@@ -1,0 +1,1191 @@
+{
+  "build": 253,
+  "purpose": "Known image/card/page targets for Photo Management Studio. Free-form target keys are also supported for future components.",
+  "targets": [
+    {
+      "target_key": "package:premium_wash:default",
+      "label": "Premium Wash \u2014 default package card",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "premium_wash",
+      "variant": "default"
+    },
+    {
+      "target_key": "package:premium_wash:small",
+      "label": "Premium Wash \u2014 Small vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "premium_wash",
+      "variant": "small"
+    },
+    {
+      "target_key": "package:premium_wash:mid",
+      "label": "Premium Wash \u2014 Mid-size vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "premium_wash",
+      "variant": "mid"
+    },
+    {
+      "target_key": "package:premium_wash:oversize",
+      "label": "Premium Wash \u2014 Large/oversize vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "premium_wash",
+      "variant": "oversize"
+    },
+    {
+      "target_key": "package:basic_detail:default",
+      "label": "Basic Detail \u2014 default package card",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "basic_detail",
+      "variant": "default"
+    },
+    {
+      "target_key": "package:basic_detail:small",
+      "label": "Basic Detail \u2014 Small vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "basic_detail",
+      "variant": "small"
+    },
+    {
+      "target_key": "package:basic_detail:mid",
+      "label": "Basic Detail \u2014 Mid-size vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "basic_detail",
+      "variant": "mid"
+    },
+    {
+      "target_key": "package:basic_detail:oversize",
+      "label": "Basic Detail \u2014 Large/oversize vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "basic_detail",
+      "variant": "oversize"
+    },
+    {
+      "target_key": "package:complete_detail:default",
+      "label": "Complete Detail \u2014 default package card",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "complete_detail",
+      "variant": "default"
+    },
+    {
+      "target_key": "package:complete_detail:small",
+      "label": "Complete Detail \u2014 Small vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "complete_detail",
+      "variant": "small"
+    },
+    {
+      "target_key": "package:complete_detail:mid",
+      "label": "Complete Detail \u2014 Mid-size vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "complete_detail",
+      "variant": "mid"
+    },
+    {
+      "target_key": "package:complete_detail:oversize",
+      "label": "Complete Detail \u2014 Large/oversize vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "complete_detail",
+      "variant": "oversize"
+    },
+    {
+      "target_key": "package:interior_detail:default",
+      "label": "Interior Detail \u2014 default package card",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "interior_detail",
+      "variant": "default"
+    },
+    {
+      "target_key": "package:interior_detail:small",
+      "label": "Interior Detail \u2014 Small vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "interior_detail",
+      "variant": "small"
+    },
+    {
+      "target_key": "package:interior_detail:mid",
+      "label": "Interior Detail \u2014 Mid-size vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "interior_detail",
+      "variant": "mid"
+    },
+    {
+      "target_key": "package:interior_detail:oversize",
+      "label": "Interior Detail \u2014 Large/oversize vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "interior_detail",
+      "variant": "oversize"
+    },
+    {
+      "target_key": "package:exterior_detail:default",
+      "label": "Exterior Detail \u2014 default package card",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "exterior_detail",
+      "variant": "default"
+    },
+    {
+      "target_key": "package:exterior_detail:small",
+      "label": "Exterior Detail \u2014 Small vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "exterior_detail",
+      "variant": "small"
+    },
+    {
+      "target_key": "package:exterior_detail:mid",
+      "label": "Exterior Detail \u2014 Mid-size vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "exterior_detail",
+      "variant": "mid"
+    },
+    {
+      "target_key": "package:exterior_detail:oversize",
+      "label": "Exterior Detail \u2014 Large/oversize vehicle",
+      "target_type": "package_card",
+      "page_path": "/services",
+      "component_key": "exterior_detail",
+      "variant": "oversize"
+    },
+    {
+      "target_key": "addon:full_clay_treatment",
+      "label": "Full Clay Treatment \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "full_clay_treatment",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:two_stage_polish",
+      "label": "Two Stage Polish \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "two_stage_polish",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:high_grade_paint_sealant",
+      "label": "High Grade Paint Sealant \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "high_grade_paint_sealant",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:uv_protectant_applied_on_interior_panels",
+      "label": "UV Protectant Applied on Interior Panels \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "uv_protectant_applied_on_interior_panels",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:de_ionizing_treatment",
+      "label": "De-Ionizing Treatment \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "de_ionizing_treatment",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:de_badging",
+      "label": "De-Badging \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "de_badging",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:engine_cleaning",
+      "label": "Engine Cleaning \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "engine_cleaning",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:external_ceramic_coating",
+      "label": "External Ceramic Coating \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "external_ceramic_coating",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:external_graphene_fine_finish",
+      "label": "External Graphene Fine Finish \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "external_graphene_fine_finish",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:external_wax",
+      "label": "External Wax \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "external_wax",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:vinyl_wrapping",
+      "label": "Vinyl Wrapping \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "vinyl_wrapping",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:window_tinting",
+      "label": "Window Tinting \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "window_tinting",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:pet_hair_removal",
+      "label": "Pet Hair Removal \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "pet_hair_removal",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:odor_treatment",
+      "label": "Odor Treatment \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "odor_treatment",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:seat_shampoo",
+      "label": "Seat Shampoo \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "seat_shampoo",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:carpet_shampoo",
+      "label": "Carpet Shampoo \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "carpet_shampoo",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:salt_stain_treatment",
+      "label": "Salt Stain Treatment \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "salt_stain_treatment",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:headlight_restoration_addon",
+      "label": "Headlight Restoration \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "headlight_restoration_addon",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:windshield_ceramic_coating",
+      "label": "Windshield Ceramic Coating \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "windshield_ceramic_coating",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:ceramic_spray_wax",
+      "label": "Ceramic Spray Protection \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "ceramic_spray_wax",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:trim_restoration",
+      "label": "Trim Restoration \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "trim_restoration",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:bug_tar_removal",
+      "label": "Bug and Tar Removal \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "bug_tar_removal",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:truck_box_wash",
+      "label": "Truck Box Wash \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "truck_box_wash",
+      "variant": ""
+    },
+    {
+      "target_key": "addon:fleet_vehicle_add_on",
+      "label": "Fleet Vehicle Add-On \u2014 service/add-on card",
+      "target_type": "addon_card",
+      "page_path": "/services",
+      "component_key": "fleet_vehicle_add_on",
+      "variant": ""
+    },
+    {
+      "target_key": "landing:ceramic-coating:hero",
+      "label": "Ceramic coating \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:ceramic-coating:gallery:1",
+      "label": "Ceramic coating \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:ceramic-coating:gallery:2",
+      "label": "Ceramic coating \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:ceramic-coating:gallery:3",
+      "label": "Ceramic coating \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:ceramic-coating",
+      "label": "Ceramic coating \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "ceramic-coating",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:hero",
+      "label": "Pet hair removal \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:gallery:1",
+      "label": "Pet hair removal \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:gallery:2",
+      "label": "Pet hair removal \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:gallery:3",
+      "label": "Pet hair removal \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:pet-hair-removal",
+      "label": "Pet hair removal \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "pet-hair-removal",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:odor-removal:hero",
+      "label": "Odor removal \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:odor-removal:gallery:1",
+      "label": "Odor removal \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:odor-removal:gallery:2",
+      "label": "Odor removal \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:odor-removal:gallery:3",
+      "label": "Odor removal \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:odor-removal",
+      "label": "Odor removal \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "odor-removal",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:headlight-restoration:hero",
+      "label": "Headlight restoration \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:headlight-restoration:gallery:1",
+      "label": "Headlight restoration \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:headlight-restoration:gallery:2",
+      "label": "Headlight restoration \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:headlight-restoration:gallery:3",
+      "label": "Headlight restoration \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:headlight-restoration",
+      "label": "Headlight restoration \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "headlight-restoration",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:paint-correction:hero",
+      "label": "Paint correction \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:paint-correction:gallery:1",
+      "label": "Paint correction \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:paint-correction:gallery:2",
+      "label": "Paint correction \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:paint-correction:gallery:3",
+      "label": "Paint correction \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:paint-correction",
+      "label": "Paint correction \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "paint-correction",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:hero",
+      "label": "Tillsonburg auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:gallery:1",
+      "label": "Tillsonburg auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:gallery:2",
+      "label": "Tillsonburg auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:gallery:3",
+      "label": "Tillsonburg auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:tillsonburg-auto-detailing",
+      "label": "Tillsonburg auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:hero",
+      "label": "Woodstock / Ingersoll auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:gallery:1",
+      "label": "Woodstock / Ingersoll auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:gallery:2",
+      "label": "Woodstock / Ingersoll auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:gallery:3",
+      "label": "Woodstock / Ingersoll auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:woodstock-ingersoll-auto-detailing",
+      "label": "Woodstock / Ingersoll auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:hero",
+      "label": "Simcoe / Delhi auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:gallery:1",
+      "label": "Simcoe / Delhi auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:gallery:2",
+      "label": "Simcoe / Delhi auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:gallery:3",
+      "label": "Simcoe / Delhi auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:simcoe-delhi-auto-detailing",
+      "label": "Simcoe / Delhi auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:hero",
+      "label": "Port Dover auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:gallery:1",
+      "label": "Port Dover auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:gallery:2",
+      "label": "Port Dover auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:gallery:3",
+      "label": "Port Dover auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:port-dover-auto-detailing",
+      "label": "Port Dover auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:hero",
+      "label": "Norwich, Otterville auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:gallery:1",
+      "label": "Norwich, Otterville auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:gallery:2",
+      "label": "Norwich, Otterville auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:gallery:3",
+      "label": "Norwich, Otterville auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:norwich-otterville-auto-detailing",
+      "label": "Norwich, Otterville auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:hero",
+      "label": "Zorra, Thamesford, Embro auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:gallery:1",
+      "label": "Zorra, Thamesford, Embro auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:gallery:2",
+      "label": "Zorra, Thamesford, Embro auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:gallery:3",
+      "label": "Zorra, Thamesford, Embro auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:zorra-thamesford-embro-auto-detailing",
+      "label": "Zorra, Thamesford, Embro auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:hero",
+      "label": "Waterford, Vittoria auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:gallery:1",
+      "label": "Waterford, Vittoria auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:gallery:2",
+      "label": "Waterford, Vittoria auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:gallery:3",
+      "label": "Waterford, Vittoria auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:waterford-vittoria-auto-detailing",
+      "label": "Waterford, Vittoria auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:hero",
+      "label": "Port Rowan, Turkey Point auto detailing \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:gallery:1",
+      "label": "Port Rowan, Turkey Point auto detailing \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:gallery:2",
+      "label": "Port Rowan, Turkey Point auto detailing \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:gallery:3",
+      "label": "Port Rowan, Turkey Point auto detailing \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:location:port-rowan-turkey-point-auto-detailing",
+      "label": "Port Rowan, Turkey Point auto detailing \u2014 home location card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "location"
+    },
+    {
+      "target_key": "landing:graphene-finish:hero",
+      "label": "Graphene finish \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:graphene-finish:gallery:1",
+      "label": "Graphene finish \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:graphene-finish:gallery:2",
+      "label": "Graphene finish \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:graphene-finish:gallery:3",
+      "label": "Graphene finish \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:graphene-finish",
+      "label": "Graphene finish \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "graphene-finish",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:hero",
+      "label": "Full clay treatment \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:gallery:1",
+      "label": "Full clay treatment \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:gallery:2",
+      "label": "Full clay treatment \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:gallery:3",
+      "label": "Full clay treatment \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:full-clay-treatment",
+      "label": "Full clay treatment \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "full-clay-treatment",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:engine-cleaning:hero",
+      "label": "Engine cleaning \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:engine-cleaning:gallery:1",
+      "label": "Engine cleaning \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:engine-cleaning:gallery:2",
+      "label": "Engine cleaning \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:engine-cleaning:gallery:3",
+      "label": "Engine cleaning \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:engine-cleaning",
+      "label": "Engine cleaning \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "engine-cleaning",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:hero",
+      "label": "High grade paint sealant \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:gallery:1",
+      "label": "High grade paint sealant \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:gallery:2",
+      "label": "High grade paint sealant \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:gallery:3",
+      "label": "High grade paint sealant \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:high-grade-paint-sealant",
+      "label": "High grade paint sealant \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:uv-protectant:hero",
+      "label": "UV protectant applied on interior panels \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:uv-protectant:gallery:1",
+      "label": "UV protectant applied on interior panels \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:uv-protectant:gallery:2",
+      "label": "UV protectant applied on interior panels \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:uv-protectant:gallery:3",
+      "label": "UV protectant applied on interior panels \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:uv-protectant",
+      "label": "UV protectant applied on interior panels \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "uv-protectant",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:exterior-wax:hero",
+      "label": "Exterior wax \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:exterior-wax:gallery:1",
+      "label": "Exterior wax \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:exterior-wax:gallery:2",
+      "label": "Exterior wax \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:exterior-wax:gallery:3",
+      "label": "Exterior wax \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:exterior-wax",
+      "label": "Exterior wax \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "exterior-wax",
+      "variant": "service"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:hero",
+      "label": "De-ionizing treatment \u2014 landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:gallery:1",
+      "label": "De-ionizing treatment \u2014 gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:gallery:2",
+      "label": "De-ionizing treatment \u2014 gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:gallery:3",
+      "label": "De-ionizing treatment \u2014 gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "3"
+    },
+    {
+      "target_key": "home:service:de-ionizing-treatment",
+      "label": "De-ionizing treatment \u2014 home service card",
+      "target_type": "home_card",
+      "page_path": "/",
+      "component_key": "de-ionizing-treatment",
+      "variant": "service"
+    },
+    {
+      "target_key": "admin:gate-c:feature",
+      "label": "DAIP Gate C \u2014 feature context photo",
+      "target_type": "admin_context",
+      "page_path": "/admin-daip-gate-c",
+      "component_key": "gate-c",
+      "variant": ""
+    },
+    {
+      "target_key": "admin:gate-c:strip:1",
+      "label": "DAIP Gate C \u2014 context strip 1",
+      "target_type": "admin_context",
+      "page_path": "/admin-daip-gate-c",
+      "component_key": "gate-c",
+      "variant": ""
+    },
+    {
+      "target_key": "admin:gate-c:strip:2",
+      "label": "DAIP Gate C \u2014 context strip 2",
+      "target_type": "admin_context",
+      "page_path": "/admin-daip-gate-c",
+      "component_key": "gate-c",
+      "variant": ""
+    },
+    {
+      "target_key": "admin:gate-c:strip:3",
+      "label": "DAIP Gate C \u2014 context strip 3",
+      "target_type": "admin_context",
+      "page_path": "/admin-daip-gate-c",
+      "component_key": "gate-c",
+      "variant": ""
+    }
+  ],
+  "target_count": 148
+}
