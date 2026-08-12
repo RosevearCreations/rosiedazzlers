@@ -1,4 +1,45 @@
-# CURRENT LIVING AUTHORITY 1 OF 2 — Build 251
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 252
+
+**Updated:** 2026-08-12  
+**Build:** 252  
+**Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` is a specialist operational runbook.
+
+## Build 252 current state — approved R2 website imagery is assigned by intent
+
+Build 252 expands the public-image system from the earlier `CarPhotos/` proof library to all three approved website prefixes in `rosie-assets`: `packages/`, `landing_pages/`, and `CarPhotos/`.
+
+### What is implemented
+
+- New read-only `/api/public/website_images` inventories image objects only from `packages/`, `landing_pages/`, and `CarPhotos/` in the configured public R2 asset bucket.
+- The endpoint never queries `DAIP_MEDIA_BUCKET` or any private raw-project prefix.
+- New `/assets/website-images.js` ranks approved images by descriptive filename, service/package code, page slug, service name, and vehicle-size hints.
+- Principal service cards prefer matching `packages/` imagery, then approved real-car proof, before an intentional placeholder.
+- Add-on cards now look for matching `packages/` images before older bundled fallbacks.
+- Dedicated service and town landing pages prefer matching `landing_pages/` images for the hero and use additional matches in the visual gallery.
+- Home-page special-service and town cards receive matching approved R2 imagery when a descriptive filename is available.
+- The hand-built Ceramic Coating page participates in the same approved R2 card-image system.
+- Dynamic LocalBusiness/Service areaServed output is narrowed for town pages to the actual town/county cluster instead of claiming every Rosie town on every location page.
+- Shared R2 card imagery has responsive crop/aspect-ratio CSS for desktop and mobile.
+
+### Runtime matching rules
+
+The application does not require a code deployment for every new approved image. Descriptive filenames are normalized across spaces, underscores, hyphens and common CamelCase names. For packages, include the package/service wording and optionally `small`, `mid`, `large`, `oversize`, `SUV`, `truck`, etc. For landing pages, include the service or location slug/name.
+
+Machine-readable mapping and folder priority are recorded in `data/build252_public_r2_image_mapping.json`.
+
+### Acceptance after deployment
+
+1. Open `/api/public/website_images` and confirm `counts.packages`, `counts.landing_pages`, and `counts.car_photos` reflect the approved R2 uploads.
+2. Open `/services` at desktop and phone width and confirm Premium Wash, Basic Detail, Complete Detail, Interior Detail and Exterior Detail use the intended package images for each size.
+3. Check several add-ons such as pet hair, odour, headlight, clay, wax/sealant and ceramic-related cards.
+4. Open the special-service and town landing pages and confirm descriptive `landing_pages/` files appear as the hero or gallery rather than generic fallbacks.
+5. Check the home-page special-service and town cards for the correct matched IRL/service photos.
+6. Rename only ambiguous R2 filenames; do not hard-code a wrong image just to eliminate a placeholder.
+7. Confirm no private DAIP object key or URL is ever returned by the public manifest.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 251 -->
 
 **Updated:** 2026-08-11  
 **Build:** 251  
@@ -1101,3 +1142,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- Build 212 documentation sync -->
 <!-- Build 213 documentation sync -->
 <!-- Build 214 documentation sync -->
+
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
