@@ -1,4 +1,35 @@
-# CURRENT LIVING AUTHORITY 2 OF 2 — Build 250
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 252
+
+**Updated:** 2026-08-12  
+**Purpose:** Current business/technical direction. For exact implemented state and deployment boundaries, read `AI_PROJECT_HANDOFF.md` first.
+
+## Build 252 value delivered
+
+- Approved public R2 imagery is now treated as a reusable website asset library rather than a set of individually hard-coded URLs.
+- `packages/` is the first choice for principal package and add-on cards.
+- `landing_pages/` is the first choice for dedicated service/location landing-page heroes and supporting galleries.
+- `CarPhotos/` remains the broad IRL proof/fallback library for customer-facing context.
+- Home-page high-intent service and town cards can display filename-matched real imagery.
+- The public manifest is prefix-limited and deliberately separated from private DAIP media.
+- Location-page structured data is narrowed to the relevant local service area while service pages remain county-wide.
+- No additional thin location pages were created; image enrichment supports the existing SEO architecture instead of adding duplicate content.
+
+## Current next work
+
+1. Deploy Build 252 and inspect `/api/public/website_images`; confirm the three public-prefix counts match the R2 folders.
+2. Review the first automatic image assignment for every principal package and each high-intent landing page.
+3. Rename ambiguous files such as `IMG_1234.png` to descriptive service/location names rather than adding one-off hard-coded mappings.
+4. Use real before/after or process photos only where customer/public-use consent and privacy review permit.
+5. Add explicit admin-side image assignment overrides only for rare cases where two descriptive files legitimately compete for the same target.
+6. Continue inventory normalization from Build 249 so products/supplies and their images become trustworthy.
+7. Complete outstanding Build 247/248 staging migrations and private DAIP acceptance separately from the public website-image system.
+8. Prove the private >300 MB resume path, processing queue, and reviewed content-package workflow before expanding automatic content output.
+9. Continue CSS/mobile regression and one-H1/title/meta checks on every public pass.
+10. Measure whether enriched package/service pages improve Services → Booking progression before adding more public navigation complexity.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 250 -->
 
 **Updated:** 2026-08-10  
 **Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
@@ -1432,3 +1463,9 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
 
 <!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 251 -->

@@ -188,11 +188,11 @@
       <h2 style="margin:0 0 10px">Special detailing services</h2>
       <p class="muted">These are the highest-intent services local customers often search for directly. Each now has its own landing page so pricing questions, booking intent, and local wording can be clearer.</p>
       <div class="service-link-grid" style="margin-top:12px">
-        <article class="service-link-card"><h3>Ceramic coating</h3><p class="muted">Protection-focused page for customers comparing coatings, gloss, upkeep, and inspection-based quoting.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
-        <article class="service-link-card"><h3>Pet hair removal</h3><p class="muted">Interior-focused page for stubborn pet hair, fabric cleanup, and quote expectations before arrival.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
-        <article class="service-link-card"><h3>Odor removal</h3><p class="muted">Smoke, pet, and spill odor page with source-treatment wording instead of a generic package mention.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
-        <article class="service-link-card"><h3>Headlight restoration</h3><p class="muted">Dedicated page for cloudy headlights, night visibility, and before/after service intent.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
-        <article class="service-link-card"><h3>Paint correction</h3><p class="muted">Dedicated page for swirl marks, gloss recovery, and inspection-led quoting before booking.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="ceramic coating paint protection gloss" data-r2-image-href="/ceramic-coating"><h3>Ceramic coating</h3><p class="muted">Protection-focused page for customers comparing coatings, gloss, upkeep, and inspection-based quoting.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="pet hair removal interior" data-r2-image-href="/pet-hair-removal"><h3>Pet hair removal</h3><p class="muted">Interior-focused page for stubborn pet hair, fabric cleanup, and quote expectations before arrival.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="odor odour removal interior" data-r2-image-href="/odor-removal"><h3>Odor removal</h3><p class="muted">Smoke, pet, and spill odor page with source-treatment wording instead of a generic package mention.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="headlight restoration" data-r2-image-href="/headlight-restoration"><h3>Headlight restoration</h3><p class="muted">Dedicated page for cloudy headlights, night visibility, and before/after service intent.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="paint correction polish swirl" data-r2-image-href="/paint-correction"><h3>Paint correction</h3><p class="muted">Dedicated page for swirl marks, gloss recovery, and inspection-led quoting before booking.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
       </div>
     </section>
 
@@ -201,10 +201,10 @@
   <h2 style="margin:0 0 10px">Town-focused detailing pages</h2>
   <p class="muted">These location pages keep the folder-backed clean-route baseline while giving your strongest service towns clearer local wording, recent work, and review proof.</p>
   <div class="local-town-grid" style="margin-top:12px">
-    <article class="local-town-card"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
-    <article class="local-town-card"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused page for frequent travel questions.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
-    <article class="local-town-card"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side page with travel and booking wording for that cluster.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
-    <article class="local-town-card"><h3>Port Dover</h3><p class="muted">Dedicated page for Port Dover detailing visibility and booking intent.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="Tillsonburg auto detailing" data-r2-image-href="/tillsonburg-auto-detailing"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="Woodstock Ingersoll auto detailing" data-r2-image-href="/woodstock-ingersoll-auto-detailing"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused page for frequent travel questions.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="Simcoe Delhi auto detailing" data-r2-image-href="/simcoe-delhi-auto-detailing"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side page with travel and booking wording for that cluster.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="Port Dover auto detailing" data-r2-image-href="/port-dover-auto-detailing"><h3>Port Dover</h3><p class="muted">Dedicated page for Port Dover detailing visibility and booking intent.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
   </div>
 </section>
 
@@ -285,9 +285,11 @@
     import { renderSocialFeedMounts } from "/assets/social-feed.js";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
     import { renderReviewProofMounts } from "/assets/reviews.js";
+    import { hydrateR2CardImages } from "/assets/website-images.js?v=20260812build252";
     renderSocialFeedMounts();
     renderRecentWorkMounts(3);
     renderReviewProofMounts(5);
+    hydrateR2CardImages();
   </script>
 
   <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
