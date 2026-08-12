@@ -1,8 +1,42 @@
-# CURRENT LIVING AUTHORITY 1 OF 2 — Build 250
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 251
 
-**Updated:** 2026-08-10  
-**Build:** 250  
+**Updated:** 2026-08-11  
+**Build:** 251  
 **Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a specialist operational runbook.
+
+
+## Build 251 current state — readable Gate C + real approved Rosie work
+
+Build 251 repairs `/admin-daip-gate-c` after its page-local card CSS fell back to a white surface inside the shared dark admin theme. The Gate C workspace now uses dark, high-contrast cards, readable muted/status text, consistent form controls, responsive KPI/evidence layouts and corrected label markup.
+
+### Approved public photo use
+
+- Gate C now shows real approved website imagery from `rosie-assets/CarPhotos/` for visual context.
+- The page first asks `/api/public/car_photos` for the current approved public manifest and uses those returned URLs when available.
+- Known approved CarPhotos keys remain as safe fallbacks so the page still has real Rosie context if the manifest is temporarily unavailable.
+- This visual use is strictly separate from private DAIP raw media; no `DAIP_MEDIA_BUCKET` path or private object URL is read or rendered.
+- Images have alt text, lazy loading for the strip and failure fallbacks.
+
+### Gate C usability repairs
+
+- Removed the undefined `--surface` dependency that caused white cards with light text.
+- Corrected nested/malformed `<label>` markup for Technical owner and Independent reviewer.
+- Added visible success/error status treatment, dark safety-note treatment and stronger KPI/audit contrast.
+- Added responsive breakpoints for desktop, tablet and narrow-phone layouts.
+- Bumped the service-worker cache to Build 251 so the repaired page is not masked by a stale cached copy after deployment.
+
+### Required acceptance after deployment
+
+1. Hard-refresh `/admin-daip-gate-c` on desktop and phone width.
+2. Confirm every card, KPI, form field, note and audit entry is readable without light-on-light or dark-on-dark text.
+3. Confirm `/api/public/car_photos` returns approved `CarPhotos/` entries; Gate C should replace its fallback photo set with those current images automatically.
+4. Confirm the public photos are context only and no private DAIP media/object paths are displayed.
+5. Save a harmless Draft review and verify status feedback remains readable.
+
+---
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 250 -->
+# Historical Build 250 handoff snapshot
 
 ## Build 250 current state — simpler service choice + approved R2 website photos
 
@@ -1059,3 +1093,11 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
 
 <!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+
+<!-- Build 210 documentation sync -->
+<!-- Build 211 documentation sync -->
+<!-- Build 212 documentation sync -->
+<!-- Build 213 documentation sync -->
+<!-- Build 214 documentation sync -->
