@@ -81,6 +81,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-media-health")
     },
     {
+      key: "admin-photo-studio",
+      label: "Photo Studio",
+      href: "/admin-photo-studio.html",
+      description: "R2 photo library, alt text, renaming, and card/page assignments",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-photo-studio")
+    },
+    {
       key: "admin-daip",
       label: "DAIP Test Lab",
       href: "/admin-daip.html",

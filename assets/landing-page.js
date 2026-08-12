@@ -1,6 +1,7 @@
+// Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
-import { loadWebsiteImageManifest, landingImageMatches } from "/assets/website-images.js?v=20260812build252";
+import { loadWebsiteImageManifest, landingImageMatches } from "/assets/website-images.js?v=20260812build253";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -235,7 +236,9 @@ function galleryMarkup(page, relatedProducts, r2Matches = []) {
   const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
   const gallery = gallerySource.filter(Boolean);
   const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
-  const approvedR2Images = (r2Matches || []).slice(1).map((item) => item?.url).filter(Boolean);
+  const approvedR2Rows = (r2Matches || []).slice(1).filter((item) => item?.url);
+  const approvedR2Images = approvedR2Rows.map((item) => item.url);
+  const r2Meta = new Map(approvedR2Rows.map((item) => [item.url, item]));
   const all = [...approvedR2Images, ...gallery, ...productImages].filter(Boolean);
   if (!all.length) return "";
 
@@ -253,7 +256,7 @@ function galleryMarkup(page, relatedProducts, r2Matches = []) {
       <div class="service-link-grid" style="margin-top:12px">
         ${unique.slice(0, 8).map((src) => `
           <article class="service-link-card">
-            ${mediaImageMarkup(src, "Rosie Dazzlers service visual")}
+            ${mediaImageMarkup(src, r2Meta.get(src)?.alt_text || "Rosie Dazzlers service visual", "proof-media", r2Meta.get(src)?.focal_point ? `style="object-position:${escapeHtml(r2Meta.get(src).focal_point)}"` : "")}
           </article>
         `).join("")}
       </div>
@@ -299,6 +302,9 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
   const landingMatches = landingImageMatches(websiteImageManifest, page, slug, 10);
   const heroImage = heroMediaForPage(page, addon, relatedProducts, landingMatches);
   const matchedR2Hero = landingMatches[0]?.url === heroImage;
+  const matchedHeroMeta = matchedR2Hero ? landingMatches[0] : null;
+  const heroAlt = matchedHeroMeta?.alt_text || page.name || page.hero_title || slug;
+  const heroExtra = matchedHeroMeta?.focal_point ? `style="object-position:${escapeHtml(matchedHeroMeta.focal_point)}"` : '';
   const photoCaption = matchedR2Hero
     ? "Real Rosie Dazzlers imagery selected from the approved public R2 website library."
     : cleanText(page.region_photo_caption || (page.type === "location" ? "Regional photo included so this local landing page feels tied to the area, not just copied from a generic service page." : ""));
@@ -326,7 +332,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
       </div>
       <aside class="panel hero-sidecard">
         <figure class="landing-region-photo">
-          ${mediaImageMarkup(heroImage, page.name || page.hero_title || slug)}
+          ${mediaImageMarkup(heroImage, heroAlt, "proof-media", heroExtra)}
           ${photoCaption || photoSource ? `<figcaption>${escapeHtml(photoCaption || "Regional/service photo")}${photoSourceUrl ? ` <a href="${escapeHtml(photoSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(photoSource || "source")}</a>` : (photoSource ? ` ${escapeHtml(photoSource)}` : "")}</figcaption>` : ""}
         </figure>
         <h2 style="margin-top:0">What to expect</h2>
