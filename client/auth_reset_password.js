@@ -1,6 +1,6 @@
 
 import { consumeCustomerAuthToken } from "../_lib/customer-auth-tokens.js";
-import { serviceHeaders, createCustomerSession, appendSetCookie } from "../_lib/customer-session.js";
+import { serviceHeaders, createCustomerSession, appendSetCookie, revokeAllCustomerSessions } from "../_lib/customer-session.js";
 
 export async function onRequestOptions(){ return new Response('', { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
@@ -15,10 +15,11 @@ export async function onRequestPost(context){
     if (!tokenRow?.customer_profile?.id) return withCors(json({ error:'Reset link is invalid or expired.' }, 400));
     const customer = tokenRow.customer_profile;
     const password_hash = await makePasswordHash(password, 'bcrypt');
-    const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(customer.id)}`, { method:'PATCH', headers:{ ...serviceHeaders(env), Prefer:'return=representation' }, body: JSON.stringify({ password_hash, updated_at: new Date().toISOString() }) });
+    const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(customer.id)}`, { method:'PATCH', headers:{ ...serviceHeaders(env), Prefer:'return=representation' }, body: JSON.stringify({ password_hash, email_verified_at: new Date().toISOString(), updated_at: new Date().toISOString() }) });
     if (!patchRes.ok) throw new Error(`Could not update password. ${await patchRes.text()}`);
     const rows = await patchRes.json().catch(() => []);
     const profile = Array.isArray(rows) ? rows[0] || customer : customer;
+    await revokeAllCustomerSessions({ env, customerProfileId: customer.id });
     const session = await createCustomerSession({ env, customerProfile: profile, request });
     let headers = new Headers({ 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' });
     headers = appendSetCookie(headers, session.cookie);
