@@ -21,6 +21,7 @@ ROUTE_COPY_PAGES = [
     "admin-water-rules.html",
     "admin-social.html",
     "admin-booking.html",
+    "admin-assign.html",
     "admin-leads.html",
     "admin-catalog.html",
     "admin-incident-reports.html",
@@ -31,6 +32,15 @@ ROUTE_COPY_PAGES = [
     "admin-gallery.html",
     "admin-customers.html",
     "admin-docs.html",
+    "admin-ui-health.html",
+    "admin-daip-intake-dry-run.html",
+    "admin-daip-media.html",
+    "admin-creative-projects.html",
+    "admin-startup-guide.html",
+    "admin-launch-readiness.html",
+    "admin-inventory-manager.html",
+    "admin-inventory-posting.html",
+    "admin-roadmap-execution.html",
     "admin-workflow.html",
     "admin-today.html",
     "admin-production.html",
@@ -46,6 +56,7 @@ ROUTE_COPY_PAGES = [
     "detailer-jobs.html",
     "progress.html",
     "final-balance-payment.html",
+    "gift-certificate-print.html",
 ]
 
 
