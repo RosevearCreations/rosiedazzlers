@@ -1,3 +1,19 @@
+# Documentation Index — Build 253
+
+## Current references
+- `AI_PROJECT_HANDOFF.md` — living implementation/handoff authority.
+- `MASTER_VALUE_ROADMAP.md` — living business/engineering direction authority.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist acceptance/deployment runbook.
+- `BUILD253_SUMMARY.md` — Build 253 Photo Management Studio release summary.
+- `data/build253_photo_targets.json` — known explicit card/page assignment registry.
+- `data/build253_photo_management.json` — machine-readable Build 253 architecture/deployment summary.
+
+Only `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Older Markdown remains specialist or historical evidence.
+
+<!-- Historical release guard: # Documentation Index — Build 252 -->
+
+---
+
 # Documentation Index — Build 252
 
 ## Current references
@@ -1377,3 +1393,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- Build 214 documentation sync -->
 
 <!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->

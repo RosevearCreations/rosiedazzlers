@@ -1,28 +1,34 @@
-# Build 252 — Approved R2 Website Image Assignment
+# Build 253 — Application-wide Photo Management Studio
 
 **Build date:** 2026-08-12
 
-Build 252 connects the newly populated public `rosie-assets/packages/` and `rosie-assets/landing_pages/` folders to the customer-facing site while retaining `CarPhotos/` as the broad IRL proof library.
+## Purpose
 
-## Implemented
+Build 253 turns Rosie Dazzlers public website imagery into an owner-manageable system. It extends the existing media library, inventories approved R2 website folders, stores accessibility/SEO metadata, and allows explicit image-to-card/page assignments without removing the filename-matching fallback.
 
-- Added `/api/public/website_images`, a read-only public manifest limited to `packages/`, `landing_pages/`, and `CarPhotos/`.
-- Added shared filename/slug scoring in `/assets/website-images.js`.
-- Principal package cards now prefer package-specific R2 images, including vehicle-size hints.
-- Add-on cards prefer descriptive package imagery before bundled fallbacks.
-- Service and town landing pages prefer matching `landing_pages/` images for hero and gallery use.
-- Home-page high-intent service/town cards are enriched with matching approved R2 imagery.
-- Ceramic Coating static landing page is enrolled in the same approved-image system.
-- Shared card-photo CSS is responsive on desktop/mobile.
-- Dynamic location structured data was narrowed to the relevant local town/county cluster.
-- Public/private media separation remains intact; DAIP raw media is not queried.
-- Two-document authority remains `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md`.
+## Main implementation
 
-## Deployment acceptance
+- New `/admin-photo-studio.html` + clean route.
+- Existing `app_media_library` extended with R2 identity, filename/folder, title, tags, dimensions/size fields, focal point, decorative flag, attribution and license/consent notes.
+- New `app_media_assignments` maps one managed public photo to an explicit target key.
+- Approved public R2 sync for `packages/`, `landing_pages/`, `landing-pages/`, `CarPhotos/`, `addons/`, `brand/`, `gallery/`, and `products/`.
+- Metadata editor for label, alt text, title, caption, tags, contexts, focal point and provenance notes.
+- Safe rename/move workflow inside approved public R2 prefixes.
+- Explicit assignments for package variants, add-ons, landing hero/gallery slots, selected home cards and Gate C visuals.
+- Canonical public manifest repaired to flat `/api/public_website_images`, with nested compatibility alias retained.
+- Public manifests contain only approved public asset metadata; private DAIP raw media is structurally outside the system.
 
-After deploying, inspect `/api/public/website_images` first. Self-explanatory filenames should match automatically. Rename ambiguous filenames instead of hard-coding uncertain image assignments.
+## Database action required
 
-No Build 252 SQL migration is required.
+Apply `sql/2026-08-12_build253_photo_management_studio.sql` in staging before using sync/save/assignment/move functions.
+
+## SEO/accessibility direction
+
+Managed alt text should describe the image in the context where it appears, stay concise and useful, and avoid keyword stuffing. Explicit placement lets the owners deliberately use stronger real-world proof while retaining truthful local relevance and one-H1/title guardrails.
+
+## Next highest-value work
+
+Accept the system in staging, deliberately assign the five principal service cards and highest-value landing pages, then add image dimension/usage/version health so routine visual refreshing is safe and reversible.
 
 <!-- Build 210 documentation sync -->
 <!-- Build 211 documentation sync -->
