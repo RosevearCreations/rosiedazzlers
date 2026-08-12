@@ -1,3 +1,104 @@
+> **Build 248 documentation status:** Historical/compatibility reference. Current state is `AI_PROJECT_HANDOFF.md`; current direction is `MASTER_VALUE_ROADMAP.md`. Retained to preserve audit/release history and old references.
+
+# Sanity Check — Build 245
+
+## Healthy in source
+
+- All exposed HTML files have one H1.
+- Indexable public pages have title, description and canonical coverage within project guardrails.
+- Protected admin pages include noindex.
+- Deprecated SVG photo fallbacks are not referenced by runtime content.
+- UI Health root and clean routes match.
+- Startup cache controls and Build 245 asset versions are wired.
+- Service-worker cache installation is isolated and offline failures are type-safe.
+
+## Not proven by source
+
+Live deployment, service-worker activation, connected APIs, payment/email providers, mobile devices, accessibility, database migrations and recovery still require Startup evidence.
+
+---
+
+# Sanity Check — Build 241
+
+## Healthy in source
+
+- `updateSummary()` uses `const rows = getEvidenceRows()` and contains no temporal-dead-zone collision.
+- Startup clean routes use the Build 241 asset token.
+- Service-worker cache version is Build 241.
+- Refresh uses all-settled isolation and visible fallback status.
+- No database migration is required.
+- Historical release evidence, one-H1 rules, CSS references, and Build 240 functions remain intact.
+
+## Required preview confirmation
+
+Open `/admin-startup-guide.html`, reload with developer tools open, select **Refresh all**, and confirm no uncaught promise error appears.
+
+---
+
+# Sanity Check — Build 240
+
+## Healthy in source
+
+- Existing inventory editor, Workbench, JSON tools and seven-image galleries remain intact.
+- Booking and project usage are previewed and committed atomically rather than through split browser writes.
+- Shortages and invalid reservations fail the complete transaction.
+- Idempotency prevents the same request from deducting stock twice.
+- Reversal adds compensating movements and never deletes original history.
+- History fallback is clearly labelled read-only.
+- New admin route is responsive, protected, noindex and has one H1.
+- Startup instructions, roadmap, canonical schema, migration and all Markdown markers are synchronized.
+
+## Not yet proven
+
+Connected-database migration, live acceptance, accounting reversal handling and the broader go-live blockers still require operator evidence.
+
+---
+
+# Sanity Check — Build 238
+
+## Healthy in source
+
+- Existing manual and detailed inventory editors remain available.
+- Bulk inventory changes no longer rely on a browser loop for authoritative writes.
+- Duplicate rows are previewed, transferred and archived—not hard deleted.
+- Known inventory references, quantity movements and before/after evidence are retained and available through a read-only history dialog/CSV export.
+- Cached API failure mode is read-only.
+- Public pages retain one H1 and improved title/description lengths.
+- Roadmap/Startup fallback data and clean routes are synchronized.
+- Canonical schema contains the complete Build 238 function/table definitions.
+
+## Not yet proven by source inspection
+
+- Supabase migration execution and PostgREST schema refresh.
+- Real data reference-transfer acceptance.
+- Live booking/payment/refund/email/backup/mobile/accessibility/search/GBP behaviour.
+- Real Core Web Vitals and deployed CSS/cache behaviour.
+
+## Release decision
+
+Do not announce a broad public launch solely because the source checks pass. Proceed to an invite-only soft launch only after every launch-blocker item in `STARTUP_GO_LIVE_BLOCKERS.md` has evidence or an explicitly reviewed waiver.
+
+---
+
+# Build 237 sanity check
+
+- Roadmap page CSS root cause identified: missing stylesheet files and missing AdminShell dependency.
+- All HTML stylesheet references now resolve; compatibility shims and emergency admin fallback are included.
+- Roadmap, Startup Guide and Launch Readiness have desktop/mobile layouts and safe outage/migration fallbacks.
+- Internal admin pages remain one-H1 and are noindex.
+- Homepage now includes WebSite structured data alongside the existing local business schema.
+- Shared launch evidence is DB-first after the included migration.
+- No claim of first-page ranking is made; local SEO work remains evidence-led.
+- Unrestricted public launch is not recommended until the critical items in `STARTUP_GO_LIVE_BLOCKERS.md` are verified.
+
+---
+
+# Build 236 sanity check
+
+The root Block Calendar regression was a truncated shared stylesheet plus obsolete schedule-column reads. Build 236 restores the complete shared CSS/admin/public-shell baseline, repairs `blocked_date`/`slot` compatibility, adds calendar health/quick actions, expands preflight, and keeps one-H1/mobile/route-copy safeguards. No DDL is required. The complete static release suite passes through Build 236 before packaging; live schedule, booking, payment, email and recovery evidence remains required before public launch.
+
+---
+
 # Build 207 pointer
 
 Current planning now lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. This historical file is retained for context and release history.
@@ -1032,3 +1133,121 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231 sanity check
+
+Ordinary bookings remain operationally separate. Project profitability excludes soft-deleted lines. Project consumption posting cannot mutate inventory. Content planning requires approved sessions. Archive exports contain metadata only. DAIP Gate C remains enforced.
+
+
+## Build 232 — accessible project controls and archive history (2026-07-15)
+
+Build 232 replaces the remaining JSON prompt used to edit project material, labour and cost rows with an accessible dialog form. It adds project budget and target-margin guidance, budget variance and break-even calculations, assignable/evidence-aware shot plans, reviewed consent-reminder queue records, draft revision history, and authenticated metadata-only archive downloads. Ordinary bookings remain unchanged; inventory posting still does not mutate stock; DAIP Gate C and all media/publication controls remain held.
+
+Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Workspace: `/admin-creative-projects.html`.
+
+### Next 20 connected steps
+1. Apply and test Build 232 in staging.
+2. Add reservation availability checks against live inventory.
+3. Define the transactional stock-posting and reversal RPC.
+4. Add sales-channel revenue-source and fee lines.
+5. Add budget-warning tasks to Today Needs Attention.
+6. Connect approved consent reminders to the notification review queue.
+7. Add shot-plan drag ordering and mobile capture evidence selection after Gate C.
+8. Display draft version comparisons and restore controls.
+9. Add provider-neutral AI draft adapter contracts with hard cost limits, disabled by default.
+10. Add editable YouTube chapter timecodes.
+11. Add clip evidence selection after Gate C.
+12. Add Pinterest board administration.
+13. Add Etsy taxonomy and shipping-profile lookup.
+14. Add website schema validation and internal-link checks.
+15. Add educational safety reviewer assignment.
+16. Add CSV archive exports alongside JSON.
+17. Add lessons-to-knowledge-base promotion with human approval.
+18. Improve recommendation scoring with cost, audience and reusable-skill factors.
+19. Add destination-readiness checks before social or commerce handoff.
+20. Keep standard bookings, DAIP media and publishing approval-only.
+
+
+## Build 233 — Supplier-link inventory intake
+- Added a provider-neutral supplier-link preview contract, with Amazon.ca and Amazon.com enabled first.
+- Staff paste a product URL, review extracted public metadata and suggested tool/consumable classification, then save through the existing authoritative inventory endpoint.
+- Exact duplicate checks use normalized Amazon URL and ASIN. Imported images, prices and descriptions are drafts only and require human review.
+- Import attempts are audited in `catalog_supplier_import_audit`; no browser credentials, scraping tokens or automatic purchases are introduced.
+- Ordinary booking inventory, project reservation ledgers and DAIP Gate C remain unchanged.
+
+
+## Build 234 — Separate Inventory Manager
+
+Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+## Build 235 sanity check
+- Existing inventory editor retained.
+- Separate Inventory Workbench enhanced rather than replacing existing workflows.
+- JSON row editing no longer requires raw syntax changes.
+- `image_url` remains featured; gallery is additive and capped at seven.
+- Archive/restore remains history-safe.
+- Launch dashboard distinguishes automatic evidence from manual confirmation.
+- Public launch should remain controlled until booking, live payment/refund, email, environment, backup, legal, mobile and security confirmations are complete.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 sanity check
+
+The application now has one clear launch operating interface and three current authority documents. CSS, one-H1, route-copy, API syntax, schema, fallback, and historical release guards must pass before packaging. Go-live confidence still depends on real environment and business evidence listed in the Startup Command Center.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+
+## Build 242 update
+
+- Repaired `/admin-daip-intake-dry-run` contrast and card styling.
+- Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
+- Advanced Startup Command Center cache-busting and service-worker references to Build 242.
+- No new database migration was introduced in this build.
+
+## Build 244 update
+
+- Bundled the new AI-generated raster placeholder images directly into the application zip so the site no longer depends on missing SVG photo fallbacks for common empty-image states.
+- Replaced review, add-on, catalog, booking, workflow, and admin placeholder-photo references from SVG files to real PNG/JPG files.
+- Preserved instructional SVG graphics, such as framing guides and charts, where SVG is still the correct format.
+- Sanity check: the remaining strongest live-readiness work is acceptance testing, content completion, operational policy confirmation, and production credential/provider validation rather than placeholder-media cleanup.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 246 catalog-readiness synchronization
+
+- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
+- Public catalog results are filtered at the server boundary.
+- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
+- Staging acceptance remains required.
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+## Build 247 sanity check
+
+The raw-media storage architecture is now correct for large historical project footage: private R2 for masters, Supabase for metadata, optional queue for downstream work and reviewed promotion only. The strongest remaining DAIP risk is execution of the queued processing pipeline, not ingestion. Operational launch risks remain migrations, real payment/email/calendar testing, recovery rehearsals, accessibility/mobile acceptance and soft-launch evidence.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->

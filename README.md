@@ -1,3 +1,49 @@
+# Rosie Dazzlers — Build 248 current pointer
+
+New chat / new AI: read only `AI_PROJECT_HANDOFF.md` first and `MASTER_VALUE_ROADMAP.md` second. Use `STARTUP_GO_LIVE_BLOCKERS.md` only when executing acceptance steps. Older roadmap/handoff files are retained history, not current authority.
+
+---
+
+# Build 245 Current Release Pointer
+
+Start with `AI_PROJECT_HANDOFF.md`, `MASTER_VALUE_ROADMAP.md`, and `STARTUP_GO_LIVE_BLOCKERS.md`. The new protected deployment acceptance route is `/admin-ui-health.html`. Build 245 requires no database migration.
+
+---
+
+# Rosie Dazzlers Build 241
+
+Build 241 is a hotfix for `/admin-startup-guide.html`. It resolves `ReferenceError: Cannot access 'evidenceRows' before initialization`, adds partial-load fallback handling, and advances the browser/service-worker cache token. No database DDL is required. Start with `AI_PROJECT_HANDOFF.md`, then use `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+# Rosie Dazzlers Build 240
+
+Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. Use `STARTUP_GO_LIVE_BLOCKERS.md` or `/admin-startup-guide.html` for the exact launch sequence.
+
+Build 240 adds transactional Inventory Posting & Reversal at `/admin-inventory-posting.html` while preserving the original Inventory Workflow and Workbench. Apply `sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql` in staging after prerequisite migrations.
+
+---
+
+# Rosie Dazzlers Build 238
+
+Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`. For the exact go-live sequence use `STARTUP_GO_LIVE_BLOCKERS.md` or `/admin-startup-guide.html`.
+
+Build 238 adds transactional inventory bulk updates, reviewed duplicate merge, readable audit history/CSV export and audit evidence while preserving the original inventory editor and seven-image galleries. Apply `sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql` in staging before using execute actions.
+
+---
+
+# Build 237 startup stabilization
+
+Deploy the package, apply `sql/2026-07-28_build237_css_startup_evidence_roadmap.sql`, then use `/admin-startup-guide.html`, `/admin-launch-readiness.html`, and `/admin-roadmap-execution.html` in that order.
+
+---
+
+# Build 236 release note
+
+Build 236 is a no-DDL calendar/CSS/schedule compatibility and launch-readiness stabilization pass. Start with `AI_PROJECT_HANDOFF.md`, then `MASTER_VALUE_ROADMAP.md`; implementation and test details are in `docs/BUILD236_CALENDAR_SEO_CSS_STABILIZATION.md`.
+
+---
+
 # Build 219 note — DAIP governance before production media
 
 Build 219 makes the DAIP plan operational without adding uploads, storage, workers, AI, customer access, or public publishing. The two current strategy sources are `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. For DAIP work, begin with `docs/digital-asset-intelligence-platform/13_DAIP_Test_Mode_Process.md`, `11_DAIP_Decision_Register.md`, `15_DAIP_Governance_Workspace_Process.md`, and `14_DAIP_Production_Promotion_Gates.md`. The new protected `/admin-daip-governance.html` screen records owner decisions and shows Gates C–F as held until test and governance evidence are complete.
@@ -1121,3 +1167,110 @@ Build 230 extends only the opt-in Creative Project Intelligence path. Ordinary c
 Added: structured project-only material, labour and other-cost lines; optional project templates; before/after applicability; consent status and summary; story/platform/commerce/report drafts; unified batch output review; reversible booking unlink, archive and restore; and a project-to-DAIP metadata association that is denied until Gate C is accepted and technical capability is explicitly enabled. Nothing publishes automatically.
 
 Primary workspace: `/admin-creative-projects.html`. Migration: `sql/2026-07-13_build230_project_costs_templates_outputs.sql`.
+
+## Build 231
+
+The Creative Project workspace now includes profitability, project classifications, reversible cost lines, reviewed consumption records, content planning from approved sessions, archive manifests and approved learning records. Apply `sql/2026-07-14_build231_project_profitability_content_planning.sql` in staging before testing.
+
+
+## Build 232 — accessible project controls and archive history (2026-07-15)
+
+Build 232 replaces the remaining JSON prompt used to edit project material, labour and cost rows with an accessible dialog form. It adds project budget and target-margin guidance, budget variance and break-even calculations, assignable/evidence-aware shot plans, reviewed consent-reminder queue records, draft revision history, and authenticated metadata-only archive downloads. Ordinary bookings remain unchanged; inventory posting still does not mutate stock; DAIP Gate C and all media/publication controls remain held.
+
+Migration: `sql/2026-07-15_build232_project_controls_archive_history.sql`. Workspace: `/admin-creative-projects.html`.
+
+### Next 20 connected steps
+1. Apply and test Build 232 in staging.
+2. Add reservation availability checks against live inventory.
+3. Define the transactional stock-posting and reversal RPC.
+4. Add sales-channel revenue-source and fee lines.
+5. Add budget-warning tasks to Today Needs Attention.
+6. Connect approved consent reminders to the notification review queue.
+7. Add shot-plan drag ordering and mobile capture evidence selection after Gate C.
+8. Display draft version comparisons and restore controls.
+9. Add provider-neutral AI draft adapter contracts with hard cost limits, disabled by default.
+10. Add editable YouTube chapter timecodes.
+11. Add clip evidence selection after Gate C.
+12. Add Pinterest board administration.
+13. Add Etsy taxonomy and shipping-profile lookup.
+14. Add website schema validation and internal-link checks.
+15. Add educational safety reviewer assignment.
+16. Add CSV archive exports alongside JSON.
+17. Add lessons-to-knowledge-base promotion with human approval.
+18. Improve recommendation scoring with cost, audience and reusable-skill factors.
+19. Add destination-readiness checks before social or commerce handoff.
+20. Keep standard bookings, DAIP media and publishing approval-only.
+
+
+## Build 233 — Supplier-link inventory intake
+- Added a provider-neutral supplier-link preview contract, with Amazon.ca and Amazon.com enabled first.
+- Staff paste a product URL, review extracted public metadata and suggested tool/consumable classification, then save through the existing authoritative inventory endpoint.
+- Exact duplicate checks use normalized Amazon URL and ASIN. Imported images, prices and descriptions are drafts only and require human review.
+- Import attempts are audited in `catalog_supplier_import_audit`; no browser credentials, scraping tokens or automatic purchases are introduced.
+- Ordinary booking inventory, project reservation ledgers and DAIP Gate C remain unchanged.
+
+
+## Build 234 — Separate Inventory Manager
+
+Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and adds `admin-inventory-manager.html` as an optional spreadsheet-style management surface. It supports row-level edits, suspicious-name review, filtering, sorting, soft archive, restore, desktop tables, and mobile cards. The authoritative save path remains `/api/admin/catalog_inventory_save`; no hard delete was added.
+
+
+### Build 235 additions
+- `/admin-inventory-manager.html`: spreadsheet, JSON field-table, bulk editing, readiness and gallery review.
+- `/admin-launch-readiness.html`: preflight and controlled go-live command center.
+- Up to seven ordered gallery images per inventory/product row after applying the Build 235 migration.
+
+---
+
+> **Build 237 synchronization (2026-07-28):** This file is retained for current operational reference, release evidence, specialist detail, or history. Current direction lives in `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`; launch blockers and exact instructions live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+---
+
+> **Build 238 synchronization (2026-07-30):** Retained for current operational reference, specialist detail, release evidence, or history. Current architecture lives in `AI_PROJECT_HANDOFF.md`; current direction lives in `MASTER_VALUE_ROADMAP.md`; exact launch blockers live in `STARTUP_GO_LIVE_BLOCKERS.md`.
+## Build 239 startup entry point
+
+After administrator sign-in, use `/admin-startup-guide.html` for all go-live preparation. Apply `sql/2026-08-01_build239_unified_startup_command_center.sql` after the Build 237 and Build 238 migrations.
+
+<!-- BUILD239_SYNC: 2026-08-01 | Current launch interface: /admin-startup-guide.html | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md -->
+
+<!-- BUILD240_SYNC: 2026-08-05 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | Inventory posting: /admin-inventory-posting.html -->
+
+<!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
+
+
+## Build 242 update
+
+- Repaired `/admin-daip-intake-dry-run` contrast and card styling.
+- Replaced many SVG-only visual placeholders with reusable local raster photo-style placeholders.
+- Advanced Startup Command Center cache-busting and service-worker references to Build 242.
+- No new database migration was introduced in this build.
+
+<!-- Build 245 synchronized 2026-08-06: current authority remains AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md; go-live authority is STARTUP_GO_LIVE_BLOCKERS.md. -->
+
+<!-- BUILD240_SYNC: Build 240 transactional inventory posting/reversal documentation authority retained. -->
+
+## Build 246 catalog-readiness synchronization
+
+- Shared product/inventory publishing readiness now blocks placeholder names, missing required classification/image fields, inactive rows and zero-stock consumables.
+- Public catalog results are filtered at the server boundary.
+- The Build 246 migration adds protected audit evidence, an all-or-nothing publish RPC, Startup process 37 and the current 20-step cycle.
+- Staging acceptance remains required.
+
+<!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
+
+## Build 247 — DAIP private large-media intake
+
+The application can now ingest large Creative Project MOV/MP4/JPG batches through resumable multipart uploads to a private R2 binding named `DAIP_MEDIA_BUCKET`. Follow `DAIP_R2_MEDIA_SETUP_GUIDE.md` before testing. Build 247 queues downstream work but does not yet execute the final video-processing/render pipeline.
+
+<!-- BUILD247_SYNC: 2026-08-07 | Authorities: AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, STARTUP_GO_LIVE_BLOCKERS.md | DAIP media: /admin-daip-media.html | Private R2 binding: DAIP_MEDIA_BUCKET -->
+
+<!-- BUILD248_SYNC: 2026-08-09 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | STARTUP_GO_LIVE_BLOCKERS.md is specialist runbook | Supplier review + private DAIP story evidence + content-package gate -->
+
+<!-- BUILD249_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Specialist runbook: STARTUP_GO_LIVE_BLOCKERS.md | Inventory recovery: reviewed existing-row Amazon refresh -->
+
+<!-- BUILD250_SYNC: 2026-08-10 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public services clarity + rosie-assets/CarPhotos runtime manifest -->
+
+<!-- BUILD251_SYNC: 2026-08-11 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Gate C dark-theme readability + approved rosie-assets/CarPhotos context -->
+<!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
