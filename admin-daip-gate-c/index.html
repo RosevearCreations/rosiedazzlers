@@ -174,9 +174,10 @@
       const hero=usable[0];
       const heroImg=$('gateHeroPhoto');
       heroImg.src=hero.url;
-      heroImg.alt=`Rosie Dazzlers real detailing photo: ${nicePhotoLabel(hero.filename)}`;
+      heroImg.alt=hero.alt_text||`Rosie Dazzlers real detailing photo: ${nicePhotoLabel(hero.filename)}`;
+      heroImg.style.objectPosition=hero.focal_point||'center';
       const stripPool=(usable.length>1?usable.slice(1):usable).slice(0,3);
-      $('gcPhotoStrip').innerHTML=stripPool.map(photo=>`<div class="gc-photo-tile"><img src="${esc(photo.url)}" alt="Rosie Dazzlers real detailing photo: ${esc(nicePhotoLabel(photo.filename))}" loading="lazy" decoding="async"><span>${esc(nicePhotoLabel(photo.filename))}</span></div>`).join('');
+      $('gcPhotoStrip').innerHTML=stripPool.map(photo=>`<div class="gc-photo-tile"><img src="${esc(photo.url)}" alt="${esc(photo.alt_text||`Rosie Dazzlers real detailing photo: ${nicePhotoLabel(photo.filename)}`)}" style="object-position:${esc(photo.focal_point||'center')}" loading="lazy" decoding="async"><span>${esc(photo.title||nicePhotoLabel(photo.filename))}</span></div>`).join('');
       $('gcPhotoSource').textContent=sourceText;
       bindPhotoFallbacks();
     }
@@ -196,14 +197,22 @@
     async function loadPublicPhotos(){
       bindPhotoFallbacks();
       try{
-        const response=await fetch('/api/public/car_photos',{headers:{Accept:'application/json'}});
+        const response=await fetch('/api/public_website_images',{headers:{Accept:'application/json'},cache:'no-store'});
+        const payload=await response.json().catch(()=>({}));
+        const assignmentOrder=['admin:gate-c:feature','admin:gate-c:strip:1','admin:gate-c:strip:2','admin:gate-c:strip:3'];
+        const assignmentMap=new Map((payload.assignments||[]).map(row=>[row.target_key,row]));
+        const explicit=assignmentOrder.map(key=>assignmentMap.get(key)).filter(Boolean);
+        const carPhotos=(payload.prefixes?.car_photos||[]).map(photo=>({url:photo.url,filename:photo.filename,alt_text:photo.alt_text,title:photo.title,focal_point:photo.focal_point}));
+        const photos=safePhotos([...explicit,...carPhotos]);
+        if(response.ok&&photos.length){applyPublicPhotos(photos,`${explicit.length?'Photo Studio assignments + ':''}${carPhotos.length} approved public CarPhotos image${carPhotos.length===1?'':'s'} available`);return;}
+      }catch{}
+      try{
+        const response=await fetch('/api/public/car_photos',{headers:{Accept:'application/json'},cache:'no-store'});
         const payload=await response.json().catch(()=>({}));
         const photos=safePhotos(payload.photos);
         if(response.ok&&photos.length){applyPublicPhotos(photos,`${photos.length} approved public CarPhotos image${photos.length===1?'':'s'} available`);return;}
-        $('gcPhotoSource').textContent='Using known approved CarPhotos while the live manifest is unavailable.';
-      }catch{
-        $('gcPhotoSource').textContent='Using known approved CarPhotos while the live manifest is unavailable.';
-      }
+      }catch{}
+      $('gcPhotoSource').textContent='Using known approved CarPhotos while the live manifest is unavailable.';
     }
 
     async function load(){note('Refreshing Gate C safeguards…');try{data=await api('/api/admin/daip_gate_c_technical_review_dashboard');render(data);note(data.warning||'Gate C review workspace is ready. Gate C remains held.',data.warning?'warn':'success');}catch(e){note(e.message||'Could not load Gate C review.','error');}}
