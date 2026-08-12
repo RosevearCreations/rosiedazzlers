@@ -1,3 +1,7 @@
+-- Build 241 Startup Command Center initialization/cache hotfix.
+-- No schema change is required. Build 240 remains the latest functional DDL.
+-- See sql/2026-08-05_build241_startup_command_center_initialization_hotfix_no_ddl.sql.
+
 -- Build 205 note: sanity report and value-added roadmap only. No new DDL is required in this pass.
 -- Future DDL candidates: quote pipeline metrics, Meta campaign ROI, memberships, vehicle history, proof-of-work checklists, and fleet account CRM.
 
@@ -384,7 +388,7 @@ create table if not exists public.job_media (
 );
 create table if not exists public.job_signoffs (id uuid primary key default gen_random_uuid(), booking_id uuid not null references public.bookings(id) on delete cascade, created_at timestamptz not null default now(), signed_at timestamptz not null default now(), signer_type text not null check (signer_type in ('customer','staff')), signer_name text not null, signer_email text null, notes text null, user_agent text null, staff_user_id uuid null);
 create table if not exists public.recovery_message_templates (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), template_key text not null unique, channel text not null check (channel in ('email','sms')), provider text not null default 'manual', is_active boolean not null default true, subject_template text null, body_template text not null, variables jsonb not null default '[]'::jsonb, rules jsonb not null default '{}'::jsonb, notes text null);
-create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, subcategory text null, description text null, image_url text null, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, sort_key integer not null default 0, reuse_policy text not null default 'reorder' check (reuse_policy in ('reorder','single_use','never_reuse')), purchase_date date null, estimated_jobs_per_unit numeric(12,2) null, receipt_url text null, assigned_station text null, service_tags text[] null, last_counted_at timestamptz null, public_badge text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null, notes text null);
+create table if not exists public.catalog_inventory_items (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_key text not null unique, item_type text not null check (item_type in ('tool','consumable')), name text not null, category text null, subcategory text null, description text null, image_url text null, gallery_image_urls jsonb not null default '[]'::jsonb, amazon_url text null, is_public boolean not null default true, is_active boolean not null default true, qty_on_hand numeric(12,2) not null default 0, reorder_point numeric(12,2) not null default 0, reorder_qty numeric(12,2) not null default 0, unit_label text null, cost_cents integer null, preferred_vendor text null, vendor_sku text null, rating_value numeric(3,2) null, rating_count integer not null default 0, sort_key integer not null default 0, reuse_policy text not null default 'reorder' check (reuse_policy in ('reorder','single_use','never_reuse')), purchase_date date null, estimated_jobs_per_unit numeric(12,2) null, receipt_url text null, assigned_station text null, service_tags text[] null, last_counted_at timestamptz null, public_badge text null, amazon_asin text null, amazon_title text null, amazon_match_status text null, amazon_match_score numeric(6,3) null, amazon_seller_name text null, amazon_brand text null, amazon_category text null, amazon_quantity_total numeric(12,2) null, amazon_net_total_cents integer null, notes text null);
 create table if not exists public.catalog_low_stock_alerts (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), item_id uuid not null references public.catalog_inventory_items(id) on delete cascade, item_key text null, qty_snapshot numeric(12,2) null, reorder_point_snapshot numeric(12,2) null, is_resolved boolean not null default false, resolved_at timestamptz null, resolved_by_name text null, resolution_notes text null);
 create table if not exists public.catalog_purchase_orders (id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(), updated_at timestamptz not null default now(), item_id uuid null references public.catalog_inventory_items(id) on delete set null, item_key text null, item_name text null, vendor_name text null, qty_ordered numeric(12,2) not null default 0, unit_cost_cents integer null, status text not null default 'draft' check (status in ('draft','requested','ordered','received','cancelled')), reminder_at timestamptz null, reminder_sent_at timestamptz null, reminder_last_channel text null, ordered_at timestamptz null, received_at timestamptz null, purchase_url text null, note text null);
 
@@ -2699,7 +2703,7 @@ create table if not exists public.app_roadmap_execution_items (
  id uuid primary key default gen_random_uuid(),
  item_key text not null unique check (item_key ~ '^[a-z0-9_:-]{4,120}$'),
  title text not null check (char_length(title) between 5 and 220),
- workstream text not null check (workstream in ('customer','booking','payments','seo','media','daip','operations','reliability','documentation')),
+ workstream text not null check (workstream in ('customer','booking','payments','seo','media','daip','operations','reliability','documentation','content','security')),
  priority text not null default 'high' check (priority in ('critical','high','medium','low')),
  status text not null default 'planned' check (status in ('planned','in_progress','blocked','done','deferred')),
  owner_label text null check (owner_label is null or char_length(owner_label)<=120),
@@ -3002,3 +3006,1588 @@ grant all privileges on table public.creative_project_templates,public.creative_
 comment on table public.creative_project_material_lines is 'Build 230 project-only material accounting. It does not mutate ordinary booking inventory or job costing.';
 comment on table public.creative_project_daip_associations is 'Build 230 gated project-to-DAIP metadata association. Database constraints prohibit media bytes and public destinations.';
 commit;
+-- Build 231 — project profitability, reviewed consumption, content planning, learning, and reversible line controls.
+begin;
+
+alter table public.creative_projects
+  add column if not exists project_classification text not null default 'commercial'
+    check (project_classification in ('commercial','therapeutic','educational','internal','non_commercial')),
+  add column if not exists expected_revenue_cad numeric(12,2) not null default 0 check (expected_revenue_cad >= 0),
+  add column if not exists actual_revenue_cad numeric(12,2) not null default 0 check (actual_revenue_cad >= 0),
+  add column if not exists consent_expires_at timestamptz null,
+  add column if not exists consent_reminder_days integer not null default 30 check (consent_reminder_days between 1 and 365),
+  add column if not exists profitability_note text null check (profitability_note is null or char_length(profitability_note) <= 2000);
+
+alter table public.creative_project_material_lines
+  add column if not exists is_deleted boolean not null default false,
+  add column if not exists deleted_at timestamptz null,
+  add column if not exists deleted_by_staff_email text null;
+alter table public.creative_project_labour_lines
+  add column if not exists is_deleted boolean not null default false,
+  add column if not exists deleted_at timestamptz null,
+  add column if not exists deleted_by_staff_email text null;
+alter table public.creative_project_cost_lines
+  add column if not exists is_deleted boolean not null default false,
+  add column if not exists deleted_at timestamptz null,
+  add column if not exists deleted_by_staff_email text null;
+alter table public.creative_project_sessions
+  add column if not exists approved_for_story boolean not null default false,
+  add column if not exists story_approved_at timestamptz null,
+  add column if not exists story_approved_by_staff_email text null;
+alter table public.creative_project_output_drafts
+  add column if not exists planning_data jsonb not null default '{}'::jsonb,
+  add column if not exists safety_review_status text not null default 'not_reviewed'
+    check (safety_review_status in ('not_reviewed','required','review','approved','rejected'));
+alter table public.creative_project_templates
+  add column if not exists safe_instructions text null check (safe_instructions is null or char_length(safe_instructions) <= 4000),
+  add column if not exists updated_by_staff_email text null;
+
+create table if not exists public.creative_project_inventory_reservations (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  material_line_id uuid null references public.creative_project_material_lines(id) on delete set null,
+  inventory_item_id uuid not null,
+  quantity numeric(12,3) not null check (quantity > 0),
+  unit text not null default 'item' check (char_length(unit) between 1 and 40),
+  status text not null default 'draft' check (status in ('draft','reserved','reviewed','posted','cancelled')),
+  review_note text null check (review_note is null or char_length(review_note) <= 1200),
+  reviewed_by_staff_email text null,
+  reviewed_at timestamptz null,
+  posted_by_staff_email text null,
+  posted_at timestamptz null,
+  inventory_mutated boolean not null default false check (inventory_mutated = false),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.creative_project_shot_plan_items (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  shot_type text not null check (shot_type in ('before','during','after','detail','tool','material','safety','thumbnail','other')),
+  description text not null check (char_length(description) between 3 and 500),
+  required boolean not null default true,
+  status text not null default 'planned' check (status in ('planned','captured','approved','not_applicable')),
+  consent_required boolean not null default false,
+  safe_note text null check (safe_note is null or char_length(safe_note) <= 1200),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.creative_project_learning_items (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  item_type text not null check (item_type in ('lesson','future_recommendation')),
+  title text not null check (char_length(title) between 3 and 180),
+  detail text not null check (char_length(detail) between 3 and 4000),
+  status text not null default 'draft' check (status in ('draft','review','approved','rejected','archived')),
+  score integer null check (score is null or score between 0 and 100),
+  rationale text null check (rationale is null or char_length(rationale) <= 2000),
+  approved_by_staff_email text null,
+  approved_at timestamptz null,
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists public.creative_project_archive_exports (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  export_status text not null default 'prepared' check (export_status in ('prepared','downloaded','superseded')),
+  manifest jsonb not null default '{}'::jsonb,
+  contains_media_bytes boolean not null default false check (contains_media_bytes = false),
+  public_destination_enabled boolean not null default false check (public_destination_enabled = false),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists creative_project_inventory_reservations_idx on public.creative_project_inventory_reservations(project_id,status,created_at desc);
+create index if not exists creative_project_shot_plan_items_idx on public.creative_project_shot_plan_items(project_id,status,created_at);
+create index if not exists creative_project_learning_items_idx on public.creative_project_learning_items(project_id,item_type,status,score desc nulls last);
+create index if not exists creative_project_archive_exports_idx on public.creative_project_archive_exports(project_id,created_at desc);
+
+alter table public.creative_project_inventory_reservations enable row level security;
+alter table public.creative_project_shot_plan_items enable row level security;
+alter table public.creative_project_learning_items enable row level security;
+alter table public.creative_project_archive_exports enable row level security;
+revoke all privileges on table public.creative_project_inventory_reservations,public.creative_project_shot_plan_items,public.creative_project_learning_items,public.creative_project_archive_exports from public,anon,authenticated;
+grant all privileges on table public.creative_project_inventory_reservations,public.creative_project_shot_plan_items,public.creative_project_learning_items,public.creative_project_archive_exports to service_role;
+
+alter table public.creative_project_audit drop constraint if exists creative_project_audit_event_type_check;
+alter table public.creative_project_audit add constraint creative_project_audit_event_type_check check (event_type in ('created','updated','session_added','output_updated','archived','restored','booking_unlinked','cost_line_added','material_line_added','labour_line_added','draft_updated','batch_approval','daip_associated','line_updated','line_soft_deleted','inventory_reservation_updated','session_story_approval','shot_plan_updated','learning_updated','archive_export_prepared','template_updated','content_plan_generated'));
+
+comment on table public.creative_project_inventory_reservations is 'Build 231 reviewed project-consumption ledger. inventory_mutated is forcibly false; ordinary booking inventory remains unchanged.';
+comment on table public.creative_project_archive_exports is 'Build 231 metadata-only archive manifests. No media bytes and no public destination.';
+commit;
+
+
+-- BEGIN BUILD 232
+-- Build 232: accessible project controls, budgets, reminders, evidence and draft history
+alter table if exists public.creative_projects add column if not exists project_budget_cad numeric(12,2) not null default 0 check (project_budget_cad >= 0);
+alter table if exists public.creative_projects add column if not exists target_margin_percent numeric(5,2) not null default 30 check (target_margin_percent between 0 and 95);
+alter table if exists public.creative_project_shot_plan_items add column if not exists owner_label text;
+alter table if exists public.creative_project_shot_plan_items add column if not exists sort_order integer not null default 1 check (sort_order between 1 and 9999);
+alter table if exists public.creative_project_shot_plan_items add column if not exists capture_evidence_note text;
+create table if not exists public.creative_project_consent_reminders (id uuid primary key default gen_random_uuid(),project_id uuid not null references public.creative_projects(id) on delete cascade,due_at timestamptz not null,status text not null default 'queued_for_review' check(status in ('queued_for_review','approved','sent','cancelled','failed')),recipient_scope text not null default 'project_owner_review',safe_message text not null,created_by_staff_email text,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
+create table if not exists public.creative_project_output_draft_versions (id uuid primary key default gen_random_uuid(),project_id uuid not null references public.creative_projects(id) on delete cascade,output_type text not null,draft_kind text not null,version_payload jsonb not null default '{}'::jsonb,created_by_staff_email text,created_at timestamptz not null default now());
+alter table public.creative_project_consent_reminders enable row level security;alter table public.creative_project_output_draft_versions enable row level security;
+revoke all on public.creative_project_consent_reminders from public,anon,authenticated;revoke all on public.creative_project_output_draft_versions from public,anon,authenticated;
+grant all on public.creative_project_consent_reminders to service_role;grant all on public.creative_project_output_draft_versions to service_role;
+create index if not exists creative_project_consent_reminders_due_idx on public.creative_project_consent_reminders(status,due_at);
+create index if not exists creative_project_draft_versions_project_idx on public.creative_project_output_draft_versions(project_id,output_type,draft_kind,created_at desc);
+-- END BUILD 232
+
+
+-- Build 233: provider-neutral supplier-link inventory intake, Amazon first.
+create table if not exists public.catalog_supplier_import_audit (
+  id uuid primary key default gen_random_uuid(), created_at timestamptz not null default now(),
+  provider text not null, source_url text not null, external_product_id text null,
+  parse_status text not null check (parse_status in ('parsed','partial','failed')), warning_text text null,
+  duplicate_item_key text null, actor_name text null
+);
+create index if not exists catalog_supplier_import_audit_created_idx on public.catalog_supplier_import_audit(created_at desc);
+alter table public.catalog_supplier_import_audit enable row level security;
+revoke all on table public.catalog_supplier_import_audit from anon, authenticated;
+grant all on table public.catalog_supplier_import_audit to service_role;
+
+
+-- Build 235: ordered product/inventory gallery support (featured image remains image_url).
+alter table if exists public.catalog_inventory_items add column if not exists gallery_image_urls jsonb not null default '[]'::jsonb;
+alter table if exists public.catalog_items add column if not exists gallery_image_urls jsonb not null default '[]'::jsonb;
+
+-- Build 236: no-DDL schedule compatibility and UI stabilization note.
+-- The existing schedule source remains:
+--   public.date_blocks(blocked_date, reason, created_at)
+--   public.slot_blocks(blocked_date, slot, reason, created_at)
+-- Build 236 API readers/writers use those columns and expose legacy aliases only at response boundaries.
+
+
+-- Build 237 canonical schema synchronization (2026-07-28).
+-- Apply sql/2026-07-28_build237_css_startup_evidence_roadmap.sql after Build 227.
+create table if not exists public.app_launch_readiness_evidence (
+  id uuid primary key default gen_random_uuid(), evidence_key text not null unique, title text not null, detail text not null,
+  severity text not null check (severity in ('block','warn')), status text not null default 'pending' check (status in ('pending','verified','failed','waived')),
+  sort_order integer not null default 100, evidence_note text null, verified_at timestamptz null, verified_by_staff_email text null,
+  updated_by_staff_email text null, created_at timestamptz not null default now(), updated_at timestamptz not null default now()
+);
+create table if not exists public.app_launch_readiness_evidence_audit (
+  id uuid primary key default gen_random_uuid(), evidence_key text not null, event_type text not null, status text not null,
+  actor_staff_email text null, safe_note text not null, created_at timestamptz not null default now()
+);
+alter table public.app_roadmap_execution_items add column if not exists cycle_key text not null default 'build227';
+alter table public.app_roadmap_execution_items add column if not exists is_current_cycle boolean not null default false;
+alter table public.app_roadmap_execution_items add column if not exists action_path text null;
+
+-- BEGIN 2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql
+-- Build 238 — transactional inventory bulk updates, reviewed duplicate merge,
+-- audit evidence, and launch-readiness roadmap cycle.
+-- Apply in Supabase SQL Editor before using the new bulk/merge execute actions.
+
+create table if not exists public.catalog_inventory_change_batches (
+  id uuid primary key default gen_random_uuid(),
+  operation_type text not null check (operation_type in ('bulk_update','archive','restore')),
+  reason text not null check (char_length(reason) between 8 and 1200),
+  row_count integer not null default 0 check (row_count >= 0),
+  actor_staff_email text null,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.catalog_inventory_change_batch_rows (
+  id uuid primary key default gen_random_uuid(),
+  batch_id uuid not null references public.catalog_inventory_change_batches(id) on delete restrict,
+  item_id uuid not null references public.catalog_inventory_items(id) on delete restrict,
+  item_key text not null,
+  before_row jsonb not null,
+  after_row jsonb not null,
+  changed_fields text[] not null default '{}',
+  created_at timestamptz not null default now()
+);
+
+create table if not exists public.catalog_inventory_merge_audit (
+  id uuid primary key default gen_random_uuid(),
+  survivor_item_id uuid not null references public.catalog_inventory_items(id) on delete restrict,
+  survivor_item_key text not null,
+  duplicate_item_id uuid not null references public.catalog_inventory_items(id) on delete restrict,
+  duplicate_item_key text not null,
+  reason text not null check (char_length(reason) between 8 and 1200),
+  reference_counts jsonb not null default '{}'::jsonb,
+  survivor_before jsonb not null,
+  duplicate_before jsonb not null,
+  survivor_after jsonb not null,
+  duplicate_after jsonb not null,
+  actor_staff_email text null,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists catalog_inventory_change_batches_created_idx
+  on public.catalog_inventory_change_batches(created_at desc);
+create index if not exists catalog_inventory_change_batch_rows_batch_idx
+  on public.catalog_inventory_change_batch_rows(batch_id, created_at);
+create index if not exists catalog_inventory_change_batch_rows_item_idx
+  on public.catalog_inventory_change_batch_rows(item_id, created_at desc);
+create index if not exists catalog_inventory_merge_survivor_idx
+  on public.catalog_inventory_merge_audit(survivor_item_id, created_at desc);
+create index if not exists catalog_inventory_merge_duplicate_idx
+  on public.catalog_inventory_merge_audit(duplicate_item_id, created_at desc);
+
+alter table public.catalog_inventory_change_batches enable row level security;
+alter table public.catalog_inventory_change_batch_rows enable row level security;
+alter table public.catalog_inventory_merge_audit enable row level security;
+revoke all privileges on table public.catalog_inventory_change_batches from public, anon, authenticated;
+revoke all privileges on table public.catalog_inventory_change_batch_rows from public, anon, authenticated;
+revoke all privileges on table public.catalog_inventory_merge_audit from public, anon, authenticated;
+grant all privileges on table public.catalog_inventory_change_batches to service_role;
+grant all privileges on table public.catalog_inventory_change_batch_rows to service_role;
+grant all privileges on table public.catalog_inventory_merge_audit to service_role;
+
+create or replace function public.admin_catalog_inventory_bulk_update(
+  p_changes jsonb,
+  p_actor_email text,
+  p_reason text,
+  p_operation_type text default 'bulk_update',
+  p_dry_run boolean default true
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_change jsonb;
+  v_patch jsonb;
+  v_item_key text;
+  v_before jsonb;
+  v_after jsonb;
+  v_item_id uuid;
+  v_batch_id uuid;
+  v_processed integer := 0;
+  v_unknown text[];
+  v_changed_fields text[];
+  v_allowed constant text[] := array[
+    'name','item_type','category','subcategory','description','qty_on_hand',
+    'reorder_point','reorder_qty','unit_label','cost_cents','preferred_vendor',
+    'reuse_policy','image_url','gallery_image_urls','is_public','is_active','notes'
+  ];
+begin
+  if jsonb_typeof(p_changes) <> 'array' or jsonb_array_length(p_changes) < 1 then
+    raise exception 'At least one inventory change is required.' using errcode = '22023';
+  end if;
+  if jsonb_array_length(p_changes) > 500 then
+    raise exception 'A maximum of 500 rows can be updated in one batch.' using errcode = '22023';
+  end if;
+  if char_length(trim(coalesce(p_reason,''))) < 8 then
+    raise exception 'Enter a reason with at least 8 characters.' using errcode = '22023';
+  end if;
+  if coalesce(p_operation_type,'') not in ('bulk_update','archive','restore') then
+    raise exception 'Invalid inventory batch operation.' using errcode = '22023';
+  end if;
+
+  -- Validate the complete batch before any write. Any later exception rolls back the transaction.
+  for v_change in select value from jsonb_array_elements(p_changes)
+  loop
+    v_item_key := trim(coalesce(v_change->>'item_key',''));
+    v_patch := coalesce(v_change->'changes','{}'::jsonb);
+    if v_item_key = '' then raise exception 'Every batch row requires item_key.' using errcode='22023'; end if;
+    if jsonb_typeof(v_patch) <> 'object' or v_patch = '{}'::jsonb then
+      raise exception 'Inventory row % has no changes.', v_item_key using errcode='22023';
+    end if;
+    select array_agg(k) into v_unknown
+      from jsonb_object_keys(v_patch) as k
+      where not (k = any(v_allowed));
+    if coalesce(array_length(v_unknown,1),0) > 0 then
+      raise exception 'Inventory row % contains unsupported fields: %.', v_item_key, array_to_string(v_unknown, ', ') using errcode='22023';
+    end if;
+    select to_jsonb(i), i.id into v_before, v_item_id
+      from public.catalog_inventory_items i where i.item_key = v_item_key for update;
+    if v_item_id is null then raise exception 'Inventory row % was not found.', v_item_key using errcode='P0002'; end if;
+    if v_patch ? 'name' and char_length(trim(coalesce(v_patch->>'name',''))) < 2 then
+      raise exception 'Inventory row % requires a useful name.', v_item_key using errcode='22023';
+    end if;
+    if v_patch ? 'item_type' and coalesce(v_patch->>'item_type','') not in ('tool','consumable') then
+      raise exception 'Inventory row % has an invalid item type.', v_item_key using errcode='22023';
+    end if;
+    if v_patch ? 'reuse_policy' and coalesce(v_patch->>'reuse_policy','') not in ('reorder','single_use','never_reuse') then
+      raise exception 'Inventory row % has an invalid reuse policy.', v_item_key using errcode='22023';
+    end if;
+    if v_patch ? 'gallery_image_urls' and (
+      jsonb_typeof(v_patch->'gallery_image_urls') <> 'array' or jsonb_array_length(v_patch->'gallery_image_urls') > 7
+    ) then raise exception 'Inventory row % can have no more than seven gallery images.', v_item_key using errcode='22023'; end if;
+    if v_patch ? 'qty_on_hand' and coalesce((v_patch->>'qty_on_hand')::numeric,0) < 0 then
+      raise exception 'Inventory row % cannot have negative quantity.', v_item_key using errcode='22023';
+    end if;
+    if v_patch ? 'reorder_point' and coalesce((v_patch->>'reorder_point')::numeric,0) < 0 then
+      raise exception 'Inventory row % cannot have a negative reorder point.', v_item_key using errcode='22023';
+    end if;
+    if v_patch ? 'cost_cents' and (v_patch->>'cost_cents') is not null and (v_patch->>'cost_cents')::integer < 0 then
+      raise exception 'Inventory row % cannot have a negative cost.', v_item_key using errcode='22023';
+    end if;
+  end loop;
+
+  if not p_dry_run then
+    insert into public.catalog_inventory_change_batches(operation_type,reason,row_count,actor_staff_email)
+    values(p_operation_type,trim(p_reason),jsonb_array_length(p_changes),nullif(trim(coalesce(p_actor_email,'')),''))
+    returning id into v_batch_id;
+  end if;
+
+  for v_change in select value from jsonb_array_elements(p_changes)
+  loop
+    v_item_key := trim(v_change->>'item_key');
+    v_patch := v_change->'changes';
+    select to_jsonb(i), i.id into v_before, v_item_id
+      from public.catalog_inventory_items i where i.item_key = v_item_key for update;
+    select array_agg(k order by k) into v_changed_fields from jsonb_object_keys(v_patch) as k;
+
+    if p_dry_run then
+      v_after := v_before || v_patch || jsonb_build_object('updated_at', now());
+    else
+      update public.catalog_inventory_items i set
+        name = case when v_patch ? 'name' then trim(v_patch->>'name') else i.name end,
+        item_type = case when v_patch ? 'item_type' then v_patch->>'item_type' else i.item_type end,
+        category = case when v_patch ? 'category' then nullif(trim(v_patch->>'category'),'') else i.category end,
+        subcategory = case when v_patch ? 'subcategory' then nullif(trim(v_patch->>'subcategory'),'') else i.subcategory end,
+        description = case when v_patch ? 'description' then nullif(trim(v_patch->>'description'),'') else i.description end,
+        qty_on_hand = case when v_patch ? 'qty_on_hand' then (v_patch->>'qty_on_hand')::numeric else i.qty_on_hand end,
+        reorder_point = case when v_patch ? 'reorder_point' then (v_patch->>'reorder_point')::numeric else i.reorder_point end,
+        reorder_qty = case when v_patch ? 'reorder_qty' then (v_patch->>'reorder_qty')::numeric else i.reorder_qty end,
+        unit_label = case when v_patch ? 'unit_label' then nullif(trim(v_patch->>'unit_label'),'') else i.unit_label end,
+        cost_cents = case when v_patch ? 'cost_cents' then nullif(v_patch->>'cost_cents','')::integer else i.cost_cents end,
+        preferred_vendor = case when v_patch ? 'preferred_vendor' then nullif(trim(v_patch->>'preferred_vendor'),'') else i.preferred_vendor end,
+        reuse_policy = case when v_patch ? 'reuse_policy' then v_patch->>'reuse_policy' else i.reuse_policy end,
+        image_url = case when v_patch ? 'image_url' then nullif(trim(v_patch->>'image_url'),'') else i.image_url end,
+        gallery_image_urls = case when v_patch ? 'gallery_image_urls' then v_patch->'gallery_image_urls' else i.gallery_image_urls end,
+        is_public = case when v_patch ? 'is_public' then (v_patch->>'is_public')::boolean else i.is_public end,
+        is_active = case when v_patch ? 'is_active' then (v_patch->>'is_active')::boolean else i.is_active end,
+        notes = case when v_patch ? 'notes' then nullif(trim(v_patch->>'notes'),'') else i.notes end,
+        updated_at = now()
+      where i.id = v_item_id
+      returning to_jsonb(i) into v_after;
+
+      insert into public.catalog_inventory_change_batch_rows(
+        batch_id,item_id,item_key,before_row,after_row,changed_fields
+      ) values(v_batch_id,v_item_id,v_item_key,v_before,v_after,coalesce(v_changed_fields,'{}'));
+    end if;
+    v_processed := v_processed + 1;
+  end loop;
+
+  return jsonb_build_object(
+    'ok',true,'dry_run',p_dry_run,'processed',v_processed,'batch_id',v_batch_id,
+    'operation_type',p_operation_type
+  );
+end;
+$$;
+
+create or replace function public.admin_catalog_inventory_merge(
+  p_survivor_item_key text,
+  p_duplicate_item_key text,
+  p_actor_email text,
+  p_reason text,
+  p_dry_run boolean default true
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  s public.catalog_inventory_items%rowtype;
+  d public.catalog_inventory_items%rowtype;
+  v_survivor_before jsonb;
+  v_duplicate_before jsonb;
+  v_survivor_after jsonb;
+  v_duplicate_after jsonb;
+  v_counts jsonb := '{}'::jsonb;
+  v_count bigint;
+  v_gallery jsonb;
+  v_tags text[];
+  v_note text;
+begin
+  if trim(coalesce(p_survivor_item_key,'')) = '' or trim(coalesce(p_duplicate_item_key,'')) = '' then
+    raise exception 'Choose both a survivor and a duplicate inventory row.' using errcode='22023';
+  end if;
+  if p_survivor_item_key = p_duplicate_item_key then
+    raise exception 'The survivor and duplicate must be different rows.' using errcode='22023';
+  end if;
+  if char_length(trim(coalesce(p_reason,''))) < 8 then
+    raise exception 'Enter a merge reason with at least 8 characters.' using errcode='22023';
+  end if;
+
+  select * into s from public.catalog_inventory_items where item_key=p_survivor_item_key for update;
+  if not found then raise exception 'Survivor inventory row was not found.' using errcode='P0002'; end if;
+  select * into d from public.catalog_inventory_items where item_key=p_duplicate_item_key for update;
+  if not found then raise exception 'Duplicate inventory row was not found.' using errcode='P0002'; end if;
+  if s.item_type <> d.item_type then
+    raise exception 'Only inventory rows of the same type can be merged.' using errcode='22023';
+  end if;
+  if nullif(trim(coalesce(s.unit_label,'')),'') is not null and nullif(trim(coalesce(d.unit_label,'')),'') is not null
+     and lower(trim(s.unit_label)) <> lower(trim(d.unit_label)) then
+    raise exception 'The selected rows use different units. Correct the units before merging.' using errcode='22023';
+  end if;
+  if d.is_active = false and coalesce(d.qty_on_hand,0)=0 and position('Merged into ' in coalesce(d.notes,''))>0 then
+    raise exception 'The selected duplicate already appears to have been merged.' using errcode='22023';
+  end if;
+
+  v_survivor_before := to_jsonb(s);
+  v_duplicate_before := to_jsonb(d);
+
+  select count(*) into v_count from public.catalog_inventory_movements where item_id=d.id or item_key=d.item_key;
+  v_counts := v_counts || jsonb_build_object('inventory_movements',v_count);
+  select count(*) into v_count from public.catalog_low_stock_alerts where item_id=d.id or item_key=d.item_key;
+  v_counts := v_counts || jsonb_build_object('low_stock_alerts',v_count);
+  select count(*) into v_count from public.catalog_purchase_orders where item_id=d.id or item_key=d.item_key;
+  v_counts := v_counts || jsonb_build_object('purchase_orders',v_count);
+  select count(*) into v_count from public.catalog_item_receipts where item_key=d.item_key;
+  v_counts := v_counts || jsonb_build_object('receipts',v_count);
+  select count(*) into v_count from public.catalog_item_assignments where item_key=d.item_key;
+  v_counts := v_counts || jsonb_build_object('assignments',v_count);
+  select count(*) into v_count from public.service_product_links where item_key=d.item_key;
+  v_counts := v_counts || jsonb_build_object('service_links',v_count);
+  select count(*) into v_count from public.creative_project_material_lines where inventory_item_id=d.id;
+  v_counts := v_counts || jsonb_build_object('project_material_lines',v_count);
+  select count(*) into v_count from public.creative_project_inventory_reservations where inventory_item_id=d.id;
+  v_counts := v_counts || jsonb_build_object('project_reservations',v_count);
+
+  select coalesce(jsonb_agg(value order by first_seen),'[]'::jsonb) into v_gallery
+  from (
+    select value, first_seen
+    from (
+      select trim(value) as value, first_seen,
+             row_number() over (partition by lower(trim(value)) order by first_seen) as duplicate_rank
+      from (
+        select value, ordinality first_seen from jsonb_array_elements_text(coalesce(s.gallery_image_urls,'[]'::jsonb)) with ordinality
+        union all
+        select value, 100 + ordinality first_seen from jsonb_array_elements_text(coalesce(d.gallery_image_urls,'[]'::jsonb)) with ordinality
+      ) source_images
+      where trim(value)<>''
+    ) ranked_images
+    where duplicate_rank=1
+    order by first_seen
+    limit 7
+  ) dedup;
+  select array_agg(tag order by tag) into v_tags from (
+    select distinct trim(tag) tag from unnest(coalesce(s.service_tags,'{}') || coalesce(d.service_tags,'{}')) tag where trim(tag)<>''
+  ) t;
+
+  if p_dry_run then
+    return jsonb_build_object(
+      'ok',true,'dry_run',true,'reference_counts',v_counts,
+      'survivor',v_survivor_before,'duplicate',v_duplicate_before,
+      'proposed',jsonb_build_object(
+        'qty_on_hand',coalesce(s.qty_on_hand,0)+coalesce(d.qty_on_hand,0),
+        'cost_cents',coalesce(s.cost_cents,d.cost_cents),
+        'image_url',coalesce(nullif(s.image_url,''),d.image_url),
+        'gallery_image_urls',coalesce(v_gallery,'[]'::jsonb),
+        'category',coalesce(nullif(s.category,''),d.category),
+        'preferred_vendor',coalesce(nullif(s.preferred_vendor,''),d.preferred_vendor),
+        'duplicate_action','archive with zero quantity; no hard delete'
+      )
+    );
+  end if;
+
+  -- Record a compensating transfer before moving historical references.
+  if coalesce(d.qty_on_hand,0) <> 0 then
+    insert into public.catalog_inventory_movements(item_id,item_key,movement_type,qty_delta,previous_qty,new_qty,unit_label,note,actor_name)
+    values(s.id,s.item_key,'adjustment',coalesce(d.qty_on_hand,0),coalesce(s.qty_on_hand,0),coalesce(s.qty_on_hand,0)+coalesce(d.qty_on_hand,0),coalesce(s.unit_label,d.unit_label),'Build 238 duplicate merge transfer from '||d.item_key,nullif(trim(coalesce(p_actor_email,'')),''));
+    insert into public.catalog_inventory_movements(item_id,item_key,movement_type,qty_delta,previous_qty,new_qty,unit_label,note,actor_name)
+    values(d.id,d.item_key,'adjustment',-coalesce(d.qty_on_hand,0),coalesce(d.qty_on_hand,0),0,coalesce(d.unit_label,s.unit_label),'Build 238 duplicate merge transfer to '||s.item_key,nullif(trim(coalesce(p_actor_email,'')),''));
+  end if;
+
+  update public.catalog_inventory_movements set item_id=s.id,item_key=s.item_key,updated_at=now() where (item_id=d.id or item_key=d.item_key) and note not like 'Build 238 duplicate merge transfer to %';
+  update public.catalog_low_stock_alerts set item_id=s.id,item_key=s.item_key where item_id=d.id or item_key=d.item_key;
+  update public.catalog_purchase_orders set item_id=s.id,item_key=s.item_key,item_name=s.name,updated_at=now() where item_id=d.id or item_key=d.item_key;
+  update public.catalog_item_receipts set item_key=s.item_key where item_key=d.item_key;
+  update public.catalog_item_assignments set item_key=s.item_key where item_key=d.item_key;
+  update public.service_product_links set item_key=s.item_key,updated_at=now() where item_key=d.item_key;
+  update public.creative_project_material_lines set inventory_item_id=s.id,updated_at=now() where inventory_item_id=d.id;
+  update public.creative_project_inventory_reservations set inventory_item_id=s.id,updated_at=now() where inventory_item_id=d.id;
+
+  update public.catalog_inventory_items as ci set
+    qty_on_hand=coalesce(s.qty_on_hand,0)+coalesce(d.qty_on_hand,0),
+    reorder_point=greatest(coalesce(s.reorder_point,0),coalesce(d.reorder_point,0)),
+    reorder_qty=greatest(coalesce(s.reorder_qty,0),coalesce(d.reorder_qty,0)),
+    category=coalesce(nullif(s.category,''),d.category),
+    subcategory=coalesce(nullif(s.subcategory,''),d.subcategory),
+    description=coalesce(nullif(s.description,''),d.description),
+    image_url=coalesce(nullif(s.image_url,''),d.image_url),
+    gallery_image_urls=coalesce(v_gallery,'[]'::jsonb),
+    cost_cents=coalesce(s.cost_cents,d.cost_cents),
+    preferred_vendor=coalesce(nullif(s.preferred_vendor,''),d.preferred_vendor),
+    vendor_sku=coalesce(nullif(s.vendor_sku,''),d.vendor_sku),
+    unit_label=coalesce(nullif(s.unit_label,''),d.unit_label),
+    receipt_url=coalesce(nullif(s.receipt_url,''),d.receipt_url),
+    assigned_station=coalesce(nullif(s.assigned_station,''),d.assigned_station),
+    amazon_url=coalesce(nullif(s.amazon_url,''),d.amazon_url),
+    amazon_asin=coalesce(nullif(s.amazon_asin,''),d.amazon_asin),
+    amazon_title=coalesce(nullif(s.amazon_title,''),d.amazon_title),
+    amazon_brand=coalesce(nullif(s.amazon_brand,''),d.amazon_brand),
+    amazon_category=coalesce(nullif(s.amazon_category,''),d.amazon_category),
+    service_tags=coalesce(v_tags,'{}'),
+    notes=concat_ws(E'\n',nullif(s.notes,''),'Merged duplicate '||d.item_key||' on '||to_char(now(),'YYYY-MM-DD')||'. Reason: '||trim(p_reason)),
+    is_active=true,
+    updated_at=now()
+  where ci.id=s.id returning to_jsonb(ci) into v_survivor_after;
+
+  v_note := concat_ws(E'\n',nullif(d.notes,''),'Merged into '||s.item_key||' on '||to_char(now(),'YYYY-MM-DD')||'. Reason: '||trim(p_reason));
+  update public.catalog_inventory_items as ci set
+    qty_on_hand=0,is_active=false,is_public=false,notes=v_note,updated_at=now()
+  where ci.id=d.id returning to_jsonb(ci) into v_duplicate_after;
+
+  insert into public.catalog_inventory_merge_audit(
+    survivor_item_id,survivor_item_key,duplicate_item_id,duplicate_item_key,reason,
+    reference_counts,survivor_before,duplicate_before,survivor_after,duplicate_after,actor_staff_email
+  ) values(
+    s.id,s.item_key,d.id,d.item_key,trim(p_reason),v_counts,
+    v_survivor_before,v_duplicate_before,v_survivor_after,v_duplicate_after,nullif(trim(coalesce(p_actor_email,'')),'')
+  );
+
+  return jsonb_build_object('ok',true,'dry_run',false,'reference_counts',v_counts,'survivor',v_survivor_after,'duplicate',v_duplicate_after);
+end;
+$$;
+
+revoke all on function public.admin_catalog_inventory_bulk_update(jsonb,text,text,text,boolean) from public, anon, authenticated;
+revoke all on function public.admin_catalog_inventory_merge(text,text,text,text,boolean) from public, anon, authenticated;
+grant execute on function public.admin_catalog_inventory_bulk_update(jsonb,text,text,text,boolean) to service_role;
+grant execute on function public.admin_catalog_inventory_merge(text,text,text,text,boolean) to service_role;
+
+comment on table public.catalog_inventory_change_batches is 'Build 238 audit header for transactional inventory bulk changes. Browser sequential partial-save batches should not be used.';
+comment on table public.catalog_inventory_merge_audit is 'Build 238 append-only evidence for reviewed duplicate inventory merges. Duplicates are archived, never hard deleted.';
+comment on function public.admin_catalog_inventory_bulk_update(jsonb,text,text,text,boolean) is 'Build 238 validates the entire batch before an all-or-nothing inventory update and records before/after evidence.';
+comment on function public.admin_catalog_inventory_merge(text,text,text,text,boolean) is 'Build 238 previews or executes a reviewed duplicate merge, transfers known references, records compensating quantity movements, and archives the duplicate.';
+
+-- Current-cycle roadmap items. Existing historical rows remain audit evidence.
+update public.app_roadmap_execution_items set is_current_cycle=false where coalesce(is_current_cycle,false)=true;
+insert into public.app_roadmap_execution_items(
+  item_key,title,workstream,priority,status,target_build,sort_order,source_document,cycle_key,is_current_cycle,action_path
+) values
+('b238_01','Apply Build 238 inventory transaction migration in staging','operations','critical','planned',238,10,'MASTER_VALUE_ROADMAP.md','build238_launch_polish',true,'Supabase SQL Editor → sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql'),
+('b238_02','Preview and execute one harmless two-row inventory merge','operations','high','planned',238,20,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-inventory-manager.html'),
+('b238_03','Preview and execute one transactional bulk inventory update','operations','high','planned',238,30,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-inventory-manager.html'),
+('b238_04','Verify Build 238 SEO title and description changes in preview','seo','high','planned',238,40,'MASTER_VALUE_ROADMAP.md','build238_launch_polish',true,'Public homepage, services, pricing, booking, gallery and local pages'),
+('b238_05','Complete Block Calendar full-day AM PM production-like test','booking','critical','planned',238,50,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-blocks.html'),
+('b238_06','Complete end-to-end booking and admin record verification','booking','critical','planned',238,60,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/book.html → /admin-booking.html'),
+('b238_07','Complete and refund a small live Stripe transaction','payments','critical','planned',238,70,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-payments.html and Stripe Dashboard'),
+('b238_08','Verify all required notification types in external inboxes','reliability','critical','planned',238,80,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-test-centre.html'),
+('b238_09','Audit Cloudflare production variables bindings and branches','reliability','critical','planned',238,90,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'Cloudflare Dashboard → Workers & Pages → Rosie Dazzlers'),
+('b238_10','Perform Supabase staging backup and restore rehearsal','reliability','critical','planned',238,100,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'Supabase Dashboard → Database → Backups'),
+('b238_11','Review and publish customer policy and consent wording','customer','critical','planned',238,110,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-site-settings.html and public footer policy pages'),
+('b238_12','Complete iPhone-size and Android-size real-device checks','reliability','high','planned',238,120,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'Public and admin critical routes on real devices'),
+('b238_13','Complete accessibility keyboard focus contrast and errors','reliability','high','planned',238,130,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-test-centre.html'),
+('b238_14','Submit sitemap and validate canonical and structured data','seo','critical','planned',238,140,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'Google Search Console and Rich Results Test'),
+('b238_15','Verify Google Business Profile categories service area and proof','seo','critical','planned',238,150,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'Google Business Profile → Edit profile'),
+('b238_16','Finish suspicious inventory name category and cost cleanup','operations','high','planned',238,160,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-inventory-manager.html'),
+('b238_17','Complete featured and seven-image product media metadata','media','high','planned',238,170,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-inventory-manager.html and /admin-catalog.html'),
+('b238_18','Replace high-value public visual placeholders with local proof','media','high','planned',238,180,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-media-health.html and IMAGES.md'),
+('b238_19','Run invite-only soft launch with daily incident review','operations','critical','planned',238,190,'STARTUP_GO_LIVE_BLOCKERS.md','build238_launch_polish',true,'/admin-launch-readiness.html and /admin-today.html'),
+('b238_20','Modernize release guards before archiving redundant Markdown','documentation','medium','planned',238,200,'MASTER_VALUE_ROADMAP.md','build238_launch_polish',true,'scripts/release_check.py and DOC_INDEX.md')
+on conflict(item_key) do update set
+ title=excluded.title,workstream=excluded.workstream,priority=excluded.priority,status=excluded.status,
+ target_build=excluded.target_build,sort_order=excluded.sort_order,source_document=excluded.source_document,
+ cycle_key=excluded.cycle_key,is_current_cycle=excluded.is_current_cycle,action_path=excluded.action_path,updated_at=now();
+-- END 2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql
+
+-- BEGIN BUILD 239 UNIFIED STARTUP COMMAND CENTER
+-- Build 239 — unified Startup Command Center, database-backed process catalog, shared evidence expansion, and current execution cycle.
+begin;
+create table if not exists public.app_startup_process_items (
+ id uuid primary key default gen_random_uuid(),
+ process_key text not null unique check (process_key ~ '^[a-z0-9_-]{4,120}$'),
+ sort_order integer not null check (sort_order between 1 and 10000),
+ category text not null check (char_length(category) between 3 and 120),
+ severity text not null check (severity in ('blocker','high','planned')),
+ title text not null check (char_length(title) between 5 and 240),
+ why_text text not null check (char_length(why_text) between 8 and 3000),
+ locations jsonb not null default '[]'::jsonb check (jsonb_typeof(locations)='array'),
+ instructions jsonb not null default '[]'::jsonb check (jsonb_typeof(instructions)='array'),
+ done_when text not null check (char_length(done_when) between 8 and 3000),
+ action_route text null check (action_route is null or char_length(action_route)<=500),
+ evidence_key text null check (evidence_key is null or evidence_key ~ '^[a-z0-9_:-]{4,80}$'),
+ source_build integer not null default 239 check (source_build between 237 and 999),
+ is_active boolean not null default true,
+ created_at timestamptz not null default now(),
+ updated_at timestamptz not null default now()
+);
+create table if not exists public.app_startup_process_audit (
+ id uuid primary key default gen_random_uuid(),
+ process_key text not null,
+ event_type text not null check (event_type in ('seeded','updated','activated','retired')),
+ actor_staff_email text null,
+ safe_note text not null check (char_length(safe_note) between 3 and 1000),
+ created_at timestamptz not null default now()
+);
+insert into public.app_startup_process_items(process_key,sort_order,category,severity,title,why_text,locations,instructions,done_when,action_route,evidence_key,source_build,is_active) values
+('deploy-239',1,'Deployment and CSS','blocker','Deploy Build 239 and verify the unified Startup Command Center','Build 239 consolidates Startup, Launch Readiness, Production Readiness, guided testing, and roadmap execution into one protected interface. A partial or cached deployment could leave old standalone pages or mismatched assets active.','["Cloudflare Pages → Deployments → preview branch", "/admin-startup-guide", "/admin-launch-readiness", "/admin-production", "/admin-test-centre", "Browser DevTools → Network and Console"]'::jsonb,'["Deploy Build 239 to the preview/development branch.", "Open /admin-startup-guide in a private browser window and press Ctrl+Shift+R.", "Confirm the Overview, Blockers, Evidence, Production, Guided Tests, and Roadmap sections all load.", "Open /admin-launch-readiness, /admin-production, and /admin-test-centre and confirm each forwards to the matching Startup Command Center section.", "In DevTools Network, confirm /assets/site.css, AdminShell, AdminMenu, the startup catalog API, and readiness APIs return HTTP 200 or show a clearly labelled fallback.", "Repeat the check at phone width and confirm the section navigation, cards, tables, dialogs, and action buttons remain usable."]'::jsonb,'The unified Startup Command Center is the only normal prelaunch workspace, legacy readiness routes forward safely, all sections work on desktop and mobile, and no required CSS/script/API request fails.','/admin-startup-guide.html','deploy_239',239,true),
+('migration-237',2,'Database migrations','blocker','Apply the Build 237 database migration','Shared launch evidence and the current roadmap cycle cannot persist until the new tables/columns exist. The UI has a safe local/static fallback, but shared evidence is the intended source of truth.','["Supabase Dashboard → SQL Editor", "sql/2026-07-28_build237_css_startup_evidence_roadmap.sql", "Supabase Dashboard → Table Editor"]'::jsonb,'["Open the SQL file from the build package.", "Copy the complete file into Supabase SQL Editor.", "Run it in staging/preview first.", "Confirm app_launch_readiness_evidence and app_launch_readiness_evidence_audit exist.", "Confirm app_roadmap_execution_items includes cycle_key, is_current_cycle and action_path.", "Open /admin-launch-readiness and /admin-roadmap-execution and confirm database-backed results load."]'::jsonb,'The two pages report shared/database evidence rather than browser-only fallback and the current Build 237 roadmap cycle appears.','/admin-launch-readiness.html','migration_237',239,true),
+('migration-238',3,'Database migrations','blocker','Apply the Build 238 inventory transaction and merge migration','The new Inventory Workbench deliberately refuses to execute bulk changes or duplicate merges without database functions that validate the whole operation and record audit evidence. This prevents a browser/network failure from leaving half a batch changed.','["Supabase Dashboard → SQL Editor", "sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql", "Supabase Dashboard → Database → Functions", "/admin-inventory-manager.html"]'::jsonb,'["Confirm the Build 237 migration has already been applied.", "Open sql/2026-07-30_build238_inventory_transactions_merge_seo_preflight.sql from the build package.", "Copy the complete migration into Supabase SQL Editor and run it in staging/preview first.", "Confirm catalog_inventory_change_batches, catalog_inventory_change_batch_rows and catalog_inventory_merge_audit exist.", "Confirm admin_catalog_inventory_bulk_update and admin_catalog_inventory_merge appear under database functions.", "Reload /admin-inventory-manager.html and preview a harmless batch without executing it.", "Open Transaction & merge history and confirm it loads an empty or current shared audit view without a migration-required error.", "Record the migration date and staging result in Launch Readiness evidence."]'::jsonb,'Both new RPC functions can complete dry-run previews, the three audit tables exist, Transaction & merge history loads, and no browser sequential partial-save fallback is used.','/admin-inventory-manager.html','migration_238',239,true),
+('migration-239',4,'Database migrations','blocker','Apply the Build 239 unified Startup Command Center migration','The detailed startup catalog should have one database source of truth instead of being duplicated across JSON, Markdown, launch-readiness cards, production checks, and roadmap notes. The static catalog remains only as a safe read-only fallback.','["Supabase Dashboard → SQL Editor", "sql/2026-08-01_build239_unified_startup_command_center.sql", "Supabase Dashboard → Table Editor → app_startup_process_items", "/admin-startup-guide.html"]'::jsonb,'["Confirm the Build 237 and Build 238 migrations have been applied.", "Open sql/2026-08-01_build239_unified_startup_command_center.sql from the build package.", "Run the complete migration in staging/preview first.", "Confirm app_startup_process_items and app_startup_process_audit exist.", "Confirm the table contains every current blocker and no Build 238 blocker was removed.", "Reload /admin-startup-guide.html and confirm the source badge says Shared database catalog instead of Packaged fallback.", "Change one evidence status, one guided test result, and one roadmap row; refresh on another browser/device and confirm the shared state remains."]'::jsonb,'The Startup Command Center loads every detailed process from the database, all existing items remain present, shared evidence/tests/roadmap persist across devices, and the static JSON is used only during migration or outage.','/admin-startup-guide.html#overview','migration_239',239,true),
+('block-calendar',5,'Booking and scheduling','blocker','Retest the repaired Block Calendar against public booking','Availability mistakes can cause double-booking or hide valid dates. A visual repair alone is not enough; save/remove behaviour must be proven against the public booking wizard.','["/admin-blocks.html", "/book", "Supabase schedule block tables"]'::jsonb,'["Choose a future date with no customer booking.", "Create a full-day block and refresh the calendar.", "Open /book in another tab and confirm that date is unavailable.", "Remove the full-day block and confirm the date returns.", "Create an AM-only block and confirm PM remains available.", "Remove AM, create PM-only, and confirm AM remains available.", "Remove the test block and record the tested date in Launch Readiness evidence."]'::jsonb,'Full-date, AM and PM changes persist after refresh and the public booking wizard matches every admin change.','/admin-blocks.html','block_calendar',239,true),
+('booking-e2e',6,'Booking and scheduling','blocker','Complete one end-to-end booking test','The complete path must work as one system: availability, vehicle, package, add-ons, customer details, deposit, confirmation and admin record.','["/book", "/admin-booking.html", "Customer confirmation email/inbox"]'::jsonb,'["Use a clearly labelled test customer and a future test date.", "Complete every booking step on a phone-sized screen.", "Confirm pricing, HST/deposit and selected options before payment.", "Finish the booking and save the confirmation number.", "Open Admin Booking and verify date, slot, vehicle, package, add-ons, customer and payment state.", "Cancel or mark the test record according to your test-data policy."]'::jsonb,'The customer and admin views agree and no manual database correction is needed.','/book','booking_e2e',239,true),
+('stripe-live',7,'Payments','blocker','Complete and refund a small live Stripe payment','Test-mode success does not prove live keys, webhook secrets, receipts, refunds or accounting evidence are configured correctly.','["/admin-payments.html", "Stripe Dashboard → Payments", "Stripe Dashboard → Developers → Webhooks", "/admin-accounting.html"]'::jsonb,'["Confirm the deployment intentionally reports Stripe live mode.", "Create a small real payment tied to a labelled test booking/quote.", "Confirm the browser returns to the correct success page.", "Verify the Stripe event reached the deployed webhook with HTTP 2xx.", "Verify the payment appears in admin payment/accounting views.", "Issue a full refund and confirm the refund event and final status.", "Record only safe payment identifiers; never put card details in evidence notes."]'::jsonb,'Payment, webhook, receipt, refund and accounting views agree on the final state.','/admin-payments.html','stripe_live',239,true),
+('email-delivery',8,'Notifications','blocker','Verify every required email reaches an external inbox','A successful API response does not prove customers or staff receive messages, and spam/mobile formatting failures can block operations.','["/admin-notifications.html", "Notification provider dashboard", "External Gmail/Outlook inboxes"]'::jsonb,'["Send a booking confirmation to an external test inbox.", "Send payment/deposit, staff assignment and consent/review messages where applicable.", "Check Inbox, Promotions and Spam/Junk folders.", "Open each message on desktop and mobile.", "Verify links go to the correct deployed domain and are not expired.", "Record provider message IDs or timestamps without including private content."]'::jsonb,'All required messages arrive, render clearly and contain working links.','/admin-notifications.html','email_delivery',239,true),
+('environment',9,'Deployment and security','blocker','Audit Cloudflare production variables and bindings','Missing or preview-only variables are a common cause of login, payment, notification, storage and API failures after launch.','["Cloudflare Dashboard → Workers & Pages → rosiedazzlers → Settings", "docs/CLOUDFLARE_ENVIRONMENT_CHECKLIST.md", "/api/health"]'::jsonb,'["Open Variables and Secrets for both Preview and Production.", "Verify Supabase URL/service key, Stripe keys/webhook secret, notification credentials, R2 bindings and public asset settings.", "Confirm secrets are stored as encrypted secrets, not committed files.", "Confirm custom domains point to the production deployment.", "Open /api/health and record the non-secret environment/mode result.", "Update the environment checklist with the exact Cloudflare screen where each setting lives."]'::jsonb,'Every required integration has an intentional production value/binding and no secret is stored in the repository.','/admin-production.html','environment',239,true),
+('backup-restore',10,'Recovery','blocker','Test backup and restore, not just backup availability','A backup is useful only when you know how to restore it and confirm permissions/data integrity afterward.','["Supabase Dashboard → Database → Backups", "/admin-recovery.html", "docs/PRODUCTION_TEST_GUIDE.md"]'::jsonb,'["Confirm the Supabase plan and backup retention available to the project.", "Choose a safe staging restore method or export a small representative data set.", "Restore to a staging project/schema or re-import selected test records.", "Compare row counts and key relationships.", "Test staff access and RLS through Cloudflare Functions after restore.", "Write the exact recovery sequence, owner and expected maximum data-loss window."]'::jsonb,'A documented rehearsal proves data can be recovered and accessed through the application boundary.','/admin-recovery.html','backups',239,true),
+('legal',11,'Policies and customer trust','blocker','Review all policies before accepting unrestricted orders','Booking, deposits, cancellations, driveway requirements, runoff/bylaw responsibility, media use and privacy must be clear before a customer commits.','["/privacy.html", "/terms.html", "/refund-policy.html", "/book", "Footer policy links"]'::jsonb,'["Read each policy as a customer, not as a developer.", "Confirm business name, contact method, province and effective date.", "Align cancellation/deposit/refund wording with the actual payment workflow.", "Confirm photo/media consent is optional and visibility choices are clear.", "Confirm power/water, driveway and local bylaw/service-condition wording matches operations.", "Have a qualified Ontario professional review any wording that carries legal or tax risk.", "Verify all policy links are visible from booking, checkout and footer."]'::jsonb,'Published policy wording matches real operations and every checkout/booking link is easy to find.','/privacy.html','legal',239,true),
+('security',12,'Deployment and security','blocker','Verify staff permissions, sessions and protected APIs','Admin pages and APIs contain customer, payment and operational data. Visual hiding is not authorization.','["/admin-security.html", "/admin-app.html", "Browser DevTools", "Supabase Security Advisor"]'::jsonb,'["Test Admin, Senior Detailer and Detailer accounts separately.", "Confirm each role can access only intended pages/actions.", "Call protected APIs while signed out and confirm 401/403 responses.", "Sign out and confirm old pages cannot continue saving data.", "Review Supabase Security Advisor and RLS posture.", "Verify security headers on public and admin responses.", "Record failures as blockers, not accepted warnings."]'::jsonb,'Server-side authorization, session expiry/logout and database containment are proven for each role.','/admin-security.html','security',239,true),
+('mobile',13,'Mobile and accessibility','high','Complete real-device mobile testing','Responsive browser resizing does not fully test touch, on-screen keyboards, camera uploads, slow connections or mobile payment handoff.','["Real phone browsers", "/book", "/admin-blocks.html", "/admin-inventory-manager.html", "/detailer-jobs.html"]'::jsonb,'["Test portrait and landscape on a real phone.", "Open/close the mobile dropdown menu on every core page.", "Complete booking fields with the on-screen keyboard.", "Test calendar tapping, inventory row/card editing and image upload/capture.", "Confirm no horizontal page drift except intentional table/calendar scroll regions.", "Test a slower network profile and retry behaviour.", "Capture screenshots of any overlap or unreadable control."]'::jsonb,'All primary customer and staff tasks can be completed without zooming, clipped controls or lost input.','/admin-test-centre.html','mobile',239,true),
+('accessibility',14,'Mobile and accessibility','high','Complete keyboard, focus, labels and contrast review','Accessible forms reduce customer abandonment and also expose hidden UI/JavaScript problems before launch.','["Public home/services/booking/payment pages", "Critical admin pages", "Browser accessibility tree"]'::jsonb,'["Navigate every interactive control using Tab/Shift+Tab only.", "Confirm visible focus never disappears behind sticky elements.", "Verify each input has a useful label and each error is announced/readable.", "Check heading order and confirm one H1 per exposed page.", "Check colour contrast for text, buttons, notices and disabled states.", "Test at 200% browser zoom.", "Document exceptions with route, control and screenshot."]'::jsonb,'Critical flows are usable by keyboard and at high zoom with clear labels, focus and errors.','/admin-test-centre.html','accessibility',239,true),
+('search-preflight',15,'SEO and local visibility','high','Complete Search Console, sitemap, canonical and schema preflight','The site already has strong local/service architecture, but indexing and structured-data evidence must be checked on the deployed canonical domain.','["Google Search Console", "/sitemap.xml", "Google Rich Results Test", "Public page source"]'::jsonb,'["Verify the rosiedazzlers.ca Search Console property.", "Submit https://rosiedazzlers.ca/sitemap.xml.", "Inspect the homepage, booking, primary service and town URLs.", "Confirm canonical URLs use the production domain and preferred trailing-slash pattern.", "Test LocalBusiness/Service/WebSite structured data and correct errors.", "Review indexed pages for accidental admin/dev URLs.", "Record real search queries monthly before rewriting titles."]'::jsonb,'The sitemap is accepted, important pages are inspectable/indexable, admin pages are noindex and schema has no critical errors.','/admin-seo-tasks.html','search',239,true),
+('business-profile',16,'SEO and local visibility','high','Complete and align Google Business Profile','Local visibility depends heavily on accurate relevance, distance/service-area and prominence signals; the profile must match the website and real business.','["Google Business Profile Manager", "/contact.html", "/services.html", "Town/service landing pages"]'::jsonb,'["Confirm the real-world business name without keyword stuffing.", "Choose the most specific accurate primary category and relevant secondary categories.", "Confirm service areas, phone, website and hours.", "Add accurate services and descriptions that match the site.", "Upload approved real photos regularly.", "Create a review-request link and respond to reviews.", "Compare profile information with footer/contact/schema data for consistency."]'::jsonb,'The profile is verified, complete, accurate and consistent with the production website.','/admin-marketing.html','business_profile',239,true),
+('inventory-cleanup',17,'Inventory and products','high','Clean inventory records before relying on product sales and job costing','Suspicious imported names, missing costs/categories and duplicates reduce customer trust and make pricing/profitability unreliable.','["/admin-inventory-manager.html", "/admin-catalog.html", "Inventory Workbench filters"]'::jsonb,'["Filter Suspicious names and replace ASIN/alphanumeric titles with clear product names.", "Complete category, vendor, unit, cost and reorder point.", "Confirm tool versus consumable classification.", "Archive rows that are true duplicates only after checking history/references.", "Leave unfinished rows inactive/private.", "Export a CSV snapshot before large bulk changes.", "Spot-check calculations after updates."]'::jsonb,'Every active/sellable row has a clear name, classification, category, cost and intentional active/public state.','/admin-inventory-manager.html','inventory_cleanup',239,true),
+('product-images',18,'Inventory and products','high','Complete product image sets and metadata','Products need strong visual proof, but multiple images must remain ordered, descriptive, consent-safe and performant.','["/admin-inventory-manager.html", "/admin-catalog.html", "Product public page/gallery"]'::jsonb,'["Set one featured image that clearly shows the complete item.", "Add up to seven gallery images covering detail, scale, packaging, use and variations.", "Order images from strongest overview to supporting detail.", "Write concise descriptive alt text rather than keyword lists.", "Record image role, caption, source/provenance and consent where applicable.", "Verify images load on mobile and do not cause layout shift.", "Keep products private until the image set and customer-facing copy are ready."]'::jsonb,'Every sellable product has a reliable featured image, useful gallery and accurate accessible metadata.','/admin-inventory-manager.html','product_images',239,true),
+('pricing-tax',19,'Payments','blocker','Verify pricing, deposits, HST and final totals','Customer-visible totals must match booking, checkout, receipts and accounting. Price drift is a launch blocker.','["/pricing.html", "/book", "/admin-site-settings.html", "/admin-tax-review.html", "Stripe checkout"]'::jsonb,'["Compare every package and add-on price in public pricing, booking and admin catalog.", "Verify vehicle-size price differences.", "Confirm deposit rules and cancellation/refund handling.", "Verify HST calculation and rounding on representative totals.", "Confirm Stripe checkout amount matches the final booking/quote.", "Verify receipt and accounting entries use the same amounts.", "Document who can change prices and how changes are reviewed."]'::jsonb,'The same selected service produces the same subtotal, tax, deposit and total everywhere.','/admin-tax-review.html','pricing_tax',239,true),
+('analytics',20,'SEO and local visibility','high','Verify analytics and conversion events in production','You need trustworthy evidence before changing SEO, ads or booking UX, and consent settings must be respected.','["/admin-analytics.html", "Browser DevTools", "Analytics provider real-time/debug view"]'::jsonb,'["Accept and reject analytics consent and confirm expected script behaviour.", "Trigger page view, package view, booking start, quote start, booking complete and payment events.", "Confirm events use the production domain and useful non-private parameters.", "Verify UTM/source values flow into lead/booking reporting.", "Exclude internal/admin traffic where practical.", "Record a baseline before launch marketing changes."]'::jsonb,'Core conversion events arrive once, contain no sensitive customer data and can be tied to real acquisition sources.','/admin-analytics.html','analytics',239,true),
+('monitoring',21,'Recovery','high','Prepare production monitoring and incident response','During the first live bookings, failures must be noticed quickly and have a clear owner and rollback path.','["/admin-production.html", "Cloudflare logs", "Supabase logs", "Stripe webhook logs", "KNOWN_GAPS_AND_RISKS.md"]'::jsonb,'["Confirm where Cloudflare Function errors are viewed.", "Confirm Supabase database/auth logs and Stripe webhook logs.", "Define who checks failures during the first week and how often.", "Write a stop-taking-bookings procedure.", "Document rollback to the previous deployment.", "Create an incident record for any payment, booking, privacy or data-loss failure.", "Review logs daily during soft launch."]'::jsonb,'A named owner can detect, classify, communicate and roll back a critical failure without searching for instructions.','/admin-production.html','monitoring',239,true),
+('soft-launch',22,'Go-live decision','blocker','Use an invite-only soft launch before unrestricted public promotion','A controlled first group gives real evidence without exposing the business to a large volume of simultaneous failures.','["/admin-launch-readiness.html", "/admin-today.html", "/admin-production.html", "Business operations calendar"]'::jsonb,'["Resolve all critical blockers or explicitly document why a controlled exception is safe.", "Invite only a small number of known customers.", "Limit daily capacity to what can be manually supported.", "Review each booking, payment, email, job update, inventory movement and review request.", "Hold public advertising until the first transactions are stable.", "Record incidents and fixes immediately.", "Expand gradually after a defined stable period."]'::jsonb,'Several real transactions complete without critical manual correction and monitoring evidence supports broader launch.','/admin-launch-readiness.html','operations',239,true),
+('duplicate-merge',23,'Inventory and products','high','Test the reviewed duplicate inventory merge workflow','Build 238 now provides a preview-first merge that transfers known operational references, records compensating quantity movements and archives the duplicate. It still requires migration and staging proof before use on important rows.','["/admin-inventory-manager.html", "Supabase → catalog_inventory_merge_audit", "Supabase → catalog_inventory_movements", "STARTUP_GO_LIVE_BLOCKERS.md"]'::jsonb,'["Apply the Build 238 migration in staging.", "Choose two harmless test rows that truly represent the same item and have no irreplaceable history.", "Select exactly those two rows in Inventory Workbench and choose Review two-row merge.", "Choose the survivor row and enter a clear reason.", "Select Preview merge and inspect quantity, gallery count and every reference-count card.", "Confirm the survivor should keep its current values when present and inherit only missing values.", "Execute the merge, reload the page and verify the duplicate is inactive, private and zero quantity.", "Verify purchase orders, movements, assignments, service links and project references point to the survivor where applicable.", "Verify catalog_inventory_merge_audit contains before/after rows and the reason.", "Open Transaction & merge history, confirm the merge appears with the correct survivor, archived duplicate, reason, actor, timestamp and transferred-reference counts, then export the audit CSV."]'::jsonb,'A staging merge preserves history, transfers known references, records compensating quantity movements, archives rather than deletes the duplicate, and appears correctly in the read-only audit history/CSV.','/admin-inventory-manager.html','inventory_merge_238',239,true),
+('bulk-rpc',24,'Inventory and products','high','Test transactional bulk inventory updates and rollback behaviour','Build 238 replaces sequential browser saves with an all-or-nothing database function. The complete batch is validated before any write and records a batch header plus row-level before/after evidence.','["/admin-inventory-manager.html", "Supabase → catalog_inventory_change_batches", "Supabase → catalog_inventory_change_batch_rows", "Cloudflare Function logs"]'::jsonb,'["Apply the Build 238 migration in staging.", "Select two harmless inventory test rows.", "Choose a bulk field and value and enter a specific audit reason.", "Select Preview batch and verify the message says no rows were changed.", "Choose Apply transaction and confirm both rows change together.", "Verify one batch header and two row evidence records exist.", "Repeat with one deliberately invalid test value and confirm the entire transaction fails with neither row changed.", "Open Transaction & merge history and confirm the successful batch shows the correct operation, row count, reason, actor and timestamp; export the audit CSV.", "Restore the test values through another audited transaction."]'::jsonb,'Valid batches update every selected row together, invalid batches change none, before/after evidence exists for every row, and the committed batch appears correctly in audit history/CSV.','/admin-inventory-manager.html','inventory_bulk_rpc_238',239,true),
+('media-derivatives',25,'Media and performance','planned','Generate responsive product/gallery image derivatives','Seven original images can create slow mobile pages and layout instability without standardized dimensions and modern formats.','["R2 derivative worker", "Media Health", "Product/gallery rendering"]'::jsonb,'["Define canonical source-image rules and maximum upload size.", "Generate thumbnail, card, medium and large dimensions.", "Create WebP/AVIF with JPEG/PNG fallback where supported.", "Store width, height, format and byte size metadata.", "Render srcset/sizes and fixed aspect-ratio boxes.", "Keep the original source private or archival according to policy.", "Monitor failed derivative jobs and provide retry."]'::jsonb,'Public product/gallery pages load appropriately sized images with stable layout and fallback formats.','/admin-media-health.html',null,239,true),
+('markdown-retirement',26,'Documentation','planned','Retire redundant Markdown only after release guards are modernized','The project has many historical documents. Deleting them now can break release checks or erase evidence, but treating all of them as current creates confusion.','["AI_PROJECT_HANDOFF.md", "MASTER_VALUE_ROADMAP.md", "DOC_INDEX.md", "scripts/release_check.py", "docs/archive"]'::jsonb,'["Treat AI_PROJECT_HANDOFF.md and MASTER_VALUE_ROADMAP.md as the only living direction documents.", "Mark operational/reference documents clearly.", "Map which release checks read historical text markers.", "Replace brittle text-marker guards with current file/route/API tests.", "Move superseded documents into docs/archive rather than deleting them.", "Update DOC_INDEX.md with canonical, operational and archive sections.", "Run the complete release suite after each archive batch."]'::jsonb,'A new developer can find current direction in two files and historical evidence remains available without controlling the roadmap.','/admin-docs.html',null,239,true),
+('notification-health',27,'Production communications','blocker','Verify notification provider and delivery-queue health','A configured email webhook is not enough. Queued or failed customer and staff messages can cause missed bookings, payment confusion, and consent failures.','["/admin-startup-guide.html#production", "Cloudflare → Workers & Pages → Settings → Variables", "Notification provider dashboard"]'::jsonb,'["Open the Startup Command Center Production section and refresh the report.", "Confirm the email provider is configured before using Send test.", "Use Check config only first, then send exactly one message to a Rosie-controlled external inbox.", "Confirm the message arrives on desktop and mobile and inspect spam/junk.", "Review failed and queued notification counts; repair the provider or retry path before launch.", "Record the receive time and safe provider result in evidence without storing addresses, secrets, or message content."]'::jsonb,'The provider test succeeds, the controlled inbox receives the message, and failed/queued notification counts are zero or have a documented accepted reason.','/admin-startup-guide.html#production','notification_health',239,true),
+('payment-link-operations',28,'Payments','blocker','Verify hosted final-balance links, webhook evidence, and reconciliation','Customers need a dependable way to pay the remaining balance. A checkout URL alone is not proof that payment status, webhook processing, receipt, refund, and accounting records agree.','["/admin-startup-guide.html#production", "Stripe Dashboard → Developers → Webhooks", "/admin-accounting.html"]'::jsonb,'["Create a small internal final-balance request.", "From the Production section, create a hosted checkout link and confirm the amount, currency, branding, and customer reference.", "Complete the test in Stripe test mode first, then perform the separately approved small live-payment test.", "Confirm webhook receipt, payment-request status, receipt, ledger/journal evidence, and customer/admin history agree.", "Issue the planned test refund and confirm the refund appears in Stripe and the application records.", "Record only safe IDs, timestamps, and outcomes in Startup evidence."]'::jsonb,'A hosted link works, payment and refund webhooks are recorded, receipt and accounting evidence agree, and the manual fallback remains available.','/admin-startup-guide.html#production','payment_links',239,true),
+('upload-recovery',29,'Field reliability','high','Prove mobile photo/video upload interruption and recovery','Detailing proof and customer updates are captured in the field, where connections can be weak. Silent loss or duplicate media would damage trust and job records.','["/admin-startup-guide.html#tests", "/detailer-jobs.html", "/admin-startup-guide.html#production"]'::jsonb,'["Use a test booking and non-sensitive photo/video on a real phone.", "Upload a small photo and confirm visible progress and completion.", "Begin a short video upload, switch networks or briefly interrupt connectivity, and confirm a useful retry/cancel state appears.", "Restore connectivity and retry once.", "Confirm the final media exists once, has the correct visibility, and any failed session appears in Production readiness for review.", "Record device, browser, connection type, approximate file size, and outcome."]'::jsonb,'Photo and video uploads show progress, interruption produces a recoverable state, retry does not duplicate media, and failed sessions are visible to staff.','/admin-startup-guide.html#tests','upload_recovery',239,true),
+('retention-review',30,'Privacy and storage','high','Complete media retention, legal-hold, and cleanup review','Unlimited storage increases cost and privacy exposure, while aggressive deletion could remove proof needed for disputes, taxes, or consent records.','["/admin-startup-guide.html#production", "/admin-media.html", "Supabase/R2 storage dashboards"]'::jsonb,'["Open the Production section and run retention in dry-run mode only.", "Review every candidate by booking, media type, stage, consent, incident/legal-hold status, and retention policy.", "Confirm permanent proof and legal-hold items are excluded.", "Correct any missing policy or expiry date before marking records for review.", "Approve deletion only through the documented storage-cleanup process; do not manually delete referenced objects.", "Record candidate counts, exclusions, reviewer, and date."]'::jsonb,'Dry-run candidates are explainable, protected evidence is excluded, referenced objects are not orphaned, and an approved cleanup/restore procedure is documented.','/admin-startup-guide.html#production','retention_review',239,true),
+('incident-closeout',31,'Customer protection','blocker','Verify incident closeout, privacy, and review-request safety','An unresolved issue or private incident note must never be exposed to a customer or followed immediately by an automated review request.','["/admin-startup-guide.html#tests", "/admin-incident-reports.html", "/admin-workflow.html", "Customer progress link in a private browser"]'::jsonb,'["Create a harmless internal test incident on a test booking.", "Confirm staff-only notes and evidence remain hidden from the signed-out customer progress view.", "Publish only specifically approved customer-safe wording.", "Confirm booking closeout or review-request automation is blocked while the incident is unresolved.", "Resolve the test incident with an auditable decision and verify the review workflow follows the documented policy.", "Remove or archive test data according to the test-data policy."]'::jsonb,'Private material never appears to the customer, unresolved incidents block unsafe closeout/review automation, and resolution creates complete audit evidence.','/admin-startup-guide.html#tests','incident_closeout',239,true),
+('rollback-drill',32,'Deployment and recovery','blocker','Complete a deployment rollback and incident-response drill','Backups protect data, but a bad frontend/function deployment also needs a fast, rehearsed rollback path with owners and verification steps.','["Cloudflare Pages → Deployments", "/admin-startup-guide.html#production", "STARTUP_GO_LIVE_BLOCKERS.md", "docs/PRODUCTION_TEST_GUIDE.md"]'::jsonb,'["Choose a safe preview deployment and identify the previous known-good deployment.", "Document who can trigger rollback and where the control is located.", "Roll preview back or promote a known-good preview in a controlled rehearsal.", "Verify home, booking, login, Block Calendar, Startup Command Center, payment endpoint health, and database connectivity after rollback.", "Restore the latest build and repeat the smoke check.", "Record timestamps, owner, deployment IDs, observed downtime, and any missing permissions."]'::jsonb,'A named owner can restore a known-good deployment, critical smoke tests pass after rollback, and the written incident path is usable without guessing.','/admin-startup-guide.html#production','rollback_drill',239,true),
+('local-proof-cadence',33,'Local SEO and trust','high','Establish an approved local-photo, review, and Business Profile cadence','Local visibility depends on accurate relevance signals and real prominence. Fresh approved work, complete profile information, and legitimate reviews are more valuable than duplicated keyword pages.','["/admin-startup-guide.html#blockers", "Google Business Profile → Photos, Services, Reviews, Performance", "/gallery.html", "/admin-gallery.html", "Search Console"]'::jsonb,'["Confirm the Business Profile name, primary category, service areas, phone, hours, website, and services match the live site and real-world operation.", "Replace the highest-value public placeholders with Rosie-owned, consent-approved before/after work.", "Add descriptive alt text and connect proof to the relevant service/town page without duplicating thin pages.", "Create a repeatable post-job review request that follows Google policy and pauses for unresolved incidents.", "Schedule a weekly profile/photo/review-response check and a monthly Search Console/local landing-page review.", "Record the first completed cycle and the next review date."]'::jsonb,'The profile and website agree, priority pages show authentic approved proof, review requests are policy-safe, and a repeatable local visibility cadence has an owner.','/admin-startup-guide.html#blockers','local_proof_cadence',239,true),
+('startup-single-interface',34,'Documentation and operations','high','Retire duplicate preflight navigation and train staff on one Startup Command Center','Even correct checks become unreliable when staff must guess between Startup Guide, Launch Readiness, Production, Guided Tests, and Roadmap pages.','["/admin-startup-guide.html", "Admin Menu", "AI_PROJECT_HANDOFF.md", "STARTUP_GO_LIVE_BLOCKERS.md"]'::jsonb,'["Confirm the Admin Menu has one Startup Command Center entry.", "Confirm old readiness URLs forward to the appropriate Startup section and remain available only for compatibility.", "Update internal instructions, bookmarks, and screenshots to use /admin-startup-guide.html.", "Train each staff role on Overview, Blockers, Evidence, Production, Tests, and Roadmap tabs.", "Confirm permissions allow required staff to view or update only the sections they are authorized to use.", "After one complete test cycle, remove duplicate wording from living documentation while retaining historical release evidence."]'::jsonb,'Staff use one interface for launch work, legacy links forward safely, permissions are correct, and no current document instructs staff to maintain a separate preflight checklist.','/admin-startup-guide.html','startup_single_interface',239,true)
+on conflict(process_key) do update set sort_order=excluded.sort_order,category=excluded.category,severity=excluded.severity,title=excluded.title,why_text=excluded.why_text,locations=excluded.locations,instructions=excluded.instructions,done_when=excluded.done_when,action_route=excluded.action_route,evidence_key=excluded.evidence_key,source_build=excluded.source_build,is_active=true,updated_at=now();
+insert into public.app_launch_readiness_evidence(evidence_key,title,detail,severity,status,sort_order) values
+('deploy_239','Build 239 unified Startup deployment','Deploy Build 239 and verify the single Startup Command Center plus compatibility redirects.','block','pending',1),
+('migration_238','Build 238 inventory migration','Apply and verify transactional bulk update, duplicate merge, and inventory audit schema.','block','pending',8),
+('migration_239','Build 239 Startup migration','Apply the shared startup process catalog and Build 239 current roadmap cycle.','block','pending',9),
+('notification_health','Notification provider and queue health','Verify a controlled external delivery and resolve failed or stuck notification events.','block','pending',32),
+('payment_links','Hosted final-balance payment links','Verify checkout, webhook, receipt, refund, and reconciliation evidence agree.','block','pending',33),
+('upload_recovery','Mobile upload recovery','Prove interrupted photo/video uploads can recover without silent loss or duplication.','warn','pending',34),
+('retention_review','Media retention review','Complete a dry-run retention review with legal-hold and permanent-proof exclusions.','warn','pending',35),
+('incident_closeout','Incident closeout and review safety','Verify unresolved incidents protect privacy and block unsafe review requests.','block','pending',36),
+('rollback_drill','Deployment rollback drill','Rehearse a known-good Cloudflare rollback and critical-route smoke check.','block','pending',37),
+('local_proof_cadence','Local proof and review cadence','Establish a recurring approved-photo, Business Profile, review-response, and Search Console routine.','warn','pending',38),
+('startup_single_interface','Single Startup Command Center','Confirm staff use one interface and legacy readiness routes only forward to it.','warn','pending',39)
+on conflict(evidence_key) do update set title=excluded.title,detail=excluded.detail,severity=excluded.severity,sort_order=excluded.sort_order,updated_at=now();
+update public.app_roadmap_execution_items set is_current_cycle=false where cycle_key<>'build239';
+insert into public.app_roadmap_execution_items(item_key,title,workstream,priority,status,target_build,sort_order,source_document,cycle_key,is_current_cycle,action_path) values
+('b239_01','Deploy Build 239 and verify the unified Startup Command Center','reliability','critical','in_progress',239,1,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Deploy preview, hard-refresh /admin-startup-guide, verify every section, then confirm legacy readiness URLs forward to the correct anchor.'),
+('b239_02','Apply the Build 239 startup catalog and roadmap migration in staging','reliability','critical','planned',239,2,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Run sql/2026-08-01_build239_unified_startup_command_center.sql, refresh schema cache, and confirm the shared database catalog source badge.'),
+('b239_03','Complete Build 237 and Build 238 migration verification if outstanding','reliability','critical','planned',239,3,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Verify evidence, roadmap, inventory transaction, merge, and audit tables/RPCs exist before production.'),
+('b239_04','Retest Block Calendar full-day, AM, and PM behaviour','booking','critical','planned',239,4,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Create/remove each block type and confirm public booking availability matches after refresh.'),
+('b239_05','Complete end-to-end booking and admin reconciliation','booking','critical','planned',239,5,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Run a phone-sized test booking and reconcile customer, booking, calendar, deposit, and staff records.'),
+('b239_06','Verify Stripe checkout, webhook, refund, and accounting evidence','payments','critical','planned',239,6,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Complete test-mode and approved small live transactions, then reconcile webhook, receipt, refund, and journal evidence.'),
+('b239_07','Verify notification provider and clear failed/queued events','reliability','critical','planned',239,7,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Run config-only then one controlled external delivery; resolve failed or stuck events before launch.'),
+('b239_08','Audit Cloudflare variables, bindings, domains, and rollback access','reliability','critical','planned',239,8,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Compare preview/production variables, verify R2/Supabase/Stripe bindings, and identify the rollback owner and known-good deployment.'),
+('b239_09','Perform Supabase restore and Cloudflare rollback rehearsals','reliability','critical','planned',239,9,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Restore safe staging data, rehearse deployment rollback, and run critical smoke checks after each recovery action.'),
+('b239_10','Publish and link legal, refund, cancellation, cookie, and media policies','customer','critical','planned',239,10,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Review final wording and confirm booking, checkout, customer portal, and footer links are visible and consistent.'),
+('b239_11','Complete real-device mobile and accessibility acceptance testing','reliability','high','planned',239,11,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Test customer/admin critical paths on real devices plus keyboard, focus, labels, contrast, errors, and touch targets.'),
+('b239_12','Prove weak-network media upload retry and deduplication','media','high','planned',239,12,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Interrupt a test photo/video upload, retry once, and confirm visible recovery with no duplicate or public exposure.'),
+('b239_13','Complete incident privacy and review-request safety test','customer','critical','planned',239,13,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Verify staff-only incident content stays private and unresolved incidents block unsafe closeout/review requests.'),
+('b239_14','Complete retention dry-run and legal-hold exclusion review','media','high','planned',239,14,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Review candidates, confirm protected evidence exclusions, and document cleanup/restore ownership.'),
+('b239_15','Clean inventory names, categories, costs, duplicates, and audit history','operations','high','planned',239,15,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Use suspicious-name, merge-preview, transactional bulk-update, and history tools; preserve referenced records.'),
+('b239_16','Complete sellable product gallery, pricing, HST, and publish readiness','operations','high','planned',239,16,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Finish featured plus gallery images, metadata, costs, price/tax totals, stock, policies, and public display checks.'),
+('b239_17','Submit sitemap and validate canonicals, structured data, and index coverage','seo','high','planned',239,17,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Use Search Console and Rich Results testing; correct inconsistent canonicals, noindex, schema, or sitemap entries.'),
+('b239_18','Align Google Business Profile and establish local proof cadence','seo','high','planned',239,18,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Verify profile facts, add approved local proof, respond to reviews, and schedule weekly/monthly checks.'),
+('b239_19','Run invite-only soft launch with daily command-centre review','operations','critical','planned',239,19,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Accept a small known-customer cohort and inspect every booking, payment, notification, upload, incident, inventory, and log event.'),
+('b239_20','Modernize release guards and retire duplicate readiness/Markdown navigation','documentation','medium','planned',239,20,'STARTUP_GO_LIVE_BLOCKERS.md','build239',true,'Replace stale text-marker dependencies, archive superseded docs safely, and keep the Startup Command Center plus three authority documents current.')
+on conflict(item_key) do update set title=excluded.title,workstream=excluded.workstream,priority=excluded.priority,status=case when public.app_roadmap_execution_items.status='done' then 'done' else excluded.status end,target_build=excluded.target_build,sort_order=excluded.sort_order,source_document=excluded.source_document,cycle_key=excluded.cycle_key,is_current_cycle=true,action_path=excluded.action_path,updated_at=now();
+create index if not exists app_startup_process_active_order_idx on public.app_startup_process_items(is_active,sort_order);
+create index if not exists app_startup_process_category_idx on public.app_startup_process_items(category,severity,sort_order);
+create index if not exists app_startup_process_audit_idx on public.app_startup_process_audit(process_key,created_at desc);
+alter table public.app_startup_process_items enable row level security;
+alter table public.app_startup_process_audit enable row level security;
+revoke all privileges on table public.app_startup_process_items,public.app_startup_process_audit from public,anon,authenticated;
+grant all privileges on table public.app_startup_process_items,public.app_startup_process_audit to service_role;
+comment on table public.app_startup_process_items is 'Build 239 canonical detailed Startup Command Center process catalog. Database is primary; packaged JSON is read-only outage/migration fallback.';
+comment on table public.app_startup_process_audit is 'Build 239 audit history for controlled startup-process catalog changes. Do not store secrets or private customer content.';
+commit;
+
+-- END BUILD 239 UNIFIED STARTUP COMMAND CENTER
+
+-- BEGIN BUILD 240 TRANSACTIONAL INVENTORY POSTING AND REVERSAL
+-- Rosie Dazzlers Build 240
+-- Transactional booking/project inventory posting, reviewed reversal, and reservation availability.
+-- Apply after Build 239. Test in staging before production.
+begin;
+
+-- Inventory reservations support thousandths; widen live quantity and movement evidence to the same safe precision.
+alter table public.catalog_inventory_items
+  alter column qty_on_hand type numeric(14,3) using round(qty_on_hand::numeric,3),
+  alter column reorder_point type numeric(14,3) using round(reorder_point::numeric,3),
+  alter column reorder_qty type numeric(14,3) using round(reorder_qty::numeric,3);
+alter table public.catalog_inventory_movements
+  alter column qty_delta type numeric(14,3) using round(qty_delta::numeric,3),
+  alter column previous_qty type numeric(14,3) using round(previous_qty::numeric,3),
+  alter column new_qty type numeric(14,3) using round(new_qty::numeric,3);
+
+alter table public.catalog_inventory_movements
+  drop constraint if exists catalog_inventory_movements_movement_type_check;
+alter table public.catalog_inventory_movements
+  add constraint catalog_inventory_movements_movement_type_check
+  check (movement_type in ('adjustment','job_use','project_use','receive','recount','waste','return'));
+
+alter table public.catalog_inventory_movements
+  add column if not exists source_kind text null
+    check (source_kind is null or source_kind in ('booking','creative_project','manual','merge','bulk')),
+  add column if not exists source_reference_id uuid null,
+  add column if not exists posting_batch_id uuid null,
+  add column if not exists reversal_of_movement_id uuid null references public.catalog_inventory_movements(id) on delete set null,
+  add column if not exists is_reversed boolean not null default false,
+  add column if not exists reversed_at timestamptz null,
+  add column if not exists reversed_by_staff_email text null,
+  add column if not exists reversal_reason text null;
+
+create table if not exists public.catalog_inventory_posting_batches (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  source_kind text not null check (source_kind in ('booking','creative_project')),
+  source_reference_id uuid not null,
+  booking_id uuid null references public.bookings(id) on delete set null,
+  project_id uuid null references public.creative_projects(id) on delete set null,
+  status text not null default 'posted' check (status in ('posted','reversed','failed')),
+  idempotency_key text not null unique check (char_length(idempotency_key) between 8 and 180),
+  reason text not null check (char_length(reason) between 8 and 1200),
+  actor_staff_email text null,
+  row_count integer not null default 0 check (row_count >= 0),
+  total_quantity numeric(14,3) not null default 0 check (total_quantity >= 0),
+  accounting_status text not null default 'pending'
+    check (accounting_status in ('pending','posted','partial','failed','not_required','reversal_review')),
+  accounting_note text null,
+  reversed_at timestamptz null,
+  reversed_by_staff_email text null,
+  reversal_reason text null
+);
+
+create table if not exists public.catalog_inventory_posting_rows (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  batch_id uuid not null references public.catalog_inventory_posting_batches(id) on delete cascade,
+  inventory_item_id uuid null references public.catalog_inventory_items(id) on delete set null,
+  item_key text not null,
+  item_name text not null,
+  reservation_id uuid null references public.creative_project_inventory_reservations(id) on delete set null,
+  quantity numeric(14,3) not null check (quantity > 0),
+  unit_label text null,
+  unit_cost_cents integer null,
+  previous_qty numeric(14,3) not null,
+  new_qty numeric(14,3) not null,
+  movement_id uuid null references public.catalog_inventory_movements(id) on delete set null,
+  reversal_movement_id uuid null references public.catalog_inventory_movements(id) on delete set null,
+  status text not null default 'posted' check (status in ('posted','reversed')),
+  unique(batch_id,item_key)
+);
+
+alter table public.catalog_inventory_movements
+  drop constraint if exists catalog_inventory_movements_posting_batch_id_fkey;
+alter table public.catalog_inventory_movements
+  add constraint catalog_inventory_movements_posting_batch_id_fkey
+  foreign key (posting_batch_id) references public.catalog_inventory_posting_batches(id) on delete set null;
+
+alter table public.creative_project_inventory_reservations
+  drop constraint if exists creative_project_inventory_reservations_inventory_mutated_check;
+alter table public.creative_project_inventory_reservations
+  add column if not exists posting_batch_id uuid null references public.catalog_inventory_posting_batches(id) on delete set null,
+  add column if not exists reversed_at timestamptz null,
+  add column if not exists reversed_by_staff_email text null,
+  add column if not exists reversal_reason text null;
+
+create index if not exists catalog_inventory_posting_batches_source_idx
+  on public.catalog_inventory_posting_batches(source_kind,source_reference_id,created_at desc);
+create index if not exists catalog_inventory_posting_batches_status_idx
+  on public.catalog_inventory_posting_batches(status,created_at desc);
+create index if not exists catalog_inventory_posting_rows_batch_idx
+  on public.catalog_inventory_posting_rows(batch_id,created_at);
+create index if not exists catalog_inventory_posting_rows_item_idx
+  on public.catalog_inventory_posting_rows(item_key,created_at desc);
+create index if not exists catalog_inventory_movements_posting_batch_idx
+  on public.catalog_inventory_movements(posting_batch_id,created_at desc);
+create index if not exists catalog_inventory_movements_reversal_idx
+  on public.catalog_inventory_movements(reversal_of_movement_id);
+
+alter table public.catalog_inventory_posting_batches enable row level security;
+alter table public.catalog_inventory_posting_rows enable row level security;
+revoke all privileges on table public.catalog_inventory_posting_batches,public.catalog_inventory_posting_rows from public,anon,authenticated;
+grant all privileges on table public.catalog_inventory_posting_batches,public.catalog_inventory_posting_rows to service_role;
+
+create or replace function public.admin_catalog_inventory_post(
+  p_source_kind text,
+  p_source_reference_id uuid,
+  p_lines jsonb,
+  p_actor_email text,
+  p_reason text,
+  p_idempotency_key text,
+  p_dry_run boolean default true
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_line jsonb;
+  v_item public.catalog_inventory_items%rowtype;
+  v_item_key text;
+  v_qty numeric(14,3);
+  v_reservation_id uuid;
+  v_reservation public.creative_project_inventory_reservations%rowtype;
+  v_batch public.catalog_inventory_posting_batches%rowtype;
+  v_batch_id uuid;
+  v_movement_id uuid;
+  v_previous numeric(14,3);
+  v_new numeric(14,3);
+  v_total numeric(14,3) := 0;
+  v_count integer := 0;
+  v_preview jsonb := '[]'::jsonb;
+  v_existing jsonb;
+  v_duplicate_count integer;
+begin
+  if p_source_kind not in ('booking','creative_project') then
+    raise exception 'source_kind must be booking or creative_project.' using errcode='22023';
+  end if;
+  if p_source_reference_id is null then
+    raise exception 'A booking or project reference is required.' using errcode='22023';
+  end if;
+  if char_length(trim(coalesce(p_reason,''))) < 8 then
+    raise exception 'Enter a posting reason with at least 8 characters.' using errcode='22023';
+  end if;
+  if char_length(trim(coalesce(p_idempotency_key,''))) < 8 then
+    raise exception 'A stable idempotency key is required.' using errcode='22023';
+  end if;
+  if jsonb_typeof(p_lines) <> 'array' or jsonb_array_length(p_lines) < 1 then
+    raise exception 'At least one inventory line is required.' using errcode='22023';
+  end if;
+  if jsonb_array_length(p_lines) > 100 then
+    raise exception 'A maximum of 100 inventory lines can be posted at once.' using errcode='22023';
+  end if;
+
+  if p_source_kind='booking' then
+    perform 1 from public.bookings where id=p_source_reference_id;
+    if not found then raise exception 'Booking was not found.' using errcode='P0002'; end if;
+  else
+    perform 1 from public.creative_projects where id=p_source_reference_id;
+    if not found then raise exception 'Creative project was not found.' using errcode='P0002'; end if;
+  end if;
+
+  if not p_dry_run then
+    select to_jsonb(b) into v_existing
+    from public.catalog_inventory_posting_batches b
+    where b.idempotency_key=trim(p_idempotency_key);
+    if v_existing is not null then
+      return jsonb_build_object('ok',true,'dry_run',false,'idempotent_replay',true,'batch',v_existing);
+    end if;
+  end if;
+
+  select count(*) into v_duplicate_count
+  from (
+    select trim(value->>'item_key') item_key
+    from jsonb_array_elements(p_lines)
+    group by trim(value->>'item_key')
+    having count(*) > 1
+  ) duplicates;
+  if v_duplicate_count > 0 then
+    raise exception 'Combine duplicate item keys into one line before posting.' using errcode='22023';
+  end if;
+
+  for v_line in select value from jsonb_array_elements(p_lines)
+  loop
+    v_item_key := trim(coalesce(v_line->>'item_key',''));
+    v_qty := round(coalesce(nullif(v_line->>'quantity','')::numeric,0),3);
+    v_reservation_id := nullif(trim(coalesce(v_line->>'reservation_id','')),'')::uuid;
+    if v_item_key='' or v_qty<=0 then
+      raise exception 'Every posting line requires an item key and quantity greater than zero.' using errcode='22023';
+    end if;
+
+    select * into v_item from public.catalog_inventory_items where item_key=v_item_key for update;
+    if not found then raise exception 'Inventory item % was not found.',v_item_key using errcode='P0002'; end if;
+    if not v_item.is_active then raise exception 'Inventory item % is archived.',v_item_key using errcode='22023'; end if;
+    if coalesce(v_item.qty_on_hand,0) < v_qty then
+      raise exception 'Insufficient stock for %: requested %, available %.',v_item_key,v_qty,coalesce(v_item.qty_on_hand,0) using errcode='22023';
+    end if;
+
+    if p_source_kind='creative_project' then
+      if v_reservation_id is null then
+        raise exception 'Creative project lines require a reviewed reservation ID.' using errcode='22023';
+      end if;
+      select * into v_reservation
+      from public.creative_project_inventory_reservations
+      where id=v_reservation_id and project_id=p_source_reference_id and inventory_item_id=v_item.id
+      for update;
+      if not found then raise exception 'Reservation does not match the selected project and inventory item.' using errcode='22023'; end if;
+      if v_reservation.status not in ('reserved','reviewed') or v_reservation.inventory_mutated then
+        raise exception 'Reservation % is not ready for posting.',v_reservation_id using errcode='22023';
+      end if;
+      if v_qty <> round(v_reservation.quantity,3) then
+        raise exception 'Posted quantity must equal the reviewed reservation quantity; edit and review the reservation first.' using errcode='22023';
+      end if;
+    end if;
+
+    v_previous := round(coalesce(v_item.qty_on_hand,0),3);
+    v_new := round(v_previous-v_qty,3);
+    v_total := v_total+v_qty;
+    v_count := v_count+1;
+    v_preview := v_preview || jsonb_build_array(jsonb_build_object(
+      'item_key',v_item.item_key,'item_name',v_item.name,'quantity',v_qty,
+      'previous_qty',v_previous,'new_qty',v_new,'unit_label',v_item.unit_label,
+      'unit_cost_cents',v_item.cost_cents,'reservation_id',v_reservation_id,
+      'available',true
+    ));
+  end loop;
+
+  if p_dry_run then
+    return jsonb_build_object(
+      'ok',true,'dry_run',true,'source_kind',p_source_kind,
+      'source_reference_id',p_source_reference_id,'row_count',v_count,
+      'total_quantity',round(v_total,3),'lines',v_preview
+    );
+  end if;
+
+  insert into public.catalog_inventory_posting_batches(
+    source_kind,source_reference_id,booking_id,project_id,status,idempotency_key,
+    reason,actor_staff_email,row_count,total_quantity,accounting_status
+  ) values(
+    p_source_kind,p_source_reference_id,
+    case when p_source_kind='booking' then p_source_reference_id else null end,
+    case when p_source_kind='creative_project' then p_source_reference_id else null end,
+    'posted',trim(p_idempotency_key),trim(p_reason),nullif(trim(coalesce(p_actor_email,'')),''),
+    v_count,round(v_total,3),case when p_source_kind='booking' then 'pending' else 'not_required' end
+  ) returning * into v_batch;
+  v_batch_id := v_batch.id;
+
+  for v_line in select value from jsonb_array_elements(p_lines)
+  loop
+    v_item_key := trim(v_line->>'item_key');
+    v_qty := round((v_line->>'quantity')::numeric,3);
+    v_reservation_id := nullif(trim(coalesce(v_line->>'reservation_id','')),'')::uuid;
+    select * into v_item from public.catalog_inventory_items where item_key=v_item_key for update;
+    v_previous := round(coalesce(v_item.qty_on_hand,0),3);
+    v_new := round(v_previous-v_qty,3);
+
+    update public.catalog_inventory_items
+      set qty_on_hand=v_new,updated_at=now()
+      where id=v_item.id;
+
+    insert into public.catalog_inventory_movements(
+      item_id,item_key,booking_id,movement_type,qty_delta,previous_qty,new_qty,
+      unit_label,note,actor_name,source_kind,source_reference_id,posting_batch_id
+    ) values(
+      v_item.id,v_item.item_key,
+      case when p_source_kind='booking' then p_source_reference_id else null end,
+      case when p_source_kind='booking' then 'job_use' else 'project_use' end,
+      -v_qty,v_previous,v_new,v_item.unit_label,trim(p_reason),
+      nullif(trim(coalesce(p_actor_email,'')),''),p_source_kind,p_source_reference_id,v_batch_id
+    ) returning id into v_movement_id;
+
+    insert into public.catalog_inventory_posting_rows(
+      batch_id,inventory_item_id,item_key,item_name,reservation_id,quantity,unit_label,
+      unit_cost_cents,previous_qty,new_qty,movement_id,status
+    ) values(
+      v_batch_id,v_item.id,v_item.item_key,v_item.name,v_reservation_id,v_qty,v_item.unit_label,
+      v_item.cost_cents,v_previous,v_new,v_movement_id,'posted'
+    );
+
+    if p_source_kind='creative_project' and v_reservation_id is not null then
+      update public.creative_project_inventory_reservations
+        set status='posted',inventory_mutated=true,posted_by_staff_email=nullif(trim(coalesce(p_actor_email,'')),''),
+            posted_at=now(),posting_batch_id=v_batch_id,updated_at=now(),
+            reversed_at=null,reversed_by_staff_email=null,reversal_reason=null
+        where id=v_reservation_id;
+    end if;
+  end loop;
+
+  return jsonb_build_object(
+    'ok',true,'dry_run',false,'idempotent_replay',false,
+    'batch',to_jsonb(v_batch),'lines',v_preview
+  );
+end;
+$$;
+
+create or replace function public.admin_catalog_inventory_post_reverse(
+  p_batch_id uuid,
+  p_actor_email text,
+  p_reason text,
+  p_dry_run boolean default true
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_batch public.catalog_inventory_posting_batches%rowtype;
+  v_row public.catalog_inventory_posting_rows%rowtype;
+  v_item public.catalog_inventory_items%rowtype;
+  v_previous numeric(14,3);
+  v_new numeric(14,3);
+  v_reversal_id uuid;
+  v_preview jsonb := '[]'::jsonb;
+begin
+  if p_batch_id is null then raise exception 'A posting batch is required.' using errcode='22023'; end if;
+  if char_length(trim(coalesce(p_reason,''))) < 8 then
+    raise exception 'Enter a reversal reason with at least 8 characters.' using errcode='22023';
+  end if;
+  select * into v_batch from public.catalog_inventory_posting_batches where id=p_batch_id for update;
+  if not found then raise exception 'Posting batch was not found.' using errcode='P0002'; end if;
+  if v_batch.status='reversed' then
+    return jsonb_build_object('ok',true,'dry_run',p_dry_run,'already_reversed',true,'batch',to_jsonb(v_batch));
+  end if;
+  if v_batch.status<>'posted' then raise exception 'Only posted batches can be reversed.' using errcode='22023'; end if;
+
+  for v_row in select * from public.catalog_inventory_posting_rows where batch_id=p_batch_id order by created_at,id for update
+  loop
+    select * into v_item from public.catalog_inventory_items where id=v_row.inventory_item_id for update;
+    if not found then raise exception 'Inventory item % is unavailable for reversal.',v_row.item_key using errcode='P0002'; end if;
+    v_previous := round(coalesce(v_item.qty_on_hand,0),3);
+    v_new := round(v_previous+v_row.quantity,3);
+    v_preview := v_preview || jsonb_build_array(jsonb_build_object(
+      'item_key',v_row.item_key,'item_name',v_row.item_name,'quantity',v_row.quantity,
+      'previous_qty',v_previous,'new_qty',v_new,'unit_label',v_row.unit_label
+    ));
+  end loop;
+
+  if p_dry_run then
+    return jsonb_build_object('ok',true,'dry_run',true,'batch',to_jsonb(v_batch),'lines',v_preview);
+  end if;
+
+  for v_row in select * from public.catalog_inventory_posting_rows where batch_id=p_batch_id order by created_at,id for update
+  loop
+    select * into v_item from public.catalog_inventory_items where id=v_row.inventory_item_id for update;
+    v_previous := round(coalesce(v_item.qty_on_hand,0),3);
+    v_new := round(v_previous+v_row.quantity,3);
+    update public.catalog_inventory_items set qty_on_hand=v_new,updated_at=now() where id=v_item.id;
+
+    insert into public.catalog_inventory_movements(
+      item_id,item_key,booking_id,movement_type,qty_delta,previous_qty,new_qty,unit_label,
+      note,actor_name,source_kind,source_reference_id,posting_batch_id,reversal_of_movement_id
+    ) values(
+      v_item.id,v_item.item_key,v_batch.booking_id,'return',v_row.quantity,v_previous,v_new,
+      v_row.unit_label,'Reversal: '||trim(p_reason),nullif(trim(coalesce(p_actor_email,'')),''),
+      v_batch.source_kind,v_batch.source_reference_id,v_batch.id,v_row.movement_id
+    ) returning id into v_reversal_id;
+
+    update public.catalog_inventory_movements
+      set is_reversed=true,reversed_at=now(),reversed_by_staff_email=nullif(trim(coalesce(p_actor_email,'')),''),
+          reversal_reason=trim(p_reason),updated_at=now()
+      where id=v_row.movement_id;
+    update public.catalog_inventory_posting_rows
+      set status='reversed',reversal_movement_id=v_reversal_id,updated_at=now()
+      where id=v_row.id;
+
+    if v_row.reservation_id is not null then
+      update public.creative_project_inventory_reservations
+        set status='reviewed',inventory_mutated=false,posting_batch_id=null,
+            reversed_at=now(),reversed_by_staff_email=nullif(trim(coalesce(p_actor_email,'')),''),
+            reversal_reason=trim(p_reason),updated_at=now()
+        where id=v_row.reservation_id;
+    end if;
+  end loop;
+
+  update public.catalog_inventory_posting_batches
+    set status='reversed',reversed_at=now(),reversed_by_staff_email=nullif(trim(coalesce(p_actor_email,'')),''),
+        reversal_reason=trim(p_reason),accounting_status=case when source_kind='booking' then 'reversal_review' else accounting_status end,
+        updated_at=now()
+    where id=p_batch_id returning * into v_batch;
+
+  return jsonb_build_object('ok',true,'dry_run',false,'batch',to_jsonb(v_batch),'lines',v_preview);
+end;
+$$;
+
+revoke all on function public.admin_catalog_inventory_post(text,uuid,jsonb,text,text,text,boolean) from public,anon,authenticated;
+grant execute on function public.admin_catalog_inventory_post(text,uuid,jsonb,text,text,text,boolean) to service_role;
+revoke all on function public.admin_catalog_inventory_post_reverse(uuid,text,text,boolean) from public,anon,authenticated;
+grant execute on function public.admin_catalog_inventory_post_reverse(uuid,text,text,boolean) to service_role;
+
+comment on table public.catalog_inventory_posting_batches is 'Build 240 atomic booking/project stock postings. One batch posts or reverses as one database transaction.';
+comment on table public.catalog_inventory_posting_rows is 'Build 240 row evidence for inventory posting and authorized reversal.';
+comment on function public.admin_catalog_inventory_post is 'Build 240 preview/commit inventory posting with stock locking, shortage checks, project reservation validation, and idempotency.';
+comment on function public.admin_catalog_inventory_post_reverse is 'Build 240 preview/commit compensating inventory reversal. It never deletes movement history.';
+
+-- Build 240 Startup Command Center additions. Existing items are preserved.
+insert into public.app_startup_process_items(process_key,sort_order,category,severity,title,why_text,locations,instructions,done_when,action_route,evidence_key,source_build,is_active) values
+('migration-240',35,'Inventory and operations','blocker','Apply and verify the Build 240 transactional inventory posting migration','Booking and Creative Project material usage must no longer depend on separate browser writes. Build 240 moves preview, shortage validation, stock mutation, movement evidence, reservation status, idempotency and reversal links into one database transaction.','["Supabase Dashboard → SQL Editor", "sql/2026-08-05_build240_transactional_inventory_posting_reversal.sql", "Supabase Dashboard → Database → Functions", "/admin-inventory-posting.html"]'::jsonb,'["Confirm Builds 235, 237, 238 and 239 migrations have been applied in order.", "Open the complete Build 240 SQL migration from the ZIP.", "Run it in staging/preview first and do not edit individual statements.", "Confirm catalog_inventory_posting_batches and catalog_inventory_posting_rows exist.", "Confirm admin_catalog_inventory_post and admin_catalog_inventory_post_reverse appear under Database Functions.", "Refresh the Supabase schema cache if the admin page reports that the RPC is missing.", "Open /admin-inventory-posting.html and preview one harmless booking posting without committing.", "Load one reviewed Creative Project reservation and confirm shortages or conflicts are explained before posting.", "Record the migration date and staging result in the Startup evidence editor."]'::jsonb,'The two tables and two RPC functions exist, previews load from the shared database, a reviewed project reservation can be validated without changing stock, and the interface no longer reports migration required.','/admin-inventory-posting.html','migration_240',240,true),
+('inventory-post-reversal-acceptance',36,'Inventory and accounting','blocker','Complete transactional inventory posting and authorized reversal acceptance testing','The feature is not production-ready until one committed booking posting, one reviewed project posting, one shortage rejection, one idempotent replay and one compensating reversal have been observed with correct quantities and audit evidence. Booking reversals also require accounting review because stock restoration does not automatically erase journal history.','["/admin-inventory-posting.html", "/admin-progress.html", "/admin-creative-projects.html", "/admin-accounting.html", "Supabase Dashboard → Table Editor → catalog_inventory_posting_batches"]'::jsonb,'["Choose a low-risk staging inventory item and record its starting quantity.", "Preview a booking posting and confirm the before/after quantity and total lines are correct.", "Commit once, refresh history, and confirm the quantity decreased exactly once.", "Repeat the same request with the same idempotency key and confirm stock does not decrease again.", "Preview a quantity greater than stock and confirm the whole transaction is rejected with no row changed.", "Create or use a reviewed Creative Project reservation, preview it, commit it, and confirm the reservation becomes posted/inventory_mutated.", "Open Transaction History, choose the test batch, enter a specific reversal reason, and preview the compensating return.", "Commit the reversal and confirm quantity returns, the original movement is marked reversed, a return movement exists, and the project reservation returns to reviewed where applicable.", "For a booking reversal, open Accounting and review or reverse the related COGS journal evidence rather than deleting it.", "Save screenshots or record IDs without customer secrets in Startup evidence."]'::jsonb,'All acceptance cases pass, duplicate submission cannot double-deduct stock, shortages leave every row unchanged, reversals preserve original and compensating history, and booking accounting evidence is reviewed.','/admin-inventory-posting.html','inventory_posting_reversal_acceptance',240,true)
+on conflict(process_key) do update set sort_order=excluded.sort_order,category=excluded.category,severity=excluded.severity,title=excluded.title,why_text=excluded.why_text,locations=excluded.locations,instructions=excluded.instructions,done_when=excluded.done_when,action_route=excluded.action_route,evidence_key=excluded.evidence_key,source_build=excluded.source_build,is_active=true,updated_at=now();
+insert into public.app_startup_process_audit(process_key,event_type,actor_staff_email,safe_note) values
+('migration-240','seeded',null,'Build 240 added transactional inventory migration instructions.'),
+('inventory-post-reversal-acceptance','seeded',null,'Build 240 added posting and reversal acceptance instructions.');
+
+-- Build 240 current execution cycle. Older rows remain for history.
+update public.app_roadmap_execution_items set is_current_cycle=false where cycle_key<>'build240';
+insert into public.app_roadmap_execution_items(item_key,title,workstream,priority,status,target_build,sort_order,source_document,cycle_key,is_current_cycle,action_path) values
+('b240_01','Deploy Build 240 and verify the Inventory Posting page','reliability','critical','in_progress',240,10,'MASTER_VALUE_ROADMAP.md','build240',true,'Deploy preview, hard-refresh /admin-inventory-posting, verify CSS/scripts/menu/route copy and confirm no console error.'),
+('b240_02','Apply the Build 240 transaction migration in staging','reliability','critical','planned',240,20,'MASTER_VALUE_ROADMAP.md','build240',true,'Run the complete Build 240 migration after prior migrations, refresh schema cache, and confirm tables/RPCs.'),
+('b240_03','Complete booking inventory posting acceptance','operations','critical','planned',240,30,'MASTER_VALUE_ROADMAP.md','build240',true,'Preview and commit a small booking usage batch; verify stock, movement, batch, row and job history evidence.'),
+('b240_04','Complete Creative Project reservation posting acceptance','operations','critical','planned',240,40,'MASTER_VALUE_ROADMAP.md','build240',true,'Post reviewed project reservations and verify project ownership, shortage checks, status and inventory_mutated evidence.'),
+('b240_05','Complete idempotency, shortage and rollback tests','reliability','critical','planned',240,50,'MASTER_VALUE_ROADMAP.md','build240',true,'Replay the same key, submit an over-stock request, and confirm no duplicate or partial mutations.'),
+('b240_06','Complete authorized reversal and accounting review','payments','critical','planned',240,60,'MASTER_VALUE_ROADMAP.md','build240',true,'Preview/commit a compensating reversal and reconcile booking COGS journal evidence without deleting history.'),
+('b240_07','Retest Block Calendar full-day, AM and PM behaviour','booking','critical','planned',240,70,'MASTER_VALUE_ROADMAP.md','build240',true,'Create/remove each block type and confirm public booking availability matches after refresh.'),
+('b240_08','Complete end-to-end booking, payment and notification test','booking','critical','planned',240,80,'MASTER_VALUE_ROADMAP.md','build240',true,'Run phone-sized booking, deposit, webhook, email and admin reconciliation with safe evidence.'),
+('b240_09','Complete Cloudflare and Supabase recovery rehearsal','reliability','critical','planned',240,90,'MASTER_VALUE_ROADMAP.md','build240',true,'Audit variables/bindings then perform staging restore and deployment rollback with smoke tests.'),
+('b240_10','Complete legal, consent and staff permission review','customer','critical','planned',240,100,'MASTER_VALUE_ROADMAP.md','build240',true,'Publish policies, verify links, roles, session expiry and private media/incident boundaries.'),
+('b240_11','Complete real-device mobile and accessibility acceptance','reliability','high','planned',240,110,'MASTER_VALUE_ROADMAP.md','build240',true,'Test customer/admin paths, keyboard, focus, labels, contrast, wrapping, tables and touch targets.'),
+('b240_12','Finish resumable media upload and derivative worker','media','high','planned',240,120,'MASTER_VALUE_ROADMAP.md','build240',true,'Implement resumable weak-network upload recovery, deduplication and WebP/AVIF responsive derivatives.'),
+('b240_13','Add automatic product publish-readiness gates','operations','high','planned',240,130,'MASTER_VALUE_ROADMAP.md','build240',true,'Block public publishing when required image roles, price, tax, category, stock, SEO or consent are incomplete.'),
+('b240_14','Complete inventory name/category/cost/duplicate cleanup','operations','high','planned',240,140,'MASTER_VALUE_ROADMAP.md','build240',true,'Use suspicious-name, transactional bulk update, merge preview and audit history tools.'),
+('b240_15','Complete sellable product galleries and pricing review','operations','high','planned',240,150,'MASTER_VALUE_ROADMAP.md','build240',true,'Finish featured plus seven images, alt/captions/roles, costs, HST, margins and public display.'),
+('b240_16','Complete payment application and tax workflow','payments','high','planned',240,160,'MASTER_VALUE_ROADMAP.md','build240',true,'Post approved receipts against AR, add HST review, exceptions and traceable journal links.'),
+('b240_17','Add month-end close, lock/reopen and accountant export','payments','high','planned',240,170,'MASTER_VALUE_ROADMAP.md','build240',true,'Implement controlled period close, authorized reopen and evidence-complete export packaging.'),
+('b240_18','Complete Search Console, schema and GBP alignment','seo','high','planned',240,180,'MASTER_VALUE_ROADMAP.md','build240',true,'Submit sitemap, validate canonicals/schema/indexing and align GBP services, areas, hours, photos and reviews.'),
+('b240_19','Replace high-value placeholders with approved local proof','seo','high','planned',240,190,'MASTER_VALUE_ROADMAP.md','build240',true,'Prioritize homepage, town/service pages, booking, galleries and trust blocks using customer-approved Rosie-owned images.'),
+('b240_20','Run invite-only soft launch and prioritize observed failures','operations','critical','planned',240,200,'MASTER_VALUE_ROADMAP.md','build240',true,'Accept a small known-customer cohort and review every booking, payment, notification, upload, inventory and incident event daily.')
+on conflict(item_key) do update set title=excluded.title,workstream=excluded.workstream,priority=excluded.priority,status=case when public.app_roadmap_execution_items.status='done' then 'done' else excluded.status end,target_build=excluded.target_build,sort_order=excluded.sort_order,source_document=excluded.source_document,cycle_key=excluded.cycle_key,is_current_cycle=true,action_path=excluded.action_path,updated_at=now();
+
+commit;
+-- END BUILD 240 TRANSACTIONAL INVENTORY POSTING AND REVERSAL
+-- Build 245 (2026-08-06): no DDL. UI/SEO/cache acceptance scanner, service-worker hardening, static landing-page H1/metadata fallbacks, admin noindex corrections, and synchronized documentation only. Build 240 remains the latest functional schema migration.
+
+-- Build 246 — catalog publish-readiness review, audit evidence, and current execution cycle.
+-- Apply after Build 238 and Build 239 migrations.
+
+create table if not exists public.catalog_publish_readiness_audit (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  actor_email text null,
+  action text not null check (action in ('preview','publish','blocked')),
+  reason text not null,
+  item_keys jsonb not null default '[]'::jsonb,
+  result jsonb not null default '{}'::jsonb,
+  blocked_count integer not null default 0,
+  published_count integer not null default 0
+);
+create index if not exists catalog_publish_readiness_audit_created_idx on public.catalog_publish_readiness_audit(created_at desc);
+
+alter table public.catalog_publish_readiness_audit enable row level security;
+revoke all on public.catalog_publish_readiness_audit from public, anon, authenticated;
+grant all on public.catalog_publish_readiness_audit to service_role;
+
+create or replace function public.admin_catalog_inventory_publish_review(
+  p_item_keys text[],
+  p_actor_email text,
+  p_reason text,
+  p_dry_run boolean default true
+) returns jsonb
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_reason text := btrim(coalesce(p_reason,''));
+  v_requested integer := coalesce(array_length(p_item_keys,1),0);
+  v_found integer := 0;
+  v_blocked integer := 0;
+  v_published integer := 0;
+  v_results jsonb := '[]'::jsonb;
+  v_missing jsonb := '[]'::jsonb;
+begin
+  if v_requested < 1 then raise exception 'Select at least one inventory item.' using errcode='22023'; end if;
+  if v_requested > 500 then raise exception 'A maximum of 500 inventory items can be reviewed at once.' using errcode='22023'; end if;
+  if length(v_reason) < 8 then raise exception 'Enter a reason with at least 8 characters.' using errcode='22023'; end if;
+
+  select count(*) into v_found from public.catalog_inventory_items where item_key = any(p_item_keys);
+  select coalesce(jsonb_agg(x.item_key),'[]'::jsonb) into v_missing
+  from (select unnest(p_item_keys) item_key except select item_key from public.catalog_inventory_items where item_key = any(p_item_keys)) x;
+  if v_found <> v_requested then
+    return jsonb_build_object('ok',false,'dry_run',p_dry_run,'error','One or more inventory rows were not found.','missing_item_keys',v_missing);
+  end if;
+
+  perform 1 from public.catalog_inventory_items where item_key = any(p_item_keys) for update;
+
+  with reviewed as (
+    select
+      i.item_key,
+      array_remove(array[
+        case when nullif(btrim(i.name),'') is null then 'Name is missing.' end,
+        case when btrim(coalesce(i.name,'')) ~* '^(unknown product|untitled|item[[:space:]]*[0-9]*|product[[:space:]]*[0-9]*|amazon item)$' then 'Name is a placeholder.' end,
+        case when btrim(coalesce(i.name,'')) ~* '^(B0[A-Z0-9]{8}|[A-Z0-9_-]{8,})$' then 'Name looks like an identifier.' end,
+        case when i.item_type not in ('tool','consumable') then 'Item type must be tool or consumable.' end,
+        case when nullif(btrim(i.category),'') is null then 'Category is missing.' end,
+        case when nullif(btrim(i.unit_label),'') is null then 'Unit label is missing.' end,
+        case when nullif(btrim(i.image_url),'') is null then 'Featured image is missing.' end,
+        case when btrim(coalesce(i.image_url,'')) ~* '\.svg([?#].*)?$' then 'Featured image is still an SVG placeholder.' end,
+        case when i.is_active is false then 'Item is inactive.' end,
+        case when i.item_type='consumable' and coalesce(i.qty_on_hand,0) <= 0 then 'Consumable stock must be above zero.' end
+      ],null) blockers,
+      array_remove(array[
+        case when coalesce(i.cost_cents,0) <= 0 then 'Unit cost is missing or zero.' end,
+        case when nullif(btrim(i.description),'') is null then 'Description is missing.' end,
+        case when nullif(btrim(i.preferred_vendor),'') is null then 'Preferred vendor is missing.' end,
+        case when jsonb_array_length(coalesce(i.gallery_image_urls,'[]'::jsonb)) = 0 then 'Gallery has no additional images.' end,
+        case when nullif(btrim(i.subcategory),'') is null then 'Subcategory is missing.' end,
+        case when coalesce(cardinality(i.service_tags),0)=0 then 'Service tags are missing.' end
+      ],null) warnings
+    from public.catalog_inventory_items i
+    where i.item_key = any(p_item_keys)
+  ), shaped as (
+    select item_key, blockers, warnings,
+      cardinality(blockers)=0 as ready,
+      greatest(0,least(100,100-cardinality(blockers)*20-cardinality(warnings)*6)) as score
+    from reviewed
+  )
+  select coalesce(jsonb_agg(jsonb_build_object(
+    'item_key',item_key,'ready',ready,'score',score,'blockers',to_jsonb(blockers),'warnings',to_jsonb(warnings)
+  ) order by item_key),'[]'::jsonb), count(*) filter(where not ready)
+  into v_results,v_blocked
+  from shaped;
+
+  if not p_dry_run and v_blocked=0 then
+    update public.catalog_inventory_items
+      set is_public=true, updated_at=now()
+    where item_key=any(p_item_keys);
+    get diagnostics v_published = row_count;
+  end if;
+
+  insert into public.catalog_publish_readiness_audit(actor_email,action,reason,item_keys,result,blocked_count,published_count)
+  values(
+    nullif(btrim(coalesce(p_actor_email,'')),''),
+    case when p_dry_run then 'preview' when v_blocked>0 then 'blocked' else 'publish' end,
+    v_reason,
+    to_jsonb(p_item_keys),
+    jsonb_build_object('items',v_results,'dry_run',p_dry_run),
+    v_blocked,
+    v_published
+  );
+
+  return jsonb_build_object(
+    'ok', v_blocked=0,
+    'dry_run', p_dry_run,
+    'reviewed_count', v_requested,
+    'blocked_count', v_blocked,
+    'published_count', v_published,
+    'items', v_results,
+    'message', case when v_blocked>0 then 'Publishing blocked until every required field is corrected.' when p_dry_run then 'All selected rows passed readiness preview.' else 'Selected rows were published.' end
+  );
+end;
+$$;
+
+revoke all on function public.admin_catalog_inventory_publish_review(text[],text,text,boolean) from public, anon, authenticated;
+grant execute on function public.admin_catalog_inventory_publish_review(text[],text,text,boolean) to service_role;
+comment on function public.admin_catalog_inventory_publish_review(text[],text,text,boolean) is 'Build 246 previews and performs all-or-nothing inventory public publishing with readiness evidence.';
+
+
+insert into public.app_startup_process_items(
+  process_key,sort_order,category,severity,title,why_text,locations,instructions,done_when,action_route,evidence_key,source_build,is_active
+) values(
+  'catalog-publish-readiness',37,'Catalog and inventory','blocker',
+  'Complete catalog publishing-readiness acceptance',
+  'Public inventory rows should never expose placeholder names, missing categories, empty images, inactive records, or zero-stock consumables. Build 246 adds one reviewed publish gate and audit trail.',
+  '["/admin-catalog.html", "/admin-inventory-manager.html", "/api/admin/catalog_readiness_report", "Supabase Dashboard → catalog_publish_readiness_audit"]'::jsonb,
+  '["Apply the Build 246 migration in staging.", "Open Admin Inventory and filter to Blocked publishing rows.", "Correct one harmless test item until its readiness score has no blockers.", "Select the item and choose Preview public readiness.", "Confirm the preview lists warnings but no blockers.", "Publish the selection and confirm it appears in the public catalog.", "Select an intentionally incomplete test row and confirm publishing is blocked without changing any selected row.", "Review catalog_publish_readiness_audit and record safe IDs in Startup evidence."]'::jsonb,
+  'Ready rows publish together, blocked rows remain private, incomplete batch publishing changes nothing, and every preview/publish attempt has audit evidence.',
+  '/admin-catalog.html','catalog_publish_readiness',246,true
+)
+on conflict (process_key) do update set
+  sort_order=excluded.sort_order,category=excluded.category,severity=excluded.severity,title=excluded.title,
+  why_text=excluded.why_text,locations=excluded.locations,instructions=excluded.instructions,
+  done_when=excluded.done_when,action_route=excluded.action_route,evidence_key=excluded.evidence_key,
+  source_build=excluded.source_build,is_active=true,updated_at=now();
+
+insert into public.app_launch_readiness_evidence(evidence_key,title,detail,severity,status,sort_order)
+values('catalog_publish_readiness','Catalog publishing readiness','Verify preview, publish, blocked-batch, public filtering, and audit evidence.','block','pending',42)
+on conflict (evidence_key) do update set title=excluded.title,detail=excluded.detail,severity=excluded.severity,sort_order=excluded.sort_order,updated_at=now();
+
+update public.app_roadmap_execution_items set is_current_cycle=false where coalesce(is_current_cycle,false)=true;
+insert into public.app_roadmap_execution_items(
+  item_key,title,workstream,priority,status,target_build,sort_order,source_document,cycle_key,is_current_cycle,action_path
+) values
+('b246_01','Deploy Build 246 and verify catalog readiness assets','reliability','critical','in_progress',246,10,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_02','Apply Build 246 catalog readiness migration in staging','reliability','critical','planned',246,20,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-catalog.html'),
+('b246_03','Preview and publish one ready catalog row','operations','critical','planned',246,30,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-catalog.html'),
+('b246_04','Prove incomplete multi-row publish is all-or-nothing','operations','critical','planned',246,40,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-catalog.html'),
+('b246_05','Review public catalog exclusions and readiness audit','operations','high','planned',246,50,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-catalog.html'),
+('b246_06','Complete real-device CSS and mobile acceptance','reliability','critical','planned',246,60,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-ui-health.html'),
+('b246_07','Retest full-day AM and PM booking blocks','booking','critical','planned',246,70,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-blocks.html'),
+('b246_08','Complete booking payment refund and webhook acceptance','payments','critical','planned',246,80,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_09','Verify external notification delivery','reliability','critical','planned',246,90,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_10','Audit production variables bindings domains and rollback','reliability','critical','planned',246,100,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_11','Perform Supabase restore and Cloudflare rollback rehearsals','reliability','critical','planned',246,110,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_12','Complete legal consent permission and accessibility review','customer','critical','planned',246,120,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_13','Finish suspicious inventory cleanup and duplicate review','operations','high','planned',246,130,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-inventory-manager.html'),
+('b246_14','Complete first sellable gallery pricing stock and tax records','operations','high','planned',246,140,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-catalog.html'),
+('b246_15','Complete Search Console canonical and structured-data review','seo','high','planned',246,150,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-seo-tasks.html'),
+('b246_16','Align Google Business Profile information and photo cadence','seo','high','planned',246,160,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-marketing.html'),
+('b246_17','Complete upload interruption and recovery acceptance','media','high','planned',246,170,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_18','Complete payment application HST close and accountant review','payments','high','planned',246,180,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-accounting.html'),
+('b246_19','Run invite-only soft launch with daily evidence review','operations','critical','planned',246,190,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-startup-guide.html'),
+('b246_20','Modernize release guards and retire duplicate Markdown safely','documentation','medium','planned',246,200,'STARTUP_GO_LIVE_BLOCKERS.md','build246',true,'/admin-docs.html')
+on conflict (item_key) do update set
+  title=excluded.title,workstream=excluded.workstream,priority=excluded.priority,
+  status=case when public.app_roadmap_execution_items.status='done' then 'done' else excluded.status end,
+  target_build=excluded.target_build,sort_order=excluded.sort_order,source_document=excluded.source_document,
+  cycle_key=excluded.cycle_key,is_current_cycle=true,action_path=excluded.action_path,updated_at=now();
+
+-- BEGIN 2026-08-07_build247_daip_private_media_ingestion.sql
+-- Canonical Build 247 DAIP private large-media ingestion schema.
+-- Build 247 — DAIP private large-media ingestion, multipart upload state, and processing queue metadata.
+-- Apply after Build 246. Raw bytes live only in private R2; Supabase stores metadata and audit state.
+
+begin;
+
+create table if not exists public.daip_project_media_assets (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  original_filename text not null check (char_length(original_filename) between 1 and 220),
+  content_type text not null check (char_length(content_type) between 3 and 120),
+  file_size_bytes bigint not null check (file_size_bytes > 0),
+  media_kind text not null check (media_kind in ('photo','video','file')),
+  capture_stage text not null default 'other' check (capture_stage in ('before','process','after','damage','interior','exterior','engine','other')),
+  privacy_status text not null default 'private_internal' check (privacy_status in ('private_internal')),
+  consent_status text not null default 'not_reviewed' check (consent_status in ('not_reviewed','internal_only','approved_public','declined','expired')),
+  storage_binding text not null default 'DAIP_MEDIA_BUCKET',
+  object_key text not null unique check (object_key like 'projects/%/raw/%'),
+  upload_status text not null default 'created' check (upload_status in ('created','uploading','uploaded','aborted','failed')),
+  r2_etag text null,
+  sha256_hex text null check (sha256_hex is null or sha256_hex ~ '^[a-fA-F0-9]{64}$'),
+  is_raw_original boolean not null default true check (is_raw_original = true),
+  public_destination_enabled boolean not null default false check (public_destination_enabled = false),
+  story_review_status text not null default 'not_reviewed' check (story_review_status in ('not_reviewed','selected','excluded')),
+  story_sort_order integer null check (story_sort_order is null or story_sort_order between 1 and 9999),
+  story_note text null check (story_note is null or char_length(story_note) <= 1200),
+  story_reviewed_by_staff_email text null,
+  story_reviewed_at timestamptz null,
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  uploaded_at timestamptz null
+);
+
+create table if not exists public.daip_media_upload_sessions (
+  id uuid primary key default gen_random_uuid(),
+  asset_id uuid not null references public.daip_project_media_assets(id) on delete cascade,
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  client_fingerprint text not null check (char_length(client_fingerprint) between 3 and 300),
+  multipart_upload_id text not null check (char_length(multipart_upload_id) between 3 and 500),
+  object_key text not null,
+  part_size_bytes integer not null default 33554432 check (part_size_bytes between 5242880 and 104857600),
+  total_parts integer not null check (total_parts between 1 and 10000),
+  file_size_bytes bigint not null check (file_size_bytes > 0),
+  status text not null default 'created' check (status in ('created','uploading','paused','uploaded','aborted','failed')),
+  last_part_number integer null check (last_part_number is null or last_part_number between 1 and 10000),
+  last_modified_ms bigint null,
+  last_error text null check (last_error is null or char_length(last_error)<=1000),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  completed_at timestamptz null,
+  aborted_at timestamptz null
+);
+
+create table if not exists public.daip_media_upload_parts (
+  id uuid primary key default gen_random_uuid(),
+  session_id uuid not null references public.daip_media_upload_sessions(id) on delete cascade,
+  part_number integer not null check (part_number between 1 and 10000),
+  etag text not null check (char_length(etag) between 3 and 300),
+  size_bytes integer not null default 0 check (size_bytes >= 0),
+  uploaded_at timestamptz not null default now(),
+  unique(session_id,part_number)
+);
+
+create table if not exists public.daip_media_processing_jobs (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references public.creative_projects(id) on delete cascade,
+  asset_id uuid not null references public.daip_project_media_assets(id) on delete cascade,
+  job_type text not null check (job_type in ('metadata_extract','privacy_review','content_candidate_index','proxy_video','frame_extract','audio_extract','transcript','scene_analysis','image_derivative','visual_analysis')),
+  status text not null default 'queued' check (status in ('queued','dispatched','processing','review','completed','blocked','failed','cancelled')),
+  priority integer not null default 100 check (priority between 1 and 999),
+  attempt_count integer not null default 0 check (attempt_count >= 0),
+  max_attempts integer not null default 3 check (max_attempts between 1 and 20),
+  next_retry_at timestamptz null,
+  dead_lettered_at timestamptz null,
+  review_note text null check (review_note is null or char_length(review_note) <= 1200),
+  output_manifest jsonb not null default '{}'::jsonb,
+  last_error text null check (last_error is null or char_length(last_error)<=1000),
+  created_by_staff_email text null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  started_at timestamptz null,
+  completed_at timestamptz null,
+  unique(asset_id,job_type)
+);
+
+create index if not exists daip_project_media_assets_project_idx on public.daip_project_media_assets(project_id,created_at desc);
+create index if not exists daip_project_media_assets_status_idx on public.daip_project_media_assets(upload_status,media_kind,created_at desc);
+create index if not exists daip_media_upload_sessions_project_idx on public.daip_media_upload_sessions(project_id,status,updated_at desc);
+create unique index if not exists daip_media_upload_sessions_active_fingerprint_uidx
+  on public.daip_media_upload_sessions(project_id,client_fingerprint)
+  where status in ('created','uploading','paused');
+create index if not exists daip_media_parts_session_idx on public.daip_media_upload_parts(session_id,part_number);
+create index if not exists daip_media_processing_jobs_queue_idx on public.daip_media_processing_jobs(status,priority,created_at);
+
+alter table public.daip_project_media_assets enable row level security;
+alter table public.daip_media_upload_sessions enable row level security;
+alter table public.daip_media_upload_parts enable row level security;
+alter table public.daip_media_processing_jobs enable row level security;
+revoke all privileges on table public.daip_project_media_assets,public.daip_media_upload_sessions,public.daip_media_upload_parts,public.daip_media_processing_jobs from public,anon,authenticated;
+grant all privileges on table public.daip_project_media_assets,public.daip_media_upload_sessions,public.daip_media_upload_parts,public.daip_media_processing_jobs to service_role;
+
+comment on table public.daip_project_media_assets is 'Build 247 private DAIP raw-media metadata. Raw bytes live in private R2 only; public destination is structurally false.';
+comment on table public.daip_media_upload_sessions is 'Build 247 resumable multipart-upload state for private DAIP project media.';
+comment on table public.daip_media_upload_parts is 'Build 247 uploaded multipart ETags needed to safely resume and complete R2 uploads.';
+comment on table public.daip_media_processing_jobs is 'Build 247 private downstream processing queue metadata for proxies, frames, transcript, scene analysis, and content candidates.';
+
+alter table public.creative_project_audit drop constraint if exists creative_project_audit_event_type_check;
+alter table public.creative_project_audit add constraint creative_project_audit_event_type_check check (event_type in (
+  'created','updated','session_added','output_updated','archived','restored','booking_unlinked','cost_line_added','material_line_added','labour_line_added','draft_updated','batch_approval','daip_associated','line_updated','line_soft_deleted','inventory_reservation_updated','session_story_approval','shot_plan_updated','learning_updated','archive_export_prepared','template_updated','content_plan_generated','media_upload_started','media_upload_completed','media_upload_aborted','media_processing_updated'
+));
+
+insert into public.app_startup_process_items(process_key,sort_order,category,severity,title,why_text,locations,instructions,done_when,action_route,evidence_key,source_build,is_active)
+values
+('daip-private-r2-setup',38,'DAIP and media','blocker','Create and bind the private DAIP R2 bucket','Raw MOV, MP4 and photo masters must not be stored in the public rosie-assets bucket. Build 247 expects one private R2 bucket bound to Pages Functions as DAIP_MEDIA_BUCKET.','["Cloudflare Dashboard → R2 Object Storage", "Cloudflare Dashboard → Workers & Pages → Rosie Dazzlers project → Settings → Bindings", "/admin-daip-media.html#setup"]'::jsonb,'["Create an R2 bucket named rosie-daip-media (or another private name).", "Leave r2.dev and custom-domain public access disabled.", "Open Workers & Pages and select the Rosie Dazzlers Pages project.", "Open Settings → Bindings → Add → R2 bucket.", "Set Variable name to DAIP_MEDIA_BUCKET.", "Select the private DAIP bucket and save.", "Repeat the binding for Preview and Production environments if Cloudflare separates them.", "Redeploy the Pages project.", "Open /admin-daip-media.html and confirm Private R2 binding says Ready."]'::jsonb,'The private bucket exists, has no public domain, DAIP_MEDIA_BUCKET is bound to the Pages project, the project was redeployed, and the DAIP Media Intake screen reports the binding as ready.','/admin-daip-media.html#setup','daip_private_r2_setup',247,true),
+('daip-large-media-acceptance',39,'DAIP and media','blocker','Complete DAIP large-media upload and recovery acceptance','Before the three historical detailing projects are ingested, one harmless test photo and one large test video should prove multipart upload, resume, immutable raw storage, DB metadata, and processing queue creation.','["/admin-daip-media.html", "Supabase Dashboard → daip_project_media_assets", "Supabase Dashboard → daip_media_upload_sessions", "Supabase Dashboard → daip_media_processing_jobs"]'::jsonb,'["Apply the Build 247 migration in staging.", "Create or select a Creative Project.", "Upload one photo and confirm it completes and queues image processing jobs.", "Begin one video larger than 300 MB, interrupt the connection after several parts, then reselect the same file and choose Resume.", "Confirm previously uploaded parts are skipped and the upload continues.", "Complete the video and confirm raw object_key begins projects/{project_uuid}/raw/video/.", "Confirm the raw bucket remains private and public_destination_enabled is false.", "Confirm proxy/frame/audio/transcript/scene-analysis jobs were queued.", "Record safe evidence in Startup Command Center; do not paste customer media URLs or credentials."]'::jsonb,'A >300 MB test video survives interruption/resume without restarting from zero, the immutable raw object is private, metadata is shared in Supabase, and the correct processing jobs exist.','/admin-daip-media.html','daip_large_media_acceptance',247,true)
+on conflict (process_key) do update set sort_order=excluded.sort_order,category=excluded.category,severity=excluded.severity,title=excluded.title,why_text=excluded.why_text,locations=excluded.locations,instructions=excluded.instructions,done_when=excluded.done_when,action_route=excluded.action_route,evidence_key=excluded.evidence_key,source_build=excluded.source_build,is_active=true,updated_at=now();
+
+insert into public.app_launch_readiness_evidence(evidence_key,title,detail,severity,status,sort_order) values
+('daip_private_r2_setup','Private DAIP R2 setup','Private bucket exists, is not publicly exposed, and is bound as DAIP_MEDIA_BUCKET.','block','pending',43),
+('daip_large_media_acceptance','DAIP large-media acceptance','Verify >300 MB multipart upload, interruption/resume, immutable raw storage, and processing job creation.','block','pending',44)
+on conflict (evidence_key) do update set title=excluded.title,detail=excluded.detail,severity=excluded.severity,sort_order=excluded.sort_order,updated_at=now();
+
+update public.app_roadmap_execution_items set is_current_cycle=false where coalesce(is_current_cycle,false)=true;
+insert into public.app_roadmap_execution_items(item_key,title,workstream,priority,status,target_build,sort_order,source_document,cycle_key,is_current_cycle,action_path) values
+('b247_01','Create and bind private DAIP R2 bucket','media','critical','planned',247,10,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html#setup'),
+('b247_02','Apply Build 247 DAIP media migration in staging','reliability','critical','planned',247,20,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html'),
+('b247_03','Upload and verify one private DAIP photo','media','critical','planned',247,30,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html'),
+('b247_04','Prove >300 MB video multipart upload','media','critical','planned',247,40,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html'),
+('b247_05','Prove interrupted video resume','media','critical','planned',247,50,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html'),
+('b247_06','Import the first historical detailing project','media','high','planned',247,60,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-daip-media.html'),
+('b247_07','Import the second historical detailing project','media','high','planned',247,70,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-daip-media.html'),
+('b247_08','Import the third historical detailing project','media','high','planned',247,80,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-daip-media.html'),
+('b247_09','Configure optional DAIP processing queue','media','high','planned',247,90,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-daip-media.html'),
+('b247_10','Implement processing consumer for proxies frames audio and transcript','media','critical','planned',248,100,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-daip-media.html'),
+('b247_11','Implement scene analysis and before-after candidate scoring','media','high','planned',248,110,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-daip-media.html'),
+('b247_12','Implement reviewed content-story assembly','content','high','planned',248,120,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-creative-projects.html'),
+('b247_13','Implement render adapter for long and short video outputs','content','critical','planned',249,130,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-creative-projects.html'),
+('b247_14','Keep generated media private until review','security','critical','planned',248,140,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-startup-guide.html'),
+('b247_15','Add reviewed copy-to-public workflow for approved derivatives','media','high','planned',249,150,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-gallery.html'),
+('b247_16','Complete real-device DAIP uploader acceptance','reliability','high','planned',247,160,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-daip-media.html'),
+('b247_17','Continue catalog publish-readiness cleanup','operations','high','planned',247,170,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-catalog.html'),
+('b247_18','Complete booking payment notification acceptance','reliability','critical','planned',247,180,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-startup-guide.html'),
+('b247_19','Complete Search Console and Google Business Profile alignment','seo','high','planned',247,190,'MASTER_VALUE_ROADMAP.md','build247',true,'/admin-seo-tasks.html'),
+('b247_20','Run invite-only soft launch and evidence review','operations','critical','planned',247,200,'STARTUP_GO_LIVE_BLOCKERS.md','build247',true,'/admin-startup-guide.html')
+on conflict (item_key) do update set title=excluded.title,workstream=excluded.workstream,priority=excluded.priority,status=excluded.status,target_build=excluded.target_build,sort_order=excluded.sort_order,source_document=excluded.source_document,cycle_key=excluded.cycle_key,is_current_cycle=true,action_path=excluded.action_path,updated_at=now();
+
+commit;
+-- END 2026-08-07_build247_daip_private_media_ingestion.sql
+
+-- BEGIN 2026-08-09_build248_supplier_daip_story_review.sql
+-- Build 248 — supplier-link resilience, reviewed DAIP story evidence, and processing retry controls.
+-- Apply after Build 247. This migration never makes raw media public and does not render/publish content.
+
+begin;
+
+alter table public.daip_project_media_assets
+  add column if not exists story_review_status text not null default 'not_reviewed',
+  add column if not exists story_sort_order integer null,
+  add column if not exists story_note text null,
+  add column if not exists story_reviewed_by_staff_email text null,
+  add column if not exists story_reviewed_at timestamptz null;
+
+alter table public.daip_project_media_assets
+  drop constraint if exists daip_project_media_assets_story_review_status_check;
+alter table public.daip_project_media_assets
+  add constraint daip_project_media_assets_story_review_status_check
+  check (story_review_status in ('not_reviewed','selected','excluded'));
+
+alter table public.daip_project_media_assets
+  drop constraint if exists daip_project_media_assets_story_sort_order_check;
+alter table public.daip_project_media_assets
+  add constraint daip_project_media_assets_story_sort_order_check
+  check (story_sort_order is null or story_sort_order between 1 and 9999);
+
+alter table public.daip_project_media_assets
+  drop constraint if exists daip_project_media_assets_story_note_check;
+alter table public.daip_project_media_assets
+  add constraint daip_project_media_assets_story_note_check
+  check (story_note is null or char_length(story_note) <= 1200);
+
+create index if not exists daip_project_media_assets_story_idx
+  on public.daip_project_media_assets(project_id, story_review_status, story_sort_order nulls last, created_at);
+
+alter table public.daip_media_processing_jobs
+  add column if not exists max_attempts integer not null default 3,
+  add column if not exists next_retry_at timestamptz null,
+  add column if not exists dead_lettered_at timestamptz null,
+  add column if not exists review_note text null;
+
+alter table public.daip_media_processing_jobs
+  drop constraint if exists daip_media_processing_jobs_max_attempts_check;
+alter table public.daip_media_processing_jobs
+  add constraint daip_media_processing_jobs_max_attempts_check
+  check (max_attempts between 1 and 20);
+
+alter table public.daip_media_processing_jobs
+  drop constraint if exists daip_media_processing_jobs_review_note_check;
+alter table public.daip_media_processing_jobs
+  add constraint daip_media_processing_jobs_review_note_check
+  check (review_note is null or char_length(review_note) <= 1200);
+
+create index if not exists daip_media_processing_jobs_retry_idx
+  on public.daip_media_processing_jobs(status, next_retry_at, priority, created_at);
+
+alter table public.creative_projects
+  add column if not exists content_package_status text not null default 'not_ready',
+  add column if not exists content_package_review_note text null,
+  add column if not exists content_package_reviewed_by_staff_email text null,
+  add column if not exists content_package_reviewed_at timestamptz null;
+
+alter table public.creative_projects
+  drop constraint if exists creative_projects_content_package_status_check;
+alter table public.creative_projects
+  add constraint creative_projects_content_package_status_check
+  check (content_package_status in ('not_ready','ready_for_review','in_review','approved','changes_requested'));
+
+alter table public.creative_projects
+  drop constraint if exists creative_projects_content_package_review_note_check;
+alter table public.creative_projects
+  add constraint creative_projects_content_package_review_note_check
+  check (content_package_review_note is null or char_length(content_package_review_note) <= 1600);
+
+create index if not exists creative_projects_content_package_idx
+  on public.creative_projects(content_package_status, updated_at desc);
+
+alter table public.creative_project_audit drop constraint if exists creative_project_audit_event_type_check;
+alter table public.creative_project_audit add constraint creative_project_audit_event_type_check check (event_type in (
+  'created','updated','session_added','output_updated','archived','restored','booking_unlinked','cost_line_added','material_line_added','labour_line_added','draft_updated','batch_approval','daip_associated','line_updated','line_soft_deleted','inventory_reservation_updated','session_story_approval','shot_plan_updated','learning_updated','archive_export_prepared','template_updated','content_plan_generated','media_upload_started','media_upload_completed','media_upload_aborted','media_processing_updated','media_story_reviewed','media_job_retried','content_package_reviewed'
+));
+
+comment on column public.daip_project_media_assets.story_review_status is 'Build 248 human review state controlling whether private media metadata may be referenced by story/content planning. It never grants public access.';
+comment on column public.daip_media_processing_jobs.dead_lettered_at is 'Build 248 operator-visible terminal retry state. It does not delete raw media.';
+comment on column public.creative_projects.content_package_status is 'Build 248 human content-package review gate. Approval does not publish content.';
+
+commit;
+
+-- END 2026-08-09_build248_supplier_daip_story_review.sql
+
+-- Build 253 — application-wide Photo Management Studio (2026-08-12)
+-- Extends Build 151 app_media_library with R2 identity, SEO/accessibility metadata,
+-- file-management metadata, and explicit reusable component/page assignments.
+alter table if exists public.app_media_library
+  add column if not exists r2_key text,
+  add column if not exists filename text,
+  add column if not exists r2_prefix text,
+  add column if not exists seo_title text,
+  add column if not exists tags text[] not null default array[]::text[],
+  add column if not exists mime_type text,
+  add column if not exists width integer,
+  add column if not exists height integer,
+  add column if not exists byte_size bigint,
+  add column if not exists r2_etag text,
+  add column if not exists uploaded_at timestamptz,
+  add column if not exists last_seen_at timestamptz,
+  add column if not exists source_type text not null default 'manual',
+  add column if not exists focal_point text not null default 'center',
+  add column if not exists decorative boolean not null default false,
+  add column if not exists attribution text,
+  add column if not exists license_notes text;
+create unique index if not exists app_media_library_r2_key_uq on public.app_media_library(r2_key) where r2_key is not null and btrim(r2_key) <> '';
+create index if not exists app_media_library_r2_prefix_idx on public.app_media_library(r2_prefix, source_status, updated_at desc);
+create index if not exists app_media_library_tags_idx on public.app_media_library using gin(tags);
+create table if not exists public.app_media_assignments (
+  id uuid primary key default gen_random_uuid(),
+  target_key text not null unique,
+  target_label text not null,
+  target_type text not null default 'component',
+  page_path text,
+  component_key text,
+  variant text,
+  media_id uuid not null references public.app_media_library(id) on delete restrict,
+  alt_override text,
+  title_override text,
+  caption_override text,
+  is_active boolean not null default true,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  updated_by text
+);
+create index if not exists app_media_assignments_media_idx on public.app_media_assignments(media_id, is_active);
+create index if not exists app_media_assignments_page_idx on public.app_media_assignments(page_path, target_type, is_active);
+alter table public.app_media_assignments enable row level security;
