@@ -1,3 +1,66 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 253
+
+**Updated:** 2026-08-12  
+**Build:** 253  
+**Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains the specialist deployment/acceptance runbook.
+
+## Build 253 current state — application-wide Photo Management Studio
+
+Build 253 replaces filename-only website image maintenance with a reusable admin photo system while preserving automatic filename matching as the fallback. Rosie now has one managed public-image inventory built on the existing `app_media_library`, plus explicit placement records in `app_media_assignments` so a specific photo can be assigned to a specific package card, add-on, landing-page hero/gallery slot, home-page service/location card, or approved admin visual without editing source code.
+
+### Implemented in source
+
+- New protected `/admin-photo-studio.html` and clean `/admin-photo-studio/` route.
+- Approved public R2 folders can be synchronized into the existing media library: `packages/`, `landing_pages/`, legacy `landing-pages/`, `CarPhotos/`, `addons/`, `brand/`, `gallery/`, and `products/`.
+- Photo metadata editor: display name, filename/folder, alt text, SEO/title text, caption, tags, usage contexts, recommended size, focal point, decorative state, attribution, and license/consent notes.
+- Safe R2 rename/move uses copy-then-database-update-then-delete so existing assignments follow the media record instead of being recreated.
+- Explicit target assignments override filename matching; automatic matching remains the non-destructive fallback.
+- Known assignment registry lives in `data/build253_photo_targets.json`; free-form target keys remain available for future components.
+- Package card targets support default plus small/mid/oversize variants.
+- Add-ons, landing-page hero/gallery slots, selected home service/location cards, and Gate C visuals accept explicit assignments.
+- New canonical public manifest is `/api/public_website_images`; `/api/public/website_images` remains a compatibility alias after the Build 252 nested-route deployment 404.
+- Public manifests contain only sanitized metadata for approved public R2 assets. They never expose `DAIP_MEDIA_BUCKET` or private Creative Project masters.
+- Existing Media Health remains useful for technical health checks; Photo Studio becomes the normal human-facing assignment/metadata workflow.
+- Service-worker cache is Build 253 and includes the new admin route/target registry.
+
+## Database action required
+
+Apply `sql/2026-08-12_build253_photo_management_studio.sql` in staging before using sync, metadata save, rename/move, or explicit assignments. The migration extends the existing `app_media_library` and creates `app_media_assignments`; it does not create a competing media table.
+
+### Recommended staging order
+
+1. Apply any still-outstanding Build 247 and Build 248 migrations first.
+2. Apply `sql/2026-08-12_build253_photo_management_studio.sql`.
+3. Deploy Pages + Functions together.
+4. Hard-refresh `/admin-photo-studio`.
+5. Press **Sync approved R2 photos** and confirm `packages/`, `landing_pages/`, `CarPhotos/` and other approved public folders appear.
+6. Pick one harmless image, add descriptive alt text, save, refresh, and confirm the metadata persists.
+7. Assign that image to one non-critical package or landing target, open the public page, and confirm the exact image/alt/focal point appears.
+8. Rename or move one harmless test image inside approved public folders; confirm its assignment remains attached and the old R2 key disappears only after the database update succeeds.
+9. Remove the test assignment and confirm automatic matching resumes.
+10. Verify `/api/public_website_images` returns JSON while the nested compatibility URL may also continue to work.
+
+## Important operating boundary
+
+Photo Studio manages **public website assets only**. It is not a path around DAIP privacy review. Raw customer media remains in the private DAIP bucket and requires the separate consent/privacy/content-package process before any reviewed derivative can become a public website asset.
+
+## Current next engineering/operating priorities
+
+1. Apply and accept Build 253 in staging using real approved R2 photos.
+2. Review all principal package assignments and set deliberate default + vehicle-size imagery where enough photos exist.
+3. Review SEO landing-page hero/gallery assignments and remove weak/generic imagery.
+4. Fill missing alt text with short contextual descriptions; use decorative=true only for truly decorative images.
+5. Add image-dimension extraction/validation to the managed library so oversized or undersized assets can be flagged before publishing.
+6. Add optional image-usage reporting showing every page/card currently referencing a photo before archive/delete is allowed.
+7. Add image replacement/version history so seasonal refreshes can be rolled back without losing placement metadata.
+8. Continue DAIP private-processing acceptance and content-package review separately from the public photo library.
+9. Continue public booking/payment/refund/notification acceptance and local Search Console/Business Profile evidence review.
+10. Keep one-H1, concise-title, accurate local-area, mobile/CSS, public/private media isolation, and cumulative release checks on every pass.
+
+<!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 252 -->
+
+---
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 252
 
 **Updated:** 2026-08-12  
@@ -1144,3 +1207,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- Build 214 documentation sync -->
 
 <!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
+
+<!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
