@@ -202,7 +202,7 @@
         const assignmentOrder=['admin:gate-c:feature','admin:gate-c:strip:1','admin:gate-c:strip:2','admin:gate-c:strip:3'];
         const assignmentMap=new Map((payload.assignments||[]).map(row=>[row.target_key,row]));
         const explicit=assignmentOrder.map(key=>assignmentMap.get(key)).filter(Boolean);
-        const carPhotos=(payload.prefixes?.car_photos||[]).map(photo=>({url:photo.url,filename:photo.filename,alt_text:photo.alt_text,title:photo.title,focal_point:photo.focal_point}));
+        const carSource=(payload.prefixes?.car_photos?.length?payload.prefixes.car_photos:(payload.images||[]).filter(photo=>String(photo.prefix||photo.r2_key||photo.key||'').startsWith('CarPhotos/')));const carPhotos=carSource.map(photo=>({url:photo.url,filename:photo.filename,alt_text:photo.alt_text,title:photo.title,focal_point:photo.focal_point}));
         const photos=safePhotos([...explicit,...carPhotos]);
         if(response.ok&&photos.length){applyPublicPhotos(photos,`${explicit.length?'Photo Studio assignments + ':''}${carPhotos.length} approved public CarPhotos image${carPhotos.length===1?'':'s'} available`);return;}
       }catch{}
