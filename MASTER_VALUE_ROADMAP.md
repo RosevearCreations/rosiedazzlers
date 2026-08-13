@@ -1,3 +1,11 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 259
+
+**Updated:** 2026-08-13
+
+## Immediate direction
+
+Build 259 moves Rosie from scattered hard-coded presentation/operations controls toward owner-managed content without weakening existing safety boundaries. Highest-value acceptance is now: apply the vehicle-size review migration; validate one uncertain-size booking end to end; deliberately refresh/assign public presentation images through Photo Studio; complete the strongest add-on landing-page copy and photos; verify Pricing/Services/Maintenance/Fleet mobile layouts; and use the now-editable Quote Pipeline for real follow-up work. Next work should connect quote rows more directly to lead/customer lookup, add reusable preview/where-used links for Photo Studio, continue editable-content coverage for remaining static public prose, and complete production booking/payment/refund/notification acceptance.
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 258
 
 **Updated:** 2026-08-13
@@ -1557,3 +1565,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 
 <!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->

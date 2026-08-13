@@ -17,7 +17,8 @@
 // Build 255 click-to-edit Photo Studio editor
 // Historical cache: rosie-app-v20260812build255
 // Historical Build 257 cache guard: rosie-app-v20260813build257
-const CACHE='rosie-app-v20260813build258';
+// Historical Build 258 cache guard: rosie-app-v20260813build258
+const CACHE='rosie-app-v20260813build259';
 const URLS=['/admin-photo-studio.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
   '/data/build247_go_live_blockers.json',
