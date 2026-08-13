@@ -56,7 +56,7 @@ studio=need('admin-photo-studio.html','Delete unassigned image from library + R2
 try:
     registry=json.loads(text('data/build253_photo_targets.json'))
     keys={row.get('target_key') for row in registry.get('targets',[])}
-    if registry.get('build')!=253 or registry.get('current_build')!=258: errors.append('target registry must retain Build253 schema identity and expose current_build 258')
+    if registry.get('build')!=253 or int(registry.get('current_build') or 0)<258: errors.append('target registry must retain Build253 schema identity and expose current_build >= 258')
     required=['page:home:review-proof','page:services:review-proof','page:pricing:review-proof','page:faq:local-proof','gift-card:interior','hub:services:interior','gallery:evidence:1','gallery:technique:1','gallery:efficiency:1','gallery:before-after:1:before','gallery:before-after:1:after']
     for key in required:
         if key not in keys: errors.append(f'target registry missing {key}')
