@@ -1,3 +1,7 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 256
+
+> **Build 256 (2026-08-12):** Photo Studio now shows exactly where each assigned photo is used, checks occupied target options in the assignment dropdown, distinguishes slots owned by the selected photo versus another image, and supports three explicit Before/After pairs per managed landing page. A pair renders publicly only after both Before and After are deliberately assigned. Build 254 image-preservation rules remain authoritative. No new SQL migration is required. See `BUILD256_SUMMARY.md`.
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 255
 
 > **Build 255 editor repair (2026-08-12):** Photo Studio thumbnails now open an immediate click-to-edit drawer with a grouped “Where should this image be used?” selector. Existing photos and assignments are not changed by this build; a placement changes only after an explicit target choice, **Use this image here**, and confirmation. R2-only photos may be registered as managed metadata when needed without assigning them. No new SQL migration is required. See `BUILD255_SUMMARY.md`.
@@ -1220,3 +1224,4 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
 
 <!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
