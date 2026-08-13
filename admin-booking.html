@@ -137,6 +137,17 @@
             </div>
           </form>
         </div>
+        <div class="panel">
+          <h2>Vehicle size verification</h2>
+          <p class="kicker">Review bookings that the vehicle catalog could not verify. If the correct size changes the total, send the customer a secure confirm/cancel link.</p>
+          <div id="vehicleSizeReviewSummary" class="notice mini">Choose a booking to review vehicle size.</div>
+          <form id="vehicleSizeReviewForm" class="form" style="margin-top:12px">
+            <label>Reviewed size<select id="vehicleSizeReviewedSize"><option value="small">small</option><option value="mid">mid</option><option value="oversize">oversize</option></select></label>
+            <label>Reviewed booking total (CAD)<input id="vehicleSizeReviewedPrice" type="number" min="0" step="0.01"></label>
+            <label>Review note<textarea id="vehicleSizeReviewNote" rows="3" placeholder="Why the size or total changed"></textarea></label>
+            <div class="row"><button id="vehicleSizeVerifyBtn" class="btn" type="button" disabled>Verify as reviewed</button><button id="vehicleSizeSendBtn" class="btn primary" type="button" disabled>Send correction for customer confirmation</button></div>
+          </form>
+        </div>
       </div>
     </section>
 
@@ -766,6 +777,22 @@
       setNotice('Creative project created. The standard booking workflow is still active.', 'ok');
     }
 
+
+    function formatMoneyCents(cents) { return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format((Number(cents)||0)/100); }
+    function renderVehicleSizeReview() {
+      const box=document.querySelector('#vehicleSizeReviewSummary');const verify=document.querySelector('#vehicleSizeVerifyBtn');const send=document.querySelector('#vehicleSizeSendBtn');
+      if(!currentBooking){box.textContent='Choose a booking to review vehicle size.';verify.disabled=true;send.disabled=true;return;}
+      const status=currentBooking.vehicle_size_review_status||'verified';const original=currentBooking.vehicle_size_original||currentBooking.vehicle_size||'—';const expected=currentBooking.vehicle_size_catalog_expected||'—';const reviewed=currentBooking.vehicle_size_reviewed_size||currentBooking.vehicle_size||'small';
+      box.innerHTML=`<strong>Status:</strong> ${escapeHtml(status)}<br><strong>Vehicle:</strong> ${escapeHtml([currentBooking.vehicle_year,currentBooking.vehicle_make,currentBooking.vehicle_model].filter(Boolean).join(' ')||'—')}<br><strong>Booked size:</strong> ${escapeHtml(original)} · <strong>Catalog expected:</strong> ${escapeHtml(expected)}<br><strong>Customer response:</strong> ${escapeHtml(currentBooking.vehicle_size_customer_response||'—')}${currentBooking.vehicle_size_review_expires_at?`<br><strong>Review link expires:</strong> ${escapeHtml(currentBooking.vehicle_size_review_expires_at)}`:''}`;
+      document.querySelector('#vehicleSizeReviewedSize').value=['small','mid','oversize'].includes(reviewed)?reviewed:'small';
+      document.querySelector('#vehicleSizeReviewedPrice').value=((Number(currentBooking.vehicle_size_reviewed_price_cents??currentBooking.price_total_cents)||0)/100).toFixed(2);
+      document.querySelector('#vehicleSizeReviewNote').value=currentBooking.vehicle_size_review_reason||'';verify.disabled=false;send.disabled=false;
+    }
+    async function saveVehicleSizeReview(action){
+      if(!currentBooking?.id)throw new Error('Choose a booking first.');const reviewed_size=document.querySelector('#vehicleSizeReviewedSize').value;const reviewed_price_cents=Math.round((Number(document.querySelector('#vehicleSizeReviewedPrice').value)||0)*100);const review_note=document.querySelector('#vehicleSizeReviewNote').value.trim();
+      const res=await fetch('/api/admin/booking_vehicle_size_review',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({booking_id:currentBooking.id,action,reviewed_size,reviewed_price_cents,review_note})});const data=await res.json().catch(()=>({}));if(!res.ok||data.ok===false)throw new Error(data.error||'Could not save vehicle-size review.');return data;
+    }
+
     function renderSelectedBooking() {
       const title = document.querySelector("#bookingTitle");
       const meta = document.querySelector("#bookingMeta");
@@ -782,6 +809,7 @@
         assignBtn.disabled = true;
         refreshSelectedBookingFinance();
         renderBookingIntakeReview();
+        renderVehicleSizeReview();
         loadBookingProjectMode();
         return;
       }
@@ -813,6 +841,7 @@
       statusBtn.disabled = false;
       assignBtn.disabled = false;
       renderBookingIntakeReview();
+      renderVehicleSizeReview();
       refreshSelectedBookingFinance();
       loadBookingProjectMode();
     }
@@ -904,6 +933,8 @@
       document.querySelector("#bookingSearch")?.addEventListener("input", applyBookingFilters);
 
       document.querySelector('#createProjectFromBookingBtn')?.addEventListener('click', async () => { try { await createProjectFromCurrentBooking(); } catch (err) { setNotice(err.message || 'Could not create project.', 'bad'); } });
+      document.querySelector('#vehicleSizeVerifyBtn')?.addEventListener('click', async()=>{try{setNotice('Saving vehicle-size verification…');await saveVehicleSizeReview('verify');await refreshBookings();setNotice('Vehicle size verified.','ok');}catch(err){setNotice(err.message||'Could not verify size.','bad');}});
+      document.querySelector('#vehicleSizeSendBtn')?.addEventListener('click', async()=>{try{if(!confirm('Send the reviewed size/price to the customer for confirmation or cancellation?'))return;setNotice('Preparing customer vehicle-size review…');const out=await saveVehicleSizeReview('send_review');await refreshBookings();setNotice(out.email_sent?'Vehicle-size correction email sent.':`Review prepared. ${out.warning||'Email was not sent; copy the secure review URL from the response/log.'}`,out.email_sent?'ok':'');}catch(err){setNotice(err.message||'Could not send size review.','bad');}});
 
       document.querySelector("#loadBookingsBtn").addEventListener("click", async () => {
         try {

@@ -1,3 +1,7 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 259
+
+> **Build 259 (2026-08-13):** Public presentation imagery is now comprehensively targetable from the existing Photo Studio without reassigning current photos; add-on cards are customer-clean and link to fully owner-editable service pages; Pricing/Services/Maintenance/Fleet CSS is repaired; Maintenance content is editable; uncertain vehicle sizes enter a staff review workflow with a secure customer confirm/cancel link when price/size changes; and Quote Pipeline rows are now selectable/editable. Apply `sql/2026-08-13_build259_vehicle_size_review.sql` before using the new vehicle-size review controls. Build 254 authored-image preservation and Build 257 no-R2-scan-on-normal-load rules remain mandatory. See `BUILD259_SUMMARY.md`.
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 258
 
 > **Build 258 (2026-08-13):** Public photo assignments now propagate consistently across Pricing town/high-intent cards, Services hub/special/town cards, FAQ access cards, Gift Card visuals, review-proof slots, managed landing pages, and the expanded mixed Gallery. Explicit Sync refreshes same-key R2 replacements by ETag and public URLs are versioned so updated files can replace stale cached images. Photo Studio adds safe current-unassigned deletion. Build 257's database-first/no-R2-scan-on-normal-load boundary and Build 254 authored-image preservation remain mandatory. No existing assignment is changed by this source update and no new SQL migration is required. See `BUILD258_SUMMARY.md`.
@@ -1236,3 +1240,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 
 <!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
