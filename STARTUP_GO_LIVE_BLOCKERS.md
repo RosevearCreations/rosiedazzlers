@@ -1542,3 +1542,5 @@ Photo Studio can sync, edit metadata, assign/unassign, rename/move and render on
 
 **Move on when:** existing site images stay stable during R2 sync/metadata edits, explicit overrides affect only their selected target, and Photo Studio remains responsive on desktop/mobile.
 <!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
+
+<!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
