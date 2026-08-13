@@ -1,0 +1,6 @@
+-- 2026-05-06 Build 130 sanity-check/admin image pass
+-- No DDL required.
+-- Application changes:
+-- 1. Admin App add-on/special-detail landing editor now previews and pre-fills the current add-on catalog image when the landing page has no page-specific hero/gallery image.
+-- 2. Roadmap and sanity-check docs now list the next 20 value-added changes and backend accounting coverage/gaps.
+-- Future DDL likely needed for: media library records, document attachments, bank reconciliation imports/matches, inventory/COGS accounting postings, and period-lock enforcement.

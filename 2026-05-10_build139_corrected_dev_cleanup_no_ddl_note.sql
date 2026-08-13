@@ -1,0 +1,6 @@
+-- Build 139 corrected dev cleanup note — 2026-05-10
+-- No database DDL is required for this pass.
+-- Applied Markdown archive/reset to the corrected dev package.
+-- Removed invalid root-level API JavaScript duplicates; live API functions remain under functions/api/ and functions/api/admin/.
+-- Moved membership_reminders_process.js into functions/api/ so the /api/membership_reminders_process route remains deployable.
+-- Continue to keep SUPABASE_SCHEMA.sql synchronized with actual migrations and no-DDL cleanup notes.

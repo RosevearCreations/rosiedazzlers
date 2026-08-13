@@ -1,0 +1,8 @@
+-- Build 127 UI/admin/content documentation compatibility note.
+-- No database DDL is required for this patch.
+-- Changes included:
+-- 1) Pricing/Services booking embed capped to 1950px.
+-- 2) Bundled pricing catalog now includes fallback service_areas so the booking location dropdown is never empty.
+-- 3) Admin App add-on editor preserves image/rule fields and displays the saved package relationship.
+-- 4) Recent work on the home page uses before/after slider pairs from before_after_gallery.
+-- 5) IMAGES.md documents image sizes, replacement steps, and gallery JSON format for multiple pairs.

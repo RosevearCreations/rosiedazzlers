@@ -1,0 +1,10 @@
+-- Build 133 Admin App add-on image hydration repair
+-- Date: 2026-05-08
+--
+-- No database DDL is required.
+--
+-- This pass fixes frontend/catalog fallback behaviour:
+-- 1. Adds the missing landingLinksToText() helper used by the landing-page editor.
+-- 2. Makes Admin App add-on image preview prefer real PNG/JPG/R2 media over SVG outline fallbacks.
+-- 3. Syncs the public bundled pricing catalog add-on image_url defaults to the original package PNG/R2 images.
+-- 4. Keeps SVG add-on artwork as fallback media only where a photo-style PNG is not available.

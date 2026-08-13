@@ -1,0 +1,7 @@
+-- 2026-04-17
+-- No DDL changes in this pass.
+-- Existing app_management_settings is reused for the public growth settings endpoint and related UI wiring.
+-- Keys read publicly in this pass:
+--   quote_booking_settings
+--   gift_delivery_settings
+--   membership_plan_settings
