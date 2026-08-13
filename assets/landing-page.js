@@ -1,8 +1,9 @@
+// Historical Build 254 image module: /assets/website-images.js?v=20260812build254
 // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
 // Historical Build 253 guard token: /assets/website-images.js?v=20260812build253
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
-import { loadWebsiteImageManifest, landingImageMatches } from "/assets/website-images.js?v=20260812build254";
+import { loadWebsiteImageManifest, landingImageMatches, landingBeforeAfterPairs } from "/assets/website-images.js?v=20260812build256";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -238,6 +239,31 @@ function bindLandingMedia(root) {
   });
 }
 
+function beforeAfterMarkup(manifest, slug) {
+  const pairs = landingBeforeAfterPairs(manifest, slug, 3);
+  if (!pairs.length) return "";
+  return `
+    <section class="section panel managed-before-after" data-photo-managed-before-after="true">
+      <p class="eyebrow">Real detailing results</p>
+      <h2 style="margin-top:0">Before &amp; after</h2>
+      <p class="muted">Paired photos selected in Rosie Dazzlers Photo Management Studio.</p>
+      <div class="before-after-pairs">
+        ${pairs.map((pair) => `
+          <article class="before-after-pair">
+            <div class="before-after-side">
+              <span class="before-after-label">Before</span>
+              ${mediaImageMarkup(pair.before.url, pair.before.alt_text || "Vehicle before detailing", "proof-media", pair.before.focal_point ? `style="object-position:${escapeHtml(pair.before.focal_point)}"` : "")}
+            </div>
+            <div class="before-after-side">
+              <span class="before-after-label">After</span>
+              ${mediaImageMarkup(pair.after.url, pair.after.alt_text || "Vehicle after detailing", "proof-media", pair.after.focal_point ? `style="object-position:${escapeHtml(pair.after.focal_point)}"` : "")}
+            </div>
+            <p class="before-after-set-label">Set ${pair.set}</p>
+          </article>`).join("")}
+      </div>
+    </section>`;
+}
+
 function galleryMarkup(page, relatedProducts, r2Matches = []) {
   const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
   const gallery = gallerySource.filter(Boolean);
@@ -398,6 +424,8 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
         ${waterSources.length ? `<div class="source-list">${waterSources.map((item) => `<a href="${escapeHtml(item.url)}" rel="noopener" target="_blank">${escapeHtml(item.label || "Official water-use source")}</a>`).join("")}</div>` : ``}
       </section>
     ` : ""}
+
+    ${beforeAfterMarkup(websiteImageManifest, slug)}
 
     ${galleryMarkup(page, relatedProducts, landingMatches)}
 

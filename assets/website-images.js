@@ -1,6 +1,7 @@
 // Build 252 — shared approved R2 website-image discovery and filename matching.
 // Canonical route: /api/public_website_images. The nested Build 252 route remains a compatibility fallback.
 // Build 253 adds explicit DB-backed card/page assignments. Build 254 protects established images: consumers may use explicit assignments as overrides, while automatic filename matches are fallback-only when an established image exists.
+// Build 256 adds explicit paired Before & After landing-page slots. A pair is public only when both sides are assigned.
 
 let manifestPromise = null;
 
@@ -166,6 +167,46 @@ export function landingImageMatches(manifest, page, slug='', limit=10){
   return dedupeImages([...hero,...automatic,...galleries]).slice(0,limit);
 }
 
+
+export function landingBeforeAfterPairs(manifest, slug='', maxSets=3){
+  const rawSlug=clean(slug).replace(/^\/+|\/+$/g,'');
+  if(!rawSlug) return [];
+  const assignments=Array.isArray(manifest?.assignments)?manifest.assignments:[];
+  const byKey=new Map(assignments.filter((row)=>row?.url).map((row)=>[clean(row.target_key),row]));
+  const pairs=[];
+  for(let setNo=1;setNo<=Math.max(1,Number(maxSets)||3);setNo+=1){
+    const beforeKey=`landing:${rawSlug}:before-after:${setNo}:before`;
+    const afterKey=`landing:${rawSlug}:before-after:${setNo}:after`;
+    const before=byKey.get(beforeKey);
+    const after=byKey.get(afterKey);
+    if(!before?.url || !after?.url) continue;
+    pairs.push({set:setNo,before,after});
+  }
+  return pairs;
+}
+
+function beforeAfterSectionMarkup(pairs=[]){
+  if(!pairs.length) return '';
+  return `<section class="section panel managed-before-after" data-photo-managed-before-after="true"><p class="eyebrow">Real detailing results</p><h2 style="margin-top:0">Before &amp; after</h2><p class="muted">Paired photos selected in Rosie Dazzlers Photo Management Studio.</p><div class="before-after-pairs">${pairs.map((pair)=>`<article class="before-after-pair"><div class="before-after-side"><span class="before-after-label">Before</span><img src="${clean(pair.before.url).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" alt="${clean(pair.before.alt_text||'Vehicle before detailing').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" loading="lazy" decoding="async" style="object-position:${clean(pair.before.focal_point||'center')}"></div><div class="before-after-side"><span class="before-after-label">After</span><img src="${clean(pair.after.url).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" alt="${clean(pair.after.alt_text||'Vehicle after detailing').replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" loading="lazy" decoding="async" style="object-position:${clean(pair.after.focal_point||'center')}"></div><p class="before-after-set-label">Set ${pair.set}</p></article>`).join('')}</div></section>`;
+}
+
+export async function hydrateBeforeAfterSets(root=document, manifest=null){
+  if(root.querySelector?.('[data-photo-managed-before-after="true"]')) return;
+  const slug=clean(location.pathname).replace(/^\/+|\/+$/g,'').split('/').filter(Boolean).pop()||'';
+  if(!slug || slug==='gallery') return;
+  const data=manifest || await loadWebsiteImageManifest();
+  const pairs=landingBeforeAfterPairs(data,slug,3);
+  if(!pairs.length) return;
+  const main=root.querySelector?.('main.container') || (root.matches?.('main.container')?root:null) || document.querySelector('main.container');
+  if(!main) return;
+  const holder=document.createElement('div');
+  holder.innerHTML=beforeAfterSectionMarkup(pairs);
+  const section=holder.firstElementChild;
+  if(!section) return;
+  const related=[...main.querySelectorAll(':scope > section.section.panel')].find((node)=>/related/i.test(node.querySelector('h2')?.textContent||''));
+  if(related) main.insertBefore(section,related); else main.appendChild(section);
+}
+
 export function cardImageMatches(manifest, keywords='', href='', limit=3, targetKey=''){
   const hrefPhrase = clean(href).replace(/^\/+|\/+$/g,'').replace(/[-_/]+/g,' ');
   const explicit=assignedImages(manifest,targetKey);
@@ -175,7 +216,6 @@ export function cardImageMatches(manifest, keywords='', href='', limit=3, target
 
 export async function hydrateR2CardImages(root=document){
   const nodes = [...root.querySelectorAll('[data-r2-image-keywords]')];
-  if (!nodes.length) return;
   const manifest = await loadWebsiteImageManifest();
   for (const node of nodes) {
     if (node.dataset.r2ImageHydrated === 'true') continue;
@@ -213,4 +253,5 @@ export async function hydrateR2CardImages(root=document){
     img.addEventListener('error',tryNext);
     tryNext();
   }
+  await hydrateBeforeAfterSets(root, manifest);
 }

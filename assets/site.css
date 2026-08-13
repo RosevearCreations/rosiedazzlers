@@ -1229,3 +1229,6 @@ body::before {
 @media (max-width:720px){
   .r2-card-photo{aspect-ratio:4/3;max-height:210px}
 }
+
+/* Build 256 — owner-assigned Before & After pairs. A block renders only when both sides are explicitly assigned. */
+.before-after-pairs{display:grid;gap:18px}.before-after-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;position:relative;padding:12px;border:1px solid rgba(255,255,255,.1);border-radius:18px;background:rgba(255,255,255,.035)}.before-after-side{position:relative;min-width:0}.before-after-side img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:#0b1220}.before-after-label{position:absolute;z-index:2;top:9px;left:9px;padding:5px 9px;border-radius:999px;background:rgba(8,15,28,.88);border:1px solid rgba(255,255,255,.2);font-weight:800;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase}.before-after-set-label{grid-column:1/-1;margin:0;color:#94a3b8;font-size:.82rem;text-align:right}@media(max-width:620px){.before-after-pair{grid-template-columns:1fr}.before-after-set-label{grid-column:auto}}
