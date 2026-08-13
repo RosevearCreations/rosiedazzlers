@@ -2,6 +2,7 @@
 // Canonical route: /api/public_website_images. The nested Build 252 route remains a compatibility fallback.
 // Build 253 adds explicit DB-backed card/page assignments. Build 254 protects established images: consumers may use explicit assignments as overrides, while automatic filename matches are fallback-only when an established image exists.
 // Build 256 adds explicit paired Before & After landing-page slots. A pair is public only when both sides are assigned.
+// Build 258 wires explicit assignments into aggregate cards, proof slots, FAQ/gift visuals, and the mixed public Gallery while preserving authored-image precedence.
 
 let manifestPromise = null;
 
@@ -65,6 +66,17 @@ function assignedImages(manifest, targetKeys=[]){
       prefix:prefixName(row), url:row.url, alt_text:row.alt_text||'', title:row.title||'', caption:row.caption||'',
       focal_point:row.focal_point||'center', explicit_assignment:true, target_key:row.target_key, match_score:10000
     }));
+}
+
+export function explicitImageForTarget(manifest, targetKey=''){
+  return assignedImages(manifest,targetKey)[0] || null;
+}
+
+export function assignmentsForTargetPrefix(manifest, prefix=''){
+  const wanted=clean(prefix);
+  if(!wanted) return [];
+  return (Array.isArray(manifest?.assignments)?manifest.assignments:[])
+    .filter((row)=>row?.url && clean(row.target_key).startsWith(wanted));
 }
 
 function dedupeImages(rows=[]){
@@ -164,7 +176,7 @@ export function landingImageMatches(manifest, page, slug='', limit=10){
   const hero=assignedImages(manifest,`landing:${rawSlug}:hero`);
   const galleries=assignedImages(manifest,[`landing:${rawSlug}:gallery:1`,`landing:${rawSlug}:gallery:2`,`landing:${rawSlug}:gallery:3`]);
   const automatic=rankedWebsiteImages(manifest,{phrases:[pageSlug,code,name,page?.hero_title],hints:[...locationAliases, ...(page?.highlights || []).slice(0,4)],preferredPrefixes:['landing_pages','car_photos','packages']},limit);
-  return dedupeImages([...hero,...automatic,...galleries]).slice(0,limit);
+  return dedupeImages([...hero,...galleries,...automatic]).slice(0,limit);
 }
 
 
@@ -214,9 +226,71 @@ export function cardImageMatches(manifest, keywords='', href='', limit=3, target
   return dedupeImages([...explicit,...automatic]).slice(0,limit);
 }
 
+export async function hydrateManagedImageSlots(root=document, manifest=null){
+  const nodes=[...root.querySelectorAll('[data-photo-image-target]')];
+  if(!nodes.length) return;
+  const data=manifest || await loadWebsiteImageManifest();
+  for(const node of nodes){
+    const target=clean(node.dataset.photoImageTarget);
+    if(!target) continue;
+    const picked=explicitImageForTarget(data,target);
+    if(!picked?.url) continue;
+    let img=node.tagName?.toLowerCase()==='img' ? node : node.querySelector(':scope > img.managed-slot-photo');
+    if(!img){
+      img=document.createElement('img');
+      img.className='managed-slot-photo proof-media';
+      img.loading='lazy';img.decoding='async';
+      node.insertBefore(img,node.firstChild);
+    }
+    img.src=picked.url;
+    img.alt=picked.alt_text || node.dataset.photoImageAlt || clean(node.querySelector('h2,h3,strong')?.textContent) || 'Rosie Dazzlers detailing photo';
+    if(picked.title) img.title=picked.title;
+    img.style.objectPosition=picked.focal_point || 'center';
+    img.dataset.photoAssignmentTarget=target;
+    node.querySelectorAll('.visual-placeholder-card').forEach((placeholder)=>placeholder.remove());
+  }
+}
+
+function managedBeforeAfterPairRows(manifest){
+  const assignments=Array.isArray(manifest?.assignments)?manifest.assignments:[];
+  const sets=new Map();
+  for(const row of assignments){
+    const key=clean(row?.target_key);
+    let match=key.match(/^landing:([^:]+):before-after:(\d+):(before|after)$/);
+    let scope='landing';
+    let slug='';
+    let setNo='';
+    let side='';
+    if(match){[,slug,setNo,side]=match;}
+    else {
+      match=key.match(/^gallery:before-after:(\d+):(before|after)$/);
+      if(!match) continue;
+      scope='gallery';[,setNo,side]=match;slug='gallery';
+    }
+    const mapKey=`${scope}:${slug}:${setNo}`;
+    if(!sets.has(mapKey)) sets.set(mapKey,{scope,slug,set:Number(setNo),before:null,after:null});
+    sets.get(mapKey)[side]=row;
+  }
+  return [...sets.values()].filter((row)=>row.before?.url && row.after?.url).sort((a,b)=>a.slug.localeCompare(b.slug)||a.set-b.set);
+}
+
+export function managedGalleryContent(manifest){
+  const assignments=Array.isArray(manifest?.assignments)?manifest.assignments:[];
+  const singles=[];
+  for(const row of assignments){
+    const key=clean(row?.target_key);
+    const match=key.match(/^gallery:(evidence|technique|efficiency):(\d+)$/);
+    if(!match || !row?.url) continue;
+    singles.push({...row,gallery_type:match[1],gallery_slot:Number(match[2])});
+  }
+  singles.sort((a,b)=>String(a.gallery_type).localeCompare(String(b.gallery_type))||a.gallery_slot-b.gallery_slot);
+  return {pairs:managedBeforeAfterPairRows(manifest),singles};
+}
+
 export async function hydrateR2CardImages(root=document){
   const nodes = [...root.querySelectorAll('[data-r2-image-keywords]')];
   const manifest = await loadWebsiteImageManifest();
+  await hydrateManagedImageSlots(root, manifest);
   for (const node of nodes) {
     if (node.dataset.r2ImageHydrated === 'true') continue;
     node.dataset.r2ImageHydrated = 'true';
@@ -229,6 +303,8 @@ export async function hydrateR2CardImages(root=document){
       node.dataset.photoTarget || ''
     );
     if (!matches.length) continue;
+    node.querySelectorAll('.visual-placeholder-card').forEach((placeholder)=>placeholder.remove());
+    node.classList.add('managed-photo-resolved');
     let img = node.querySelector(':scope > img.r2-card-photo');
     if (!img) {
       img = document.createElement('img');

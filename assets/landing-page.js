@@ -1,9 +1,10 @@
+// Historical Build 256 image module: /assets/website-images.js?v=20260812build256
 // Historical Build 254 image module: /assets/website-images.js?v=20260812build254
 // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
 // Historical Build 253 guard token: /assets/website-images.js?v=20260812build253
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
-import { loadWebsiteImageManifest, landingImageMatches, landingBeforeAfterPairs } from "/assets/website-images.js?v=20260812build256";
+import { loadWebsiteImageManifest, landingImageMatches, landingBeforeAfterPairs, explicitImageForTarget } from "/assets/website-images.js?v=20260813build258";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });
@@ -336,6 +337,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
   const landingMatches = landingImageMatches(websiteImageManifest, page, slug, 10);
   const heroImage = heroMediaForPage(page, addon, relatedProducts, landingMatches, slug);
   const matchedHeroMeta = landingMatches.find((row)=>row?.url === heroImage) || null;
+  const reviewProofImage = explicitImageForTarget(websiteImageManifest, `landing:${slug}:review-proof`);
   const matchedR2Hero = Boolean(matchedHeroMeta);
   const heroAlt = matchedHeroMeta?.alt_text || page.name || page.hero_title || slug;
   const heroExtra = matchedHeroMeta?.focal_point ? `style="object-position:${escapeHtml(matchedHeroMeta.focal_point)}"` : '';
@@ -458,7 +460,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          <img data-reviews src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
+          ${mediaImageMarkup(reviewProofImage?.url || "/assets/brand/rosie-reviews-fallback.png", reviewProofImage?.alt_text || "Rosie Dazzlers reviews", "proof-media", reviewProofImage?.focal_point ? `style="object-position:${escapeHtml(reviewProofImage.focal_point)}"` : "")}
         </article>
         <article class="proof-card">
           <h3>Booking fit</h3>
