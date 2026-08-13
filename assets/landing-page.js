@@ -1,10 +1,11 @@
+// Historical Build 258 image module: /assets/website-images.js?v=20260813build258
 // Historical Build 256 image module: /assets/website-images.js?v=20260812build256
 // Historical Build 254 image module: /assets/website-images.js?v=20260812build254
 // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
 // Historical Build 253 guard token: /assets/website-images.js?v=20260812build253
 import { renderRecentWorkMounts } from "/assets/recent-work.js?v=20260501build127";
 import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
-import { loadWebsiteImageManifest, landingImageMatches, landingBeforeAfterPairs, explicitImageForTarget } from "/assets/website-images.js?v=20260813build258";
+import { loadWebsiteImageManifest, landingImageMatches, landingBeforeAfterPairs, explicitImageForTarget } from "/assets/website-images.js?v=20260813build259";
 
 async function fetchJson(url) {
   const res = await fetch(url, { cache: "no-store" });

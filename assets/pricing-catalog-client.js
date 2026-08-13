@@ -96,6 +96,7 @@ function normalizeAddons(rows) {
       price_cad: toMoney(addon?.price_cad),
       image_url: String(addon?.image_url || "").trim() || null,
       image_fallback_url: String(addon?.image_fallback_url || "").trim() || null,
+      duration_label: String(addon?.duration_label || addon?.estimated_duration || addon?.time_addition || "").trim() || "Time varies by condition",
       notes: notes.map((row) => String(row || "").trim()).filter(Boolean)
     };
   }).filter(Boolean);
@@ -332,6 +333,18 @@ function normalizeSvgColumns(columns) {
   }));
 }
 
+function splitHeaderLabel(label, maxChars=18) {
+  const words=String(label||'').trim().split(/\s+/).filter(Boolean);
+  if(!words.length)return [''];
+  const lines=[];let line='';
+  for(const word of words){
+    if(!line){line=word;continue;}
+    if((line+' '+word).length<=maxChars){line+=' '+word;}else{lines.push(line);line=word;}
+  }
+  if(line)lines.push(line);
+  return lines.slice(0,3);
+}
+
 function renderSvgTableChart({ title, subtitle = "", columns = [], rows = [], footer = "", accent = "#f472b6" }) {
   const safeColumns = normalizeSvgColumns(columns);
   const safeRows = Array.isArray(rows) ? rows : [];
@@ -341,10 +354,6 @@ function renderSvgTableChart({ title, subtitle = "", columns = [], rows = [], fo
   const titleY = 60;
   const subtitleY = subtitle ? 90 : 78;
   const tableTop = subtitle ? 124 : 108;
-  const headerHeight = 48;
-  const rowHeight = 44;
-  const footerHeight = footer ? 44 : 18;
-  const height = tableTop + headerHeight + (safeRows.length * rowHeight) + footerHeight + 24;
   let cursor = margin;
   const columnRects = safeColumns.map((col) => {
     const widthPx = innerWidth * col.ratio;
@@ -352,10 +361,21 @@ function renderSvgTableChart({ title, subtitle = "", columns = [], rows = [], fo
     cursor += widthPx;
     return rect;
   });
+  const headers=columnRects.map((col)=>{
+    const chars=Math.max(10,Math.floor(col.widthPx/12));
+    const lines=splitHeaderLabel(col.label||'',chars);
+    return {...col,headerLines:lines};
+  });
+  const headerLineCount=Math.max(1,...headers.map((col)=>col.headerLines.length));
+  const headerHeight=Math.max(52,24+(headerLineCount*23));
+  const rowHeight = 44;
+  const footerHeight = footer ? 44 : 18;
+  const height = tableTop + headerHeight + (safeRows.length * rowHeight) + footerHeight + 24;
 
-  const headerCells = columnRects.map((col) => `
-    <text x="${(col.x + 14).toFixed(2)}" y="${tableTop + 30}" font-size="20" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#f8fafc">${svgEscape(col.label || "")}</text>
-  `).join("");
+  const headerCells = headers.map((col) => {
+    const startY=tableTop+29-((col.headerLines.length-1)*10);
+    return col.headerLines.map((line,index)=>`<text x="${(col.x + 14).toFixed(2)}" y="${startY+(index*22)}" font-size="18" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#f8fafc">${svgEscape(line)}</text>`).join('');
+  }).join("");
 
   const rowBands = safeRows.map((row, rowIdx) => {
     const y = tableTop + headerHeight + rowIdx * rowHeight;
@@ -370,32 +390,11 @@ function renderSvgTableChart({ title, subtitle = "", columns = [], rows = [], fo
       const size = Number(cell.size || 18);
       return `<text x="${x.toFixed(2)}" y="${y + 28}" text-anchor="${align}" font-size="${size}" font-family="Arial, Helvetica, sans-serif" font-weight="${weight}" fill="${fill}">${svgEscape(cell.text || "")}</text>`;
     }).join("");
-    return `
-      <rect x="${margin}" y="${y}" width="${innerWidth}" height="${rowHeight}" rx="8" fill="${band}" />
-      ${cells}
-    `;
+    return `<rect x="${margin}" y="${y}" width="${innerWidth}" height="${rowHeight}" rx="8" fill="${band}" />${cells}`;
   }).join("");
 
   const verticals = columnRects.slice(1).map((col) => `<line x1="${col.x.toFixed(2)}" y1="${tableTop}" x2="${col.x.toFixed(2)}" y2="${height - footerHeight}" stroke="rgba(255,255,255,0.08)" />`).join("");
-
-  return `
-<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${svgEscape(title)}">
-  <defs>
-    <linearGradient id="rdAccent" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#111827" />
-      <stop offset="100%" stop-color="#1f2937" />
-    </linearGradient>
-  </defs>
-  <rect width="${width}" height="${height}" rx="24" fill="url(#rdAccent)" />
-  <rect x="${margin}" y="${tableTop - 14}" width="${innerWidth}" height="${headerHeight}" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.10)" />
-  <text x="${margin}" y="${titleY}" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#ffffff">${svgEscape(title)}</text>
-  ${subtitle ? `<text x="${margin}" y="${subtitleY}" font-size="18" font-family="Arial, Helvetica, sans-serif" fill="#dbe4f0">${svgEscape(subtitle)}</text>` : ''}
-  <rect x="${margin}" y="${tableTop - 14}" width="${innerWidth}" height="4" rx="2" fill="${accent}" />
-  ${headerCells}
-  ${verticals}
-  ${rowBands}
-  ${footer ? `<text x="${margin}" y="${height - 18}" font-size="16" font-family="Arial, Helvetica, sans-serif" fill="#cbd5e1">${svgEscape(footer)}</text>` : ''}
-</svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}" role="img" aria-label="${svgEscape(title)}"><defs><linearGradient id="rdAccent" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#111827"/><stop offset="100%" stop-color="#1f2937"/></linearGradient></defs><rect width="${width}" height="${height}" rx="24" fill="url(#rdAccent)"/><rect x="${margin}" y="${tableTop - 14}" width="${innerWidth}" height="${headerHeight}" rx="12" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.10)"/><text x="${margin}" y="${titleY}" font-size="34" font-family="Arial, Helvetica, sans-serif" font-weight="700" fill="#ffffff">${svgEscape(title)}</text>${subtitle ? `<text x="${margin}" y="${subtitleY}" font-size="18" font-family="Arial, Helvetica, sans-serif" fill="#dbe4f0">${svgEscape(subtitle)}</text>` : ''}<rect x="${margin}" y="${tableTop - 14}" width="${innerWidth}" height="4" rx="2" fill="${accent}"/>${headerCells}${verticals}${rowBands}${footer ? `<text x="${margin}" y="${height - 18}" font-size="16" font-family="Arial, Helvetica, sans-serif" fill="#cbd5e1">${svgEscape(footer)}</text>` : ''}</svg>`;
 }
 
 export function buildLivePricingChartSvg(catalog) {

@@ -927,6 +927,12 @@ async function initChrome() {
   ensureStickyConversionCta();
   enhanceProfessionalImages();
   ensureVisualPlaceholderSystem();
+  try {
+    const imageTools = await import('/assets/website-images.js?v=20260813build259');
+    await imageTools.hydrateGlobalSiteImageOverrides(document);
+  } catch (error) {
+    console.warn('Optional Photo Studio presentation overrides could not be applied.', error);
+  }
 
   attachRotators("#homePackages");
   attachRotators("#packageCards");

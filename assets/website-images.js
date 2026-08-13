@@ -331,3 +331,65 @@ export async function hydrateR2CardImages(root=document){
   }
   await hydrateBeforeAfterSets(root, manifest);
 }
+
+
+// Build 259 — explicit-only global presentation image overrides.
+// This deliberately does NOT use automatic filename matching. Existing authored images stay intact until an owner assigns a Photo Studio target.
+function normalizedPagePath(value=''){
+  const raw=clean(value||'/').split('?')[0].split('#')[0].replace(/\/+$/,'');
+  return raw || '/';
+}
+
+function explicitAssetTargetForImage(img){
+  const original=clean(img?.dataset?.photoOriginalSrc || img?.getAttribute('src'));
+  if(!original) return '';
+  if(!img.dataset.photoOriginalSrc) img.dataset.photoOriginalSrc=original;
+  try{
+    const u=new URL(original,location.origin);
+    const source=u.origin===location.origin ? u.pathname : u.href.split('?')[0].split('#')[0];
+    return `site-asset:${source}`;
+  }catch{return `site-asset:${original.split('?')[0].split('#')[0]}`;}
+}
+
+function applyExplicitImage(img,picked,target){
+  if(!img||!picked?.url)return false;
+  img.src=picked.url;
+  if(picked.alt_text)img.alt=picked.alt_text;
+  if(picked.title)img.title=picked.title;
+  img.style.objectPosition=picked.focal_point||'center';
+  img.dataset.photoAssignmentTarget=target;
+  return true;
+}
+
+export async function hydrateGlobalSiteImageOverrides(root=document,manifest=null){
+  if(!root || normalizedPagePath(location.pathname).startsWith('/admin'))return;
+  const data=manifest||await loadWebsiteImageManifest();
+  const brandTargets=[
+    ['site:brand:logo','[data-logo]'],
+    ['site:brand:banner','[data-banner],img[data-main-banner],#bannerImage,#globalMainBanner img'],
+    ['site:brand:reviews','[data-reviews],#reviewsImage,.reviews img,[data-reviews-panel] img']
+  ];
+  for(const [target,selector] of brandTargets){
+    const picked=explicitImageForTarget(data,target);if(!picked?.url)continue;
+    root.querySelectorAll(selector).forEach((img)=>applyExplicitImage(img,picked,target));
+  }
+  const siteBackground=explicitImageForTarget(data,'site:brand:background');
+  if(siteBackground?.url){
+    document.documentElement.style.setProperty('--hero-bg',`url("${String(siteBackground.url).replaceAll('\"','%22')}")`);
+    document.documentElement.dataset.photoBackgroundTarget='site:brand:background';
+  }
+  for(const img of root.querySelectorAll('img[src]')){
+    if(img.dataset.photoAssignmentTarget)continue;
+    const target=explicitAssetTargetForImage(img);if(!target)continue;
+    const picked=explicitImageForTarget(data,target);if(picked?.url)applyExplicitImage(img,picked,target);
+  }
+  const pageTarget=`page-background:${normalizedPagePath(location.pathname)}`;
+  const bg=explicitImageForTarget(data,pageTarget);
+  if(bg?.url){
+    document.body.style.backgroundImage=`linear-gradient(rgba(8,13,24,.88),rgba(8,13,24,.94)),url("${String(bg.url).replaceAll('"','%22')}")`;
+    document.body.style.backgroundSize='cover';
+    document.body.style.backgroundPosition=bg.focal_point||'center';
+    document.body.style.backgroundAttachment='fixed';
+    document.body.dataset.photoAssignmentTarget=pageTarget;
+  }
+}
