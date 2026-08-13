@@ -1,3 +1,11 @@
+## Build 257 acceptance — Worker resource hotfix
+
+- [ ] Deploy Pages + Functions together and hard-refresh `/admin-photo-studio`.
+- [ ] Confirm opening Photo Studio does not trigger an R2 scan and returns the managed library promptly.
+- [ ] Press **Sync approved R2 photos** once; confirm it returns a bounded scanned/inserted count rather than Error 1102.
+- [ ] Open Services and one landing page; confirm `/api/public_website_images` returns compact JSON without enumerating R2.
+- [ ] Confirm existing package images, explicit assignments and Before/After pairs remain unchanged.
+
 
 ## Build 256 Photo Studio acceptance
 - Confirm an assigned thumbnail displays its human-readable target name.
@@ -1551,3 +1559,18 @@ Photo Studio can sync, edit metadata, assign/unassign, rename/move and render on
 
 <!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
 <!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
+
+<!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
+
+## Validate Build 258 public photo consistency and cleanup
+
+- Deploy Pages and Functions together; hard-refresh the modified public/admin pages.
+- Open Photo Studio without Sync and confirm Build 257 resource protections remain stable.
+- Run one explicit R2 Sync and verify both new-photo and refreshed-existing-photo counts.
+- Verify Pricing town/high-intent cards and Services hub/special/town cards reflect explicit assignments.
+- Verify FAQ access-card and Gift Card visuals.
+- Verify Home/Pricing/Services/landing review-proof slots can be assigned.
+- Verify multiple complete Before/After sets plus Evidence/Technique/Efficiency items render in Gallery.
+- Verify assigned images cannot be deleted; verify one harmless unassigned duplicate can be deleted from library + public R2.
+- Verify `Which service should we choose?` is three/two/one columns across desktop/tablet/phone.
+<!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
