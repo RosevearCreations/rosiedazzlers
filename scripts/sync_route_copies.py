@@ -47,6 +47,7 @@ ROUTE_COPY_PAGES = [
     "admin-test-centre.html",
     "admin-security.html",
     "admin-media-health.html",
+    "admin-photo-studio.html",
     "admin-daip.html",
     "admin-daip-governance.html",
     "admin-daip-readiness.html",
@@ -57,6 +58,11 @@ ROUTE_COPY_PAGES = [
     "progress.html",
     "final-balance-payment.html",
     "gift-certificate-print.html",
+    "services.html",
+    "pricing.html",
+    "gift-cards.html",
+    "faq.html",
+    "gallery.html",
 ]
 
 
