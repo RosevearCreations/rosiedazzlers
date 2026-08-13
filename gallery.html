@@ -5,7 +5,7 @@
   <title>Auto Detailing Photo Gallery | Rosie Dazzlers</title>
   <meta name="description" content="See approved Rosie Dazzlers detailing photos from Oxford and Norfolk Counties: before-and-after results, service evidence, efficient workflows, and techniques." />
   <link rel="canonical" href="https://rosiedazzlers.ca/gallery" />
-  <link rel="stylesheet" href="/assets/site.css?v=20260813build258" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260813build259" />
   <style>
     .compare-grid{display:grid;gap:18px}.compare-card{padding:18px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
     .compare-stage{position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.04)}
@@ -70,7 +70,7 @@
 </script>
 
 <script type="module">
-import { loadWebsiteImageManifest, managedGalleryContent } from "/assets/website-images.js?v=20260813build258";
+import { loadWebsiteImageManifest, managedGalleryContent } from "/assets/website-images.js?v=20260813build259";
 const managedSection=document.getElementById('managedGallerySection');
 const managedHost=document.getElementById('managedGalleryList');
 const typeFilter=document.getElementById('contentTypeFilter');
@@ -100,4 +100,5 @@ function renderManaged(){
 try{managedData=managedGalleryContent(await loadWebsiteImageManifest());renderManaged();}catch{}
 typeFilter?.addEventListener('change',renderManaged);
 </script>
+<!-- Historical Build 258 image module: /assets/website-images.js?v=20260813build258 -->
 </body></html>

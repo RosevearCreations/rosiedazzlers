@@ -365,6 +365,7 @@
         </div>
       </div>
 
+      <div id="sizeVerificationNotice" class="notice warn" style="display:none;margin-top:10px"></div>
       <div id="sizeHint" class="notice" style="display:none;margin-top:12px"></div>
       <div id="vehicleServiceHint" class="notice" style="display:none;margin-top:12px"></div>
       <div id="step1Error" class="field-error"></div>
@@ -1570,6 +1571,27 @@
       return category && ["small", "mid", "oversize"].includes(category) ? category : null;
     }
 
+
+    function selectedCatalogModelRecord() {
+      const model=normalizeChoice(qs("#veh_model").value).toLowerCase();
+      return state.vehicleCatalog.models.find((row)=>normalizeChoice(row.model).toLowerCase()===model) || null;
+    }
+
+    function vehicleSizeVerificationState() {
+      const row=selectedCatalogModelRecord();
+      const selected=selectedSize();
+      const expected=String(row?.size_bucket||'').trim();
+      if(row && ["small","mid","oversize"].includes(expected) && selected===expected) return {verified:true,status:'verified',expected,reason:'Vehicle model matched the Rosie size catalog.'};
+      if(row && ["small","mid","oversize"].includes(expected)) return {verified:false,status:'needs_review',expected,reason:`Catalog suggests ${expected}, while ${selected||'no size'} was selected.`};
+      return {verified:false,status:'needs_review',expected:null,reason:'This year/make/model could not be confidently matched to a verified Rosie vehicle-size record.'};
+    }
+
+    function renderVehicleSizeVerificationNotice(){
+      const node=qs('#sizeVerificationNotice');if(!node)return;const review=vehicleSizeVerificationState();
+      if(review.verified){node.style.display='block';node.className='notice ok';node.textContent='Vehicle size matched our catalog. We will still correct obvious data errors before service.';return;}
+      node.style.display='block';node.className='notice warn';node.textContent='Vehicle size is provisional. We could not confidently verify this selection automatically. Staff will review upcoming orders. If the correct size changes the price, we will email you a secure link to confirm the updated size/price or cancel the booking before service.';
+    }
+
     function updateSizeHint() {
       const rec = recommendedSize();
       const chosen = selectedSize();
@@ -1590,6 +1612,7 @@
       renderReviewVehicle();
       renderFinalSummary();
       renderVehicleServiceHint();
+      renderVehicleSizeVerificationNotice();
     }
 
     async function loadGarageVehicles() {
@@ -1677,7 +1700,7 @@
 
     function applyVehicleModelMetadata() {
       const chosen = state.vehicleCatalog.models.find((row) => normalizeChoice(row.model).toLowerCase() === normalizeChoice(qs("#veh_model").value).toLowerCase());
-      if (!chosen) return;
+      if (!chosen) { updateSizeHint(); return; }
       if (chosen.size_bucket && !qs("#vehicle_size").value) qs("#vehicle_size").value = chosen.size_bucket;
       if (chosen.vehicle_type && !qs("#veh_body").value) {
         const t = String(chosen.vehicle_type).toLowerCase();
@@ -2099,6 +2122,9 @@
         service_area_meta: selectedServiceAreaMeta(),
         package_code: state.selectedPackageCode,
         vehicle_size: selectedSize(),
+        vehicle_size_review_status: vehicleSizeVerificationState().status,
+        vehicle_size_catalog_expected: vehicleSizeVerificationState().expected,
+        vehicle_size_review_reason: vehicleSizeVerificationState().reason,
         customer_name: qs("#customer_name").value.trim(),
         customer_email: qs("#customer_email").value.trim(),
         customer_phone: qs("#customer_phone").value.trim() || null,
