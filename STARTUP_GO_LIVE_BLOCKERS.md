@@ -1,3 +1,9 @@
+
+## Build 256 Photo Studio acceptance
+- Confirm an assigned thumbnail displays its human-readable target name.
+- Confirm occupied dropdown targets show `✓`, including `— this photo` when applicable.
+- Assign harmless test photos to one landing-page Set 1 Before and After target; confirm no block appears after only one side and a paired block appears only after both sides exist.
+- Remove the test assignments and confirm the previous page imagery remains unchanged.
 # Build 252 operational addition — specialist runbook
 
 **Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed acceptance steps only.
@@ -1544,3 +1550,4 @@ Photo Studio can sync, edit metadata, assign/unassign, rename/move and render on
 <!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
 
 <!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
