@@ -124,6 +124,9 @@
     const selectors = isAdmin ? ['.card[data-build206]', '.card[data-build205]', '.panel[data-needs-visual]'] : ['.service-link-card', '.local-town-card', '.proof-card', '.card[data-needs-visual]', '.panel[data-needs-visual]'];
     selectors.forEach(sel=>root.querySelectorAll(sel).forEach(node=>{
       if (node.dataset.visualPlaceholderSkip === 'true') return;
+      // Build 258: managed photo slots own their image lifecycle. Do not pre-insert a generic placeholder
+      // that can remain beside a later Photo Studio/R2 image and create a duplicate-photo card.
+      if (node.dataset.r2ImageKeywords || node.dataset.photoTarget || node.dataset.photoImageTarget) return;
       if (node.querySelector('img,.visual-placeholder-card')) return;
       const type = inferType(node); const title = (node.querySelector('h2,h3,strong')?.textContent || titleFor(type)).trim();
       node.insertBefore(buildBlock(type, title), node.firstChild);
