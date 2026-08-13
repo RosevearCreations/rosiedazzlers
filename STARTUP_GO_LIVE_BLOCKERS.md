@@ -1,3 +1,17 @@
+## Build 259 acceptance — editable media, vehicle-size review and quote operations
+
+- [ ] Apply `sql/2026-08-13_build259_vehicle_size_review.sql` in staging before using vehicle-size review controls.
+- [ ] Deploy Pages + Functions together and hard-refresh Services, Pricing, Maintenance Plan, Fleet, Photo Studio, Admin Booking and Admin Quotes.
+- [ ] Confirm existing Photo Studio assignments are unchanged; verify new logo/banner/review/background/static-image/maintenance/add-on targets are selectable but unassigned until deliberately chosen.
+- [ ] Open an add-on from Services; confirm the internal code is hidden, price/Quote Required and estimated added time fit inside the card, and process/details opens the owner-editable landing page.
+- [ ] Review Paint Correction copy for test spots, clear-coat limits, multi-stage labour and condition-driven price escalation.
+- [ ] Confirm Package Service Details headings do not overlap and the Services decision cards remain readable at desktop/tablet/phone widths.
+- [ ] Edit Maintenance Plan information/waitlist/good-fit copy and assign a test hero image; confirm waitlist/fleet form fields stay inside their panels.
+- [ ] Create an uncertain vehicle-size booking; verify staff can mark it verified without customer action.
+- [ ] Create a harmless corrected size/price test; confirm the secure email link can confirm or cancel, expires, and cannot be reused.
+- [ ] Open Quote Pipeline; select a row, edit/save it, create a test row, and confirm lead/customer/booking link fields persist.
+- [ ] Confirm normal public/Photo Studio loads still perform no R2 enumeration; only explicit Sync may scan R2.
+
 ## Build 257 acceptance — Worker resource hotfix
 
 - [ ] Deploy Pages + Functions together and hard-refresh `/admin-photo-studio`.
@@ -1574,3 +1588,5 @@ Photo Studio can sync, edit metadata, assign/unassign, rename/move and render on
 - Verify assigned images cannot be deleted; verify one harmless unassigned duplicate can be deleted from library + public R2.
 - Verify `Which service should we choose?` is three/two/one columns across desktop/tablet/phone.
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
