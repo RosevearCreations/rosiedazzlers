@@ -1,3 +1,9 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 256
+
+**Build 256 value delivered:** Photo maintenance is now easier to audit before changing anything: thumbnail cards expose placement names, occupied placement choices are checked, and before/after storytelling is managed as intentional paired slots instead of remembering unrelated gallery positions. Existing authored imagery remains protected unless staff explicitly saves an override.
+
+**Next photo-management priorities:** add full “where used” dependency reporting with page preview links; image replacement/version rollback; bulk metadata/alt editing; optional pair captions/project/town metadata; and a safe delete workflow only after dependency checks.
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 255
 
 > **Build 255 editor repair (2026-08-12):** Photo Studio thumbnails now open an immediate click-to-edit drawer with a grouped “Where should this image be used?” selector. Existing photos and assignments are not changed by this build; a placement changes only after an explicit target choice, **Use this image here**, and confirmation. R2-only photos may be registered as managed metadata when needed without assigning them. No new SQL migration is required. See `BUILD255_SUMMARY.md`.
@@ -1531,3 +1537,4 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
 
 <!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
