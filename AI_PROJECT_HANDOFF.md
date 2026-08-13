@@ -1,3 +1,11 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 258
+
+> **Build 258 (2026-08-13):** Public photo assignments now propagate consistently across Pricing town/high-intent cards, Services hub/special/town cards, FAQ access cards, Gift Card visuals, review-proof slots, managed landing pages, and the expanded mixed Gallery. Explicit Sync refreshes same-key R2 replacements by ETag and public URLs are versioned so updated files can replace stale cached images. Photo Studio adds safe current-unassigned deletion. Build 257's database-first/no-R2-scan-on-normal-load boundary and Build 254 authored-image preservation remain mandatory. No existing assignment is changed by this source update and no new SQL migration is required. See `BUILD258_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 257
+
+> **Build 257 hotfix (2026-08-13):** Cloudflare Error 1102 mitigation for the growing public photo library. Ordinary Photo Studio loads and public website image-manifest requests are now database-first and do not scan R2. R2 enumeration occurs only through the explicit Photo Studio Sync action, with bounded prefix scans, compact responses, and batched database inserts. No existing image assignment was changed and no SQL migration is required. See `BUILD257_SUMMARY.md`.
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 256
 
 > **Build 256 (2026-08-12):** Photo Studio now shows exactly where each assigned photo is used, checks occupied target options in the assignment dropdown, distinguishes slots owned by the selected photo versus another image, and supports three explicit Before/After pairs per managed landing page. A pair renders publicly only after both Before and After are deliberately assigned. Build 254 image-preservation rules remain authoritative. No new SQL migration is required. See `BUILD256_SUMMARY.md`.
@@ -1225,3 +1233,6 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 
 <!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
 <!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
+
+<!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
+<!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
