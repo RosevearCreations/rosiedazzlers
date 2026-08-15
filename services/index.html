@@ -19,7 +19,7 @@
   <link rel="canonical" href="https://rosiedazzlers.ca/services" />
   <meta property="og:title" content="Mobile Auto Detailing Services | Rosie Dazzlers" />
   <meta property="og:description" content="See Rosie Dazzlers detailing packages, what is included, add-ons, and service options for small, mid-size, and oversized vehicles." />
-  <link rel="stylesheet" href="/assets/site.css?v=20260810build250" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260813build259" />
   <script type="application/ld+json" id="servicesSchema">
   {
     "@context": "https://schema.org",
@@ -64,6 +64,10 @@
     .decision-card .row{margin-top:10px}
     .quote-strip{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;border:1px solid rgba(56,189,248,.25);background:linear-gradient(135deg,rgba(56,189,248,.12),rgba(255,255,255,.04));border-radius:16px;padding:14px}
     .addon-grid .panel,.package-grid .panel{min-width:0}
+
+    .decision-card{display:grid;grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;column-gap:10px;row-gap:10px;align-content:start;min-width:0;overflow:hidden}
+    .decision-card__number{grid-row:1;grid-column:1;align-self:start}.decision-card>div:nth-child(2){grid-column:2;min-width:0}.decision-card .decision-book{grid-column:1/-1;justify-self:start;max-width:100%;white-space:normal}
+    .addon-grid .panel{display:flex;flex-direction:column;overflow:hidden;min-width:0}.addon-card-head{display:block;min-width:0}.addon-card-head h3{overflow-wrap:anywhere}.addon-card-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px}.addon-card-meta .tag{max-width:100%;white-space:normal;text-align:center}.addon-card-time{font-size:.86rem;color:rgba(234,242,255,.72)}.addon-card-actions{margin-top:auto;padding-top:12px;display:flex;gap:8px;flex-wrap:wrap}.addon-card-actions .btn{max-width:100%;white-space:normal}
     ul.tight{margin:8px 0 0 18px;padding:0}
     ul.tight li{margin:4px 0}
 
@@ -73,6 +77,7 @@
     .modal img{width:100%; height:auto; border-radius:14px; border:1px solid rgba(255,255,255,.10)}
     .modalHead{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
   </style>
+  <!-- Historical stylesheet token: /assets/site.css?v=20260810build250 -->
 </head>
 
 <body>
@@ -207,13 +212,13 @@
       <h2 style="margin-top:0">Full service hub</h2>
       <p class="muted">After choosing a main package, use this hub only when you need specialty work, gifts, fleet service, maintenance, or extra guidance.</p>
       <div class="service-link-grid" style="margin-top:12px">
-        <article class="service-link-card" data-r2-image-keywords="interior detail deep cleaning pet hair seat shampoo" data-r2-image-href="/book?condition=interior"><h3>Interior and deep cleaning</h3><p class="muted">Interior detail, pet hair, odour, salt, shampoo, stains, and daily-use reset.</p><a class="btn ghost small" href="/book?condition=interior">Get interior guidance</a></article>
-        <article class="service-link-card" data-r2-image-keywords="paint correction exterior paint care" data-r2-image-href="/paint-correction"><h3>Exterior and paint care</h3><p class="muted">Wash, clay, sealant, ceramic spray, paint correction, coating prep, and glass protection.</p><a class="btn ghost small" href="/paint-correction">Paint correction</a></article>
-        <article class="service-link-card" data-r2-image-keywords="detailing specials before after" data-r2-image-href="/specials"><h3>Specials</h3><p class="muted">Spring salt cleanup, same-address multi-vehicle service, senior-friendly help, and headlight refresh offers.</p><a class="btn ghost small" href="/specials">View specials</a></article>
-        <article class="service-link-card" data-r2-image-keywords="gift cards detailing" data-r2-image-href="/gift-cards"><h3>Gift cards</h3><p class="muted">Interior detail, full detail, and custom amount gift-card paths.</p><a class="btn ghost small" href="/gift-cards">Gift card guide</a></article>
-        <article class="service-link-card" data-r2-image-keywords="fleet work truck detailing" data-r2-image-href="/fleet"><h3>Fleet and work trucks</h3><p class="muted">Small business fleets, contractor vehicles, truck boxes, and recurring same-location work.</p><a class="btn ghost small" href="/fleet">Fleet quote</a></article>
-        <article class="service-link-card" data-r2-image-keywords="maintenance wash detail" data-r2-image-href="/maintenance"><h3>Maintenance plans</h3><p class="muted">Monthly maintenance, seasonal reset, and recurring cleanup interest.</p><a class="btn ghost small" href="/maintenance">Maintenance guide</a></article>
-        <article class="service-link-card" data-r2-image-keywords="detailing guides car care" data-r2-image-href="/blog"><h3>Helpful guides</h3><p class="muted">Road salt, ceramic coating, paint correction, pet hair, and prep education.</p><a class="btn ghost small" href="/blog">Read guides</a></article>
+        <article class="service-link-card" data-r2-image-keywords="interior detail deep cleaning pet hair seat shampoo" data-r2-image-href="/book?condition=interior" data-photo-target="hub:services:interior"><h3>Interior and deep cleaning</h3><p class="muted">Interior detail, pet hair, odour, salt, shampoo, stains, and daily-use reset.</p><a class="btn ghost small" href="/book?condition=interior">Get interior guidance</a></article>
+        <article class="service-link-card" data-r2-image-keywords="paint correction exterior paint care" data-r2-image-href="/paint-correction" data-photo-target="hub:services:exterior"><h3>Exterior and paint care</h3><p class="muted">Wash, clay, sealant, ceramic spray, paint correction, coating prep, and glass protection.</p><a class="btn ghost small" href="/paint-correction">Paint correction</a></article>
+        <article class="service-link-card" data-r2-image-keywords="detailing specials before after" data-r2-image-href="/specials" data-photo-target="hub:services:specials"><h3>Specials</h3><p class="muted">Spring salt cleanup, same-address multi-vehicle service, senior-friendly help, and headlight refresh offers.</p><a class="btn ghost small" href="/specials">View specials</a></article>
+        <article class="service-link-card" data-r2-image-keywords="gift cards detailing" data-r2-image-href="/gift-cards" data-photo-target="hub:services:gift-cards"><h3>Gift cards</h3><p class="muted">Interior detail, full detail, and custom amount gift-card paths.</p><a class="btn ghost small" href="/gift-cards">Gift card guide</a></article>
+        <article class="service-link-card" data-r2-image-keywords="fleet work truck detailing" data-r2-image-href="/fleet" data-photo-target="hub:services:fleet"><h3>Fleet and work trucks</h3><p class="muted">Small business fleets, contractor vehicles, truck boxes, and recurring same-location work.</p><a class="btn ghost small" href="/fleet">Fleet quote</a></article>
+        <article class="service-link-card" data-r2-image-keywords="maintenance wash detail" data-r2-image-href="/maintenance" data-photo-target="hub:services:maintenance"><h3>Maintenance plans</h3><p class="muted">Monthly maintenance, seasonal reset, and recurring cleanup interest.</p><a class="btn ghost small" href="/maintenance">Maintenance guide</a></article>
+        <article class="service-link-card" data-r2-image-keywords="detailing guides car care" data-r2-image-href="/blog" data-photo-target="hub:services:guides"><h3>Helpful guides</h3><p class="muted">Road salt, ceramic coating, paint correction, pet hair, and prep education.</p><a class="btn ghost small" href="/blog">Read guides</a></article>
       </div>
     </section>
 
@@ -241,11 +246,11 @@
       <h2 style="margin-top:0">Special detailing landing pages</h2>
       <p class="muted">These pages target the specific services people search for most often instead of forcing everything through one broad services page.</p>
       <div class="service-link-grid" style="margin-top:12px">
-        <article class="service-link-card"><h3>Ceramic coating</h3><p class="muted">Protection, gloss, and coating preparation.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
-        <article class="service-link-card"><h3>Pet hair removal</h3><p class="muted">Embedded pet hair, fabric cleanup, and interior recovery.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
-        <article class="service-link-card"><h3>Odor removal</h3><p class="muted">Source-focused interior deodorizing and treatment planning.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
-        <article class="service-link-card"><h3>Headlight restoration</h3><p class="muted">Cloudy lens cleanup and clarity recovery.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
-        <article class="service-link-card"><h3>Paint correction</h3><p class="muted">Swirl reduction, gloss recovery, and inspection-led quoting.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="ceramic coating protection gloss" data-r2-image-href="/ceramic-coating" data-photo-target="landing:ceramic-coating:hero"><h3>Ceramic coating</h3><p class="muted">Protection, gloss, and coating preparation.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="pet hair removal interior fabric" data-r2-image-href="/pet-hair-removal" data-photo-target="landing:pet-hair-removal:hero"><h3>Pet hair removal</h3><p class="muted">Embedded pet hair, fabric cleanup, and interior recovery.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="odor removal interior treatment" data-r2-image-href="/odor-removal" data-photo-target="landing:odor-removal:hero"><h3>Odor removal</h3><p class="muted">Source-focused interior deodorizing and treatment planning.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="headlight restoration lens clarity" data-r2-image-href="/headlight-restoration" data-photo-target="landing:headlight-restoration:hero"><h3>Headlight restoration</h3><p class="muted">Cloudy lens cleanup and clarity recovery.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="paint correction swirl gloss" data-r2-image-href="/paint-correction" data-photo-target="landing:paint-correction:hero"><h3>Paint correction</h3><p class="muted">Swirl reduction, gloss recovery, and inspection-led quoting.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
       </div>
     </div>
 
@@ -254,10 +259,10 @@
   <h2 style="margin:0 0 10px">Town-focused detailing pages</h2>
   <p class="muted">These location pages keep the folder-backed clean-route baseline while giving your strongest service towns clearer local wording, recent work, and review proof.</p>
   <div class="local-town-grid" style="margin-top:12px">
-    <article class="local-town-card"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
-    <article class="local-town-card"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused page for frequent travel questions.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
-    <article class="local-town-card"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side page with travel and booking wording for that cluster.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
-    <article class="local-town-card"><h3>Port Dover</h3><p class="muted">Dedicated page for Port Dover detailing visibility and booking intent.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="tillsonburg auto detailing local proof" data-r2-image-href="/tillsonburg-auto-detailing" data-photo-target="landing:tillsonburg-auto-detailing:hero"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="woodstock ingersoll auto detailing local proof" data-r2-image-href="/woodstock-ingersoll-auto-detailing" data-photo-target="landing:woodstock-ingersoll-auto-detailing:hero"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused page for frequent travel questions.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="simcoe delhi auto detailing local proof" data-r2-image-href="/simcoe-delhi-auto-detailing" data-photo-target="landing:simcoe-delhi-auto-detailing:hero"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side page with travel and booking wording for that cluster.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
+    <article class="local-town-card" data-r2-image-keywords="port dover auto detailing local proof" data-r2-image-href="/port-dover-auto-detailing" data-photo-target="landing:port-dover-auto-detailing:hero"><h3>Port Dover</h3><p class="muted">Dedicated page for Port Dover detailing visibility and booking intent.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
   </div>
 </section>
 
@@ -269,7 +274,7 @@
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          <img data-reviews src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
+          <img data-reviews data-photo-image-target="page:services:review-proof" src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
         </article>
         <article class="proof-card">
           <h3>Strongest service-area wording</h3>
@@ -298,7 +303,9 @@
     </div>
   </div>
 
-  <script type="module">
+  <!-- Historical Build 256 image module: /assets/website-images.js?v=20260812build256 -->
+  <!-- Historical Build 254 image module: /assets/website-images.js?v=20260812build254 -->
+<script type="module">
     import {
       loadPricingCatalogClient,
       money,
@@ -311,11 +318,12 @@
       buildLiveVehicleSizeChartDataUri,
       buildServicesCatalogSchema,
       applyJsonLdScript
-    } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+    } from "/assets/pricing-catalog-client.js?v=20260813build259";
     import { renderRecentWorkMounts } from "/assets/recent-work.js";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260812build252";
     // Historical Build 252 image module marker: /assets/website-images.js?v=20260812build252
-    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260812build253";
+    // Historical Build 253 guard tokens: /assets/website-images.js?v=20260812build253 preferredPhotoRow?.alt_text preferredAddonPhoto?.alt_text
+    import { loadWebsiteImageManifest, packageImageMatches, addonImageMatches, hydrateR2CardImages } from "/assets/website-images.js?v=20260813build259";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
@@ -331,7 +339,11 @@
     const PACKAGE_ORDER = ['premium_wash','basic_detail','complete_detail','interior_detail','exterior_detail'];
 
     function packagePhotoCandidates(pkg){
-      return packageImageMatches(websiteImageManifest, pkg, sizeKey(), 6).filter((photo) => photo?.url);
+      const rows = packageImageMatches(websiteImageManifest, pkg, sizeKey(), 8).filter((photo) => photo?.url);
+      return {
+        explicit: rows.filter((photo) => photo.explicit_assignment === true),
+        automatic: rows.filter((photo) => photo.explicit_assignment !== true)
+      };
     }
 
     function generalCarPhotoForPackage(pkg){
@@ -443,9 +455,12 @@
     function buildPackageCard(pkg){
       const sz = sizeKey();
       const mainImg = pkg.images_by_size?.[sz] || "";
-      const approvedPhotoCandidates = packagePhotoCandidates(pkg);
-      const preferredPhotoRow = approvedPhotoCandidates[0] || null;
-      const preferredPhoto = preferredPhotoRow?.url || "";
+      const packagePhotos = packagePhotoCandidates(pkg);
+      const explicitPhotoRow = packagePhotos.explicit[0] || null;
+      const automaticPhotoRows = packagePhotos.automatic;
+      const explicitPhoto = explicitPhotoRow?.url || "";
+      const automaticFallbackRow = automaticPhotoRows[0] || null;
+      const automaticFallback = automaticFallbackRow?.url || "";
       const generalApprovedPhotoRow = generalCarPhotoForPackage(pkg);
       const generalApprovedPhoto = generalApprovedPhotoRow?.url || "";
       const price = pkg.prices_cad?.[sz];
@@ -457,19 +472,28 @@
       const inc = Array.isArray(pkg.included_services) ? pkg.included_services : [];
       const incList = inc.slice(0, 9).map(s=>`<li>${escapeHtml(s.name || "")}</li>`).join("");
 
-      let resolvedMainImg = preferredPhoto || mainImg || generalApprovedPhoto;
-      const getImages = ()=>[resolvedMainImg, ...approvedPhotoCandidates.slice(1).map((row)=>row.url), mainImg, generalApprovedPhoto, ...HOVER_EXTRA_IMAGES].filter(Boolean);
+      // Build 254 safety rule: never displace a configured package image through filename matching.
+      // Only an explicit Photo Studio assignment may intentionally override it.
+      let resolvedMainImg = explicitPhoto || mainImg || automaticFallback || generalApprovedPhoto;
+      const getImages = ()=>[
+        resolvedMainImg,
+        mainImg,
+        ...packagePhotos.explicit.slice(1).map((row)=>row.url),
+        ...automaticPhotoRows.map((row)=>row.url),
+        generalApprovedPhoto,
+        ...HOVER_EXTRA_IMAGES
+      ].filter(Boolean);
 
       el.innerHTML = `
         <div class="service-card-media">
-          <img class="cardImg" alt="${escapeHtml(preferredPhotoRow?.alt_text || `${pkg.name} mobile detailing example`)}" style="object-position:${escapeHtml(preferredPhotoRow?.focal_point || "center")}" />
+          <img class="cardImg" alt="${escapeHtml(explicitPhotoRow?.alt_text || `${pkg.name} mobile detailing example`)}" style="object-position:${escapeHtml(explicitPhotoRow?.focal_point || "center")}" />
           ${pkg.code === 'complete_detail' ? '<span class="service-recommended-badge">Most complete choice</span>' : ''}
         </div>
         <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
           <div>
             <h3 style="margin:0">${escapeHtml(pkg.name)}</h3>
             <div class="muted mini">${escapeHtml(pkg.subtitle || "")}</div>
-            ${preferredPhoto ? '<div class="mini service-photo-source">Approved Rosie photo</div>' : ''}
+            ${explicitPhoto ? '<div class="mini service-photo-source">Photo Studio override</div>' : ''}
           </div>
           <div style="text-align:right">
             <div class="tag ok">${price!=null ? money(price) : "$—"}</div>
@@ -491,10 +515,15 @@
       const img = el.querySelector("img");
       img.loading = "lazy";
       img.decoding = "async";
-      bindImageWithCandidates(img, preferredPhoto || mainImg || generalApprovedPhoto, {
-        extra: [...approvedPhotoCandidates.slice(1).map((row)=>row.url), mainImg, generalApprovedPhoto].filter(Boolean),
+      bindImageWithCandidates(img, explicitPhoto || mainImg || automaticFallback || generalApprovedPhoto, {
+        extra: [
+          mainImg,
+          ...packagePhotos.explicit.slice(1).map((row)=>row.url),
+          ...automaticPhotoRows.map((row)=>row.url),
+          generalApprovedPhoto
+        ].filter(Boolean),
         fallback: "/assets/placeholders/service-photo-needed.svg",
-        onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || preferredPhoto || mainImg || generalApprovedPhoto; },
+        onResolved: (_img, resolvedUrl) => { resolvedMainImg = resolvedUrl || explicitPhoto || mainImg || automaticFallback || generalApprovedPhoto; },
         onExhausted: (node) => { node.src = "/assets/placeholders/service-photo-needed.svg"; node.classList.add("visual-placeholder-img"); }
       });
 
@@ -503,11 +532,17 @@
       return el;
     }
 
+
+    const ADDON_DETAIL_SLUGS={full_clay_treatment:'full-clay-treatment',two_stage_polish:'two-stage-polish',high_grade_paint_sealant:'high-grade-paint-sealant',uv_protectant_applied_on_interior_panels:'uv-protectant',de_ionizing_treatment:'de-ionizing-treatment',de_badging:'de-badging',engine_cleaning:'engine-cleaning',external_ceramic_coating:'external-ceramic-coating',external_graphene_fine_finish:'graphene-finish',external_wax:'exterior-wax',vinyl_wrapping:'vinyl-wrapping',window_tinting:'window-tinting',paint_correction:'paint-correction'};
+    function addonDetailHref(addon){const code=String(addon?.code||'').trim();return '/'+(ADDON_DETAIL_SLUGS[code]||code.replace(/_/g,'-'));}
+
     function buildAddonCard(addon){
-      const approvedAddonPhotoRows = addonImageMatches(websiteImageManifest, addon, 5).filter((photo)=>photo?.url);
-      const preferredAddonPhoto = approvedAddonPhotoRows[0] || null;
-      const approvedAddonPhotos = approvedAddonPhotoRows.map((photo)=>photo.url);
-      const imageUrl = preferredAddonPhoto?.url || addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      const approvedAddonPhotoRows = addonImageMatches(websiteImageManifest, addon, 6).filter((photo)=>photo?.url);
+      const explicitAddonPhoto = approvedAddonPhotoRows.find((photo)=>photo.explicit_assignment === true) || null;
+      const automaticAddonPhotos = approvedAddonPhotoRows.filter((photo)=>photo.explicit_assignment !== true);
+      const configuredAddonPhoto = addonPrimaryImage(addon) || ADDON_IMAGES[addon.code] || null;
+      // Build 254: preserve the existing configured add-on image unless an admin explicitly overrides it.
+      const imageUrl = explicitAddonPhoto?.url || configuredAddonPhoto || automaticAddonPhotos[0]?.url || null;
       const fallbackUrl = addonFallback(addon.code);
 
       const el = document.createElement("div");
@@ -520,19 +555,15 @@
       const badge = addon.quote_required
         ? `<span class="tag warn">Quote required</span>`
         : `<span class="tag ok">${price!=null ? money(price) : "$—"}</span>`;
+      const duration=String(addon.duration_label||addon.estimated_duration||'Time varies by condition').trim();
+      const detailsHref=addonDetailHref(addon);
 
       el.innerHTML = `
-        ${imageUrl ? `<img class="cardImg" alt="${escapeHtml(preferredAddonPhoto?.alt_text || addon.name)}" style="object-position:${escapeHtml(preferredAddonPhoto?.focal_point || "center")}" />` : ``}
-        <div style="margin-top:${imageUrl ? "10px":"0"};display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
-          <div>
-            <h3 style="margin:0">${escapeHtml(addon.name)}</h3>
-            <div class="muted mini mono">${escapeHtml(addon.code)}</div>
-          </div>
-          <div style="text-align:right">${badge}</div>
-        </div>
-        <div class="muted mini" style="margin-top:10px">
-          ${addon.quote_required ? "Requested online, priced after inspection." : "Optional add-on service."}
-        </div>
+        ${imageUrl ? `<a href="${escapeHtml(detailsHref)}" aria-label="View ${escapeHtml(addon.name)} details"><img class="cardImg" alt="${escapeHtml(explicitAddonPhoto?.alt_text || addon.name)}" style="object-position:${escapeHtml(explicitAddonPhoto?.focal_point || "center")}" /></a>` : ``}
+        <div class="addon-card-head" style="margin-top:${imageUrl ? "10px":"0"}"><h3 style="margin:0"><a href="${escapeHtml(detailsHref)}" style="color:inherit;text-decoration:none">${escapeHtml(addon.name)}</a></h3></div>
+        <div class="addon-card-meta"><div>${badge}</div><div class="addon-card-time">Estimated added time: <strong>${escapeHtml(duration)}</strong></div></div>
+        <div class="muted mini" style="margin-top:10px">${addon.quote_required ? "Requested online, priced after inspection. Final scope can change with condition." : "Optional add-on service."}</div>
+        <div class="addon-card-actions"><a class="btn ghost small" href="${escapeHtml(detailsHref)}">View process &amp; details</a><a class="btn ghost small" href="/book?addon=${encodeURIComponent(addon.code)}">Add to booking</a></div>
       `;
 
       const imgEl = el.querySelector("img");
@@ -540,7 +571,7 @@
         imgEl.loading = "lazy";
         imgEl.decoding = "async";
         bindImageWithCandidates(imgEl, imageUrl, {
-          extra: [...approvedAddonPhotos.slice(1), addonPrimaryImage(addon), ADDON_IMAGES[addon.code]].filter(Boolean),
+          extra: [configuredAddonPhoto, ...automaticAddonPhotos.map((photo)=>photo.url)].filter(Boolean),
           fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.png",
           onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
         });
@@ -604,5 +635,7 @@
 
   <script type="module" src="/assets/chrome.js?v=20260812build252"></script>
   <script src="/assets/public-content-blocks.js?v=20260525build178" defer></script>
+<!-- Historical Build 258 image module: /assets/website-images.js?v=20260813build258 -->
+<!-- Historical Build 258 stylesheet: /assets/site.css?v=20260813build258 -->
 </body>
 </html>
