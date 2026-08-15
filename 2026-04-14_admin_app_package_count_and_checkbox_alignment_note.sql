@@ -1,0 +1,6 @@
+-- Rosie Dazzlers
+-- 2026-04-14 admin-app package count + checkbox alignment note
+-- No database DDL change in this pass.
+-- This note tracks the UI clarification work that aligned non-catalog checkbox rows in App Management
+-- and clarified package families versus size-priced entries while keeping oversize/exotic coupled
+-- in the current canonical pricing catalog.

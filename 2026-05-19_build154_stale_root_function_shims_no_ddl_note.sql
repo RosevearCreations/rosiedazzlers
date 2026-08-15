@@ -1,0 +1,2 @@
+-- Build 154 has no database DDL changes.
+-- This hotfix adds Cloudflare Pages Function compatibility shims for stale root API files left behind by GitHub web uploads.

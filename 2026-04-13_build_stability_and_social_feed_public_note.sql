@@ -1,0 +1,6 @@
+-- 2026-04-13 build-stability + social-feed-public note
+-- No new table or column DDL was required in this pass.
+-- Application-layer work completed in this pass:
+-- 1) added functions/api/social_feed_public.js so the public site and App Management reload path share a real endpoint
+-- 2) removed duplicate GL actor keys in functions/api/_lib/accounting-gl.js to eliminate avoidable Pages build warnings
+-- 3) kept book.html locked/stable and _redirects complete for the current route model

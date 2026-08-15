@@ -1,0 +1,13 @@
+-- Build 132 admin add-on media hydration note
+-- Date: 2026-05-08
+-- No DDL required.
+--
+-- This pass fixes Admin App add-on editor behaviour so saved pricing_catalog
+-- rows with blank image_url/image_fallback_url are hydrated from the bundled
+-- default pricing catalog before rendering. The public pricing catalog merge
+-- helper now also prevents blank saved media values from masking fallback media.
+--
+-- Tables affected: none.
+-- Runtime files affected:
+--   - admin-app.html
+--   - functions/api/_lib/pricing-catalog.js

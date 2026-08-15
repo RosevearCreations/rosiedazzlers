@@ -1,0 +1,3 @@
+-- 2026-04-16 pass20
+-- No schema DDL change in this pass.
+-- Purpose: document the addition of explicit admin Pages Function wrappers for social_feed_public, vehicle_makes, and vehicle_models to prevent Pages build import-resolution failures under /api/admin.

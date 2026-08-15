@@ -1,0 +1,6 @@
+-- 2026-04-14 pass 16
+-- No schema changes were required in this pass.
+-- This note records a stability/documentation update covering:
+--   1) App Management screen helper restoration
+--   2) visible menu access to /admin-app
+--   3) docs/schema refresh with no DDL changes

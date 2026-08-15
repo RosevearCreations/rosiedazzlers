@@ -1,0 +1,16 @@
+-- 2026-05-01 Build 125 booking embed console patch
+-- No DDL changes required in this pass.
+--
+-- Purpose:
+-- - Documents the Services/Pricing booking embed JavaScript repair.
+-- - The embedded booking Step 1 layout helper previously called Array.index(...),
+--   which is not a JavaScript Array method. It now uses indexOf(...) with a
+--   guarded try/catch/finally fallback so an embed layout issue cannot stop the
+--   booking calendar/date boxes from rendering.
+--
+-- Current required DDL remains:
+-- - sql/2026-04-30_job_time_entries_minutes_compatibility.sql
+--
+-- Verification target:
+-- - /services iframe /book?embed=1 should no longer throw groups.index is not a function.
+-- - /pricing iframe /book?embed=1 should no longer throw groups.index is not a function.

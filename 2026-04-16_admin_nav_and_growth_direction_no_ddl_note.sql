@@ -1,0 +1,7 @@
+-- 2026-04-16 admin-nav and growth-direction pass
+-- No schema DDL change in this pass.
+-- App Management now tracks these logical settings keys:
+--   quote_booking_settings
+--   gift_delivery_settings
+--   membership_plan_settings
+-- Gift checkout now captures recipient_name, delivery_date, and gift_message in checkout metadata for future scheduled-delivery automation.

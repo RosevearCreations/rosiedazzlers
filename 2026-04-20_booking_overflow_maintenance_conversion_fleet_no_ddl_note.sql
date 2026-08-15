@@ -1,0 +1,2 @@
+-- 2026-04-20 no-DDL note
+-- Booking layout overflow polish, My Account garage/fleet handoff, and maintenance conversion UX were updated in application code and public HTML.

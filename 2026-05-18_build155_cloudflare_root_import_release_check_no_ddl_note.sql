@@ -1,0 +1,6 @@
+-- Build 155 Cloudflare root import and release-check hotfix (2026-05-18 America/Toronto)
+-- No database DDL is required for this pass.
+-- This build repairs four remaining root Cloudflare Pages Function files that still imported ../_lib/* from /functions/api/*.js.
+-- Correct root route imports now use ./_lib/*, while nested /functions/api/admin/*.js files continue to use ../_lib/*.
+-- The release checker now runs the stale root function import guard and executes Python checks in-process to avoid nested subprocess hangs in constrained environments.
+-- Active database baseline remains Build 150 inventory image indexes plus Build 151 app_media_library.

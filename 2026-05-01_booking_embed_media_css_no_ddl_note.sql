@@ -1,0 +1,5 @@
+-- 2026-05-01 Booking embed, media sizing, and public-page CSS hardening note.
+-- No structural database change is required for this patch.
+-- Keep sql/2026-04-30_job_time_entries_minutes_compatibility.sql applied in live Supabase for full payroll/manual-minute support.
+-- Public pages now rely more heavily on shared media URL helpers and CSS fallbacks rather than page-specific hard-coded image constants.
+-- Also added dashboard/jobsite detail fallbacks for old job_time_entries tables that do not yet expose minutes.

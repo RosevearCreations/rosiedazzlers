@@ -1,0 +1,9 @@
+-- Build 134 note: admin add-on save, landing SEO, and populated editor pass.
+-- Date: 2026-05-08
+-- No database DDL is required for this pass.
+-- Changes are frontend/API normalization and documentation only:
+-- 1) Admin App add-on editor has a dedicated Update / save add-on button.
+-- 2) Admin App landing editor now exposes hero image, gallery images, and related product/media fields.
+-- 3) landing_pages_public normalization preserves hero_image_url, gallery_image_urls, and related_products.
+-- 4) Admin Catalog textboxes have populated datalist suggestions from current inventory plus common detailing terms.
+-- 5) Static landing pages and sitemap metadata were refreshed for local search visibility.
