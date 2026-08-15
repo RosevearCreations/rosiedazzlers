@@ -22,7 +22,14 @@ const DEFAULTS = {
       "Priority reminder before your preferred date",
       "Faster rebooking using your saved vehicle",
       "Cleaner predictable maintenance cycle"
-    ]
+    ],
+    why_title: "Why add this now",
+    why_lines: ["Repeat scheduling | Less back-and-forth","Preferred cycle | Every 4 or 8 weeks","Local planning | Better crew forecasting","Booking path | Still uses the live booking flow"],
+    waitlist_intro: "Leave your preferred cycle and a few details about the vehicles you want covered. We use this to shape the recurring-plan offer while actual reminder timing follows completed service history.",
+    self_serve_title: "How this fits the self-serve direction",
+    self_serve_copy: "Recurring plans should not replace the booking flow. They should make the same booking-led experience easier to repeat with reminder-first scheduling, saved vehicle details, and clearer maintenance timing.",
+    good_fit_title: "Good fit for",
+    good_fit_lines: ["Busy households trying to keep vehicles presentable year-round","Repeat clients who already know their package and preferred clean cycle","Work-from-home or driveway-friendly bookings across Oxford and Norfolk areas"]
   }
 };
 

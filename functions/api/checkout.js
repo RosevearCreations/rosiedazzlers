@@ -211,6 +211,11 @@ export async function onRequestPost({ request, env }) {
     const mediaConsentPreference = normalizeMediaConsentPreference(body.media_consent_preference);
     notes.push(`Media/photo consent preference: ${mediaConsentPreference}`);
 
+    const requestedReviewStatus = String(body.vehicle_size_review_status || "").trim();
+    const vehicleSizeReviewStatus = requestedReviewStatus === "needs_review" ? "needs_review" : "verified";
+    const vehicleSizeCatalogExpected = ["small","mid","oversize"].includes(String(body.vehicle_size_catalog_expected || "")) ? String(body.vehicle_size_catalog_expected) : null;
+    if (vehicleSizeReviewStatus === "needs_review") notes.push("Vehicle size requires staff review before service; customer acknowledged that price may change if the selected size is incorrect.");
+
     const bookingPayload = {
       service_date: body.service_date,
       start_slot: body.start_slot,
@@ -222,6 +227,10 @@ export async function onRequestPost({ request, env }) {
       ...buildTrustedLocationPatch(trustedServiceLocation),
       package_code: pkg.code,
       vehicle_size: vehicleSize,
+      vehicle_size_review_status: vehicleSizeReviewStatus,
+      vehicle_size_original: vehicleSize,
+      vehicle_size_catalog_expected: vehicleSizeCatalogExpected,
+      vehicle_size_review_reason: vehicleSizeReviewStatus === "needs_review" ? String(body.vehicle_size_review_reason || "Vehicle size could not be verified automatically.").trim().slice(0,500) : null,
       customer_name: body.customer_name,
       customer_email: body.customer_email,
       customer_phone: body.customer_phone || null,
@@ -348,7 +357,11 @@ const OPTIONAL_BOOKING_INTAKE_FIELDS = [
   "media_consent_preference",
   "photo_estimate_status",
   "condition_review_status",
-  "media_privacy_status"
+  "media_privacy_status",
+  "vehicle_size_review_status",
+  "vehicle_size_original",
+  "vehicle_size_catalog_expected",
+  "vehicle_size_review_reason"
 ];
 
 async function insertBookingWithOptionalFields(supa, bookingPayload) {

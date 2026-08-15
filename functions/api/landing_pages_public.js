@@ -161,19 +161,45 @@ async function loadLandingPages(env) {
     return applyWaterRestrictionRulesToLandingPages(fallback, waterRules);
   }
 
-  const res = await fetch(
-    `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.landing_pages&limit=1`,
-    { headers: serviceHeaders(env) }
-  );
-
-  if (!res.ok) {
-    return applyWaterRestrictionRulesToLandingPages(fallback, waterRules);
+  const keys = ["landing_pages_content", "landing_pages"];
+  let merged = fallback;
+  let found = false;
+  for (const key of keys) {
+    const res = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.${encodeURIComponent(key)}&limit=1`,
+      { headers: serviceHeaders(env) }
+    );
+    if (!res.ok) continue;
+    const rows = await res.json().catch(() => []);
+    const row = Array.isArray(rows) ? rows[0] || null : null;
+    if (!row?.value || typeof row.value !== "object") continue;
+    merged = mergeLandingPages(merged, flattenEditableLandingPages(row.value));
+    found = true;
   }
+  return applyWaterRestrictionRulesToLandingPages(found ? merged : fallback, waterRules);
+}
 
-  const rows = await res.json().catch(() => []);
-  const row = Array.isArray(rows) ? rows[0] || null : null;
-  const merged = mergeLandingPages(fallback, row?.value);
-  return applyWaterRestrictionRulesToLandingPages(merged, waterRules);
+function flattenEditableLandingPages(value) {
+  const out = { pages: {} };
+  const mergeRows = (rows) => {
+    if (!rows || typeof rows !== "object" || Array.isArray(rows)) return;
+    for (const [slug, page] of Object.entries(rows)) {
+      if (!page || typeof page !== "object") continue;
+      out.pages[slug] = { ...(out.pages[slug] || {}), ...page, slug };
+    }
+  };
+  mergeRows(value?.default_pages?.pages);
+  mergeRows(value?.expansion_pages?.pages);
+  mergeRows(value?.pages);
+  if (Array.isArray(value?.pages)) for (const page of value.pages) {
+    const slug = String(page?.slug || page?.id || "").trim();
+    if (slug) out.pages[slug] = { ...(out.pages[slug] || {}), ...page, slug };
+  }
+  if (Array.isArray(value?.landing_pages)) for (const page of value.landing_pages) {
+    const slug = String(page?.slug || page?.id || "").trim();
+    if (slug) out.pages[slug] = { ...(out.pages[slug] || {}), ...page, slug };
+  }
+  return out;
 }
 
 function mergeLandingPages(fallback, candidate) {
