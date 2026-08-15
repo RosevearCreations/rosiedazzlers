@@ -1,3 +1,7 @@
+
+## Build 259 — vehicle-size review fields
+
+`public.bookings` now supports staff verification when a vehicle cannot be confidently matched to the size catalog. The additive fields are `vehicle_size_review_status`, `vehicle_size_original`, `vehicle_size_catalog_expected`, `vehicle_size_review_reason`, `vehicle_size_reviewed_size`, `vehicle_size_reviewed_price_cents`, review actor/timestamps, a SHA-256 review-token hash/expiry, and the customer response/timestamp. Apply `sql/2026-08-13_build259_vehicle_size_review.sql` before using the staff correction/secure customer confirmation workflow.
 # Database Structure — Build 245 Status
 
 Build 245 requires no DDL. It adds browser/static acceptance tooling and content hardening only. Build 240 remains the latest functional database migration.
@@ -1108,3 +1112,12 @@ Historical Build 246 catalog readiness tables/RPCs remain part of the current sc
 <!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
 
 <!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
+<!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
+
+<!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
+
+<!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
+<!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->

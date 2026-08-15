@@ -2,10 +2,10 @@
 <html lang="en"><head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Auto Detailing Before & After Gallery | Rosie Dazzlers</title>
-  <meta name="description" content="See approved before-and-after mobile detailing results from Oxford and Norfolk Counties, including interior cleaning and exterior restoration work." />
+  <title>Auto Detailing Photo Gallery | Rosie Dazzlers</title>
+  <meta name="description" content="See approved Rosie Dazzlers detailing photos from Oxford and Norfolk Counties: before-and-after results, service evidence, efficient workflows, and techniques." />
   <link rel="canonical" href="https://rosiedazzlers.ca/gallery" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260813build259" />
   <style>
     .compare-grid{display:grid;gap:18px}.compare-card{padding:18px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
     .compare-stage{position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.04)}
@@ -15,10 +15,12 @@
     .privacy-note{margin-top:10px;color:#94a3b8;font-size:.95rem}
     .compare-media-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:18px;color:#cbd5e1;background:linear-gradient(135deg,rgba(15,23,42,.82),rgba(30,41,59,.74));border:1px dashed rgba(255,255,255,.18)}
     .compare-media-fallback strong{display:block;color:#f8fafc;margin-bottom:4px}
+
+    .managed-gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:14px}.managed-gallery-card{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.035);border-radius:16px;overflow:hidden;min-width:0}.managed-gallery-card img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#0b1220}.managed-gallery-card-body{padding:12px}.managed-gallery-card h3{margin:0 0 6px}.managed-pair-card{grid-column:span 2}.managed-pair-sides{display:grid;grid-template-columns:1fr 1fr;gap:2px}.managed-pair-side{position:relative}.managed-pair-side span{position:absolute;left:8px;top:8px;z-index:1;padding:4px 8px;border-radius:999px;background:rgba(15,23,42,.82);font-size:.78rem;font-weight:900}.managed-pair-sides img{aspect-ratio:4/3}.gallery-type-badge{text-transform:capitalize}@media(max-width:720px){.managed-pair-card{grid-column:auto}.managed-pair-sides{grid-template-columns:1fr}}
   </style>
 </head><body data-build175="gallery-proof-filter-privacy" data-build177="privacy-proof-badges">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false">Menu</button><div id="navLinks" class="nav-links"></div><a class="btn primary" href="/book">Book now</a></div></header>
-<main class="container"><section class="section"><div class="hero"><div><div class="badge">Transformation Gallery</div><h1>Before and after detailing gallery</h1><p>Filter privacy-approved before/after proof by service and town. Photos or videos stay hidden until consent and privacy checks are complete.</p><div class="gallery-filters"><label>Service proof<select id="serviceFilter"><option value="all">All services</option></select></label><label>Town proof<select id="townFilter"><option value="all">All towns</option></select></label></div><p class="privacy-note" id="privacyNote">Loading privacy rule…</p></div></div></section><section class="section"><div id="galleryList" class="compare-grid"><div class="panel">Loading gallery…</div></div></section></main><footer class="footer container" data-footer></footer>
+<main class="container"><section class="section"><div class="hero"><div><div class="badge">Detailing Photo Gallery</div><h1>Detailing results, evidence, and techniques</h1><p>See privacy-approved before-and-after results plus evidence, efficient workflow, and technique photos from Rosie Dazzlers. Customer media stays hidden until consent and privacy checks are complete.</p><div class="gallery-filters"><label>Service proof<select id="serviceFilter"><option value="all">All services</option></select></label><label>Town proof<select id="townFilter"><option value="all">All towns</option></select></label><label>Photo type<select id="contentTypeFilter"><option value="all">All managed photos</option><option value="before-after">Before &amp; after</option><option value="evidence">Evidence</option><option value="technique">Technique</option><option value="efficiency">Efficiency</option></select></label></div><p class="privacy-note" id="privacyNote">Loading privacy rule…</p></div></div></section><section class="section"><div id="galleryList" class="compare-grid"><div class="panel">Loading gallery…</div></div></section><section class="section panel" id="managedGallerySection" hidden><div class="section-head"><div><h2 style="margin:0">More approved Rosie Dazzlers proof</h2><p class="muted" style="margin:6px 0 0">Photo Studio assignments for before/after sets, evidence, technique, and efficiency.</p></div></div><div id="managedGalleryList" class="managed-gallery-grid"></div></section></main><footer class="footer container" data-footer></footer>
 <script src="/assets/chrome.js"></script>
 <script>
 (function(){
@@ -66,4 +68,37 @@
   loadGallery().catch(()=>{host.innerHTML='<div class="panel">Could not load the gallery right now.</div>';});
 })();
 </script>
+
+<script type="module">
+import { loadWebsiteImageManifest, managedGalleryContent } from "/assets/website-images.js?v=20260813build259";
+const managedSection=document.getElementById('managedGallerySection');
+const managedHost=document.getElementById('managedGalleryList');
+const typeFilter=document.getElementById('contentTypeFilter');
+const esc2=(v)=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const pretty=(v)=>String(v||'').replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+let managedData={pairs:[],singles:[]};
+function managedRows(){
+  const type=typeFilter?.value||'all';
+  const rows=[];
+  if(type==='all'||type==='before-after') rows.push(...managedData.pairs.map(p=>({kind:'before-after',pair:p})));
+  if(type==='all'||['evidence','technique','efficiency'].includes(type)) rows.push(...managedData.singles.filter(x=>type==='all'||x.gallery_type===type).map(x=>({kind:x.gallery_type,item:x})));
+  return rows;
+}
+function renderManaged(){
+  const rows=managedRows();
+  managedSection.hidden=rows.length===0;
+  if(!rows.length){managedHost.innerHTML='';return;}
+  managedHost.innerHTML=rows.map(row=>{
+    if(row.kind==='before-after'){
+      const p=row.pair; const label=p.scope==='gallery'?`Gallery Before & After · Set ${p.set}`:`${pretty(p.slug)} · Before & After Set ${p.set}`;
+      return `<article class="managed-gallery-card managed-pair-card"><div class="managed-pair-sides"><div class="managed-pair-side"><span>Before</span><img src="${esc2(p.before.url)}" alt="${esc2(p.before.alt_text||'Vehicle before detailing')}" loading="lazy" decoding="async" style="object-position:${esc2(p.before.focal_point||'center')}"></div><div class="managed-pair-side"><span>After</span><img src="${esc2(p.after.url)}" alt="${esc2(p.after.alt_text||'Vehicle after detailing')}" loading="lazy" decoding="async" style="object-position:${esc2(p.after.focal_point||'center')}"></div></div><div class="managed-gallery-card-body"><h3>${esc2(label)}</h3><span class="badge gallery-type-badge">Before &amp; after</span></div></article>`;
+    }
+    const item=row.item;
+    return `<article class="managed-gallery-card"><img src="${esc2(item.url)}" alt="${esc2(item.alt_text||`Rosie Dazzlers ${row.kind} photo`)}" loading="lazy" decoding="async" style="object-position:${esc2(item.focal_point||'center')}"><div class="managed-gallery-card-body"><h3>${esc2(item.title||item.target_label||`Detailing ${row.kind}`)}</h3>${item.caption?`<p class="muted">${esc2(item.caption)}</p>`:''}<span class="badge gallery-type-badge">${esc2(row.kind)}</span></div></article>`;
+  }).join('');
+}
+try{managedData=managedGalleryContent(await loadWebsiteImageManifest());renderManaged();}catch{}
+typeFilter?.addEventListener('change',renderManaged);
+</script>
+<!-- Historical Build 258 image module: /assets/website-images.js?v=20260813build258 -->
 </body></html>
