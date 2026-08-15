@@ -66,6 +66,10 @@ const BASE_BOOKING_LIST_SELECT = [
   "service_area_zone",
   "package_code",
   "vehicle_size",
+  "vehicle_year",
+  "vehicle_make",
+  "vehicle_model",
+  "price_total_cents",
   "assigned_to",
   "assigned_staff_user_id",
   "assigned_staff_email",
@@ -104,7 +108,18 @@ const OPTIONAL_BOOKING_INTAKE_SELECT = [
   "blur_crop_complete",
   "intake_review_note",
   "intake_reviewed_at",
-  "intake_reviewed_by"
+  "intake_reviewed_by",
+  "vehicle_size_review_status",
+  "vehicle_size_original",
+  "vehicle_size_catalog_expected",
+  "vehicle_size_review_reason",
+  "vehicle_size_reviewed_size",
+  "vehicle_size_reviewed_price_cents",
+  "vehicle_size_reviewed_at",
+  "vehicle_size_reviewed_by",
+  "vehicle_size_review_expires_at",
+  "vehicle_size_customer_response",
+  "vehicle_size_customer_responded_at"
 ];
 
 async function loadBookingsWithOptionalIntakeFields(env) {
