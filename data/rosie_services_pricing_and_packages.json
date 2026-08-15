@@ -396,7 +396,8 @@
       "category": "paint correction",
       "type": "surface prep",
       "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
-      "image_fallback_url": "/assets/addons/full_clay_treatment.png"
+      "image_fallback_url": "/assets/addons/full_clay_treatment.png",
+      "duration_label": "45\u201390 min"
     },
     {
       "code": "two_stage_polish",
@@ -414,7 +415,8 @@
       "category": "paint correction",
       "type": "machine polishing",
       "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
-      "image_fallback_url": "/assets/addons/two_stage_polish.png"
+      "image_fallback_url": "/assets/addons/two_stage_polish.png",
+      "duration_label": "3\u20137+ hr"
     },
     {
       "code": "high_grade_paint_sealant",
@@ -432,7 +434,8 @@
       "notes": [
         "Longer-lasting gloss"
       ],
-      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png"
+      "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png",
+      "duration_label": "30\u201360 min"
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
@@ -450,7 +453,8 @@
       "notes": [
         "Interior panel dressing"
       ],
-      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png"
+      "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "duration_label": "20\u201340 min"
     },
     {
       "code": "de_ionizing_treatment",
@@ -465,7 +469,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/De-Ionizing%20Vehicle%20Add%20on%20service.png",
       "category": "odor treatment",
       "type": "de-ionizing",
-      "image_fallback_url": "/assets/addons/de_ionizing_treatment.png"
+      "image_fallback_url": "/assets/addons/de_ionizing_treatment.png",
+      "duration_label": "30\u201360 min"
     },
     {
       "code": "de_badging",
@@ -475,7 +480,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
       "category": "appearance modifications",
       "type": "badge removal",
-      "image_fallback_url": "/assets/addons/de_badging.png"
+      "image_fallback_url": "/assets/addons/de_badging.png",
+      "duration_label": "45\u2013120+ min"
     },
     {
       "code": "engine_cleaning",
@@ -486,7 +492,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
       "category": "engine bay",
       "type": "cleaning",
-      "image_fallback_url": "/assets/addons/engine_cleaning.png"
+      "image_fallback_url": "/assets/addons/engine_cleaning.png",
+      "duration_label": "45\u201390 min"
     },
     {
       "code": "external_ceramic_coating",
@@ -500,7 +507,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
       "category": "paint protection",
       "type": "ceramic coating",
-      "image_fallback_url": "/assets/addons/external_ceramic_coating.png"
+      "image_fallback_url": "/assets/addons/external_ceramic_coating.png",
+      "duration_label": "2\u20136+ hr"
     },
     {
       "code": "external_graphene_fine_finish",
@@ -514,7 +522,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Graphene%20Fine%20finish%20add%20on%20service.png",
       "category": "paint protection",
       "type": "graphene finish",
-      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.png"
+      "image_fallback_url": "/assets/addons/external_graphene_fine_finish.png",
+      "duration_label": "45\u201390 min"
     },
     {
       "code": "external_wax",
@@ -529,7 +538,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/External%20Wax%20add%20on%20service.png",
       "category": "paint protection",
       "type": "wax",
-      "image_fallback_url": "/assets/addons/external_wax.png"
+      "image_fallback_url": "/assets/addons/external_wax.png",
+      "duration_label": "30\u201360 min"
     },
     {
       "code": "vinyl_wrapping",
@@ -539,7 +549,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
       "category": "appearance modifications",
       "type": "vinyl wrapping",
-      "image_fallback_url": "/assets/addons/vinyl_wrapping.png"
+      "image_fallback_url": "/assets/addons/vinyl_wrapping.png",
+      "duration_label": "Quote by area / scope"
     },
     {
       "code": "window_tinting",
@@ -549,7 +560,8 @@
       "image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
       "category": "glass services",
       "type": "window tinting",
-      "image_fallback_url": "/assets/addons/window_tinting.png"
+      "image_fallback_url": "/assets/addons/window_tinting.png",
+      "duration_label": "1.5\u20134+ hr"
     },
     {
       "code": "pet_hair_removal",
@@ -573,7 +585,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 45,
-      "customer_goal": "Remove embedded pet hair"
+      "customer_goal": "Remove embedded pet hair",
+      "duration_label": "45\u2013180+ min"
     },
     {
       "code": "odor_treatment",
@@ -597,7 +610,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 45,
-      "customer_goal": "Reduce or remove stubborn odours"
+      "customer_goal": "Reduce or remove stubborn odours",
+      "duration_label": "45\u2013120+ min"
     },
     {
       "code": "seat_shampoo",
@@ -620,7 +634,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 45,
-      "customer_goal": "Clean fabric seats and spills"
+      "customer_goal": "Clean fabric seats and spills",
+      "duration_label": "45\u2013120 min"
     },
     {
       "code": "carpet_shampoo",
@@ -644,7 +659,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 45,
-      "customer_goal": "Clean carpets, mats, and cargo areas"
+      "customer_goal": "Clean carpets, mats, and cargo areas",
+      "duration_label": "45\u2013120 min"
     },
     {
       "code": "salt_stain_treatment",
@@ -668,7 +684,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 35,
-      "customer_goal": "Clean Ontario winter salt stains"
+      "customer_goal": "Clean Ontario winter salt stains",
+      "duration_label": "45\u2013150+ min"
     },
     {
       "code": "headlight_restoration_addon",
@@ -693,7 +710,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 60,
-      "customer_goal": "Improve headlight clarity"
+      "customer_goal": "Improve headlight clarity",
+      "duration_label": "Time varies by condition"
     },
     {
       "code": "windshield_ceramic_coating",
@@ -718,7 +736,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 30,
-      "customer_goal": "Make windshield cleaning easier"
+      "customer_goal": "Make windshield cleaning easier",
+      "duration_label": "Time varies by condition"
     },
     {
       "code": "ceramic_spray_wax",
@@ -743,7 +762,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 30,
-      "customer_goal": "Add quick gloss and protection"
+      "customer_goal": "Add quick gloss and protection",
+      "duration_label": "Time varies by condition"
     },
     {
       "code": "trim_restoration",
@@ -766,7 +786,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 45,
-      "customer_goal": "Improve faded exterior trim"
+      "customer_goal": "Improve faded exterior trim",
+      "duration_label": "45\u2013120 min"
     },
     {
       "code": "bug_tar_removal",
@@ -790,7 +811,8 @@
         "complete_detail"
       ],
       "time_added_minutes": 35,
-      "customer_goal": "Remove stuck-on road grime"
+      "customer_goal": "Remove stuck-on road grime",
+      "duration_label": "Time varies by condition"
     },
     {
       "code": "truck_box_wash",
@@ -815,7 +837,8 @@
         "exterior_detail"
       ],
       "time_added_minutes": 45,
-      "customer_goal": "Clean pickup/work truck cargo area"
+      "customer_goal": "Clean pickup/work truck cargo area",
+      "duration_label": "Time varies by condition"
     },
     {
       "code": "fleet_vehicle_add_on",
@@ -837,7 +860,8 @@
         "fleet"
       ],
       "time_added_minutes": 0,
-      "customer_goal": "Quote multiple vehicles at one location"
+      "customer_goal": "Quote multiple vehicles at one location",
+      "duration_label": "Time varies by condition"
     }
   ],
   "service_areas": [

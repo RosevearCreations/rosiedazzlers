@@ -1,10 +1,10 @@
 {
   "build": 253,
-  "purpose": "Known image/card/page targets for Photo Management Studio. Free-form target keys are also supported for future components.",
+  "purpose": "Known image/card/page targets for Photo Management Studio, including paired Before & After landing-page slots. Free-form target keys remain supported for future components.",
   "targets": [
     {
       "target_key": "package:premium_wash:default",
-      "label": "Premium Wash \u2014 default package card",
+      "label": "Premium Wash — default package card",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "premium_wash",
@@ -12,7 +12,7 @@
     },
     {
       "target_key": "package:premium_wash:small",
-      "label": "Premium Wash \u2014 Small vehicle",
+      "label": "Premium Wash — Small vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "premium_wash",
@@ -20,7 +20,7 @@
     },
     {
       "target_key": "package:premium_wash:mid",
-      "label": "Premium Wash \u2014 Mid-size vehicle",
+      "label": "Premium Wash — Mid-size vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "premium_wash",
@@ -28,7 +28,7 @@
     },
     {
       "target_key": "package:premium_wash:oversize",
-      "label": "Premium Wash \u2014 Large/oversize vehicle",
+      "label": "Premium Wash — Large/oversize vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "premium_wash",
@@ -36,7 +36,7 @@
     },
     {
       "target_key": "package:basic_detail:default",
-      "label": "Basic Detail \u2014 default package card",
+      "label": "Basic Detail — default package card",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "basic_detail",
@@ -44,7 +44,7 @@
     },
     {
       "target_key": "package:basic_detail:small",
-      "label": "Basic Detail \u2014 Small vehicle",
+      "label": "Basic Detail — Small vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "basic_detail",
@@ -52,7 +52,7 @@
     },
     {
       "target_key": "package:basic_detail:mid",
-      "label": "Basic Detail \u2014 Mid-size vehicle",
+      "label": "Basic Detail — Mid-size vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "basic_detail",
@@ -60,7 +60,7 @@
     },
     {
       "target_key": "package:basic_detail:oversize",
-      "label": "Basic Detail \u2014 Large/oversize vehicle",
+      "label": "Basic Detail — Large/oversize vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "basic_detail",
@@ -68,7 +68,7 @@
     },
     {
       "target_key": "package:complete_detail:default",
-      "label": "Complete Detail \u2014 default package card",
+      "label": "Complete Detail — default package card",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "complete_detail",
@@ -76,7 +76,7 @@
     },
     {
       "target_key": "package:complete_detail:small",
-      "label": "Complete Detail \u2014 Small vehicle",
+      "label": "Complete Detail — Small vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "complete_detail",
@@ -84,7 +84,7 @@
     },
     {
       "target_key": "package:complete_detail:mid",
-      "label": "Complete Detail \u2014 Mid-size vehicle",
+      "label": "Complete Detail — Mid-size vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "complete_detail",
@@ -92,7 +92,7 @@
     },
     {
       "target_key": "package:complete_detail:oversize",
-      "label": "Complete Detail \u2014 Large/oversize vehicle",
+      "label": "Complete Detail — Large/oversize vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "complete_detail",
@@ -100,7 +100,7 @@
     },
     {
       "target_key": "package:interior_detail:default",
-      "label": "Interior Detail \u2014 default package card",
+      "label": "Interior Detail — default package card",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "interior_detail",
@@ -108,7 +108,7 @@
     },
     {
       "target_key": "package:interior_detail:small",
-      "label": "Interior Detail \u2014 Small vehicle",
+      "label": "Interior Detail — Small vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "interior_detail",
@@ -116,7 +116,7 @@
     },
     {
       "target_key": "package:interior_detail:mid",
-      "label": "Interior Detail \u2014 Mid-size vehicle",
+      "label": "Interior Detail — Mid-size vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "interior_detail",
@@ -124,7 +124,7 @@
     },
     {
       "target_key": "package:interior_detail:oversize",
-      "label": "Interior Detail \u2014 Large/oversize vehicle",
+      "label": "Interior Detail — Large/oversize vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "interior_detail",
@@ -132,7 +132,7 @@
     },
     {
       "target_key": "package:exterior_detail:default",
-      "label": "Exterior Detail \u2014 default package card",
+      "label": "Exterior Detail — default package card",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "exterior_detail",
@@ -140,7 +140,7 @@
     },
     {
       "target_key": "package:exterior_detail:small",
-      "label": "Exterior Detail \u2014 Small vehicle",
+      "label": "Exterior Detail — Small vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "exterior_detail",
@@ -148,7 +148,7 @@
     },
     {
       "target_key": "package:exterior_detail:mid",
-      "label": "Exterior Detail \u2014 Mid-size vehicle",
+      "label": "Exterior Detail — Mid-size vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "exterior_detail",
@@ -156,7 +156,7 @@
     },
     {
       "target_key": "package:exterior_detail:oversize",
-      "label": "Exterior Detail \u2014 Large/oversize vehicle",
+      "label": "Exterior Detail — Large/oversize vehicle",
       "target_type": "package_card",
       "page_path": "/services",
       "component_key": "exterior_detail",
@@ -164,7 +164,7 @@
     },
     {
       "target_key": "addon:full_clay_treatment",
-      "label": "Full Clay Treatment \u2014 service/add-on card",
+      "label": "Full Clay Treatment — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "full_clay_treatment",
@@ -172,7 +172,7 @@
     },
     {
       "target_key": "addon:two_stage_polish",
-      "label": "Two Stage Polish \u2014 service/add-on card",
+      "label": "Two Stage Polish — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "two_stage_polish",
@@ -180,7 +180,7 @@
     },
     {
       "target_key": "addon:high_grade_paint_sealant",
-      "label": "High Grade Paint Sealant \u2014 service/add-on card",
+      "label": "High Grade Paint Sealant — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "high_grade_paint_sealant",
@@ -188,7 +188,7 @@
     },
     {
       "target_key": "addon:uv_protectant_applied_on_interior_panels",
-      "label": "UV Protectant Applied on Interior Panels \u2014 service/add-on card",
+      "label": "UV Protectant Applied on Interior Panels — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "uv_protectant_applied_on_interior_panels",
@@ -196,7 +196,7 @@
     },
     {
       "target_key": "addon:de_ionizing_treatment",
-      "label": "De-Ionizing Treatment \u2014 service/add-on card",
+      "label": "De-Ionizing Treatment — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "de_ionizing_treatment",
@@ -204,7 +204,7 @@
     },
     {
       "target_key": "addon:de_badging",
-      "label": "De-Badging \u2014 service/add-on card",
+      "label": "De-Badging — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "de_badging",
@@ -212,7 +212,7 @@
     },
     {
       "target_key": "addon:engine_cleaning",
-      "label": "Engine Cleaning \u2014 service/add-on card",
+      "label": "Engine Cleaning — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "engine_cleaning",
@@ -220,7 +220,7 @@
     },
     {
       "target_key": "addon:external_ceramic_coating",
-      "label": "External Ceramic Coating \u2014 service/add-on card",
+      "label": "External Ceramic Coating — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "external_ceramic_coating",
@@ -228,7 +228,7 @@
     },
     {
       "target_key": "addon:external_graphene_fine_finish",
-      "label": "External Graphene Fine Finish \u2014 service/add-on card",
+      "label": "External Graphene Fine Finish — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "external_graphene_fine_finish",
@@ -236,7 +236,7 @@
     },
     {
       "target_key": "addon:external_wax",
-      "label": "External Wax \u2014 service/add-on card",
+      "label": "External Wax — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "external_wax",
@@ -244,7 +244,7 @@
     },
     {
       "target_key": "addon:vinyl_wrapping",
-      "label": "Vinyl Wrapping \u2014 service/add-on card",
+      "label": "Vinyl Wrapping — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "vinyl_wrapping",
@@ -252,7 +252,7 @@
     },
     {
       "target_key": "addon:window_tinting",
-      "label": "Window Tinting \u2014 service/add-on card",
+      "label": "Window Tinting — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "window_tinting",
@@ -260,7 +260,7 @@
     },
     {
       "target_key": "addon:pet_hair_removal",
-      "label": "Pet Hair Removal \u2014 service/add-on card",
+      "label": "Pet Hair Removal — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "pet_hair_removal",
@@ -268,7 +268,7 @@
     },
     {
       "target_key": "addon:odor_treatment",
-      "label": "Odor Treatment \u2014 service/add-on card",
+      "label": "Odor Treatment — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "odor_treatment",
@@ -276,7 +276,7 @@
     },
     {
       "target_key": "addon:seat_shampoo",
-      "label": "Seat Shampoo \u2014 service/add-on card",
+      "label": "Seat Shampoo — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "seat_shampoo",
@@ -284,7 +284,7 @@
     },
     {
       "target_key": "addon:carpet_shampoo",
-      "label": "Carpet Shampoo \u2014 service/add-on card",
+      "label": "Carpet Shampoo — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "carpet_shampoo",
@@ -292,7 +292,7 @@
     },
     {
       "target_key": "addon:salt_stain_treatment",
-      "label": "Salt Stain Treatment \u2014 service/add-on card",
+      "label": "Salt Stain Treatment — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "salt_stain_treatment",
@@ -300,7 +300,7 @@
     },
     {
       "target_key": "addon:headlight_restoration_addon",
-      "label": "Headlight Restoration \u2014 service/add-on card",
+      "label": "Headlight Restoration — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "headlight_restoration_addon",
@@ -308,7 +308,7 @@
     },
     {
       "target_key": "addon:windshield_ceramic_coating",
-      "label": "Windshield Ceramic Coating \u2014 service/add-on card",
+      "label": "Windshield Ceramic Coating — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "windshield_ceramic_coating",
@@ -316,7 +316,7 @@
     },
     {
       "target_key": "addon:ceramic_spray_wax",
-      "label": "Ceramic Spray Protection \u2014 service/add-on card",
+      "label": "Ceramic Spray Protection — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "ceramic_spray_wax",
@@ -324,7 +324,7 @@
     },
     {
       "target_key": "addon:trim_restoration",
-      "label": "Trim Restoration \u2014 service/add-on card",
+      "label": "Trim Restoration — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "trim_restoration",
@@ -332,7 +332,7 @@
     },
     {
       "target_key": "addon:bug_tar_removal",
-      "label": "Bug and Tar Removal \u2014 service/add-on card",
+      "label": "Bug and Tar Removal — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "bug_tar_removal",
@@ -340,7 +340,7 @@
     },
     {
       "target_key": "addon:truck_box_wash",
-      "label": "Truck Box Wash \u2014 service/add-on card",
+      "label": "Truck Box Wash — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "truck_box_wash",
@@ -348,7 +348,7 @@
     },
     {
       "target_key": "addon:fleet_vehicle_add_on",
-      "label": "Fleet Vehicle Add-On \u2014 service/add-on card",
+      "label": "Fleet Vehicle Add-On — service/add-on card",
       "target_type": "addon_card",
       "page_path": "/services",
       "component_key": "fleet_vehicle_add_on",
@@ -356,7 +356,7 @@
     },
     {
       "target_key": "landing:ceramic-coating:hero",
-      "label": "Ceramic coating \u2014 landing page hero",
+      "label": "Ceramic coating — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/ceramic-coating",
       "component_key": "ceramic-coating",
@@ -364,7 +364,7 @@
     },
     {
       "target_key": "landing:ceramic-coating:gallery:1",
-      "label": "Ceramic coating \u2014 gallery image 1",
+      "label": "Ceramic coating — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/ceramic-coating",
       "component_key": "ceramic-coating",
@@ -372,7 +372,7 @@
     },
     {
       "target_key": "landing:ceramic-coating:gallery:2",
-      "label": "Ceramic coating \u2014 gallery image 2",
+      "label": "Ceramic coating — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/ceramic-coating",
       "component_key": "ceramic-coating",
@@ -380,7 +380,7 @@
     },
     {
       "target_key": "landing:ceramic-coating:gallery:3",
-      "label": "Ceramic coating \u2014 gallery image 3",
+      "label": "Ceramic coating — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/ceramic-coating",
       "component_key": "ceramic-coating",
@@ -388,7 +388,7 @@
     },
     {
       "target_key": "home:service:ceramic-coating",
-      "label": "Ceramic coating \u2014 home service card",
+      "label": "Ceramic coating — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "ceramic-coating",
@@ -396,7 +396,7 @@
     },
     {
       "target_key": "landing:pet-hair-removal:hero",
-      "label": "Pet hair removal \u2014 landing page hero",
+      "label": "Pet hair removal — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/pet-hair-removal",
       "component_key": "pet-hair-removal",
@@ -404,7 +404,7 @@
     },
     {
       "target_key": "landing:pet-hair-removal:gallery:1",
-      "label": "Pet hair removal \u2014 gallery image 1",
+      "label": "Pet hair removal — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/pet-hair-removal",
       "component_key": "pet-hair-removal",
@@ -412,7 +412,7 @@
     },
     {
       "target_key": "landing:pet-hair-removal:gallery:2",
-      "label": "Pet hair removal \u2014 gallery image 2",
+      "label": "Pet hair removal — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/pet-hair-removal",
       "component_key": "pet-hair-removal",
@@ -420,7 +420,7 @@
     },
     {
       "target_key": "landing:pet-hair-removal:gallery:3",
-      "label": "Pet hair removal \u2014 gallery image 3",
+      "label": "Pet hair removal — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/pet-hair-removal",
       "component_key": "pet-hair-removal",
@@ -428,7 +428,7 @@
     },
     {
       "target_key": "home:service:pet-hair-removal",
-      "label": "Pet hair removal \u2014 home service card",
+      "label": "Pet hair removal — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "pet-hair-removal",
@@ -436,7 +436,7 @@
     },
     {
       "target_key": "landing:odor-removal:hero",
-      "label": "Odor removal \u2014 landing page hero",
+      "label": "Odor removal — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/odor-removal",
       "component_key": "odor-removal",
@@ -444,7 +444,7 @@
     },
     {
       "target_key": "landing:odor-removal:gallery:1",
-      "label": "Odor removal \u2014 gallery image 1",
+      "label": "Odor removal — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/odor-removal",
       "component_key": "odor-removal",
@@ -452,7 +452,7 @@
     },
     {
       "target_key": "landing:odor-removal:gallery:2",
-      "label": "Odor removal \u2014 gallery image 2",
+      "label": "Odor removal — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/odor-removal",
       "component_key": "odor-removal",
@@ -460,7 +460,7 @@
     },
     {
       "target_key": "landing:odor-removal:gallery:3",
-      "label": "Odor removal \u2014 gallery image 3",
+      "label": "Odor removal — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/odor-removal",
       "component_key": "odor-removal",
@@ -468,7 +468,7 @@
     },
     {
       "target_key": "home:service:odor-removal",
-      "label": "Odor removal \u2014 home service card",
+      "label": "Odor removal — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "odor-removal",
@@ -476,7 +476,7 @@
     },
     {
       "target_key": "landing:headlight-restoration:hero",
-      "label": "Headlight restoration \u2014 landing page hero",
+      "label": "Headlight restoration — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/headlight-restoration",
       "component_key": "headlight-restoration",
@@ -484,7 +484,7 @@
     },
     {
       "target_key": "landing:headlight-restoration:gallery:1",
-      "label": "Headlight restoration \u2014 gallery image 1",
+      "label": "Headlight restoration — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/headlight-restoration",
       "component_key": "headlight-restoration",
@@ -492,7 +492,7 @@
     },
     {
       "target_key": "landing:headlight-restoration:gallery:2",
-      "label": "Headlight restoration \u2014 gallery image 2",
+      "label": "Headlight restoration — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/headlight-restoration",
       "component_key": "headlight-restoration",
@@ -500,7 +500,7 @@
     },
     {
       "target_key": "landing:headlight-restoration:gallery:3",
-      "label": "Headlight restoration \u2014 gallery image 3",
+      "label": "Headlight restoration — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/headlight-restoration",
       "component_key": "headlight-restoration",
@@ -508,7 +508,7 @@
     },
     {
       "target_key": "home:service:headlight-restoration",
-      "label": "Headlight restoration \u2014 home service card",
+      "label": "Headlight restoration — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "headlight-restoration",
@@ -516,7 +516,7 @@
     },
     {
       "target_key": "landing:paint-correction:hero",
-      "label": "Paint correction \u2014 landing page hero",
+      "label": "Paint correction — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/paint-correction",
       "component_key": "paint-correction",
@@ -524,7 +524,7 @@
     },
     {
       "target_key": "landing:paint-correction:gallery:1",
-      "label": "Paint correction \u2014 gallery image 1",
+      "label": "Paint correction — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/paint-correction",
       "component_key": "paint-correction",
@@ -532,7 +532,7 @@
     },
     {
       "target_key": "landing:paint-correction:gallery:2",
-      "label": "Paint correction \u2014 gallery image 2",
+      "label": "Paint correction — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/paint-correction",
       "component_key": "paint-correction",
@@ -540,7 +540,7 @@
     },
     {
       "target_key": "landing:paint-correction:gallery:3",
-      "label": "Paint correction \u2014 gallery image 3",
+      "label": "Paint correction — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/paint-correction",
       "component_key": "paint-correction",
@@ -548,7 +548,7 @@
     },
     {
       "target_key": "home:service:paint-correction",
-      "label": "Paint correction \u2014 home service card",
+      "label": "Paint correction — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "paint-correction",
@@ -556,7 +556,7 @@
     },
     {
       "target_key": "landing:tillsonburg-auto-detailing:hero",
-      "label": "Tillsonburg auto detailing \u2014 landing page hero",
+      "label": "Tillsonburg auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/tillsonburg-auto-detailing",
       "component_key": "tillsonburg-auto-detailing",
@@ -564,7 +564,7 @@
     },
     {
       "target_key": "landing:tillsonburg-auto-detailing:gallery:1",
-      "label": "Tillsonburg auto detailing \u2014 gallery image 1",
+      "label": "Tillsonburg auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/tillsonburg-auto-detailing",
       "component_key": "tillsonburg-auto-detailing",
@@ -572,7 +572,7 @@
     },
     {
       "target_key": "landing:tillsonburg-auto-detailing:gallery:2",
-      "label": "Tillsonburg auto detailing \u2014 gallery image 2",
+      "label": "Tillsonburg auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/tillsonburg-auto-detailing",
       "component_key": "tillsonburg-auto-detailing",
@@ -580,7 +580,7 @@
     },
     {
       "target_key": "landing:tillsonburg-auto-detailing:gallery:3",
-      "label": "Tillsonburg auto detailing \u2014 gallery image 3",
+      "label": "Tillsonburg auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/tillsonburg-auto-detailing",
       "component_key": "tillsonburg-auto-detailing",
@@ -588,7 +588,7 @@
     },
     {
       "target_key": "home:location:tillsonburg-auto-detailing",
-      "label": "Tillsonburg auto detailing \u2014 home location card",
+      "label": "Tillsonburg auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "tillsonburg-auto-detailing",
@@ -596,7 +596,7 @@
     },
     {
       "target_key": "landing:woodstock-ingersoll-auto-detailing:hero",
-      "label": "Woodstock / Ingersoll auto detailing \u2014 landing page hero",
+      "label": "Woodstock / Ingersoll auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/woodstock-ingersoll-auto-detailing",
       "component_key": "woodstock-ingersoll-auto-detailing",
@@ -604,7 +604,7 @@
     },
     {
       "target_key": "landing:woodstock-ingersoll-auto-detailing:gallery:1",
-      "label": "Woodstock / Ingersoll auto detailing \u2014 gallery image 1",
+      "label": "Woodstock / Ingersoll auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/woodstock-ingersoll-auto-detailing",
       "component_key": "woodstock-ingersoll-auto-detailing",
@@ -612,7 +612,7 @@
     },
     {
       "target_key": "landing:woodstock-ingersoll-auto-detailing:gallery:2",
-      "label": "Woodstock / Ingersoll auto detailing \u2014 gallery image 2",
+      "label": "Woodstock / Ingersoll auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/woodstock-ingersoll-auto-detailing",
       "component_key": "woodstock-ingersoll-auto-detailing",
@@ -620,7 +620,7 @@
     },
     {
       "target_key": "landing:woodstock-ingersoll-auto-detailing:gallery:3",
-      "label": "Woodstock / Ingersoll auto detailing \u2014 gallery image 3",
+      "label": "Woodstock / Ingersoll auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/woodstock-ingersoll-auto-detailing",
       "component_key": "woodstock-ingersoll-auto-detailing",
@@ -628,7 +628,7 @@
     },
     {
       "target_key": "home:location:woodstock-ingersoll-auto-detailing",
-      "label": "Woodstock / Ingersoll auto detailing \u2014 home location card",
+      "label": "Woodstock / Ingersoll auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "woodstock-ingersoll-auto-detailing",
@@ -636,7 +636,7 @@
     },
     {
       "target_key": "landing:simcoe-delhi-auto-detailing:hero",
-      "label": "Simcoe / Delhi auto detailing \u2014 landing page hero",
+      "label": "Simcoe / Delhi auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/simcoe-delhi-auto-detailing",
       "component_key": "simcoe-delhi-auto-detailing",
@@ -644,7 +644,7 @@
     },
     {
       "target_key": "landing:simcoe-delhi-auto-detailing:gallery:1",
-      "label": "Simcoe / Delhi auto detailing \u2014 gallery image 1",
+      "label": "Simcoe / Delhi auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/simcoe-delhi-auto-detailing",
       "component_key": "simcoe-delhi-auto-detailing",
@@ -652,7 +652,7 @@
     },
     {
       "target_key": "landing:simcoe-delhi-auto-detailing:gallery:2",
-      "label": "Simcoe / Delhi auto detailing \u2014 gallery image 2",
+      "label": "Simcoe / Delhi auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/simcoe-delhi-auto-detailing",
       "component_key": "simcoe-delhi-auto-detailing",
@@ -660,7 +660,7 @@
     },
     {
       "target_key": "landing:simcoe-delhi-auto-detailing:gallery:3",
-      "label": "Simcoe / Delhi auto detailing \u2014 gallery image 3",
+      "label": "Simcoe / Delhi auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/simcoe-delhi-auto-detailing",
       "component_key": "simcoe-delhi-auto-detailing",
@@ -668,7 +668,7 @@
     },
     {
       "target_key": "home:location:simcoe-delhi-auto-detailing",
-      "label": "Simcoe / Delhi auto detailing \u2014 home location card",
+      "label": "Simcoe / Delhi auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "simcoe-delhi-auto-detailing",
@@ -676,7 +676,7 @@
     },
     {
       "target_key": "landing:port-dover-auto-detailing:hero",
-      "label": "Port Dover auto detailing \u2014 landing page hero",
+      "label": "Port Dover auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/port-dover-auto-detailing",
       "component_key": "port-dover-auto-detailing",
@@ -684,7 +684,7 @@
     },
     {
       "target_key": "landing:port-dover-auto-detailing:gallery:1",
-      "label": "Port Dover auto detailing \u2014 gallery image 1",
+      "label": "Port Dover auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/port-dover-auto-detailing",
       "component_key": "port-dover-auto-detailing",
@@ -692,7 +692,7 @@
     },
     {
       "target_key": "landing:port-dover-auto-detailing:gallery:2",
-      "label": "Port Dover auto detailing \u2014 gallery image 2",
+      "label": "Port Dover auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/port-dover-auto-detailing",
       "component_key": "port-dover-auto-detailing",
@@ -700,7 +700,7 @@
     },
     {
       "target_key": "landing:port-dover-auto-detailing:gallery:3",
-      "label": "Port Dover auto detailing \u2014 gallery image 3",
+      "label": "Port Dover auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/port-dover-auto-detailing",
       "component_key": "port-dover-auto-detailing",
@@ -708,7 +708,7 @@
     },
     {
       "target_key": "home:location:port-dover-auto-detailing",
-      "label": "Port Dover auto detailing \u2014 home location card",
+      "label": "Port Dover auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "port-dover-auto-detailing",
@@ -716,7 +716,7 @@
     },
     {
       "target_key": "landing:norwich-otterville-auto-detailing:hero",
-      "label": "Norwich, Otterville auto detailing \u2014 landing page hero",
+      "label": "Norwich, Otterville auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/norwich-otterville-auto-detailing",
       "component_key": "norwich-otterville-auto-detailing",
@@ -724,7 +724,7 @@
     },
     {
       "target_key": "landing:norwich-otterville-auto-detailing:gallery:1",
-      "label": "Norwich, Otterville auto detailing \u2014 gallery image 1",
+      "label": "Norwich, Otterville auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/norwich-otterville-auto-detailing",
       "component_key": "norwich-otterville-auto-detailing",
@@ -732,7 +732,7 @@
     },
     {
       "target_key": "landing:norwich-otterville-auto-detailing:gallery:2",
-      "label": "Norwich, Otterville auto detailing \u2014 gallery image 2",
+      "label": "Norwich, Otterville auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/norwich-otterville-auto-detailing",
       "component_key": "norwich-otterville-auto-detailing",
@@ -740,7 +740,7 @@
     },
     {
       "target_key": "landing:norwich-otterville-auto-detailing:gallery:3",
-      "label": "Norwich, Otterville auto detailing \u2014 gallery image 3",
+      "label": "Norwich, Otterville auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/norwich-otterville-auto-detailing",
       "component_key": "norwich-otterville-auto-detailing",
@@ -748,7 +748,7 @@
     },
     {
       "target_key": "home:location:norwich-otterville-auto-detailing",
-      "label": "Norwich, Otterville auto detailing \u2014 home location card",
+      "label": "Norwich, Otterville auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "norwich-otterville-auto-detailing",
@@ -756,7 +756,7 @@
     },
     {
       "target_key": "landing:zorra-thamesford-embro-auto-detailing:hero",
-      "label": "Zorra, Thamesford, Embro auto detailing \u2014 landing page hero",
+      "label": "Zorra, Thamesford, Embro auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/zorra-thamesford-embro-auto-detailing",
       "component_key": "zorra-thamesford-embro-auto-detailing",
@@ -764,7 +764,7 @@
     },
     {
       "target_key": "landing:zorra-thamesford-embro-auto-detailing:gallery:1",
-      "label": "Zorra, Thamesford, Embro auto detailing \u2014 gallery image 1",
+      "label": "Zorra, Thamesford, Embro auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/zorra-thamesford-embro-auto-detailing",
       "component_key": "zorra-thamesford-embro-auto-detailing",
@@ -772,7 +772,7 @@
     },
     {
       "target_key": "landing:zorra-thamesford-embro-auto-detailing:gallery:2",
-      "label": "Zorra, Thamesford, Embro auto detailing \u2014 gallery image 2",
+      "label": "Zorra, Thamesford, Embro auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/zorra-thamesford-embro-auto-detailing",
       "component_key": "zorra-thamesford-embro-auto-detailing",
@@ -780,7 +780,7 @@
     },
     {
       "target_key": "landing:zorra-thamesford-embro-auto-detailing:gallery:3",
-      "label": "Zorra, Thamesford, Embro auto detailing \u2014 gallery image 3",
+      "label": "Zorra, Thamesford, Embro auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/zorra-thamesford-embro-auto-detailing",
       "component_key": "zorra-thamesford-embro-auto-detailing",
@@ -788,7 +788,7 @@
     },
     {
       "target_key": "home:location:zorra-thamesford-embro-auto-detailing",
-      "label": "Zorra, Thamesford, Embro auto detailing \u2014 home location card",
+      "label": "Zorra, Thamesford, Embro auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "zorra-thamesford-embro-auto-detailing",
@@ -796,7 +796,7 @@
     },
     {
       "target_key": "landing:waterford-vittoria-auto-detailing:hero",
-      "label": "Waterford, Vittoria auto detailing \u2014 landing page hero",
+      "label": "Waterford, Vittoria auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/waterford-vittoria-auto-detailing",
       "component_key": "waterford-vittoria-auto-detailing",
@@ -804,7 +804,7 @@
     },
     {
       "target_key": "landing:waterford-vittoria-auto-detailing:gallery:1",
-      "label": "Waterford, Vittoria auto detailing \u2014 gallery image 1",
+      "label": "Waterford, Vittoria auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/waterford-vittoria-auto-detailing",
       "component_key": "waterford-vittoria-auto-detailing",
@@ -812,7 +812,7 @@
     },
     {
       "target_key": "landing:waterford-vittoria-auto-detailing:gallery:2",
-      "label": "Waterford, Vittoria auto detailing \u2014 gallery image 2",
+      "label": "Waterford, Vittoria auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/waterford-vittoria-auto-detailing",
       "component_key": "waterford-vittoria-auto-detailing",
@@ -820,7 +820,7 @@
     },
     {
       "target_key": "landing:waterford-vittoria-auto-detailing:gallery:3",
-      "label": "Waterford, Vittoria auto detailing \u2014 gallery image 3",
+      "label": "Waterford, Vittoria auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/waterford-vittoria-auto-detailing",
       "component_key": "waterford-vittoria-auto-detailing",
@@ -828,7 +828,7 @@
     },
     {
       "target_key": "home:location:waterford-vittoria-auto-detailing",
-      "label": "Waterford, Vittoria auto detailing \u2014 home location card",
+      "label": "Waterford, Vittoria auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "waterford-vittoria-auto-detailing",
@@ -836,7 +836,7 @@
     },
     {
       "target_key": "landing:port-rowan-turkey-point-auto-detailing:hero",
-      "label": "Port Rowan, Turkey Point auto detailing \u2014 landing page hero",
+      "label": "Port Rowan, Turkey Point auto detailing — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/port-rowan-turkey-point-auto-detailing",
       "component_key": "port-rowan-turkey-point-auto-detailing",
@@ -844,7 +844,7 @@
     },
     {
       "target_key": "landing:port-rowan-turkey-point-auto-detailing:gallery:1",
-      "label": "Port Rowan, Turkey Point auto detailing \u2014 gallery image 1",
+      "label": "Port Rowan, Turkey Point auto detailing — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/port-rowan-turkey-point-auto-detailing",
       "component_key": "port-rowan-turkey-point-auto-detailing",
@@ -852,7 +852,7 @@
     },
     {
       "target_key": "landing:port-rowan-turkey-point-auto-detailing:gallery:2",
-      "label": "Port Rowan, Turkey Point auto detailing \u2014 gallery image 2",
+      "label": "Port Rowan, Turkey Point auto detailing — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/port-rowan-turkey-point-auto-detailing",
       "component_key": "port-rowan-turkey-point-auto-detailing",
@@ -860,7 +860,7 @@
     },
     {
       "target_key": "landing:port-rowan-turkey-point-auto-detailing:gallery:3",
-      "label": "Port Rowan, Turkey Point auto detailing \u2014 gallery image 3",
+      "label": "Port Rowan, Turkey Point auto detailing — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/port-rowan-turkey-point-auto-detailing",
       "component_key": "port-rowan-turkey-point-auto-detailing",
@@ -868,7 +868,7 @@
     },
     {
       "target_key": "home:location:port-rowan-turkey-point-auto-detailing",
-      "label": "Port Rowan, Turkey Point auto detailing \u2014 home location card",
+      "label": "Port Rowan, Turkey Point auto detailing — home location card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "port-rowan-turkey-point-auto-detailing",
@@ -876,7 +876,7 @@
     },
     {
       "target_key": "landing:graphene-finish:hero",
-      "label": "Graphene finish \u2014 landing page hero",
+      "label": "Graphene finish — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/graphene-finish",
       "component_key": "graphene-finish",
@@ -884,7 +884,7 @@
     },
     {
       "target_key": "landing:graphene-finish:gallery:1",
-      "label": "Graphene finish \u2014 gallery image 1",
+      "label": "Graphene finish — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/graphene-finish",
       "component_key": "graphene-finish",
@@ -892,7 +892,7 @@
     },
     {
       "target_key": "landing:graphene-finish:gallery:2",
-      "label": "Graphene finish \u2014 gallery image 2",
+      "label": "Graphene finish — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/graphene-finish",
       "component_key": "graphene-finish",
@@ -900,7 +900,7 @@
     },
     {
       "target_key": "landing:graphene-finish:gallery:3",
-      "label": "Graphene finish \u2014 gallery image 3",
+      "label": "Graphene finish — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/graphene-finish",
       "component_key": "graphene-finish",
@@ -908,7 +908,7 @@
     },
     {
       "target_key": "home:service:graphene-finish",
-      "label": "Graphene finish \u2014 home service card",
+      "label": "Graphene finish — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "graphene-finish",
@@ -916,7 +916,7 @@
     },
     {
       "target_key": "landing:full-clay-treatment:hero",
-      "label": "Full clay treatment \u2014 landing page hero",
+      "label": "Full clay treatment — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/full-clay-treatment",
       "component_key": "full-clay-treatment",
@@ -924,7 +924,7 @@
     },
     {
       "target_key": "landing:full-clay-treatment:gallery:1",
-      "label": "Full clay treatment \u2014 gallery image 1",
+      "label": "Full clay treatment — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/full-clay-treatment",
       "component_key": "full-clay-treatment",
@@ -932,7 +932,7 @@
     },
     {
       "target_key": "landing:full-clay-treatment:gallery:2",
-      "label": "Full clay treatment \u2014 gallery image 2",
+      "label": "Full clay treatment — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/full-clay-treatment",
       "component_key": "full-clay-treatment",
@@ -940,7 +940,7 @@
     },
     {
       "target_key": "landing:full-clay-treatment:gallery:3",
-      "label": "Full clay treatment \u2014 gallery image 3",
+      "label": "Full clay treatment — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/full-clay-treatment",
       "component_key": "full-clay-treatment",
@@ -948,7 +948,7 @@
     },
     {
       "target_key": "home:service:full-clay-treatment",
-      "label": "Full clay treatment \u2014 home service card",
+      "label": "Full clay treatment — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "full-clay-treatment",
@@ -956,7 +956,7 @@
     },
     {
       "target_key": "landing:engine-cleaning:hero",
-      "label": "Engine cleaning \u2014 landing page hero",
+      "label": "Engine cleaning — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/engine-cleaning",
       "component_key": "engine-cleaning",
@@ -964,7 +964,7 @@
     },
     {
       "target_key": "landing:engine-cleaning:gallery:1",
-      "label": "Engine cleaning \u2014 gallery image 1",
+      "label": "Engine cleaning — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/engine-cleaning",
       "component_key": "engine-cleaning",
@@ -972,7 +972,7 @@
     },
     {
       "target_key": "landing:engine-cleaning:gallery:2",
-      "label": "Engine cleaning \u2014 gallery image 2",
+      "label": "Engine cleaning — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/engine-cleaning",
       "component_key": "engine-cleaning",
@@ -980,7 +980,7 @@
     },
     {
       "target_key": "landing:engine-cleaning:gallery:3",
-      "label": "Engine cleaning \u2014 gallery image 3",
+      "label": "Engine cleaning — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/engine-cleaning",
       "component_key": "engine-cleaning",
@@ -988,7 +988,7 @@
     },
     {
       "target_key": "home:service:engine-cleaning",
-      "label": "Engine cleaning \u2014 home service card",
+      "label": "Engine cleaning — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "engine-cleaning",
@@ -996,7 +996,7 @@
     },
     {
       "target_key": "landing:high-grade-paint-sealant:hero",
-      "label": "High grade paint sealant \u2014 landing page hero",
+      "label": "High grade paint sealant — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/high-grade-paint-sealant",
       "component_key": "high-grade-paint-sealant",
@@ -1004,7 +1004,7 @@
     },
     {
       "target_key": "landing:high-grade-paint-sealant:gallery:1",
-      "label": "High grade paint sealant \u2014 gallery image 1",
+      "label": "High grade paint sealant — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/high-grade-paint-sealant",
       "component_key": "high-grade-paint-sealant",
@@ -1012,7 +1012,7 @@
     },
     {
       "target_key": "landing:high-grade-paint-sealant:gallery:2",
-      "label": "High grade paint sealant \u2014 gallery image 2",
+      "label": "High grade paint sealant — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/high-grade-paint-sealant",
       "component_key": "high-grade-paint-sealant",
@@ -1020,7 +1020,7 @@
     },
     {
       "target_key": "landing:high-grade-paint-sealant:gallery:3",
-      "label": "High grade paint sealant \u2014 gallery image 3",
+      "label": "High grade paint sealant — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/high-grade-paint-sealant",
       "component_key": "high-grade-paint-sealant",
@@ -1028,7 +1028,7 @@
     },
     {
       "target_key": "home:service:high-grade-paint-sealant",
-      "label": "High grade paint sealant \u2014 home service card",
+      "label": "High grade paint sealant — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "high-grade-paint-sealant",
@@ -1036,7 +1036,7 @@
     },
     {
       "target_key": "landing:uv-protectant:hero",
-      "label": "UV protectant applied on interior panels \u2014 landing page hero",
+      "label": "UV protectant applied on interior panels — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/uv-protectant",
       "component_key": "uv-protectant",
@@ -1044,7 +1044,7 @@
     },
     {
       "target_key": "landing:uv-protectant:gallery:1",
-      "label": "UV protectant applied on interior panels \u2014 gallery image 1",
+      "label": "UV protectant applied on interior panels — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/uv-protectant",
       "component_key": "uv-protectant",
@@ -1052,7 +1052,7 @@
     },
     {
       "target_key": "landing:uv-protectant:gallery:2",
-      "label": "UV protectant applied on interior panels \u2014 gallery image 2",
+      "label": "UV protectant applied on interior panels — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/uv-protectant",
       "component_key": "uv-protectant",
@@ -1060,7 +1060,7 @@
     },
     {
       "target_key": "landing:uv-protectant:gallery:3",
-      "label": "UV protectant applied on interior panels \u2014 gallery image 3",
+      "label": "UV protectant applied on interior panels — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/uv-protectant",
       "component_key": "uv-protectant",
@@ -1068,7 +1068,7 @@
     },
     {
       "target_key": "home:service:uv-protectant",
-      "label": "UV protectant applied on interior panels \u2014 home service card",
+      "label": "UV protectant applied on interior panels — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "uv-protectant",
@@ -1076,7 +1076,7 @@
     },
     {
       "target_key": "landing:exterior-wax:hero",
-      "label": "Exterior wax \u2014 landing page hero",
+      "label": "Exterior wax — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/exterior-wax",
       "component_key": "exterior-wax",
@@ -1084,7 +1084,7 @@
     },
     {
       "target_key": "landing:exterior-wax:gallery:1",
-      "label": "Exterior wax \u2014 gallery image 1",
+      "label": "Exterior wax — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/exterior-wax",
       "component_key": "exterior-wax",
@@ -1092,7 +1092,7 @@
     },
     {
       "target_key": "landing:exterior-wax:gallery:2",
-      "label": "Exterior wax \u2014 gallery image 2",
+      "label": "Exterior wax — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/exterior-wax",
       "component_key": "exterior-wax",
@@ -1100,7 +1100,7 @@
     },
     {
       "target_key": "landing:exterior-wax:gallery:3",
-      "label": "Exterior wax \u2014 gallery image 3",
+      "label": "Exterior wax — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/exterior-wax",
       "component_key": "exterior-wax",
@@ -1108,7 +1108,7 @@
     },
     {
       "target_key": "home:service:exterior-wax",
-      "label": "Exterior wax \u2014 home service card",
+      "label": "Exterior wax — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "exterior-wax",
@@ -1116,7 +1116,7 @@
     },
     {
       "target_key": "landing:de-ionizing-treatment:hero",
-      "label": "De-ionizing treatment \u2014 landing page hero",
+      "label": "De-ionizing treatment — landing page hero",
       "target_type": "landing_hero",
       "page_path": "/de-ionizing-treatment",
       "component_key": "de-ionizing-treatment",
@@ -1124,7 +1124,7 @@
     },
     {
       "target_key": "landing:de-ionizing-treatment:gallery:1",
-      "label": "De-ionizing treatment \u2014 gallery image 1",
+      "label": "De-ionizing treatment — gallery image 1",
       "target_type": "landing_gallery",
       "page_path": "/de-ionizing-treatment",
       "component_key": "de-ionizing-treatment",
@@ -1132,7 +1132,7 @@
     },
     {
       "target_key": "landing:de-ionizing-treatment:gallery:2",
-      "label": "De-ionizing treatment \u2014 gallery image 2",
+      "label": "De-ionizing treatment — gallery image 2",
       "target_type": "landing_gallery",
       "page_path": "/de-ionizing-treatment",
       "component_key": "de-ionizing-treatment",
@@ -1140,7 +1140,7 @@
     },
     {
       "target_key": "landing:de-ionizing-treatment:gallery:3",
-      "label": "De-ionizing treatment \u2014 gallery image 3",
+      "label": "De-ionizing treatment — gallery image 3",
       "target_type": "landing_gallery",
       "page_path": "/de-ionizing-treatment",
       "component_key": "de-ionizing-treatment",
@@ -1148,7 +1148,7 @@
     },
     {
       "target_key": "home:service:de-ionizing-treatment",
-      "label": "De-ionizing treatment \u2014 home service card",
+      "label": "De-ionizing treatment — home service card",
       "target_type": "home_card",
       "page_path": "/",
       "component_key": "de-ionizing-treatment",
@@ -1156,7 +1156,7 @@
     },
     {
       "target_key": "admin:gate-c:feature",
-      "label": "DAIP Gate C \u2014 feature context photo",
+      "label": "DAIP Gate C — feature context photo",
       "target_type": "admin_context",
       "page_path": "/admin-daip-gate-c",
       "component_key": "gate-c",
@@ -1164,7 +1164,7 @@
     },
     {
       "target_key": "admin:gate-c:strip:1",
-      "label": "DAIP Gate C \u2014 context strip 1",
+      "label": "DAIP Gate C — context strip 1",
       "target_type": "admin_context",
       "page_path": "/admin-daip-gate-c",
       "component_key": "gate-c",
@@ -1172,7 +1172,7 @@
     },
     {
       "target_key": "admin:gate-c:strip:2",
-      "label": "DAIP Gate C \u2014 context strip 2",
+      "label": "DAIP Gate C — context strip 2",
       "target_type": "admin_context",
       "page_path": "/admin-daip-gate-c",
       "component_key": "gate-c",
@@ -1180,12 +1180,3768 @@
     },
     {
       "target_key": "admin:gate-c:strip:3",
-      "label": "DAIP Gate C \u2014 context strip 3",
+      "label": "DAIP Gate C — context strip 3",
       "target_type": "admin_context",
       "page_path": "/admin-daip-gate-c",
       "component_key": "gate-c",
       "variant": ""
+    },
+    {
+      "target_key": "landing:ceramic-coating:before-after:1:before",
+      "label": "Ceramic coating — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:ceramic-coating:before-after:1:after",
+      "label": "Ceramic coating — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:ceramic-coating:before-after:2:before",
+      "label": "Ceramic coating — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:ceramic-coating:before-after:2:after",
+      "label": "Ceramic coating — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:ceramic-coating:before-after:3:before",
+      "label": "Ceramic coating — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:ceramic-coating:before-after:3:after",
+      "label": "Ceramic coating — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:before-after:1:before",
+      "label": "Pet hair removal — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:before-after:1:after",
+      "label": "Pet hair removal — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:before-after:2:before",
+      "label": "Pet hair removal — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:before-after:2:after",
+      "label": "Pet hair removal — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:before-after:3:before",
+      "label": "Pet hair removal — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:before-after:3:after",
+      "label": "Pet hair removal — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:odor-removal:before-after:1:before",
+      "label": "Odor removal — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:odor-removal:before-after:1:after",
+      "label": "Odor removal — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:odor-removal:before-after:2:before",
+      "label": "Odor removal — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:odor-removal:before-after:2:after",
+      "label": "Odor removal — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:odor-removal:before-after:3:before",
+      "label": "Odor removal — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:odor-removal:before-after:3:after",
+      "label": "Odor removal — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:headlight-restoration:before-after:1:before",
+      "label": "Headlight restoration — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:headlight-restoration:before-after:1:after",
+      "label": "Headlight restoration — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:headlight-restoration:before-after:2:before",
+      "label": "Headlight restoration — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:headlight-restoration:before-after:2:after",
+      "label": "Headlight restoration — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:headlight-restoration:before-after:3:before",
+      "label": "Headlight restoration — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:headlight-restoration:before-after:3:after",
+      "label": "Headlight restoration — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:paint-correction:before-after:1:before",
+      "label": "Paint correction — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:paint-correction:before-after:1:after",
+      "label": "Paint correction — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:paint-correction:before-after:2:before",
+      "label": "Paint correction — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:paint-correction:before-after:2:after",
+      "label": "Paint correction — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:paint-correction:before-after:3:before",
+      "label": "Paint correction — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:paint-correction:before-after:3:after",
+      "label": "Paint correction — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:before-after:1:before",
+      "label": "Tillsonburg auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:before-after:1:after",
+      "label": "Tillsonburg auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:before-after:2:before",
+      "label": "Tillsonburg auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:before-after:2:after",
+      "label": "Tillsonburg auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:before-after:3:before",
+      "label": "Tillsonburg auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:before-after:3:after",
+      "label": "Tillsonburg auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:before-after:1:before",
+      "label": "Woodstock / Ingersoll auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:before-after:1:after",
+      "label": "Woodstock / Ingersoll auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:before-after:2:before",
+      "label": "Woodstock / Ingersoll auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:before-after:2:after",
+      "label": "Woodstock / Ingersoll auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:before-after:3:before",
+      "label": "Woodstock / Ingersoll auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:before-after:3:after",
+      "label": "Woodstock / Ingersoll auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:before-after:1:before",
+      "label": "Simcoe / Delhi auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:before-after:1:after",
+      "label": "Simcoe / Delhi auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:before-after:2:before",
+      "label": "Simcoe / Delhi auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:before-after:2:after",
+      "label": "Simcoe / Delhi auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:before-after:3:before",
+      "label": "Simcoe / Delhi auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:before-after:3:after",
+      "label": "Simcoe / Delhi auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:before-after:1:before",
+      "label": "Port Dover auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:before-after:1:after",
+      "label": "Port Dover auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:before-after:2:before",
+      "label": "Port Dover auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:before-after:2:after",
+      "label": "Port Dover auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:before-after:3:before",
+      "label": "Port Dover auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:before-after:3:after",
+      "label": "Port Dover auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:before-after:1:before",
+      "label": "Norwich, Otterville auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:before-after:1:after",
+      "label": "Norwich, Otterville auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:before-after:2:before",
+      "label": "Norwich, Otterville auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:before-after:2:after",
+      "label": "Norwich, Otterville auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:before-after:3:before",
+      "label": "Norwich, Otterville auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:before-after:3:after",
+      "label": "Norwich, Otterville auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:before-after:1:before",
+      "label": "Zorra, Thamesford, Embro auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:before-after:1:after",
+      "label": "Zorra, Thamesford, Embro auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:before-after:2:before",
+      "label": "Zorra, Thamesford, Embro auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:before-after:2:after",
+      "label": "Zorra, Thamesford, Embro auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:before-after:3:before",
+      "label": "Zorra, Thamesford, Embro auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:before-after:3:after",
+      "label": "Zorra, Thamesford, Embro auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:before-after:1:before",
+      "label": "Waterford, Vittoria auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:before-after:1:after",
+      "label": "Waterford, Vittoria auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:before-after:2:before",
+      "label": "Waterford, Vittoria auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:before-after:2:after",
+      "label": "Waterford, Vittoria auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:before-after:3:before",
+      "label": "Waterford, Vittoria auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:before-after:3:after",
+      "label": "Waterford, Vittoria auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:before-after:1:before",
+      "label": "Port Rowan, Turkey Point auto detailing — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:before-after:1:after",
+      "label": "Port Rowan, Turkey Point auto detailing — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:before-after:2:before",
+      "label": "Port Rowan, Turkey Point auto detailing — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:before-after:2:after",
+      "label": "Port Rowan, Turkey Point auto detailing — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:before-after:3:before",
+      "label": "Port Rowan, Turkey Point auto detailing — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:before-after:3:after",
+      "label": "Port Rowan, Turkey Point auto detailing — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:graphene-finish:before-after:1:before",
+      "label": "Graphene finish — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:graphene-finish:before-after:1:after",
+      "label": "Graphene finish — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:graphene-finish:before-after:2:before",
+      "label": "Graphene finish — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:graphene-finish:before-after:2:after",
+      "label": "Graphene finish — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:graphene-finish:before-after:3:before",
+      "label": "Graphene finish — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:graphene-finish:before-after:3:after",
+      "label": "Graphene finish — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:before-after:1:before",
+      "label": "Full clay treatment — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:before-after:1:after",
+      "label": "Full clay treatment — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:before-after:2:before",
+      "label": "Full clay treatment — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:before-after:2:after",
+      "label": "Full clay treatment — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:before-after:3:before",
+      "label": "Full clay treatment — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:before-after:3:after",
+      "label": "Full clay treatment — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:engine-cleaning:before-after:1:before",
+      "label": "Engine cleaning — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:engine-cleaning:before-after:1:after",
+      "label": "Engine cleaning — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:engine-cleaning:before-after:2:before",
+      "label": "Engine cleaning — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:engine-cleaning:before-after:2:after",
+      "label": "Engine cleaning — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:engine-cleaning:before-after:3:before",
+      "label": "Engine cleaning — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:engine-cleaning:before-after:3:after",
+      "label": "Engine cleaning — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:before-after:1:before",
+      "label": "High grade paint sealant — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:before-after:1:after",
+      "label": "High grade paint sealant — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:before-after:2:before",
+      "label": "High grade paint sealant — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:before-after:2:after",
+      "label": "High grade paint sealant — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:before-after:3:before",
+      "label": "High grade paint sealant — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:before-after:3:after",
+      "label": "High grade paint sealant — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:uv-protectant:before-after:1:before",
+      "label": "UV protectant applied on interior panels — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:uv-protectant:before-after:1:after",
+      "label": "UV protectant applied on interior panels — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:uv-protectant:before-after:2:before",
+      "label": "UV protectant applied on interior panels — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:uv-protectant:before-after:2:after",
+      "label": "UV protectant applied on interior panels — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:uv-protectant:before-after:3:before",
+      "label": "UV protectant applied on interior panels — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:uv-protectant:before-after:3:after",
+      "label": "UV protectant applied on interior panels — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:exterior-wax:before-after:1:before",
+      "label": "Exterior wax — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:exterior-wax:before-after:1:after",
+      "label": "Exterior wax — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:exterior-wax:before-after:2:before",
+      "label": "Exterior wax — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:exterior-wax:before-after:2:after",
+      "label": "Exterior wax — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:exterior-wax:before-after:3:before",
+      "label": "Exterior wax — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:exterior-wax:before-after:3:after",
+      "label": "Exterior wax — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:before-after:1:before",
+      "label": "De-ionizing treatment — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:before-after:1:after",
+      "label": "De-ionizing treatment — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:before-after:2:before",
+      "label": "De-ionizing treatment — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:before-after:2:after",
+      "label": "De-ionizing treatment — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:before-after:3:before",
+      "label": "De-ionizing treatment — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:before-after:3:after",
+      "label": "De-ionizing treatment — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page:services:review-proof",
+      "label": "Services — Review proof image",
+      "target_type": "proof_image",
+      "page_path": "/services",
+      "component_key": "review-proof",
+      "variant": ""
+    },
+    {
+      "target_key": "page:pricing:review-proof",
+      "label": "Pricing — Review proof image",
+      "target_type": "proof_image",
+      "page_path": "/pricing",
+      "component_key": "review-proof",
+      "variant": ""
+    },
+    {
+      "target_key": "page:faq:booking-help",
+      "label": "FAQ — Booking help image",
+      "target_type": "faq_card",
+      "page_path": "/faq",
+      "component_key": "booking-help",
+      "variant": ""
+    },
+    {
+      "target_key": "page:faq:service-choices",
+      "label": "FAQ — Service choices image",
+      "target_type": "faq_card",
+      "page_path": "/faq",
+      "component_key": "service-choices",
+      "variant": ""
+    },
+    {
+      "target_key": "page:faq:help-articles",
+      "label": "FAQ — Help articles image",
+      "target_type": "faq_card",
+      "page_path": "/faq",
+      "component_key": "help-articles",
+      "variant": ""
+    },
+    {
+      "target_key": "page:faq:local-proof",
+      "label": "FAQ — Local proof image",
+      "target_type": "faq_card",
+      "page_path": "/faq",
+      "component_key": "local-proof",
+      "variant": ""
+    },
+    {
+      "target_key": "gift-card:interior",
+      "label": "Gift Cards — Interior Detail gift card",
+      "target_type": "gift_card",
+      "page_path": "/gift-cards",
+      "component_key": "gift-card",
+      "variant": "interior"
+    },
+    {
+      "target_key": "gift-card:complete",
+      "label": "Gift Cards — Complete Detail gift card",
+      "target_type": "gift_card",
+      "page_path": "/gift-cards",
+      "component_key": "gift-card",
+      "variant": "complete"
+    },
+    {
+      "target_key": "gift-card:custom",
+      "label": "Gift Cards — Custom Amount gift card",
+      "target_type": "gift_card",
+      "page_path": "/gift-cards",
+      "component_key": "gift-card",
+      "variant": "custom"
+    },
+    {
+      "target_key": "hub:services:interior",
+      "label": "Services hub — Interior and deep cleaning",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "interior",
+      "variant": ""
+    },
+    {
+      "target_key": "hub:services:exterior",
+      "label": "Services hub — Exterior and paint care",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "exterior",
+      "variant": ""
+    },
+    {
+      "target_key": "hub:services:specials",
+      "label": "Services hub — Specials",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "specials",
+      "variant": ""
+    },
+    {
+      "target_key": "hub:services:gift-cards",
+      "label": "Services hub — Gift cards",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "gift-cards",
+      "variant": ""
+    },
+    {
+      "target_key": "hub:services:fleet",
+      "label": "Services hub — Fleet and work trucks",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "fleet",
+      "variant": ""
+    },
+    {
+      "target_key": "hub:services:maintenance",
+      "label": "Services hub — Maintenance plans",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "maintenance",
+      "variant": ""
+    },
+    {
+      "target_key": "hub:services:guides",
+      "label": "Services hub — Helpful guides",
+      "target_type": "service_hub",
+      "page_path": "/services",
+      "component_key": "guides",
+      "variant": ""
+    },
+    {
+      "target_key": "landing:ceramic-coating:review-proof",
+      "label": "Ceramic coating — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/ceramic-coating",
+      "component_key": "ceramic-coating",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:pet-hair-removal:review-proof",
+      "label": "Pet hair removal — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/pet-hair-removal",
+      "component_key": "pet-hair-removal",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:odor-removal:review-proof",
+      "label": "Odor removal — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/odor-removal",
+      "component_key": "odor-removal",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:headlight-restoration:review-proof",
+      "label": "Headlight restoration — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/headlight-restoration",
+      "component_key": "headlight-restoration",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:paint-correction:review-proof",
+      "label": "Paint correction — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/paint-correction",
+      "component_key": "paint-correction",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:tillsonburg-auto-detailing:review-proof",
+      "label": "Tillsonburg auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "tillsonburg-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:woodstock-ingersoll-auto-detailing:review-proof",
+      "label": "Woodstock / Ingersoll auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "woodstock-ingersoll-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:simcoe-delhi-auto-detailing:review-proof",
+      "label": "Simcoe / Delhi auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "simcoe-delhi-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:port-dover-auto-detailing:review-proof",
+      "label": "Port Dover auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "port-dover-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:norwich-otterville-auto-detailing:review-proof",
+      "label": "Norwich, Otterville auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "norwich-otterville-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:zorra-thamesford-embro-auto-detailing:review-proof",
+      "label": "Zorra, Thamesford, Embro auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "zorra-thamesford-embro-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:waterford-vittoria-auto-detailing:review-proof",
+      "label": "Waterford, Vittoria auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "waterford-vittoria-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:port-rowan-turkey-point-auto-detailing:review-proof",
+      "label": "Port Rowan, Turkey Point auto detailing — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "port-rowan-turkey-point-auto-detailing",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:graphene-finish:review-proof",
+      "label": "Graphene finish — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/graphene-finish",
+      "component_key": "graphene-finish",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:full-clay-treatment:review-proof",
+      "label": "Full clay treatment — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/full-clay-treatment",
+      "component_key": "full-clay-treatment",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:engine-cleaning:review-proof",
+      "label": "Engine cleaning — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/engine-cleaning",
+      "component_key": "engine-cleaning",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:high-grade-paint-sealant:review-proof",
+      "label": "High grade paint sealant — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "high-grade-paint-sealant",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:uv-protectant:review-proof",
+      "label": "UV protectant applied on interior panels — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/uv-protectant",
+      "component_key": "uv-protectant",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:exterior-wax:review-proof",
+      "label": "Exterior wax — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/exterior-wax",
+      "component_key": "exterior-wax",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:de-ionizing-treatment:review-proof",
+      "label": "De-ionizing treatment — landing page hero — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "de-ionizing-treatment",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "gallery:evidence:1",
+      "label": "Gallery — Evidence 1",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "1"
+    },
+    {
+      "target_key": "gallery:evidence:2",
+      "label": "Gallery — Evidence 2",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "2"
+    },
+    {
+      "target_key": "gallery:evidence:3",
+      "label": "Gallery — Evidence 3",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "3"
+    },
+    {
+      "target_key": "gallery:evidence:4",
+      "label": "Gallery — Evidence 4",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "4"
+    },
+    {
+      "target_key": "gallery:evidence:5",
+      "label": "Gallery — Evidence 5",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "5"
+    },
+    {
+      "target_key": "gallery:evidence:6",
+      "label": "Gallery — Evidence 6",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "6"
+    },
+    {
+      "target_key": "gallery:evidence:7",
+      "label": "Gallery — Evidence 7",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "7"
+    },
+    {
+      "target_key": "gallery:evidence:8",
+      "label": "Gallery — Evidence 8",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "8"
+    },
+    {
+      "target_key": "gallery:evidence:9",
+      "label": "Gallery — Evidence 9",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "9"
+    },
+    {
+      "target_key": "gallery:evidence:10",
+      "label": "Gallery — Evidence 10",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "10"
+    },
+    {
+      "target_key": "gallery:evidence:11",
+      "label": "Gallery — Evidence 11",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "11"
+    },
+    {
+      "target_key": "gallery:evidence:12",
+      "label": "Gallery — Evidence 12",
+      "target_type": "gallery_evidence",
+      "page_path": "/gallery",
+      "component_key": "evidence",
+      "variant": "12"
+    },
+    {
+      "target_key": "gallery:technique:1",
+      "label": "Gallery — Technique 1",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "1"
+    },
+    {
+      "target_key": "gallery:technique:2",
+      "label": "Gallery — Technique 2",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "2"
+    },
+    {
+      "target_key": "gallery:technique:3",
+      "label": "Gallery — Technique 3",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "3"
+    },
+    {
+      "target_key": "gallery:technique:4",
+      "label": "Gallery — Technique 4",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "4"
+    },
+    {
+      "target_key": "gallery:technique:5",
+      "label": "Gallery — Technique 5",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "5"
+    },
+    {
+      "target_key": "gallery:technique:6",
+      "label": "Gallery — Technique 6",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "6"
+    },
+    {
+      "target_key": "gallery:technique:7",
+      "label": "Gallery — Technique 7",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "7"
+    },
+    {
+      "target_key": "gallery:technique:8",
+      "label": "Gallery — Technique 8",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "8"
+    },
+    {
+      "target_key": "gallery:technique:9",
+      "label": "Gallery — Technique 9",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "9"
+    },
+    {
+      "target_key": "gallery:technique:10",
+      "label": "Gallery — Technique 10",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "10"
+    },
+    {
+      "target_key": "gallery:technique:11",
+      "label": "Gallery — Technique 11",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "11"
+    },
+    {
+      "target_key": "gallery:technique:12",
+      "label": "Gallery — Technique 12",
+      "target_type": "gallery_technique",
+      "page_path": "/gallery",
+      "component_key": "technique",
+      "variant": "12"
+    },
+    {
+      "target_key": "gallery:efficiency:1",
+      "label": "Gallery — Efficiency 1",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "1"
+    },
+    {
+      "target_key": "gallery:efficiency:2",
+      "label": "Gallery — Efficiency 2",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "2"
+    },
+    {
+      "target_key": "gallery:efficiency:3",
+      "label": "Gallery — Efficiency 3",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "3"
+    },
+    {
+      "target_key": "gallery:efficiency:4",
+      "label": "Gallery — Efficiency 4",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "4"
+    },
+    {
+      "target_key": "gallery:efficiency:5",
+      "label": "Gallery — Efficiency 5",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "5"
+    },
+    {
+      "target_key": "gallery:efficiency:6",
+      "label": "Gallery — Efficiency 6",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "6"
+    },
+    {
+      "target_key": "gallery:efficiency:7",
+      "label": "Gallery — Efficiency 7",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "7"
+    },
+    {
+      "target_key": "gallery:efficiency:8",
+      "label": "Gallery — Efficiency 8",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "8"
+    },
+    {
+      "target_key": "gallery:efficiency:9",
+      "label": "Gallery — Efficiency 9",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "9"
+    },
+    {
+      "target_key": "gallery:efficiency:10",
+      "label": "Gallery — Efficiency 10",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "10"
+    },
+    {
+      "target_key": "gallery:efficiency:11",
+      "label": "Gallery — Efficiency 11",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "11"
+    },
+    {
+      "target_key": "gallery:efficiency:12",
+      "label": "Gallery — Efficiency 12",
+      "target_type": "gallery_efficiency",
+      "page_path": "/gallery",
+      "component_key": "efficiency",
+      "variant": "12"
+    },
+    {
+      "target_key": "gallery:before-after:1:before",
+      "label": "Gallery — Before & After — Set 1 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set1-before"
+    },
+    {
+      "target_key": "gallery:before-after:1:after",
+      "label": "Gallery — Before & After — Set 1 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set1-after"
+    },
+    {
+      "target_key": "gallery:before-after:2:before",
+      "label": "Gallery — Before & After — Set 2 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set2-before"
+    },
+    {
+      "target_key": "gallery:before-after:2:after",
+      "label": "Gallery — Before & After — Set 2 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set2-after"
+    },
+    {
+      "target_key": "gallery:before-after:3:before",
+      "label": "Gallery — Before & After — Set 3 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set3-before"
+    },
+    {
+      "target_key": "gallery:before-after:3:after",
+      "label": "Gallery — Before & After — Set 3 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set3-after"
+    },
+    {
+      "target_key": "gallery:before-after:4:before",
+      "label": "Gallery — Before & After — Set 4 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set4-before"
+    },
+    {
+      "target_key": "gallery:before-after:4:after",
+      "label": "Gallery — Before & After — Set 4 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set4-after"
+    },
+    {
+      "target_key": "gallery:before-after:5:before",
+      "label": "Gallery — Before & After — Set 5 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set5-before"
+    },
+    {
+      "target_key": "gallery:before-after:5:after",
+      "label": "Gallery — Before & After — Set 5 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set5-after"
+    },
+    {
+      "target_key": "gallery:before-after:6:before",
+      "label": "Gallery — Before & After — Set 6 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set6-before"
+    },
+    {
+      "target_key": "gallery:before-after:6:after",
+      "label": "Gallery — Before & After — Set 6 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set6-after"
+    },
+    {
+      "target_key": "gallery:before-after:7:before",
+      "label": "Gallery — Before & After — Set 7 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set7-before"
+    },
+    {
+      "target_key": "gallery:before-after:7:after",
+      "label": "Gallery — Before & After — Set 7 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set7-after"
+    },
+    {
+      "target_key": "gallery:before-after:8:before",
+      "label": "Gallery — Before & After — Set 8 — Before",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set8-before"
+    },
+    {
+      "target_key": "gallery:before-after:8:after",
+      "label": "Gallery — Before & After — Set 8 — After",
+      "target_type": "gallery_before_after_pair",
+      "page_path": "/gallery",
+      "component_key": "gallery",
+      "variant": "set8-after"
+    },
+    {
+      "group": "Review / proof images",
+      "target_key": "page:home:review-proof",
+      "label": "Home page — Review proof image",
+      "target_type": "proof",
+      "page_path": "/",
+      "component_key": "review-proof",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "site:brand:logo",
+      "label": "Site-wide — Rosie Dazzlers logo",
+      "target_type": "site_brand",
+      "page_path": "/",
+      "component_key": "logo",
+      "variant": ""
+    },
+    {
+      "target_key": "site:brand:banner",
+      "label": "Site-wide — main Rosie Dazzlers banner",
+      "target_type": "site_brand",
+      "page_path": "/",
+      "component_key": "banner",
+      "variant": ""
+    },
+    {
+      "target_key": "site:brand:reviews",
+      "label": "Site-wide — reviews / social-proof image",
+      "target_type": "site_brand",
+      "page_path": "/",
+      "component_key": "reviews",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/brand/rosie-reviews-fallback.png",
+      "label": "Reviews fallback image",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/brand/rosie-reviews-fallback.png",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/brand/CarPrice2025.PNG",
+      "label": "Pricing — Vehicle Price Chart image",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/brand/CarPrice2025.PNG",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/brand/CarPriceDetails2025.PNG",
+      "label": "Pricing — Package Service Details chart image",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/brand/CarPriceDetails2025.PNG",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG",
+      "label": "Vehicle Size Chart image",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/photos/coating-detail.jpg",
+      "label": "Shared coating/detail proof photo",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/photos/coating-detail.jpg",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/photos/engine-bay.jpg",
+      "label": "Shared engine-bay service photo",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/photos/engine-bay.jpg",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/photos/interior-detail.jpg",
+      "label": "Shared interior-detail service photo",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/photos/interior-detail.jpg",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/photos/service-exterior.jpg",
+      "label": "Shared exterior service photo",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/photos/service-exterior.jpg",
+      "variant": ""
+    },
+    {
+      "target_key": "site-asset:/assets/photos/wrap-tint.jpg",
+      "label": "Shared wrap/tint service photo",
+      "target_type": "site_asset",
+      "page_path": "/",
+      "component_key": "/assets/photos/wrap-tint.jpg",
+      "variant": ""
+    },
+    {
+      "target_key": "maintenance:hero",
+      "label": "Maintenance Plan — hero image",
+      "target_type": "maintenance_page",
+      "page_path": "/maintenance-plan",
+      "component_key": "hero",
+      "variant": ""
+    },
+    {
+      "target_key": "page-background:/",
+      "label": "Home — optional page background",
+      "target_type": "page_background",
+      "page_path": "/",
+      "component_key": "/",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/404",
+      "label": "404 — optional page background",
+      "target_type": "page_background",
+      "page_path": "/404",
+      "component_key": "/404",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/about",
+      "label": "About — optional page background",
+      "target_type": "page_background",
+      "page_path": "/about",
+      "component_key": "/about",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/blog",
+      "label": "Blog — optional page background",
+      "target_type": "page_background",
+      "page_path": "/blog",
+      "component_key": "/blog",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/book",
+      "label": "Book — optional page background",
+      "target_type": "page_background",
+      "page_path": "/book",
+      "component_key": "/book",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/consumables",
+      "label": "Consumables — optional page background",
+      "target_type": "page_background",
+      "page_path": "/consumables",
+      "component_key": "/consumables",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/contact",
+      "label": "Contact — optional page background",
+      "target_type": "page_background",
+      "page_path": "/contact",
+      "component_key": "/contact",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/faq",
+      "label": "Faq — optional page background",
+      "target_type": "page_background",
+      "page_path": "/faq",
+      "component_key": "/faq",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/fleet",
+      "label": "Fleet — optional page background",
+      "target_type": "page_background",
+      "page_path": "/fleet",
+      "component_key": "/fleet",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/fleet-pricing",
+      "label": "Fleet Pricing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/fleet-pricing",
+      "component_key": "/fleet-pricing",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/gallery",
+      "label": "Gallery — optional page background",
+      "target_type": "page_background",
+      "page_path": "/gallery",
+      "component_key": "/gallery",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/gear",
+      "label": "Gear — optional page background",
+      "target_type": "page_background",
+      "page_path": "/gear",
+      "component_key": "/gear",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/gift-cards",
+      "label": "Gift Cards — optional page background",
+      "target_type": "page_background",
+      "page_path": "/gift-cards",
+      "component_key": "/gift-cards",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/gift-certificate-print",
+      "label": "Gift Certificate Print — optional page background",
+      "target_type": "page_background",
+      "page_path": "/gift-certificate-print",
+      "component_key": "/gift-certificate-print",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/gifts",
+      "label": "Gifts — optional page background",
+      "target_type": "page_background",
+      "page_path": "/gifts",
+      "component_key": "/gifts",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/maintenance",
+      "label": "Maintenance — optional page background",
+      "target_type": "page_background",
+      "page_path": "/maintenance",
+      "component_key": "/maintenance",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/maintenance-plan",
+      "label": "Maintenance Plan — optional page background",
+      "target_type": "page_background",
+      "page_path": "/maintenance-plan",
+      "component_key": "/maintenance-plan",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/pricing",
+      "label": "Pricing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/pricing",
+      "component_key": "/pricing",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/privacy",
+      "label": "Privacy — optional page background",
+      "target_type": "page_background",
+      "page_path": "/privacy",
+      "component_key": "/privacy",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/services",
+      "label": "Services — optional page background",
+      "target_type": "page_background",
+      "page_path": "/services",
+      "component_key": "/services",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/specials",
+      "label": "Specials — optional page background",
+      "target_type": "page_background",
+      "page_path": "/specials",
+      "component_key": "/specials",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/terms",
+      "label": "Terms — optional page background",
+      "target_type": "page_background",
+      "page_path": "/terms",
+      "component_key": "/terms",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/videos",
+      "label": "Videos — optional page background",
+      "target_type": "page_background",
+      "page_path": "/videos",
+      "component_key": "/videos",
+      "variant": "background"
+    },
+    {
+      "target_key": "page-background:/waiver",
+      "label": "Waiver — optional page background",
+      "target_type": "page_background",
+      "page_path": "/waiver",
+      "component_key": "/waiver",
+      "variant": "background"
+    },
+    {
+      "target_key": "site-asset:/assets/placeholders/inventory-tools-photo.jpg",
+      "label": "Shared placeholder — inventory/tools photo",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "/assets/placeholders/inventory-tools-photo.jpg",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:/assets/placeholders/product-gallery-photo.jpg",
+      "label": "Shared placeholder — product/gallery photo",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "/assets/placeholders/product-gallery-photo.jpg",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:/assets/vehicles/outline_front.svg",
+      "label": "Vehicle photo framing guide — front",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "/assets/vehicles/outline_front.svg",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:/assets/vehicles/outline_back.svg",
+      "label": "Vehicle photo framing guide — rear",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "/assets/vehicles/outline_back.svg",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/CarPhotos/port-dover-ceramic-proof-before.webp",
+      "label": "Legacy Port Dover ceramic proof image",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "https://assets.rosiedazzlers.ca/CarPhotos/port-dover-ceramic-proof-before.webp",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/CarPhotos/simcoe-pet-hair-proof-before.webp",
+      "label": "Legacy Simcoe pet-hair proof image",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "https://assets.rosiedazzlers.ca/CarPhotos/simcoe-pet-hair-proof-before.webp",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/CarPhotos/tillsonburg-interior-proof-before.webp",
+      "label": "Legacy Tillsonburg interior proof image",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "https://assets.rosiedazzlers.ca/CarPhotos/tillsonburg-interior-proof-before.webp",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/CarPhotos/woodstock-exterior-proof-before.webp",
+      "label": "Legacy Woodstock exterior proof image",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "https://assets.rosiedazzlers.ca/CarPhotos/woodstock-exterior-proof-before.webp",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG",
+      "label": "Shared brand photo — black car",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site-asset:https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+      "label": "Shared Rosie Dazzlers banner image",
+      "target_type": "site_asset",
+      "page_path": "*",
+      "component_key": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "site:brand:background",
+      "label": "Site-wide — default page background",
+      "target_type": "site_brand",
+      "page_path": "*",
+      "component_key": "site-background",
+      "variant": "default"
+    },
+    {
+      "target_key": "page-background:/ceramic-coating",
+      "label": "Ceramic Coating — optional page background",
+      "target_type": "page_background",
+      "page_path": "/ceramic-coating",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/de-ionizing-treatment",
+      "label": "De Ionizing Treatment — optional page background",
+      "target_type": "page_background",
+      "page_path": "/de-ionizing-treatment",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/engine-cleaning",
+      "label": "Engine Cleaning — optional page background",
+      "target_type": "page_background",
+      "page_path": "/engine-cleaning",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/exterior-wax",
+      "label": "Exterior Wax — optional page background",
+      "target_type": "page_background",
+      "page_path": "/exterior-wax",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/full-clay-treatment",
+      "label": "Full Clay Treatment — optional page background",
+      "target_type": "page_background",
+      "page_path": "/full-clay-treatment",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/graphene-finish",
+      "label": "Graphene Finish — optional page background",
+      "target_type": "page_background",
+      "page_path": "/graphene-finish",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/headlight-restoration",
+      "label": "Headlight Restoration — optional page background",
+      "target_type": "page_background",
+      "page_path": "/headlight-restoration",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/high-grade-paint-sealant",
+      "label": "High Grade Paint Sealant — optional page background",
+      "target_type": "page_background",
+      "page_path": "/high-grade-paint-sealant",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/norwich-otterville-auto-detailing",
+      "label": "Norwich Otterville Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/norwich-otterville-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/odor-removal",
+      "label": "Odor Removal — optional page background",
+      "target_type": "page_background",
+      "page_path": "/odor-removal",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/paint-correction",
+      "label": "Paint Correction — optional page background",
+      "target_type": "page_background",
+      "page_path": "/paint-correction",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/pet-hair-removal",
+      "label": "Pet Hair Removal — optional page background",
+      "target_type": "page_background",
+      "page_path": "/pet-hair-removal",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/port-dover-auto-detailing",
+      "label": "Port Dover Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/port-dover-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/port-rowan-turkey-point-auto-detailing",
+      "label": "Port Rowan Turkey Point Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/port-rowan-turkey-point-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/simcoe-delhi-auto-detailing",
+      "label": "Simcoe Delhi Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/simcoe-delhi-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/tillsonburg-auto-detailing",
+      "label": "Tillsonburg Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/tillsonburg-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/uv-protectant",
+      "label": "Uv Protectant — optional page background",
+      "target_type": "page_background",
+      "page_path": "/uv-protectant",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/waterford-vittoria-auto-detailing",
+      "label": "Waterford Vittoria Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/waterford-vittoria-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/woodstock-ingersoll-auto-detailing",
+      "label": "Woodstock Ingersoll Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/woodstock-ingersoll-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "page-background:/zorra-thamesford-embro-auto-detailing",
+      "label": "Zorra Thamesford Embro Auto Detailing — optional page background",
+      "target_type": "page_background",
+      "page_path": "/zorra-thamesford-embro-auto-detailing",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:hero",
+      "label": "Bug and Tar Removal — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:gallery:1",
+      "label": "Bug and Tar Removal — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:gallery:2",
+      "label": "Bug and Tar Removal — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:gallery:3",
+      "label": "Bug and Tar Removal — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:review-proof",
+      "label": "Bug and Tar Removal — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:before-after:1:before",
+      "label": "Bug and Tar Removal — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:before-after:1:after",
+      "label": "Bug and Tar Removal — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:before-after:2:before",
+      "label": "Bug and Tar Removal — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:before-after:2:after",
+      "label": "Bug and Tar Removal — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:before-after:3:before",
+      "label": "Bug and Tar Removal — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:bug-tar-removal:before-after:3:after",
+      "label": "Bug and Tar Removal — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/bug-tar-removal",
+      "component_key": "bug-tar-removal",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/bug-tar-removal",
+      "label": "Bug and Tar Removal — optional page background",
+      "target_type": "page_background",
+      "page_path": "/bug-tar-removal",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:hero",
+      "label": "Carpet Shampoo — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:gallery:1",
+      "label": "Carpet Shampoo — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:gallery:2",
+      "label": "Carpet Shampoo — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:gallery:3",
+      "label": "Carpet Shampoo — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:review-proof",
+      "label": "Carpet Shampoo — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:before-after:1:before",
+      "label": "Carpet Shampoo — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:before-after:1:after",
+      "label": "Carpet Shampoo — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:before-after:2:before",
+      "label": "Carpet Shampoo — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:before-after:2:after",
+      "label": "Carpet Shampoo — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:before-after:3:before",
+      "label": "Carpet Shampoo — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:carpet-shampoo:before-after:3:after",
+      "label": "Carpet Shampoo — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/carpet-shampoo",
+      "component_key": "carpet-shampoo",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/carpet-shampoo",
+      "label": "Carpet Shampoo — optional page background",
+      "target_type": "page_background",
+      "page_path": "/carpet-shampoo",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:hero",
+      "label": "Ceramic Spray Protection — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:gallery:1",
+      "label": "Ceramic Spray Protection — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:gallery:2",
+      "label": "Ceramic Spray Protection — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:gallery:3",
+      "label": "Ceramic Spray Protection — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:review-proof",
+      "label": "Ceramic Spray Protection — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:before-after:1:before",
+      "label": "Ceramic Spray Protection — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:before-after:1:after",
+      "label": "Ceramic Spray Protection — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:before-after:2:before",
+      "label": "Ceramic Spray Protection — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:before-after:2:after",
+      "label": "Ceramic Spray Protection — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:before-after:3:before",
+      "label": "Ceramic Spray Protection — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:ceramic-spray-wax:before-after:3:after",
+      "label": "Ceramic Spray Protection — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "ceramic-spray-wax",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/ceramic-spray-wax",
+      "label": "Ceramic Spray Protection — optional page background",
+      "target_type": "page_background",
+      "page_path": "/ceramic-spray-wax",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:de-badging:hero",
+      "label": "De-Badging — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:de-badging:gallery:1",
+      "label": "De-Badging — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:de-badging:gallery:2",
+      "label": "De-Badging — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:de-badging:gallery:3",
+      "label": "De-Badging — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:de-badging:review-proof",
+      "label": "De-Badging — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:de-badging:before-after:1:before",
+      "label": "De-Badging — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:de-badging:before-after:1:after",
+      "label": "De-Badging — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:de-badging:before-after:2:before",
+      "label": "De-Badging — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:de-badging:before-after:2:after",
+      "label": "De-Badging — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:de-badging:before-after:3:before",
+      "label": "De-Badging — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:de-badging:before-after:3:after",
+      "label": "De-Badging — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/de-badging",
+      "component_key": "de-badging",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/de-badging",
+      "label": "De-Badging — optional page background",
+      "target_type": "page_background",
+      "page_path": "/de-badging",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:hero",
+      "label": "External Ceramic Coating — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:gallery:1",
+      "label": "External Ceramic Coating — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:gallery:2",
+      "label": "External Ceramic Coating — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:gallery:3",
+      "label": "External Ceramic Coating — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:review-proof",
+      "label": "External Ceramic Coating — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:before-after:1:before",
+      "label": "External Ceramic Coating — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:before-after:1:after",
+      "label": "External Ceramic Coating — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:before-after:2:before",
+      "label": "External Ceramic Coating — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:before-after:2:after",
+      "label": "External Ceramic Coating — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:before-after:3:before",
+      "label": "External Ceramic Coating — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:external-ceramic-coating:before-after:3:after",
+      "label": "External Ceramic Coating — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "external-ceramic-coating",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/external-ceramic-coating",
+      "label": "External Ceramic Coating — optional page background",
+      "target_type": "page_background",
+      "page_path": "/external-ceramic-coating",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:hero",
+      "label": "Fleet Vehicle Add-On — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:gallery:1",
+      "label": "Fleet Vehicle Add-On — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:gallery:2",
+      "label": "Fleet Vehicle Add-On — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:gallery:3",
+      "label": "Fleet Vehicle Add-On — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:review-proof",
+      "label": "Fleet Vehicle Add-On — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:before-after:1:before",
+      "label": "Fleet Vehicle Add-On — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:before-after:1:after",
+      "label": "Fleet Vehicle Add-On — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:before-after:2:before",
+      "label": "Fleet Vehicle Add-On — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:before-after:2:after",
+      "label": "Fleet Vehicle Add-On — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:before-after:3:before",
+      "label": "Fleet Vehicle Add-On — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:fleet-vehicle-add-on:before-after:3:after",
+      "label": "Fleet Vehicle Add-On — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "fleet-vehicle-add-on",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/fleet-vehicle-add-on",
+      "label": "Fleet Vehicle Add-On — optional page background",
+      "target_type": "page_background",
+      "page_path": "/fleet-vehicle-add-on",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:hero",
+      "label": "Headlight Restoration — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:gallery:1",
+      "label": "Headlight Restoration — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:gallery:2",
+      "label": "Headlight Restoration — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:gallery:3",
+      "label": "Headlight Restoration — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:review-proof",
+      "label": "Headlight Restoration — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:before-after:1:before",
+      "label": "Headlight Restoration — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:before-after:1:after",
+      "label": "Headlight Restoration — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:before-after:2:before",
+      "label": "Headlight Restoration — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:before-after:2:after",
+      "label": "Headlight Restoration — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:before-after:3:before",
+      "label": "Headlight Restoration — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:headlight-restoration-addon:before-after:3:after",
+      "label": "Headlight Restoration — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "headlight-restoration-addon",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/headlight-restoration-addon",
+      "label": "Headlight Restoration — optional page background",
+      "target_type": "page_background",
+      "page_path": "/headlight-restoration-addon",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:odor-treatment:hero",
+      "label": "Odor Treatment — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:odor-treatment:gallery:1",
+      "label": "Odor Treatment — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:odor-treatment:gallery:2",
+      "label": "Odor Treatment — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:odor-treatment:gallery:3",
+      "label": "Odor Treatment — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:odor-treatment:review-proof",
+      "label": "Odor Treatment — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:odor-treatment:before-after:1:before",
+      "label": "Odor Treatment — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:odor-treatment:before-after:1:after",
+      "label": "Odor Treatment — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:odor-treatment:before-after:2:before",
+      "label": "Odor Treatment — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:odor-treatment:before-after:2:after",
+      "label": "Odor Treatment — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:odor-treatment:before-after:3:before",
+      "label": "Odor Treatment — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:odor-treatment:before-after:3:after",
+      "label": "Odor Treatment — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/odor-treatment",
+      "component_key": "odor-treatment",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/odor-treatment",
+      "label": "Odor Treatment — optional page background",
+      "target_type": "page_background",
+      "page_path": "/odor-treatment",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:hero",
+      "label": "Salt Stain Treatment — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:gallery:1",
+      "label": "Salt Stain Treatment — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:gallery:2",
+      "label": "Salt Stain Treatment — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:gallery:3",
+      "label": "Salt Stain Treatment — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:review-proof",
+      "label": "Salt Stain Treatment — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:before-after:1:before",
+      "label": "Salt Stain Treatment — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:before-after:1:after",
+      "label": "Salt Stain Treatment — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:before-after:2:before",
+      "label": "Salt Stain Treatment — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:before-after:2:after",
+      "label": "Salt Stain Treatment — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:before-after:3:before",
+      "label": "Salt Stain Treatment — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:salt-stain-treatment:before-after:3:after",
+      "label": "Salt Stain Treatment — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "salt-stain-treatment",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/salt-stain-treatment",
+      "label": "Salt Stain Treatment — optional page background",
+      "target_type": "page_background",
+      "page_path": "/salt-stain-treatment",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:seat-shampoo:hero",
+      "label": "Seat Shampoo — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:seat-shampoo:gallery:1",
+      "label": "Seat Shampoo — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:seat-shampoo:gallery:2",
+      "label": "Seat Shampoo — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:seat-shampoo:gallery:3",
+      "label": "Seat Shampoo — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:seat-shampoo:review-proof",
+      "label": "Seat Shampoo — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:seat-shampoo:before-after:1:before",
+      "label": "Seat Shampoo — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:seat-shampoo:before-after:1:after",
+      "label": "Seat Shampoo — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:seat-shampoo:before-after:2:before",
+      "label": "Seat Shampoo — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:seat-shampoo:before-after:2:after",
+      "label": "Seat Shampoo — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:seat-shampoo:before-after:3:before",
+      "label": "Seat Shampoo — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:seat-shampoo:before-after:3:after",
+      "label": "Seat Shampoo — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/seat-shampoo",
+      "component_key": "seat-shampoo",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/seat-shampoo",
+      "label": "Seat Shampoo — optional page background",
+      "target_type": "page_background",
+      "page_path": "/seat-shampoo",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:trim-restoration:hero",
+      "label": "Trim Restoration — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:trim-restoration:gallery:1",
+      "label": "Trim Restoration — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:trim-restoration:gallery:2",
+      "label": "Trim Restoration — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:trim-restoration:gallery:3",
+      "label": "Trim Restoration — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:trim-restoration:review-proof",
+      "label": "Trim Restoration — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:trim-restoration:before-after:1:before",
+      "label": "Trim Restoration — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:trim-restoration:before-after:1:after",
+      "label": "Trim Restoration — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:trim-restoration:before-after:2:before",
+      "label": "Trim Restoration — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:trim-restoration:before-after:2:after",
+      "label": "Trim Restoration — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:trim-restoration:before-after:3:before",
+      "label": "Trim Restoration — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:trim-restoration:before-after:3:after",
+      "label": "Trim Restoration — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/trim-restoration",
+      "component_key": "trim-restoration",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/trim-restoration",
+      "label": "Trim Restoration — optional page background",
+      "target_type": "page_background",
+      "page_path": "/trim-restoration",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:truck-box-wash:hero",
+      "label": "Truck Box Wash — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:truck-box-wash:gallery:1",
+      "label": "Truck Box Wash — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:truck-box-wash:gallery:2",
+      "label": "Truck Box Wash — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:truck-box-wash:gallery:3",
+      "label": "Truck Box Wash — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:truck-box-wash:review-proof",
+      "label": "Truck Box Wash — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:truck-box-wash:before-after:1:before",
+      "label": "Truck Box Wash — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:truck-box-wash:before-after:1:after",
+      "label": "Truck Box Wash — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:truck-box-wash:before-after:2:before",
+      "label": "Truck Box Wash — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:truck-box-wash:before-after:2:after",
+      "label": "Truck Box Wash — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:truck-box-wash:before-after:3:before",
+      "label": "Truck Box Wash — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:truck-box-wash:before-after:3:after",
+      "label": "Truck Box Wash — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/truck-box-wash",
+      "component_key": "truck-box-wash",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/truck-box-wash",
+      "label": "Truck Box Wash — optional page background",
+      "target_type": "page_background",
+      "page_path": "/truck-box-wash",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:two-stage-polish:hero",
+      "label": "Two Stage Polish — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:two-stage-polish:gallery:1",
+      "label": "Two Stage Polish — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:two-stage-polish:gallery:2",
+      "label": "Two Stage Polish — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:two-stage-polish:gallery:3",
+      "label": "Two Stage Polish — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:two-stage-polish:review-proof",
+      "label": "Two Stage Polish — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:two-stage-polish:before-after:1:before",
+      "label": "Two Stage Polish — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:two-stage-polish:before-after:1:after",
+      "label": "Two Stage Polish — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:two-stage-polish:before-after:2:before",
+      "label": "Two Stage Polish — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:two-stage-polish:before-after:2:after",
+      "label": "Two Stage Polish — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:two-stage-polish:before-after:3:before",
+      "label": "Two Stage Polish — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:two-stage-polish:before-after:3:after",
+      "label": "Two Stage Polish — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/two-stage-polish",
+      "component_key": "two-stage-polish",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/two-stage-polish",
+      "label": "Two Stage Polish — optional page background",
+      "target_type": "page_background",
+      "page_path": "/two-stage-polish",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:hero",
+      "label": "Vinyl Wrapping — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:gallery:1",
+      "label": "Vinyl Wrapping — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:gallery:2",
+      "label": "Vinyl Wrapping — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:gallery:3",
+      "label": "Vinyl Wrapping — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:review-proof",
+      "label": "Vinyl Wrapping — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:before-after:1:before",
+      "label": "Vinyl Wrapping — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:before-after:1:after",
+      "label": "Vinyl Wrapping — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:before-after:2:before",
+      "label": "Vinyl Wrapping — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:before-after:2:after",
+      "label": "Vinyl Wrapping — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:before-after:3:before",
+      "label": "Vinyl Wrapping — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:vinyl-wrapping:before-after:3:after",
+      "label": "Vinyl Wrapping — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "vinyl-wrapping",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/vinyl-wrapping",
+      "label": "Vinyl Wrapping — optional page background",
+      "target_type": "page_background",
+      "page_path": "/vinyl-wrapping",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:window-tinting:hero",
+      "label": "Window Tinting — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:window-tinting:gallery:1",
+      "label": "Window Tinting — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:window-tinting:gallery:2",
+      "label": "Window Tinting — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:window-tinting:gallery:3",
+      "label": "Window Tinting — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:window-tinting:review-proof",
+      "label": "Window Tinting — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:window-tinting:before-after:1:before",
+      "label": "Window Tinting — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:window-tinting:before-after:1:after",
+      "label": "Window Tinting — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:window-tinting:before-after:2:before",
+      "label": "Window Tinting — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:window-tinting:before-after:2:after",
+      "label": "Window Tinting — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:window-tinting:before-after:3:before",
+      "label": "Window Tinting — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:window-tinting:before-after:3:after",
+      "label": "Window Tinting — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/window-tinting",
+      "component_key": "window-tinting",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/window-tinting",
+      "label": "Window Tinting — optional page background",
+      "target_type": "page_background",
+      "page_path": "/window-tinting",
+      "component_key": "page-background",
+      "variant": "explicit"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:hero",
+      "label": "Windshield Ceramic Coating — landing page hero",
+      "target_type": "landing_hero",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "hero"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:gallery:1",
+      "label": "Windshield Ceramic Coating — gallery image 1",
+      "target_type": "landing_gallery",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "1"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:gallery:2",
+      "label": "Windshield Ceramic Coating — gallery image 2",
+      "target_type": "landing_gallery",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "2"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:gallery:3",
+      "label": "Windshield Ceramic Coating — gallery image 3",
+      "target_type": "landing_gallery",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "3"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:review-proof",
+      "label": "Windshield Ceramic Coating — review proof image",
+      "target_type": "proof_image",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "review-proof"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:before-after:1:before",
+      "label": "Windshield Ceramic Coating — Before & After — Set 1 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "set-1-before"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:before-after:1:after",
+      "label": "Windshield Ceramic Coating — Before & After — Set 1 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "set-1-after"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:before-after:2:before",
+      "label": "Windshield Ceramic Coating — Before & After — Set 2 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "set-2-before"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:before-after:2:after",
+      "label": "Windshield Ceramic Coating — Before & After — Set 2 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "set-2-after"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:before-after:3:before",
+      "label": "Windshield Ceramic Coating — Before & After — Set 3 — Before",
+      "target_type": "before_after_pair",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "set-3-before"
+    },
+    {
+      "target_key": "landing:windshield-ceramic-coating:before-after:3:after",
+      "label": "Windshield Ceramic Coating — Before & After — Set 3 — After",
+      "target_type": "before_after_pair",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "windshield-ceramic-coating",
+      "variant": "set-3-after"
+    },
+    {
+      "target_key": "page-background:/windshield-ceramic-coating",
+      "label": "Windshield Ceramic Coating — optional page background",
+      "target_type": "page_background",
+      "page_path": "/windshield-ceramic-coating",
+      "component_key": "page-background",
+      "variant": "explicit"
     }
   ],
-  "target_count": 148
+  "target_count": 617,
+  "revision": 256,
+  "current_build": 259,
+  "current_revision": "build259-comprehensive-public-image-targets"
 }

@@ -13,7 +13,7 @@
         "nav_group": "special-service",
         "name": "Ceramic coating",
         "meta_title": "Ceramic Coating in Oxford & Norfolk Counties | Rosie Dazzlers",
-        "meta_description": "Learn how Rosie Dazzlers approaches ceramic coating prep, polishing requirements, coating installation, aftercare, and booking expectations for Oxford and Norfolk County vehicles.",
+        "meta_description": "Learn how Rosie Dazzlers approaches ceramic coating prep, polishing requirements, coating installation, aftercare, and booking expectations for Oxford.",
         "badge": "Special service landing page",
         "hero_title": "Ceramic coating service",
         "hero_intro": "Ceramic coating is a protection-focused upgrade for customers who want easier washing, stronger gloss retention, and a more deliberate long-term maintenance path after proper prep.",
@@ -68,7 +68,7 @@
         "nav_group": "special-service",
         "name": "Pet hair removal",
         "meta_title": "Pet Hair Removal for Vehicle Interiors | Rosie Dazzlers",
-        "meta_description": "Learn how Rosie Dazzlers handles pet hair removal from carpets, seats, cargo areas, and trim, including tool choice, realistic labour expectations, and when a deeper interior package makes more sense.",
+        "meta_description": "Learn how Rosie Dazzlers handles pet hair removal from carpets, seats, cargo areas, and trim, including tool choice, realistic labour expectations, and.",
         "badge": "Special service landing page",
         "hero_title": "Pet hair removal service",
         "hero_intro": "Pet hair removal is labour-heavy interior work that depends on the upholstery type, how deeply the hair is woven into carpet or cloth, and how much overall interior cleaning is needed at the same time.",
@@ -123,7 +123,7 @@
         "nav_group": "special-service",
         "name": "Odor removal",
         "meta_title": "Vehicle Odor Removal Service | Rosie Dazzlers",
-        "meta_description": "Learn how Rosie Dazzlers approaches smoke, pet, food, and general interior odour reduction, including source cleaning, deeper interior prep, deodorizing tools, and realistic expectations.",
+        "meta_description": "Learn how Rosie Dazzlers approaches smoke, pet, food, and general interior odour reduction, including source cleaning, deeper interior prep, deodorizing.",
         "badge": "Special service landing page",
         "hero_title": "Vehicle odor removal service",
         "hero_intro": "Odor removal works best when the source is cleaned first. The treatment stage matters, but the real improvement often starts with carpets, seats, vents, spill areas, and hidden organic build-up being addressed properly.",
@@ -233,20 +233,21 @@
         "nav_group": "special-service",
         "name": "Paint correction",
         "meta_title": "Paint Correction in Oxford & Norfolk Counties | Rosie Dazzlers",
-        "meta_description": "Paint correction information for swirl marks, oxidation, dull paint, and gloss restoration. Learn when one-stage polishing or heavier correction may be needed before protection services.",
+        "meta_description": "Paint correction information for swirl marks, oxidation, dull paint, and gloss restoration. Learn when one-stage polishing or heavier correction may be.",
         "badge": "Special service landing page",
         "hero_title": "Paint correction service",
-        "hero_intro": "Paint correction is defect-removal work, not just a gloss product. The right path depends on paint condition, defect depth, and the level of improvement the customer wants.",
+        "hero_intro": "Paint correction is defect-removal work, not just a gloss product. Cost can rise quickly because every extra panel, deeper defect, harder or softer clear coat, and additional polishing stage adds inspection, masking, machine time, pads, compounds, and finishing work. We quote the actual condition before promising a correction level.",
         "reasons_page_exists": [
           "Customers often mix up wax, sealant, polish, and correction even though they do different jobs.",
           "This page clarifies when swirl marks, oxidation, haze, and gloss loss call for correction rather than simple protection.",
           "It also explains why quote-led inspection matters before promising a finish result."
         ],
         "process": [
-          "Inspect the finish under proper light to understand swirls, haze, oxidation, and deeper defects.",
-          "Wash and decontaminate the paint so polishing work is not being performed over bonded contamination.",
-          "Choose the least aggressive polishing path that can achieve the target improvement level.",
-          "Refine the finish and match it with the right protection step afterward."
+          "Inspect the finish under dedicated lighting, photograph representative defects, and agree on the realistic improvement target before polishing begins.",
+          "Wash, chemically decontaminate, and clay as needed so polishing is performed on clean paint rather than bonded contamination.",
+          "Perform a test section to choose the least aggressive pad, compound, polish, and machine combination that safely reaches the target.",
+          "Correct panel by panel. A one-stage enhancement may be enough for lighter defects; heavier swirls, oxidation, sanding marks, or deeper scratches can require multiple cutting and refining stages.",
+          "Reinspect under proper light, refine haze or micro-marring, prepare the surface, and recommend wax, sealant, ceramic, or another protection step appropriate to the corrected finish."
         ],
         "equipment": [
           "decontamination supplies, iron removers, and wash media",
@@ -260,23 +261,29 @@
           "Deep defects that run through the clear coat cannot always be corrected safely."
         ],
         "things_to_know": [
-          "Correction removes or reduces visible defects; it is not the same thing as waxing.",
-          "Not every vehicle needs an aggressive cut step; sometimes refinement is the smarter path.",
-          "The better the correction target, the more valuable the protection step becomes afterward."
+          "Paint correction removes or reduces defects from the clear coat; it is not the same thing as waxing, glazing, or simply adding gloss.",
+          "Cost can rise quickly when more panels need correction, defects are deeper, the clear coat behaves unexpectedly, trim needs extra masking, or a second/third polishing stage is required.",
+          "We do not chase defects that would require unsafe clear-coat removal. Deep scratches, chips, failing clear coat, or damage through the paint may need body-shop repair instead.",
+          "A photo estimate is useful, but final correction scope is confirmed after direct inspection and a test section.",
+          "The customer can choose a practical daily-driver improvement target or request a higher correction target; those are different labour commitments and are quoted accordingly."
         ],
         "official_links": [],
         "faq": [
           {
             "q": "Is paint correction the same as waxing?",
-            "a": "No. Correction removes or reduces visible defects; wax is mainly a protection or gloss step."
+            "a": "No. Correction removes or reduces visible paint defects. Wax, sealant, or ceramic protection is applied after correction to protect and enhance the improved finish."
+          },
+          {
+            "q": "Why can paint-correction pricing increase so quickly?",
+            "a": "Correction is labour driven. More affected panels, deeper defects, multiple machine-polishing stages, difficult clear coat, extra masking, and repeated inspection/refinement can add substantial time."
           },
           {
             "q": "Can one correction level fit every vehicle?",
-            "a": "No. Daily-driver improvement work and higher-level correction work are not the same labour or finish target."
+            "a": "No. A daily-driver gloss enhancement and a high-level multi-stage correction are different jobs. We confirm the desired improvement level and safe limit first."
           },
           {
-            "q": "Why is this usually quote-led?",
-            "a": "Because paint condition, defect depth, and the desired finish level all change the time, pad, and polish path."
+            "q": "Can photos give a final price?",
+            "a": "Photos help us triage the job, but direct inspection and a test section may still change the recommended process, time, and quote."
           }
         ]
       },
@@ -287,7 +294,7 @@
         "nav_group": "town",
         "name": "Tillsonburg auto detailing",
         "meta_title": "Mobile Auto Detailing in Tillsonburg, Ontario | Rosie Dazzlers",
-        "meta_description": "Town-focused mobile auto detailing information for Tillsonburg customers, including local watering restrictions, seasonal parking notes, Ontario electricity timing reminders, and booking guidance.",
+        "meta_description": "Town-focused mobile auto detailing information for Tillsonburg customers, including local watering restrictions, seasonal parking notes, Ontario.",
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Tillsonburg",
         "hero_intro": "This page exists so Tillsonburg-area customers can find local mobile-detailing guidance, seasonal municipal reminders, and current proof of work without digging through broader county pages first.",
@@ -362,7 +369,7 @@
         "nav_group": "town",
         "name": "Woodstock / Ingersoll auto detailing",
         "meta_title": "Mobile Auto Detailing in Woodstock & Ingersoll | Rosie Dazzlers",
-        "meta_description": "Town-focused mobile auto detailing page for Woodstock and Ingersoll customers, including Oxford water-use reminders, parking notes, and practical booking guidance for this service area.",
+        "meta_description": "Town-focused mobile auto detailing page for Woodstock and Ingersoll customers, including Oxford water-use reminders, parking notes, and practical booking.",
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Woodstock and Ingersoll",
         "hero_intro": "This page gives Woodstock and Ingersoll visitors a clearer local service entry point, with package guidance, recent proof, and practical town-level notes that matter for mobile work.",
@@ -504,7 +511,7 @@
         "nav_group": "town",
         "name": "Port Dover auto detailing",
         "meta_title": "Mobile Auto Detailing in Port Dover | Rosie Dazzlers",
-        "meta_description": "Town-focused mobile auto detailing page for Port Dover customers, including seasonal parking, Norfolk water-use reminders, and local booking guidance for coastal-area service calls.",
+        "meta_description": "Town-focused mobile auto detailing page for Port Dover customers, including seasonal parking, Norfolk water-use reminders, and local booking guidance for.",
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Port Dover",
         "hero_intro": "Port Dover deserves its own page because coastal and seasonal traffic patterns make local search intent and customer questions feel different from broader inland service pages.",
@@ -636,7 +643,7 @@
         "slug": "zorra-thamesford-embro-auto-detailing",
         "nav_group": "town",
         "name": "Zorra, Thamesford, Embro auto detailing",
-        "meta_title": "Mobile Auto Detailing in Zorra, Thamesford & Embro | Rosie Dazzlers",
+        "meta_title": "Mobile Auto Detailing in Zorra, Thamesford & Embro | Rosie.",
         "meta_description": "Mobile auto detailing for Zorra, Thamesford, Embro, and nearby Oxford County route areas with package guidance and local setup reminders.",
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Zorra, Thamesford, and Embro",
@@ -755,7 +762,7 @@
         "slug": "port-rowan-turkey-point-auto-detailing",
         "nav_group": "town",
         "name": "Port Rowan, Turkey Point auto detailing",
-        "meta_title": "Mobile Auto Detailing in Port Rowan & Turkey Point | Rosie Dazzlers",
+        "meta_title": "Mobile Auto Detailing in Port Rowan & Turkey Point | Rosie.",
         "meta_description": "Mobile auto detailing for Port Rowan, Turkey Point, and nearby Norfolk County coastal communities with seasonal access and water-use guidance.",
         "badge": "Town-focused detailing page",
         "hero_title": "Mobile auto detailing in Port Rowan and Turkey Point",
@@ -928,8 +935,8 @@
         "slug": "graphene-finish",
         "nav_group": "special-service",
         "name": "Graphene finish",
-        "meta_title": "Graphene Finish Service in Oxford & Norfolk Counties | Rosie Dazzlers",
-        "meta_description": "Learn how Rosie Dazzlers approaches graphene finish prep, what products are used, when exterior detailing is required first, and what customers should expect from gloss and maintenance behaviour.",
+        "meta_title": "Graphene Finish Service in Oxford & Norfolk Counties |.",
+        "meta_description": "Learn how Rosie Dazzlers approaches graphene finish prep, what products are used, when exterior detailing is required first, and what customers should.",
         "badge": "Special service landing page",
         "hero_title": "Graphene finish service",
         "hero_intro": "Graphene finish work is only worthwhile when the exterior has already been cleaned and prepared properly. This page explains the prep, the products, the finish expectations, and why graphene is tied to qualifying exterior-focused packages instead of being chosen alone.",
@@ -1003,7 +1010,7 @@
         "nav_group": "special-service",
         "name": "Full clay treatment",
         "meta_title": "Full Clay Treatment for Vehicle Paint | Rosie Dazzlers",
-        "meta_description": "Learn what a full clay treatment is, why bonded contamination matters, what products Rosie Dazzlers uses, and when a clay treatment should be paired with exterior detailing or correction work.",
+        "meta_description": "Learn what a full clay treatment is, why bonded contamination matters, what products Rosie Dazzlers uses, and when a clay treatment should be paired with.",
         "badge": "Special service landing page",
         "hero_title": "Full clay treatment",
         "hero_intro": "A clay treatment is a decontamination service, not a gloss shortcut. It helps remove bonded contamination from the paint so the surface feels cleaner and later polishing or protection steps behave the way they should.",
@@ -1081,7 +1088,7 @@
         "nav_group": "special-service",
         "name": "Engine cleaning",
         "meta_title": "Engine Cleaning Service | Rosie Dazzlers",
-        "meta_description": "Learn how Rosie Dazzlers approaches engine-bay cleaning, what products and tools support the process, when it can be booked by itself, and what limits apply to older or more sensitive engine bays.",
+        "meta_description": "Learn how Rosie Dazzlers approaches engine-bay cleaning, what products and tools support the process, when it can be booked by itself, and what limits.",
         "badge": "Special service landing page",
         "hero_title": "Engine cleaning service",
         "hero_intro": "Engine cleaning is one of the few add-ons that can stand on its own when the vehicle and engine bay are a good fit. The goal is a cleaner, easier-to-maintain bay using sensible moisture control and product choice rather than reckless pressure or over-dressing.",
@@ -1154,7 +1161,7 @@
         "nav_group": "special-service",
         "name": "High grade paint sealant",
         "meta_title": "High Grade Paint Sealant Service | Rosie Dazzlers",
-        "meta_description": "Learn how Rosie Dazzlers applies paint sealant, when it makes sense, what products support the service, and how it compares with wax, graphene, and ceramic-style protection.",
+        "meta_description": "Learn how Rosie Dazzlers applies paint sealant, when it makes sense, what products support the service, and how it compares with wax, graphene, and.",
         "badge": "Special service landing page",
         "hero_title": "High grade paint sealant service",
         "hero_intro": "A high grade paint sealant is a protection-focused add-on for customers who want stronger gloss and water behaviour than a simple wash alone, but who may not need a heavier correction or quote-led ceramic path.",
@@ -1293,7 +1300,7 @@
         "nav_group": "special-service",
         "name": "Exterior wax",
         "meta_title": "Exterior Wax Service | Rosie Dazzlers",
-        "meta_description": "Learn when exterior wax makes sense, how Rosie Dazzlers approaches prep, what products support the service, and how wax compares with sealant, graphene, and ceramic-style protection.",
+        "meta_description": "Learn when exterior wax makes sense, how Rosie Dazzlers approaches prep, what products support the service, and how wax compares with sealant, graphene.",
         "badge": "Special service landing page",
         "hero_title": "Exterior wax service",
         "hero_intro": "Exterior wax is a practical protection and gloss add-on when the vehicle has already been washed and prepared properly. It is a simpler protection conversation than ceramic or graphene, but the prep still matters.",
@@ -1779,5 +1786,919 @@
       ],
       "related_products": []
     }
+  },
+  "pages": {
+    "two-stage-polish": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "two-stage-polish",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Two Stage Polish",
+      "meta_title": "Two Stage Polish | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs two stage polish, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Two Stage Polish",
+      "hero_intro": "Two Stage Polish is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what two stage polish does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that two stage polish is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the two stage polish process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for machine polishing",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Two Stage Polish",
+        "Typical added time: 3–7+ hr",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 3–7+ hr.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary.",
+        "Quote required because paint condition varies"
+      ],
+      "faq": [
+        {
+          "q": "How long does two stage polish add?",
+          "a": "A typical planning allowance is 3–7+ hr, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is two stage polish a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "de-badging": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "de-badging",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "De-Badging",
+      "meta_title": "De-Badging | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs de-badging, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "De-Badging",
+      "hero_intro": "De-Badging is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/DeBadgingAddonService.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what de-badging does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that de-badging is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the de-badging process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for badge removal",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: De-Badging",
+        "Typical added time: 45–120+ min",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 45–120+ min.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary."
+      ],
+      "faq": [
+        {
+          "q": "How long does de-badging add?",
+          "a": "A typical planning allowance is 45–120+ min, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is de-badging a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "external-ceramic-coating": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "external-ceramic-coating",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "External Ceramic Coating",
+      "meta_title": "External Ceramic Coating | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs external ceramic coating, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "External Ceramic Coating",
+      "hero_intro": "External Ceramic Coating is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/External%20Ceramic%20coating%20add%20on%20service.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what external ceramic coating does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that external ceramic coating is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the external ceramic coating process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for ceramic coating",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: External Ceramic Coating",
+        "Typical added time: 2–6+ hr",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 2–6+ hr.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary.",
+        "Starting price only"
+      ],
+      "faq": [
+        {
+          "q": "How long does external ceramic coating add?",
+          "a": "A typical planning allowance is 2–6+ hr, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is external ceramic coating a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "vinyl-wrapping": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "vinyl-wrapping",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Vinyl Wrapping",
+      "meta_title": "Vinyl Wrapping | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs vinyl wrapping, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Vinyl Wrapping",
+      "hero_intro": "Vinyl Wrapping is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/Vinyl%20Wrapping%20add%20on%20service.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what vinyl wrapping does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that vinyl wrapping is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the vinyl wrapping process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for vinyl wrapping",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Vinyl Wrapping",
+        "Typical added time: Quote by area / scope",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Quote by area / scope.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary."
+      ],
+      "faq": [
+        {
+          "q": "How long does vinyl wrapping add?",
+          "a": "A typical planning allowance is Quote by area / scope, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is vinyl wrapping a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "window-tinting": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "window-tinting",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Window Tinting",
+      "meta_title": "Window Tinting | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs window tinting, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Window Tinting",
+      "hero_intro": "Window Tinting is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/Window%20Tinting%20add%20on%20service.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what window tinting does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that window tinting is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the window tinting process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for window tinting",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Window Tinting",
+        "Typical added time: 1.5–4+ hr",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 1.5–4+ hr.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary."
+      ],
+      "faq": [
+        {
+          "q": "How long does window tinting add?",
+          "a": "A typical planning allowance is 1.5–4+ hr, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is window tinting a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "odor-treatment": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "odor-treatment",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Odor Treatment",
+      "meta_title": "Odor Treatment | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs odor treatment, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Odor Treatment",
+      "hero_intro": "Odor Treatment is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/odor_treatment.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what odor treatment does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that odor treatment is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the odor treatment process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for odor help",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Odor Treatment",
+        "Typical added time: 45–120+ min",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 45–120+ min.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Best for smoke, food, pet, musty, or unknown odour concerns after source cleaning. Severe or biohazard odours may require inspection or referral."
+      ],
+      "faq": [
+        {
+          "q": "How long does odor treatment add?",
+          "a": "A typical planning allowance is 45–120+ min, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is odor treatment a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "seat-shampoo": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "seat-shampoo",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Seat Shampoo",
+      "meta_title": "Seat Shampoo | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs seat shampoo, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Seat Shampoo",
+      "hero_intro": "Seat Shampoo is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/seat_shampoo.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what seat shampoo does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that seat shampoo is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the seat shampoo process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for fabric extraction",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Seat Shampoo",
+        "Typical added time: 45–120 min",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 45–120 min.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Greatly improves many fabric stains and spills, but some permanent staining may remain."
+      ],
+      "faq": [
+        {
+          "q": "How long does seat shampoo add?",
+          "a": "A typical planning allowance is 45–120 min, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is seat shampoo a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "carpet-shampoo": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "carpet-shampoo",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Carpet Shampoo",
+      "meta_title": "Carpet Shampoo | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs carpet shampoo, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Carpet Shampoo",
+      "hero_intro": "Carpet Shampoo is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/carpet_shampoo.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what carpet shampoo does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that carpet shampoo is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the carpet shampoo process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for carpet extraction",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Carpet Shampoo",
+        "Typical added time: 45–120 min",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 45–120 min.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Recommended for salt, coffee, kids, pets, cargo dirt, and winter buildup. Heavy salt may require multiple passes."
+      ],
+      "faq": [
+        {
+          "q": "How long does carpet shampoo add?",
+          "a": "A typical planning allowance is 45–120 min, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is carpet shampoo a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "salt-stain-treatment": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "salt-stain-treatment",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Salt Stain Treatment",
+      "meta_title": "Salt Stain Treatment | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs salt stain treatment, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Salt Stain Treatment",
+      "hero_intro": "Salt Stain Treatment is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/salt_stain_treatment.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what salt stain treatment does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that salt stain treatment is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the salt stain treatment process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for seasonal cleanup",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Salt Stain Treatment",
+        "Typical added time: 45–150+ min",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 45–150+ min.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Local Ontario winter add-on for white salt staining on mats, carpets, and lower panels. Some older salt staining may only improve, not fully disappear."
+      ],
+      "faq": [
+        {
+          "q": "How long does salt stain treatment add?",
+          "a": "A typical planning allowance is 45–150+ min, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is salt stain treatment a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "headlight-restoration-addon": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "headlight-restoration-addon",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Headlight Restoration",
+      "meta_title": "Headlight Restoration | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs headlight restoration, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Headlight Restoration",
+      "hero_intro": "Headlight Restoration is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/headlight_restoration.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what headlight restoration does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that headlight restoration is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the headlight restoration process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for safety and clarity",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Headlight Restoration",
+        "Typical added time: Time varies by condition",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Time varies by condition.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Improves cloudy, yellowed, or oxidized headlight lenses where the lens is restorable. Cracked, wet, or failing lenses may need replacement."
+      ],
+      "faq": [
+        {
+          "q": "How long does headlight restoration add?",
+          "a": "A typical planning allowance is Time varies by condition, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is headlight restoration a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "windshield-ceramic-coating": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "windshield-ceramic-coating",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Windshield Ceramic Coating",
+      "meta_title": "Windshield Ceramic Coating | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs windshield ceramic coating, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Windshield Ceramic Coating",
+      "hero_intro": "Windshield Ceramic Coating is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/windshield_ceramic_coating.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what windshield ceramic coating does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that windshield ceramic coating is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the windshield ceramic coating process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for glass coating",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Windshield Ceramic Coating",
+        "Typical added time: Time varies by condition",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Time varies by condition.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Adds hydrophobic protection to exterior glass after cleaning and prep. Best after exterior detail or glass polishing when needed."
+      ],
+      "faq": [
+        {
+          "q": "How long does windshield ceramic coating add?",
+          "a": "A typical planning allowance is Time varies by condition, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is windshield ceramic coating a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "ceramic-spray-wax": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "ceramic-spray-wax",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Ceramic Spray Protection",
+      "meta_title": "Ceramic Spray Protection | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs ceramic spray protection, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Ceramic Spray Protection",
+      "hero_intro": "Ceramic Spray Protection is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/ceramic_spray_wax.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what ceramic spray protection does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that ceramic spray protection is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the ceramic spray protection process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for paint protection",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Ceramic Spray Protection",
+        "Typical added time: Time varies by condition",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Time varies by condition.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Entry-level gloss and water-beading protection after an exterior wash/detail. Not the same as a multi-year ceramic coating."
+      ],
+      "faq": [
+        {
+          "q": "How long does ceramic spray protection add?",
+          "a": "A typical planning allowance is Time varies by condition, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is ceramic spray protection a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "trim-restoration": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "trim-restoration",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Trim Restoration",
+      "meta_title": "Trim Restoration | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs trim restoration, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Trim Restoration",
+      "hero_intro": "Trim Restoration is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/trim_restoration.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what trim restoration does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that trim restoration is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the trim restoration process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for plastic trim",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Trim Restoration",
+        "Typical added time: 45–120 min",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: 45–120 min.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Improves faded exterior plastic trim where the material is still restorable."
+      ],
+      "faq": [
+        {
+          "q": "How long does trim restoration add?",
+          "a": "A typical planning allowance is 45–120 min, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is trim restoration a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "bug-tar-removal": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "bug-tar-removal",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Bug and Tar Removal",
+      "meta_title": "Bug and Tar Removal | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs bug and tar removal, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Bug and Tar Removal",
+      "hero_intro": "Bug and Tar Removal is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/bug_tar_removal.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what bug and tar removal does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that bug and tar removal is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the bug and tar removal process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for contamination removal",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Bug and Tar Removal",
+        "Typical added time: Time varies by condition",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Time varies by condition.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "Displayed add-on prices assume a normal service condition; unusually heavy correction or preparation can require a reviewed adjustment before work proceeds.",
+        "Helps remove bug residue, tar spotting, sap-like contamination, and stuck-on road grime before protection."
+      ],
+      "faq": [
+        {
+          "q": "How long does bug and tar removal add?",
+          "a": "A typical planning allowance is Time varies by condition, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is bug and tar removal a fixed price?",
+          "a": "The listed add-on price covers a normal-condition service. If inspection shows substantially more preparation or labour is required, we review the change before proceeding."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "truck-box-wash": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "truck-box-wash",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Truck Box Wash",
+      "meta_title": "Truck Box Wash | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs truck box wash, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Truck Box Wash",
+      "hero_intro": "Truck Box Wash is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/truck_box_wash.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what truck box wash does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that truck box wash is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the truck box wash process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for truck utility cleanup",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Truck Box Wash",
+        "Typical added time: Time varies by condition",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Time varies by condition.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary.",
+        "Quote path for pickup beds, work trucks, contractor vehicles, farm trucks, and cargo use. Loose debris and hazardous materials must be removed before service."
+      ],
+      "faq": [
+        {
+          "q": "How long does truck box wash add?",
+          "a": "A typical planning allowance is Time varies by condition, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is truck box wash a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    },
+    "fleet-vehicle-add-on": {
+      "enabled": true,
+      "type": "addon",
+      "slug": "fleet-vehicle-add-on",
+      "nav_group": "addon-service",
+      "badge": "Optional detailing add-on",
+      "name": "Fleet Vehicle Add-On",
+      "meta_title": "Fleet Vehicle Add-On | Rosie Dazzlers Mobile Detailing",
+      "meta_description": "Learn how Rosie Dazzlers performs fleet vehicle add-on, what adds time or cost, and when inspection is required in Oxford and Norfolk Counties.",
+      "hero_title": "Fleet Vehicle Add-On",
+      "hero_intro": "Fleet Vehicle Add-On is an optional Rosie Dazzlers mobile detailing service for vehicles in Oxford and Norfolk Counties. Review the process, expected added time, fit, and condition-dependent pricing before adding it to a booking.",
+      "hero_image_url": "https://assets.rosiedazzlers.ca/packages/fleet_vehicle_add_on.png",
+      "gallery_image_urls": [],
+      "reasons_page_exists": [
+        "Explain what fleet vehicle add-on does before a customer adds it to a package.",
+        "Set realistic labour, preparation, timing, and pricing expectations before arrival.",
+        "Give staff one editable source for the service description instead of repeating short card copy."
+      ],
+      "process": [
+        "Inspect the vehicle and confirm that fleet vehicle add-on is suitable for the material, finish, and condition.",
+        "Protect adjacent surfaces and complete the cleaning or preparation needed before the add-on begins.",
+        "Perform the fleet vehicle add-on process using the appropriate products, tools, dwell time, and controlled technique.",
+        "Inspect the result, remove residue or protection materials, and document any limitations or recommended follow-up."
+      ],
+      "equipment": [
+        "Products and tools selected for commercial scheduling",
+        "Surface-safe towels, applicators, brushes, pads, or machines as required",
+        "Inspection lighting and protection materials appropriate to the job"
+      ],
+      "highlights": [
+        "Optional add-on: Fleet Vehicle Add-On",
+        "Typical added time: Time varies by condition",
+        "Mobile service across eligible Oxford and Norfolk County appointments"
+      ],
+      "things_to_know": [
+        "Typical added time: Time varies by condition.",
+        "Actual time can increase when contamination, access, previous coatings, staining, damage, or material condition requires extra preparation.",
+        "This service may require inspection or photo review before the final price is confirmed because condition and labour vary.",
+        "For multiple vehicles at one location, work trucks, company cars, and recurring business cleanup."
+      ],
+      "faq": [
+        {
+          "q": "How long does fleet vehicle add-on add?",
+          "a": "A typical planning allowance is Time varies by condition, but vehicle condition, access, preparation, and the amount of correction needed can change the actual time."
+        },
+        {
+          "q": "Is fleet vehicle add-on a fixed price?",
+          "a": "It is quote-required because condition and labour can vary. We may use photos or an in-person inspection before confirming the final amount."
+        },
+        {
+          "q": "Can I add this to any package?",
+          "a": "Most add-ons can be requested with a compatible package. Rosie Dazzlers reviews the package, vehicle condition, available appointment time, and any service conflicts before confirming the final work plan."
+        }
+      ],
+      "related_products": [],
+      "official_links": []
+    }
+  },
+  "metadata": {
+    "build259_note": "All catalog add-ons have owner-editable landing-page records or overrides."
   }
 }
