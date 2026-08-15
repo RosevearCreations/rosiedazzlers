@@ -219,6 +219,18 @@ create table if not exists public.bookings (
   service_area_zone text null,
   package_code text not null,
   vehicle_size text not null,
+  vehicle_size_review_status text not null default 'verified',
+  vehicle_size_original text null,
+  vehicle_size_catalog_expected text null,
+  vehicle_size_review_reason text null,
+  vehicle_size_reviewed_size text null,
+  vehicle_size_reviewed_price_cents integer null,
+  vehicle_size_reviewed_at timestamptz null,
+  vehicle_size_reviewed_by uuid null,
+  vehicle_size_review_token_hash text null,
+  vehicle_size_review_expires_at timestamptz null,
+  vehicle_size_customer_response text null,
+  vehicle_size_customer_responded_at timestamptz null,
   addons jsonb not null default '[]'::jsonb,
   customer_name text not null,
   customer_email text not null,
@@ -4591,3 +4603,25 @@ create table if not exists public.app_media_assignments (
 create index if not exists app_media_assignments_media_idx on public.app_media_assignments(media_id, is_active);
 create index if not exists app_media_assignments_page_idx on public.app_media_assignments(page_path, target_type, is_active);
 alter table public.app_media_assignments enable row level security;
+
+
+-- BEGIN 2026-08-13_build259_vehicle_size_review.sql
+-- Build 259 — staff/customer vehicle-size verification workflow.
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_review_status text NOT NULL DEFAULT 'verified';
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_original text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_catalog_expected text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_review_reason text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_reviewed_size text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_reviewed_price_cents integer;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_reviewed_at timestamptz;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_reviewed_by uuid;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_review_token_hash text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_review_expires_at timestamptz;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_customer_response text;
+ALTER TABLE public.bookings ADD COLUMN IF NOT EXISTS vehicle_size_customer_responded_at timestamptz;
+
+CREATE INDEX IF NOT EXISTS bookings_vehicle_size_review_status_idx ON public.bookings(vehicle_size_review_status, service_date);
+
+COMMENT ON COLUMN public.bookings.vehicle_size_review_status IS 'verified, needs_review, awaiting_customer, customer_confirmed, customer_cancelled';
+COMMENT ON COLUMN public.bookings.vehicle_size_review_token_hash IS 'SHA-256 only; raw customer review token is never stored.';
+-- END 2026-08-13_build259_vehicle_size_review.sql

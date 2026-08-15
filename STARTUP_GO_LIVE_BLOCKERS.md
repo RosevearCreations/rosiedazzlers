@@ -1,3 +1,31 @@
+## Build 259 acceptance — editable media, vehicle-size review and quote operations
+
+- [ ] Apply `sql/2026-08-13_build259_vehicle_size_review.sql` in staging before using vehicle-size review controls.
+- [ ] Deploy Pages + Functions together and hard-refresh Services, Pricing, Maintenance Plan, Fleet, Photo Studio, Admin Booking and Admin Quotes.
+- [ ] Confirm existing Photo Studio assignments are unchanged; verify new logo/banner/review/background/static-image/maintenance/add-on targets are selectable but unassigned until deliberately chosen.
+- [ ] Open an add-on from Services; confirm the internal code is hidden, price/Quote Required and estimated added time fit inside the card, and process/details opens the owner-editable landing page.
+- [ ] Review Paint Correction copy for test spots, clear-coat limits, multi-stage labour and condition-driven price escalation.
+- [ ] Confirm Package Service Details headings do not overlap and the Services decision cards remain readable at desktop/tablet/phone widths.
+- [ ] Edit Maintenance Plan information/waitlist/good-fit copy and assign a test hero image; confirm waitlist/fleet form fields stay inside their panels.
+- [ ] Create an uncertain vehicle-size booking; verify staff can mark it verified without customer action.
+- [ ] Create a harmless corrected size/price test; confirm the secure email link can confirm or cancel, expires, and cannot be reused.
+- [ ] Open Quote Pipeline; select a row, edit/save it, create a test row, and confirm lead/customer/booking link fields persist.
+- [ ] Confirm normal public/Photo Studio loads still perform no R2 enumeration; only explicit Sync may scan R2.
+
+## Build 257 acceptance — Worker resource hotfix
+
+- [ ] Deploy Pages + Functions together and hard-refresh `/admin-photo-studio`.
+- [ ] Confirm opening Photo Studio does not trigger an R2 scan and returns the managed library promptly.
+- [ ] Press **Sync approved R2 photos** once; confirm it returns a bounded scanned/inserted count rather than Error 1102.
+- [ ] Open Services and one landing page; confirm `/api/public_website_images` returns compact JSON without enumerating R2.
+- [ ] Confirm existing package images, explicit assignments and Before/After pairs remain unchanged.
+
+
+## Build 256 Photo Studio acceptance
+- Confirm an assigned thumbnail displays its human-readable target name.
+- Confirm occupied dropdown targets show `✓`, including `— this photo` when applicable.
+- Assign harmless test photos to one landing-page Set 1 Before and After target; confirm no block appears after only one side and a paired block appears only after both sides exist.
+- Remove the test assignments and confirm the previous page imagery remains unchanged.
 # Build 252 operational addition — specialist runbook
 
 **Authority note:** Use `AI_PROJECT_HANDOFF.md` + `MASTER_VALUE_ROADMAP.md` for current state/direction. This file provides detailed acceptance steps only.
@@ -1529,3 +1557,36 @@ Build 253 makes public website imagery owner-manageable instead of source-code-d
 Photo Studio can sync, edit metadata, assign/unassign, rename/move and render one approved public image end-to-end; the canonical manifest works at `/api/public_website_images`; and public/private media isolation is proven.
 
 <!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
+
+
+## Build 254 — Verify existing imagery preservation and Photo Studio performance
+
+1. Deploy Build 254 and hard-refresh `/services` and one existing service/location landing page.
+2. Confirm principal package cards display their established configured images unless an explicit Photo Studio override exists.
+3. Confirm add-on cards retain their established images.
+4. Open `/admin-photo-studio`, press **Sync approved R2 photos**, and confirm merely syncing does not change any public card.
+5. Select several thumbnails and type in Search. Confirm the editor updates without rebuilding/jumping the whole page; occasional browser layout diagnostics may occur, but the repeated forced-reflow warnings from selection should no longer reproduce.
+6. Save one harmless explicit override, verify only that exact target changes, then remove the override and verify the original configured image returns.
+
+**Move on when:** existing site images stay stable during R2 sync/metadata edits, explicit overrides affect only their selected target, and Photo Studio remains responsive on desktop/mobile.
+<!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
+
+<!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
+
+<!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
+
+## Validate Build 258 public photo consistency and cleanup
+
+- Deploy Pages and Functions together; hard-refresh the modified public/admin pages.
+- Open Photo Studio without Sync and confirm Build 257 resource protections remain stable.
+- Run one explicit R2 Sync and verify both new-photo and refreshed-existing-photo counts.
+- Verify Pricing town/high-intent cards and Services hub/special/town cards reflect explicit assignments.
+- Verify FAQ access-card and Gift Card visuals.
+- Verify Home/Pricing/Services/landing review-proof slots can be assigned.
+- Verify multiple complete Before/After sets plus Evidence/Technique/Efficiency items render in Gallery.
+- Verify assigned images cannot be deleted; verify one harmless unassigned duplicate can be deleted from library + public R2.
+- Verify `Which service should we choose?` is three/two/one columns across desktop/tablet/phone.
+<!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
