@@ -1,3 +1,27 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 259
+
+> **Build 259 (2026-08-13):** Public presentation imagery is now comprehensively targetable from the existing Photo Studio without reassigning current photos; add-on cards are customer-clean and link to fully owner-editable service pages; Pricing/Services/Maintenance/Fleet CSS is repaired; Maintenance content is editable; uncertain vehicle sizes enter a staff review workflow with a secure customer confirm/cancel link when price/size changes; and Quote Pipeline rows are now selectable/editable. Apply `sql/2026-08-13_build259_vehicle_size_review.sql` before using the new vehicle-size review controls. Build 254 authored-image preservation and Build 257 no-R2-scan-on-normal-load rules remain mandatory. See `BUILD259_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 258
+
+> **Build 258 (2026-08-13):** Public photo assignments now propagate consistently across Pricing town/high-intent cards, Services hub/special/town cards, FAQ access cards, Gift Card visuals, review-proof slots, managed landing pages, and the expanded mixed Gallery. Explicit Sync refreshes same-key R2 replacements by ETag and public URLs are versioned so updated files can replace stale cached images. Photo Studio adds safe current-unassigned deletion. Build 257's database-first/no-R2-scan-on-normal-load boundary and Build 254 authored-image preservation remain mandatory. No existing assignment is changed by this source update and no new SQL migration is required. See `BUILD258_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 257
+
+> **Build 257 hotfix (2026-08-13):** Cloudflare Error 1102 mitigation for the growing public photo library. Ordinary Photo Studio loads and public website image-manifest requests are now database-first and do not scan R2. R2 enumeration occurs only through the explicit Photo Studio Sync action, with bounded prefix scans, compact responses, and batched database inserts. No existing image assignment was changed and no SQL migration is required. See `BUILD257_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 256
+
+> **Build 256 (2026-08-12):** Photo Studio now shows exactly where each assigned photo is used, checks occupied target options in the assignment dropdown, distinguishes slots owned by the selected photo versus another image, and supports three explicit Before/After pairs per managed landing page. A pair renders publicly only after both Before and After are deliberately assigned. Build 254 image-preservation rules remain authoritative. No new SQL migration is required. See `BUILD256_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 255
+
+> **Build 255 editor repair (2026-08-12):** Photo Studio thumbnails now open an immediate click-to-edit drawer with a grouped “Where should this image be used?” selector. Existing photos and assignments are not changed by this build; a placement changes only after an explicit target choice, **Use this image here**, and confirmation. R2-only photos may be registered as managed metadata when needed without assigning them. No new SQL migration is required. See `BUILD255_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 254
+
+> **Build 254 hotfix (2026-08-12):** Existing configured product/package/add-on/landing imagery is protected again. Photo Studio explicit assignments are deliberate overrides; automatic R2 filename matching is fallback-only. Photo Studio selection/filter rendering was also hardened to reduce forced-reflow warnings. No new SQL migration is required. See `BUILD254_SUMMARY.md`.
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 253
 
 **Updated:** 2026-08-12  
@@ -1209,3 +1233,12 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD252_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Public packages/landing_pages/CarPhotos R2 assignment -->
 
 <!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
+<!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
+
+<!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
+
+<!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
+<!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->

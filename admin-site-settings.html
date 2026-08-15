@@ -655,7 +655,7 @@
 
     function renderLandingContentEditor(value) {
       const rows = landingPageRows(value);
-      return renderFriendlySection("landing_pages", "Landing-page SEO and hero cards", "Edit the most important public landing-page fields. Deeper process/equipment/FAQ arrays are preserved in advanced JSON until they receive dedicated screens.", rows.map((row) => friendlyRowTemplate("landing_pages", row)).join(""), "Add landing page");
+      return renderFriendlySection("landing_pages", "Complete landing-page editor<!-- Historical Build 199 label: Landing-page SEO and hero cards -->", "Edit the full customer-facing landing page here: SEO, hero, process, equipment, highlights, limits, FAQs, related products, and official links. Photo placement remains in Photo Management Studio.", rows.map((row) => friendlyRowTemplate("landing_pages", row)).join(""), "Add landing page");
     }
 
     function friendlyRowTemplate(kind, row = {}) {
@@ -685,7 +685,11 @@
         const page = row.page || row;
         const slug = row.slug || page.slug || "";
         const enabled = page.enabled === false ? "" : " checked";
-        return `<div class="friendly-row" data-friendly-row="landing_pages" data-original-slug="${escapeHtml(slug)}"><div class="friendly-row-header"><strong>${escapeHtml(page.name || page.title || page.hero_title || slug || "Landing page")}</strong>${remove}</div><div class="structured-grid"><label>Slug<input data-friendly-field="slug" value="${escapeHtml(slug)}"></label><label>Name<input data-friendly-field="name" value="${escapeHtml(page.name || page.title || "")}"></label><label>Type<input data-friendly-field="type" value="${escapeHtml(page.type || "")}"></label><label>Nav group<input data-friendly-field="nav_group" value="${escapeHtml(page.nav_group || "")}"></label><label>Meta title<input data-friendly-field="meta_title" value="${escapeHtml(page.meta_title || page.title || "")}"></label><label>Meta description<textarea data-friendly-field="meta_description">${escapeHtml(page.meta_description || page.description || "")}</textarea></label><label>Hero title<input data-friendly-field="hero_title" value="${escapeHtml(page.hero_title || page.headline || "")}"></label><label>Hero intro<textarea data-friendly-field="hero_intro">${escapeHtml(page.hero_intro || page.summary || page.intro || "")}</textarea></label></div><label class="friendly-check"><input type="checkbox" data-friendly-field="enabled"${enabled}> Enabled public page</label></div>`;
+        const lines = (value) => Array.isArray(value) ? value.join("\n") : "";
+        const faqText = Array.isArray(page.faq) ? page.faq.map((item) => `${item.q || ""} | ${item.a || ""}`).join("\n") : "";
+        const productText = Array.isArray(page.related_products) ? page.related_products.map((item) => `${item.name || ""} | ${item.role || ""} | ${item.note || ""}`).join("\n") : "";
+        const linkText = Array.isArray(page.official_links) ? page.official_links.map((item) => `${item.label || "Official source"} | ${item.url || ""}`).join("\n") : "";
+        return `<div class="friendly-row" data-friendly-row="landing_pages" data-original-slug="${escapeHtml(slug)}"><div class="friendly-row-header"><strong>${escapeHtml(page.name || page.title || page.hero_title || slug || "Landing page")}</strong>${remove}</div><div class="structured-grid"><label>Slug<input data-friendly-field="slug" value="${escapeHtml(slug)}"></label><label>Name<input data-friendly-field="name" value="${escapeHtml(page.name || page.title || "")}"></label><label>Type<input data-friendly-field="type" value="${escapeHtml(page.type || "")}"></label><label>Nav group<input data-friendly-field="nav_group" value="${escapeHtml(page.nav_group || "")}"></label><label>Badge<input data-friendly-field="badge" value="${escapeHtml(page.badge || "")}"></label><label>Meta title<input data-friendly-field="meta_title" value="${escapeHtml(page.meta_title || page.title || "")}"></label><label>Meta description<textarea data-friendly-field="meta_description">${escapeHtml(page.meta_description || page.description || "")}</textarea></label><label>Hero title<input data-friendly-field="hero_title" value="${escapeHtml(page.hero_title || page.headline || "")}"></label><label>Hero intro<textarea data-friendly-field="hero_intro">${escapeHtml(page.hero_intro || page.summary || page.intro || "")}</textarea></label><label>Why this page/service exists — one point per line<textarea data-friendly-field="reasons_page_exists">${escapeHtml(lines(page.reasons_page_exists))}</textarea></label><label>Process — one step per line<textarea data-friendly-field="process">${escapeHtml(lines(page.process))}</textarea></label><label>Equipment / products — one per line<textarea data-friendly-field="equipment">${escapeHtml(lines(page.equipment))}</textarea></label><label>Highlights — one per line<textarea data-friendly-field="highlights">${escapeHtml(lines(page.highlights))}</textarea></label><label>Things to know / limits — one per line<textarea data-friendly-field="things_to_know">${escapeHtml(lines(page.things_to_know))}</textarea></label><label>FAQ — one per line: Question | Answer<textarea data-friendly-field="faq_text">${escapeHtml(faqText)}</textarea></label><label>Related products — Name | Role | Note<textarea data-friendly-field="related_products_text">${escapeHtml(productText)}</textarea></label><label>Official links — Label | URL<textarea data-friendly-field="official_links_text">${escapeHtml(linkText)}</textarea></label></div><label class="friendly-check"><input type="checkbox" data-friendly-field="enabled"${enabled}> Enabled public page</label></div>`;
       }
       return `<div class="friendly-row" data-friendly-row="${escapeHtml(kind)}"><div class="friendly-row-header"><strong>Row</strong>${remove}</div></div>`;
     }
@@ -768,16 +772,23 @@
     }
 
     function landingPageRows(value) {
-      if (value?.default_pages?.pages && typeof value.default_pages.pages === "object" && !Array.isArray(value.default_pages.pages)) {
-        return Object.entries(value.default_pages.pages).map(([slug, page]) => ({ slug, page }));
-      }
-      if (value?.pages && typeof value.pages === "object" && !Array.isArray(value.pages)) {
-        return Object.entries(value.pages).map(([slug, page]) => ({ slug, page }));
-      }
-      if (Array.isArray(value?.pages)) return value.pages.map((page) => ({ slug: page.slug || page.id || "", page }));
-      if (Array.isArray(value?.landing_pages)) return value.landing_pages.map((page) => ({ slug: page.slug || page.id || "", page }));
-      return [];
+      const merged = {};
+      const addObject = (pages) => {
+        if (!pages || typeof pages !== "object" || Array.isArray(pages)) return;
+        Object.entries(pages).forEach(([slug, page]) => { if (page && typeof page === "object") merged[slug] = { ...(merged[slug] || {}), ...page, slug }; });
+      };
+      addObject(value?.default_pages?.pages);
+      addObject(value?.expansion_pages?.pages);
+      addObject(value?.pages);
+      if (Array.isArray(value?.pages)) value.pages.forEach((page) => { const slug = page?.slug || page?.id || ""; if (slug) merged[slug] = { ...(merged[slug] || {}), ...page, slug }; });
+      if (Array.isArray(value?.landing_pages)) value.landing_pages.forEach((page) => { const slug = page?.slug || page?.id || ""; if (slug) merged[slug] = { ...(merged[slug] || {}), ...page, slug }; });
+      return Object.entries(merged).sort((a,b)=>a[0].localeCompare(b[0])).map(([slug,page])=>({slug,page}));
     }
+
+    function parseSimpleLines(value) { return String(value || "").split(/\r?\n/).map((line)=>line.trim()).filter(Boolean); }
+    function parseFaqLines(value) { return parseSimpleLines(value).map((line)=>{ const parts=line.split("|").map((part)=>part.trim()); return {q:parts.shift()||"",a:parts.join(" | ")||""}; }).filter((row)=>row.q&&row.a); }
+    function parseRelatedProductLines(value) { return parseSimpleLines(value).map((line)=>{ const parts=line.split("|").map((part)=>part.trim()); return {name:parts[0]||"",role:parts[1]||"",note:parts.slice(2).join(" | ")||""}; }).filter((row)=>row.name); }
+    function parseOfficialLinkLines(value) { return parseSimpleLines(value).map((line)=>{ const parts=line.split("|").map((part)=>part.trim()); return {label:parts[0]||"Official source",url:parts[1]||parts[0]||""}; }).filter((row)=>row.url); }
 
     function applyLandingPageRows(payload, box) {
       const rows = Array.from(box.querySelectorAll('[data-friendly-row="landing_pages"]'));
@@ -788,23 +799,16 @@
         const slug = friendlyValue(row, "slug") || originalSlug || "new-landing-page";
         const base = { ...(existing.get(originalSlug) || existing.get(slug) || {}) };
         Object.assign(base, {
-          slug,
-          name: friendlyValue(row, "name"),
-          type: friendlyValue(row, "type"),
-          nav_group: friendlyValue(row, "nav_group"),
-          meta_title: friendlyValue(row, "meta_title"),
-          meta_description: friendlyValue(row, "meta_description"),
-          hero_title: friendlyValue(row, "hero_title"),
-          hero_intro: friendlyValue(row, "hero_intro"),
-          enabled: friendlyChecked(row, "enabled")
+          slug, name:friendlyValue(row,"name"), type:friendlyValue(row,"type"), nav_group:friendlyValue(row,"nav_group"), badge:friendlyValue(row,"badge"),
+          meta_title:friendlyValue(row,"meta_title"), meta_description:friendlyValue(row,"meta_description"), hero_title:friendlyValue(row,"hero_title"), hero_intro:friendlyValue(row,"hero_intro"),
+          reasons_page_exists:parseSimpleLines(friendlyValue(row,"reasons_page_exists")), process:parseSimpleLines(friendlyValue(row,"process")), equipment:parseSimpleLines(friendlyValue(row,"equipment")),
+          highlights:parseSimpleLines(friendlyValue(row,"highlights")), things_to_know:parseSimpleLines(friendlyValue(row,"things_to_know")), faq:parseFaqLines(friendlyValue(row,"faq_text")),
+          related_products:parseRelatedProductLines(friendlyValue(row,"related_products_text")), official_links:parseOfficialLinkLines(friendlyValue(row,"official_links_text")), enabled:friendlyChecked(row,"enabled")
         });
         updated[slug] = base;
       });
-      if (payload.default_pages?.pages && typeof payload.default_pages.pages === "object" && !Array.isArray(payload.default_pages.pages)) payload.default_pages.pages = updated;
-      else if (payload.pages && typeof payload.pages === "object" && !Array.isArray(payload.pages)) payload.pages = updated;
-      else if (Array.isArray(payload.pages)) payload.pages = Object.values(updated);
-      else if (Array.isArray(payload.landing_pages)) payload.landing_pages = Object.values(updated);
-      else payload.pages = updated;
+      // Store owner edits as a flat override map. Bundled defaults/expansions stay untouched for safe fallback and are merged by the public API.
+      payload.pages = updated;
     }
 
 

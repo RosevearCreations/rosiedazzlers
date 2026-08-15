@@ -172,6 +172,17 @@
         <div class="field"><label for="membership_teaser">Public teaser</label><textarea id="membership_teaser" placeholder="Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking."></textarea></div>
         <div class="field"><label for="membership_benefits">Benefits (one per line)</label><textarea id="membership_benefits" placeholder="Priority reminder before your preferred date&#10;Faster rebooking using your saved vehicle&#10;Cleaner predictable maintenance cycle"></textarea></div>
         <div class="subgrid">
+          <div class="field"><label for="membership_why_title">Information box title</label><input id="membership_why_title" placeholder="Why add this now"></div>
+          <div class="field"><label for="membership_why_lines">Information rows — Label | Value, one per line</label><textarea id="membership_why_lines" placeholder="Repeat scheduling | Less back-and-forth&#10;Local planning | Better crew forecasting"></textarea></div>
+        </div>
+        <div class="field"><label for="membership_waitlist_intro">Waitlist explanation</label><textarea id="membership_waitlist_intro"></textarea></div>
+        <div class="subgrid">
+          <div class="field"><label for="membership_self_serve_title">Lower information box title</label><input id="membership_self_serve_title" placeholder="How this fits the self-serve direction"></div>
+          <div class="field"><label for="membership_self_serve_copy">Lower information box copy</label><textarea id="membership_self_serve_copy"></textarea></div>
+          <div class="field"><label for="membership_good_fit_title">Good-fit box title</label><input id="membership_good_fit_title" placeholder="Good fit for"></div>
+          <div class="field"><label for="membership_good_fit_lines">Good-fit points — one per line</label><textarea id="membership_good_fit_lines"></textarea></div>
+        </div>
+        <div class="subgrid">
           <div class="field"><label for="membership_reminder_subject">Reminder email subject</label><input id="membership_reminder_subject" placeholder="It may be time to book your next Rosie Dazzlers clean"></div>
           <div class="field"><label for="membership_reminder_intro">Reminder intro</label><textarea id="membership_reminder_intro" placeholder="Use the booking-led planner to pick your next clean while your preferred timing is still open."></textarea></div>
         </div>
@@ -914,8 +925,8 @@
   function readQuoteSettings(){ return { prominent_cta: byId('quote_prominent_cta').checked, show_exact_total: byId('quote_show_exact_total').checked, show_time_expectation: byId('quote_show_time_expectation').checked, teaser_text: byId('quote_teaser_text').value || quoteSettingsDefaults().teaser_text }; }
   function giftDeliveryDefaults(){ return { enabled: true, manual_review: false, automation_enabled: true, default_message: 'Choose a recipient, add a message, and pick the day you want us to send the gift.', default_send_hour_local: 9, timezone_label: 'America/Toronto', send_copy_to_purchaser: true }; }
   function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, automation_enabled: byId('gift_delivery_automation_enabled').checked, send_copy_to_purchaser: byId('gift_delivery_send_copy_to_purchaser').checked, default_send_hour_local: Number(byId('gift_delivery_send_hour').value || giftDeliveryDefaults().default_send_hour_local), timezone_label: byId('gift_delivery_timezone').value || giftDeliveryDefaults().timezone_label, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
-  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'], reminder_enabled: true, reminder_channel: 'email', reminder_subject: 'It may be time to book your next Rosie Dazzlers clean', reminder_intro: 'Use the booking-led planner to pick your next clean while your preferred timing is still open.', reminder_send_hour_local: 9, timezone_label: 'America/Toronto' }; }
-  function readMembershipPlanSettings(){ return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, reminder_enabled: byId('membership_reminder_enabled').checked, plan_name: byId('membership_name').value || membershipPlanDefaults().plan_name, cycle_label: byId('membership_cycle').value || membershipPlanDefaults().cycle_label, teaser: byId('membership_teaser').value || membershipPlanDefaults().teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean), reminder_subject: byId('membership_reminder_subject').value || membershipPlanDefaults().reminder_subject, reminder_intro: byId('membership_reminder_intro').value || membershipPlanDefaults().reminder_intro, reminder_channel: 'email', reminder_send_hour_local: membershipPlanDefaults().reminder_send_hour_local, timezone_label: membershipPlanDefaults().timezone_label }; }
+  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'], why_title:'Why add this now', why_lines:['Repeat scheduling | Less back-and-forth','Preferred cycle | Every 4 or 8 weeks','Local planning | Better crew forecasting','Booking path | Still uses the live booking flow'], waitlist_intro:'Leave your preferred cycle and a few details about the vehicles you want covered. We use this to shape the recurring-plan offer while actual reminder timing follows completed service history.', self_serve_title:'How this fits the self-serve direction', self_serve_copy:'Recurring plans should not replace the booking flow. They should make the same booking-led experience easier to repeat with reminder-first scheduling, saved vehicle details, and clearer maintenance timing.', good_fit_title:'Good fit for', good_fit_lines:['Busy households trying to keep vehicles presentable year-round','Repeat clients who already know their package and preferred clean cycle','Work-from-home or driveway-friendly bookings across Oxford and Norfolk areas'], reminder_enabled: true, reminder_channel: 'email', reminder_subject: 'It may be time to book your next Rosie Dazzlers clean', reminder_intro: 'Use the booking-led planner to pick your next clean while your preferred timing is still open.', reminder_send_hour_local: 9, timezone_label: 'America/Toronto' }; }
+  function readMembershipPlanSettings(){ var d=membershipPlanDefaults(); return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, reminder_enabled: byId('membership_reminder_enabled').checked, plan_name: byId('membership_name').value || d.plan_name, cycle_label: byId('membership_cycle').value || d.cycle_label, teaser: byId('membership_teaser').value || d.teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean), why_title:byId('membership_why_title').value||d.why_title, why_lines:(byId('membership_why_lines').value||'').split(/\n+/).map(function(r){return r.trim();}).filter(Boolean), waitlist_intro:byId('membership_waitlist_intro').value||d.waitlist_intro, self_serve_title:byId('membership_self_serve_title').value||d.self_serve_title, self_serve_copy:byId('membership_self_serve_copy').value||d.self_serve_copy, good_fit_title:byId('membership_good_fit_title').value||d.good_fit_title, good_fit_lines:(byId('membership_good_fit_lines').value||'').split(/\n+/).map(function(r){return r.trim();}).filter(Boolean), reminder_subject: byId('membership_reminder_subject').value || d.reminder_subject, reminder_intro: byId('membership_reminder_intro').value || d.reminder_intro, reminder_channel: 'email', reminder_send_hour_local: d.reminder_send_hour_local, timezone_label: d.timezone_label }; }
   function renderMembershipInterestList(rows){
     var host = byId('membershipInterestList');
     if (!host) return;
@@ -1639,6 +1650,7 @@
         '<label class="field"><span>Name</span><input data-addon-editor-field="name" value="' + escapeHtml(addon.name || '') + '"></label>' +
         '<label class="field"><span>Category</span><input list="addonCategoryOptions" data-addon-editor-field="category" value="' + escapeHtml(addon.category || '') + '"></label>' +
         '<label class="field"><span>Type</span><input list="addonTypeOptions" data-addon-editor-field="type" value="' + escapeHtml(addon.type || '') + '"></label>' +
+        '<label class="field"><span>Estimated time addition</span><input data-addon-editor-field="duration_label" placeholder="45–90 min" value="' + escapeHtml(addon.duration_label || addon.estimated_duration || '') + '"></label>' +
         '<label class="field"><span>Small</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.small" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
         '<label class="field"><span>Mid</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.mid" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
         '<label class="field"><span>Oversize / exotic</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.oversize" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
@@ -2025,6 +2037,13 @@
     byId('membership_cycle').value = membershipPlanSettings.cycle_label || membershipPlanDefaults().cycle_label;
     byId('membership_teaser').value = membershipPlanSettings.teaser || membershipPlanDefaults().teaser;
     byId('membership_benefits').value = Array.isArray(membershipPlanSettings.benefits) ? membershipPlanSettings.benefits.join('\n') : membershipPlanDefaults().benefits.join('\n');
+    byId('membership_why_title').value = membershipPlanSettings.why_title || membershipPlanDefaults().why_title;
+    byId('membership_why_lines').value = Array.isArray(membershipPlanSettings.why_lines) ? membershipPlanSettings.why_lines.join('\n') : membershipPlanDefaults().why_lines.join('\n');
+    byId('membership_waitlist_intro').value = membershipPlanSettings.waitlist_intro || membershipPlanDefaults().waitlist_intro;
+    byId('membership_self_serve_title').value = membershipPlanSettings.self_serve_title || membershipPlanDefaults().self_serve_title;
+    byId('membership_self_serve_copy').value = membershipPlanSettings.self_serve_copy || membershipPlanDefaults().self_serve_copy;
+    byId('membership_good_fit_title').value = membershipPlanSettings.good_fit_title || membershipPlanDefaults().good_fit_title;
+    byId('membership_good_fit_lines').value = Array.isArray(membershipPlanSettings.good_fit_lines) ? membershipPlanSettings.good_fit_lines.join('\n') : membershipPlanDefaults().good_fit_lines.join('\n');
     byId('membership_reminder_subject').value = membershipPlanSettings.reminder_subject || membershipPlanDefaults().reminder_subject;
     byId('membership_reminder_intro').value = membershipPlanSettings.reminder_intro || membershipPlanDefaults().reminder_intro;
 
@@ -2104,7 +2123,7 @@
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('addAddonBtn', 'click', function () {
-    pricingCatalogState.addons.push({ code: 'new_addon', name: 'New Add-on', category: '', type: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, image_url: '', image_fallback_url: '', notes: [] });
+    pricingCatalogState.addons.push({ code: 'new_addon', name: 'New Add-on', category: '', type: '', duration_label: 'Time varies by condition', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, image_url: '', image_fallback_url: '', notes: [] });
     syncPricingEditorToJson(); renderPricingDashboard();
   });
   bindById('addServiceAreaBtn', 'click', function () {
@@ -2164,7 +2183,7 @@
     buildLivePricingChartSvg,
     buildLiveServiceDetailsChartSvg,
     buildLiveVehicleSizeChartSvg
-  } from "/assets/pricing-catalog-client.js?v=20260423livecharts2";
+  } from "/assets/pricing-catalog-client.js?v=20260813build259";
 
   const chartBuilders = {
     prices: { filename: 'rosie-vehicle-price-chart.svg', build: buildLivePricingChartSvg },
