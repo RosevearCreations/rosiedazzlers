@@ -1,3 +1,41 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 259
+
+**Updated:** 2026-08-13
+
+## Immediate direction
+
+Build 259 moves Rosie from scattered hard-coded presentation/operations controls toward owner-managed content without weakening existing safety boundaries. Highest-value acceptance is now: apply the vehicle-size review migration; validate one uncertain-size booking end to end; deliberately refresh/assign public presentation images through Photo Studio; complete the strongest add-on landing-page copy and photos; verify Pricing/Services/Maintenance/Fleet mobile layouts; and use the now-editable Quote Pipeline for real follow-up work. Next work should connect quote rows more directly to lead/customer lookup, add reusable preview/where-used links for Photo Studio, continue editable-content coverage for remaining static public prose, and complete production booking/payment/refund/notification acceptance.
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 258
+
+**Updated:** 2026-08-13
+
+## Immediate photo-system direction
+
+Build 258 makes explicit Photo Studio assignments the reusable presentation layer across the main public discovery pages while preserving existing authored images. Highest-value acceptance is now operational rather than architectural: Sync once after direct R2 changes, verify same-filename replacements refresh, deliberately assign review/local/service/gift/FAQ/Gallery slots, and remove only genuinely unassigned duplicates. Next media work should add page-preview/where-used links, version rollback, bulk metadata editing, image dimensions/quality warnings, and incremental/cursor R2 synchronization before raising scan limits.
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 257
+
+**Updated:** 2026-08-13
+
+## Immediate reliability direction
+
+Build 257 moves public-photo discovery off the request hot path. The managed media library is the source used by ordinary public/admin reads; R2 remains the object store and is synchronized deliberately. Highest-value acceptance is to deploy, hard-refresh Photo Studio, verify normal page loads no longer trigger Error 1102, run one explicit R2 sync, and then continue the existing assignment/Before-After workflow. Future media growth should use pagination/incremental sync rather than increasing one-request scan limits.
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 256
+
+**Build 256 value delivered:** Photo maintenance is now easier to audit before changing anything: thumbnail cards expose placement names, occupied placement choices are checked, and before/after storytelling is managed as intentional paired slots instead of remembering unrelated gallery positions. Existing authored imagery remains protected unless staff explicitly saves an override.
+
+**Next photo-management priorities:** add full “where used” dependency reporting with page preview links; image replacement/version rollback; bulk metadata/alt editing; optional pair captions/project/town metadata; and a safe delete workflow only after dependency checks.
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 255
+
+> **Build 255 editor repair (2026-08-12):** Photo Studio thumbnails now open an immediate click-to-edit drawer with a grouped “Where should this image be used?” selector. Existing photos and assignments are not changed by this build; a placement changes only after an explicit target choice, **Use this image here**, and confirmation. R2-only photos may be registered as managed metadata when needed without assigning them. No new SQL migration is required. See `BUILD255_SUMMARY.md`.
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 254
+
+> **Build 254 hotfix (2026-08-12):** Existing configured product/package/add-on/landing imagery is protected again. Photo Studio explicit assignments are deliberate overrides; automatic R2 filename matching is fallback-only. Photo Studio selection/filter rendering was also hardened to reduce forced-reflow warnings. No new SQL migration is required. See `BUILD254_SUMMARY.md`.
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 253
 
 **Updated:** 2026-08-12  
@@ -1520,3 +1558,12 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 251 -->
 
 <!-- BUILD253_SYNC: 2026-08-12 | Living authorities: AI_PROJECT_HANDOFF.md + MASTER_VALUE_ROADMAP.md | Photo Studio: /admin-photo-studio.html | Public manifest: /api/public_website_images | Migration: sql/2026-08-12_build253_photo_management_studio.sql -->
+<!-- BUILD254_SYNC: 2026-08-12 | Existing authored images protected; explicit Photo Studio override only; automatic R2 matching fallback-only; Photo Studio reflow hotfix. -->
+
+<!-- BUILD255_SYNC: 2026-08-12 | Photo Studio click-to-edit drawer + explicit grouped website target dropdown; no automatic image reassignment. -->
+<!-- BUILD256_SYNC: 2026-08-12 | Photo assignment labels + checked occupied targets + explicit Before/After pairs; no automatic image reassignment. -->
+
+<!-- BUILD257_SYNC: 2026-08-13 | Cloudflare 1102 hotfix: database-first photo reads; bounded explicit R2 sync; compact public manifest; no image reassignment. -->
+<!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
+
+<!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->

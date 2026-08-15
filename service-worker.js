@@ -1,3 +1,5 @@
+// Historical Build 256 cache token: rosie-app-v20260812build256
+// Build 257 resource-limit hotfix: database-first photo loads; bounded R2 sync.
 // Historical Build 250 cache guard: rosie-app-v20260810build250
 // Historical Build 251 cache guard: rosie-app-v20260811build251 (Gate C readability release marker retained in docs)
 // Historical Build 249 cache guard: rosie-app-v20260810build249 /data/build249_inventory_recovery.json
@@ -10,7 +12,13 @@
 // Build 238 service-worker cache: CSS recovery, Startup Guide, transactional inventory, current roadmap, launch evidence and operational readiness.
 // Historical Build 238 guard: rosie-app-v20260730build238 /data/build238_go_live_blockers.json /data/build238_next_steps.json
 // Historical Build 252 cache guard: rosie-app-v20260812build252
-const CACHE='rosie-app-v20260812build253';
+// Historical Build 253 cache guard: rosie-app-v20260812build253
+// Historical Build 254 cache guard: rosie-app-v20260812build254
+// Build 255 click-to-edit Photo Studio editor
+// Historical cache: rosie-app-v20260812build255
+// Historical Build 257 cache guard: rosie-app-v20260813build257
+// Historical Build 258 cache guard: rosie-app-v20260813build258
+const CACHE='rosie-app-v20260813build259';
 const URLS=['/admin-photo-studio.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
   '/data/build247_go_live_blockers.json',
