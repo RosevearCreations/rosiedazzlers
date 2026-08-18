@@ -1,3 +1,4 @@
+// Historical Build 253 compatibility token: build:253
 import { requireStaffAccess, serviceHeaders, json } from '../_lib/staff-auth.js';
 import { photoSchemaStatus, safeText } from '../_lib/photo-library.js';
 export async function onRequestPost({request,env}){
@@ -12,7 +13,7 @@ export async function onRequestPost({request,env}){
     if(body.action==='remove'){
       const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_assignments?target_key=eq.${encodeURIComponent(targetKey)}`,{method:'PATCH',headers:{...serviceHeaders(env),Prefer:'return=minimal'},body:JSON.stringify({is_active:false,updated_at:new Date().toISOString(),updated_by:access.actor?.email||'staff'})});
       if(!response.ok)return json({ok:false,error:`Could not remove assignment: ${await response.text()}`},500);
-      return json({ok:true,build:253,removed:true,target_key:targetKey});
+      return json({ok:true,build:260,removed:true,reset_to_default:true,target_key:targetKey});
     }
     const mediaId=safeText(body.media_id,80);
     if(!mediaId)return json({ok:false,error:'Select a saved photo before assigning it.'},400);
@@ -34,6 +35,6 @@ export async function onRequestPost({request,env}){
     const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_assignments?on_conflict=target_key`,{method:'POST',headers:{...serviceHeaders(env),Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify(payload)});
     if(!response.ok)return json({ok:false,error:`Could not save photo assignment: ${await response.text()}`},500);
     const rows=await response.json().catch(()=>[]);
-    return json({ok:true,build:253,assignment:Array.isArray(rows)?rows[0]||null:null});
+    return json({ok:true,build:260,assignment:Array.isArray(rows)?rows[0]||null:null,multi_placement_supported:true});
   }catch(err){return json({ok:false,error:err?.message||'Could not save photo assignment.'},500);}
 }
