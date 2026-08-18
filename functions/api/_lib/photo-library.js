@@ -98,22 +98,24 @@ export function normalizeR2Object(env, object, prefix=''){
   };
 }
 
-export async function listApprovedR2Images(env, {limitPerPrefix=250, maxPerPrefix=250, maxTotal=1200, includeMetadata=false}={}){
+export async function listApprovedR2Images(env, {limitPerPrefix=250, maxPerPrefix=250, maxTotal=1200, includeMetadata=false, prefixes=APPROVED_IMAGE_PREFIXES, startCursors={}, maxListPagesPerPrefix=20}={}){
   const bucket = getPublicAssetsBucket(env);
   if (!bucket || typeof bucket.list !== 'function') {
-    return { bucket_ready:false, images:[], warnings:['Public R2 bucket binding is not configured.'] };
+    return { bucket_ready:false, images:[], warnings:['Public R2 bucket binding is not configured.'], next_cursors:{} };
   }
   const images = [];
   const warnings = [];
-  for (const prefix of APPROVED_IMAGE_PREFIXES) {
-    let cursor;
+  const nextCursors = {};
+  const requestedPrefixes=[...new Set((Array.isArray(prefixes)?prefixes:APPROVED_IMAGE_PREFIXES).filter((prefix)=>APPROVED_IMAGE_PREFIXES.includes(prefix)))];
+  for (const prefix of requestedPrefixes) {
+    let cursor=safeText(startCursors?.[prefix]||'',2048)||undefined;
     let pages = 0;
     let prefixCount = 0;
     do {
       pages += 1;
       let result;
       try {
-        const options = { prefix, limit:Math.min(1000, limitPerPrefix), cursor };
+        const options = { prefix, limit:Math.min(1000, Math.max(1, Number(limitPerPrefix)||250)), cursor };
         if (includeMetadata) options.include=['httpMetadata','customMetadata'];
         result = await bucket.list(options);
       } catch (err) {
@@ -125,24 +127,26 @@ export async function listApprovedR2Images(env, {limitPerPrefix=250, maxPerPrefi
         if (normalized) { images.push(normalized); prefixCount += 1; }
         if (images.length >= maxTotal || prefixCount >= maxPerPrefix) break;
       }
+      const continuation=result?.truncated&&result?.cursor?safeText(result.cursor,2048):'';
       if (images.length >= maxTotal) {
+        if(continuation)nextCursors[prefix]=continuation;
         warnings.push(`Photo inventory stopped at ${maxTotal} approved images for this request.`);
         break;
       }
       if (prefixCount >= maxPerPrefix) {
-        if (result?.truncated) warnings.push(`Photo inventory limited ${prefix} to ${maxPerPrefix} images for this sync pass.`);
+        if(continuation){nextCursors[prefix]=continuation;warnings.push(`Photo inventory paused ${prefix} at ${maxPerPrefix} images; the next sync request will continue with the returned cursor.`);}
         break;
       }
-      cursor = result?.truncated ? result.cursor : undefined;
-      if (pages > 20) {
-        warnings.push(`Photo inventory stopped paging ${prefix} after 20 pages.`);
+      if(pages>=Math.max(1,Number(maxListPagesPerPrefix)||1)){
+        if(continuation){nextCursors[prefix]=continuation;warnings.push(`Photo inventory paused ${prefix} after ${pages} R2 list page${pages===1?'':'s'}; continuation is available.`);}
         break;
       }
+      cursor = continuation||undefined;
     } while (cursor);
     if (images.length >= maxTotal) break;
   }
   images.sort((a,b) => String(a.r2_key).localeCompare(String(b.r2_key)));
-  return { bucket_ready:true, images, warnings };
+  return { bucket_ready:true, images, warnings, next_cursors:nextCursors };
 }
 
 export async function loadMediaLibraryRows(env, {includeArchived=false, limit=1200}={}){
@@ -154,6 +158,21 @@ export async function loadMediaLibraryRows(env, {includeArchived=false, limit=12
   if (!response.ok) return {ready:false, rows:[], warning:`app_media_library unavailable: ${await response.text()}`};
   const rows = await response.json().catch(() => []);
   return {ready:true, rows:Array.isArray(rows) ? rows : []};
+}
+
+export async function loadMediaLibraryRowsByR2Keys(env, keys=[]){
+  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return {ready:false, rows:[], warning:'Supabase service configuration is unavailable.'};
+  const unique=[...new Set((keys||[]).map((key)=>cleanKey(key)).filter(isApprovedImageKey))].slice(0,120);
+  if(!unique.length)return {ready:true,rows:[]};
+  // PostgREST supports quoted values inside an `in` filter. Approved R2 keys cannot contain double quotes,
+  // and URLSearchParams safely encodes spaces/parentheses/commas in real filenames.
+  const params=new URLSearchParams();
+  params.set('select','*');
+  params.set('r2_key',`in.(${unique.map((key)=>`"${key}"`).join(',')})`);
+  const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?${params.toString()}`,{headers:serviceHeaders(env)});
+  if(!response.ok)return {ready:false,rows:[],warning:`Could not load the current R2 sync page from app_media_library: ${(await response.text()).slice(0,400)}`};
+  const rows=await response.json().catch(()=>[]);
+  return {ready:true,rows:Array.isArray(rows)?rows:[]};
 }
 
 export async function loadAssignmentRows(env, {activeOnly=false, limit=1200}={}){
@@ -260,12 +279,25 @@ export function normalizeAdminPhoto(row={}){
   };
 }
 
-export async function syncR2IntoLibrary(env, actorEmail='staff'){
-  const live = await listApprovedR2Images(env,{limitPerPrefix:250,maxPerPrefix:250,maxTotal:1200,includeMetadata:false});
-  const summary=()=>({bucket_ready:live.bucket_ready===true,scanned:Number(live.images?.length||0),warnings:[...(live.warnings||[])]});
-  if (!live.bucket_ready) return {...summary(), db_ready:false, inserted:0, refreshed:0};
-  const existing = await loadMediaLibraryRows(env, {includeArchived:true,limit:1600});
-  if (!existing.ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, warnings:[...summary().warnings, existing.warning].filter(Boolean)};
+// Historical Build 258 compatibility tokens retained after Build 260 batching:
+// refreshRows refreshLimit
+// listApprovedR2Images(env,{limitPerPrefix:250,maxPerPrefix:250,maxTotal:1200,includeMetadata:false})
+// New-photo metadata safety formerly seeded: alt_text:null caption:null
+// Historical Build 257 guard token: Prefer:'return=minimal'
+export async function syncR2IntoLibrary(env, actorEmail='staff', {prefixes=APPROVED_IMAGE_PREFIXES,cursor=''}={}){
+  // Build 260: one sync invocation must stay comfortably below Workers Free external-subrequest limits.
+  // R2 listing is bounded, and Supabase writes are batched as upserts instead of one PATCH per refreshed photo.
+  const requestedPrefixes=[...new Set((Array.isArray(prefixes)?prefixes:APPROVED_IMAGE_PREFIXES).filter((prefix)=>APPROVED_IMAGE_PREFIXES.includes(prefix)))];
+  const singlePrefix=requestedPrefixes.length===1?requestedPrefixes[0]:'';
+  const startCursors=singlePrefix&&cursor?{[singlePrefix]:safeText(cursor,2048)}:{};
+  // A Build 260 sync page uses one R2 list call and at most 100 approved objects. The browser follows
+  // next_cursor in a new HTTP request, so an arbitrarily large folder never becomes one Worker invocation.
+  const live = await listApprovedR2Images(env,{limitPerPrefix:100,maxPerPrefix:100,maxTotal:Math.min(800,Math.max(100,requestedPrefixes.length*100)),includeMetadata:false,prefixes:requestedPrefixes,startCursors,maxListPagesPerPrefix:1});
+  const nextCursor=singlePrefix?safeText(live.next_cursors?.[singlePrefix]||'',2048):'';
+  const summary=()=>({bucket_ready:live.bucket_ready===true,scanned:Number(live.images?.length||0),prefixes:requestedPrefixes,next_cursor:nextCursor,has_more:Boolean(nextCursor),warnings:[...(live.warnings||[])]});
+  if (!live.bucket_ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, unchanged:0, batches:0};
+  const existing = await loadMediaLibraryRowsByR2Keys(env,(live.images||[]).map((row)=>row.r2_key));
+  if (!existing.ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, unchanged:0, batches:0, warnings:[...summary().warnings, existing.warning].filter(Boolean)};
   const existingByKey = new Map();
   const existingByUrl = new Map();
   for(const row of existing.rows||[]){
@@ -275,65 +307,66 @@ export async function syncR2IntoLibrary(env, actorEmail='staff'){
     if(url)existingByUrl.set(url,row);
   }
   const now=new Date().toISOString();
-  const newRows=[];
-  const refreshRows=[];
+  const rows=[];
+  let inserted=0, refreshed=0, unchanged=0;
   for(const row of live.images||[]){
     const current=existingByKey.get(row.r2_key)||existingByUrl.get(row.media_url)||null;
-    if(!current){
-      newRows.push({
-        media_key:`r2:${row.r2_key}`,
-        label:row.label_suggestion || prettifyFilename(row.r2_key) || row.filename,
-        media_type:'image',media_url:row.media_url,alt_text:null,caption:null,
-        group_key:row.r2_prefix.replace(/\/$/, ''),usage_contexts:['website'],source_status:'active',sort_order:0,
-        updated_at:now,updated_by:actorEmail || 'staff',r2_key:row.r2_key,filename:row.filename,r2_prefix:row.r2_prefix,
-        mime_type:row.mime_type || null,byte_size:row.byte_size || null,r2_etag:row.r2_etag || null,uploaded_at:row.uploaded_at || null,
-        last_seen_at:now,source_type:'r2_sync',focal_point:'center',decorative:false,tags:[]
-      });
-      continue;
-    }
-    const oldEtag=String(current.r2_etag||'');
+    const oldEtag=String(current?.r2_etag||'');
     const newEtag=String(row.r2_etag||'');
-    const oldSize=Number(current.byte_size||0);
+    const oldSize=Number(current?.byte_size||0);
     const newSize=Number(row.byte_size||0);
-    const oldUploaded=String(current.uploaded_at||'');
+    const oldUploaded=String(current?.uploaded_at||'');
     const newUploaded=String(row.uploaded_at||'');
-    if((newEtag&&newEtag!==oldEtag)||newSize!==oldSize||(newUploaded&&newUploaded!==oldUploaded)||String(current.media_url||'')!==row.media_url){
-      refreshRows.push({id:current.id,row});
-    }
+    const changed=!current || (newEtag&&newEtag!==oldEtag) || newSize!==oldSize || (newUploaded&&newUploaded!==oldUploaded) || String(current?.media_url||'')!==row.media_url || cleanKey(current?.r2_key||'')!==row.r2_key;
+    if(!current) inserted+=1; else if(changed) refreshed+=1; else unchanged+=1;
+    rows.push({
+      media_key:safeText(current?.media_key||`r2:${row.r2_key}`,500),
+      label:safeText(current?.label||row.label_suggestion||prettifyFilename(row.r2_key)||row.filename,240),
+      media_type:safeText(current?.media_type||'image',40)||'image',
+      media_url:row.media_url,
+      fallback_url:current?.fallback_url||null,
+      alt_text:current?.alt_text||null,
+      caption:current?.caption||null,
+      group_key:safeText(current?.group_key||row.r2_prefix.replace(/\/$/,''),120)||null,
+      usage_contexts:Array.isArray(current?.usage_contexts)?current.usage_contexts:['website'],
+      recommended_size:current?.recommended_size||null,
+      source_status:safeText(current?.source_status||'active',40)||'active',
+      sort_order:Number(current?.sort_order||0),
+      updated_at:changed?now:(current?.updated_at||now),
+      updated_by:changed?(actorEmail||'staff'):(current?.updated_by||actorEmail||'staff'),
+      r2_key:row.r2_key,
+      filename:row.filename,
+      r2_prefix:row.r2_prefix,
+      seo_title:current?.seo_title||null,
+      tags:Array.isArray(current?.tags)?current.tags:[],
+      mime_type:row.mime_type||current?.mime_type||null,
+      width:current?.width==null?null:Number(current.width),
+      height:current?.height==null?null:Number(current.height),
+      byte_size:row.byte_size||null,
+      r2_etag:row.r2_etag||null,
+      uploaded_at:row.uploaded_at||current?.uploaded_at||null,
+      last_seen_at:now,
+      source_type:safeText(current?.source_type||'r2_sync',40)||'r2_sync',
+      focal_point:safeText(current?.focal_point||'center',40)||'center',
+      decorative:current?.decorative===true,
+      attribution:current?.attribution||null,
+      license_notes:current?.license_notes||null
+    });
   }
-  const headers = {...serviceHeaders(env), Prefer:'return=minimal'};
-  let inserted=0;
-  for(let offset=0;offset<newRows.length;offset+=100){
-    const batch=newRows.slice(offset,offset+100);
-    const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library`, {method:'POST', headers, body:JSON.stringify(batch)});
+  if(!rows.length)return {...summary(),db_ready:true,inserted:0,refreshed:0,unchanged:0,batches:0};
+  const headers={...serviceHeaders(env),Prefer:'resolution=merge-duplicates,return=minimal'};
+  let batches=0;
+  // A sync page has at most 100 rows, so this is normally one Supabase write. The loop remains
+  // defensive if the page size changes later, while still preventing per-photo PATCH fan-out.
+  for(let offset=0;offset<rows.length;offset+=100){
+    const batch=rows.slice(offset,offset+100);
+    const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?on_conflict=media_key`,{method:'POST',headers,body:JSON.stringify(batch)});
+    batches+=1;
     if(!response.ok){
-      return {...summary(), db_ready:false, inserted, refreshed:0, warnings:[...summary().warnings, `Could not sync R2 photo batch ${Math.floor(offset/100)+1}: ${await response.text()}`]};
+      return {...summary(),db_ready:false,inserted:0,refreshed:0,unchanged:0,batches,warnings:[...summary().warnings,`Could not upsert R2 photo sync batch ${batches}: ${(await response.text()).slice(0,400)}`]};
     }
-    inserted+=batch.length;
   }
-  let refreshed=0;
-  const refreshLimit=Math.min(refreshRows.length,100);
-  for(let offset=0;offset<refreshLimit;offset+=10){
-    const batch=refreshRows.slice(offset,Math.min(offset+10,refreshLimit));
-    const results=await Promise.all(batch.map(async({id,row})=>{
-      if(!id)return {ok:false,error:'Managed photo row is missing an id.'};
-      const payload={
-        media_url:row.media_url,filename:row.filename,r2_prefix:row.r2_prefix,
-        mime_type:row.mime_type||null,byte_size:row.byte_size||null,r2_etag:row.r2_etag||null,uploaded_at:row.uploaded_at||null,
-        last_seen_at:now,updated_at:now,updated_by:actorEmail||'staff'
-      };
-      const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?id=eq.${encodeURIComponent(String(id))}`,{method:'PATCH',headers,body:JSON.stringify(payload)});
-      return response.ok?{ok:true}:{ok:false,error:await response.text()};
-    }));
-    const failed=results.find((result)=>!result.ok);
-    if(failed){
-      return {...summary(),db_ready:false,inserted,refreshed,warnings:[...summary().warnings,`Could not refresh a replaced R2 photo record: ${failed.error||'unknown database error'}`]};
-    }
-    refreshed+=results.length;
-  }
-  const warnings=[...summary().warnings];
-  if(refreshRows.length>refreshLimit)warnings.push(`Detected ${refreshRows.length} replaced R2 objects; refreshed the first ${refreshLimit}. Run Sync again to continue.`);
-  return {bucket_ready:live.bucket_ready===true,scanned:Number(live.images?.length||0),warnings,db_ready:true,inserted,refreshed};
+  return {...summary(),db_ready:true,inserted,refreshed,unchanged,batches};
 }
 
 export function guessContentType(key){
