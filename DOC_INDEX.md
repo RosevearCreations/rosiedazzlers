@@ -1,3 +1,27 @@
+# Documentation Index — Build 260
+
+## Read only these for current direction
+
+1. `AI_PROJECT_HANDOFF.md` — **living authority 1 of 2**: exact implemented state, deployment order, safety boundaries and new-chat handoff.
+2. `MASTER_VALUE_ROADMAP.md` — **living authority 2 of 2**: business/engineering direction and current next 20.
+
+## Active specialist references
+
+- `STARTUP_GO_LIVE_BLOCKERS.md` — deployment/acceptance runbook; not a third strategy authority.
+- `DATABASE_STRUCTURE_CURRENT.md` + migrations under `sql/` — schema reference; migrations are authoritative for database changes.
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` and DAIP design documents — specialist private-media architecture/operations.
+- `DOC_INDEX.md` — navigation only.
+
+## Retirement rule
+
+All other Markdown files are **historical or specialist references**. They remain in the repository because release checks, audit history and detailed implementation evidence still refer to them. Do not use an older `ROADMAP`, `KNOWN_GAPS`, `NEW_CHAT_STATUS`, `PROJECT_BRAIN`, competitor/sanity report or Build summary as current direction when it conflicts with the two living authorities above.
+
+Build 260 does not destructively delete historical documentation; it retires it logically and makes the status explicit.
+
+---
+
+## Historical documentation-index record retained below
+
 # Documentation Index — Build 253
 
 ## Current references
@@ -1404,3 +1428,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
 
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
+
+<!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
