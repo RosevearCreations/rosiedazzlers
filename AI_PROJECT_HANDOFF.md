@@ -1,3 +1,50 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 260
+
+**Updated:** 2026-08-18
+**Build:** 260
+**Read this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` is the specialist acceptance/deployment runbook. All older Build sections retained below are historical evidence even when their original headings say “CURRENT”.
+
+## Build 260 current state — stabilization, current acceptance and operator clarity
+
+Build 260 removes several sources of operational confusion while preserving the Build 254 authored-image rule and Build 257 no-R2-scan-on-normal-load rule.
+
+- **Photo Studio R2 sync:** `/api/admin/photo_library_sync` is prefix-bounded and database writes are batched. The browser synchronizes each approved R2 folder as cursor-paged requests, with at most 100 approved objects per Worker invocation, instead of making one large all-library request. This addresses the observed `Too many subrequests by single Worker invocation` failure.
+- **Photo assignment behavior:** one managed photo may serve multiple independent placement targets. Resetting one target removes only that explicit assignment and restores that location's authored/default image; other placements and the media record remain intact.
+- **Photo Studio diagnostics:** `/admin-media-health` is now database-first and aligned with `app_media_library` + `app_media_assignments`. Ordinary load performs no R2 scan and no public-image fan-out. The optional delivery test probes at most 12 exact managed URLs.
+- **Startup Guide:** current catalog identity is Build 260. Historical Build 237–247 migration/deploy mechanics remain stored for audit but are retired from today's blocker list. The Evidence tab shows only evidence referenced by the current catalog and calls it **verification**, not blanket approval.
+- **UI/cache health:** Startup script, cache checker, UI scanner, route matrix and service-worker cache all identify Build 260. Current fallback files are `data/build260_go_live_blockers.json` and `data/build260_ui_health_routes.json`.
+- **DAIP start flow:** `/admin-creative-projects` is the normal new-project entry. `/admin-daip-media` is private raw-media intake. `/admin-daip-intake-dry-run` is fictional metadata validation only. `/admin-daip-gate-c` records technical/governance/rollback evidence and does not itself enable upload, processing or public publishing.
+- **Current business features retained:** Build 259 editable public-media targets, add-on detail pages, vehicle-size correction workflow and editable Quote Pipeline remain in source.
+- **Documentation:** two living planning authorities only. Other Markdown is specialist/historical and carries a Build 260 status banner; retained historical sections remain because release/audit references still depend on them.
+
+## Database/deployment actions
+
+1. If not already applied, run `sql/2026-08-13_build259_vehicle_size_review.sql` in staging.
+2. Run `sql/2026-08-18_build260_startup_catalog_health_sync.sql` in staging. It deactivates obsolete Startup process rows without deleting historical evidence, seeds current Build 260 evidence/process rows, and makes the Build 260 next-20 roadmap cycle current.
+3. Deploy Pages + Functions together.
+4. Hard-refresh `/admin-startup-guide.html` and verify Build 260 cache/script/service-worker parity.
+5. Open Photo Studio normally, then run one explicit approved-R2 sync. Verify all folder passes complete without subrequest-limit/1102 errors.
+6. Open Media Health and confirm database-first diagnostics load; run the optional 12-URL delivery sample only when needed.
+7. Complete current Startup evidence using harmless/staging records before unrestricted production promotion.
+
+## Current important boundaries
+
+- Do not silently replace authored package/product/service imagery. Explicit Photo Studio assignment is the owner-managed override; automatic matching remains fallback-only.
+- Do not expose `DAIP_MEDIA_BUCKET`, raw Creative Project object keys, signed URLs or private customer media through public manifests or Photo Studio.
+- Do not treat a saved Gate C review as public-publishing authorization.
+- Do not make historical migration rows current blockers simply because their evidence still exists in the database.
+- Continue one public H1 per exposed page, concise descriptive titles, accurate local wording, responsive/mobile CSS and contextual alt text.
+
+## Immediate next engineering/acceptance priorities
+
+The active 20-item queue is Build 260 in `MASTER_VALUE_ROADMAP.md` and the shared `app_roadmap_execution_items` cycle after the Build 260 SQL is applied. Highest-value unfinished engineering remains the private DAIP processing consumer/retry/dead-letter/derivative path; highest-value acceptance remains booking/payment/refund/notification, vehicle-size review, inventory posting/reversal, Photo Studio sync, Media Health, quote workflow, real-device CSS/accessibility, SEO/Business Profile evidence, restore/rollback, then controlled soft launch.
+
+---
+
+## Historical implementation record retained below
+
+Everything below this boundary is retained for release guards, audit context and specialist detail. It does **not** override the Build 260 section above.
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 259
 
 > **Build 259 (2026-08-13):** Public presentation imagery is now comprehensively targetable from the existing Photo Studio without reassigning current photos; add-on cards are customer-clean and link to fully owner-editable service pages; Pricing/Services/Maintenance/Fleet CSS is repaired; Maintenance content is editable; uncertain vehicle sizes enter a staff review workflow with a secure customer confirm/cancel link when price/size changes; and Quote Pipeline rows are now selectable/editable. Apply `sql/2026-08-13_build259_vehicle_size_review.sql` before using the new vehicle-size review controls. Build 254 authored-image preservation and Build 257 no-R2-scan-on-normal-load rules remain mandatory. See `BUILD259_SUMMARY.md`.
@@ -24,8 +71,8 @@
 
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 253
 
-**Updated:** 2026-08-12  
-**Build:** 253  
+**Updated:** 2026-08-12
+**Build:** 253
 **Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains the specialist deployment/acceptance runbook.
 
 ## Build 253 current state — application-wide Photo Management Studio
@@ -87,8 +134,8 @@ Photo Studio manages **public website assets only**. It is not a path around DAI
 
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 252
 
-**Updated:** 2026-08-12  
-**Build:** 252  
+**Updated:** 2026-08-12
+**Build:** 252
 **Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` is a specialist operational runbook.
 
 ## Build 252 current state — approved R2 website imagery is assigned by intent
@@ -128,8 +175,8 @@ Machine-readable mapping and folder priority are recorded in `data/build252_publ
 
 <!-- Historical release guard: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 251 -->
 
-**Updated:** 2026-08-11  
-**Build:** 251  
+**Updated:** 2026-08-11
+**Build:** 251
 **Use this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a specialist operational runbook.
 
 
@@ -209,8 +256,8 @@ Build 250 concentrates the public service journey around three plain steps: choo
 # Historical Build 249 handoff snapshot
 
 
-**Updated:** 2026-08-10  
-**Build:** 249  
+**Updated:** 2026-08-10
+**Build:** 249
 **Use this file first in a new chat or by another AI.** The only other living authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a detailed operational runbook, not a third planning authority.
 
 ## Build 249 current state — inventory recovery through reviewed supplier refresh
@@ -245,8 +292,8 @@ Build 249 turns the Amazon supplier-link helper into an existing-row recovery wo
 
 # Historical Build 248 handoff snapshot
 
-**Updated:** 2026-08-09  
-**Build:** 248  
+**Updated:** 2026-08-09
+**Build:** 248
 **Use this file first in a new chat or by another AI.** The only other living authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains a detailed operational runbook, not a third planning authority.
 
 ## Build 248 current state
@@ -299,7 +346,7 @@ Apply the Build 246 migration in staging and complete process 37 before treating
 
 # Rosie Dazzlers — AI Project Handoff (Build 245)
 
-**Updated:** 2026-08-06  
+**Updated:** 2026-08-06
 **Build 245:** protected UI/SEO route scanner, Startup cache diagnostics and recovery controls, safer service-worker installation/fallbacks, service-specific static landing-page H1/metadata fallbacks, admin noindex corrections, gift-certificate one-H1 repair, and synchronized no-DDL documentation.
 
 ## Continue from here
@@ -315,7 +362,7 @@ Apply the Build 246 migration in staging and complete process 37 before treating
 
 # Rosie Dazzlers — AI Project Handoff (Build 241)
 
-**Updated:** 2026-08-05  
+**Updated:** 2026-08-05
 **Build 241 hotfix:** repairs the unified Startup Command Center summary crash caused by a JavaScript temporal-dead-zone name collision, adds all-settled refresh fallback handling, and advances browser/service-worker cache tokens. No database change is required.
 
 ## Build 241 continuation pointer
@@ -331,7 +378,7 @@ Apply the Build 246 migration in staging and complete process 37 before treating
 
 # Rosie Dazzlers — AI Project Handoff (Build 240)
 
-**Updated:** 2026-08-05  
+**Updated:** 2026-08-05
 **Build 240 operational release:** preview-first transactional inventory posting and authorized compensating reversal for bookings and reviewed Creative Project reservations; database row locking, shortage validation, idempotency, posting history, read-only fallback, mobile/desktop admin workflow, Startup catalog expansion, SEO/CSS/schema/document synchronization.
 
 ## Build 240 continuation pointer
@@ -348,7 +395,7 @@ Apply the Build 246 migration in staging and complete process 37 before treating
 
 # Rosie Dazzlers — AI Project Handoff (Build 238)
 
-**Updated:** 2026-07-30  
+**Updated:** 2026-07-30
 **Build 238 operational release:** transactional inventory changes, reviewed duplicate merge, stronger API/UI fallbacks, current-cycle startup guidance, SEO metadata tightening, CSS/route regression protection and synchronized schema/documentation.
 
 ## Read order and authority
@@ -421,7 +468,7 @@ Build 236 restores the broken Block Calendar, the missing shared responsive/admi
 
 # Rosie Dazzlers — AI Project Handoff (Build 225)
 
-**Updated:** 2026-07-07  
+**Updated:** 2026-07-07
 **Living source of truth:** Read this file first, then `MASTER_VALUE_ROADMAP.md`. Historical Markdown is retained for audit/release support, not as competing planning.
 
 ## Build 225 central capability: social/analytics Connections Centre and DAIP external-service boundary
@@ -1135,7 +1182,7 @@ Apply migrations in order: Build 235 gallery if outstanding, Build 237 evidence/
 <!-- Build 246 synchronization: current authorities are AI_PROJECT_HANDOFF.md, MASTER_VALUE_ROADMAP.md, and STARTUP_GO_LIVE_BLOCKERS.md; historical content retained for audit. -->
 # Build 247 — DAIP private raw-media ingestion
 
-**Current build:** 247  
+**Current build:** 247
 **Updated:** 2026-08-07
 
 Build 247 moves DAIP from metadata-only intake planning to a deliberately private, Creative-Project-linked raw-media ingestion layer. It does **not** weaken the historical Build 218 metadata-only Test Lab: that older subsystem continues using `daip_media_assets`. Production project masters use a separate table, `daip_project_media_assets`.
@@ -1242,3 +1289,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
 
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
+
+<!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
