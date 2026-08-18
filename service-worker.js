@@ -1,3 +1,5 @@
+// Historical Build 259 cache guard: rosie-app-v20260813build259
+// Historical Build 247 fallback token: /data/build247_go_live_blockers.json
 // Historical Build 256 cache token: rosie-app-v20260812build256
 // Build 257 resource-limit hotfix: database-first photo loads; bounded R2 sync.
 // Historical Build 250 cache guard: rosie-app-v20260810build250
@@ -18,20 +20,21 @@
 // Historical cache: rosie-app-v20260812build255
 // Historical Build 257 cache guard: rosie-app-v20260813build257
 // Historical Build 258 cache guard: rosie-app-v20260813build258
-const CACHE='rosie-app-v20260813build259';
-const URLS=['/admin-photo-studio.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
+// Build 260 stabilization: current startup/UI/media-health assets are cache coherent.
+const CACHE='rosie-app-v20260818build260';
+const URLS=['/admin-photo-studio.html','/admin-media-health.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
-  '/data/build247_go_live_blockers.json',
+  '/data/build260_go_live_blockers.json',
   '/data/build247_next_steps.json',
   '/data/build247_following_steps.json',
   '/data/build246_next_steps.json',
   '/data/build246_completed_steps.json',
   '/admin-catalog.html',
-  '/data/build247_ui_health_routes.json',
+  '/data/build260_ui_health_routes.json',
   '/assets/cache-health-controls.js',
-  '/assets/cache-health-controls.js?v=20260807build247',
+  '/assets/cache-health-controls.js?v=20260818build260',
   '/assets/ui-health-scanner.js',
-  '/assets/ui-health-scanner.js?v=20260807build247',
+  '/assets/ui-health-scanner.js?v=20260818build260',
   '/admin-ui-health.html',
   '/assets/brand/rosie-reviews-fallback.png',
   '/assets/addons/generic_addon.png',
@@ -49,7 +52,7 @@ const URLS=['/admin-photo-studio.html','/data/build253_photo_targets.json','/dat
   '/assets/placeholders/inventory-tools-photo.jpg',
   '/assets/placeholders/workflow-photo.jpg',
   '/assets/placeholders/launch-readiness-photo.jpg',
-  '/assets/startup-command-center.js?v=20260807build247',
+  '/assets/startup-command-center.js?v=20260818build260',
   '/admin-inventory-posting.html',
   '/data/build240_go_live_blockers.json',
   '/data/build240_next_steps.json',
