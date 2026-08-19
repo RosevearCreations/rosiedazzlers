@@ -1,0 +1,17 @@
+-- Build 199 friendly Site Settings editor pass — 2026-06-07
+-- No database schema changes are required.
+--
+-- This pass converts routine Admin Site Settings JSON editing into friendly
+-- row/card editors for:
+--   - navigation_footer.navigation
+--   - navigation_footer.footer_links
+--   - navigation_footer.footer_groups
+--   - analytics_event_registry.events
+--   - media_requirements.required_assets
+--   - business_hours_holidays.holiday_closures
+--   - landing_pages_content.default_pages.pages / pages / landing_pages
+--
+-- The UI writes back to the same app_management_settings JSON payload and keeps
+-- advanced JSON available only for emergency repair/fallback workflows.
+-- Recovery template delivery rules also continue using the existing rules JSON
+-- payload; common fields now have friendly UI inputs.

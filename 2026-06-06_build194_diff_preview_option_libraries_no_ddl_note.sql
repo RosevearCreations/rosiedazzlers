@@ -1,0 +1,15 @@
+-- Build 194 diff/preview/option-library pass
+-- Date: 2026-06-06
+--
+-- No database schema changes are required for this pass.
+--
+-- This build adds:
+-- - /api/admin/editable_site_settings_compare for DB/editor versus bundled fallback JSON diffs.
+-- - /api/admin/analytics_registry_add_event for one-click addition of unknown analytics event names.
+-- - Shared Admin option-library dropdown hydration from the existing option_libraries editable setting.
+-- - Admin Site Settings preview, permission guidance, and SEO copy-length warnings.
+--
+-- Existing tables used:
+-- - app_management_settings
+-- - app_management_setting_history
+-- - site_activity_events

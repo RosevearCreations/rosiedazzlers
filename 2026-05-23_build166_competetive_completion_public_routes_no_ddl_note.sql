@@ -1,0 +1,6 @@
+-- Build 166: COMPETETIVE.md public-route completion pass
+-- Date: 2026-05-23
+--
+-- No database DDL is required in this pass.
+-- This build adds static/public routes, catalog fallback metadata, docs, and release checks.
+-- Existing pending migrations from Builds 156, 158, 159, 162, 163, 164, and 165 still apply as needed.
