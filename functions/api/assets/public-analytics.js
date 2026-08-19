@@ -1,3 +1,4 @@
+// Build 261 — protected-screen exclusion + transient 5xx analytics circuit breaker.
 // Build 236 restored editable analytics event registry integration.
 (function attachRosieAnalytics(globalScope) {
   const API = '/api/analytics/ingest';
@@ -8,7 +9,9 @@
     cart: 'rosie_analytics_last_cart',
     maxScroll: 'rosie_analytics_max_scroll'
   };
-  const state = { pageStartedAt: Date.now(), lastHeartbeatAt: 0, started: false, lastTrackedScroll: 0, registryLoaded: false, eventRegistry: {} };
+  const state = { pageStartedAt: Date.now(), lastHeartbeatAt: 0, started: false, lastTrackedScroll: 0, registryLoaded: false, eventRegistry: {}, failureCount: 0 };
+  const FAILURE_UNTIL_KEY = 'rosie_analytics_disabled_until';
+  const FAILURE_BACKOFF_MS = 5 * 60 * 1000;
 
   async function loadEventRegistry() {
     if (state.registryLoaded) return state.eventRegistry;
@@ -46,6 +49,19 @@
   }
   function safeLocal(key) { try { return localStorage.getItem(key); } catch { return null; } }
   function setLocal(key, value) { try { localStorage.setItem(key, value); } catch {} }
+  function analyticsTemporarilyDisabled() {
+    return Number(safeLocal(FAILURE_UNTIL_KEY) || 0) > Date.now();
+  }
+  function tripAnalyticsCircuit(status) {
+    state.failureCount += 1;
+    const multiplier = Math.min(4, Math.max(1, state.failureCount));
+    setLocal(FAILURE_UNTIL_KEY, String(Date.now() + FAILURE_BACKOFF_MS * multiplier));
+    return status;
+  }
+  function clearAnalyticsCircuit() {
+    state.failureCount = 0;
+    setLocal(FAILURE_UNTIL_KEY, '0');
+  }
   function getViewport() { return `${globalScope.innerWidth || 0}x${globalScope.innerHeight || 0}`; }
   function getCartSnapshot() {
     const candidates = ['rosie_cart', 'rosie_gift_cart', 'gift_cart', 'cart'];
@@ -90,9 +106,17 @@
       payload: basicPayload({ ...registryMeta(event_type), ...payload }),
       ...extra
     };
+    if (analyticsTemporarilyDisabled()) return;
     try {
-      await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true, cache: 'no-store' });
-    } catch {}
+      const response = await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true, cache: 'no-store' });
+      if (response.status === 429 || response.status >= 500) {
+        tripAnalyticsCircuit(response.status);
+        return;
+      }
+      if (response.ok) clearAnalyticsCircuit();
+    } catch {
+      tripAnalyticsCircuit(0);
+    }
   }
   function maybeTrackCart() {
     const snapshot = getCartSnapshot();
@@ -169,7 +193,7 @@
       maybeTrackCart();
       maybeTrackScroll();
       post('heartbeat', { duration_ms: Date.now() - state.pageStartedAt, online: true, max_scroll_percent: state.lastTrackedScroll || 0 });
-    }, 30000);
+    }, 120000);
   }
 
   globalScope.RosieAnalytics = {

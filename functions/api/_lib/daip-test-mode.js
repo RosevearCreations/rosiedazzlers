@@ -69,8 +69,10 @@ export function safeDate(value) {
 }
 
 export function isInternalTestAcknowledged(body) {
-  return body?.safety_confirmation === INTERNAL_TEST_PHRASE && body?.internal_test_only === true && body?.no_customer_data === true && body?.no_public_export === true;
+  const phrase=String(body?.safety_confirmation||'').trim().replace(/\s+/g,' ').toUpperCase();
+  return phrase === INTERNAL_TEST_PHRASE && body?.internal_test_only === true && body?.no_customer_data === true && body?.no_public_export === true;
 }
+
 
 export function containsForbiddenStorageInput(body = {}) {
   const prohibited = ['public_url','url','media_url','storage_key','storage_path','storage_bucket','signed_url','download_url','upload_url','r2_key','drive_file_id'];
@@ -102,4 +104,4 @@ export async function readInternalTestJob(env, jobId) {
 }
 
 export function safeJson(value) { try { return JSON.parse(value); } catch { return null; } }
-export function daipError(error, status = 400) { return withCors(json({ ok:false, error }, status)); }
+export function daipError(error, status = 400, extra = {}) { return withCors(json({ ok:false, error, ...extra }, status)); }
