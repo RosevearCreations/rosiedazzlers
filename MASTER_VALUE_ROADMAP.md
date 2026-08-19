@@ -1,4 +1,51 @@
-# CURRENT LIVING AUTHORITY 2 OF 2 — Build 260
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 261
+
+**Updated:** 2026-08-19
+**Purpose:** Current business/engineering direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state.
+
+## Build 261 value delivered
+
+- Staff photo work no longer generates public engagement analytics, reducing avoidable Functions traffic and console noise.
+- A transient 5xx cannot immediately strip cached static presentation assets when a safe service-worker copy exists.
+- Photo assignment writes are lower-cost and retain explicit multi-placement/reset semantics.
+- The owner can export the exact current list of known image-placement targets that have no deliberate Photo Studio override, making visual completion a printable operating task rather than a code audit.
+- DAIP Test Lab keeps all internal-only protections while removing preventable input-format 400s.
+- Startup/cache diagnostics stay build-coherent instead of introducing another expected/fetched mismatch.
+
+## Current next 20
+
+1. Deploy Build 261 and verify Startup/Cache Health reports Build 261 runtime assets.
+2. Test one Photo Studio second placement, refresh, and confirm both placements remain listed.
+3. Reset one of those placements and confirm only that location returns to its authored/default image.
+4. Export the live unassigned-placement CSV and print checklist; prioritize public/customer-facing placements before optional admin visuals.
+5. Fill the highest-value missing manual imagery: package cards, service/add-on detail pages, town/high-intent landing heroes, local/review proof, gift cards, maintenance, FAQ, gallery evidence/technique/efficiency, then secondary backgrounds/admin visuals.
+6. Create one harmless DAIP test job through the generated safe reference workflow.
+7. Capture Cloudflare Functions Metrics/Invocation Status evidence if another 503 affects APIs and static files together.
+8. Continue booking/deposit/final-balance/refund/webhook production acceptance.
+9. Verify external email/SMS delivery, retry and failure evidence.
+10. Accept uncertain vehicle-size staff review and customer confirmation/cancellation flow.
+11. Complete transactional inventory posting, shortage, idempotency and reversal acceptance.
+12. Accept Quote Pipeline edit/follow-up/booking hand-off.
+13. Finish catalog/supplier/image publish readiness.
+14. Complete owner-editable service/add-on landing content and condition-dependent pricing explanations.
+15. Populate Gallery with approved Before/After, Evidence, Technique and Efficiency proof.
+16. Complete real-device CSS/mobile acceptance on booking, pricing, services, maintenance, fleet and admin photo workflows.
+17. Complete keyboard/focus/label/contrast/reduced-motion accessibility review.
+18. Verify Search Console, sitemap/canonicals/schema and Google Business Profile evidence.
+19. Implement/accept the private DAIP processing consumer, retry/dead-letter and reviewed-derivative path.
+20. Rehearse Supabase restore + Cloudflare rollback, then run a controlled invite-only soft launch.
+
+## Permanent guardrails
+
+- One public H1 per indexable page.
+- Never silently replace an authored/default image; only explicit owner assignment can override it.
+- Never expose private DAIP media through public Photo Studio/manifests.
+- Keep public analytics off protected admin/client/detailer screens.
+- Do not turn temporary network/runtime failure into destructive retries or duplicate non-idempotent writes.
+
+---
+
+# HISTORICAL LIVING AUTHORITY SNAPSHOT — Build 260
 
 **Updated:** 2026-08-18
 **Purpose:** Current business/engineering direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state. Older Build sections below are retained history even where their original headings use “CURRENT”.
@@ -1634,3 +1681,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
 
 <!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
+
+<!-- Historical release compatibility: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 260 -->
