@@ -21,7 +21,8 @@
 // Historical Build 257 cache guard: rosie-app-v20260813build257
 // Historical Build 258 cache guard: rosie-app-v20260813build258
 // Build 260 stabilization: current startup/UI/media-health assets are cache coherent.
-const CACHE='rosie-app-v20260818build260';
+// Build 261 reliability: static 5xx cache fallback + admin analytics isolation.
+const CACHE='rosie-app-v20260819build261';
 const URLS=['/admin-photo-studio.html','/admin-media-health.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
   '/data/build260_go_live_blockers.json',
@@ -30,11 +31,11 @@ const URLS=['/admin-photo-studio.html','/admin-media-health.html','/data/build25
   '/data/build246_next_steps.json',
   '/data/build246_completed_steps.json',
   '/admin-catalog.html',
-  '/data/build260_ui_health_routes.json',
+  '/data/build261_ui_health_routes.json',
   '/assets/cache-health-controls.js',
-  '/assets/cache-health-controls.js?v=20260818build260',
+  '/assets/cache-health-controls.js?v=20260819build261',
   '/assets/ui-health-scanner.js',
-  '/assets/ui-health-scanner.js?v=20260818build260',
+  '/assets/ui-health-scanner.js?v=20260819build261',
   '/admin-ui-health.html',
   '/assets/brand/rosie-reviews-fallback.png',
   '/assets/addons/generic_addon.png',
@@ -52,7 +53,7 @@ const URLS=['/admin-photo-studio.html','/admin-media-health.html','/data/build25
   '/assets/placeholders/inventory-tools-photo.jpg',
   '/assets/placeholders/workflow-photo.jpg',
   '/assets/placeholders/launch-readiness-photo.jpg',
-  '/assets/startup-command-center.js?v=20260818build260',
+  '/assets/startup-command-center.js?v=20260819build261',
   '/admin-inventory-posting.html',
   '/data/build240_go_live_blockers.json',
   '/data/build240_next_steps.json',
@@ -77,6 +78,7 @@ const URLS=['/admin-photo-studio.html','/admin-media-health.html','/data/build25
   '/services',
   '/login',
   '/assets/site.css',
+  '/manifest.webmanifest',
   '/assets/chrome.js',
   '/assets/public-analytics.js',
   '/assets/admin-auth.js',
@@ -132,5 +134,25 @@ const URLS=['/admin-photo-studio.html','/admin-media-health.html','/data/build25
   '/data/build231_project_profitability_content_planning.json'];
 self.addEventListener('install',event=>{event.waitUntil((async()=>{const cache=await caches.open(CACHE);await Promise.allSettled(URLS.map(async(url)=>{try{const response=await fetch(url,{cache:'reload'});if(response.ok)await cache.put(url,response.clone());}catch{}}));await self.skipWaiting();})());});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
-self.addEventListener('fetch',event=>{if(event.request.method!=='GET')return;event.respondWith((async()=>{try{return await fetch(event.request);}catch{const found=await caches.match(event.request);if(found)return found;if(event.request.mode==='navigate'){const shell=await caches.match('/');if(shell)return shell;}return new Response('Rosie Dazzlers is temporarily offline and this resource is not cached.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}});}})());});
+self.addEventListener('fetch',event=>{
+  if(event.request.method!=='GET')return;
+  event.respondWith((async()=>{
+    const url=new URL(event.request.url);
+    const sameOrigin=url.origin===self.location.origin;
+    const isApi=sameOrigin&&url.pathname.startsWith('/api/');
+    const cached=async()=>sameOrigin&&!isApi?await caches.match(event.request,{ignoreSearch:true}):null;
+    try{
+      const response=await fetch(event.request);
+      // Build 261: a transient Pages/Workers 5xx must not strip CSS/manifest/navigation when a safe cached copy exists.
+      if(response.status>=500&&sameOrigin&&!isApi){const found=await cached();if(found)return found;}
+      return response;
+    }catch{
+      const found=await cached();if(found)return found;
+      if(event.request.mode==='navigate'){const shell=await caches.match('/');if(shell)return shell;}
+      return new Response('Rosie Dazzlers is temporarily offline and this resource is not cached.',{status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}});
+    }
+  })());
+});
 self.addEventListener('message',event=>{if(event.data?.type==='SKIP_WAITING')self.skipWaiting();});
+
+// Build 260 compatibility markers: rosie-app-v20260818build260 ; build260_ui_health_routes.json
