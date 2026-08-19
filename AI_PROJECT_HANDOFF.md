@@ -1,4 +1,38 @@
-# CURRENT LIVING AUTHORITY 1 OF 2 — Build 260
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 261
+
+**Updated:** 2026-08-19
+**Build:** 261
+**Read this file first in a new chat or by another AI.** The only other living planning authority is `MASTER_VALUE_ROADMAP.md`. `STARTUP_GO_LIVE_BLOCKERS.md` remains the specialist acceptance/deployment runbook.
+
+## Build 261 current state — admin reliability and photo-assignment audit
+
+Build 261 keeps the Build 260 operational architecture and focuses on live reliability failures observed during DAIP Test Lab and Photo Studio work.
+
+- **Photo assignment remains multi-placement:** one managed photo can serve several independent targets. Resetting one target returns only that target to its authored/default image.
+- **Assignment saves are lighter:** `/api/admin/photo_assignment_save` no longer performs a two-query schema probe before every save; direct idempotent upsert/reset is used after staff authentication, with missing-schema errors mapped back to the Build 253 migration guidance.
+- **Photo Studio recovery:** idempotent library/sync/assignment operations retry one transient 502/503/504. Persistent 503s explicitly state that confirmation was not received and staff should refresh before retrying.
+- **Live image-placement audit:** Photo Studio can download a CSV or print a checklist of every known target with no active manual Photo Studio assignment. The report distinguishes manual overrides from authored/default/automatic fallback imagery.
+- **Protected-screen analytics isolation:** `chrome.js` no longer loads public analytics or the public PWA manifest on admin/client/detailer screens. Public analytics uses a 5xx/429 circuit breaker and a slower heartbeat.
+- **Static 5xx resilience:** the service worker can serve a cached same-origin non-API asset when the network returns a 5xx, preventing transient runtime problems from unnecessarily stripping cached CSS/manifest/navigation.
+- **DAIP Test Lab UX:** the safety phrase is locked/prefilled, a safe DAIP-only reference can be generated, and field-level client/API validation makes 400 responses understandable without weakening the internal-test boundary.
+- **Runtime/cache identity:** Startup Command Center, Cache Health, UI Health runtime stamp, and service-worker cache identify Build 261. The active go-live catalog remains the Build 260 operational catalog because no new policy catalog was introduced.
+
+## Database/deployment actions
+
+No new Build 261 SQL is required. Preserve all previously applicable migrations. Deploy Pages + Functions together, then hard-refresh. Test Photo Studio assignment/reset, the live unassigned-placement export, and one harmless DAIP test job. If APIs and ordinary static assets simultaneously return 503 again, capture the Cloudflare Functions invocation status for that timestamp.
+
+## Immediate next acceptance priorities
+
+1. Prove Build 261 cache/runtime parity and service-worker takeover.
+2. Save one photo into a second placement and verify both placements remain active.
+3. Reset only one placement and confirm its authored/default image returns.
+4. Download/print the live unassigned-placement report and use it as the deliberate-image completion checklist.
+5. Create one harmless DAIP test job with generated reference and all safety acknowledgements.
+6. Continue the Build 260 active acceptance queue (booking/payment/refund/notification, vehicle-size review, inventory posting/reversal, Quote Pipeline, private DAIP processor, real-device CSS/accessibility, SEO/Business Profile evidence and rollback).
+
+---
+
+# HISTORICAL LIVING AUTHORITY SNAPSHOT — Build 260
 
 **Updated:** 2026-08-18
 **Build:** 260
@@ -1291,3 +1325,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
 
 <!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
+
+<!-- Historical release compatibility: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 260 -->
