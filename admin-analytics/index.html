@@ -195,7 +195,7 @@
     }
   </style>
 </head>
-<body data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report" data-build179="local-proof-tasking" data-build194="analytics-registry-quick-add">
+<body data-build262="cpu-stabilization" data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report" data-build179="local-proof-tasking" data-build194="analytics-registry-quick-add">
   <main class="shell">
     <div class="loading" data-admin-shell-loading>Loading analytics...</div>
     <div data-admin-shell-ready hidden>
@@ -214,6 +214,7 @@
       </header>
 
       <div class="status" data-admin-shell-status hidden></div>
+      <div class="status" style="display:block;border-color:#f59e0b;background:rgba(245,158,11,.12);color:inherit">Build 262 CPU stabilization: analytics loads once and refreshes only when you press <strong>Refresh</strong>. Background 30-second polling is disabled while Rosie is in test-mode reliability work.</div>
 
       <section class="grid">
         <article class="card">
@@ -410,7 +411,6 @@
 
       let abandonedRows = [];
       let latestAnalytics = null;
-      let autoRefreshTimer = null;
 
       function setShellStatus(message, type) {
         document.querySelectorAll("[data-admin-shell-status]").forEach((node) => {
@@ -749,8 +749,8 @@
         onReady: async () => {
           try {
             await load();
-            clearInterval(autoRefreshTimer);
-            autoRefreshTimer = setInterval(() => load().catch(() => {}), 30000);
+            // Build 262: deliberately no background analytics polling. A single open
+            // admin tab previously generated six API requests every 30 seconds.
           } catch (err) {
             setShellStatus(err?.message || "Could not initialize analytics.", "error");
           }
