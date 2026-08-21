@@ -3,7 +3,7 @@
 // Build 241 hotfix: prevents Startup summary temporal-dead-zone crashes and keeps Build 240 catalog fallback. Historical Build 239 markers remain for compatibility.
 (function(globalScope){
 'use strict';
-const BUILD=260,CACHE_PREFIX='rosie_startup_build260_',LOCAL_EVIDENCE_KEY='rosie_startup_evidence_fallback_build260';
+const BUILD=262,CACHE_PREFIX='rosie_startup_build262_',LOCAL_EVIDENCE_KEY='rosie_startup_evidence_fallback_build262';
 const $=(s)=>document.querySelector(s),$$=(s)=>Array.from(document.querySelectorAll(s));
 const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let actor=null,catalog=[],evidence={},production=null,tests=[],roadmap=[],sources={catalog:'loading',evidence:'loading',tests:'loading',roadmap:'loading',production:'loading'},automatic={};
@@ -50,3 +50,9 @@ async function refreshAll(){setStatus('Refreshing Startup catalog, evidence, pro
 function boot(){if(!globalScope.AdminShell||!globalScope.AdminMenu){setStatus('Admin dependencies did not load. Use STARTUP_GO_LIVE_BLOCKERS.md as the emergency detailed fallback.','bad');return;}bindStatic();globalScope.AdminShell.boot({pageKey:'admin-startup-guide',onReady:async({actor:current})=>{actor=current||null;globalScope.AdminMenu.render({currentPage:'admin-startup-guide'});await refreshAll();if(location.hash){setTimeout(()=>document.querySelector(location.hash)?.scrollIntoView({block:'start'}),120);}}});}
 boot();
 })(window);
+
+// Build 260 compatibility marker: const BUILD=260
+
+// Build 262 CPU stabilization: current Startup Command Center identity; runtime diagnostics available separately.
+
+// Historical Build 261 release tokens: const BUILD=261 ; rosie_startup_build261_
