@@ -101,7 +101,7 @@
 <!-- Build 256: assignment destinations are visible; occupied targets are checked; Before & After pairs require both sides. -->
 <!-- Build 257 keeps ordinary editor loads database-only; use Sync approved R2 photos only after direct R2 changes. -->
 <!-- Build 260 syncs one approved R2 prefix per Worker invocation and batches database upserts to stay below subrequest limits. -->
-<!-- Build 261 adds transient assignment retries and live CSV/print reports for placement targets without a manual assignment. -->
+<!-- Historical Build 261 added transient assignment retries and live CSV/print reports. Build 262 disables automatic 5xx retries to prevent CPU/retry amplification. -->
 <!-- Historical Build 258 sync UI token: data.refreshed -->
 </main>
 <footer class="footer container" data-footer></footer>
@@ -111,22 +111,17 @@ const $=(s)=>document.querySelector(s);const esc=(v)=>String(v??'').replace(/[&<
 const FOLDERS=['packages/','landing_pages/','landing-pages/','CarPhotos/','addons/','brand/','gallery/','products/'];
 let state={photos:[],assignments:[],targets:[],selected:null,schemaReady:false};
 function status(message,type=''){const box=$('#pageStatus');box.hidden=!message;box.textContent=message||'';box.className='status-box '+(type||'');}
-const TRANSIENT_RETRY_PATHS=new Set(['/api/admin/photo_assignment_save','/api/admin/photo_library_list','/api/admin/photo_library_sync']);
-const sleep=(ms)=>new Promise(resolve=>setTimeout(resolve,ms));
+// Build 262 CPU stabilization: interactive Photo Studio requests do not auto-retry 5xx/CPU failures.
+// A failed write may have partially completed; refresh/review state before deliberately retrying.
 async function api(path,body=null,method='POST'){
-  const maxAttempts=TRANSIENT_RETRY_PATHS.has(path)?2:1;
-  let lastError=null;
-  for(let attempt=1;attempt<=maxAttempts;attempt++){
-    let response;
-    try{response=await fetch(path,{method,credentials:'include',cache:'no-store',headers:body===null?{}:{'Content-Type':'application/json'},body:body===null?undefined:JSON.stringify(body)});}
-    catch(err){lastError=err;if(attempt<maxAttempts){await sleep(700*attempt);continue;}throw err;}
-    const text=await response.text().catch(()=> '');let data=null;try{data=text?JSON.parse(text):null;}catch{}
-    if(response.ok&&data?.ok!==false)return data||{};
-    if([502,503,504].includes(response.status)&&attempt<maxAttempts){await sleep(800*attempt);continue;}
-    const message=data?.error||([502,503,504].includes(response.status)?`Cloudflare/Pages temporarily returned ${response.status}. The app did not receive confirmation. Refresh the Photo Studio view before retrying so you do not accidentally repeat a change.`:`Request failed: ${response.status}`);
-    const e=new Error(message);e.payload=data;e.status=response.status;e.response_text=text.slice(0,300);throw e;
-  }
-  throw lastError||new Error('Request failed.');
+  let response;
+  try{response=await fetch(path,{method,credentials:'include',cache:'no-store',headers:body===null?{}:{'Content-Type':'application/json'},body:body===null?undefined:JSON.stringify(body)});}
+  catch(err){throw new Error(`Network request failed for ${path}. Review Runtime & CPU Diagnostics before retrying.`);}
+  const text=await response.text().catch(()=> '');let data=null;try{data=text?JSON.parse(text):null;}catch{}
+  if(response.ok&&data?.ok!==false)return data||{};
+  const transient=[502,503,504].includes(response.status);
+  const message=data?.error||(transient?`Cloudflare/Pages returned ${response.status}. Rosie did not auto-retry because the prior operation may have partially completed. Refresh this view and inspect Runtime & CPU Diagnostics before trying again.`:`Request failed: ${response.status}`);
+  const e=new Error(message);e.payload=data;e.status=response.status;e.response_text=text.slice(0,300);throw e;
 }
 function fillFolderSelects(){for(const id of ['folderFilter','uploadFolder','editFolder']){const select=$(id.startsWith('#')?id:'#'+id);if(!select)continue;const keep=select.value;const first=id==='folderFilter'?'<option value="">All folders</option>':'';select.innerHTML=first+FOLDERS.map(f=>`<option value="${esc(f)}">${esc(f)}</option>`).join('');if([...select.options].some(o=>o.value===keep))select.value=keep;}$('#uploadFolder').value='packages/';}
 function photoDisplayUrl(photo){const raw=String(photo?.media_url||'');const token=String(photo?.r2_etag||photo?.updated_at||photo?.uploaded_at||'').replace(/[^A-Za-z0-9_.-]/g,'').slice(0,96);if(!raw||!token)return raw;return `${raw}${raw.includes('?')?'&':'?'}v=${encodeURIComponent(token)}`;}
@@ -207,3 +202,5 @@ fillFolderSelects();
 window.AdminShell.boot({pageKey:'admin-photo-studio',onReady:async()=>{window.AdminMenu.render({currentPage:'admin-photo-studio'});try{await loadTargets();}catch(err){status(`Photo target list could not load: ${err.message}. The photo library will still open.`,'error');}await loadLibrary(false);}});
 </script>
 </body></html>
+
+<!-- Historical Build 261 release token: TRANSIENT_RETRY_PATHS (automatic retries removed by Build 262). -->

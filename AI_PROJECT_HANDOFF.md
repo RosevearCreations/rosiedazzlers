@@ -1,3 +1,62 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 262
+
+**Updated:** 2026-08-20  
+**Build:** 262  
+**Priority:** P0 Worker CPU stabilization before major feature work.
+
+## Build 262 current state — self-diagnosing CPU stabilization
+
+Cloudflare incident evidence reports 7,592 observed Rosie Worker invocations, 2,244 exceeded-CPU terminations (~29.6%), no memory failures, no internal errors and no script-exception spike. Rosie is still in test mode with no live-client/real-DAIP workload, so this build treats application-generated invocation volume and hot request processing as the primary reliability problem to remove and instrument.
+
+### Concrete source issues corrected
+
+- Admin Analytics no longer fires six API requests every 30 seconds. It loads once and refreshes only through owner action/filter change.
+- Live Operations no longer auto-starts 15-second multi-API polling. Optional refresh is 60 seconds or slower, pauses in hidden tabs, and no longer fetches the entire booking list during each refresh.
+- Customer Progress polling is visibility-aware and reduced from 20 seconds to 120 seconds.
+- Public analytics has no heartbeat interval. Events are queued/batched (maximum 12/request), telemetry fails open, and 429/5xx/network failure opens a circuit instead of replaying the batch.
+- `/api/analytics/ingest` performs bounded batch validation, one combined settings read and one batched event insert.
+- Admin Analytics uses compact rollups by default. Large rollup recomputation moves to the Build 262 Supabase RPC instead of loading/aggregating large raw event sets in Worker JavaScript.
+- Photo Studio no longer auto-retries 5xx assignment/list/sync requests; staff review state before a deliberate retry.
+- Shared app settings can be loaded in one PostgREST query for several keys.
+- Routine Functions JSON responses are compact rather than pretty-printed, removing a common serialization/payload tax.
+- `_routes.json` still invokes Pages Functions only for `/api/*`; ordinary HTML/CSS/JS/manifest assets remain static.
+
+### Rosie self-diagnostics
+
+New protected `/admin-runtime-health` records a browser-local ring of safe `/api/*` call metadata: route pathname, method, status, browser wall time, page, timestamp, build and Cloudflare Ray ID when available. It records no query strings, request/response bodies, customer information, passwords, tokens or payment data and creates **no diagnostic Worker request**. It can export CSV/JSON and includes the Cloudflare incident baseline plus a packaged source-risk audit.
+
+Browser wall time is not Worker CPU time; Cloudflare Observability remains authoritative for CPU. The local recorder exists because the historical incident had no persisted Query Builder data.
+
+### Cloudflare observability
+
+Do not hand-create a partial production Wrangler config. The Pages project is dashboard-configured. Follow `CLOUDFLARE_OBSERVABILITY_BUILD262.md`: download current Pages configuration with `wrangler pages download config`, verify all bindings/settings against the dashboard, then deliberately enable persistent Workers Logs and redeploy.
+
+## Database/deployment actions
+
+1. Apply `sql/2026-08-20_build262_cpu_safe_analytics_rollups.sql` before using Admin Analytics **Refresh rollups**.
+2. Preserve all previously applicable Build 259/260 migrations.
+3. Deploy Pages + Functions together.
+4. Hard-refresh Startup Guide/UI Health and confirm Build 262/cache parity.
+5. Use normal test workflows without leaving automatic polling screens running; Build 262 should not generate the previous background invocation volume.
+6. If any admin API fails, open Runtime & CPU Diagnostics and export evidence before clearing/retrying.
+7. Enable persistent Cloudflare Workers Logs through the safe config migration procedure and observe a representative test window.
+8. Do not resume major feature expansion until `Exceeded CPU Time Limits = 0` during that representative period.
+
+## Immediate next priorities
+
+1. Deploy and apply the Build 262 analytics migration.
+2. Verify Runtime & CPU Diagnostics records harmless admin API calls and Ray IDs without sending diagnostic API requests.
+3. Verify Admin Analytics has no background polling and manual refresh remains functional.
+4. Verify Live Operations is manual by default and optional refresh never runs faster than 60 seconds.
+5. Verify Progress refresh is 120 seconds and hidden-tab paused.
+6. Enable Cloudflare Workers Logs safely and capture route-level invocation/CPU data.
+7. Compare post-fix exceeded-CPU count and percentiles to the incident baseline.
+8. Audit remaining top routes from `data/build262_cpu_source_audit.json` only where runtime evidence supports it.
+9. Keep booking/payment/inventory/accounting/security/permissions intact while optimizing.
+10. Resume the Build 261/260 business acceptance queue only after CPU stability is demonstrated.
+
+---
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 261
 
 **Updated:** 2026-08-19
@@ -1327,3 +1386,5 @@ Build 247 creates the ingestion and processing-job pipeline, but it does **not y
 <!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
 
 <!-- Historical release compatibility: # CURRENT LIVING AUTHORITY 1 OF 2 — Build 260 -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->

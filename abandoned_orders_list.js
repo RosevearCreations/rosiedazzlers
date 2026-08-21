@@ -10,11 +10,11 @@ export async function onRequestPost(context){
     if(!access.ok) return withCors(access.response);
 
     const since=new Date(Date.now()-Number(body.days||30)*86400000).toISOString();
-    const res=await fetch(`${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,session_id,visitor_id,page_path,event_type,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=10000`,{headers:serviceHeaders(env)});
+    const res=await fetch(`${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,session_id,visitor_id,page_path,event_type,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=2000`,{headers:serviceHeaders(env)});
     if(!res.ok) return withCors(json({error:`Could not load events. ${await res.text()}`},500));
     const rows=await res.json().catch(()=>[]);
     const bySession=new Map();
-    const sorted=[...(Array.isArray(rows)?rows:[])].sort((a,b)=>String(a.created_at).localeCompare(String(b.created_at)));
+    const sorted=(Array.isArray(rows)?rows:[]).slice().reverse(); // API returns newest-first; reverse avoids an O(n log n) sort.
     for(const row of sorted){
       const sid=row.session_id||`anon:${row.visitor_id||row.id}`;
       const cur=bySession.get(sid)||[];
