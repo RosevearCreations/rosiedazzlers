@@ -613,8 +613,9 @@
       document.querySelector('#commentForm')?.addEventListener('submit', (event)=>{ event.preventDefault(); postCustomerComment(); });
       document.querySelector('#refreshProgressBtn')?.addEventListener('click', ()=>loadProgress());
       document.querySelector('#updatesList')?.addEventListener('click',(event)=>{const btn=event.target.closest('[data-recommendation]');if(btn)decideRecommendation(btn.dataset.recommendation,btn.dataset.decision,Number(btn.dataset.priceCents||0),btn.dataset.title||'additional work');}); document.querySelector('#completedSummaryBox')?.addEventListener('click',async(event)=>{const btn=event.target.closest('[data-ack-summary]');if(!btn)return;const name=(window.prompt('Type your full name to acknowledge this completed-job summary:')||'').trim();if(!name)return;try{const res=await fetch('/api/progress/summary_acknowledge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:currentToken,name})});const out=await res.json().catch(()=>({}));if(!res.ok||!out.ok)throw new Error(out.error||'Could not record acknowledgement.');setNotice('Thank you — your acknowledgement was recorded.','ok');await loadProgress();}catch(err){setNotice(err.message||'Could not record acknowledgement.','bad');}});
-      refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 20000);
+      refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 120000);
       document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) loadProgress({ quiet:true }); });
+// Build 262 CPU stabilization: customer progress refresh is visibility-aware and no more frequent than every 2 minutes.
     });
   </script>
 </body>

@@ -1,3 +1,79 @@
+# Build 262 CPU stabilization acceptance — specialist, not a strategy authority
+
+Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current direction. This section defines the P0 Cloudflare CPU incident acceptance evidence.
+
+## Required deployment
+
+- [ ] Apply `sql/2026-08-20_build262_cpu_safe_analytics_rollups.sql`.
+- [ ] Deploy Pages + Functions together.
+- [ ] Hard-refresh Startup Guide/UI Health and confirm current script/cache/service-worker identity is Build 262.
+- [ ] Confirm `_routes.json` invokes Functions only for `/api/*`.
+
+## Invocation-volume acceptance
+
+- [ ] Leave Admin Analytics open for at least 5 minutes without interacting. Confirm it creates no periodic analytics-dashboard API requests.
+- [ ] Open Live Operations. Confirm auto-refresh is stopped by default; optional refresh is 60 seconds or slower and stops/pauses while hidden.
+- [ ] Open a harmless Progress test page. Confirm refresh is no faster than 120 seconds and does not poll in a hidden tab.
+- [ ] Browse public pages and confirm public analytics is batched, no heartbeat exists, and a 5xx/429 opens the telemetry circuit rather than replaying a batch.
+- [ ] Trigger a harmless Photo Studio validation/failure and confirm no automatic 5xx retry occurs.
+
+## Self-diagnostics acceptance
+
+- [ ] Open `/admin-runtime-health`.
+- [ ] Make several harmless admin API calls and confirm route/method/status/wall duration appear locally.
+- [ ] Confirm query strings, request bodies, customer data, passwords, tokens and payment data are absent.
+- [ ] Confirm Ray ID appears when Cloudflare exposes the response header.
+- [ ] Export CSV and JSON successfully.
+- [ ] Confirm opening/refreshing Runtime Diagnostics itself does not send a diagnostic-storage API request.
+
+## Analytics CPU acceptance
+
+- [ ] Press Admin Analytics **Refresh rollups** and confirm the Build 262 PostgreSQL RPC is used.
+- [ ] Confirm the Worker does not load/aggregate the full raw analytics history.
+- [ ] Confirm normal analytics overview uses compact rollups; raw recent detail is opt-in/bounded.
+
+## Cloudflare evidence
+
+- [ ] Follow `CLOUDFLARE_OBSERVABILITY_BUILD262.md`; download existing Pages config before enabling persistent observability.
+- [ ] Compare downloaded bindings/settings with the dashboard before making Wrangler production-authoritative.
+- [ ] Enable Workers Logs and confirm new invocations appear in Query Builder.
+- [ ] Observe a representative test period.
+- [ ] **Exceeded CPU Time Limits: 0**
+- [ ] **Script Threw Exception: 0**
+- [ ] **Exceeded Memory: 0**
+- [ ] Record post-fix CPU percentiles and top request paths against the incident baseline (7,592 invocations / 2,244 exceeded CPU / ~29.6% failure).
+
+## Move on when
+
+Do not treat Build 262 as accepted only because it deploys. Resume major feature work only after representative testing shows zero exceeded-CPU terminations, no invocation/retry storm, no broken customer/admin workflow and no SEO/mobile/CSS regression.
+
+---
+
+# Historical Build 260 acceptance runbook snapshot
+
+Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current state/direction. This file is detailed acceptance evidence only.
+
+## Current Build 260 acceptance
+
+- [ ] Apply `sql/2026-08-13_build259_vehicle_size_review.sql` if it is not already present in staging.
+- [ ] Apply `sql/2026-08-18_build260_startup_catalog_health_sync.sql` in staging.
+- [ ] Deploy Pages + Functions together and hard-refresh Startup Guide/UI Health.
+- [ ] Confirm Startup script, expected asset build, UI scanner and active `rosie-app` service-worker cache all identify Build 260.
+- [ ] Confirm the Startup Evidence tab shows only current catalog evidence. Historical Build 237–247 evidence may remain in the database but must not appear as a fresh approval requirement.
+- [ ] Open Photo Studio normally and confirm it does not scan R2.
+- [ ] Press **Sync approved R2 photos** and confirm each approved folder completes without `Too many subrequests` or Error 1102.
+- [ ] Assign one harmless photo to two test placements; reset one placement to default and prove the second placement remains assigned.
+- [ ] Open Media Health and verify current database-first counts/issues. Run the explicit delivery sample and confirm it checks no more than 12 exact managed URLs.
+- [ ] Create one harmless Creative Project and follow the displayed new DAIP flow into private Media Intake. Separately verify Intake Dry Run accepts only fictional metadata and Gate C remains governance/technical evidence only.
+- [ ] Accept the Build 259 vehicle-size review/correction flow and editable Quote Pipeline.
+- [ ] Continue current payment/refund/webhook, notification, inventory reversal, catalog readiness, real-device CSS/accessibility, SEO/Business Profile, restore/rollback and controlled soft-launch acceptance.
+
+**Evidence terminology:** current Startup rows require **verification evidence**, not blanket business approval. A `verified` status should mean the stated observable acceptance condition was actually tested with safe evidence.
+
+---
+
+## Historical specialist acceptance record retained below
+
 ## Build 259 acceptance — editable media, vehicle-size review and quote operations
 
 - [ ] Apply `sql/2026-08-13_build259_vehicle_size_review.sql` in staging before using vehicle-size review controls.
@@ -1590,3 +1666,7 @@ Photo Studio can sync, edit metadata, assign/unassign, rename/move and render on
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
 
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
+
+<!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->
