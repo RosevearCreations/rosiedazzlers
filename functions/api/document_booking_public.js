@@ -16,7 +16,7 @@ export async function onRequestGet({ request, env }) {
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+  return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
 }
 function corsHeaders() {
   return {

@@ -485,6 +485,6 @@ async function getPayPalAccessToken(env) {
 }
 
 function safeJson(text) { try { return JSON.parse(text); } catch { return null; } }
-function corsJson(data, status = 200) { return new Response(JSON.stringify(data, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders() } }); }
+function corsJson(data, status = 200) { return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders() } }); }
 function corsResponse(body = "", status = 200) { return new Response(body, { status, headers: corsHeaders() }); }
 function corsHeaders() { return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST,OPTIONS", "Access-Control-Allow-Headers": "Content-Type", "Cache-Control": "no-store" }; }

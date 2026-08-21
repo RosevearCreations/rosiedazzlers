@@ -17,4 +17,4 @@ export async function onRequestGet({ request, env }) {
   return json({ ok: true, date: ymd, day: dayKey, is_closed: !!closure, closure, hours_label: closure ? (closure.label || closure.reason || "Closed") : (hours[dayKey] || "By appointment"), source_status: loaded?.source_status || "bundled_json_fallback", timezone: value.timezone || "America/Toronto", notes: value.notes || "Availability is by appointment and may depend on weather, driveway access, municipal rules, and service scope." });
 }
 function parseDate(value) { if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return null; const d = new Date(`${value}T12:00:00Z`); return Number.isNaN(d.getTime()) ? null : d; }
-function json(data, status = 200) { return new Response(JSON.stringify(data, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=120" } }); }
+function json(data, status = 200) { return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=120" } }); }
