@@ -31,13 +31,13 @@ export async function onRequestGet() { return withCors(methodNotAllowed()); }
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
 async function loadEvents(env, since) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/site_activity_events?select=event_type,page_path,payload,created_at&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=15000`, { headers: serviceHeaders(env) });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/site_activity_events?select=event_type,page_path,payload,created_at&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=2000`, { headers: serviceHeaders(env) });
   if (!res.ok) return [];
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows : [];
 }
 async function loadRows(env, table, select, since, dateColumn = "created_at") {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/${table}?select=${encodeURIComponent(select)}&${dateColumn}=gte.${encodeURIComponent(since)}&order=${dateColumn}.desc&limit=5000`, { headers: serviceHeaders(env) });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/${table}?select=${encodeURIComponent(select)}&${dateColumn}=gte.${encodeURIComponent(since)}&order=${dateColumn}.desc&limit=1000`, { headers: serviceHeaders(env) });
   if (!res.ok) return [];
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows : [];
