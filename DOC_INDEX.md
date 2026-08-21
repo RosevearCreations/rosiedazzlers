@@ -1,4 +1,26 @@
-# Documentation Index — Build 260
+# Documentation Index — Build 262
+
+## Read these first
+
+1. `AI_PROJECT_HANDOFF.md` — **living authority 1 of 2**: exact implemented state, CPU incident response, deployment order and new-chat handoff.
+2. `MASTER_VALUE_ROADMAP.md` — **living authority 2 of 2**: current reliability-first business/engineering priorities.
+
+## Active specialist references
+
+- `STARTUP_GO_LIVE_BLOCKERS.md` — deployment/acceptance runbook; current top section is Build 262 CPU stabilization acceptance.
+- `BUILD262_SUMMARY.md` — concise CPU/self-diagnostics release evidence.
+- `CLOUDFLARE_OBSERVABILITY_BUILD262.md` — safe persistent Workers Logs setup without overwriting dashboard-managed Pages bindings.
+- `BUILD262_CPU_SOURCE_AUDIT.md` + `data/build262_cpu_source_audit.json` — static source-risk evidence; not measured CPU.
+- `DATABASE_STRUCTURE_CURRENT.md` + migrations under `sql/` — schema reference; migrations remain authoritative.
+- `DAIP_R2_MEDIA_SETUP_GUIDE.md` and DAIP design documents — specialist private-media references; DAIP remains secondary to current Worker stabilization.
+
+## Retirement rule
+
+All other Markdown is historical or specialist evidence unless one of the two living authorities explicitly promotes it. Do not use an older roadmap/build summary as current direction when it conflicts with Build 262.
+
+---
+
+# Historical Documentation Index — Build 260
 
 ## Read only these for current direction
 
@@ -1430,3 +1452,5 @@ Build 234 preserves the existing `admin-catalog.html` Inventory Workflow and add
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
 
 <!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->

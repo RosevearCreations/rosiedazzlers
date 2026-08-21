@@ -106,3 +106,5 @@ If 503 responses affect both APIs and ordinary static files at the same moment a
 <!-- BUILD240_SYNC: retained for cumulative release compatibility. -->
 <!-- BUILD241_SYNC: 2026-08-05 | Startup Command Center initialization/cache hotfix | No DDL required -->
 <!-- Build 246 synchronization: historical compatibility marker retained. -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->
