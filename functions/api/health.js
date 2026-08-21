@@ -18,7 +18,7 @@ export function onRequest({ env, request }) {
     host: request.headers.get("host") || null,
   };
 
-  return new Response(JSON.stringify(out, null, 2), {
+  return new Response(JSON.stringify(out), {
     headers: { "content-type": "application/json" },
   });
 }

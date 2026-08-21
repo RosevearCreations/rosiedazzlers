@@ -22,7 +22,7 @@ export async function onRequestGet({ request, env }) {
 }
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=120" } });
+  return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "public, max-age=120" } });
 }
 function corsHeaders() {
   return { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "GET,OPTIONS", "Access-Control-Allow-Headers": "Content-Type", "Cache-Control": "public, max-age=120" };
