@@ -1,5 +1,4 @@
 import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
-import { loadAppSettings } from "../_lib/app-settings.js";
 import { ALL_SERVICE_AREA_LABEL } from "../_lib/analytics-rollups.js";
 
 export async function onRequestOptions() {
@@ -21,68 +20,70 @@ export async function onRequestPost(context) {
     if (!access.ok) return withCors(access.response);
 
     const days = Math.max(1, Math.min(365, Number(body.days || 30)));
+    const includeRecent = body.include_recent === true;
     const serviceAreaFilter = cleanText(body.service_area || "");
     const since = new Date(Date.now() - days * 86400000).toISOString();
     const sinceDate = since.slice(0, 10);
-    const settings = await loadAppSettings(env);
 
+    // Build 262 CPU stabilization: the normal dashboard reads compact rollups only.
+    // Recent raw journeys/actions are opt-in and tightly bounded instead of loading
+    // 10k+ raw rows every time the admin dashboard opens or refreshes.
     const rollupData = await loadRollupAnalytics(env, sinceDate, serviceAreaFilter).catch(() => null);
     if (rollupData?.reports?.daily?.length) {
-      const recentWindowDays = Math.min(Math.max(days, 7), 14);
-      const recent = await loadRawSupplement(env, recentWindowDays, serviceAreaFilter);
+      const recent = includeRecent
+        ? await loadRawSupplement(env, Math.min(days, 7), serviceAreaFilter)
+        : emptyRecentSupplement();
       const dailySummary = Array.isArray(rollupData.reports.daily) ? rollupData.reports.daily : [];
 
-      return withCors(
-        json({
-          ok: true,
-          settings,
-          generated_at: new Date().toISOString(),
-          days,
-          window: {
-            start_at: since,
-            end_at: new Date().toISOString()
-          },
-          summary: {
-            events: sumMetric(dailySummary, "events"),
-            page_views: sumMetric(dailySummary, "page_views"),
-            unique_visitors: sumMetric(dailySummary, "unique_visitors"),
-            unique_sessions: sumMetric(dailySummary, "unique_sessions"),
-            abandoned_sessions: recent.abandoned.length,
-            live_online_sessions: recent.liveOnline.length,
-            avg_engagement_seconds: recent.avgEngagementSeconds,
-            booking_starts: sumMetric(dailySummary, "booking_starts"),
-            booking_completions: sumMetric(dailySummary, "booking_completions")
-          },
-          top_pages: rollupData.top_pages,
-          top_countries: rollupData.top_countries,
-          top_regions: rollupData.top_regions,
-          top_cities: rollupData.top_cities,
-          top_devices: rollupData.top_devices,
-          top_referrers: rollupData.top_referrers,
-          top_actions: rollupData.top_actions,
-          top_service_areas: rollupData.top_service_areas,
-          service_area_options: rollupData.service_area_options,
-          selected_service_area: serviceAreaFilter || null,
-          funnel: rollupData.funnel,
-          checkout_states: rollupData.checkout_states,
-          reports: rollupData.reports,
-          daily_traffic: rollupData.reports.daily,
-          session_journeys: recent.sessionJourneys.slice(0, 50),
-          live_online_sessions: recent.liveOnline.slice(0, 50),
-          cart_snapshots: recent.cartSnapshots.slice(0, 50),
-          recent_actions: recent.recentActions.slice(0, 50),
-          abandoned_checkouts: recent.abandoned.slice(0, 50),
-          source: {
-            mode: "rollups",
-            summary_unique_scope: "summed_daily_rollups",
-            live_and_abandoned_scope_days: recentWindowDays,
-            all_service_area_label: ALL_SERVICE_AREA_LABEL
-          }
-        })
-      );
+      return withCors(json({
+        ok: true,
+        settings: {},
+        generated_at: new Date().toISOString(),
+        days,
+        window: { start_at: since, end_at: new Date().toISOString() },
+        summary: {
+          events: sumMetric(dailySummary, "events"),
+          page_views: sumMetric(dailySummary, "page_views"),
+          unique_visitors: sumMetric(dailySummary, "unique_visitors"),
+          unique_sessions: sumMetric(dailySummary, "unique_sessions"),
+          abandoned_sessions: recent.abandoned.length,
+          live_online_sessions: recent.liveOnline.length,
+          avg_engagement_seconds: recent.avgEngagementSeconds,
+          booking_starts: sumMetric(dailySummary, "booking_starts"),
+          booking_completions: sumMetric(dailySummary, "booking_completions")
+        },
+        top_pages: rollupData.top_pages,
+        top_countries: rollupData.top_countries,
+        top_regions: rollupData.top_regions,
+        top_cities: rollupData.top_cities,
+        top_devices: rollupData.top_devices,
+        top_referrers: rollupData.top_referrers,
+        top_actions: rollupData.top_actions,
+        top_service_areas: rollupData.top_service_areas,
+        service_area_options: rollupData.service_area_options,
+        selected_service_area: serviceAreaFilter || null,
+        funnel: rollupData.funnel,
+        checkout_states: rollupData.checkout_states,
+        reports: rollupData.reports,
+        daily_traffic: rollupData.reports.daily,
+        session_journeys: recent.sessionJourneys.slice(0, 25),
+        live_online_sessions: recent.liveOnline.slice(0, 25),
+        cart_snapshots: recent.cartSnapshots.slice(0, 25),
+        recent_actions: recent.recentActions.slice(0, 25),
+        abandoned_checkouts: recent.abandoned.slice(0, 25),
+        source: {
+          mode: "rollups",
+          cpu_safe_mode: true,
+          recent_detail_loaded: includeRecent,
+          all_service_area_label: ALL_SERVICE_AREA_LABEL
+        }
+      }));
     }
 
-    const raw = await loadRawAnalytics(env, since, days, serviceAreaFilter, settings);
+    // Rollups missing: use a small raw fallback so a missing rollup table cannot turn
+    // an ordinary admin page into a 25k-row JavaScript aggregation job.
+    const raw = await loadRawAnalytics(env, since, Math.min(days, 14), serviceAreaFilter, {});
+    raw.source = { ...(raw.source || {}), mode: 'raw_events_bounded', cpu_safe_mode: true, requested_days: days, effective_days: Math.min(days, 14) };
     return withCors(json(raw));
   } catch (err) {
     return withCors(json({ error: err?.message || "Unexpected server error." }, 500));
@@ -98,19 +99,19 @@ async function loadRollupAnalytics(env, sinceDate, serviceAreaFilter) {
   const headers = serviceHeaders(env);
   const [summaryRes, dimRes, funnelRes, areaRes] = await Promise.all([
     fetch(
-      `${env.SUPABASE_URL}/rest/v1/site_activity_rollups?select=period_type,period_key,period_start,period_end,service_area_label,events,page_views,unique_visitors,unique_sessions,booking_starts,booking_completions,cart_snapshots&period_start=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=period_start.asc&limit=5000`,
+      `${env.SUPABASE_URL}/rest/v1/site_activity_rollups?select=period_type,period_key,period_start,period_end,service_area_label,events,page_views,unique_visitors,unique_sessions,booking_starts,booking_completions,cart_snapshots&period_start=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=period_start.asc&limit=1500`,
       { headers }
     ),
     fetch(
-      `${env.SUPABASE_URL}/rest/v1/site_activity_dimension_daily_rollups?select=rollup_date,service_area_label,dimension_type,dimension_value,count&rollup_date=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=rollup_date.asc&limit=50000`,
+      `${env.SUPABASE_URL}/rest/v1/site_activity_dimension_daily_rollups?select=rollup_date,service_area_label,dimension_type,dimension_value,count&rollup_date=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=rollup_date.asc&limit=4000`,
       { headers }
     ),
     fetch(
-      `${env.SUPABASE_URL}/rest/v1/site_activity_funnel_daily_rollups?select=rollup_date,service_area_label,step_1_views,step_2_views,step_3_views,step_4_views,step_5_views,service_area_picks,date_picks,package_picks,addon_toggles,customer_continue,checkout_started,checkout_completed&rollup_date=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=rollup_date.asc&limit=5000`,
+      `${env.SUPABASE_URL}/rest/v1/site_activity_funnel_daily_rollups?select=rollup_date,service_area_label,step_1_views,step_2_views,step_3_views,step_4_views,step_5_views,service_area_picks,date_picks,package_picks,addon_toggles,customer_continue,checkout_started,checkout_completed&rollup_date=gte.${encodeURIComponent(sinceDate)}&service_area_label=eq.${encodeURIComponent(targetArea)}&order=rollup_date.asc&limit=1500`,
       { headers }
     ),
     fetch(
-      `${env.SUPABASE_URL}/rest/v1/site_activity_rollups?select=service_area_label&period_type=eq.day&period_start=gte.${encodeURIComponent(sinceDate)}&service_area_label=not.eq.${encodeURIComponent(ALL_SERVICE_AREA_LABEL)}&order=service_area_label.asc&limit=5000`,
+      `${env.SUPABASE_URL}/rest/v1/site_activity_rollups?select=service_area_label&period_type=eq.day&period_start=gte.${encodeURIComponent(sinceDate)}&service_area_label=not.eq.${encodeURIComponent(ALL_SERVICE_AREA_LABEL)}&order=service_area_label.asc&limit=1000`,
       { headers }
     )
   ]);
@@ -151,7 +152,7 @@ async function loadRollupAnalytics(env, sinceDate, serviceAreaFilter) {
 
 async function loadRawAnalytics(env, since, days, serviceAreaFilter, settings) {
   const res = await fetch(
-    `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=25000`,
+    `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=2000`,
     { headers: serviceHeaders(env) }
   );
   if (!res.ok) throw new Error(`Could not load analytics. ${await res.text()}`);
@@ -251,7 +252,7 @@ async function loadRawAnalytics(env, since, days, serviceAreaFilter, settings) {
 async function loadRawSupplement(env, days, serviceAreaFilter) {
   const since = new Date(Date.now() - days * 86400000).toISOString();
   const res = await fetch(
-    `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=10000`,
+    `${env.SUPABASE_URL}/rest/v1/site_activity_events?select=id,event_type,page_path,country,session_id,visitor_id,referrer,checkout_state,created_at,payload&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=1000`,
     { headers: serviceHeaders(env) }
   );
   if (!res.ok) {
@@ -275,6 +276,10 @@ async function loadRawSupplement(env, days, serviceAreaFilter) {
       ? Math.round(heartbeatEvents.reduce((sum, row) => sum + Number(row?.payload?.duration_ms || 0), 0) / heartbeatEvents.length / 1000)
       : 0
   };
+}
+
+function emptyRecentSupplement() {
+  return { sessionJourneys: [], abandoned: [], liveOnline: [], cartSnapshots: [], recentActions: [], avgEngagementSeconds: 0 };
 }
 
 function normalizeArray(value) {
