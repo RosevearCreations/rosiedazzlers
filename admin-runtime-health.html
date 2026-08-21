@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<title>Runtime & CPU Diagnostics | Rosie Dazzlers Admin</title>
+<meta name="description" content="Protected local runtime diagnostics for Rosie Dazzlers API reliability and Cloudflare CPU stabilization."/>
+<link rel="stylesheet" href="/assets/site.css?v=20260820build262"/>
+<style>
+.runtime-shell{display:grid;gap:14px;padding-bottom:60px}.hero-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(250px,.6fr);gap:14px}.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.metric strong{display:block;font-size:1.6rem;margin-top:4px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.table-wrap{overflow:auto}.runtime-table{width:100%;border-collapse:collapse;min-width:820px}.runtime-table th,.runtime-table td{padding:8px;border-bottom:1px solid var(--border,rgba(255,255,255,.1));text-align:left;vertical-align:top}.failure{padding:10px 0;border-bottom:1px solid var(--border,rgba(255,255,255,.1))}.baseline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}.baseline div{padding:10px;border:1px solid var(--border,rgba(255,255,255,.1));border-radius:12px}.baseline strong{display:block;font-size:1.35rem}@media(max-width:900px){.hero-grid{grid-template-columns:1fr}.summary,.baseline{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:560px){.summary,.baseline{grid-template-columns:1fr}.toolbar .btn{width:100%}}
+</style>
+</head>
+<body data-page="admin-runtime-health" data-build262="cpu-stabilization">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container runtime-shell">
+<div data-admin-shell-status class="shell-status" hidden></div><div data-admin-shell-loading class="section"><div class="panel">Loading runtime diagnostics…</div></div>
+<div data-admin-shell-ready hidden class="runtime-shell">
+<section class="panel hero-grid"><div><span class="badge">Build 262 · CPU stabilization</span><h1>Runtime &amp; CPU Diagnostics</h1><p class="kicker">Rosie records safe API route/status/wall-time metadata in this browser so failures can be identified even when Cloudflare historical logs are empty. No request bodies, passwords, tokens, payment details, or customer data are stored by this recorder.</p><div class="toolbar"><button id="refreshRuntime" class="btn primary" type="button">Refresh local report</button><button id="exportRuntimeCsv" class="btn ghost" type="button">Export API CSV</button><button id="exportRuntimeJson" class="btn ghost" type="button">Export full JSON</button><button id="clearRuntime" class="btn danger" type="button">Clear local diagnostics</button><a class="btn ghost" href="/admin-ui-health.html">UI &amp; SEO Health</a></div></div><div class="panel"><strong>Important distinction</strong><p class="mini">Browser duration is wall time, not Cloudflare CPU time. Cloudflare Observability remains authoritative for CPU. This local recorder tells us which routes were called, failed, repeated, or took unusually long from the browser's point of view.</p></div></section>
+<div id="runtimeStatus" class="notice soft">Reading local diagnostics…</div>
+<section id="runtimeSummary" class="summary"></section>
+<section class="panel"><h2>Cloudflare incident baseline</h2><div class="baseline"><div><span class="mini">Observed invocations</span><strong>7,592</strong></div><div><span class="mini">Exceeded CPU</span><strong>2,244</strong></div><div><span class="mini">Failure rate</span><strong>29.6%</strong></div><div><span class="mini">CPU P50 / P99</span><strong>~10 / 109.6 ms</strong></div></div><p class="mini">Production acceptance target: zero exceeded-CPU invocations during a representative monitoring period.</p></section>
+<section class="panel"><h2>Routes observed by this browser</h2><div class="table-wrap"><table class="runtime-table"><thead><tr><th>Route</th><th>Calls</th><th>Failures</th><th>Avg wall</th><th>Max wall</th><th>Last status</th><th>Last seen</th></tr></thead><tbody id="runtimeRoutes"></tbody></table></div></section>
+<section class="panel"><h2>Recent 5xx / network failures</h2><div id="recentFailures"></div></section>
+<section class="panel"><h2>Static source-risk audit</h2><p class="mini">This is a source-code heuristic, not measured CPU. It highlights routes with large JavaScript transforms, loops, fetches, sorting, or large query limits so they can be reviewed before production traffic exists.</p><div class="table-wrap"><table class="runtime-table"><thead><tr><th>#</th><th>API path</th><th>Risk score</th><th>Fetch calls</th><th>Loops</th><th>Large query limits</th></tr></thead><tbody id="sourceRisk"></tbody></table></div></section>
+<section class="panel"><h2>How to use this during testing</h2><ol><li>Leave the recorder enabled while doing normal admin testing.</li><li>When a button reports a failure, open this page and export the JSON before clearing anything.</li><li>In Cloudflare Observability, compare the route and Ray ID with invocation CPU/outcome when Workers Logs are available.</li><li>Do not repeatedly retry an operation that returned 5xx until its state is checked; CPU termination can occur after a write has already succeeded.</li></ol></section>
+</div></main>
+<script src="/assets/admin-auth.js?v=20260820build262"></script>
+<script src="/assets/admin-shell.js?v=20260820build262"></script>
+<script src="/assets/admin-menu.js?v=20260820build262"></script>
+<script src="/assets/runtime-health.js?v=20260820build262"></script>
+<script src="/assets/chrome.js?v=20260820build262"></script>
+</body></html>
