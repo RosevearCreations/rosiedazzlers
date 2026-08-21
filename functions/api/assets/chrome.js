@@ -825,7 +825,7 @@ function ensurePublicAnalytics(){
   const head=document.head||document.querySelector("head");
   if(!head || head.querySelector('script[data-public-analytics-bootstrap]')) return;
   const script=document.createElement('script');
-  script.src='/assets/public-analytics.js?v=20260819build261';
+  script.src='/assets/public-analytics.js?v=20260820build262';
   script.defer=true;
   script.dataset.publicAnalyticsBootstrap='true';
   head.appendChild(script);
@@ -954,3 +954,7 @@ if (document.readyState === "loading") {
 } else {
   initChrome();
 }
+
+// Build 262 CPU stabilization: batched public analytics bootstrap.
+
+// Historical Build 261 release token: /assets/public-analytics.js?v=20260819build261

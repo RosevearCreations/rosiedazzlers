@@ -73,21 +73,34 @@ export const DEFAULT_APP_SETTINGS = {
 export async function loadAppSettings(env, keys = ['visibility_matrix','manual_scheduling_rules','feature_flags']) {
   const serviceKey = getSupabaseServiceRoleKey(env);
   if (!env?.SUPABASE_URL || !serviceKey) return structuredClone(DEFAULT_APP_SETTINGS);
+
+  const requested = [...new Set((Array.isArray(keys) ? keys : []).map((key) => String(key || '').trim()).filter(Boolean))];
+  const out = structuredClone(DEFAULT_APP_SETTINGS);
+  if (!requested.length) return out;
+
   const headers = {
     apikey: serviceKey,
     Authorization: `Bearer ${serviceKey}`,
     'Content-Type': 'application/json'
   };
-  const out = structuredClone(DEFAULT_APP_SETTINGS);
-  for (const key of keys) {
-    try {
-      const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?select=key,value&key=eq.${encodeURIComponent(key)}&limit=1`, { headers });
-      if (!res.ok) continue;
-      const rows = await res.json().catch(() => []);
-      const row = Array.isArray(rows) ? rows[0] || null : null;
-      if (row && row.value && typeof row.value === 'object') out[key] = { ...(out[key] || {}), ...row.value };
-    } catch {}
-  }
+
+  // Build 262 CPU stabilization: load all requested settings in one PostgREST
+  // request rather than one fetch/JSON parse per key on every Worker invocation.
+  // These keys are internal allow-listed setting names, never raw user input.
+  const inList = requested.map((key) => `"${key.replaceAll('"', '')}"`).join(',');
+  try {
+    const res = await fetch(
+      `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=key,value&key=in.(${encodeURIComponent(inList)})&limit=${requested.length}`,
+      { headers }
+    );
+    if (!res.ok) return out;
+    const rows = await res.json().catch(() => []);
+    for (const row of Array.isArray(rows) ? rows : []) {
+      const key = String(row?.key || '').trim();
+      if (!requested.includes(key) || !row?.value || typeof row.value !== 'object') continue;
+      out[key] = { ...(out[key] || {}), ...row.value };
+    }
+  } catch {}
   return out;
 }
 

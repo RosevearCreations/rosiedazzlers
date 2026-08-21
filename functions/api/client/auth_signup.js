@@ -46,7 +46,7 @@ export async function onRequestPost(context) {
     let headers = new Headers({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
     headers = appendSetCookie(headers, session.cookie);
     headers = applyCors(headers);
-    return new Response(JSON.stringify({ ok: true, message: "Client account created.", customer: formatCustomer(profile) }, null, 2), { status: 200, headers });
+    return new Response(JSON.stringify({ ok: true, message: "Client account created.", customer: formatCustomer(profile) }), { status: 200, headers });
   } catch (err) {
     return withCors(json({ error: err?.message || "Unexpected server error." }, 500));
   }
@@ -94,7 +94,7 @@ function cleanText(v){ const s=String(v??"").trim(); return s||null; }
 function cleanEmail(v){ const s=String(v||"").trim().toLowerCase(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s)?s:null; }
 function toBoolean(v){ if(typeof v === 'boolean') return v; const s=String(v||"").trim().toLowerCase(); return s==='true'||s==='1'||s==='yes'||s==='on'; }
 function normalizeNotificationChannel(v){ const s=String(v||"").trim().toLowerCase(); return ['email','sms','none'].includes(s)?s:'email'; }
-function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
+function json(data,status=200){ return new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
 function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"}; }
 function applyCors(headers){ const out=headers instanceof Headers?new Headers(headers):new Headers(headers||{}); for(const [k,v] of Object.entries(corsHeaders())) if(!out.has(k)) out.set(k,v); return out; }
 function withCors(response){ return new Response(response.body,{status:response.status,statusText:response.statusText,headers:applyCors(response.headers||{})}); }

@@ -134,7 +134,7 @@ function dashboardJson(data, status = 200, setCookie = null) {
   });
   if (setCookie) headersOut = appendSetCookie(headersOut, setCookie);
   headersOut = applyCors(headersOut);
-  return new Response(JSON.stringify(data, null, 2), { status, headers: headersOut });
+  return new Response(JSON.stringify(data), { status, headers: headersOut });
 }
 
 function corsHeaders() {

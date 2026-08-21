@@ -50,6 +50,6 @@ function normalizeMediaKind(value, contentType){ const raw=String(value||'').tri
 function allowedContentTypes(){ return ['image/jpeg','image/png','image/webp','image/heic','image/heif','video/mp4','video/quicktime']; }
 function isAllowedContentType(value){ return allowedContentTypes().includes(String(value||'').trim().toLowerCase()); }
 function getUploadSizeLimit({ env, content_type, media_kind }){ const defaultImage=Number(env.CUSTOMER_MEDIA_MAX_IMAGE_BYTES || env.JOB_MEDIA_MAX_IMAGE_BYTES || 25*1024*1024); const defaultVideo=Number(env.CUSTOMER_MEDIA_MAX_VIDEO_BYTES || env.JOB_MEDIA_MAX_VIDEO_BYTES || 150*1024*1024); return media_kind==='video' || String(content_type||'').startsWith('video/') ? defaultVideo : defaultImage; }
-function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}}); }
+function json(data,status=200){ return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}}); }
 function corsHeaders(){ return {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type','Cache-Control':'no-store'}; }
 function withCors(response){ const headers=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }
