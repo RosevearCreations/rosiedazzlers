@@ -8,7 +8,7 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css?v=20260410b" />
 </head>
-<body data-page="admin-live">
+<body data-build262="cpu-stabilization" data-page="admin-live">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -79,16 +79,16 @@
             <label>
               Refresh interval
               <select id="refreshSeconds">
-                <option value="10">10 seconds</option>
-                <option value="15" selected>15 seconds</option>
-                <option value="30">30 seconds</option>
                 <option value="60">60 seconds</option>
+                <option value="120" selected>2 minutes</option>
+                <option value="300">5 minutes</option>
               </select>
+              <span class="mini">Build 262: manual refresh is the default. Auto refresh is optional, minimum 60 seconds, and pauses while this tab is hidden.</span>
             </label>
 
             <div class="toolbar-wrap">
               <button class="btn primary" type="submit">Load live job</button>
-              <button id="toggleRefreshBtn" class="btn ghost" type="button" disabled>Pause refresh</button>
+              <button id="toggleRefreshBtn" class="btn ghost" type="button" disabled>Start auto refresh</button>
             </div>
           </form>
         </div>
@@ -263,14 +263,14 @@
       if (!currentBookingId) return;
       if (showNotice) setNotice('Refreshing live job data…');
 
-      const [intakeData, timeData, bookingData] = await Promise.all([
+      // Build 262 CPU stabilization: load only the selected booking. The previous
+      // implementation fetched the entire bookings list on every live refresh.
+      const [intakeData, timeData] = await Promise.all([
         apiPost('/api/admin/jobsite_intake_get', { booking_id: currentBookingId }),
-        apiPost('/api/admin/job_time_summary_get', { booking_id: currentBookingId }),
-        apiPost('/api/admin/bookings', {})
+        apiPost('/api/admin/job_time_summary_get', { booking_id: currentBookingId })
       ]);
 
-      const allBookings = Array.isArray(bookingData.bookings) ? bookingData.bookings : [];
-      const booking = allBookings.find((row) => row.id === currentBookingId) || intakeData.booking || null;
+      const booking = intakeData.booking || null;
 
       let progressData = { updates: [], media: [], signoffs: [] };
       if (booking?.progress_token) {
@@ -286,7 +286,7 @@
       renderSignoffs(Array.isArray(progressData.signoffs) ? progressData.signoffs : []);
       qs('#lastRefreshText').textContent = formatDateTime(new Date().toISOString());
       if (showNotice) {
-        const warning = bookingData.crew_warning || intakeData.crew_warning || progressData.crew_warning || '';
+        const warning = intakeData.crew_warning || progressData.crew_warning || '';
         setNotice(warning ? `Live job data refreshed. ${warning}` : 'Live job data refreshed.', warning ? 'warn' : 'ok');
       }
     }
@@ -294,14 +294,15 @@
     function stopRefreshLoop() {
       if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; }
       qs('#refreshStatusText').textContent = 'Stopped';
-      qs('#toggleRefreshBtn').textContent = 'Start refresh';
+      qs('#toggleRefreshBtn').textContent = 'Start auto refresh';
       refreshPaused = true;
     }
 
     function startRefreshLoop() {
       stopRefreshLoop();
-      const seconds = Number(qs('#refreshSeconds').value || 15);
+      const seconds = Math.max(60, Number(qs('#refreshSeconds').value || 120));
       refreshTimer = setInterval(() => {
+        if (document.hidden) return;
         refreshLiveData(false).catch((err) => setNotice(err.message || 'Live refresh failed.', 'bad'));
       }, seconds * 1000);
       qs('#refreshStatusText').textContent = `Running every ${seconds}s`;
@@ -322,7 +323,8 @@
           currentBookingId = bookingId;
           qs('#toggleRefreshBtn').disabled = false;
           await refreshLiveData(true);
-          startRefreshLoop();
+          stopRefreshLoop();
+          setNotice('Live job loaded. Refresh is manual by default; start the optional slow auto refresh only while you are actively watching this job.', 'ok');
         } catch (err) {
           setNotice(err.message || 'Could not load live job.', 'bad');
         }
@@ -343,6 +345,12 @@
         setNotice('Auto refresh paused.', 'warn');
       });
 
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden && !refreshPaused) {
+          stopRefreshLoop();
+          setNotice('Auto refresh paused because the tab is hidden. Start it again when needed.', 'warn');
+        }
+      });
       window.addEventListener('beforeunload', stopRefreshLoop);
 
       await window.AdminPageInit.init({

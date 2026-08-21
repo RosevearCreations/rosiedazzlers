@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <meta name="robots" content="noindex,nofollow,noarchive"/>
   <title>DAIP Gate C Technical Review | Rosie Dazzlers Admin</title>
-  <link rel="stylesheet" href="/assets/site.css?v=20260812build251"/>
+  <link rel="stylesheet" href="/assets/site.css?v=20260818build260"/>
   <style>
     .gc-wrap{max-width:1200px;margin:0 auto;padding:20px 18px 34px}
     .gc-grid{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,.92fr);gap:16px}
@@ -55,16 +55,16 @@
   </style>
 </head>
 <body data-page="admin-daip-gate-c">
-  <script src="/assets/admin-auth.js?v=20260706build224"></script>
-  <script src="/assets/admin-shell.js?v=20260728build237"></script>
-  <script src="/assets/admin-menu.js?v=20260706build224"></script>
-  <script src="/assets/visual-placeholders.js?v=20260812build251"></script>
+  <script src="/assets/admin-auth.js?v=20260818build260"></script>
+  <script src="/assets/admin-shell.js?v=20260818build260"></script>
+  <script src="/assets/admin-menu.js?v=20260818build260"></script>
+  <script src="/assets/visual-placeholders.js?v=20260818build260"></script>
 
   <header class="site-header"><a class="brand" href="/admin.html">Rosie Dazzlers Admin</a><nav id="adminMenu"></nav></header>
 
   <main class="gc-wrap">
     <section class="section" data-build247-private-ingestion-notice>
-      <div class="notice warn"><strong>Build 247 private-ingestion update:</strong> the owner has commissioned the private R2/multipart ingestion implementation. Gate C remains pending operational acceptance until Startup processes 38–39 pass. Processing/public-export gates remain held. <a href="/admin-daip-media.html">Open DAIP Media Intake</a>.</div>
+      <div class="notice warn"><strong>Build 247 private-ingestion update:</strong> the owner has commissioned the private R2/multipart ingestion implementation. Gate C remains pending operational acceptance until the current Startup Command Center DAIP acceptance checks pass. Processing/public-export gates remain held. <a href="/admin-daip-media.html">Open DAIP Media Intake</a>.</div>
     </section>
 
     <section class="hero">
@@ -82,6 +82,13 @@
     </section>
 
     <div id="status" class="notice soft gc-status">Loading Gate C safeguards…</div>
+
+    <section class="gc-card" data-build260-gate-purpose>
+      <h2>What Gate C is — and is not</h2>
+      <p><strong>Gate C is a technical/governance evidence checkpoint.</strong> Use it to record who reviewed the private-media boundary, failure tests, cost stops and rollback plan. Saving this form does not enable uploads, processing, publication or public destinations.</p>
+      <p class="gc-muted">For a normal new DAIP job, start in Creative Projects, then use private DAIP Media Intake. Intake Dry Run is a fictional validation rehearsal. Gate C is revisited when the technical boundary or governance decision materially changes, not as a per-project approval button.</p>
+      <div class="gc-actions"><a class="btn primary" href="/admin-creative-projects.html">Start a fresh DAIP project</a><a class="btn ghost" href="/admin-daip-media.html">Private media intake</a><a class="btn ghost" href="/admin-daip-intake-dry-run.html">Run fictional intake rehearsal</a></div>
+    </section>
 
     <section class="gc-card">
       <div id="kpis" class="gc-kpis"></div>
