@@ -1,4 +1,55 @@
-# Build 260 current acceptance runbook — specialist, not a strategy authority
+# Build 262 CPU stabilization acceptance — specialist, not a strategy authority
+
+Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current direction. This section defines the P0 Cloudflare CPU incident acceptance evidence.
+
+## Required deployment
+
+- [ ] Apply `sql/2026-08-20_build262_cpu_safe_analytics_rollups.sql`.
+- [ ] Deploy Pages + Functions together.
+- [ ] Hard-refresh Startup Guide/UI Health and confirm current script/cache/service-worker identity is Build 262.
+- [ ] Confirm `_routes.json` invokes Functions only for `/api/*`.
+
+## Invocation-volume acceptance
+
+- [ ] Leave Admin Analytics open for at least 5 minutes without interacting. Confirm it creates no periodic analytics-dashboard API requests.
+- [ ] Open Live Operations. Confirm auto-refresh is stopped by default; optional refresh is 60 seconds or slower and stops/pauses while hidden.
+- [ ] Open a harmless Progress test page. Confirm refresh is no faster than 120 seconds and does not poll in a hidden tab.
+- [ ] Browse public pages and confirm public analytics is batched, no heartbeat exists, and a 5xx/429 opens the telemetry circuit rather than replaying a batch.
+- [ ] Trigger a harmless Photo Studio validation/failure and confirm no automatic 5xx retry occurs.
+
+## Self-diagnostics acceptance
+
+- [ ] Open `/admin-runtime-health`.
+- [ ] Make several harmless admin API calls and confirm route/method/status/wall duration appear locally.
+- [ ] Confirm query strings, request bodies, customer data, passwords, tokens and payment data are absent.
+- [ ] Confirm Ray ID appears when Cloudflare exposes the response header.
+- [ ] Export CSV and JSON successfully.
+- [ ] Confirm opening/refreshing Runtime Diagnostics itself does not send a diagnostic-storage API request.
+
+## Analytics CPU acceptance
+
+- [ ] Press Admin Analytics **Refresh rollups** and confirm the Build 262 PostgreSQL RPC is used.
+- [ ] Confirm the Worker does not load/aggregate the full raw analytics history.
+- [ ] Confirm normal analytics overview uses compact rollups; raw recent detail is opt-in/bounded.
+
+## Cloudflare evidence
+
+- [ ] Follow `CLOUDFLARE_OBSERVABILITY_BUILD262.md`; download existing Pages config before enabling persistent observability.
+- [ ] Compare downloaded bindings/settings with the dashboard before making Wrangler production-authoritative.
+- [ ] Enable Workers Logs and confirm new invocations appear in Query Builder.
+- [ ] Observe a representative test period.
+- [ ] **Exceeded CPU Time Limits: 0**
+- [ ] **Script Threw Exception: 0**
+- [ ] **Exceeded Memory: 0**
+- [ ] Record post-fix CPU percentiles and top request paths against the incident baseline (7,592 invocations / 2,244 exceeded CPU / ~29.6% failure).
+
+## Move on when
+
+Do not treat Build 262 as accepted only because it deploys. Resume major feature work only after representative testing shows zero exceeded-CPU terminations, no invocation/retry storm, no broken customer/admin workflow and no SEO/mobile/CSS regression.
+
+---
+
+# Historical Build 260 acceptance runbook snapshot
 
 Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current state/direction. This file is detailed acceptance evidence only.
 
@@ -1617,3 +1668,5 @@ Photo Studio can sync, edit metadata, assign/unassign, rename/move and render on
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
 
 <!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->
