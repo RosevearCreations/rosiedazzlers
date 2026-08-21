@@ -802,6 +802,9 @@ function enhanceProfessionalImages() {
 }
 
 function ensureManifest(){
+  const path=normalizePath(location.pathname);
+  // Build 261: the public PWA manifest is unnecessary on protected admin/client/detailer screens.
+  if(path.startsWith('/admin')||path.startsWith('/client')||path.startsWith('/detailer')) return;
   const head=document.head||document.querySelector('head');
   if(!head) return;
   let m=head.querySelector('link[rel="manifest"]');
@@ -814,10 +817,15 @@ function ensureManifest(){
 
 
 function ensurePublicAnalytics(){
+  const path = normalizePath(location.pathname);
+  // Build 261: customer/public analytics never runs on protected staff/client/detailer screens.
+  // This keeps admin work from creating noisy analytics traffic during a Pages/Workers incident.
+  if (path.startsWith('/admin') || path.startsWith('/client') || path.startsWith('/detailer')) return;
+  if (['/login','/my-account','/progress','/final-balance-payment','/quote-payment','/checkout','/complete','/invoice','/privacy','/terms'].includes(path)) return;
   const head=document.head||document.querySelector("head");
   if(!head || head.querySelector('script[data-public-analytics-bootstrap]')) return;
   const script=document.createElement('script');
-  script.src='/assets/public-analytics.js';
+  script.src='/assets/public-analytics.js?v=20260820build262';
   script.defer=true;
   script.dataset.publicAnalyticsBootstrap='true';
   head.appendChild(script);
@@ -946,3 +954,7 @@ if (document.readyState === "loading") {
 } else {
   initChrome();
 }
+
+// Build 262 CPU stabilization: batched public analytics bootstrap.
+
+// Historical Build 261 release token: /assets/public-analytics.js?v=20260819build261

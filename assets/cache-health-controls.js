@@ -1,7 +1,7 @@
 (function attachCacheHealth(globalScope){
   'use strict';
-  const EXPECTED_BUILD = 247;
-  const EXPECTED_ASSET = '/assets/startup-command-center.js?v=20260807build247';
+  const EXPECTED_BUILD = 262;
+  const EXPECTED_ASSET = '/assets/startup-command-center.js?v=20260820build262';
   const $ = (s) => document.querySelector(s);
   const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   async function snapshot(){
@@ -16,7 +16,7 @@
     const host=$('#cacheHealthStatus');if(!host)return;
     const current=data.asset_build===EXPECTED_BUILD;
     host.className='notice '+(current?'ok':'warn');
-    host.innerHTML=`<strong>${current?'Build 247 assets confirmed':'Cache/build mismatch detected'}</strong><div class="mini">Expected script build: ${EXPECTED_BUILD} · fetched build: ${esc(data.asset_build??'unknown')} · app caches: ${esc(data.caches.join(', ')||'none')} · controller: ${esc(data.controller||'none')}</div>`;
+    host.innerHTML=`<strong>${current?'Build 262 assets confirmed':'Cache/build mismatch detected'}</strong><div class="mini">Expected script build: ${EXPECTED_BUILD} · fetched build: ${esc(data.asset_build??'unknown')} · app caches: ${esc(data.caches.join(', ')||'none')} · controller: ${esc(data.controller||'none')}</div>`;
     const raw=$('#cacheHealthRaw');if(raw)raw.textContent=JSON.stringify(data,null,2);
   }
   async function refresh(){const btn=$('#cacheCheckBtn');if(btn){btn.disabled=true;btn.textContent='Checking…';}try{render(await snapshot());}finally{if(btn){btn.disabled=false;btn.textContent='Check cache & build';}}}
@@ -41,3 +41,9 @@
   globalScope.RosieCacheHealth={snapshot,refresh,clearAndReload};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);else bind();
 })(window);
+
+// Build 260 compatibility markers: /assets/startup-command-center.js?v=20260818build260 ; EXPECTED_BUILD = 260
+
+// Build 262 CPU stabilization: expected deployed startup/cache identity = 262.
+
+// Historical Build 261 release tokens: EXPECTED_BUILD = 261 ; 20260819build261 ; Build 261 assets confirmed

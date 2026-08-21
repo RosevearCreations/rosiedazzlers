@@ -1,3 +1,4 @@
+// Build 261 — clearer transient Pages/Workers 5xx diagnostics for protected admin screens.
 // assets/admin-runtime.js
 //
 // Shared helper for session-first admin/detailer pages.
@@ -83,6 +84,7 @@
       response,
       error:
         (data && data.error) ||
+        ([502,503,504].includes(response.status) ? `Cloudflare/Pages temporarily returned ${response.status}. No successful admin response was received; refresh the page before repeating a write.` : null) ||
         (text && !response.ok ? text.slice(0, 240) : null) ||
         (!response.ok ? `Request failed (${response.status}).` : null)
     };

@@ -224,6 +224,13 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-ui-health")
     },
     {
+      key: "admin-runtime-health",
+      label: "Runtime & CPU Diagnostics",
+      href: "/admin-runtime-health.html",
+      description: "Local API failure history, route timing, Ray IDs, and CPU source-risk audit",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-runtime-health")
+    },
+    {
       key: "admin-app",
       label: "App Management",
       href: "/admin-app.html",

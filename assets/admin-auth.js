@@ -28,6 +28,85 @@
     loaded: false
   };
 
+  // Build 262 — browser-side API reliability recorder.
+  // This intentionally stores only route/method/status/timing metadata in localStorage.
+  // Request/response bodies, credentials, query strings and customer data are never recorded.
+  const DIAGNOSTIC_STORAGE_KEY = "rosie_api_runtime_diagnostics_v262";
+  const DIAGNOSTIC_LIMIT = 300;
+
+  function readDiagnosticRows() {
+    try {
+      const parsed = JSON.parse(globalScope.localStorage?.getItem(DIAGNOSTIC_STORAGE_KEY) || "[]");
+      return Array.isArray(parsed) ? parsed.slice(-DIAGNOSTIC_LIMIT) : [];
+    } catch { return []; }
+  }
+
+  function writeDiagnosticRows(rows) {
+    try {
+      globalScope.localStorage?.setItem(DIAGNOSTIC_STORAGE_KEY, JSON.stringify((rows || []).slice(-DIAGNOSTIC_LIMIT)));
+    } catch {}
+  }
+
+  function recordApiDiagnostic(row) {
+    const rows = readDiagnosticRows();
+    rows.push({
+      at: new Date().toISOString(),
+      page: globalScope.location?.pathname || "",
+      route: row.route || "",
+      method: row.method || "GET",
+      status: Number(row.status || 0),
+      ok: row.ok === true,
+      duration_ms: Math.max(0, Math.round(Number(row.duration_ms || 0))),
+      outcome: row.outcome || (row.ok ? "success" : "failure"),
+      ray_id: String(row.ray_id || "").slice(0, 80) || null,
+      build: 262
+    });
+    writeDiagnosticRows(rows);
+  }
+
+  function installApiDiagnosticsFetchWrapper() {
+    if (globalScope.__ROSIE_API_DIAGNOSTICS_FETCH_WRAPPED__) return;
+    if (typeof globalScope.fetch !== "function") return;
+    const nativeFetch = globalScope.fetch.bind(globalScope);
+    globalScope.__ROSIE_API_DIAGNOSTICS_FETCH_WRAPPED__ = true;
+    globalScope.__ROSIE_NATIVE_FETCH__ = nativeFetch;
+    globalScope.fetch = async function rosieDiagnosticFetch(input, init = {}) {
+      let url = null;
+      try { url = new URL(typeof input === "string" ? input : input?.url || String(input || ""), globalScope.location?.origin || undefined); } catch {}
+      const shouldRecord = !!url && url.origin === globalScope.location?.origin && url.pathname.startsWith("/api/");
+      if (!shouldRecord) return nativeFetch(input, init);
+      const started = globalScope.performance?.now ? globalScope.performance.now() : Date.now();
+      const method = String(init?.method || (typeof input !== "string" && input?.method) || "GET").toUpperCase();
+      try {
+        const response = await nativeFetch(input, init);
+        const ended = globalScope.performance?.now ? globalScope.performance.now() : Date.now();
+        recordApiDiagnostic({
+          route: url.pathname,
+          method,
+          status: response.status,
+          ok: response.ok,
+          duration_ms: ended - started,
+          outcome: response.ok ? "success" : "http_error",
+          ray_id: response.headers?.get?.("cf-ray") || ""
+        });
+        return response;
+      } catch (error) {
+        const ended = globalScope.performance?.now ? globalScope.performance.now() : Date.now();
+        recordApiDiagnostic({ route: url.pathname, method, status: 0, ok: false, duration_ms: ended - started, outcome: "network_error" });
+        throw error;
+      }
+    };
+  }
+
+  installApiDiagnosticsFetchWrapper();
+
+  globalScope.RosieApiDiagnostics = {
+    storageKey: DIAGNOSTIC_STORAGE_KEY,
+    list: () => readDiagnosticRows(),
+    clear: () => writeDiagnosticRows([]),
+    record: (row) => recordApiDiagnostic(row)
+  };
+
   async function requestJson(url, options = {}) {
     const response = await fetch(url, {
       credentials: "include",
@@ -268,6 +347,7 @@
       case "admin-app":
       case "admin-docs":
       case "admin-ui-health":
+      case "admin-runtime-health":
       case "admin-daip":
       case "admin-daip-governance":
       case "admin-daip-readiness":

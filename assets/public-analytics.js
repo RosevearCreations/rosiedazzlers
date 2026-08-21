@@ -1,38 +1,32 @@
-// Build 236 restored editable analytics event registry integration.
+// Build 262 — CPU-safe browser analytics.
+// Events are batched so ordinary browsing does not create one Worker invocation per click/scroll event.
 (function attachRosieAnalytics(globalScope) {
+  'use strict';
   const API = '/api/analytics/ingest';
   const STORAGE = {
     visitor: 'rosie_analytics_visitor_id',
     session: 'rosie_analytics_session_id',
-    startedAt: 'rosie_analytics_started_at',
     cart: 'rosie_analytics_last_cart',
     maxScroll: 'rosie_analytics_max_scroll'
   };
-  const state = { pageStartedAt: Date.now(), lastHeartbeatAt: 0, started: false, lastTrackedScroll: 0, registryLoaded: false, eventRegistry: {} };
-
-  async function loadEventRegistry() {
-    if (state.registryLoaded) return state.eventRegistry;
-    state.registryLoaded = true;
-    try {
-      const res = await fetch('/api/site_settings_public?key=analytics_event_registry', { cache: 'no-store' });
-      const data = await res.json().catch(() => null);
-      const value = data?.settings?.analytics_event_registry?.value || {};
-      const events = Array.isArray(value.events) ? value.events : [];
-      state.eventRegistry = Object.fromEntries(events.filter((event) => event && event.is_active !== false).map((event) => [String(event.key || '').trim(), event]));
-    } catch {}
-    return state.eventRegistry;
-  }
-
-  function registryMeta(event_type) {
-    const item = state.eventRegistry && state.eventRegistry[event_type] ? state.eventRegistry[event_type] : null;
-    if (!item) return {};
-    return { event_label: item.label || event_type, event_category: item.category || '' };
-  }
+  const FAILURE_UNTIL_KEY = 'rosie_analytics_disabled_until';
+  const FAILURE_BACKOFF_MS = 10 * 60 * 1000;
+  const FLUSH_DELAY_MS = 20000;
+  const MAX_QUEUE = 8;
+  const MAX_BATCH = 12;
+  const state = { pageStartedAt: Date.now(), started: false, lastTrackedScroll: 0, queue: [], flushTimer: null, flushing: false, failureCount: 0 };
 
   function uuid() {
     if (globalScope.crypto?.randomUUID) return globalScope.crypto.randomUUID();
-    return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+    if (globalScope.crypto?.getRandomValues) {
+      const bytes = new Uint8Array(16);
+      globalScope.crypto.getRandomValues(bytes);
+      return [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+    return `${Date.now().toString(36)}-analytics`;
   }
+  function safeLocal(key) { try { return localStorage.getItem(key); } catch { return null; } }
+  function setLocal(key, value) { try { localStorage.setItem(key, value); } catch {} }
   function getOrCreate(key, rotateHours) {
     try {
       const existing = localStorage.getItem(key);
@@ -44,41 +38,28 @@
       return value;
     } catch { return uuid(); }
   }
-  function safeLocal(key) { try { return localStorage.getItem(key); } catch { return null; } }
-  function setLocal(key, value) { try { localStorage.setItem(key, value); } catch {} }
+  function analyticsTemporarilyDisabled() { return Number(safeLocal(FAILURE_UNTIL_KEY) || 0) > Date.now(); }
+  function tripCircuit() {
+    state.failureCount += 1;
+    const multiplier = Math.min(6, Math.max(1, state.failureCount));
+    setLocal(FAILURE_UNTIL_KEY, String(Date.now() + FAILURE_BACKOFF_MS * multiplier));
+  }
+  function clearCircuit() { state.failureCount = 0; setLocal(FAILURE_UNTIL_KEY, '0'); }
+  function registryMeta(eventType) {
+    const events = globalScope.RosiePublicSiteSettings?.analytics_event_registry?.events;
+    if (!Array.isArray(events)) return {};
+    const item = events.find((event) => String(event?.key || '').trim() === eventType && event?.is_active !== false);
+    return item ? { event_label: item.label || eventType, event_category: item.category || '' } : {};
+  }
   function getViewport() { return `${globalScope.innerWidth || 0}x${globalScope.innerHeight || 0}`; }
-  function getCartSnapshot() {
-    const candidates = ['rosie_cart', 'rosie_gift_cart', 'gift_cart', 'cart'];
-    for (const key of candidates) {
-      const raw = safeLocal(key);
-      if (!raw) continue;
-      try {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length) return { key, item_count: parsed.length, raw: parsed.slice(0, 10) };
-        if (parsed && typeof parsed === 'object' && Object.keys(parsed).length) return { key, item_count: Array.isArray(parsed.items) ? parsed.items.length : Object.keys(parsed).length, raw: parsed };
-      } catch {
-        if (raw) return { key, item_count: 1, raw: String(raw).slice(0, 500) };
-      }
-    }
-    return null;
-  }
   function basicPayload(payload = {}) {
-    return {
-      viewport: getViewport(),
-      page_url: location.href,
-      path: location.pathname,
-      search: location.search,
-      hash: location.hash || '',
-      ...payload
-    };
+    return { viewport: getViewport(), path: location.pathname, search: location.search, ...payload };
   }
-  async function post(event_type, payload = {}, extra = {}) {
-    const visitor_id = getOrCreate(STORAGE.visitor, 24 * 365 * 5);
-    const session_id = getOrCreate(STORAGE.session, 12);
-    const body = {
-      visitor_id,
-      session_id,
-      event_type,
+  function buildEvent(eventType, payload = {}, extra = {}) {
+    return {
+      visitor_id: getOrCreate(STORAGE.visitor, 24 * 365 * 5),
+      session_id: getOrCreate(STORAGE.session, 12),
+      event_type: String(eventType || 'page_view').slice(0, 80),
       page_path: location.pathname + location.search,
       page_title: document.title || '',
       referrer: document.referrer || '',
@@ -87,27 +68,71 @@
       screen: `${globalScope.screen?.width || 0}x${globalScope.screen?.height || 0}`,
       source: new URLSearchParams(location.search).get('utm_source') || '',
       campaign: new URLSearchParams(location.search).get('utm_campaign') || '',
-      payload: basicPayload({ ...registryMeta(event_type), ...payload }),
+      payload: basicPayload({ ...registryMeta(eventType), ...payload }),
+      created_at: new Date().toISOString(),
       ...extra
     };
+  }
+  function scheduleFlush(delay = FLUSH_DELAY_MS) {
+    if (state.flushTimer || state.flushing || analyticsTemporarilyDisabled()) return;
+    state.flushTimer = setTimeout(() => { state.flushTimer = null; flush().catch(() => {}); }, delay);
+  }
+  async function flush({ keepalive = false } = {}) {
+    if (state.flushing || !state.queue.length || analyticsTemporarilyDisabled()) return;
+    state.flushing = true;
+    const batch = state.queue.splice(0, MAX_BATCH);
     try {
-      await fetch(API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), keepalive: true, cache: 'no-store' });
-    } catch {}
+      const response = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ events: batch }),
+        keepalive,
+        cache: 'no-store'
+      });
+      if (response.status === 429 || response.status >= 500) {
+        // Telemetry is expendable; do not retry the same batch during an incident.
+        tripCircuit();
+      } else if (response.ok) {
+        clearCircuit();
+      }
+    } catch {
+      tripCircuit();
+    } finally {
+      state.flushing = false;
+      if (state.queue.length && !analyticsTemporarilyDisabled()) scheduleFlush(5000);
+    }
+  }
+  function queue(eventType, payload = {}, extra = {}, { immediate = false } = {}) {
+    if (analyticsTemporarilyDisabled()) return Promise.resolve();
+    state.queue.push(buildEvent(eventType, payload, extra));
+    if (state.queue.length > MAX_BATCH * 2) state.queue.splice(0, state.queue.length - MAX_BATCH * 2);
+    if (immediate || state.queue.length >= MAX_QUEUE) return flush({ keepalive: immediate });
+    scheduleFlush();
+    return Promise.resolve();
+  }
+  function getCartSnapshot() {
+    for (const key of ['rosie_cart', 'rosie_gift_cart', 'gift_cart', 'cart']) {
+      const raw = safeLocal(key);
+      if (!raw) continue;
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length) return { key, item_count: parsed.length };
+        if (parsed && typeof parsed === 'object' && Object.keys(parsed).length) return { key, item_count: Array.isArray(parsed.items) ? parsed.items.length : Object.keys(parsed).length };
+      } catch { return { key, item_count: 1 }; }
+    }
+    return null;
   }
   function maybeTrackCart() {
     const snapshot = getCartSnapshot();
     const now = JSON.stringify(snapshot || null);
-    const prev = safeLocal(STORAGE.cart);
-    if (now !== prev) {
-      setLocal(STORAGE.cart, now);
-      if (snapshot) post('cart_snapshot', { cart_key: snapshot.key, item_count: snapshot.item_count, snapshot: snapshot.raw });
-    }
+    if (now === safeLocal(STORAGE.cart)) return;
+    setLocal(STORAGE.cart, now);
+    if (snapshot) queue('cart_snapshot', snapshot);
   }
   function classifyScroll() {
     const doc = document.documentElement;
     const maxScrollable = Math.max(1, (doc.scrollHeight || 0) - (globalScope.innerHeight || 0));
-    const pct = Math.min(100, Math.max(0, Math.round(((globalScope.scrollY || doc.scrollTop || 0) / maxScrollable) * 100)));
-    return pct;
+    return Math.min(100, Math.max(0, Math.round(((globalScope.scrollY || doc.scrollTop || 0) / maxScrollable) * 100)));
   }
   function maybeTrackScroll() {
     const pct = classifyScroll();
@@ -115,70 +140,53 @@
     if (!bucket || bucket <= state.lastTrackedScroll) return;
     state.lastTrackedScroll = bucket;
     setLocal(STORAGE.maxScroll, String(bucket));
-    post('scroll_depth', { percent: bucket });
+    queue('scroll_depth', { percent: bucket });
   }
-  function attachClickTracking() {
+  function attachInteractions() {
     document.addEventListener('click', (event) => {
       const target = event.target?.closest?.('a,button,[data-analytics-label]');
       if (!target) return;
-      const text = (target.getAttribute('data-analytics-label') || target.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 140);
+      const text = (target.getAttribute('data-analytics-label') || target.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 120);
       const href = target.getAttribute?.('href') || '';
-      post('ui_click', {
-        target_tag: target.tagName || '',
-        target_text: text,
-        href: href || null,
-        is_external: href ? /^https?:/i.test(href) && !href.includes(location.host) : false,
-        id: target.id || null,
-        class_name: (target.className || '').toString().slice(0, 160) || null
-      });
+      queue('ui_click', { target_tag: target.tagName || '', target_text: text, href: href || null, id: target.id || null });
     }, { passive: true });
     document.addEventListener('submit', (event) => {
       const form = event.target;
-      if (!form || !(form instanceof HTMLFormElement)) return;
-      post('form_submit', {
-        form_id: form.id || null,
-        form_action: form.getAttribute('action') || null,
-        form_method: (form.getAttribute('method') || 'get').toLowerCase()
-      });
+      if (!(form instanceof HTMLFormElement)) return;
+      queue('form_submit', { form_id: form.id || null, form_action: form.getAttribute('action') || null, form_method: (form.getAttribute('method') || 'get').toLowerCase() }, {}, { immediate: true });
     }, true);
   }
   function start() {
     if (state.started) return;
-    loadEventRegistry();
     state.started = true;
-    setLocal(STORAGE.startedAt, String(Date.now()));
-    post('page_view', { path: location.pathname, search: location.search, hash: location.hash || '' });
+    queue('page_view', { path: location.pathname, search: location.search });
     maybeTrackCart();
-    attachClickTracking();
+    attachInteractions();
+    globalScope.addEventListener('scroll', maybeTrackScroll, { passive: true });
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden') {
-        post('page_exit', { duration_ms: Date.now() - state.pageStartedAt, max_scroll_percent: state.lastTrackedScroll || Number(safeLocal(STORAGE.maxScroll) || 0) || 0 });
+        queue('page_exit', { duration_ms: Date.now() - state.pageStartedAt, max_scroll_percent: state.lastTrackedScroll || Number(safeLocal(STORAGE.maxScroll) || 0) || 0 }, {}, { immediate: true });
       } else {
         state.pageStartedAt = Date.now();
-        post('page_focus', {});
       }
     });
-    globalScope.addEventListener('beforeunload', () => {
-      post('page_exit', { duration_ms: Date.now() - state.pageStartedAt, max_scroll_percent: state.lastTrackedScroll || Number(safeLocal(STORAGE.maxScroll) || 0) || 0 });
+    globalScope.addEventListener('pagehide', () => {
+      queue('page_exit', { duration_ms: Date.now() - state.pageStartedAt, max_scroll_percent: state.lastTrackedScroll || 0 }, {}, { immediate: true });
     });
-    globalScope.addEventListener('scroll', () => {
-      maybeTrackScroll();
-    }, { passive: true });
-    setInterval(() => {
-      state.lastHeartbeatAt = Date.now();
-      maybeTrackCart();
-      maybeTrackScroll();
-      post('heartbeat', { duration_ms: Date.now() - state.pageStartedAt, online: true, max_scroll_percent: state.lastTrackedScroll || 0 });
-    }, 30000);
+    // Build 262 deliberately removes the old analytics heartbeat interval.
+    // Page exits and explicit conversion events provide engagement evidence without background Worker traffic.
   }
 
   globalScope.RosieAnalytics = {
     start,
-    track(event_type, payload = {}, extra = {}) { return post(event_type, payload, extra); },
-    trackCheckout(stateName, payload = {}) { return post('checkout_progress', payload, { checkout_state: stateName || '' }); },
-    trackCart(payload = {}) { return post('cart_snapshot', payload); }
+    flush,
+    track(eventType, payload = {}, extra = {}) { return queue(eventType, payload, extra); },
+    trackCheckout(stateName, payload = {}) { return queue('checkout_progress', payload, { checkout_state: stateName || '' }, { immediate: true }); },
+    trackCart(payload = {}) { return queue('cart_snapshot', payload); }
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
 })(window);
+
+// Historical Build 261 release token: 120000 heartbeat interval removed by Build 262.
