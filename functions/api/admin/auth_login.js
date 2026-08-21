@@ -43,7 +43,7 @@ export async function onRequestPost(context) {
     headers = applyCors(headers);
 
     return new Response(
-      JSON.stringify({ ok: true, message: "Signed in.", actor: formatActor(staffUser) }, null, 2),
+      JSON.stringify({ ok: true, message: "Signed in.", actor: formatActor(staffUser) }),
       { status: 200, headers }
     );
   } catch (err) {
@@ -215,7 +215,7 @@ function safeError(err) {
 }
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), { status, headers: jsonHeaders() });
+  return new Response(JSON.stringify(data), { status, headers: jsonHeaders() });
 }
 
 function jsonHeaders() {
