@@ -1,3 +1,171 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 262
+
+**Updated:** 2026-08-20  
+**Purpose:** Current business/engineering direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state.
+
+## Priority shift — reliability before feature expansion
+
+Rosie remains in controlled test mode, but Cloudflare recorded 2,244 exceeded-CPU terminations in the incident window. The business priority is therefore to stabilize the application before adding another major subsystem. Reliability work protects every later booking, payment, photo, accounting and DAIP workflow.
+
+## Build 262 value delivered
+
+- Removes the highest-volume browser-generated Worker traffic found in source: 30-second Admin Analytics fan-out, default 15-second Live Operations polling, 20-second Progress polling and analytics heartbeat/event fan-out.
+- Batches public analytics and makes telemetry fail open instead of competing with customer/admin workflows.
+- Moves heavy analytics rollup computation into Supabase/PostgreSQL rather than Cloudflare Worker JavaScript.
+- Removes automatic Photo Studio replay after 5xx so a CPU termination cannot immediately amplify into another expensive invocation or accidental repeated write.
+- Compacts routine API JSON responses and combines multi-key app-setting reads to reduce common-path CPU/payload overhead.
+- Adds browser-local Runtime & CPU Diagnostics with route/status/wall-time/Ray evidence and no extra Worker storage request.
+- Adds a source-risk inventory of actual request handlers so remaining optimization can be evidence-directed rather than random.
+- Keeps static Pages traffic outside Functions and preserves the existing image/SEO/mobile/security boundaries.
+
+## Current next 20
+
+1. Apply `sql/2026-08-20_build262_cpu_safe_analytics_rollups.sql`.
+2. Deploy Build 262 Pages + Functions together and prove Build 262 cache/script/service-worker parity.
+3. Exercise representative admin workflows and export Runtime & CPU Diagnostics if any API returns 5xx/network failure.
+4. Verify Admin Analytics no longer creates background requests while left open.
+5. Verify Live Operations is manual by default and hidden-tab safe.
+6. Verify customer Progress polling is no faster than 120 seconds.
+7. Verify public analytics batching and circuit-breaker behavior with harmless browsing.
+8. Safely enable persistent Cloudflare Workers Logs using the downloaded current Pages configuration; do not replace dashboard bindings with a hand-written partial config.
+9. Observe a representative test window and target **Exceeded CPU Time Limits = 0**.
+10. Group any remaining CPU/resource events by pathname and compare with the packaged source-risk audit.
+11. Optimize only routes supported by measured evidence; move SQL aggregation/filtering into Postgres where practical.
+12. Confirm no retry amplification or partial-write duplication on 5xx/1102-style failures.
+13. Re-run booking/deposit/final-balance/refund/webhook acceptance after CPU stabilization.
+14. Re-run vehicle-size correction and Quote Pipeline acceptance.
+15. Re-run Photo Studio sync/multi-placement/reset and Media Health acceptance.
+16. Complete inventory posting/reversal/idempotency acceptance.
+17. Complete email/SMS provider delivery and failure evidence.
+18. Resume real-device CSS/accessibility and public SEO/local-proof acceptance.
+19. Resume private DAIP processor/derivative implementation only after ordinary Worker stability is proven.
+20. Rehearse restore/rollback and then move toward a controlled invite-only soft launch.
+
+## Permanent CPU/reliability guardrails
+
+- No routine admin/customer API polling faster than 60 seconds; prefer initial load + manual refresh.
+- Pause optional refresh while the page is hidden.
+- Non-essential telemetry must fail open and must not aggressively retry.
+- Do not aggregate very large datasets in Worker JavaScript when SQL can perform the work.
+- No automatic retry of non-idempotent writes after 5xx/resource termination unless state is first checked.
+- Keep routine response serialization compact.
+- Keep Pages Functions scoped to `/api/*`; static assets must not depend on the Functions runtime.
+- One public H1, concise titles, honest local relevance, responsive/mobile CSS and accessibility remain required during reliability work.
+
+---
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 261
+
+**Updated:** 2026-08-19
+**Purpose:** Current business/engineering direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state.
+
+## Build 261 value delivered
+
+- Staff photo work no longer generates public engagement analytics, reducing avoidable Functions traffic and console noise.
+- A transient 5xx cannot immediately strip cached static presentation assets when a safe service-worker copy exists.
+- Photo assignment writes are lower-cost and retain explicit multi-placement/reset semantics.
+- The owner can export the exact current list of known image-placement targets that have no deliberate Photo Studio override, making visual completion a printable operating task rather than a code audit.
+- DAIP Test Lab keeps all internal-only protections while removing preventable input-format 400s.
+- Startup/cache diagnostics stay build-coherent instead of introducing another expected/fetched mismatch.
+
+## Current next 20
+
+1. Deploy Build 261 and verify Startup/Cache Health reports Build 261 runtime assets.
+2. Test one Photo Studio second placement, refresh, and confirm both placements remain listed.
+3. Reset one of those placements and confirm only that location returns to its authored/default image.
+4. Export the live unassigned-placement CSV and print checklist; prioritize public/customer-facing placements before optional admin visuals.
+5. Fill the highest-value missing manual imagery: package cards, service/add-on detail pages, town/high-intent landing heroes, local/review proof, gift cards, maintenance, FAQ, gallery evidence/technique/efficiency, then secondary backgrounds/admin visuals.
+6. Create one harmless DAIP test job through the generated safe reference workflow.
+7. Capture Cloudflare Functions Metrics/Invocation Status evidence if another 503 affects APIs and static files together.
+8. Continue booking/deposit/final-balance/refund/webhook production acceptance.
+9. Verify external email/SMS delivery, retry and failure evidence.
+10. Accept uncertain vehicle-size staff review and customer confirmation/cancellation flow.
+11. Complete transactional inventory posting, shortage, idempotency and reversal acceptance.
+12. Accept Quote Pipeline edit/follow-up/booking hand-off.
+13. Finish catalog/supplier/image publish readiness.
+14. Complete owner-editable service/add-on landing content and condition-dependent pricing explanations.
+15. Populate Gallery with approved Before/After, Evidence, Technique and Efficiency proof.
+16. Complete real-device CSS/mobile acceptance on booking, pricing, services, maintenance, fleet and admin photo workflows.
+17. Complete keyboard/focus/label/contrast/reduced-motion accessibility review.
+18. Verify Search Console, sitemap/canonicals/schema and Google Business Profile evidence.
+19. Implement/accept the private DAIP processing consumer, retry/dead-letter and reviewed-derivative path.
+20. Rehearse Supabase restore + Cloudflare rollback, then run a controlled invite-only soft launch.
+
+## Permanent guardrails
+
+- One public H1 per indexable page.
+- Never silently replace an authored/default image; only explicit owner assignment can override it.
+- Never expose private DAIP media through public Photo Studio/manifests.
+- Keep public analytics off protected admin/client/detailer screens.
+- Do not turn temporary network/runtime failure into destructive retries or duplicate non-idempotent writes.
+
+---
+
+# HISTORICAL LIVING AUTHORITY SNAPSHOT — Build 260
+
+**Updated:** 2026-08-18
+**Purpose:** Current business/engineering direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state. Older Build sections below are retained history even where their original headings use “CURRENT”.
+
+## Business and product direction
+
+Rosie Dazzlers should continue differentiating on **simple mobile booking, transparent scope/vehicle sizing, strong real-work proof, detailed process explanations, owner-maintainable content, and reliable follow-up operations** rather than creating more disconnected admin screens.
+
+A current Ontario competitor review on 2026-08-18 reinforces several useful patterns: local competitors prominently expose dedicated paint-correction/ceramic pages, clear mobile-service calls to action, package/service navigation, vehicle types, fleet/custom quote paths, gift cards or maintenance/subscription concepts, and strong visual proof. Rosie already covers most of those categories; our stronger opportunity is to connect them with clearer condition-dependent pricing, verified vehicle-size review, richer evidence/technique galleries, editable local proof, and a booking/quote workflow that explains uncertainty rather than hiding it.
+
+Public comparison sources reviewed: `lvscardetail.com`, `rightcardetailing.ca`, `woodstockautospa.ca`, `detailingexperts.ca`, `rydenshine.ca`, `precisiondetailingco.ca`, and `blackstardetailing.ca`. Use these as market evidence, not copy templates.
+
+## Build 260 value delivered
+
+- Photo Studio sync is split into cursor-paged requests (one approved folder page per Worker invocation, up to 100 approved objects) with batched Supabase upserts so the growing R2 library does not consume one Worker invocation's subrequest budget.
+- One photo can intentionally serve several website placements; any single placement can be reset to its authored/default image without affecting the others.
+- Media Health now reports the managed public library rather than an old static requirements scanner, with only an explicit bounded public-delivery sample.
+- Startup evidence is current/relevance-filtered; historical build migrations remain audit history instead of perpetual approval work.
+- UI/cache health is version-aligned to Build 260 and the service-worker cache is current.
+- DAIP page copy makes the operational path explicit: Creative Project → private raw-media intake → reviewed evidence/content package; Dry Run and Gate C retain their narrower validation/governance roles.
+- Documentation is logically retired to two living planning authorities plus specialist references, without destructive deletion of historical release evidence.
+
+## Current next 20
+
+1. Deploy Build 260 and prove startup-script/UI-scanner/service-worker cache parity.
+2. Apply outstanding Build 259 vehicle-size SQL and Build 260 startup/evidence/roadmap SQL in staging.
+3. Accept bounded Photo Studio sync, multi-placement assignment and reset-to-default.
+4. Accept database-first Media Health and the bounded delivery sample.
+5. Run one harmless fresh Creative Project through the clarified private DAIP start flow.
+6. Accept editable Quote Pipeline selection/edit/follow-up/booking hand-off.
+7. Accept uncertain vehicle-size staff review and customer confirm/cancel correction flow.
+8. Complete booking, deposit, final-balance, refund and webhook production acceptance.
+9. Verify external email/SMS delivery, retry and failure evidence.
+10. Complete transactional inventory posting, idempotency, shortage and reversal acceptance.
+11. Finish catalog publish-readiness, supplier repair and sellable-item image review.
+12. Finish deliberate public photo assignments, contextual alt text and local-proof review.
+13. Complete owner-editable add-on landing content, pricing caveats and process explanations.
+14. Populate Gallery with approved Before/After, Evidence, Technique and Efficiency proof.
+15. Complete real-device CSS/mobile acceptance on booking, pricing, services, maintenance and fleet.
+16. Complete keyboard/focus/label/contrast/reduced-motion accessibility review.
+17. Verify Search Console, sitemap/canonicals/schema and Google Business Profile evidence.
+18. Perform Supabase restore rehearsal and Cloudflare deployment rollback drill.
+19. Implement and accept the private DAIP processing consumer, retry/dead-letter and reviewed-derivatives path.
+20. Run a controlled invite-only soft launch with monitoring, incident and daily evidence review.
+
+## SEO/local guardrails every pass
+
+- One meaningful H1 per public/indexable page.
+- Concise descriptive title and useful meta description; avoid repetitive town/service stuffing.
+- Local pages must add genuine local/service value and approved proof rather than merely swapping town names.
+- Use contextual HTML image alt text for informative images; mark genuinely decorative imagery accordingly.
+- Keep package/add-on pricing caveats, quote-required states and condition-dependent services truthful and visible.
+- Preserve fast mobile rendering and avoid public R2 inventory scans or other expensive request-time media discovery.
+
+## Documentation policy
+
+Only `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are living planning authorities. `STARTUP_GO_LIVE_BLOCKERS.md` is the specialist acceptance runbook, `DOC_INDEX.md` is navigation, schema/migration documents are technical references, and all remaining Markdown is historical/specialist evidence unless one of the two living authorities explicitly promotes it.
+
+---
+
+## Historical roadmap record retained below
+
+Everything below this boundary is historical/specialist context and does **not** override the Build 260 direction above.
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 259
 
 **Updated:** 2026-08-13
@@ -38,7 +206,7 @@ Build 257 moves public-photo discovery off the request hot path. The managed med
 
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 253
 
-**Updated:** 2026-08-12  
+**Updated:** 2026-08-12
 **Purpose:** Current business/technical direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state.
 
 ## Build 253 value delivered — Photo Management Studio makes photos a managed business asset
@@ -87,7 +255,7 @@ The website can now be refreshed visually without repeatedly changing source cod
 
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 252
 
-**Updated:** 2026-08-12  
+**Updated:** 2026-08-12
 **Purpose:** Current business/technical direction. For exact implemented state and deployment boundaries, read `AI_PROJECT_HANDOFF.md` first.
 
 ## Build 252 value delivered
@@ -118,7 +286,7 @@ The website can now be refreshed visually without repeatedly changing source cod
 
 <!-- Historical release guard: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 250 -->
 
-**Updated:** 2026-08-10  
+**Updated:** 2026-08-10
 **Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
 
 ## Build 250 value delivered
@@ -161,7 +329,7 @@ The website can now be refreshed visually without repeatedly changing source cod
 # Historical Build 249 roadmap snapshot
 
 
-**Updated:** 2026-08-10  
+**Updated:** 2026-08-10
 **Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
 
 ## Build 249 value delivered
@@ -200,7 +368,7 @@ The website can now be refreshed visually without repeatedly changing source cod
 
 # Historical Build 248 roadmap snapshot
 
-**Updated:** 2026-08-09  
+**Updated:** 2026-08-09
 **Purpose:** Current business/technical direction. For exact implemented state and handoff, read `AI_PROJECT_HANDOFF.md` first.
 
 ## Build 248 value delivered
@@ -295,7 +463,7 @@ The current ordered queue is stored in `data/build245_next_steps.json`. The imme
 
 # Rosie Dazzlers Master Value Roadmap — Build 241
 
-**Updated:** 2026-08-05  
+**Updated:** 2026-08-05
 **Build 241:** Startup Command Center initialization and cache hotfix; no roadmap item was removed and no database DDL is required.
 
 ## Completed in this hotfix
@@ -311,7 +479,7 @@ The Build 240 next-20 cycle remains current. Resume launch evidence and producti
 
 # Rosie Dazzlers Master Value Roadmap — Build 240
 
-**Updated:** 2026-08-05  
+**Updated:** 2026-08-05
 **Build 240:** transactional booking/project inventory posting, authorized reversal, operational evidence and continued launch polish.
 
 ## Completed in source; staging acceptance required
@@ -332,7 +500,7 @@ Complete Build 240 acceptance, then finish resumable media uploads/derivatives, 
 
 # Rosie Dazzlers Master Value Roadmap — Build 238
 
-**Updated:** 2026-07-30  
+**Updated:** 2026-07-30
 **Build 238 — Inventory transactions, reviewed duplicate merge, SEO/startup polish**
 
 ## Strategic direction
@@ -427,7 +595,7 @@ Only this file and `AI_PROJECT_HANDOFF.md` are living strategy documents. Curren
 
 # Rosie Dazzlers Master Value Roadmap — Build 225
 
-**Updated:** 2026-07-07  
+**Updated:** 2026-07-07
 **Purpose:** One active business/product roadmap. Read after `AI_PROJECT_HANDOFF.md`. Retained Markdown remains history/audit context.
 
 ## Build 225 — Social & Analytics Connections Centre, consent-first tags, and DAIP external-service boundary
@@ -1567,3 +1735,9 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD258_SYNC: 2026-08-13 | Public photo consistency + Gallery expansion + safe unassigned cleanup; Build257 resource boundary retained. -->
 
 <!-- BUILD259_SYNC: 2026-08-13 | Comprehensive explicit public image targets + owner-editable add-on/maintenance content + vehicle-size review + editable quote pipeline | Migration: sql/2026-08-13_build259_vehicle_size_review.sql -->
+
+<!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
+
+<!-- Historical release compatibility: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 260 -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->
