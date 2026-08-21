@@ -1,4 +1,4 @@
-// Build 236 restored complete admin navigation and retained current workbench/preflight routes.
+// Build 238 retained complete admin navigation and retained current workbench/preflight routes.
 // assets/admin-menu.js
 //
 // Shared internal admin/detailer navigation.
@@ -93,6 +93,13 @@
       href: "/admin-daip.html",
       description: "Internal-only media-process registry and privacy gate testing",
       visible: () => globalScope.AdminAuth.canAccessPage("admin-daip")
+    },
+    {
+      key: "admin-daip-media",
+      label: "DAIP Media Intake",
+      href: "/admin-daip-media.html",
+      description: "Private resumable raw photo/video ingestion for Creative Projects",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-daip-media")
     },
     {
       key: "admin-daip-governance",
@@ -210,6 +217,20 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-docs")
     },
     {
+      key: "admin-ui-health",
+      label: "UI & SEO Health",
+      href: "/admin-ui-health.html",
+      description: "Critical route, CSS, asset, H1, metadata, clean-route, and cache acceptance scanner",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-ui-health")
+    },
+    {
+      key: "admin-runtime-health",
+      label: "Runtime & CPU Diagnostics",
+      href: "/admin-runtime-health.html",
+      description: "Local API failure history, route timing, Ray IDs, and CPU source-risk audit",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-runtime-health")
+    },
+    {
       key: "admin-app",
       label: "App Management",
       href: "/admin-app.html",
@@ -259,11 +280,25 @@
       visible: () => globalScope.AdminAuth.canAccessPage("admin-inventory-manager") || globalScope.AdminAuth.canAccessPage("admin")
     },
     {
+      key: "admin-inventory-posting",
+      label: "Inventory Posting",
+      href: "/admin-inventory-posting.html",
+      description: "Preview, post and reverse booking or project inventory as one audited transaction",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-inventory-posting") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
+      key: "admin-startup-guide",
+      label: "Startup Command Center",
+      href: "/admin-startup-guide.html",
+      description: "All blockers, evidence, production checks, guided tests, and next-20 roadmap in one interface",
+      visible: () => globalScope.AdminAuth.canAccessPage("admin-startup-guide") || globalScope.AdminAuth.canAccessPage("admin")
+    },
+    {
       key: "admin-launch-readiness",
       label: "Launch Readiness",
       href: "/admin-launch-readiness.html",
       description: "Preflight evidence, blockers and controlled go-live checks",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-launch-readiness") || globalScope.AdminAuth.canAccessPage("admin")
+      visible: () => false // Build 239 compatibility route now forwards into Startup Command Center
     },
     {
       key: "admin-creative-projects",
@@ -277,7 +312,7 @@
       label: "Roadmap Execution",
       href: "/admin-roadmap-execution.html",
       description: "DB-backed next-20 execution queue and DAIP planning policy",
-      visible: () => globalScope.AdminAuth.canAccessPage("admin-roadmap-execution")
+      visible: () => false // Build 239 roadmap is embedded in Startup Command Center
     },
     {
       key: "admin-integrations",

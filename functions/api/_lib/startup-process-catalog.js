@@ -960,4 +960,119 @@ export const STARTUP_PROCESS_CATALOG_BUILD246 = [
   }
 ];
 
-export const STARTUP_PROCESS_BUILD = 246;
+// Build 260 keeps historical process rows for audit, but removes completed build/migration
+// mechanics from the current operator checklist. Current launch acceptance remains explicit.
+export const RETIRED_STARTUP_PROCESS_IDS_BUILD260 = new Set([
+  'deploy-239',
+  'migration-237',
+  'migration-238',
+  'migration-239',
+  'migration-240',
+  'startup-single-interface',
+  'media-derivatives',
+  'markdown-retirement'
+]);
+
+const STARTUP_PROCESS_BUILD260_ADDITIONS = [
+  {
+    id:'deploy-260', order:1, category:'Deployment and UI health', severity:'blocker',
+    title:'Deploy Build 260 and verify current assets, cache and Startup Command Center',
+    why:'A mixed deployment can make current pages execute historical startup scripts or service-worker caches. Build 260 makes deployed-build parity a current acceptance requirement rather than asking staff to re-approve old build migrations.',
+    where:['Cloudflare Pages → Deployments','/admin-startup-guide.html#ui-health','/admin-ui-health.html','Browser DevTools → Network and Application'],
+    steps:[
+      'Deploy the complete Build 260 Pages and Functions output to preview/staging.',
+      'Hard-refresh /admin-startup-guide and run Check cache & build.',
+      'Confirm the expected startup script build, fetched build and active rosie-app service-worker cache all report Build 260.',
+      'Open /admin-ui-health and run the current route scan at desktop and phone widths.',
+      'Confirm there is no recurring 404/500/1102 on required startup, media or booking APIs.',
+      'Record only the deployment ID/date and safe outcome in evidence; do not store credentials or customer data.'
+    ],
+    done_when:'The current deployment, startup script, UI scanner and service-worker cache all identify Build 260, required routes pass, and no historical cache/build mismatch remains.',
+    route:'/admin-startup-guide.html#ui-health', evidence_key:'deploy_260', source_build:260
+  },
+  {
+    id:'photo-studio-sync-260', order:40, category:'Media and public proof', severity:'high',
+    title:'Accept the bounded Photo Studio R2 sync and assignment reset workflow',
+    why:'The public image library is now large enough that one Worker invocation must not scan and patch the entire library. Build 260 synchronizes one cursor-bounded page from one approved R2 folder per invocation and batches database upserts while preserving explicit placements.',
+    where:['/admin-photo-studio.html','Cloudflare Workers Logs','Supabase → app_media_library','Supabase → app_media_assignments'],
+    steps:[
+      'Open Photo Studio normally and confirm it loads from the managed database without scanning R2.',
+      'Press Sync approved R2 photos once and confirm each approved folder completes without Too many subrequests or Error 1102.',
+      'Assign one harmless photo to two different test placements and confirm both placements remain visible.',
+      'Reset one of those placements to default and confirm only that placement returns to its authored/default image.',
+      'Confirm the second placement still uses the selected photo and the photo remains in the library.',
+      'Remove the remaining test assignment or restore the original authored assignment before finishing.'
+    ],
+    done_when:'Approved-folder sync completes within Worker limits, one photo can safely serve multiple placements, and Reset to default removes only the selected explicit placement.',
+    route:'/admin-photo-studio.html', evidence_key:'photo_sync_260', source_build:260
+  },
+  {
+    id:'vehicle-size-review-259', order:41, category:'Booking and customer communication', severity:'blocker',
+    title:'Accept the Build 259 uncertain vehicle-size review and customer correction flow',
+    why:'Bookings with an uncertain vehicle classification must not silently charge the wrong package size. Staff need to verify the selected size or send a secure correction that the customer can confirm or cancel.',
+    where:['sql/2026-08-13_build259_vehicle_size_review.sql','/admin-booking.html','/book.html','test customer email'],
+    steps:[
+      'Confirm the Build 259 vehicle-size review migration has been applied in staging.',
+      'Create one harmless booking with a model that can be classified confidently and confirm it remains verified.',
+      'Create one harmless uncertain/manual vehicle and confirm it is flagged for staff review.',
+      'Verify one uncertain booking without changing size and confirm no customer interruption is required.',
+      'For another test booking, propose a corrected size/price and send the secure confirmation link.',
+      'Open the link as the test customer, confirm the corrected booking, then separately test the cancel outcome with another harmless record.',
+      'Verify expired/used tokens cannot be reused.'
+    ],
+    done_when:'Known vehicles stay verified, uncertain vehicles enter review, staff can accept or propose a correction, and the one-time customer link can confirm or cancel safely.',
+    route:'/admin-booking.html', evidence_key:'vehicle_size_review_259', source_build:260
+  },
+  {
+    id:'media-health-260', order:42, category:'Media and public proof', severity:'high',
+    title:'Accept database-first Media Health and a bounded public-delivery sample',
+    why:'Media Health should summarize the managed library cheaply and only perform a small explicit delivery sample. It must not fan out hundreds of public URL probes during page load.',
+    where:['/admin-media-health.html','/admin-photo-studio.html','Cloudflare Workers Logs'],
+    steps:[
+      'Open Media Health and confirm the managed-library summary loads without a deep public scan.',
+      'Review missing alt text, large files, unassigned images, missing storage identity and duplicate candidates.',
+      'Use the Photo Studio links from a few flagged items and confirm they select or locate the correct asset.',
+      'Run the explicit public-delivery sample and confirm it checks only the bounded sample shown in the interface.',
+      'Confirm normal page load and summary refresh do not produce subrequest-limit or 1102 errors.'
+    ],
+    done_when:'Media Health is current with Photo Studio, normal load is database-first, and the explicit delivery sample is bounded and actionable.',
+    route:'/admin-media-health.html', evidence_key:'media_health_260', source_build:260
+  },
+  {
+    id:'daip-project-flow-260', order:43, category:'DAIP and media', severity:'high',
+    title:'Accept the normal fresh DAIP project workflow and governance boundaries',
+    why:'Creative Projects is the normal starting point for new DAIP work. Intake Dry Run is only a fictional validation rehearsal and Gate C is a governance/technical evidence gate, not a per-project publishing button.',
+    where:['/admin-creative-projects.html','/admin-daip-media.html','/admin-daip-intake-dry-run.html','/admin-daip-gate-c.html'],
+    steps:[
+      'Create one harmless Creative Project using the Start fresh DAIP project guidance.',
+      'Open private DAIP Media Intake for that project and confirm raw media remains private.',
+      'Use Intake Dry Run separately with fictional metadata to confirm validation/rejection rules without uploading a real file.',
+      'Open Gate C and confirm it records technical/governance review evidence only and remains held unless the broader gate criteria are deliberately satisfied.',
+      'Return to the Creative Project and confirm consent/content-package review remains separate from raw-media intake.'
+    ],
+    done_when:'Staff can explain and follow Create Project → private raw intake → review/content package, while Dry Run and Gate C are used only for their intended validation/governance purposes.',
+    route:'/admin-creative-projects.html', evidence_key:'daip_project_flow_260', source_build:260
+  },
+  {
+    id:'quote-pipeline-259', order:44, category:'Leads and fleet', severity:'high',
+    title:'Accept the editable quote pipeline and booking hand-off',
+    why:'Fleet and custom-service leads need an actionable quote workspace rather than a read-only dashboard.',
+    where:['/admin-quotes.html','/fleet.html','/admin-booking.html'],
+    steps:[
+      'Create or select one harmless quote row.',
+      'Edit customer, town, scope, quoted amount, probability, source, follow-up stage and follow-up date.',
+      'Save and refresh to confirm the shared database record persists.',
+      'Link a harmless booking where appropriate and use Open booking dashboard.',
+      'Confirm mobile/tablet controls remain usable and no quote action silently changes an unrelated booking.'
+    ],
+    done_when:'A quote can be selected, edited, saved, followed up and deliberately linked to a booking with clear shared state.',
+    route:'/admin-quotes.html', evidence_key:'quote_pipeline_259', source_build:260
+  }
+];
+
+export const STARTUP_PROCESS_CATALOG_BUILD260 = [
+  ...STARTUP_PROCESS_CATALOG_BUILD246.filter((item)=>!RETIRED_STARTUP_PROCESS_IDS_BUILD260.has(String(item.id||item.process_key||''))),
+  ...STARTUP_PROCESS_BUILD260_ADDITIONS
+].sort((a,b)=>Number(a.order||a.sort_order||9999)-Number(b.order||b.sort_order||9999));
+
+export const STARTUP_PROCESS_BUILD = 260;
