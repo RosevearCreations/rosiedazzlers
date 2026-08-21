@@ -1,3 +1,59 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 262
+
+**Updated:** 2026-08-20  
+**Purpose:** Current business/engineering direction. Read `AI_PROJECT_HANDOFF.md` first for exact implemented/deployment state.
+
+## Priority shift — reliability before feature expansion
+
+Rosie remains in controlled test mode, but Cloudflare recorded 2,244 exceeded-CPU terminations in the incident window. The business priority is therefore to stabilize the application before adding another major subsystem. Reliability work protects every later booking, payment, photo, accounting and DAIP workflow.
+
+## Build 262 value delivered
+
+- Removes the highest-volume browser-generated Worker traffic found in source: 30-second Admin Analytics fan-out, default 15-second Live Operations polling, 20-second Progress polling and analytics heartbeat/event fan-out.
+- Batches public analytics and makes telemetry fail open instead of competing with customer/admin workflows.
+- Moves heavy analytics rollup computation into Supabase/PostgreSQL rather than Cloudflare Worker JavaScript.
+- Removes automatic Photo Studio replay after 5xx so a CPU termination cannot immediately amplify into another expensive invocation or accidental repeated write.
+- Compacts routine API JSON responses and combines multi-key app-setting reads to reduce common-path CPU/payload overhead.
+- Adds browser-local Runtime & CPU Diagnostics with route/status/wall-time/Ray evidence and no extra Worker storage request.
+- Adds a source-risk inventory of actual request handlers so remaining optimization can be evidence-directed rather than random.
+- Keeps static Pages traffic outside Functions and preserves the existing image/SEO/mobile/security boundaries.
+
+## Current next 20
+
+1. Apply `sql/2026-08-20_build262_cpu_safe_analytics_rollups.sql`.
+2. Deploy Build 262 Pages + Functions together and prove Build 262 cache/script/service-worker parity.
+3. Exercise representative admin workflows and export Runtime & CPU Diagnostics if any API returns 5xx/network failure.
+4. Verify Admin Analytics no longer creates background requests while left open.
+5. Verify Live Operations is manual by default and hidden-tab safe.
+6. Verify customer Progress polling is no faster than 120 seconds.
+7. Verify public analytics batching and circuit-breaker behavior with harmless browsing.
+8. Safely enable persistent Cloudflare Workers Logs using the downloaded current Pages configuration; do not replace dashboard bindings with a hand-written partial config.
+9. Observe a representative test window and target **Exceeded CPU Time Limits = 0**.
+10. Group any remaining CPU/resource events by pathname and compare with the packaged source-risk audit.
+11. Optimize only routes supported by measured evidence; move SQL aggregation/filtering into Postgres where practical.
+12. Confirm no retry amplification or partial-write duplication on 5xx/1102-style failures.
+13. Re-run booking/deposit/final-balance/refund/webhook acceptance after CPU stabilization.
+14. Re-run vehicle-size correction and Quote Pipeline acceptance.
+15. Re-run Photo Studio sync/multi-placement/reset and Media Health acceptance.
+16. Complete inventory posting/reversal/idempotency acceptance.
+17. Complete email/SMS provider delivery and failure evidence.
+18. Resume real-device CSS/accessibility and public SEO/local-proof acceptance.
+19. Resume private DAIP processor/derivative implementation only after ordinary Worker stability is proven.
+20. Rehearse restore/rollback and then move toward a controlled invite-only soft launch.
+
+## Permanent CPU/reliability guardrails
+
+- No routine admin/customer API polling faster than 60 seconds; prefer initial load + manual refresh.
+- Pause optional refresh while the page is hidden.
+- Non-essential telemetry must fail open and must not aggressively retry.
+- Do not aggregate very large datasets in Worker JavaScript when SQL can perform the work.
+- No automatic retry of non-idempotent writes after 5xx/resource termination unless state is first checked.
+- Keep routine response serialization compact.
+- Keep Pages Functions scoped to `/api/*`; static assets must not depend on the Functions runtime.
+- One public H1, concise titles, honest local relevance, responsive/mobile CSS and accessibility remain required during reliability work.
+
+---
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 261
 
 **Updated:** 2026-08-19
@@ -1683,3 +1739,5 @@ Build 247 establishes the private source-of-truth media layer needed for the DAI
 <!-- BUILD260_SYNC: 2026-08-18 | Cursor-paged Photo Studio R2 sync + batched exact-key upsert; multi-placement/reset; current Startup evidence/cache/UI health; database-first Media Health; clarified DAIP project/Dry Run/Gate C roles; two living Markdown authorities. -->
 
 <!-- Historical release compatibility: # CURRENT LIVING AUTHORITY 2 OF 2 — Build 260 -->
+
+<!-- BUILD262_SYNC: 2026-08-20 | P0 Worker CPU stabilization + browser-local diagnostics + observability setup. -->
