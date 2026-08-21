@@ -1,0 +1,691 @@
+{
+  "build": 262,
+  "generated_at": "2026-08-20",
+  "note": "Source heuristic of actual request handlers only; not measured Worker CPU. Review alongside local browser diagnostics and Cloudflare metrics.",
+  "highest_risk_routes": [
+    {
+      "path": "/api/admin/analytics_overview",
+      "source": "functions/api/admin/analytics_overview.js",
+      "heuristic_score": 126.7,
+      "fetch_calls": 6,
+      "loop_constructs": 59,
+      "sort_calls": 10,
+      "json_ops": 0,
+      "large_query_limits": [
+        1500,
+        4000,
+        1500,
+        1000,
+        2000,
+        1000
+      ],
+      "bytes": 25056
+    },
+    {
+      "path": "/api/checkout",
+      "source": "functions/api/checkout.js",
+      "heuristic_score": 50.4,
+      "fetch_calls": 6,
+      "loop_constructs": 19,
+      "sort_calls": 0,
+      "json_ops": 6,
+      "large_query_limits": [],
+      "bytes": 27879
+    },
+    {
+      "path": "/api/admin/today_needs_attention_report",
+      "source": "functions/api/admin/today_needs_attention_report.js",
+      "heuristic_score": 40.2,
+      "fetch_calls": 1,
+      "loop_constructs": 24,
+      "sort_calls": 1,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 13729
+    },
+    {
+      "path": "/api/progress/view",
+      "source": "functions/api/progress/view.js",
+      "heuristic_score": 38.9,
+      "fetch_calls": 10,
+      "loop_constructs": 5,
+      "sort_calls": 0,
+      "json_ops": 2,
+      "large_query_limits": [],
+      "bytes": 10599
+    },
+    {
+      "path": "/api/day_schedule",
+      "source": "functions/api/day_schedule.js",
+      "heuristic_score": 37.9,
+      "fetch_calls": 3,
+      "loop_constructs": 20,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 10489
+    },
+    {
+      "path": "/api/admin/day_schedule",
+      "source": "functions/api/admin/day_schedule.js",
+      "heuristic_score": 37.9,
+      "fetch_calls": 3,
+      "loop_constructs": 20,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 10490
+    },
+    {
+      "path": "/api/admin/service_area_rules",
+      "source": "functions/api/admin/service_area_rules.js",
+      "heuristic_score": 36.4,
+      "fetch_calls": 5,
+      "loop_constructs": 14,
+      "sort_calls": 0,
+      "json_ops": 2,
+      "large_query_limits": [],
+      "bytes": 9616
+    },
+    {
+      "path": "/api/jobsite_detail",
+      "source": "functions/api/jobsite_detail.js",
+      "heuristic_score": 35.9,
+      "fetch_calls": 8,
+      "loop_constructs": 8,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 8064
+    },
+    {
+      "path": "/api/gifts/webhook",
+      "source": "functions/api/gifts/webhook.js",
+      "heuristic_score": 35.4,
+      "fetch_calls": 4,
+      "loop_constructs": 15,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [],
+      "bytes": 11310
+    },
+    {
+      "path": "/api/admin/assign_booking",
+      "source": "functions/api/admin/assign_booking.js",
+      "heuristic_score": 33.8,
+      "fetch_calls": 7,
+      "loop_constructs": 6,
+      "sort_calls": 1,
+      "json_ops": 3,
+      "large_query_limits": [],
+      "bytes": 10629
+    },
+    {
+      "path": "/api/admin/quote_deposit_request_create",
+      "source": "functions/api/admin/quote_deposit_request_create.js",
+      "heuristic_score": 33.5,
+      "fetch_calls": 9,
+      "loop_constructs": 1,
+      "sort_calls": 0,
+      "json_ops": 7,
+      "large_query_limits": [],
+      "bytes": 16067
+    },
+    {
+      "path": "/api/admin/booking_save",
+      "source": "functions/api/admin/booking_save.js",
+      "heuristic_score": 32.6,
+      "fetch_calls": 9,
+      "loop_constructs": 1,
+      "sort_calls": 0,
+      "json_ops": 5,
+      "large_query_limits": [],
+      "bytes": 20469
+    },
+    {
+      "path": "/api/admin/production_reliability_report",
+      "source": "functions/api/admin/production_reliability_report.js",
+      "heuristic_score": 32.4,
+      "fetch_calls": 1,
+      "loop_constructs": 18,
+      "sort_calls": 1,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 14317
+    },
+    {
+      "path": "/api/admin/jobsite_detail",
+      "source": "functions/api/admin/jobsite_detail.js",
+      "heuristic_score": 31.6,
+      "fetch_calls": 8,
+      "loop_constructs": 5,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 7305
+    },
+    {
+      "path": "/api/admin/catalog_supplier_link_preview",
+      "source": "functions/api/admin/catalog_supplier_link_preview.js",
+      "heuristic_score": 31.6,
+      "fetch_calls": 3,
+      "loop_constructs": 13,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [
+        1200
+      ],
+      "bytes": 20929
+    },
+    {
+      "path": "/api/landing_pages_public",
+      "source": "functions/api/landing_pages_public.js",
+      "heuristic_score": 30.9,
+      "fetch_calls": 1,
+      "loop_constructs": 18,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [],
+      "bytes": 14010
+    },
+    {
+      "path": "/api/admin/progress_list",
+      "source": "functions/api/admin/progress_list.js",
+      "heuristic_score": 30.7,
+      "fetch_calls": 7,
+      "loop_constructs": 6,
+      "sort_calls": 0,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 9439
+    },
+    {
+      "path": "/api/client/dashboard",
+      "source": "functions/api/client/dashboard.js",
+      "heuristic_score": 30.6,
+      "fetch_calls": 7,
+      "loop_constructs": 6,
+      "sort_calls": 0,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 8939
+    },
+    {
+      "path": "/api/admin/job_summary_generate",
+      "source": "functions/api/admin/job_summary_generate.js",
+      "heuristic_score": 30.0,
+      "fetch_calls": 5,
+      "loop_constructs": 9,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [],
+      "bytes": 10636
+    },
+    {
+      "path": "/api/admin/media_asset_health_scan",
+      "source": "functions/api/admin/media_asset_health_scan.js",
+      "heuristic_score": 29.8,
+      "fetch_calls": 4,
+      "loop_constructs": 11,
+      "sort_calls": 0,
+      "json_ops": 2,
+      "large_query_limits": [],
+      "bytes": 15054
+    },
+    {
+      "path": "/api/admin/lead_conversion_create_booking",
+      "source": "functions/api/admin/lead_conversion_create_booking.js",
+      "heuristic_score": 29.7,
+      "fetch_calls": 6,
+      "loop_constructs": 4,
+      "sort_calls": 0,
+      "json_ops": 7,
+      "large_query_limits": [
+        1500
+      ],
+      "bytes": 12752
+    },
+    {
+      "path": "/api/progress/recommendation_decide",
+      "source": "functions/api/progress/recommendation_decide.js",
+      "heuristic_score": 29.4,
+      "fetch_calls": 8,
+      "loop_constructs": 0,
+      "sort_calls": 0,
+      "json_ops": 7,
+      "large_query_limits": [
+        1000
+      ],
+      "bytes": 10951
+    },
+    {
+      "path": "/api/admin/local_seo_proof_report",
+      "source": "functions/api/admin/local_seo_proof_report.js",
+      "heuristic_score": 29.1,
+      "fetch_calls": 1,
+      "loop_constructs": 16,
+      "sort_calls": 1,
+      "json_ops": 2,
+      "large_query_limits": [],
+      "bytes": 8636
+    },
+    {
+      "path": "/api/admin/customers_detail",
+      "source": "functions/api/admin/customers_detail.js",
+      "heuristic_score": 28.6,
+      "fetch_calls": 7,
+      "loop_constructs": 5,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 6934
+    },
+    {
+      "path": "/api/admin/conversion_funnel_summary",
+      "source": "functions/api/admin/conversion_funnel_summary.js",
+      "heuristic_score": 27.9,
+      "fetch_calls": 2,
+      "loop_constructs": 11,
+      "sort_calls": 2,
+      "json_ops": 0,
+      "large_query_limits": [
+        2000,
+        1000
+      ],
+      "bytes": 6292
+    },
+    {
+      "path": "/api/admin/photo_library_health",
+      "source": "functions/api/admin/photo_library_health.js",
+      "heuristic_score": 27.8,
+      "fetch_calls": 1,
+      "loop_constructs": 17,
+      "sort_calls": 0,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 5651
+    },
+    {
+      "path": "/api/paypal/capture-order",
+      "source": "functions/api/paypal/capture-order.js",
+      "heuristic_score": 27.6,
+      "fetch_calls": 8,
+      "loop_constructs": 0,
+      "sort_calls": 0,
+      "json_ops": 6,
+      "large_query_limits": [],
+      "bytes": 6844
+    },
+    {
+      "path": "/api/dashboard_summary",
+      "source": "functions/api/dashboard_summary.js",
+      "heuristic_score": 27.0,
+      "fetch_calls": 4,
+      "loop_constructs": 10,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 11791
+    },
+    {
+      "path": "/api/admin/dashboard_summary",
+      "source": "functions/api/admin/dashboard_summary.js",
+      "heuristic_score": 27.0,
+      "fetch_calls": 4,
+      "loop_constructs": 10,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 11792
+    },
+    {
+      "path": "/api/admin/catalog_inventory_bulk_update",
+      "source": "functions/api/admin/catalog_inventory_bulk_update.js",
+      "heuristic_score": 26.8,
+      "fetch_calls": 2,
+      "loop_constructs": 13,
+      "sort_calls": 0,
+      "json_ops": 2,
+      "large_query_limits": [
+        1000
+      ],
+      "bytes": 7086
+    },
+    {
+      "path": "/api/admin/workflow_command_center_report",
+      "source": "functions/api/admin/workflow_command_center_report.js",
+      "heuristic_score": 26.5,
+      "fetch_calls": 1,
+      "loop_constructs": 16,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 12634
+    },
+    {
+      "path": "/api/admin/quote_deposit_request_mark_paid",
+      "source": "functions/api/admin/quote_deposit_request_mark_paid.js",
+      "heuristic_score": 26.4,
+      "fetch_calls": 7,
+      "loop_constructs": 1,
+      "sort_calls": 0,
+      "json_ops": 6,
+      "large_query_limits": [],
+      "bytes": 8814
+    },
+    {
+      "path": "/api/stripe/webhook",
+      "source": "functions/api/stripe/webhook.js",
+      "heuristic_score": 26.3,
+      "fetch_calls": 4,
+      "loop_constructs": 7,
+      "sort_calls": 0,
+      "json_ops": 6,
+      "large_query_limits": [],
+      "bytes": 17666
+    },
+    {
+      "path": "/api/service_area_rules_public",
+      "source": "functions/api/service_area_rules_public.js",
+      "heuristic_score": 25.9,
+      "fetch_calls": 2,
+      "loop_constructs": 12,
+      "sort_calls": 1,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 6959
+    },
+    {
+      "path": "/api/admin/progress_convert_incident",
+      "source": "functions/api/admin/progress_convert_incident.js",
+      "heuristic_score": 25.2,
+      "fetch_calls": 5,
+      "loop_constructs": 3,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [
+        4000
+      ],
+      "bytes": 6109
+    },
+    {
+      "path": "/api/media_library_list",
+      "source": "functions/api/media_library_list.js",
+      "heuristic_score": 25.0,
+      "fetch_calls": 2,
+      "loop_constructs": 11,
+      "sort_calls": 1,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 6756
+    },
+    {
+      "path": "/api/admin/live_interaction_report",
+      "source": "functions/api/admin/live_interaction_report.js",
+      "heuristic_score": 25.0,
+      "fetch_calls": 2,
+      "loop_constructs": 13,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 7137
+    },
+    {
+      "path": "/api/admin/lead_conversion_price_reconcile",
+      "source": "functions/api/admin/lead_conversion_price_reconcile.js",
+      "heuristic_score": 24.8,
+      "fetch_calls": 1,
+      "loop_constructs": 14,
+      "sort_calls": 0,
+      "json_ops": 2,
+      "large_query_limits": [],
+      "bytes": 11256
+    },
+    {
+      "path": "/api/admin/media_library_list",
+      "source": "functions/api/admin/media_library_list.js",
+      "heuristic_score": 24.4,
+      "fetch_calls": 2,
+      "loop_constructs": 11,
+      "sort_calls": 1,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 6020
+    },
+    {
+      "path": "/api/admin/photo_library_delete",
+      "source": "functions/api/admin/photo_library_delete.js",
+      "heuristic_score": 24.0,
+      "fetch_calls": 7,
+      "loop_constructs": 1,
+      "sort_calls": 0,
+      "json_ops": 2,
+      "large_query_limits": [],
+      "bytes": 5327
+    },
+    {
+      "path": "/api/admin/pricing_suggestions_for_lead",
+      "source": "functions/api/admin/pricing_suggestions_for_lead.js",
+      "heuristic_score": 24.0,
+      "fetch_calls": 1,
+      "loop_constructs": 11,
+      "sort_calls": 2,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 9061
+    },
+    {
+      "path": "/api/before_after_gallery_public",
+      "source": "functions/api/before_after_gallery_public.js",
+      "heuristic_score": 23.0,
+      "fetch_calls": 2,
+      "loop_constructs": 9,
+      "sort_calls": 1,
+      "json_ops": 3,
+      "large_query_limits": [],
+      "bytes": 11184
+    },
+    {
+      "path": "/api/detailer/jobs",
+      "source": "functions/api/detailer/jobs.js",
+      "heuristic_score": 23.0,
+      "fetch_calls": 3,
+      "loop_constructs": 9,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [
+        1000
+      ],
+      "bytes": 4683
+    },
+    {
+      "path": "/api/customers_detail",
+      "source": "functions/api/customers_detail.js",
+      "heuristic_score": 22.7,
+      "fetch_calls": 6,
+      "loop_constructs": 3,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 6348
+    },
+    {
+      "path": "/api/admin/quote_proposal_drafts_save",
+      "source": "functions/api/admin/quote_proposal_drafts_save.js",
+      "heuristic_score": 21.5,
+      "fetch_calls": 2,
+      "loop_constructs": 1,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [
+        12000
+      ],
+      "bytes": 6795
+    },
+    {
+      "path": "/api/admin/booking_detail",
+      "source": "functions/api/admin/booking_detail.js",
+      "heuristic_score": 21.4,
+      "fetch_calls": 6,
+      "loop_constructs": 2,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 7381
+    },
+    {
+      "path": "/api/live_list",
+      "source": "functions/api/live_list.js",
+      "heuristic_score": 21.0,
+      "fetch_calls": 2,
+      "loop_constructs": 10,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 12378
+    },
+    {
+      "path": "/api/admin/live_list",
+      "source": "functions/api/admin/live_list.js",
+      "heuristic_score": 21.0,
+      "fetch_calls": 2,
+      "loop_constructs": 10,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 12379
+    },
+    {
+      "path": "/api/customers_list",
+      "source": "functions/api/customers_list.js",
+      "heuristic_score": 20.9,
+      "fetch_calls": 3,
+      "loop_constructs": 8,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 8883
+    },
+    {
+      "path": "/api/admin/customers_list",
+      "source": "functions/api/admin/customers_list.js",
+      "heuristic_score": 20.9,
+      "fetch_calls": 3,
+      "loop_constructs": 8,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 8324
+    },
+    {
+      "path": "/api/admin/payment_refund_status_poll",
+      "source": "functions/api/admin/payment_refund_status_poll.js",
+      "heuristic_score": 20.2,
+      "fetch_calls": 6,
+      "loop_constructs": 0,
+      "sort_calls": 0,
+      "json_ops": 3,
+      "large_query_limits": [],
+      "bytes": 8070
+    },
+    {
+      "path": "/api/admin/progress_media_reuse",
+      "source": "functions/api/admin/progress_media_reuse.js",
+      "heuristic_score": 20.2,
+      "fetch_calls": 5,
+      "loop_constructs": 2,
+      "sort_calls": 0,
+      "json_ops": 4,
+      "large_query_limits": [],
+      "bytes": 5372
+    },
+    {
+      "path": "/api/admin/staff_detail",
+      "source": "functions/api/admin/staff_detail.js",
+      "heuristic_score": 20.1,
+      "fetch_calls": 4,
+      "loop_constructs": 5,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 11558
+    },
+    {
+      "path": "/api/staff_detail",
+      "source": "functions/api/staff_detail.js",
+      "heuristic_score": 20.0,
+      "fetch_calls": 4,
+      "loop_constructs": 5,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 11206
+    },
+    {
+      "path": "/api/admin/pricing_catalog_repair",
+      "source": "functions/api/admin/pricing_catalog_repair.js",
+      "heuristic_score": 20.0,
+      "fetch_calls": 2,
+      "loop_constructs": 8,
+      "sort_calls": 0,
+      "json_ops": 4,
+      "large_query_limits": [],
+      "bytes": 6091
+    },
+    {
+      "path": "/api/progress_list",
+      "source": "functions/api/progress_list.js",
+      "heuristic_score": 19.9,
+      "fetch_calls": 6,
+      "loop_constructs": 1,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 5406
+    },
+    {
+      "path": "/api/admin/booking_form_data",
+      "source": "functions/api/admin/booking_form_data.js",
+      "heuristic_score": 19.8,
+      "fetch_calls": 5,
+      "loop_constructs": 3,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 6735
+    },
+    {
+      "path": "/api/admin/catalog_bulk_import",
+      "source": "functions/api/admin/catalog_bulk_import.js",
+      "heuristic_score": 19.8,
+      "fetch_calls": 1,
+      "loop_constructs": 11,
+      "sort_calls": 0,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 7457
+    },
+    {
+      "path": "/api/admin/pricing_catalog_diagnostics",
+      "source": "functions/api/admin/pricing_catalog_diagnostics.js",
+      "heuristic_score": 19.7,
+      "fetch_calls": 1,
+      "loop_constructs": 11,
+      "sort_calls": 0,
+      "json_ops": 1,
+      "large_query_limits": [],
+      "bytes": 5739
+    },
+    {
+      "path": "/api/admin/creative_project_detail",
+      "source": "functions/api/admin/creative_project_detail.js",
+      "heuristic_score": 19.2,
+      "fetch_calls": 0,
+      "loop_constructs": 13,
+      "sort_calls": 0,
+      "json_ops": 0,
+      "large_query_limits": [],
+      "bytes": 8891
+    }
+  ]
+}

@@ -34,7 +34,7 @@ export async function onRequestPost(context) {
     let headers = jsonHeaders();
     headers = appendSetCookie(headers, session.cookie);
     headers = applyCors(headers);
-    return new Response(JSON.stringify({ ok: true, message: "Signed in.", customer: formatCustomer(customer) }, null, 2), { status: 200, headers });
+    return new Response(JSON.stringify({ ok: true, message: "Signed in.", customer: formatCustomer(customer) }), { status: 200, headers });
   } catch (err) {
     return withCors(json(loginError(
       "Client sign-in is temporarily unavailable. Check the Supabase customer auth tables and Cloudflare environment variables.",
@@ -178,7 +178,7 @@ function safeError(err) {
 }
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), { status, headers: jsonHeaders() });
+  return new Response(JSON.stringify(data), { status, headers: jsonHeaders() });
 }
 
 function jsonHeaders() {

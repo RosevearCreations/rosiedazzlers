@@ -99,7 +99,7 @@ export async function onRequestGet(context) {
 }
 
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data, null, 2), {
+  return new Response(JSON.stringify(data), {
     status,
     headers: {
       "Content-Type": "application/json; charset=utf-8",
