@@ -1,4 +1,28 @@
+# Build 264 modular runtime documentation
+
+Current planning authority remains exactly two files: `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`.
+
+Build 264 runtime references:
+
+- `docs/modular-app/01_MODULAR_APPLICATION_ARCHITECTURE.md` — four-shell architecture and security/runtime principles.
+- `docs/modular-app/02_BUILD263_IMPLEMENTATION_PLAN.md` — staged migration plan.
+- `docs/modular-app/03_BUILD264_DETAILER_RUNTIME.md` — first active modular runtime and Detailer idle/live contract.
+- `data/build264_app_modules.json` — machine-readable current module/runtime status.
+- `BUILD264_SUMMARY.md` — release summary.
+- `STARTUP_GO_LIVE_BLOCKERS.md` — specialist deployment/acceptance runbook; not a strategy authority.
+
+---
+
 # Documentation Index — Build 262
+
+## Build 263 modular application architecture
+
+- `docs/modular-app/01_MODULAR_APPLICATION_ARCHITECTURE.md` — four-shell target architecture, access model, operational-state/timer policy and staged migration.
+- `docs/modular-app/02_BUILD263_IMPLEMENTATION_PLAN.md` — concrete implementation order beginning with shared app-core and Detailer Mobile.
+- `data/build263_app_modules.json` — machine-readable initial module registry.
+- `data/build263_route_migration_matrix.csv` — current top-level route → target shell inventory.
+- `data/build263_api_namespace_inventory.csv` — current API namespace/source inventory for future customer/detailer/operations/admin separation.
+
 
 ## Read these first
 
