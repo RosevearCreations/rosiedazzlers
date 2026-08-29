@@ -1,7 +1,0 @@
--- Build 161 conversion path / service chooser pass
--- Date: 2026-05-21
--- No database shape change is required in this pass.
--- Public Booking/Contact/Services pages now surface clearer package chooser,
--- package aliases, and photo-estimate guidance using existing pricing catalog data.
--- The enriched package metadata remains JSON/DB-compatible and should be carried
--- into app_management_settings.pricing_catalog when the DB-first catalog is updated.

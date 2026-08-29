@@ -1,8 +1,0 @@
--- Build 245 — UI/SEO/cache acceptance and public landing-page metadata hardening
--- Date: 2026-08-06
---
--- No database DDL is required for Build 245.
--- This release adds a protected browser-based UI/SEO health scanner, safer
--- service-worker installation/fallback behaviour, cache refresh controls,
--- static H1/content fallbacks for JavaScript landing pages, and admin noindex
--- corrections. Build 240 remains the latest functional schema migration.

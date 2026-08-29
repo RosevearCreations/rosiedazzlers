@@ -1,3 +1,0 @@
--- Build 136 no-DDL note: admin catalog click-to-edit, accounting pricing-window helper, homepage sample reviews, and pricing embedded booking continuation polish.
--- No database schema change is required for this pass.
--- Keep using dev as the active branch target. Future review API integration may add a reviews/content table or app_setting, but this pass uses static sample review cards only.

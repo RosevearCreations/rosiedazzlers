@@ -1,0 +1,37 @@
+# Rosie Dazzlers repository hygiene
+# New database migrations belong in /sql, not the repository root.
+/*.sql
+!/SUPABASE_SCHEMA.sql
+
+# Local/package artifacts
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.bak
+*.tmp
+*.temp
+*.log
+*.orig
+*.rej
+.DS_Store
+Thumbs.db
+
+# Tool/runtime caches
+node_modules/
+.wrangler/
+.dev.vars
+.env
+.env.*
+!.env.example
+__pycache__/
+*.py[cod]
+coverage/
+dist/
+build/
+tmp/
+temp/
+
+# Generated review/export artifacts
+reports/generated/

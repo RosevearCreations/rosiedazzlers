@@ -1,6 +1,0 @@
--- Build 170 customer dashboard signed-out fallback note — 2026-05-24
--- No DDL is required for this pass.
--- This note exists to keep schema handoff documentation current with the deployed build.
--- The customer dashboard endpoint was changed so a missing/signed-out customer session returns
--- a safe JSON response with HTTP 200 instead of a browser-console 401. Protected write endpoints
--- still return authorization errors when a session is required.

@@ -1,7 +1,0 @@
--- Build 201 friendly editor validation, media picker, and route-copy sync note.
--- No database schema changes are required for this pass.
--- Admin App inline validation, media URL picker helpers, consent/source badges,
--- landing schema previews, and save-review summaries run in the UI against the
--- existing app_management_settings JSON payloads.
--- scripts/sync_route_copies.py is a repository packaging helper and does not
--- require Supabase DDL.

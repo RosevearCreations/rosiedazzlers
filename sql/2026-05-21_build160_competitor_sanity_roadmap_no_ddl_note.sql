@@ -1,4 +1,0 @@
--- Build 160: competitor sanity check and roadmap reset
--- Date: 2026-05-21
--- No database DDL is required for this build.
--- This pass updates planning docs, release checks, and Services-page conversion guidance.

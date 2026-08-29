@@ -1,4 +1,0 @@
--- Build 225 — Social & Analytics Connections Centre and DAIP external-service boundary.
--- No database migration is required.
--- Runtime connection values are intentionally Cloudflare Variables and Secrets, never Supabase app settings.
--- This file exists as schema/release history evidence only.

@@ -1,9 +1,0 @@
--- Build 147: Admin App dropdown/mobile navigation repair
--- Date: 2026-05-16
--- No DDL required.
--- This pass fixes frontend/runtime behavior:
---   * adds mergeServiceAreaRows() in Admin App
---   * adds visible catalog dropdown option editor/save button
---   * compacts public mobile navigation
---   * adds scripts/mobile_nav_check.py release guard
--- Existing app_settings.catalog_dropdown_options remains the current storage path.
