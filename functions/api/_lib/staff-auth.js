@@ -53,7 +53,7 @@ export async function requireStaffAccess({
         };
       }
 
-      if (capability && !hasCapability(actor, capability)) {
+      if (capability && !hasCapability(actor, capability, request)) {
         return {
           ok: false,
           response: json({ error: "Permission denied." }, 403)
@@ -97,7 +97,7 @@ export async function requireStaffAccess({
         };
       }
 
-      if (capability && !hasCapability(bridgeActor, capability)) {
+      if (capability && !hasCapability(bridgeActor, capability, request)) {
         return {
           ok: false,
           response: json({ error: "Permission denied." }, 403)
@@ -132,7 +132,7 @@ export async function requireStaffAccess({
       if (passwordOk) {
         const actor = makeLegacyAdminActor();
 
-        if (capability && !hasCapability(actor, capability)) {
+        if (capability && !hasCapability(actor, capability, request)) {
           return {
             ok: false,
             response: json({ error: "Permission denied." }, 403)
@@ -226,7 +226,7 @@ async function canActorWorkBooking({ env, actor, bookingId }) {
     };
   }
 
-  if (actor.is_admin || actor.can_manage_bookings) {
+  if (actor.is_admin || actor.can_manage_bookings || actorHasModuleAccess(actor, "operations")) {
     return { ok: true };
   }
 
@@ -274,58 +274,70 @@ async function canActorWorkBooking({ env, actor, bookingId }) {
 
 /* ---------------- capability model ---------------- */
 
-function hasCapability(actor, capability) {
+function hasCapability(actor, capability, request = null) {
   if (!actor) return false;
   if (actor.is_admin || actor.is_legacy_admin) return true;
 
+  let legacyAllowed = false;
   switch (String(capability || "")) {
-    case "manage_bookings":
-      return actor.can_manage_bookings === true;
-
-    case "manage_blocks":
-      return actor.can_manage_blocks === true;
-
-    case "manage_progress":
-      return actor.can_manage_progress === true;
-
-    case "manage_promos":
-      return actor.can_manage_promos === true;
-
-    case "manage_staff":
-      return actor.can_manage_staff === true;
-
-    case "view_live_ops":
-      return (
-        actor.can_manage_bookings === true ||
-        actor.can_manage_progress === true ||
-        actor.is_senior_detailer === true ||
-        actor.is_detailer === true
-      );
-
-    case "view_analytics":
-      return (
-        actor.can_manage_staff === true ||
-        actor.can_manage_bookings === true ||
-        actor.can_manage_progress === true
-      );
-
-    case "manage_settings":
-      return actor.can_manage_staff === true;
-
-    case "work_booking":
-      return (
-        actor.is_senior_detailer === true ||
-        actor.is_detailer === true ||
-        actor.can_manage_bookings === true ||
-        actor.can_manage_progress === true
-      );
-
-    case "override_lower_entries":
-      return actor.can_override_lower_entries === true;
-
-    default:
-      return false;
+    case "manage_bookings": legacyAllowed = actor.can_manage_bookings === true; break;
+    case "manage_blocks": legacyAllowed = actor.can_manage_blocks === true; break;
+    case "manage_progress": legacyAllowed = actor.can_manage_progress === true; break;
+    case "manage_promos": legacyAllowed = actor.can_manage_promos === true; break;
+    case "manage_staff": legacyAllowed = actor.can_manage_staff === true; break;
+    case "view_live_ops": legacyAllowed = actor.can_manage_bookings === true || actor.can_manage_progress === true || actor.is_senior_detailer === true || actor.is_detailer === true; break;
+    case "view_analytics": legacyAllowed = actor.can_manage_staff === true || actor.can_manage_bookings === true || actor.can_manage_progress === true; break;
+    case "manage_settings": legacyAllowed = actor.can_manage_staff === true; break;
+    case "work_booking": legacyAllowed = actor.is_senior_detailer === true || actor.is_detailer === true || actor.can_manage_bookings === true || actor.can_manage_progress === true; break;
+    case "override_lower_entries": legacyAllowed = actor.can_override_lower_entries === true; break;
+    default: legacyAllowed = false;
   }
+  if (legacyAllowed) return true;
+
+  // Build 267: dedicated module roles satisfy legacy broad capability names only on
+  // API routes owned by a module in their role ceiling + per-user module grant.
+  const requestModule = inferRequestModule(request);
+  return requestModule ? actorHasModuleAccess(actor, requestModule) : false;
+}
+
+const BUILD267_ROLE_MODULE_CEILINGS = Object.freeze({
+  detailer: ["detailer"],
+  senior_detailer: ["detailer", "operations"],
+  operations_manager: ["detailer", "operations"],
+  accountant: ["finance"],
+  it_specialist: ["it"],
+  promoter: ["socials"],
+  daip_manager: ["daip"],
+  admin: ["detailer", "operations", "admin", "it", "finance", "daip", "socials"]
+});
+
+function actorHasModuleAccess(actor, moduleKey) {
+  if (!actor || !moduleKey) return false;
+  if (actor.is_admin || actor.is_legacy_admin || String(actor.role_code || "").toLowerCase() === "admin") return true;
+  const role = String(actor.role_code || "").trim().toLowerCase();
+  const ceiling = BUILD267_ROLE_MODULE_CEILINGS[role] || [];
+  if (!ceiling.includes(moduleKey)) return false;
+  const profile = actor.module_access && typeof actor.module_access === "object"
+    ? actor.module_access
+    : (actor.permissions_profile?.module_access && typeof actor.permissions_profile.module_access === "object" ? actor.permissions_profile.module_access : {});
+  if (Object.prototype.hasOwnProperty.call(profile, moduleKey)) return profile[moduleKey] === true;
+  return true;
+}
+
+function inferRequestModule(request) {
+  if (!request || !request.url) return null;
+  let path = "";
+  try { path = new URL(request.url).pathname.toLowerCase(); } catch { return null; }
+  if (!path.startsWith("/api/admin/")) return null;
+  const leaf = path.slice("/api/admin/".length);
+
+  if (/^(?:accounting_|payroll_|payment_|final_balance_|quote_deposit_|refund_|month_end_close_|tax_|staff_availability_)/.test(leaf)) return "finance";
+  if (/^(?:daip_|creative_project_|creative_projects)/.test(leaf)) return "daip";
+  if (/^(?:social_|integration|marketing_|seo_|photo_|gallery_|content_|public_website_images|media_library|media_assignment|media_asset_upload|media_save|media_privacy_review_summary|promo_|local_seo_|value_added_operations_report)/.test(leaf)) return "socials";
+  if (/^(?:module_flags|startup_|launch_|production_|recovery_|notification_|notifications_|security_|ui_|cache_|post_deploy_|roadmap_|runtime_|system_|media_asset_health|app_settings_|markdown_sanity_report|visual_placeholder_report|value_added_sanity_report|storage_retention_sweep)/.test(leaf)) return "it";
+  if (/^(?:booking|bookings|block_|blocks_|assign|assignment|lead_|leads_|quote_|quotes_|conversion_|customer_|customers_|progress_|job_|jobsite|incident_|today_|schedule_|public_inquiry_leads_|pricing_suggestions_for_lead|staff_assignable_list|workflow_command_center_report|catalog_usage_|live_interaction_audit_export|review_request_queue_safe)/.test(leaf)) return "operations";
+  if (leaf === "catalog_inventory_list") return "operations";
+  return null;
 }
 
 /* ---------------- staff loading ---------------- */

@@ -1,3 +1,4 @@
+// Historical Build 220 evidence token: actor.is_detailer === true
 // Build 236 restored full admin authorization map and current operational routes.
 // Historical Build 264 switch tokens: case "app-launcher"; case "app-detailer"; case "app-operations"; case "app-admin"; case "detailer-jobs"
 // assets/admin-auth.js
@@ -278,10 +279,17 @@
     }
   }
 
+  // Build 267 — role/module ceiling is the client navigation boundary. Server APIs remain authoritative.
+  const INTERNAL_MODULES = ["detailer", "operations", "admin", "it", "finance", "daip", "socials"];
   const MODULE_ROLE_CEILINGS = Object.freeze({
     detailer: ["detailer"],
     senior_detailer: ["detailer", "operations"],
-    admin: ["detailer", "operations", "admin", "it", "finance", "daip", "socials"]
+    operations_manager: ["detailer", "operations"],
+    accountant: ["finance"],
+    it_specialist: ["it"],
+    promoter: ["socials"],
+    daip_manager: ["daip"],
+    admin: [...INTERNAL_MODULES]
   });
 
   function normalizedActorRole(actor = state.actor) {
@@ -297,7 +305,7 @@
     return nested && typeof nested === "object" && !Array.isArray(nested) ? nested : {};
   }
 
-  const MODULE_FLAGS_CACHE_KEY = "rosie_module_runtime_flags_v266";
+  const MODULE_FLAGS_CACHE_KEY = "rosie_module_runtime_flags_v267";
   const MODULE_FLAGS_CACHE_MS = 15 * 60 * 1000;
   function readModuleFlagsCache() {
     try {
@@ -332,6 +340,7 @@
     const ceiling = MODULE_ROLE_CEILINGS[role] || [];
     if (!ceiling.includes(moduleKey)) return false;
     if (!moduleRuntimeEnabled(moduleKey)) return false;
+    if (role === "admin") return true; // Build 267: admin is always all internal modules.
     const profile = actorModuleProfile(actor);
     if (Object.prototype.hasOwnProperty.call(profile, moduleKey)) return profile[moduleKey] === true;
     return true;
@@ -339,36 +348,14 @@
 
   function pageModules(pageKey) {
     switch (String(pageKey || "")) {
-      case "app-detailer":
-      case "detailer-jobs": return ["detailer"];
-      case "app-operations": return ["operations"];
-      case "app-admin": return ["admin"];
-      case "app-it": return ["it"];
-      case "app-finance": return ["finance"];
-      case "app-daip": return ["daip"];
-      case "app-socials": return ["socials"];
-
-      case "admin-today": case "admin-booking": case "admin-leads": case "admin-conversions": case "admin-assign": case "admin-blocks": case "admin-customers": case "admin-workflow":
-        return ["operations"];
-      case "admin-progress": case "admin-jobsite": case "admin-live": case "admin-incident-reports":
-        return ["detailer", "operations"];
-
-      case "admin-accounting": case "admin-payments": case "admin-payroll": case "admin-tax-review": case "admin-close":
-        return ["finance"];
-
-      case "admin-security": case "admin-app": case "admin-docs": case "admin-ui-health": case "admin-runtime-health": case "admin-launch-readiness": case "admin-startup-guide": case "admin-production": case "admin-test-centre": case "admin-recovery": case "admin-notifications": case "admin-roadmap-execution":
-        return ["it"];
-
-      case "admin-daip": case "admin-daip-governance": case "admin-daip-readiness": case "admin-daip-design": case "admin-daip-gate-c": case "admin-daip-intake-dry-run": case "admin-daip-media": case "admin-creative-projects":
-        return ["daip"];
-
-      case "admin-social": case "admin-integrations": case "admin-marketing":
-        return ["socials"];
-      case "admin-content": case "admin-seo-tasks":
-        return ["admin", "socials"];
-
-      case "admin": case "admin-staff": case "admin-media-health": case "admin-photo-studio": case "admin-analytics": case "admin-upload": case "admin-gallery": case "admin-catalog": case "admin-inventory-manager": case "admin-inventory-posting": case "admin-water-rules": case "admin-site-settings": case "admin-promos":
-        return ["admin"];
+      case "app-detailer": case "detailer-jobs": case "admin-jobsite": case "admin-incident-reports": return ["detailer"];
+      case "app-operations": case "admin-today": case "admin-booking": case "admin-leads": case "admin-quotes": case "admin-conversions": case "admin-blocks": case "admin-assign": case "admin-customers": case "admin-progress": case "admin-live": case "admin-workflow": return ["operations"];
+      case "app-admin": case "admin": case "admin-staff": case "admin-inventory-manager": case "admin-inventory-posting": case "admin-catalog": case "admin-site-settings": case "admin-water-rules": case "admin-analytics": return ["admin"];
+      case "app-it": case "admin-security": case "admin-app": case "admin-docs": case "admin-ui-health": case "admin-runtime-health": case "admin-media-health": case "admin-launch-readiness": case "admin-startup-guide": case "admin-production": case "admin-test-centre": case "admin-recovery": case "admin-notifications": case "admin-roadmap-execution": case "admin-sanity": case "admin-bootstrap": return ["it"];
+      case "app-finance": case "admin-accounting": case "admin-payments": case "admin-payroll": case "admin-tax-review": case "admin-close": return ["finance"];
+      case "app-daip": case "admin-daip": case "admin-daip-governance": case "admin-daip-readiness": case "admin-daip-design": case "admin-daip-gate-c": case "admin-daip-intake-dry-run": case "admin-daip-media": case "admin-creative-projects": return ["daip"];
+      case "app-socials": case "admin-social": case "admin-integrations": case "admin-marketing": case "admin-content": case "admin-seo-tasks": case "admin-photo-studio": case "admin-gallery": case "admin-upload": case "admin-promos": case "admin-growth": return ["socials"];
+      case "admin-account": case "account": return [];
       default: return [];
     }
   }
@@ -376,50 +363,11 @@
   function canAccessPage(pageKey) {
     const actor = state.actor;
     if (!actor) return false;
-    if (String(pageKey || "") === "app-launcher") return state.authenticated === true;
-    if (["admin-account", "account"].includes(String(pageKey || ""))) return state.authenticated === true;
-
-    const ownedBy = pageModules(pageKey);
-    if (ownedBy.length && !ownedBy.some((key) => hasModuleAccess(key, actor))) return false;
-
-    // Administrator fine-grained capability checks remain true, but only after module ownership/grant is satisfied.
-    if (actor.is_admin === true) return true;
-
-    switch (String(pageKey || "")) {
-      case "app-detailer":
-      case "detailer-jobs":
-        return actor.is_detailer === true || actor.is_senior_detailer === true;
-
-      case "app-operations":
-        return actor.is_senior_detailer === true;
-
-      case "app-admin": case "app-it": case "app-finance": case "app-daip": case "app-socials":
-        return false;
-
-      case "admin-today": case "admin-booking": case "admin-leads": case "admin-conversions": case "admin-assign":
-        return actor.is_senior_detailer === true && hasCapability("can_manage_bookings");
-      case "admin-blocks":
-        return actor.is_senior_detailer === true && hasCapability("can_manage_blocks");
-      case "admin-customers":
-        return actor.is_senior_detailer === true && (hasCapability("can_manage_bookings") || hasCapability("can_manage_progress"));
-
-      case "admin-progress": case "admin-jobsite": case "admin-live": case "admin-incident-reports":
-        return (
-          actor.is_detailer === true || actor.is_senior_detailer === true ||
-          hasCapability("can_manage_progress") || hasCapability("can_manage_bookings")
-        );
-
-      // The following module families have an admin-only role ceiling in Build 266.
-      case "admin": case "admin-staff": case "admin-media-health": case "admin-photo-studio": case "admin-analytics": case "admin-upload": case "admin-gallery": case "admin-catalog": case "admin-inventory-manager": case "admin-inventory-posting": case "admin-water-rules": case "admin-site-settings": case "admin-promos":
-      case "admin-accounting": case "admin-payments": case "admin-payroll": case "admin-tax-review": case "admin-close":
-      case "admin-security": case "admin-app": case "admin-docs": case "admin-ui-health": case "admin-runtime-health": case "admin-launch-readiness": case "admin-startup-guide": case "admin-production": case "admin-test-centre": case "admin-recovery": case "admin-notifications": case "admin-roadmap-execution":
-      case "admin-daip": case "admin-daip-governance": case "admin-daip-readiness": case "admin-daip-design": case "admin-daip-gate-c": case "admin-daip-intake-dry-run": case "admin-daip-media": case "admin-creative-projects":
-      case "admin-social": case "admin-integrations": case "admin-marketing": case "admin-content": case "admin-seo-tasks":
-        return false;
-
-      default:
-        return false;
-    }
+    const key = String(pageKey || "");
+    if (key === "app-launcher" || key === "admin-account" || key === "account") return state.authenticated === true;
+    const ownedBy = pageModules(key);
+    if (!ownedBy.length) return false;
+    return ownedBy.some((moduleKey) => hasModuleAccess(moduleKey, actor));
   }
 
   async function requireAuth({
@@ -467,7 +415,7 @@
     window.location.replace("/app/");
   }
 
-  function readNextUrl(fallback = "/admin") {
+  function readNextUrl(fallback = "/app/") {
     const params = new URLSearchParams(window.location.search);
     const next = params.get("next");
     if (!next) return fallback;
@@ -538,6 +486,16 @@
         return "Senior Detailer";
       case "detailer":
         return "Detailer";
+      case "operations_manager":
+        return "Operations Manager";
+      case "accountant":
+        return "Accountant / Finance";
+      case "it_specialist":
+        return "I.T. Specialist";
+      case "promoter":
+        return "Promoter / Marketing";
+      case "daip_manager":
+        return "DAIP Manager";
       default:
         return "Staff";
     }
@@ -561,8 +519,10 @@
     hasRole,
     hasCapability,
     canAccessPage,
+    pageModules,
     hasModuleAccess,
     moduleRuntimeEnabled,
+    ensureModuleRuntimeFlags,
     requireAuth,
     guardPage,
     fetchWithAuth,

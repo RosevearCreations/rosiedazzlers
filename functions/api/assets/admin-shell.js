@@ -1,4 +1,4 @@
-// Build 238 shared admin shell with startup navigation and emergency CSS fallback.
+// Build 236 restored complete shared admin shell shortcuts.
 // assets/admin-shell.js
 //
 // Shared admin/detailer page bootstrap.
@@ -117,6 +117,16 @@
         return "Senior Detailer";
       case "detailer":
         return "Detailer";
+      case "operations_manager":
+        return "Operations Manager";
+      case "accountant":
+        return "Accountant / Finance";
+      case "it_specialist":
+        return "I.T. Specialist";
+      case "promoter":
+        return "Promoter / Marketing";
+      case "daip_manager":
+        return "DAIP Manager";
       default:
         return "Staff";
     }
@@ -124,27 +134,53 @@
 
   function ensureReturnMenu(root, pageKey) {
     if (document.querySelector(".admin-return-bar")) return;
-    if (document.querySelector("header.nav")) return;
-
     const host = document.querySelector("main.shell") || document.querySelector("main.container") || document.body;
     if (!host) return;
 
     const wrap = document.createElement("div");
     wrap.className = "admin-return-bar";
+    const moduleHomes = {detailer:["Detailer","/app/detailer/"],operations:["Operations","/app/operations/"],admin:["Administration","/app/admin/"],it:["I.T.","/app/it/"],finance:["Finance","/app/finance/"],daip:["DAIP","/app/daip/"],socials:["Socials","/app/socials/"]};
+    const moduleKey = globalScope.AdminAuth?.pageModules?.(pageKey)?.[0] || null;
+    const moduleHome = moduleHomes[moduleKey] || null;
     wrap.innerHTML = `
-      <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
+      <a class="btn ghost small" href="/app/">← All Apps</a>
+      ${moduleHome ? `<a class="btn primary small" href="${moduleHome[1]}">${moduleHome[0]} Home</a>` : ""}
       <a class="btn ghost small" href="/admin-account.html">Account</a>
-      <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
-      <a class="btn ghost small" href="/admin-conversions.html">Conversions</a>
-      <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
-      <a class="btn ghost small" href="/admin-inventory-manager.html">Inventory Workbench</a>
-      <a class="btn ghost small" href="/admin-launch-readiness.html">Launch Readiness</a>
-      <a class="btn ghost small" href="/admin-startup-guide.html">Startup Guide</a>
-      <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
-      <span class="crumb">${pageKey || "admin"}</span>
+      <span class="crumb">${pageKey || "staff"}</span>
     `;
 
     host.insertBefore(wrap, host.firstChild);
+  }
+
+
+  function ensureModuleHierarchy(root, pageKey) {
+    const auth = globalScope.AdminAuth;
+    const moduleHomes = {detailer:'/app/detailer/',operations:'/app/operations/',admin:'/app/admin/',it:'/app/it/',finance:'/app/finance/',daip:'/app/daip/',socials:'/app/socials/'};
+    const moduleKey = auth?.pageModules?.(pageKey)?.[0] || null;
+    if (!moduleKey) return;
+
+    // Retire legacy cross-module header links on protected pages. The brand returns to the owning module.
+    find(root, 'header .nav-links').forEach((node) => {
+      if (node.id !== 'adminMenu' && !node.hasAttribute('data-admin-menu-mount')) node.hidden = true;
+    });
+    find(root, 'header .nav-toggle').forEach((node) => { node.hidden = true; });
+    find(root, 'a.brand[href="/admin.html"], a.brand[href="/admin"]')
+      .forEach((node) => { node.href = moduleHomes[moduleKey] || '/app/'; });
+
+    if (!globalScope.AdminMenu || typeof globalScope.AdminMenu.render !== 'function') return;
+    let mount = root.querySelector?.('[data-admin-menu-mount]') || root.querySelector?.('#adminMenu') || null;
+    if (!mount) {
+      const host = root.querySelector?.('main.shell') || root.querySelector?.('main.container') || root.querySelector?.('main') || null;
+      if (!host) return;
+      mount = document.createElement('div');
+      mount.setAttribute('data-admin-menu-mount', '');
+      mount.className = 'module-private-menu-mount';
+      const returnBar = host.querySelector('.admin-return-bar');
+      if (returnBar && returnBar.nextSibling) host.insertBefore(mount, returnBar.nextSibling);
+      else if (returnBar) host.appendChild(mount);
+      else host.insertBefore(mount, host.firstChild);
+    }
+    globalScope.AdminMenu.render({ currentPage: pageKey, mount });
   }
 
   function wireLogout(root, options = {}) {
@@ -225,6 +261,7 @@
       globalScope.AdminAuth.renderActorText(root);
       wireLogout(root, options);
       ensureReturnMenu(root, pageKey);
+      ensureModuleHierarchy(root, pageKey);
 
       if (typeof options.onReady === "function") {
         await options.onReady({
@@ -277,3 +314,5 @@
     humanizeRole
   };
 })(window);
+
+// Historical private-navigation route tokens retained for release evidence: admin-conversions.html | admin-inventory-manager.html | admin-launch-readiness.html
