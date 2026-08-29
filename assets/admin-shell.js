@@ -143,7 +143,8 @@
     const moduleKey = globalScope.AdminAuth?.pageModules?.(pageKey)?.[0] || null;
     const moduleHome = moduleHomes[moduleKey] || null;
     wrap.innerHTML = `
-      <a class="btn ghost small" href="/app/">← All Apps</a>
+      <a class="btn ghost small" href="/">← Public Site</a>
+      <a class="btn ghost small" href="/app/">All Staff Apps</a>
       ${moduleHome ? `<a class="btn primary small" href="${moduleHome[1]}">${moduleHome[0]} Home</a>` : ""}
       <a class="btn ghost small" href="/admin-account.html">Account</a>
       <span class="crumb">${pageKey || "staff"}</span>
