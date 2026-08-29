@@ -10,6 +10,12 @@
     all('[data-notification-enable]').forEach((button)=>{button.disabled=!("Notification" in globalScope);});
     all('[data-notification-test]').forEach((button)=>{button.disabled=!("Notification" in globalScope)||Notification.permission!=="granted";});
   }
+  function pushRoutes(){
+    const isCustomer=document.body?.dataset?.appModule==='customer';
+    return isCustomer
+      ? {kind:'customer',config:'/api/customer_push_config',subscribe:'/api/customer_push_subscribe',unsubscribe:'/api/customer_push_unsubscribe'}
+      : {kind:'staff',config:'/api/push_config',subscribe:'/api/push_subscribe',unsubscribe:'/api/push_unsubscribe'};
+  }
   globalScope.addEventListener('beforeinstallprompt',(event)=>{event.preventDefault();deferredPrompt=event;state.installable=true;setStatus('Rosie can be installed as a standalone app on this device.');update();});
   globalScope.addEventListener('appinstalled',()=>{deferredPrompt=null;state.installable=false;setStatus('Rosie is installed on this device.');update();});
   async function install(){
@@ -40,18 +46,23 @@
     const permission=await Notification.requestPermission();
     if(permission!=='granted'){setStatus(`Notification permission: ${permission}.`);update();return;}
     try{
+      const routes=pushRoutes();
       const reg=await registration();
       if(!reg.pushManager){setStatus('Local device notifications are enabled; this browser does not support Web Push subscriptions.');update();return;}
-      const config=await apiJson('/api/push_config');
+      const config=await apiJson(routes.config);
+      if(routes.kind==='customer'&&config.notification_opt_in!==true){
+        setStatus('Remote push is off in your Rosie notification preferences. Enable notifications in your customer account first.');
+        update();return;
+      }
       if(!config.subscription_enabled||!config.vapid_public_key){
-        setStatus('Local device notifications are enabled. Remote push is waiting for Cloudflare VAPID configuration.');
+        setStatus('Local device notifications are enabled. Remote push is waiting for server VAPID configuration.');
         update();return;
       }
       let subscription=await reg.pushManager.getSubscription();
       if(!subscription){
         subscription=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:applicationServerKey(config.vapid_public_key)});
       }
-      await apiJson('/api/push_subscribe',{
+      await apiJson(routes.subscribe,{
         method:'POST',
         body:JSON.stringify({
           subscription:subscription.toJSON(),
@@ -59,17 +70,19 @@
           platform:navigator.userAgentData?.platform||navigator.platform||null
         })
       });
-      setStatus(config.delivery_ready?'Remote Rosie notifications are enabled for this staff account.':'This device is subscribed. Server push delivery is waiting for the Cloudflare VAPID private key.');
+      const ownerLabel=routes.kind==='customer'?'customer account':'staff account';
+      setStatus(config.delivery_ready?`Remote Rosie notifications are enabled for this ${ownerLabel}.`:'This device is subscribed. Server push delivery is waiting for the VAPID private key.');
     }catch(error){setStatus(error?.message||'Could not enable remote Rosie notifications.');}
     update();
   }
   async function disableRemotePush(){
     try{
+      const routes=pushRoutes();
       const reg=await registration();
       const subscription=await reg.pushManager?.getSubscription();
       if(!subscription){setStatus('No remote Rosie push subscription is active on this device.');return;}
       const endpoint=subscription.endpoint;
-      await apiJson('/api/push_unsubscribe',{method:'POST',body:JSON.stringify({endpoint})});
+      await apiJson(routes.unsubscribe,{method:'POST',body:JSON.stringify({endpoint})});
       await subscription.unsubscribe();
       setStatus('Remote Rosie notifications are disabled on this device.');
     }catch(error){setStatus(error?.message||'Could not disable remote Rosie notifications.');}
