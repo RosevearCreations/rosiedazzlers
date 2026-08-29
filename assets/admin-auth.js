@@ -281,6 +281,29 @@
     if (actor.is_admin === true) return true;
 
     switch (String(pageKey || "")) {
+      case "app-launcher":
+        return state.authenticated === true;
+
+      case "app-detailer":
+      case "detailer-jobs":
+        return (
+          actor.is_detailer === true ||
+          actor.is_senior_detailer === true ||
+          hasCapability("can_manage_bookings") ||
+          hasCapability("can_manage_progress")
+        );
+
+      case "app-operations":
+        return (
+          actor.is_senior_detailer === true ||
+          ["supervisor", "booking_manager"].includes(String(actor.role_code || "").trim()) ||
+          hasCapability("can_manage_bookings") ||
+          hasCapability("can_manage_blocks")
+        );
+
+      case "app-admin":
+        return actor.is_admin === true || hasCapability("can_manage_staff");
+
       case "admin":
       case "admin-today":
       case "admin-booking":
