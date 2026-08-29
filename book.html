@@ -1932,11 +1932,16 @@
     }
 
     function addonDisplayPrice(addon) {
-      const size = selectedSize();
-      if (addon.quote_required) return "Quote required";
-      if (addon.prices_cad && addon.prices_cad[size] != null) return money(addon.prices_cad[size]);
-      if (addon.price_cad != null) return money(addon.price_cad);
-      return "Included in quote";
+      const sizeKey = String(state.vehicle_size || "mid").toLowerCase();
+      const prices = addon?.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
+      const raw = prices[sizeKey] ?? prices.mid ?? prices.small ?? addon?.price_cad;
+      const amount = Number(raw);
+      if (addon?.quote_required === true) {
+        return Number.isFinite(amount) && amount > 0
+          ? `From ${money(amount)} · condition assessed`
+          : "Condition quote";
+      }
+      return Number.isFinite(amount) && amount > 0 ? `From ${money(amount)}` : "Ask for price";
     }
 
     function renderAddons() {
@@ -1963,7 +1968,7 @@
       qsa(".addon-thumb").forEach((img) => {
         bindImageWithCandidates(img, img.dataset.mediaSource || "", {
           fallback: img.dataset.fallback || "/assets/addons/generic_addon.png",
-          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
+          onExhausted: (node) => { node.src = "/assets/placeholders/service-photo-needed.svg"; node.classList.add("visual-placeholder-img"); }
         });
       });
 
