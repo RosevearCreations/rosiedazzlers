@@ -26,10 +26,12 @@ for rel in ['docs/archive','reports/build261','functions/api/assets']:
     if (ROOT/rel).exists(): errors.append(f'retired tree remains: {rel}')
 for rel in [
     'data/app_modules.json','data/internal_navigation.json','data/route_module_ownership.json','data/action_permissions.json',
-    'sql/2026-08-29_build267_role_module_hierarchy.sql','sql/2026-08-29_build270_push_subscription_authority.sql',
+    'sql/2026-08-29_build267_role_module_hierarchy.sql','sql/2026-08-29_build270_push_subscription_authority.sql','sql/2026-08-29_build270_vapid_vault_authority.sql',
     'functions/api/_lib/staff-auth.js','functions/api/_lib/permissions-profile.js','functions/api/_lib/action-permissions.js',
-    'functions/api/_lib/push-subscriptions.js','functions/api/push_config.js','functions/api/push_subscribe.js','functions/api/push_unsubscribe.js',
-    'functions/api/customer_push_config.js','functions/api/customer_push_subscribe.js','functions/api/customer_push_unsubscribe.js'
+    'functions/api/_lib/push-subscriptions.js','functions/api/_lib/notification-hooks.js','functions/api/_lib/provider-dispatch.js','functions/api/_lib/live-interaction-alerts.js',
+    'functions/api/push_config.js','functions/api/push_subscribe.js','functions/api/push_unsubscribe.js',
+    'functions/api/customer_push_config.js','functions/api/customer_push_subscribe.js','functions/api/customer_push_unsubscribe.js',
+    'supabase/functions/rosie-web-push/index.ts'
 ]:
     txt(rel)
 
@@ -62,7 +64,6 @@ for token in ["rosie-app-v20260829build270","addEventListener('push'","addEventL
 precache=sw.split("self.addEventListener('install'",1)[0]
 for heavy in ['/app/detailer/','/app/operations/','/app/admin/','/app/finance/','live-job-module.js']:
     if heavy in precache: errors.append(f'heavy module eagerly precached: {heavy}')
-
 launcher=txt('app/index.html')
 for token in ['Staff App Launcher','← Public Site','data-build="270"','v=20260829build270']:
     if token not in launcher: errors.append(f'Build270 launcher missing {token}')
@@ -94,26 +95,29 @@ for rel,action,legacy in [('functions/api/notifications_list.js','it.notificatio
     body=txt(rel)
     if action not in body: errors.append(f'{rel} missing explicit action {action}')
     if legacy in body: errors.append(f'{rel} still uses broad legacy notification capability')
-for rel,target in [('functions/api/admin/_lib/staff-auth.js','../../_lib/staff-auth.js'),('functions/api/admin/_lib/staff-session.js','../../_lib/staff-session.js'),('functions/api/admin/staff_save.js','../staff_save.js'),('functions/api/admin/notifications_list.js','../notifications_list.js'),('functions/api/admin/notifications_process.js','../notifications_process.js')]:
+for rel,target in [('functions/api/admin/_lib/staff-auth.js','../../_lib/staff-auth.js'),('functions/api/admin/_lib/staff-session.js','../../_lib/staff-session.js'),('functions/api/admin/staff_save.js','../staff_save.js'),('functions/api/admin/notifications_list.js','../notifications_list.js'),('functions/api/admin/notifications_process.js','../notifications_process.js'),('functions/api/admin/_lib/notification-hooks.js','../../_lib/notification-hooks.js')]:
     if target not in txt(rel): errors.append(f'compatibility wrapper drift: {rel}')
 
 # Build 270 push persistence/security authority
 push_sql=txt('sql/2026-08-29_build270_push_subscription_authority.sql')
 for token in ['notification_push_subscriptions','recipient_staff_user_id','enable row level security','revoke all on table public.notification_push_subscriptions from public, anon, authenticated','grant select, insert, update, delete on table public.notification_push_subscriptions to service_role','notification_push_subscriptions_exactly_one_owner_check']:
     if token not in push_sql: errors.append(f'Build270 push SQL missing {token}')
+vault_sql=txt('sql/2026-08-29_build270_vapid_vault_authority.sql')
+for token in ['SECRET VALUES MUST NEVER BE COMMITTED TO SOURCE','rosie_vapid_public_key','rosie_vapid_private_key','notification_push_public_config','notification_push_private_config','grant execute on function public.notification_push_private_config() to service_role']:
+    if token not in vault_sql: errors.append(f'Build270 VAPID Vault authority missing {token}')
+if 'vault.create_secret(' in vault_sql: errors.append('VAPID secret provisioning values must not be committed in canonical SQL')
 push_helper=txt('functions/api/_lib/push-subscriptions.js')
 for token in ['saveStaffPushSubscription','saveCustomerPushSubscription','revokeStaffPushSubscription','revokeCustomerPushSubscription','notification_opt_in !== true','owner_type']:
     if token not in push_helper: errors.append(f'push subscription helper missing {token}')
 for rel,auth_token in [
-    ('functions/api/push_subscribe.js','requireStaffAccess'),
-    ('functions/api/push_unsubscribe.js','requireStaffAccess'),
-    ('functions/api/customer_push_subscribe.js','getCurrentCustomerSession'),
-    ('functions/api/customer_push_unsubscribe.js','getCurrentCustomerSession')
+    ('functions/api/push_subscribe.js','requireStaffAccess'),('functions/api/push_unsubscribe.js','requireStaffAccess'),
+    ('functions/api/customer_push_subscribe.js','getCurrentCustomerSession'),('functions/api/customer_push_unsubscribe.js','getCurrentCustomerSession')
 ]:
     if auth_token not in txt(rel): errors.append(f'{rel} missing authenticated owner boundary {auth_token}')
 for rel in ['functions/api/push_config.js','functions/api/customer_push_config.js']:
     body=txt(rel)
-    if 'VAPID_PUBLIC_KEY' not in body or 'VAPID_PRIVATE_KEY' not in body: errors.append(f'{rel} missing VAPID readiness inputs')
+    if 'notification_push_public_config' not in body: errors.append(f'{rel} does not use the public-only VAPID RPC')
+    if 'notification_push_private_config' in body or 'VAPID_PRIVATE_KEY' in body: errors.append(f'{rel} can access private VAPID material')
     if 'vapid_private_key' in body.lower(): errors.append(f'{rel} exposes a private-key response field')
 client=txt('assets/app-core/install-client.js')
 for token in ['pushRoutes()','customer_push_config','customer_push_subscribe','pushManager.subscribe','Notification.requestPermission','data-app-module']:
@@ -125,7 +129,26 @@ if not (0 <= enable_pos < subscribe_pos < bind_pos): errors.append('push subscri
 for forbidden in ['VAPID_PRIVATE_KEY','SUPABASE_SERVICE_ROLE_KEY']:
     for rel in ['assets/app-core/install-client.js','service-worker.js','app/index.html','app/customer/index.html']:
         if forbidden in txt(rel): errors.append(f'server secret name leaked into browser asset: {rel} -> {forbidden}')
-for rel in ['functions/api/_lib/push-subscriptions.js','functions/api/push_config.js','functions/api/push_subscribe.js','functions/api/push_unsubscribe.js','functions/api/customer_push_config.js','functions/api/customer_push_subscribe.js','functions/api/customer_push_unsubscribe.js']:
+
+provider=txt('functions/api/_lib/provider-dispatch.js')
+for token in ['/functions/v1/rosie-web-push','NOTIFICATIONS_PUSH_WEBHOOK_URL','NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN','getSupabaseServiceRoleKey']:
+    if token not in provider: errors.append(f'push provider dispatcher missing {token}')
+if "if (!authToken) return" not in provider: errors.append('explicit external push webhook does not fail closed without its own auth token')
+processor=txt('functions/api/notifications_process.js')
+for token in ['recipient_staff_user_id','customer_profile_id','channel === "push"','Missing push recipient']:
+    if token not in processor: errors.append(f'notification processor missing push recipient logic {token}')
+hooks=txt('functions/api/_lib/notification-hooks.js')
+for token in ['hasActivePushSubscription','maybeQueueStaffPushNotification','channel:\'push\'','notification_push_subscriptions']:
+    if token not in hooks: errors.append(f'notification hooks missing event-driven push token {token}')
+live=txt('functions/api/_lib/live-interaction-alerts.js')
+for token in ['assigned_staff_user_id','maybeQueueStaffPushNotification']:
+    if token not in live: errors.append(f'live interaction alert missing assigned-staff push token {token}')
+edge=txt('supabase/functions/rosie-web-push/index.ts')
+for token in ['npm:web-push@3.6.7','notification_push_private_config','status === 404 || status === 410','push_enabled: false','no_active_subscription']:
+    if token not in edge: errors.append(f'Web Push Edge sender missing {token}')
+if 'setInterval(' in edge: errors.append('Web Push Edge sender contains prohibited polling')
+
+for rel in ['functions/api/_lib/push-subscriptions.js','functions/api/push_config.js','functions/api/push_subscribe.js','functions/api/push_unsubscribe.js','functions/api/customer_push_config.js','functions/api/customer_push_subscribe.js','functions/api/customer_push_unsubscribe.js','functions/api/_lib/provider-dispatch.js','functions/api/_lib/notification-hooks.js']:
     if 'setInterval(' in txt(rel): errors.append(f'push path contains prohibited polling: {rel}')
 
 # Public content mirror + service depth
@@ -151,6 +174,7 @@ print('Build 270 release check: PASS')
 print(' - canonical repository shape is clean')
 print(' - module/role boundaries and no-idle-poll rules remain intact')
 print(' - Build 267 schema tolerance and Build 269 action permissions remain canonical')
-print(' - Build 270 server-only push storage, staff/customer ownership and opt-in-only subscription paths are protected')
-print(' - VAPID private-key material is not exposed by browser assets/config responses')
+print(' - Build 270 push storage, VAPID Vault separation, staff/customer ownership and opt-in-only subscription paths are protected')
+print(' - public config cannot access VAPID private material; Edge sender owns private-key use')
+print(' - push queue/provider/live-event integration remains event-driven and fail-closed')
 print(' - Functions, route parity, service mirrors, customer-profile and SEO checks pass')
