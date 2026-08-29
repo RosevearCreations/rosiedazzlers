@@ -6,6 +6,9 @@ export async function dispatchNotificationThroughProvider(env, event, options = 
     id: event.id || null,
     event_type: event.event_type || null,
     channel,
+    booking_id: event.booking_id || null,
+    customer_profile_id: event.customer_profile_id || null,
+    recipient_staff_user_id: event.recipient_staff_user_id || null,
     recipient_email: event.recipient_email || null,
     recipient_phone: event.recipient_phone || null,
     subject: event.subject || null,
@@ -41,6 +44,16 @@ export async function dispatchNotificationThroughProvider(env, event, options = 
     const outbound = options.preview === true && previewRecipient ? { ...payload, recipient_phone: previewRecipient } : payload;
     if (!url) return { ok: false, provider: rule.provider_key || 'sms', error: 'Missing SMS provider webhook URL.' };
     return postJson(url, outbound, authToken, rule.provider_key || 'sms');
+  }
+
+  if (channel === "push") {
+    const url = env.NOTIFICATIONS_PUSH_WEBHOOK_URL || "";
+    const authToken = env.NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN || env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN || '';
+    if (!url) return { ok: false, provider: 'web_push', error: 'Missing Web Push provider webhook URL.' };
+    if (!payload.recipient_staff_user_id && !payload.customer_profile_id) {
+      return { ok: false, provider: 'web_push', error: 'Push event is missing a staff or customer recipient.' };
+    }
+    return postJson(url, payload, authToken, 'web_push');
   }
 
   return { ok: false, provider: channel || "unknown", error: "Unsupported notification channel." };
