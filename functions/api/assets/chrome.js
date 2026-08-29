@@ -702,7 +702,7 @@ async function initAccountWidget() {
       <div class="account-widget-inner">
         <span class="account-chip">${staffActor.full_name || staffActor.email || 'Staff'} · ${role}</span>
         ${widgetButton('/admin.html', 'Admin', 'ghost')}
-        ${widgetButton('/detailer-jobs.html', 'Jobs', 'ghost')}
+        ${widgetButton('/app/detailer/', 'Jobs', 'ghost')}
         ${widgetButton('/admin-account.html', 'Settings', 'ghost')}
         ${widgetActionButton('publicLogoutBtn', 'Sign out', 'primary')}
       </div>
