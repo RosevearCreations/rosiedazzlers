@@ -1,7 +1,16 @@
 import { requireStaffAccess, serviceHeaders, json, cleanText, cleanEmail, toBoolean } from "./_lib/staff-auth.js";
 
 const INTERNAL_MODULES=["detailer","operations","admin","it","finance","daip","socials"];
-const ROLE_CEILINGS={detailer:["detailer"],senior_detailer:["detailer","operations"],admin:[...INTERNAL_MODULES]};
+const ROLE_CEILINGS={
+  detailer:["detailer"],
+  senior_detailer:["detailer","operations"],
+  operations_manager:["detailer","operations"],
+  accountant:["finance"],
+  it_specialist:["it"],
+  promoter:["socials"],
+  daip_manager:["daip"],
+  admin:[...INTERNAL_MODULES]
+};
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -49,8 +58,8 @@ export async function onRequestPost(context) {
     return json({ ok: true, message: "Staff user created.", actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null }, staff_user: Array.isArray(rows) ? rows[0] || null : null });
   } catch (err) { return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500); }
 }
-function normalizeModuleAccess(roleCode,input){const ceiling=new Set(ROLE_CEILINGS[roleCode]||[]),out={};for(const key of INTERNAL_MODULES)out[key]=ceiling.has(key)&&(Object.prototype.hasOwnProperty.call(input||{},key)?input[key]===true:true);return out;}
-function cleanRole(value) { const s = String(value ?? "").trim().toLowerCase(); return ["admin", "senior_detailer", "detailer"].includes(s) ? s : null; }
+function normalizeModuleAccess(roleCode,input){const ceiling=new Set(ROLE_CEILINGS[roleCode]||[]),out={};for(const key of INTERNAL_MODULES){if(roleCode==="admin"){out[key]=true;continue;}out[key]=ceiling.has(key)&&(Object.prototype.hasOwnProperty.call(input||{},key)?input[key]===true:true);}return out;}
+function cleanRole(value) { const s = String(value ?? "").trim().toLowerCase(); return ["admin", "senior_detailer", "detailer", "operations_manager", "accountant", "it_specialist", "promoter", "daip_manager"].includes(s) ? s : null; }
 function toBooleanDefault(value, fallback = false) { if (value === null || value === undefined || value === "") return fallback; return toBoolean(value); }
 function cleanPaySchedule(value) { const s = String(value ?? "").trim().toLowerCase(); return ["weekly", "biweekly", "semimonthly", "monthly", "contractor"].includes(s) ? s : null; }
 function cleanPositiveNumber(value, fallback) { const n = Number(value); return Number.isFinite(n) && n > 0 ? Math.round(n * 100) / 100 : fallback; }
