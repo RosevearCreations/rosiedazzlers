@@ -1,3 +1,83 @@
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 264 Modular Runtime Roadmap
+
+**Updated:** 2026-08-25
+
+## P0 — Reliability + modular runtime
+
+Build 264 begins the runtime migration while preserving Build 262 CPU acceptance as a go-live gate. The architectural objective is not merely fewer timers; it is that an entire subsystem should remain unloaded/asleep when operational state does not require it.
+
+### Completed in Build 264
+
+- Four canonical app entries exist under `/app/`.
+- Staff module launcher performs auth/module choice only; it does not preload subsystem datasets.
+- Detailer Mobile is the first active modular runtime.
+- Detailer base workspace is bounded to 80 current/future rows with a small historical overlap.
+- Crew/unread feed fan-out is deferred from base Detailer load until live work is actually opened.
+- No Detailer `setInterval` or recurring live-job read is permitted.
+- Arrived/Detailing/Paused state dynamically loads the separate live-job bundle.
+- Job mutation responses update local state rather than forcing a follow-up workspace refresh.
+- Signed media uploads send binary data browser → storage rather than through Cloudflare Functions.
+- Detailer live/feed/media APIs have canonical `/api/detailer/*` facades while reusing existing authoritative handlers.
+- Current PWA cache identity is Build 264; the heavy live-job bundle is intentionally not precached.
+
+### Next — Build 265 Operations runtime
+
+Migrate the first Operations group as a real shell runtime:
+
+1. Today / needs-attention summary.
+2. Schedule + blocked days.
+3. Assignment.
+4. Live-job oversight / progress.
+5. Explicit operational state contract: blocked, open-idle, scheduled, active, wrap-up.
+6. Blocked/no-active-job state must disable live monitoring and live-photo/watch behavior.
+7. Same-browser refresh leadership may be enabled only for a genuinely necessary recurring read and never below the established safe interval floor.
+
+### Still P0 before go-live
+
+- Exceeded CPU Time Limits must remain 0 during representative usage.
+- Persistent Cloudflare observability should be enabled safely after current Pages configuration is imported/verified.
+- Booking/payment/refund/webhook, inventory posting/reversal, notification delivery, backup/rollback, permissions and mobile acceptance remain required.
+
+---
+
+# CURRENT LIVING AUTHORITY 2 OF 2 — Build 263 Architecture Foundation
+
+**Updated:** 2026-08-21  
+**Purpose:** Establish the four-shell Rosie architecture without weakening the Build 262 CPU-stabilization gate.
+
+## Direction
+
+The next architectural program is to convert the existing all-in-one interface into four independently loadable shells backed by the same secured platform: Customer, Detailer Mobile, Operations/Supervisor, and Business Administration. The public SEO website stays static-first and routes interactive work into the Customer shell.
+
+## Build 263 foundation priorities
+
+1. Keep Build 262 CPU acceptance as the deployment gate.
+2. Adopt `data/build263_app_modules.json` as the initial shell registry.
+3. Use `data/build263_route_migration_matrix.csv` to assign every current top-level interface to a future owner.
+4. Keep customer and staff authentication separate while resolving module grants after sign-in.
+5. Add a small shared app-core rather than a new framework rewrite.
+6. Make module access distinct from action capabilities.
+7. Formalize business-day/job runtime states and wake/sleep rules.
+8. Default every recurring timer to OFF unless state and visibility require it.
+9. Use one same-browser refresh leader so multiple tabs cannot multiply polling.
+10. Migrate Detailer Mobile first and prove zero live-job monitoring when no eligible job is active.
+11. Migrate Today/Schedule/Live into Operations and suppress live monitoring on blocked/no-active-job days.
+12. Move back-office screens into lazy Business Administration groups.
+13. Keep accounting, payments, inventory transactions, permissions and private media authoritative server-side.
+14. Move bounded filtering/searching/drafts/image preprocessing to the browser where safe.
+15. Move large aggregation/filtering to Postgres rather than Worker JavaScript.
+16. Keep public SEO/service/town pages static/crawlable and one-H1 compliant.
+17. Preserve existing routes as compatibility entries during staged migration.
+18. Extend Runtime & CPU Diagnostics with active-module labels during runtime implementation.
+19. Measure API call counts and Cloudflare CPU before/after each migrated workflow.
+20. Split deployments/repositories only if later evidence shows a real operational/security need; do not create four codebases now.
+
+## Permanent modular rule
+
+Every new feature must identify: owning shell, allowed identity/capability, operational wake condition, and justification for any recurring server call.
+
+---
+
 # CURRENT LIVING AUTHORITY 2 OF 2 — Build 262
 
 **Updated:** 2026-08-20  
