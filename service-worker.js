@@ -1,6 +1,6 @@
-// Build 268 — thin, event-driven Rosie Dazzlers service worker.
+// Build 269 — thin, event-driven Rosie Dazzlers service worker.
 // Only the shared launcher shell is precached. Business modules/workflows remain lazy.
-const CACHE='rosie-app-v20260829build268';
+const CACHE='rosie-app-v20260829build269';
 const URLS=['/','/app/','/app/customer/','/assets/site.css','/assets/app-core/module-shell.css','/assets/app-core/module-resolver.js','/assets/app-core/module-navigation.js','/assets/app-core/install-client.js','/apps/launcher/app-launcher.js','/assets/admin-auth.js','/assets/admin-shell.js','/manifest.webmanifest','/assets/app-icons/rosie-192.png','/assets/app-icons/rosie-512.png','/assets/app-icons/rosie-maskable-512.png'];
 self.addEventListener('install',event=>{event.waitUntil((async()=>{const cache=await caches.open(CACHE);await Promise.allSettled(URLS.map(async(url)=>{try{const response=await fetch(url,{cache:'reload'});if(response.ok)await cache.put(url,response.clone());}catch{}}));await self.skipWaiting();})());});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim()));});
