@@ -1,3 +1,45 @@
+# Build 264 modular Detailer runtime acceptance — specialist runbook
+
+Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current strategy. Build 262 CPU evidence remains a P0 go-live gate.
+
+## Deployment
+
+- [ ] No Build 264 SQL migration is required.
+- [ ] Deploy Pages + Functions together.
+- [ ] Hard-refresh and confirm service-worker cache identity `rosie-app-v20260825build264`.
+- [ ] Confirm Cache Health expects Build 264 through `/assets/app-core/module-resolver.js`.
+- [ ] Confirm `_routes.json` still invokes Functions only for `/api/*`.
+
+## Four app entries
+
+- [ ] `/app/customer/` opens without loading staff/admin datasets.
+- [ ] `/app/` shows only authorized internal modules.
+- [ ] `/app/detailer/` allows Detailer/Senior Detailer/admin-authorized field users.
+- [ ] `/app/operations/` blocks unauthorized staff and loads no operational dataset until a workflow is chosen.
+- [ ] `/app/admin/` blocks unauthorized staff and loads no back-office dataset until a module is chosen.
+
+## Detailer CPU/network acceptance
+
+- [ ] With no eligible open job, leave `/app/detailer/` open for at least 5 minutes. Runtime Diagnostics must show **no recurring Detailer API traffic**.
+- [ ] Confirm `/apps/detailer/live-job-module.js` is not requested while Detailer state is Idle/Ready.
+- [ ] Confirm base workspace uses `/api/detailer/jobs?scope=workspace` and returns `bounded=true`, `row_limit=80`, `automatic_refresh=false`.
+- [ ] Select a scheduled job. Confirm no feed request occurs merely from selection.
+- [ ] Advance a safe test job through Arrived/Start. Confirm the live bundle loads only after open-job state.
+- [ ] Confirm the initial live feed loads once, and subsequent feed refresh happens only by explicit button press.
+- [ ] Post a harmless note. Confirm the returned note is added locally without a full feed reload.
+- [ ] Upload harmless test media. Confirm the binary PUT goes directly to signed storage and the Function traffic is limited to authorization/session/metadata operations.
+- [ ] Complete/suspend the test job and confirm no live-job timer remains.
+- [ ] Hide and restore the tab. Confirm visibility changes do not start an automatic server refresh.
+
+## Cloudflare acceptance still required
+
+- [ ] Representative test window shows **Exceeded CPU Time Limits: 0**.
+- [ ] Script exceptions: 0.
+- [ ] Memory exceeded: 0.
+- [ ] Export Runtime Diagnostics if a 5xx/network error occurs before repeating an ambiguous write.
+
+---
+
 # Build 262 CPU stabilization acceptance — specialist, not a strategy authority
 
 Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current direction. This section defines the P0 Cloudflare CPU incident acceptance evidence.
