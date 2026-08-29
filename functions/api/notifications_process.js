@@ -1,5 +1,6 @@
 
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { requireActionAccess } from "./_lib/action-permissions.js";
 import { loadFeatureFlags } from "./_lib/app-settings.js";
 import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js";
 
@@ -10,8 +11,10 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => ({}));
     const flags = await loadFeatureFlags(env);
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_staff", allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: null, allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
+    const actionAccess = requireActionAccess(access.actor, "it.notifications.process");
+    if (!actionAccess.ok) return withCors(actionAccess.response);
 
     if (flags.notifications_retry_enabled === false) {
       return withCors(json({ error: "Notification retry is disabled by app settings." }, 403));
