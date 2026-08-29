@@ -24,7 +24,7 @@ root_sql=[p.name for p in ROOT.glob('*.sql') if p.name!='SUPABASE_SCHEMA.sql']
 if root_sql: errors.append(f'root SQL copies remain: {root_sql[:8]}')
 for rel in ['docs/archive','reports/build261','functions/api/assets']:
     if (ROOT/rel).exists(): errors.append(f'retired tree remains: {rel}')
-for rel in ['data/app_modules.json','data/internal_navigation.json','data/route_module_ownership.json','sql/2026-08-29_build267_role_module_hierarchy.sql','functions/api/_lib/staff-auth.js']:
+for rel in ['data/app_modules.json','data/internal_navigation.json','data/route_module_ownership.json','data/action_permissions.json','sql/2026-08-29_build267_role_module_hierarchy.sql','functions/api/_lib/staff-auth.js','functions/api/_lib/permissions-profile.js','functions/api/_lib/action-permissions.js']:
     txt(rel)
 
 # Module/role authority
@@ -51,11 +51,41 @@ if 'setInterval(' in txt('progress.html'): errors.append('customer progress has 
 
 # Thin/event-driven service worker
 sw=txt('service-worker.js')
-for token in ["rosie-app-v20260829build268","addEventListener('push'","addEventListener('notificationclick'"]:
+for token in ["rosie-app-v20260829build269","addEventListener('push'","addEventListener('notificationclick'"]:
     if token not in sw: errors.append(f'service worker missing {token}')
 precache=sw.split("self.addEventListener('install'",1)[0]
 for heavy in ['/app/detailer/','/app/operations/','/app/admin/','/app/finance/','live-job-module.js']:
     if heavy in precache: errors.append(f'heavy module eagerly precached: {heavy}')
+
+# Build 269 launcher/profile/action convergence
+launcher=txt('app/index.html')
+for token in ['Staff App Launcher','← Public Site','data-build="269"']:
+    if token not in launcher: errors.append(f'Build269 launcher missing {token}')
+resolver=txt('assets/app-core/module-resolver.js')
+for token in ['const BUILD=269',"rosie_module_runtime_flags_v269"]:
+    if token not in resolver: errors.append(f'Build269 resolver missing {token}')
+cache_health=txt('assets/cache-health-controls.js')
+for token in ['EXPECTED_BUILD','269','v=20260829build269']:
+    if token not in cache_health: errors.append(f'Build269 cache health missing {token}')
+profile=txt('functions/api/_lib/permissions-profile.js')
+for token in ['parsePermissionsProfile','profileForDatabase','typeof observedValue === "string"']:
+    if token not in profile: errors.append(f'permissions profile helper missing {token}')
+session=txt('functions/api/_lib/staff-session.js')
+for token in ['parsePermissionsProfile(row.permissions_profile)','moduleAccessFromProfile(row.permissions_profile)']:
+    if token not in session: errors.append(f'staff session profile normalization missing {token}')
+staff_save=txt('functions/api/staff_save.js')
+for token in ['profileForDatabase(permissions_profile, observedProfileValue)','module_access_version:269']:
+    if token not in staff_save: errors.append(f'staff save compatibility missing {token}')
+actions=js('data/action_permissions.json')
+if actions.get('build')!=269: errors.append('action permission registry build mismatch')
+for action in ['it.notifications.view','it.notifications.process','finance.reconcile','socials.publish','operations.assignment.manage']:
+    if action not in actions.get('actions',{}): errors.append(f'action registry missing {action}')
+for rel,action,legacy in [('functions/api/notifications_list.js','it.notifications.view','capability: "manage_progress"'),('functions/api/notifications_process.js','it.notifications.process','capability: "manage_staff"')]:
+    body=txt(rel)
+    if action not in body: errors.append(f'{rel} missing explicit action {action}')
+    if legacy in body: errors.append(f'{rel} still uses broad legacy notification capability')
+for rel,target in [('functions/api/admin/_lib/staff-auth.js','../../_lib/staff-auth.js'),('functions/api/admin/_lib/staff-session.js','../../_lib/staff-session.js'),('functions/api/admin/staff_save.js','../staff_save.js'),('functions/api/admin/notifications_list.js','../notifications_list.js'),('functions/api/admin/notifications_process.js','../notifications_process.js')]:
+    if target not in txt(rel): errors.append(f'compatibility wrapper drift: {rel}')
 
 # Public content mirror + service depth
 p=txt('data/rosie_services_pricing_and_packages.json'); pf=txt('functions/api/data/rosie_services_pricing_and_packages.json')
@@ -73,11 +103,11 @@ for script,args in [('scripts/cloudflare_pages_functions_check.py',()),('scripts
     else: errors.append(f'missing {script}')
 
 if errors:
-    print('Build 268 release check: FAIL')
+    print('Build 269 release check: FAIL')
     for e in errors: print(' -',e)
     raise SystemExit(1)
-print('Build 268 release check: PASS')
+print('Build 269 release check: PASS')
 print(' - canonical repository shape is clean')
 print(' - module/role boundaries and no-idle-poll rules remain intact')
-print(' - schema-tolerant Build 267 migration is canonical')
-print(' - current Functions, route parity, service mirrors and SEO checks pass')
+print(' - schema-tolerant Build 267 migration and Build 269 profile compatibility are canonical')
+print(' - explicit action permissions, notification scope, Functions, route parity, service mirrors and SEO checks pass')
