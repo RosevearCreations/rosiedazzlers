@@ -7,14 +7,14 @@
   <meta name="robots" content="noindex,nofollow"/>
   <title>Detailer Mobile App | Rosie Dazzlers</title><link rel="manifest" href="/manifest.webmanifest">
   <meta name="description" content="Rosie Dazzlers mobile-first field application for assigned jobs. Live-job tools remain asleep until a job is open."/>
-  <link rel="stylesheet" href="/assets/site.css?v=20260829build266"/>
+  <link rel="stylesheet" href="/assets/site.css?v=20260829build267"/><link rel="stylesheet" href="/assets/app-core/module-shell.css?v=20260829build267"/>
   <style>
     .app-shell{width:min(1120px,calc(100% - 24px));margin:0 auto;padding:18px 0 90px}.app-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}.app-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}.app-brand img{width:42px;height:42px;object-fit:contain}.module-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.5fr);gap:16px;align-items:start}.stack{display:grid;gap:12px}.runtime-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.runtime-card{padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.runtime-card strong{display:block;font-size:1.1rem}.job-button{width:100%;text-align:left;display:grid;gap:4px}.job-button[aria-current="true"]{outline:2px solid rgba(56,189,248,.75);background:rgba(56,189,248,.08)}.job-actions{display:flex;gap:8px;flex-wrap:wrap}.job-actions .btn{min-height:44px}.idle-panel{padding:20px;border:1px dashed var(--border);border-radius:16px}.live-host[data-loaded="false"]{min-height:150px;display:grid;place-items:center}.mobile-bar{position:fixed;left:12px;right:12px;bottom:max(10px,env(safe-area-inset-bottom));z-index:40;display:none;gap:8px;padding:10px;background:rgba(8,17,31,.95);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(12px)}.mobile-bar .btn{flex:1;min-height:48px}.mode-idle{color:#94a3b8}.mode-ready{color:#fbbf24}.mode-live{color:#4ade80}.mini{font-size:.85rem;color:var(--muted)}
     @media(max-width:860px){.module-grid{grid-template-columns:1fr}.runtime-strip{grid-template-columns:1fr}.mobile-bar{display:flex}.app-shell{padding-bottom:110px}}
   </style>
 </head>
 <!-- Historical release token: Build 264 modular runtime -->
-<body data-page="app-detailer" data-app-module="detailer" data-build="266">
+<body data-page="app-detailer" data-app-module="detailer" data-build="267">
   <main class="app-shell">
     <header class="app-head">
       <a class="app-brand" href="/app/"><img data-logo alt="Rosie Dazzlers logo"/><span><strong>Rosie Dazzlers</strong><br><span class="mini">Detailer Mobile App</span></span></a>
@@ -22,7 +22,7 @@
     </header>
 
     <section class="panel stack" aria-labelledby="detailer-title">
-      <div><span class="badge">Build 266 modular runtime</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow stays lightweight. Live feed, photo/video, and customer-progress code loads only while an eligible job is open.</p></div>
+      <div><span class="badge">Build 267 modular runtime</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow stays lightweight. Live feed, photo/video, and customer-progress code loads only while an eligible job is open.</p></div>
       <div class="runtime-strip">
         <div class="runtime-card"><span class="mini">Runtime mode</span><strong id="runtimeMode">Starting…</strong><span class="mini" id="runtimeReason">Checking assigned jobs once.</span></div>
         <div class="runtime-card"><span class="mini">Automatic monitoring</span><strong id="monitorState">OFF</strong><span class="mini">Build 266 creates no job polling interval.</span></div>
@@ -56,17 +56,19 @@
         <div id="liveJobHost" class="live-host" data-loaded="false"><div class="notice">Live-job tools are asleep.</div></div>
       </section>
     </section>
+    <section class="section"><div data-module-home-cards></div></section>
   </main>
   <div class="mobile-bar"><button class="btn primary" id="mobileRefreshJobs" type="button">Refresh jobs</button><a class="btn ghost" href="/app/">Apps</a></div>
 
-  <script src="/assets/admin-auth.js?v=20260829build266"></script>
-  <script src="/assets/admin-shell.js?v=20260829build266"></script>
-  <script src="/assets/app-core/module-resolver.js?v=20260829build266"></script>
-  <script src="/assets/app-core/runtime-policy.js?v=20260829build266"></script>
-  <script src="/assets/app-core/api-client.js?v=20260829build266"></script>
-  <script src="/assets/app-core/module-loader.js?v=20260829build266"></script>
-  <script src="/assets/app-core/refresh-leader.js?v=20260829build266"></script>
-  <script src="/assets/app-core/install-client.js?v=20260829build266"></script>
-  <script src="/apps/detailer/detailer-app.js?v=20260829build266"></script>
+  <script src="/assets/admin-auth.js?v=20260829build267"></script>
+  <script src="/assets/admin-shell.js?v=20260829build267"></script>
+  <script src="/assets/app-core/module-resolver.js?v=20260829build267"></script>
+  <script src="/assets/app-core/runtime-policy.js?v=20260829build267"></script>
+  <script src="/assets/app-core/api-client.js?v=20260829build267"></script>
+  <script src="/assets/app-core/module-loader.js?v=20260829build267"></script>
+  <script src="/assets/app-core/refresh-leader.js?v=20260829build267"></script>
+  <script src="/assets/app-core/install-client.js?v=20260829build267"></script>
+  <script src="/assets/app-core/module-navigation.js?v=20260829build267"></script>
+  <script src="/apps/detailer/detailer-app.js?v=20260829build267"></script>
 </body>
 </html>
