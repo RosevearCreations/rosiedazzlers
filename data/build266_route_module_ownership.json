@@ -1,0 +1,93 @@
+{
+  "build": 266,
+  "rule": "a route may belong to more than one authorized module, but module ownership never replaces server action capability/scope checks",
+  "modules": {
+    "detailer": [
+      "/app/detailer/",
+      "/detailer-jobs.html",
+      "/admin-progress.html",
+      "/admin-jobsite.html",
+      "/admin-live.html",
+      "/admin-incident-reports.html"
+    ],
+    "operations": [
+      "/app/operations/",
+      "/admin-today.html",
+      "/admin-booking.html",
+      "/admin-leads.html",
+      "/admin-conversions.html",
+      "/admin-blocks.html",
+      "/admin-assign.html",
+      "/admin-customers.html",
+      "/admin-progress.html",
+      "/admin-jobsite.html",
+      "/admin-live.html",
+      "/admin-incident-reports.html"
+    ],
+    "admin": [
+      "/app/admin/",
+      "/admin.html",
+      "/admin-staff.html",
+      "/admin-inventory-manager.html",
+      "/admin-inventory-posting.html",
+      "/admin-catalog.html",
+      "/admin-photo-studio.html",
+      "/admin-media-health.html",
+      "/admin-content.html",
+      "/admin-site-settings.html",
+      "/admin-water-rules.html",
+      "/admin-promos.html",
+      "/admin-analytics.html"
+    ],
+    "it": [
+      "/app/it/",
+      "/admin-security.html",
+      "/admin-app.html",
+      "/admin-docs.html",
+      "/admin-ui-health.html",
+      "/admin-runtime-health.html",
+      "/admin-launch-readiness.html",
+      "/admin-startup-guide.html",
+      "/admin-production.html",
+      "/admin-test-centre.html",
+      "/admin-recovery.html",
+      "/admin-notifications.html",
+      "/admin-roadmap-execution.html"
+    ],
+    "finance": [
+      "/app/finance/",
+      "/admin-accounting.html",
+      "/admin-payments.html",
+      "/admin-payroll.html",
+      "/admin-tax-review.html",
+      "/admin-close.html"
+    ],
+    "daip": [
+      "/app/daip/",
+      "/admin-daip.html",
+      "/admin-daip-governance.html",
+      "/admin-daip-readiness.html",
+      "/admin-daip-design.html",
+      "/admin-daip-gate-c.html",
+      "/admin-daip-intake-dry-run.html",
+      "/admin-daip-media.html",
+      "/admin-creative-projects.html"
+    ],
+    "socials": [
+      "/app/socials/",
+      "/admin-social.html",
+      "/admin-integrations.html",
+      "/admin-marketing.html",
+      "/admin-content.html",
+      "/admin-seo-tasks.html"
+    ],
+    "customer": [
+      "/app/customer/",
+      "/book",
+      "/my-account",
+      "/progress",
+      "/quote-response",
+      "/gift-cards"
+    ]
+  }
+}
