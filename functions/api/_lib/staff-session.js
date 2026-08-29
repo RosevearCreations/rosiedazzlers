@@ -109,7 +109,7 @@ export async function getCurrentStaffSession({ env, request }) {
     `${env.SUPABASE_URL}/rest/v1/staff_auth_sessions` +
       `?select=id,staff_user_id,created_at,updated_at,expires_at,revoked_at,last_seen_at,ip_address,user_agent,` +
       `staff_user:staff_users!staff_auth_sessions_staff_user_id_fkey(id,created_at,updated_at,full_name,email,role_code,is_active,` +
-      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes)` +
+      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,permissions_profile,notes)` +
       `&token_hash=eq.${encodeURIComponent(tokenHash)}` +
       `&limit=1`,
     {
@@ -364,6 +364,8 @@ function normalizeStaffUser(row) {
     can_manage_progress: row.can_manage_progress === true,
     can_manage_promos: row.can_manage_promos === true,
     can_manage_staff: row.can_manage_staff === true,
+    permissions_profile: row.permissions_profile && typeof row.permissions_profile === "object" ? row.permissions_profile : {},
+    module_access: row.permissions_profile?.module_access && typeof row.permissions_profile.module_access === "object" ? row.permissions_profile.module_access : {},
     notes: row.notes || null,
     is_admin: String(row.role_code || "") === "admin",
     is_senior_detailer: String(row.role_code || "") === "senior_detailer",
