@@ -10,9 +10,7 @@ export function normalizeBrowserPushSubscription(input) {
   const keys = source.keys && typeof source.keys === "object" ? source.keys : {};
   const p256dh = cleanText(keys.p256dh, MAX_KEY_LENGTH);
   const authSecret = cleanText(keys.auth, MAX_KEY_LENGTH);
-  if (!endpoint || !p256dh || !authSecret) {
-    throw new Error("A complete browser push subscription is required.");
-  }
+  if (!endpoint || !p256dh || !authSecret) throw new Error("A complete browser push subscription is required.");
   let url;
   try { url = new URL(endpoint); } catch { throw new Error("Push subscription endpoint is invalid."); }
   if (url.protocol !== "https:") throw new Error("Push subscription endpoint must use HTTPS.");
@@ -38,6 +36,43 @@ export function cleanPushMetadata(body, request) {
 }
 
 export async function saveStaffPushSubscription({ env, actor, subscription, metadata }) {
+  if (!actor?.id) throw new Error("A staff identity is required.");
+  return saveOwnedPushSubscription({
+    env,
+    ownerType: "staff",
+    ownerId: actor.id,
+    subscription,
+    metadata
+  });
+}
+
+export async function saveCustomerPushSubscription({ env, customerProfile, subscription, metadata }) {
+  if (!customerProfile?.id) throw new Error("A customer identity is required.");
+  if (customerProfile.notification_opt_in !== true) {
+    const err = new Error("Customer notification opt-in is required before remote push can be enabled.");
+    err.status = 403;
+    throw err;
+  }
+  return saveOwnedPushSubscription({
+    env,
+    ownerType: "customer",
+    ownerId: customerProfile.id,
+    subscription,
+    metadata
+  });
+}
+
+export async function revokeStaffPushSubscription({ env, actor, endpoint }) {
+  if (!actor?.id) throw new Error("A staff identity is required.");
+  return revokeOwnedPushSubscription({ env, ownerType:"staff", ownerId:actor.id, endpoint });
+}
+
+export async function revokeCustomerPushSubscription({ env, customerProfile, endpoint }) {
+  if (!customerProfile?.id) throw new Error("A customer identity is required.");
+  return revokeOwnedPushSubscription({ env, ownerType:"customer", ownerId:customerProfile.id, endpoint });
+}
+
+async function saveOwnedPushSubscription({ env, ownerType, ownerId, subscription, metadata }) {
   const existing = await loadSubscriptionByEndpoint(env, subscription.endpoint);
   if (existing && (existing.p256dh !== subscription.p256dh || existing.auth_secret !== subscription.auth_secret)) {
     const err = new Error("This push endpoint is already registered with different browser keys.");
@@ -46,9 +81,9 @@ export async function saveStaffPushSubscription({ env, actor, subscription, meta
   }
   const now = new Date().toISOString();
   const record = {
-    owner_type: "staff",
-    staff_user_id: actor.id,
-    customer_profile_id: null,
+    owner_type: ownerType,
+    staff_user_id: ownerType === "staff" ? ownerId : null,
+    customer_profile_id: ownerType === "customer" ? ownerId : null,
     endpoint: subscription.endpoint,
     p256dh: subscription.p256dh,
     auth_secret: subscription.auth_secret,
@@ -65,6 +100,8 @@ export async function saveStaffPushSubscription({ env, actor, subscription, meta
     last_error: null
   };
   if (existing) {
+    // One browser endpoint can only have one active Rosie owner. Re-association is explicit
+    // and authenticated by the currently signed-in actor rather than silently duplicating it.
     const response = await fetch(`${env.SUPABASE_URL}/rest/v1/notification_push_subscriptions?id=eq.${encodeURIComponent(existing.id)}`, {
       method: "PATCH",
       headers: { ...serviceHeaders(env), Prefer: "return=representation" },
@@ -84,11 +121,12 @@ export async function saveStaffPushSubscription({ env, actor, subscription, meta
   return Array.isArray(rows) ? rows[0] || null : null;
 }
 
-export async function revokeStaffPushSubscription({ env, actor, endpoint }) {
+async function revokeOwnedPushSubscription({ env, ownerType, ownerId, endpoint }) {
   const cleanEndpoint = cleanText(endpoint, MAX_ENDPOINT_LENGTH);
   if (!cleanEndpoint) throw new Error("Push subscription endpoint is required.");
+  const ownerColumn = ownerType === "staff" ? "staff_user_id" : "customer_profile_id";
   const response = await fetch(
-    `${env.SUPABASE_URL}/rest/v1/notification_push_subscriptions?owner_type=eq.staff&staff_user_id=eq.${encodeURIComponent(actor.id)}&endpoint=eq.${encodeURIComponent(cleanEndpoint)}`,
+    `${env.SUPABASE_URL}/rest/v1/notification_push_subscriptions?owner_type=eq.${encodeURIComponent(ownerType)}&${ownerColumn}=eq.${encodeURIComponent(ownerId)}&endpoint=eq.${encodeURIComponent(cleanEndpoint)}`,
     {
       method: "PATCH",
       headers: { ...serviceHeaders(env), Prefer: "return=representation" },
