@@ -1,4 +1,5 @@
 import { requireStaffAccess, serviceHeaders, json, cleanText, cleanEmail, toBoolean } from "./_lib/staff-auth.js";
+import { parsePermissionsProfile, profileForDatabase } from "./_lib/permissions-profile.js";
 
 const INTERNAL_MODULES=["detailer","operations","admin","it","finance","daip","socials"];
 const ROLE_CEILINGS={
@@ -24,13 +25,17 @@ export async function onRequestPost(context) {
     if (!role_code) return json({ error: "Invalid role_code." }, 400);
 
     let existingProfile={};
+    let observedProfileValue=null;
     if(id){
       const profileRes=await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=permissions_profile&id=eq.${encodeURIComponent(id)}&limit=1`,{headers:serviceHeaders(env)});
-      if(profileRes.ok){const rows=await profileRes.json().catch(()=>[]);existingProfile=Array.isArray(rows)&&rows[0]?.permissions_profile&&typeof rows[0].permissions_profile==="object"?rows[0].permissions_profile:{};}
+      if(profileRes.ok){const rows=await profileRes.json().catch(()=>[]);observedProfileValue=Array.isArray(rows)&&rows[0]?rows[0].permissions_profile:null;existingProfile=parsePermissionsProfile(observedProfileValue);}
+    } else {
+      const sampleRes=await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=permissions_profile&limit=1`,{headers:serviceHeaders(env)});
+      if(sampleRes.ok){const rows=await sampleRes.json().catch(()=>[]);observedProfileValue=Array.isArray(rows)&&rows[0]?rows[0].permissions_profile:null;}
     }
     const requestedAccess=body.module_access&&typeof body.module_access==="object"?body.module_access:(existingProfile.module_access||{});
     const module_access=normalizeModuleAccess(role_code,requestedAccess);
-    const permissions_profile={...existingProfile,module_access};
+    const permissions_profile={...existingProfile,module_access,module_access_version:269};
 
     const record = {
       full_name, email, role_code, is_active,
@@ -40,7 +45,7 @@ export async function onRequestPost(context) {
       can_manage_progress: toBooleanDefault(body.can_manage_progress, false),
       can_manage_promos: toBooleanDefault(body.can_manage_promos, false),
       can_manage_staff: toBooleanDefault(body.can_manage_staff, false),
-      permissions_profile,
+      permissions_profile: profileForDatabase(permissions_profile, observedProfileValue),
       employee_code: cleanText(body.employee_code), position_title: cleanText(body.position_title), pay_schedule: cleanPaySchedule(body.pay_schedule),
       hourly_rate_cents: cleanMoneyToCents(body.hourly_rate_cad, body.hourly_rate_cents), max_hours_per_day: cleanPositiveNumber(body.max_hours_per_day, 8), max_hours_per_week: cleanPositiveNumber(body.max_hours_per_week, 40),
       payroll_enabled: toBooleanDefault(body.payroll_enabled, true), preferred_work_hours: cleanJsonOrText(body.preferred_work_hours), tips_payout_notes: cleanText(body.tips_payout_notes), payroll_notes: cleanText(body.payroll_notes), notes: cleanText(body.notes), updated_at: new Date().toISOString()
