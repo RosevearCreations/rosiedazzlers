@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 269  
+**Build:** 270  
 **Updated:** 2026-08-29  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
@@ -18,15 +18,28 @@ Rosie Dazzlers remains **one secured platform**, not separate codebases. The pub
 7. DAIP
 8. Socials & Promotion
 
-The permanent runtime rule is:
+Permanent runtime rule:
 
 > **Role defines the maximum module set; the staff profile may narrow non-admin access; the global module switch may make a module unavailable; operational state decides whether an authorized module actually wakes.**
 
 Opening a launcher/module home must not load unrelated business datasets.
 
-## Role/module authority
+## Current Development database authority
 
-Current staff role ceilings:
+Supabase project: RosieDazzlers (`cwxhhvwpilmrfwxirixx`).
+
+Verified Development drift that must remain supported:
+
+- `staff_users.permissions_profile` is `text` in the long-lived Development database;
+- `app_management_settings.value` is `jsonb`;
+- Build 267 schema-tolerant role/module migration was applied successfully;
+- current Admin module access was verified with all seven internal module flags true.
+
+Do not blindly change `permissions_profile` to JSONB until all consumers and environments are audited. Build 269 runtime code accepts TEXT or JSONB and preserves the observed representation when saving staff.
+
+## Role / module / action authority
+
+Staff role ceilings:
 
 | Role | Maximum modules |
 |---|---|
@@ -39,21 +52,24 @@ Current staff role ceilings:
 | `daip_manager` | DAIP |
 | `admin` | all seven internal staff modules |
 
-Per-user module grants continue to live in `staff_users.permissions_profile.module_access`; explicit Build 269 action overrides use `staff_users.permissions_profile.action_access`; global availability continues to use `app_management_settings.module_runtime_flags`. A role/module ceiling is always checked before an action grant, so a per-user action cannot escape the role's module ceiling. Admin remains all-modules/all-actions by design.
+Authorities:
 
-### Build 267 database acceptance
+- per-user module access: `staff_users.permissions_profile.module_access`;
+- per-user action overrides: `staff_users.permissions_profile.action_access`;
+- global module availability: `app_management_settings.module_runtime_flags`;
+- action vocabulary/defaults: `data/action_permissions.json`.
 
-Development evidence supplied on 2026-08-29 confirms:
-
-- the expanded `staff_users_role_code_check` contains all eight roles;
-- `staff_role_module_defaults` is stored in `app_management_settings`;
-- the verified Administrator module profile contains `detailer`, `operations`, `admin`, `it`, `finance`, `daip`, and `socials` all `true`.
-
-Development also exposed historical schema drift: `staff_users.permissions_profile` had existed as `text` even though later aggregate schema documentation described it as `jsonb`. The schema-tolerant Build 267 migration was used successfully. Build 269 now normalizes TEXT or JSONB at runtime and writes back using the observed database representation. Do not blindly change the column type until every consumer and actual environment are audited.
+A role/module ceiling is checked before action access, so an action grant cannot escape the role's module ceiling. Admin remains all-modules/all-actions by design.
 
 ## Private navigation
 
-`/app/` is the **Staff App Launcher**, not the Business Administration module. `/app/admin/` is the Business Administration home. Build 269 adds an explicit **Public Site** return control to the launcher and the shared protected-page return bar. Each allowed module has a module home with categorized static cards. Protected legacy pages render their owning module hierarchy instead of the historical flat Admin menu.
+`/app/` is the **Staff App Launcher**, not Business Administration. `/app/admin/` is the Administration module home.
+
+Build 269/270 navigation provides:
+
+- explicit **Public Site** return on `/app/`;
+- protected-page return bar: Public Site / All Staff Apps / Module Home / Account;
+- module-local card hierarchy instead of the historical flat Admin menu.
 
 Canonical authorities:
 
@@ -61,7 +77,6 @@ Canonical authorities:
 - `data/internal_navigation.json`
 - `data/route_module_ownership.json`
 - `data/action_permissions.json`
-- `docs/modular-app/README.md`
 - `assets/app-core/module-resolver.js`
 - `assets/app-core/module-navigation.js`
 - `functions/api/_lib/staff-auth.js`
@@ -69,108 +84,171 @@ Canonical authorities:
 - `functions/api/_lib/action-permissions.js`
 - `sql/2026-08-29_build267_role_module_hierarchy.sql`
 
-## Build 269 action-permission convergence
+## Build 270 — event-driven Web Push foundation
 
-Build 269 introduces explicit action names without discarding the legacy capability bridge in one unsafe step. Initial action families include Detailer job/message actions, Operations schedule/assignment/customer actions, Administration staff/settings actions, I.T. runtime/notification/module actions, Finance view/post/reconcile, DAIP view/manage and Socials view/manage/publish.
+Build 270 extends the existing notification queue; it does not add a second polling service.
 
-The existing notification queue is retained. Its authorization is now separated from unrelated broad capabilities:
+### Database — applied to Development
 
-- notification list/read requires `it.notifications.view`;
-- manual notification processing/retry requires `it.notifications.process`.
+Applied Supabase migration: `build270_push_subscription_authority`.
 
-Focused roles receive role-safe defaults from `data/action_permissions.json`; an explicit `action_access` value may narrow/allow an action only inside the user's module ceiling. No recurring notification polling was added.
+Canonical source:
+
+- `sql/2026-08-29_build270_push_subscription_authority.sql`
+
+Changes:
+
+- added `notification_events.recipient_staff_user_id`;
+- added server-only `notification_push_subscriptions`;
+- owner is exactly one of staff/customer;
+- endpoint is unique;
+- active staff/customer indexes added;
+- RLS enabled;
+- direct `public`, `anon`, `authenticated` grants revoked;
+- CRUD granted to `service_role` only.
+
+Existing customer notification preferences are reused; no duplicate customer-preference table was introduced.
+
+### Staff/customer subscription APIs
+
+Staff:
+
+- `/api/push_config`
+- `/api/push_subscribe`
+- `/api/push_unsubscribe`
+
+Customer:
+
+- `/api/customer_push_config`
+- `/api/customer_push_subscribe`
+- `/api/customer_push_unsubscribe`
+
+Staff and customer ownership use different authenticated session cookies/routes. Customer remote push requires the existing customer `notification_opt_in=true`; browser permission alone never overrides Rosie consent.
+
+### Client behavior
+
+`assets/app-core/install-client.js`:
+
+- never creates a PushSubscription automatically;
+- subscription begins only after the user clicks **Enable device notifications**;
+- chooses staff or customer API routes from the current app module;
+- exposes only the VAPID public key to the browser;
+- local test notifications continue to work if remote delivery is not configured;
+- contains no polling timer.
+
+`service-worker.js` remains thin/event-driven and contains push + notification-click handlers. Heavy Detailer/Operations/Admin/Finance modules are not eagerly precached.
+
+Build/cache identity is synchronized at 270 across:
+
+- `/app/`
+- `/app/customer/`
+- `module-resolver.js`
+- `service-worker.js`
+- `cache-health-controls.js`.
+
+### Notification queue / live-event integration
+
+The existing `notification_events` retry/backoff queue now recognizes `channel='push'` and staff/customer UUID recipients.
+
+`provider-dispatch.js` has a fail-closed Web Push provider slot:
+
+- `NOTIFICATIONS_PUSH_WEBHOOK_URL`
+- `NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN` (or shared provider token fallback)
+
+Customer event hooks may enqueue one secondary push event only when:
+
+- Rosie customer notifications are opted in;
+- the corresponding event preference permits it;
+- an active customer push subscription exists.
+
+Assigned-staff live-interaction events may enqueue one push event for `bookings.assigned_staff_user_id` when that staff account has an active subscription. Development schema verification confirmed this booking UUID column exists.
+
+No per-device fan-out or recurring watcher runs inside booking/message requests. Actual device fan-out belongs in the push provider/sender.
+
+## Notification action permissions
+
+The existing notification administration remains scoped to explicit I.T. actions:
+
+- list/read queue → `it.notifications.view`;
+- process/retry queue → `it.notifications.process`.
+
+This avoids granting `manage_staff` or other unrelated business powers merely to operate notification infrastructure.
 
 ## Wake/sleep and CPU rules
 
-- Detailer performs a bounded assigned-work load; no eligible open job means no live-job bundle/feed/media/message monitor.
-- The live Detailer bundle wakes only for Arrived/Detailing/Paused work and uses manual/event-driven updates rather than polling.
-- Operations loads no operational dataset until Today/Schedule/Blocks/Assignments/Live is explicitly selected.
-- Finance, Administration, I.T., DAIP and Socials shells load no subsystem datasets merely because they are open.
-- Customer live progress uses active-job-only bounded refresh and stops when hidden/inactive.
-- Module/runtime-flag resolution is cached and timer-free.
-- Permission to access a notification/action does not create a timer; real events/manual actions invoke work.
-- Ambiguous non-idempotent writes are not automatically replayed after 5xx/timeouts.
-- Static Pages traffic stays outside Functions; `_routes.json` limits Functions to `/api/*`.
+- no open Detailer job → no live job bundle/feed/media/message monitor;
+- Detailer live bundle wakes only for eligible active work;
+- Operations datasets load only when the operator selects a view;
+- Finance/Admin/I.T./DAIP/Socials shells do not preload subsystem datasets;
+- Customer progress refresh is bounded/active-state only;
+- module/runtime flag resolution is cached and timer-free;
+- notification/push permissions do not create timers;
+- real events/manual actions invoke queue work;
+- ambiguous non-idempotent writes are not auto-replayed;
+- `_routes.json` keeps Functions under `/api/*`.
 
-## Public/service state retained
+## Build 268 repository hygiene retained
 
-Build 265 service convergence remains current:
+Build 268 removed redundant source/history bloat while preserving Git history:
 
-- 24 add-ons have canonical detailed service pages;
-- condition-sensitive work uses starting-price/condition-assessed wording rather than misleading flat final prices;
-- Headlight Restoration, carpet/extraction, pet hair, odour, engine work, coatings and similar variable work remain quote-safe;
-- duplicate service intents redirect to canonical URLs;
-- public pages remain static-first, responsive and one-H1 compliant;
-- approved R2 image hydration and visual placeholders remain supported.
-
-## Installable application direction
-
-Current source provides an installable PWA/service-worker foundation and event-driven push notification handlers. Build 269 synchronizes launcher/module/cache identity at 269. Remote push delivery is **not yet complete** because browser subscriptions and server-side Web Push delivery still need a stored subscription authority/provider integration.
-
-Planned packaging remains one shared codebase:
-
-- Web/PWA now;
-- Capacitor later for Android/iOS native push, camera/network/deep-link benefits;
-- Tauri later only where true Windows/macOS system-tray/background-native behavior is useful.
-
-## Build 268 repository hygiene
-
-Build 268 removed source-tree history/bloat without changing the database:
-
-- one canonical migration copy under `sql/` instead of duplicate root SQL files;
-- root API/function shims removed; Cloudflare Functions live under `functions/api/`;
-- retired/historical Markdown removed from the working tree; Git history is the archive;
-- stable canonical module registry names introduced;
-- comment-only/no-DDL “migration” marker files removed;
-- generated report/import-review artifacts removed;
-- `.gitignore` added to prevent ZIPs, local caches, logs and root migrations from accumulating again;
-- release checking modernized around current capabilities instead of obsolete historical marker files.
-
-Build 269 continues that convergence by replacing selected duplicate `/api/admin/` staff/auth/notification implementations with tiny compatibility wrappers to canonical root handlers.
+- migration history lives under `sql/`;
+- Cloudflare Functions live under `functions/api/`;
+- obsolete root API/shim copies and no-DDL marker migrations removed;
+- historical Markdown/report artifacts removed from working tree;
+- selected `/api/admin/` duplicates continue being replaced with tiny wrappers to canonical handlers;
+- `.gitignore` protects against ZIP/log/cache/root-migration accumulation.
 
 ## Current release guard
 
-`scripts/release_check.py` is the current capability-based guard. Build 269 source acceptance currently covers:
+`scripts/release_check.py` is the capability-based current guard. Build 270 protects:
 
-- canonical repository shape;
-- role/module ceilings and no-idle-poll rules;
-- schema-tolerant Build 267 migration;
-- TEXT/JSONB permissions-profile runtime compatibility;
-- Build 269 launcher/cache identity;
-- explicit action registry and I.T. notification authorization;
-- Cloudflare Functions static/syntax checks;
-- route-copy parity;
-- service/pricing content mirrors;
+- repository hygiene;
+- module/role/action boundaries;
+- no-idle-poll rules;
+- schema-tolerant Build 267 authority;
+- TEXT/JSONB staff-profile compatibility;
+- Build 270 launcher/cache identity;
+- server-only push migration/table authority;
+- authenticated staff/customer push ownership;
+- opt-in-only customer push;
+- no VAPID private-key exposure in browser assets/config response fields;
+- Functions syntax/static checks;
+- route parity;
+- service/pricing mirrors;
 - customer-profile quality;
 - global one-H1 SEO guard.
 
-## What still requires deployed/external evidence
+## Still requires deployed/external evidence
 
-Do not call these complete from source alone:
+Do **not** call these complete from source/database setup alone:
 
-- confirm the current Build 269 `dev` head is the Development Pages deployment and verify cache/script parity;
-- authenticated runtime acceptance for Admin and each focused role, including direct-URL/API denial outside its module/action ceiling;
-- verify Staff App Launcher → Public Site and protected page → Public Site navigation in the deployed browser;
-- representative Cloudflare evidence with `Exceeded CPU Time Limits = 0`, script exceptions = 0 and memory exceeded = 0;
-- Stripe test payment/refund/webhook acceptance;
+- confirm current Build 270 `dev` SHA is the Development Pages deployment;
+- deployed Staff App Launcher/Public Site navigation acceptance;
+- Admin and each focused role menu/direct-URL/API acceptance;
+- staff save/edit acceptance against the historical TEXT profile column;
+- representative Cloudflare CPU/script/memory evidence;
+- real VAPID key pair in a secret store;
+- real encrypted Web Push provider/sender configuration and staff/customer delivery evidence;
+- stale/410 push subscription revocation behavior;
+- Stripe payment/refund/webhook acceptance;
 - PayPal sandbox decision/acceptance if retained;
-- real Web Push subscription/provider delivery and failure evidence;
 - inventory posting/reversal/idempotency acceptance;
 - backup/restore and Cloudflare rollback rehearsal;
 - real-device mobile/PWA/accessibility acceptance;
 - Search Console/Google Business Profile evidence;
-- DAIP private processing/derivative/retry/dead-letter acceptance before any public handoff.
+- DAIP private processing/derivative/retry/dead-letter acceptance.
 
 ## Immediate engineering direction
 
-1. Complete deployed Build 269 role/module/action acceptance.
-2. Add stored Web Push subscriptions/preferences and server-side event delivery using the existing notification queue; do not add polling.
-3. Continue replacing broad legacy capabilities with explicit action permissions module by module.
-4. Move Customer ↔ Detailer/Operations messaging toward push/unread-event wakeups.
-5. After web/PWA behavior is proven, proceed toward Capacitor mobile packaging and later Tauri tray packaging where justified.
+1. Complete Build 270 source guard and deployed Development acceptance.
+2. Configure a secure VAPID sender/provider and prove one staff + one opted-in customer Web Push delivery.
+3. Revoke stale/expired subscriptions based on real provider response evidence.
+4. Continue converting broad legacy capabilities to explicit action permissions, beginning with Operations and Finance high-value mutations.
+5. Finish customer ↔ Detailer/Operations message unread/deep-link behavior using event-driven wakeups.
+6. After PWA/event behavior is proven, move toward Capacitor mobile packaging; Tauri tray packaging remains later/optional.
 
-The objective is not simply slower polling: **dormant modules should generate no periodic server traffic and real business events should wake only the people/modules that need them.**
+The target is unchanged: **dormant modules generate no periodic server traffic; real business events wake only the users/modules that need them.**
 
 ## Documentation policy
 
-Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Update them in place. Git history replaces historical working-tree copies.
+Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Update them in place; Git history is the archive.
