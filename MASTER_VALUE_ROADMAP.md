@@ -1,125 +1,96 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 266  
+**Build:** 267  
 **Updated:** 2026-08-29  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
 ## Current direction
 
-The next value is **not more always-loaded screens**. Rosie should become one application platform whose modules are permission-scoped, conditionally awake and installable across phone/desktop/web while preserving the static-first public site.
+Build 267 converts the private application from a broad Admin surface into a **role-aware module operating system**. The next work should prove the new database/server boundaries in Development, then continue event-driven notifications/native packaging and service economics without reintroducing always-awake pages.
 
-## Completed in Build 266
+## Completed in Build 267
 
-- [x] Expanded the four-shell foundation to eight modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, Socials & Integrations.
-- [x] Added a hard role ceiling: Detailer → Detailer only; Senior Detailer → Detailer + Operations; Admin → explicitly granted internal modules.
-- [x] Reused `staff_users.permissions_profile.module_access` for per-user module grants; no new staff-access DDL.
-- [x] Added global module on/off switches in existing `app_management_settings.module_runtime_flags`.
-- [x] Locked I.T. on as the recovery/control plane.
-- [x] Added 15-minute browser caching of the one-row module switch snapshot with no timer.
-- [x] Added I.T., Finance, DAIP and Socials/Integrations entry shells that load no subsystem dataset merely by opening.
-- [x] Re-scoped Administration away from Finance/I.T./DAIP/Socials.
-- [x] Preserved Detailer open-job-only live bundle and Operations explicit/manual workstream loading.
-- [x] Converted Customer Progress from perpetual interval polling to active-job-only one-shot refresh; inactive/hidden state sleeps.
-- [x] Exposed existing customer/detailer job updates as the two-way job messaging path.
-- [x] Added PWA icons, shortcuts, install controls, local device-notification permission/test and event-driven service-worker push handlers.
-- [x] Reduced service-worker precache to the shared launcher layer so optional modules are not eagerly downloaded.
-- [x] Restored Build 265 pricing/landing-page function mirrors found drifted in the newly supplied package.
+- [x] Added one hierarchical private navigation authority across the seven internal staff modules.
+- [x] Converted module home pages into categorized clickable workflow cards instead of flat legacy admin links.
+- [x] Replaced the protected-page flat Admin menu with a module-local menu plus All Apps / Module Home / Account navigation.
+- [x] Added focused role ceilings: Operations Manager, Accountant, I.T. Specialist, Promoter and DAIP Manager while retaining Detailer, Senior Detailer and Administrator.
+- [x] Made Administrator a forced all-internal-modules role in resolver, browser auth, staff-save API and migration.
+- [x] Reused `staff_users.permissions_profile.module_access`; no parallel staff entitlement table.
+- [x] Added fail-closed Build 267 SQL that grants every current Admin all modules **before** expanding `role_code` values.
+- [x] Reused `app_management_settings` for auditable role/module defaults.
+- [x] Added route-scoped server module fallback so focused roles can use legacy APIs in their own module without receiving the old broad capability everywhere.
+- [x] Preserved booking scope/action checks and DAIP/private-media gates.
+- [x] Preserved Build 264 Detailer idle sleep, Build 265 lazy Operations/service convergence, and Build 266 installable PWA/module-switch foundation.
 
-## Priority 0 — deploy and prove the module boundary
+## P0 — apply and prove Build 267 safely
 
-1. Deploy Build 266 Pages + Functions together and confirm cache/build identity `rosie-app-v20260829build266` / resolver Build 266.
-2. Confirm `_routes.json` still invokes Functions only under `/api/*`.
-3. Sign in as a **Detailer** and prove `/app/` shows only Detailer; direct Finance/I.T./DAIP/Socials/Admin/Operations routes must deny/return to Apps.
-4. Sign in as a **Senior Detailer** and prove only Detailer + Operations can be granted.
-5. Sign in as **Admin**, remove one module grant in Staff & Access, and prove it disappears/blocks without altering legacy action capabilities.
-6. In I.T., turn Finance off globally and prove Finance disappears/blocks for otherwise authorized staff; turn it back on.
-7. Leave I.T./Finance/DAIP/Socials/Admin shells open for five minutes and confirm they create no subsystem API traffic.
-8. Repeat Detailer no-open-job test: no live bundle/feed/media/messaging traffic.
-9. Open Customer Progress for a completed/inactive job and prove no refresh timer/API loop remains.
-10. Observe representative Cloudflare traffic and retain **Exceeded CPU Time Limits = 0** as the reliability gate.
+1. Inspect current Development `staff_users` and confirm which active rows are `role_code='admin'`.
+2. Apply `sql/2026-08-29_build267_role_module_hierarchy.sql` in Development. Its admin grant/assertion must complete before role constraint expansion.
+3. Read the affected Admin rows back and verify all seven internal module grants are true.
+4. Hard-refresh and verify Build/cache identity is 267.
+5. Sign in as an Admin and confirm all internal module cards appear and cannot be unchecked away.
+6. Create controlled test users for Operations Manager, Accountant, I.T. Specialist, Promoter and DAIP Manager.
+7. For each role, verify launcher shows only its role ceiling and direct links to other modules fail closed.
+8. Run actual API acceptance: Accountant Finance success + Staff/I.T./DAIP denial; Promoter Socials success + Finance/Admin denial; I.T. technical success + business mutation denial; DAIP success + Social/Finance denial; Operations scoped success + Finance/Admin denial.
+9. Verify Detailer remains Detailer-only; Senior Detailer remains Detailer + Operations only.
+10. Observe representative Cloudflare traffic and keep **Exceeded CPU Time Limits = 0**.
 
-## Priority 1 — finish module ownership rather than duplicating screens
+## P1 — finish module ownership cleanup
 
-Migrate existing legacy pages behind the new module boundaries without copying business logic.
+1. Retire duplicate legacy Today/Blocks/Assign cards only after their Operations lazy equivalents pass parity testing.
+2. Move any remaining private page that appears outside the hierarchy into exactly one primary module or explicitly mark it special/compatibility-only.
+3. Continue replacing old broad capability names inside endpoints with named action capabilities (`finance_read`, `finance_post`, `it_diagnostics`, `social_publish`, etc.) where evidence shows value; the Build 267 route fallback is a compatibility bridge, not the final permission vocabulary.
+4. Add a protected role/module matrix viewer in I.T. that reports roles, global switches and route ownership without reading business datasets.
+5. Add regression evidence for every route newly assigned to a module.
 
-1. **Operations:** Quotes/customer operational support, then mutations for Today/Schedule/Blocks/Assignments using scoped responses and local patching.
-2. **Administration:** staff/access, inventory/catalog, public content/media, business/site controls.
-3. **I.T.:** move all preflight/test/cache/runtime/security/launch/recovery navigation here; remove duplicate technical links from business dashboards.
-4. **Finance:** accounting, payments, payroll, tax, close/reconciliation and accountant export.
-5. **DAIP:** governance/readiness/private media/evidence/creative-content workflow, retaining all current hold gates.
-6. **Socials & Integrations:** connection state, explicit provider tests, content/social handoff; never wake external APIs from app/module load.
-7. Keep route aliases during migration; retire only after permission/runtime acceptance proves parity.
+## P2 — event-driven notifications / two-way app communication
 
-## Priority 2 — harden server namespaces to match the UI modules
+1. Keep one job-message authority; do not build a parallel chat store without a demonstrated need.
+2. Store explicit push subscriptions/preferences with consent, quiet hours and revoke controls.
+3. Push only meaningful events: assignment/change, new customer/detailer message, arrival/start/complete, quote/payment action, urgent I.T. failure.
+4. Push wakes the user; it must not become an excuse to restore aggressive polling.
+5. Keep queued/sent/delivered/failed notification evidence distinct.
 
-The Build 266 role ceiling protects what users see/load, but UI hiding is never the final security boundary.
+## P3 — full mobile + desktop packaging
 
-1. Add module ownership metadata to protected API groups.
-2. Require server-side module entitlement in addition to existing action capabilities on sensitive Finance/I.T./DAIP/Socials/Admin APIs.
-3. Keep Detailer job APIs booking-scoped even when the Detailer module is granted.
-4. Keep financial/private-media/settings writes server-authoritative.
-5. Add automated regression cases proving a Detailer cannot call Finance/I.T./DAIP/Admin endpoints even if an old legacy capability flag was mistakenly left true.
+- Continue PWA real-device acceptance first.
+- Use Capacitor for the iOS/Android wrapper around the same Rosie modules when bundle IDs/signing/native push decisions are ready.
+- Use Tauri only when true Windows/macOS tray, minimize-to-tray, auto-start and native background integration are required.
+- Do not fork business logic into separate mobile/desktop codebases.
 
-## Priority 3 — notifications and two-way communication without polling
+## P4 — service-cost / minimum-price authority
 
-1. Keep the current job feed as the single two-way job message authority; do not create a parallel chat database until evidence requires it.
-2. Add unread/message state to Customer and Detailer app surfaces from bounded current-job reads.
-3. Configure a real remote push strategy (Web Push and/or native provider) with consent, quiet hours, unsubscribe/revoke and cost controls.
-4. Save push subscriptions only after user action; never subscribe automatically.
-5. Trigger push from meaningful events (new customer message, detailer reply, schedule change, payment/quote action) rather than periodic checks.
-6. Keep notification delivery/retry auditable and separate queued-versus-delivered status.
-7. Add offline/weak-network compose protection only after field tests define required behaviour; avoid automatic duplicate message replay.
+Retain the Build 265 business direction: model labour minutes, consumables, overhead and target margin for every package/add-on; calculate minimum viable price and flag underpriced services. Continue replacing visual placeholders with approved Rosie work proof and keep severe condition work quote-based.
 
-## Priority 4 — mobile + desktop packaging
-
-### Shared PWA first
-
-- Accept install/add-to-home-screen on current Android/iOS/desktop browsers.
-- Test camera/file capture, weak Wi-Fi/cellular, offline fallback, resume and standalone display.
-- Verify app icons/shortcuts and local device notifications.
-
-### Native mobile wrapper next
-
-Use Capacitor around the same hosted/bundled web modules when we are ready to choose bundle IDs, signing, app-store accounts and native push provider. Do not fork business logic.
-
-### Native desktop wrapper only when needed
-
-Use Tauri around the same modules if we need true Windows/macOS tray, minimize-to-tray, auto-start, background native notifications or stronger OS integration. An installed PWA already covers standalone window/taskbar/pinning without adding a second native maintenance burden.
-
-## Priority 5 — retain Build 265 service economics direction
-
-1. Review the 24 add-on starting prices against actual Rosie labour/product cost.
-2. Build the planned **service-cost / minimum-price authority**: labour minutes by tier, consumables, overhead, target gross margin, minimum viable price and under-price warning.
-3. Continue approved real-work image replacement for service placeholders.
-4. Keep condition-assessed/quote-required services from being charged as blind flat extras.
-
-## Priority 6 — external commercial/go-live evidence
+## P5 — inherited go-live evidence
 
 - Stripe deposit/final balance/refund/webhook acceptance.
 - PayPal sandbox parity if retained.
-- Email/SMS delivery/retry/failure evidence.
+- Email/SMS/push delivery and failure evidence.
 - Inventory posting/reversal/idempotency.
-- Search Console/Business Profile/local SEO/accessibility/real-device acceptance.
-- Supabase restore + Cloudflare rollback rehearsal.
-- DAIP processor/derivative evidence before any production promotion.
+- Real-device mobile/accessibility testing.
+- Search Console / Business Profile / local proof review.
+- Supabase restore and Cloudflare rollback rehearsal.
+- DAIP private processing/derivative evidence before production promotion.
 
-## Permanent runtime rules
+## Permanent runtime/security rules
 
-- Authorization to a module does not mean the module is awake.
-- No recurring server read is added without an explicit operational need and documented sleep condition.
-- No open Detailer job = no live Detailer messaging/media monitor.
-- No active customer job = no Customer Progress refresh timer.
-- Hidden tabs suspend optional refresh.
-- Opening Finance/I.T./DAIP/Socials/Admin/Operations shells loads no subsystem dataset.
-- Global on/off switch is not a security grant; server authorization remains authoritative.
-- Do not make eight codebases or eight databases.
-- Public SEO pages stay static-first, crawlable, responsive and one-H1 compliant.
+- Role ceiling is a hard maximum, never a suggested menu.
+- Per-user grants can narrow lower roles; Administrator always retains every internal module.
+- Module OFF means the runtime does not load; OFF does not create a new permission grant.
+- Server action/scope checks remain authoritative even when module entitlement passes.
+- No module home or menu performs business-data reads.
+- No recurring read without an explicit wake condition and sleep condition.
+- No open Detailer job = no live Detailer monitor.
+- No active Customer job = no customer progress refresh timer.
+- Public SEO pages stay static-first, responsive and one-H1 compliant.
 
 ## Next clean checkpoint
 
-Build 266 becomes a clean Development checkpoint when source guards are green **and** deployed acceptance proves role ceilings, per-user grants, global on/off switches, idle network behaviour, PWA install/device notifications and Cloudflare CPU stability. Then begin server-side module entitlement hardening and remote-push/native-wrapper work instead of adding another broad admin screen.
+Build 267 becomes Development-proven only after the actual database migration and controlled role/API tests pass. **Build 268 should then implement event-driven push/subscription authority and stronger named server capabilities**, not another flat dashboard.
 
+<!-- Historical Build 266 exact release tokens: **Build:** 266 | Completed in Build 266 | server-side module entitlement | Capacitor | Tauri -->
 <!-- Historical release-check compatibility only: Build:** 265 | Completed in Build 265 | service-cost / minimum-price authority | Build 264 Modular Runtime Roadmap | Build 265 Operations runtime -->
 
 ---
