@@ -1,3 +1,39 @@
+# Build 265 current acceptance — service convergence + Operations runtime
+
+**Authority note:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are the only living planning authorities. This file is the specialist deployed-environment checklist.
+
+## Build/cache identity
+
+- [ ] Deploy Pages + Functions together and hard-refresh.
+- [ ] Confirm service worker cache is `rosie-app-v20260829build265`.
+- [ ] Confirm Runtime/Cache Health reports Build 265 from `/assets/app-core/module-resolver.js`.
+
+## Public service acceptance
+
+- [ ] Open Headlight Restoration and confirm light/moderate/heavy condition tiers, process, limits, aftercare, FAQ and one H1.
+- [ ] Open Carpet Shampoo and confirm routine shampoo, repeated extraction and under-carpet restoration are visibly different scopes.
+- [ ] Confirm Services and Booking show condition-sensitive add-ons as starting-price/condition-assessed work rather than a guaranteed flat amount.
+- [ ] Confirm `/headlight-restoration-addon`, `/odor-treatment` and `/external-ceramic-coating` 301 to their canonical routes.
+- [ ] Verify several add-on pages at desktop, tablet and ~390px phone widths with no overflow/overlap.
+- [ ] Confirm placeholder photo briefs are replaced only by deliberate approved Rosie-owned images.
+
+## Operations modular runtime acceptance
+
+- [ ] Sign in with an Operations-authorized account and open `/app/operations/`. Confirm no Today/Schedule/Blocks/Assignment/Live dataset request occurs merely from opening the shell.
+- [ ] Select each workstream once and confirm only that workstream's bounded/manual read occurs.
+- [ ] Leave Operations open for at least 5 minutes. Confirm no recurring Operations API traffic.
+- [ ] Select Live Snapshot. Confirm it loads one snapshot and does not begin a timer.
+- [ ] Press Sleep Operations and confirm no selected workstream remains active.
+
+## Reliability gates still inherited from Build 262
+
+- [ ] Representative Cloudflare test window shows **Exceeded CPU Time Limits: 0**.
+- [ ] Script exceptions: 0.
+- [ ] Memory exceeded: 0.
+- [ ] Verify corrected Build 262 analytics rollup migration state before applying any historical SQL.
+
+---
+
 # Build 264 modular Detailer runtime acceptance — specialist runbook
 
 Use `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` for current strategy. Build 262 CPU evidence remains a P0 go-live gate.
