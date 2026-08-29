@@ -1,3 +1,5 @@
+import { parsePermissionsProfile, moduleAccessFromProfile } from "./permissions-profile.js";
+
 // functions/api/_lib/staff-session.js
 //
 // Shared staff session helpers.
@@ -364,8 +366,8 @@ function normalizeStaffUser(row) {
     can_manage_progress: row.can_manage_progress === true,
     can_manage_promos: row.can_manage_promos === true,
     can_manage_staff: row.can_manage_staff === true,
-    permissions_profile: row.permissions_profile && typeof row.permissions_profile === "object" ? row.permissions_profile : {},
-    module_access: row.permissions_profile?.module_access && typeof row.permissions_profile.module_access === "object" ? row.permissions_profile.module_access : {},
+    permissions_profile: parsePermissionsProfile(row.permissions_profile),
+    module_access: moduleAccessFromProfile(row.permissions_profile),
     notes: row.notes || null,
     is_admin: String(row.role_code || "") === "admin",
     is_senior_detailer: String(row.role_code || "") === "senior_detailer",
