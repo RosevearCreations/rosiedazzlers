@@ -324,7 +324,7 @@ async function loadStaffUserById(env, staffUserId) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/staff_users` +
       `?select=id,created_at,updated_at,full_name,email,role_code,is_active,` +
-      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes` +
+      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,permissions_profile,notes` +
       `&id=eq.${encodeURIComponent(staffUserId)}` +
       `&limit=1`,
     {
@@ -342,7 +342,7 @@ async function loadStaffUserByEmail(env, email) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/staff_users` +
       `?select=id,created_at,updated_at,full_name,email,role_code,is_active,` +
-      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes` +
+      `can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,permissions_profile,notes` +
       `&email=eq.${encodeURIComponent(email)}` +
       `&limit=1`,
     {
@@ -460,6 +460,8 @@ function normalizeActor(row, { is_legacy_admin = false } = {}) {
     can_manage_progress: row.can_manage_progress === true,
     can_manage_promos: row.can_manage_promos === true,
     can_manage_staff: row.can_manage_staff === true,
+    permissions_profile: row.permissions_profile && typeof row.permissions_profile === "object" ? row.permissions_profile : {},
+    module_access: row.permissions_profile?.module_access && typeof row.permissions_profile.module_access === "object" ? row.permissions_profile.module_access : {},
 
     notes: row.notes || null,
 
@@ -486,6 +488,8 @@ function makeLegacyAdminActor() {
     can_manage_progress: true,
     can_manage_promos: true,
     can_manage_staff: true,
+    permissions_profile: { module_access: { detailer:true, operations:true, admin:true, it:true, finance:true, daip:true, socials:true } },
+    module_access: { detailer:true, operations:true, admin:true, it:true, finance:true, daip:true, socials:true },
 
     notes: null,
 
