@@ -1,0 +1,9 @@
+const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export async function mount({host,api}){
+  let visible=true;
+  host.innerHTML='<section class="panel stack"><div class="module-head"><div><span class="badge">Manual module</span><h2>Today needs attention</h2></div><button class="btn ghost" id="opsTodayRefresh">Refresh now</button></div><div id="opsTodayBody"><div class="notice">Loading once…</div></div><a class="btn ghost small" href="/admin-today.html">Open full Today workspace</a></section>';
+  const body=()=>host.querySelector('#opsTodayBody');
+  async function load(){if(!visible)return;body().innerHTML='<div class="notice">Refreshing once…</div>';const out=await api.requestJson('/api/admin/today_needs_attention_report');const c=out.counts||{};const rows=Array.isArray(out.items)?out.items.slice(0,12):[];body().innerHTML=`<div class="operations-stats"><div><span>Total</span><strong>${Number(c.total||0)}</strong></div><div><span>Urgent</span><strong>${Number(c.urgent||0)}</strong></div><div><span>High</span><strong>${Number(c.high||0)}</strong></div></div>${rows.length?`<div class="operations-list">${rows.map((x)=>`<article class="operations-row"><div><span class="badge">${esc(x.urgency||'normal')}</span><h3>${esc(x.title||'Attention item')}</h3><p class="mini">${esc(x.detail||'')}</p></div><a class="btn ghost small" href="${esc(x.target||'/admin-today.html')}">Open</a></article>`).join('')}</div>`:'<div class="notice ok">No attention items are open.</div>'}`;}
+  host.querySelector('#opsTodayRefresh').addEventListener('click',()=>load().catch((e)=>body().innerHTML=`<div class="notice bad">${esc(e.message)}</div>`));
+  await load();return{suspend(){visible=false;},setVisibility(v){visible=v!==false;}};
+}
