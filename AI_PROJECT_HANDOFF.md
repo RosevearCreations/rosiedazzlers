@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 268  
+**Build:** 269  
 **Updated:** 2026-08-29  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
@@ -39,7 +39,7 @@ Current staff role ceilings:
 | `daip_manager` | DAIP |
 | `admin` | all seven internal staff modules |
 
-Per-user grants continue to live in `staff_users.permissions_profile.module_access`; global availability continues to use `app_management_settings.module_runtime_flags`. Server-side action/scope/privacy/DAIP checks remain authoritative even when a module is visible.
+Per-user module grants continue to live in `staff_users.permissions_profile.module_access`; explicit Build 269 action overrides use `staff_users.permissions_profile.action_access`; global availability continues to use `app_management_settings.module_runtime_flags`. A role/module ceiling is always checked before an action grant, so a per-user action cannot escape the role's module ceiling. Admin remains all-modules/all-actions by design.
 
 ### Build 267 database acceptance
 
@@ -49,22 +49,36 @@ Development evidence supplied on 2026-08-29 confirms:
 - `staff_role_module_defaults` is stored in `app_management_settings`;
 - the verified Administrator module profile contains `detailer`, `operations`, `admin`, `it`, `finance`, `daip`, and `socials` all `true`.
 
-Development also exposed historical schema drift: `staff_users.permissions_profile` had existed as `text` even though later aggregate schema documentation described it as `jsonb`. The schema-tolerant Build 267 migration was used successfully. Do not blindly change that column type until every consumer and actual environment are audited.
+Development also exposed historical schema drift: `staff_users.permissions_profile` had existed as `text` even though later aggregate schema documentation described it as `jsonb`. The schema-tolerant Build 267 migration was used successfully. Build 269 now normalizes TEXT or JSONB at runtime and writes back using the observed database representation. Do not blindly change the column type until every consumer and actual environment are audited.
 
 ## Private navigation
 
-`/app/` is the role-aware staff launcher. Each allowed module has a module home with categorized static cards. Protected legacy pages render their owning module hierarchy instead of the historical flat Admin menu.
+`/app/` is the **Staff App Launcher**, not the Business Administration module. `/app/admin/` is the Business Administration home. Build 269 adds an explicit **Public Site** return control to the launcher and the shared protected-page return bar. Each allowed module has a module home with categorized static cards. Protected legacy pages render their owning module hierarchy instead of the historical flat Admin menu.
 
-Canonical authorities are now stable names rather than build-number copies:
+Canonical authorities:
 
 - `data/app_modules.json`
 - `data/internal_navigation.json`
 - `data/route_module_ownership.json`
+- `data/action_permissions.json`
 - `docs/modular-app/README.md`
 - `assets/app-core/module-resolver.js`
 - `assets/app-core/module-navigation.js`
-- `functions/api/admin/_lib/staff-auth.js`
+- `functions/api/_lib/staff-auth.js`
+- `functions/api/_lib/permissions-profile.js`
+- `functions/api/_lib/action-permissions.js`
 - `sql/2026-08-29_build267_role_module_hierarchy.sql`
+
+## Build 269 action-permission convergence
+
+Build 269 introduces explicit action names without discarding the legacy capability bridge in one unsafe step. Initial action families include Detailer job/message actions, Operations schedule/assignment/customer actions, Administration staff/settings actions, I.T. runtime/notification/module actions, Finance view/post/reconcile, DAIP view/manage and Socials view/manage/publish.
+
+The existing notification queue is retained. Its authorization is now separated from unrelated broad capabilities:
+
+- notification list/read requires `it.notifications.view`;
+- manual notification processing/retry requires `it.notifications.process`.
+
+Focused roles receive role-safe defaults from `data/action_permissions.json`; an explicit `action_access` value may narrow/allow an action only inside the user's module ceiling. No recurring notification polling was added.
 
 ## Wake/sleep and CPU rules
 
@@ -74,6 +88,7 @@ Canonical authorities are now stable names rather than build-number copies:
 - Finance, Administration, I.T., DAIP and Socials shells load no subsystem datasets merely because they are open.
 - Customer live progress uses active-job-only bounded refresh and stops when hidden/inactive.
 - Module/runtime-flag resolution is cached and timer-free.
+- Permission to access a notification/action does not create a timer; real events/manual actions invoke work.
 - Ambiguous non-idempotent writes are not automatically replayed after 5xx/timeouts.
 - Static Pages traffic stays outside Functions; `_routes.json` limits Functions to `/api/*`.
 
@@ -90,7 +105,7 @@ Build 265 service convergence remains current:
 
 ## Installable application direction
 
-Current source provides an installable PWA/service-worker foundation and event-driven push notification handlers. Remote push delivery is **not yet complete**.
+Current source provides an installable PWA/service-worker foundation and event-driven push notification handlers. Build 269 synchronizes launcher/module/cache identity at 269. Remote push delivery is **not yet complete** because browser subscriptions and server-side Web Push delivery still need a stored subscription authority/provider integration.
 
 Planned packaging remains one shared codebase:
 
@@ -100,30 +115,46 @@ Planned packaging remains one shared codebase:
 
 ## Build 268 repository hygiene
 
-Build 268 deliberately removes source-tree history/bloat without changing the database:
+Build 268 removed source-tree history/bloat without changing the database:
 
 - one canonical migration copy under `sql/` instead of duplicate root SQL files;
 - root API/function shims removed; Cloudflare Functions live under `functions/api/`;
 - retired/historical Markdown removed from the working tree; Git history is the archive;
-- old build-numbered module registries replaced by stable canonical registry names;
+- stable canonical module registry names introduced;
 - comment-only/no-DDL “migration” marker files removed;
 - generated report/import-review artifacts removed;
-- oversized committed fallback images optimized in place without changing their public paths/dimensions;
 - `.gitignore` added to prevent ZIPs, local caches, logs and root migrations from accumulating again;
-- release checking is being modernized around current capabilities instead of forcing obsolete historical marker files to remain forever.
+- release checking modernized around current capabilities instead of obsolete historical marker files.
 
-This reduces deploy/checkout weight and, more importantly, removes multiple competing copies of the same authority.
+Build 269 continues that convergence by replacing selected duplicate `/api/admin/` staff/auth/notification implementations with tiny compatibility wrappers to canonical root handlers.
+
+## Current release guard
+
+`scripts/release_check.py` is the current capability-based guard. Build 269 source acceptance currently covers:
+
+- canonical repository shape;
+- role/module ceilings and no-idle-poll rules;
+- schema-tolerant Build 267 migration;
+- TEXT/JSONB permissions-profile runtime compatibility;
+- Build 269 launcher/cache identity;
+- explicit action registry and I.T. notification authorization;
+- Cloudflare Functions static/syntax checks;
+- route-copy parity;
+- service/pricing content mirrors;
+- customer-profile quality;
+- global one-H1 SEO guard.
 
 ## What still requires deployed/external evidence
 
 Do not call these complete from source alone:
 
-- deploy the Build 268 cleaned source to the Development Pages project and confirm cache/script parity;
-- authenticated runtime acceptance for each focused role and direct-URL/API denial outside its module ceiling;
+- confirm the current Build 269 `dev` head is the Development Pages deployment and verify cache/script parity;
+- authenticated runtime acceptance for Admin and each focused role, including direct-URL/API denial outside its module/action ceiling;
+- verify Staff App Launcher → Public Site and protected page → Public Site navigation in the deployed browser;
 - representative Cloudflare evidence with `Exceeded CPU Time Limits = 0`, script exceptions = 0 and memory exceeded = 0;
 - Stripe test payment/refund/webhook acceptance;
 - PayPal sandbox decision/acceptance if retained;
-- real notification-provider delivery and failure evidence;
+- real Web Push subscription/provider delivery and failure evidence;
 - inventory posting/reversal/idempotency acceptance;
 - backup/restore and Cloudflare rollback rehearsal;
 - real-device mobile/PWA/accessibility acceptance;
@@ -132,7 +163,13 @@ Do not call these complete from source alone:
 
 ## Immediate engineering direction
 
-After Build 268 Development acceptance, proceed to the event-driven permission/notification program in `MASTER_VALUE_ROADMAP.md`. The objective is not simply slower polling: **dormant modules should generate no periodic server traffic and real business events should wake only the people/modules that need them.**
+1. Complete deployed Build 269 role/module/action acceptance.
+2. Add stored Web Push subscriptions/preferences and server-side event delivery using the existing notification queue; do not add polling.
+3. Continue replacing broad legacy capabilities with explicit action permissions module by module.
+4. Move Customer ↔ Detailer/Operations messaging toward push/unread-event wakeups.
+5. After web/PWA behavior is proven, proceed toward Capacitor mobile packaging and later Tauri tray packaging where justified.
+
+The objective is not simply slower polling: **dormant modules should generate no periodic server traffic and real business events should wake only the people/modules that need them.**
 
 ## Documentation policy
 
