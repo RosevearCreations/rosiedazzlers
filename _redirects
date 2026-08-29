@@ -1,2 +1,5 @@
 # Folder-backed routes remain the live baseline.
 # Build 188 removed the invalid /landing/* rewrite because Cloudflare detected an infinite loop.
+/headlight-restoration-addon /headlight-restoration 301
+/odor-treatment /odor-removal 301
+/external-ceramic-coating /ceramic-coating 301
