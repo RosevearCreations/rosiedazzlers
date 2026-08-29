@@ -1,3 +1,49 @@
+# Build 266 current acceptance — eight-module runtime + installable app foundation
+
+**Authority note:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are the only living planning authorities. This is deployed-environment acceptance.
+
+## Build/cache
+
+- [ ] Deploy Pages + Functions together.
+- [ ] Confirm service worker cache `rosie-app-v20260829build266`.
+- [ ] Confirm Cache Health reads Build 266 from `/assets/app-core/module-resolver.js`.
+- [ ] Confirm `_routes.json` still limits Functions to `/api/*`.
+
+## Role ceiling / grants
+
+- [ ] Detailer account: launcher shows Detailer only; Operations/Admin/I.T./Finance/DAIP/Socials direct entries deny/return to Apps.
+- [ ] Senior Detailer: only Detailer + Operations can be granted.
+- [ ] Admin: remove Finance module grant in Staff & Access and confirm Finance disappears/denies; restore it.
+- [ ] Confirm a stray legacy `can_manage_bookings` on a Detailer cannot expose Operations/Finance/Admin.
+
+## Global switches
+
+- [ ] I.T. → turn Finance OFF. Confirm an otherwise authorized Admin no longer sees/opens Finance after switch refresh.
+- [ ] Turn Finance ON and confirm it returns.
+- [ ] Confirm I.T. is locked on and cannot disable the recovery/control plane.
+- [ ] Leave each lazy shell open for five minutes and confirm no subsystem API polling/dataset load occurs.
+
+## Detailer + two-way messages
+
+- [ ] No open assigned job: no live bundle, live feed, photo/video, or recurring Detailer message request.
+- [ ] Active job: customer message appears in the lazy live feed; Detailer reply/update returns into local feed without full workspace reload.
+- [ ] Customer Progress active job: refresh is no faster than ~120 seconds and pauses hidden.
+- [ ] Completed/inactive job: Customer Progress has no refresh timer/API loop.
+
+## Installability / notifications
+
+- [ ] Install Rosie as a PWA on representative Android/iOS/desktop browser where supported.
+- [ ] Confirm standalone launch, icons and shortcuts.
+- [ ] Enable notifications by user gesture and send the local test notification.
+- [ ] Confirm no push subscription/provider is claimed until a real remote-push implementation is configured/tested.
+
+## Reliability inherited
+
+- [ ] Representative Cloudflare test window: Exceeded CPU Time Limits = 0; script exceptions = 0; memory exceeded = 0.
+- [ ] Re-run Stripe/PayPal/notification-provider/inventory/restore/mobile/accessibility/SEO gates before go-live.
+
+---
+
 # Build 265 current acceptance — service convergence + Operations runtime
 
 **Authority note:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are the only living planning authorities. This file is the specialist deployed-environment checklist.
