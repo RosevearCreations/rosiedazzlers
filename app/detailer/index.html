@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0f172a"/>
+  <meta name="robots" content="noindex,nofollow"/>
+  <title>Detailer Mobile App | Rosie Dazzlers</title>
+  <meta name="description" content="Rosie Dazzlers mobile-first field application for assigned jobs. Live-job tools remain asleep until a job is open."/>
+  <link rel="stylesheet" href="/assets/site.css?v=20260825build264"/>
+  <style>
+    .app-shell{width:min(1120px,calc(100% - 24px));margin:0 auto;padding:18px 0 90px}.app-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}.app-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}.app-brand img{width:42px;height:42px;object-fit:contain}.module-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.5fr);gap:16px;align-items:start}.stack{display:grid;gap:12px}.runtime-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.runtime-card{padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.runtime-card strong{display:block;font-size:1.1rem}.job-button{width:100%;text-align:left;display:grid;gap:4px}.job-button[aria-current="true"]{outline:2px solid rgba(56,189,248,.75);background:rgba(56,189,248,.08)}.job-actions{display:flex;gap:8px;flex-wrap:wrap}.job-actions .btn{min-height:44px}.idle-panel{padding:20px;border:1px dashed var(--border);border-radius:16px}.live-host[data-loaded="false"]{min-height:150px;display:grid;place-items:center}.mobile-bar{position:fixed;left:12px;right:12px;bottom:max(10px,env(safe-area-inset-bottom));z-index:40;display:none;gap:8px;padding:10px;background:rgba(8,17,31,.95);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(12px)}.mobile-bar .btn{flex:1;min-height:48px}.mode-idle{color:#94a3b8}.mode-ready{color:#fbbf24}.mode-live{color:#4ade80}.mini{font-size:.85rem;color:var(--muted)}
+    @media(max-width:860px){.module-grid{grid-template-columns:1fr}.runtime-strip{grid-template-columns:1fr}.mobile-bar{display:flex}.app-shell{padding-bottom:110px}}
+  </style>
+</head>
+<body data-page="app-detailer" data-app-module="detailer" data-build="264">
+  <main class="app-shell">
+    <header class="app-head">
+      <a class="app-brand" href="/app/"><img data-logo alt="Rosie Dazzlers logo"/><span><strong>Rosie Dazzlers</strong><br><span class="mini">Detailer Mobile App</span></span></a>
+      <div class="job-actions"><a class="btn ghost" href="/app/">Apps</a><a class="btn ghost" href="/detailer-jobs.html">Legacy workspace</a><button class="btn ghost" data-admin-logout type="button">Sign out</button></div>
+    </header>
+
+    <section class="panel stack" aria-labelledby="detailer-title">
+      <div><span class="badge">Build 264 modular runtime</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow stays lightweight. Live feed, photo/video, and customer-progress code loads only while an eligible job is open.</p></div>
+      <div class="runtime-strip">
+        <div class="runtime-card"><span class="mini">Runtime mode</span><strong id="runtimeMode">Starting…</strong><span class="mini" id="runtimeReason">Checking assigned jobs once.</span></div>
+        <div class="runtime-card"><span class="mini">Automatic monitoring</span><strong id="monitorState">OFF</strong><span class="mini">Build 264 creates no job polling interval.</span></div>
+        <div class="runtime-card"><span class="mini">Signed in</span><strong data-actor-name>Staff</strong><span class="mini" data-actor-role></span></div>
+      </div>
+      <div id="appStatus" class="notice" hidden></div>
+    </section>
+
+    <section class="module-grid section">
+      <aside class="stack">
+        <article class="panel stack">
+          <div class="job-actions"><button class="btn primary" id="refreshJobs" type="button">Refresh assigned jobs</button><span class="badge" id="jobCount">0 jobs</span></div>
+          <div id="jobsList"><div class="notice">Loading the bounded workspace once…</div></div>
+        </article>
+        <article class="panel stack">
+          <h2 style="margin:0">Selected job</h2>
+          <div id="jobSummary" class="mini">Choose an assigned job.</div>
+          <label>Workflow note / reason<input id="workflowReason" maxlength="500" placeholder="Required for decline/pause; optional otherwise"/></label>
+          <div class="job-actions" id="workflowActions">
+            <button class="btn ghost" data-job-action="accept">Accept</button><button class="btn ghost" data-job-action="decline">Decline</button><button class="btn ghost" data-job-action="dispatch">On my way</button><button class="btn ghost" data-job-action="arrive">Arrived</button><button class="btn primary" data-job-action="start">Start job</button><button class="btn ghost" data-job-action="pause">Pause</button><button class="btn ghost" data-job-action="resume">Resume</button><button class="btn primary" data-job-action="complete">Complete</button>
+          </div>
+        </article>
+      </aside>
+
+      <section class="stack">
+        <article class="panel stack" id="runtimeExplanation">
+          <h2 style="margin:0">Job runtime</h2>
+          <div id="runtimeMessage" class="idle-panel"><strong>Idle by default.</strong><p class="mini">No live-job module is loaded until an assigned job enters Arrived, Detailing, or Paused state.</p></div>
+        </article>
+        <div id="liveJobHost" class="live-host" data-loaded="false"><div class="notice">Live-job tools are asleep.</div></div>
+      </section>
+    </section>
+  </main>
+  <div class="mobile-bar"><button class="btn primary" id="mobileRefreshJobs" type="button">Refresh jobs</button><a class="btn ghost" href="/app/">Apps</a></div>
+
+  <script src="/assets/admin-auth.js?v=20260825build264"></script>
+  <script src="/assets/admin-shell.js?v=20260825build264"></script>
+  <script src="/assets/app-core/module-resolver.js?v=20260825build264"></script>
+  <script src="/assets/app-core/runtime-policy.js?v=20260825build264"></script>
+  <script src="/assets/app-core/api-client.js?v=20260825build264"></script>
+  <script src="/assets/app-core/module-loader.js?v=20260825build264"></script>
+  <script src="/assets/app-core/refresh-leader.js?v=20260825build264"></script>
+  <script src="/apps/detailer/detailer-app.js?v=20260825build264"></script>
+</body>
+</html>
