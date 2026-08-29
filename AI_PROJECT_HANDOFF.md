@@ -1,3 +1,84 @@
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 264 Detailer Modular Runtime
+
+**Updated:** 2026-08-25  
+**Build:** 264  
+**Runtime priority:** continue CPU stabilization while moving always-awake interface logic into conditionally loaded modules.
+
+## Build 264 current state
+
+Rosie now has canonical entry shells for **Customer**, **Detailer Mobile**, **Operations / Supervisor**, and **Business Administration** under `/app/`. Build 264 activates the first real extracted runtime: `/app/detailer/`.
+
+The Detailer base shell performs staff authentication plus one bounded `/api/detailer/jobs?scope=workspace` load. It creates no recurring job timer. If no Arrived/Detailing/Paused job exists, live feed/media/customer-progress logic remains asleep and the separate `live-job-module.js` bundle is not requested.
+
+When a field action changes job state, the client patches local state from the authoritative mutation response instead of immediately reloading the jobs workspace. The live module wakes only for an open job, loads the feed once, uses explicit/manual refresh thereafter, and updates returned notes/media locally. Photo/video binaries upload directly to signed storage; Cloudflare Functions only authorize/sign and record metadata.
+
+### Four module status
+
+1. **Customer App** — canonical `/app/customer/`; compatibility bridge for current interactive routes; public SEO stays static-first.
+2. **Detailer Mobile App** — canonical `/app/detailer/`; **active modular runtime in Build 264**.
+3. **Operations / Supervisor App** — canonical `/app/operations/`; protected bridge with no operational datasets loaded merely by opening the shell. Build 265 runtime target.
+4. **Business Administration App** — canonical `/app/admin/`; protected bridge; back-office datasets remain on-demand.
+
+### Build 264 acceptance rule
+
+> **No eligible open Detailer job = no recurring live-job network activity and no live-job bundle request.**
+
+No Build 264 SQL migration is required. Preserve and apply the corrected Build 262 analytics RPC migration where not already applied. Build 262 Cloudflare acceptance remains in force: representative testing must show zero exceeded-CPU terminations before go-live.
+
+### Immediate next priorities
+
+1. Deploy Build 264 and confirm service-worker/cache identity reports Build 264.
+2. Sign in as a Detailer with no open job and confirm Runtime Diagnostics shows only authentication + bounded workspace activity, with no repeating Detailer API calls.
+3. Select a scheduled job and confirm the live-job chunk/feed still does not load.
+4. Advance a safe test job to Arrived/Detailing and confirm the live chunk loads once; note/media actions remain event-driven.
+5. Complete/close the test job and confirm live controls suspend without a polling loop.
+6. Continue Cloudflare CPU evidence monitoring.
+7. Build 265: migrate Today / Schedule / Blocks / Assignment / Live into the first real Operations runtime with explicit blocked-day/no-active-job sleep state.
+
+---
+
+# CURRENT LIVING AUTHORITY 1 OF 2 — Build 263 Architecture Foundation
+
+**Updated:** 2026-08-21  
+**Build:** 263 planning/scaffolding foundation  
+**Runtime priority:** Build 262 CPU stabilization remains P0 until representative Cloudflare evidence is clean.
+
+## Modular application direction
+
+Rosie Dazzlers is being reorganized as one platform with four independently loadable application shells:
+
+1. **Customer App** — customer/guest booking, account, progress, quote/payment and repeat-maintenance interaction. Public SEO pages remain static-first.
+2. **Detailer Mobile App** — assigned-job field workflow, media, notes, incidents, material capture and closeout. No active/eligible job means live-job logic is dormant.
+3. **Operations / Supervisor App** — Today Needs Attention, booking/schedule/assignment, live-job oversight, progress/incidents, leads/quotes and customer operational support. Blocked/no-active-job days suppress live monitoring.
+4. **Business Administration App** — finance, inventory administration, staff/security, settings, media/content/SEO, analytics, readiness, integrations, DAIP administration and diagnostics; back-office modules load on demand.
+
+This is an incremental shell separation, not four repositories or four databases. Authentication/data remain shared, authorization remains server-side, and existing routes stay compatible while screens migrate.
+
+### Build 263 foundation artifacts
+
+- `docs/modular-app/01_MODULAR_APPLICATION_ARCHITECTURE.md`
+- `docs/modular-app/02_BUILD263_IMPLEMENTATION_PLAN.md`
+- `data/build263_app_modules.json`
+- `data/build263_route_migration_matrix.csv`
+- `data/build263_api_namespace_inventory.csv`
+- ownership scaffolds under `apps/customer`, `apps/detailer`, `apps/operations`, `apps/admin`, and `assets/app-core`
+
+### Core runtime rule
+
+Module access and feature activity are separate. Registration/role decides which shell may load; operational state decides which permitted features are awake. Timers are off by default, hidden tabs pause optional refresh, same-browser tabs must not multiply a timer, and blocked/no-job states turn off live-job monitoring.
+
+### Implementation order
+
+1. Prove Build 262 CPU stabilization in deployed test use.
+2. Add the small shared module resolver/runtime-policy layer.
+3. Migrate Detailer Mobile first because it has the clearest idle/active state boundary.
+4. Migrate Operations/Supervisor workflows.
+5. Migrate Business Administration in lazy-loaded groups.
+6. Consolidate interactive customer flows while keeping SEO pages static-first.
+7. Retire old compatibility routes only after route/capability/CPU evidence is clean.
+
+---
+
 # CURRENT LIVING AUTHORITY 1 OF 2 — Build 262
 
 **Updated:** 2026-08-20  
