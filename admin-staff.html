@@ -126,8 +126,23 @@
               <label class="row"><input id="canManageProgress" type="checkbox" /> <div><strong>Can manage progress</strong></div></label>
               <label class="row"><input id="canManagePromos" type="checkbox" /> <div><strong>Can manage promos</strong></div></label>
               <label class="row"><input id="canManageStaff" type="checkbox" /> <div><strong>Can manage staff</strong></div></label>
-              <label class="row"><input id="payrollEnabled" type="checkbox" checked /> <div><strong>Payroll enabled</strong><div class="kicker">Include this staff member in payroll runs.</div></div></label>
             </div>
+
+            <fieldset class="panel" style="padding:14px;margin:0">
+              <legend><strong>Application module access</strong></legend>
+              <p class="kicker">Build 266 uses a hard role ceiling first. Detailers can only receive Detailer; Senior Detailers can receive Detailer + Operations; Admins can be granted any internal module. A checkbox can remove access but cannot elevate a role.</p>
+              <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+                <label class="row"><input type="checkbox" data-module-access="detailer" /> <div><strong>Detailer</strong><div class="kicker">Assigned mobile field work</div></div></label>
+                <label class="row"><input type="checkbox" data-module-access="operations" /> <div><strong>Operations</strong><div class="kicker">Schedule, blocks, assignment, oversight</div></div></label>
+                <label class="row"><input type="checkbox" data-module-access="admin" /> <div><strong>Administration</strong><div class="kicker">Staff, inventory, site/content</div></div></label>
+                <label class="row"><input type="checkbox" data-module-access="it" /> <div><strong>I.T.</strong><div class="kicker">Tests, preflights, diagnostics, recovery</div></div></label>
+                <label class="row"><input type="checkbox" data-module-access="finance" /> <div><strong>Finance</strong><div class="kicker">Accounting, payments, payroll, tax</div></div></label>
+                <label class="row"><input type="checkbox" data-module-access="daip" /> <div><strong>DAIP</strong><div class="kicker">Private governed media/evidence</div></div></label>
+                <label class="row"><input type="checkbox" data-module-access="socials" /> <div><strong>Socials & Integrations</strong><div class="kicker">Social/content/provider connections</div></div></label>
+              </div>
+            </fieldset>
+
+            <label class="row"><input id="payrollEnabled" type="checkbox" checked /> <div><strong>Payroll enabled</strong><div class="kicker">Include this staff member in payroll runs.</div></div></label>
 
             <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
               <label>Employee code<input id="employeeCode" type="text" placeholder="RD-001" /></label>
@@ -179,6 +194,12 @@
     let staffUsers = [];
     let customerTiers = [];
     let selectedStaffId = "";
+    const MODULE_KEYS = ["detailer","operations","admin","it","finance","daip","socials"];
+    const ROLE_MODULES = {
+      detailer: ["detailer"],
+      senior_detailer: ["detailer","operations"],
+      admin: [...MODULE_KEYS]
+    };
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -204,6 +225,25 @@
         ? customerTiers.map((tier) => `<div><strong>${escapeHtml(tier.label || tier.code)}</strong> — ${escapeHtml(tier.description || "")}</div>`).join("")
         : "No customer tiers loaded.";
     }
+    function syncModuleAccess(row = null, useRoleDefaults = false) {
+      const role = document.querySelector("#roleCode").value || "detailer";
+      const ceiling = new Set(ROLE_MODULES[role] || []);
+      const profile = row?.permissions_profile?.module_access && typeof row.permissions_profile.module_access === "object" ? row.permissions_profile.module_access : {};
+      document.querySelectorAll("[data-module-access]").forEach((input) => {
+        const key = input.getAttribute("data-module-access");
+        const allowed = ceiling.has(key);
+        const hasExplicit = Object.prototype.hasOwnProperty.call(profile, key);
+        input.disabled = !allowed;
+        input.checked = allowed && (useRoleDefaults || !hasExplicit ? true : profile[key] === true);
+        input.closest("label")?.classList.toggle("muted", !allowed);
+        input.title = allowed ? "This role may be granted this module." : `The ${role} role cannot be elevated into this module.`;
+      });
+    }
+    function collectModuleAccess() {
+      const out = {};
+      document.querySelectorAll("[data-module-access]").forEach((input) => { out[input.getAttribute("data-module-access")] = input.checked === true && input.disabled !== true; });
+      return out;
+    }
     function fillForm(row) {
       document.querySelector("#staffId").value = row?.id || "";
       document.querySelector("#fullName").value = row?.full_name || "";
@@ -227,6 +267,7 @@
       document.querySelector("#tipsPayoutNotes").value = row?.tips_payout_notes || "";
       document.querySelector("#payrollNotes").value = row?.payroll_notes || "";
       document.querySelector("#notes").value = row?.notes || "";
+      syncModuleAccess(row, !row);
     }
     function renderSelectedStaff() {
       const row = staffUsers.find((s) => s.id === selectedStaffId) || null;
@@ -279,6 +320,7 @@
         can_manage_progress: document.querySelector("#canManageProgress").checked,
         can_manage_promos: document.querySelector("#canManagePromos").checked,
         can_manage_staff: document.querySelector("#canManageStaff").checked,
+        module_access: collectModuleAccess(),
         employee_code: document.querySelector("#employeeCode").value.trim(),
         position_title: document.querySelector("#positionTitle").value.trim(),
         pay_schedule: document.querySelector("#paySchedule").value,
@@ -297,6 +339,7 @@
       setBrandImages();
       setFooter();
       syncSessionMeta();
+      document.querySelector("#roleCode").addEventListener("change", () => syncModuleAccess(null, true));
       document.querySelector("#adminPassword").addEventListener("input", function () {
         currentPassword = document.querySelector("#adminPassword").value.trim();
         syncSessionMeta();

@@ -1,11 +1,153 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 265  
+**Build:** 266  
 **Updated:** 2026-08-29  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
-## What Rosie is now
+## Build 266 current architecture — one platform, eight sleeping modules
+
+Rosie is still **one secured codebase/platform**, not eight repositories or databases. The application is now organized into eight independently authorized and independently sleeping runtime modules:
+
+1. **Customer App** — `/app/customer/`
+2. **Detailer Mobile App** — `/app/detailer/`
+3. **Operations / Supervisor App** — `/app/operations/`
+4. **Business Administration App** — `/app/admin/`
+5. **I.T. & Reliability App** — `/app/it/`
+6. **Finance App** — `/app/finance/`
+7. **DAIP App** — `/app/daip/`
+8. **Socials & Integrations App** — `/app/socials/`
+
+The permanent rule is now:
+
+> **Permission to enter a module and reason for that module to wake are separate decisions.**
+
+An authorized module can remain completely asleep. Opening the app launcher does not load job, finance, DAIP, social, inventory, analytics or Operations datasets.
+
+## Build 266 access model
+
+There are three layers, in this order:
+
+### 1. Hard role ceiling
+
+- `detailer` → **Detailer only**.
+- `senior_detailer` → **Detailer + Operations** only.
+- `admin` → may be granted any internal module.
+
+Legacy capability flags such as `can_manage_bookings` can no longer elevate a Detailer into Operations, Finance, I.T., DAIP, Socials or Administration through the app/module UI.
+
+### 2. Per-staff module grants
+
+Existing `staff_users.permissions_profile` is reused. Module grants are stored under:
+
+`permissions_profile.module_access`
+
+No Build 266 staff-access DDL is required. `/admin-staff.html` now exposes module checkboxes, but the server normalizes every save against the hard role ceiling so the browser cannot elevate a lower role.
+
+### 3. Global runtime switches
+
+Existing `app_management_settings` is reused with one row:
+
+`module_runtime_flags`
+
+The I.T. module owns these global on/off switches. They control whether an otherwise authorized runtime is available; they **do not grant permission**. The switch snapshot is cached in the browser for 15 minutes and has no refresh timer. I.T. is intentionally locked on so the recovery/control plane cannot disable itself.
+
+## Build 266 wake/sleep contracts
+
+| Module | What may wake it | What must stay asleep otherwise |
+|---|---|---|
+| Customer | customer explicitly enters booking/account/progress/quote workflow | staff/admin datasets and public SEO pages remain separate |
+| Detailer | bounded assigned-work load after sign-in; live bundle only for Arrived/Detailing/Paused work | no eligible open job = no live bundle, feed, photo/video workflow or Detailer messaging polling |
+| Operations | explicit Today/Schedule/Blocks/Assignments/Live selection | opening Operations loads no operational dataset and starts no polling |
+| Administration | explicit staff/inventory/catalog/media/content/business tool | no back-office dataset from launcher/shell |
+| I.T. | explicit preflight/test/diagnostic/security/recovery tool | no health scan, preflight or test merely because I.T. is open |
+| Finance | explicit accounting/payment/payroll/tax/close tool | no finance data from launcher/shell |
+| DAIP | explicit governed DAIP workflow plus its existing gates | no private-media enumeration, processing, AI or public destination from shell load |
+| Socials & Integrations | explicit social/content/provider workflow | no social/provider API request from shell load |
+
+## Detailer + customer two-way communication
+
+The existing job-progress channel is now treated as the two-way job communication path rather than creating a second always-awake messaging system.
+
+- Customer messages post into the existing job update/feed authority.
+- The lazy Detailer live module shows customer-origin messages alongside approved job updates/media.
+- Detailer message/update writes patch local state from the authoritative response rather than reloading the full workspace.
+- Detailer still has **no recurring live-job interval**.
+- Customer Progress no longer creates a perpetual `setInterval`. It schedules a one-shot refresh about every two minutes **only while the job is active**.
+- Completed/not-active job = no customer live-progress refresh timer.
+- Hidden Progress tab = timer cleared; returning to an active job performs one refresh and reschedules.
+
+This is intentionally compatible with future push notifications: push should wake the user, not force the browser to poll faster.
+
+## Installable/mobile/desktop application state
+
+Build 266 strengthens the web application into the shared installable application layer:
+
+- PWA manifest now has 192/512/maskable Rosie app icons and Customer/Apps/Detailer/Operations shortcuts.
+- Staff/customer app shells expose **Install Rosie app**, **Enable device notifications**, and **Test notification** controls where supported.
+- Service worker precaches only the small launcher/shared layer; optional modules are not all downloaded during installation.
+- Optional module assets are cached after deliberate use for offline fallback; `/api/*` is never cached.
+- Service worker contains event-driven `push` and `notificationclick` handlers; it creates no polling.
+- Local device notification permission/test works without a notification provider.
+
+### What is not being falsely called complete
+
+Remote push delivery still needs a real push subscription/provider/key strategy and deployed testing. A PWA can run in a standalone window and minimize/pin like an application, but **true Windows/macOS system-tray/background-native behaviour requires a native desktop wrapper**. App-store-native mobile push/background features likewise require a native mobile wrapper/signing layer.
+
+The intended next packaging layers are:
+
+- **Mobile native wrapper:** Capacitor around the same web modules, only after bundle identifiers/signing/push-provider decisions are made.
+- **Desktop native wrapper:** Tauri around the same web modules if true tray/minimize-to-tray/start-with-Windows/native-notification behaviour is required.
+
+Do not create a separate business-logic codebase for either wrapper.
+
+## Build 266 source changes
+
+- Added `data/build266_app_modules.json` as the current eight-module registry.
+- Added `data/build266_route_module_ownership.json` for legacy-route ownership/overlap.
+- Added `/api/admin/module_flags` using existing `app_management_settings`.
+- Added role-ceiling/per-staff module access to staff actor/session payloads and Staff management.
+- Added I.T., Finance, DAIP and Socials module entry shells.
+- Re-scoped Business Administration so Finance/I.T./DAIP/Socials are no longer presented as one back-office bucket.
+- App launcher reads one cached runtime-switch snapshot, then shows only modules inside role ceiling + explicit staff grant + global availability.
+- Direct protected pages also consult the cached module switch; if the cache is absent/stale they perform one lightweight module-switch read, not a timer.
+- Existing Build 264 Detailer and Build 265 Operations lazy runtimes remain intact.
+- Restored the Build 265 public pricing/landing-page function mirrors that had drifted in the newly supplied ZIP.
+
+## Database / deployment truth
+
+**No new Build 266 table/column migration is required.** Build 266 reuses `staff_users.permissions_profile` and `app_management_settings`.
+
+The source ZIP cannot prove Cloudflare/Supabase/provider/mobile-device state. Deployment acceptance remains required for:
+
+- module switch persistence in the actual database;
+- Detailer/Senior Detailer/Admin role ceiling using real staff sessions;
+- direct-link denial for modules not granted/switched off;
+- zero Detailer recurring traffic with no open job;
+- zero customer live-progress refresh after the job becomes inactive;
+- Operations no-dataset shell and manual workstreams;
+- installability on Android/iOS/desktop browsers;
+- local notification permission/test;
+- real remote push/provider delivery when implemented;
+- representative Cloudflare `Exceeded CPU Time Limits = 0`;
+- Stripe/PayPal/notification-provider/backup/restore and other inherited go-live evidence.
+
+## Documentation policy
+
+Only these files are current planning authority:
+
+1. `AI_PROJECT_HANDOFF.md` — exact implementation/current-state handoff.
+2. `MASTER_VALUE_ROADMAP.md` — ordered direction and remaining gates.
+
+`STARTUP_GO_LIVE_BLOCKERS.md` is the detailed acceptance runbook; `DOC_INDEX.md` is navigation. Older summaries remain release/history evidence.
+
+<!-- Historical release-check compatibility only: Build:** 265 | Build 264 Detailer Modular Runtime | No eligible open Detailer job -->
+
+---
+
+# Retained Build 265 implementation snapshot — historical below this boundary
+
+## Historical Build 265 platform snapshot
 
 Rosie Dazzlers is one platform with four application boundaries sharing the same authentication/data authorities:
 
