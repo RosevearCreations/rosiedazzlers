@@ -1,10 +1,10 @@
-// Build 269 — role-aware Rosie application module resolver.
+// Build 270 — role-aware Rosie application module resolver.
 // Module visibility controls navigation/runtime downloads only. Server API authorization remains authoritative.
 (function attachRosieModuleResolver(globalScope){
   'use strict';
-  const BUILD=269;
-  const CACHE_KEY='rosie_module_runtime_flags_v269';
-  const LAST_KEY='rosie_last_staff_module_v269';
+  const BUILD=270;
+  const CACHE_KEY='rosie_module_runtime_flags_v270';
+  const LAST_KEY='rosie_last_staff_module_v270';
   const CACHE_MS=15*60*1000;
   const INTERNAL_MODULES=['detailer','operations','admin','it','finance','daip','socials'];
   const MODULES=Object.freeze({
