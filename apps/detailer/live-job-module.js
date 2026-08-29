@@ -1,4 +1,4 @@
-// Build 264 — lazy Detailer live-job module.
+// Build 266 — lazy Detailer live-job module (Build 264 architecture retained).
 // Loaded only for Arrived/Detailing/Paused jobs. No setInterval, no background polling.
 const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=(v)=>{try{return v?new Date(v).toLocaleString('en-CA'):'';}catch{return String(v||'');}};
@@ -7,7 +7,7 @@ export async function mount({host,job,policy,api,onJobPatch}){
   let currentJob=job,currentPolicy=policy,feed={updates:[],media:[],proof_media_status:{stage_counts:{}}},uploadXhr=null,lastFile=null,visible=true;
   host.innerHTML=`
     <section class="panel stack" data-live-module="build264">
-      <div class="job-actions" style="justify-content:space-between"><div><span class="badge">Lazy live-job module</span><h2 style="margin:8px 0 0">Live notes, media & customer progress</h2></div><button class="btn ghost" id="liveRefreshFeed" type="button">Refresh feed</button></div>
+      <div class="job-actions" style="justify-content:space-between"><div><span class="badge">Lazy live-job module</span><h2 style="margin:8px 0 0">Two-way job messages, media & customer progress</h2></div><button class="btn ghost" id="liveRefreshFeed" type="button">Refresh feed</button></div>
       <div class="notice ok">This module was loaded because the selected job is open. It performs no automatic refresh.</div>
       <div class="runtime-strip"><div class="runtime-card"><span class="mini">Photo/video capture</span><strong id="liveMediaState">ON</strong></div><div class="runtime-card"><span class="mini">Customer progress</span><strong id="liveProgressState">${currentJob.progress_enabled?'ON':'OFF'}</strong></div><div class="runtime-card"><span class="mini">Background polling</span><strong>OFF</strong></div></div>
       <div class="job-actions"><button class="btn ghost" id="enableLiveProgress" type="button">Enable customer progress</button><button class="btn ghost" id="copyLiveProgress" type="button">Copy customer link</button><a class="btn ghost" id="liveIncidentLink" href="/admin-incident-reports.html">Incident report</a></div>
@@ -15,9 +15,9 @@ export async function mount({host,job,policy,api,onJobPatch}){
       <div class="stack">
         <label>Stage<select id="liveStage"><option value="arrival">Arrival / setup</option><option value="pre_existing">Pre-existing condition</option><option value="during" selected>During the detail</option><option value="final">Final result</option><option value="recommendation">Recommendation</option><option value="issue">Issue / concern</option><option value="general">General update</option></select></label>
         <label>Visibility<select id="liveAudience"><option value="customer">Customer now</option><option value="review">Admin review first</option><option value="internal">Staff only</option></select></label>
-        <label>Update note<textarea id="liveNote" rows="3" maxlength="4000" placeholder="What should the customer or team know?"></textarea></label>
+        <label>Message / update<textarea id="liveNote" rows="3" maxlength="4000" placeholder="What should the customer or team know?"></textarea></label>
         <label class="check-row"><input id="liveActionRequired" type="checkbox"/> Customer response or decision is requested</label>
-        <button class="btn primary" id="postLiveNote" type="button">Post note</button>
+        <button class="btn primary" id="postLiveNote" type="button">Send message / update</button>
       </div>
       <div class="hr"></div>
       <div class="stack">
@@ -49,7 +49,8 @@ export async function mount({host,job,policy,api,onJobPatch}){
     q('liveFeed').innerHTML=rows.length?rows.map((item)=>{
       let mediaHtml='';
       if(item._type==='media'&&item.media_url){mediaHtml=item.kind==='video'?`<video controls preload="metadata" style="width:100%;max-height:320px" src="${esc(item.media_url)}"></video>`:`<img loading="lazy" style="width:100%;max-height:320px;object-fit:contain" src="${esc(item.media_url)}" alt="${esc(item.caption||'Job photo')}">`;}
-      return `<article class="card stack">${mediaHtml}<div class="badges"><span class="badge">${esc(item.stage||'general')}</span><span class="badge">${esc(item.visibility||'internal')}</span><span class="badge">${item._type}</span></div><strong>${esc(item._type==='media'?(item.caption||item.kind||'Media'):(item.created_by||'Update'))}</strong>${item._type==='note'?`<p>${esc(item.note||'')}</p>`:''}<span class="mini">${esc(fmt(item.created_at))}</span></article>`;
+      const customerOrigin=String(item.source_channel||'').toLowerCase()==='customer';
+      return `<article class="card stack">${mediaHtml}<div class="badges"><span class="badge">${esc(item.stage||'general')}</span><span class="badge">${esc(item.visibility||'internal')}</span><span class="badge">${item._type}</span>${customerOrigin?'<span class="badge">CUSTOMER MESSAGE</span>':''}</div><strong>${esc(item._type==='media'?(item.caption||item.kind||'Media'):(item.created_by||'Update'))}</strong>${item._type==='note'?`<p>${esc(item.note||'')}</p>`:''}<span class="mini">${esc(fmt(item.created_at))}</span></article>`;
     }).join(''):'<div class="notice">No live updates yet.</div>';
   }
   async function loadFeed({manual=false}={}){

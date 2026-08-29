@@ -1,4 +1,5 @@
-// Build 264 — Detailer Mobile App shell.
+// Historical Build 264 live bundle token: /apps/detailer/live-job-module.js?v=20260825build264
+// Build 266 — Detailer Mobile App shell with role/module ceiling and cached runtime flags.
 // Acceptance rule: no eligible active job = zero recurring live-job network activity.
 (function bootDetailerApp(globalScope){
   'use strict';
@@ -90,7 +91,7 @@
     if(!currentPolicy?.may_load_live_module||!selected)return;
     $('liveJobHost').dataset.loaded='loading';
     try{
-      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20260825build264');
+      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20260829build266');
       if(!liveModule){
         liveModule=await mod.mount({host:$('liveJobHost'),job:selected,policy:currentPolicy,api,onJobPatch:(patch)=>{selected={...selected,...patch};const idx=jobs.findIndex((j)=>String(j.id)===String(selected.id));if(idx>=0)jobs[idx]=selected;renderJobs();renderSelected();}});
       }else liveModule.setJob?.(selected,currentPolicy);
@@ -110,10 +111,11 @@
     document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden);});
   }
   async function boot(){
-    if(!api||!policy||!loader||!resolver)throw new Error('Build 264 app-core did not load.');
+    if(!api||!policy||!loader||!resolver)throw new Error('Build 266 app-core did not load.');
     bind();
     await globalScope.AdminShell.boot({pageKey:'app-detailer',onReady:async({actor:currentActor})=>{
       actor=currentActor||null;
+      await resolver.loadRuntimeFlags();
       if(!resolver.canAccess('detailer',actor)){location.replace('/app/');return;}
       resolver.remember('detailer');
       await loadWorkspace();
