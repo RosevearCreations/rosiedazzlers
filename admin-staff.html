@@ -107,9 +107,14 @@
             <label>Email<input id="email" type="email" placeholder="Email address" required /></label>
             <label>Role
               <select id="roleCode" required>
-                <option value="detailer">detailer</option>
-                <option value="senior_detailer">senior_detailer</option>
-                <option value="admin">admin</option>
+                <option value="detailer">Detailer</option>
+                <option value="senior_detailer">Senior Detailer</option>
+                <option value="operations_manager">Operations Manager</option>
+                <option value="accountant">Accountant / Finance</option>
+                <option value="it_specialist">I.T. Specialist</option>
+                <option value="promoter">Promoter / Marketing</option>
+                <option value="daip_manager">DAIP Manager</option>
+                <option value="admin">Administrator / Owner — all modules</option>
               </select>
             </label>
             <label>Active
@@ -130,7 +135,7 @@
 
             <fieldset class="panel" style="padding:14px;margin:0">
               <legend><strong>Application module access</strong></legend>
-              <p class="kicker">Build 266 uses a hard role ceiling first. Detailers can only receive Detailer; Senior Detailers can receive Detailer + Operations; Admins can be granted any internal module. A checkbox can remove access but cannot elevate a role.</p>
+              <p class="kicker">Build 267 uses role templates as a hard ceiling, then per-person module grants can narrow access. Admin accounts are always granted every internal module and cannot be reduced here. Accountants, I.T. Specialists, Promoters and DAIP Managers only see their own module by default.</p>
               <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
                 <label class="row"><input type="checkbox" data-module-access="detailer" /> <div><strong>Detailer</strong><div class="kicker">Assigned mobile field work</div></div></label>
                 <label class="row"><input type="checkbox" data-module-access="operations" /> <div><strong>Operations</strong><div class="kicker">Schedule, blocks, assignment, oversight</div></div></label>
@@ -198,6 +203,11 @@
     const ROLE_MODULES = {
       detailer: ["detailer"],
       senior_detailer: ["detailer","operations"],
+      operations_manager: ["detailer","operations"],
+      accountant: ["finance"],
+      it_specialist: ["it"],
+      promoter: ["socials"],
+      daip_manager: ["daip"],
       admin: [...MODULE_KEYS]
     };
 
@@ -233,15 +243,16 @@
         const key = input.getAttribute("data-module-access");
         const allowed = ceiling.has(key);
         const hasExplicit = Object.prototype.hasOwnProperty.call(profile, key);
-        input.disabled = !allowed;
-        input.checked = allowed && (useRoleDefaults || !hasExplicit ? true : profile[key] === true);
+        const forcedAdmin = role === "admin";
+        input.disabled = !allowed || forcedAdmin;
+        input.checked = forcedAdmin ? true : (allowed && (useRoleDefaults || !hasExplicit ? true : profile[key] === true));
         input.closest("label")?.classList.toggle("muted", !allowed);
-        input.title = allowed ? "This role may be granted this module." : `The ${role} role cannot be elevated into this module.`;
+        input.title = forcedAdmin ? "Administrator accounts are always granted every internal module." : (allowed ? "This role may be granted this module." : `The ${role} role cannot be elevated into this module.`);
       });
     }
     function collectModuleAccess() {
       const out = {};
-      document.querySelectorAll("[data-module-access]").forEach((input) => { out[input.getAttribute("data-module-access")] = input.checked === true && input.disabled !== true; });
+      document.querySelectorAll("[data-module-access]").forEach((input) => { out[input.getAttribute("data-module-access")] = input.checked === true; });
       return out;
     }
     function fillForm(row) {

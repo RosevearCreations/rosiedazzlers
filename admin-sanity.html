@@ -73,7 +73,7 @@
         $('sanityPriorities').innerHTML = (data.priority_additions || []).map((item)=>`<div class="summary-item"><strong>${Number(item.rank || 0)}. ${esc(item.feature)}</strong><div class="muted">${esc(item.value || '')}</div><div style="margin-top:8px"><a class="btn ghost small" href="${esc(item.route || '/admin.html')}">${esc(item.route || 'Open')}</a></div></div>`).join('') || '<div class="summary-item muted">No priorities loaded.</div>';
         $('sanityVisuals').innerHTML = rows(data.visual_enrichment || []);
       }
-      window.AdminShell.boot({ pageKey:'admin', onReady: async()=>{ try{ await load(); } catch(err){ $('sanityStatus').dataset.state='error'; $('sanityStatus').innerHTML = `<strong>Could not load sanity report</strong><div class="muted">${esc(err?.message || 'Unknown error')}</div>`; } } });
+      window.AdminShell.boot({ pageKey:'admin-sanity', onReady: async()=>{ try{ await load(); } catch(err){ $('sanityStatus').dataset.state='error'; $('sanityStatus').innerHTML = `<strong>Could not load sanity report</strong><div class="muted">${esc(err?.message || 'Unknown error')}</div>`; } } });
     })();
   </script>
 </body>

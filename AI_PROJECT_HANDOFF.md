@@ -1,146 +1,114 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 266  
+**Build:** 267  
 **Updated:** 2026-08-29  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
-## Build 266 current architecture — one platform, eight sleeping modules
+## Build 267 current architecture — role-aware module homes
 
-Rosie is still **one secured codebase/platform**, not eight repositories or databases. The application is now organized into eight independently authorized and independently sleeping runtime modules:
+Rosie remains **one secured platform**, now organized around eight independently loadable modules: Customer, Detailer, Operations / Supervisor, Business Administration, I.T. & Reliability, Finance, DAIP, and Socials & Promotion.
 
-1. **Customer App** — `/app/customer/`
-2. **Detailer Mobile App** — `/app/detailer/`
-3. **Operations / Supervisor App** — `/app/operations/`
-4. **Business Administration App** — `/app/admin/`
-5. **I.T. & Reliability App** — `/app/it/`
-6. **Finance App** — `/app/finance/`
-7. **DAIP App** — `/app/daip/`
-8. **Socials & Integrations App** — `/app/socials/`
+Build 267 makes the private side follow that architecture instead of exposing one giant flat Admin menu. `/app/` is the staff launcher. Each allowed module has its own home page, and every current private workflow is grouped under the most sensible module/category as a clickable card. Protected pages use the same module hierarchy for their local menu/return navigation.
 
-The permanent rule is now:
+Permanent rule:
 
-> **Permission to enter a module and reason for that module to wake are separate decisions.**
+> **Role decides the maximum modules a person may ever enter; the staff profile may narrow that set; the global switch may make a module unavailable; operational state decides whether an authorized module actually wakes.**
 
-An authorized module can remain completely asleep. Opening the app launcher does not load job, finance, DAIP, social, inventory, analytics or Operations datasets.
+## Build 267 role/module authority
 
-## Build 266 access model
+Build 267 expands the existing `staff_users.role_code` authority instead of creating a second role table:
 
-There are three layers, in this order:
+| Role | Maximum modules |
+|---|---|
+| `detailer` | Detailer |
+| `senior_detailer` | Detailer + Operations |
+| `operations_manager` | Detailer + Operations |
+| `accountant` | Finance |
+| `it_specialist` | I.T. |
+| `promoter` | Socials & Promotion |
+| `daip_manager` | DAIP |
+| `admin` | **all seven internal staff modules, always** |
 
-### 1. Hard role ceiling
+Existing `staff_users.permissions_profile.module_access` remains the per-person module-grant authority. Lower roles can be narrowed inside their role ceiling. **Administrators cannot be narrowed:** client resolver, staff save API, and Build 267 migration all force every internal module true for `admin`.
 
-- `detailer` → **Detailer only**.
-- `senior_detailer` → **Detailer + Operations** only.
-- `admin` → may be granted any internal module.
+The role-specific server fallback is route-scoped. For example, an Accountant may satisfy an old broad capability name only on a Finance-owned API; that does **not** give the Accountant `manage_staff` on Staff, Security, DAIP or Operations routes. Existing booking scope, action capability and private-media gates remain in force.
 
-Legacy capability flags such as `can_manage_bookings` can no longer elevate a Detailer into Operations, Finance, I.T., DAIP, Socials or Administration through the app/module UI.
+## Critical Build 267 database order
 
-### 2. Per-staff module grants
+Apply `sql/2026-08-29_build267_role_module_hierarchy.sql` only after reviewing the current Development database.
 
-Existing `staff_users.permissions_profile` is reused. Module grants are stored under:
+The migration deliberately performs these actions in this order:
 
-`permissions_profile.module_access`
+1. Update **every existing `admin` staff account first** so `permissions_profile.module_access` contains Detailer, Operations, Administration, I.T., Finance, DAIP and Socials = `true`.
+2. Fail the transaction if any existing Administrator does not have all seven internal module grants.
+3. Backfill safe module defaults only for old Detailer/Senior Detailer accounts that do not yet have a module profile.
+4. Expand the existing `staff_users.role_code` check constraint for Operations Manager, Accountant, I.T. Specialist, Promoter and DAIP Manager.
+5. Store the role/module default map in existing `app_management_settings` as `staff_role_module_defaults`.
 
-No Build 266 staff-access DDL is required. `/admin-staff.html` now exposes module checkboxes, but the server normalizes every save against the hard role ceiling so the browser cannot elevate a lower role.
+No new role table, module table or staff-access column is introduced.
 
-### 3. Global runtime switches
+**Source truth:** the migration guarantees ordering and fails closed. This ZIP cannot claim the live Development database has already been changed or enumerate its current Administrator rows; that must be verified/applied against the actual environment.
 
-Existing `app_management_settings` is reused with one row:
+## Private navigation hierarchy
 
-`module_runtime_flags`
+The static/no-API navigation authority is `data/build267_internal_navigation.json`, mirrored into the tiny client `assets/app-core/module-navigation.js` so opening a menu does not require another Worker/database request.
 
-The I.T. module owns these global on/off switches. They control whether an otherwise authorized runtime is available; they **do not grant permission**. The switch snapshot is cached in the browser for 15 minutes and has no refresh timer. I.T. is intentionally locked on so the recovery/control plane cannot disable itself.
+Current hierarchy:
 
-## Build 266 wake/sleep contracts
+- **Detailer:** field workspace, legacy assigned jobs, jobsite, incidents.
+- **Operations:** Today/schedule/blocked days/assignments/live oversight; bookings/quotes/leads; customers/progress/workflow.
+- **Administration:** Staff & Access; inventory posting/workbench/catalog; business/site/water/analytics controls.
+- **I.T.:** Startup/preflight/production/test centre; runtime/UI/cache/media/notification health; security/recovery; app/docs/roadmap/sanity/bootstrap.
+- **Finance:** accounting; payments/refunds; payroll/staff availability; tax; month-end close.
+- **DAIP:** creative projects/private intake; governance/readiness/design/Gate C/dry-run/test controls.
+- **Socials & Promotion:** social queue/marketing/promos/growth; content/photo/gallery/upload/SEO; integrations.
 
-| Module | What may wake it | What must stay asleep otherwise |
-|---|---|---|
-| Customer | customer explicitly enters booking/account/progress/quote workflow | staff/admin datasets and public SEO pages remain separate |
-| Detailer | bounded assigned-work load after sign-in; live bundle only for Arrived/Detailing/Paused work | no eligible open job = no live bundle, feed, photo/video workflow or Detailer messaging polling |
-| Operations | explicit Today/Schedule/Blocks/Assignments/Live selection | opening Operations loads no operational dataset and starts no polling |
-| Administration | explicit staff/inventory/catalog/media/content/business tool | no back-office dataset from launcher/shell |
-| I.T. | explicit preflight/test/diagnostic/security/recovery tool | no health scan, preflight or test merely because I.T. is open |
-| Finance | explicit accounting/payment/payroll/tax/close tool | no finance data from launcher/shell |
-| DAIP | explicit governed DAIP workflow plus its existing gates | no private-media enumeration, processing, AI or public destination from shell load |
-| Socials & Integrations | explicit social/content/provider workflow | no social/provider API request from shell load |
+The old flat `assets/admin-menu.js` is replaced by a module-local hierarchical menu. `/admin-account.html` and `/admin-login.html` remain special routes rather than business-module cards. Compatibility pages such as old Today/Blocks/Assign remain available while Operations uses its newer lazy views.
 
-## Detailer + customer two-way communication
+## Wake/sleep / server-load rules retained
 
-The existing job-progress channel is now treated as the two-way job communication path rather than creating a second always-awake messaging system.
+- Opening `/app/` loads identity + module availability only, not module business datasets.
+- Module home card catalogs are static and create no API request.
+- Detailer still has no recurring job timer; no eligible open job means no live bundle/feed/media/messaging monitor.
+- Operations remains explicit/manual; a workstream loads only when selected.
+- Finance/I.T./DAIP/Socials/Admin shells do not load subsystem data merely because they are open.
+- Customer active-job progress uses bounded one-shot refresh only while the job is active/visible.
+- Global module switches remain cached and timer-free; I.T. remains locked on as the recovery/control plane.
+- No automatic replay of ambiguous non-idempotent writes is introduced.
 
-- Customer messages post into the existing job update/feed authority.
-- The lazy Detailer live module shows customer-origin messages alongside approved job updates/media.
-- Detailer message/update writes patch local state from the authoritative response rather than reloading the full workspace.
-- Detailer still has **no recurring live-job interval**.
-- Customer Progress no longer creates a perpetual `setInterval`. It schedules a one-shot refresh about every two minutes **only while the job is active**.
-- Completed/not-active job = no customer live-progress refresh timer.
-- Hidden Progress tab = timer cleared; returning to an active job performs one refresh and reschedules.
+## Build 267 source authorities
 
-This is intentionally compatible with future push notifications: push should wake the user, not force the browser to poll faster.
+- `data/build267_app_modules.json` — roles, module ceilings and runtime registry.
+- `data/build267_internal_navigation.json` — module/category/card/page ownership.
+- `data/build267_route_module_ownership.json` — current route ownership + compatibility entries.
+- `assets/app-core/module-resolver.js` — role ceiling + staff grant + runtime flag resolver.
+- `assets/app-core/module-navigation.js` — static module home/menu catalog.
+- `assets/admin-menu.js` — hierarchical module-local private menu.
+- `assets/admin-auth.js` — protected-page module enforcement.
+- `functions/api/admin/_lib/staff-auth.js` + mirror — route-scoped server module fallback while retaining action/scope checks.
+- `admin-staff.html` + `functions/api/admin/staff_save.js` — role/module administration.
+- `sql/2026-08-29_build267_role_module_hierarchy.sql` — admin-first fail-closed database convergence.
 
-## Installable/mobile/desktop application state
+## Deployment truth / still required
 
-Build 266 strengthens the web application into the shared installable application layer:
+Source validation is not database/deployment acceptance. Development still needs:
 
-- PWA manifest now has 192/512/maskable Rosie app icons and Customer/Apps/Detailer/Operations shortcuts.
-- Staff/customer app shells expose **Install Rosie app**, **Enable device notifications**, and **Test notification** controls where supported.
-- Service worker precaches only the small launcher/shared layer; optional modules are not all downloaded during installation.
-- Optional module assets are cached after deliberate use for offline fallback; `/api/*` is never cached.
-- Service worker contains event-driven `push` and `notificationclick` handlers; it creates no polling.
-- Local device notification permission/test works without a notification provider.
-
-### What is not being falsely called complete
-
-Remote push delivery still needs a real push subscription/provider/key strategy and deployed testing. A PWA can run in a standalone window and minimize/pin like an application, but **true Windows/macOS system-tray/background-native behaviour requires a native desktop wrapper**. App-store-native mobile push/background features likewise require a native mobile wrapper/signing layer.
-
-The intended next packaging layers are:
-
-- **Mobile native wrapper:** Capacitor around the same web modules, only after bundle identifiers/signing/push-provider decisions are made.
-- **Desktop native wrapper:** Tauri around the same web modules if true tray/minimize-to-tray/start-with-Windows/native-notification behaviour is required.
-
-Do not create a separate business-logic codebase for either wrapper.
-
-## Build 266 source changes
-
-- Added `data/build266_app_modules.json` as the current eight-module registry.
-- Added `data/build266_route_module_ownership.json` for legacy-route ownership/overlap.
-- Added `/api/admin/module_flags` using existing `app_management_settings`.
-- Added role-ceiling/per-staff module access to staff actor/session payloads and Staff management.
-- Added I.T., Finance, DAIP and Socials module entry shells.
-- Re-scoped Business Administration so Finance/I.T./DAIP/Socials are no longer presented as one back-office bucket.
-- App launcher reads one cached runtime-switch snapshot, then shows only modules inside role ceiling + explicit staff grant + global availability.
-- Direct protected pages also consult the cached module switch; if the cache is absent/stale they perform one lightweight module-switch read, not a timer.
-- Existing Build 264 Detailer and Build 265 Operations lazy runtimes remain intact.
-- Restored the Build 265 public pricing/landing-page function mirrors that had drifted in the newly supplied ZIP.
-
-## Database / deployment truth
-
-**No new Build 266 table/column migration is required.** Build 266 reuses `staff_users.permissions_profile` and `app_management_settings`.
-
-The source ZIP cannot prove Cloudflare/Supabase/provider/mobile-device state. Deployment acceptance remains required for:
-
-- module switch persistence in the actual database;
-- Detailer/Senior Detailer/Admin role ceiling using real staff sessions;
-- direct-link denial for modules not granted/switched off;
-- zero Detailer recurring traffic with no open job;
-- zero customer live-progress refresh after the job becomes inactive;
-- Operations no-dataset shell and manual workstreams;
-- installability on Android/iOS/desktop browsers;
-- local notification permission/test;
-- real remote push/provider delivery when implemented;
-- representative Cloudflare `Exceeded CPU Time Limits = 0`;
-- Stripe/PayPal/notification-provider/backup/restore and other inherited go-live evidence.
+- inspect current admin rows, apply Build 267 migration, then verify every admin has all internal modules;
+- create one safe test user for each new role and prove launcher/direct-link/API isolation;
+- verify Administrator cannot lose an internal module via Staff & Access save;
+- verify Accountant cannot access Staff/I.T./DAIP/Operations APIs while Finance works;
+- verify I.T. Specialist cannot use business/payment/booking mutations simply because Startup screens can reference those tests;
+- verify Promoter and DAIP Manager remain inside their own server route namespaces;
+- re-run no-job Detailer and idle module network tests;
+- retain representative Cloudflare `Exceeded CPU Time Limits = 0`;
+- complete inherited payment/provider/mobile/push/restore/SEO/accessibility go-live evidence.
 
 ## Documentation policy
 
-Only these files are current planning authority:
+Only `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are living planning authorities. `STARTUP_GO_LIVE_BLOCKERS.md` is deployment acceptance; `DOC_INDEX.md` is navigation. Build summaries and older modular documents are evidence/history.
 
-1. `AI_PROJECT_HANDOFF.md` — exact implementation/current-state handoff.
-2. `MASTER_VALUE_ROADMAP.md` — ordered direction and remaining gates.
-
-`STARTUP_GO_LIVE_BLOCKERS.md` is the detailed acceptance runbook; `DOC_INDEX.md` is navigation. Older summaries remain release/history evidence.
-
+<!-- Historical Build 266 exact release tokens: **Build:** 266 | eight independently authorized and independently sleeping runtime modules | Detailer only | module_runtime_flags | true Windows/macOS system-tray -->
 <!-- Historical release-check compatibility only: Build:** 265 | Build 264 Detailer Modular Runtime | No eligible open Detailer job -->
 
 ---
