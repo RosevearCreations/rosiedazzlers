@@ -1,8 +1,8 @@
-# Rosie Dazzlers Documentation Index — Build 266
+# Rosie Dazzlers Documentation Index — Build 267
 
 **Updated:** 2026-08-29
 
-**Current modular runtime:** `docs/modular-app/05_BUILD266_EXPANDED_MODULE_RUNTIME.md` + `data/build266_app_modules.json` + `data/build266_route_module_ownership.json`.
+**Current modular runtime:** `docs/modular-app/06_BUILD267_ROLE_MODULE_NAVIGATION.md` + `data/build267_app_modules.json` + `data/build267_internal_navigation.json` + `data/build267_route_module_ownership.json`.
 
 ## Read these first — the only living planning authorities
 
@@ -18,8 +18,9 @@ A new AI/chat should read those two files and should **not** reconstruct current
 - `docs/ACCESS_CONTROL.md` — authorization reference.
 - `CLOUDFLARE_OBSERVABILITY_BUILD262.md` — CPU incident/observability procedure until Build 262 reliability evidence is closed.
 - `DAIP_R2_MEDIA_SETUP_GUIDE.md` and `docs/digital-asset-intelligence-platform/` — private DAIP specialist references.
-- `docs/modular-app/` — modular architecture/rationale and migration evidence; Build 266 eight-module runtime is current.
-- `BUILD266_SUMMARY.md` — immutable Build 266 release evidence (not planning authority).
+- `docs/modular-app/` — modular architecture/rationale and migration evidence; Build 267 role/module navigation and entitlement convergence is current.
+- `BUILD267_SUMMARY.md` — immutable Build 267 release evidence (not planning authority).
+- `BUILD266_SUMMARY.md` — prior Build 266 release evidence.
 
 ## Historical / retired planning material
 
@@ -92,3 +93,5 @@ BUILD259_SYNC:
 BUILD260_SYNC:
 DOCUMENT STATUS — Build 260
 -->
+
+<!-- Historical Build 266 exact index tokens: Documentation Index — Build 266 | 05_BUILD266_EXPANDED_MODULE_RUNTIME.md -->
