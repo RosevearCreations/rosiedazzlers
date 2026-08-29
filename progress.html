@@ -200,6 +200,7 @@
     let hasSignoff = false;
     let currentBooking = null;
     let refreshTimer = null;
+    const ACTIVE_PROGRESS_STAGES = new Set(["accepted","dispatched","arrived","detailing","paused","in_progress","active"]);
     let refreshBusy = false;
 
     function formatDateTime(value) {
@@ -496,6 +497,20 @@
       }
     }
 
+    function clearProgressRefresh() { if (refreshTimer) { window.clearTimeout(refreshTimer); refreshTimer = null; } }
+    function progressIsActive() {
+      const stage = String(currentBooking?.current_workflow_stage || currentBooking?.job_status || currentBooking?.status || "").trim().toLowerCase();
+      return ACTIVE_PROGRESS_STAGES.has(stage);
+    }
+    function scheduleProgressRefresh() {
+      clearProgressRefresh();
+      const label = document.querySelector('#lastRefreshText');
+      if (!progressIsActive()) { if (label) label.textContent = 'Automatic live refresh is asleep because this job is not active. Use Refresh now when needed.'; return; }
+      if (document.hidden) { if (label) label.textContent = 'Live refresh is paused while this tab is hidden.'; return; }
+      if (label) label.textContent = 'Live job is active · next automatic refresh in about 2 minutes.';
+      refreshTimer = window.setTimeout(() => loadProgress({ quiet:true }), 120000);
+    }
+
     async function loadProgress({ quiet = false } = {}) {
       if (refreshBusy) return;
       refreshBusy = true;
@@ -538,7 +553,8 @@
         renderMedia(data);
         renderSignoff(data);
         const refreshed = document.querySelector('#lastRefreshText');
-        if (refreshed) refreshed.textContent = `Last refreshed ${formatDateTime(new Date().toISOString())} · automatic refresh every ${Number(data.refresh_after_seconds || 20)} seconds.`;
+        if (refreshed) refreshed.textContent = `Last refreshed ${formatDateTime(new Date().toISOString())}.`;
+        scheduleProgressRefresh();
         setNotice("Progress information loaded.", "ok");
       } catch (err) {
         if (!quiet) setNotice(err.message || "Could not load progress information.", "bad");
@@ -613,9 +629,9 @@
       document.querySelector('#commentForm')?.addEventListener('submit', (event)=>{ event.preventDefault(); postCustomerComment(); });
       document.querySelector('#refreshProgressBtn')?.addEventListener('click', ()=>loadProgress());
       document.querySelector('#updatesList')?.addEventListener('click',(event)=>{const btn=event.target.closest('[data-recommendation]');if(btn)decideRecommendation(btn.dataset.recommendation,btn.dataset.decision,Number(btn.dataset.priceCents||0),btn.dataset.title||'additional work');}); document.querySelector('#completedSummaryBox')?.addEventListener('click',async(event)=>{const btn=event.target.closest('[data-ack-summary]');if(!btn)return;const name=(window.prompt('Type your full name to acknowledge this completed-job summary:')||'').trim();if(!name)return;try{const res=await fetch('/api/progress/summary_acknowledge',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token:currentToken,name})});const out=await res.json().catch(()=>({}));if(!res.ok||!out.ok)throw new Error(out.error||'Could not record acknowledgement.');setNotice('Thank you — your acknowledgement was recorded.','ok');await loadProgress();}catch(err){setNotice(err.message||'Could not record acknowledgement.','bad');}});
-      refreshTimer = window.setInterval(()=>{ if (!document.hidden) loadProgress({ quiet:true }); }, 120000);
-      document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) loadProgress({ quiet:true }); });
-// Build 262 CPU stabilization: customer progress refresh is visibility-aware and no more frequent than every 2 minutes.
+      document.addEventListener('visibilitychange', ()=>{ if (document.hidden) clearProgressRefresh(); else if (progressIsActive()) loadProgress({ quiet:true }); });
+// Build 262 CPU stabilization token: 120000. Build 266 replaces perpetual setInterval with an active-job-only one-shot timeout.
+// No active job = no customer live-progress messaging refresh timer.
     });
   </script>
 </body>
