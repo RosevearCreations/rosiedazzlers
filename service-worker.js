@@ -1,3 +1,4 @@
+// Historical Build 264 cache guard retained for release evidence: const CACHE='rosie-app-v20260825build264'
 // Historical Build 259 cache guard: rosie-app-v20260813build259
 // Historical Build 247 fallback token: /data/build247_go_live_blockers.json
 // Historical Build 256 cache token: rosie-app-v20260812build256
@@ -24,9 +25,9 @@
 // Build 261 reliability: static 5xx cache fallback + admin analytics isolation.
 // Build 262 CPU stabilization: self-diagnostics, bounded analytics, manual admin refresh, coherent cache identity.
 // Historical Build 262 cache guard: rosie-app-v20260820build262
-// Build 264 modular runtime: four app entry shells + idle-first Detailer Mobile base shell. Heavy live-job chunk is intentionally NOT precached.
-const CACHE='rosie-app-v20260825build264';
-const URLS=['/app/','/app/detailer/','/app/customer/','/app/operations/','/app/admin/','/assets/app-core/module-resolver.js','/assets/app-core/runtime-policy.js','/assets/app-core/api-client.js','/assets/app-core/module-loader.js','/assets/app-core/refresh-leader.js','/apps/detailer/detailer-app.js','/admin-photo-studio.html','/admin-media-health.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
+// Build 265 convergence: condition-aware public services + lazy Operations runtime. Heavy live-job/Operations workstream chunks are intentionally NOT precached.
+const CACHE='rosie-app-v20260829build265';
+const URLS=['/app/','/app/detailer/','/app/customer/','/app/operations/','/app/admin/','/assets/app-core/module-resolver.js','/assets/app-core/runtime-policy.js','/assets/app-core/api-client.js','/assets/app-core/module-loader.js','/assets/app-core/refresh-leader.js','/apps/detailer/detailer-app.js','/apps/operations/operations-app.js','/admin-photo-studio.html','/admin-media-health.html','/data/build253_photo_targets.json','/data/build249_inventory_recovery.json',
   '/admin-daip-media.html',
   '/data/build260_go_live_blockers.json',
   '/data/build247_next_steps.json',

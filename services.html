@@ -533,7 +533,7 @@
     }
 
 
-    const ADDON_DETAIL_SLUGS={full_clay_treatment:'full-clay-treatment',two_stage_polish:'two-stage-polish',high_grade_paint_sealant:'high-grade-paint-sealant',uv_protectant_applied_on_interior_panels:'uv-protectant',de_ionizing_treatment:'de-ionizing-treatment',de_badging:'de-badging',engine_cleaning:'engine-cleaning',external_ceramic_coating:'external-ceramic-coating',external_graphene_fine_finish:'graphene-finish',external_wax:'exterior-wax',vinyl_wrapping:'vinyl-wrapping',window_tinting:'window-tinting',paint_correction:'paint-correction'};
+    const ADDON_DETAIL_SLUGS={full_clay_treatment:'full-clay-treatment',two_stage_polish:'two-stage-polish',high_grade_paint_sealant:'high-grade-paint-sealant',uv_protectant_applied_on_interior_panels:'uv-protectant',de_ionizing_treatment:'de-ionizing-treatment',de_badging:'de-badging',engine_cleaning:'engine-cleaning',external_ceramic_coating:'ceramic-coating',external_graphene_fine_finish:'graphene-finish',external_wax:'exterior-wax',vinyl_wrapping:'vinyl-wrapping',window_tinting:'window-tinting',pet_hair_removal:'pet-hair-removal',odor_treatment:'odor-removal',seat_shampoo:'seat-shampoo',carpet_shampoo:'carpet-shampoo',salt_stain_treatment:'salt-stain-treatment',headlight_restoration_addon:'headlight-restoration',windshield_ceramic_coating:'windshield-ceramic-coating',ceramic_spray_wax:'ceramic-spray-wax',trim_restoration:'trim-restoration',bug_tar_removal:'bug-tar-removal',truck_box_wash:'truck-box-wash',fleet_vehicle_add_on:'fleet-vehicle-add-on',paint_correction:'paint-correction'};
     function addonDetailHref(addon){const code=String(addon?.code||'').trim();return '/'+(ADDON_DETAIL_SLUGS[code]||code.replace(/_/g,'-'));}
 
     function buildAddonCard(addon){
@@ -548,13 +548,12 @@
       const el = document.createElement("div");
       el.className = "panel";
 
-      const price =
-        addon.quote_required ? null :
-        (addon.prices_cad?.[sizeKey()] ?? addon.price_cad ?? null);
-
+      const rawPrice = addon.prices_cad?.[sizeKey()] ?? addon.prices_cad?.mid ?? addon.prices_cad?.small ?? addon.price_cad ?? null;
+      const price = Number(rawPrice);
+      const hasPrice = Number.isFinite(price) && price > 0;
       const badge = addon.quote_required
-        ? `<span class="tag warn">Quote required</span>`
-        : `<span class="tag ok">${price!=null ? money(price) : "$—"}</span>`;
+        ? `<span class="tag warn">${hasPrice ? `From ${money(price)} · condition quote` : "Condition quote"}</span>`
+        : `<span class="tag ok">${hasPrice ? `From ${money(price)}` : "$—"}</span>`;
       const duration=String(addon.duration_label||addon.estimated_duration||'Time varies by condition').trim();
       const detailsHref=addonDetailHref(addon);
 
@@ -562,7 +561,7 @@
         ${imageUrl ? `<a href="${escapeHtml(detailsHref)}" aria-label="View ${escapeHtml(addon.name)} details"><img class="cardImg" alt="${escapeHtml(explicitAddonPhoto?.alt_text || addon.name)}" style="object-position:${escapeHtml(explicitAddonPhoto?.focal_point || "center")}" /></a>` : ``}
         <div class="addon-card-head" style="margin-top:${imageUrl ? "10px":"0"}"><h3 style="margin:0"><a href="${escapeHtml(detailsHref)}" style="color:inherit;text-decoration:none">${escapeHtml(addon.name)}</a></h3></div>
         <div class="addon-card-meta"><div>${badge}</div><div class="addon-card-time">Estimated added time: <strong>${escapeHtml(duration)}</strong></div></div>
-        <div class="muted mini" style="margin-top:10px">${addon.quote_required ? "Requested online, priced after inspection. Final scope can change with condition." : "Optional add-on service."}</div>
+        <div class="muted mini" style="margin-top:10px">${escapeHtml(addon.pricing_basis ? `Pricing basis: ${addon.pricing_basis}. ` : "")}${addon.quote_required ? "Requested online, then finalized after condition/scope review." : "Starting price shown; unusual condition can still require a revised scope."}</div>
         <div class="addon-card-actions"><a class="btn ghost small" href="${escapeHtml(detailsHref)}">View process &amp; details</a><a class="btn ghost small" href="/book?addon=${encodeURIComponent(addon.code)}">Add to booking</a></div>
       `;
 
@@ -572,8 +571,8 @@
         imgEl.decoding = "async";
         bindImageWithCandidates(imgEl, imageUrl, {
           extra: [configuredAddonPhoto, ...automaticAddonPhotos.map((photo)=>photo.url)].filter(Boolean),
-          fallback: fallbackUrl || "/assets/brand/rosie-reviews-fallback.png",
-          onExhausted: (node) => { node.src = "/assets/brand/rosie-reviews-fallback.png"; node.classList.add("visual-placeholder-img"); }
+          fallback: fallbackUrl || "/assets/placeholders/service-photo-needed.svg",
+          onExhausted: (node) => { node.src = "/assets/placeholders/service-photo-needed.svg"; node.classList.add("visual-placeholder-img"); }
         });
       }
 
