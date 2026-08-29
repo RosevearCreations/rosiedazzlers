@@ -47,13 +47,23 @@ export async function dispatchNotificationThroughProvider(env, event, options = 
   }
 
   if (channel === "push") {
-    const url = env.NOTIFICATIONS_PUSH_WEBHOOK_URL || "";
-    const authToken = env.NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN || env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN || '';
-    if (!url) return { ok: false, provider: 'web_push', error: 'Missing Web Push provider webhook URL.' };
     if (!payload.recipient_staff_user_id && !payload.customer_profile_id) {
       return { ok: false, provider: 'web_push', error: 'Push event is missing a staff or customer recipient.' };
     }
-    return postJson(url, payload, authToken, 'web_push');
+
+    const explicitUrl = String(env.NOTIFICATIONS_PUSH_WEBHOOK_URL || '').trim();
+    if (explicitUrl) {
+      const authToken = String(env.NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN || env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN || '').trim();
+      if (!authToken) return { ok:false, provider:'web_push', error:'Configured Web Push webhook is missing its provider auth token.' };
+      return postJson(explicitUrl, payload, authToken, 'web_push');
+    }
+
+    const supabaseUrl = String(env.SUPABASE_URL || '').replace(/\/$/, '');
+    const serviceKey = getSupabaseServiceRoleKey(env);
+    if (!supabaseUrl || !serviceKey) {
+      return { ok:false, provider:'web_push', error:'Supabase Web Push sender credentials are unavailable.' };
+    }
+    return postJson(`${supabaseUrl}/functions/v1/rosie-web-push`, payload, serviceKey, 'supabase_web_push');
   }
 
   return { ok: false, provider: channel || "unknown", error: "Unsupported notification channel." };
@@ -82,4 +92,14 @@ async function postJson(url, payload, bearerToken, providerKey) {
   } catch (err) {
     return { ok: false, provider: providerKey || null, error: err?.message || 'Provider dispatch failed.' };
   }
+}
+
+function getSupabaseServiceRoleKey(env) {
+  return String(
+    env?.SUPABASE_SERVICE_ROLE_KEY ||
+    env?.SUPABASE_SERVICE_KEY ||
+    env?.SUPABASE_SERVICE_ROLE ||
+    env?.SUPABASE_SECRET_KEY ||
+    ''
+  ).trim();
 }
