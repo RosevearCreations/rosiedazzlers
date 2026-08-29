@@ -566,18 +566,28 @@ export function buildServicesCatalogSchema(catalog, pageUrl = 'https://rosiedazz
           name: pkg.name,
           itemListElement: (pkg.included_services || []).map((item) => ({ '@type': 'ListItem', name: item?.name || '' })).filter((item) => item.name)
         })),
-        ...normalized.addons.map((addon) => ({
-          '@type': 'Offer',
-          priceCurrency: 'CAD',
-          price: addon.price_cad != null ? Number(addon.price_cad) : undefined,
-          availability: 'https://schema.org/InStock',
-          itemOffered: {
-            '@type': 'Service',
-            name: addon.name,
-            description: addon.quote_required ? 'Quote required add-on service.' : 'Optional mobile detailing add-on.',
-            serviceType: 'Mobile auto detailing add-on'
+        ...normalized.addons.map((addon) => {
+          const sizePrices = Object.values(addon?.prices_cad || {}).map(Number).filter((value) => Number.isFinite(value) && value > 0);
+          const fixedPrice = addon?.price_cad != null ? Number(addon.price_cad) : (sizePrices.length ? Math.min(...sizePrices) : null);
+          const offer = {
+            '@type': 'Offer',
+            availability: 'https://schema.org/InStock',
+            itemOffered: {
+              '@type': 'Service',
+              name: addon.name,
+              description: addon.quote_required
+                ? 'Condition-assessed mobile detailing add-on; starting scope is confirmed before final pricing.'
+                : 'Optional mobile detailing add-on.',
+              serviceType: 'Mobile auto detailing add-on'
+            }
+          };
+          // Do not publish a starting number as though it were a final price for condition-quoted work.
+          if (!addon.quote_required && Number.isFinite(fixedPrice) && fixedPrice > 0) {
+            offer.priceCurrency = 'CAD';
+            offer.price = fixedPrice;
           }
-        }))
+          return offer;
+        })
       ]
     }
   };
@@ -597,7 +607,7 @@ export function addonDisplay(addon, size) {
     return "Quote required";
   }
   if (addon?.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon?.price_cad != null) return money(addon.price_cad);
+  if (addon?.price_cad != null) return `From ${money(addon.price_cad)}`;
   return "$—";
 }
 

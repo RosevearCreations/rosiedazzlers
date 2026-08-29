@@ -1,8 +1,9 @@
+// Historical Build 264 release guard: const EXPECTED_BUILD = 264; /assets/app-core/module-resolver.js?v=20260825build264; Build 264 assets confirmed.
 (function attachCacheHealth(globalScope){
   'use strict';
   // Historical Build 262 release guard: const EXPECTED_BUILD = 262; 20260820build262; Build 262 assets confirmed.
-  const EXPECTED_BUILD = 264;
-  const EXPECTED_ASSET = '/assets/app-core/module-resolver.js?v=20260825build264';
+  const EXPECTED_BUILD = 265;
+  const EXPECTED_ASSET = '/assets/app-core/module-resolver.js?v=20260829build265';
   const $ = (s) => document.querySelector(s);
   const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   async function snapshot(){
@@ -17,7 +18,7 @@
     const host=$('#cacheHealthStatus');if(!host)return;
     const current=data.asset_build===EXPECTED_BUILD;
     host.className='notice '+(current?'ok':'warn');
-    host.innerHTML=`<strong>${current?'Build 264 assets confirmed':'Cache/build mismatch detected'}</strong><div class="mini">Expected script build: ${EXPECTED_BUILD} · fetched build: ${esc(data.asset_build??'unknown')} · app caches: ${esc(data.caches.join(', ')||'none')} · controller: ${esc(data.controller||'none')}</div>`;
+    host.innerHTML=`<strong>${current?'Build 265 assets confirmed':'Cache/build mismatch detected'}</strong><div class="mini">Expected script build: ${EXPECTED_BUILD} · fetched build: ${esc(data.asset_build??'unknown')} · app caches: ${esc(data.caches.join(', ')||'none')} · controller: ${esc(data.controller||'none')}</div>`;
     const raw=$('#cacheHealthRaw');if(raw)raw.textContent=JSON.stringify(data,null,2);
   }
   async function refresh(){const btn=$('#cacheCheckBtn');if(btn){btn.disabled=true;btn.textContent='Checking…';}try{render(await snapshot());}finally{if(btn){btn.disabled=false;btn.textContent='Check cache & build';}}}

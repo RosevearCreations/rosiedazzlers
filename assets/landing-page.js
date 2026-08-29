@@ -218,13 +218,13 @@ function heroMediaForPage(page, addon, relatedProducts, r2Matches = [], slug = "
   if (automaticR2?.url) return automaticR2.url;
   if (addon?.image_url) return addon.image_url;
   if (addon?.image_fallback_url) return addon.image_fallback_url;
-  return "/assets/brand/rosie-reviews-fallback.png";
+  return "/assets/placeholders/service-photo-needed.svg";
 }
 
 function mediaImageMarkup(src, alt, className = "proof-media", extra = "") {
   const source = cleanText(src);
   if (!source) return "";
-  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/brand/rosie-reviews-fallback.png" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
+  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/placeholders/service-photo-needed.svg" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
 }
 
 function bindLandingMedia(root) {
@@ -232,10 +232,10 @@ function bindLandingMedia(root) {
     if (img.dataset.mediaResolverBound === "true") return;
     img.dataset.mediaResolverBound = "true";
     bindImageWithCandidates(img, img.dataset.mediaSource || "", {
-      fallback: img.dataset.mediaFallback || "/assets/brand/rosie-reviews-fallback.png",
+      fallback: img.dataset.mediaFallback || "/assets/placeholders/service-photo-needed.svg",
       onExhausted: (node) => {
         node.classList.add("visual-placeholder-img");
-        node.src = "/assets/brand/rosie-reviews-fallback.png";
+        node.src = "/assets/placeholders/service-photo-needed.svg";
       }
     });
   });
@@ -262,6 +262,50 @@ function beforeAfterMarkup(manifest, slug) {
             </div>
             <p class="before-after-set-label">Set ${pair.set}</p>
           </article>`).join("")}
+      </div>
+    </section>`;
+}
+
+function conditionPricingMarkup(addon) {
+  if (!addon) return "";
+  const rows = Array.isArray(addon.condition_pricing) ? addon.condition_pricing : [];
+  const basis = cleanText(addon.pricing_basis);
+  const note = cleanText(addon.pricing_note);
+  if (!rows.length && !basis && !note) return "";
+  return `
+    <section class="section panel service-condition-pricing">
+      <p class="eyebrow">Transparent starting prices</p>
+      <h2 style="margin-top:0">Price by condition, not guesswork</h2>
+      <p class="muted">${escapeHtml(basis ? `Pricing is based on ${basis}.` : "The final scope is matched to the vehicle instead of forcing every condition into one flat price.")}</p>
+      ${rows.length ? `<div class="condition-price-grid" style="margin-top:14px">${rows.map((row) => `
+        <article class="condition-price-card">
+          <h3>${escapeHtml(row.label || "Condition tier")}</h3>
+          <div class="condition-price-value">${escapeHtml(row.price_label || "Inspection quote")}</div>
+          ${row.time_label ? `<div class="badge">${escapeHtml(row.time_label)}</div>` : ""}
+          ${row.when ? `<p class="muted">${escapeHtml(row.when)}</p>` : ""}
+        </article>`).join("")}</div>` : ""}
+      ${note ? `<p class="muted pricing-fine-print">${escapeHtml(note)}</p>` : ""}
+    </section>`;
+}
+
+function detailListCard(title, rows, className = "") {
+  const items = Array.isArray(rows) ? rows.filter(Boolean) : [];
+  if (!items.length) return "";
+  return `<article class="proof-card ${escapeHtml(className)}"><h2 style="margin-top:0">${escapeHtml(title)}</h2><ul class="muted-list service-detail-list">${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></article>`;
+}
+
+function visualBriefsMarkup(page, websiteImageManifest, slug) {
+  const briefs = Array.isArray(page?.visual_briefs) ? page.visual_briefs.filter(Boolean) : [];
+  if (!briefs.length) return "";
+  const managed = landingImageMatches(websiteImageManifest, page, slug, 20).filter((row) => row?.explicit_assignment === true && row?.url);
+  if (managed.length >= briefs.length) return "";
+  return `
+    <section class="section panel visual-proof-plan" data-visual-placeholder-section="true">
+      <p class="eyebrow">Visual proof placeholders</p>
+      <h2 style="margin-top:0">Photos that will strengthen this service page</h2>
+      <p class="muted">These placeholders keep the layout ready for real Rosie Dazzlers work. Replace them through Photo Management Studio as matching before/after and process photos become available.</p>
+      <div class="visual-brief-grid">
+        ${briefs.slice(managed.length, managed.length + 6).map((brief) => `<article class="visual-brief-card"><img src="/assets/placeholders/service-photo-needed.svg" alt="Photo placeholder for ${escapeHtml(brief)}" loading="lazy"><h3>Photo needed</h3><p class="muted">${escapeHtml(brief)}</p></article>`).join("")}
       </div>
     </section>`;
 }
@@ -330,6 +374,11 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
   const equipment = Array.isArray(page.equipment) ? page.equipment : [];
   const highlights = Array.isArray(page.highlights) ? page.highlights : [];
   const thingsToKnow = Array.isArray(page.things_to_know) ? page.things_to_know : [];
+  const scopeIncludes = Array.isArray(page.scope_includes) ? page.scope_includes : [];
+  const scopeExcludes = Array.isArray(page.scope_excludes) ? page.scope_excludes : [];
+  const customerPrep = Array.isArray(page.customer_prep) ? page.customer_prep : [];
+  const aftercare = Array.isArray(page.aftercare) ? page.aftercare : [];
+  const quoteTriggers = Array.isArray(page.quote_triggers) ? page.quote_triggers : [];
   const officialLinks = Array.isArray(page.official_links) ? page.official_links : [];
   const waterNote = waterNoteForPage(page, thingsToKnow);
   const waterSources = waterSourcesForPage(page, officialLinks);
@@ -359,7 +408,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
         <div class="badges">
           <span class="badge">Mobile service</span>
           <span class="badge">Oxford & Norfolk Counties</span>
-          ${addon ? `<span class="badge">${escapeHtml(addon.quote_required ? "Quote required" : "Bookable add-on")}</span>` : `<span class="badge">Local service page</span>`}
+          ${addon ? `<span class="badge">${escapeHtml(addon.quote_required ? "Starting price · condition assessed" : "Bookable add-on")}</span>` : `<span class="badge">Local service page</span>`}
         </div>
         <div class="cta-row" style="margin-top:14px">
           <a class="btn primary" href="/book">Book now</a>
@@ -378,6 +427,8 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
         <p class="muted">${escapeHtml((highlights[0] || reasons[0] || page.hero_intro || "").slice(0, 280))}</p>
       </aside>
     </section>
+
+    ${conditionPricingMarkup(addon)}
 
     <section class="section proof-grid">
       <article class="proof-card">
@@ -400,6 +451,12 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
         <ul class="muted-list">${equipment.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
       </article>
     </section>
+
+    ${(scopeIncludes.length || scopeExcludes.length) ? `<section class="section scope-grid">${detailListCard("What’s included", scopeIncludes, "scope-includes")}${detailListCard("What is not automatically included", scopeExcludes, "scope-excludes")}</section>` : ""}
+
+    ${(customerPrep.length || aftercare.length) ? `<section class="section scope-grid">${detailListCard("Before we arrive", customerPrep)}${detailListCard("Aftercare", aftercare)}</section>` : ""}
+
+    ${quoteTriggers.length ? `<section class="section panel quote-trigger-panel"><h2 style="margin-top:0">When we pause and re-quote</h2><p class="muted">Photos are useful, but hidden damage, contamination or extra disassembly can change the labour. We confirm that before expanding the job.</p><ul class="muted-list">${quoteTriggers.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></section>` : ""}
 
     ${relatedProducts.length ? `
       <section class="section panel">
@@ -431,6 +488,8 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
     ${beforeAfterMarkup(websiteImageManifest, slug)}
 
     ${galleryMarkup(page, relatedProducts, landingMatches)}
+
+    ${visualBriefsMarkup(page, websiteImageManifest, slug)}
 
     ${thingsToKnow.length ? `
       <section class="section panel">
@@ -538,12 +597,13 @@ function landingAreaServed(page, slug) {
 }
 
 function updateLandingStructuredData(page, addon, slug) {
+  document.getElementById("landing-static-jsonld")?.remove();
   const title = page?.meta_title || page?.hero_title || page?.name || "Rosie Dazzlers landing page";
   const description = page?.meta_description || page?.hero_intro || "Rosie Dazzlers mobile auto detailing information page.";
   const url = `${location.origin}/${slug}`;
   const faqs = Array.isArray(page?.faq) ? page.faq.filter((item) => item?.q && item?.a) : [];
 
-  upsertJsonLd("landing-service-jsonld", {
+  const serviceJsonLd = {
     "@context": "https://schema.org",
     "@type": "Service",
     "name": page?.name || page?.hero_title || title,
@@ -557,7 +617,13 @@ function updateLandingStructuredData(page, addon, slug) {
       "areaServed": landingAreaServed(page, slug)
     },
     "areaServed": landingAreaServed(page, slug)
-  });
+  };
+  if (addon && addon.quote_required !== true) {
+    const sizePrices = Object.values(addon?.prices_cad || {}).map(Number).filter((value) => Number.isFinite(value) && value > 0);
+    const basePrice = hasPositiveMoney(addon?.price_cad) ? Number(addon.price_cad) : (sizePrices.length ? Math.min(...sizePrices) : null);
+    if (basePrice) serviceJsonLd.offers = { "@type": "Offer", "priceCurrency": "CAD", "price": basePrice, "url": `${location.origin}/book` };
+  }
+  upsertJsonLd("landing-service-jsonld", serviceJsonLd);
 
   upsertJsonLd("landing-breadcrumb-jsonld", {
     "@context": "https://schema.org",
