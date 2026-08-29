@@ -1,0 +1,34 @@
+{
+  "build": 264,
+  "updated_at": "2026-08-25",
+  "runtime_enabled": true,
+  "status": "historical_runtime_snapshot",
+  "superseded_by": "data/build265_app_modules.json",
+  "modules": [
+    {
+      "key": "customer",
+      "route": "/app/customer/",
+      "runtime_status": "protected_compatibility_bridge"
+    },
+    {
+      "key": "detailer",
+      "route": "/app/detailer/",
+      "runtime_status": "active_modular_runtime"
+    },
+    {
+      "key": "operations",
+      "route": "/app/operations/",
+      "runtime_status": "protected_compatibility_bridge"
+    },
+    {
+      "key": "admin",
+      "route": "/app/admin/",
+      "runtime_status": "protected_compatibility_bridge"
+    }
+  ],
+  "runtime_policy": {
+    "recurring_intervals": false,
+    "detailer_live_module": "lazy",
+    "automatic_mutation_retry": false
+  }
+}
