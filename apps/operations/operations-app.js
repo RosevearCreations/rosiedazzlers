@@ -1,4 +1,4 @@
-// Build 266 — Operations / Supervisor modular runtime (Build 265 extraction retained).
+// Build 267 — Operations / Supervisor modular runtime (Build 265 extraction retained).
 // Hard rule: opening Operations loads no operational dataset. Every workstream is explicit/manual and no module creates a polling interval.
 (function bootOperationsApp(globalScope){
   'use strict';
@@ -36,12 +36,12 @@
     document.addEventListener('visibilitychange',()=>currentInstance?.setVisibility?.(!document.hidden));
   }
   async function boot(){
-    if(!loader||!resolver||!api)throw new Error('Build 266 app-core did not load.');
+    if(!loader||!resolver||!api)throw new Error('Build 267 app-core did not load.');
     bind();setMode(null);
     await globalScope.AdminShell.boot({pageKey:'app-operations',onReady:async({actor})=>{
       await resolver.loadRuntimeFlags();
       if(!resolver.canAccess('operations',actor)){location.replace('/app/');return;}
-      resolver.remember('operations');status('Operations ready. Choose a workstream when you need it.','ok');
+      resolver.remember('operations');globalScope.RosieAppCore.ModuleNavigation?.renderHome?.('operations');status('Operations ready. Choose a workstream when you need it.','ok');const requested=new URLSearchParams(location.search).get('view');if(modulePaths[requested])await openModule(requested);
     }});
   }
   boot().catch((error)=>status(error.message||'Could not start Operations App.','bad'));

@@ -111,13 +111,14 @@
     document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden);});
   }
   async function boot(){
-    if(!api||!policy||!loader||!resolver)throw new Error('Build 266 app-core did not load.');
+    if(!api||!policy||!loader||!resolver)throw new Error('Build 267 app-core did not load.');
     bind();
     await globalScope.AdminShell.boot({pageKey:'app-detailer',onReady:async({actor:currentActor})=>{
       actor=currentActor||null;
       await resolver.loadRuntimeFlags();
       if(!resolver.canAccess('detailer',actor)){location.replace('/app/');return;}
       resolver.remember('detailer');
+      globalScope.RosieAppCore.ModuleNavigation?.renderHome?.('detailer');
       await loadWorkspace();
     }});
   }

@@ -1,4 +1,4 @@
-// Build 266 — generic lazy module shell. Auth + cached module flags only; no subsystem dataset reads.
+// Build 267 — generic lazy module shell. Auth + cached module flags only; no subsystem dataset reads.
 (function (globalScope) {
   'use strict';
 
@@ -17,6 +17,7 @@
           return;
         }
         resolver.remember(key);
+        globalScope.RosieAppCore.ModuleNavigation?.renderHome?.(key);
         const status = document.getElementById('moduleRuntimeStatus');
         if (status) {
           status.className = 'notice ok';
