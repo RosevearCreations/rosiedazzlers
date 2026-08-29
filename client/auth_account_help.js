@@ -32,6 +32,6 @@ function safePhone(value){ const text=String(value ?? '').trim(); if (!text) ret
 function safeEmail(value){ const text=String(value ?? '').trim().toLowerCase(); if(!text) return null; return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text) ? text.slice(0,320) : null; }
 function utcDate(){ return new Date().toISOString().slice(0,10); }
 async function sha256Hex(input){ const bytes=new TextEncoder().encode(String(input||'')); const hash=await crypto.subtle.digest('SHA-256',bytes); return [...new Uint8Array(hash)].map((byte)=>byte.toString(16).padStart(2,'0')).join(''); }
-function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}}); }
+function json(data,status=200){ return new Response(JSON.stringify(data),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}}); }
 function corsHeaders(){ return {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'POST,OPTIONS','Access-Control-Allow-Headers':'Content-Type','Cache-Control':'no-store'}; }
 function withCors(response){ const headers=new Headers(response.headers||{}); for(const [key,value] of Object.entries(corsHeaders())) headers.set(key,value); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }

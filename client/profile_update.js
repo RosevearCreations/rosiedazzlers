@@ -44,6 +44,6 @@ export async function onRequestPost(context){ const {request,env}=context; try{
 function cleanText(v){ const s=String(v??"").trim(); return s||null; }
 function toBoolean(v){ if(typeof v==='boolean') return v; const s=String(v||"").trim().toLowerCase(); return s==='true'||s==='1'||s==='yes'||s==='on'; }
 function normalizeNotificationChannel(v){ const s=String(v||"").trim().toLowerCase(); return ["email","sms","none"].includes(s)?s:null; }
-function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
+function json(data,status=200){ return new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"}}); }
 function corsHeaders(){ return {"Access-Control-Allow-Origin":"*","Access-Control-Allow-Methods":"POST,OPTIONS","Access-Control-Allow-Headers":"Content-Type","Cache-Control":"no-store"}; }
 function withCors(response){ const headers=new Headers(response.headers||{}); for(const [k,v] of Object.entries(corsHeaders())) headers.set(k,v); return new Response(response.body,{status:response.status,statusText:response.statusText,headers}); }

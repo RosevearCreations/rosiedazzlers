@@ -1,4 +1,4 @@
-// Build 238 shared admin shell with startup navigation and emergency CSS fallback.
+// Build 236 restored complete shared admin shell shortcuts.
 // assets/admin-shell.js
 //
 // Shared admin/detailer page bootstrap.
@@ -36,33 +36,6 @@
 // - [data-admin-shell-ready]
 
 (function attachAdminShell(globalScope) {
-  function ensureAdminCssFallback() {
-    const styleId = "rosie-admin-emergency-css";
-    if (document.getElementById(styleId)) return;
-    const apply = () => {
-      const probe = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
-      if (probe) return;
-      const style = document.createElement("style");
-      style.id = styleId;
-      style.textContent = `
-        :root{color-scheme:dark;--bg:#08111f;--surface:#111827;--border:#334155;--text:#eef6ff;--muted:#a8b4c5}
-        *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
-        a{color:#93c5fd}.container,.shell,.rx,.dr,.gc-wrap{width:min(1240px,calc(100% - 24px));margin:auto;padding:16px 0}
-        .nav,.site-header{background:#0f172a;border-bottom:1px solid var(--border);padding:10px 14px}.nav-inner,.site-header{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-        .panel,.card,.gc-card,.item,.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px}
-        input,select,textarea,button{font:inherit;max-width:100%}input,select,textarea{width:100%;padding:10px;border-radius:9px;border:1px solid #475569;background:#0b1220;color:var(--text)}
-        .btn,button{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid #64748b;background:#1e293b;color:#fff;text-decoration:none;cursor:pointer}.primary{background:#2563eb}
-        .notice{padding:11px;border:1px solid #64748b;border-radius:10px;margin:10px 0}.muted,.mini{color:var(--muted)}table{width:100%}.table-wrap{overflow:auto}
-        @media(max-width:760px){.grid,.gc-grid,.row,.kpis,.gc-kpis{grid-template-columns:1fr!important}.btn,button{min-height:44px}}
-      `;
-      document.head.appendChild(style);
-      document.documentElement.dataset.cssFallback = "active";
-      console.warn("Rosie Dazzlers emergency admin CSS fallback activated. Verify /assets/site.css deployment.");
-    };
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(apply, 50), {once:true});
-    else setTimeout(apply, 50);
-  }
-  ensureAdminCssFallback();
   function assertDependency() {
     if (!globalScope.AdminAuth) {
       throw new Error("AdminShell requires /assets/admin-auth.js to be loaded first.");
@@ -139,7 +112,6 @@
       <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
       <a class="btn ghost small" href="/admin-inventory-manager.html">Inventory Workbench</a>
       <a class="btn ghost small" href="/admin-launch-readiness.html">Launch Readiness</a>
-      <a class="btn ghost small" href="/admin-startup-guide.html">Startup Guide</a>
       <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
       <span class="crumb">${pageKey || "admin"}</span>
     `;

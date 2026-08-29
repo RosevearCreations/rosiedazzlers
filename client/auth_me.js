@@ -55,7 +55,7 @@ export async function onRequestGet(context) {
     headers = applyCors(headers);
 
     return new Response(
-      JSON.stringify({ ok: true, authenticated: true, customer: formatCustomer(current.customer_profile) }, null, 2),
+      JSON.stringify({ ok: true, authenticated: true, customer: formatCustomer(current.customer_profile) }),
       { status: 200, headers }
     );
   } catch (err) {
@@ -84,7 +84,7 @@ function unauthenticatedResponse({ clearCookie = null, degraded = false, reason 
     body.message = message;
     body.diagnostic = diagnostic;
   }
-  return new Response(JSON.stringify(body, null, 2), { status: 200, headers });
+  return new Response(JSON.stringify(body), { status: 200, headers });
 }
 
 function formatCustomer(row) {

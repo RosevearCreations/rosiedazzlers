@@ -18,4 +18,4 @@ export async function onRequestGet({ request, env }){
     return json({ ok:true, incident_reports:Array.isArray(rows)?rows:[] });
   } catch (err) { return json({ ok:false, error:err?.message || String(err) }, 500); }
 }
-function json(data, status=200){ return new Response(JSON.stringify(data,null,2), { status, headers:{ 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' } }); }
+function json(data, status=200){ return new Response(JSON.stringify(data), { status, headers:{ 'Content-Type':'application/json; charset=utf-8', 'Cache-Control':'no-store' } }); }

@@ -116,4 +116,4 @@ function publicPaymentUrl(request,env,row){const base=String(env.PUBLIC_SITE_ORI
 export async function onRequestOptions(){ return new Response("", { status:204, headers:{ "Access-Control-Allow-Origin":"*", "Access-Control-Allow-Methods":"POST,OPTIONS", "Access-Control-Allow-Headers":"Content-Type", "Cache-Control":"no-store" } }); }
 function clean(v){ return String(v == null ? "" : v).trim(); }
 function serviceHeaders(env){ return { apikey:env.SUPABASE_SERVICE_ROLE_KEY, Authorization:`Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" }; }
-function json(data,status=200){ return new Response(JSON.stringify(data,null,2),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","Access-Control-Allow-Origin":"*"}}); }
+function json(data,status=200){ return new Response(JSON.stringify(data),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","Access-Control-Allow-Origin":"*"}}); }
