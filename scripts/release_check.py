@@ -218,6 +218,7 @@ CHECKS = [
     "scripts/release_check_build263.py",
     "scripts/release_check_build264.py",
     "scripts/release_check_build265.py",
+    "scripts/release_check_build266.py",
     "scripts/build224_customer_profile_quality_check.py",
     "scripts/seo_h1_check.py",
 ]
