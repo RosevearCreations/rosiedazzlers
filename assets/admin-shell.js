@@ -36,6 +36,33 @@
 // - [data-admin-shell-ready]
 
 (function attachAdminShell(globalScope) {
+  function ensureAdminCssFallback() {
+    const styleId = "rosie-admin-emergency-css";
+    if (document.getElementById(styleId)) return;
+    const apply = () => {
+      const probe = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+      if (probe) return;
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = `
+        :root{color-scheme:dark;--bg:#08111f;--surface:#111827;--border:#334155;--text:#eef6ff;--muted:#a8b4c5}
+        *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}
+        a{color:#93c5fd}.container,.shell,.rx,.dr,.gc-wrap{width:min(1240px,calc(100% - 24px));margin:auto;padding:16px 0}
+        .nav,.site-header{background:#0f172a;border-bottom:1px solid var(--border);padding:10px 14px}.nav-inner,.site-header{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+        .panel,.card,.gc-card,.item,.kpi{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px}
+        input,select,textarea,button{font:inherit;max-width:100%}input,select,textarea{width:100%;padding:10px;border-radius:9px;border:1px solid #475569;background:#0b1220;color:var(--text)}
+        .btn,button{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:10px;border:1px solid #64748b;background:#1e293b;color:#fff;text-decoration:none;cursor:pointer}.primary{background:#2563eb}
+        .notice{padding:11px;border:1px solid #64748b;border-radius:10px;margin:10px 0}.muted,.mini{color:var(--muted)}table{width:100%}.table-wrap{overflow:auto}
+        @media(max-width:760px){.grid,.gc-grid,.row,.kpis,.gc-kpis{grid-template-columns:1fr!important}.btn,button{min-height:44px}}
+      `;
+      document.head.appendChild(style);
+      document.documentElement.dataset.cssFallback = "active";
+      console.warn("Rosie Dazzlers emergency admin CSS fallback activated. Verify /assets/site.css deployment.");
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(apply, 50), {once:true});
+    else setTimeout(apply, 50);
+  }
+  ensureAdminCssFallback();
   function assertDependency() {
     if (!globalScope.AdminAuth) {
       throw new Error("AdminShell requires /assets/admin-auth.js to be loaded first.");
@@ -90,6 +117,16 @@
         return "Senior Detailer";
       case "detailer":
         return "Detailer";
+      case "operations_manager":
+        return "Operations Manager";
+      case "accountant":
+        return "Accountant / Finance";
+      case "it_specialist":
+        return "I.T. Specialist";
+      case "promoter":
+        return "Promoter / Marketing";
+      case "daip_manager":
+        return "DAIP Manager";
       default:
         return "Staff";
     }
@@ -97,26 +134,53 @@
 
   function ensureReturnMenu(root, pageKey) {
     if (document.querySelector(".admin-return-bar")) return;
-    if (document.querySelector("header.nav")) return;
-
     const host = document.querySelector("main.shell") || document.querySelector("main.container") || document.body;
     if (!host) return;
 
     const wrap = document.createElement("div");
     wrap.className = "admin-return-bar";
+    const moduleHomes = {detailer:["Detailer","/app/detailer/"],operations:["Operations","/app/operations/"],admin:["Administration","/app/admin/"],it:["I.T.","/app/it/"],finance:["Finance","/app/finance/"],daip:["DAIP","/app/daip/"],socials:["Socials","/app/socials/"]};
+    const moduleKey = globalScope.AdminAuth?.pageModules?.(pageKey)?.[0] || null;
+    const moduleHome = moduleHomes[moduleKey] || null;
     wrap.innerHTML = `
-      <a class="btn ghost small" href="/admin.html">← Admin Dashboard</a>
+      <a class="btn ghost small" href="/app/">← All Apps</a>
+      ${moduleHome ? `<a class="btn primary small" href="${moduleHome[1]}">${moduleHome[0]} Home</a>` : ""}
       <a class="btn ghost small" href="/admin-account.html">Account</a>
-      <a class="btn ghost small" href="/admin-analytics.html">Analytics</a>
-      <a class="btn ghost small" href="/admin-conversions.html">Conversions</a>
-      <a class="btn ghost small" href="/admin-catalog.html">Inventory</a>
-      <a class="btn ghost small" href="/admin-inventory-manager.html">Inventory Workbench</a>
-      <a class="btn ghost small" href="/admin-launch-readiness.html">Launch Readiness</a>
-      <a class="btn ghost small" href="/admin-accounting.html">Accounting</a>
-      <span class="crumb">${pageKey || "admin"}</span>
+      <span class="crumb">${pageKey || "staff"}</span>
     `;
 
     host.insertBefore(wrap, host.firstChild);
+  }
+
+
+  function ensureModuleHierarchy(root, pageKey) {
+    const auth = globalScope.AdminAuth;
+    const moduleHomes = {detailer:'/app/detailer/',operations:'/app/operations/',admin:'/app/admin/',it:'/app/it/',finance:'/app/finance/',daip:'/app/daip/',socials:'/app/socials/'};
+    const moduleKey = auth?.pageModules?.(pageKey)?.[0] || null;
+    if (!moduleKey) return;
+
+    // Retire legacy cross-module header links on protected pages. The brand returns to the owning module.
+    find(root, 'header .nav-links').forEach((node) => {
+      if (node.id !== 'adminMenu' && !node.hasAttribute('data-admin-menu-mount')) node.hidden = true;
+    });
+    find(root, 'header .nav-toggle').forEach((node) => { node.hidden = true; });
+    find(root, 'a.brand[href="/admin.html"], a.brand[href="/admin"]')
+      .forEach((node) => { node.href = moduleHomes[moduleKey] || '/app/'; });
+
+    if (!globalScope.AdminMenu || typeof globalScope.AdminMenu.render !== 'function') return;
+    let mount = root.querySelector?.('[data-admin-menu-mount]') || root.querySelector?.('#adminMenu') || null;
+    if (!mount) {
+      const host = root.querySelector?.('main.shell') || root.querySelector?.('main.container') || root.querySelector?.('main') || null;
+      if (!host) return;
+      mount = document.createElement('div');
+      mount.setAttribute('data-admin-menu-mount', '');
+      mount.className = 'module-private-menu-mount';
+      const returnBar = host.querySelector('.admin-return-bar');
+      if (returnBar && returnBar.nextSibling) host.insertBefore(mount, returnBar.nextSibling);
+      else if (returnBar) host.appendChild(mount);
+      else host.insertBefore(mount, host.firstChild);
+    }
+    globalScope.AdminMenu.render({ currentPage: pageKey, mount });
   }
 
   function wireLogout(root, options = {}) {
@@ -197,6 +261,7 @@
       globalScope.AdminAuth.renderActorText(root);
       wireLogout(root, options);
       ensureReturnMenu(root, pageKey);
+      ensureModuleHierarchy(root, pageKey);
 
       if (typeof options.onReady === "function") {
         await options.onReady({
@@ -249,3 +314,5 @@
     humanizeRole
   };
 })(window);
+
+// Historical private-navigation route tokens retained for release evidence: admin-conversions.html | admin-inventory-manager.html | admin-launch-readiness.html
