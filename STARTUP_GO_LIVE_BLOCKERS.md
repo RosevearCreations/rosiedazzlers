@@ -1,3 +1,45 @@
+# Build 267 current acceptance — role/module hierarchy and private menu convergence
+
+**Authority note:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are the only living planning authorities. This is deployed Development acceptance.
+
+## Database — administrator protection first
+
+- [ ] Before migration, list/record only safe IDs/emails/roles for current `role_code=admin` accounts.
+- [ ] Apply `sql/2026-08-29_build267_role_module_hierarchy.sql` in Development.
+- [ ] Confirm the transaction did not raise the admin-module assertion.
+- [ ] Read every Admin back and confirm Detailer/Operations/Admin/I.T./Finance/DAIP/Socials module grants are all true.
+- [ ] Confirm the expanded role constraint accepts Operations Manager, Accountant, I.T. Specialist, Promoter and DAIP Manager.
+- [ ] Confirm no new role/module table or direct browser DB grant was introduced.
+
+## Build/cache/menu
+
+- [ ] Deploy Pages + Functions together and hard-refresh.
+- [ ] Confirm service-worker cache `rosie-app-v20260829build267` and resolver Build 267.
+- [ ] `/app/` shows only modules authorized by role ceiling + staff grant + global availability.
+- [ ] Each internal module home shows categorized clickable cards; opening a home/card catalog causes no business-data API read.
+- [ ] A protected legacy page shows only its owning module hierarchy, plus All Apps / Module Home / Account.
+- [ ] Old Today/Blocks/Assign compatibility routes remain usable while the Operations lazy equivalents are accepted.
+
+## Role/API isolation
+
+- [ ] Detailer → Detailer only.
+- [ ] Senior Detailer → Detailer + Operations only.
+- [ ] Operations Manager → Detailer + Operations; Finance/Admin/I.T./DAIP/Socials denied.
+- [ ] Accountant → Finance only; Finance reads/writes used by the Finance UI work while Staff/Admin/Operations/I.T./DAIP/Socials APIs deny.
+- [ ] I.T. Specialist → I.T. only; technical diagnostics/settings permitted according to existing action checks, but cross-module business mutations referenced by test pages remain denied.
+- [ ] Promoter → Socials & Promotion only; marketing/content/photo/gallery/SEO/integration workflows work, Finance/Admin/DAIP denied.
+- [ ] DAIP Manager → DAIP only and all existing DAIP gates remain authoritative.
+- [ ] Administrator → all seven internal modules and Staff & Access cannot remove them.
+
+## Idle network / reliability
+
+- [ ] Launcher/module homes idle for five minutes with no module business-data polling.
+- [ ] No-open-job Detailer still has no live bundle/feed/media/message polling.
+- [ ] Operations shell remains manual/lazy.
+- [ ] Representative Cloudflare window: Exceeded CPU Time Limits = 0; script exceptions = 0; memory exceeded = 0.
+
+---
+
 # Build 266 current acceptance — eight-module runtime + installable app foundation
 
 **Authority note:** `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md` are the only living planning authorities. This is deployed-environment acceptance.
