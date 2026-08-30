@@ -150,6 +150,33 @@
     return `<section class="rosie-help-dialog__section"><h3>${esc(title)}</h3><p>${esc(value)}</p></section>`;
   }
 
+  function orderedSection(title, value) {
+    if (!Array.isArray(value) || !value.length) return value ? section(title, value) : '';
+    return `<section class="rosie-help-dialog__section"><h3>${esc(title)}</h3><ol>${value.map((item) => `<li>${esc(item)}</li>`).join('')}</ol></section>`;
+  }
+
+  function safeExternalUrl(value) {
+    try {
+      const parsed = new URL(String(value || ''));
+      if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+      return parsed.href;
+    } catch {
+      return null;
+    }
+  }
+
+  function linkSection(title, links) {
+    if (!Array.isArray(links) || !links.length) return '';
+    const rendered = links.map((item) => {
+      const url = safeExternalUrl(typeof item === 'string' ? item : item?.url);
+      if (!url) return '';
+      const label = typeof item === 'string' ? item : (item?.label || item.url);
+      return `<li><a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a></li>`;
+    }).filter(Boolean).join('');
+    if (!rendered) return '';
+    return `<section class="rosie-help-dialog__section"><h3>${esc(title)}</h3><ul class="rosie-help-dialog__links">${rendered}</ul></section>`;
+  }
+
   function openDialog(entry, trigger) {
     const dialog = ensureDialog();
     lastTrigger = trigger || document.activeElement;
@@ -159,10 +186,17 @@
       section('What it changes', entry.changes),
       section('Why Rosie needs it', entry.why),
       section('Where the value comes from', entry.source),
+      orderedSection('How to obtain it', entry.setup),
+      section('Prerequisites / permissions', entry.prerequisites),
       section('Expected format', entry.format),
+      section('Where Rosie stores it', entry.storage),
+      section('Callback / redirect setup', entry.callbacks),
       section('Operational / accounting implications', entry.implications),
+      section('How to test it', entry.test),
+      section('Troubleshooting', entry.troubleshooting),
       section('Security', entry.security),
       section('Related records / systems', entry.related),
+      linkSection('Official provider resources', entry.official),
       entry.integration === false ? '' : '<a class="rosie-help-dialog__it-link" href="/admin-integrations.html">Open I.T. Connections →</a>'
     ].join('');
     dialog.hidden = false;
