@@ -1,262 +1,182 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 271  
+**Build:** 272  
 **Updated:** 2026-08-29
 
 ## North star
 
 Build a professional mobile-first detailing platform connecting:
 
-`lead / quote → booking → assigned work → live customer/detailer interaction → proof → payment → review/public proof → repeat maintenance`
+`lead / quote → booking → assigned work → live customer/detailer interaction → proof → payment → accounting/tax workpaper → review/public proof → repeat maintenance`
 
 while dormant modules stay asleep and server work is driven by real business events rather than polling.
 
-## Current Development baseline — Build 271
+## Build 272 — closed
 
-### Platform / navigation
+Build 272 closes the current permission/package-clarity/T2125 increment. Its historical detail is `BUILD272_SUMMARY.md`.
 
-- `/app/` = Staff App Launcher, not Administration.
-- `/app/admin/` = Business Administration.
-- Protected navigation can return to Public Site / All Staff Apps / Module Home / Account.
-- Eight independently loadable modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, Socials.
-- Public discovery remains static-first and SEO-first.
+Closed source scope:
 
-### Role ceilings
+- customer/profile/tier writes behind `operations.customer.manage`;
+- quote/proposal/deposit-request/final-balance management behind `operations.quote.manage`;
+- refunds behind `finance.refund.manage`;
+- settlements behind `finance.settlement.manage`;
+- existing package prices preserved;
+- Exterior vs Premium Wash scope clarified;
+- Complete positioned as **Best value** with broadest inside/out base scope;
+- vehicle-size pricing and condition/quote triggers clarified before price;
+- fully mobile water/power promise made explicit;
+- booking/deposit mechanics retained;
+- public one-H1 rule retained;
+- first Finance-scoped T2125 workpaper added with review-first handling for meals, vehicle, CCA, home office, COGS and unknown mappings;
+- aligned CSV/JSON tax workpaper export added;
+- Build 272 focused guard added to Development acceptance workflow.
 
-- Detailer → Detailer.
-- Senior Detailer / Operations Manager → Detailer + Operations.
-- Accountant → Finance.
-- I.T. Specialist → I.T.
-- Promoter → Socials.
-- DAIP Manager → DAIP.
-- Admin → all seven internal modules and all actions.
+Anything not objectively finishable without new scope, credentials, real devices, provider interaction, human tax facts or rehearsals is carried into Build 273. Do not keep Build 271 or 272 open for those items.
 
-Server authorization is authoritative. Hidden cards/links are not security.
+## Current architecture
 
-### Permission architecture
+Eight independently loadable modules remain authoritative:
 
-Layered evaluation:
+1. Customer
+2. Detailer
+3. Operations / Supervisor
+4. Business Administration
+5. I.T. & Reliability
+6. Finance
+7. DAIP
+8. Socials & Promotion
+
+Layered authorization remains:
 
 1. role/module ceiling;
-2. per-user `permissions_profile.module_access` narrowing;
+2. per-user module narrowing;
 3. global module runtime availability;
 4. explicit action permission;
 5. workflow/business-state checks.
 
-Per-user action overrides use `permissions_profile.action_access`. Build 271 makes real staff sessions and transition bridge-header auth normalize the historical TEXT profile through the same parser.
+Admin is all-modules/all-actions by design. Server authorization is authoritative.
 
-## Build 270 retained — Web Push infrastructure
+## Build 273 — active engineering queue
 
-Build 270 push infrastructure is already implemented in Development and should not be rebuilt on chat startup:
+### Finance / accounting / tax support
 
-- server-only push-subscription table + RLS;
-- existing customer notification preferences reused;
-- separate staff/customer authenticated subscription endpoints;
-- explicit click-to-subscribe only;
-- VAPID key pair in Supabase Vault;
-- service-role-only VAPID RPCs;
-- active `rosie-web-push` Supabase Edge Function;
-- `web-push@3.6.7` pinned;
-- 404/410 subscription revocation;
-- existing notification queue/retry/backoff remains the single delivery authority;
-- I.T.-only remote push test;
-- no notification polling loop.
+Priority order:
 
-Remaining work is acceptance/evidence and preference UX, not another push architecture.
+1. Add a persistent business/tax profile with configurable entity/tax mode rather than hard-coding a legal structure.
+2. Add mileage/vehicle records: vehicle identity, tax year, odometer/total km, business trips/km, purpose, linked booking/job where available, parking/tolls and evidence.
+3. Feed complete business/total-kilometre facts into T2125 line 9281 support while leaving uncertain trips reviewable.
+4. Add business-use-of-home support: allocation basis, workspace/home area or reasonable shared-use basis, eligible costs, prior carry-forward, income limitation and claimed amount.
+5. Add capital asset/CCA support: acquisition/disposition dates, capital cost, class, prior UCC, business-use percentage, available-for-use facts and review notes.
+6. Add year-end inventory/COGS support: opening inventory, purchases/direct costs, closing inventory and valuation evidence.
+7. Link receipts/documents/evidence to ledger and tax-review items.
+8. Produce an accountant package combining P&L, trial balance, balance sheet, GST/HST, T2125, mileage, CCA, home-office support, evidence index and unresolved review queue.
+9. Preserve period locks, posted-ledger immutability, double-entry rules and evidence links.
 
-## Build 271 implemented — communication + explicit actions
+### Permissions / workflow extraction
 
-### Active communication boundary
+Continue explicit high-risk action extraction when those areas are changed:
 
-Reuse the existing Build 210 unread/viewed/notified timestamps. Do not add a parallel unread system.
+- booking cancellation/reschedule/override;
+- incident/report approval and customer-visible publication;
+- review-request queue mutation;
+- manual journal/adjusting entries;
+- tax close/lock;
+- payroll finalization;
+- sensitive accountant export generation;
+- I.T. diagnostics/test/runtime/module settings;
+- Administration staff/catalog/inventory configuration;
+- Socials review/edit/publish/provider actions;
+- DAIP intake/review/promote behind consent/private-media gates.
 
-New live-message writes are allowed only while the booking/job is in an active live state. Completed/inactive history remains readable but live customer/detailer messages close.
+Do not broaden roles merely to make a page work. Add the narrow action authority the workflow actually needs.
 
-Deep links:
+### Module extraction
 
-- customer → exact progress message form;
-- assigned staff → exact bounded Detailer job/live-job host.
-
-The Detailer deep-link resolver is one-shot and does not poll for missing jobs.
-
-### Operations actions converted
-
-- assignment/crew changes → `operations.assignment.manage`;
-- date/slot/range block/unblock writes → `operations.schedule.manage`.
-
-### Finance actions converted
-
-- payment application write → `finance.post`;
-- bank reconciliation read → `finance.view`;
-- reconciliation save → `finance.reconcile`;
-- period-close read → `finance.view`;
-- period-close write → `finance.period.close`.
-
-Accountant defaults now include `finance.period.close`; Detailer has no Finance action.
-
-### Build 271 source gates
-
-- focused Build 271 release guard: PASS;
-- cumulative Build 270 guard: PASS against canonical authorities;
-- 598 Functions static checks;
-- 63 critical JS syntax checks;
-- customer profile quality PASS;
-- route-copy parity PASS;
-- global one-H1 PASS;
-- no new polling in Build 271 paths.
-
-## P0 — deployed Build 271 acceptance
-
-Before calling Build 271 Development-proven:
-
-1. Confirm the exact current `dev` head is the Development Pages deployment; keep `main` untouched.
-2. Admin: all seven internal modules visible/accessible.
-3. Detailer: Detailer only; Operations/Finance/Admin/I.T./DAIP/Socials direct URLs/APIs denied.
-4. Senior Detailer: Detailer + permitted Operations reads only; high-risk schedule/assignment mutation follows action defaults/overrides.
-5. Operations Manager: assignment/schedule writes pass; Finance/Admin/I.T./DAIP/Socials denied.
-6. Accountant: Finance reads/post/reconcile/period-close pass; Operations/Admin/I.T./DAIP/Socials denied.
-7. I.T. Specialist: I.T. notification/runtime controls pass; business/payment mutations denied.
-8. Promoter: Socials only; publish/manage actions scoped there.
-9. DAIP Manager: DAIP only and existing privacy gates remain authoritative.
-10. Verify active customer ↔ Detailer message flow and push deep links on real sessions/devices.
-11. Verify completed/inactive job message writes reject cleanly while history stays readable.
-12. Capture Cloudflare evidence: exceeded CPU = 0, script exceptions = 0, memory exceeded = 0 for representative use.
-
-## Build 272 candidate — finish high-value action extraction
-
-Continue explicit permissions before adding more broad feature surface.
-
-### Operations
-
-Convert remaining high-risk mutation paths in this order:
-
-1. quote create/edit/send/accept-state changes;
-2. customer identity/contact/service-history mutations;
-3. booking cancellation/reschedule/override;
-4. incident/report approval and customer-visible publishing;
-5. review-request queue mutation.
-
-Keep read-only operational views separate from mutation actions.
-
-### Finance
-
-Convert remaining high-risk paths:
-
-1. refunds and refund approvals;
-2. deposit/final-balance settlement mutation;
-3. manual journal posting / adjusting entries;
-4. tax-close/lock actions;
-5. payroll finalization;
-6. accountant export generation where sensitive.
-
-Do not make Accountant depend on broad `manage_staff` authority.
-
-### I.T. / Administration / Socials / DAIP
-
-Then continue:
-
-- I.T.: diagnostics/test/runtime/module settings;
-- Administration: staff/catalog/inventory configuration;
-- Socials: review/edit/publish/provider actions;
-- DAIP: intake/review/promote only behind private-media/consent gates.
-
-## Preference / communication UX
-
-Only extend stored authorities already present:
-
-- customer notification opt-in/channel/event preferences;
-- push subscription event preferences;
-- subscription quiet-hours fields where a clear user-facing need exists.
-
-Do not create another customer-preferences table or another queue.
-
-Next UX priorities:
-
-- clear notification/preferences surface in Customer App;
-- staff device preference/quiet-hours surface in I.T. or Account;
-- clear “live messaging closed” state on completed jobs;
-- unread indicators in Operations/Detailer using existing viewed timestamps;
-- deep links to quote/payment context where events already know those targets.
-
-## Module extraction priority
-
-Some module cards still open compatibility pages. Extract the highest-use workflows into lazy module components in this order:
+Continue moving high-use compatibility pages into lazy module surfaces in this order:
 
 1. Operations customer/booking/quote support;
-2. Finance accounting/payments/reconciliation/period close;
+2. Finance accounting/payments/reconciliation/tax support;
 3. I.T. Startup/Test/Runtime health;
 4. Administration Staff/Inventory/Catalog;
 5. Socials Content/Photo/SEO/Integrations;
 6. DAIP only as privacy/cost/processing gates permit.
 
-Retire compatibility routes only after authorization, mobile/desktop behavior and server-load evidence are clean.
+## Build 273 — manual / external acceptance queue
 
-## Native packaging after web event model is proven
+These are intentionally deferred until the required human input, credentials, devices or provider state are available. They are not stale Build 271/272 blockers.
 
-### Mobile
+### Authenticated runtime
 
-Use one codebase with Capacitor rather than forking business logic.
+- Admin and focused-role launcher/direct-URL/API matrix.
+- Detailer/Senior Detailer/Operations Manager/Accountant/I.T./Promoter/DAIP role/action acceptance.
+- Real customer ↔ Detailer message/deep-link flow.
+- Completed/inactive job message rejection with readable history.
 
-Priorities:
+### Providers / payments
 
-- native push;
-- camera/photo/video capture;
-- weak-network awareness and safe retry/cancel;
-- deep links to assigned job/message/payment;
-- background behavior only where OS + business need justify it;
-- real Wi-Fi/cellular acceptance.
+- real email/SMS/Web Push delivery/retry/failure evidence;
+- Stripe test deposit;
+- Stripe final balance;
+- Stripe refund;
+- Stripe webhook settlement/replay/idempotency;
+- PayPal sandbox parity decision/acceptance if retained.
 
-### Desktop / tray
+### Inventory / reliability
 
-Tauri remains optional/later. Add a true tray/startup wrapper only if it creates clear operational value. A minimized desktop shell must not keep Detailer/Finance/DAIP subsystems awake.
-
-## Current go-live evidence still open
-
-Keep these bridged to the **current release**, never stale historical build numbers:
-
-- Stripe test deposit/final-balance/refund/webhook settlement;
-- PayPal sandbox parity decision/acceptance if PayPal remains in scope;
-- email/SMS/Web Push real-provider delivery/retry/failure evidence;
-- transactional inventory posting/reversal/idempotency/shortage acceptance;
+- live inventory posting/reversal/idempotency/shortage evidence;
+- representative Cloudflare exceeded-CPU/script-exception/memory evidence;
 - Supabase restore rehearsal;
-- Cloudflare deployment rollback rehearsal;
-- DAIP private media processing/retry/cancel/dead-letter/usage evidence;
-- real-device CSS, keyboard/focus/contrast/reduced-motion/accessibility acceptance;
+- Cloudflare deployment rollback rehearsal.
+
+### DAIP / devices / launch
+
+- private-media processing/retry/cancel/dead-letter/usage evidence;
+- consent/privacy acceptance;
+- approved-only Gallery/Social handoff;
+- phone/tablet/desktop/PWA acceptance;
+- Wi-Fi/cellular/weak-network behavior;
+- keyboard/focus/contrast/reduced-motion/accessibility acceptance;
 - Search Console, sitemap/canonical/schema and Google Business Profile evidence;
 - controlled invite-only soft launch with monitoring.
 
-## DAIP direction
+### Human tax facts
 
-DAIP remains private/governed and independently switchable:
+- business legal/entity/tax profile confirmation;
+- actual business and total kilometres;
+- home-office allocation facts and eligible costs;
+- capital asset/CCA class/UCC facts;
+- inventory/direct-cost facts;
+- accountant review of judgment-heavy T2125 items.
 
-1. private ingestion/storage authorization;
-2. proxy/thumbnail/contact-sheet processing outside ordinary Pages request paths;
-3. retry/cancel/dead-letter + usage/cost recording;
-4. privacy/consent review;
-5. evidence/lesson/content-package review;
-6. approved-only Gallery/Social handoff;
-7. never automatic public publishing.
+The system should do the bookkeeping leg work, surface missing facts and produce accountant-ready workpapers, but must not invent those facts.
 
-## Public/business priorities after reliability
+## Public/business priorities
 
-- replace remaining visual placeholders with approved Rosie-owned proof;
-- strengthen Gallery Evidence/Technique/Efficiency proof;
+- replace remaining placeholders with approved Rosie-owned proof;
+- strengthen Gallery Evidence / Technique / Efficiency proof;
 - continue service-cost/minimum-price authority so labour/consumables/overhead protect margins;
-- measure quote-to-booking and repeat-maintenance conversion before adding more marketing integrations;
-- keep Oxford/Norfolk local pages genuinely useful/distinct;
-- maintain detailed condition-aware service/add-on landing pages and one meaningful H1 per public page.
+- measure quote-to-booking and repeat-maintenance conversion;
+- keep Oxford/Norfolk local pages genuinely useful and distinct;
+- maintain detailed condition-aware service/add-on landing pages;
+- maintain one meaningful H1 per public/indexable page.
+
+## Native packaging after the web event model is proven
+
+Use one codebase with Capacitor rather than forking business logic. Priorities remain native push, camera/photo/video capture, weak-network awareness and deep links. Tauri tray packaging stays optional/later and must not keep dormant business modules awake.
 
 ## Permanent guardrails
 
 - one meaningful H1 per public/indexable page;
 - crawlable static-first service/local pages;
 - no public R2 bucket enumeration on normal requests;
-- no subsystem polling merely because a module/app is installed or authorized;
+- no subsystem polling just because a module is installed or authorized;
 - optional refresh pauses while hidden and should be event/manual first;
 - heavy aggregation/filtering belongs in Postgres, not Worker JavaScript;
 - no automatic replay of ambiguous non-idempotent writes;
 - server authorization is authoritative;
 - customer/private DAIP media never becomes public without explicit consent/review;
 - secrets never belong in browser code or Git;
+- tax/accounting automation proposes and documents; judgment-heavy claims remain reviewable;
 - `main` / live Production is promoted only deliberately from an accepted Development release.
