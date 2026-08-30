@@ -2,7 +2,8 @@
 
 **Living authority 2 of 2**  
 **Build:** 274  
-**Updated:** 2026-08-30
+**Updated:** 2026-08-30  
+**Read first:** `AI_PROJECT_HANDOFF.md`
 
 ## North star
 
@@ -10,28 +11,24 @@ Build a professional **mobile-first detailing application** connecting:
 
 `search / lead → recommendation / quote → booking → assigned work → live customer/detailer interaction → proof → payment → accounting/tax workpaper → review/public proof → repeat maintenance`
 
-while dormant modules stay asleep and server work is driven by real business events rather than polling.
+while dormant modules stay asleep and server work is driven by real business events rather than background polling.
 
-The public website is the crawlable acquisition layer. Booking and all authenticated Customer/Detailer/Operations/Admin/I.T./Finance/DAIP/Socials experiences remain application workflows optimized for phone/touch use first.
+The public website is the crawlable acquisition layer. Booking and all authenticated Customer/Detailer/Operations/Admin/I.T./Finance/DAIP/Socials experiences are application workflows optimized for phone/touch use first, then tablet/desktop.
 
-## Retained closed/current baseline
+## Retained baseline
 
-Build 272 closed the permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Historical implementation detail remains in the matching Build summaries and Git history.
+Build 272 closed the permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Build 274 is the only active release.
 
 Do not regress:
 
-- customer/profile/tier writes behind `operations.customer.manage`;
-- quote/proposal/deposit/final-balance management behind `operations.quote.manage`;
-- refunds behind `finance.refund.manage`;
-- settlements behind `finance.settlement.manage`;
-- Finance reads behind `finance.view` and tax-support writes behind `finance.tax.manage`;
+- server-authoritative role/module/action permissions;
 - Complete = **Best value**;
 - Exterior Detail differentiated from Premium Wash;
-- Small/Mid/Oversized + condition/quote rules before final price;
+- current Small/Mid/Oversized + condition/quote pricing authority;
 - booking/deposit/conflict mechanics;
-- one-H1/SEO rules;
+- one meaningful H1 per indexable public page;
 - persistent tax-support/evidence/accountant-package authority;
-- no fabricated accounting/tax facts.
+- no fabricated accounting/tax facts, reviews or provider evidence.
 
 ## Current architecture
 
@@ -46,7 +43,7 @@ Eight independently loadable modules remain authoritative:
 7. DAIP
 8. Socials & Promotion
 
-Layered authorization remains:
+Authorization layers remain:
 
 1. role/module ceiling;
 2. per-user module narrowing;
@@ -54,195 +51,117 @@ Layered authorization remains:
 4. explicit action permission;
 5. workflow/business-state checks.
 
-Admin is all-modules/all-actions by design. Server authorization is authoritative.
+Admin is all-modules/all-actions by design. Server authorization is authoritative. Dormant modules do not wake merely because they exist or a user could access them.
 
 ## Build 274 — active
 
-Build 274 is the broader closure/product-value release. `BUILD274_SUMMARY.md` records release checkpoints; `AI_PROJECT_HANDOFF.md` and this file remain the living authority.
-
 ### 1. I.T. Connections / contextual help
 
-The I.T. module becomes the authoritative catalogue for every external/runtime dependency actually used or deliberately prepared by Rosie.
+I.T. Connections is the authoritative catalogue for external/runtime dependencies actually used or deliberately prepared by Rosie.
 
 Required behavior:
 
 - exact variable/secret/binding name;
 - configured/missing presence only;
 - safe storage type/location;
-- what the value does and why Rosie needs it;
-- **step-by-step external acquisition instructions** behind a circular `i` for every external field/box;
-- prerequisites, scopes/roles, callback/redirect setup and environment separation;
+- why Rosie needs it and what changing it affects;
+- step-by-step acquisition/configuration behind a circular `i`;
+- prerequisites, roles/scopes and callback/redirect setup;
 - bounded test procedure and troubleshooting;
 - official provider resources;
 - no raw secret display or browser credential editor.
 
-Shared contextual help remains an application-level system across protected screens and dynamically inserted fields, with accessible page/field controls and safe fallback wording.
+Shared contextual help is an application-level system. `AdminPageInit`, `AdminMenu` and the Build 274 legacy `AdminShell` compatibility bridge load help fail-open so help failure never blocks authentication or protected-page startup.
 
 ### 2. Google trust and measurable local SEO
 
 Priority order:
 
-1. **Real review authority** — remove temporary/sample customer-style review proof as genuine reviews become available; connect Google Business Profile/review workflows and place verified review/proof where it supports the service being sold.
-2. **Search Console authority** — verify ownership/property/sitemap and use query/page/impression/click/CTR/position data to decide future SEO work.
-3. **Service authority pages** — every major service/add-on page must explain condition range, process, expected result/limits, time/price drivers, FAQs, proof and booking path.
-4. **Proof at point of decision** — before/after evidence belongs on the service/local page it proves, not only in a generic Gallery.
-5. **Distinct local pages** — Oxford/Norfolk town pages must earn their existence through actual local jobs/proof, access/service conditions, seasonal/local concerns, useful FAQs and direct booking paths. Do not mass-produce thin city-swapped doorway pages.
-6. **Business-identity authority** — keep Organization/LocalBusiness/Breadcrumb structured data coherent from one business-profile source.
-7. **Technical SEO** — one meaningful H1, canonical, sitemap, crawlable static-first text, strong internal links, useful titles/descriptions and no public R2 enumeration.
-8. **SEO cockpit** — surface high-impression/low-CTR, page-two and non-branded opportunities inside I.T./SEO so SEO becomes a measured work queue rather than a periodic guess.
+1. **Real review authority** — source is now guarded against invented/sample homepage testimonials. Verified review content may render only from a genuine connected source. Google Business Profile ownership/review connection remains external acceptance.
+2. **Search Console authority** — verify ownership/property/sitemap and use query/page/impression/click/CTR/position data to prioritize future SEO work.
+3. **Service authority pages** — every major service/add-on page should explain condition range, process, expected result/limits, time/price drivers, FAQ, proof and booking path.
+4. **Proof at point of decision** — before/after evidence belongs on the exact service/local page it proves, not only in a generic Gallery.
+5. **Distinct local pages** — Oxford/Norfolk town pages must earn their existence through useful local facts, jobs/proof, access/service conditions, seasonal concerns, FAQs and direct booking paths. Do not mass-produce city-swapped doorway pages.
+6. **Business identity** — keep LocalBusiness/Organization/Breadcrumb structured data coherent from a single authority.
+7. **Technical SEO** — one H1, canonical URLs, sitemap, crawlable static-first copy, strong internal links, useful titles/descriptions and no public R2 enumeration.
+8. **SEO cockpit** — surface high-impression/low-CTR, page-two and non-branded opportunities inside I.T./SEO when Search Console is connected.
 
-### 3. Competitive service position
-
-Rosie should be marketed as:
+Public positioning is:
 
 > **Mobile Auto Detailing & Interior/Exterior Restoration**
 
 while preserving “mobile auto detailing” as the high-intent primary category.
 
-The market gap is not primarily more ordinary wash/detail SKUs; it is **deeper specialization, condition-aware pricing, convenience and proof**.
+### 3. Condition-based specialist services
 
-#### Priority service opportunities
+The market gap is not more generic wash SKUs; it is **specialization, condition-aware pricing, convenience and proof**.
 
-1. **Interior Carpet & Upholstery Restoration**
-   - Maintenance Cleaning — routine soil/light shampoo.
-   - Deep Extraction — salt, staining, embedded soil, repeated extraction/labour.
-   - Spill / Water-Intrusion Recovery — quote/review path; may include seat removal, carpet lifting, extraction/drying and inspection where Rosie operationally supports it.
-   - Never promise mould/rust remediation outcomes without inspection and an approved operating scope.
+#### Interior Carpet / Spill / Floor Restoration
 
-2. **Headlight Restoration**
-   - light oxidation;
-   - moderate restoration;
-   - severe oxidation/failed clear-coat review;
-   - explain sanding/polishing/protection stages, result limits and price/time drivers;
-   - warranty language only after business approval.
+Current catalog authority is not the older stale $79/$99/$119 model. Build 274 follows the current branch catalog:
 
-3. **Ontario seasonal services**
-   - Spring Salt Recovery;
-   - Post-Winter Interior Reset;
-   - Fall/Winter Protection;
-   - connect to salt extraction, mats/carpets, paint protection and maintenance-plan conversion.
+- routine carpet shampoo: **Small $99 / Mid $129 / Oversize $159**;
+- heavy salt / beverage / repeated extraction: **From $129–$159+**;
+- saturated floor / under-carpet restoration: **From $299+ / inspection quote**.
 
-4. **Pre-Sale / Lease-Return Detail**
-   - high-intent use-case page and booking recommendation;
-   - combine appropriate interior/exterior reset, headlight, engine-bay and paint-enhancement review without forcing every item into a fixed bundle.
+`/carpet-shampoo` now crawlably distinguishes routine shampoo from deeper extraction and water-intrusion recovery, explains safe seat/trim access, carpet lifting where appropriate, drying/follow-up, hidden moisture, odour, biological-growth and corrosion risks, and routes severe work into photo/inspection review. It must not claim mould/mold remediation.
 
-5. **Maintenance plans**
-   - Initial Reset;
-   - recurring 4/6/8-week maintenance options;
-   - seasonal deep reset;
-   - priority booking/convenience and controlled perks rather than unlimited margin-eroding service.
+#### Headlight Restoration
 
-6. **Fleet / Workplace Detail Days**
-   - contractors, HVAC/plumbing/electrical/service firms, real-estate teams, delivery/home-care/small fleets;
-   - multiple vehicles at one location should reduce travel overhead and support recurring contracts;
-   - minimum vehicle count/discount rules require business approval.
+`/headlight-restoration` now crawlably explains current condition tiers:
 
-7. **Later build-vs-buy/partner decisions**
-   - PPF;
-   - rustproofing/undercoating;
-   - other equipment/certification/insurance-heavy services.
+- light haze / early coating failure: **From $99 per pair**;
+- moderate oxidation: **From $129 per pair**;
+- heavy oxidation / rough lens: **From $169+ per pair**.
 
-Do not add these merely to match a competitor. Add only when margin, equipment, insurance, training, environmental and workflow requirements are understood.
+It explains inspection, sanding/refining, polishing, UV protection, price drivers and realistic limits. Cracks, internal haze/moisture, reflector/electrical failure and severe material damage may require repair/replacement. No warranty is promised until explicitly approved as a business rule.
 
-### 4. Condition-based pricing / margin protection
+#### Next service opportunities
 
-Every service/add-on whose labour varies materially must stop pretending every vehicle is the same job.
+1. Ontario seasonal services: Spring Salt Recovery, Post-Winter Interior Reset, Fall/Winter Protection.
+2. Pre-Sale / Lease-Return Detail.
+3. Maintenance plans: Initial Reset → 4/6/8-week recurring maintenance → seasonal deep reset.
+4. Fleet/workplace detail days for contractors, service businesses and small fleets.
+5. PPF, rustproofing/undercoating and other certification/equipment-heavy services remain later build-vs-buy/partner decisions.
 
-Required landing/booking architecture:
+### 4. Resolved mobile operating authority
 
-- show **starting/range/quote-required** pricing appropriately;
-- define visible condition tiers or examples;
-- explain what pushes the job from light → moderate → severe;
-- request photos where severity cannot be priced safely in advance;
-- preserve staff review before a variable-scope promise becomes final;
-- connect supplier/consumable/labour/overhead cost authority so public prices protect minimum margin;
-- do not convert severe restoration into a cheap add-on simply because the old catalogue had a flat price.
+This is **not** an open business question:
+
+> **Rosie brings standard detailing water and power. The customer provides a safe/private work area. Unusual parking, apartment/condo access, site rules, weather or local runoff constraints are reviewed before dispatch.**
+
+Browser/server pricing normalization, the homepage and the first guarded specialist pages now use this authority. Do not reintroduce “customer provides water/power” as the normal rule.
+
+Fleet/business intake may still ask about site/access constraints and unusual utility/runoff restrictions, but that does not change the default Rosie-supplied model.
 
 ### 5. Mobile Quick Book
 
 Preserve the current booking engine's availability, service-area, pricing, size, quote, deposit, conflict and payment authorities. Simplify what the customer sees.
 
-#### Target flow
+The first Build 274 **Mobile Quick Book** presentation layer is implemented over the existing booking engine:
 
-**A. What does your vehicle need?**
+- problem-first “What does your vehicle need?” choices;
+- year/make/model essentials with existing vehicle-size suggestion;
+- Saved Garage path for returning customers;
+- optional vehicle fields behind disclosure;
+- existing authoritative package/add-on controls, not a second pricing engine;
+- quote/photo branch for severe/variable conditions;
+- existing calendar with first useful days surfaced;
+- preserved quote, deposit, service-area, capacity and 409 conflict behavior;
+- `booking_quick_need_pick` instrumentation.
 
-Large touch choices:
+Next booking refinements:
 
-- Just needs a clean
-- Interior needs attention
-- Pet hair / stains / road salt
-- Full inside/outside reset
-- Paint / scratches / shine / protection
-- Cloudy headlights
-- Something spilled / got wet / odour
-- Pre-sale / lease return
-- Work truck / fleet
-- Not sure — recommend one
-
-These map into the existing condition-helper/package rules rather than creating a second pricing engine.
-
-**B. What do you drive?**
-
-- Year
-- Make
-- Model
-- Rosie auto-suggests size/body metadata from the current vehicle catalogue.
-- Vehicle size remains reviewable because it affects price.
-- Colour, mileage, category, body style and plate move behind **Optional vehicle details** unless a later business rule actually requires them.
-- Saved Garage vehicles appear before manual entry for signed-in customers.
-
-**C. Where and when?**
-
-- Service area/town;
-- show the **next three useful openings** as the primary choice when practical;
-- full calendar remains available for people who want another day;
-- only offer slots that current availability rules actually allow.
-
-**D. Rosie recommends**
-
-- automatically apply the nearest package/add-ons/quote path from the customer's selected need/condition;
-- show one recommended choice first, with editable alternatives;
-- never hide that a severe condition can require staff/photo review.
-
-**E. Photo/condition branch**
-
-Pet hair, heavy salt/stains, spill/water, odour source, severe headlight oxidation, paint defects, fleet/heavy-use and other variable work should move naturally into photo review instead of forcing a false instant price.
-
-**F. Contact, requirements and payment**
-
-- ask for customer/contact/service-address details only after service/slot value is clear;
-- consolidate acknowledgements where legally/operationally safe;
-- preserve driveway/access/bylaw/weather/deposit rules;
-- preserve 409 conflict handling and exact booking authority;
-- make quote-only vs deposit-ready state unmistakable.
-
-**G. Returning customers**
-
-Target: `saved vehicle → repeat last/maintenance service → next opening → confirm deposit`, with minimal taps.
-
-#### Funnel measurement
-
-Track at minimum:
-
-- booking start;
-- need/problem choice;
-- vehicle essentials complete;
-- size suggestion/override;
-- recommendation displayed/accepted/changed;
-- photo-review branch;
-- slot displayed/selected;
-- checkout start;
-- deposit success/failure;
-- abandoned step;
-- repeat-maintenance conversion.
-
-Use these events to remove friction rather than guessing what users find difficult.
+1. evolve day shortcuts into true next-three useful appointment choices;
+2. shorten returning-user rebook to `saved vehicle → repeat/maintenance service → next opening → deposit`;
+3. complete funnel measurement through recommendation, slot, quote/photo, checkout, payment and repeat maintenance;
+4. validate touch/mobile/keyboard/weak-network behavior in Development.
 
 ### 6. Proof / reviews / content engine
 
-The strongest competitive asset should become **problem → process → result** evidence.
+Public proof must follow **problem → process → result**.
 
-For each accepted proof item capture:
+For each accepted proof item retain:
 
 - service/condition;
 - before evidence;
@@ -250,67 +169,50 @@ For each accepted proof item capture:
 - after result;
 - town/service area;
 - vehicle type;
-- customer publication consent state;
-- page(s) where the proof is relevant;
-- review/testimonial link where legitimately associated.
+- customer publication-consent state;
+- relevant public page(s);
+- legitimate review/testimonial source where associated.
 
-DAIP/Photo Studio can help prepare proof, but customer/private evidence never becomes public without consent/review.
+DAIP/Photo Studio can prepare proof, but private/customer evidence never becomes public without consent/review. Sample/fabricated testimonials are permanently prohibited from public review presentation.
 
 ### 7. Maintenance and retention
 
-Build a real repeat-service product rather than treating repeat business as an afterthought.
+Target behavior:
 
-Target application behavior:
-
-- completion suggests the correct next maintenance interval;
-- customer can accept a reminder/plan without re-entering vehicle information;
-- account shows next recommended service and one-tap rebook;
-- Operations sees recurring-plan demand/capacity;
-- Finance sees plan discounts/perks separately enough to measure margin;
+- completion suggests the next approved maintenance interval;
+- customer can accept a reminder/plan without re-entering vehicle data;
+- account shows next recommended service and a short rebook path;
+- Operations sees recurring demand/capacity;
+- Finance can measure discounts/perks and margin;
 - customers can pause/cancel according to approved rules;
-- no background polling merely because a customer has a plan.
+- no polling merely because a plan exists.
 
-### 8. Fleet/workplace acquisition
+Exact plan price/cadence/perks/cancellation rules remain a business-input checkpoint.
 
-Create a business lead/quote path that captures:
+### 8. Fleet / workplace acquisition
 
-- business/contact;
-- service location(s);
-- number/type/use of vehicles;
-- frequency;
-- interior/exterior priorities;
-- workplace access/water/power constraints;
-- preferred service windows;
-- photo/fleet list evidence;
-- recurring contract interest.
+Create a business lead/quote path capturing business/contact, location, vehicle count/type/use, frequency, service priorities, site/access constraints, preferred windows, photos/fleet list and recurring-contract interest.
 
-Do not force a fleet prospect through a consumer one-vehicle booking flow.
+Rosie brings normal mobile detailing utilities; fleet intake should ask only about unusual site/utility/runoff constraints. Do not force a fleet prospect through the one-vehicle consumer booking flow.
 
-### 9. Finance / accounting / tax support — retained next moves
+Minimum vehicle count, discounts and travel rules remain business-input checkpoints.
 
-Continue without waiting for manual tax facts where possible:
+### 9. Payments / Finance / accounting
 
-1. Improve receipt/evidence linking from tax-support records to `accounting_documents`.
-2. Add accountant-friendly CSV/PDF/export surfaces after JSON package shape stabilizes; preserve one data authority.
-3. Continue explicit permission extraction when touching manual journals, adjusting entries, tax close/lock, payroll finalization and sensitive exports.
-4. Keep posted-ledger immutability, double-entry, period locks and evidence links authoritative.
-5. Improve readiness dashboards to surface missing source facts before year end.
+Retain Build 273 authority and continue the Build 274 closure queue through:
+
+1. Stripe deposit/payment/final-balance/refund/webhook state transitions and idempotency;
+2. PayPal sandbox/order/capture/webhook parity where retained;
+3. settlement/reconciliation links into Finance;
+4. receipt/evidence linking into `accounting_documents`;
+5. accountant-friendly export surfaces while preserving one data authority;
+6. narrow permissions for journals, adjustments, tax close/lock, payroll finalization, refunds/settlements and sensitive exports.
+
+Provider credentials and real settlement evidence remain external acceptance, not source-green substitutes.
 
 ### 10. Permissions / module extraction / reliability
 
-Continue explicit high-risk action extraction when affected workflows are changed:
-
-- booking cancellation/reschedule/override;
-- incident/report approval and customer-visible publication;
-- review-request queue mutation;
-- manual journal/adjusting entries;
-- tax close/lock;
-- payroll finalization;
-- sensitive accountant export generation;
-- I.T. diagnostics/test/runtime/module settings;
-- Administration staff/catalog/inventory configuration;
-- Socials review/edit/publish/provider actions;
-- DAIP intake/review/promote behind consent/private-media gates.
+Continue explicit high-risk action extraction when affected workflows are changed. Do not broaden roles merely to make a page work.
 
 Continue moving high-use compatibility pages into lazy module surfaces in this order:
 
@@ -321,89 +223,83 @@ Continue moving high-use compatibility pages into lazy module surfaces in this o
 5. Socials Content/Photo/SEO/Integrations;
 6. DAIP only as privacy/cost/processing gates permit.
 
-Do not broaden roles merely to make a page work. Do not wake modules/timers merely because a user is authorized.
+Reliability rules:
 
-## Build 274 — business input checkpoints
+- no open Detailer job → no live job/media/message monitors;
+- hidden/inactive refresh sleeps;
+- completed jobs reject new live-message writes;
+- no automatic replay of ambiguous non-idempotent writes;
+- heavy filtering/aggregation belongs in Postgres rather than Worker loops;
+- Functions remain under `/api/*`.
 
-Engineering should continue wherever rules are safe and inferable. Request input before finalizing only genuinely business-specific decisions:
+## Business input checkpoints
 
-- interior-restoration labour tiers/starting ranges and maximum scope;
-- whether seat removal/carpet lifting/water-intrusion recovery is offered and under what site/weather constraints;
-- headlight-restoration warranty, if any;
-- maintenance-plan 4/6/8-week pricing, perks, pause/cancel and eligibility rules;
+Engineering should continue where rules are safe and inferable. Ask only before public/business rules that cannot be inferred:
+
+- material changes to current condition-tier pricing or maximum restoration scope;
+- whether seat removal/carpet lifting/water-intrusion recovery can be offered under every site/weather condition;
+- headlight/protection warranty, if any;
+- maintenance-plan pricing/cadence/perks/pause/cancel rules;
 - fleet minimum vehicle count/discount/travel rules;
-- current water/power operating model — Rosie-supplied vs customer-supplied/default/exception;
 - real GBP/Search Console property/account selections and review source;
 - any new insurance/certification/equipment/environmental requirement.
 
-Do not invent these values to complete a UI.
+The standard water/power model is resolved and must not be asked again.
 
-## Build 274 — manual / external acceptance queue
+## Build 274 validation authority
 
-These require human input, credentials, provider state, live services or devices and must remain explicit:
+Source validation:
 
-### Google / public proof
+- cumulative guard: `scripts/release_check.py`;
+- retained focused guards: Build 271/272/273 where present;
+- Build 274 focused guard: `scripts/build274_release_check.py`;
+- feature-only source workflow: `.github/workflows/build274-source-gate.yml`.
 
-- Google Business Profile ownership, review connection and genuine review evidence;
-- Search Console property ownership, sitemap, canonical/schema/indexing evidence;
-- real service/local proof and customer publication consent;
-- final condition-tier pricing/warranty/maintenance/fleet decisions.
+Development validation:
 
-### Authenticated runtime
+- `.github/workflows/cloudflare-development-acceptance.yml` runs only on `dev`/manual dispatch;
+- exact `dev` SHA must reach Cloudflare Development;
+- anonymous protected-endpoint smoke checks must be non-5xx;
+- authenticated/browser/mobile/provider evidence stays separate.
 
-- Admin and focused-role launcher/direct-URL/API matrix;
-- Detailer/Senior Detailer/Operations Manager/Accountant/I.T./Promoter/DAIP role/action acceptance;
-- real customer ↔ Detailer message/deep-link flow;
-- completed/inactive job message rejection with readable history;
-- authenticated I.T. contextual-help placement/keyboard/mobile acceptance.
+Do not move `dev` merely because source was committed. Promote only after the **latest feature SHA** has a green source gate.
 
-### Providers / payments
+## Manual / external acceptance queue
 
+These require credentials, provider state, live services/devices or human/business evidence:
+
+- Google Business Profile ownership/review connection and genuine review proof;
+- Search Console ownership/property/sitemap/indexing evidence;
+- authenticated role/action/direct-URL/API matrix;
+- customer ↔ Detailer real-session messaging/deep links and closed-job UX;
 - real email/SMS/Web Push delivery/retry/failure evidence;
-- Stripe test deposit/final balance/refund/webhook settlement/replay/idempotency;
-- PayPal sandbox parity decision/acceptance if retained;
-- Google/Meta/social OAuth/publishing acceptance.
-
-### Inventory / reliability / DAIP / devices
-
+- Stripe test deposit/final-balance/refund/webhook settlement/replay/idempotency;
+- PayPal sandbox acceptance if retained;
 - live inventory posting/reversal/idempotency/shortage evidence;
-- representative Cloudflare exceeded-CPU/script-exception/memory evidence;
+- representative Cloudflare CPU/script/memory evidence;
 - Supabase restore rehearsal;
-- Cloudflare deployment rollback rehearsal;
+- Cloudflare rollback rehearsal;
 - DAIP private-media processing/retry/cancel/dead-letter/usage/consent evidence;
-- phone/tablet/desktop/PWA, Wi-Fi/cellular/weak-network and accessibility acceptance.
-
-### Finance/tax facts retained from Build 273
-
-- business legal/entity/tax profile confirmation;
-- actual business/total kilometres/trip classifications;
-- home-office allocation facts/costs;
-- capital asset/CCA class/UCC/rate review;
-- inventory/direct-cost facts;
-- accountant review of judgment-heavy T2125 items.
-
-## Security / reliability queue
-
-Pre-existing Supabase/project security findings remain separate hardening work. Review SECURITY DEFINER exposure, function search-path warnings, leaked-password protection and other advisor findings without silently changing business behavior. Preserve service-role/RLS boundaries and test affected workflows after hardening.
-
-## Native packaging after the web event model is proven
-
-Use one codebase with Capacitor rather than forking business logic. Priorities remain native push, camera/photo/video capture, weak-network awareness and deep links. Tauri tray packaging stays optional/later and must not keep dormant business modules awake.
+- phone/tablet/desktop/PWA/accessibility/weak-network acceptance;
+- accountant/tax facts and judgment-heavy review retained from Build 273.
 
 ## Permanent guardrails
 
-- mobile/touch application behavior is first-class, not a desktop website afterthought;
+- mobile/touch behavior is first-class;
 - one meaningful H1 per public/indexable page;
 - crawlable static-first service/local pages;
 - no thin/duplicated doorway-location pages;
 - no public R2 bucket enumeration on normal requests;
-- no subsystem polling just because a module is installed or authorized;
-- optional refresh pauses while hidden and should be event/manual first;
-- heavy aggregation/filtering belongs in Postgres, not Worker JavaScript;
-- no automatic replay of ambiguous non-idempotent writes;
+- no fabricated/sample customer reviews;
+- resolved standard mobile utilities remain Rosie-supplied water/power plus a safe/private work area;
+- no subsystem polling merely because a module is authorized;
 - server authorization is authoritative;
-- customer/private DAIP media never becomes public without explicit consent/review;
+- private/customer DAIP media never becomes public without consent/review;
 - secrets never belong in browser code or Git;
-- tax/accounting automation proposes and documents; judgment-heavy claims remain reviewable;
+- accounting/tax automation proposes/documents but does not fabricate facts or professional judgment;
 - booking simplicity never bypasses availability, quote, pricing, conflict, payment, consent or audit authority;
 - `main` / live Production is promoted only deliberately from an accepted Development release.
+
+## Documentation policy
+
+Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. `BUILD274_SUMMARY.md` is the active release checkpoint. Older build summaries and Git history are archive/evidence, not planning authority.
