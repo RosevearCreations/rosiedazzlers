@@ -90,14 +90,7 @@ export async function onRequestPost({ request, env }) {
       }, 409);
     }
 
-    const settled = await updateBookingAndGift({
-      env,
-      booking,
-      bookingId,
-      orderId,
-      captureId,
-      giftInfo
-    });
+    const settled = await updateBookingAndGift({ env, booking, bookingId, orderId, captureId, giftInfo });
     if (!settled.ok) return corsJson({ error: settled.error }, settled.status || 500);
 
     const notification = settled.idempotent
@@ -205,7 +198,7 @@ async function applyGiftRedemption({ env, bookingId, giftInfo }) {
   if (giftCode && String(gift.code || "").trim().toUpperCase() !== giftCode.toUpperCase()) {
     return { ok: false, status: 409, error: "Gift certificate metadata mismatch." };
   }
-  if (!/[active|redeemed]/i.test(String(gift.status || "active"))) {
+  if (!/^(active|redeemed)$/i.test(String(gift.status || "active"))) {
     return { ok: false, status: 409, error: "Gift certificate is not redeemable." };
   }
   if (Number(gift.remaining_cents || 0) < giftInfo.amount_cents) {
