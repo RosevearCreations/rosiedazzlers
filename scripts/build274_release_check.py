@@ -101,7 +101,7 @@ console.log('Build274 integration registry behavior PASS');
             print(proc.stdout.strip())
 
 
-# Shared help assets: minimum four-question contract, accessibility and dynamic fields.
+# Shared help assets: minimum four-question contract, accessibility, dynamic fields and detailed external setup sections.
 need(
     "assets/contextual-help.js",
     "EDITABLE_SELECTOR",
@@ -112,6 +112,13 @@ need(
     "What it changes",
     "Why Rosie needs it",
     "Where the value comes from",
+    "How to obtain it",
+    "Prerequisites / permissions",
+    "Where Rosie stores it",
+    "Callback / redirect setup",
+    "How to test it",
+    "Troubleshooting",
+    "Official provider resources",
     "/admin-integrations.html",
 )
 need(
@@ -123,7 +130,33 @@ need(
     "settingJson",
     "security:",
 )
-need("assets/contextual-help.css", ".rosie-help-page-button", ".rosie-help-field-button", ".rosie-help-dialog")
+need("assets/contextual-help.css", ".rosie-help-page-button", ".rosie-help-field-button", ".rosie-help-dialog", ".rosie-help-dialog__links")
+
+# I.T.-specific external acquisition help must remain detailed and provider-specific.
+need(
+    "assets/it-external-help-catalog.js",
+    'version: "274.2"',
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "ROSIE_PUBLIC_ASSETS_BUCKET",
+    "STRIPE_WEBHOOK_SECRET",
+    "PAYPAL_WEBHOOK_ID",
+    "FACEBOOK_PAGE_ACCESS_TOKEN",
+    "INSTAGRAM_ACCESS_TOKEN",
+    "TIKTOK_ACCESS_TOKEN",
+    "LINKEDIN_ACCESS_TOKEN",
+    "YOUTUBE_ACCESS_TOKEN",
+    "GOOGLE_OAUTH_ACCESS_TOKEN",
+    "GOOGLE_BUSINESS_PROFILE_LOCATION_NAME",
+    "google_search_console",
+    "google_maps",
+    "github",
+    "YouTube Data API v3",
+    "Google Auth Platform",
+    "redirect_uri_mismatch",
+    "How to obtain",
+    "Cloudflare Pages encrypted secret",
+)
+forbid("assets/it-external-help-catalog.js", "localStorage.setItem", "sessionStorage.setItem", "document.cookie")
 
 # Shared loaders must make help a common protected-screen concern and must fail open for help only.
 need(
@@ -196,7 +229,7 @@ need("functions/api/paypal/capture-order.js", "PAYPAL_CLIENT_ID", "PAYPAL_CLIENT
 need("functions/api/_lib/provider-dispatch.js", "NOTIFICATIONS_EMAIL_WEBHOOK_URL", "NOTIFICATIONS_SMS_WEBHOOK_URL", "NOTIFICATIONS_PUSH_WEBHOOK_URL", "getSupabaseServiceRoleKey")
 need("functions/api/push_config.js", "notification_push_public_config")
 
-# I.T. UI is status/help only, never a browser credential editor.
+# I.T. UI is status/help only, never a browser credential editor. Every generated external requirement gets a circled help control.
 need(
     "admin-integrations.html",
     "I.T. connections",
@@ -208,6 +241,12 @@ need(
     "/api/admin/integration_status",
     "window.AdminPageInit.init",
     'data-build274="it-help-foundation"',
+    "/assets/it-external-help-catalog.js",
+    "data-it-help-key",
+    "it-help-button",
+    "openITHelp",
+    "How to obtain and configure",
+    "Use the circled",
 )
 forbid("admin-integrations.html", "<input", "<textarea", "type=\"password\"")
 
@@ -216,6 +255,7 @@ for rel in [
     "functions/api/_lib/integration-registry.js",
     "assets/contextual-help-catalog.js",
     "assets/contextual-help.js",
+    "assets/it-external-help-catalog.js",
     "assets/admin-page-init.js",
     "assets/admin-menu.js",
 ]:
@@ -236,9 +276,10 @@ if errors:
     sys.exit(1)
 
 print("Build 274 focused release check: PASS")
-print(" - shared contextual help has accessible page/field controls, dynamic-field coverage and four-question fallback guidance")
+print(" - shared contextual help has accessible page/field controls, dynamic-field coverage and the four-question fallback contract")
+print(" - external I.T. help adds provider-specific acquisition, prerequisites, callbacks, storage, testing, troubleshooting and official resources")
+print(" - every generated I.T. requirement/measurement/prepared box exposes a circled provider-help control")
 print(" - protected HTML screens are connected to a shared help bridge")
 print(" - I.T. catalogue reports exact runtime names/storage/readiness without returning raw secret values")
 print(" - Supabase/R2/Stripe/PayPal/notification authority remains aligned with current source paths")
-print(" - I.T. page remains read-only for credentials and includes setup/test/troubleshooting guidance")
 print(" - Build 274 workflow and living authorities are synchronized")
