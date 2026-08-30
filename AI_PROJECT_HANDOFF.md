@@ -17,6 +17,8 @@ Current Development rule:
 - `main` / live Production remains untouched unless deliberate Production promotion is explicitly requested;
 - do not reopen old build numbers for later manual evidence.
 
+Build 274 now has a dedicated source-only GitHub Actions gate at `.github/workflows/build274-source-gate.yml`. It runs on the feature branch before `dev` promotion and does not contact Cloudflare or external providers. Development acceptance remains a separate `dev`-only workflow.
+
 ## Application boundary
 
 Rosie Dazzlers remains one secured, **mobile-first application platform** with a static-first public website and eight independently loadable modules:
@@ -96,9 +98,9 @@ Rosie is not primarily missing ordinary service breadth. The larger opportunity 
 
 #### Google/local-search priorities
 
-1. Replace temporary/sample review proof with genuine customer review authority and connect/verify Google Business Profile workflows.
+1. Keep the homepage free of invented/sample testimonials. Genuine customer reviews may be rendered only from a verified review authority; Google Business Profile/review connection remains external acceptance.
 2. Connect/verify Search Console and use query/page/impression/CTR/position data as the prioritization authority rather than guessing future SEO work.
-3. Deepen every major service/add-on landing page so each explains problem severity, procedure, condition tiers, expected results/limits, time/price drivers, FAQ, proof and booking path.
+3. Deepen every major service/add-on landing page so each explains problem severity, procedure, condition tiers, expected results/limits, time/price drivers, FAQ, proof and booking path. Headlight Restoration and Carpet Shampoo/Spill Extraction are the first Build 274 guarded specialist pages.
 4. Add Rosie-owned before/after evidence to the exact service/local page it proves rather than relying only on a generic gallery.
 5. Keep Oxford/Norfolk town pages genuinely distinct: actual jobs/proof, local conditions, service-area/access details, seasonal concerns, useful FAQs and direct booking paths. Do not mass-produce near-duplicate city doorway pages.
 6. Keep business identity/LocalBusiness/Organization/Breadcrumb structured data coherent and sourced from one business-profile authority.
@@ -111,8 +113,8 @@ Position Rosie as **Mobile Auto Detailing & Interior/Exterior Restoration** with
 
 Priority opportunities:
 
-1. **Interior Carpet & Upholstery Restoration** — maintenance cleaning, deep extraction and spill/water-intrusion recovery as different scopes rather than one cheap shampoo add-on.
-2. **Headlight Restoration tiers** — light oxidation, moderate restoration and severe restoration/failed-clear-coat review with condition-based procedure, realistic outcome and protection.
+1. **Interior Carpet & Upholstery Restoration** — maintenance shampoo, deeper/repeated extraction and spill/water-intrusion recovery are different scopes rather than one flat-price promise. Current prices remain sourced from the canonical catalog and must not be duplicated as an independent pricing engine.
+2. **Headlight Restoration tiers** — light oxidation, moderate restoration and severe restoration/failed-coating review with condition-based procedure, realistic outcome and protection. Current catalog tiers are now crawlably explained on `/headlight-restoration`.
 3. **Ontario seasonal services** — Spring Salt Recovery, Post-Winter Interior Reset and Fall/Winter Protection using existing salt/protection capability.
 4. **Pre-Sale / Lease-Return Detail** — bundle the relevant interior/exterior, headlights, engine-bay and paint-enhancement work into a high-intent use-case service.
 5. **Maintenance plans** — Initial Reset → recurring 4/6/8-week maintenance → seasonal deep reset. Prefer priority/convenience/value over margin-destroying unlimited service.
@@ -138,18 +140,27 @@ The desired **Quick Book** experience is mobile-first and problem-first:
 9. Preserve 409 conflict handling, quote-only rules, deposits, service-area constraints, one-vehicle/day capacity and staff review authority.
 10. Instrument the funnel so Rosie can measure start → vehicle complete → recommendation → slot selected → quote/photo path → checkout → paid booking → repeat maintenance.
 
+The first Build 274 Quick Book presentation layer is implemented over the existing booking engine. It remains subject to exact Development/mobile acceptance after feature-source gates pass.
+
 The application must remain touch-friendly, responsive, accessible, keyboard-safe and usable on weak/mobile networks. Do not simplify the UI by removing backend correctness.
+
+### Resolved operating authority
+
+The standard mobile setup is no longer a business-input question:
+
+> **Rosie brings standard detailing water and power. The customer provides a safe/private work area. Unusual parking, apartment/condo access, site rules, weather or local runoff constraints are reviewed before dispatch.**
+
+Browser and server pricing-catalog normalization already enforce this rule. Build 274 public homepage and specialist service pages now use the same wording. Do not reintroduce “customer provides water/power” as a default rule.
 
 ### Business-rule input that must be requested only when it becomes necessary
 
 Do not block engineering that can proceed safely, but explicitly request business input before finalizing rules that cannot be inferred, including:
 
-- exact starting/range pricing and labour thresholds for restoration tiers;
-- whether seat removal/carpet lifting/water intrusion work is offered in all locations and what site/weather constraints apply;
+- material changes to current catalog starting/range pricing or labour thresholds for restoration tiers;
+- whether seat removal/carpet lifting/water-intrusion work is offered in all locations and what site/weather constraints apply;
 - any warranty Rosie wants to promise for restored headlights/protection work;
 - exact maintenance-plan cadence/discount/perks/cancellation rules;
 - fleet minimum vehicle count/discount/travel rules;
-- whether Rosie currently brings standard water/power to every job or whether customer utilities remain the normal requirement;
 - final real Google review/GBP/Search Console credentials/account/property selections;
 - any new service requiring insurance, certification, equipment or environmental-policy changes.
 
@@ -158,9 +169,10 @@ Do not block engineering that can proceed safely, but explicitly request busines
 - cumulative guard: `scripts/release_check.py`;
 - retained focused guards: `scripts/build271_release_check.py`, `scripts/build272_release_check.py`, `scripts/build273_release_check.py` where present;
 - current focused guard: `scripts/build274_release_check.py`;
+- feature source gate: `.github/workflows/build274-source-gate.yml`;
 - Development workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Build 274 must not be called accepted on Development until the focused/cumulative source chain is green and the exact Development SHA passes Cloudflare/source/anonymous smoke acceptance. Authenticated/manual/provider/device evidence stays explicitly separate.
+Build 274 must not be called accepted on Development until the feature source gate and focused/cumulative source chain are green and the exact Development SHA passes Cloudflare/source/anonymous smoke acceptance. Authenticated/manual/provider/device evidence stays explicitly separate.
 
 ## Wake/sleep and cost rules
 
@@ -178,15 +190,15 @@ Build 274 must not be called accepted on Development until the focused/cumulativ
 
 ### Engineering / product work
 
-1. Finish living-authority synchronization and Build 274 source guard execution.
+1. Finish feature source-gate execution, fix any failures, then run the cumulative source chain.
 2. Complete detailed external I.T. help coverage and authenticated browser acceptance.
-3. Implement Quick Book presentation over the current booking authorities; keep mobile-first and preserve backend correctness.
-4. Reprice/restructure condition-dependent add-ons and deepen their landing pages, beginning with interior restoration and headlights.
-5. Complete real proof/review plumbing and service-specific proof placement.
+3. Continue Quick Book refinement toward true “next three useful appointments,” returning-customer rebook and funnel instrumentation while preserving backend authority.
+4. Continue condition-dependent add-on/service-page convergence after the now-guarded Headlight Restoration and Carpet/Spill Extraction pages.
+5. Complete real proof/review plumbing and service-specific proof placement; sample homepage testimonials are removed.
 6. Complete maintenance-plan product/booking/account path.
 7. Build seasonal, pre-sale/lease-return and fleet/workplace service paths where existing capability supports them.
 8. Complete distinct Oxford/Norfolk local pages and Search Console-driven SEO work queues.
-9. Continue Finance, module, reliability and security work without waking dormant modules unnecessarily.
+9. Continue Finance, payments, module, reliability and security work without waking dormant modules unnecessarily.
 10. Keep Development coherent and exact-SHA accepted before any deliberate Production promotion.
 
 ### Manual / external evidence queue
@@ -195,7 +207,7 @@ Do not fabricate these; complete when credentials, devices, facts or human revie
 
 - Google Business Profile ownership/review connection and real review evidence;
 - Search Console ownership/property/sitemap/canonical/schema evidence;
-- actual service/restoration pricing/warranty/maintenance/fleet business decisions listed above;
+- headlight warranty, maintenance-plan and fleet business decisions where not yet approved;
 - authenticated role/action/direct-URL/API matrix;
 - customer ↔ Detailer real-session messaging/deep links and closed-job UX;
 - real provider email/SMS/Web Push delivery/retry/failure evidence;
@@ -221,6 +233,8 @@ Do not fabricate these; complete when credentials, devices, facts or human revie
 - secrets never belong in browser code or Git;
 - accounting workpapers automate preparation but do not fabricate tax facts or professional judgment;
 - customer booking simplicity must not bypass availability, pricing, quote, payment, consent or audit authority;
+- public pages must not present fabricated/sample testimonials as customer reviews;
+- the resolved standard mobile setup is Rosie-supplied water/power plus a safe/private customer work area;
 - `main` is promoted only deliberately from an accepted Development release.
 
 ## Documentation policy
