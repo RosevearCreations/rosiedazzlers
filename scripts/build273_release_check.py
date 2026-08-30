@@ -180,21 +180,24 @@ need(
 )
 
 # Retained Build 273 documentation authority must survive while later living releases become active.
+# Exact action vocabulary remains protected in executable source above; living docs preserve the semantic Finance authority.
 need("BUILD273_SUMMARY.md", "Build 273", "finance.tax.manage", "accounting_mileage_logs", "admin-tax-support.html")
 require_living_build_at_least("AI_PROJECT_HANDOFF.md", 273)
 need(
     "AI_PROJECT_HANDOFF.md",
+    "Build 273 is the retained Finance/tax-support baseline",
     "finance.tax.manage",
-    "Finance",
-    "tax-support",
-    "accountant",
+    "persistent Finance tax-support records",
+    "accountant-package workflow",
 )
 require_living_build_at_least("MASTER_VALUE_ROADMAP.md", 273)
 need(
     "MASTER_VALUE_ROADMAP.md",
-    "finance.tax.manage",
-    "Finance / accounting / tax support",
-    "accountant",
+    "Build 273 established the retained Finance/tax-support baseline",
+    "### 9. Payments / Finance / accounting",
+    "Retain Build 273 authority",
+    "accounting_documents",
+    "accountant-friendly export surfaces",
 )
 
 # JavaScript syntax, including inline Finance pages.
