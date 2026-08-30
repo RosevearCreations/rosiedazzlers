@@ -150,13 +150,29 @@ for constant in ["PACKAGE_GUIDE", "PUBLIC_SCOPE_GUIDE"]:
 if re.search(r"<h1\b", text("assets/build272-public-clarity.js"), flags=re.I):
     errors.append("assets/build272-public-clarity.js must not inject an H1")
 
-# Closure documentation must preserve Build 272 as historical closure while allowing the two living
-# authorities to advance to Build 273 and later. Retained focused guards must never freeze live docs.
+# Closure documentation must preserve Build 272 behavior without freezing later living-authority headings.
+# Retained focused guards protect semantic authority; they must allow Build 273/274+ to become active.
 need("BUILD272_SUMMARY.md", "Build 272", "CLOSED", "Build 273")
 require_living_build_at_least("AI_PROJECT_HANDOFF.md", 272)
-need("AI_PROJECT_HANDOFF.md", "Build 272 is closed", "## Build 272 retained authority", "Build 273")
+need(
+    "AI_PROJECT_HANDOFF.md",
+    "Retained Build 272/273 authority",
+    "operations.customer.manage",
+    "operations.quote.manage",
+    "finance.refund.manage",
+    "finance.settlement.manage",
+    "Complete = **Best value**",
+)
 require_living_build_at_least("MASTER_VALUE_ROADMAP.md", 272)
-need("MASTER_VALUE_ROADMAP.md", "## Build 272 — closed baseline", "## Build 273 — active")
+need(
+    "MASTER_VALUE_ROADMAP.md",
+    "Retained closed/current baseline",
+    "operations.customer.manage",
+    "operations.quote.manage",
+    "finance.refund.manage",
+    "finance.settlement.manage",
+    "Complete = **Best value**",
+)
 
 # Syntax checks for every Build 272 JavaScript authority surface.
 for rel in [
@@ -185,4 +201,4 @@ print(" - Rosie package prices are unchanged")
 print(" - Exterior/Complete scope, vehicle sizing, condition quote triggers, and fully-mobile water/power are clarified before price")
 print(" - Complete uses Best value, one-H1 source rules remain intact, and existing booking/deposit mechanics remain present")
 print(" - T2125 workpaper is Finance-scoped, review-first, and exports aligned CSV/JSON")
-print(" - Build 272 remains historically closed while living planning authorities may advance")
+print(" - Build 272 remains historically closed while later living planning authorities may advance")

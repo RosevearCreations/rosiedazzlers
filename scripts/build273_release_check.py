@@ -24,6 +24,16 @@ def forbid(rel, *tokens):
         if token in body:
             errors.append(f"{rel} contains forbidden token {token}")
 
+def require_living_build_at_least(rel, minimum):
+    body = text(rel)
+    match = re.search(r"\*\*Build:\*\*\s*(\d+)", body)
+    if not match:
+        errors.append(f"{rel} missing living Build marker")
+        return
+    current = int(match.group(1))
+    if current < minimum:
+        errors.append(f"{rel} living Build regressed below {minimum}: {current}")
+
 def node_check(rel):
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
     if proc.returncode:
@@ -169,10 +179,23 @@ need(
     "structured_tax_support"
 )
 
-# Living authority and active release checkpoint must agree.
-need("BUILD273_SUMMARY.md", "**Status: ACTIVE**", "finance.tax.manage", "accounting_mileage_logs", "admin-tax-support.html")
-need("AI_PROJECT_HANDOFF.md", "**Build:** 273", "Build 273 active implementation", "finance.tax.manage")
-need("MASTER_VALUE_ROADMAP.md", "**Build:** 273", "Build 273 — active", "Finance / accounting / tax support — implemented this increment")
+# Retained Build 273 documentation authority must survive while later living releases become active.
+need("BUILD273_SUMMARY.md", "Build 273", "finance.tax.manage", "accounting_mileage_logs", "admin-tax-support.html")
+require_living_build_at_least("AI_PROJECT_HANDOFF.md", 273)
+need(
+    "AI_PROJECT_HANDOFF.md",
+    "finance.tax.manage",
+    "Finance",
+    "tax-support",
+    "accountant",
+)
+require_living_build_at_least("MASTER_VALUE_ROADMAP.md", 273)
+need(
+    "MASTER_VALUE_ROADMAP.md",
+    "finance.tax.manage",
+    "Finance / accounting / tax support",
+    "accountant",
+)
 
 # JavaScript syntax, including inline Finance pages.
 for rel in [
@@ -201,4 +224,4 @@ print(" - mileage uses dedicated business-use records and never customer vehicle
 print(" - home-office, vehicle and CCA calculations stay review-first")
 print(" - enriched T2125 and accountant package use structured facts without fabricating filing judgment")
 print(" - Tax Support UI collects masked identity plus mileage/home-office/CCA/inventory facts and exports accountant JSON")
-print(" - Build 273 living authorities and ACTIVE checkpoint are synchronized")
+print(" - Build 273 authority remains retained while later living releases may advance")
