@@ -120,7 +120,7 @@ for rel in ['functions/api/push_config.js','functions/api/customer_push_config.j
     if 'notification_push_private_config' in body or 'VAPID_PRIVATE_KEY' in body: errors.append(f'{rel} can access private VAPID material')
     if 'vapid_private_key' in body.lower(): errors.append(f'{rel} exposes a private-key response field')
 client=txt('assets/app-core/install-client.js')
-for token in ['pushRoutes()','customer_push_config','customer_push_subscribe','pushManager.subscribe','Notification.requestPermission','data-app-module']:
+for token in ['pushRoutes()','customer_push_config','customer_push_subscribe','pushManager.subscribe','Notification.requestPermission','dataset?.appModule']:
     if token not in client: errors.append(f'Build270 install client missing {token}')
 enable_pos=client.find('async function enableNotifications')
 subscribe_pos=client.find('pushManager.subscribe')
