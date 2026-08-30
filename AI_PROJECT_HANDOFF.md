@@ -1,13 +1,21 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 271  
+**Build:** 272  
 **Updated:** 2026-08-29  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
+## Current release state
+
+Build 272 is the closed source release for the current permission/package-clarity/T2125 increment. Its canonical summary is `BUILD272_SUMMARY.md`.
+
+Development promotion is `dev` only. `main` / live Production remains outside ordinary Development work and must not be changed unless promotion is explicitly requested.
+
+Do not reopen old build numbers to attach later manual evidence. Later acceptance, fixes and enhancements belong to the current active release, now **Build 273**.
+
 ## Current platform boundary
 
-Rosie Dazzlers remains one secured platform with a static-first public website and eight independently loadable modules:
+Rosie Dazzlers remains one secured, mobile-first platform with a static-first public website and eight independently loadable modules:
 
 1. Customer
 2. Detailer
@@ -20,26 +28,13 @@ Rosie Dazzlers remains one secured platform with a static-first public website a
 
 Permanent runtime rule:
 
-> **Role defines the maximum module set; the staff profile may narrow non-admin access; the global module switch may make a module unavailable; operational state decides whether an authorized module actually wakes.**
+> **Role defines the maximum module set; the staff profile may narrow non-admin access; the global module switch may make a module unavailable; workflow state decides whether an authorized module actually wakes.**
 
-`/app/` is the **Staff App Launcher**. `/app/admin/` is Administration. Protected staff navigation includes Public Site / All Staff Apps / Module Home / Account. `main` / live Production is not part of ordinary Development work and remains untouched unless promotion is explicitly requested.
-
-## Current Development data authority
-
-Supabase Development project: RosieDazzlers (`cwxhhvwpilmrfwxirixx`).
-
-Important historical schema drift that current runtime must support:
-
-- `staff_users.permissions_profile` is `text` in the long-lived Development database;
-- `app_management_settings.value` is `jsonb`;
-- Build 267 schema-tolerant role/module migration is applied;
-- Admin has all seven internal module grants.
-
-Do not blindly convert `permissions_profile` to JSONB. Build 269/271 parsing accepts TEXT or object JSON and preserves the observed representation when staff profiles are saved.
+`/app/` is the Staff App Launcher. `/app/admin/` is Administration.
 
 ## Role / module / action authority
 
-Role ceilings:
+Role ceilings remain:
 
 | Role | Maximum modules |
 |---|---|
@@ -50,136 +45,125 @@ Role ceilings:
 | `it_specialist` | I.T. |
 | `promoter` | Socials & Promotion |
 | `daip_manager` | DAIP |
-| `admin` | all seven internal modules |
+| `admin` | all internal modules |
 
 Authorities:
 
 - module grants: `staff_users.permissions_profile.module_access`;
 - per-user action overrides: `staff_users.permissions_profile.action_access`;
 - action vocabulary/defaults: `data/action_permissions.json`;
-- global module availability: `app_management_settings.module_runtime_flags`.
+- global module availability: `app_management_settings.module_runtime_flags`;
+- server authorization is authoritative; hidden navigation is not security.
 
-Module/role ceilings are evaluated before action access. Admin remains all-modules/all-actions by design.
+Historical Development schema tolerance remains important: `permissions_profile` may be TEXT or object JSON and must continue to use the shared parser rather than being blindly converted.
 
-Build 271 additionally makes the transition `x-staff-user-id` / `x-staff-email` bridge path parse `permissions_profile` through the same helpers as real staff sessions. Supported auth paths therefore no longer interpret the historical TEXT profile differently.
+## Build 272 closure
 
-## Build 270 retained — event-driven Web Push
+### Explicit Operations / Finance actions
 
-Build 270 is infrastructure-complete in Development:
+Build 272 adds/extends:
 
-- `notification_push_subscriptions` is server-only with RLS enabled;
-- browser roles have no direct table grants;
-- staff/customer subscription ownership is separate;
-- customer remote push requires the existing Rosie notification opt-in;
-- VAPID key material is stored in Supabase Vault, not Git/browser source;
-- service-role-only public/private VAPID RPCs exist;
-- Supabase Edge Function `rosie-web-push` is deployed with JWT verification and pinned `web-push@3.6.7`;
-- stale 404/410 subscriptions are revoked by the sender;
-- the existing `notification_events` queue remains the only retry/backoff authority;
-- I.T. has a bounded remote-push test path;
-- no push polling service exists.
+- `operations.customer.manage` for customer/profile/tier mutation;
+- `operations.quote.manage` for staff quote/proposal/deposit-request/final-balance management;
+- `finance.refund.manage` for refund mutation;
+- `finance.settlement.manage` for settlement mutation.
 
-Do not re-create the push table, VAPID keys, second queue, or sender on new-chat startup unless read-only verification proves drift.
+Converted high-risk routes do not use legacy admin-password fallback. Accountant receives Finance actions; Operations roles do not receive Finance actions by default.
 
-## Build 271 — active communication boundary
+### Public package clarity
 
-Existing unread/viewed timestamps from Build 210 remain authoritative. No replacement message/read table was added.
+Build 272 preserves existing Rosie pricing and booking/deposit mechanics while making the service decision clearer:
 
-Shared live communication states:
+- Premium Wash is positioned as maintenance exterior refresh;
+- Exterior Detail is a full exterior-focused detail/protection-prep service;
+- Complete Detail is the broadest inside/out base scope and is labeled **Best value**;
+- Small / Mid-sized / Oversized base pricing is explained before price;
+- condition/contamination/risk/extra-labour quote triggers are explicit;
+- Rosie’s standard mobile detailing states that Rosie brings its own water and power;
+- public one-H1 rules remain intact.
 
-- active: `accepted`, `dispatched`, `arrived`, `detailing`, `paused`, `in_progress`, `active`;
-- completed/closed/non-live states do not accept new live-message writes.
+### Finance / T2125
 
-Completed progress history remains readable, but these write paths now fail closed after the job is no longer active:
+Build 272 establishes a review-first T2125 workpaper generated from the posted accounting year-end report.
 
-- public-token customer progress comments;
-- signed-in customer progress comments;
-- Detailer live job notes/messages;
-- associated live alert creation.
+It maps ledger expense categories to CRA workpaper categories but deliberately does not silently decide judgment-heavy items:
 
-Push deep links now target context instead of only a module home:
+- meals/entertainment → candidate with review;
+- vehicle → business/total-kilometre support required;
+- CCA → asset/class schedule required;
+- business-use-of-home → allocation/limit/carry-forward support required;
+- COGS/direct costs → inventory/direct-cost review required;
+- unknown accounts → visible review queue.
 
-- customer: `/progress.html?token=<token>#commentForm`;
-- assigned staff: `/app/detailer/?job=<booking-id>#liveJobHost`.
-
-The Detailer shell resolves a requested job only inside its existing bounded workspace, selects it once, and wakes the live-job bundle only if the normal runtime policy allows it. Missing links do not start a search/poll loop.
-
-## Build 271 — explicit high-value Operations / Finance actions
-
-Operations writes converted:
-
-- assignment/crew changes → `operations.assignment.manage`;
-- date, slot and range block/unblock writes → `operations.schedule.manage`.
-
-Finance converted:
-
-- payment application write → `finance.post`;
-- bank reconciliation read → `finance.view`;
-- bank reconciliation write → `finance.reconcile`;
-- period-close read → `finance.view`;
-- period-close write → `finance.period.close`.
-
-`finance.period.close` is now an Accountant default. Converted high-risk writes do not enable the legacy admin-password fallback.
-
-The action registry retains its Build 269 origin and is marked `extended_through_build: 271`.
-
-## Wake/sleep and CPU rules
-
-- no open Detailer job → no live job bundle/feed/media/message monitor;
-- Detailer workspace is bounded and has no recurring poll;
-- Operations datasets load only when selected;
-- Customer progress uses active-state one-shot refresh and sleeps while hidden/inactive;
-- completed jobs stop accepting live-message writes;
-- push/deep-link behavior is event-driven and one-shot;
-- module/runtime flags are cached and timer-free;
-- no automatic replay of ambiguous non-idempotent writes;
-- Functions remain under `/api/*`.
+The T2125 API is read-only and requires `finance.view`. Tax Review provides CSV and JSON exports and separately displays GST/HST collected, ITC/debit activity and net activity.
 
 ## Current validation authority
 
-Cumulative guard: `scripts/release_check.py`  
-Focused Build 271 guard: `scripts/build271_release_check.py`
+- cumulative guard: `scripts/release_check.py`;
+- retained focused guard: `scripts/build271_release_check.py`;
+- current focused guard: `scripts/build272_release_check.py`;
+- Development workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Current source validation:
+The Development workflow now runs the cumulative guard plus Build 271 and Build 272 focused guards before exact-SHA Development Pages acceptance and anonymous HTTP/module-load smoke.
 
-- Build 271 focused guard: **PASS**;
-- cumulative Build 270 guard: **PASS** after aligning the local reconstruction with canonical GitHub copies;
-- Cloudflare Pages Functions static check: **598 JS files**;
-- 63 critical syntax checks;
-- customer-profile quality: PASS;
-- route-copy synchronization: PASS;
-- global one-H1 SEO check: PASS;
-- no new polling loop in Build 271 paths.
+## Wake/sleep and cost rules
 
-Canonical Build 271 detail: `BUILD271_SUMMARY.md`.
+- no open Detailer job → no live job bundle/feed/media/message monitor;
+- Operations and Finance datasets load only when selected;
+- Customer progress refreshes only when useful and sleeps while hidden/inactive;
+- completed jobs stop accepting new live-message writes;
+- push/deep-link behavior is event-driven and one-shot;
+- module/runtime flags are timer-free;
+- no automatic replay of ambiguous non-idempotent writes;
+- Functions remain under `/api/*`;
+- heavy filtering/aggregation belongs in Postgres rather than Worker loops.
 
-## Still requires deployed / external evidence
+## Build 273 — active carry-forward
 
-Do not mark these complete from source work alone:
+Build 273 is the only active queue. It absorbs anything previously described as “remaining Build 271/272 acceptance” so stale builds do not remain open.
 
-- current Build 271 `dev` revision deployed to Development Pages;
-- Admin + focused-role launcher/direct-URL/API matrix;
-- real-session active-job customer ↔ Detailer deep-link/message acceptance;
-- closed-job messaging UX acceptance;
-- representative Cloudflare CPU/script/memory evidence;
-- staff/customer remote Web Push delivery evidence where not already captured;
-- Stripe deposit/final-balance/refund/webhook acceptance;
+### Engineering queue
+
+1. Persistent tax/business profile with configurable legal/entity/tax mode.
+2. Mileage/vehicle log and annual business-use ratio feeding T2125 vehicle support.
+3. Business-use-of-home evidence and calculation records.
+4. Capital-asset/CCA register and schedule support.
+5. Year-end inventory/COGS support records.
+6. Receipt/document/evidence links from ledger/tax-review items.
+7. Accountant year-end package combining statements, GST/HST, T2125, mileage, CCA, home-office and unresolved review queue.
+8. Continue high-risk action extraction when touching booking overrides, incidents/customer-visible publishing, journal/tax-close/payroll/export workflows.
+9. Continue lazy module extraction and broader app improvements without waking dormant modules.
+
+### Manual / external evidence queue
+
+Do not fabricate these; complete them when credentials, devices, tax facts or human review are available:
+
+- authenticated role/action/direct-URL/API matrix;
+- customer ↔ Detailer real-session messaging/deep links and closed-job UX;
+- real provider email/SMS/Web Push delivery/retry/failure evidence;
+- Stripe deposit/final-balance/refund/webhook settlement acceptance;
 - PayPal sandbox decision/acceptance if retained;
-- inventory posting/reversal/idempotency acceptance;
-- Supabase restore + Cloudflare rollback rehearsal;
-- DAIP private processing/retry/dead-letter acceptance;
-- real-device PWA/mobile/accessibility acceptance.
+- live inventory posting/reversal/idempotency/shortage evidence;
+- representative Cloudflare CPU/script/memory evidence;
+- Supabase restore rehearsal;
+- Cloudflare deployment rollback rehearsal;
+- DAIP private-media processing/retry/cancel/dead-letter/usage evidence;
+- real-device PWA/mobile/accessibility/weak-network evidence;
+- Search Console/sitemap/canonical/schema/Google Business Profile evidence;
+- actual business kilometre, home-office, CCA, inventory and accountant-reviewed tax facts.
 
-## Immediate engineering direction
+## Permanent guardrails
 
-1. Finish deployed Build 271 role/action/message acceptance.
-2. Continue Operations explicit actions for quote/customer mutations.
-3. Continue Finance explicit actions for refund/settlement/high-risk posting paths.
-4. Add quiet-hours/preference UI only where existing stored authority supports it; do not invent another preferences system.
-5. Continue lazy module extraction for the highest-use Operations and Finance workflows.
-6. Keep Stripe/PayPal/inventory/restore/DAIP blockers bridged to the current release rather than stale historical build numbers.
-7. After the web/PWA event model is proven on real devices, proceed toward Capacitor mobile packaging; keep Tauri tray packaging optional/later.
+- one meaningful H1 per public/indexable page;
+- crawlable static-first service/local pages;
+- no public R2 enumeration on normal requests;
+- no subsystem polling merely because a module is installed/authorized;
+- server authorization is authoritative;
+- customer/private DAIP media never becomes public without consent/review;
+- secrets never belong in browser code or Git;
+- accounting workpapers automate preparation but do not fabricate tax facts or professional judgment;
+- `main` is promoted only deliberately from an accepted Development release.
 
 ## Documentation policy
 
-Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Update them in place. Git history is the archive.
+Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are historical closure records. Git history is the archive.
