@@ -3,6 +3,7 @@
 **Status: CLOSED**  
 **Closure date:** 2026-08-29  
 **Source branch:** `build272-permissions-package-clarity`  
+**Promoted source commit:** `d1e314411b878c6e270ef3e208c9d2b6fbd2cebd`  
 **Promotion target:** `dev` only  
 **Production rule:** `main` remains untouched.
 
@@ -10,7 +11,7 @@
 
 Build 272 is closed as the release that finishes the current permission/package-clarity increment and establishes the first Finance T2125 workpaper. Work that requires real credentials, real provider interaction, human tax facts, real devices, rollback/restore rehearsal, or a larger new engineering subsystem is not left attached to Build 272. It is explicitly carried forward to Build 273.
 
-Closure means the implemented source scope is complete and guarded. It does **not** mean the application has fabricated manual acceptance evidence. The Development workflow remains the authority for exact-SHA deployment/source smoke when this release reaches `dev`.
+Closure means the implemented source scope is complete and guarded. It does **not** mean the application has fabricated manual acceptance evidence. The Development workflow remains the authority for exact-SHA deployment/source smoke on the final `dev` head.
 
 ## Implemented in Build 272
 
