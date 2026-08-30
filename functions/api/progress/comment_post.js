@@ -1,5 +1,5 @@
 import { schemaLooksLegacy } from "../_lib/job-live-feed.js";
-import { queueStaffLiveAlert } from '../_lib/live-interaction-alerts.js';
+import { queueStaffLiveAlert, liveCommunicationState } from '../_lib/live-interaction-alerts.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -13,11 +13,13 @@ export async function onRequestPost(context) {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return json({ error: 'Server configuration is incomplete.' }, 500);
 
     const headers = serviceHeaders(env);
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_name,progress_enabled,progress_token&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_name,progress_enabled,progress_token,status,job_status,current_workflow_stage&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
     if (!bookingRes.ok) return json({ error: `Could not resolve booking. ${await bookingRes.text()}` }, 500);
     const booking = (await bookingRes.json().catch(() => []))?.[0] || null;
     if (!booking) return json({ error: 'Progress record not found.' }, 404);
     if (booking.progress_enabled === false) return json({ error: 'Progress viewing is not enabled for this booking.' }, 403);
+    const communication = liveCommunicationState(booking);
+    if (!communication.open) return json({ error: 'Live job messaging is closed because this job is no longer active.', communication_state: communication.state }, 409);
 
     const cleanName = createdBy.slice(0, 120);
     const cleanNote = note.slice(0, 4000);
