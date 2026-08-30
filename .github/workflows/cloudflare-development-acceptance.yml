@@ -141,7 +141,7 @@ jobs:
 
           for attempt in $(seq 1 12); do
             curl --fail-with-body --silent --show-error \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=100" \
+              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
               "${AUTH[@]}" > /tmp/cf-deployments.json
             jq -e '.success == true' /tmp/cf-deployments.json >/dev/null
 
