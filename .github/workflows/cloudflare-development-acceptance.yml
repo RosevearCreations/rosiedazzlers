@@ -67,6 +67,9 @@ jobs:
       - name: Run Build 272 focused guard
         run: python scripts/build272_release_check.py
 
+      - name: Run Build 273 focused guard
+        run: python scripts/build273_release_check.py
+
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
         shell: bash
@@ -197,7 +200,7 @@ jobs:
             exit 7
           }
 
-          for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace"; do
+          for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace" "/api/admin/accounting_tax_support" "/api/admin/accounting_accountant_package"; do
             code=$(curl --silent --show-error --output /tmp/rosie-api.json --write-out '%{http_code}' "${CF_DEV_URL}${endpoint}")
             if [[ "$code" =~ ^5 ]]; then
               echo "::error::Protected smoke endpoint ${endpoint} returned HTTP ${code}; Functions may not have loaded cleanly."
@@ -207,10 +210,21 @@ jobs:
             echo "${endpoint} returned expected protected/non-5xx HTTP ${code}."
           done
 
+          tax_page_code=$(curl --silent --show-error --location --output /tmp/rosie-tax-support.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-tax-support.html")
+          if [[ "$tax_page_code" != "200" ]]; then
+            echo "::error::Development Tax Support page returned HTTP ${tax_page_code}."
+            exit 9
+          fi
+          grep -q "Tax support & accountant readiness" /tmp/rosie-tax-support.html || {
+            echo "::error::Development Tax Support page did not contain the Build 273 marker."
+            exit 10
+          }
+
           {
             echo "### Development smoke"
             echo "- ${CF_DEV_URL}/app/ → HTTP 200 + Staff App Launcher marker"
-            echo "- protected API module graph → non-5xx"
+            echo "- ${CF_DEV_URL}/admin-tax-support.html → HTTP 200 + Build 273 marker"
+            echo "- protected API module graph including Build 273 Finance tax endpoints → non-5xx"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record acceptance boundary
@@ -218,6 +232,6 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 272, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, and anonymous HTTP/module-load smoke only."
-            echo "Authenticated role/action behavior, real-device/provider delivery, tax-source evidence entry, payment sandboxes, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain carried-forward manual/external evidence."
+            echo "This workflow proves cumulative/source guards through Build 273, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, Tax Support page availability, and anonymous HTTP/module-load smoke only."
+            echo "Authenticated Finance write/read behavior, actual tax-source facts/accountant review, real-device/provider delivery, payment sandboxes, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain current-release manual/external evidence."
           } >> "$GITHUB_STEP_SUMMARY"
