@@ -1,17 +1,22 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 272  
-**Updated:** 2026-08-29  
+**Build:** 273  
+**Updated:** 2026-08-30  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 272 is the closed source release for the current permission/package-clarity/T2125 increment. Its canonical summary is `BUILD272_SUMMARY.md`.
+Build 272 is closed and historically summarized in `BUILD272_SUMMARY.md`. **Build 273 is the only active release** and is summarized as it evolves in `BUILD273_SUMMARY.md`.
 
-Development promotion is `dev` only. `main` / live Production remains outside ordinary Development work and must not be changed unless promotion is explicitly requested.
+Current Development rule:
 
-Do not reopen old build numbers to attach later manual evidence. Later acceptance, fixes and enhancements belong to the current active release, now **Build 273**.
+- work from accepted `dev` through a focused feature branch;
+- promote back to `dev` only after source coherence/gates;
+- exact-SHA Cloudflare Development acceptance is required after promotion;
+- `main` / live Production remains untouched unless deliberate Production promotion is explicitly requested.
+
+Do not reopen old build numbers for later manual evidence.
 
 ## Current platform boundary
 
@@ -55,56 +60,101 @@ Authorities:
 - global module availability: `app_management_settings.module_runtime_flags`;
 - server authorization is authoritative; hidden navigation is not security.
 
+Build 273 adds `finance.tax.manage`. Accountant receives it by default; Operations/Detailer roles do not receive Finance actions. Tax-support/accountant-package reads require `finance.view`; tax-support writes require `finance.tax.manage`; legacy admin-password fallback remains disabled on these converted Finance routes.
+
 Historical Development schema tolerance remains important: `permissions_profile` may be TEXT or object JSON and must continue to use the shared parser rather than being blindly converted.
 
-## Build 272 closure
+## Build 272 retained authority
 
-### Explicit Operations / Finance actions
+Build 272 remains the closed permission/package-clarity/T2125 baseline:
 
-Build 272 adds/extends:
+- `operations.customer.manage` — customer/profile/tier mutation;
+- `operations.quote.manage` — staff quote/proposal/deposit/final-balance management;
+- `finance.refund.manage` — refund mutation;
+- `finance.settlement.manage` — settlement mutation;
+- public package clarity without price changes;
+- Complete = **Best value**;
+- Exterior Detail differentiated from Premium Wash;
+- Small/Mid/Oversized + condition/quote rules shown before price;
+- Rosie brings standard detailing water and power;
+- one-H1/SEO and existing booking/deposit mechanics retained;
+- first review-first Finance T2125 workpaper.
 
-- `operations.customer.manage` for customer/profile/tier mutation;
-- `operations.quote.manage` for staff quote/proposal/deposit-request/final-balance management;
-- `finance.refund.manage` for refund mutation;
-- `finance.settlement.manage` for settlement mutation.
+## Build 273 active implementation
 
-Converted high-risk routes do not use legacy admin-password fallback. Accountant receives Finance actions; Operations roles do not receive Finance actions by default.
+### Persistent tax-support authority
 
-### Public package clarity
+The live Rosie Supabase accounting schema now includes additive Build 273 authorities:
 
-Build 272 preserves existing Rosie pricing and booking/deposit mechanics while making the service decision clearer:
+- `accounting_business_vehicles`;
+- `accounting_vehicle_tax_years`;
+- `accounting_mileage_logs`;
+- `accounting_home_office_workpapers`;
+- `accounting_capital_assets`;
+- `accounting_tax_year_support`.
 
-- Premium Wash is positioned as maintenance exterior refresh;
-- Exterior Detail is a full exterior-focused detail/protection-prep service;
-- Complete Detail is the broadest inside/out base scope and is labeled **Best value**;
-- Small / Mid-sized / Oversized base pricing is explained before price;
-- condition/contamination/risk/extra-labour quote triggers are explicit;
-- Rosie’s standard mobile detailing states that Rosie brings its own water and power;
-- public one-H1 rules remain intact.
+All use RLS and the existing service-role Cloudflare Functions pattern. Existing `accounting_documents` remains the receipt/evidence authority; tax support links to evidence rather than duplicating files.
 
-### Finance / T2125
+`app_management_settings.business_tax_profile` is the tax-profile configuration authority. It is Canada/Ontario/T2125-aware, keeps entity type configurable/unconfirmed until real facts are supplied, and stores only masked/display-safe business/GST identifiers.
 
-Build 272 establishes a review-first T2125 workpaper generated from the posted accounting year-end report.
+### Tax-support calculations
 
-It maps ledger expense categories to CRA workpaper categories but deliberately does not silently decide judgment-heavy items:
+Build 273 now records and calculates:
 
-- meals/entertainment → candidate with review;
-- vehicle → business/total-kilometre support required;
-- CCA → asset/class schedule required;
-- business-use-of-home → allocation/limit/carry-forward support required;
-- COGS/direct costs → inventory/direct-cost review required;
-- unknown accounts → visible review queue.
+- business-use vehicles and trip purpose;
+- business/total kilometres and annual odometer reconciliation;
+- vehicle business-use percentage without guessing commute/personal use;
+- business-use-of-home area/time/reasonable-other allocation;
+- eligible home costs, prior carry-forward and positive-net-income limitation;
+- capital asset facts and explicit CCA claim candidate without inventing a class/rate;
+- year-end opening/closing inventory, valuation method and direct-cost adjustment;
+- readiness state showing missing facts instead of treating missing values as zero.
 
-The T2125 API is read-only and requires `finance.view`. Tax Review provides CSV and JSON exports and separately displays GST/HST collected, ITC/debit activity and net activity.
+No destructive delete workflow is included in this slice: records are deactivated, excluded or retained for audit history.
+
+### T2125 structured support
+
+The Build 272 ledger workpaper is now enriched by Build 273 factual support:
+
+- line 9281 can use a reconciled vehicle business-use percentage;
+- line 9945 can use the calculated current-year home-office candidate;
+- line 9936 can use explicitly entered CCA claim candidates;
+- tax profile and inventory/COGS readiness are carried alongside the workpaper.
+
+All judgment-heavy items remain reviewable. The system does not decide filing eligibility or replace accountant review.
+
+### Accountant package
+
+`/api/admin/accounting_accountant_package` assembles a year-end JSON workpaper package with:
+
+- tax profile;
+- year-end report;
+- balance sheet;
+- enriched T2125;
+- mileage summary;
+- home-office calculation;
+- capital-asset summary;
+- inventory/COGS support;
+- inventory cost completeness;
+- tax evidence manifest;
+- readiness/unresolved flags.
+
+Even an `accountant_ready_candidate` package remains marked `manual_review_required: true`.
+
+### Finance UI
+
+- `admin-tax-support.html` is the factual-input/readiness workspace.
+- `admin-tax-review.html` remains the GST/HST + T2125 review/export workspace and links to Tax Support.
+- Tax Support can download the accountant JSON package.
 
 ## Current validation authority
 
 - cumulative guard: `scripts/release_check.py`;
-- retained focused guard: `scripts/build271_release_check.py`;
-- current focused guard: `scripts/build272_release_check.py`;
+- retained focused guards: `scripts/build271_release_check.py`, `scripts/build272_release_check.py`;
+- current focused guard: `scripts/build273_release_check.py` once added;
 - Development workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-The Development workflow now runs the cumulative guard plus Build 271 and Build 272 focused guards before exact-SHA Development Pages acceptance and anonymous HTTP/module-load smoke.
+Build 273 must not be called accepted on Development until the focused guard is in the workflow and the exact Development SHA passes Cloudflare/source/anonymous smoke acceptance.
 
 ## Wake/sleep and cost rules
 
@@ -118,26 +168,27 @@ The Development workflow now runs the cumulative guard plus Build 271 and Build 
 - Functions remain under `/api/*`;
 - heavy filtering/aggregation belongs in Postgres rather than Worker loops.
 
-## Build 273 — active carry-forward
+## Build 273 current queue
 
-Build 273 is the only active queue. It absorbs anything previously described as “remaining Build 271/272 acceptance” so stale builds do not remain open.
+### Engineering still available without manual evidence
 
-### Engineering queue
-
-1. Persistent tax/business profile with configurable legal/entity/tax mode.
-2. Mileage/vehicle log and annual business-use ratio feeding T2125 vehicle support.
-3. Business-use-of-home evidence and calculation records.
-4. Capital-asset/CCA register and schedule support.
-5. Year-end inventory/COGS support records.
-6. Receipt/document/evidence links from ledger/tax-review items.
-7. Accountant year-end package combining statements, GST/HST, T2125, mileage, CCA, home-office and unresolved review queue.
-8. Continue high-risk action extraction when touching booking overrides, incidents/customer-visible publishing, journal/tax-close/payroll/export workflows.
-9. Continue lazy module extraction and broader app improvements without waking dormant modules.
+1. Complete Build 273 source guard/workflow/Development acceptance for the tax-support slice.
+2. Improve tax-document/evidence linking UX around `accounting_documents`.
+3. Continue Finance action extraction when journal/tax-close/payroll/sensitive export workflows are touched.
+4. Continue broader module/application improvements without waking dormant modules.
+5. Continue public/business improvements: proof, margin/cost authority, detailed condition-aware landing pages, local SEO and conversion measurement.
+6. Triage pre-existing Supabase security-advisor findings separately from Build 273 tax schema; do not silently change public business behavior while hardening.
 
 ### Manual / external evidence queue
 
-Do not fabricate these; complete them when credentials, devices, tax facts or human review are available:
+Do not fabricate these; complete when credentials, devices, tax facts or human review are available:
 
+- business legal/entity/tax profile confirmation;
+- actual business/total kilometres and trip classification;
+- home-office allocation/cost facts;
+- capital-asset/CCA class/UCC facts;
+- year-end inventory/direct-cost facts;
+- accountant review of judgment-heavy T2125 items;
 - authenticated role/action/direct-URL/API matrix;
 - customer ↔ Detailer real-session messaging/deep links and closed-job UX;
 - real provider email/SMS/Web Push delivery/retry/failure evidence;
@@ -149,8 +200,7 @@ Do not fabricate these; complete them when credentials, devices, tax facts or hu
 - Cloudflare deployment rollback rehearsal;
 - DAIP private-media processing/retry/cancel/dead-letter/usage evidence;
 - real-device PWA/mobile/accessibility/weak-network evidence;
-- Search Console/sitemap/canonical/schema/Google Business Profile evidence;
-- actual business kilometre, home-office, CCA, inventory and accountant-reviewed tax facts.
+- Search Console/sitemap/canonical/schema/Google Business Profile evidence.
 
 ## Permanent guardrails
 
@@ -166,4 +216,4 @@ Do not fabricate these; complete them when credentials, devices, tax facts or hu
 
 ## Documentation policy
 
-Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are historical closure records. Git history is the archive.
+Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are historical/current-release checkpoints. Git history is the archive.
