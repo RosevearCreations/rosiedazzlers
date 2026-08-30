@@ -28,6 +28,13 @@ def forbid(rel, *tokens):
             errors.append(f"{rel} contains forbidden token {token}")
 
 
+def one_h1(rel):
+    body = text(rel)
+    count = len(re.findall(r"<h1(?:\s[^>]*)?>", body, flags=re.I))
+    if count != 1:
+        errors.append(f"{rel} expected exactly one H1, found {count}")
+
+
 def node_check(rel):
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
     if proc.returncode:
@@ -305,6 +312,71 @@ forbid(
     "Customer supplies power and water",
 )
 
+# Public trust and service-merchandising authority must remain crawlable and aligned with the booking model.
+one_h1("index.html")
+need(
+    "index.html",
+    "Mobile Auto Detailing &amp; Interior/Exterior Restoration",
+    "Rosie brings standard water + power",
+    "Rosie brings standard detailing water and power",
+    "data-review-proof-mount",
+    "/book?estimate=photos",
+    "/carpet-shampoo",
+    "/headlight-restoration",
+)
+forbid(
+    "index.html",
+    "Sample customer-style reviews",
+    "Sample Rosie Dazzlers customer reviews",
+    "Customer provides power + water",
+    "If power/water are not available",
+    "Melissa R.",
+    "Jason K.",
+    "Amanda P.",
+    "Trevor M.",
+    "Rachel D.",
+)
+
+one_h1("headlight-restoration/index.html")
+need(
+    "headlight-restoration/index.html",
+    "From $99 per pair",
+    "From $129 per pair",
+    "From $169+ per pair",
+    "UV protection",
+    "Rosie brings standard detailing water and power",
+    "/book?estimate=photos&amp;addon=headlight_restoration_addon",
+    "cracks, internal haze or moisture",
+)
+forbid(
+    "headlight-restoration/index.html",
+    "warranty",
+    "guaranteed",
+    "Customer provides power",
+    "Customer supplies power",
+)
+
+one_h1("carpet-shampoo/index.html")
+need(
+    "carpet-shampoo/index.html",
+    "Small $99 · Mid $129 · Oversize $159",
+    "From $129–$159+",
+    "From $299+ / inspection quote",
+    "under-carpet",
+    "seat/trim",
+    "Rosie brings standard detailing water and power",
+    "/book?estimate=photos&amp;addon=carpet_shampoo",
+    "biological growth",
+    "corrosion",
+)
+forbid(
+    "carpet-shampoo/index.html",
+    "mold remediation",
+    "mould remediation",
+    "Customer provides power",
+    "Customer supplies power",
+)
+
 # JavaScript syntax and executable registry behavior.
 for rel in [
     "functions/api/_lib/integration-registry.js",
@@ -321,6 +393,9 @@ for rel in [
     node_check(rel)
 inline_script_check("admin-integrations.html")
 inline_script_check("book.html")
+inline_script_check("index.html")
+inline_script_check("headlight-restoration/index.html")
+inline_script_check("carpet-shampoo/index.html")
 registry_behavior_check()
 
 # Release documentation/workflow must explicitly carry this active release.
@@ -344,4 +419,6 @@ print(" - I.T. catalogue reports exact runtime names/storage/readiness without r
 print(" - Supabase/R2/Stripe/PayPal/notification authority remains aligned with current source paths")
 print(" - mobile Quick Book remains a touch-first presentation layer over existing booking/pricing/availability authorities")
 print(" - Rosie-supplied standard water/power remains canonical on browser and server pricing-catalog paths")
+print(" - homepage no longer publishes sample testimonials or customer-supplied utility copy")
+print(" - headlight and carpet/spill specialist pages retain condition pricing, limits, photo-estimate paths and one-H1 SEO authority")
 print(" - Build 274 workflow and living authorities are synchronized")
