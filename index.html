@@ -1,25 +1,14 @@
-<!-- /index.html
-     REPLACE ENTIRE FILE
-
-     Restores:
-     - Hero banner image (RosieDazzlersBanner.png)
-     - Reviews image (RosieReviews.png)
-     - Uses standardized nav/footer via /assets/chrome.js
-     - Optional background image switch (KatBlackCar.PNG or KateCar.PNG)
-
-     Note:
-     - data-banner and data-reviews are auto-filled by chrome.js if src is blank.
--->
+<!-- /index.html — Build 274 public trust + mobile operating model -->
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mobile Auto Detailing in Oxford & Norfolk | Rosie Dazzlers</title>
-  <meta name="description" content="Mobile auto detailing across Oxford and Norfolk Counties. Compare interior, exterior and complete packages, then book service at your home or workplace." />
+  <title>Mobile Auto Detailing & Restoration | Oxford & Norfolk | Rosie Dazzlers</title>
+  <meta name="description" content="Mobile auto detailing and interior/exterior restoration across Oxford and Norfolk Counties. Compare services, send condition photos, and book Rosie Dazzlers at your home or workplace." />
   <link rel="canonical" href="https://rosiedazzlers.ca/" />
-  <meta property="og:title" content="Rosie Dazzlers | Mobile Auto Detailing Norfolk & Oxford" />
-  <meta property="og:description" content="Mobile auto detailing for Tillsonburg, Woodstock, Simcoe, Delhi, Port Dover, and nearby Oxford and Norfolk communities. View services, transparent pricing, gift certificates, and online booking with deposit." />
+  <meta property="og:title" content="Rosie Dazzlers | Mobile Auto Detailing & Restoration" />
+  <meta property="og:description" content="Mobile detailing, interior restoration, paint care and specialty services for Tillsonburg, Woodstock, Simcoe, Delhi, Port Dover and nearby Oxford and Norfolk communities." />
   <meta name="robots" content="index,follow" />
   <link rel="stylesheet" href="/assets/site.css?v=20260813build259" />
   <script type="application/ld+json">
@@ -43,8 +32,6 @@
     ]
   }
   </script>
-
-
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -54,26 +41,15 @@
     "url": "https://rosiedazzlers.ca/"
   }
   </script>
-
-  <!-- OPTIONAL: Use a high-end car as a subtle background -->
   <style>
     :root{
       --bg-image: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
       --bg-image-opacity: .12;
     }
-  
     .social-feed-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.social-feed-card{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;background:rgba(255,255,255,.03)}.social-feed-card h3{margin:0 0 8px}.social-feed-card p{margin:0 0 10px;color:var(--muted)}.social-feed-items{display:grid;gap:8px}.social-feed-item{display:block;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);text-decoration:none;color:inherit}.social-feed-item strong{display:block}.social-feed-item span{display:block;margin-top:4px;color:var(--muted);font-size:.92rem}
-  
-    .sample-review-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}
-    .sample-review-card{border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:12px;background:rgba(255,255,255,.035)}
-    .sample-review-card .stars{color:#fde68a;font-weight:800;letter-spacing:.04em}
-    .sample-review-card blockquote{margin:8px 0;color:rgba(248,250,252,.92);line-height:1.45}
-    .sample-review-card footer{color:rgba(234,242,255,.66);font-size:.92rem}
   </style>
-  <!-- Historical stylesheet token: /assets/site.css?v=20260728build237 -->
 </head>
-
-<body data-build203="desktop-mobile-visual-polish">
+<body data-build274="public-trust-mobile-restoration">
   <div class="nav">
     <div class="nav-inner">
       <a class="brand" href="/">
@@ -89,97 +65,75 @@
   <div class="container">
     <div class="hero">
       <div>
-        <img data-banner alt="Rosie Dazzlers banner"
-             style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
-
-        <h1 style="margin:14px 0 6px">Mobile Auto Detailing</h1>
+        <img data-banner alt="Rosie Dazzlers mobile auto detailing banner" style="width:100%;height:auto;border-radius:16px;border:1px solid rgba(255,255,255,.10)" />
+        <h1 style="margin:14px 0 6px">Mobile Auto Detailing &amp; Interior/Exterior Restoration</h1>
         <p class="kicker" style="margin:0 0 10px">
-          We come to you across <strong>Norfolk</strong> & <strong>Oxford</strong> Counties — clear pricing,
-          one vehicle per day, and a deposit to lock your spot.
+          We come to you across <strong>Norfolk</strong> &amp; <strong>Oxford</strong> Counties for maintenance cleaning, deep interior recovery, exterior care and condition-based specialty work.
         </p>
-
         <div class="badges" style="margin-top:10px">
-          <span class="badge">Driveway required</span>
-          <span class="badge">Customer provides power + water</span>
+          <span class="badge">Rosie brings standard water + power</span>
+          <span class="badge">Safe/private work area needed</span>
           <span class="badge">Online booking + deposit</span>
         </div>
-
-        <div class="section">
-          <div data-checkout-status class="notice" style="display:none"></div>
-        </div>
-
+        <div class="section"><div data-checkout-status class="notice" style="display:none"></div></div>
         <div class="section" style="display:flex;gap:10px;flex-wrap:wrap">
-          <a class="btn primary" href="/book">Book now</a>
-          <a class="btn ghost" href="/pricing#booking-planner">See live availability</a>
-          <a class="btn ghost" href="/services">Not sure? Compare services</a>
+          <a class="btn primary" href="/book">Start Quick Book</a>
+          <a class="btn ghost" href="/book?estimate=photos">Send photos for estimate</a>
+          <a class="btn ghost" href="/services">Compare services</a>
+          <a class="btn ghost" href="/pricing">Pricing</a>
           <a class="btn ghost" href="/faq">Common questions</a>
-          <a class="btn ghost" href="/blog">Help articles</a>
-          <a class="btn ghost" href="/gifts">Gift certificates</a>
         </div>
-
         <div class="section panel" style="margin-top:14px">
           <h2 style="margin:0 0 8px">How it works</h2>
           <ol class="muted" style="margin:0 0 0 18px">
-            <li>Choose a package + vehicle size.</li>
-            <li>Pick a date + AM/PM slot.</li>
-            <li>Pay the deposit to reserve your spot.</li>
-            <li>We arrive and detail your vehicle on-site.</li>
+            <li>Tell Quick Book what the vehicle needs.</li>
+            <li>Add the year, make and model so we can confirm vehicle size.</li>
+            <li>Choose an available date/slot and review the recommended service path.</li>
+            <li>Use photos for severe, variable or restoration-level conditions before extra work is authorized.</li>
+            <li>Confirm contact details and the required deposit when the scope is clear.</li>
           </ol>
           <div class="hr"></div>
-          <div class="muted">
-            <strong>Note:</strong> If power/water are not available, additional charges may apply.
-            Customer accepts responsibility for local bylaw considerations regarding runoff/chemicals.
-          </div>
+          <div class="muted"><strong>Mobile setup:</strong> Rosie brings standard detailing water and power. Please provide a safe driveway/private work area and tell us about unusual parking, apartment/condo access, site rules or runoff restrictions before dispatch.</div>
         </div>
       </div>
 
       <div class="panel">
-        <h2 style="margin:0 0 10px">Reviews</h2>
-        <p class="help">Sample customer-style reviews are shown until the live review API is connected.</p>
+        <h2 style="margin:0 0 10px">Customer review proof</h2>
+        <p class="help">Verified review content can load here from the connected review source. Rosie Dazzlers does not publish sample testimonials as customer reviews.</p>
         <div class="hr"></div>
-        <div data-review-proof-mount><div class="sample-review-grid" aria-label="Sample Rosie Dazzlers customer reviews">
-          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“Our SUV had winter salt in every corner. The interior detail made it feel fresh again, especially the mats and door jambs.”</blockquote><footer>— Melissa R., Tillsonburg · SUV interior detail</footer></article>
-          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“The engine bay cleaning was exactly what we wanted before selling the car. It looked cared for without being overdone.”</blockquote><footer>— Jason K., Woodstock · Engine cleaning</footer></article>
-          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“Pet hair was our biggest problem. They took the time to work through the seats and cargo area and the car finally looked presentable again.”</blockquote><footer>— Amanda P., Ingersoll · Pet hair removal</footer></article>
-          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“The clay treatment and sealant brought the paint back to a smooth shine. Water beads much better now after washing.”</blockquote><footer>— Trevor M., Simcoe · Clay treatment + sealant</footer></article>
-          <article class="sample-review-card"><div class="stars">★★★★★</div><blockquote>“We booked a complete detail before a family trip. The van smelled cleaner, the glass was spotless, and the kids noticed first.”</blockquote><footer>— Rachel D., Delhi · Complete detail</footer></article>
-        </div></div>
+        <div data-review-proof-mount></div>
+        <div class="cta-row" style="margin-top:12px"><a class="btn ghost small" href="/gallery">See recent work</a><a class="btn ghost small" href="/contact">Ask a question</a></div>
       </div>
     </div>
-
-    
-
 
     <section class="section panel" data-build203="responsive-visual-showcase">
       <div class="section-head">
         <div>
           <span class="viewport-mode-pill"><span data-viewport-tier-label>Desktop website view</span></span>
-          <h2 style="margin:10px 0 8px">Sharp on desktop, simple on mobile</h2>
-          <p class="muted">The site now has shared responsive polish for the desktop website and the mobile app-style view: stronger image frames, softer card depth, touch-friendly buttons, compact mobile navigation, and professional proof sections that still keep one clear main heading per page.</p>
+          <h2 style="margin:10px 0 8px">A public website for research, an app-style flow for action</h2>
+          <p class="muted">Service and location pages stay search-friendly and detailed, while booking is moving toward a shorter touch-first flow for customers using a phone.</p>
         </div>
         <a class="btn ghost small" href="/gallery">View gallery proof</a>
       </div>
       <div class="visual-showcase" style="margin-top:14px">
         <div class="visual-stack">
-          <div class="visual-media-frame contain">
-            <img src="https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png" alt="Rosie Dazzlers mobile detailing banner" loading="lazy" decoding="async">
-          </div>
+          <div class="visual-media-frame contain"><img src="https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png" alt="Rosie Dazzlers mobile detailing banner" loading="lazy" decoding="async"></div>
           <div class="visual-proof-grid">
-            <div class="visual-proof-stat"><strong>Desktop</strong><span>Wide service cards, visible proof blocks, and cleaner comparison sections.</span></div>
-            <div class="visual-proof-stat"><strong>Mobile</strong><span>Single-column booking flow, compact menu, sticky quick links, and touch-sized actions.</span></div>
-            <div class="visual-proof-stat"><strong>Local</strong><span>Oxford and Norfolk wording stays prominent on pages customers search for.</span></div>
+            <div class="visual-proof-stat"><strong>Research</strong><span>Clear services, condition tiers, limitations and local coverage.</span></div>
+            <div class="visual-proof-stat"><strong>Mobile</strong><span>Problem-first Quick Book, photo estimates and touch-sized actions.</span></div>
+            <div class="visual-proof-stat"><strong>Local</strong><span>Oxford and Norfolk relevance without duplicate doorway pages.</span></div>
           </div>
         </div>
         <div class="responsive-split">
           <div class="desktop-preview-card desktop-only">
             <h3 style="margin-top:0">Desktop website version</h3>
             <div class="desktop-frame-demo" aria-hidden="true"><div class="top"></div><div class="screen"><div></div><div></div></div></div>
-            <p class="muted" style="margin-top:10px">Designed for browsing services, comparing packages, reading proof, and managing quotes from larger screens.</p>
+            <p class="muted" style="margin-top:10px">Built for comparing packages, reading detailed service guidance and viewing proof.</p>
           </div>
           <div class="mobile-preview-card">
             <h3 style="margin-top:0">Mobile app-style version</h3>
             <div class="mobile-frame-demo" aria-hidden="true"><div class="bar"></div><div class="screen"><div></div><div></div><div></div><div></div></div></div>
-            <p class="muted" style="margin-top:10px">Designed for fast booking, photo estimates, contact, and customer progress while someone is on their phone.</p>
+            <p class="muted" style="margin-top:10px">Built for fast booking, photo estimates, saved vehicles and repeat service.</p>
           </div>
         </div>
       </div>
@@ -187,87 +141,75 @@
 
     <section class="section panel">
       <h2 style="margin:0 0 10px">Special detailing services</h2>
-      <p class="muted">These are the highest-intent services local customers often search for directly. Each now has its own landing page so pricing questions, booking intent, and local wording can be clearer.</p>
+      <p class="muted">Use a specialist page when the condition changes the process, time or price. These pages explain the scope before you reach checkout.</p>
       <div class="service-link-grid" style="margin-top:12px">
-        <article class="service-link-card" data-r2-image-keywords="ceramic coating paint protection gloss" data-r2-image-href="/ceramic-coating" data-photo-target="home:service:ceramic-coating"><h3>Ceramic coating</h3><p class="muted">Protection-focused page for customers comparing coatings, gloss, upkeep, and inspection-based quoting.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
-        <article class="service-link-card" data-r2-image-keywords="pet hair removal interior" data-r2-image-href="/pet-hair-removal" data-photo-target="home:service:pet-hair-removal"><h3>Pet hair removal</h3><p class="muted">Interior-focused page for stubborn pet hair, fabric cleanup, and quote expectations before arrival.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
-        <article class="service-link-card" data-r2-image-keywords="odor odour removal interior" data-r2-image-href="/odor-removal" data-photo-target="home:service:odor-removal"><h3>Odor removal</h3><p class="muted">Smoke, pet, and spill odor page with source-treatment wording instead of a generic package mention.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
-        <article class="service-link-card" data-r2-image-keywords="headlight restoration" data-r2-image-href="/headlight-restoration" data-photo-target="home:service:headlight-restoration"><h3>Headlight restoration</h3><p class="muted">Dedicated page for cloudy headlights, night visibility, and before/after service intent.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
-        <article class="service-link-card" data-r2-image-keywords="paint correction polish swirl" data-r2-image-href="/paint-correction" data-photo-target="home:service:paint-correction"><h3>Paint correction</h3><p class="muted">Dedicated page for swirl marks, gloss recovery, and inspection-led quoting before booking.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="ceramic coating paint protection gloss" data-r2-image-href="/ceramic-coating" data-photo-target="home:service:ceramic-coating"><h3>Ceramic coating</h3><p class="muted">Protection, gloss, prep requirements and inspection-based quoting.</p><a class="btn ghost small" href="/ceramic-coating">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="pet hair removal interior" data-r2-image-href="/pet-hair-removal" data-photo-target="home:service:pet-hair-removal"><h3>Pet hair removal</h3><p class="muted">Embedded hair, fabric cleanup and condition-aware labour.</p><a class="btn ghost small" href="/pet-hair-removal">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="odor odour removal interior" data-r2-image-href="/odor-removal" data-photo-target="home:service:odor-removal"><h3>Odor removal</h3><p class="muted">Source-focused cleaning and treatment planning for persistent cabin odours.</p><a class="btn ghost small" href="/odor-removal">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="carpet extraction spill interior restoration" data-r2-image-href="/carpet-shampoo" data-photo-target="home:service:carpet-shampoo"><h3>Carpet &amp; spill extraction</h3><p class="muted">Routine shampoo, repeated extraction and under-carpet water-intrusion recovery.</p><a class="btn ghost small" href="/carpet-shampoo">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="headlight restoration" data-r2-image-href="/headlight-restoration" data-photo-target="home:service:headlight-restoration"><h3>Headlight restoration</h3><p class="muted">Light haze, moderate oxidation and heavy lens restoration priced by condition.</p><a class="btn ghost small" href="/headlight-restoration">Open page</a></article>
+        <article class="service-link-card" data-r2-image-keywords="paint correction polish swirl" data-r2-image-href="/paint-correction" data-photo-target="home:service:paint-correction"><h3>Paint correction</h3><p class="muted">Swirl reduction, gloss recovery and inspection-led correction planning.</p><a class="btn ghost small" href="/paint-correction">Open page</a></article>
       </div>
     </section>
 
-    
-<section class="section panel">
-  <h2 style="margin:0 0 10px">Town-focused detailing pages</h2>
-  <p class="muted">These location pages keep the folder-backed clean-route baseline while giving your strongest service towns clearer local wording, recent work, and review proof.</p>
-  <div class="local-town-grid" style="margin-top:12px">
-    <article class="local-town-card" data-r2-image-keywords="Tillsonburg auto detailing" data-r2-image-href="/tillsonburg-auto-detailing" data-photo-target="home:location:tillsonburg-auto-detailing"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
-    <article class="local-town-card" data-r2-image-keywords="Woodstock Ingersoll auto detailing" data-r2-image-href="/woodstock-ingersoll-auto-detailing" data-photo-target="home:location:woodstock-ingersoll-auto-detailing"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused page for frequent travel questions.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
-    <article class="local-town-card" data-r2-image-keywords="Simcoe Delhi auto detailing" data-r2-image-href="/simcoe-delhi-auto-detailing" data-photo-target="home:location:simcoe-delhi-auto-detailing"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side page with travel and booking wording for that cluster.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
-    <article class="local-town-card" data-r2-image-keywords="Port Dover auto detailing" data-r2-image-href="/port-dover-auto-detailing" data-photo-target="home:location:port-dover-auto-detailing"><h3>Port Dover</h3><p class="muted">Dedicated page for Port Dover detailing visibility and booking intent.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
-  </div>
-</section>
+    <section class="section panel">
+      <h2 style="margin:0 0 10px">Town-focused detailing pages</h2>
+      <p class="muted">Local pages are built around distinct service-area information and useful local proof rather than city-name swaps.</p>
+      <div class="local-town-grid" style="margin-top:12px">
+        <article class="local-town-card" data-r2-image-keywords="Tillsonburg auto detailing" data-r2-image-href="/tillsonburg-auto-detailing" data-photo-target="home:location:tillsonburg-auto-detailing"><h3>Tillsonburg</h3><p class="muted">Local page for the core home-base service area.</p><a class="btn ghost small" href="/tillsonburg-auto-detailing">Open page</a></article>
+        <article class="local-town-card" data-r2-image-keywords="Woodstock Ingersoll auto detailing" data-r2-image-href="/woodstock-ingersoll-auto-detailing" data-photo-target="home:location:woodstock-ingersoll-auto-detailing"><h3>Woodstock / Ingersoll</h3><p class="muted">Oxford County route-focused information and booking guidance.</p><a class="btn ghost small" href="/woodstock-ingersoll-auto-detailing">Open page</a></article>
+        <article class="local-town-card" data-r2-image-keywords="Simcoe Delhi auto detailing" data-r2-image-href="/simcoe-delhi-auto-detailing" data-photo-target="home:location:simcoe-delhi-auto-detailing"><h3>Simcoe / Delhi</h3><p class="muted">Norfolk-side travel, service and booking information.</p><a class="btn ghost small" href="/simcoe-delhi-auto-detailing">Open page</a></article>
+        <article class="local-town-card" data-r2-image-keywords="Port Dover auto detailing" data-r2-image-href="/port-dover-auto-detailing" data-photo-target="home:location:port-dover-auto-detailing"><h3>Port Dover</h3><p class="muted">Dedicated Port Dover service-area and booking guidance.</p><a class="btn ghost small" href="/port-dover-auto-detailing">Open page</a></article>
+      </div>
+    </section>
 
-<section class="section panel">
+    <section class="section panel">
       <h2 style="margin:0 0 10px">Recent work and visible proof</h2>
-      <p class="muted">Keep fresh before/after work, review proof, and social updates visible so local visitors can see current activity before they book.</p>
+      <p class="muted">Fresh before/after work and connected review proof help customers judge real current work before booking.</p>
       <div data-recent-work-mount style="margin-top:12px"></div>
       <div class="hr"></div>
       <div class="proof-grid">
         <article class="proof-card">
-          <h3>Review proof</h3>
-          <img data-reviews data-photo-image-target="page:home:review-proof" src="/assets/brand/rosie-reviews-fallback.png" alt="Rosie Dazzlers reviews" class="proof-media" />
+          <h3>Verified review feed</h3>
+          <p class="muted">When a verified review source is connected, review proof is rendered from that source rather than from invented sample testimonials.</p>
+          <div data-review-proof-mount></div>
         </article>
         <article class="proof-card">
           <h3>Where we work most often</h3>
-          <p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover, and nearby Oxford / Norfolk communities.</p>
+          <p class="muted">Tillsonburg, Woodstock, Ingersoll, Norwich, Simcoe, Delhi, Courtland, Port Dover and nearby Oxford / Norfolk communities.</p>
           <ul class="muted-list">
-            <li>Local wording now lives on the main public pages and the new special-service pages.</li>
-            <li>Booking still checks live service-area restrictions before checkout.</li>
+            <li>Booking checks current service-area rules before checkout.</li>
+            <li>Rosie brings standard detailing water and power; site/access constraints are still confirmed.</li>
             <li>Gallery and socials are linked from the pages customers actually land on first.</li>
           </ul>
-          <div class="cta-row" style="margin-top:10px">
-            <a class="btn ghost small" href="/gallery">Gallery</a>
-            <a class="btn ghost small" href="/contact">Service area questions</a>
-          </div>
+          <div class="cta-row" style="margin-top:10px"><a class="btn ghost small" href="/gallery">Gallery</a><a class="btn ghost small" href="/contact">Service area questions</a></div>
         </article>
       </div>
     </section>
 
     <section class="section grid cards">
       <article class="card">
-        <h2 style="margin-top:0">See exact live availability faster</h2>
-        <p class="muted">We are leaning further into a booking-led self-serve flow. Start inside the live booking planner so you can see service-area restrictions, 21-day availability, package choices, and add-ons before checkout.</p>
-        <div class="row" style="margin-top:12px">
-          <a class="btn primary" href="/pricing#booking-planner">Start with live availability</a>
-          <a class="btn ghost" href="/maintenance-plan">Recurring plan interest</a>
-        </div>
+        <h2 style="margin-top:0">Start with what the vehicle needs</h2>
+        <p class="muted">Quick Book begins with the problem, then uses your vehicle and condition details to steer toward the appropriate package, add-on or photo-estimate path.</p>
+        <div class="row" style="margin-top:12px"><a class="btn primary" href="/book">Start Quick Book</a><a class="btn ghost" href="/book?estimate=photos">Photo estimate</a></div>
       </article>
       <article class="card">
         <h2 style="margin-top:0">Maintenance plan direction</h2>
-        <p class="muted">We are preparing a recurring clean / maintenance-plan layer so repeat local customers can rebook on a steadier cycle, get earlier reminders based on real completed service history, and keep their preferred maintenance window.</p>
-        <div class="badges" style="margin-top:12px">
-          <span class="badge">Recurring reminders</span>
-          <span class="badge">Simpler rebooking</span>
-          <span class="badge">Better schedule forecasting</span>
-        </div>
-        <div class="row" style="margin-top:12px">
-          <a class="btn ghost" href="/maintenance-plan">See recurring-clean options</a>
-        </div>
+        <p class="muted">Recurring-clean options are being developed so repeat customers can rebook more easily and keep vehicles on a steadier maintenance cycle.</p>
+        <div class="badges" style="margin-top:12px"><span class="badge">Recurring reminders</span><span class="badge">Simpler rebooking</span><span class="badge">Seasonal resets</span></div>
+        <div class="row" style="margin-top:12px"><a class="btn ghost" href="/maintenance-plan">See recurring-clean options</a></div>
       </article>
     </section>
 
     <section class="section panel">
       <h2 style="margin:0 0 12px">Latest from our socials</h2>
-      <p class="muted">We can show the latest five links for each platform here. Update them from App Management so the site stays current without editing every page.</p>
+      <p class="muted">Recent connected social links can appear here so current work remains visible without hand-editing the homepage.</p>
       <div data-social-feed-mount class="social-feed-grid"></div>
     </section>
 
-
     <section class="section panel" id="competitor-completion-links">
       <h2>Choose the easiest path</h2>
-      <p class="muted">Start with the route that fits the vehicle: book a standard detail, send photos for a quote, view seasonal specials, buy a gift card, or ask about fleet/maintenance work.</p>
+      <p class="muted">Book a standard detail, send photos for variable-condition work, view specials, buy a gift card, or ask about fleet and maintenance service.</p>
       <div class="row" style="margin-top:12px">
         <a class="btn primary" href="/book">Book now</a>
         <a class="btn ghost" href="/book?estimate=photos">Send photos for estimate</a>
@@ -276,7 +218,6 @@
         <a class="btn ghost" href="/fleet">Fleet quote</a>
       </div>
     </section>
-
 
     <section class="section panel" data-build178="public-content-blocks" data-content-blocks data-content-placement="home_feature" data-heading="More from Rosie Dazzlers" data-intro="Fresh homepage cards from the admin content center." data-limit="6" hidden></section>
     <div class="footer" data-footer></div>
@@ -292,9 +233,8 @@
     renderReviewProofMounts(5);
     hydrateR2CardImages();
   </script>
-
   <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
   <script src="/assets/public-content-blocks.js?v=20260525build178" defer></script>
-<!-- Historical Build 258 image module: /assets/website-images.js?v=20260813build258 -->
+  <!-- Historical Build 258 image module: /assets/website-images.js?v=20260813build258 -->
 </body>
 </html>
