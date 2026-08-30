@@ -1,9 +1,10 @@
-// Build 267 — hierarchical internal navigation.
+// Build 274 — hierarchical internal navigation + legacy protected-page contextual-help bridge.
 // The old flat admin menu is retired. Each protected page belongs to one primary module,
 // and the module page exposes its workflows as clickable cards.
 (function attachAdminMenu(globalScope){
   'use strict';
   let navPromise=null;
+  let helpPromise=null;
   function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
   function ensureNavigation(){
     if(globalScope.RosieAppCore?.ModuleNavigation)return Promise.resolve(globalScope.RosieAppCore.ModuleNavigation);
@@ -16,6 +17,34 @@
       document.head.appendChild(script);
     });
     return navPromise;
+  }
+  function ensureHelpStyles(){
+    if(document.querySelector('link[href="/assets/contextual-help.css"]'))return;
+    const link=document.createElement('link');link.rel='stylesheet';link.href='/assets/contextual-help.css';document.head.appendChild(link);
+  }
+  function loadHelpScript(src){
+    return new Promise((resolve,reject)=>{
+      const existing=document.querySelector(`script[src="${src}"]`);
+      if(existing){
+        if(src.includes('catalog')&&globalScope.RosieHelpCatalog)return resolve();
+        if(src.endsWith('/contextual-help.js')&&globalScope.RosieContextHelp)return resolve();
+        existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return;
+      }
+      const script=document.createElement('script');script.src=src;script.async=false;script.onload=resolve;script.onerror=()=>reject(new Error(`Could not load ${src}.`));document.head.appendChild(script);
+    });
+  }
+  function ensureContextualHelp(currentPage){
+    if(globalScope.AdminPageInit?.loadContextualHelp){void globalScope.AdminPageInit.loadContextualHelp(currentPage);return;}
+    if(currentPage)document.documentElement.dataset.helpPage=currentPage;
+    ensureHelpStyles();
+    if(globalScope.RosieContextHelp){globalScope.RosieContextHelp.init({pageKey:currentPage});return;}
+    if(!helpPromise){
+      helpPromise=loadHelpScript('/assets/contextual-help-catalog.js')
+        .then(()=>loadHelpScript('/assets/contextual-help.js'))
+        .then(()=>globalScope.RosieContextHelp||null)
+        .catch(error=>{console.warn('Contextual help is unavailable; menu rendering will continue.',error);helpPromise=null;return null;});
+    }
+    void helpPromise.then(runtime=>runtime?.init?.({pageKey:currentPage}));
   }
   function fallback(mount){
     mount.innerHTML='<div class="panel stack"><strong>Rosie Apps</strong><a class="btn ghost small" href="/app/">All modules</a><a class="btn ghost small" href="/admin-account.html">My account</a></div>';
@@ -38,6 +67,7 @@
     const mount=options.mount||document.querySelector('[data-admin-menu-mount]');
     if(!mount)return;
     const currentPage=options.currentPage||document.body?.dataset?.page||'';
+    ensureContextualHelp(currentPage);
     mount.innerHTML='<div class="notice">Loading module menu…</div>';
     ensureNavigation().then(nav=>nav?renderNow({currentPage,mount,nav}):fallback(mount)).catch(()=>fallback(mount));
   }
