@@ -1,6 +1,7 @@
 import { requireStaffAccess, serviceHeaders, json } from "../_lib/staff-auth.js";
+import { requireActionAccess } from "../_lib/action-permissions.js";
 import { normalizeAudience, normalizeLiveStage, audienceFields, schemaLooksLegacy } from "../_lib/job-live-feed.js";
-import { queueCustomerLiveAlert, queueStaffLiveAlert } from "../_lib/live-interaction-alerts.js";
+import { queueCustomerLiveAlert, queueStaffLiveAlert, requireLiveCommunicationOpen } from "../_lib/live-interaction-alerts.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -21,6 +22,10 @@ export async function onRequestPost(context) {
 
     const access = await requireStaffAccess({ request, env, body, capability: 'work_booking', bookingId, allowLegacyAdminFallback: false });
     if (!access.ok) return access.response;
+    const actionAccess = requireActionAccess(access.actor, 'detailer.message.send');
+    if (!actionAccess.ok) return actionAccess.response;
+    const communication = await requireLiveCommunicationOpen(env, bookingId);
+    if (!communication.ok) return json({ error:'Live job messaging is closed because this job is no longer active.', communication_state:communication.state.state },409);
     const actor = access.actor || {};
     const audiencePatch = audienceFields(audience, actor);
     const base = {
