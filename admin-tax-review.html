@@ -8,10 +8,8 @@
   <link rel="stylesheet" href="/assets/site.css"/>
   <style>
     .status{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
-    .grid{display:grid;gap:14px}
-    .card{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
-    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin:12px 0}
-    .muted{color:#94a3b8}
+    .grid{display:grid;gap:14px}.card{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin:12px 0}.muted{color:#94a3b8}
     .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
     .metric{padding:12px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:rgba(255,255,255,.035)}
     .metric span{display:block;font-size:.82rem;color:#94a3b8;margin-bottom:4px}.metric strong{font-size:1.08rem}
@@ -34,7 +32,6 @@
   </section>
   <div class="grid">
     <div data-admin-menu-mount></div>
-
     <section class="section"><div class="panel">
       <h2>GST/HST payment review</h2>
       <p class="muted">Payment-side review of tax-included deposits and refunds. The general ledger workpaper below separately summarizes HST collected, ITC/debit activity and net tax activity.</p>
@@ -45,10 +42,9 @@
       </div>
       <div id="taxOut" class="card muted">Ready to load.</div>
     </div></section>
-
     <section class="section"><div class="panel">
       <h2>T2125 year-end workpaper</h2>
-      <p class="muted">Uses posted accounting entries to propose the CRA expense categories. Vehicle, business-use-of-home, CCA, cost-of-goods-sold and uncertain mappings remain review items until their supporting facts are complete.</p>
+      <p class="muted">Uses posted accounting entries to propose CRA expense categories. Vehicle, business-use-of-home, CCA, cost-of-goods-sold and uncertain mappings remain review items until their supporting facts are complete.</p>
       <div class="toolbar">
         <label>Tax year<input id="t2125Year" type="number" min="2020" max="2100" step="1"/></label>
         <button class="btn primary" id="loadT2125" type="button">Build T2125 workpaper</button>
@@ -75,23 +71,18 @@
   const csvBtn=document.getElementById('downloadT2125Csv');
   const jsonBtn=document.getElementById('downloadT2125Json');
   let latestWorkpaper=null;
-
   yearInput.value=String(new Date().getFullYear());
 
   function setStatus(message,state){status.hidden=!message;status.textContent=message||'';status.dataset.state=state||''}
   function moneyDollars(value){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(value||0))}
   function moneyCents(value){return moneyDollars(Number(value||0)/100)}
   function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
-  async function postJson(path,body){const r=await fetch(path,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}
-  async function getJson(path){
-    if(window.DDAuth?.apiFetch){const r=await window.DDAuth.apiFetch(path);const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}
-    const r=await fetch(path,{credentials:'include'});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d;
-  }
+  async function postJson(path,body){const fetcher=window.DDAuth?.apiFetch||fetch;const r=await fetcher(path,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}
+  async function getJson(path){const fetcher=window.DDAuth?.apiFetch||fetch;const r=await fetcher(path,{credentials:'include'});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}
 
   async function loadPaymentTax(){
     setStatus('Loading GST/HST payment summary…');
-    const d=await postJson('/api/admin/payment_tax_review_summary',{});
-    const x=d.summary||{};
+    const d=await postJson('/api/admin/payment_tax_review_summary',{});const x=d.summary||{};
     taxOut.innerHTML='<strong>Estimated tax-included payment review</strong><div class="metric-grid">'+
       '<div class="metric"><span>Gross collected</span><strong>'+moneyCents(x.gross_collected_cents)+'</strong></div>'+
       '<div class="metric"><span>Refunds</span><strong>'+moneyCents(x.refunds_cents)+'</strong></div>'+
@@ -102,50 +93,32 @@
   }
 
   function renderT2125(w){
-    const s=w.summary||{}, h=w.gst_hst_workpaper||{}, rows=w.line_items||[], flags=w.review_flags||[];
+    const s=w.summary||{},h=w.gst_hst_workpaper||{},rows=w.line_items||[],flags=w.review_flags||[];
     const lineHtml=rows.length?rows.map(r=>'<tr><td>'+esc(r.line)+'</td><td>'+esc(r.category)+'</td><td>'+esc((r.source_accounts||[]).join(', '))+'</td><td class="num">'+moneyDollars(r.recorded_amount_cad)+'</td><td class="num">'+(Number(r.unresolved_amount_cad||0)>0?'Review':moneyDollars(r.suggested_deductible_cad))+'</td><td><span class="pill '+(r.review_required?'review':'ok')+'">'+(r.review_required?'review':'mapped')+'</span></td></tr>').join(''):'<tr><td colspan="6">No expense-category rows were found for this year.</td></tr>';
     const flagHtml=flags.length?'<div class="flags">'+flags.map(f=>'<div class="flag"><strong>'+esc((f.severity||'review').toUpperCase())+'</strong> '+esc(f.account_code?f.account_code+' — ':'')+esc(f.message||'Review required')+(f.amount_cad!=null?' ('+moneyDollars(f.amount_cad)+')':'')+'</div>').join('')+'</div>':'<p><span class="pill ok">No automatic review flags</span></p>';
     tOut.classList.remove('muted');
     tOut.innerHTML='<div><strong>'+esc(w.workpaper_type||'T2125')+' workpaper · '+esc(w.tax_year)+'</strong> <span class="pill '+(w.filing_status==='review_required'?'review':'ok')+'">'+esc(w.filing_status||'review')+'</span></div>'+
-      '<div class="metric-grid">'+
-      '<div class="metric"><span>Gross business revenue</span><strong>'+moneyDollars(s.gross_business_revenue_cad)+'</strong></div>'+
-      '<div class="metric"><span>Ledger expenses</span><strong>'+moneyDollars(s.ledger_expenses_cad)+'</strong></div>'+
-      '<div class="metric"><span>Ledger net income</span><strong>'+moneyDollars(s.ledger_net_income_cad)+'</strong></div>'+
-      '<div class="metric"><span>Mapped deductible candidate</span><strong>'+moneyDollars(s.known_deductible_candidate_cad)+'</strong></div>'+
-      '<div class="metric"><span>Amount still requiring tax allocation</span><strong>'+moneyDollars(s.unresolved_expense_cad)+'</strong></div>'+
-      '<div class="metric"><span>Owner draws (not business expense)</span><strong>'+moneyDollars(s.owner_draw_cad)+'</strong></div></div>'+
-      '<h3>GST/HST ledger workpaper</h3><div class="metric-grid">'+
-      '<div class="metric"><span>HST collected</span><strong>'+moneyDollars(h.collected_cad)+'</strong></div>'+
-      '<div class="metric"><span>ITC / debit activity</span><strong>'+moneyDollars(h.input_tax_credit_debit_activity_cad)+'</strong></div>'+
-      '<div class="metric"><span>Net tax activity</span><strong>'+moneyDollars(h.net_tax_activity_cad)+'</strong></div></div><p class="muted">'+esc(h.note||'')+'</p>'+
-      '<h3>T2125 category mapping</h3><div class="table-wrap"><table><thead><tr><th>Line</th><th>CRA category</th><th>Source account(s)</th><th>Recorded</th><th>Candidate</th><th>Status</th></tr></thead><tbody>'+lineHtml+'</tbody></table></div>'+
-      '<h3>Review queue</h3>'+flagHtml+
-      '<details><summary>Supporting-record checklist</summary><pre>'+esc(JSON.stringify(w.required_support||{},null,2))+'</pre></details>'+
-      '<p class="muted" style="margin-top:12px">'+esc(w.disclaimer||'')+'</p>';
+      '<div class="metric-grid"><div class="metric"><span>Gross business revenue</span><strong>'+moneyDollars(s.gross_business_revenue_cad)+'</strong></div><div class="metric"><span>Ledger expenses</span><strong>'+moneyDollars(s.ledger_expenses_cad)+'</strong></div><div class="metric"><span>Ledger net income</span><strong>'+moneyDollars(s.ledger_net_income_cad)+'</strong></div><div class="metric"><span>Mapped deductible candidate</span><strong>'+moneyDollars(s.known_deductible_candidate_cad)+'</strong></div><div class="metric"><span>Amount still requiring tax allocation</span><strong>'+moneyDollars(s.unresolved_expense_cad)+'</strong></div><div class="metric"><span>Owner draws (not business expense)</span><strong>'+moneyDollars(s.owner_draw_cad)+'</strong></div></div>'+
+      '<h3>GST/HST ledger workpaper</h3><div class="metric-grid"><div class="metric"><span>HST collected</span><strong>'+moneyDollars(h.collected_cad)+'</strong></div><div class="metric"><span>ITC / debit activity</span><strong>'+moneyDollars(h.input_tax_credit_debit_activity_cad)+'</strong></div><div class="metric"><span>Net tax activity</span><strong>'+moneyDollars(h.net_tax_activity_cad)+'</strong></div></div><p class="muted">'+esc(h.note||'')+'</p>'+
+      '<h3>T2125 category mapping</h3><div class="table-wrap"><table><thead><tr><th>Line</th><th>CRA category</th><th>Source account(s)</th><th>Recorded</th><th>Candidate</th><th>Status</th></tr></thead><tbody>'+lineHtml+'</tbody></table></div><h3>Review queue</h3>'+flagHtml+'<details><summary>Supporting-record checklist</summary><pre>'+esc(JSON.stringify(w.required_support||{},null,2))+'</pre></details><p class="muted" style="margin-top:12px">'+esc(w.disclaimer||'')+'</p>';
   }
 
   async function loadT2125(){
-    const year=Math.max(2020,Math.min(2100,Number(yearInput.value||new Date().getFullYear())));
-    yearInput.value=String(year);
-    setStatus('Building T2125 workpaper…');
-    const d=await getJson('/api/admin/accounting_t2125_workpaper?year='+encodeURIComponent(year));
-    latestWorkpaper=d.workpaper||null;
-    if(!latestWorkpaper)throw new Error('T2125 workpaper was not returned.');
-    renderT2125(latestWorkpaper);
-    csvBtn.disabled=false;jsonBtn.disabled=false;
-    setStatus('T2125 workpaper built. Review flagged items before treating the package as tax-ready.','success');
+    const year=Math.max(2020,Math.min(2100,Number(yearInput.value||new Date().getFullYear())));yearInput.value=String(year);setStatus('Building T2125 workpaper…');
+    const d=await getJson('/api/admin/accounting_t2125_workpaper?year='+encodeURIComponent(year));latestWorkpaper=d.workpaper||null;if(!latestWorkpaper)throw new Error('T2125 workpaper was not returned.');
+    renderT2125(latestWorkpaper);csvBtn.disabled=false;jsonBtn.disabled=false;setStatus('T2125 workpaper built. Review flagged items before treating the package as tax-ready.','success');
   }
 
   function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"'}
   function buildCsv(w){
     const lines=[];
-    lines.push(['section','line','category','account','recorded_cad','candidate_cad','unresolved_cad','review_required','note'].map(csvCell).join(','));
-    for(const r of w.line_items||[])lines.push(['t2125',r.line,r.category,(r.source_accounts||[]).join(' | '),r.recorded_amount_cad,r.suggested_deductible_cad,r.unresolved_amount_cad,r.review_required?'yes':'no',''].map(csvCell).join(','));
-    for(const f of w.review_flags||[])lines.push(['review','','',f.account_code||'',f.amount_cad??'','','',f.severity||'review',f.message||''].map(csvCell).join(','));
+    lines.push(['section','line','category','account','recorded_cad','candidate_cad','unresolved_cad','review_required','severity','note'].map(csvCell).join(','));
+    for(const r of w.line_items||[])lines.push(['t2125',r.line,r.category,(r.source_accounts||[]).join(' | '),r.recorded_amount_cad,r.suggested_deductible_cad,r.unresolved_amount_cad,r.review_required?'yes':'no','',''].map(csvCell).join(','));
+    for(const f of w.review_flags||[])lines.push(['review',f.t2125_line||'','',f.account_code||'',f.amount_cad??'','','','yes',f.severity||'review',f.message||''].map(csvCell).join(','));
     const h=w.gst_hst_workpaper||{};
-    lines.push(['gst_hst','','collected','',''+(h.collected_cad||0),'','','',''].map(csvCell).join(','));
-    lines.push(['gst_hst','','itc_debit_activity','',''+(h.input_tax_credit_debit_activity_cad||0),'','','',''].map(csvCell).join(','));
-    lines.push(['gst_hst','','net_tax_activity','',''+(h.net_tax_activity_cad||0),'','','',''].map(csvCell).join(','));
+    lines.push(['gst_hst','','HST collected','',h.collected_cad||0,'','','no','',''].map(csvCell).join(','));
+    lines.push(['gst_hst','','ITC / debit activity','',h.input_tax_credit_debit_activity_cad||0,'','','no','',''].map(csvCell).join(','));
+    lines.push(['gst_hst','','Net tax activity','',h.net_tax_activity_cad||0,'','','no','',''].map(csvCell).join(','));
     return lines.join('\n');
   }
   function download(name,type,text){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},0)}
@@ -154,14 +127,7 @@
   document.getElementById('loadT2125').addEventListener('click',()=>loadT2125().catch(e=>setStatus(e.message,'error')));
   csvBtn.addEventListener('click',()=>{if(latestWorkpaper)download('rosie-t2125-'+latestWorkpaper.tax_year+'.csv','text/csv;charset=utf-8',buildCsv(latestWorkpaper))});
   jsonBtn.addEventListener('click',()=>{if(latestWorkpaper)download('rosie-t2125-'+latestWorkpaper.tax_year+'.json','application/json;charset=utf-8',JSON.stringify(latestWorkpaper,null,2))});
-
-  window.AdminShell.boot({pageKey:'admin-tax-review',onReady:()=>{
-    window.AdminMenu.render({currentPage:'admin-tax-review'});
-    Promise.allSettled([loadPaymentTax(),loadT2125()]).then(results=>{
-      const failed=results.filter(r=>r.status==='rejected');
-      if(failed.length===2)setStatus(failed[0].reason?.message||'Tax review could not be loaded.','error');
-    });
-  }});
+  window.AdminShell.boot({pageKey:'admin-tax-review',onReady:()=>{window.AdminMenu.render({currentPage:'admin-tax-review'});Promise.allSettled([loadPaymentTax(),loadT2125()]).then(results=>{const failed=results.filter(r=>r.status==='rejected');if(failed.length===2)setStatus(failed[0].reason?.message||'Tax review could not be loaded.','error')})}});
 })();
 </script>
 </body>
