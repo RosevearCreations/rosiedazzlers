@@ -18,12 +18,6 @@ def need(rel, *tokens):
         if token not in body:
             errors.append(f"{rel} missing {token}")
 
-def forbid(rel, *tokens):
-    body = text(rel)
-    for token in tokens:
-        if token in body:
-            errors.append(f"{rel} still contains forbidden token {token}")
-
 # Canonical action registry and role boundaries.
 actions = json.loads(text("data/action_permissions.json") or "{}")
 if int(actions.get("extended_through_build") or 0) < 272:
@@ -100,6 +94,34 @@ need(
 # Existing booking/deposit path remains present; Build 272 does not replace checkout mechanics.
 need("book.html", 'id="checkoutBtn"', "Book and pay deposit", "selectedPackageCode", "deposit")
 
+# T2125 workpaper is read-only, Finance-scoped, review-first, and exportable.
+need(
+    "functions/api/_lib/t2125-workpaper.js",
+    'workpaper_type: "T2125"',
+    'filing_status:',
+    'business_km_allocation_required',
+    'cca_schedule_required',
+    'home_office_calculation_required',
+    'cost_of_goods_sold_review',
+    'input_tax_credit_debit_activity_cad',
+    'Accounting workpaper only.'
+)
+need(
+    "functions/api/admin/accounting_t2125_workpaper.js",
+    'capability: null',
+    'allowLegacyAdminFallback: false',
+    'requireActionAccess(access.actor, "finance.view")',
+    'buildT2125WorkpaperFromYearEnd'
+)
+need(
+    "admin-tax-review.html",
+    'Tax and T2125 review',
+    "['section','line','category','account','recorded_cad','candidate_cad','unresolved_cad','review_required','severity','note']",
+    "['review',f.t2125_line||'','',f.account_code||'',f.amount_cad??'','','','yes',f.severity||'review',f.message||'']",
+    'Download CSV',
+    'Download JSON'
+)
+
 # Preserve one-H1 public SEO rule in source pages and do not introduce an H1 in Build 272 injection.
 for rel in ["index.html", "book.html", "pricing.html", "services.html"]:
     body = text(rel)
@@ -110,12 +132,19 @@ for rel in ["functions/_middleware.js", "assets/build272-public-clarity.js"]:
     if re.search(r"<h1\b", text(rel), flags=re.I):
         errors.append(f"{rel} must not inject an additional H1")
 
-# Syntax checks for every new/changed JavaScript authority surface.
+# Closure documentation must move unfinished work forward rather than leaving stale Build 272 blockers.
+need("BUILD272_SUMMARY.md", "Build 272", "CLOSED", "Build 273")
+need("AI_PROJECT_HANDOFF.md", "Build: 272", "Build 272 closure", "Build 273")
+need("MASTER_VALUE_ROADMAP.md", "Build: 272", "Build 272 — closed", "Build 273")
+
+# Syntax checks for every Build 272 JavaScript authority surface.
 for rel in [
     "functions/api/_lib/action-permissions.js",
     "functions/api/admin/_middleware.js",
     "functions/_middleware.js",
     "assets/build272-public-clarity.js",
+    "functions/api/_lib/t2125-workpaper.js",
+    "functions/api/admin/accounting_t2125_workpaper.js",
 ]:
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
     if proc.returncode:
@@ -134,3 +163,5 @@ print(" - refund and settlement mutations are separated into Finance actions")
 print(" - Rosie package prices are unchanged")
 print(" - Exterior/Complete scope, vehicle sizing, condition quote triggers, and fully-mobile water/power are clarified before price")
 print(" - Complete uses Best value, one-H1 source rules remain intact, and existing booking/deposit mechanics remain present")
+print(" - T2125 workpaper is Finance-scoped, review-first, and exports aligned CSV/JSON")
+print(" - Build 272 closure docs explicitly carry unfinished manual/external and future engineering work to Build 273")
