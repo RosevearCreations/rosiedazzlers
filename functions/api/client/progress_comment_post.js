@@ -1,6 +1,7 @@
 import { getCurrentCustomerSession } from "../_lib/customer-session.js";
 import { maybeQueueCustomerNotification } from "../_lib/notification-hooks.js";
 import { loadAppSettings } from "../_lib/app-settings.js";
+import { liveCommunicationState } from "../_lib/live-interaction-alerts.js";
 
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
@@ -24,12 +25,14 @@ export async function onRequestPost(context){
     if (flags.customer_chat_enabled === false) return withCors(json({ error:'Client chat is disabled right now.' },403));
 
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" };
-    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,customer_profile_id,progress_enabled,assigned_staff_email,assigned_staff_name&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
+    const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_email,customer_profile_id,progress_enabled,assigned_staff_email,assigned_staff_name,status,job_status,current_workflow_stage&progress_token=eq.${encodeURIComponent(token)}&limit=1`, { headers });
     if (!bookingRes.ok) return withCors(json({ error:`Could not load booking. ${await bookingRes.text()}` },500));
     const bookingRows = await bookingRes.json().catch(() => []);
     const booking = Array.isArray(bookingRows) ? bookingRows[0] || null : null;
     if (!booking) return withCors(json({ error:'Progress record not found.' },404));
     if (booking.progress_enabled === false) return withCors(json({ error:'Progress is not enabled for this booking.' },403));
+    const communication = liveCommunicationState(booking);
+    if (!communication.open) return withCors(json({ error:'Live job messaging is closed because this job is no longer active.', communication_state:communication.state },409));
     if ((booking.customer_email || '').toLowerCase() !== (current.customer_profile.email || '').toLowerCase()) return withCors(json({ error:'This booking does not belong to the signed-in client.' },403));
 
     const parentCheck = await validateParent({ env, headers, booking_id: booking.id, parent_type, parent_id, author_type:'client', moderationRules });
