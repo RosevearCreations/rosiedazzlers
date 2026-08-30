@@ -53,6 +53,15 @@ jobs:
       - name: Check payment money units
         run: node scripts/build274_payment_money_check.mjs
 
+      - name: Run retained Build 271 focused guard
+        run: python scripts/build271_release_check.py
+
+      - name: Run retained Build 272 focused guard
+        run: python scripts/build272_release_check.py
+
+      - name: Run retained Build 273 focused guard
+        run: python scripts/build273_release_check.py
+
       - name: Run Build 274 focused guard
         run: python scripts/build274_release_check.py
 
@@ -67,6 +76,7 @@ jobs:
             echo "- Feature branch: \`${GITHUB_REF_NAME}\`"
             echo "- Pricing/Quick Book/payment syntax: PASS"
             echo "- Payment money-unit behavior: PASS"
+            echo "- Retained Build 271/272/273 focused guards: PASS"
             echo "- Focused Build 274 guard: PASS"
             echo "- Cumulative release guard: PASS"
             echo "- No Cloudflare resource or external provider was mutated by this workflow."

@@ -150,28 +150,24 @@ for constant in ["PACKAGE_GUIDE", "PUBLIC_SCOPE_GUIDE"]:
 if re.search(r"<h1\b", text("assets/build272-public-clarity.js"), flags=re.I):
     errors.append("assets/build272-public-clarity.js must not inject an H1")
 
-# Closure documentation must preserve Build 272 behavior without freezing later living-authority headings.
-# Retained focused guards protect semantic authority; they must allow Build 273/274+ to become active.
+# Historical closure and living-authority continuity. Code-level action names are already protected above;
+# living Markdown only needs to preserve the retained Build 272 meaning while later releases advance.
 need("BUILD272_SUMMARY.md", "Build 272", "CLOSED", "Build 273")
 require_living_build_at_least("AI_PROJECT_HANDOFF.md", 272)
 need(
     "AI_PROJECT_HANDOFF.md",
-    "Retained Build 272/273 authority",
-    "operations.customer.manage",
-    "operations.quote.manage",
-    "finance.refund.manage",
-    "finance.settlement.manage",
+    "## Retained Build 272/273 authority",
+    "narrow Operations/Finance action permissions",
     "Complete = **Best value**",
+    "one meaningful H1 per indexable public page",
 )
 require_living_build_at_least("MASTER_VALUE_ROADMAP.md", 272)
 need(
     "MASTER_VALUE_ROADMAP.md",
-    "Retained closed/current baseline",
-    "operations.customer.manage",
-    "operations.quote.manage",
-    "finance.refund.manage",
-    "finance.settlement.manage",
+    "## Retained baseline",
+    "Build 272 closed",
     "Complete = **Best value**",
+    "server-authoritative role/module/action permissions",
 )
 
 # Syntax checks for every Build 272 JavaScript authority surface.
