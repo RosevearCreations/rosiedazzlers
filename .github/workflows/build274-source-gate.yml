@@ -43,10 +43,15 @@ jobs:
 
       - name: Check payment lifecycle syntax
         run: |
+          node --check functions/api/_lib/payment-money.js
+          node --check functions/api/_lib/quote-deposit-payments.js
           node --check functions/api/paypal/capture-order.js
           node --check functions/api/paypal/webhook.js
           node --check functions/api/stripe/webhook.js
           node --check functions/api/checkout.js
+
+      - name: Check payment money units
+        run: node scripts/build274_payment_money_check.mjs
 
       - name: Run Build 274 focused guard
         run: python scripts/build274_release_check.py
@@ -61,6 +66,7 @@ jobs:
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Feature branch: \`${GITHUB_REF_NAME}\`"
             echo "- Pricing/Quick Book/payment syntax: PASS"
+            echo "- Payment money-unit behavior: PASS"
             echo "- Focused Build 274 guard: PASS"
             echo "- Cumulative release guard: PASS"
             echo "- No Cloudflare resource or external provider was mutated by this workflow."

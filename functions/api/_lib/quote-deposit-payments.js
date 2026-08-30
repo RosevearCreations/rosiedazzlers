@@ -1,7 +1,9 @@
 // Build 181 — shared quote deposit/payment settlement helpers.
+// Build 274 hardening: provider settlement amounts entering this helper are explicit integer cents.
 // Used by verified Stripe/PayPal webhooks and staff/manual confirmation flows.
 
 import { queueOrderConfirmationNotification } from "./booking-documents.js";
+import { normalizeCents, providerMoneyToCents } from "./payment-money.js";
 
 const PAYMENT_SELECT = [
   "id", "quote_proposal_draft_id", "lead_id", "lead_conversion_draft_id", "booking_id", "confirmed_booking_id",
@@ -66,9 +68,23 @@ export async function markQuoteDepositPaidFromProvider({
   }
 
   const now = new Date().toISOString();
-  const paidCents = moneyToCents(paidAmountCents || row.amount_cents);
+  const sourcePaidCents = paidAmountCents === null || paidAmountCents === undefined || paidAmountCents === ""
+    ? row.amount_cents
+    : paidAmountCents;
+  const paidCents = normalizeCents(sourcePaidCents);
+  const expectedCents = normalizeCents(row.amount_cents);
   if (!(paidCents > 0)) {
     return { ok: false, status: 400, error: "Verified payment amount must be greater than zero.", payment_request: row };
+  }
+  if (expectedCents > 0 && paidCents !== expectedCents) {
+    return {
+      ok: false,
+      status: 409,
+      error: "Verified provider payment amount does not match the quote deposit request.",
+      expected_cents: expectedCents,
+      paid_cents: paidCents,
+      payment_request: row
+    };
   }
 
   const bookingId = cleanText(row.booking_id || row.confirmed_booking_id || await convertedBookingId(env, row.lead_conversion_draft_id));
@@ -232,11 +248,10 @@ async function confirmBookingFromDeposit(env, bookingId, row, details) {
   return { ok: true, notification };
 }
 
+// Compatibility export for retained webhook call sites. Numeric/integer values are already cents;
+// decimal currency strings (the PayPal REST shape) are converted deliberately.
 export function moneyToCents(value) {
-  if (value === null || value === undefined || value === "") return 0;
-  const raw = Number(value);
-  if (!Number.isFinite(raw) || raw < 0) return 0;
-  return Math.round(raw > 9999 ? raw : raw * 100);
+  return providerMoneyToCents(value);
 }
 
 export function cleanText(value) { return String(value ?? "").trim(); }
