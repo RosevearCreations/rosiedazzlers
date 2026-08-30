@@ -103,11 +103,11 @@ need("book.html", 'id="checkoutBtn"', "Book and pay deposit", "selectedPackageCo
 # Preserve one-H1 public SEO rule in source pages and do not introduce an H1 in Build 272 injection.
 for rel in ["index.html", "book.html", "pricing.html", "services.html"]:
     body = text(rel)
-    count = len(re.findall(r"<h1\\b", body, flags=re.I))
+    count = len(re.findall(r"<h1\b", body, flags=re.I))
     if count != 1:
         errors.append(f"{rel} expected exactly one H1, found {count}")
 for rel in ["functions/_middleware.js", "assets/build272-public-clarity.js"]:
-    if re.search(r"<h1\\b", text(rel), flags=re.I):
+    if re.search(r"<h1\b", text(rel), flags=re.I):
         errors.append(f"{rel} must not inject an additional H1")
 
 # Syntax checks for every new/changed JavaScript authority surface.
