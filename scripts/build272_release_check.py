@@ -122,15 +122,23 @@ need(
     'Download JSON'
 )
 
-# Preserve one-H1 public SEO rule in source pages and do not introduce an H1 in Build 272 injection.
+# Preserve one-H1 public SEO rule in source pages. Build 272 is allowed to locate the existing H1,
+# but its injected HTML fragments must never contain a new H1.
 for rel in ["index.html", "book.html", "pricing.html", "services.html"]:
     body = text(rel)
     count = len(re.findall(r"<h1\b", body, flags=re.I))
     if count != 1:
         errors.append(f"{rel} expected exactly one H1, found {count}")
-for rel in ["functions/_middleware.js", "assets/build272-public-clarity.js"]:
-    if re.search(r"<h1\b", text(rel), flags=re.I):
-        errors.append(f"{rel} must not inject an additional H1")
+
+middleware = text("functions/_middleware.js")
+for constant in ["PACKAGE_GUIDE", "PUBLIC_SCOPE_GUIDE"]:
+    match = re.search(rf"const\s+{constant}\s*=\s*`([\s\S]*?)`;", middleware)
+    if not match:
+        errors.append(f"functions/_middleware.js missing injectable fragment {constant}")
+    elif re.search(r"<h1\b", match.group(1), flags=re.I):
+        errors.append(f"functions/_middleware.js {constant} must not inject an H1")
+if re.search(r"<h1\b", text("assets/build272-public-clarity.js"), flags=re.I):
+    errors.append("assets/build272-public-clarity.js must not inject an H1")
 
 # Closure documentation must move unfinished work forward rather than leaving stale Build 272 blockers.
 need("BUILD272_SUMMARY.md", "Build 272", "CLOSED", "Build 273")
