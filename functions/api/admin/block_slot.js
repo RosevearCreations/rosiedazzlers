@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
+import { requireActionAccess } from "../_lib/action-permissions.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: corsHeaders() });
@@ -11,10 +12,12 @@ export async function onRequestPost({ request, env }) {
       request,
       env,
       body,
-      capability: "manage_blocks",
-      allowLegacyAdminFallback: true,
+      capability: null,
+      allowLegacyAdminFallback: false,
     });
     if (!access.ok) return withCors(access.response);
+    const actionAccess = requireActionAccess(access.actor, "operations.schedule.manage");
+    if (!actionAccess.ok) return withCors(actionAccess.response);
 
     const blocked_date = String(body.blocked_date || body.block_date || "").trim();
     const slot = String(body.slot || body.slot_code || "").trim().toUpperCase();
