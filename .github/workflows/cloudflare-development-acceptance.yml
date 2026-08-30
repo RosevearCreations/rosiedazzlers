@@ -101,7 +101,7 @@ jobs:
           fi
 
           if [[ -z "$account_id" ]]; then
-            echo "::error::ROSIEDAZZLERS_TOKEN is valid but cannot discover/read Pages project ${CF_PROJECT_NAME}. It needs Rosie account visibility plus Pages read access, or CLOUDFLARE_ACCOUNT_ID must be configured."
+            echo "::error::ROSIEDAZZLERS_TOKEN is valid but cannot discover/read Pages project ${CF_PROJECT_NAME}."
             exit 4
           fi
 
@@ -141,17 +141,20 @@ jobs:
 
           for attempt in $(seq 1 12); do
             curl --fail-with-body --silent --show-error \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?env=preview&per_page=25" \
+              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=100" \
               "${AUTH[@]}" > /tmp/cf-deployments.json
             jq -e '.success == true' /tmp/cf-deployments.json >/dev/null
 
             matched_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_DEV_BRANCH" '
-              [.result[]? | select((.source.config.branch // "") == $branch and (.source.config.commit_hash // "") == $sha)][0].id // empty
+              [.result[]? | select(
+                (.deployment_trigger.metadata.branch // "") == $branch and
+                (.deployment_trigger.metadata.commit_hash // "") == $sha
+              )][0].id // empty
             ' /tmp/cf-deployments.json)
 
             if [[ -n "$matched_id" ]]; then
               matched_url=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | .url // empty' /tmp/cf-deployments.json | head -n1)
-              matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // .deployment_trigger.metadata.status // "unknown")' /tmp/cf-deployments.json | head -n1)
+              matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/cf-deployments.json | head -n1)
               break
             fi
 
@@ -159,9 +162,10 @@ jobs:
           done
 
           if [[ -z "$matched_id" ]]; then
-            latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.source.config.branch // "") == $branch)][0].source.config.commit_hash // "none"' /tmp/cf-deployments.json)
-            latest_url=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.source.config.branch // "") == $branch)][0].url // "none"' /tmp/cf-deployments.json)
-            echo "::error::Cloudflare does not yet show the exact dev commit ${GITHUB_SHA}. Latest dev commit is ${latest_sha} at ${latest_url}."
+            latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].deployment_trigger.metadata.commit_hash // "none"' /tmp/cf-deployments.json)
+            latest_url=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].url // "none"' /tmp/cf-deployments.json)
+            latest_env=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].environment // "none"' /tmp/cf-deployments.json)
+            echo "::error::Cloudflare does not yet show exact dev commit ${GITHUB_SHA}. Latest visible dev deployment is ${latest_sha} (${latest_env}) at ${latest_url}."
             exit 5
           fi
 
