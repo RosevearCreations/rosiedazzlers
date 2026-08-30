@@ -64,6 +64,9 @@ jobs:
       - name: Run Build 271 focused guard
         run: python scripts/build271_release_check.py
 
+      - name: Run Build 272 focused guard
+        run: python scripts/build272_release_check.py
+
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
         shell: bash
@@ -215,6 +218,6 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves source guards, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, and anonymous HTTP/module-load smoke only."
-            echo "Authenticated role/action behavior, real-device push delivery, and Cloudflare CPU/error metrics remain separate acceptance evidence."
+            echo "This workflow proves cumulative/source guards through Build 272, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, and anonymous HTTP/module-load smoke only."
+            echo "Authenticated role/action behavior, real-device/provider delivery, tax-source evidence entry, payment sandboxes, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain carried-forward manual/external evidence."
           } >> "$GITHUB_STEP_SUMMARY"
