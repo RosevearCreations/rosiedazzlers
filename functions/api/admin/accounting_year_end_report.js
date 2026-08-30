@@ -1,12 +1,14 @@
-
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireActionAccess } from "../_lib/action-permissions.js";
 import { buildYearEndReport } from "../_lib/accounting-gl.js";
 
 export async function onRequestOptions(){ return new Response('', {status:204, headers:corsHeaders()}); }
 export async function onRequestGet({request, env}){
   try {
-    const access = await requireStaffAccess({ request, env, capability:'manage_staff', allowLegacyAdminFallback:false });
+    const access = await requireStaffAccess({ request, env, capability:null, allowLegacyAdminFallback:false });
     if (!access.ok) return withCors(access.response);
+    const actionAccess = requireActionAccess(access.actor, 'finance.view');
+    if (!actionAccess.ok) return withCors(actionAccess.response);
     const url = new URL(request.url);
     const now = new Date();
     const year = Math.max(2020, Math.min(2100, Number(url.searchParams.get('year') || now.getFullYear())));
