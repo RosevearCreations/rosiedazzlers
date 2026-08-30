@@ -224,9 +224,9 @@ const CORE_INTEGRATIONS = [
     required: [
       { key: "STRIPE_SECRET_KEY", kind: "secret", obtain: "Stripe Dashboard / Developers / API keys", purpose: "Server-side Stripe API access." }
     ],
-    optional: [
-      { key: "STRIPE_WEBHOOK_SECRET", kind: "secret", conditional: true, obtain: "Stripe Dashboard / Developers / Webhooks / Rosie booking endpoint", purpose: "Verifies booking/payment webhook signatures." },
-      { key: "STRIPE_WEBHOOK_SECRET_QUOTES", kind: "secret", conditional: true, obtain: "Stripe Dashboard / Developers / Webhooks / quote endpoint", purpose: "Verifies quote-payment webhook signatures where that endpoint is retained." }
+    alternatives: [
+      [{ key: "STRIPE_WEBHOOK_SECRET", kind: "secret", obtain: "Stripe Dashboard / Developers / Webhooks / Rosie payment endpoint", purpose: "Preferred signing secret accepted by the current verified settlement webhook." }],
+      [{ key: "STRIPE_WEBHOOK_SECRET_QUOTES", kind: "secret", obtain: "Stripe Dashboard / Developers / Webhooks / retained quote endpoint", purpose: "Accepted signing-secret alias used by the current webhook when the primary name is absent." }]
     ],
     test: "Use Stripe test mode and Rosie Development. Complete a test payment and verify the signed webhook updates the intended booking/quote only.",
     callbacks_scopes: ["Webhook signing secret must match the exact Development endpoint being tested."],
@@ -238,10 +238,10 @@ const CORE_INTEGRATIONS = [
     category: "Alternative payment processing",
     required: [
       { key: "PAYPAL_CLIENT_ID", kind: "secret", obtain: "PayPal Developer Dashboard / Apps & Credentials", purpose: "Server-side OAuth client identifier." },
-      { key: "PAYPAL_CLIENT_SECRET", kind: "secret", obtain: "PayPal Developer Dashboard / Apps & Credentials", purpose: "Server-side OAuth client secret." }
+      { key: "PAYPAL_CLIENT_SECRET", kind: "secret", obtain: "PayPal Developer Dashboard / Apps & Credentials", purpose: "Canonical server-side OAuth client secret used by Rosie order capture." },
+      { key: "PAYPAL_WEBHOOK_ID", kind: "secret", obtain: "PayPal Developer Dashboard / Webhooks", purpose: "Required by the current webhook verifier before settlement can be trusted." }
     ],
     optional: [
-      { key: "PAYPAL_WEBHOOK_ID", kind: "secret", conditional: true, obtain: "PayPal Developer Dashboard / Webhooks", purpose: "Required by the current webhook verifier before settlement can be trusted." },
       { key: "PAYPAL_API_BASE", kind: "variable", obtain: "Set only when intentionally overriding the default PayPal API environment.", purpose: "Optional API base override." }
     ],
     test: "Use PayPal Sandbox on Rosie Development; create/capture a sandbox order and verify a signed webhook against PAYPAL_WEBHOOK_ID.",
