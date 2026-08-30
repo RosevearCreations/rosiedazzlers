@@ -65,7 +65,16 @@
       ack.checked = true;
       ack.disabled = true;
       const label = ack.closest("label");
-      if (label) label.innerHTML = `<input id="ack_power_water" type="checkbox" checked disabled /><span><strong>Rosie brings its own water and power</strong><br><span>We arrive fully mobile for standard detailing. We still need a safe driveway/work area and reasonable vehicle access.</span></span>`;
+      if (label && !/Rosie brings its own water and power/i.test(label.textContent || "")) {
+        const strong = label.querySelector("strong");
+        if (strong) strong.textContent = "Rosie brings its own water and power";
+        const spans = label.querySelectorAll("span");
+        const detail = spans.length > 1 ? spans[spans.length - 1] : null;
+        if (detail) {
+          detail.removeAttribute("data-policy-copy");
+          detail.textContent = "We arrive fully mobile for standard detailing. We still need a safe driveway/work area and reasonable vehicle access.";
+        }
+      }
     }
     const mobile = document.querySelector("#need_mobile_water_power");
     if (mobile) {
@@ -89,7 +98,7 @@
     document.querySelectorAll(".badge, .muted, .notice, p, li, span, strong").forEach((node) => {
       if (node.children.length) return;
       const text = String(node.textContent || "");
-      let next = text
+      const next = text
         .replaceAll("Customer provides power + water", "We bring our own water + power")
         .replaceAll("Our #1 choice", "Best value");
       if (next !== text) node.textContent = next;
