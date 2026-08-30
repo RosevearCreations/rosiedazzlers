@@ -1,132 +1,202 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 270  
+**Build:** 271  
 **Updated:** 2026-08-29
 
 ## North star
 
-Build a professional mobile-first detailing platform that connects:
+Build a professional mobile-first detailing platform connecting:
 
 `lead / quote → booking → assigned work → live customer/detailer interaction → proof → payment → review/public proof → repeat maintenance`
 
-while dormant modules remain asleep and server work is driven by real events rather than polling.
+while dormant modules stay asleep and server work is driven by real business events rather than polling.
 
-## P0 — accept the current Development baseline
+## Current Development baseline — Build 271
 
-1. Confirm the current Build 270 `dev` head is the Development Pages deployment only; keep live `main` untouched.
-2. Confirm `/app/`, `/app/customer/`, service worker, module resolver and cache-health identity are all Build 270.
-3. Confirm `/app/` is the Staff App Launcher, `/app/admin/` is Administration, and launcher/protected pages can return to the Public Site.
-4. Admin: verify all seven internal staff module cards and direct module entry.
-5. Detailer: Detailer only; direct Operations/Finance/Admin/I.T./DAIP/Socials access denied.
-6. Senior Detailer / Operations Manager: Detailer + Operations only.
-7. Accountant: Finance only; Finance work must not require broad staff administration.
-8. I.T. Specialist: I.T. only; notification/runtime actions must not grant business/payment mutation authority.
-9. Promoter: Socials/Marketing/Content/SEO integrations only.
-10. DAIP Manager: DAIP only and existing privacy gates remain authoritative.
-11. Prove launcher/module homes create no business-data polling and no-open-job Detailer remains asleep.
-12. Capture representative Cloudflare evidence: exceeded CPU = 0, script exceptions = 0, memory exceeded = 0.
+### Platform / navigation
 
-## Build 269 foundation retained
+- `/app/` = Staff App Launcher, not Administration.
+- `/app/admin/` = Business Administration.
+- Protected navigation can return to Public Site / All Staff Apps / Module Home / Account.
+- Eight independently loadable modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, Socials.
+- Public discovery remains static-first and SEO-first.
 
-Build 269 established:
+### Role ceilings
 
-- schema-tolerant TEXT/JSONB staff permission profiles;
-- explicit action-permission vocabulary layered under role/module ceilings;
-- notification administration scoped to `it.notifications.view` / `it.notifications.process`;
-- selected `/api/admin/` duplicate handlers consolidated into canonical wrappers;
-- Staff App Launcher/Public Site navigation clarity;
-- no new polling.
+- Detailer → Detailer.
+- Senior Detailer / Operations Manager → Detailer + Operations.
+- Accountant → Finance.
+- I.T. Specialist → I.T.
+- Promoter → Socials.
+- DAIP Manager → DAIP.
+- Admin → all seven internal modules and all actions.
 
-Continue replacing broad legacy capabilities with explicit actions in this order:
+Server authorization is authoritative. Hidden cards/links are not security.
 
-1. Operations assignment/schedule/customer/quote mutations.
-2. Finance read/post/reconcile/refund/close.
-3. I.T. diagnostics/test/runtime/module settings.
-4. Administration staff/catalog/inventory configuration.
-5. Socials review/edit/publish/provider integrations.
-6. DAIP intake/review/promote only behind privacy gates.
+### Permission architecture
 
-## Build 270 — event-driven Web Push foundation
+Layered evaluation:
 
-### Applied database authority
+1. role/module ceiling;
+2. per-user `permissions_profile.module_access` narrowing;
+3. global module runtime availability;
+4. explicit action permission;
+5. workflow/business-state checks.
 
-Development migration `build270_push_subscription_authority` is applied and canonicalized as:
+Per-user action overrides use `permissions_profile.action_access`. Build 271 makes real staff sessions and transition bridge-header auth normalize the historical TEXT profile through the same parser.
 
-`sql/2026-08-29_build270_push_subscription_authority.sql`
+## Build 270 retained — Web Push infrastructure
 
-It adds:
+Build 270 push infrastructure is already implemented in Development and should not be rebuilt on chat startup:
 
-- `notification_events.recipient_staff_user_id`;
-- server-only `notification_push_subscriptions`;
-- exact staff/customer owner constraint;
-- unique browser endpoint;
-- active-recipient indexes;
-- RLS enabled;
-- no direct `anon` / `authenticated` grants;
-- service-role CRUD only.
+- server-only push-subscription table + RLS;
+- existing customer notification preferences reused;
+- separate staff/customer authenticated subscription endpoints;
+- explicit click-to-subscribe only;
+- VAPID key pair in Supabase Vault;
+- service-role-only VAPID RPCs;
+- active `rosie-web-push` Supabase Edge Function;
+- `web-push@3.6.7` pinned;
+- 404/410 subscription revocation;
+- existing notification queue/retry/backoff remains the single delivery authority;
+- I.T.-only remote push test;
+- no notification polling loop.
 
-Reuse existing customer notification preferences. Do not create another customer preference system.
+Remaining work is acceptance/evidence and preference UX, not another push architecture.
 
-### Subscription/API boundary
+## Build 271 implemented — communication + explicit actions
 
-Staff endpoints:
+### Active communication boundary
 
-- `/api/push_config`
-- `/api/push_subscribe`
-- `/api/push_unsubscribe`
+Reuse the existing Build 210 unread/viewed/notified timestamps. Do not add a parallel unread system.
 
-Customer endpoints:
+New live-message writes are allowed only while the booking/job is in an active live state. Completed/inactive history remains readable but live customer/detailer messages close.
 
-- `/api/customer_push_config`
-- `/api/customer_push_subscribe`
-- `/api/customer_push_unsubscribe`
+Deep links:
 
-Rules:
+- customer → exact progress message form;
+- assigned staff → exact bounded Detailer job/live-job host.
 
-- subscription begins only from an explicit user click;
-- staff/customer session ownership is separate;
-- customer remote push additionally requires existing `notification_opt_in=true`;
-- VAPID private key never enters source/browser responses;
-- no push polling/timers.
+The Detailer deep-link resolver is one-shot and does not poll for missing jobs.
 
-### Queue/event integration
+### Operations actions converted
 
-The existing `notification_events` retry/backoff queue remains the single delivery authority.
+- assignment/crew changes → `operations.assignment.manage`;
+- date/slot/range block/unblock writes → `operations.schedule.manage`.
 
-- `channel='push'` uses staff/customer UUID recipient authority.
-- Customer live progress/media/comment/message events may enqueue one secondary push record only if opted in, event preference allows it, and an active customer subscription exists.
-- Assigned-staff live alerts may enqueue one push record for `bookings.assigned_staff_user_id` when that staff account has an active subscription.
-- Device fan-out belongs in the sender/provider, not in booking/message request handling.
-- `provider-dispatch.js` has a fail-closed push webhook slot; missing provider configuration must produce a clear failure, never a false `sent` state.
+### Finance actions converted
 
-### Build 270 acceptance still open
+- payment application write → `finance.post`;
+- bank reconciliation read → `finance.view`;
+- reconciliation save → `finance.reconcile`;
+- period-close read → `finance.view`;
+- period-close write → `finance.period.close`.
 
-- current `dev` SHA deployed to Development Pages;
-- launcher/cache identity acceptance;
-- Admin + all focused-role direct URL/API acceptance;
-- staff save/edit against historical TEXT profile column;
-- real Web Push sender/VAPID secrets configured in a secret store;
-- one staff and one opted-in customer remote Web Push accepted;
-- expired/410 endpoint revocation behavior;
-- queue retry/failure audit evidence;
-- representative Cloudflare CPU/error evidence.
+Accountant defaults now include `finance.period.close`; Detailer has no Finance action.
 
-## Next release — Build 271: communication acceptance + explicit actions
+### Build 271 source gates
 
-After remote push sender acceptance:
+- focused Build 271 release guard: PASS;
+- cumulative Build 270 guard: PASS against canonical authorities;
+- 598 Functions static checks;
+- 63 critical JS syntax checks;
+- customer profile quality PASS;
+- route-copy parity PASS;
+- global one-H1 PASS;
+- no new polling in Build 271 paths.
 
-1. Complete Customer ↔ Detailer/Operations unread/message delivery state.
-2. Deep-link push into the exact active job/message/quote/payment context.
-3. Archive/sleep completed-job messaging cleanly.
-4. Convert Operations high-value writes to explicit actions.
-5. Convert Finance high-value reads/writes/refunds/reconciliation/close to explicit actions.
-6. Add notification preference/quiet-hours editing UI only where the stored authority is already present.
-7. Keep event creation bounded; never add an “anything changed?” client poll.
+## P0 — deployed Build 271 acceptance
 
-## Build 272 — native mobile packaging
+Before calling Build 271 Development-proven:
 
-After the web/PWA event model is proven, package the same codebase with Capacitor for Android/iOS.
+1. Confirm the exact current `dev` head is the Development Pages deployment; keep `main` untouched.
+2. Admin: all seven internal modules visible/accessible.
+3. Detailer: Detailer only; Operations/Finance/Admin/I.T./DAIP/Socials direct URLs/APIs denied.
+4. Senior Detailer: Detailer + permitted Operations reads only; high-risk schedule/assignment mutation follows action defaults/overrides.
+5. Operations Manager: assignment/schedule writes pass; Finance/Admin/I.T./DAIP/Socials denied.
+6. Accountant: Finance reads/post/reconcile/period-close pass; Operations/Admin/I.T./DAIP/Socials denied.
+7. I.T. Specialist: I.T. notification/runtime controls pass; business/payment mutations denied.
+8. Promoter: Socials only; publish/manage actions scoped there.
+9. DAIP Manager: DAIP only and existing privacy gates remain authoritative.
+10. Verify active customer ↔ Detailer message flow and push deep links on real sessions/devices.
+11. Verify completed/inactive job message writes reject cleanly while history stays readable.
+12. Capture Cloudflare evidence: exceeded CPU = 0, script exceptions = 0, memory exceeded = 0 for representative use.
+
+## Build 272 candidate — finish high-value action extraction
+
+Continue explicit permissions before adding more broad feature surface.
+
+### Operations
+
+Convert remaining high-risk mutation paths in this order:
+
+1. quote create/edit/send/accept-state changes;
+2. customer identity/contact/service-history mutations;
+3. booking cancellation/reschedule/override;
+4. incident/report approval and customer-visible publishing;
+5. review-request queue mutation.
+
+Keep read-only operational views separate from mutation actions.
+
+### Finance
+
+Convert remaining high-risk paths:
+
+1. refunds and refund approvals;
+2. deposit/final-balance settlement mutation;
+3. manual journal posting / adjusting entries;
+4. tax-close/lock actions;
+5. payroll finalization;
+6. accountant export generation where sensitive.
+
+Do not make Accountant depend on broad `manage_staff` authority.
+
+### I.T. / Administration / Socials / DAIP
+
+Then continue:
+
+- I.T.: diagnostics/test/runtime/module settings;
+- Administration: staff/catalog/inventory configuration;
+- Socials: review/edit/publish/provider actions;
+- DAIP: intake/review/promote only behind private-media/consent gates.
+
+## Preference / communication UX
+
+Only extend stored authorities already present:
+
+- customer notification opt-in/channel/event preferences;
+- push subscription event preferences;
+- subscription quiet-hours fields where a clear user-facing need exists.
+
+Do not create another customer-preferences table or another queue.
+
+Next UX priorities:
+
+- clear notification/preferences surface in Customer App;
+- staff device preference/quiet-hours surface in I.T. or Account;
+- clear “live messaging closed” state on completed jobs;
+- unread indicators in Operations/Detailer using existing viewed timestamps;
+- deep links to quote/payment context where events already know those targets.
+
+## Module extraction priority
+
+Some module cards still open compatibility pages. Extract the highest-use workflows into lazy module components in this order:
+
+1. Operations customer/booking/quote support;
+2. Finance accounting/payments/reconciliation/period close;
+3. I.T. Startup/Test/Runtime health;
+4. Administration Staff/Inventory/Catalog;
+5. Socials Content/Photo/SEO/Integrations;
+6. DAIP only as privacy/cost/processing gates permit.
+
+Retire compatibility routes only after authorization, mobile/desktop behavior and server-load evidence are clean.
+
+## Native packaging after web event model is proven
+
+### Mobile
+
+Use one codebase with Capacitor rather than forking business logic.
 
 Priorities:
 
@@ -134,37 +204,26 @@ Priorities:
 - camera/photo/video capture;
 - weak-network awareness and safe retry/cancel;
 - deep links to assigned job/message/payment;
-- background behavior only where the OS and business case require it;
+- background behavior only where OS + business need justify it;
 - real Wi-Fi/cellular acceptance.
 
-Do not fork business logic into a second mobile application.
+### Desktop / tray
 
-## Build 273 — desktop/tray only if justified
+Tauri remains optional/later. Add a true tray/startup wrapper only if it creates clear operational value. A minimized desktop shell must not keep Detailer/Finance/DAIP subsystems awake.
 
-Use a thin Tauri wrapper only if true Windows/macOS tray/startup/background notifications create clear value. A minimized desktop shell must not keep Detailer/Finance/DAIP subsystems awake.
+## Current go-live evidence still open
 
-## Continue module extraction
+Keep these bridged to the **current release**, never stale historical build numbers:
 
-The module card hierarchy owns 60+ existing workflows, but some still open compatibility pages. Migrate high-use workflows into lazy module components in this order:
-
-1. Operations customer/booking/quote support.
-2. Finance accounting/payments/payroll/close.
-3. I.T. Startup/Test/Runtime health.
-4. Administration Staff/Inventory/Catalog.
-5. Socials Content/Photo/SEO/Integrations.
-6. DAIP only as privacy/cost/processing gates permit.
-
-Retire a compatibility route only after authorization, mobile/desktop behavior and server-load evidence are clean.
-
-## Go-live evidence still open
-
-- Stripe test deposit/final-balance/refund/webhook settlement.
-- PayPal sandbox parity decision if PayPal remains in scope.
-- actual email/SMS/Web Push provider delivery, retry and failure evidence.
-- transactional inventory posting/reversal/idempotency/shortage acceptance.
-- Supabase restore rehearsal and Cloudflare deployment rollback.
-- real-device CSS, keyboard/focus/contrast/reduced-motion/accessibility acceptance.
-- Search Console, sitemap/canonical/schema and Google Business Profile evidence.
+- Stripe test deposit/final-balance/refund/webhook settlement;
+- PayPal sandbox parity decision/acceptance if PayPal remains in scope;
+- email/SMS/Web Push real-provider delivery/retry/failure evidence;
+- transactional inventory posting/reversal/idempotency/shortage acceptance;
+- Supabase restore rehearsal;
+- Cloudflare deployment rollback rehearsal;
+- DAIP private media processing/retry/cancel/dead-letter/usage evidence;
+- real-device CSS, keyboard/focus/contrast/reduced-motion/accessibility acceptance;
+- Search Console, sitemap/canonical/schema and Google Business Profile evidence;
 - controlled invite-only soft launch with monitoring.
 
 ## DAIP direction
@@ -173,19 +232,20 @@ DAIP remains private/governed and independently switchable:
 
 1. private ingestion/storage authorization;
 2. proxy/thumbnail/contact-sheet processing outside ordinary Pages request paths;
-3. retry/cancel/dead-letter and usage/cost recording;
+3. retry/cancel/dead-letter + usage/cost recording;
 4. privacy/consent review;
 5. evidence/lesson/content-package review;
 6. approved-only Gallery/Social handoff;
 7. never automatic public publishing.
 
-## Public/business work after reliability
+## Public/business priorities after reliability
 
 - replace remaining visual placeholders with approved Rosie-owned proof;
-- improve Gallery Evidence/Technique/Efficiency proof;
+- strengthen Gallery Evidence/Technique/Efficiency proof;
 - continue service-cost/minimum-price authority so labour/consumables/overhead protect margins;
 - measure quote-to-booking and repeat-maintenance conversion before adding more marketing integrations;
-- keep Oxford/Norfolk local pages genuinely useful and distinct.
+- keep Oxford/Norfolk local pages genuinely useful/distinct;
+- maintain detailed condition-aware service/add-on landing pages and one meaningful H1 per public page.
 
 ## Permanent guardrails
 
@@ -196,7 +256,7 @@ DAIP remains private/governed and independently switchable:
 - optional refresh pauses while hidden and should be event/manual first;
 - heavy aggregation/filtering belongs in Postgres, not Worker JavaScript;
 - no automatic replay of ambiguous non-idempotent writes;
-- server authorization is authoritative; hidden navigation is not security;
+- server authorization is authoritative;
 - customer/private DAIP media never becomes public without explicit consent/review;
 - secrets never belong in browser code or Git;
-- `main`/live Production is promoted only deliberately from an accepted Development release.
+- `main` / live Production is promoted only deliberately from an accepted Development release.
