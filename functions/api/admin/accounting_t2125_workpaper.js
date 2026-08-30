@@ -2,6 +2,8 @@ import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.j
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { buildYearEndReport } from "../_lib/accounting-gl.js";
 import { buildT2125WorkpaperFromYearEnd } from "../_lib/t2125-workpaper.js";
+import { loadTaxSupport, calculateHomeOfficeWorkpaper } from "../_lib/accounting-tax-support.js";
+import { enrichT2125WithTaxSupport } from "../_lib/t2125-tax-support.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -23,13 +25,23 @@ export async function onRequestGet({ request, env }) {
     const url = new URL(request.url);
     const now = new Date();
     const year = Math.max(2020, Math.min(2100, Number(url.searchParams.get("year") || now.getFullYear())));
-    const yearEnd = await buildYearEndReport(env, { year });
-    const workpaper = buildT2125WorkpaperFromYearEnd(yearEnd, { year });
+    const [yearEnd, support] = await Promise.all([
+      buildYearEndReport(env, { year }),
+      loadTaxSupport(env, { year })
+    ]);
+    if (support.home_office) {
+      support.home_office_calculation = calculateHomeOfficeWorkpaper(support.home_office, {
+        fallbackNetIncome: Math.max(0, Number(yearEnd?.totals?.net_income_cad || 0))
+      });
+    }
+    const ledgerWorkpaper = buildT2125WorkpaperFromYearEnd(yearEnd, { year });
+    const workpaper = enrichT2125WithTaxSupport(ledgerWorkpaper, support);
 
     return withCors(json({
       ok: true,
       year,
       workpaper,
+      tax_support_readiness: support.readiness || [],
       year_end_totals: yearEnd?.totals || {},
       generated_at: new Date().toISOString()
     }));
