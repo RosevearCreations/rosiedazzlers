@@ -1,13 +1,13 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 270  
+**Build:** 271  
 **Updated:** 2026-08-29  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
-## Current platform
+## Current platform boundary
 
-Rosie Dazzlers remains **one secured platform**, not separate codebases. The public website stays static-first for SEO while protected work is divided into eight independently loadable modules:
+Rosie Dazzlers remains one secured platform with a static-first public website and eight independently loadable modules:
 
 1. Customer
 2. Detailer
@@ -22,24 +22,24 @@ Permanent runtime rule:
 
 > **Role defines the maximum module set; the staff profile may narrow non-admin access; the global module switch may make a module unavailable; operational state decides whether an authorized module actually wakes.**
 
-Opening a launcher/module home must not load unrelated business datasets.
+`/app/` is the **Staff App Launcher**. `/app/admin/` is Administration. Protected staff navigation includes Public Site / All Staff Apps / Module Home / Account. `main` / live Production is not part of ordinary Development work and remains untouched unless promotion is explicitly requested.
 
-## Current Development database authority
+## Current Development data authority
 
-Supabase project: RosieDazzlers (`cwxhhvwpilmrfwxirixx`).
+Supabase Development project: RosieDazzlers (`cwxhhvwpilmrfwxirixx`).
 
-Verified Development drift that must remain supported:
+Important historical schema drift that current runtime must support:
 
 - `staff_users.permissions_profile` is `text` in the long-lived Development database;
 - `app_management_settings.value` is `jsonb`;
-- Build 267 schema-tolerant role/module migration was applied successfully;
-- current Admin module access was verified with all seven internal module flags true.
+- Build 267 schema-tolerant role/module migration is applied;
+- Admin has all seven internal module grants.
 
-Do not blindly change `permissions_profile` to JSONB until all consumers and environments are audited. Build 269 runtime code accepts TEXT or JSONB and preserves the observed representation when saving staff.
+Do not blindly convert `permissions_profile` to JSONB. Build 269/271 parsing accepts TEXT or object JSON and preserves the observed representation when staff profiles are saved.
 
 ## Role / module / action authority
 
-Staff role ceilings:
+Role ceilings:
 
 | Role | Maximum modules |
 |---|---|
@@ -50,205 +50,136 @@ Staff role ceilings:
 | `it_specialist` | I.T. |
 | `promoter` | Socials & Promotion |
 | `daip_manager` | DAIP |
-| `admin` | all seven internal staff modules |
+| `admin` | all seven internal modules |
 
 Authorities:
 
-- per-user module access: `staff_users.permissions_profile.module_access`;
+- module grants: `staff_users.permissions_profile.module_access`;
 - per-user action overrides: `staff_users.permissions_profile.action_access`;
-- global module availability: `app_management_settings.module_runtime_flags`;
-- action vocabulary/defaults: `data/action_permissions.json`.
+- action vocabulary/defaults: `data/action_permissions.json`;
+- global module availability: `app_management_settings.module_runtime_flags`.
 
-A role/module ceiling is checked before action access, so an action grant cannot escape the role's module ceiling. Admin remains all-modules/all-actions by design.
+Module/role ceilings are evaluated before action access. Admin remains all-modules/all-actions by design.
 
-## Private navigation
+Build 271 additionally makes the transition `x-staff-user-id` / `x-staff-email` bridge path parse `permissions_profile` through the same helpers as real staff sessions. Supported auth paths therefore no longer interpret the historical TEXT profile differently.
 
-`/app/` is the **Staff App Launcher**, not Business Administration. `/app/admin/` is the Administration module home.
+## Build 270 retained — event-driven Web Push
 
-Build 269/270 navigation provides:
+Build 270 is infrastructure-complete in Development:
 
-- explicit **Public Site** return on `/app/`;
-- protected-page return bar: Public Site / All Staff Apps / Module Home / Account;
-- module-local card hierarchy instead of the historical flat Admin menu.
+- `notification_push_subscriptions` is server-only with RLS enabled;
+- browser roles have no direct table grants;
+- staff/customer subscription ownership is separate;
+- customer remote push requires the existing Rosie notification opt-in;
+- VAPID key material is stored in Supabase Vault, not Git/browser source;
+- service-role-only public/private VAPID RPCs exist;
+- Supabase Edge Function `rosie-web-push` is deployed with JWT verification and pinned `web-push@3.6.7`;
+- stale 404/410 subscriptions are revoked by the sender;
+- the existing `notification_events` queue remains the only retry/backoff authority;
+- I.T. has a bounded remote-push test path;
+- no push polling service exists.
 
-Canonical authorities:
+Do not re-create the push table, VAPID keys, second queue, or sender on new-chat startup unless read-only verification proves drift.
 
-- `data/app_modules.json`
-- `data/internal_navigation.json`
-- `data/route_module_ownership.json`
-- `data/action_permissions.json`
-- `assets/app-core/module-resolver.js`
-- `assets/app-core/module-navigation.js`
-- `functions/api/_lib/staff-auth.js`
-- `functions/api/_lib/permissions-profile.js`
-- `functions/api/_lib/action-permissions.js`
-- `sql/2026-08-29_build267_role_module_hierarchy.sql`
+## Build 271 — active communication boundary
 
-## Build 270 — event-driven Web Push foundation
+Existing unread/viewed timestamps from Build 210 remain authoritative. No replacement message/read table was added.
 
-Build 270 extends the existing notification queue; it does not add a second polling service.
+Shared live communication states:
 
-### Database — applied to Development
+- active: `accepted`, `dispatched`, `arrived`, `detailing`, `paused`, `in_progress`, `active`;
+- completed/closed/non-live states do not accept new live-message writes.
 
-Applied Supabase migration: `build270_push_subscription_authority`.
+Completed progress history remains readable, but these write paths now fail closed after the job is no longer active:
 
-Canonical source:
+- public-token customer progress comments;
+- signed-in customer progress comments;
+- Detailer live job notes/messages;
+- associated live alert creation.
 
-- `sql/2026-08-29_build270_push_subscription_authority.sql`
+Push deep links now target context instead of only a module home:
 
-Changes:
+- customer: `/progress.html?token=<token>#commentForm`;
+- assigned staff: `/app/detailer/?job=<booking-id>#liveJobHost`.
 
-- added `notification_events.recipient_staff_user_id`;
-- added server-only `notification_push_subscriptions`;
-- owner is exactly one of staff/customer;
-- endpoint is unique;
-- active staff/customer indexes added;
-- RLS enabled;
-- direct `public`, `anon`, `authenticated` grants revoked;
-- CRUD granted to `service_role` only.
+The Detailer shell resolves a requested job only inside its existing bounded workspace, selects it once, and wakes the live-job bundle only if the normal runtime policy allows it. Missing links do not start a search/poll loop.
 
-Existing customer notification preferences are reused; no duplicate customer-preference table was introduced.
+## Build 271 — explicit high-value Operations / Finance actions
 
-### Staff/customer subscription APIs
+Operations writes converted:
 
-Staff:
+- assignment/crew changes → `operations.assignment.manage`;
+- date, slot and range block/unblock writes → `operations.schedule.manage`.
 
-- `/api/push_config`
-- `/api/push_subscribe`
-- `/api/push_unsubscribe`
+Finance converted:
 
-Customer:
+- payment application write → `finance.post`;
+- bank reconciliation read → `finance.view`;
+- bank reconciliation write → `finance.reconcile`;
+- period-close read → `finance.view`;
+- period-close write → `finance.period.close`.
 
-- `/api/customer_push_config`
-- `/api/customer_push_subscribe`
-- `/api/customer_push_unsubscribe`
+`finance.period.close` is now an Accountant default. Converted high-risk writes do not enable the legacy admin-password fallback.
 
-Staff and customer ownership use different authenticated session cookies/routes. Customer remote push requires the existing customer `notification_opt_in=true`; browser permission alone never overrides Rosie consent.
-
-### Client behavior
-
-`assets/app-core/install-client.js`:
-
-- never creates a PushSubscription automatically;
-- subscription begins only after the user clicks **Enable device notifications**;
-- chooses staff or customer API routes from the current app module;
-- exposes only the VAPID public key to the browser;
-- local test notifications continue to work if remote delivery is not configured;
-- contains no polling timer.
-
-`service-worker.js` remains thin/event-driven and contains push + notification-click handlers. Heavy Detailer/Operations/Admin/Finance modules are not eagerly precached.
-
-Build/cache identity is synchronized at 270 across:
-
-- `/app/`
-- `/app/customer/`
-- `module-resolver.js`
-- `service-worker.js`
-- `cache-health-controls.js`.
-
-### Notification queue / live-event integration
-
-The existing `notification_events` retry/backoff queue now recognizes `channel='push'` and staff/customer UUID recipients.
-
-`provider-dispatch.js` has a fail-closed Web Push provider slot:
-
-- `NOTIFICATIONS_PUSH_WEBHOOK_URL`
-- `NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN` (or shared provider token fallback)
-
-Customer event hooks may enqueue one secondary push event only when:
-
-- Rosie customer notifications are opted in;
-- the corresponding event preference permits it;
-- an active customer push subscription exists.
-
-Assigned-staff live-interaction events may enqueue one push event for `bookings.assigned_staff_user_id` when that staff account has an active subscription. Development schema verification confirmed this booking UUID column exists.
-
-No per-device fan-out or recurring watcher runs inside booking/message requests. Actual device fan-out belongs in the push provider/sender.
-
-## Notification action permissions
-
-The existing notification administration remains scoped to explicit I.T. actions:
-
-- list/read queue → `it.notifications.view`;
-- process/retry queue → `it.notifications.process`.
-
-This avoids granting `manage_staff` or other unrelated business powers merely to operate notification infrastructure.
+The action registry retains its Build 269 origin and is marked `extended_through_build: 271`.
 
 ## Wake/sleep and CPU rules
 
 - no open Detailer job → no live job bundle/feed/media/message monitor;
-- Detailer live bundle wakes only for eligible active work;
-- Operations datasets load only when the operator selects a view;
-- Finance/Admin/I.T./DAIP/Socials shells do not preload subsystem datasets;
-- Customer progress refresh is bounded/active-state only;
-- module/runtime flag resolution is cached and timer-free;
-- notification/push permissions do not create timers;
-- real events/manual actions invoke queue work;
-- ambiguous non-idempotent writes are not auto-replayed;
-- `_routes.json` keeps Functions under `/api/*`.
+- Detailer workspace is bounded and has no recurring poll;
+- Operations datasets load only when selected;
+- Customer progress uses active-state one-shot refresh and sleeps while hidden/inactive;
+- completed jobs stop accepting live-message writes;
+- push/deep-link behavior is event-driven and one-shot;
+- module/runtime flags are cached and timer-free;
+- no automatic replay of ambiguous non-idempotent writes;
+- Functions remain under `/api/*`.
 
-## Build 268 repository hygiene retained
+## Current validation authority
 
-Build 268 removed redundant source/history bloat while preserving Git history:
+Cumulative guard: `scripts/release_check.py`  
+Focused Build 271 guard: `scripts/build271_release_check.py`
 
-- migration history lives under `sql/`;
-- Cloudflare Functions live under `functions/api/`;
-- obsolete root API/shim copies and no-DDL marker migrations removed;
-- historical Markdown/report artifacts removed from working tree;
-- selected `/api/admin/` duplicates continue being replaced with tiny wrappers to canonical handlers;
-- `.gitignore` protects against ZIP/log/cache/root-migration accumulation.
+Current source validation:
 
-## Current release guard
+- Build 271 focused guard: **PASS**;
+- cumulative Build 270 guard: **PASS** after aligning the local reconstruction with canonical GitHub copies;
+- Cloudflare Pages Functions static check: **598 JS files**;
+- 63 critical syntax checks;
+- customer-profile quality: PASS;
+- route-copy synchronization: PASS;
+- global one-H1 SEO check: PASS;
+- no new polling loop in Build 271 paths.
 
-`scripts/release_check.py` is the capability-based current guard. Build 270 protects:
+Canonical Build 271 detail: `BUILD271_SUMMARY.md`.
 
-- repository hygiene;
-- module/role/action boundaries;
-- no-idle-poll rules;
-- schema-tolerant Build 267 authority;
-- TEXT/JSONB staff-profile compatibility;
-- Build 270 launcher/cache identity;
-- server-only push migration/table authority;
-- authenticated staff/customer push ownership;
-- opt-in-only customer push;
-- no VAPID private-key exposure in browser assets/config response fields;
-- Functions syntax/static checks;
-- route parity;
-- service/pricing mirrors;
-- customer-profile quality;
-- global one-H1 SEO guard.
+## Still requires deployed / external evidence
 
-## Still requires deployed/external evidence
+Do not mark these complete from source work alone:
 
-Do **not** call these complete from source/database setup alone:
-
-- confirm current Build 270 `dev` SHA is the Development Pages deployment;
-- deployed Staff App Launcher/Public Site navigation acceptance;
-- Admin and each focused role menu/direct-URL/API acceptance;
-- staff save/edit acceptance against the historical TEXT profile column;
+- current Build 271 `dev` revision deployed to Development Pages;
+- Admin + focused-role launcher/direct-URL/API matrix;
+- real-session active-job customer ↔ Detailer deep-link/message acceptance;
+- closed-job messaging UX acceptance;
 - representative Cloudflare CPU/script/memory evidence;
-- real VAPID key pair in a secret store;
-- real encrypted Web Push provider/sender configuration and staff/customer delivery evidence;
-- stale/410 push subscription revocation behavior;
-- Stripe payment/refund/webhook acceptance;
+- staff/customer remote Web Push delivery evidence where not already captured;
+- Stripe deposit/final-balance/refund/webhook acceptance;
 - PayPal sandbox decision/acceptance if retained;
 - inventory posting/reversal/idempotency acceptance;
-- backup/restore and Cloudflare rollback rehearsal;
-- real-device mobile/PWA/accessibility acceptance;
-- Search Console/Google Business Profile evidence;
-- DAIP private processing/derivative/retry/dead-letter acceptance.
+- Supabase restore + Cloudflare rollback rehearsal;
+- DAIP private processing/retry/dead-letter acceptance;
+- real-device PWA/mobile/accessibility acceptance.
 
 ## Immediate engineering direction
 
-1. Complete Build 270 source guard and deployed Development acceptance.
-2. Configure a secure VAPID sender/provider and prove one staff + one opted-in customer Web Push delivery.
-3. Revoke stale/expired subscriptions based on real provider response evidence.
-4. Continue converting broad legacy capabilities to explicit action permissions, beginning with Operations and Finance high-value mutations.
-5. Finish customer ↔ Detailer/Operations message unread/deep-link behavior using event-driven wakeups.
-6. After PWA/event behavior is proven, move toward Capacitor mobile packaging; Tauri tray packaging remains later/optional.
-
-The target is unchanged: **dormant modules generate no periodic server traffic; real business events wake only the users/modules that need them.**
+1. Finish deployed Build 271 role/action/message acceptance.
+2. Continue Operations explicit actions for quote/customer mutations.
+3. Continue Finance explicit actions for refund/settlement/high-risk posting paths.
+4. Add quiet-hours/preference UI only where existing stored authority supports it; do not invent another preferences system.
+5. Continue lazy module extraction for the highest-use Operations and Finance workflows.
+6. Keep Stripe/PayPal/inventory/restore/DAIP blockers bridged to the current release rather than stale historical build numbers.
+7. After the web/PWA event model is proven on real devices, proceed toward Capacitor mobile packaging; keep Tauri tray packaging optional/later.
 
 ## Documentation policy
 
-Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Update them in place; Git history is the archive.
+Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Update them in place. Git history is the archive.
