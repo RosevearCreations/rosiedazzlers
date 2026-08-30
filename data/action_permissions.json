@@ -1,6 +1,6 @@
 {
   "build": 269,
-  "extended_through_build": 272,
+  "extended_through_build": 273,
   "version": 1,
   "authority": "staff_users.permissions_profile.action_access",
   "principles": {
@@ -32,6 +32,7 @@
     "finance.period.close": {"module":"finance"},
     "finance.refund.manage": {"module":"finance"},
     "finance.settlement.manage": {"module":"finance"},
+    "finance.tax.manage": {"module":"finance"},
     "daip.view": {"module":"daip"},
     "daip.manage": {"module":"daip"},
     "socials.view": {"module":"socials"},
@@ -42,7 +43,7 @@
     "detailer": ["detailer.job.view","detailer.job.update","detailer.message.send"],
     "senior_detailer": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.quote.manage"],
     "operations_manager": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.schedule.manage","operations.assignment.manage","operations.customer.manage","operations.quote.manage"],
-    "accountant": ["finance.view","finance.post","finance.reconcile","finance.period.close","finance.refund.manage","finance.settlement.manage"],
+    "accountant": ["finance.view","finance.post","finance.reconcile","finance.period.close","finance.refund.manage","finance.settlement.manage","finance.tax.manage"],
     "it_specialist": ["it.runtime.view","it.runtime.manage","it.notifications.view","it.notifications.process","it.modules.manage"],
     "promoter": ["socials.view","socials.manage","socials.publish"],
     "daip_manager": ["daip.view","daip.manage"],
