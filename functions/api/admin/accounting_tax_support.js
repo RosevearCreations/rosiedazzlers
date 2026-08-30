@@ -54,6 +54,7 @@ export async function onRequestPost({ request, env }) {
     const actionAccess = requireActionAccess(access.actor, "finance.tax.manage");
     if (!actionAccess.ok) return withCors(actionAccess.response);
 
+    validateOptionalReferences(body);
     const year = cleanYear(
       body?.tax_year || body?.year || body?.home_office?.tax_year || body?.vehicle_year?.tax_year || body?.tax_year_support?.tax_year
     );
@@ -71,13 +72,32 @@ export async function onRequestPost({ request, env }) {
 
     return withCors(json({ ok: true, year, result, support }));
   } catch (err) {
-    const status = /required|cannot exceed|unsupported/i.test(String(err?.message || "")) ? 400 : 500;
+    const status = /required|cannot exceed|unsupported|invalid/i.test(String(err?.message || "")) ? 400 : 500;
     return withCors(json({ error: err?.message || "Unexpected server error." }, status));
   }
 }
 
 export async function onRequestDelete() {
   return withCors(methodNotAllowed());
+}
+
+function validateOptionalReferences(body = {}) {
+  const operation = String(body.operation || "");
+  const values = [];
+  if (operation === "save_mileage") {
+    values.push([body?.mileage?.booking_id, "booking_id"], [body?.mileage?.document_id, "document_id"]);
+  }
+  if (operation === "save_capital_asset") {
+    values.push([body?.asset?.inventory_item_id, "inventory_item_id"], [body?.asset?.document_id, "document_id"]);
+  }
+  for (const [value, label] of values) {
+    const s = String(value || "").trim();
+    if (s && !isUuid(s)) throw new Error(`Invalid ${label}.`);
+  }
+}
+
+function isUuid(value) {
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(value || "").trim());
 }
 
 function cleanYear(value) {
