@@ -16,11 +16,13 @@
     .key-line{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;word-break:break-word;color:#bfdbfe;padding:7px 8px;border-radius:8px;background:rgba(15,23,42,.48);margin-top:8px}
     .requirement{margin-top:8px;padding:9px;border-radius:10px;border:1px solid rgba(148,163,184,.16);background:rgba(2,6,23,.25)}
     .requirement-head{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.requirement-meta{font-size:.82rem;color:#cbd5e1;margin-top:5px}.requirement-meta strong{color:#e2e8f0}
+    .it-help-button{display:inline-flex;align-items:center;justify-content:center;width:1.75rem;height:1.75rem;border:1px solid #93c5fd;border-radius:50%;background:rgba(59,130,246,.08);color:#bfdbfe;font-weight:900;font-family:Georgia,serif;font-style:italic;cursor:pointer;flex:0 0 auto;line-height:1;margin-left:auto}
+    .it-help-button:hover,.it-help-button:focus-visible{background:rgba(59,130,246,.2);outline:2px solid #93c5fd;outline-offset:2px}.it-help-button--heading{margin-left:.35rem;vertical-align:middle}
     .tip-list{margin:8px 0 0;padding-left:18px}.tip-list li{margin:6px 0;color:#cbd5e1}.callout{border-left:4px solid #facc15;padding:12px 14px;border-radius:10px;background:rgba(250,204,21,.08)}
     .action-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.workflow{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px}.workflow>div{padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07)}
     .section-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}.summary-pills{display:flex;gap:6px;flex-wrap:wrap}.detail-block{margin-top:10px;padding-top:8px;border-top:1px solid rgba(148,163,184,.15)}
-    .detail-block strong{color:#e2e8f0}.empty{color:#94a3b8}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-    @media(max-width:620px){.action-row .btn{width:100%}.integrations-grid{grid-template-columns:1fr}}
+    .detail-block strong{color:#e2e8f0}.empty{color:#94a3b8}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.help-instruction{margin-top:10px;color:#bfdbfe;font-weight:750}
+    @media(max-width:620px){.action-row .btn{width:100%}.integrations-grid{grid-template-columns:1fr}.it-help-button{width:2rem;height:2rem}}
   </style>
 </head>
 <body data-page="admin-integrations" data-help-page="admin-integrations" data-build274="it-help-foundation">
@@ -43,6 +45,7 @@
             <div class="badge">Build 274 · Administrator only</div>
             <h1>I.T. connections</h1>
             <p>Rosie's authoritative catalogue for required integrations, exact runtime names, safe storage locations, acquisition instructions, connection presence, testing, callbacks/scopes and troubleshooting. This page never displays or accepts a raw secret.</p>
+            <p class="help-instruction">Use the circled <strong>i</strong> beside any external requirement for the exact provider setup steps, permissions, callback/storage instructions and test procedure.</p>
           </div>
           <div class="panel"><div class="kicker">Current environment</div><strong id="modeLabel">Loading…</strong><p id="modeHelp" class="muted">Checking configuration presence without exposing values.</p></div>
         </div>
@@ -71,47 +74,62 @@
       <section class="section"><div class="panel"><div class="section-heading"><div><h2>Core application services</h2><p class="muted">Database, storage, payments and notification delivery used by current Rosie runtime paths.</p></div><div id="coreSummary" class="summary-pills"></div></div><div id="coreList" class="integrations-grid"><div class="notice">Loading core services…</div></div></div></section>
       <section class="section"><div class="panel"><div class="section-heading"><div><h2>Consent-first website measurement</h2><p class="muted">Public marketing tags remain consent-gated. Internal, customer, booking, payment and progress routes are excluded.</p></div><div id="trackingSummary" class="summary-pills"></div></div><div id="trackingList" class="integrations-grid"><div class="notice">Loading measurement status…</div></div></div></section>
       <section class="section"><div class="panel"><div class="section-heading"><div><h2>Social, video and local publishing</h2><p class="muted">“Configured” proves variable-name presence only. Provider permissions, scopes, page roles and actual publishing still require acceptance evidence.</p></div><div id="publishingSummary" class="summary-pills"></div></div><div id="publishingList" class="integrations-grid"><div class="notice">Loading publishing connections…</div></div></div></section>
-      <section class="section"><div class="panel"><h2>Prepared and control-plane integrations</h2><p class="muted">These are deliberately catalogued without inventing runtime credentials. They become “configured” only when a real Rosie adapter has an approved authority and test.</p><div id="preparedList" class="integrations-grid"><div class="notice">Loading prepared integrations…</div></div></div></section>
+      <section class="section"><div class="panel"><h2>Prepared and control-plane integrations</h2><p class="muted">These are deliberately catalogued without inventing runtime credentials. Their circled <strong>i</strong> explains what to configure externally and, equally important, what not to create yet.</p><div id="preparedList" class="integrations-grid"><div class="notice">Loading prepared integrations…</div></div></div></section>
 
-      <section class="section"><div class="panel"><h2>Safe connection test standard</h2><ol class="tip-list"><li>Use the Development environment and the provider's sandbox/test mode where one exists.</li><li>Confirm the exact variable/binding names on this page before adding anything.</li><li>Test one bounded integration at a time with non-customer test data.</li><li>Verify both configuration presence and the provider-side result; presence alone is not acceptance.</li><li>Record only pass/fail evidence and safe identifiers. Never paste a secret or customer-private payload into test notes.</li></ol></div></section>
+      <section class="section"><div class="panel"><h2>Safe connection test standard</h2><ol class="tip-list"><li>Use the Development environment and the provider's sandbox/test mode where one exists.</li><li>Confirm the exact variable/binding names on this page before adding anything.</li><li>Open the circled <strong>i</strong> and complete its provider-specific acquisition, scope, callback and storage steps.</li><li>Test one bounded integration at a time with non-customer test data.</li><li>Verify both configuration presence and the provider-side result; presence alone is not acceptance.</li><li>Record only pass/fail evidence and safe identifiers. Never paste a secret or customer-private payload into test notes.</li></ol></div></section>
 
       <section class="section"><div class="panel"><h2>DAIP boundary remains held</h2><p class="muted">The I.T. catalogue does not authorize DAIP storage, uploads, processing, AI, public exports or publishing. Gate C remains held until its independent acceptance boundary is satisfied.</p><div data-visual-placeholder="daip_integration_boundary" data-visual-label="DAIP and third-party connection boundary visual"></div></div></section>
     </div>
   </main>
 
   <footer class="footer container" data-footer></footer>
-  <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/admin-menu.js"></script><script src="/assets/admin-page-init.js"></script><script src="/assets/admin-runtime.js"></script><script src="/assets/chrome.js"></script>
+  <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/admin-menu.js"></script><script src="/assets/admin-page-init.js"></script><script src="/assets/admin-runtime.js"></script><script src="/assets/chrome.js"></script><script src="/assets/it-external-help-catalog.js"></script>
   <script>
     (function(){
       const runtime = window.AdminRuntime;
+      const helpItems = new Map();
       const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (m) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
       const q = (selector) => document.querySelector(selector);
       const statusClass = (configured, invalid) => invalid ? 'invalid' : configured === true ? 'ready' : configured === false ? 'missing' : 'prepared';
       const statusText = (configured, invalid) => invalid ? 'Check format' : configured === true ? 'Configured' : configured === false ? 'Missing / incomplete' : 'Prepared / external';
       function setNotice(message,type){const el=q('#pageNotice');if(!el)return;el.className=type?`notice ${type}`:'notice';el.textContent=message;}
-      function requirementHtml(item){
+      function helpButton(key,label){return `<button type="button" class="it-help-button" data-it-help-key="${esc(key)}" aria-label="${esc(label||`How to obtain ${key}`)}" title="${esc(label||`How to obtain ${key}`)}">i</button>`;}
+      function registerHelp(key,item,parent){if(key)helpItems.set(String(key),{item:item||{},parent:parent||{}});}
+      function requirementHtml(item,parent){
         const configured = item.status === 'configured';
-        return `<div class="requirement"><div class="requirement-head"><span class="status ${configured?'ready':'missing'}">${configured?'Configured':'Missing'}</span><span class="key-line">${esc(item.key)}</span></div><div class="requirement-meta"><strong>Type:</strong> ${esc(item.kind || 'configuration')} · <strong>Storage:</strong> ${esc(item.storage || 'See I.T. guidance')}${item.conditional?' · conditional':''}${item.required===false?' · optional':''}</div>${item.purpose?`<p>${esc(item.purpose)}</p>`:''}${item.obtain?`<p><strong>Obtain it:</strong> ${esc(item.obtain)}</p>`:''}${item.format?`<p><strong>Format:</strong> ${esc(item.format)}</p>`:''}</div>`;
+        registerHelp(item.key,item,parent);
+        return `<div class="requirement"><div class="requirement-head"><span class="status ${configured?'ready':'missing'}">${configured?'Configured':'Missing'}</span><span class="key-line">${esc(item.key)}</span>${helpButton(item.key,`How to obtain and configure ${item.key}`)}</div><div class="requirement-meta"><strong>Type:</strong> ${esc(item.kind || 'configuration')} · <strong>Storage:</strong> ${esc(item.storage || 'See I.T. guidance')}${item.conditional?' · conditional':''}${item.required===false?' · optional':''}</div>${item.purpose?`<p>${esc(item.purpose)}</p>`:''}${item.obtain?`<p><strong>Quick path:</strong> ${esc(item.obtain)}</p>`:''}${item.format?`<p><strong>Format:</strong> ${esc(item.format)}</p>`:''}</div>`;
       }
       function variableGroups(item){
-        const required=(item.required_variables||[]).map(requirementHtml).join('');
-        const optional=(item.optional_variables||[]).map(requirementHtml).join('');
-        const alternatives=(item.alternative_variable_sets||[]).map((set,index)=>`<div class="detail-block"><strong>Accepted ${item.alternative_variable_sets.length>1?`option ${index+1}`:'configuration'}:</strong>${set.map(requirementHtml).join('')}</div>`).join('');
+        const required=(item.required_variables||[]).map((entry)=>requirementHtml(entry,item)).join('');
+        const optional=(item.optional_variables||[]).map((entry)=>requirementHtml(entry,item)).join('');
+        const alternatives=(item.alternative_variable_sets||[]).map((set,index)=>`<div class="detail-block"><strong>Accepted ${item.alternative_variable_sets.length>1?`option ${index+1}`:'configuration'}:</strong>${set.map((entry)=>requirementHtml(entry,item)).join('')}</div>`).join('');
         return `${required}${alternatives}${optional?`<div class="detail-block"><strong>Optional / conditional:</strong>${optional}</div>`:''}`;
       }
       function details(item){
         const callbacks=(item.callbacks_scopes||[]).length?`<div class="detail-block"><strong>Callbacks / scopes:</strong><ul class="tip-list">${item.callbacks_scopes.map((v)=>`<li>${esc(v)}</li>`).join('')}</ul></div>`:'';
         const trouble=(item.troubleshooting||[]).length?`<div class="detail-block"><strong>Troubleshooting:</strong><ul class="tip-list">${item.troubleshooting.map((v)=>`<li>${esc(v)}</li>`).join('')}</ul></div>`:'';
-        return `${item.storage_note?`<p><strong>Storage note:</strong> ${esc(item.storage_note)}</p>`:''}${item.obtain?`<p><strong>Obtain it:</strong> ${esc(item.obtain)}</p>`:''}${item.test?`<p><strong>Test:</strong> ${esc(item.test)}</p>`:''}${callbacks}${trouble}`;
+        return `${item.storage_note?`<p><strong>Storage note:</strong> ${esc(item.storage_note)}</p>`:''}${item.obtain?`<p><strong>Quick path:</strong> ${esc(item.obtain)}</p>`:''}${item.test?`<p><strong>Test:</strong> ${esc(item.test)}</p>`:''}${callbacks}${trouble}`;
       }
       function serviceCard(item){return `<article class="integration-card"><span class="status ${statusClass(item.configured)}">${statusText(item.configured)}</span><h3>${esc(item.label)}</h3><p>${esc(item.category||'')}</p>${item.current_mode?`<p>${esc(item.current_mode)}</p>`:''}${variableGroups(item)}${details(item)}</article>`;}
-      function trackingCard(item){return `<article class="integration-card"><span class="status ${statusClass(item.configured,item.valid_format===false)}">${statusText(item.configured,item.valid_format===false)}</span><h3>${esc(item.label)}</h3><p>${esc(item.category)}</p><div class="requirement"><div class="requirement-head"><span class="key-line">${esc(item.variable)}</span></div><div class="requirement-meta"><strong>Type:</strong> public ID · <strong>Storage:</strong> ${esc(item.storage||'environment variable')}</div><p><strong>Obtain it:</strong> ${esc(item.setup_path)}</p></div><p>${esc(item.status_note)}</p>${details(item)}</article>`;}
-      function preparedCard(item){return `<article class="integration-card"><span class="status prepared">${esc(item.lifecycle||'prepared')}</span><h3>${esc(item.label)}</h3><p>${esc(item.category||'')}</p><p><strong>Storage:</strong> ${esc(item.storage||'external')}</p><p>${esc(item.current_mode||'')}</p>${details(item)}</article>`;}
+      function trackingCard(item){registerHelp(item.variable,{key:item.variable,kind:item.kind||'public_id',storage:item.storage,obtain:item.setup_path,purpose:item.status_note,format:item.valid_format===false?'Current value does not match the registered format.':null},item);return `<article class="integration-card"><span class="status ${statusClass(item.configured,item.valid_format===false)}">${statusText(item.configured,item.valid_format===false)}</span><h3>${esc(item.label)}</h3><p>${esc(item.category)}</p><div class="requirement"><div class="requirement-head"><span class="key-line">${esc(item.variable)}</span>${helpButton(item.variable,`How to obtain and configure ${item.variable}`)}</div><div class="requirement-meta"><strong>Type:</strong> public ID · <strong>Storage:</strong> ${esc(item.storage||'environment variable')}</div><p><strong>Quick path:</strong> ${esc(item.setup_path)}</p></div><p>${esc(item.status_note)}</p>${details(item)}</article>`;}
+      function preparedCard(item){registerHelp(item.key,{key:item.key,kind:'external',storage:item.storage,obtain:item.obtain,purpose:item.category},item);return `<article class="integration-card"><span class="status prepared">${esc(item.lifecycle||'prepared')}</span><h3>${esc(item.label)} ${helpButton(item.key,`Setup help for ${item.label}`)}</h3><p>${esc(item.category||'')}</p><p><strong>Storage:</strong> ${esc(item.storage||'external')}</p><p>${esc(item.current_mode||'')}</p>${details(item)}</article>`;}
+      function fallbackHelp(key){
+        const context=helpItems.get(String(key))||{};const item=context.item||{},parent=context.parent||{};
+        return {title:String(key||item.key||parent.label||'Integration setup'),what:item.purpose||`External configuration required by ${parent.label||'this Rosie integration'}.`,changes:`Configuring this value changes whether ${parent.label||'the integration'} can use its external provider connection.`,why:`Rosie needs the exact provider-issued value or binding before ${parent.label||'this connection'} can be tested safely.`,source:item.obtain||parent.obtain||'Use the official provider/business/developer console for this connection.',setup:[item.obtain||parent.obtain||'Open the provider console and locate the exact credential/configuration named by this Rosie card.','Confirm you are working in the correct Development/test or Production/live provider environment.','Create or copy only the minimum credential/configuration required by this card.','Store it in the location shown by Rosie, redeploy if required, then perform the bounded connection test.'],format:item.format||null,storage:item.storage||parent.storage_note||parent.storage||null,callbacks:parent.callbacks_scopes||[],test:parent.test||null,troubleshooting:parent.troubleshooting||[],security:/TOKEN|SECRET|KEY|WEBHOOK_URL/i.test(String(key||''))?'Treat this value as sensitive unless the I.T. card explicitly identifies it as a public ID. Never paste secrets into browser-visible settings or evidence.':null,integration:false};
+      }
+      async function openITHelp(key,trigger){
+        const entry=window.RosieITHelpCatalog?.entries?.[key]||fallbackHelp(key);
+        if(!window.RosieContextHelp?.open&&window.AdminPageInit?.loadContextualHelp){await Promise.resolve(window.AdminPageInit.loadContextualHelp('admin-integrations'));}
+        if(window.RosieContextHelp?.open){window.RosieContextHelp.open(entry,trigger);return;}
+        setNotice(`Detailed help for ${key} could not be loaded. Refresh the page and try again.`,'error');
+      }
       function setSummary(selector,configured,total,label){const host=q(selector);if(host)host.innerHTML=`<span class="status ${configured?'ready':'off'}">${configured}/${total} ${esc(label)}</span>`;}
       async function load(){
+        helpItems.clear();
         const result=await runtime.requestJson('/api/admin/integration_status',{method:'GET'});if(!result.ok)throw new Error(runtime.normalizeError(result,'Could not load I.T. catalogue.'));
         const integrations=result.data?.integrations||{};
-        q('#modeLabel').textContent=`Tracking: ${integrations.mode||'off'} · ${integrations.enabled?'enabled':'off'} · catalogue ${integrations.catalogue_version||'legacy'}`;
+        q('#modeLabel').textContent=`Tracking: ${integrations.mode||'off'} · ${integrations.enabled?'enabled':'off'} · catalogue ${integrations.catalogue_version||'legacy'} · help ${window.RosieITHelpCatalog?.version||'fallback'}`;
         q('#modeHelp').textContent=integrations.release_boundary||'Configuration presence only.';
         const core=integrations.core||[],tracking=integrations.tracking||[],publishing=integrations.publishing||[],prepared=integrations.prepared||[];
         q('#coreList').innerHTML=core.map(serviceCard).join('')||'<div class="notice">No core integrations are registered.</div>';
@@ -119,9 +137,10 @@
         q('#publishingList').innerHTML=publishing.map(serviceCard).join('')||'<div class="notice">No publishing providers are registered.</div>';
         q('#preparedList').innerHTML=prepared.map(preparedCard).join('')||'<div class="notice">No prepared integrations are registered.</div>';
         setSummary('#coreSummary',integrations.configured_core_count||0,core.length,'ready');setSummary('#trackingSummary',integrations.configured_tracking_count||0,tracking.length,'ready');setSummary('#publishingSummary',integrations.configured_publishing_count||0,publishing.length,'ready');
-        setNotice(`I.T. catalogue loaded: ${integrations.configured_core_count||0}/${core.length} core, ${integrations.configured_tracking_count||0}/${tracking.length} measurement, ${integrations.configured_publishing_count||0}/${publishing.length} publishing connections report ready by presence checks.`, 'success');
+        setNotice(`I.T. catalogue loaded: ${integrations.configured_core_count||0}/${core.length} core, ${integrations.configured_tracking_count||0}/${tracking.length} measurement, ${integrations.configured_publishing_count||0}/${publishing.length} publishing connections report ready by presence checks. Use each circled i for the full provider setup procedure.`, 'success');
         window.RosieContextHelp?.refresh?.({pageKey:'admin-integrations'});
       }
+      document.addEventListener('click',(event)=>{const button=event.target.closest('[data-it-help-key]');if(!button)return;event.preventDefault();openITHelp(button.dataset.itHelpKey,button).catch((err)=>setNotice(err?.message||'Could not open integration help.','error'));});
       window.AdminPageInit.init({pageKey:'admin-integrations',onReady:async()=>{q('#refreshButton').addEventListener('click',()=>load().catch((err)=>setNotice(err.message,'error')));await load();},onError:(err)=>setNotice(err?.message||'Could not initialize I.T. Connections.','error')});
     })();
   </script>
