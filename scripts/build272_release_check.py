@@ -134,8 +134,8 @@ for rel in ["functions/_middleware.js", "assets/build272-public-clarity.js"]:
 
 # Closure documentation must move unfinished work forward rather than leaving stale Build 272 blockers.
 need("BUILD272_SUMMARY.md", "Build 272", "CLOSED", "Build 273")
-need("AI_PROJECT_HANDOFF.md", "Build: 272", "Build 272 closure", "Build 273")
-need("MASTER_VALUE_ROADMAP.md", "Build: 272", "Build 272 — closed", "Build 273")
+need("AI_PROJECT_HANDOFF.md", "**Build:** 272", "Build 272 closure", "Build 273")
+need("MASTER_VALUE_ROADMAP.md", "**Build:** 272", "Build 272 — closed", "Build 273")
 
 # Syntax checks for every Build 272 JavaScript authority surface.
 for rel in [
