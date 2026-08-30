@@ -1,5 +1,6 @@
 {
   "build": 269,
+  "extended_through_build": 271,
   "version": 1,
   "authority": "staff_users.permissions_profile.action_access",
   "principles": {
@@ -27,6 +28,7 @@
     "finance.view": {"module":"finance"},
     "finance.post": {"module":"finance"},
     "finance.reconcile": {"module":"finance"},
+    "finance.period.close": {"module":"finance"},
     "daip.view": {"module":"daip"},
     "daip.manage": {"module":"daip"},
     "socials.view": {"module":"socials"},
@@ -37,7 +39,7 @@
     "detailer": ["detailer.job.view","detailer.job.update","detailer.message.send"],
     "senior_detailer": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view"],
     "operations_manager": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.schedule.manage","operations.assignment.manage","operations.customer.manage"],
-    "accountant": ["finance.view","finance.post","finance.reconcile"],
+    "accountant": ["finance.view","finance.post","finance.reconcile","finance.period.close"],
     "it_specialist": ["it.runtime.view","it.runtime.manage","it.notifications.view","it.notifications.process","it.modules.manage"],
     "promoter": ["socials.view","socials.manage","socials.publish"],
     "daip_manager": ["daip.view","daip.manage"],
