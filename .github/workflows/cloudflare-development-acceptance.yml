@@ -24,33 +24,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN || secrets.ROSIEDAZZLERS_BUILD_TOKEN || secrets.CLOUDFLARE_API_TOKEN }}
-      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID || secrets.ROSIEDAZZLERS_CLOUDFLARE_ACCOUNT_ID }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
     steps:
       - name: Checkout exact dev commit
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Run cumulative Rosie release guard
-        run: python scripts/release_check.py
-
-      - name: Run Build 271 focused guard
-        run: python scripts/build271_release_check.py
-
-      - name: Validate Cloudflare secret presence
+      - name: Validate ROSIEDAZZLERS_TOKEN secret presence
         shell: bash
         run: |
           set -euo pipefail
           if [[ -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
-            echo "::error::No Rosie Cloudflare token was found. Expected ROSIEDAZZLERS_TOKEN, ROSIEDAZZLERS_BUILD_TOKEN, or CLOUDFLARE_API_TOKEN."
+            echo "::error::GitHub Actions secret ROSIEDAZZLERS_TOKEN is empty or unavailable to this repository workflow."
             exit 2
           fi
           echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
-          echo "Cloudflare token secret is present."
+          echo "ROSIEDAZZLERS_TOKEN secret is present."
 
       - name: Verify Cloudflare API token
         shell: bash
@@ -62,7 +51,18 @@ jobs:
             --header "Content-Type: application/json" \
             > /tmp/cf-token.json
           jq -e '.success == true and (.result.status // "") == "active"' /tmp/cf-token.json >/dev/null
-          echo "Cloudflare token is active."
+          echo "ROSIEDAZZLERS_TOKEN is an active Cloudflare API token."
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Run Build 271 focused guard
+        run: python scripts/build271_release_check.py
 
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
@@ -83,7 +83,7 @@ jobs:
 
           if [[ -n "$account_id" ]]; then
             if ! project_ok "$account_id"; then
-              echo "::error::Configured Cloudflare account ID cannot read Pages project ${CF_PROJECT_NAME}."
+              echo "::error::Configured CLOUDFLARE_ACCOUNT_ID cannot read Pages project ${CF_PROJECT_NAME}."
               exit 3
             fi
           else
@@ -101,7 +101,7 @@ jobs:
           fi
 
           if [[ -z "$account_id" ]]; then
-            echo "::error::Token is valid but cannot discover/read the ${CF_PROJECT_NAME} Pages project. The token may need Pages Read/Write scope for the Rosie Dazzlers account, or CLOUDFLARE_ACCOUNT_ID may need to be configured."
+            echo "::error::ROSIEDAZZLERS_TOKEN is valid but cannot discover/read Pages project ${CF_PROJECT_NAME}. It needs Rosie account visibility plus Pages read access, or CLOUDFLARE_ACCOUNT_ID must be configured."
             exit 4
           fi
 
@@ -211,6 +211,6 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves source guards, Cloudflare token access, exact dev SHA deployment, and anonymous HTTP/module-load smoke only."
+            echo "This workflow proves source guards, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, and anonymous HTTP/module-load smoke only."
             echo "Authenticated role/action behavior, real-device push delivery, and Cloudflare CPU/error metrics remain separate acceptance evidence."
           } >> "$GITHUB_STEP_SUMMARY"
