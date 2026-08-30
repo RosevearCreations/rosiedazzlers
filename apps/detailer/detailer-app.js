@@ -1,5 +1,5 @@
 // Historical Build 264 live bundle token: /apps/detailer/live-job-module.js?v=20260825build264
-// Build 266 — Detailer Mobile App shell with role/module ceiling and cached runtime flags.
+// Build 271 — Detailer Mobile App shell with role/module ceiling, deep-link job selection and cached runtime flags.
 // Acceptance rule: no eligible active job = zero recurring live-job network activity.
 (function bootDetailerApp(globalScope){
   'use strict';
@@ -9,8 +9,10 @@
   const loader=core.ModuleLoader;
   const resolver=core.ModuleResolver;
   const $=(id)=>document.getElementById(id);
-  const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let actor=null,jobs=[],selected=null,liveModule=null,currentPolicy=null;
+  const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot',"'":'&#39;'}[c]));
+  const requestedJobId=String(new URLSearchParams(location.search).get('job')||'').trim();
+  const requestedMessages=location.hash==='#liveJobHost';
+  let actor=null,jobs=[],selected=null,liveModule=null,currentPolicy=null,deepLinkHandled=false;
 
   function status(message,type=''){
     const box=$('appStatus');box.hidden=!message;box.className=`notice ${type}`.trim();box.textContent=message||'';
@@ -52,13 +54,20 @@
     selected=jobs.find((job)=>String(job.id)===String(id))||null;
     renderJobs();renderSelected();
   }
+  function resolveDeepLink(){
+    if(deepLinkHandled||!requestedJobId)return null;
+    const match=jobs.find((job)=>String(job.id)===requestedJobId)||null;
+    deepLinkHandled=true;
+    if(!match){status('The linked job is not in this bounded Detailer workspace. Use Refresh assigned jobs or open it from Operations.','warn');return null;}
+    return match;
+  }
   async function loadWorkspace({manual=false}={}){
     if(manual)status('Refreshing assigned jobs…');
     try{
       const out=await api.requestJson('/api/detailer/jobs?scope=workspace');
       actor=out.actor||actor;jobs=Array.isArray(out.jobs)?out.jobs:[];
       const keep=selected?.id;
-      selected=(keep&&jobs.find((job)=>String(job.id)===String(keep)))||chooseSuggested();
+      selected=resolveDeepLink()||(keep&&jobs.find((job)=>String(job.id)===String(keep)))||chooseSuggested();
       renderJobs();renderSelected();
       if(out.workspace?.bounded===true && manual) status(`Assigned jobs refreshed. ${jobs.length} bounded workspace job(s) loaded.`,'ok');
       else if(manual)status('Assigned jobs refreshed.','ok');
@@ -91,12 +100,13 @@
     if(!currentPolicy?.may_load_live_module||!selected)return;
     $('liveJobHost').dataset.loaded='loading';
     try{
-      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20260829build266');
+      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20260829build271');
       if(!liveModule){
         liveModule=await mod.mount({host:$('liveJobHost'),job:selected,policy:currentPolicy,api,onJobPatch:(patch)=>{selected={...selected,...patch};const idx=jobs.findIndex((j)=>String(j.id)===String(selected.id));if(idx>=0)jobs[idx]=selected;renderJobs();renderSelected();}});
       }else liveModule.setJob?.(selected,currentPolicy);
       $('liveJobHost').dataset.loaded='true';
       $('runtimeMessage').innerHTML='<strong>Live-job module awake.</strong><p class="mini">The module loaded because this job is open. Feed/photo activity is user-driven; there is still no recurring network timer.</p>';
+      if(requestedMessages&&String(selected.id)===requestedJobId){requestAnimationFrame(()=>$('liveJobHost')?.scrollIntoView({block:'start'}));}
     }catch(error){$('liveJobHost').dataset.loaded='false';$('liveJobHost').innerHTML=`<div class="notice bad">Could not load live-job tools: ${esc(error.message||error)}</div>`;}
   }
   function sleepLiveModule(){
@@ -111,7 +121,7 @@
     document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden);});
   }
   async function boot(){
-    if(!api||!policy||!loader||!resolver)throw new Error('Build 267 app-core did not load.');
+    if(!api||!policy||!loader||!resolver)throw new Error('Build 271 app-core did not load.');
     bind();
     await globalScope.AdminShell.boot({pageKey:'app-detailer',onReady:async({actor:currentActor})=>{
       actor=currentActor||null;
