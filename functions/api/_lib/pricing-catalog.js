@@ -12,6 +12,16 @@ const LOCAL_CHART_URLS = {
   "CarSizeChart.PNG": "https://assets.rosiedazzlers.ca/packages/CarSizeChart.PNG"
 };
 
+// Build 274 retained operating authority: Rosie brings standard detailing water and power.
+// Keep this runtime-owned so stale database/bundled wording cannot reintroduce a contradictory customer promise.
+const ROSIE_PUBLIC_REQUIREMENTS = Object.freeze([
+  "Driveway/private work area preferred",
+  "Rosie brings standard detailing water and power; unusual site/access requirements must be confirmed before dispatch",
+  "Staff verify county water-use, runoff and site-access reminders before dispatch"
+]);
+
+const ROSIE_ACCESS_RULE = "Confirm a safe driveway/private work area, slope, parking, apartment/condo access and building rules before dispatch. Rosie brings standard detailing water and power unless an explicitly approved service setup says otherwise.";
+
 const DEFAULT_BOOKING_RULES = {
   availability_window_days: 21,
   default_service_area: "Tillsonburg, Oxford County",
@@ -21,11 +31,7 @@ const DEFAULT_BOOKING_RULES = {
     PM: "PM half day",
     FULL: "Full day"
   },
-  public_requirements: [
-    "Driveway required",
-    "Customer provides power and water or additional fees may apply",
-    "One vehicle per day unless half-day jobs are confirmed"
-  ],
+  public_requirements: [...ROSIE_PUBLIC_REQUIREMENTS],
   travel_pricing: {
     urban: 0,
     township: 0,
@@ -89,9 +95,8 @@ export function normalizeCatalog(raw) {
       ...DEFAULT_BOOKING_RULES.slot_labels,
       ...(bookingRuleSource.slot_labels && typeof bookingRuleSource.slot_labels === "object" ? bookingRuleSource.slot_labels : {})
     },
-    public_requirements: normalizeStringArray(
-      Array.isArray(bookingRuleSource.public_requirements) ? bookingRuleSource.public_requirements : DEFAULT_BOOKING_RULES.public_requirements
-    ),
+    // Build 274: do not allow stale App Management JSON to contradict the mobile operating model.
+    public_requirements: [...ROSIE_PUBLIC_REQUIREMENTS],
     travel_pricing: {
       urban: numberOr(bookingRuleSource?.travel_pricing?.urban, DEFAULT_BOOKING_RULES.travel_pricing.urban),
       township: numberOr(bookingRuleSource?.travel_pricing?.township, DEFAULT_BOOKING_RULES.travel_pricing.township),
@@ -109,9 +114,7 @@ export function normalizeCatalog(raw) {
     }
   };
 
-  const publicRequirements = normalizeStringArray(
-    Array.isArray(source.public_requirements) ? source.public_requirements : bookingRules.public_requirements
-  );
+  const publicRequirements = [...ROSIE_PUBLIC_REQUIREMENTS];
 
   return {
     ...source,
@@ -257,13 +260,13 @@ function normalizeServiceAreas(rows) {
       municipality: cleanText(row?.municipality) || null,
       zone: cleanText(row?.zone) || null,
       area_type: cleanText(row?.area_type) || null,
-      travel_tier: cleanText(row?.travel_tier) || 'township',
+      travel_tier: cleanText(row?.travel_tier) || "township",
       bylaw_note: cleanText(row?.bylaw_note) || null,
       parking_rule: cleanText(row?.parking_rule) || null,
       noise_rule: cleanText(row?.noise_rule) || null,
       water_rule_key: cleanText(row?.water_rule_key) || null,
       water_rule: cleanText(row?.water_rule) || null,
-      access_rule: cleanText(row?.access_rule) || null,
+      access_rule: ROSIE_ACCESS_RULE,
       official_links: (Array.isArray(row?.official_links) ? row.official_links : []).map((link) => ({
         label: cleanText(link?.label) || "Official source",
         url: cleanText(link?.url)
