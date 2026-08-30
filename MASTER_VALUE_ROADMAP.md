@@ -1,8 +1,8 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 272  
-**Updated:** 2026-08-29
+**Build:** 273  
+**Updated:** 2026-08-30
 
 ## North star
 
@@ -12,28 +12,23 @@ Build a professional mobile-first detailing platform connecting:
 
 while dormant modules stay asleep and server work is driven by real business events rather than polling.
 
-## Build 272 — closed
+## Build 272 — closed baseline
 
-Build 272 closes the current permission/package-clarity/T2125 increment. Its historical detail is `BUILD272_SUMMARY.md`.
+Build 272 closed the permission/package-clarity/T2125 increment and is documented in `BUILD272_SUMMARY.md`. Do not attach new manual evidence to Build 271/272.
 
-Closed source scope:
+Retained Build 272 authority includes:
 
 - customer/profile/tier writes behind `operations.customer.manage`;
-- quote/proposal/deposit-request/final-balance management behind `operations.quote.manage`;
+- quote/proposal/deposit/final-balance management behind `operations.quote.manage`;
 - refunds behind `finance.refund.manage`;
 - settlements behind `finance.settlement.manage`;
-- existing package prices preserved;
+- package prices preserved;
 - Exterior vs Premium Wash scope clarified;
-- Complete positioned as **Best value** with broadest inside/out base scope;
-- vehicle-size pricing and condition/quote triggers clarified before price;
-- fully mobile water/power promise made explicit;
-- booking/deposit mechanics retained;
-- public one-H1 rule retained;
-- first Finance-scoped T2125 workpaper added with review-first handling for meals, vehicle, CCA, home office, COGS and unknown mappings;
-- aligned CSV/JSON tax workpaper export added;
-- Build 272 focused guard added to Development acceptance workflow.
-
-Anything not objectively finishable without new scope, credentials, real devices, provider interaction, human tax facts or rehearsals is carried into Build 273. Do not keep Build 271 or 272 open for those items.
+- Complete = **Best value**;
+- vehicle-size/condition rules before price;
+- Rosie brings standard detailing water and power;
+- booking/deposit mechanics and one-H1 SEO rules retained;
+- first Finance-scoped review-first T2125 workpaper.
 
 ## Current architecture
 
@@ -58,21 +53,37 @@ Layered authorization remains:
 
 Admin is all-modules/all-actions by design. Server authorization is authoritative.
 
-## Build 273 — active engineering queue
+## Build 273 — active
 
-### Finance / accounting / tax support
+Historical/current implementation detail is in `BUILD273_SUMMARY.md`.
 
-Priority order:
+### Finance / accounting / tax support — implemented this increment
 
-1. Add a persistent business/tax profile with configurable entity/tax mode rather than hard-coding a legal structure.
-2. Add mileage/vehicle records: vehicle identity, tax year, odometer/total km, business trips/km, purpose, linked booking/job where available, parking/tolls and evidence.
-3. Feed complete business/total-kilometre facts into T2125 line 9281 support while leaving uncertain trips reviewable.
-4. Add business-use-of-home support: allocation basis, workspace/home area or reasonable shared-use basis, eligible costs, prior carry-forward, income limitation and claimed amount.
-5. Add capital asset/CCA support: acquisition/disposition dates, capital cost, class, prior UCC, business-use percentage, available-for-use facts and review notes.
-6. Add year-end inventory/COGS support: opening inventory, purchases/direct costs, closing inventory and valuation evidence.
-7. Link receipts/documents/evidence to ledger and tax-review items.
-8. Produce an accountant package combining P&L, trial balance, balance sheet, GST/HST, T2125, mileage, CCA, home-office support, evidence index and unresolved review queue.
-9. Preserve period locks, posted-ledger immutability, double-entry rules and evidence links.
+The first Build 273 Finance slice now includes:
+
+1. **Persistent configurable tax profile** in `app_management_settings.business_tax_profile`; entity type remains unconfirmed/configurable until real facts are supplied; identifiers are masked-only.
+2. **Business-use vehicle master** separate from customer vehicle mileage.
+3. **Mileage log** with trip date, purpose, total/business km, optional booking/document reference, parking/tolls and review status.
+4. **Annual vehicle reconciliation** with opening/closing odometer, total/business km and business-use percentage.
+5. **Business-use-of-home workpaper** with area/time/reasonable-other basis, eligible costs, prior carry-forward and positive-net-income limitation.
+6. **Capital asset/CCA factual register** with acquisition/availability/disposition facts, cost, class, prior UCC, business-use percentage and explicit current-year claim candidate.
+7. **Year-end inventory/COGS support** with opening/closing inventory, valuation method and direct-cost adjustment.
+8. **Existing Accounting Documents reused as evidence authority** rather than creating a duplicate receipt store.
+9. **T2125 enrichment** so complete structured facts can support lines 9281, 9945 and 9936 while remaining review-marked.
+10. **Accountant year-end package API** combining year-end statements, balance sheet, enriched T2125, tax support, inventory cost completeness and evidence manifest.
+11. **Tax Support Finance workspace** for factual entry/readiness and accountant JSON download.
+12. **`finance.tax.manage`** as the narrow write authority; `finance.view` remains read authority.
+13. **Year-end report permission hardening** from broad staff-management capability to `finance.view`.
+
+### Finance / accounting / tax support — next engineering moves
+
+Continue without waiting for manual tax facts where possible:
+
+1. Improve direct receipt/evidence linking from tax-support records to `accounting_documents`.
+2. Add accountant-friendly CSV/PDF/export surfaces after JSON package shape stabilizes; preserve one data authority.
+3. Continue explicit permission extraction when touching manual journals, adjusting entries, tax close/lock, payroll finalization and sensitive exports.
+4. Keep posted-ledger immutability, double-entry, period locks and evidence links authoritative.
+5. Improve accounting readiness dashboards to surface missing source facts before year end instead of only at filing time.
 
 ### Permissions / workflow extraction
 
@@ -105,14 +116,25 @@ Continue moving high-use compatibility pages into lazy module surfaces in this o
 
 ## Build 273 — manual / external acceptance queue
 
-These are intentionally deferred until the required human input, credentials, devices or provider state are available. They are not stale Build 271/272 blockers.
+These are intentionally deferred until required human input, credentials, devices or provider state are available. They are not stale Build 271/272 blockers.
+
+### Human tax facts
+
+- business legal/entity/tax profile confirmation;
+- actual business and total kilometres and trip classifications;
+- home-office allocation facts and eligible costs;
+- capital asset/CCA class/UCC/rate review;
+- inventory/direct-cost facts;
+- accountant review of judgment-heavy T2125 items.
+
+The system should do the bookkeeping leg work, surface missing facts and produce accountant-ready workpapers, but must not invent those facts.
 
 ### Authenticated runtime
 
-- Admin and focused-role launcher/direct-URL/API matrix.
-- Detailer/Senior Detailer/Operations Manager/Accountant/I.T./Promoter/DAIP role/action acceptance.
-- Real customer ↔ Detailer message/deep-link flow.
-- Completed/inactive job message rejection with readable history.
+- Admin and focused-role launcher/direct-URL/API matrix;
+- Detailer/Senior Detailer/Operations Manager/Accountant/I.T./Promoter/DAIP role/action acceptance;
+- real customer ↔ Detailer message/deep-link flow;
+- completed/inactive job message rejection with readable history.
 
 ### Providers / payments
 
@@ -141,16 +163,9 @@ These are intentionally deferred until the required human input, credentials, de
 - Search Console, sitemap/canonical/schema and Google Business Profile evidence;
 - controlled invite-only soft launch with monitoring.
 
-### Human tax facts
+## Security / reliability queue
 
-- business legal/entity/tax profile confirmation;
-- actual business and total kilometres;
-- home-office allocation facts and eligible costs;
-- capital asset/CCA class/UCC facts;
-- inventory/direct-cost facts;
-- accountant review of judgment-heavy T2125 items.
-
-The system should do the bookkeeping leg work, surface missing facts and produce accountant-ready workpapers, but must not invent those facts.
+Build 273 Supabase schema work was followed by the security advisor. The new tax tables match the existing service-role/RLS accounting pattern and did not introduce a new WARN-level finding. Pre-existing project findings still deserve separate hardening work, including SECURITY DEFINER exposure review, function search-path warnings and leaked-password protection configuration. Treat these as current security work, not tax-schema defects, and avoid behavior-changing fixes without verifying the affected workflow.
 
 ## Public/business priorities
 
