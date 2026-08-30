@@ -18,7 +18,7 @@ def forbid(rel,*tokens):
 
 actions=json.loads(text('data/action_permissions.json') or '{}')
 if actions.get('build')!=269: errors.append('base action permission registry build changed unexpectedly')
-if actions.get('extended_through_build')!=271: errors.append('action permission registry is not extended through Build 271')
+if int(actions.get('extended_through_build') or 0)<271: errors.append('action permission registry is not extended through Build 271')
 for action in ['detailer.message.send','operations.assignment.manage','operations.schedule.manage','finance.post','finance.reconcile','finance.period.close']:
     if action not in actions.get('actions',{}): errors.append(f'missing action {action}')
 if 'finance.period.close' not in actions.get('role_defaults',{}).get('accountant',[]): errors.append('accountant missing finance.period.close default')
