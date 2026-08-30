@@ -175,7 +175,6 @@ need(
 )
 
 # Protected HTML coverage: a protected page must load a common help bridge or the help runtime itself.
-# Login pages are not authenticated work screens and are intentionally excluded.
 protected_markers = ["/assets/admin-auth.js", "AdminAuth.guardPage", "AdminAuth.requireAuth", "AdminShell.boot"]
 bridges = ["/assets/admin-page-init.js", "/assets/admin-menu.js", "/assets/contextual-help.js"]
 for path in sorted(ROOT.glob("*.html")) + sorted(ROOT.glob("app/**/*.html")):
@@ -250,23 +249,84 @@ need(
 )
 forbid("admin-integrations.html", "<input", "<textarea", "type=\"password\"")
 
+# Mobile Quick Book is a presentation layer over the existing booking engine, not a replacement authority.
+need(
+    "assets/pricing-catalog-client.js",
+    "pricing-catalog-client-legacy.js",
+    "ROSIE_PUBLIC_REQUIREMENTS",
+    "Rosie brings standard detailing water and power",
+    'import("./booking-quick-start-v274.js")',
+    "applyRosieOperatingRules",
+)
+need(
+    "assets/booking-quick-start-v274.js",
+    "mobile-first Quick Book",
+    "What does your vehicle need?",
+    "Optional vehicle details",
+    "Next available days",
+    "booking_quick_need_pick",
+    "photo_quote",
+    "Saved Garage vehicles",
+    "Rosie-supplied water/power",
+    "premium_wash",
+    "interior_detail",
+    "complete_detail",
+    "exterior_detail",
+)
+need(
+    "book.html",
+    'data-step="1"',
+    'id="packageCards"',
+    'id="conditionRecommendBtn"',
+    'id="ack_power_water"',
+    'id="veh_year"',
+    'id="veh_make"',
+    'id="veh_model"',
+    'id="vehicle_size"',
+)
+forbid(
+    "assets/booking-quick-start-v274.js",
+    "/api/checkout",
+    "STRIPE_SECRET_KEY",
+    "PAYPAL_CLIENT_SECRET",
+)
+
+# Standard mobile-detail utilities are a canonical runtime rule on both server and browser.
+need(
+    "functions/api/_lib/pricing-catalog.js",
+    "ROSIE_PUBLIC_REQUIREMENTS",
+    "ROSIE_ACCESS_RULE",
+    "Rosie brings standard detailing water and power",
+    "stale App Management JSON",
+)
+forbid(
+    "assets/pricing-catalog-client.js",
+    "Customer provides power and water",
+    "Customer supplies power and water",
+)
+
 # JavaScript syntax and executable registry behavior.
 for rel in [
     "functions/api/_lib/integration-registry.js",
+    "functions/api/_lib/pricing-catalog.js",
     "assets/contextual-help-catalog.js",
     "assets/contextual-help.js",
     "assets/it-external-help-catalog.js",
     "assets/admin-page-init.js",
     "assets/admin-menu.js",
+    "assets/pricing-catalog-client.js",
+    "assets/pricing-catalog-client-legacy.js",
+    "assets/booking-quick-start-v274.js",
 ]:
     node_check(rel)
 inline_script_check("admin-integrations.html")
+inline_script_check("book.html")
 registry_behavior_check()
 
 # Release documentation/workflow must explicitly carry this active release.
 need("BUILD274_SUMMARY.md", "**Status: ACTIVE**", "I.T. Connections", "contextual help")
-need("AI_PROJECT_HANDOFF.md", "**Build:** 274", "Build 274 active implementation", "I.T. Connections")
-need("MASTER_VALUE_ROADMAP.md", "**Build:** 274", "Build 274 — active", "contextual help")
+need("AI_PROJECT_HANDOFF.md", "**Build:** 274", "Build 274 active implementation", "I.T. Connections", "Quick Book", "Mobile Auto Detailing & Interior/Exterior Restoration")
+need("MASTER_VALUE_ROADMAP.md", "**Build:** 274", "Build 274 — active", "contextual help", "Mobile Quick Book", "Google trust and measurable local SEO")
 need(".github/workflows/cloudflare-development-acceptance.yml", "Run Build 274 focused guard", "python scripts/build274_release_check.py", "Build 274 I.T. Connections")
 
 if errors:
@@ -282,4 +342,6 @@ print(" - every generated I.T. requirement/measurement/prepared box exposes a ci
 print(" - protected HTML screens are connected to a shared help bridge")
 print(" - I.T. catalogue reports exact runtime names/storage/readiness without returning raw secret values")
 print(" - Supabase/R2/Stripe/PayPal/notification authority remains aligned with current source paths")
+print(" - mobile Quick Book remains a touch-first presentation layer over existing booking/pricing/availability authorities")
+print(" - Rosie-supplied standard water/power remains canonical on browser and server pricing-catalog paths")
 print(" - Build 274 workflow and living authorities are synchronized")
