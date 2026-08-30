@@ -1,3 +1,168 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>HST/GST Review | Rosie Dazzlers Admin</title><meta name="robots" content="noindex,nofollow"/><link rel="stylesheet" href="/assets/site.css"/><style>.status{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}.grid{display:grid;gap:14px}.card{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.muted{color:#94a3b8}pre{white-space:pre-wrap;overflow:auto;max-height:320px}</style></head><body data-page="admin-tax-review" data-build185="hst-gst-review-screen"><header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-payments.html">Payments</a><a href="/admin-media-health.html">Media Health</a></nav></div></header><main class="container"><div class="status" data-page-status hidden></div><section class="hero compact"><p class="eyebrow">Build 185</p><h1 style="margin:10px 0 6px">HST/GST review</h1><p class="kicker" style="margin:0;max-width:850px">Review tax-included quote deposits, refunds, and estimated Ontario HST before payment close or accountant export.</p></section><div class="grid"><div data-admin-menu-mount></div><section class="section"><div class="panel"><div class="toolbar"><label>Review status<select id="taxReviewStatus" data-option-library="tax_review_statuses"><option value="needs_review">needs review</option><option value="reviewed">reviewed</option><option value="ready_for_close">ready for close</option></select></label><button class="btn primary" id="loadTax">Load HST/GST summary</button><a class="btn ghost" href="/admin-payments.html">Back to Payments</a></div><div id="taxOut" class="card muted">Ready to load.</div></div></section></div></main><footer class="footer container" data-footer></footer><script src="/assets/admin-auth.js"></script>
-  <script src="/assets/admin-option-libraries.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/admin-menu.js"></script><script src="/assets/chrome.js"></script><script>
-(function(){const s=document.querySelector('[data-page-status]'),out=document.getElementById('taxOut');function set(m,t){s.hidden=!m;s.textContent=m||'';s.dataset.state=t||''}function money(c){return '$'+(Number(c||0)/100).toFixed(2)}async function api(p,b){const r=await fetch(p,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}async function load(){set('Loading tax summary…');const d=await api('/api/admin/payment_tax_review_summary',{});const x=d.summary||{};out.innerHTML='<strong>Estimated tax-included review</strong><p>Gross collected: '+money(x.gross_collected_cents)+'<br>Refunds: '+money(x.refunds_cents)+'<br>Net tax-included: '+money(x.net_tax_included_cents)+'<br>Estimated pre-tax: '+money(x.estimated_pre_tax_cents)+'<br>Estimated HST: '+money(x.estimated_hst_cents)+'</p><pre>'+JSON.stringify(d,null,2)+'</pre>';set('Tax review loaded.','success')}document.getElementById('loadTax').addEventListener('click',()=>load().catch(e=>set(e.message,'error')));window.AdminShell.boot({pageKey:'admin-tax-review',onReady:()=>{window.AdminMenu.render({currentPage:'admin-tax-review'});load().catch(e=>set(e.message,'error'))}})})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Tax & T2125 Review | Rosie Dazzlers Admin</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="stylesheet" href="/assets/site.css"/>
+  <style>
+    .status{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
+    .grid{display:grid;gap:14px}
+    .card{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+    .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin:12px 0}
+    .muted{color:#94a3b8}
+    .metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:12px 0}
+    .metric{padding:12px;border:1px solid rgba(255,255,255,.09);border-radius:12px;background:rgba(255,255,255,.035)}
+    .metric span{display:block;font-size:.82rem;color:#94a3b8;margin-bottom:4px}.metric strong{font-size:1.08rem}
+    .table-wrap{overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:12px;margin-top:12px}
+    table{width:100%;border-collapse:collapse;min-width:820px}th,td{padding:10px;text-align:left;border-bottom:1px solid rgba(255,255,255,.08);vertical-align:top}th{font-size:.82rem;color:#cbd5e1}td.num{text-align:right;white-space:nowrap}
+    .pill{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.78rem;border:1px solid rgba(255,255,255,.14)}
+    .pill.review{background:rgba(245,158,11,.15)}.pill.ok{background:rgba(34,197,94,.12)}
+    .flags{display:grid;gap:8px;margin-top:12px}.flag{padding:10px 12px;border-radius:10px;border:1px solid rgba(245,158,11,.25);background:rgba(245,158,11,.08)}
+    details{margin-top:12px}pre{white-space:pre-wrap;overflow:auto;max-height:360px}
+  </style>
+</head>
+<body data-page="admin-tax-review" data-build272="t2125-tax-workpaper">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-accounting.html">Accounting</a><a href="/admin-payments.html">Payments</a></nav></div></header>
+<main class="container">
+  <div class="status" data-page-status hidden></div>
+  <section class="hero compact">
+    <p class="eyebrow">Finance · Build 272</p>
+    <h1 style="margin:10px 0 6px">Tax and T2125 review</h1>
+    <p class="kicker" style="margin:0;max-width:900px">Turn the posted accounting ledger into accountant-ready GST/HST and T2125 workpapers. The application proposes categories and calculations, while anything requiring tax judgment stays visibly flagged for review.</p>
+  </section>
+  <div class="grid">
+    <div data-admin-menu-mount></div>
+
+    <section class="section"><div class="panel">
+      <h2>GST/HST payment review</h2>
+      <p class="muted">Payment-side review of tax-included deposits and refunds. The general ledger workpaper below separately summarizes HST collected, ITC/debit activity and net tax activity.</p>
+      <div class="toolbar">
+        <label>Review status<select id="taxReviewStatus" data-option-library="tax_review_statuses"><option value="needs_review">needs review</option><option value="reviewed">reviewed</option><option value="ready_for_close">ready for close</option></select></label>
+        <button class="btn primary" id="loadTax" type="button">Load HST/GST summary</button>
+        <a class="btn ghost" href="/admin-payments.html">Payments</a>
+      </div>
+      <div id="taxOut" class="card muted">Ready to load.</div>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <h2>T2125 year-end workpaper</h2>
+      <p class="muted">Uses posted accounting entries to propose the CRA expense categories. Vehicle, business-use-of-home, CCA, cost-of-goods-sold and uncertain mappings remain review items until their supporting facts are complete.</p>
+      <div class="toolbar">
+        <label>Tax year<input id="t2125Year" type="number" min="2020" max="2100" step="1"/></label>
+        <button class="btn primary" id="loadT2125" type="button">Build T2125 workpaper</button>
+        <button class="btn ghost" id="downloadT2125Csv" type="button" disabled>Download CSV</button>
+        <button class="btn ghost" id="downloadT2125Json" type="button" disabled>Download JSON</button>
+        <a class="btn ghost" href="/admin-accounting.html">Accounting cockpit</a>
+      </div>
+      <div id="t2125Out" class="card muted">Choose a year to build the workpaper.</div>
+    </div></section>
+  </div>
+</main>
+<footer class="footer container" data-footer></footer>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-option-libraries.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script src="/assets/admin-menu.js"></script>
+<script src="/assets/chrome.js"></script>
+<script>
+(function(){
+  const status=document.querySelector('[data-page-status]');
+  const taxOut=document.getElementById('taxOut');
+  const tOut=document.getElementById('t2125Out');
+  const yearInput=document.getElementById('t2125Year');
+  const csvBtn=document.getElementById('downloadT2125Csv');
+  const jsonBtn=document.getElementById('downloadT2125Json');
+  let latestWorkpaper=null;
+
+  yearInput.value=String(new Date().getFullYear());
+
+  function setStatus(message,state){status.hidden=!message;status.textContent=message||'';status.dataset.state=state||''}
+  function moneyDollars(value){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(value||0))}
+  function moneyCents(value){return moneyDollars(Number(value||0)/100)}
+  function esc(value){return String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]))}
+  async function postJson(path,body){const r=await fetch(path,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body||{})});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}
+  async function getJson(path){
+    if(window.DDAuth?.apiFetch){const r=await window.DDAuth.apiFetch(path);const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}
+    const r=await fetch(path,{credentials:'include'});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d;
+  }
+
+  async function loadPaymentTax(){
+    setStatus('Loading GST/HST payment summary…');
+    const d=await postJson('/api/admin/payment_tax_review_summary',{});
+    const x=d.summary||{};
+    taxOut.innerHTML='<strong>Estimated tax-included payment review</strong><div class="metric-grid">'+
+      '<div class="metric"><span>Gross collected</span><strong>'+moneyCents(x.gross_collected_cents)+'</strong></div>'+
+      '<div class="metric"><span>Refunds</span><strong>'+moneyCents(x.refunds_cents)+'</strong></div>'+
+      '<div class="metric"><span>Net tax-included</span><strong>'+moneyCents(x.net_tax_included_cents)+'</strong></div>'+
+      '<div class="metric"><span>Estimated pre-tax</span><strong>'+moneyCents(x.estimated_pre_tax_cents)+'</strong></div>'+
+      '<div class="metric"><span>Estimated HST</span><strong>'+moneyCents(x.estimated_hst_cents)+'</strong></div></div>';
+    setStatus('GST/HST payment review loaded.','success');
+  }
+
+  function renderT2125(w){
+    const s=w.summary||{}, h=w.gst_hst_workpaper||{}, rows=w.line_items||[], flags=w.review_flags||[];
+    const lineHtml=rows.length?rows.map(r=>'<tr><td>'+esc(r.line)+'</td><td>'+esc(r.category)+'</td><td>'+esc((r.source_accounts||[]).join(', '))+'</td><td class="num">'+moneyDollars(r.recorded_amount_cad)+'</td><td class="num">'+(Number(r.unresolved_amount_cad||0)>0?'Review':moneyDollars(r.suggested_deductible_cad))+'</td><td><span class="pill '+(r.review_required?'review':'ok')+'">'+(r.review_required?'review':'mapped')+'</span></td></tr>').join(''):'<tr><td colspan="6">No expense-category rows were found for this year.</td></tr>';
+    const flagHtml=flags.length?'<div class="flags">'+flags.map(f=>'<div class="flag"><strong>'+esc((f.severity||'review').toUpperCase())+'</strong> '+esc(f.account_code?f.account_code+' — ':'')+esc(f.message||'Review required')+(f.amount_cad!=null?' ('+moneyDollars(f.amount_cad)+')':'')+'</div>').join('')+'</div>':'<p><span class="pill ok">No automatic review flags</span></p>';
+    tOut.classList.remove('muted');
+    tOut.innerHTML='<div><strong>'+esc(w.workpaper_type||'T2125')+' workpaper · '+esc(w.tax_year)+'</strong> <span class="pill '+(w.filing_status==='review_required'?'review':'ok')+'">'+esc(w.filing_status||'review')+'</span></div>'+
+      '<div class="metric-grid">'+
+      '<div class="metric"><span>Gross business revenue</span><strong>'+moneyDollars(s.gross_business_revenue_cad)+'</strong></div>'+
+      '<div class="metric"><span>Ledger expenses</span><strong>'+moneyDollars(s.ledger_expenses_cad)+'</strong></div>'+
+      '<div class="metric"><span>Ledger net income</span><strong>'+moneyDollars(s.ledger_net_income_cad)+'</strong></div>'+
+      '<div class="metric"><span>Mapped deductible candidate</span><strong>'+moneyDollars(s.known_deductible_candidate_cad)+'</strong></div>'+
+      '<div class="metric"><span>Amount still requiring tax allocation</span><strong>'+moneyDollars(s.unresolved_expense_cad)+'</strong></div>'+
+      '<div class="metric"><span>Owner draws (not business expense)</span><strong>'+moneyDollars(s.owner_draw_cad)+'</strong></div></div>'+
+      '<h3>GST/HST ledger workpaper</h3><div class="metric-grid">'+
+      '<div class="metric"><span>HST collected</span><strong>'+moneyDollars(h.collected_cad)+'</strong></div>'+
+      '<div class="metric"><span>ITC / debit activity</span><strong>'+moneyDollars(h.input_tax_credit_debit_activity_cad)+'</strong></div>'+
+      '<div class="metric"><span>Net tax activity</span><strong>'+moneyDollars(h.net_tax_activity_cad)+'</strong></div></div><p class="muted">'+esc(h.note||'')+'</p>'+
+      '<h3>T2125 category mapping</h3><div class="table-wrap"><table><thead><tr><th>Line</th><th>CRA category</th><th>Source account(s)</th><th>Recorded</th><th>Candidate</th><th>Status</th></tr></thead><tbody>'+lineHtml+'</tbody></table></div>'+
+      '<h3>Review queue</h3>'+flagHtml+
+      '<details><summary>Supporting-record checklist</summary><pre>'+esc(JSON.stringify(w.required_support||{},null,2))+'</pre></details>'+
+      '<p class="muted" style="margin-top:12px">'+esc(w.disclaimer||'')+'</p>';
+  }
+
+  async function loadT2125(){
+    const year=Math.max(2020,Math.min(2100,Number(yearInput.value||new Date().getFullYear())));
+    yearInput.value=String(year);
+    setStatus('Building T2125 workpaper…');
+    const d=await getJson('/api/admin/accounting_t2125_workpaper?year='+encodeURIComponent(year));
+    latestWorkpaper=d.workpaper||null;
+    if(!latestWorkpaper)throw new Error('T2125 workpaper was not returned.');
+    renderT2125(latestWorkpaper);
+    csvBtn.disabled=false;jsonBtn.disabled=false;
+    setStatus('T2125 workpaper built. Review flagged items before treating the package as tax-ready.','success');
+  }
+
+  function csvCell(value){const s=String(value??'');return '"'+s.replace(/"/g,'""')+'"'}
+  function buildCsv(w){
+    const lines=[];
+    lines.push(['section','line','category','account','recorded_cad','candidate_cad','unresolved_cad','review_required','note'].map(csvCell).join(','));
+    for(const r of w.line_items||[])lines.push(['t2125',r.line,r.category,(r.source_accounts||[]).join(' | '),r.recorded_amount_cad,r.suggested_deductible_cad,r.unresolved_amount_cad,r.review_required?'yes':'no',''].map(csvCell).join(','));
+    for(const f of w.review_flags||[])lines.push(['review','','',f.account_code||'',f.amount_cad??'','','',f.severity||'review',f.message||''].map(csvCell).join(','));
+    const h=w.gst_hst_workpaper||{};
+    lines.push(['gst_hst','','collected','',''+(h.collected_cad||0),'','','',''].map(csvCell).join(','));
+    lines.push(['gst_hst','','itc_debit_activity','',''+(h.input_tax_credit_debit_activity_cad||0),'','','',''].map(csvCell).join(','));
+    lines.push(['gst_hst','','net_tax_activity','',''+(h.net_tax_activity_cad||0),'','','',''].map(csvCell).join(','));
+    return lines.join('\n');
+  }
+  function download(name,type,text){const blob=new Blob([text],{type});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},0)}
+
+  document.getElementById('loadTax').addEventListener('click',()=>loadPaymentTax().catch(e=>setStatus(e.message,'error')));
+  document.getElementById('loadT2125').addEventListener('click',()=>loadT2125().catch(e=>setStatus(e.message,'error')));
+  csvBtn.addEventListener('click',()=>{if(latestWorkpaper)download('rosie-t2125-'+latestWorkpaper.tax_year+'.csv','text/csv;charset=utf-8',buildCsv(latestWorkpaper))});
+  jsonBtn.addEventListener('click',()=>{if(latestWorkpaper)download('rosie-t2125-'+latestWorkpaper.tax_year+'.json','application/json;charset=utf-8',JSON.stringify(latestWorkpaper,null,2))});
+
+  window.AdminShell.boot({pageKey:'admin-tax-review',onReady:()=>{
+    window.AdminMenu.render({currentPage:'admin-tax-review'});
+    Promise.allSettled([loadPaymentTax(),loadT2125()]).then(results=>{
+      const failed=results.filter(r=>r.status==='rejected');
+      if(failed.length===2)setStatus(failed[0].reason?.message||'Tax review could not be loaded.','error');
+    });
+  }});
+})();
+</script>
+</body>
+</html>
