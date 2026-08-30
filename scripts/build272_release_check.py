@@ -18,6 +18,16 @@ def need(rel, *tokens):
         if token not in body:
             errors.append(f"{rel} missing {token}")
 
+def require_living_build_at_least(rel, minimum):
+    body = text(rel)
+    match = re.search(r"\*\*Build:\*\*\s*(\d+)", body)
+    if not match:
+        errors.append(f"{rel} missing living Build marker")
+        return
+    current = int(match.group(1))
+    if current < minimum:
+        errors.append(f"{rel} living Build regressed below {minimum}: {current}")
+
 # Canonical action registry and role boundaries.
 actions = json.loads(text("data/action_permissions.json") or "{}")
 if int(actions.get("extended_through_build") or 0) < 272:
@@ -140,10 +150,13 @@ for constant in ["PACKAGE_GUIDE", "PUBLIC_SCOPE_GUIDE"]:
 if re.search(r"<h1\b", text("assets/build272-public-clarity.js"), flags=re.I):
     errors.append("assets/build272-public-clarity.js must not inject an H1")
 
-# Closure documentation must move unfinished work forward rather than leaving stale Build 272 blockers.
+# Closure documentation must preserve Build 272 as historical closure while allowing the two living
+# authorities to advance to Build 273 and later. Retained focused guards must never freeze live docs.
 need("BUILD272_SUMMARY.md", "Build 272", "CLOSED", "Build 273")
-need("AI_PROJECT_HANDOFF.md", "**Build:** 272", "Build 272 closure", "Build 273")
-need("MASTER_VALUE_ROADMAP.md", "**Build:** 272", "Build 272 — closed", "Build 273")
+require_living_build_at_least("AI_PROJECT_HANDOFF.md", 272)
+need("AI_PROJECT_HANDOFF.md", "Build 272 is closed", "## Build 272 retained authority", "Build 273")
+require_living_build_at_least("MASTER_VALUE_ROADMAP.md", 272)
+need("MASTER_VALUE_ROADMAP.md", "## Build 272 — closed baseline", "## Build 273 — active")
 
 # Syntax checks for every Build 272 JavaScript authority surface.
 for rel in [
@@ -172,4 +185,4 @@ print(" - Rosie package prices are unchanged")
 print(" - Exterior/Complete scope, vehicle sizing, condition quote triggers, and fully-mobile water/power are clarified before price")
 print(" - Complete uses Best value, one-H1 source rules remain intact, and existing booking/deposit mechanics remain present")
 print(" - T2125 workpaper is Finance-scoped, review-first, and exports aligned CSV/JSON")
-print(" - Build 272 closure docs explicitly carry unfinished manual/external and future engineering work to Build 273")
+print(" - Build 272 remains historically closed while living planning authorities may advance")
