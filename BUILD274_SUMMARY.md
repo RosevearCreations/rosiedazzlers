@@ -4,145 +4,135 @@
 **Started:** 2026-08-30  
 **Source branch:** `build274-full-closure-queue`  
 **Accepted starting point:** `3cd7f8ac2f1b5639ade16d192569e0259189f0f7`  
-**Promotion target:** `dev` only after the Build 274 source chain is green  
+**Promotion target:** `dev` only after the latest Build 274 source SHA is green  
 **Production rule:** `main` remains untouched.
 
 ## Build 274 purpose
 
-Build 274 is the broader current-release closure queue. The I.T./contextual-help work in this checkpoint is a completed source slice inside that queue; it does **not** replace or close the remaining Build 274 1–10 work.
+Build 274 is the current broader closure/product-value release. It is not complete merely because a source slice exists. Source, focused/cumulative guards, exact Development deployment and the applicable runtime/provider evidence remain separate acceptance layers.
 
-This slice establishes two permanent application systems:
+## Source slices now implemented
 
-1. **I.T. Connections** as the authoritative catalogue for external/runtime integrations; and
-2. **shared contextual help** for authenticated work screens and user-editable fields.
+### I.T. Connections and contextual help
 
-## I.T. Connections foundation
+`admin-integrations.html` and `functions/api/_lib/integration-registry.js` provide the safe external/runtime integration catalogue for Supabase, Cloudflare/R2, Stripe, PayPal, notifications, analytics, social/video publishing, Google Business Profile, Search Console and prepared control-plane integrations.
 
-`admin-integrations.html` is now the I.T. connection centre instead of a social/analytics-only status page.
+The registry returns presence/readiness metadata, exact runtime names, storage guidance and testing information without returning raw secret values.
 
-The server registry in `functions/api/_lib/integration-registry.js` reports safe configuration metadata for:
+Contextual help is shared through:
 
-- Supabase;
-- Cloudflare R2;
-- Stripe;
-- PayPal;
-- email delivery;
-- SMS delivery;
-- Web Push;
-- Google Analytics / Ads and other consented measurement providers already registered by Rosie;
-- Facebook / Instagram / X / TikTok / LinkedIn / YouTube publishing readiness already represented in source;
-- Google Business Profile;
-- Google Search Console as an external/prepared integration;
-- Google Maps as prepared work until an approved adapter defines the exact API/restriction boundary;
-- GitHub as a development/deployment control-plane integration rather than an invented Rosie runtime secret.
+- `assets/contextual-help-catalog.js`;
+- `assets/contextual-help.js`;
+- `assets/contextual-help.css`;
+- `assets/admin-page-init.js`;
+- `assets/admin-menu.js`;
+- Build 274 `assets/admin-shell.js` compatibility bridge for protected legacy/module pages.
 
-Each registered runtime requirement can report:
+The AdminShell bridge is intentionally fail-open: contextual-help failure must never block authentication or normal protected-page startup.
 
-- exact variable, secret or binding name;
-- configured/missing presence only;
-- storage type/location;
-- acquisition path;
-- purpose;
-- optional/conditional/alternative-set status;
-- safe test direction;
-- callbacks/scopes where relevant;
-- troubleshooting guidance.
+### Mobile Quick Book
 
-Raw credential values are never returned by this registry or accepted by the I.T. page.
+The first Build 274 mobile-first Quick Book presentation layer is implemented in `assets/booking-quick-start-v274.js` and is loaded through the canonical pricing client only on direct `/book` use.
 
-### Payment readiness semantics
+It preserves the existing booking engine rather than creating another authority:
 
-A green payment card is deliberately stronger than “an API client credential exists”:
+- problem-first need selection;
+- Saved Garage first for returning users;
+- year/make/model essentials and existing vehicle-size suggestion;
+- optional vehicle fields behind disclosure;
+- existing authoritative package/add-on controls;
+- photo/quote routing for variable conditions;
+- existing availability/calendar, service area, deposit and 409 conflict behavior;
+- `booking_quick_need_pick` instrumentation.
 
-- Stripe requires `STRIPE_SECRET_KEY` plus one accepted current webhook signing secret (`STRIPE_WEBHOOK_SECRET` or retained `STRIPE_WEBHOOK_SECRET_QUOTES`).
-- PayPal requires the canonical capture credentials `PAYPAL_CLIENT_ID` + `PAYPAL_CLIENT_SECRET` plus `PAYPAL_WEBHOOK_ID` for the current verified settlement path.
+True next-three appointment choices and the shortest returning-customer rebook path remain subsequent Build 274 refinement/Development acceptance work.
 
-Sandbox/test acceptance remains external evidence and is not manufactured by a presence check.
+### Resolved mobile utility authority
 
-## Shared contextual help foundation
+Build 274 now treats the standard operating rule as resolved:
 
-New shared assets:
+> **Rosie brings standard detailing water and power. The customer provides a safe/private work area. Unusual parking, apartment/condo access, site rules, weather or local runoff constraints are reviewed before dispatch.**
 
-- `assets/contextual-help-catalog.js` — central help catalogue;
-- `assets/contextual-help.js` — accessible runtime;
-- `assets/contextual-help.css` — shared controls/dialog styles.
+Server/browser pricing normalization, the homepage and first guarded specialist pages use this rule. “Customer provides water/power” is no longer an approved normal public rule.
 
-Every help entry must answer at least:
+### Public trust cleanup
 
-1. what this is;
-2. what it changes;
-3. why Rosie needs it;
-4. where the value comes from.
+The homepage source no longer publishes invented “sample customer-style reviews” or named sample testimonials. Verified review proof can populate through the real review mount only when a genuine source is connected.
 
-Important entries can additionally describe expected format, accounting/operational implications, security sensitivity, related records/systems and the I.T. connection path.
+The homepage is now positioned as:
 
-The runtime provides:
+> **Mobile Auto Detailing & Interior/Exterior Restoration**
 
-- page-level `ⓘ Page help`;
-- accessible field-level `ⓘ` controls;
-- keyboard/Escape-close dialog behavior;
-- dynamic-field coverage through `MutationObserver`;
-- a safe four-question fallback for fields that do not yet have bespoke catalogue wording;
-- direct linkage back to I.T. Connections when integration guidance is relevant.
+while retaining mobile-auto-detailing search intent, Oxford/Norfolk relevance, photo-estimate paths and static crawlable content.
 
-### Protected-screen reach
+### Headlight Restoration authority
 
-Two common protected-screen entry points now carry contextual help:
+`/headlight-restoration` now has one crawlable H1 and explains current catalog tiers:
 
-- `assets/admin-page-init.js` covers the modern shared initialization path;
-- `assets/admin-menu.js` provides a non-blocking bridge for older protected pages that still initialize authentication/menu behavior directly.
+- light haze / early coating failure: **From $99 per pair**;
+- moderate oxidation: **From $129 per pair**;
+- heavy oxidation / rough lens: **From $169+ per pair**.
 
-Help loading is intentionally non-blocking: a help-asset failure must not prevent authentication or normal page operation.
+The page explains condition drivers, sanding/polishing/protection stages, limits such as cracks/internal haze/moisture and replacement review, aftercare, proof placeholders and Quick Book/photo-estimate routing. No unsupported warranty is promised.
 
-`admin-site-settings.html` is the first legacy/dynamic-field proof surface and has explicit catalogue guidance for its advanced raw-JSON repair field in addition to generic field coverage.
+### Carpet / spill extraction authority
+
+`/carpet-shampoo` now uses the **current branch catalog**, not older stale pricing notes:
+
+- routine shampoo: **Small $99 / Mid $129 / Oversize $159**;
+- heavy salt / beverage / repeated extraction: **From $129–$159+**;
+- saturated floor / under-carpet restoration: **From $299+ / inspection quote**.
+
+The page distinguishes maintenance cleaning from deep extraction and water-intrusion restoration; explains safe seat/trim access, carpet lifting where appropriate, drying/follow-up, moisture/odour/biological-growth/corrosion risks and photo-first severe-condition routing. It does not claim mould/mold remediation.
 
 ## Source protection
 
-New `scripts/build274_release_check.py` protects:
+`scripts/build274_release_check.py` now protects:
 
-- JavaScript syntax for the registry/help/shared loaders;
-- inline I.T. page JavaScript syntax;
-- the four-question help contract and accessibility hooks;
-- dynamic-field support;
-- protected HTML coverage through a shared help bridge;
-- exact I.T. variable/binding names against current source authorities;
-- secret non-disclosure behavior;
-- Stripe/PayPal readiness semantics;
-- retained public tracking compatibility;
-- read-only credential behavior on the I.T. page;
-- Build 274 documentation/workflow synchronization.
+- shared contextual-help reach, including the legacy AdminShell bridge;
+- JavaScript syntax for current Build 274 shared assets;
+- JSON-LD-aware inline-script checking so structured data is not incorrectly parsed as JavaScript;
+- I.T. runtime-name/readiness/non-secret authority;
+- Quick Book presentation-vs-authority boundary;
+- canonical Rosie-supplied utilities;
+- homepage trust rules and no sample testimonials;
+- exactly one H1 and current condition tiers on the first specialist pages;
+- photo-estimate paths and realistic service limits;
+- documentation/workflow synchronization.
 
-The existing `.github/workflows/cloudflare-development-acceptance.yml` now runs the Build 274 focused guard after the Build 273 guard and, after deliberate promotion to `dev`, will smoke-check:
+## Build 274 Source Gate
 
-- `/api/admin/integration_status` as a protected non-5xx route;
-- `/admin-integrations.html` HTTP availability;
-- the Build 274 I.T. page marker.
+New workflow: `.github/workflows/build274-source-gate.yml`.
 
-## Validation completed on the feature queue
+It runs on `build274-full-closure-queue` and performs, without touching Cloudflare or external providers:
 
-Before/while committing this slice:
+- `node --check assets/pricing-catalog-client.js`;
+- `node --check assets/booking-quick-start-v274.js`;
+- `node --check functions/api/_lib/pricing-catalog.js`;
+- `python scripts/build274_release_check.py`;
+- `python scripts/release_check.py`.
 
-- `node --check` passed for the expanded integration registry, contextual-help catalogue/runtime, shared initializer and shared menu bridge;
-- the rebuilt I.T. page inline JavaScript passed `node --check` after extraction;
-- an executable Node behavior check confirmed all seven fully supplied core integrations report ready;
-- serialized integration status did not contain supplied sentinel secret values;
-- Stripe does not report ready with only its API key, but does accept the retained current webhook-secret alias;
-- PayPal does not report ready without its webhook ID;
-- public Google Analytics tracking configuration remains compatible.
+The first source-gate attempts correctly exposed new-guard defects: JSON-LD was being passed to `node --check`, legacy AdminShell pages were not yet a help bridge, and one I.T. guard token did not match the actual `setup:` catalogue structure. Build 274 then made AdminShell a real fail-open contextual-help bridge and corrected those guard assumptions.
 
-The exact full repository Build 274 focused guard will be authoritative when the branch is run in the repository/CI environment; exact-SHA Cloudflare Development acceptance intentionally waits for deliberate promotion to `dev`.
+**The latest source-gate result remains authoritative. Do not promote `dev` until the newest feature SHA has completed green.**
+
+## Development workflow
+
+`.github/workflows/cloudflare-development-acceptance.yml` remains intentionally separate and `dev`-only. After deliberate source-green promotion it runs the cumulative/focused guard chain, resolves the correct Cloudflare Pages project, requires the exact `dev` SHA to appear in Development deployment history and performs anonymous protected-route/non-5xx smoke checks.
 
 ## Current acceptance boundary
 
-This checkpoint does **not** claim:
+Build 274 does **not** yet claim:
 
-- authenticated browser acceptance of every contextual-help placement;
-- real Stripe test settlement acceptance;
+- exact-SHA Development acceptance of the current feature work;
+- authenticated browser/mobile contextual-help acceptance;
+- real Stripe test deposit/final balance/refund/webhook settlement acceptance;
 - PayPal sandbox acceptance;
 - provider email/SMS/Web Push delivery acceptance;
 - Google/Meta/social OAuth or publishing acceptance;
 - Search Console/GBP external evidence;
-- completion of the rest of the Build 274 1–10 queue;
+- real-device/PWA/weak-network acceptance;
+- completion of the remaining Payments/Finance, maintenance, fleet, reliability, DAIP and provider-evidence queue;
 - Production promotion.
 
-Those remain current-release work/evidence and must not be backdated into an older build.
+These remain Build 274 work/evidence and must not be backdated into older releases.
