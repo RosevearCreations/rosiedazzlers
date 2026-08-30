@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireActionAccess } from "../_lib/action-permissions.js";
 import { buildYearEndReport } from "../_lib/accounting-gl.js";
 import { buildT2125WorkpaperFromYearEnd } from "../_lib/t2125-workpaper.js";
 
@@ -11,10 +12,13 @@ export async function onRequestGet({ request, env }) {
     const access = await requireStaffAccess({
       request,
       env,
-      capability: "manage_staff",
+      capability: null,
       allowLegacyAdminFallback: false
     });
     if (!access.ok) return withCors(access.response);
+
+    const actionAccess = requireActionAccess(access.actor, "finance.view");
+    if (!actionAccess.ok) return withCors(actionAccess.response);
 
     const url = new URL(request.url);
     const now = new Date();
