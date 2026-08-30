@@ -1,6 +1,6 @@
 {
   "build": 269,
-  "extended_through_build": 271,
+  "extended_through_build": 272,
   "version": 1,
   "authority": "staff_users.permissions_profile.action_access",
   "principles": {
@@ -17,6 +17,7 @@
     "operations.schedule.manage": {"module":"operations"},
     "operations.assignment.manage": {"module":"operations"},
     "operations.customer.manage": {"module":"operations"},
+    "operations.quote.manage": {"module":"operations"},
     "admin.staff.view": {"module":"admin"},
     "admin.staff.manage": {"module":"admin"},
     "admin.settings.manage": {"module":"admin"},
@@ -29,6 +30,8 @@
     "finance.post": {"module":"finance"},
     "finance.reconcile": {"module":"finance"},
     "finance.period.close": {"module":"finance"},
+    "finance.refund.manage": {"module":"finance"},
+    "finance.settlement.manage": {"module":"finance"},
     "daip.view": {"module":"daip"},
     "daip.manage": {"module":"daip"},
     "socials.view": {"module":"socials"},
@@ -37,9 +40,9 @@
   },
   "role_defaults": {
     "detailer": ["detailer.job.view","detailer.job.update","detailer.message.send"],
-    "senior_detailer": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view"],
-    "operations_manager": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.schedule.manage","operations.assignment.manage","operations.customer.manage"],
-    "accountant": ["finance.view","finance.post","finance.reconcile","finance.period.close"],
+    "senior_detailer": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.quote.manage"],
+    "operations_manager": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.schedule.manage","operations.assignment.manage","operations.customer.manage","operations.quote.manage"],
+    "accountant": ["finance.view","finance.post","finance.reconcile","finance.period.close","finance.refund.manage","finance.settlement.manage"],
     "it_specialist": ["it.runtime.view","it.runtime.manage","it.notifications.view","it.notifications.process","it.modules.manage"],
     "promoter": ["socials.view","socials.manage","socials.publish"],
     "daip_manager": ["daip.view","daip.manage"],
