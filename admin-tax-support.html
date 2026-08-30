@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Tax Support & Accountant Readiness | Rosie Dazzlers Admin</title>
+  <meta name="robots" content="noindex,nofollow"/>
+  <link rel="stylesheet" href="/assets/site.css"/>
+  <style>
+    .grid{display:grid;gap:14px}.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}.card{padding:14px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.04)}
+    .toolbar,.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.metric-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}.metric{padding:11px;border:1px solid rgba(255,255,255,.08);border-radius:12px}.metric span{display:block;font-size:.8rem;color:#94a3b8}.metric strong{display:block;margin-top:4px}.muted{color:#94a3b8}.status{margin:10px 0;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.1)}
+    form{display:grid;gap:10px}label{display:grid;gap:5px}input,select,textarea{width:100%}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.wide{grid-column:1/-1}.table-wrap{overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:720px}th,td{padding:9px;border-bottom:1px solid rgba(255,255,255,.07);text-align:left;vertical-align:top}.pill{display:inline-block;padding:3px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:.78rem}.pill.ok{background:rgba(34,197,94,.12)}.pill.review{background:rgba(245,158,11,.15)}
+    details>summary{cursor:pointer;font-weight:700}.section-title{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.mini{font-size:.86rem}
+  </style>
+</head>
+<body data-page="admin-tax-support" data-build273="tax-support-accountant-readiness">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><nav class="nav-links"><a href="/admin-accounting.html">Accounting</a><a href="/admin-tax-review.html">T2125 Review</a></nav></div></header>
+<main class="container">
+  <div class="status" id="pageStatus" hidden></div>
+  <section class="hero compact">
+    <p class="eyebrow">Finance · Build 273</p>
+    <h1 style="margin:8px 0">Tax support & accountant readiness</h1>
+    <p class="kicker" style="max-width:980px;margin:0">Collect the factual records behind the T2125 workpaper—business-use mileage, home-office allocation, capital assets/CCA and year-end inventory—without silently turning incomplete records into tax claims.</p>
+    <div class="toolbar" style="margin-top:14px">
+      <label>Tax year<input id="taxYear" type="number" min="2020" max="2100" step="1"/></label>
+      <button class="btn primary" id="refreshBtn" type="button">Refresh tax support</button>
+      <button class="btn ghost" id="packageBtn" type="button">Download accountant JSON</button>
+      <a class="btn ghost" href="/admin-tax-review.html">Open T2125 workpaper</a>
+    </div>
+  </section>
+
+  <div class="grid">
+    <div data-admin-menu-mount></div>
+
+    <section class="section"><div class="panel">
+      <div class="section-title"><div><h2 style="margin:0">Year readiness</h2><p class="muted mini">A green item means the stored facts are complete enough for the workpaper calculation—not that tax treatment has been finally approved.</p></div><span id="readinessPill" class="pill review">Loading</span></div>
+      <div id="readinessMetrics" class="metric-grid"></div>
+      <div id="readinessList" class="cols" style="margin-top:12px"></div>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <div class="section-title"><div><h2 style="margin:0">Business tax profile</h2><p class="muted mini">Only display-safe masked identifiers are stored here. Full CRA identifiers are not required by this workpaper layer.</p></div></div>
+      <form id="profileForm" class="form-grid">
+        <label>Entity type<select name="entity_type"><option value="unconfirmed">Unconfirmed</option><option value="sole_proprietor">Sole proprietor</option><option value="partnership">Partnership</option><option value="corporation">Corporation</option><option value="other">Other</option></select></label>
+        <label>Province<input name="jurisdiction_province" maxlength="2" value="ON"/></label>
+        <label>GST/HST registered<select name="gst_hst_registered"><option value="">Unconfirmed</option><option value="true">Yes</option><option value="false">No</option></select></label>
+        <label>Business number — last 4 only<input name="business_number_masked" maxlength="4" inputmode="numeric" placeholder="1234"/></label>
+        <label>GST/HST number — last 4 only<input name="gst_hst_number_masked" maxlength="4" inputmode="numeric" placeholder="5678"/></label>
+        <label>Year-end month<input name="fiscal_year_end_month" type="number" min="1" max="12" value="12"/></label>
+        <label>Year-end day<input name="fiscal_year_end_day" type="number" min="1" max="31" value="31"/></label>
+        <label class="wide">Primary business activity<input name="primary_business_activity" value="Mobile auto detailing"/></label>
+        <label class="wide">Tax profile notes<textarea name="notes" rows="2"></textarea></label>
+        <div class="wide"><button class="btn primary" type="submit">Save tax profile</button></div>
+      </form>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <div class="section-title"><div><h2 style="margin:0">Business-use vehicles & mileage</h2><p class="muted mini">Business kilometres are recorded explicitly. The app does not guess commuting or personal-use kilometres.</p></div></div>
+      <div class="cols">
+        <div class="card"><h3>Vehicle</h3><form id="vehicleForm" class="form-grid">
+          <input type="hidden" name="id"/>
+          <label class="wide">Label<input name="label" required placeholder="Detailing van / personal SUV"/></label>
+          <label>Year<input name="vehicle_year" type="number" min="1900" max="2100"/></label><label>Make<input name="make"/></label><label>Model<input name="model"/></label>
+          <label>Ownership<select name="ownership_type"><option value="personal">Personal</option><option value="business">Business</option><option value="leased">Leased</option><option value="other">Other</option></select></label>
+          <label>Acquisition date<input name="acquisition_date" type="date"/></label><label>Placed in service<input name="placed_in_service_date" type="date"/></label>
+          <label>Capital cost CAD<input name="capital_cost_cad" type="number" min="0" step="0.01"/></label><label>CCA class<input name="cca_class" placeholder="Review required"/></label>
+          <label class="wide">Notes<textarea name="notes" rows="2"></textarea></label>
+          <div class="wide row"><button class="btn primary" type="submit">Save vehicle</button><button class="btn ghost" type="reset">New vehicle</button></div>
+        </form></div>
+
+        <div class="card"><h3>Mileage entry</h3><form id="mileageForm" class="form-grid">
+          <label class="wide">Vehicle<select name="vehicle_id" data-vehicle-select required></select></label>
+          <label>Trip date<input name="trip_date" type="date" required/></label><label>Booking ID optional<input name="booking_id"/></label>
+          <label class="wide">Business purpose<input name="purpose" required placeholder="Travel to detailing appointment / supplies"/></label>
+          <label>Origin<input name="origin_label"/></label><label>Destination<input name="destination_label"/></label>
+          <label>Start odometer km<input name="start_odometer_km" type="number" min="0" step="0.1"/></label><label>End odometer km<input name="end_odometer_km" type="number" min="0" step="0.1"/></label>
+          <label>Total km<input name="total_km" type="number" min="0" step="0.1" required/></label><label>Business km<input name="business_km" type="number" min="0" step="0.1" required/></label>
+          <label>Parking CAD<input name="parking_cad" type="number" min="0" step="0.01"/></label><label>Tolls CAD<input name="tolls_cad" type="number" min="0" step="0.01"/></label>
+          <label>Review<select name="review_status"><option value="unreviewed">Unreviewed</option><option value="reviewed">Reviewed</option><option value="excluded">Excluded</option></select></label>
+          <div class="wide"><button class="btn primary" type="submit">Save mileage</button></div>
+        </form></div>
+
+        <div class="card"><h3>Annual odometer reconciliation</h3><form id="vehicleYearForm" class="form-grid">
+          <label class="wide">Vehicle<select name="vehicle_id" data-vehicle-select required></select></label>
+          <label>Opening odometer km<input name="opening_odometer_km" type="number" min="0" step="0.1"/></label><label>Closing odometer km<input name="closing_odometer_km" type="number" min="0" step="0.1"/></label>
+          <label>Total annual km<input name="total_km" type="number" min="0" step="0.1"/></label><label>Business km<input name="business_km" type="number" min="0" step="0.1"/></label>
+          <label>Status<select name="status"><option value="draft">Draft</option><option value="review">Review</option><option value="ready">Ready</option></select></label>
+          <label class="wide">Notes<textarea name="notes" rows="2"></textarea></label>
+          <div class="wide"><button class="btn primary" type="submit">Save annual reconciliation</button></div>
+        </form></div>
+      </div>
+      <div id="vehicleSummary" class="table-wrap" style="margin-top:12px"></div>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <h2>Business-use-of-home workpaper</h2>
+      <p class="muted mini">The calculation uses factual area/time inputs, eligible home costs, prior carry-forward and the available business-income limit. It never includes home CCA automatically.</p>
+      <form id="homeForm" class="form-grid">
+        <label>Allocation method<select name="allocation_method"><option value="area">Area</option><option value="area_and_time">Area + shared-use time</option><option value="reasonable_other">Other reasonable basis</option></select></label>
+        <label>Workspace sq ft<input name="workspace_area_sqft" type="number" min="0" step="0.01"/></label><label>Home sq ft<input name="home_area_sqft" type="number" min="0" step="0.01"/></label>
+        <label>Other allocation %<input name="allocation_pct" type="number" min="0" max="100" step="0.01"/></label>
+        <label><span>Exclusive business use</span><input name="exclusive_business_use" type="checkbox" style="width:auto"/></label>
+        <label>Shared hours/day<input name="shared_hours_per_day" type="number" min="0" max="24" step="0.1"/></label><label>Shared days/week<input name="shared_days_per_week" type="number" min="0" max="7" step="0.1"/></label><label>Shared weeks/year<input name="shared_weeks_per_year" type="number" min="0" max="53" step="0.1"/></label>
+        <label>Heat<input data-home-cost="heat" type="number" min="0" step="0.01"/></label><label>Electricity<input data-home-cost="electricity" type="number" min="0" step="0.01"/></label><label>Water<input data-home-cost="water" type="number" min="0" step="0.01"/></label>
+        <label>Home insurance<input data-home-cost="home_insurance" type="number" min="0" step="0.01"/></label><label>Maintenance<input data-home-cost="maintenance" type="number" min="0" step="0.01"/></label><label>Mortgage interest<input data-home-cost="mortgage_interest" type="number" min="0" step="0.01"/></label>
+        <label>Property taxes<input data-home-cost="property_taxes" type="number" min="0" step="0.01"/></label><label>Rent<input data-home-cost="rent" type="number" min="0" step="0.01"/></label><label>Other eligible costs<input data-home-cost="other" type="number" min="0" step="0.01"/></label>
+        <label>Prior carry-forward CAD<input name="prior_carryforward_cad" type="number" min="0" step="0.01"/></label><label>Income limit override CAD<input name="net_income_limit_cad" type="number" min="0" step="0.01" placeholder="Blank = ledger net income"/></label><label>Claim amount CAD<input name="claim_amount_cad" type="number" min="0" step="0.01"/></label>
+        <label>Status<select name="review_status"><option value="draft">Draft</option><option value="review">Review</option><option value="ready">Ready</option></select></label>
+        <label class="wide">Notes<textarea name="notes" rows="2"></textarea></label>
+        <div class="wide"><button class="btn primary" type="submit">Save home-office workpaper</button></div>
+      </form>
+      <div id="homeCalc" class="metric-grid" style="margin-top:12px"></div>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <h2>Capital assets / CCA support</h2>
+      <p class="muted mini">The system stores facts and an explicit current-year claim candidate. It does not invent a CCA class or rate.</p>
+      <form id="assetForm" class="form-grid">
+        <input type="hidden" name="id"/>
+        <label class="wide">Asset name<input name="asset_name" required/></label><label>Inventory item ID optional<input name="inventory_item_id"/></label>
+        <label>Acquisition date<input name="acquisition_date" type="date" required/></label><label>Available for use<input name="available_for_use_date" type="date"/></label><label>Disposition date<input name="disposition_date" type="date"/></label>
+        <label>Capital cost CAD<input name="capital_cost_cad" type="number" min="0" step="0.01" required/></label><label>CCA class<input name="cca_class"/></label><label>Prior UCC CAD<input name="prior_ucc_cad" type="number" min="0" step="0.01"/></label>
+        <label>Business use %<input name="business_use_pct" type="number" min="0" max="100" step="0.01" value="100"/></label><label>Current-year CCA claim CAD<input name="current_year_cca_claim_cad" type="number" min="0" step="0.01"/></label>
+        <label>Status<select name="review_status"><option value="draft">Draft</option><option value="review">Review</option><option value="ready">Ready</option><option value="disposed">Disposed</option></select></label>
+        <label class="wide">Notes<textarea name="notes" rows="2"></textarea></label>
+        <div class="wide row"><button class="btn primary" type="submit">Save capital asset</button><button class="btn ghost" type="reset">New asset</button></div>
+      </form>
+      <div id="assetSummary" class="table-wrap" style="margin-top:12px"></div>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <h2>Year-end inventory / COGS support</h2>
+      <form id="yearSupportForm" class="form-grid">
+        <label>Opening inventory CAD<input name="opening_inventory_cad" type="number" min="0" step="0.01"/></label><label>Closing inventory CAD<input name="closing_inventory_cad" type="number" min="0" step="0.01"/></label>
+        <label>Valuation method<input name="inventory_valuation_method" placeholder="e.g. cost / reviewed method"/></label><label>Direct-cost adjustment CAD<input name="direct_cost_adjustment_cad" type="number" step="0.01" value="0"/></label>
+        <label>Filing status<select name="filing_status"><option value="collecting">Collecting</option><option value="review">Review</option><option value="accountant_ready">Accountant ready</option><option value="filed">Filed</option></select></label>
+        <label class="wide">Notes<textarea name="notes" rows="2"></textarea></label><label class="wide">Accountant notes<textarea name="accountant_notes" rows="2"></textarea></label>
+        <div class="wide"><button class="btn primary" type="submit">Save year-end support</button></div>
+      </form>
+    </div></section>
+
+    <section class="section"><div class="panel">
+      <h2>Tax evidence manifest</h2>
+      <p class="muted mini">Receipts and source documents remain in the existing Accounting Documents authority. Tax-support records can reference those documents rather than duplicating files.</p>
+      <div id="evidenceTable" class="table-wrap"></div>
+    </div></section>
+  </div>
+</main>
+<footer class="footer container" data-footer></footer>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script src="/assets/admin-menu.js"></script>
+<script src="/assets/chrome.js"></script>
+<script>
+(function(){
+  const $=s=>document.querySelector(s); const $$=s=>Array.from(document.querySelectorAll(s));
+  const status=$('#pageStatus'); const yearInput=$('#taxYear'); let state=null;
+  yearInput.value=String(new Date().getFullYear());
+  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+  function money(v){return new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(v||0));}
+  function setStatus(msg,kind=''){status.hidden=!msg;status.textContent=msg||'';status.dataset.state=kind;}
+  function val(form,name){return form.elements[name]?.value??'';} function num(form,name){const v=val(form,name);return v===''?null:Number(v);}
+  async function api(path,options={}){const r=await window.AdminAuth.fetchWithAuth(path,options);const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||`Request failed (${r.status})`);return d;}
+  async function post(operation,payload){setStatus('Saving tax-support record…');const d=await api('/api/admin/accounting_tax_support',{method:'POST',body:JSON.stringify({operation,...payload})});state=d.support;render();setStatus('Tax-support record saved.','success');return d;}
+  function fill(form,name,value){if(form.elements[name])form.elements[name].value=value??'';}
+
+  function render(){const s=state||{};const r=s.readiness||[];$('#readinessPill').textContent=`${s.ready_count||0}/${s.readiness_count||r.length||0} ready`;$('#readinessPill').className='pill '+((s.ready_count||0)===(s.readiness_count||r.length)&&r.length?'ok':'review');
+    $('#readinessMetrics').innerHTML=`<div class="metric"><span>Business km</span><strong>${Number(s.mileage_summary?.combined_business_km||0).toFixed(1)} km</strong></div><div class="metric"><span>Total reconciled km</span><strong>${Number(s.mileage_summary?.combined_total_km||0).toFixed(1)} km</strong></div><div class="metric"><span>Business use</span><strong>${s.mileage_summary?.combined_business_use_pct==null?'Review':Number(s.mileage_summary.combined_business_use_pct).toFixed(2)+'%'}</strong></div><div class="metric"><span>CCA claim candidate</span><strong>${money(s.capital_asset_summary?.suggested_cca_claim_cad)}</strong></div>`;
+    $('#readinessList').innerHTML=r.map(x=>`<div class="card"><span class="pill ${x.ready?'ok':'review'}">${x.ready?'ready':'needs facts'}</span><strong style="display:block;margin-top:6px">${esc(x.label)}</strong>${x.manual_input?'<span class="muted mini">Manual/business facts involved</span>':''}</div>`).join('');
+    renderProfile(s.profile); renderVehicles(s); renderHome(s); renderAssets(s); renderYear(s.tax_year_support); renderEvidence(s.documents||[]);
+  }
+  function renderProfile(p){if(!p)return;const f=$('#profileForm');fill(f,'entity_type',p.entity_type);fill(f,'jurisdiction_province',p.jurisdiction_province);fill(f,'gst_hst_registered',p.gst_hst_registered==null?'':String(p.gst_hst_registered));fill(f,'business_number_masked',String(p.business_number_masked||'').replace(/\D/g,'').slice(-4));fill(f,'gst_hst_number_masked',String(p.gst_hst_number_masked||'').replace(/\D/g,'').slice(-4));fill(f,'fiscal_year_end_month',p.fiscal_year_end_month);fill(f,'fiscal_year_end_day',p.fiscal_year_end_day);fill(f,'primary_business_activity',p.primary_business_activity);fill(f,'notes',p.notes);}
+  function renderVehicles(s){const vehicles=s.vehicles||[];$$('[data-vehicle-select]').forEach(sel=>{const keep=sel.value;sel.innerHTML='<option value="">Choose vehicle</option>'+vehicles.filter(v=>v.active!==false).map(v=>`<option value="${esc(v.id)}">${esc(v.label)}</option>`).join('');if(vehicles.some(v=>v.id===keep))sel.value=keep;});
+    const sums=s.mileage_summary?.vehicles||[];$('#vehicleSummary').innerHTML=`<table><thead><tr><th>Vehicle</th><th>Business km</th><th>Total km</th><th>Business use</th><th>Logs</th><th>Status</th></tr></thead><tbody>${sums.length?sums.map(x=>`<tr><td>${esc(x.vehicle?.label)}</td><td>${Number(x.reconciled_business_km||0).toFixed(1)}</td><td>${x.total_km==null?'—':Number(x.total_km).toFixed(1)}</td><td>${x.business_use_pct==null?'—':Number(x.business_use_pct).toFixed(2)+'%'}</td><td>${x.log_count||0} (${x.unreviewed_log_count||0} unreviewed)</td><td><span class="pill ${x.ready_for_allocation?'ok':'review'}">${x.ready_for_allocation?'reconciled':'review'}</span></td></tr>`).join(''):'<tr><td colspan="6">No business-use vehicles recorded yet.</td></tr>'}</tbody></table>`;}
+  function renderHome(s){const h=s.home_office;if(h){const f=$('#homeForm');['allocation_method','workspace_area_sqft','home_area_sqft','allocation_pct','shared_hours_per_day','shared_days_per_week','shared_weeks_per_year','prior_carryforward_cad','net_income_limit_cad','claim_amount_cad','review_status','notes'].forEach(k=>fill(f,k,h[k]));f.elements.exclusive_business_use.checked=h.exclusive_business_use===true;$$('[data-home-cost]').forEach(i=>i.value=h.eligible_costs?.[i.dataset.homeCost]??'');}
+    const c=s.home_office_calculation;$('#homeCalc').innerHTML=c?`<div class="metric"><span>Eligible home costs</span><strong>${money(c.eligible_cost_total_cad)}</strong></div><div class="metric"><span>Allocation</span><strong>${c.allocation_pct==null?'Review':Number(c.allocation_pct).toFixed(2)+'%'}</strong></div><div class="metric"><span>Current deduction candidate</span><strong>${c.suggested_current_year_deduction_cad==null?'Review':money(c.suggested_current_year_deduction_cad)}</strong></div><div class="metric"><span>Carry-forward candidate</span><strong>${c.suggested_carryforward_cad==null?'Review':money(c.suggested_carryforward_cad)}</strong></div>`:'';}
+  function renderAssets(s){const a=s.capital_assets||[];$('#assetSummary').innerHTML=`<table><thead><tr><th>Asset</th><th>Acquired</th><th>Cost</th><th>CCA class</th><th>Business use</th><th>Claim candidate</th><th>Status</th></tr></thead><tbody>${a.length?a.map(x=>`<tr><td>${esc(x.asset_name)}</td><td>${esc(x.acquisition_date)}</td><td>${money(x.capital_cost_cad)}</td><td>${esc(x.cca_class||'Review')}</td><td>${Number(x.business_use_pct||0).toFixed(2)}%</td><td>${x.current_year_cca_claim_cad==null?'Review':money(x.current_year_cca_claim_cad)}</td><td>${esc(x.review_status)}</td></tr>`).join(''):'<tr><td colspan="7">No capital assets recorded in the tax-support register.</td></tr>'}</tbody></table>`;}
+  function renderYear(y){if(!y)return;const f=$('#yearSupportForm');['opening_inventory_cad','closing_inventory_cad','inventory_valuation_method','direct_cost_adjustment_cad','filing_status','notes','accountant_notes'].forEach(k=>fill(f,k,y[k]));}
+  function renderEvidence(rows){$('#evidenceTable').innerHTML=`<table><thead><tr><th>Date</th><th>Type</th><th>Title</th><th>Related</th><th>File</th></tr></thead><tbody>${rows.length?rows.map(x=>`<tr><td>${esc(x.document_date||'')}</td><td>${esc(x.document_kind||'')}</td><td>${esc(x.title||'')}</td><td>${esc(x.related_type||'')} ${esc(x.related_id||'')}</td><td>${esc(x.file_name||x.storage_path||'')}</td></tr>`).join(''):'<tr><td colspan="5">No tax-tagged accounting documents are linked yet.</td></tr>'}</tbody></table>`;}
+
+  async function load(){const year=Math.max(2020,Math.min(2100,Number(yearInput.value||new Date().getFullYear())));yearInput.value=String(year);setStatus('Loading tax support…');const d=await api('/api/admin/accounting_tax_support?year='+year);state=d.support;render();setStatus('Tax support loaded.','success');}
+  $('#profileForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;const g=val(f,'gst_hst_registered');post('save_profile',{profile:{entity_type:val(f,'entity_type'),jurisdiction_province:val(f,'jurisdiction_province'),gst_hst_registered:g===''?null:g==='true',business_number_masked:val(f,'business_number_masked'),gst_hst_number_masked:val(f,'gst_hst_number_masked'),fiscal_year_end_month:num(f,'fiscal_year_end_month'),fiscal_year_end_day:num(f,'fiscal_year_end_day'),primary_business_activity:val(f,'primary_business_activity'),notes:val(f,'notes')}}).catch(err=>setStatus(err.message,'error'));});
+  $('#vehicleForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;post('save_vehicle',{year:Number(yearInput.value),vehicle:{id:val(f,'id'),label:val(f,'label'),vehicle_year:num(f,'vehicle_year'),make:val(f,'make'),model:val(f,'model'),ownership_type:val(f,'ownership_type'),acquisition_date:val(f,'acquisition_date'),placed_in_service_date:val(f,'placed_in_service_date'),capital_cost_cad:num(f,'capital_cost_cad'),cca_class:val(f,'cca_class'),notes:val(f,'notes')}}).then(()=>f.reset()).catch(err=>setStatus(err.message,'error'));});
+  $('#mileageForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;post('save_mileage',{year:Number(yearInput.value),mileage:{vehicle_id:val(f,'vehicle_id'),trip_date:val(f,'trip_date'),booking_id:val(f,'booking_id'),purpose:val(f,'purpose'),origin_label:val(f,'origin_label'),destination_label:val(f,'destination_label'),start_odometer_km:num(f,'start_odometer_km'),end_odometer_km:num(f,'end_odometer_km'),total_km:num(f,'total_km'),business_km:num(f,'business_km'),parking_cad:num(f,'parking_cad'),tolls_cad:num(f,'tolls_cad'),review_status:val(f,'review_status')}}).then(()=>f.reset()).catch(err=>setStatus(err.message,'error'));});
+  $('#vehicleYearForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;post('save_vehicle_year',{year:Number(yearInput.value),vehicle_year:{vehicle_id:val(f,'vehicle_id'),tax_year:Number(yearInput.value),opening_odometer_km:num(f,'opening_odometer_km'),closing_odometer_km:num(f,'closing_odometer_km'),total_km:num(f,'total_km'),business_km:num(f,'business_km'),status:val(f,'status'),notes:val(f,'notes')}}).catch(err=>setStatus(err.message,'error'));});
+  $('#homeForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;const eligible={};$$('[data-home-cost]').forEach(i=>eligible[i.dataset.homeCost]=i.value===''?0:Number(i.value));post('save_home_office',{home_office:{tax_year:Number(yearInput.value),allocation_method:val(f,'allocation_method'),workspace_area_sqft:num(f,'workspace_area_sqft'),home_area_sqft:num(f,'home_area_sqft'),allocation_pct:num(f,'allocation_pct'),exclusive_business_use:f.elements.exclusive_business_use.checked,shared_hours_per_day:num(f,'shared_hours_per_day'),shared_days_per_week:num(f,'shared_days_per_week'),shared_weeks_per_year:num(f,'shared_weeks_per_year'),eligible_costs:eligible,prior_carryforward_cad:num(f,'prior_carryforward_cad'),net_income_limit_cad:num(f,'net_income_limit_cad'),claim_amount_cad:num(f,'claim_amount_cad'),review_status:val(f,'review_status'),notes:val(f,'notes')}}).catch(err=>setStatus(err.message,'error'));});
+  $('#assetForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;post('save_capital_asset',{year:Number(yearInput.value),asset:{id:val(f,'id'),asset_name:val(f,'asset_name'),inventory_item_id:val(f,'inventory_item_id'),acquisition_date:val(f,'acquisition_date'),available_for_use_date:val(f,'available_for_use_date'),disposition_date:val(f,'disposition_date'),capital_cost_cad:num(f,'capital_cost_cad'),cca_class:val(f,'cca_class'),prior_ucc_cad:num(f,'prior_ucc_cad'),business_use_pct:num(f,'business_use_pct'),current_year_cca_claim_cad:num(f,'current_year_cca_claim_cad'),review_status:val(f,'review_status'),notes:val(f,'notes')}}).then(()=>f.reset()).catch(err=>setStatus(err.message,'error'));});
+  $('#yearSupportForm').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;post('save_tax_year',{tax_year_support:{tax_year:Number(yearInput.value),opening_inventory_cad:num(f,'opening_inventory_cad'),closing_inventory_cad:num(f,'closing_inventory_cad'),inventory_valuation_method:val(f,'inventory_valuation_method'),direct_cost_adjustment_cad:num(f,'direct_cost_adjustment_cad'),filing_status:val(f,'filing_status'),notes:val(f,'notes'),accountant_notes:val(f,'accountant_notes')}}).catch(err=>setStatus(err.message,'error'));});
+  $('#refreshBtn').addEventListener('click',()=>load().catch(err=>setStatus(err.message,'error')));
+  $('#packageBtn').addEventListener('click',async()=>{try{setStatus('Building accountant package…');const year=Number(yearInput.value);const d=await api('/api/admin/accounting_accountant_package?year='+year);const blob=new Blob([JSON.stringify(d.accountant_package,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`rosie-accountant-package-${year}.json`;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},0);setStatus('Accountant workpaper package built.','success');}catch(err){setStatus(err.message,'error')}});
+  window.AdminShell.boot({pageKey:'admin-tax-review',onReady:()=>{window.AdminMenu.render({currentPage:'admin-tax-review'});load().catch(err=>setStatus(err.message,'error'));}});
+})();
+</script>
+</body>
+</html>
