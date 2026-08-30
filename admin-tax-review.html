@@ -21,14 +21,14 @@
     details{margin-top:12px}pre{white-space:pre-wrap;overflow:auto;max-height:360px}
   </style>
 </head>
-<body data-page="admin-tax-review" data-build272="t2125-tax-workpaper">
-<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-accounting.html">Accounting</a><a href="/admin-payments.html">Payments</a></nav></div></header>
+<body data-page="admin-tax-review" data-build273="structured-t2125-tax-workpaper">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-accounting.html">Accounting</a><a href="/admin-tax-support.html">Tax Support</a><a href="/admin-payments.html">Payments</a></nav></div></header>
 <main class="container">
   <div class="status" data-page-status hidden></div>
   <section class="hero compact">
-    <p class="eyebrow">Finance · Build 272</p>
+    <p class="eyebrow">Finance · Build 273</p>
     <h1 style="margin:10px 0 6px">Tax and T2125 review</h1>
-    <p class="kicker" style="margin:0;max-width:900px">Turn the posted accounting ledger into accountant-ready GST/HST and T2125 workpapers. The application proposes categories and calculations, while anything requiring tax judgment stays visibly flagged for review.</p>
+    <p class="kicker" style="margin:0;max-width:900px">Turn the posted accounting ledger and structured tax-support records into accountant-ready GST/HST and T2125 workpapers. The application proposes categories and calculations, while anything requiring tax judgment stays visibly flagged for review.</p>
   </section>
   <div class="grid">
     <div data-admin-menu-mount></div>
@@ -44,12 +44,13 @@
     </div></section>
     <section class="section"><div class="panel">
       <h2>T2125 year-end workpaper</h2>
-      <p class="muted">Uses posted accounting entries to propose CRA expense categories. Vehicle, business-use-of-home, CCA, cost-of-goods-sold and uncertain mappings remain review items until their supporting facts are complete.</p>
+      <p class="muted">Uses posted accounting entries plus Build 273 mileage, home-office, CCA and inventory support to propose CRA expense categories. Missing facts and tax judgments remain review items rather than being guessed.</p>
       <div class="toolbar">
         <label>Tax year<input id="t2125Year" type="number" min="2020" max="2100" step="1"/></label>
         <button class="btn primary" id="loadT2125" type="button">Build T2125 workpaper</button>
         <button class="btn ghost" id="downloadT2125Csv" type="button" disabled>Download CSV</button>
         <button class="btn ghost" id="downloadT2125Json" type="button" disabled>Download JSON</button>
+        <a class="btn ghost" href="/admin-tax-support.html">Enter supporting facts</a>
         <a class="btn ghost" href="/admin-accounting.html">Accounting cockpit</a>
       </div>
       <div id="t2125Out" class="card muted">Choose a year to build the workpaper.</div>
@@ -96,9 +97,11 @@
     const s=w.summary||{},h=w.gst_hst_workpaper||{},rows=w.line_items||[],flags=w.review_flags||[];
     const lineHtml=rows.length?rows.map(r=>'<tr><td>'+esc(r.line)+'</td><td>'+esc(r.category)+'</td><td>'+esc((r.source_accounts||[]).join(', '))+'</td><td class="num">'+moneyDollars(r.recorded_amount_cad)+'</td><td class="num">'+(Number(r.unresolved_amount_cad||0)>0?'Review':moneyDollars(r.suggested_deductible_cad))+'</td><td><span class="pill '+(r.review_required?'review':'ok')+'">'+(r.review_required?'review':'mapped')+'</span></td></tr>').join(''):'<tr><td colspan="6">No expense-category rows were found for this year.</td></tr>';
     const flagHtml=flags.length?'<div class="flags">'+flags.map(f=>'<div class="flag"><strong>'+esc((f.severity||'review').toUpperCase())+'</strong> '+esc(f.account_code?f.account_code+' — ':'')+esc(f.message||'Review required')+(f.amount_cad!=null?' ('+moneyDollars(f.amount_cad)+')':'')+'</div>').join('')+'</div>':'<p><span class="pill ok">No automatic review flags</span></p>';
+    const support=w.structured_tax_support||{};
+    const supportHtml=support.readiness?'<h3>Structured tax support</h3><div class="metric-grid"><div class="metric"><span>Vehicle business use</span><strong>'+(support.vehicle?.combined_business_use_pct==null?'Review':Number(support.vehicle.combined_business_use_pct).toFixed(2)+'%')+'</strong></div><div class="metric"><span>Home-office candidate</span><strong>'+(support.home_office?.current_year_candidate_cad==null?'Review':moneyDollars(support.home_office.current_year_candidate_cad))+'</strong></div><div class="metric"><span>CCA claim candidate</span><strong>'+moneyDollars(support.cca?.claim_candidate_cad||0)+'</strong></div></div>':'';
     tOut.classList.remove('muted');
     tOut.innerHTML='<div><strong>'+esc(w.workpaper_type||'T2125')+' workpaper · '+esc(w.tax_year)+'</strong> <span class="pill '+(w.filing_status==='review_required'?'review':'ok')+'">'+esc(w.filing_status||'review')+'</span></div>'+
-      '<div class="metric-grid"><div class="metric"><span>Gross business revenue</span><strong>'+moneyDollars(s.gross_business_revenue_cad)+'</strong></div><div class="metric"><span>Ledger expenses</span><strong>'+moneyDollars(s.ledger_expenses_cad)+'</strong></div><div class="metric"><span>Ledger net income</span><strong>'+moneyDollars(s.ledger_net_income_cad)+'</strong></div><div class="metric"><span>Mapped deductible candidate</span><strong>'+moneyDollars(s.known_deductible_candidate_cad)+'</strong></div><div class="metric"><span>Amount still requiring tax allocation</span><strong>'+moneyDollars(s.unresolved_expense_cad)+'</strong></div><div class="metric"><span>Owner draws (not business expense)</span><strong>'+moneyDollars(s.owner_draw_cad)+'</strong></div></div>'+
+      '<div class="metric-grid"><div class="metric"><span>Gross business revenue</span><strong>'+moneyDollars(s.gross_business_revenue_cad)+'</strong></div><div class="metric"><span>Ledger expenses</span><strong>'+moneyDollars(s.ledger_expenses_cad)+'</strong></div><div class="metric"><span>Ledger net income</span><strong>'+moneyDollars(s.ledger_net_income_cad)+'</strong></div><div class="metric"><span>Mapped deductible candidate</span><strong>'+moneyDollars(s.known_deductible_candidate_cad)+'</strong></div><div class="metric"><span>Amount still requiring tax allocation</span><strong>'+moneyDollars(s.unresolved_expense_cad)+'</strong></div><div class="metric"><span>Owner draws (not business expense)</span><strong>'+moneyDollars(s.owner_draw_cad)+'</strong></div></div>'+supportHtml+
       '<h3>GST/HST ledger workpaper</h3><div class="metric-grid"><div class="metric"><span>HST collected</span><strong>'+moneyDollars(h.collected_cad)+'</strong></div><div class="metric"><span>ITC / debit activity</span><strong>'+moneyDollars(h.input_tax_credit_debit_activity_cad)+'</strong></div><div class="metric"><span>Net tax activity</span><strong>'+moneyDollars(h.net_tax_activity_cad)+'</strong></div></div><p class="muted">'+esc(h.note||'')+'</p>'+
       '<h3>T2125 category mapping</h3><div class="table-wrap"><table><thead><tr><th>Line</th><th>CRA category</th><th>Source account(s)</th><th>Recorded</th><th>Candidate</th><th>Status</th></tr></thead><tbody>'+lineHtml+'</tbody></table></div><h3>Review queue</h3>'+flagHtml+'<details><summary>Supporting-record checklist</summary><pre>'+esc(JSON.stringify(w.required_support||{},null,2))+'</pre></details><p class="muted" style="margin-top:12px">'+esc(w.disclaimer||'')+'</p>';
   }
