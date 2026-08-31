@@ -101,6 +101,8 @@ function formatActor(staffUser) {
     is_admin: isAdmin,
     is_senior_detailer: isSenior,
     is_detailer: isDetailer,
+    permissions_profile: staffUser.permissions_profile || {},
+    module_access: staffUser.module_access || staffUser.permissions_profile?.module_access || {},
     capabilities: {
       can_override_lower_entries: isAdmin || staffUser.can_override_lower_entries === true,
       can_manage_bookings: isAdmin || staffUser.can_manage_bookings === true,

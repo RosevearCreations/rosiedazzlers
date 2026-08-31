@@ -118,7 +118,8 @@
     const membership = growth.membership_plan_settings || {};
     qs('#planName').textContent = membership.plan_name || 'Maintain Your Shine Plan';
     qs('#planCycle').textContent = membership.cycle_label || 'Every 4 or 8 weeks';
-    qs('#cycleSummary').textContent = membership.cycle_label || 'Every 4 or 8 weeks';
+    const cycleSummary = qs('#cycleSummary');
+    if (cycleSummary) cycleSummary.textContent = membership.cycle_label || 'Every 4 or 8 weeks';
     qs('#planTeaser').textContent = membership.teaser || qs('#planTeaser').textContent;
     const benefits = Array.isArray(membership.benefits) && membership.benefits.length ? membership.benefits : ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'];
     qs('#planBenefits').innerHTML = benefits.map((item)=>`<li>${esc(item)}</li>`).join('');

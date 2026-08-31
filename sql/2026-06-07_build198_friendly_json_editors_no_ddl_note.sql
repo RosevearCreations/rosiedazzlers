@@ -1,6 +1,0 @@
--- Build 198 friendly JSON editor conversion note
--- Date: 2026-06-07
--- No database schema changes are required.
--- Social feeds, before/after gallery rows, and water restriction rules now use friendly admin row editors
--- while continuing to save through existing app_management_settings / editable water-rule endpoints.
--- Raw JSON remains available only as an advanced emergency/fallback-sync view.

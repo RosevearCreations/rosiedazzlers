@@ -134,7 +134,7 @@ create table if not exists public.staff_users (
   updated_at timestamptz not null default now(),
   full_name text not null,
   email text not null unique,
-  role_code text not null default 'detailer' check (role_code in ('admin','senior_detailer','detailer')),
+  role_code text not null default 'detailer' check (role_code in ('admin','senior_detailer','detailer','operations_manager','accountant','it_specialist','promoter','daip_manager')),
   is_active boolean not null default true,
   password_hash text null,
   can_override_lower_entries boolean not null default false,

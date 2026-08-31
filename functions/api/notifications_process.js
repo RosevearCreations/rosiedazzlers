@@ -1,5 +1,6 @@
 
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { requireActionAccess } from "./_lib/action-permissions.js";
 import { loadFeatureFlags } from "./_lib/app-settings.js";
 import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js";
 
@@ -10,8 +11,10 @@ export async function onRequestPost(context) {
   try {
     const body = await request.json().catch(() => ({}));
     const flags = await loadFeatureFlags(env);
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_staff", allowLegacyAdminFallback: false });
+    const access = await requireStaffAccess({ request, env, body, capability: null, allowLegacyAdminFallback: false });
     if (!access.ok) return withCors(access.response);
+    const actionAccess = requireActionAccess(access.actor, "it.notifications.process");
+    if (!actionAccess.ok) return withCors(actionAccess.response);
 
     if (flags.notifications_retry_enabled === false) {
       return withCors(json({ error: "Notification retry is disabled by app settings." }, 403));
@@ -19,7 +22,7 @@ export async function onRequestPost(context) {
 
     const ids = Array.isArray(body.ids) ? body.ids.filter(Boolean) : [];
     const nowIso = new Date().toISOString();
-    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,event_type,channel,recipient_email,recipient_phone,subject,body_text,body_html,payload,status,attempt_count,last_error,max_attempts,next_attempt_at`;
+    let url = `${env.SUPABASE_URL}/rest/v1/notification_events?select=id,event_type,channel,booking_id,customer_profile_id,recipient_staff_user_id,recipient_email,recipient_phone,subject,body_text,body_html,payload,status,attempt_count,last_error,max_attempts,next_attempt_at`;
     if (ids.length) {
       url += `&id=in.(${ids.map(encodeURIComponent).join(",")})`;
     } else {
@@ -35,16 +38,19 @@ export async function onRequestPost(context) {
     for (const item of rows) {
       const currentAttempts = Number(item.attempt_count || 0);
       const maxAttempts = Number(item.max_attempts || 5);
-      const hasRecipient = !!(item.recipient_email || item.recipient_phone);
+      const channel = String(item.channel || "").trim().toLowerCase();
+      const hasRecipient = channel === "push"
+        ? !!(item.recipient_staff_user_id || item.customer_profile_id)
+        : !!(item.recipient_email || item.recipient_phone);
 
       if (!hasRecipient) {
         await patchEvent(env, item.id, {
           status: "failed",
-          last_error: "Missing recipient.",
+          last_error: channel === "push" ? "Missing push recipient." : "Missing recipient.",
           attempt_count: currentAttempts + 1,
           processed_at: new Date().toISOString()
         });
-        results.push({ id: item.id, ok: false, error: "Missing recipient." });
+        results.push({ id: item.id, ok: false, error: channel === "push" ? "Missing push recipient." : "Missing recipient." });
         continue;
       }
 

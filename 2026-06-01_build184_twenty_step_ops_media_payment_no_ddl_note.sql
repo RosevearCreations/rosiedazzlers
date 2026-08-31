@@ -1,4 +1,0 @@
--- Build 184 (2026-06-01): no DDL required.
--- Adds 20-step operational hardening around media health scanning, refund status polling,
--- receipt requeueing, accountant payment exports, admin dashboard/menu access, and docs.
--- Uses existing Build 180-182 payment tables plus static image requirements JSON.

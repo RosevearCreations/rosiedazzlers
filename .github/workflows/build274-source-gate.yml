@@ -1,0 +1,83 @@
+name: Build 274 Source Gate
+
+on:
+  push:
+    branches:
+      - build274-full-closure-queue
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build274-source-gate
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Build 274 source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact feature commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check canonical pricing browser syntax
+        run: node --check assets/pricing-catalog-client.js
+
+      - name: Check Quick Book syntax
+        run: node --check assets/booking-quick-start-v274.js
+
+      - name: Check canonical pricing server syntax
+        run: node --check functions/api/_lib/pricing-catalog.js
+
+      - name: Check payment lifecycle syntax
+        run: |
+          node --check functions/api/_lib/payment-money.js
+          node --check functions/api/_lib/quote-deposit-payments.js
+          node --check functions/api/paypal/capture-order.js
+          node --check functions/api/paypal/webhook.js
+          node --check functions/api/stripe/webhook.js
+          node --check functions/api/checkout.js
+
+      - name: Check payment money units
+        run: node scripts/build274_payment_money_check.mjs
+
+      - name: Run retained Build 271 focused guard
+        run: python scripts/build271_release_check.py
+
+      - name: Run retained Build 272 focused guard
+        run: python scripts/build272_release_check.py
+
+      - name: Run retained Build 273 focused guard
+        run: python scripts/build273_release_check.py
+
+      - name: Run Build 274 focused guard
+        run: python scripts/build274_release_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Source gate summary
+        run: |
+          {
+            echo "### Build 274 source gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Feature branch: \`${GITHUB_REF_NAME}\`"
+            echo "- Pricing/Quick Book/payment syntax: PASS"
+            echo "- Payment money-unit behavior: PASS"
+            echo "- Retained Build 271/272/273 focused guards: PASS"
+            echo "- Focused Build 274 guard: PASS"
+            echo "- Cumulative release guard: PASS"
+            echo "- No Cloudflare resource or external provider was mutated by this workflow."
+          } >> "$GITHUB_STEP_SUMMARY"

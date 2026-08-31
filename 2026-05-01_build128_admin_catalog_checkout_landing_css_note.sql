@@ -1,8 +1,0 @@
--- 2026-05-01_build128_admin_catalog_checkout_landing_css_note.sql
--- Build 128 UI/runtime hardening note.
--- No destructive DDL is required by this patch.
--- Runtime changes:
--- 1) /api/checkout now retries booking inserts after stripping optional modern booking columns when Supabase reports missing schema-cache columns.
--- 2) Admin App seeds editable location landing-page drafts when the saved landing_pages setting is empty.
--- 3) Admin Catalog table/editor and Admin Accounting date controls were compacted with CSS-only fixes.
--- Recommended DB check: ensure earlier migrations for booking service-area, vehicle, and geofence columns have been applied before disabling the checkout legacy fallback.

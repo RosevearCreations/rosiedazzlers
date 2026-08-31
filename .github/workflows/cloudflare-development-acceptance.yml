@@ -1,0 +1,251 @@
+name: Cloudflare Development Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-cloudflare-development
+  cancel-in-progress: true
+
+env:
+  CF_PROJECT_NAME: rosiedazzlers
+  CF_DEV_BRANCH: dev
+  CF_DEV_URL: https://dev.rosiedazzlers.pages.dev
+
+jobs:
+  verify-development:
+    name: Verify Development deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout exact dev commit
+        uses: actions/checkout@v4
+
+      - name: Validate ROSIEDAZZLERS_TOKEN secret presence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
+            echo "::error::GitHub Actions secret ROSIEDAZZLERS_TOKEN is empty or unavailable to this repository workflow."
+            exit 2
+          fi
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          echo "ROSIEDAZZLERS_TOKEN secret is present."
+
+      - name: Verify Cloudflare API token
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail-with-body --silent --show-error \
+            "https://api.cloudflare.com/client/v4/user/tokens/verify" \
+            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            --header "Content-Type: application/json" \
+            > /tmp/cf-token.json
+          jq -e '.success == true and (.result.status // "") == "active"' /tmp/cf-token.json >/dev/null
+          echo "ROSIEDAZZLERS_TOKEN is an active Cloudflare API token."
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Run Build 271 focused guard
+        run: python scripts/build271_release_check.py
+
+      - name: Run Build 272 focused guard
+        run: python scripts/build272_release_check.py
+
+      - name: Run Build 273 focused guard
+        run: python scripts/build273_release_check.py
+
+      - name: Run Build 274 focused guard
+        run: python scripts/build274_release_check.py
+
+      - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
+        id: cloudflare
+        shell: bash
+        run: |
+          set -euo pipefail
+          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
+          account_id="${CONFIGURED_ACCOUNT_ID:-}"
+
+          project_ok() {
+            local candidate="$1"
+            local code
+            code=$(curl --silent --show-error --output /tmp/cf-project.json --write-out '%{http_code}' \
+              "https://api.cloudflare.com/client/v4/accounts/${candidate}/pages/projects/${CF_PROJECT_NAME}" \
+              "${AUTH[@]}")
+            [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/cf-project.json >/dev/null 2>&1
+          }
+
+          if [[ -n "$account_id" ]]; then
+            if ! project_ok "$account_id"; then
+              echo "::error::Configured CLOUDFLARE_ACCOUNT_ID cannot read Pages project ${CF_PROJECT_NAME}."
+              exit 3
+            fi
+          else
+            curl --fail-with-body --silent --show-error \
+              "https://api.cloudflare.com/client/v4/accounts?per_page=50" \
+              "${AUTH[@]}" > /tmp/cf-accounts.json
+            jq -e '.success == true' /tmp/cf-accounts.json >/dev/null
+            while IFS= read -r candidate; do
+              [[ -z "$candidate" ]] && continue
+              if project_ok "$candidate"; then
+                account_id="$candidate"
+                break
+              fi
+            done < <(jq -r '.result[]?.id' /tmp/cf-accounts.json)
+          fi
+
+          if [[ -z "$account_id" ]]; then
+            echo "::error::ROSIEDAZZLERS_TOKEN is valid but cannot discover/read Pages project ${CF_PROJECT_NAME}."
+            exit 4
+          fi
+
+          project_name=$(jq -r '.result.name // empty' /tmp/cf-project.json)
+          production_branch=$(jq -r '.result.production_branch // empty' /tmp/cf-project.json)
+          subdomain=$(jq -r '.result.subdomain // empty' /tmp/cf-project.json)
+          source_type=$(jq -r '.result.source.type // empty' /tmp/cf-project.json)
+          source_repo=$(jq -r '.result.source.config.repo_name // empty' /tmp/cf-project.json)
+
+          echo "account_id=${account_id}" >> "$GITHUB_OUTPUT"
+          echo "project_name=${project_name}" >> "$GITHUB_OUTPUT"
+          echo "production_branch=${production_branch}" >> "$GITHUB_OUTPUT"
+          echo "subdomain=${subdomain}" >> "$GITHUB_OUTPUT"
+          echo "source_type=${source_type}" >> "$GITHUB_OUTPUT"
+          echo "source_repo=${source_repo}" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Cloudflare project authority"
+            echo "- Project: \`${project_name}\`"
+            echo "- Production branch: \`${production_branch:-unknown}\`"
+            echo "- Pages subdomain: \`${subdomain:-unknown}\`"
+            echo "- Source type: \`${source_type:-unknown}\`"
+            echo "- Source repository: \`${source_repo:-unknown}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Confirm exact dev SHA reached Cloudflare Pages
+        id: deployment
+        shell: bash
+        env:
+          CF_ACCOUNT_ID: ${{ steps.cloudflare.outputs.account_id }}
+        run: |
+          set -euo pipefail
+          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
+          matched_id=""
+          matched_url=""
+          matched_status=""
+
+          for attempt in $(seq 1 12); do
+            curl --fail-with-body --silent --show-error \
+              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
+              "${AUTH[@]}" > /tmp/cf-deployments.json
+            jq -e '.success == true' /tmp/cf-deployments.json >/dev/null
+
+            matched_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_DEV_BRANCH" '
+              [.result[]? | select(
+                (.deployment_trigger.metadata.branch // "") == $branch and
+                (.deployment_trigger.metadata.commit_hash // "") == $sha
+              )][0].id // empty
+            ' /tmp/cf-deployments.json)
+
+            if [[ -n "$matched_id" ]]; then
+              matched_url=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | .url // empty' /tmp/cf-deployments.json | head -n1)
+              matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/cf-deployments.json | head -n1)
+              break
+            fi
+
+            if [[ "$attempt" -lt 12 ]]; then sleep 10; fi
+          done
+
+          if [[ -z "$matched_id" ]]; then
+            latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].deployment_trigger.metadata.commit_hash // "none"' /tmp/cf-deployments.json)
+            latest_url=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].url // "none"' /tmp/cf-deployments.json)
+            latest_env=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].environment // "none"' /tmp/cf-deployments.json)
+            echo "::error::Cloudflare does not yet show exact dev commit ${GITHUB_SHA}. Latest visible dev deployment is ${latest_sha} (${latest_env}) at ${latest_url}."
+            exit 5
+          fi
+
+          echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
+          echo "deployment_url=${matched_url}" >> "$GITHUB_OUTPUT"
+          echo "deployment_status=${matched_status}" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Exact Development deployment"
+            echo "- GitHub SHA: \`${GITHUB_SHA}\`"
+            echo "- Cloudflare deployment: \`${matched_id}\`"
+            echo "- Deployment status: \`${matched_status}\`"
+            echo "- Deployment URL: ${matched_url:-not returned}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Development HTTP smoke checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          app_code=$(curl --silent --show-error --location --output /tmp/rosie-app.html --write-out '%{http_code}' "${CF_DEV_URL}/app/")
+          if [[ "$app_code" != "200" ]]; then
+            echo "::error::Development Staff App returned HTTP ${app_code}."
+            exit 6
+          fi
+          grep -q "Staff App Launcher" /tmp/rosie-app.html || {
+            echo "::error::Development /app/ did not contain the Staff App Launcher marker."
+            exit 7
+          }
+
+          for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace" "/api/admin/accounting_tax_support" "/api/admin/accounting_accountant_package" "/api/admin/integration_status"; do
+            code=$(curl --silent --show-error --output /tmp/rosie-api.json --write-out '%{http_code}' "${CF_DEV_URL}${endpoint}")
+            if [[ "$code" =~ ^5 ]]; then
+              echo "::error::Protected smoke endpoint ${endpoint} returned HTTP ${code}; Functions may not have loaded cleanly."
+              cat /tmp/rosie-api.json || true
+              exit 8
+            fi
+            echo "${endpoint} returned expected protected/non-5xx HTTP ${code}."
+          done
+
+          tax_page_code=$(curl --silent --show-error --location --output /tmp/rosie-tax-support.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-tax-support.html")
+          if [[ "$tax_page_code" != "200" ]]; then
+            echo "::error::Development Tax Support page returned HTTP ${tax_page_code}."
+            exit 9
+          fi
+          grep -q "Tax support & accountant readiness" /tmp/rosie-tax-support.html || {
+            echo "::error::Development Tax Support page did not contain the Build 273 marker."
+            exit 10
+          }
+
+          it_page_code=$(curl --silent --show-error --location --output /tmp/rosie-it-connections.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-integrations.html")
+          if [[ "$it_page_code" != "200" ]]; then
+            echo "::error::Development I.T. Connections page returned HTTP ${it_page_code}."
+            exit 11
+          fi
+          grep -q 'data-build274="it-help-foundation"' /tmp/rosie-it-connections.html || {
+            echo "::error::Development I.T. Connections page did not contain the Build 274 marker."
+            exit 12
+          }
+
+          {
+            echo "### Development smoke"
+            echo "- ${CF_DEV_URL}/app/ → HTTP 200 + Staff App Launcher marker"
+            echo "- ${CF_DEV_URL}/admin-tax-support.html → HTTP 200 + Build 273 marker"
+            echo "- ${CF_DEV_URL}/admin-integrations.html → HTTP 200 + Build 274 I.T. Connections marker"
+            echo "- protected API module graph including Build 273 Finance + Build 274 I.T. status endpoints → non-5xx"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Record acceptance boundary
+        shell: bash
+        run: |
+          {
+            echo "### Acceptance boundary"
+            echo "This workflow proves cumulative/source guards through Build 274, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, Tax Support and I.T. Connections page availability, protected I.T. status route loading, and anonymous HTTP/module-load smoke only."
+            echo "Authenticated contextual-help behavior, authenticated Finance write/read behavior, actual tax-source facts/accountant review, real-device/provider delivery, payment sandboxes, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain current-release manual/external evidence."
+          } >> "$GITHUB_STEP_SUMMARY"

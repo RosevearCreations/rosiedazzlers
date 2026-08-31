@@ -1,8 +1,0 @@
--- Build 135 admin landing / inventory option repair note
--- No required DDL in this pass.
--- Frontend/admin changes:
--- 1) Admin App landing add-on/location dropdowns preserve selection and update editor fields.
--- 2) Service areas/travel tiers hydrate from bundled pricing fallback when saved settings are sparse.
--- 3) Admin App stores catalog_dropdown_options in app_settings for configurable dropdown suggestions.
--- 4) Admin Catalog merges saved catalog_inventory_items rows with bundled gear/consumable JSON fallbacks so edited rows do not hide unsaved fallback catalog items.
--- Future optional backend improvement: add a dedicated catalog_option_sets table if dropdown suggestions should be shared across users without relying only on app_settings/browser fallback.

@@ -1,0 +1,52 @@
+{
+  "build": 269,
+  "extended_through_build": 273,
+  "version": 1,
+  "authority": "staff_users.permissions_profile.action_access",
+  "principles": {
+    "module_ceiling_first": true,
+    "admin_all_actions_required": true,
+    "permission_does_not_wake_module": true,
+    "legacy_capabilities_remain_compatible_during_convergence": true
+  },
+  "actions": {
+    "detailer.job.view": {"module":"detailer"},
+    "detailer.job.update": {"module":"detailer"},
+    "detailer.message.send": {"module":"detailer"},
+    "operations.schedule.view": {"module":"operations"},
+    "operations.schedule.manage": {"module":"operations"},
+    "operations.assignment.manage": {"module":"operations"},
+    "operations.customer.manage": {"module":"operations"},
+    "operations.quote.manage": {"module":"operations"},
+    "admin.staff.view": {"module":"admin"},
+    "admin.staff.manage": {"module":"admin"},
+    "admin.settings.manage": {"module":"admin"},
+    "it.runtime.view": {"module":"it"},
+    "it.runtime.manage": {"module":"it"},
+    "it.notifications.view": {"module":"it"},
+    "it.notifications.process": {"module":"it"},
+    "it.modules.manage": {"module":"it"},
+    "finance.view": {"module":"finance"},
+    "finance.post": {"module":"finance"},
+    "finance.reconcile": {"module":"finance"},
+    "finance.period.close": {"module":"finance"},
+    "finance.refund.manage": {"module":"finance"},
+    "finance.settlement.manage": {"module":"finance"},
+    "finance.tax.manage": {"module":"finance"},
+    "daip.view": {"module":"daip"},
+    "daip.manage": {"module":"daip"},
+    "socials.view": {"module":"socials"},
+    "socials.manage": {"module":"socials"},
+    "socials.publish": {"module":"socials"}
+  },
+  "role_defaults": {
+    "detailer": ["detailer.job.view","detailer.job.update","detailer.message.send"],
+    "senior_detailer": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.quote.manage"],
+    "operations_manager": ["detailer.job.view","detailer.job.update","detailer.message.send","operations.schedule.view","operations.schedule.manage","operations.assignment.manage","operations.customer.manage","operations.quote.manage"],
+    "accountant": ["finance.view","finance.post","finance.reconcile","finance.period.close","finance.refund.manage","finance.settlement.manage","finance.tax.manage"],
+    "it_specialist": ["it.runtime.view","it.runtime.manage","it.notifications.view","it.notifications.process","it.modules.manage"],
+    "promoter": ["socials.view","socials.manage","socials.publish"],
+    "daip_manager": ["daip.view","daip.manage"],
+    "admin": ["*"]
+  }
+}

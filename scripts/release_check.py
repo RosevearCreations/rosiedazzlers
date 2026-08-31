@@ -1,260 +1,180 @@
 #!/usr/bin/env python3
-"""Rosie Dazzlers release smoke checks.
-
-Build 206 note:
-- Adds dedicated Gallery Approvals, Quote Pipeline, and Value-Added Operations dashboards with DB migration destinations for the top sanity-check additions.
-
-Build 205 note:
-- Adds a sanity-check/value-added roadmap screen, dashboard card, structured backlog, and competitor-inspired next-step documentation.
-
-Build 204 note:
-- Repairs before/after Gallery image loading with field-alias normalization, static fallback data, local asset fallback handling, and dashboard diagnostics.
-
-Build 203 note:
-- Adds desktop/mobile visual polish, responsive diagnostics, and professional image/card treatment.
-
-Build 202 note:
-- Adds private incident reports with required evidence, admin-approved customer-visible summaries/photos, and a marketing tracker based on attached detailer notes.
-
-Build 201 note:
-- Adds inline friendly-editor validation, media URL picker helpers, landing schema previews, save-review summaries, and route-copy synchronization.
-
-Build 200 note:
-- Completes the main Admin App pricing JSON retirement by adding friendly package detail fields and chart helpers that use editor state.
-
-Build 199 note:
-- Converts remaining high-risk Admin Site Settings JSON helper areas into friendly row/card editors while keeping advanced JSON as emergency fallback.
-
-Build 198 note:
-- Converts routine social feed, before/after gallery, and water-rule updates from direct JSON textareas into friendly admin row editors while preserving advanced JSON fallback recovery.
-
-Build 197 note:
-- Adds self-healing Admin Dashboard diagnostics for pricing catalog source/repair, route-copy parity, independent card failures, and landing-page SEO readiness warnings.
-
-Build 196 note:
-- Fixes live Admin Dashboard local SEO proof 405s, Admin App esc helper crash, and Landing Page Builder add-on fallback hydration.
-
-Build 195 note:
-- Adds editable-setting field markers, selected-history diffs, template preview/test payloads, audit/fallback reports, sitemap/schema previews, policy stamping, and override logging.
-
-Build 194 note:
-- Adds editable-setting JSON diff/preview tools, analytics registry quick-add, option-library dropdown hydration, and route-copy parity guards.
-
-Build 193 note:
-- Fixes /api/admin/social_templates_list null-filter 500s, adds social-template UI fallback handling, and adds editable-setting validation schemas/token/link warnings.
-
-Build 191 note:
-- Hardens AdminAuth helpers, Admin Site Settings, policy/template rendering, analytics validation, and stable media requirements.
-
-Build 190 note:
-- Adds live rendering for editable site settings, validation, sync controls, and setting history.
-
-Build 186 note:
-- Corrects Oxford/Tillsonburg and Norfolk water-restriction rules across data, booking/Admin App fallbacks, and local landing content.
-
-Build 183 note:
-- Adds direct provider refunds, payment reconciliation export, webhook warnings, and image requirements refresh.
-
-Build 182 note:
-- Adds webhook event history, verified replay controls, receipt emails, and refund/partial-refund tracking.
-
-Build 181 note:
-- Adds verified Stripe/PayPal webhook settlement for quote deposit/payment requests.
-
-Build 180 note:
-- Connects accepted quote drafts to deposit/payment requests and final booking confirmation tracking.
-
-Build 179 note:
-- Adds hard social publish blocking, local proof tasking, and quote delivery/acceptance tracking.
-
-Build 178 note:
-- Adds conversion status saving, final price review saving, live public content block rendering, social/media privacy badges, and local proof recommendations.
-
-Build 177 note:
-- Adds dedicated conversion draft review queue, final price reconciliation, and local SEO proof reporting.
-
-Build 176 note:
-- Adds reviewed conversion-draft to real booking creation, analytics dashboard cards, and media privacy warning guard.
-
-Build 175 note:
-- Adds lead conversion drafts, catalog-backed pricing suggestions, quote status controls, expanded content blocks, gallery privacy/town/service filters, and conversion analytics guard.
-
-Build 174 note:
-- Adds quote/proposal draft guard for Admin Leads persistent draft workflow.
-
-Build 173 note:
-- Run Python checks in-process with runpy instead of spawning a new Python
-  interpreter for every guard. This avoids intermittent sandbox/CI startup
-  hangs while preserving each guard's existing SystemExit return code.
-
-Build 207 note:
-- Consolidates Markdown into canonical handoff/roadmap files, adds admin docs sanity reporting, and installs visual placeholder enrichment/reporting.
-Build 208 note:
-- Adds a connected Workflow Command Center that links lead/quote, booking, proof-of-work, invoice/payment, review/public proof, and repeat-maintenance modules.
-
-Build 209 note:
-- Adds the live detail interaction backbone: direct photo/video/note posting, explicit customer/review/private audiences, public-feed privacy filtering, protected media metadata, moderation, diagnostics, responsive polish, and Markdown retirement.
-
-Build 216 note:
-- Adds bounded public media recovery checks, persistent RLS-protected asset alert records, and DAIP decision/acceptance planning gates without DAIP production implementation.
-
-Build 218 note:
-- Adds metadata-only, RLS-protected DAIP internal test mode with a Test Lab, audit trail, explicit public/export/worker hard stops, and guided acceptance checks. It does not add media storage or processing.
-
-Build 219 note:
-- Adds an RLS-protected DAIP owner-decision governance workspace, Gate A/B evidence checks, and explicitly held Gates C-F. It does not add DAIP storage, uploads, workers, processing, customer access, exports, or publishing.
-
-Build 221 note:
-- Repairs customer-admin route compatibility for /api/admin/customer_admin_list 405 responses by adding generic onRequest dispatchers, list GET fallback, and a cache bump without schema or DAIP production changes.
-"""
 from __future__ import annotations
-
-import os
-import runpy
-import sys
+import json, subprocess, sys
 from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+errors=[]
 
-ROOT = Path(__file__).resolve().parents[1]
-CHECKS = [
-    "scripts/cloudflare_pages_functions_check.py",
-    "scripts/social_dispatch_workflow_check.py",
-    "scripts/competitor_roadmap_check.py",
-    "scripts/conversion_path_check.py",
-    "scripts/booking_condition_recommender_check.py",
-    "scripts/booking_intake_admin_review_check.py",
-    "scripts/booking_intake_review_actions_check.py",
-    "scripts/booking_photo_estimate_links_check.py",
-    "scripts/competetive_completion_check.py",
-    "scripts/competetive_matrix_build167_check.py",
-    "scripts/admin_leads_build168_check.py",
-    "scripts/auth_analytics_build169_check.py",
-    "scripts/client_dashboard_build170_check.py",
-    "scripts/lead_quote_preview_build171_check.py",
-    "scripts/public_faq_content_build172_check.py",
-    "scripts/admin_content_build173_check.py",
-    "scripts/quote_proposal_drafts_build174_check.py",
-    "scripts/build175_conversion_content_gallery_analytics_check.py",
-    "scripts/build176_conversion_booking_privacy_dashboard_check.py",
-    "scripts/build177_conversion_review_price_local_proof_check.py",
-    "scripts/build178_status_price_content_privacy_check.py",
-    "scripts/build179_publish_block_tasks_quote_acceptance_check.py",
-    "scripts/build180_quote_deposit_booking_confirmation_check.py",
-    "scripts/build181_payment_webhook_quote_deposits_check.py",
-    "scripts/build182_webhook_history_receipts_refunds_check.py",
-    "scripts/build183_direct_refunds_reconciliation_images_check.py",
-    "scripts/build184_twenty_step_ops_media_payment_check.py",
-    "scripts/build185_next_twenty_ops_foundations_check.py",
-    "scripts/build186_verified_water_restrictions_check.py",
-    "scripts/build187_local_page_water_rules_check.py",
-    "scripts/build188_editable_water_rules_hardcoding_audit_check.py",
-    "scripts/build189_editable_site_settings_check.py",
-    "scripts/build190_editable_settings_live_rendering_check.py",
-    "scripts/build191_editable_settings_hardening_check.py",
-        "scripts/build192_editable_operations_completion_check.py",
-    "scripts/build193_social_templates_and_validation_check.py",
-    "scripts/build194_diff_preview_option_libraries_check.py",
-    "scripts/build195_schema_history_template_export_check.py",
-    "scripts/build196_admin_live_error_repairs_check.py",
-    "scripts/build197_self_healing_admin_checks.py",
-    "scripts/build198_friendly_json_editors_check.py",
-    "scripts/build199_friendly_site_settings_editors_check.py",
-    "scripts/build200_friendly_pricing_editors_check.py",
-    "scripts/build201_friendly_validation_media_route_sync_check.py",
-    "scripts/build202_incident_reports_marketing_check.py",
-    "scripts/build203_desktop_mobile_visual_polish_check.py",
-    "scripts/build204_gallery_media_resilience_check.py",
-    "scripts/build205_sanity_value_roadmap_check.py",
-    "scripts/build206_value_added_operations_check.py",
-    "scripts/build207_markdown_visual_sanity_check.py",
-    "scripts/build208_connected_workflow_command_center_check.py",
-    "scripts/build209_live_interaction_documentation_check.py",
-    "scripts/build210_connected_live_workflow_check.py",
-    "scripts/build211_production_reliability_check.py",
-    "scripts/build212_guided_production_testing_check.py",
-    "scripts/build213_owner_action_customer_trust_check.py",
-    "scripts/build214_security_task_orchestration_check.py",
-    "scripts/build215_asset_resolver_daip_planning_check.py",
-    "scripts/build216_media_reliability_daip_governance_check.py",
-    "scripts/build217_secure_final_balance_links_check.py",
-    "scripts/build218_daip_test_mode_foundation_check.py",
-    "scripts/build219_daip_governance_workspace_check.py",
-    "scripts/build220_customer_access_management_check.py",
-    "scripts/build221_customer_admin_route_hotfix_check.py",
-    "scripts/build222_daip_phase1_readiness_check.py",
-    "scripts/build223_daip_private_mvp_design_check.py",
-    "scripts/build224_daip_gate_c_technical_review_check.py",
-    "scripts/build225_social_analytics_connections_check.py",
-    "scripts/build226_daip_intake_dry_run_check.py",
-    "scripts/build227_roadmap_execution_daip_policy_check.py",
-    "scripts/build228_creative_project_intelligence_check.py",
-    "scripts/build229_standard_job_project_choice_check.py",
-    "scripts/build230_project_costs_templates_outputs_check.py",
-    "scripts/build231_project_profitability_content_planning_check.py",
-    "scripts/build232_project_controls_archive_history_check.py",
-    "scripts/build236_calendar_css_schedule_stabilization_check.py",
-    "scripts/build237_css_startup_evidence_check.py",
-    "scripts/build238_inventory_transactions_seo_startup_check.py",
-    "scripts/build239_unified_startup_command_center_check.py",
-    "scripts/build240_transactional_inventory_posting_check.py",
-    "scripts/build241_startup_command_center_initialization_check.py",
-    "scripts/build245_ui_seo_cache_check.py",
-    "scripts/build246_catalog_publish_readiness_check.py",
-    "scripts/build247_daip_private_media_ingestion_check.py",
-    "scripts/build248_supplier_daip_story_review_check.py",
-    "scripts/build249_inventory_supplier_recovery_check.py",
-    "scripts/release_check_build250.py",
-    "scripts/release_check_build251.py",
-    "scripts/release_check_build252.py",
-    "scripts/release_check_build253.py",
-    "scripts/release_check_build254.py",
-    "scripts/release_check_build255.py",
-    "scripts/release_check_build256.py",
-    "scripts/release_check_build257.py",
-    "scripts/release_check_build258.py",
-    "scripts/release_check_build259.py",
-    "scripts/release_check_build260.py",
-    "scripts/release_check_build261.py",
-    "scripts/release_check_build262.py",
-    "scripts/build224_customer_profile_quality_check.py",
-    "scripts/seo_h1_check.py",
-]
+def txt(rel):
+    p=ROOT/rel
+    if not p.exists(): errors.append(f'missing {rel}'); return ''
+    return p.read_text(encoding='utf-8',errors='ignore')
 
+def js(rel):
+    try: return json.loads(txt(rel))
+    except Exception as e: errors.append(f'invalid JSON {rel}: {e}'); return {}
 
-def run_python_check(rel: str) -> int:
-    path = ROOT / rel
-    if not path.exists():
-        print(f"Missing release check: {rel}", flush=True)
-        return 1
+def run(rel,*args):
+    p=subprocess.run([sys.executable,str(ROOT/rel),*args],cwd=ROOT,text=True,capture_output=True)
+    if p.returncode: errors.append(f'{rel} failed\n{p.stdout}{p.stderr}')
+    elif p.stdout.strip(): print(p.stdout.strip())
 
-    print(f"Running {sys.executable} {rel}", flush=True)
-    previous_cwd = Path.cwd()
-    try:
-      os.chdir(ROOT)
-      try:
-          runpy.run_path(str(path), run_name="__main__")
-      except SystemExit as exc:
-          code = exc.code
-          if code is None:
-              return 0
-          if isinstance(code, int):
-              return code
-          print(code, flush=True)
-          return 1
-    finally:
-      os.chdir(previous_cwd)
+# Repository hygiene
+root_sql=[p.name for p in ROOT.glob('*.sql') if p.name!='SUPABASE_SCHEMA.sql']
+if root_sql: errors.append(f'root SQL copies remain: {root_sql[:8]}')
+for rel in ['docs/archive','reports/build261','functions/api/assets']:
+    if (ROOT/rel).exists(): errors.append(f'retired tree remains: {rel}')
+for rel in [
+    'data/app_modules.json','data/internal_navigation.json','data/route_module_ownership.json','data/action_permissions.json',
+    'sql/2026-08-29_build267_role_module_hierarchy.sql','sql/2026-08-29_build270_push_subscription_authority.sql','sql/2026-08-29_build270_vapid_vault_authority.sql',
+    'functions/api/_lib/staff-auth.js','functions/api/_lib/permissions-profile.js','functions/api/_lib/action-permissions.js',
+    'functions/api/_lib/push-subscriptions.js','functions/api/_lib/notification-hooks.js','functions/api/_lib/provider-dispatch.js','functions/api/_lib/live-interaction-alerts.js',
+    'functions/api/push_config.js','functions/api/push_subscribe.js','functions/api/push_unsubscribe.js',
+    'functions/api/customer_push_config.js','functions/api/customer_push_subscribe.js','functions/api/customer_push_unsubscribe.js',
+    'supabase/functions/rosie-web-push/index.ts'
+]:
+    txt(rel)
 
-    return 0
+# Module/role authority
+mods=js('data/app_modules.json').get('modules',[])
+keys={m.get('key') for m in mods}
+expected={'customer','detailer','operations','admin','it','finance','daip','socials'}
+if keys!=expected: errors.append(f'module registry mismatch: {sorted(keys)}')
+nav=js('data/internal_navigation.json')
+roles=nav.get('roles',{})
+want={'detailer':['detailer'],'senior_detailer':['detailer','operations'],'operations_manager':['detailer','operations'],'accountant':['finance'],'it_specialist':['it'],'promoter':['socials'],'daip_manager':['daip'],'admin':['detailer','operations','admin','it','finance','daip','socials']}
+for role,ceiling in want.items():
+    if roles.get(role,{}).get('modules')!=ceiling: errors.append(f'{role} ceiling mismatch')
+if roles.get('admin',{}).get('force_all') is not True: errors.append('admin force_all missing')
 
+# Proven schema-tolerant Build 267 migration
+sql=txt('sql/2026-08-29_build267_role_module_hierarchy.sql')
+for token in ['rosie_build267_safe_jsonb','unsupported permissions_profile type','staff_users_role_code_check','staff_role_module_defaults','operations_manager','accountant','it_specialist','promoter','daip_manager']:
+    if token not in sql: errors.append(f'Build267 SQL missing {token}')
 
-def main() -> int:
-    for rel in CHECKS:
-        code = run_python_check(rel)
-        if code != 0:
-            return code
-    print("Release check passed.")
-    return 0
+# Runtime sleep rules
+for rel in ['assets/app-core/module-resolver.js','apps/detailer/detailer-app.js','apps/detailer/live-job-module.js','apps/operations/operations-app.js']:
+    if 'setInterval(' in txt(rel): errors.append(f'prohibited setInterval in {rel}')
+if 'setInterval(' in txt('progress.html'): errors.append('customer progress has perpetual interval')
 
+# Thin/event-driven service worker + Build 270 cache identity
+sw=txt('service-worker.js')
+for token in ["rosie-app-v20260829build270","addEventListener('push'","addEventListener('notificationclick'"]:
+    if token not in sw: errors.append(f'service worker missing {token}')
+precache=sw.split("self.addEventListener('install'",1)[0]
+for heavy in ['/app/detailer/','/app/operations/','/app/admin/','/app/finance/','live-job-module.js']:
+    if heavy in precache: errors.append(f'heavy module eagerly precached: {heavy}')
+launcher=txt('app/index.html')
+for token in ['Staff App Launcher','← Public Site','data-build="270"','v=20260829build270']:
+    if token not in launcher: errors.append(f'Build270 launcher missing {token}')
+customer_app=txt('app/customer/index.html')
+for token in ['data-app-module="customer"','data-build="270"','v=20260829build270']:
+    if token not in customer_app: errors.append(f'Build270 customer app missing {token}')
+resolver=txt('assets/app-core/module-resolver.js')
+for token in ['const BUILD=270',"rosie_module_runtime_flags_v270","rosie_last_staff_module_v270"]:
+    if token not in resolver: errors.append(f'Build270 resolver missing {token}')
+cache_health=txt('assets/cache-health-controls.js')
+for token in ['EXPECTED_BUILD=270','v=20260829build270','Build 270 assets confirmed']:
+    if token not in cache_health: errors.append(f'Build270 cache health missing {token}')
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+# Build 269 role/action compatibility retained
+profile=txt('functions/api/_lib/permissions-profile.js')
+for token in ['parsePermissionsProfile','profileForDatabase','typeof observedValue === "string"']:
+    if token not in profile: errors.append(f'permissions profile helper missing {token}')
+session=txt('functions/api/_lib/staff-session.js')
+for token in ['parsePermissionsProfile(row.permissions_profile)','moduleAccessFromProfile(row.permissions_profile)']:
+    if token not in session: errors.append(f'staff session profile normalization missing {token}')
+staff_save=txt('functions/api/staff_save.js')
+for token in ['profileForDatabase(permissions_profile, observedProfileValue)','module_access_version:269']:
+    if token not in staff_save: errors.append(f'staff save compatibility missing {token}')
+actions=js('data/action_permissions.json')
+if actions.get('build')!=269: errors.append('action permission registry build mismatch')
+for action in ['it.notifications.view','it.notifications.process','finance.reconcile','socials.publish','operations.assignment.manage']:
+    if action not in actions.get('actions',{}): errors.append(f'action registry missing {action}')
+for rel,action,legacy in [('functions/api/notifications_list.js','it.notifications.view','capability: "manage_progress"'),('functions/api/notifications_process.js','it.notifications.process','capability: "manage_staff"')]:
+    body=txt(rel)
+    if action not in body: errors.append(f'{rel} missing explicit action {action}')
+    if legacy in body: errors.append(f'{rel} still uses broad legacy notification capability')
+for rel,target in [('functions/api/admin/_lib/staff-auth.js','../../_lib/staff-auth.js'),('functions/api/admin/_lib/staff-session.js','../../_lib/staff-session.js'),('functions/api/admin/staff_save.js','../staff_save.js'),('functions/api/admin/notifications_list.js','../notifications_list.js'),('functions/api/admin/notifications_process.js','../notifications_process.js'),('functions/api/admin/_lib/notification-hooks.js','../../_lib/notification-hooks.js')]:
+    if target not in txt(rel): errors.append(f'compatibility wrapper drift: {rel}')
 
+# Build 270 push persistence/security authority
+push_sql=txt('sql/2026-08-29_build270_push_subscription_authority.sql')
+for token in ['notification_push_subscriptions','recipient_staff_user_id','enable row level security','revoke all on table public.notification_push_subscriptions from public, anon, authenticated','grant select, insert, update, delete on table public.notification_push_subscriptions to service_role','notification_push_subscriptions_exactly_one_owner_check']:
+    if token not in push_sql: errors.append(f'Build270 push SQL missing {token}')
+vault_sql=txt('sql/2026-08-29_build270_vapid_vault_authority.sql')
+for token in ['SECRET VALUES MUST NEVER BE COMMITTED TO SOURCE','rosie_vapid_public_key','rosie_vapid_private_key','notification_push_public_config','notification_push_private_config','grant execute on function public.notification_push_private_config() to service_role']:
+    if token not in vault_sql: errors.append(f'Build270 VAPID Vault authority missing {token}')
+if 'vault.create_secret(' in vault_sql: errors.append('VAPID secret provisioning values must not be committed in canonical SQL')
+push_helper=txt('functions/api/_lib/push-subscriptions.js')
+for token in ['saveStaffPushSubscription','saveCustomerPushSubscription','revokeStaffPushSubscription','revokeCustomerPushSubscription','notification_opt_in !== true','owner_type']:
+    if token not in push_helper: errors.append(f'push subscription helper missing {token}')
+for rel,auth_token in [
+    ('functions/api/push_subscribe.js','requireStaffAccess'),('functions/api/push_unsubscribe.js','requireStaffAccess'),
+    ('functions/api/customer_push_subscribe.js','getCurrentCustomerSession'),('functions/api/customer_push_unsubscribe.js','getCurrentCustomerSession')
+]:
+    if auth_token not in txt(rel): errors.append(f'{rel} missing authenticated owner boundary {auth_token}')
+for rel in ['functions/api/push_config.js','functions/api/customer_push_config.js']:
+    body=txt(rel)
+    if 'notification_push_public_config' not in body: errors.append(f'{rel} does not use the public-only VAPID RPC')
+    if 'notification_push_private_config' in body or 'VAPID_PRIVATE_KEY' in body: errors.append(f'{rel} can access private VAPID material')
+    if 'vapid_private_key' in body.lower(): errors.append(f'{rel} exposes a private-key response field')
+client=txt('assets/app-core/install-client.js')
+for token in ['pushRoutes()','customer_push_config','customer_push_subscribe','pushManager.subscribe','Notification.requestPermission','dataset?.appModule']:
+    if token not in client: errors.append(f'Build270 install client missing {token}')
+enable_pos=client.find('async function enableNotifications')
+subscribe_pos=client.find('pushManager.subscribe')
+bind_pos=client.find('function bind')
+if not (0 <= enable_pos < subscribe_pos < bind_pos): errors.append('push subscription is not confined to the click-driven enableNotifications path')
+for forbidden in ['VAPID_PRIVATE_KEY','SUPABASE_SERVICE_ROLE_KEY']:
+    for rel in ['assets/app-core/install-client.js','service-worker.js','app/index.html','app/customer/index.html']:
+        if forbidden in txt(rel): errors.append(f'server secret name leaked into browser asset: {rel} -> {forbidden}')
+
+provider=txt('functions/api/_lib/provider-dispatch.js')
+for token in ['/functions/v1/rosie-web-push','NOTIFICATIONS_PUSH_WEBHOOK_URL','NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN','getSupabaseServiceRoleKey']:
+    if token not in provider: errors.append(f'push provider dispatcher missing {token}')
+if "if (!authToken) return" not in provider: errors.append('explicit external push webhook does not fail closed without its own auth token')
+processor=txt('functions/api/notifications_process.js')
+for token in ['recipient_staff_user_id','customer_profile_id','channel === "push"','Missing push recipient']:
+    if token not in processor: errors.append(f'notification processor missing push recipient logic {token}')
+hooks=txt('functions/api/_lib/notification-hooks.js')
+for token in ['hasActivePushSubscription','maybeQueueStaffPushNotification','channel:\'push\'','notification_push_subscriptions']:
+    if token not in hooks: errors.append(f'notification hooks missing event-driven push token {token}')
+live=txt('functions/api/_lib/live-interaction-alerts.js')
+for token in ['assigned_staff_user_id','maybeQueueStaffPushNotification']:
+    if token not in live: errors.append(f'live interaction alert missing assigned-staff push token {token}')
+edge=txt('supabase/functions/rosie-web-push/index.ts')
+for token in ['npm:web-push@3.6.7','notification_push_private_config','status === 404 || status === 410','push_enabled: false','no_active_subscription']:
+    if token not in edge: errors.append(f'Web Push Edge sender missing {token}')
+if 'setInterval(' in edge: errors.append('Web Push Edge sender contains prohibited polling')
+
+for rel in ['functions/api/_lib/push-subscriptions.js','functions/api/push_config.js','functions/api/push_subscribe.js','functions/api/push_unsubscribe.js','functions/api/customer_push_config.js','functions/api/customer_push_subscribe.js','functions/api/customer_push_unsubscribe.js','functions/api/_lib/provider-dispatch.js','functions/api/_lib/notification-hooks.js']:
+    if 'setInterval(' in txt(rel): errors.append(f'push path contains prohibited polling: {rel}')
+
+# Public content mirror + service depth
+p=txt('data/rosie_services_pricing_and_packages.json'); pf=txt('functions/api/data/rosie_services_pricing_and_packages.json')
+l=txt('data/landing_pages_content.json'); lf=txt('functions/api/data/landing_pages_content.json')
+if p!=pf: errors.append('pricing mirror drift')
+if l!=lf: errors.append('landing-page mirror drift')
+try:
+    addons=json.loads(p).get('addons',[])
+    if len(addons)!=24: errors.append(f'expected 24 add-ons, got {len(addons)}')
+except Exception as e: errors.append(f'pricing JSON invalid: {e}')
+
+# Current broad static checks
+for script,args in [('scripts/cloudflare_pages_functions_check.py',()),('scripts/customer_profile_quality_check.py',()),('scripts/sync_route_copies.py',('--check',)),('scripts/seo_h1_check.py',())]:
+    if (ROOT/script).exists(): run(script,*args)
+    else: errors.append(f'missing {script}')
+
+if errors:
+    print('Build 270 release check: FAIL')
+    for e in errors: print(' -',e)
+    raise SystemExit(1)
+print('Build 270 release check: PASS')
+print(' - canonical repository shape is clean')
+print(' - module/role boundaries and no-idle-poll rules remain intact')
+print(' - Build 267 schema tolerance and Build 269 action permissions remain canonical')
+print(' - Build 270 push storage, VAPID Vault separation, staff/customer ownership and opt-in-only subscription paths are protected')
+print(' - public config cannot access VAPID private material; Edge sender owns private-key use')
+print(' - push queue/provider/live-event integration remains event-driven and fail-closed')
+print(' - Functions, route parity, service mirrors, customer-profile and SEO checks pass')

@@ -1,4 +1,0 @@
--- Build 207 Markdown consolidation and visual placeholder sanity pass — 2026-06-14
--- No new DDL is required. Build 207 adds canonical documentation, admin sanity
--- reporting, visual placeholder registry/reporting, and CSS/JS visual enrichment using
--- bundled JSON/data files and existing admin staff authentication.

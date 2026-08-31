@@ -6,6 +6,9 @@ export async function dispatchNotificationThroughProvider(env, event, options = 
     id: event.id || null,
     event_type: event.event_type || null,
     channel,
+    booking_id: event.booking_id || null,
+    customer_profile_id: event.customer_profile_id || null,
+    recipient_staff_user_id: event.recipient_staff_user_id || null,
     recipient_email: event.recipient_email || null,
     recipient_phone: event.recipient_phone || null,
     subject: event.subject || null,
@@ -43,6 +46,26 @@ export async function dispatchNotificationThroughProvider(env, event, options = 
     return postJson(url, outbound, authToken, rule.provider_key || 'sms');
   }
 
+  if (channel === "push") {
+    if (!payload.recipient_staff_user_id && !payload.customer_profile_id) {
+      return { ok: false, provider: 'web_push', error: 'Push event is missing a staff or customer recipient.' };
+    }
+
+    const explicitUrl = String(env.NOTIFICATIONS_PUSH_WEBHOOK_URL || '').trim();
+    if (explicitUrl) {
+      const authToken = String(env.NOTIFICATIONS_PUSH_PROVIDER_AUTH_TOKEN || env.NOTIFICATIONS_PROVIDER_AUTH_TOKEN || '').trim();
+      if (!authToken) return { ok:false, provider:'web_push', error:'Configured Web Push webhook is missing its provider auth token.' };
+      return postJson(explicitUrl, payload, authToken, 'web_push');
+    }
+
+    const supabaseUrl = String(env.SUPABASE_URL || '').replace(/\/$/, '');
+    const serviceKey = getSupabaseServiceRoleKey(env);
+    if (!supabaseUrl || !serviceKey) {
+      return { ok:false, provider:'web_push', error:'Supabase Web Push sender credentials are unavailable.' };
+    }
+    return postJson(`${supabaseUrl}/functions/v1/rosie-web-push`, payload, serviceKey, 'supabase_web_push');
+  }
+
   return { ok: false, provider: channel || "unknown", error: "Unsupported notification channel." };
 }
 
@@ -69,4 +92,14 @@ async function postJson(url, payload, bearerToken, providerKey) {
   } catch (err) {
     return { ok: false, provider: providerKey || null, error: err?.message || 'Provider dispatch failed.' };
   }
+}
+
+function getSupabaseServiceRoleKey(env) {
+  return String(
+    env?.SUPABASE_SERVICE_ROLE_KEY ||
+    env?.SUPABASE_SERVICE_KEY ||
+    env?.SUPABASE_SERVICE_ROLE ||
+    env?.SUPABASE_SECRET_KEY ||
+    ''
+  ).trim();
 }

@@ -1,9 +1,0 @@
--- Build 196 admin live-error repair pass — 2026-06-06
--- No DDL changes.
--- This pass fixes live admin/client-side failures by reusing existing endpoints and fallback JSON:
--- 1) /api/admin/local_seo_proof_report now supports GET and POST for dashboard/analytics callers.
--- 2) The proof report returns compatibility aliases: proof_recommendations, recommendations,
---    next_proof_recommendations, and gaps.
--- 3) Admin App option-library hydration keeps a local esc() alias.
--- 4) Admin App pricing/landing editors backfill missing add-ons/packages/charts/service matrix
---    from bundled pricing JSON when an editable/API row is partial or temporarily unavailable.

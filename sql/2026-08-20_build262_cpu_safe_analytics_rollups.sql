@@ -12,7 +12,7 @@ as $$
 declare
   v_days integer := greatest(7, least(coalesce(p_days, 90), 365));
   v_since timestamptz := now() - make_interval(days => greatest(7, least(coalesce(p_days, 90), 365)));
-  v_start_date date := (now() - make_interval(days => greatest(7, least(coalesce(p_days, 90), 365)))::date;
+  v_start_date date := (now() - make_interval(days => greatest(7, least(coalesce(p_days, 90), 365))))::date;
   v_event_count integer := 0;
   v_summary_count integer := 0;
   v_dimension_count integer := 0;

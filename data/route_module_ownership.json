@@ -1,0 +1,101 @@
+{
+  "build": 267,
+  "rule": "every protected UI has one primary module for navigation; server action capability/scope checks remain authoritative; compatibility aliases may remain outside card menus",
+  "modules": {
+    "detailer": [
+      "/app/detailer/",
+      "/detailer-jobs.html",
+      "/admin-jobsite.html",
+      "/admin-incident-reports.html"
+    ],
+    "operations": [
+      "/app/operations/",
+      "/app/operations/?view=live",
+      "/admin-booking.html",
+      "/admin-leads.html",
+      "/admin-quotes.html",
+      "/admin-conversions.html",
+      "/admin-customers.html",
+      "/admin-progress.html",
+      "/admin-live.html",
+      "/admin-workflow.html",
+      "/admin-today.html",
+      "/admin-blocks.html",
+      "/admin-assign.html"
+    ],
+    "admin": [
+      "/app/admin/",
+      "/admin-staff.html",
+      "/admin.html",
+      "/admin-inventory-manager.html",
+      "/admin-inventory-posting.html",
+      "/admin-catalog.html",
+      "/admin-site-settings.html",
+      "/admin-water-rules.html",
+      "/admin-analytics.html"
+    ],
+    "it": [
+      "/app/it/",
+      "/admin-startup-guide.html",
+      "/admin-launch-readiness.html",
+      "/admin-production.html",
+      "/admin-test-centre.html",
+      "/admin-runtime-health.html",
+      "/admin-ui-health.html",
+      "/admin-media-health.html",
+      "/admin-notifications.html",
+      "/admin-security.html",
+      "/admin-recovery.html",
+      "/admin-app.html",
+      "/admin-docs.html",
+      "/admin-roadmap-execution.html",
+      "/admin-sanity.html",
+      "/admin-bootstrap.html"
+    ],
+    "finance": [
+      "/app/finance/",
+      "/admin-accounting.html",
+      "/admin-payments.html",
+      "/admin-payroll.html",
+      "/admin-tax-review.html",
+      "/admin-close.html"
+    ],
+    "daip": [
+      "/app/daip/",
+      "/admin-creative-projects.html",
+      "/admin-daip-media.html",
+      "/admin-daip.html",
+      "/admin-daip-governance.html",
+      "/admin-daip-readiness.html",
+      "/admin-daip-design.html",
+      "/admin-daip-gate-c.html",
+      "/admin-daip-intake-dry-run.html"
+    ],
+    "socials": [
+      "/app/socials/",
+      "/admin-social.html",
+      "/admin-marketing.html",
+      "/admin-promos.html",
+      "/admin-growth.html",
+      "/admin-content.html",
+      "/admin-photo-studio.html",
+      "/admin-gallery.html",
+      "/admin-upload.html",
+      "/admin-seo-tasks.html",
+      "/admin-integrations.html"
+    ],
+    "customer": [
+      "/app/customer/",
+      "/book",
+      "/my-account",
+      "/progress",
+      "/quote-response",
+      "/gift-cards"
+    ]
+  },
+  "special_routes": {
+    "/app/": "authorized module launcher",
+    "/admin-login.html": "staff authentication",
+    "/admin-account.html": "signed-in staff account"
+  }
+}

@@ -1,5 +1,0 @@
--- Build 203 — Desktop/mobile visual polish no-DDL note
--- No database migration is required for this pass.
--- The responsive/visual registry is bundled at data/responsive_visual_registry.json.
--- Dashboard diagnostics are served through functions/api/admin/responsive_visual_report.js.
--- Future work may move these visual-slot settings into app_management_settings with a friendly UI.

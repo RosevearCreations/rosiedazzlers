@@ -1,5 +1,6 @@
 
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
+import { requireActionAccess } from "./_lib/action-permissions.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -13,10 +14,12 @@ export async function onRequestPost(context) {
       request,
       env,
       body,
-      capability: "manage_progress",
+      capability: null,
       allowLegacyAdminFallback: false
     });
     if (!access.ok) return withCors(access.response);
+    const actionAccess = requireActionAccess(access.actor, "it.notifications.view");
+    if (!actionAccess.ok) return withCors(actionAccess.response);
 
     const limit = Number.isFinite(Number(body.limit)) ? Math.min(Math.max(Number(body.limit), 1), 200) : 100;
     const status = String(body.status || "").trim();

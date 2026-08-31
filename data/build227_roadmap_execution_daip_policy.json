@@ -1,8 +1,0 @@
-{
-  "build": 227,
-  "page": "/admin-roadmap-execution.html",
-  "completed_steps": 20,
-  "gate_c": "held",
-  "technical_capability_enabled": false,
-  "schema": "sql/2026-07-09_build227_roadmap_execution_daip_policy.sql"
-}

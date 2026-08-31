@@ -109,7 +109,8 @@ export async function onRequestGet(context) {
       unread_count: unreadCount,
       incident_report_notice: incidentsRes.ok ? null : "Incident report sharing is not available yet.",
       enhanced_live_feed: !updatesResult.legacy && !mediaResult.legacy,
-      refresh_after_seconds: 20
+      refresh_after_seconds: ["accepted","dispatched","arrived","detailing","paused","in_progress","active"].includes(String(booking.current_workflow_stage || booking.job_status || booking.status || "").toLowerCase()) ? 120 : 0,
+      automatic_refresh_active_job_only: true
     });
   } catch (err) {
     return json({ error: err?.message || "Unexpected server error." }, 500);

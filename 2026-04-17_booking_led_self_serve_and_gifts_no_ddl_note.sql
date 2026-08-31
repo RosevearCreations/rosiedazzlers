@@ -1,3 +1,0 @@
--- 2026-04-17 pass26
--- No DDL change required.
--- This pass extended booking-led self-serve on pricing and the service-gift flow by reusing existing settings and purchase_context JSON metadata.

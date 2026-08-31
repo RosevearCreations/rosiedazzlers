@@ -153,6 +153,8 @@ function formatActor(staffUser) {
     is_admin: staffUser.is_admin === true,
     is_senior_detailer: staffUser.is_senior_detailer === true,
     is_detailer: staffUser.is_detailer === true,
+    permissions_profile: staffUser.permissions_profile || {},
+    module_access: staffUser.module_access || staffUser.permissions_profile?.module_access || {},
 
     can_override_lower_entries: staffUser.can_override_lower_entries === true,
     can_manage_bookings: staffUser.can_manage_bookings === true,

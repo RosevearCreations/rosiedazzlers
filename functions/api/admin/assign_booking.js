@@ -1,4 +1,5 @@
 import { requireStaffAccess, serviceHeaders, json, cleanText, cleanEmail, isUuid } from "../_lib/staff-auth.js";
+import { requireActionAccess } from "../_lib/action-permissions.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -11,8 +12,10 @@ export async function onRequestPost(context) {
     const assigned_staff_name = cleanText(body.assigned_staff_name) || assigned_to;
 
     if (!isUuid(booking_id)) return json({ error: "Valid booking_id is required." }, 400);
-    const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body, capability: null, allowLegacyAdminFallback: false });
     if (!access.ok) return access.response;
+    const actionAccess = requireActionAccess(access.actor, "operations.assignment.manage");
+    if (!actionAccess.ok) return actionAccess.response;
 
     const normalizedCrew = await normalizeCrewAssignments(env, body.crew_assignments, {
       assigned_to,
@@ -80,10 +83,7 @@ export async function onRequestPost(context) {
 
 async function normalizeCrewAssignments(env, incomingCrew, fallbackAssignment) {
   const rawCrew = Array.isArray(incomingCrew) ? incomingCrew : [];
-  const items = rawCrew.length
-    ? rawCrew
-    : [fallbackAssignment];
-
+  const items = rawCrew.length ? rawCrew : [fallbackAssignment];
   const normalized = [];
   for (let index = 0; index < items.length; index += 1) {
     const item = items[index] || {};
@@ -94,148 +94,50 @@ async function normalizeCrewAssignments(env, incomingCrew, fallbackAssignment) {
       assigned_staff_name: cleanText(item.assigned_staff_name)
     });
     if (!resolved.assigned_to && !resolved.assigned_staff_user_id && !resolved.assigned_staff_email && !resolved.assigned_staff_name) continue;
-    normalized.push({
-      ...resolved,
-      assignment_role: item.assignment_role === "lead" || item.is_lead === true ? "lead" : "crew",
-      sort_order: Number.isFinite(Number(item.sort_order)) ? Number(item.sort_order) : index,
-      notes: cleanText(item.notes) || null
-    });
+    normalized.push({ ...resolved, assignment_role: item.assignment_role === "lead" || item.is_lead === true ? "lead" : "crew", sort_order: Number.isFinite(Number(item.sort_order)) ? Number(item.sort_order) : index, notes: cleanText(item.notes) || null });
   }
-
   const deduped = [];
   const seen = new Set();
   for (const row of normalized) {
     const key = [row.assigned_staff_user_id || "", row.assigned_staff_email || "", row.assigned_staff_name || row.assigned_to || ""].join("|").toLowerCase();
     if (!key || seen.has(key)) continue;
-    seen.add(key);
-    deduped.push(row);
+    seen.add(key); deduped.push(row);
   }
-
   if (!deduped.length) return [];
-
   let leadIndex = deduped.findIndex((row) => row.assignment_role === "lead");
   if (leadIndex < 0) leadIndex = 0;
-
-  return deduped
-    .map((row, index) => ({
-      ...row,
-      assignment_role: index === leadIndex ? "lead" : "crew"
-    }))
-    .sort((a, b) => {
-      if (a.assignment_role !== b.assignment_role) return a.assignment_role === "lead" ? -1 : 1;
-      return (a.sort_order || 0) - (b.sort_order || 0);
-    });
+  return deduped.map((row, index) => ({ ...row, assignment_role: index === leadIndex ? "lead" : "crew" })).sort((a,b)=>a.assignment_role!==b.assignment_role?(a.assignment_role==="lead"?-1:1):(a.sort_order||0)-(b.sort_order||0));
 }
 
 async function resolveAssignmentActor(env, assignment) {
   const empty = { assigned_to: null, assigned_staff_user_id: null, assigned_staff_email: null, assigned_staff_name: null };
-  const byId = cleanText(assignment.assigned_staff_user_id);
-  const byEmail = cleanEmail(assignment.assigned_staff_email);
-  const byName = cleanText(assignment.assigned_staff_name || assignment.assigned_to);
-
+  const byId = cleanText(assignment.assigned_staff_user_id), byEmail = cleanEmail(assignment.assigned_staff_email), byName = cleanText(assignment.assigned_staff_name || assignment.assigned_to);
   if (!byId && !byEmail && !byName) return empty;
-
-  const row = byId
-    ? await loadStaffById(env, byId)
-    : (byEmail ? await loadStaffByEmail(env, byEmail) : (byName ? await loadStaffByName(env, byName) : null));
-
-  if (row) {
-    return {
-      assigned_to: row.full_name || row.email || byName || null,
-      assigned_staff_user_id: row.id || null,
-      assigned_staff_email: row.email || null,
-      assigned_staff_name: row.full_name || row.email || null
-    };
-  }
-
-  return {
-    assigned_to: byName || byEmail || null,
-    assigned_staff_user_id: byId || null,
-    assigned_staff_email: byEmail || null,
-    assigned_staff_name: byName || null
-  };
+  const row = byId ? await loadStaffById(env, byId) : (byEmail ? await loadStaffByEmail(env, byEmail) : (byName ? await loadStaffByName(env, byName) : null));
+  if (row) return { assigned_to: row.full_name || row.email || byName || null, assigned_staff_user_id: row.id || null, assigned_staff_email: row.email || null, assigned_staff_name: row.full_name || row.email || null };
+  return { assigned_to: byName || byEmail || null, assigned_staff_user_id: byId || null, assigned_staff_email: byEmail || null, assigned_staff_name: byName || null };
 }
 
 async function syncCrewAssignments(env, bookingId, crewAssignments, actor) {
   const headers = serviceHeaders(env);
-  const deleteRes = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_staff_assignments?booking_id=eq.${encodeURIComponent(bookingId)}`, {
-    method: "DELETE",
-    headers
-  });
-
+  const deleteRes = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_staff_assignments?booking_id=eq.${encodeURIComponent(bookingId)}`, { method: "DELETE", headers });
   if (!deleteRes.ok) {
     const text = await deleteRes.text().catch(() => "");
-    if (text.includes("booking_staff_assignments") || deleteRes.status === 404) {
-      return { persisted: false, warning: "Crew-assignment table is not available yet. Run the latest SQL migration before testing multi-detailer crews." };
-    }
+    if (text.includes("booking_staff_assignments") || deleteRes.status === 404) return { persisted: false, warning: "Crew-assignment table is not available yet. Run the latest SQL migration before testing multi-detailer crews." };
     return { persisted: false, warning: `Could not clear previous crew assignments. ${text}` };
   }
-
   if (!crewAssignments.length) return { persisted: true, warning: null };
-
-  const payload = crewAssignments.map((row, index) => ({
-    booking_id: bookingId,
-    staff_user_id: row.assigned_staff_user_id || null,
-    staff_email: row.assigned_staff_email || null,
-    staff_name: row.assigned_staff_name || row.assigned_to || null,
-    assignment_role: row.assignment_role === "lead" ? "lead" : "crew",
-    sort_order: index,
-    assigned_by_staff_user_id: actor?.id || null,
-    assigned_by_name: actor?.full_name || actor?.email || "Staff",
-    notes: row.notes || null,
-    updated_at: new Date().toISOString()
-  }));
-
-  const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_staff_assignments`, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(payload)
-  });
-
+  const payload = crewAssignments.map((row,index)=>({ booking_id: bookingId, staff_user_id: row.assigned_staff_user_id || null, staff_email: row.assigned_staff_email || null, staff_name: row.assigned_staff_name || row.assigned_to || null, assignment_role: row.assignment_role === "lead" ? "lead" : "crew", sort_order: index, assigned_by_staff_user_id: actor?.id || null, assigned_by_name: actor?.full_name || actor?.email || "Staff", notes: row.notes || null, updated_at: new Date().toISOString() }));
+  const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/booking_staff_assignments`, { method: "POST", headers, body: JSON.stringify(payload) });
   if (!insertRes.ok) {
     const text = await insertRes.text().catch(() => "");
-    if (text.includes("booking_staff_assignments") || insertRes.status === 404) {
-      return { persisted: false, warning: "Crew-assignment table is not available yet. Run the latest SQL migration before testing multi-detailer crews." };
-    }
+    if (text.includes("booking_staff_assignments") || insertRes.status === 404) return { persisted: false, warning: "Crew-assignment table is not available yet. Run the latest SQL migration before testing multi-detailer crews." };
     return { persisted: false, warning: `Lead assignment saved, but the crew list could not be stored. ${text}` };
   }
-
   return { persisted: true, warning: null };
 }
 
-function toCrewResponseRow(row) {
-  return {
-    assigned_to: row.assigned_to || row.assigned_staff_name || row.assigned_staff_email || null,
-    assigned_staff_user_id: row.assigned_staff_user_id || null,
-    assigned_staff_email: row.assigned_staff_email || null,
-    assigned_staff_name: row.assigned_staff_name || null,
-    assignment_role: row.assignment_role === "lead" ? "lead" : "crew",
-    notes: row.notes || null
-  };
-}
-
-async function loadStaffById(env, id) {
-  if (!isUuid(id)) return null;
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,full_name,email,is_active&id=eq.${encodeURIComponent(id)}&limit=1`, { headers: serviceHeaders(env) });
-  if (!res.ok) return null;
-  const rows = await res.json().catch(() => []);
-  const row = Array.isArray(rows) ? rows[0] || null : null;
-  return row && row.is_active !== false ? row : null;
-}
-
-async function loadStaffByEmail(env, email) {
-  if (!email) return null;
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,full_name,email,is_active&email=eq.${encodeURIComponent(email)}&limit=1`, { headers: serviceHeaders(env) });
-  if (!res.ok) return null;
-  const rows = await res.json().catch(() => []);
-  const row = Array.isArray(rows) ? rows[0] || null : null;
-  return row && row.is_active !== false ? row : null;
-}
-
-async function loadStaffByName(env, name) {
-  if (!name) return null;
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,full_name,email,is_active&full_name=ilike.${encodeURIComponent(name)}&is_active=eq.true&limit=1`, { headers: serviceHeaders(env) });
-  if (!res.ok) return null;
-  const rows = await res.json().catch(() => []);
-  return Array.isArray(rows) ? rows[0] || null : null;
-}
+function toCrewResponseRow(row) { return { assigned_to: row.assigned_to || row.assigned_staff_name || row.assigned_staff_email || null, assigned_staff_user_id: row.assigned_staff_user_id || null, assigned_staff_email: row.assigned_staff_email || null, assigned_staff_name: row.assigned_staff_name || null, assignment_role: row.assignment_role === "lead" ? "lead" : "crew", notes: row.notes || null }; }
+async function loadStaffById(env,id){ if(!isUuid(id))return null; const res=await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,full_name,email,is_active&id=eq.${encodeURIComponent(id)}&limit=1`,{headers:serviceHeaders(env)}); if(!res.ok)return null; const rows=await res.json().catch(()=>[]); const row=Array.isArray(rows)?rows[0]||null:null; return row&&row.is_active!==false?row:null; }
+async function loadStaffByEmail(env,email){ if(!email)return null; const res=await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,full_name,email,is_active&email=eq.${encodeURIComponent(email)}&limit=1`,{headers:serviceHeaders(env)}); if(!res.ok)return null; const rows=await res.json().catch(()=>[]); const row=Array.isArray(rows)?rows[0]||null:null; return row&&row.is_active!==false?row:null; }
+async function loadStaffByName(env,name){ if(!name)return null; const res=await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users?select=id,full_name,email,is_active&full_name=ilike.${encodeURIComponent(name)}&is_active=eq.true&limit=1`,{headers:serviceHeaders(env)}); if(!res.ok)return null; const rows=await res.json().catch(()=>[]); return Array.isArray(rows)?rows[0]||null:null; }

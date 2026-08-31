@@ -384,9 +384,9 @@
       "code": "full_clay_treatment",
       "name": "Full Clay Treatment",
       "prices_cad": {
-        "small": 79,
-        "mid": 99,
-        "oversize": 129
+        "small": 89,
+        "mid": 109,
+        "oversize": 139
       },
       "quote_required": false,
       "source": "interpreted_pricing",
@@ -397,15 +397,32 @@
       "type": "surface prep",
       "image_url": "https://assets.rosiedazzlers.ca/packages/full_clay_treatment.png",
       "image_fallback_url": "/assets/addons/full_clay_treatment.png",
-      "duration_label": "45\u201390 min"
+      "duration_label": "60–120+ min",
+      "pricing_basis": "vehicle size; severe bonded contamination or overspray is quoted after inspection",
+      "pricing_mode": "starting_price",
+      "condition_pricing": [
+        {
+          "label": "Normal bonded contamination",
+          "price_label": "From $89 small / $109 mid / $139 oversize",
+          "time_label": "60–120 min",
+          "when": "Typical rail dust, sap haze and bonded road film after a proper wash."
+        },
+        {
+          "label": "Heavy fallout / overspray",
+          "price_label": "Inspection quote",
+          "time_label": "2+ hr",
+          "when": "Dense industrial fallout, paint overspray, stubborn sap or contamination that needs repeated chemical/mechanical decontamination."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "two_stage_polish",
       "name": "Two Stage Polish",
       "prices_cad": {
-        "small": 199,
-        "mid": 279,
-        "oversize": 359
+        "small": 349,
+        "mid": 449,
+        "oversize": 549
       },
       "quote_required": true,
       "source": "interpreted_pricing",
@@ -416,15 +433,38 @@
       "type": "machine polishing",
       "image_url": "https://assets.rosiedazzlers.ca/packages/two_stage_polish.png",
       "image_fallback_url": "/assets/addons/two_stage_polish.png",
-      "duration_label": "3\u20137+ hr"
+      "duration_label": "4–8+ hr",
+      "pricing_basis": "paint size, hardness, defect depth and correction target",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Moderate correction target",
+          "price_label": "From $349",
+          "time_label": "4–6 hr",
+          "when": "Noticeable swirls, wash marring and light oxidation where a two-stage process is appropriate."
+        },
+        {
+          "label": "Large / hard paint / deeper defects",
+          "price_label": "From $449–$549+",
+          "time_label": "6–8+ hr",
+          "when": "Larger vehicles, hard clear coat or defects requiring slower section-by-section correction."
+        },
+        {
+          "label": "Beyond safe correction",
+          "price_label": "Inspection / referral",
+          "time_label": "Varies",
+          "when": "Deep scratches through clear, failing clear coat or paint too thin to safely chase the requested result."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "high_grade_paint_sealant",
       "name": "High Grade Paint Sealant",
       "prices_cad": {
-        "small": 59,
-        "mid": 79,
-        "oversize": 99
+        "small": 79,
+        "mid": 99,
+        "oversize": 119
       },
       "quote_required": false,
       "source": "interpreted_pricing",
@@ -435,15 +475,26 @@
         "Longer-lasting gloss"
       ],
       "image_fallback_url": "/assets/addons/high_grade_paint_sealant.png",
-      "duration_label": "30\u201360 min"
+      "duration_label": "45–75 min",
+      "pricing_basis": "vehicle size after suitable wash/decontamination",
+      "pricing_mode": "starting_price",
+      "condition_pricing": [
+        {
+          "label": "Standard service",
+          "price_label": "From $79 small / $99 mid / $119 oversize",
+          "time_label": "45–75 min",
+          "when": "Paint must be properly cleaned and suitable for protection; decontamination or correction is separate if needed."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "uv_protectant_applied_on_interior_panels",
       "name": "UV Protectant Applied on Interior Panels",
       "prices_cad": {
-        "small": 25,
-        "mid": 35,
-        "oversize": 45
+        "small": 49,
+        "mid": 59,
+        "oversize": 79
       },
       "quote_required": false,
       "source": "interpreted_pricing",
@@ -454,15 +505,26 @@
         "Interior panel dressing"
       ],
       "image_fallback_url": "/assets/addons/uv_protectant_applied_on_interior_panels.png",
-      "duration_label": "20\u201340 min"
+      "duration_label": "30–60 min",
+      "pricing_basis": "interior size and number of treated panels",
+      "pricing_mode": "starting_price",
+      "condition_pricing": [
+        {
+          "label": "Standard service",
+          "price_label": "From $49 small / $59 mid / $79 oversize",
+          "time_label": "30–60 min",
+          "when": "Pricing assumes cleaned, accessible interior panels; heavy soil cleaning belongs to the interior detail."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "de_ionizing_treatment",
       "name": "De-Ionizing Treatment",
       "prices_cad": {
-        "small": 59,
-        "mid": 79,
-        "oversize": 99
+        "small": 99,
+        "mid": 129,
+        "oversize": 159
       },
       "quote_required": true,
       "source": "package_asset",
@@ -470,7 +532,24 @@
       "category": "odor treatment",
       "type": "de-ionizing",
       "image_fallback_url": "/assets/addons/de_ionizing_treatment.png",
-      "duration_label": "30\u201360 min"
+      "duration_label": "60–180+ min",
+      "pricing_basis": "mineral/water-spot severity, affected area and whether polishing is required",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Light mineral spotting",
+          "price_label": "From $99",
+          "time_label": "60–90 min",
+          "when": "Fresh water spotting or mineral residue that responds to chemical treatment."
+        },
+        {
+          "label": "Etched / stubborn deposits",
+          "price_label": "From $129–$159+",
+          "time_label": "90–180+ min",
+          "when": "Older deposits that may require mechanical polishing after mineral removal."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "de_badging",
@@ -481,24 +560,68 @@
       "category": "appearance modifications",
       "type": "badge removal",
       "image_fallback_url": "/assets/addons/de_badging.png",
-      "duration_label": "45\u2013120+ min"
+      "duration_label": "60–180+ min",
+      "price_cad": 79,
+      "pricing_basis": "badge count, adhesive age, paint condition and ghosting risk",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Simple badge / fresh adhesive",
+          "price_label": "From $79",
+          "time_label": "60–90 min",
+          "when": "Accessible emblem with stable surrounding paint and manageable adhesive."
+        },
+        {
+          "label": "Multiple / aged badges or ghosting risk",
+          "price_label": "Inspection quote",
+          "time_label": "90–180+ min",
+          "when": "Brittle adhesive, multiple emblems, paint fade outlines or polishing needed after removal."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "engine_cleaning",
       "name": "Engine Cleaning",
-      "price_cad": 59,
-      "quote_required": false,
+      "quote_required": true,
       "source": "package_asset",
       "image_url": "https://assets.rosiedazzlers.ca/packages/Engine%20Cleaning%20add%20on%20service.png",
       "category": "engine bay",
       "type": "cleaning",
       "image_fallback_url": "/assets/addons/engine_cleaning.png",
-      "duration_label": "45\u201390 min"
+      "duration_label": "60–120+ min",
+      "prices_cad": {
+        "small": 79,
+        "mid": 99,
+        "oversize": 119
+      },
+      "pricing_basis": "engine-bay size, grease level, access and sensitive-component risk",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Maintenance engine-bay clean",
+          "price_label": "From $79",
+          "time_label": "60–90 min",
+          "when": "Dust, road film and light grime on accessible surfaces."
+        },
+        {
+          "label": "Heavy grease / complicated access",
+          "price_label": "From $99–$119+",
+          "time_label": "90–120+ min",
+          "when": "Built-up grease, dense covers, sensitive aftermarket wiring or repeated degreasing is needed."
+        },
+        {
+          "label": "Active fluid leak / unsafe condition",
+          "price_label": "Do not detail until assessed",
+          "time_label": "—",
+          "when": "Fresh leaks, exposed electrical faults or mechanical conditions where cleaning could hide or worsen a problem."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "external_ceramic_coating",
       "name": "External Ceramic Coating",
-      "price_cad": 299,
       "quote_required": true,
       "source": "package_asset",
       "notes": [
@@ -508,12 +631,39 @@
       "category": "paint protection",
       "type": "ceramic coating",
       "image_fallback_url": "/assets/addons/external_ceramic_coating.png",
-      "duration_label": "2\u20136+ hr"
+      "duration_label": "5–10+ hr plus cure requirements",
+      "prices_cad": {
+        "small": 599,
+        "mid": 749,
+        "oversize": 899
+      },
+      "pricing_basis": "vehicle size plus required decontamination/correction before coating",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Coating-ready paint",
+          "price_label": "From $599",
+          "time_label": "5–7 hr + cure",
+          "when": "Paint is already in good condition and needs wash, chemical/mechanical decontamination and panel prep."
+        },
+        {
+          "label": "Light polish preparation",
+          "price_label": "From $749+",
+          "time_label": "7–9 hr + cure",
+          "when": "Gloss improvement or light defect correction is needed before coating."
+        },
+        {
+          "label": "Correction-first coating",
+          "price_label": "From $899+ / inspection quote",
+          "time_label": "Full day or longer",
+          "when": "Swirls, oxidation or deeper defects require correction before the coating stage."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "external_graphene_fine_finish",
       "name": "External Graphene Fine Finish",
-      "price_cad": 249,
       "quote_required": true,
       "source": "package_asset",
       "notes": [
@@ -523,15 +673,37 @@
       "category": "paint protection",
       "type": "graphene finish",
       "image_fallback_url": "/assets/addons/external_graphene_fine_finish.png",
-      "duration_label": "45\u201390 min"
+      "duration_label": "2–5+ hr",
+      "prices_cad": {
+        "small": 299,
+        "mid": 399,
+        "oversize": 499
+      },
+      "pricing_basis": "vehicle size, prep condition and selected protection system",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Prepared paint",
+          "price_label": "From $299",
+          "time_label": "2–3 hr",
+          "when": "Paint is clean, decontaminated and does not require correction."
+        },
+        {
+          "label": "Prep / enhancement required",
+          "price_label": "From $399–$499+",
+          "time_label": "3–5+ hr",
+          "when": "Additional decontamination, gloss enhancement or spot polishing is needed first."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "external_wax",
       "name": "External Wax",
       "prices_cad": {
-        "small": 49,
-        "mid": 59,
-        "oversize": 69
+        "small": 79,
+        "mid": 99,
+        "oversize": 119
       },
       "quote_required": false,
       "source": "package_asset",
@@ -539,7 +711,18 @@
       "category": "paint protection",
       "type": "wax",
       "image_fallback_url": "/assets/addons/external_wax.png",
-      "duration_label": "30\u201360 min"
+      "duration_label": "45–75 min",
+      "pricing_basis": "vehicle size after an appropriate exterior clean",
+      "pricing_mode": "starting_price",
+      "condition_pricing": [
+        {
+          "label": "Standard service",
+          "price_label": "From $79 small / $99 mid / $119 oversize",
+          "time_label": "45–75 min",
+          "when": "Pricing assumes a clean exterior; clay/decontamination or polishing is separate when needed."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "vinyl_wrapping",
@@ -550,7 +733,25 @@
       "category": "appearance modifications",
       "type": "vinyl wrapping",
       "image_fallback_url": "/assets/addons/vinyl_wrapping.png",
-      "duration_label": "Quote by area / scope"
+      "duration_label": "Quote by area / scope",
+      "price_cad": 149,
+      "pricing_basis": "panel area, film choice, removal/disassembly and surface condition",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Small accent / trim area",
+          "price_label": "From $149",
+          "time_label": "By scope",
+          "when": "Small, accessible accent areas using a suitable film."
+        },
+        {
+          "label": "Panels / complex shapes / old-film removal",
+          "price_label": "Inspection quote",
+          "time_label": "Half day to multi-day",
+          "when": "Large areas, mirrors/curves, disassembly, old adhesive removal or paint-condition concerns."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "window_tinting",
@@ -561,17 +762,39 @@
       "category": "glass services",
       "type": "window tinting",
       "image_fallback_url": "/assets/addons/window_tinting.png",
-      "duration_label": "1.5\u20134+ hr"
+      "duration_label": "2–5+ hr",
+      "prices_cad": {
+        "small": 299,
+        "mid": 349,
+        "oversize": 449
+      },
+      "pricing_basis": "glass count, film, vehicle access and removal of old tint",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Typical vehicle, new film",
+          "price_label": "From $299 small / $349 mid / $449 oversize",
+          "time_label": "2–4 hr",
+          "when": "Standard glass set with no old-film removal."
+        },
+        {
+          "label": "Old tint removal / difficult access",
+          "price_label": "Inspection quote",
+          "time_label": "3–5+ hr",
+          "when": "Existing film/adhesive, difficult rear glass or complicated interior access adds labour."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "pet_hair_removal",
       "name": "Pet Hair Removal",
       "prices_cad": {
-        "small": 49,
-        "mid": 69,
-        "oversize": 89
+        "small": 59,
+        "mid": 89,
+        "oversize": 119
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "interior",
       "type": "deep cleaning",
       "notes": [
@@ -586,17 +809,40 @@
       ],
       "time_added_minutes": 45,
       "customer_goal": "Remove embedded pet hair",
-      "duration_label": "45\u2013180+ min"
+      "duration_label": "45–240+ min",
+      "pricing_basis": "hair density, upholstery type and affected zones",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Light / localized hair",
+          "price_label": "From $59",
+          "time_label": "45–75 min",
+          "when": "Loose hair on mats, seats or one cargo zone."
+        },
+        {
+          "label": "Embedded across cabin",
+          "price_label": "From $89–$119+",
+          "time_label": "1.5–3 hr",
+          "when": "Hair is woven into carpet, cloth seats, seat rails and cargo trim."
+        },
+        {
+          "label": "Severe / multiple animals",
+          "price_label": "Inspection quote",
+          "time_label": "3–4+ hr",
+          "when": "Dense embedded hair throughout the cabin, under seats and in hard-to-reach trim."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "odor_treatment",
       "name": "Odor Treatment",
       "prices_cad": {
-        "small": 59,
-        "mid": 79,
-        "oversize": 99
+        "small": 89,
+        "mid": 119,
+        "oversize": 149
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "interior",
       "type": "odor help",
       "notes": [
@@ -611,17 +857,40 @@
       ],
       "time_added_minutes": 45,
       "customer_goal": "Reduce or remove stubborn odours",
-      "duration_label": "45\u2013120+ min"
+      "duration_label": "60 min to multi-stage / return visit",
+      "pricing_basis": "source, material affected, cleaning required and treatment method",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Light source + refresh",
+          "price_label": "From $89",
+          "time_label": "60–90 min",
+          "when": "Localized food/pet/stale odour where the source can be cleaned directly."
+        },
+        {
+          "label": "Deep clean + treatment",
+          "price_label": "From $119–$149+",
+          "time_label": "2–4 hr",
+          "when": "Odour is carried in carpet, seats, vents or several interior surfaces."
+        },
+        {
+          "label": "Smoke, mold evidence or unknown severe source",
+          "price_label": "Inspection quote / possible referral",
+          "time_label": "Varies",
+          "when": "The source is widespread, potentially hazardous, or may require remediation beyond normal detailing."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "seat_shampoo",
       "name": "Seat Shampoo",
       "prices_cad": {
-        "small": 49,
-        "mid": 69,
-        "oversize": 89
+        "small": 89,
+        "mid": 119,
+        "oversize": 149
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "interior",
       "type": "fabric extraction",
       "notes": [
@@ -635,17 +904,40 @@
       ],
       "time_added_minutes": 45,
       "customer_goal": "Clean fabric seats and spills",
-      "duration_label": "45\u2013120 min"
+      "duration_label": "60–180+ min",
+      "pricing_basis": "seat count, fabric, staining, saturation and extraction time",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Spot / limited seat extraction",
+          "price_label": "From $89",
+          "time_label": "60–90 min",
+          "when": "A few manageable stains or a limited cloth seating area."
+        },
+        {
+          "label": "Full cloth seating extraction",
+          "price_label": "From $119–$149+",
+          "time_label": "90–180 min",
+          "when": "Multiple rows, embedded soil or repeated extraction is needed."
+        },
+        {
+          "label": "Deep spill / saturation",
+          "price_label": "Inspection quote",
+          "time_label": "3+ hr",
+          "when": "Liquid reached foam, seams, seat hardware or odor remains after surface extraction."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "carpet_shampoo",
       "name": "Carpet Shampoo",
       "prices_cad": {
-        "small": 49,
-        "mid": 69,
-        "oversize": 89
+        "small": 99,
+        "mid": 129,
+        "oversize": 159
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "interior",
       "type": "carpet extraction",
       "notes": [
@@ -660,17 +952,40 @@
       ],
       "time_added_minutes": 45,
       "customer_goal": "Clean carpets, mats, and cargo areas",
-      "duration_label": "45\u2013120 min"
+      "duration_label": "90 min to full-day restoration",
+      "pricing_basis": "floor area, salt/stains, spill depth, extraction and disassembly needs",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Maintenance shampoo / light stains",
+          "price_label": "From $99",
+          "time_label": "90–120 min",
+          "when": "Routine carpet and mat cleaning with reachable staining."
+        },
+        {
+          "label": "Heavy salt / beverage / repeated extraction",
+          "price_label": "From $129–$159+",
+          "time_label": "2–4 hr",
+          "when": "Deep winter salt, coffee/pop spills or heavy soil needs multiple extraction cycles."
+        },
+        {
+          "label": "Saturated floor / under-carpet restoration",
+          "price_label": "From $299+ / inspection quote",
+          "time_label": "Half day to full day",
+          "when": "Liquid has migrated below the carpet or underlay and safe seat/trim removal, carpet lifting, water extraction and controlled drying may be required."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "salt_stain_treatment",
       "name": "Salt Stain Treatment",
       "prices_cad": {
-        "small": 39,
-        "mid": 59,
-        "oversize": 79
+        "small": 69,
+        "mid": 99,
+        "oversize": 129
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "interior",
       "type": "seasonal cleanup",
       "notes": [
@@ -685,17 +1000,29 @@
       ],
       "time_added_minutes": 35,
       "customer_goal": "Clean Ontario winter salt stains",
-      "duration_label": "45\u2013150+ min"
+      "duration_label": "60–180+ min",
+      "pricing_basis": "salt depth, affected area and repeated extraction cycles",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Light seasonal salt",
+          "price_label": "From $69",
+          "time_label": "60–90 min",
+          "when": "Surface salt on mats/lower carpet that responds in one treatment cycle."
+        },
+        {
+          "label": "Heavy crystallized salt",
+          "price_label": "From $99–$129+",
+          "time_label": "90–180+ min",
+          "when": "Repeated winter buildup needs staged dissolving, agitation, extraction and drying."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "headlight_restoration_addon",
       "name": "Headlight Restoration",
-      "prices_cad": {
-        "small": 89,
-        "mid": 99,
-        "oversize": 119
-      },
-      "quote_required": false,
+      "quote_required": true,
       "category": "exterior",
       "type": "safety and clarity",
       "notes": [
@@ -711,15 +1038,45 @@
       ],
       "time_added_minutes": 60,
       "customer_goal": "Improve headlight clarity",
-      "duration_label": "Time varies by condition"
+      "duration_label": "1.5–3+ hr per pair",
+      "price_cad": 99,
+      "pricing_basis": "pair of lenses; oxidation severity, coating failure and lens condition",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Light haze / early coating failure",
+          "price_label": "From $99 per pair",
+          "time_label": "1.5–2 hr",
+          "when": "Lens is hazy but the plastic is still relatively clear beneath the failed surface layer."
+        },
+        {
+          "label": "Moderate yellowing / oxidation",
+          "price_label": "From $129 per pair",
+          "time_label": "2–2.5 hr",
+          "when": "Noticeable yellowing needs a more complete sanding progression, polishing and UV protection."
+        },
+        {
+          "label": "Heavy oxidation / rough lens",
+          "price_label": "From $169+ per pair",
+          "time_label": "2.5–3+ hr",
+          "when": "Deep oxidation needs more correction steps and may not return to new-lens clarity."
+        },
+        {
+          "label": "Cracks, internal moisture or reflector damage",
+          "price_label": "Replacement / repair referral",
+          "time_label": "—",
+          "when": "The problem is inside the assembly or the lens/assembly is physically failing."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "windshield_ceramic_coating",
       "name": "Windshield Ceramic Coating",
       "prices_cad": {
-        "small": 49,
-        "mid": 59,
-        "oversize": 69
+        "small": 89,
+        "mid": 99,
+        "oversize": 109
       },
       "quote_required": false,
       "category": "exterior",
@@ -737,15 +1094,26 @@
       ],
       "time_added_minutes": 30,
       "customer_goal": "Make windshield cleaning easier",
-      "duration_label": "Time varies by condition"
+      "duration_label": "45–75 min plus cure",
+      "pricing_basis": "windshield size after glass cleaning/decontamination",
+      "pricing_mode": "starting_price",
+      "condition_pricing": [
+        {
+          "label": "Standard service",
+          "price_label": "From $89 small / $99 mid / $109 oversize",
+          "time_label": "45–75 min plus cure",
+          "when": "Glass must be clean and free of bonded contamination; polishing for mineral etching is separate."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "ceramic_spray_wax",
       "name": "Ceramic Spray Protection",
       "prices_cad": {
-        "small": 49,
-        "mid": 69,
-        "oversize": 89
+        "small": 69,
+        "mid": 89,
+        "oversize": 109
       },
       "quote_required": false,
       "category": "exterior",
@@ -763,17 +1131,28 @@
       ],
       "time_added_minutes": 30,
       "customer_goal": "Add quick gloss and protection",
-      "duration_label": "Time varies by condition"
+      "duration_label": "30–60 min",
+      "pricing_basis": "vehicle size after compatible wash/prep",
+      "pricing_mode": "starting_price",
+      "condition_pricing": [
+        {
+          "label": "Standard service",
+          "price_label": "From $69 small / $89 mid / $109 oversize",
+          "time_label": "30–60 min",
+          "when": "This is short-term spray protection, not a multi-year coating; heavy prep is separate."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "trim_restoration",
       "name": "Trim Restoration",
       "prices_cad": {
-        "small": 49,
-        "mid": 69,
-        "oversize": 89
+        "small": 79,
+        "mid": 99,
+        "oversize": 129
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "exterior",
       "type": "plastic trim",
       "notes": [
@@ -787,17 +1166,34 @@
       ],
       "time_added_minutes": 45,
       "customer_goal": "Improve faded exterior trim",
-      "duration_label": "45\u2013120 min"
+      "duration_label": "60–180+ min",
+      "pricing_basis": "amount of faded trim, oxidation and whether coating/restoration is suitable",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Light fading",
+          "price_label": "From $79",
+          "time_label": "60–90 min",
+          "when": "Exterior plastic is structurally sound and mainly needs cleaning/restoration."
+        },
+        {
+          "label": "Large amount / severe oxidation",
+          "price_label": "From $99–$129+",
+          "time_label": "90–180+ min",
+          "when": "Many trim pieces, chalking or prep-intensive surfaces need additional labour."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "bug_tar_removal",
       "name": "Bug and Tar Removal",
       "prices_cad": {
-        "small": 39,
-        "mid": 59,
-        "oversize": 79
+        "small": 49,
+        "mid": 69,
+        "oversize": 89
       },
-      "quote_required": false,
+      "quote_required": true,
       "category": "exterior",
       "type": "contamination removal",
       "notes": [
@@ -812,16 +1208,28 @@
       ],
       "time_added_minutes": 35,
       "customer_goal": "Remove stuck-on road grime",
-      "duration_label": "Time varies by condition"
+      "duration_label": "30–120+ min",
+      "pricing_basis": "contamination density, dwell time and paint sensitivity",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Localized fresh contamination",
+          "price_label": "From $49",
+          "time_label": "30–60 min",
+          "when": "Fresh bug remains or small tar areas release with safe dwell and agitation."
+        },
+        {
+          "label": "Heavy / baked-on contamination",
+          "price_label": "From $69–$89+",
+          "time_label": "60–120+ min",
+          "when": "Dense tar, baked insect residue or delicate paint requires repeated slow treatment."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "truck_box_wash",
       "name": "Truck Box Wash",
-      "prices_cad": {
-        "small": 0,
-        "mid": 0,
-        "oversize": 49
-      },
       "quote_required": true,
       "category": "fleet",
       "type": "truck utility cleanup",
@@ -838,7 +1246,25 @@
       ],
       "time_added_minutes": 45,
       "customer_goal": "Clean pickup/work truck cargo area",
-      "duration_label": "Time varies by condition"
+      "duration_label": "45–150+ min",
+      "price_cad": 79,
+      "pricing_basis": "box size, soil/grease/debris and required containment",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Routine empty-box wash",
+          "price_label": "From $79",
+          "time_label": "45–75 min",
+          "when": "Loose dirt and road film in an empty, accessible pickup box."
+        },
+        {
+          "label": "Heavy soil / grease / work debris",
+          "price_label": "Inspection quote",
+          "time_label": "75–150+ min",
+          "when": "Grease, construction material, organic debris or runoff/containment concerns increase scope."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     },
     {
       "code": "fleet_vehicle_add_on",
@@ -861,7 +1287,24 @@
       ],
       "time_added_minutes": 0,
       "customer_goal": "Quote multiple vehicles at one location",
-      "duration_label": "Time varies by condition"
+      "duration_label": "Quoted by fleet scope",
+      "pricing_basis": "vehicle count, vehicle mix, frequency, site access and service standard",
+      "pricing_mode": "condition_assessed",
+      "condition_pricing": [
+        {
+          "label": "Repeat standardized fleet service",
+          "price_label": "Custom fleet quote",
+          "time_label": "By route / vehicle count",
+          "when": "Several vehicles can use a repeatable service standard at one site."
+        },
+        {
+          "label": "Mixed-condition / mixed-vehicle fleet",
+          "price_label": "Pilot + custom quote",
+          "time_label": "Varies",
+          "when": "Different vehicle sizes, conditions or operating requirements make a per-vehicle pilot more accurate."
+        }
+      ],
+      "pricing_note": "Starting prices are in CAD before HST. Vehicle size and condition can change labour. Quote-required services are not finalized until the condition/scope is reviewed."
     }
   ],
   "service_areas": [
@@ -2443,7 +2886,9 @@
       "material_surcharge_cad": 0,
       "minimum_callout_cad": 0,
       "tax_rate_percent": 13
-    }
+    },
+    "condition_pricing_policy": "Add-ons marked quote_required are requestable online but the add-on price is not final until condition/scope is reviewed. Starting prices are triage anchors, not maximum prices."
   },
-  "water_rule_authority": "/data/water_restriction_rules.json"
+  "water_rule_authority": "/data/water_restriction_rules.json",
+  "version": "build265-market-aware-condition-pricing"
 }

@@ -13,6 +13,7 @@ const DEFAULT_LANDING_PAGES = fallbackLandingPagesContent.default_pages || { pag
 
 const LANDING_PAGE_EXPANSIONS = fallbackLandingPagesContent.expansion_pages || { pages: {} };
 const ADDON_LANDING_PAGE_TEMPLATES = fallbackLandingPagesContent.addon_landing_page_templates || {};
+const EXPLICIT_LANDING_PAGES = { pages: fallbackLandingPagesContent.pages || {} };
 
 
 const PRICING_CATALOG_DEFAULT = fallbackPricingCatalog && typeof fallbackPricingCatalog === "object" ? fallbackPricingCatalog : {};
@@ -26,11 +27,23 @@ const ADDON_LANDING_PAGE_MAP = {
   de_ionizing_treatment: "de-ionizing-treatment",
   de_badging: "de-badging",
   engine_cleaning: "engine-cleaning",
-  external_ceramic_coating: "external-ceramic-coating",
+  external_ceramic_coating: "ceramic-coating",
   external_graphene_fine_finish: "graphene-finish",
   external_wax: "exterior-wax",
   vinyl_wrapping: "vinyl-wrapping",
-  window_tinting: "window-tinting"
+  window_tinting: "window-tinting",
+  pet_hair_removal: "pet-hair-removal",
+  odor_treatment: "odor-removal",
+  seat_shampoo: "seat-shampoo",
+  carpet_shampoo: "carpet-shampoo",
+  salt_stain_treatment: "salt-stain-treatment",
+  headlight_restoration_addon: "headlight-restoration",
+  windshield_ceramic_coating: "windshield-ceramic-coating",
+  ceramic_spray_wax: "ceramic-spray-wax",
+  trim_restoration: "trim-restoration",
+  bug_tar_removal: "bug-tar-removal",
+  truck_box_wash: "truck-box-wash",
+  fleet_vehicle_add_on: "fleet-vehicle-add-on"
 };
 
 const GENERATED_ADDON_LANDING_PAGES = buildGeneratedAddonPages();
@@ -134,8 +147,11 @@ function normalizeProductRefList(rows) {
 
 const SYSTEM_LANDING_PAGES = applyWaterRestrictionRulesToLandingPages(
   mergeLandingPages(
-    mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS),
-    GENERATED_ADDON_LANDING_PAGES
+    mergeLandingPages(
+      mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS),
+      GENERATED_ADDON_LANDING_PAGES
+    ),
+    EXPLICIT_LANDING_PAGES
   ),
   normalizeWaterRestrictionPayload(fallbackWaterRestrictionRules, "bundled_json_fallback")
 );
@@ -240,6 +256,12 @@ function normalizePage(page) {
     equipment: normalizeStringArray(page?.equipment),
     highlights: normalizeStringArray(page?.highlights),
     things_to_know: normalizeStringArray(page?.things_to_know),
+    scope_includes: normalizeStringArray(page?.scope_includes),
+    scope_excludes: normalizeStringArray(page?.scope_excludes),
+    customer_prep: normalizeStringArray(page?.customer_prep),
+    aftercare: normalizeStringArray(page?.aftercare),
+    quote_triggers: normalizeStringArray(page?.quote_triggers),
+    visual_briefs: normalizeStringArray(page?.visual_briefs),
     water_restriction_note: String(page?.water_restriction_note || page?.verified_water_rule_summary || "").trim(),
     water_restriction_sources: normalizeLinkArray(page?.water_restriction_sources || []),
     official_links: normalizeLinkArray(page?.official_links),

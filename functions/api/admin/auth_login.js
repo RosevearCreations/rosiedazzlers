@@ -61,7 +61,7 @@ export async function onRequestGet() {
 async function loadStaffUserByEmail(env, email) {
   const extendedSelect =
     "id,created_at,updated_at,full_name,email,role_code,is_active,password_hash," +
-    "can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,notes";
+    "can_override_lower_entries,can_manage_bookings,can_manage_blocks,can_manage_progress,can_manage_promos,can_manage_staff,permissions_profile,notes";
   const minimalSelect = "id,created_at,updated_at,full_name,email,role_code,is_active,password_hash,notes";
 
   const first = await fetchStaffUser(env, email, extendedSelect);
@@ -102,6 +102,8 @@ function normalizeStaffRow(row) {
     can_manage_progress: isAdmin || row.can_manage_progress === true,
     can_manage_promos: isAdmin || row.can_manage_promos === true,
     can_manage_staff: isAdmin || row.can_manage_staff === true,
+    permissions_profile: row.permissions_profile && typeof row.permissions_profile === "object" ? row.permissions_profile : {},
+    module_access: row.permissions_profile?.module_access && typeof row.permissions_profile.module_access === "object" ? row.permissions_profile.module_access : {},
     notes: row.notes || null,
     is_admin: isAdmin,
     is_senior_detailer: roleCode === "senior_detailer",
@@ -170,6 +172,8 @@ function formatActor(staffUser) {
     is_admin: staffUser.is_admin === true,
     is_senior_detailer: staffUser.is_senior_detailer === true,
     is_detailer: staffUser.is_detailer === true,
+    permissions_profile: staffUser.permissions_profile || {},
+    module_access: staffUser.module_access || staffUser.permissions_profile?.module_access || {},
     capabilities: {
       can_override_lower_entries: staffUser.can_override_lower_entries === true,
       can_manage_bookings: staffUser.can_manage_bookings === true,

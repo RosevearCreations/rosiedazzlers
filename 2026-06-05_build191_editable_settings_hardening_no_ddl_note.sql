@@ -1,3 +1,0 @@
--- Build 191: editable settings hardening, auth compatibility, dependency map, policy/template rendering.
--- No DDL is required by this build beyond Build 190 app_management_setting_history.
--- Optional future DDL: add actor_id/action columns to app_management_setting_history for richer restore auditing.
