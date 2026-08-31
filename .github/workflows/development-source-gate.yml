@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout exact dev commit
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -83,7 +85,7 @@ jobs:
       - name: Check source whitespace/conflict markers
         run: |
           git diff --check HEAD^ -- . ':!*.md'
-          if git grep -nE '^(<<<<<<<|=======|>>>>>>>)' -- ':!*.md'; then
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
             echo "::error::Merge-conflict markers remain in source."
             exit 2
           fi
