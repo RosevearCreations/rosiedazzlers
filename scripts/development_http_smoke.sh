@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+# Build 281 exact-deployment + branch-alias convergence smoke authority.
 
 BASE_URL="${1:-}"
 LABEL="${2:-Development endpoint}"
