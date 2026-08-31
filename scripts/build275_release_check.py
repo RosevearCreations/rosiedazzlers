@@ -172,6 +172,18 @@ need(
     "service_date",
 )
 
+# Development acceptance must prove the exact promoted Build 275 module rather
+# than silently stopping at the prior Build 274 boundary.
+need(
+    ".github/workflows/cloudflare-development-acceptance.yml",
+    "Run Build 275 focused guard",
+    "python scripts/build275_release_check.py",
+    "/assets/booking-retention-v275.js",
+    "Next available slots",
+    "booking_funnel_exit",
+    "through Build 275",
+)
+
 need(
     "BUILD275_SUMMARY.md",
     "**Status: ACTIVE — Development-first**",
@@ -179,6 +191,7 @@ need(
     "true next-three available slots",
     "returning-customer short rebook",
     "funnel exit evidence",
+    "Development acceptance boundary",
     "No Production/main mutation",
 )
 
