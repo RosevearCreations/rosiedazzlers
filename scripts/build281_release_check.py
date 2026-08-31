@@ -17,10 +17,14 @@ smoke = text("scripts/development_http_smoke.sh")
 workflow = text(".github/workflows/cloudflare-development-acceptance.yml")
 dev_gate = text(".github/workflows/development-source-gate.yml")
 summary = text("BUILD281_SUMMARY.md")
+routes = text("_routes.json")
 
 for token in [
     "Cache-Control: no-cache",
     "SMOKE_RETRY_MODE",
+    "SMOKE_SCOPE",
+    '[[ "$SMOKE_SCOPE" == "full" ]]',
+    '[[ "$code" == "404" || "$code" =~ ^5 ]]',
     "Staff App Launcher",
     "self-contained mobile operating water and power",
     'data-build278="local-seo-depth"',
@@ -35,21 +39,30 @@ for token in [
     "Exact deployment HTTP smoke checks",
     "Development alias convergence smoke checks",
     "steps.deployment.outputs.deployment_url",
-    'bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"',
+    "matched_uses_functions",
+    'deployments/${matched_id}',
+    'uses_functions=true',
+    'SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"',
     'for alias_attempt in $(seq 1 12)',
-    'SMOKE_RETRY_MODE=1 bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"',
+    'SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"',
     "sleep 5",
     "Production remains closed",
 ]:
     if token not in workflow:
         errors.append(f"Development acceptance missing Build 281 contract: {token}")
 
+if '"/api/*"' not in routes:
+    errors.append("Pages _routes.json no longer declares /api/* Functions routing")
+
 if "Run current Build 281 focused guard" not in dev_gate:
     errors.append("Development Source Gate does not retain Build 281")
 
 for token in [
     "exact deployment",
+    "static artifact",
+    "uses_functions",
     "branch alias",
+    "dynamic/API",
     "bounded retry",
     "Production",
 ]:
@@ -63,8 +76,8 @@ if errors:
     raise SystemExit(1)
 
 print("Build 281 focused release check: PASS")
-print(" - exact immutable Cloudflare deployment is smoked before the mutable dev alias")
-print(" - dev alias convergence uses the same smoke helper with bounded retry")
-print(" - intermediate propagation misses are warnings; only exhausted convergence is red")
-print(" - retained service/location/API/sitemap markers stay identical across both paths")
+print(" - exact Cloudflare deployment proves successful SHA + static artifact identity")
+print(" - Cloudflare deployment metadata must report uses_functions=true for this /api/* Pages Functions project")
+print(" - full dynamic/API smoke is reserved for the mutable dev alias and rejects missing 404 API routes")
+print(" - dev alias convergence uses bounded retry; intermediate propagation misses are warnings")
 print(" - Production remains closed and non-mutating")
