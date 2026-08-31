@@ -239,6 +239,60 @@ forbid(
     "Customer supplies power",
 )
 
+# The deeper waitlist page and public growth-settings transport must remain
+# waitlist-only until recurring pricing/perks/cadence are deliberately approved.
+one_h1("maintenance-plan/index.html")
+need(
+    "maintenance-plan/index.html",
+    "Maintenance Plan Interest",
+    "Cadence selected after service review",
+    "does not create a subscription",
+    "Rosie brings standard detailing water and power",
+    "membership.waitlist_enabled === false",
+    "miSubmitBtn",
+)
+forbid(
+    "maintenance-plan/index.html",
+    "#cycleSummary",
+    "Every 4 or 8 weeks</p>",
+    "Priority reminder before your preferred date",
+    "completed Complete Detail baseline",
+)
+need(
+    "functions/api/growth_settings_public.js",
+    "SAFE_MEMBERSHIP_PUBLIC_DEFAULTS",
+    "normalizeMembershipPublicSettings",
+    "no subscription, fixed cadence, price, discount, or perk is promised",
+    "enabled: source.enabled === true",
+    "waitlist_enabled: source.waitlist_enabled !== false",
+)
+forbid(
+    "functions/api/growth_settings_public.js",
+    'cycle_label: "Every 4 or 8 weeks"',
+    '"Priority reminder before your preferred date"',
+)
+need(
+    "assets/growth-settings.js",
+    "normalizePublicMembershipSettings",
+    "Cadence selected after service review",
+    "no subscription, fixed cadence, price, discount, or perk is promised",
+    "enabled: source.enabled === true",
+    "waitlist_enabled: source.waitlist_enabled !== false",
+)
+forbid(
+    "assets/growth-settings.js",
+    "cycle_label: 'Every 4 or 8 weeks'",
+    "'Priority reminder before your preferred date'",
+)
+
+# Build 275 source workflow must syntax-check the growth settings authority too.
+need(
+    ".github/workflows/build275-source-gate.yml",
+    "Check growth and maintenance settings syntax",
+    "node --check assets/growth-settings.js",
+    "node --check functions/api/growth_settings_public.js",
+)
+
 # Development acceptance must prove the exact promoted Build 275 module rather
 # than silently stopping at the prior Build 274 boundary.
 need(
@@ -262,6 +316,7 @@ need(
     "published add-on route integrity",
     "fleet utility authority",
     "maintenance utility authority",
+    "maintenance waitlist authority",
     "No Production/main mutation",
 )
 
