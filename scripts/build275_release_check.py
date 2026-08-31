@@ -293,16 +293,24 @@ need(
     "node --check functions/api/growth_settings_public.js",
 )
 
-# Development acceptance must prove the exact promoted Build 275 module rather
-# than silently stopping at the prior Build 274 boundary.
+# Development acceptance must still prove the exact promoted Build 275 module.
+# Later releases may centralize HTTP assertions in the shared smoke helper, so
+# verify the workflow actually invokes that helper and the helper retains the
+# exact Build 275 module/marker/funnel assertions instead of requiring duplicate
+# curl/grep statements inline in every later acceptance workflow.
 need(
     ".github/workflows/cloudflare-development-acceptance.yml",
     "Run Build 275 focused guard",
     "python scripts/build275_release_check.py",
+    "SMOKE_SCOPE=static bash scripts/development_http_smoke.sh",
+    "SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh",
+    "through Build 275",
+)
+need(
+    "scripts/development_http_smoke.sh",
     "/assets/booking-retention-v275.js",
     "Next available slots",
     "booking_funnel_exit",
-    "through Build 275",
 )
 
 need(
