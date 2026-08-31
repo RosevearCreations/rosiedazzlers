@@ -40,6 +40,7 @@ jobs:
           node --check assets/visual-placeholders.js
           node --check functions/api/_lib/gallery-publication.js
           node --check functions/api/before_after_gallery_public.js
+          bash -n scripts/build284_http_smoke.sh
 
       - name: Run retained Builds 271–283 focused guards
         run: |
@@ -73,7 +74,7 @@ jobs:
             echo "### Build 284 Source Gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Build 283 publication/proof authority retained: PASS"
-            echo "- Shared contextual proof renderer syntax: PASS"
+            echo "- Shared contextual proof renderer + dedicated HTTP smoke syntax: PASS"
             echo "- Service/location/use-case context matching: PASS"
             echo "- Sample/unpublished/unapproved/incomplete proof fail-closed: PASS"
             echo "- Zero-real-proof hidden state: PASS"
