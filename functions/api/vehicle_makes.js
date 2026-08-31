@@ -1,11 +1,19 @@
-import { fetchVehicleMakes, allowedYears } from './_lib/vehicle-catalog.js';
+import { fetchVehicleMakes, fallbackVehicleMakes, allowedYears } from './_lib/vehicle-catalog.js';
 
 export async function onRequestGet() {
   try {
     const makes = await fetchVehicleMakes();
     return json({ ok: true, years: allowedYears(), makes });
-  } catch (err) {
-    return json({ error: err?.message || 'Could not load vehicle makes.' }, 500);
+  } catch {
+    // Vehicle suggestions are optional enrichment. Never block booking because
+    // an external catalogue or unexpected lookup path is unavailable.
+    return json({
+      ok: true,
+      years: allowedYears(),
+      makes: fallbackVehicleMakes(),
+      degraded: true,
+      warning: 'Vehicle suggestions are temporarily limited. You can still type your vehicle make manually.'
+    });
   }
 }
 
