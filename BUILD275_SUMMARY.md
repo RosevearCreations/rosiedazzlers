@@ -24,7 +24,7 @@ This build continues the already-approved roadmap rather than reopening Build 27
 
 The Build 274 Quick Book shortcut showed three open **days**. Build 275 now projects the first three real AM/PM openings from the canonical date-pill results already produced by the existing booking engine.
 
-- No parallel `/api/availability` call was added.
+- No parallel availability call was added.
 - No duplicate business-hours/conflict calculation was added.
 - The shortcut reads only the existing open/partial date pills after the canonical booking engine has resolved availability.
 - Selecting a shortcut clicks the existing date control and then the existing enabled AM/PM slot control, preserving the booking engine's normal refresh, validation and analytics behavior.
@@ -33,9 +33,22 @@ The Build 274 Quick Book shortcut showed three open **days**. Build 275 now proj
 
 This closes the roadmap item for **true next-three available slots** at the feature-source level; Development deployment acceptance is still required before Build 275 can call this slice Development-proven.
 
+## Slice 3 — returning-customer short rebook
+
+Build 275 now adds a guarded acceleration path for authenticated returning customers using the existing `/api/client/dashboard` authority.
+
+- The shortcut appears only when the customer is authenticated, has at least one saved Garage vehicle, and has a past non-cancelled booking with a retained `package_code`.
+- The prior package is reused only as a starting selection in the current booking form.
+- When exactly one Garage vehicle exists, that saved vehicle can be loaded automatically through the existing Garage button behavior.
+- When multiple Garage vehicles exist, Build 275 does **not** guess which vehicle the old booking belonged to; the customer is sent to the existing Garage picker to choose the correct vehicle.
+- The shortcut does not auto-book, bypass current availability, skip vehicle-size review, freeze old pricing, or skip current add-on/deposit rules.
+- Failure to load returning-customer history remains fail-open; anonymous/current booking continues normally.
+
+This closes the **returning-customer short rebook** source slice while preserving current booking authority and review.
+
 ## Build 275 source authority
 
-The focused Build 275 guard pins the utility compatibility bridge, slot-projection boundary and retained vehicle-catalogue fail-open behavior. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
+The focused Build 275 guard pins the utility compatibility bridge, slot-projection boundary, returning-customer prefill boundary and retained vehicle-catalogue fail-open behavior. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
 
 No Production/main mutation occurs during this feature-source phase. Development promotion happens only after the Build 275 source gate is green and the bounded slices are reviewed.
 
@@ -43,13 +56,12 @@ No Production/main mutation occurs during this feature-source phase. Development
 
 The active queue remains:
 
-1. Add the **returning-customer short rebook** path using saved Garage/prior-booking authorities.
-2. Complete booking **funnel instrumentation**, including meaningful abandon/drop-off evidence.
-3. Continue detailed service/add-on landing-page convergence with condition-based effort and quote-safe scope.
-4. Continue proof/review mechanics and local SEO/service-area depth.
-5. Continue maintenance-plan and fleet/workplace paths without inventing undecided pricing, perks or vehicle-count minimums.
-6. Add the remaining analytics-ingest/reliability regression protection and close payment/rollback/manual external evidence where applicable.
-7. Structurally remove the remaining stale inline booking fallback utility source once retained historical guard compatibility can be advanced safely.
+1. Complete booking **funnel instrumentation**, including meaningful abandon/drop-off evidence.
+2. Continue detailed service/add-on landing-page convergence with condition-based effort and quote-safe scope.
+3. Continue proof/review mechanics and local SEO/service-area depth.
+4. Continue maintenance-plan and fleet/workplace paths without inventing undecided pricing, perks or vehicle-count minimums.
+5. Add the remaining analytics-ingest/reliability regression protection and close payment/rollback/manual external evidence where applicable.
+6. Structurally remove the remaining stale inline booking fallback utility source once retained historical guard compatibility can be advanced safely.
 
 ## Non-negotiable business authorities
 

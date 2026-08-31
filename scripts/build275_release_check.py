@@ -76,6 +76,25 @@ forbid(
     "STRIPE_SECRET_KEY",
     "PAYPAL_CLIENT_SECRET",
 )
+
+# Returning-customer acceleration must reuse authenticated dashboard history,
+# prior package selection and existing Garage controls. It is a prefill/review
+# path only and cannot auto-book or infer which of multiple vehicles is correct.
+need(
+    "assets/booking-retention-v275.js",
+    "/api/client/dashboard",
+    'credentials: "include"',
+    "pastRepeatableBooking",
+    "serviceDate < todayIso",
+    "cancel|refund|failed|declin|void",
+    "data-garage-index",
+    "vehicleCount === 1",
+    "Reuse this service",
+    "Current vehicle size, availability, add-ons, price and deposit rules still apply",
+    "booking_returning_rebook_prefill",
+    "Optional returning-customer acceleration must never block anonymous booking",
+)
+
 need(
     "assets/pricing-catalog-client.js",
     'import("./booking-quick-start-v274.js")',
@@ -106,6 +125,17 @@ need(
     "models: []",
     "degraded: true",
     "type the model manually",
+)
+
+# Dashboard data needed by short rebook must remain available from the existing
+# authenticated client authority rather than a new customer-history endpoint.
+need(
+    "functions/api/client/dashboard.js",
+    "bookings:",
+    "vehicles:",
+    "package_code",
+    "vehicle_size",
+    "service_date",
 )
 
 # Build authority must state what is actually closed and what remains queued.

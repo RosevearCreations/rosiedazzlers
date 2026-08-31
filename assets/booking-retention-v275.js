@@ -11,6 +11,18 @@
   const qs = (selector, root = document) => root.querySelector(selector);
   const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
 
+  function ensureStyles() {
+    if (qs("style[data-build275-booking-retention]")) return;
+    const style = document.createElement("style");
+    style.dataset.build275BookingRetention = "true";
+    style.textContent = `
+      .qb275__rebook{margin:10px 0;padding:11px;border:1px solid rgba(77,119,255,.26);border-radius:14px;background:rgba(77,119,255,.08)}
+      .qb275__rebook strong{display:block}.qb275__rebook p{margin:4px 0 9px!important}.qb275__rebook-meta{font-size:.82rem;color:rgba(234,242,255,.72)}
+      [data-qb-slot] strong{display:block}[data-qb-slot] span{display:block;font-size:.78rem;opacity:.78;margin-top:2px}
+    `;
+    document.head.appendChild(style);
+  }
+
   function canonicalSlotCandidates(calendar) {
     const candidates = [];
     const dates = qsa(".date-pill.is-open,.date-pill.is-partial", calendar).filter((button) => !button.disabled);
@@ -103,7 +115,100 @@
     }
   }
 
+  function humanizePackageCode(code) {
+    return String(code || "").replace(/[_-]+/g, " ").replace(/\b\w/g, (ch) => ch.toUpperCase()).trim();
+  }
+
+  function pastRepeatableBooking(bookings) {
+    const today = new Date();
+    const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    return (Array.isArray(bookings) ? bookings : []).find((row) => {
+      const packageCode = String(row?.package_code || "").trim();
+      const serviceDate = String(row?.service_date || "").slice(0, 10);
+      const status = `${row?.status || ""} ${row?.job_status || ""}`.toLowerCase();
+      return !!packageCode && /^\d{4}-\d{2}-\d{2}$/.test(serviceDate) && serviceDate < todayIso && !/cancel|refund|failed|declin|void/.test(status);
+    }) || null;
+  }
+
+  function packageControl(packageCode) {
+    return qsa("[data-package-suggest],[data-package]").find((button) =>
+      String(button.getAttribute("data-package-suggest") || button.getAttribute("data-package") || "") === String(packageCode || "")
+    ) || null;
+  }
+
+  function waitForPackageControl(packageCode, callback, attempt = 0) {
+    const control = packageControl(packageCode);
+    if (control) return callback(control);
+    if (attempt < 30) setTimeout(() => waitForPackageControl(packageCode, callback, attempt + 1), 100);
+  }
+
+  function waitForGarageButtons(callback, attempt = 0) {
+    const buttons = qsa("[data-garage-index]");
+    if (buttons.length) return callback(buttons);
+    if (attempt < 30) setTimeout(() => waitForGarageButtons(callback, attempt + 1), 100);
+  }
+
+  function applyPastBookingShortcut(booking, vehicleCount) {
+    waitForPackageControl(booking.package_code, (control) => {
+      control.click();
+      waitForGarageButtons((garageButtons) => {
+        if (vehicleCount === 1 && garageButtons.length === 1) {
+          garageButtons[0].click();
+          setTimeout(() => qs("#qb274NextDays")?.scrollIntoView({ behavior: "smooth", block: "center" }), 250);
+        } else {
+          qs("#garagePickerWrap")?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+      try {
+        window.dispatchEvent(new CustomEvent("rd:analytics", {
+          detail: { event: "booking_returning_rebook_prefill", package_code: booking.package_code, prior_service_date: booking.service_date || null, vehicle_count: vehicleCount }
+        }));
+      } catch {}
+    });
+  }
+
+  function renderReturningCustomerShortcut(out) {
+    if (!out?.authenticated || !Array.isArray(out.vehicles) || !out.vehicles.length || qs("[data-build275-rebook]")) return;
+    const booking = pastRepeatableBooking(out.bookings);
+    if (!booking) return;
+
+    waitForPackageControl(booking.package_code, () => {
+      if (qs("[data-build275-rebook]")) return;
+      const account = qs(".qb274__account");
+      const vehicleSection = qs("[data-qb274-vehicle]");
+      const anchor = account || vehicleSection;
+      if (!anchor) return;
+
+      const card = document.createElement("div");
+      card.className = "qb275__rebook";
+      card.dataset.build275Rebook = "true";
+      const packageLabel = humanizePackageCode(booking.package_code) || "Previous service";
+      const vehicleInstruction = out.vehicles.length === 1
+        ? "Your single saved Garage vehicle will also be loaded."
+        : `You have ${out.vehicles.length} saved Garage vehicles, so choose the correct vehicle after reusing the package.`;
+      card.innerHTML = `
+        <strong>Returning customer — repeat a past booking</strong>
+        <p>Reuse <b>${packageLabel}</b> from ${String(booking.service_date || "").slice(0, 10)} as a starting point. ${vehicleInstruction}</p>
+        <div class="qb275__rebook-meta">This only prefills the current booking form. Current vehicle size, availability, add-ons, price and deposit rules still apply.</div>
+        <button class="btn primary small" type="button" data-build275-rebook-action>Reuse this service</button>`;
+      anchor.insertAdjacentElement("afterend", card);
+      qs("[data-build275-rebook-action]", card)?.addEventListener("click", () => applyPastBookingShortcut(booking, out.vehicles.length));
+    });
+  }
+
+  async function installReturningCustomerShortcut() {
+    try {
+      const response = await fetch("/api/client/dashboard", { credentials: "include", cache: "no-store" });
+      const out = await response.json().catch(() => null);
+      if (!response.ok || !out?.authenticated) return;
+      renderReturningCustomerShortcut(out);
+    } catch {
+      // Optional returning-customer acceleration must never block anonymous booking.
+    }
+  }
+
   function install() {
+    ensureStyles();
     const calendar = qs("#availableDates");
     if (!calendar || !renderNextAvailableSlots()) {
       setTimeout(install, 100);
@@ -111,6 +216,8 @@
     }
 
     normalizeFallbackUtilityCopy(document);
+    installReturningCustomerShortcut();
+
     const calendarObserver = new MutationObserver(() => renderNextAvailableSlots());
     calendarObserver.observe(calendar, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "disabled"] });
 
