@@ -177,15 +177,15 @@ After real review authority is connected:
 - place genuine review proof near relevant service/local decisions;
 - consider referral/loyalty economics only after the business rules are explicitly approved.
 
-### 7. Payments / Finance / accounting closure
+### 9. Payments / Finance / accounting
 
-Continue retained Finance work without weakening permissions:
+Retain Build 273 authority and continue Finance closure without weakening permissions:
 
 - Stripe test deposit/final balance/refund/webhook/idempotency acceptance;
 - PayPal sandbox parity if retained;
 - settlement/reconciliation links into Finance;
-- evidence/receipt links into accounting documents;
-- accountant-friendly exports from one data authority;
+- receipt/evidence linking into `accounting_documents`;
+- accountant-friendly export surfaces while preserving one data authority;
 - narrow journal/refund/tax/payroll-sensitive actions;
 - no fabricated tax facts or accountant judgment.
 
@@ -193,7 +193,7 @@ Continue retained Finance work without weakening permissions:
 
 Complete real evidence for Customer ↔ Detailer messaging/deep links and closed-job behavior; role/action/direct-URL/API matrix; phone/tablet/desktop/PWA/accessibility/weak-network behavior; real provider email/SMS/Web Push delivery/retry/failure; rollback/restore rehearsals; and representative Cloudflare runtime evidence.
 
-### 9. Continue modular extraction only when it creates value
+### 10. Continue modular extraction only when it creates value
 
 Preferred high-use order remains:
 
