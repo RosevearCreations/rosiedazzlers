@@ -317,3 +317,5 @@ jobs:
             echo "This workflow proves cumulative/source guards through Build 276, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment after Cloudflare reaches success, Tax Support and I.T. Connections page availability, the deployed Build 275 booking-retention module, protected I.T. status route loading, anonymous HTTP/module-load smoke, and the non-mutating Production promotion boundary."
             echo "Authenticated contextual-help behavior, authenticated Finance write/read behavior, live returning-customer rebook behavior, payment-provider completion, actual tax-source facts/accountant review, real-device/provider delivery, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain current-release manual/external evidence."
           } >> "$GITHUB_STEP_SUMMARY"
+
+# Retained Development acceptance through Build 275 is preserved and extended through Build 276.
