@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 283  
+**Build:** 284  
 **Updated:** 2026-08-31  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 281 is the accepted Development reliability baseline at `6e0b6015066d2056ee023c35f939da4f5ad23384`. Build 282 is the accepted high-intent customer/business baseline at `841d90561a98089835018c008ec144667782f37d`. Build 283 is the active proof/media publication slice and is summarized in `BUILD283_SUMMARY.md`.
+Build 281 is the accepted Development reliability baseline at `6e0b6015066d2056ee023c35f939da4f5ad23384`. Build 282 is the accepted high-intent customer/business baseline at `841d90561a98089835018c008ec144667782f37d`. Build 283 is the accepted proof/media publication baseline at `a3bcb16c6af94fddd561aba795fd488c94a588f5`. Build 284 is the active **contextual proof placement** slice and is summarized in `BUILD284_SUMMARY.md`.
 
 **Build 273 is the retained Finance/tax-support baseline.** Later builds extend the platform without replacing that Finance authority.
 
-Acceptance is evidence-based, not document-based: the current Build 283 SHA is accepted only when its feature source gate is green, the feature preview is successful, `dev` points to that exact SHA, Cloudflare reports the exact Development deployment successful with Functions attached, exact static smoke passes, and the `dev` alias passes the full runtime smoke.
+Acceptance is evidence-based, not document-based: Build 284 is accepted only when its exact feature SHA passes the feature source gate and Cloudflare preview, `dev` points to that same SHA, Cloudflare reports the exact Development deployment successful with Functions attached, exact static smoke passes, the mutable `dev` alias passes full runtime smoke, and the Production boundary remains non-mutating.
 
 Production remains deliberately separate. `main` is still the Build 274 Production line and must not be force-moved to `dev`; future promotion must reconcile the known divergent histories deliberately.
 
@@ -64,7 +64,7 @@ Do not regress these rules:
 - no public R2 enumeration on normal requests;
 - **Rosie brings standard detailing water and power. The customer provides a safe, private and permitted work area.** Unusual parking, building access, site rules, weather or local runoff restrictions are reviewed before dispatch.
 
-## Completed forward work through Build 282
+## Completed forward work through Build 283
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added booking/retention convergence, including true next useful AM/PM appointment shortcuts, returning-customer rebook acceleration and funnel-exit evidence.
@@ -72,22 +72,23 @@ Do not regress these rules:
 - Builds 277–280 deepened all indexed add-on destinations, normalized the self-contained mobile operating model, deepened eight distinct Oxford/Norfolk local pages and closed sitemap/canonical/H1 coverage.
 - Build 281 hardened exact Cloudflare deployment versus mutable `dev` alias acceptance, including `uses_functions=true`, immutable static identity and bounded full-runtime alias convergence.
 - Build 282 added three high-intent acquisition → existing-booking paths: Pre-Sale / Lease-Return, Spring Salt Recovery, and Fall / Winter Protection Prep.
+- Build 283 separated media pairing, public-use consent/privacy review and explicit publication, while defining fail-closed real-proof readiness.
 
 Do not re-open these items because an older roadmap mentions them.
 
-## Build 283 — active proof/media publication slice
+## Build 283 — retained proof/media publication authority
 
 Build 283 strengthens the existing Gallery/App Management path without adding another media system or database migration.
 
 ### Final-media eligibility
 
-`functions/api/admin/gallery_media_candidates_list.js` now filters the internal Gallery picker so rejected/private/hidden/deleted/withdrawn or unusable candidates are withheld before staff pairing. The existing Build 210 source boundary remains: only final-stage, customer-visible, approved job media can be queued for Gallery reuse in the first place.
+`functions/api/admin/gallery_media_candidates_list.js` filters the internal Gallery picker so rejected/private/hidden/deleted/withdrawn or unusable candidates are withheld before staff pairing. The existing final-stage/customer-visible/approved job-media source boundary remains authoritative.
 
 A candidate being eligible for pairing is **not** public-use consent and is **not** publication.
 
 ### Separate review and publication
 
-Gallery rows now carry an explicit `publication_status`.
+Gallery rows carry an explicit `publication_status`.
 
 - new rows start `draft`;
 - public-use consent/privacy confirmation remains an explicit staff assertion based on real evidence;
@@ -100,43 +101,63 @@ The public Gallery reuses the existing `before_after_gallery` setting. If saved 
 
 ### Real-proof eligibility
 
-Gallery publication and real-proof readiness are deliberately different.
+A real proof row must be non-sample, explicitly published, public-use consent approved, media-privacy approved, paired before/after media, tied to service and town/location, supplied with vehicle/condition context, and documented as **problem → process → result**. Sample fallback never counts as real Rosie proof.
 
-A real proof row must be:
+Build 283 adds **no database migration** and no parallel Gallery authority.
 
-- non-sample;
-- explicitly published;
-- public-use consent approved;
-- media privacy approved;
+## Build 284 — active contextual proof placement
+
+Build 284 consumes only the Build 283 public Gallery authority and places real proof at customer decision points.
+
+### Shared presentation layer
+
+`assets/contextual-proof-v284.js` is a presentation-only renderer. The existing first-party visual bootstrap loads it only when a service/add-on, location, or Build 282 high-intent use-case marker is present.
+
+The client intentionally rechecks the real-proof boundary even though the public API already fails closed:
+
+- explicit `published` state;
+- approved public-use consent;
+- approved media privacy;
+- non-sample proof;
 - paired before/after media;
-- tied to a service and town/location;
-- supplied with vehicle type/label and condition context;
-- documented as **problem → process → result**.
+- service and town/location;
+- vehicle and condition;
+- problem, process and result.
 
-Sample fallback remains clearly marked sample and never counts as real Rosie proof.
+At most three records are shown. No customer name or testimonial is synthesized or exposed by this layer.
 
-### Storage/schema boundary
+### Context matching
 
-Build 283 adds **no database migration**. Publication/proof context is stored inside the existing editable-setting JSON. Existing job-media and `gallery_media_candidates` authorities are reused.
+- service/add-on pages require the Gallery service slug to match the page;
+- location pages require a town represented by that location page;
+- Build 282 use-case pages require a relevant starting-service match and explicitly describe the evidence as relevant work rather than proof that every vehicle has the same condition/result.
+
+If no real matching row exists, the section remains hidden. Existing public proof-placeholder plans are hidden instead of masquerading as customer evidence.
+
+### Authority/storage boundary
+
+Build 284 adds **no database migration**, direct R2 enumeration, private/admin API dependency, review authority, pricing authority, or booking authority. Publishing/consent/privacy remains Build 283-owned.
 
 ## Current validation authority
 
 - cumulative: `scripts/release_check.py`;
 - public H1/current conversion+proof hook: `scripts/seo_h1_check.py`;
 - retained Build 282 guard: `scripts/build282_release_check.py`;
-- focused Build 283 guard: `scripts/build283_release_check.py`;
-- feature source workflow: `.github/workflows/build283-source-gate.yml`;
+- retained Build 283 guard: `scripts/build283_release_check.py`;
+- focused Build 284 guard: `scripts/build284_release_check.py`;
+- feature source workflow: `.github/workflows/build284-source-gate.yml`;
+- Build 284 HTTP smoke: `scripts/build284_http_smoke.sh`;
 - Development source workflow: `.github/workflows/development-source-gate.yml`;
-- exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
+- retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Build 283 is not Development-green merely because source exists. The exact accepted feature SHA, feature preview, `dev`, Cloudflare Development artifact, and runtime smoke must agree.
+Build 284 is not Development-green merely because source exists. The exact accepted feature SHA, feature preview, `dev`, Cloudflare Development artifact, Build 284 smoke, and runtime smoke must agree.
 
-## Next business/product work after Build 283
+## Next business/product work after Build 284
 
 Proceed in this order where work is not blocked by real business/provider evidence:
 
-1. publish **real, consented Rosie proof** through the Build 283 controls and place only proof-ready rows on the exact service/local/use-case pages they genuinely prove;
+1. publish **real, consented Rosie proof** through the Build 283 controls; Build 284 will surface only proof-ready rows where their service/town/use-case context genuinely matches;
 2. Search Console/Google Business Profile measurement and genuine review authority when account access is available;
 3. maintenance-plan product/account/booking path **after** cadence, price/perks and pause/cancel rules are approved;
 4. fleet/workplace acquisition path **after** minimum-vehicle, discount/travel and recurring-service rules are approved;
@@ -148,6 +169,7 @@ Proceed in this order where work is not blocked by real business/provider eviden
 ## Manual / external evidence that must not be fabricated
 
 - real customer/public-use consent for any actual before/after proof;
+- real Gallery rows with accurate service/town/vehicle/condition/problem/process/result context;
 - Google Business Profile ownership/review connection;
 - Search Console ownership/property/sitemap/indexing evidence;
 - genuine customer review/proof publication consent;
@@ -173,6 +195,11 @@ Proceed in this order where work is not blocked by real business/provider eviden
 ## Documentation policy
 
 Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are release checkpoints; Git history is the archive. Old build-numbered documents must not override these two current authorities.
+
+<!-- Historical Build 283 retained-guard compatibility only; this is not the living build number.
+**Build:** 283
+Build 283 proof/media publication authority remains retained.
+-->
 
 <!-- Historical Build 274 retained-guard compatibility only; this is not the living build number.
 **Build:** 274
