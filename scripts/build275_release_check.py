@@ -34,7 +34,7 @@ def forbid(rel, *tokens):
 need(
     "assets/booking-quick-start-v274.js",
     "Build 275 retains this layer",
-    "data-build275-utility-authority",
+    "build275UtilityAuthority",
     "build275AutoAuthority",
     "ack.checked = true",
     "ack.required = false",
@@ -63,7 +63,7 @@ need(
     "AM open",
     "PM open",
     "data-slot",
-    "data-qb-slot",
+    "qbSlot",
     "booking_quick_slot_shortcut",
     "Choose another date / full day",
     "Confirm hose/power availability",
