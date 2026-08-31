@@ -1,6 +1,6 @@
 // Build 275 — booking/retention convergence over the retained booking engine.
 // This layer does not own availability. It derives shortcuts only from the
-// canonical date pills already rendered by book.html after /api/availability.
+// canonical date pills already rendered by book.html after the booking engine resolves availability.
 (function initBuild275BookingRetention() {
   const normalizedPath = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
   const params = new URLSearchParams(location.search);
