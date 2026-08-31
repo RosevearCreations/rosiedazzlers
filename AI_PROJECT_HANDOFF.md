@@ -9,6 +9,8 @@
 
 Build 281 is the accepted Development reliability baseline at `6e0b6015066d2056ee023c35f939da4f5ad23384`. Build 282 is the active customer/business release and is summarized in `BUILD282_SUMMARY.md`.
 
+**Build 273 is the retained Finance/tax-support baseline.** Later builds extend the platform without replacing that Finance authority.
+
 Acceptance is evidence-based, not document-based: the current Build 282 SHA is accepted only when its feature source gate is green, `dev` points to that exact SHA, Cloudflare reports the exact Development deployment successful with Functions attached, exact static smoke passes, and the `dev` alias passes the full runtime smoke.
 
 Production remains deliberately separate. `main` is still the Build 274 Production line and must not be force-moved to `dev`; future promotion must reconcile the known divergent histories deliberately.
@@ -43,6 +45,7 @@ These exact retained authorities remain live and must not be weakened by later c
 - booking/deposit/conflict mechanics remain authoritative;
 - one meaningful H1 per indexable public page;
 - persistent Finance tax-support records, evidence links, T2125 workpaper and accountant-package workflow remain retained;
+- Finance authority includes `finance.view` and `finance.tax.manage`; Operations/Detailer roles do not inherit Finance actions;
 - accounting automation must not fabricate tax facts or professional judgment.
 
 ## Retained business/public authority
