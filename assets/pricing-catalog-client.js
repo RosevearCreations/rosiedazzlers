@@ -45,7 +45,9 @@ export async function loadPricingCatalogClient(options = {}) {
 
 const normalizedPath = String(globalThis.location?.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
 if (normalizedPath === "/book") {
-  import("./booking-quick-start-v274.js").catch((error) => {
-    console.warn("Optional Build 274 Quick Book presentation could not be loaded; legacy booking remains available.", error);
-  });
+  import("./booking-quick-start-v274.js")
+    .then(() => import("./booking-retention-v275.js"))
+    .catch((error) => {
+      console.warn("Optional Build 275 booking presentation could not be loaded; legacy booking remains available.", error);
+    });
 }

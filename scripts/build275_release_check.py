@@ -52,6 +52,37 @@ need(
     "Saved Garage vehicles",
 )
 
+# Build 275 slot shortcuts must be projections of the existing canonical
+# calendar/date-pill + slot controls. They may not create a parallel API or
+# their own availability truth.
+need(
+    "assets/booking-retention-v275.js",
+    "canonical date pills",
+    "Next available slots",
+    "data-date-pill",
+    "AM open",
+    "PM open",
+    "data-slot",
+    "data-qb-slot",
+    "booking_quick_slot_shortcut",
+    "Choose another date / full day",
+    "Confirm hose/power availability",
+    "Rosie brings standard detailing water and power",
+)
+forbid(
+    "assets/booking-retention-v275.js",
+    "/api/availability",
+    "/api/checkout",
+    "STRIPE_SECRET_KEY",
+    "PAYPAL_CLIENT_SECRET",
+)
+need(
+    "assets/pricing-catalog-client.js",
+    'import("./booking-quick-start-v274.js")',
+    'import("./booking-retention-v275.js")',
+    "legacy booking remains available",
+)
+
 # Retained Build 274 compatibility hooks may still exist in source, but they
 # must not become a new customer-facing authority or payment dependency.
 need("book.html", 'id="ack_power_water"', 'id="need_mobile_water_power"')
