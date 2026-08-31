@@ -1,5 +1,18 @@
 const VPIC_API_BASE = 'https://vpic.nhtsa.dot.gov/api/vehicles';
 
+const FALLBACK_VEHICLE_MAKE_NAMES = [
+  'Acura', 'Alfa Romeo', 'Aston Martin', 'Audi', 'Bentley', 'BMW', 'Buick', 'Cadillac',
+  'Chevrolet', 'Chrysler', 'Dodge', 'Ferrari', 'Fiat', 'Ford', 'Genesis', 'GMC', 'Honda',
+  'Hyundai', 'Infiniti', 'Jaguar', 'Jeep', 'Kia', 'Lamborghini', 'Land Rover', 'Lexus',
+  'Lincoln', 'Maserati', 'Mazda', 'McLaren', 'Mercedes-Benz', 'MINI', 'Mitsubishi',
+  'Nissan', 'Polestar', 'Porsche', 'Ram', 'Rivian', 'Subaru', 'Tesla', 'Toyota',
+  'Volkswagen', 'Volvo'
+];
+
+export function fallbackVehicleMakes() {
+  return FALLBACK_VEHICLE_MAKE_NAMES.map((make) => ({ make_id: null, make }));
+}
+
 export function allowedYears() {
   const current = new Date().getFullYear();
   const years = [];
@@ -7,23 +20,41 @@ export function allowedYears() {
   return years;
 }
 
+async function fetchVpicJson(url) {
+  try {
+    const res = await fetch(url, {
+      headers: { Accept: 'application/json' },
+      redirect: 'follow'
+    });
+    if (!res.ok) return null;
+    const json = await res.json().catch(() => null);
+    return json && typeof json === 'object' ? json : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchVehicleMakes() {
-  const seen = new Map();
-  for (const type of ['car','truck','multipurpose passenger vehicle']) {
+  // vPIC suggestions are optional enrichment. Seed a practical local list so
+  // booking remains usable when the external service is blocked or unavailable.
+  const seen = new Map(
+    fallbackVehicleMakes().map((row) => [row.make.toLowerCase(), row])
+  );
+
+  for (const type of ['car', 'truck', 'multipurpose passenger vehicle']) {
     const url = `${VPIC_API_BASE}/GetMakesForVehicleType/${encodeURIComponent(type)}?format=json`;
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!res.ok) throw new Error(`Could not load vehicle makes from vPIC. ${await res.text()}`);
-    const json = await res.json().catch(() => ({}));
-    const rows = Array.isArray(json.Results) ? json.Results : [];
+    const json = await fetchVpicJson(url);
+    const rows = Array.isArray(json?.Results) ? json.Results : [];
     for (const row of rows) {
       const name = String(row.MakeName || '').trim();
       const id = Number(row.MakeId || 0) || null;
       if (!name) continue;
       const key = name.toLowerCase();
       const existing = seen.get(key);
-      if (!existing) seen.set(key, { make_id: id, make: name });
+      if (!existing || (!existing.make_id && id)) seen.set(key, { make_id: id, make: name });
     }
   }
+
   return Array.from(seen.values()).sort((a, b) => a.make.localeCompare(b.make));
 }
 
@@ -35,12 +66,10 @@ export async function fetchVehicleModelsForMakeYear({ make, year }) {
 
   const out = [];
   const seen = new Set();
-  for (const type of ['Passenger Car','Truck','Multipurpose Passenger Vehicle']) {
+  for (const type of ['Passenger Car', 'Truck', 'Multipurpose Passenger Vehicle']) {
     const url = `${VPIC_API_BASE}/GetModelsForMakeYear/make/${encodeURIComponent(safeMake)}/modelyear/${safeYear}/vehicletype/${encodeURIComponent(type)}?format=json`;
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!res.ok) continue;
-    const json = await res.json().catch(() => ({}));
-    const rows = Array.isArray(json.Results) ? json.Results : [];
+    const json = await fetchVpicJson(url);
+    const rows = Array.isArray(json?.Results) ? json.Results : [];
     for (const row of rows) {
       const model = String(row.Model_Name || row.ModelName || '').trim();
       const makeName = String(row.Make_Name || row.MakeName || safeMake).trim();
