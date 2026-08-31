@@ -50,8 +50,7 @@ jobs:
           curl --fail-with-body --silent --show-error \
             "https://api.cloudflare.com/client/v4/user/tokens/verify" \
             --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            --header "Content-Type: application/json" \
-            > /tmp/cf-token.json
+            --header "Content-Type: application/json" > /tmp/cf-token.json
           jq -e '.success == true and (.result.status // "") == "active"' /tmp/cf-token.json >/dev/null
           echo "ROSIEDAZZLERS_TOKEN is an active Cloudflare API token."
 
@@ -62,24 +61,26 @@ jobs:
 
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
-
       - name: Run Build 271 focused guard
         run: python scripts/build271_release_check.py
-
       - name: Run Build 272 focused guard
         run: python scripts/build272_release_check.py
-
       - name: Run Build 273 focused guard
         run: python scripts/build273_release_check.py
-
       - name: Run Build 274 focused guard
         run: python scripts/build274_release_check.py
-
       - name: Run Build 275 focused guard
         run: python scripts/build275_release_check.py
-
       - name: Run Build 276 focused guard
         run: python scripts/build276_release_check.py
+      - name: Run Build 277 focused guard
+        run: python scripts/build277_release_check.py
+      - name: Run Build 278 focused guard
+        run: python scripts/build278_release_check.py
+      - name: Run Build 279 focused guard
+        run: python scripts/build279_release_check.py
+      - name: Run Build 280 focused guard
+        run: python scripts/build280_release_check.py
 
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
@@ -88,7 +89,6 @@ jobs:
           set -euo pipefail
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
           account_id="${CONFIGURED_ACCOUNT_ID:-}"
-
           project_ok() {
             local candidate="$1"
             local code
@@ -97,7 +97,6 @@ jobs:
               "${AUTH[@]}")
             [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/cf-project.json >/dev/null 2>&1
           }
-
           if [[ -n "$account_id" ]]; then
             if ! project_ok "$account_id"; then
               echo "::error::Configured CLOUDFLARE_ACCOUNT_ID cannot read Pages project ${CF_PROJECT_NAME}."
@@ -105,36 +104,28 @@ jobs:
             fi
           else
             curl --fail-with-body --silent --show-error \
-              "https://api.cloudflare.com/client/v4/accounts?per_page=50" \
-              "${AUTH[@]}" > /tmp/cf-accounts.json
+              "https://api.cloudflare.com/client/v4/accounts?per_page=50" "${AUTH[@]}" > /tmp/cf-accounts.json
             jq -e '.success == true' /tmp/cf-accounts.json >/dev/null
             while IFS= read -r candidate; do
               [[ -z "$candidate" ]] && continue
-              if project_ok "$candidate"; then
-                account_id="$candidate"
-                break
-              fi
+              if project_ok "$candidate"; then account_id="$candidate"; break; fi
             done < <(jq -r '.result[]?.id' /tmp/cf-accounts.json)
           fi
-
           if [[ -z "$account_id" ]]; then
             echo "::error::ROSIEDAZZLERS_TOKEN is valid but cannot discover/read Pages project ${CF_PROJECT_NAME}."
             exit 4
           fi
-
           project_name=$(jq -r '.result.name // empty' /tmp/cf-project.json)
           production_branch=$(jq -r '.result.production_branch // empty' /tmp/cf-project.json)
           subdomain=$(jq -r '.result.subdomain // empty' /tmp/cf-project.json)
           source_type=$(jq -r '.result.source.type // empty' /tmp/cf-project.json)
           source_repo=$(jq -r '.result.source.config.repo_name // empty' /tmp/cf-project.json)
-
           echo "account_id=${account_id}" >> "$GITHUB_OUTPUT"
           echo "project_name=${project_name}" >> "$GITHUB_OUTPUT"
           echo "production_branch=${production_branch}" >> "$GITHUB_OUTPUT"
           echo "subdomain=${subdomain}" >> "$GITHUB_OUTPUT"
           echo "source_type=${source_type}" >> "$GITHUB_OUTPUT"
           echo "source_repo=${source_repo}" >> "$GITHUB_OUTPUT"
-
           {
             echo "### Cloudflare project authority"
             echo "- Project: \`${project_name}\`"
@@ -152,46 +143,26 @@ jobs:
         run: |
           set -euo pipefail
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
-          matched_id=""
-          matched_url=""
-          matched_status=""
-          ready="false"
-
+          matched_id=""; matched_url=""; matched_status=""; ready="false"
           for attempt in $(seq 1 24); do
             curl --fail-with-body --silent --show-error \
               "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
               "${AUTH[@]}" > /tmp/cf-deployments.json
             jq -e '.success == true' /tmp/cf-deployments.json >/dev/null
-
-            matched_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_DEV_BRANCH" '
-              [.result[]? | select(
-                (.deployment_trigger.metadata.branch // "") == $branch and
-                (.deployment_trigger.metadata.commit_hash // "") == $sha
-              )][0].id // empty
-            ' /tmp/cf-deployments.json)
-
+            matched_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch and (.deployment_trigger.metadata.commit_hash // "") == $sha)][0].id // empty' /tmp/cf-deployments.json)
             if [[ -n "$matched_id" ]]; then
               matched_url=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | .url // empty' /tmp/cf-deployments.json | head -n1)
               matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/cf-deployments.json | head -n1)
               echo "Exact dev deployment ${matched_id} is visible with status ${matched_status}."
-
               case "$matched_status" in
-                success)
-                  ready="true"
-                  break
-                  ;;
-                failure|failed|canceled|cancelled)
-                  echo "::error::Exact dev deployment ${matched_id} reached terminal status ${matched_status}."
-                  exit 5
-                  ;;
+                success) ready="true"; break ;;
+                failure|failed|canceled|cancelled) echo "::error::Exact dev deployment ${matched_id} reached terminal status ${matched_status}."; exit 5 ;;
               esac
             else
               echo "Exact dev SHA is not visible in Cloudflare Pages yet (attempt ${attempt}/24)."
             fi
-
             if [[ "$attempt" -lt 24 ]]; then sleep 10; fi
           done
-
           if [[ "$ready" != "true" ]]; then
             if [[ -z "$matched_id" ]]; then
               latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].deployment_trigger.metadata.commit_hash // "none"' /tmp/cf-deployments.json)
@@ -203,7 +174,6 @@ jobs:
             fi
             exit 5
           fi
-
           echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
           echo "deployment_url=${matched_url}" >> "$GITHUB_OUTPUT"
           echo "deployment_status=${matched_status}" >> "$GITHUB_OUTPUT"
@@ -220,66 +190,50 @@ jobs:
         run: |
           set -euo pipefail
           app_code=$(curl --silent --show-error --location --output /tmp/rosie-app.html --write-out '%{http_code}' "${CF_DEV_URL}/app/")
-          if [[ "$app_code" != "200" ]]; then
-            echo "::error::Development Staff App returned HTTP ${app_code}."
-            exit 6
-          fi
-          grep -q "Staff App Launcher" /tmp/rosie-app.html || {
-            echo "::error::Development /app/ did not contain the Staff App Launcher marker."
-            exit 7
-          }
+          [[ "$app_code" == "200" ]] || { echo "::error::Development Staff App returned HTTP ${app_code}."; exit 6; }
+          grep -q "Staff App Launcher" /tmp/rosie-app.html || { echo "::error::Development /app/ did not contain the Staff App Launcher marker."; exit 7; }
 
           for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace" "/api/admin/accounting_tax_support" "/api/admin/accounting_accountant_package" "/api/admin/integration_status"; do
             code=$(curl --silent --show-error --output /tmp/rosie-api.json --write-out '%{http_code}' "${CF_DEV_URL}${endpoint}")
-            if [[ "$code" =~ ^5 ]]; then
-              echo "::error::Protected smoke endpoint ${endpoint} returned HTTP ${code}; Functions may not have loaded cleanly."
-              cat /tmp/rosie-api.json || true
-              exit 8
-            fi
+            if [[ "$code" =~ ^5 ]]; then echo "::error::Protected smoke endpoint ${endpoint} returned HTTP ${code}."; cat /tmp/rosie-api.json || true; exit 8; fi
             echo "${endpoint} returned expected protected/non-5xx HTTP ${code}."
           done
 
           tax_page_code=$(curl --silent --show-error --location --output /tmp/rosie-tax-support.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-tax-support.html")
-          if [[ "$tax_page_code" != "200" ]]; then
-            echo "::error::Development Tax Support page returned HTTP ${tax_page_code}."
-            exit 9
-          fi
-          grep -q "Tax support & accountant readiness" /tmp/rosie-tax-support.html || {
-            echo "::error::Development Tax Support page did not contain the Build 273 marker."
-            exit 10
-          }
+          [[ "$tax_page_code" == "200" ]] || { echo "::error::Development Tax Support page returned HTTP ${tax_page_code}."; exit 9; }
+          grep -q "Tax support & accountant readiness" /tmp/rosie-tax-support.html || { echo "::error::Development Tax Support page missing Build 273 marker."; exit 10; }
 
           it_page_code=$(curl --silent --show-error --location --output /tmp/rosie-it-connections.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-integrations.html")
-          if [[ "$it_page_code" != "200" ]]; then
-            echo "::error::Development I.T. Connections page returned HTTP ${it_page_code}."
-            exit 11
-          fi
-          grep -q 'data-build274="it-help-foundation"' /tmp/rosie-it-connections.html || {
-            echo "::error::Development I.T. Connections page did not contain the Build 274 marker."
-            exit 12
-          }
+          [[ "$it_page_code" == "200" ]] || { echo "::error::Development I.T. Connections page returned HTTP ${it_page_code}."; exit 11; }
+          grep -q 'data-build274="it-help-foundation"' /tmp/rosie-it-connections.html || { echo "::error::Development I.T. Connections page missing Build 274 marker."; exit 12; }
 
           retention_code=$(curl --silent --show-error --location --output /tmp/rosie-booking-retention.js --write-out '%{http_code}' "${CF_DEV_URL}/assets/booking-retention-v275.js")
-          if [[ "$retention_code" != "200" ]]; then
-            echo "::error::Development Build 275 booking-retention module returned HTTP ${retention_code}."
-            exit 13
-          fi
-          grep -q "Next available slots" /tmp/rosie-booking-retention.js || {
-            echo "::error::Development booking-retention module did not contain the Build 275 slot marker."
-            exit 14
-          }
-          grep -q "booking_funnel_exit" /tmp/rosie-booking-retention.js || {
-            echo "::error::Development booking-retention module did not contain the Build 275 funnel marker."
-            exit 15
-          }
+          [[ "$retention_code" == "200" ]] || { echo "::error::Development Build 275 booking-retention module returned HTTP ${retention_code}."; exit 13; }
+          grep -q "Next available slots" /tmp/rosie-booking-retention.js || { echo "::error::Development booking-retention module missing slot marker."; exit 14; }
+          grep -q "booking_funnel_exit" /tmp/rosie-booking-retention.js || { echo "::error::Development booking-retention module missing funnel marker."; exit 15; }
+
+          landing_api_code=$(curl --silent --show-error --location --output /tmp/rosie-landing-pages.json --write-out '%{http_code}' "${CF_DEV_URL}/api/landing_pages_public")
+          [[ "$landing_api_code" == "200" ]] || { echo "::error::Development public landing-page API returned HTTP ${landing_api_code}."; exit 17; }
+          jq -e '.ok == true and .pages["tillsonburg-auto-detailing"] and .pages["port-dover-auto-detailing"]' /tmp/rosie-landing-pages.json >/dev/null || { echo "::error::Development landing-page API is missing guarded local pages."; exit 18; }
+          grep -qi "self-contained mobile operating water and power" /tmp/rosie-landing-pages.json || { echo "::error::Development landing-page API does not expose the Build 278 self-contained service model."; exit 19; }
+          if grep -Eqi 'customer-supplied garden hose|household electricity rate|standard exterior outlet' /tmp/rosie-landing-pages.json; then echo "::error::Stale customer utility assumptions escaped the Build 278 finalizer."; exit 20; fi
+
+          for slug in tillsonburg-auto-detailing woodstock-ingersoll-auto-detailing norwich-otterville-auto-detailing zorra-thamesford-embro-auto-detailing simcoe-delhi-auto-detailing port-dover-auto-detailing waterford-vittoria-auto-detailing port-rowan-turkey-point-auto-detailing; do
+            code=$(curl --silent --show-error --location --output "/tmp/${slug}.html" --write-out '%{http_code}' "${CF_DEV_URL}/${slug}/")
+            [[ "$code" == "200" ]] || { echo "::error::Development local page ${slug} returned HTTP ${code}."; exit 21; }
+            grep -q 'data-build278="local-seo-depth"' "/tmp/${slug}.html" || { echo "::error::Development local page ${slug} is missing Build 278 static-depth marker."; exit 22; }
+          done
+
+          sitemap_code=$(curl --silent --show-error --location --output /tmp/rosie-sitemap.xml --write-out '%{http_code}' "${CF_DEV_URL}/sitemap.xml")
+          [[ "$sitemap_code" == "200" ]] || { echo "::error::Development sitemap returned HTTP ${sitemap_code}."; exit 23; }
+          grep -A1 'tillsonburg-auto-detailing/' /tmp/rosie-sitemap.xml | grep -q '2026-08-31' || { echo "::error::Development sitemap does not expose the Build 280 local lastmod."; exit 24; }
 
           {
             echo "### Development smoke"
-            echo "- ${CF_DEV_URL}/app/ → HTTP 200 + Staff App Launcher marker"
-            echo "- ${CF_DEV_URL}/admin-tax-support.html → HTTP 200 + Build 273 marker"
-            echo "- ${CF_DEV_URL}/admin-integrations.html → HTTP 200 + Build 274 I.T. Connections marker"
-            echo "- ${CF_DEV_URL}/assets/booking-retention-v275.js → HTTP 200 + Build 275 slot/funnel markers"
-            echo "- protected API module graph including Build 273 Finance + Build 274 I.T. status endpoints → non-5xx"
+            echo "- Staff App, retained admin pages/APIs and Build 275 booking-retention module: PASS"
+            echo "- Build 278 public landing-page API self-contained service model: PASS"
+            echo "- Eight Build 278 local static fallbacks: HTTP 200 + depth marker"
+            echo "- Build 280 sitemap local lastmod: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record Production promotion boundary
@@ -292,12 +246,10 @@ jobs:
           merge_base=$(git merge-base origin/main origin/dev)
           dev_ahead=$(git rev-list --count origin/main..origin/dev)
           main_ahead=$(git rev-list --count origin/dev..origin/main)
-
           if [[ "$dev_sha" != "$GITHUB_SHA" ]]; then
             echo "::error::Development moved during acceptance. Expected ${GITHUB_SHA}, current origin/dev is ${dev_sha}."
             exit 16
           fi
-
           {
             echo "### Production promotion boundary"
             echo "- Accepted Development SHA: \`${dev_sha}\`"
@@ -314,8 +266,8 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 276, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment after Cloudflare reaches success, Tax Support and I.T. Connections page availability, the deployed Build 275 booking-retention module, protected I.T. status route loading, anonymous HTTP/module-load smoke, and the non-mutating Production promotion boundary."
-            echo "Authenticated contextual-help behavior, authenticated Finance write/read behavior, live returning-customer rebook behavior, payment-provider completion, actual tax-source facts/accountant review, real-device/provider delivery, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain current-release manual/external evidence."
+            echo "This workflow proves cumulative/source guards through Build 280, exact successful Cloudflare dev deployment, retained application smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, sitemap freshness, and the non-mutating Production promotion boundary."
+            echo "Authenticated Finance/application write flows, payment-provider completion, real-device/provider delivery, rollback/restore rehearsals, and Production promotion remain later/manual evidence."
           } >> "$GITHUB_STEP_SUMMARY"
 
-# Retained Development acceptance through Build 275 is preserved and extended through Build 276.
+# Retained Development acceptance through Build 276 remains part of the cumulative boundary.
