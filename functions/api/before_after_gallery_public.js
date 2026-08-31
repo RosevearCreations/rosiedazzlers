@@ -80,7 +80,7 @@ export async function onRequestGet({ request, env }) {
       blocked_count: Math.max(0, saved.items.length - savedPublished.length),
       proof_ready_count: sourceItems.filter((item) => galleryProofEligibility(item).eligible).length,
       publication_rule: "A saved Gallery row must be explicitly published and pass both public-use consent and media-privacy review. Legacy approval alone never implies publication.",
-      proof_rule: "Real proof additionally requires non-sample media plus vehicle, condition, problem, process, and result context.",
+      proof_rule: "Real Rosie proof additionally requires non-sample media plus vehicle, condition, problem, process, and result context.",
     };
 
     if (loaded.warning) payload.warning = loaded.warning;
