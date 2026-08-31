@@ -20,6 +20,7 @@ summary = text("BUILD281_SUMMARY.md")
 
 for token in [
     "Cache-Control: no-cache",
+    "SMOKE_RETRY_MODE",
     "Staff App Launcher",
     "self-contained mobile operating water and power",
     'data-build278="local-seo-depth"',
@@ -36,7 +37,7 @@ for token in [
     "steps.deployment.outputs.deployment_url",
     'bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"',
     'for alias_attempt in $(seq 1 12)',
-    'bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"',
+    'SMOKE_RETRY_MODE=1 bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"',
     "sleep 5",
     "Production remains closed",
 ]:
@@ -64,5 +65,6 @@ if errors:
 print("Build 281 focused release check: PASS")
 print(" - exact immutable Cloudflare deployment is smoked before the mutable dev alias")
 print(" - dev alias convergence uses the same smoke helper with bounded retry")
+print(" - intermediate propagation misses are warnings; only exhausted convergence is red")
 print(" - retained service/location/API/sitemap markers stay identical across both paths")
 print(" - Production remains closed and non-mutating")
