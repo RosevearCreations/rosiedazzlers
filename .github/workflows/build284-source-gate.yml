@@ -42,6 +42,8 @@ jobs:
           node --check functions/api/before_after_gallery_public.js
           bash -n scripts/build284_http_smoke.sh
 
+      # The loop below explicitly includes the retained Build 283 guard:
+      # python scripts/build283_release_check.py
       - name: Run retained Builds 271–283 focused guards
         run: |
           for build in $(seq 271 283); do
