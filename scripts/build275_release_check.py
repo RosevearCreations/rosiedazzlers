@@ -220,6 +220,25 @@ forbid(
     "water and power access",
 )
 
+# Maintenance is an interest/planning path, not a published fixed membership.
+# Keep utility authority aligned and prevent internal roadmap wording or
+# invented recurring-plan economics from leaking into public copy.
+one_h1("maintenance/index.html")
+need(
+    "maintenance/index.html",
+    "Rosie brings standard detailing water and power",
+    "safe work area",
+    "no recurring-plan price, discount, or perk is promised on this page",
+    "parking or work-area access",
+)
+forbid(
+    "maintenance/index.html",
+    "driveway/water/power details",
+    "competitor roadmap",
+    "Customer provides power",
+    "Customer supplies power",
+)
+
 # Development acceptance must prove the exact promoted Build 275 module rather
 # than silently stopping at the prior Build 274 boundary.
 need(
@@ -242,6 +261,7 @@ need(
     "Development acceptance boundary",
     "published add-on route integrity",
     "fleet utility authority",
+    "maintenance utility authority",
     "No Production/main mutation",
 )
 
