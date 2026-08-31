@@ -86,6 +86,7 @@ for token in [
         errors.append(f"Gallery media candidate eligibility missing {token}")
 
 admin = read("admin-gallery.html")
+route_admin = read("admin-gallery/index.html")
 for token in [
     'data-build283="proof-publication-controls"',
     "Confirm public-use approval",
@@ -101,6 +102,8 @@ for token in [
 ]:
     if token not in admin:
         errors.append(f"admin-gallery.html missing Build 283 control: {token}")
+if admin != route_admin:
+    errors.append("admin-gallery.html and admin-gallery/index.html must remain exact route copies")
 
 fallback_raw = read("data/before_after_gallery.json")
 try:
@@ -115,6 +118,37 @@ for idx, item in enumerate(fallback.get("items", [])):
         errors.append(f"fallback item {idx} must be explicitly published sample fallback")
     if item.get("proof_kind") != "sample":
         errors.append(f"fallback item {idx} must not masquerade as real proof")
+
+smoke = read("scripts/development_http_smoke.sh")
+for token in [
+    'data-build283="proof-publication-controls"',
+    "/api/before_after_gallery_public",
+    "/api/admin/gallery_approvals_list",
+    "/api/admin/gallery_media_candidates_list",
+    "public Gallery API is missing Build 283 publication/proof authority fields",
+]:
+    if token not in smoke:
+        errors.append(f"Development HTTP smoke missing Build 283 runtime evidence token: {token}")
+
+dev_gate = read(".github/workflows/development-source-gate.yml")
+for token in [
+    "Run current Build 283 focused guard",
+    "functions/api/_lib/gallery-publication.js",
+    "functions/api/admin/gallery_approvals_save.js",
+    "Build 283 proof/media publication syntax",
+]:
+    if token not in dev_gate:
+        errors.append(f"Development source gate missing Build 283 authority: {token}")
+
+cf_acceptance = read(".github/workflows/cloudflare-development-acceptance.yml")
+for token in [
+    "Run Build 283 focused guard",
+    "Build 283 Gallery publication UI identity and explicit publish/unpublish controls",
+    "Build 283 public Gallery publication/proof API + protected Gallery endpoints",
+    "cumulative/source guards through Build 283",
+]:
+    if token not in cf_acceptance:
+        errors.append(f"Cloudflare Development acceptance missing Build 283 authority: {token}")
 
 summary = read("BUILD283_SUMMARY.md")
 for token in [
@@ -152,5 +186,7 @@ print("- public Gallery fails closed for legacy saved rows and uses sample fallb
 print("- sample placeholders can remain public fallback but never count as real Rosie proof")
 print("- real proof requires published non-sample media plus vehicle, condition, problem, process, and result context")
 print("- publication-sensitive edits return a published row to draft review")
+print("- route-copy parity and Development exact/runtime smoke explicitly retain Build 283")
+print("- Development source and Cloudflare acceptance workflows explicitly run the Build 283 guard")
 print("- no database migration or parallel Gallery authority was introduced")
 print("- Production remains closed")

@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check current booking and pricing syntax
+      - name: Check current booking, pricing and Gallery syntax
         run: |
           node --check assets/booking-quick-start-v274.js
           node --check assets/booking-retention-v275.js
@@ -44,6 +44,11 @@ jobs:
           node --check functions/api/_lib/pricing-catalog.js
           node --check functions/api/landing_pages_public.js
           node --check assets/landing-page.js
+          node --check functions/api/_lib/gallery-publication.js
+          node --check functions/api/before_after_gallery_public.js
+          node --check functions/api/admin/gallery_approvals_list.js
+          node --check functions/api/admin/gallery_approvals_save.js
+          node --check functions/api/admin/gallery_media_candidates_list.js
 
       - name: Check growth, vehicle and payment syntax
         run: |
@@ -89,6 +94,8 @@ jobs:
         run: python scripts/build281_release_check.py
       - name: Run current Build 282 focused guard
         run: python scripts/build282_release_check.py
+      - name: Run current Build 283 focused guard
+        run: python scripts/build283_release_check.py
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
       - name: Check one-H1 source rule
@@ -107,11 +114,12 @@ jobs:
           {
             echo "### Development Source Gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
-            echo "- Current booking/pricing/growth/vehicle/payment/landing syntax: PASS"
+            echo "- Current booking/pricing/Gallery/growth/vehicle/payment/landing syntax: PASS"
             echo "- Build 282 use-case booking adapter syntax: PASS"
+            echo "- Build 283 proof/media publication syntax: PASS"
             echo "- Development HTTP smoke helper syntax: PASS"
             echo "- Retained Build 271–276 focused guards: PASS"
-            echo "- Current Builds 277–282 service/SEO/release-reliability/customer-conversion guards: PASS"
+            echo "- Current Builds 277–283 service/SEO/release-reliability/customer-conversion/proof-publication guards: PASS"
             echo "- Cumulative release + one-H1 guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."

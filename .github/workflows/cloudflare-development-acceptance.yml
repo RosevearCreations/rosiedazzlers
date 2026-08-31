@@ -85,6 +85,8 @@ jobs:
         run: python scripts/build281_release_check.py
       - name: Run Build 282 focused guard
         run: python scripts/build282_release_check.py
+      - name: Run Build 283 focused guard
+        run: python scripts/build283_release_check.py
       - name: Check Development smoke helper syntax
         run: bash -n scripts/development_http_smoke.sh
 
@@ -222,10 +224,9 @@ jobs:
             echo "- Immutable deployment URL: ${EXACT_DEV_URL}"
             echo "- Cloudflare deployment metadata uses_functions=true: PASS"
             echo "- Build 274 I.T. Connections page: PASS via shared smoke helper"
-            echo "- Build 275 booking-retention path /assets/booking-retention-v275.js: PASS via shared smoke helper"
-            echo "- Build 275 marker Next available slots: PASS via shared smoke helper"
-            echo "- Build 275 marker booking_funnel_exit: PASS via shared smoke helper"
+            echo "- Build 275 booking-retention path: PASS via shared smoke helper"
             echo "- Build 282 high-intent use-case routes + booking adapter: PASS via shared smoke helper"
+            echo "- Build 283 Gallery publication UI identity and explicit publish/unpublish controls: PASS via shared smoke helper"
             echo "- Static application/service/location/sitemap identity: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -253,6 +254,7 @@ jobs:
             echo "- Bounded retry: 12 attempts × 5 seconds maximum spacing"
             echo "- Full static + dynamic/API runtime smoke: PASS"
             echo "- Build 282 acquisition-to-Quick-Book paths: PASS"
+            echo "- Build 283 public Gallery publication/proof API + protected Gallery endpoints: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record Production promotion boundary
@@ -285,9 +287,9 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 282, exact successful Cloudflare dev deployment, exact static artifact identity, Cloudflare Functions attachment metadata, bounded dev-alias convergence, full dynamic/API Development runtime smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, Build 282 high-intent use-case conversion paths, sitemap freshness, and the non-mutating Production promotion boundary."
-            echo "Authenticated Finance/application write flows, payment-provider completion, real-device/provider delivery, rollback/restore rehearsals, and Production promotion remain later/manual evidence."
+            echo "This workflow proves cumulative/source guards through Build 283, exact successful Cloudflare dev deployment, exact static artifact identity, Cloudflare Functions attachment metadata, bounded dev-alias convergence, full dynamic/API Development runtime smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, Build 282 high-intent use-case conversion paths, Build 283 Gallery publication/proof controls, sitemap freshness, and the non-mutating Production promotion boundary."
+            echo "Authenticated Gallery mutation, Finance/application write flows, payment-provider completion, real-device/provider delivery, rollback/restore rehearsals, and Production promotion remain later/manual evidence."
           } >> "$GITHUB_STEP_SUMMARY"
 
 # Historical Development acceptance through Build 275 remains retained.
-# Retained Development acceptance through Build 276 remains part of the cumulative boundary.
+# Retained Development acceptance through Build 283 remains part of the cumulative boundary.

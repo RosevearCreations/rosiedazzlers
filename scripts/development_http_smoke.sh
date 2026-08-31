@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Build 282 exact-deployment + branch-alias smoke authority.
-# Retains Build 281 Functions-aware static/full separation while proving the
-# high-intent use-case acquisition-to-booking artifacts on the accepted SHA.
+# Build 283 exact-deployment + branch-alias smoke authority.
+# Retains Build 281 Functions-aware static/full separation, Build 282 high-intent
+# acquisition-to-booking artifacts, and now proves Build 283 Gallery publication UI/API.
 
 BASE_URL="${1:-}"
 LABEL="${2:-Development endpoint}"
@@ -44,7 +44,7 @@ app_code=$(curl_code /tmp/rosie-app.html "${BASE_URL}/app/")
 grep -q "Staff App Launcher" /tmp/rosie-app.html || { report_failure "${LABEL}: /app/ did not contain the Staff App Launcher marker."; exit 7; }
 
 if [[ "$SMOKE_SCOPE" == "full" ]]; then
-  for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace" "/api/admin/accounting_tax_support" "/api/admin/accounting_accountant_package" "/api/admin/integration_status"; do
+  for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace" "/api/admin/accounting_tax_support" "/api/admin/accounting_accountant_package" "/api/admin/integration_status" "/api/admin/gallery_approvals_list" "/api/admin/gallery_media_candidates_list"; do
     code=$(curl_code /tmp/rosie-api.json "${BASE_URL}${endpoint}")
     if [[ "$code" == "404" || "$code" =~ ^5 ]]; then
       report_failure "${LABEL}: protected smoke endpoint ${endpoint} returned HTTP ${code}."
@@ -73,6 +73,13 @@ grep -q "booking_usecase_entry" /tmp/rosie-booking-usecase-v282.js || { report_f
 grep -q "spring_salt" /tmp/rosie-booking-usecase-v282.js || { report_failure "${LABEL}: Build 282 booking adapter missing spring salt preset."; exit 32; }
 grep -q "winter_prep" /tmp/rosie-booking-usecase-v282.js || { report_failure "${LABEL}: Build 282 booking adapter missing winter protection preset."; exit 33; }
 
+gallery_admin_code=$(curl_code /tmp/rosie-admin-gallery.html "${BASE_URL}/admin-gallery.html")
+[[ "$gallery_admin_code" == "200" ]] || { report_failure "${LABEL}: Build 283 Gallery publication page returned HTTP ${gallery_admin_code}."; exit 37; }
+grep -q 'data-build283="proof-publication-controls"' /tmp/rosie-admin-gallery.html || { report_failure "${LABEL}: Gallery publication page missing Build 283 identity marker."; exit 38; }
+grep -q "Confirm public-use approval" /tmp/rosie-admin-gallery.html || { report_failure "${LABEL}: Gallery publication page missing separate public-use approval control."; exit 39; }
+grep -q 'data-action="publish"' /tmp/rosie-admin-gallery.html || { report_failure "${LABEL}: Gallery publication page missing explicit publish control."; exit 40; }
+grep -q 'data-action="unpublish"' /tmp/rosie-admin-gallery.html || { report_failure "${LABEL}: Gallery publication page missing explicit unpublish control."; exit 41; }
+
 if [[ "$SMOKE_SCOPE" == "full" ]]; then
   landing_api_code=$(curl_code /tmp/rosie-landing-pages.json "${BASE_URL}/api/landing_pages_public")
   [[ "$landing_api_code" == "200" ]] || { report_failure "${LABEL}: public landing-page API returned HTTP ${landing_api_code}."; exit 17; }
@@ -82,6 +89,12 @@ if [[ "$SMOKE_SCOPE" == "full" ]]; then
     report_failure "${LABEL}: stale customer utility assumptions escaped the Build 278 finalizer."
     exit 20
   fi
+
+  gallery_api_code=$(curl_code /tmp/rosie-gallery-public.json "${BASE_URL}/api/before_after_gallery_public")
+  [[ "$gallery_api_code" == "200" ]] || { report_failure "${LABEL}: Build 283 public Gallery API returned HTTP ${gallery_api_code}."; exit 42; }
+  jq -e '.ok == true and (.items | type == "array") and (.blocked_count | type == "number") and (.proof_ready_count | type == "number") and (.publication_rule | type == "string") and (.proof_rule | type == "string")' /tmp/rosie-gallery-public.json >/dev/null || { report_failure "${LABEL}: public Gallery API is missing Build 283 publication/proof authority fields."; cat /tmp/rosie-gallery-public.json || true; exit 43; }
+  grep -qi "explicitly published" /tmp/rosie-gallery-public.json || { report_failure "${LABEL}: public Gallery API does not expose the explicit publication rule."; exit 44; }
+  grep -qi "real Rosie proof" /tmp/rosie-gallery-public.json || { report_failure "${LABEL}: public Gallery API does not expose the real-proof boundary."; exit 45; }
 fi
 
 for slug in tillsonburg-auto-detailing woodstock-ingersoll-auto-detailing norwich-otterville-auto-detailing zorra-thamesford-embro-auto-detailing simcoe-delhi-auto-detailing port-dover-auto-detailing waterford-vittoria-auto-detailing port-rowan-turkey-point-auto-detailing; do
