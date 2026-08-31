@@ -64,16 +64,18 @@ A fresh repository sanity pass found that part of the older public-content backl
 - The dedicated headlight-restoration and carpet-shampoo/spill-recovery pages are already condition-based, quote-safe and protected by the Build 274 focused guard, including one-H1 SEO checks and Rosie-supplied utility authority.
 - The headlight page already distinguishes light/moderate/heavy restoration rather than pretending every oxidized lens is the same job.
 - The carpet page already distinguishes maintenance shampoo/extraction from severe spill or under-carpet recovery, including drying, corrosion/biological-growth risk and quote-required expanded work.
+- The current catalog maps `seat_shampoo` to `/seat-shampoo`; that route already exists as the cloth-seat extraction guide, so the older `/seat-shampoo-extraction` backlog name is not treated as a missing page.
 - Current public-market sanity was used as a comparison signal only. Build 275 does not overwrite Rosie's pricing simply because another detailer charges a different amount; current scope, labour, condition and Rosie's own pricing authority remain controlling.
 - The material release gap found by this pass was the Development acceptance workflow: it still stopped at Build 274 even though Build 275 had its own focused guard.
 - The Development acceptance boundary now runs `scripts/build275_release_check.py`, verifies the exact `dev` SHA reached Cloudflare Pages, and requires the deployed `/assets/booking-retention-v275.js` asset to return Build 275 slot and funnel markers.
 - The Build 275 focused guard now protects that Development-acceptance coverage so future edits cannot silently fall back to a Build 274-only proof.
+- Build 275 now also enforces **published add-on route integrity**: every detail route actually emitted by `services.html` must resolve to a real folder-backed page with exactly one H1, a matching canonical URL and matching landing slug.
 
 These five slices remain feature-source changes until exact-SHA Development deployment acceptance proves the promoted Build 275 checkpoint.
 
 ## Build 275 source authority
 
-The focused Build 275 guard pins the utility compatibility bridge, canonical slot projection, returning-customer prefill boundary, funnel-exit suppression/privacy rules, existing bounded analytics authority, retained vehicle-catalogue fail-open behavior, and the Build 275 Development acceptance boundary. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
+The focused Build 275 guard pins the utility compatibility bridge, canonical slot projection, returning-customer prefill boundary, funnel-exit suppression/privacy rules, existing bounded analytics authority, retained vehicle-catalogue fail-open behavior, published add-on route integrity, and the Build 275 Development acceptance boundary. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
 
 **No Production/main mutation** occurs during this feature-source phase. Development promotion happens only after the Build 275 source gate is green and the bounded slices are reviewed.
 
@@ -81,7 +83,7 @@ The focused Build 275 guard pins the utility compatibility bridge, canonical slo
 
 The active queue is now narrowed to work not already proven by the current source:
 
-1. Continue the remaining detailed service/add-on landing pages that still lack enough condition, process, limitation, time and quote-safe depth; do not rewrite already-converged headlight/carpet pages without a real defect.
+1. Continue the remaining detailed service/add-on landing pages that still lack enough condition, process, limitation, time and quote-safe depth; do not rewrite already-converged headlight/carpet/seat pages without a real defect.
 2. Continue proof/review mechanics and local SEO/service-area depth, replacing proof placeholders only with real Rosie evidence rather than invented reviews.
 3. Continue maintenance-plan and fleet/workplace paths without inventing undecided pricing, perks or vehicle-count minimums.
 4. Continue analytics-ingest/reliability regression protection and close payment/rollback/manual external evidence where applicable without reintroducing high-frequency telemetry.
