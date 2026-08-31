@@ -162,3 +162,8 @@ Proceed in this order where work is not blocked by business/provider evidence:
 ## Documentation policy
 
 Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are release checkpoints; Git history is the archive. Old build-numbered documents must not override these two current authorities.
+
+<!-- Historical Build 274 retained-guard compatibility only; this is not the living build number.
+**Build:** 274
+Build 274 active implementation
+-->
