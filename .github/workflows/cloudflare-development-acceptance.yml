@@ -90,7 +90,9 @@ jobs:
       - name: Run Build 284 focused guard
         run: python scripts/build284_release_check.py
       - name: Check Development smoke helper syntax
-        run: bash -n scripts/development_http_smoke.sh
+        run: |
+          bash -n scripts/development_http_smoke.sh
+          bash -n scripts/build284_http_smoke.sh
 
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
@@ -221,6 +223,7 @@ jobs:
         run: |
           set -euo pipefail
           SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
+          SMOKE_SCOPE=static bash scripts/build284_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
           {
             echo "### Exact deployment smoke"
             echo "- Immutable deployment URL: ${EXACT_DEV_URL}"
@@ -229,7 +232,7 @@ jobs:
             echo "- Build 275 booking-retention path: PASS via shared smoke helper"
             echo "- Build 282 high-intent use-case routes + booking adapter: PASS via shared smoke helper"
             echo "- Build 283 Gallery publication UI identity and explicit publish/unpublish controls: PASS via shared smoke helper"
-            echo "- Build 284 contextual proof asset + fail-closed identity: PASS via shared smoke helper"
+            echo "- Build 284 contextual proof asset + fail-closed identity: PASS via dedicated smoke helper"
             echo "- Static application/service/location/sitemap identity: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -251,6 +254,7 @@ jobs:
             echo "::error::Development branch alias did not converge to the accepted deployment within 12 attempts."
             exit 26
           fi
+          SMOKE_SCOPE=full bash scripts/build284_http_smoke.sh "$CF_DEV_URL" "Development alias contextual proof"
           {
             echo "### Development alias smoke"
             echo "- Alias: ${CF_DEV_URL}"
@@ -297,5 +301,6 @@ jobs:
 
 # Historical Development acceptance through Build 275 remains retained.
 # Historical release-reliability acceptance through Build 276 remains retained.
+# Historical compatibility: cumulative/source guards through Build 283.
 # Retained Development acceptance through Build 283 remains part of the cumulative boundary.
 # Current Development acceptance through Build 284 includes contextual proof placement.
