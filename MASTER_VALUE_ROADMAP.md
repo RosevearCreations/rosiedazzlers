@@ -13,7 +13,22 @@ Build a professional mobile-first detailing platform connecting:
 
 while server work remains event-driven and dormant modules stay asleep.
 
-## Current accepted direction
+## Retained baseline
+
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–281 added customer booking, service/local acquisition depth and release reliability without replacing those authorities.
+
+Do not regress:
+
+- server-authoritative role/module/action permissions;
+- Complete = **Best value**;
+- Exterior Detail differentiated from Premium Wash;
+- current Small/Mid/Oversized + condition/quote pricing authority;
+- booking/deposit/conflict mechanics;
+- one meaningful H1 per indexable public page;
+- persistent tax-support/evidence/accountant-package authority;
+- no fabricated accounting/tax facts, reviews or provider evidence.
+
+## Current architecture and permanent constraints
 
 The public website is the crawlable acquisition layer. Booking and authenticated Customer/Detailer/Operations/Admin/I.T./Finance/DAIP/Socials experiences remain application workflows optimized for phone/touch first, then tablet/desktop.
 
@@ -21,10 +36,8 @@ Eight modules remain authoritative: Customer, Detailer, Operations / Supervisor,
 
 Permanent constraints:
 
-- server authorization is authoritative;
 - current package/add-on/vehicle-size pricing has one catalogue authority;
 - booking simplicity cannot bypass availability, quote, conflict, deposit/payment, consent or audit authority;
-- one meaningful H1 per public/indexable page;
 - static-first service/local/use-case content, production canonicals and sitemap coverage;
 - no thin doorway pages, fabricated reviews or public customer media without consent;
 - Rosie supplies standard detailing water and power; customers supply a safe/private/permitted work area;
@@ -138,15 +151,7 @@ Target product behavior:
 
 Build a separate business lead/quote path rather than forcing multi-vehicle prospects through the one-vehicle consumer flow.
 
-Capture:
-
-- business/contact and location;
-- vehicle count/type/use;
-- frequency and service priorities;
-- preferred service windows;
-- site/access/runoff constraints;
-- photos or fleet list;
-- recurring-contract interest.
+Capture business/contact and location, vehicle count/type/use, frequency and service priorities, preferred windows, site/access/runoff constraints, photos/fleet list and recurring-contract interest.
 
 Rosie still supplies normal mobile water/power. Ask only about unusual site restrictions.
 
@@ -186,13 +191,7 @@ Continue retained Finance work without weakening permissions:
 
 ### 8. Authenticated/mobile/device acceptance
 
-Complete real evidence for:
-
-- Customer ↔ Detailer messaging/deep links and closed-job behavior;
-- role/action/direct-URL/API matrix;
-- phone/tablet/desktop/PWA/accessibility/weak-network behavior;
-- real provider email/SMS/Web Push delivery/retry/failure;
-- rollback/restore rehearsals and representative Cloudflare runtime evidence.
+Complete real evidence for Customer ↔ Detailer messaging/deep links and closed-job behavior; role/action/direct-URL/API matrix; phone/tablet/desktop/PWA/accessibility/weak-network behavior; real provider email/SMS/Web Push delivery/retry/failure; rollback/restore rehearsals; and representative Cloudflare runtime evidence.
 
 ### 9. Continue modular extraction only when it creates value
 
