@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 282  
+**Build:** 283  
 **Updated:** 2026-08-31  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 281 is the accepted Development reliability baseline at `6e0b6015066d2056ee023c35f939da4f5ad23384`. Build 282 is the active customer/business release and is summarized in `BUILD282_SUMMARY.md`.
+Build 281 is the accepted Development reliability baseline at `6e0b6015066d2056ee023c35f939da4f5ad23384`. Build 282 is the accepted high-intent customer/business baseline at `841d90561a98089835018c008ec144667782f37d`. Build 283 is the active proof/media publication slice and is summarized in `BUILD283_SUMMARY.md`.
 
 **Build 273 is the retained Finance/tax-support baseline.** Later builds extend the platform without replacing that Finance authority.
 
-Acceptance is evidence-based, not document-based: the current Build 282 SHA is accepted only when its feature source gate is green, `dev` points to that exact SHA, Cloudflare reports the exact Development deployment successful with Functions attached, exact static smoke passes, and the `dev` alias passes the full runtime smoke.
+Acceptance is evidence-based, not document-based: the current Build 283 SHA is accepted only when its feature source gate is green, the feature preview is successful, `dev` points to that exact SHA, Cloudflare reports the exact Development deployment successful with Functions attached, exact static smoke passes, and the `dev` alias passes the full runtime smoke.
 
 Production remains deliberately separate. `main` is still the Build 274 Production line and must not be force-moved to `dev`; future promotion must reconcile the known divergent histories deliberately.
 
@@ -58,75 +58,85 @@ Do not regress these rules:
 - booking keeps service-area, availability, capacity/conflict, quote, deposit and payment authority;
 - production canonicals, crawlable static-first content and useful sitemap/internal links;
 - no fabricated/sample customer reviews or invented provider evidence;
-- private/customer media never becomes public without consent/review;
+- private/customer media never becomes public without consent/review **and an explicit publication action**;
+- public-use consent/privacy approval and actual publication are separate authorities;
+- sample Gallery fallback never counts as real Rosie proof;
 - no public R2 enumeration on normal requests;
 - **Rosie brings standard detailing water and power. The customer provides a safe, private and permitted work area.** Unusual parking, building access, site rules, weather or local runoff restrictions are reviewed before dispatch.
 
-## Completed forward work through Build 281
+## Completed forward work through Build 282
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added booking/retention convergence, including true next useful AM/PM appointment shortcuts, returning-customer rebook acceleration and funnel-exit evidence.
 - Build 276 hardened Development source/release mechanics.
 - Builds 277–280 deepened all indexed add-on destinations, normalized the self-contained mobile operating model, deepened eight distinct Oxford/Norfolk local pages and closed sitemap/canonical/H1 coverage.
 - Build 281 hardened exact Cloudflare deployment versus mutable `dev` alias acceptance, including `uses_functions=true`, immutable static identity and bounded full-runtime alias convergence.
+- Build 282 added three high-intent acquisition → existing-booking paths: Pre-Sale / Lease-Return, Spring Salt Recovery, and Fall / Winter Protection Prep.
 
 Do not re-open these items because an older roadmap mentions them.
 
-## Build 282 — active customer/business slice
+## Build 283 — active proof/media publication slice
 
-Build 282 converts three high-intent customer situations into first-class acquisition → booking paths without creating another transaction system.
+Build 283 strengthens the existing Gallery/App Management path without adding another media system or database migration.
 
-### Pre-Sale / Lease-Return Detail
+### Final-media eligibility
 
-`/pre-sale-lease-return-detailing`
+`functions/api/admin/gallery_media_candidates_list.js` now filters the internal Gallery picker so rejected/private/hidden/deleted/withdrawn or unusable candidates are withheld before staff pairing. The existing Build 210 source boundary remains: only final-stage, customer-visible, approved job media can be queued for Gallery reuse in the first place.
 
-- starts Quick Book with `need=presale`;
-- recommends the existing Complete Detail path as the normal inside/outside starting point;
-- keeps headlights, paint correction/protection, pet hair, stains, odour, engine-bay work and other extras separate and condition-reviewed;
-- does **not** guarantee sale value, trade value or avoidance of lease-return charges.
+A candidate being eligible for pairing is **not** public-use consent and is **not** publication.
 
-### Spring Salt Recovery
+### Separate review and publication
 
-`/spring-salt-recovery-detailing`
+Gallery rows now carry an explicit `publication_status`.
 
-- starts Quick Book with `need=spring_salt`;
-- recommends the existing Interior Detail path;
-- distinguishes light residue, crusted carpet salt and wet/saturated-floor history;
-- escalates heavy extraction, hidden moisture, seat/trim access or under-carpet work to photo/inspection review;
-- does not claim mould/mold remediation.
+- new rows start `draft`;
+- public-use consent/privacy confirmation remains an explicit staff assertion based on real evidence;
+- that approval does **not** publish;
+- **Publish** is a separate action and fails closed unless both public-use consent and media-privacy approval pass;
+- **Unpublish**, private/hide, rejection, and sensitive edits remove or return publication to review;
+- legacy saved rows with no explicit publication state are not inferred public.
 
-### Fall / Winter Protection Prep
+The public Gallery reuses the existing `before_after_gallery` setting. If saved rows exist but none pass the Build 283 explicit publication gate, bundled sample fallback remains visible instead of leaking legacy rows or breaking the Gallery.
 
-`/fall-winter-protection-detailing`
+### Real-proof eligibility
 
-- starts Quick Book with `need=winter_prep`;
-- recommends the existing Exterior Detail path;
-- uses the retained clay/sealant/ceramic-spray/glass/trim/coating services only after preparation/condition review;
-- explicitly does **not** represent rustproofing or undercoating.
+Gallery publication and real-proof readiness are deliberately different.
 
-### Booking adapter
+A real proof row must be:
 
-`assets/booking-usecase-entry-v282.js` is presentation-only. It clicks the retained Quick Book choices, preserves staff notes and photo-review state, and emits `booking_usecase_entry`. It never owns package/add-on prices, availability, deposits, checkout or conflicts. Its loader is fail-open so ordinary booking remains usable if the optional preset layer fails.
+- non-sample;
+- explicitly published;
+- public-use consent approved;
+- media privacy approved;
+- paired before/after media;
+- tied to a service and town/location;
+- supplied with vehicle type/label and condition context;
+- documented as **problem → process → result**.
 
-`/specials` is now a seasonal/use-case discovery hub. It no longer presents unapproved same-address/senior discounts as if they are current offers.
+Sample fallback remains clearly marked sample and never counts as real Rosie proof.
+
+### Storage/schema boundary
+
+Build 283 adds **no database migration**. Publication/proof context is stored inside the existing editable-setting JSON. Existing job-media and `gallery_media_candidates` authorities are reused.
 
 ## Current validation authority
 
 - cumulative: `scripts/release_check.py`;
-- public H1/current conversion hook: `scripts/seo_h1_check.py`;
-- focused Build 282 guard: `scripts/build282_release_check.py`;
-- feature source workflow: `.github/workflows/build282-source-gate.yml`;
+- public H1/current conversion+proof hook: `scripts/seo_h1_check.py`;
+- retained Build 282 guard: `scripts/build282_release_check.py`;
+- focused Build 283 guard: `scripts/build283_release_check.py`;
+- feature source workflow: `.github/workflows/build283-source-gate.yml`;
 - Development source workflow: `.github/workflows/development-source-gate.yml`;
 - exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Build 282 smoke explicitly proves the use-case adapter, all three public routes and their sitemap entries on the accepted Development artifact.
+Build 283 is not Development-green merely because source exists. The exact accepted feature SHA, feature preview, `dev`, Cloudflare Development artifact, and runtime smoke must agree.
 
-## Next business/product work after Build 282
+## Next business/product work after Build 283
 
-Proceed in this order where work is not blocked by business/provider evidence:
+Proceed in this order where work is not blocked by real business/provider evidence:
 
-1. real Rosie before/after proof placement on the exact service/local/use-case pages it proves;
+1. publish **real, consented Rosie proof** through the Build 283 controls and place only proof-ready rows on the exact service/local/use-case pages they genuinely prove;
 2. Search Console/Google Business Profile measurement and genuine review authority when account access is available;
 3. maintenance-plan product/account/booking path **after** cadence, price/perks and pause/cancel rules are approved;
 4. fleet/workplace acquisition path **after** minimum-vehicle, discount/travel and recurring-service rules are approved;
@@ -137,9 +147,10 @@ Proceed in this order where work is not blocked by business/provider evidence:
 
 ## Manual / external evidence that must not be fabricated
 
+- real customer/public-use consent for any actual before/after proof;
 - Google Business Profile ownership/review connection;
 - Search Console ownership/property/sitemap/indexing evidence;
-- real customer review/proof publication consent;
+- genuine customer review/proof publication consent;
 - maintenance-plan and fleet commercial rules not yet approved;
 - authenticated role/action/direct-URL/API matrix;
 - real email/SMS/Web Push delivery evidence;

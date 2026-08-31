@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check exposed HTML pages for more than one H1 and retain current public conversion guards."""
+"""Check exposed HTML pages for more than one H1 and retain current public conversion/proof guards."""
 from __future__ import annotations
 
 import re
@@ -8,6 +8,20 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def run_guard(path: Path) -> int:
+    proc = subprocess.run(
+        [sys.executable, str(path)],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+    )
+    if proc.stdout.strip():
+        print(proc.stdout.strip())
+    if proc.stderr.strip():
+        print(proc.stderr.strip(), file=sys.stderr)
+    return proc.returncode
 
 
 def main() -> int:
@@ -28,23 +42,21 @@ def main() -> int:
 
     print("SEO/H1 check passed: no HTML file has more than one H1.")
 
-    # Build 282 is a public acquisition/booking slice. The cumulative release check
-    # already invokes this SEO guard, so retain the focused use-case contract here
-    # without rewriting the older cumulative release authority.
+    # Build 282 is retained because it owns current public acquisition/booking paths.
     build282 = ROOT / "scripts/build282_release_check.py"
     if build282.exists():
-        proc = subprocess.run(
-            [sys.executable, str(build282)],
-            cwd=ROOT,
-            text=True,
-            capture_output=True,
-        )
-        if proc.stdout.strip():
-            print(proc.stdout.strip())
-        if proc.stderr.strip():
-            print(proc.stderr.strip(), file=sys.stderr)
-        if proc.returncode:
-            return proc.returncode
+        code = run_guard(build282)
+        if code:
+            return code
+
+    # Build 283 owns the public proof/publication safety boundary. The cumulative
+    # release check already invokes this SEO guard, so retain that focused contract
+    # here without creating another top-level release chain.
+    build283 = ROOT / "scripts/build283_release_check.py"
+    if build283.exists():
+        code = run_guard(build283)
+        if code:
+            return code
 
     return 0
 
