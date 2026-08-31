@@ -38,6 +38,11 @@ jobs:
           node --check assets/booking-retention-v275.js
           node --check assets/pricing-catalog-client.js
 
+      - name: Check growth and maintenance settings syntax
+        run: |
+          node --check assets/growth-settings.js
+          node --check functions/api/growth_settings_public.js
+
       - name: Check vehicle catalogue syntax
         run: |
           node --check functions/api/_lib/vehicle-catalog.js
@@ -72,6 +77,7 @@ jobs:
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Source branch: \`${GITHUB_REF_NAME}\`"
             echo "- Quick Book + Build 275 slot projection syntax: PASS"
+            echo "- Public growth/maintenance settings syntax: PASS"
             echo "- Vehicle catalogue fail-open resilience: PASS"
             echo "- Retained Build 271/272/273/274 focused guards: PASS"
             echo "- Focused Build 275 guard: PASS"
