@@ -13,6 +13,7 @@ Build 283 is intentionally bounded to **proof/media eligibility** and **Gallery 
 - Final job-media candidates are filtered server-side before they appear in Gallery Approvals.
 - Customer-visible/final job media remains only a pairing candidate; that state does **not** imply public-use consent.
 - Gallery consent/privacy review is now separate from publication.
+- Gallery publication now uses **explicit publish/unpublish** actions rather than inferring public visibility from an approval field.
 - New/edited Gallery rows remain draft/unpublished until staff explicitly chooses **Publish**.
 - Public Gallery output requires an explicit `published` state plus a passing public-use consent/privacy gate.
 - Legacy saved Gallery rows without an explicit publication state fail closed; bundled sample fallback remains available so the public Gallery does not break while older rows are reviewed.
