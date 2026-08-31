@@ -49,6 +49,8 @@ jobs:
           node --check functions/api/admin/gallery_approvals_list.js
           node --check functions/api/admin/gallery_approvals_save.js
           node --check functions/api/admin/gallery_media_candidates_list.js
+          node --check assets/contextual-proof-v284.js
+          node --check assets/visual-placeholders.js
 
       - name: Check growth, vehicle and payment syntax
         run: |
@@ -96,6 +98,8 @@ jobs:
         run: python scripts/build282_release_check.py
       - name: Run current Build 283 focused guard
         run: python scripts/build283_release_check.py
+      - name: Run current Build 284 focused guard
+        run: python scripts/build284_release_check.py
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
       - name: Check one-H1 source rule
@@ -117,9 +121,10 @@ jobs:
             echo "- Current booking/pricing/Gallery/growth/vehicle/payment/landing syntax: PASS"
             echo "- Build 282 use-case booking adapter syntax: PASS"
             echo "- Build 283 proof/media publication syntax: PASS"
+            echo "- Build 284 contextual proof presentation syntax: PASS"
             echo "- Development HTTP smoke helper syntax: PASS"
             echo "- Retained Build 271–276 focused guards: PASS"
-            echo "- Current Builds 277–283 service/SEO/release-reliability/customer-conversion/proof-publication guards: PASS"
+            echo "- Current Builds 277–284 service/SEO/release-reliability/customer-conversion/proof-publication/contextual-proof guards: PASS"
             echo "- Cumulative release + one-H1 guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
