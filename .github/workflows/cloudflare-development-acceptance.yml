@@ -292,4 +292,5 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
 # Historical Development acceptance through Build 275 remains retained.
+# Historical release-reliability acceptance through Build 276 remains retained.
 # Retained Development acceptance through Build 283 remains part of the cumulative boundary.
