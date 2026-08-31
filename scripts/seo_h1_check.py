@@ -49,12 +49,19 @@ def main() -> int:
         if code:
             return code
 
-    # Build 283 owns the public proof/publication safety boundary. The cumulative
-    # release check already invokes this SEO guard, so retain that focused contract
-    # here without creating another top-level release chain.
+    # Build 283 owns the public proof/publication safety boundary.
     build283 = ROOT / "scripts/build283_release_check.py"
     if build283.exists():
         code = run_guard(build283)
+        if code:
+            return code
+
+    # Build 284 owns contextual placement of real proof on service/location/use-case pages.
+    # The cumulative release check invokes this SEO guard, so this keeps the latest
+    # public conversion/proof contract in the stable cumulative path.
+    build284 = ROOT / "scripts/build284_release_check.py"
+    if build284.exists():
+        code = run_guard(build284)
         if code:
             return code
 
