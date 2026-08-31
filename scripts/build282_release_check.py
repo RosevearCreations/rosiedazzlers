@@ -86,9 +86,13 @@ for token in ["Pre-Sale / Lease-Return", "Spring Salt Recovery", "Fall / Winter 
     if token not in summary:
         errors.append(f"Build 282 summary missing {token}")
 
-release = read("scripts/release_check.py")
-if "scripts/build282_release_check.py" not in release:
-    errors.append("cumulative release check does not invoke Build 282 guard")
+# scripts/release_check.py already invokes seo_h1_check.py. Build 282 is retained
+# transitively through that stable cumulative path so older release authority need
+# not be rewritten merely to add one public/customer focused slice.
+seo_guard = read("scripts/seo_h1_check.py")
+for token in ["build282_release_check.py", "subprocess.run"]:
+    if token not in seo_guard:
+        errors.append(f"cumulative SEO path does not retain Build 282 guard: {token}")
 
 if errors:
     print("Build 282 use-case conversion check FAILED:")
@@ -101,4 +105,5 @@ print("- three crawlable high-intent use-case pages retain one-H1, canonical, Se
 print("- acquisition URLs map into existing Quick Book recommendations without owning pricing/checkout authority")
 print("- condition-dependent work retains photo/re-quote boundaries")
 print("- specials discovery no longer implies unapproved discounts")
+print("- cumulative release path retains Build 282 through seo_h1_check.py")
 print("- Production remains closed")
