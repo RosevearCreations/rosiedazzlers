@@ -32,16 +32,28 @@ Permanent runtime rule:
 
 Server authorization remains authoritative. Dormant modules do not wake merely because they exist.
 
+## Retained Build 272/273 authority
+
+These exact retained authorities remain live and must not be weakened by later customer/business work:
+
+- narrow Operations/Finance action permissions;
+- Complete = **Best value** and the current Small/Mid/Oversized pricing authority;
+- Exterior Detail remains differentiated from Premium Wash;
+- condition/quote rules apply before final price where work can vary materially;
+- booking/deposit/conflict mechanics remain authoritative;
+- one meaningful H1 per indexable public page;
+- persistent Finance tax-support records, evidence links, T2125 workpaper and accountant-package workflow remain retained;
+- accounting automation must not fabricate tax facts or professional judgment.
+
 ## Retained business/public authority
 
 Do not regress these rules:
 
 - public positioning: **Mobile Auto Detailing & Interior/Exterior Restoration** while retaining “mobile auto detailing” as the primary high-intent category;
-- Complete Detail = **Best value**; Exterior Detail remains distinct from Premium Wash;
 - vehicle-size/package/add-on pricing comes from the canonical catalogue, not page-specific duplicate prices;
 - material condition variability uses photo/inspection review and an explicit expanded-scope confirmation boundary;
 - booking keeps service-area, availability, capacity/conflict, quote, deposit and payment authority;
-- exactly one meaningful H1 per public/indexable page, production canonicals, crawlable static-first content and useful sitemap/internal links;
+- production canonicals, crawlable static-first content and useful sitemap/internal links;
 - no fabricated/sample customer reviews or invented provider evidence;
 - private/customer media never becomes public without consent/review;
 - no public R2 enumeration on normal requests;
@@ -59,7 +71,7 @@ Do not re-open these items because an older roadmap mentions them.
 
 ## Build 282 — active customer/business slice
 
-Build 282 converts three high-intent customer situations into first-class acquisition → booking paths without creating another transaction system:
+Build 282 converts three high-intent customer situations into first-class acquisition → booking paths without creating another transaction system.
 
 ### Pre-Sale / Lease-Return Detail
 
@@ -133,6 +145,16 @@ Proceed in this order where work is not blocked by business/provider evidence:
 - Supabase restore and Cloudflare rollback rehearsals;
 - representative real-device/PWA/accessibility/weak-network evidence;
 - accountant/tax facts and judgment-heavy review.
+
+## Permanent runtime/cost guardrails
+
+- no open Detailer job → no live job/media/message monitors;
+- hidden/inactive refresh sleeps;
+- completed jobs reject new live-message writes;
+- no automatic replay of ambiguous non-idempotent writes;
+- heavy filtering/aggregation belongs in Postgres rather than Worker loops;
+- Functions remain under `/api/*`;
+- secrets never belong in browser code or Git.
 
 ## Documentation policy
 
