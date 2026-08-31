@@ -56,23 +56,37 @@ Build 275 adds booking-specific **funnel exit evidence** without creating a new 
 - Build 275 Quick Slot and returning-customer shortcut events are also persisted through the same `RosieAnalytics` client instead of existing only as local custom events.
 - The public analytics client retains batching, backoff and keepalive behavior, and the ingest endpoint remains bounded at 12 events/request and 64 KB/request.
 
-These four booking/retention slices are source-level changes until Development deployment acceptance proves the exact promoted Build 275 SHA.
+## Slice 5 — current-state sanity and Development acceptance boundary
+
+A fresh repository sanity pass found that part of the older public-content backlog was already completed in the retained Build 274 source and should not be rebuilt unnecessarily.
+
+- `services.html` already uses the current public pricing authority, exposes detailed specialist-guide routes, keeps the principal service paths together, and preserves one focused H1.
+- The dedicated headlight-restoration and carpet-shampoo/spill-recovery pages are already condition-based, quote-safe and protected by the Build 274 focused guard, including one-H1 SEO checks and Rosie-supplied utility authority.
+- The headlight page already distinguishes light/moderate/heavy restoration rather than pretending every oxidized lens is the same job.
+- The carpet page already distinguishes maintenance shampoo/extraction from severe spill or under-carpet recovery, including drying, corrosion/biological-growth risk and quote-required expanded work.
+- Current public-market sanity was used as a comparison signal only. Build 275 does not overwrite Rosie's pricing simply because another detailer charges a different amount; current scope, labour, condition and Rosie's own pricing authority remain controlling.
+- The material release gap found by this pass was the Development acceptance workflow: it still stopped at Build 274 even though Build 275 had its own focused guard.
+- The Development acceptance boundary now runs `scripts/build275_release_check.py`, verifies the exact `dev` SHA reached Cloudflare Pages, and requires the deployed `/assets/booking-retention-v275.js` asset to return Build 275 slot and funnel markers.
+- The Build 275 focused guard now protects that Development-acceptance coverage so future edits cannot silently fall back to a Build 274-only proof.
+
+These five slices remain feature-source changes until exact-SHA Development deployment acceptance proves the promoted Build 275 checkpoint.
 
 ## Build 275 source authority
 
-The focused Build 275 guard pins the utility compatibility bridge, canonical slot projection, returning-customer prefill boundary, funnel-exit suppression/privacy rules, existing bounded analytics authority, and retained vehicle-catalogue fail-open behavior. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
+The focused Build 275 guard pins the utility compatibility bridge, canonical slot projection, returning-customer prefill boundary, funnel-exit suppression/privacy rules, existing bounded analytics authority, retained vehicle-catalogue fail-open behavior, and the Build 275 Development acceptance boundary. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
 
-No Production/main mutation occurs during this feature-source phase. Development promotion happens only after the Build 275 source gate is green and the bounded slices are reviewed.
+**No Production/main mutation** occurs during this feature-source phase. Development promotion happens only after the Build 275 source gate is green and the bounded slices are reviewed.
 
 ## Outstanding Build 275 queue
 
-The active queue remains:
+The active queue is now narrowed to work not already proven by the current source:
 
-1. Continue detailed service/add-on landing-page convergence with condition-based effort and quote-safe scope.
-2. Continue proof/review mechanics and local SEO/service-area depth.
+1. Continue the remaining detailed service/add-on landing pages that still lack enough condition, process, limitation, time and quote-safe depth; do not rewrite already-converged headlight/carpet pages without a real defect.
+2. Continue proof/review mechanics and local SEO/service-area depth, replacing proof placeholders only with real Rosie evidence rather than invented reviews.
 3. Continue maintenance-plan and fleet/workplace paths without inventing undecided pricing, perks or vehicle-count minimums.
-4. Add the remaining analytics-ingest/reliability regression protection and close payment/rollback/manual external evidence where applicable.
+4. Continue analytics-ingest/reliability regression protection and close payment/rollback/manual external evidence where applicable without reintroducing high-frequency telemetry.
 5. Structurally remove the remaining stale inline booking fallback utility source once retained historical guard compatibility can be advanced safely.
+6. After the Build 275 feature gate is green, promote the exact accepted tree to `dev` only and require exact-SHA Cloudflare Development acceptance before calling Build 275 GREEN.
 
 ## Non-negotiable business authorities
 
