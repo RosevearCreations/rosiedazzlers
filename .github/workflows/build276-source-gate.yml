@@ -1,21 +1,21 @@
-name: Build 274 Source Gate
+name: Build 276 Source Gate
 
 on:
   push:
     branches:
-      - build274-full-closure-queue
+      - build276-release-reliability
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-build274-source-gate-${{ github.ref_name }}
+  group: rosiedazzlers-build276-source-gate
   cancel-in-progress: true
 
 jobs:
   source-gate:
-    name: Validate Build 274 source
+    name: Validate Build 276 source
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -32,35 +32,25 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check canonical pricing browser syntax
-        run: node --check assets/pricing-catalog-client.js
+      - name: Check current booking/pricing/growth syntax
+        run: |
+          node --check assets/booking-quick-start-v274.js
+          node --check assets/booking-retention-v275.js
+          node --check assets/pricing-catalog-client.js
+          node --check assets/growth-settings.js
+          node --check functions/api/growth_settings_public.js
 
-      - name: Check Quick Book syntax
-        run: node --check assets/booking-quick-start-v274.js
-
-      - name: Check canonical pricing server syntax
-        run: node --check functions/api/_lib/pricing-catalog.js
-
-      - name: Check vehicle catalogue syntax
+      - name: Check retained vehicle and payment syntax
         run: |
           node --check functions/api/_lib/vehicle-catalog.js
           node --check functions/api/vehicle_makes.js
           node --check functions/api/vehicle_models.js
-
-      - name: Check vehicle catalogue resilience
-        run: node scripts/build274_vehicle_catalog_resilience_check.mjs
-
-      - name: Check payment lifecycle syntax
-        run: |
           node --check functions/api/_lib/payment-money.js
           node --check functions/api/_lib/quote-deposit-payments.js
           node --check functions/api/paypal/capture-order.js
           node --check functions/api/paypal/webhook.js
           node --check functions/api/stripe/webhook.js
           node --check functions/api/checkout.js
-
-      - name: Check payment money units
-        run: node scripts/build274_payment_money_check.mjs
 
       - name: Run retained Build 271 focused guard
         run: python scripts/build271_release_check.py
@@ -71,24 +61,36 @@ jobs:
       - name: Run retained Build 273 focused guard
         run: python scripts/build273_release_check.py
 
-      - name: Run Build 274 focused guard
+      - name: Run retained Build 274 focused guard
         run: python scripts/build274_release_check.py
+
+      - name: Run retained Build 275 focused guard
+        run: python scripts/build275_release_check.py
+
+      - name: Run Build 276 focused guard
+        run: python scripts/build276_release_check.py
 
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
 
+      - name: Check whitespace/conflict markers
+        run: |
+          git diff --check HEAD^
+          if git grep -nE '^(<<<<<<<|=======|>>>>>>>)' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
+
       - name: Source gate summary
         run: |
           {
-            echo "### Build 274 source gate"
+            echo "### Build 276 source gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Source branch: \`${GITHUB_REF_NAME}\`"
-            echo "- Pricing/Quick Book/payment syntax: PASS"
-            echo "- Vehicle catalogue fail-open resilience: PASS"
-            echo "- Payment money-unit behavior: PASS"
-            echo "- Retained Build 271/272/273 focused guards: PASS"
-            echo "- Focused Build 274 guard: PASS"
+            echo "- Current booking/pricing/growth syntax: PASS"
+            echo "- Retained vehicle/payment syntax: PASS"
+            echo "- Retained Build 271–275 focused guards: PASS"
+            echo "- Focused Build 276 reliability/release guard: PASS"
             echo "- Cumulative release guard: PASS"
-            echo "- Historical feature gate only; current dev uses Development Source Gate."
-            echo "- No Cloudflare resource or external provider was mutated by this workflow."
+            echo "- No Cloudflare resource or Production branch is mutated by this workflow."
           } >> "$GITHUB_STEP_SUMMARY"

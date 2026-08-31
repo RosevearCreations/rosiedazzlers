@@ -29,6 +29,8 @@ jobs:
     steps:
       - name: Checkout exact dev commit
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Validate ROSIEDAZZLERS_TOKEN secret presence
         shell: bash
@@ -75,6 +77,9 @@ jobs:
 
       - name: Run Build 275 focused guard
         run: python scripts/build275_release_check.py
+
+      - name: Run Build 276 focused guard
+        run: python scripts/build276_release_check.py
 
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
@@ -139,7 +144,7 @@ jobs:
             echo "- Source repository: \`${source_repo:-unknown}\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Confirm exact dev SHA reached Cloudflare Pages
+      - name: Confirm exact dev SHA reached successful Cloudflare Pages deployment
         id: deployment
         shell: bash
         env:
@@ -150,8 +155,9 @@ jobs:
           matched_id=""
           matched_url=""
           matched_status=""
+          ready="false"
 
-          for attempt in $(seq 1 12); do
+          for attempt in $(seq 1 24); do
             curl --fail-with-body --silent --show-error \
               "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
               "${AUTH[@]}" > /tmp/cf-deployments.json
@@ -167,17 +173,34 @@ jobs:
             if [[ -n "$matched_id" ]]; then
               matched_url=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | .url // empty' /tmp/cf-deployments.json | head -n1)
               matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/cf-deployments.json | head -n1)
-              break
+              echo "Exact dev deployment ${matched_id} is visible with status ${matched_status}."
+
+              case "$matched_status" in
+                success)
+                  ready="true"
+                  break
+                  ;;
+                failure|failed|canceled|cancelled)
+                  echo "::error::Exact dev deployment ${matched_id} reached terminal status ${matched_status}."
+                  exit 5
+                  ;;
+              esac
+            else
+              echo "Exact dev SHA is not visible in Cloudflare Pages yet (attempt ${attempt}/24)."
             fi
 
-            if [[ "$attempt" -lt 12 ]]; then sleep 10; fi
+            if [[ "$attempt" -lt 24 ]]; then sleep 10; fi
           done
 
-          if [[ -z "$matched_id" ]]; then
-            latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].deployment_trigger.metadata.commit_hash // "none"' /tmp/cf-deployments.json)
-            latest_url=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].url // "none"' /tmp/cf-deployments.json)
-            latest_env=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].environment // "none"' /tmp/cf-deployments.json)
-            echo "::error::Cloudflare does not yet show exact dev commit ${GITHUB_SHA}. Latest visible dev deployment is ${latest_sha} (${latest_env}) at ${latest_url}."
+          if [[ "$ready" != "true" ]]; then
+            if [[ -z "$matched_id" ]]; then
+              latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].deployment_trigger.metadata.commit_hash // "none"' /tmp/cf-deployments.json)
+              latest_url=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].url // "none"' /tmp/cf-deployments.json)
+              latest_env=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].environment // "none"' /tmp/cf-deployments.json)
+              echo "::error::Cloudflare does not show exact dev commit ${GITHUB_SHA}. Latest visible dev deployment is ${latest_sha} (${latest_env}) at ${latest_url}."
+            else
+              echo "::error::Exact dev deployment ${matched_id} was found but did not become successful; last status was ${matched_status}."
+            fi
             exit 5
           fi
 
@@ -259,11 +282,38 @@ jobs:
             echo "- protected API module graph including Build 273 Finance + Build 274 I.T. status endpoints → non-5xx"
           } >> "$GITHUB_STEP_SUMMARY"
 
+      - name: Record Production promotion boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin main dev
+          dev_sha=$(git rev-parse origin/dev)
+          main_sha=$(git rev-parse origin/main)
+          merge_base=$(git merge-base origin/main origin/dev)
+          dev_ahead=$(git rev-list --count origin/main..origin/dev)
+          main_ahead=$(git rev-list --count origin/dev..origin/main)
+
+          if [[ "$dev_sha" != "$GITHUB_SHA" ]]; then
+            echo "::error::Development moved during acceptance. Expected ${GITHUB_SHA}, current origin/dev is ${dev_sha}."
+            exit 16
+          fi
+
+          {
+            echo "### Production promotion boundary"
+            echo "- Accepted Development SHA: \`${dev_sha}\`"
+            echo "- Current Production/main SHA: \`${main_sha}\`"
+            echo "- Merge base: \`${merge_base}\`"
+            echo "- dev-only commits vs main: \`${dev_ahead}\`"
+            echo "- main-only commits vs dev: \`${main_ahead}\`"
+            echo "- Status: **Development evidence only — Production remains closed.**"
+            echo "- Promotion rule: reconcile/merge the accepted dev tree deliberately; never force-move main to dev."
+          } >> "$GITHUB_STEP_SUMMARY"
+
       - name: Record acceptance boundary
         shell: bash
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 275, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment, Tax Support and I.T. Connections page availability, the deployed Build 275 booking-retention module, protected I.T. status route loading, and anonymous HTTP/module-load smoke only."
+            echo "This workflow proves cumulative/source guards through Build 276, ROSIEDAZZLERS_TOKEN access, exact dev SHA deployment after Cloudflare reaches success, Tax Support and I.T. Connections page availability, the deployed Build 275 booking-retention module, protected I.T. status route loading, anonymous HTTP/module-load smoke, and the non-mutating Production promotion boundary."
             echo "Authenticated contextual-help behavior, authenticated Finance write/read behavior, live returning-customer rebook behavior, payment-provider completion, actual tax-source facts/accountant review, real-device/provider delivery, rollback/restore rehearsals, and Cloudflare CPU/error metrics remain current-release manual/external evidence."
           } >> "$GITHUB_STEP_SUMMARY"

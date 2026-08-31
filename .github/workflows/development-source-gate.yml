@@ -1,0 +1,102 @@
+name: Development Source Gate
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-development-source-gate
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate current Development source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact dev commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check current booking and pricing syntax
+        run: |
+          node --check assets/booking-quick-start-v274.js
+          node --check assets/booking-retention-v275.js
+          node --check assets/pricing-catalog-client.js
+          node --check functions/api/_lib/pricing-catalog.js
+
+      - name: Check growth, vehicle and payment syntax
+        run: |
+          node --check assets/growth-settings.js
+          node --check functions/api/growth_settings_public.js
+          node --check functions/api/_lib/vehicle-catalog.js
+          node --check functions/api/vehicle_makes.js
+          node --check functions/api/vehicle_models.js
+          node --check functions/api/_lib/payment-money.js
+          node --check functions/api/_lib/quote-deposit-payments.js
+          node --check functions/api/paypal/capture-order.js
+          node --check functions/api/paypal/webhook.js
+          node --check functions/api/stripe/webhook.js
+          node --check functions/api/checkout.js
+
+      - name: Check retained vehicle catalogue resilience
+        run: node scripts/build274_vehicle_catalog_resilience_check.mjs
+
+      - name: Check retained payment money units
+        run: node scripts/build274_payment_money_check.mjs
+
+      - name: Run retained Build 271 focused guard
+        run: python scripts/build271_release_check.py
+
+      - name: Run retained Build 272 focused guard
+        run: python scripts/build272_release_check.py
+
+      - name: Run retained Build 273 focused guard
+        run: python scripts/build273_release_check.py
+
+      - name: Run retained Build 274 focused guard
+        run: python scripts/build274_release_check.py
+
+      - name: Run retained Build 275 focused guard
+        run: python scripts/build275_release_check.py
+
+      - name: Run current Build 276 focused guard
+        run: python scripts/build276_release_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Check whitespace/conflict markers
+        run: |
+          git diff --check HEAD^
+          if git grep -nE '^(<<<<<<<|=======|>>>>>>>)' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
+
+      - name: Development source summary
+        run: |
+          {
+            echo "### Development Source Gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Branch: \`${GITHUB_REF_NAME}\`"
+            echo "- Current booking/pricing/growth/vehicle/payment syntax: PASS"
+            echo "- Retained Build 271–275 focused guards: PASS"
+            echo "- Current Build 276 focused guard: PASS"
+            echo "- Cumulative release guard: PASS"
+            echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
+          } >> "$GITHUB_STEP_SUMMARY"
