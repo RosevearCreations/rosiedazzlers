@@ -204,6 +204,9 @@ jobs:
             echo "### Exact deployment smoke"
             echo "- Immutable deployment URL: ${EXACT_DEV_URL}"
             echo "- Build 274 I.T. Connections page: PASS via shared smoke helper"
+            echo "- Build 275 booking-retention path /assets/booking-retention-v275.js: PASS via shared smoke helper"
+            echo "- Build 275 marker Next available slots: PASS via shared smoke helper"
+            echo "- Build 275 marker booking_funnel_exit: PASS via shared smoke helper"
             echo "- Application/API/service/location/sitemap smoke: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
