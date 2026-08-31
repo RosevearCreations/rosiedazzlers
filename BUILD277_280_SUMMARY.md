@@ -9,6 +9,7 @@ Build 276 is the accepted Development baseline. Builds 277–280 deepen public s
 - Retain the detailed condition-price, scope, quote-trigger, aftercare and FAQ structure already present on the indexed add-on landing pages.
 - Replace generated fallback copy that explains SEO mechanics with customer-facing guidance about service fit, preparation, condition and realistic limits.
 - Guard all mapped add-on destinations for one H1, production canonical, sitemap inclusion and decision-depth markers.
+- A specialist page may use its own customer-facing approval language instead of the shared “When we pause and re-quote” heading, but expanded/deeper work must still have an explicit scope-confirmation boundary. This preserves strong specialist pages such as Headlight Restoration without forcing duplicated boilerplate.
 
 ## Build 278 — local service-area correctness and depth
 
