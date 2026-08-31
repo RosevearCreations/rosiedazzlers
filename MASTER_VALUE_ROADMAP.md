@@ -240,3 +240,11 @@ Never call a new release Development-green merely because the source exists. The
 ## Documentation policy
 
 Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are release checkpoints. Git history is the archive; older planning documents do not override the current two-file authority.
+
+<!-- Historical Build 274 retained-guard compatibility only; this is not the living build number or active roadmap section.
+**Build:** 274
+Build 274 — active
+contextual help
+Mobile Quick Book
+Google trust and measurable local SEO
+-->
