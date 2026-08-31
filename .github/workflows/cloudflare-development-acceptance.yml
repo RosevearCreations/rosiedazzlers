@@ -81,6 +81,10 @@ jobs:
         run: python scripts/build279_release_check.py
       - name: Run Build 280 focused guard
         run: python scripts/build280_release_check.py
+      - name: Run Build 281 focused guard
+        run: python scripts/build281_release_check.py
+      - name: Check Development smoke helper syntax
+        run: bash -n scripts/development_http_smoke.sh
 
       - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
         id: cloudflare
@@ -177,6 +181,7 @@ jobs:
             fi
             exit 5
           fi
+          [[ -n "$matched_url" ]] || { echo "::error::Exact successful Development deployment did not return an immutable deployment URL."; exit 25; }
           echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
           echo "deployment_url=${matched_url}" >> "$GITHUB_OUTPUT"
           echo "deployment_status=${matched_status}" >> "$GITHUB_OUTPUT"
@@ -185,66 +190,45 @@ jobs:
             echo "- GitHub SHA: \`${GITHUB_SHA}\`"
             echo "- Cloudflare deployment: \`${matched_id}\`"
             echo "- Deployment status: \`${matched_status}\`"
-            echo "- Deployment URL: ${matched_url:-not returned}"
+            echo "- Deployment URL: ${matched_url}"
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: Development HTTP smoke checks
+      - name: Exact deployment HTTP smoke checks
+        shell: bash
+        env:
+          EXACT_DEV_URL: ${{ steps.deployment.outputs.deployment_url }}
+        run: |
+          set -euo pipefail
+          bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
+          {
+            echo "### Exact deployment smoke"
+            echo "- Immutable deployment URL: ${EXACT_DEV_URL}"
+            echo "- Application/API/service/location/sitemap smoke: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Development alias convergence smoke checks
         shell: bash
         run: |
           set -euo pipefail
-          app_code=$(curl --silent --show-error --location --output /tmp/rosie-app.html --write-out '%{http_code}' "${CF_DEV_URL}/app/")
-          [[ "$app_code" == "200" ]] || { echo "::error::Development Staff App returned HTTP ${app_code}."; exit 6; }
-          grep -q "Staff App Launcher" /tmp/rosie-app.html || { echo "::error::Development /app/ did not contain the Staff App Launcher marker."; exit 7; }
-
-          for endpoint in "/api/notifications_list" "/api/detailer/jobs?scope=workspace" "/api/admin/accounting_tax_support" "/api/admin/accounting_accountant_package" "/api/admin/integration_status"; do
-            code=$(curl --silent --show-error --output /tmp/rosie-api.json --write-out '%{http_code}' "${CF_DEV_URL}${endpoint}")
-            if [[ "$code" =~ ^5 ]]; then
-              echo "::error::Protected smoke endpoint ${endpoint} returned HTTP ${code}."
-              cat /tmp/rosie-api.json || true
-              exit 8
+          alias_ready="false"
+          for alias_attempt in $(seq 1 12); do
+            echo "Checking Development branch alias convergence (attempt ${alias_attempt}/12)."
+            if SMOKE_RETRY_MODE=1 bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"; then
+              alias_ready="true"
+              echo "Development branch alias converged on attempt ${alias_attempt}/12."
+              break
             fi
+            [[ "$alias_attempt" -ge 12 ]] || sleep 5
           done
-
-          tax_page_code=$(curl --silent --show-error --location --output /tmp/rosie-tax-support.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-tax-support.html")
-          [[ "$tax_page_code" == "200" ]] || { echo "::error::Development Tax Support page returned HTTP ${tax_page_code}."; exit 9; }
-          grep -q "Tax support & accountant readiness" /tmp/rosie-tax-support.html || { echo "::error::Development Tax Support page missing Build 273 marker."; exit 10; }
-
-          it_page_code=$(curl --silent --show-error --location --output /tmp/rosie-it-connections.html --write-out '%{http_code}' "${CF_DEV_URL}/admin-integrations.html")
-          [[ "$it_page_code" == "200" ]] || { echo "::error::Development I.T. Connections page returned HTTP ${it_page_code}."; exit 11; }
-          grep -q 'data-build274="it-help-foundation"' /tmp/rosie-it-connections.html || { echo "::error::Development I.T. Connections page missing Build 274 marker."; exit 12; }
-
-          retention_code=$(curl --silent --show-error --location --output /tmp/rosie-booking-retention.js --write-out '%{http_code}' "${CF_DEV_URL}/assets/booking-retention-v275.js")
-          [[ "$retention_code" == "200" ]] || { echo "::error::Development Build 275 booking-retention module returned HTTP ${retention_code}."; exit 13; }
-          grep -q "Next available slots" /tmp/rosie-booking-retention.js || { echo "::error::Development booking-retention module missing Next available slots marker."; exit 14; }
-          grep -q "booking_funnel_exit" /tmp/rosie-booking-retention.js || { echo "::error::Development booking-retention module missing booking_funnel_exit marker."; exit 15; }
-
-          landing_api_code=$(curl --silent --show-error --location --output /tmp/rosie-landing-pages.json --write-out '%{http_code}' "${CF_DEV_URL}/api/landing_pages_public")
-          [[ "$landing_api_code" == "200" ]] || { echo "::error::Development public landing-page API returned HTTP ${landing_api_code}."; exit 17; }
-          jq -e '.ok == true and .pages["tillsonburg-auto-detailing"] and .pages["port-dover-auto-detailing"]' /tmp/rosie-landing-pages.json >/dev/null || { echo "::error::Development landing-page API is missing guarded local pages."; exit 18; }
-          grep -qi "self-contained mobile operating water and power" /tmp/rosie-landing-pages.json || { echo "::error::Development landing-page API does not expose the Build 278 self-contained service model."; exit 19; }
-          if grep -Eqi 'customer-supplied garden hose|household electricity rate|standard exterior outlet' /tmp/rosie-landing-pages.json; then
-            echo "::error::Stale customer utility assumptions escaped the Build 278 finalizer."
-            exit 20
+          if [[ "$alias_ready" != "true" ]]; then
+            echo "::error::Development branch alias did not converge to the accepted deployment within 12 attempts."
+            exit 26
           fi
-
-          for slug in tillsonburg-auto-detailing woodstock-ingersoll-auto-detailing norwich-otterville-auto-detailing zorra-thamesford-embro-auto-detailing simcoe-delhi-auto-detailing port-dover-auto-detailing waterford-vittoria-auto-detailing port-rowan-turkey-point-auto-detailing; do
-            code=$(curl --silent --show-error --location --output "/tmp/${slug}.html" --write-out '%{http_code}' "${CF_DEV_URL}/${slug}/")
-            [[ "$code" == "200" ]] || { echo "::error::Development local page ${slug} returned HTTP ${code}."; exit 21; }
-            grep -q 'data-build278="local-seo-depth"' "/tmp/${slug}.html" || { echo "::error::Development local page ${slug} is missing Build 278 static-depth marker."; exit 22; }
-          done
-
-          sitemap_code=$(curl --silent --show-error --location --output /tmp/rosie-sitemap.xml --write-out '%{http_code}' "${CF_DEV_URL}/sitemap.xml")
-          [[ "$sitemap_code" == "200" ]] || { echo "::error::Development sitemap returned HTTP ${sitemap_code}."; exit 23; }
-          grep 'tillsonburg-auto-detailing/' /tmp/rosie-sitemap.xml | grep -q '2026-08-31' || { echo "::error::Development sitemap does not expose the Build 280 local lastmod."; exit 24; }
-
           {
-            echo "### Development smoke"
-            echo "- Staff App and retained protected module graph: PASS"
-            echo "- Build 274 I.T. Connections page: PASS"
-            echo "- Build 275 booking-retention module: PASS"
-            echo "- Build 278 public landing-page API self-contained service model: PASS"
-            echo "- Eight Build 278 local static fallbacks: HTTP 200 + depth marker"
-            echo "- Build 280 sitemap local lastmod: PASS"
+            echo "### Development alias smoke"
+            echo "- Alias: ${CF_DEV_URL}"
+            echo "- Bounded retry: 12 attempts × 5 seconds maximum spacing"
+            echo "- Application/API/service/location/sitemap smoke: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record Production promotion boundary
@@ -277,7 +261,7 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 280, exact successful Cloudflare dev deployment, retained application smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, sitemap freshness, and the non-mutating Production promotion boundary."
+            echo "This workflow proves cumulative/source guards through Build 281, exact successful Cloudflare dev deployment, immutable-deployment smoke, bounded dev-alias convergence, retained application smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, sitemap freshness, and the non-mutating Production promotion boundary."
             echo "Authenticated Finance/application write flows, payment-provider completion, real-device/provider delivery, rollback/restore rehearsals, and Production promotion remain later/manual evidence."
           } >> "$GITHUB_STEP_SUMMARY"
 
