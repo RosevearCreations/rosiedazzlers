@@ -57,6 +57,8 @@ jobs:
           node --check functions/api/stripe/webhook.js
           node --check functions/api/checkout.js
 
+      - name: Check Development smoke helper syntax
+        run: bash -n scripts/development_http_smoke.sh
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
       - name: Check retained payment money units
@@ -81,6 +83,8 @@ jobs:
         run: python scripts/build279_release_check.py
       - name: Run current Build 280 focused guard
         run: python scripts/build280_release_check.py
+      - name: Run current Build 281 focused guard
+        run: python scripts/build281_release_check.py
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
       - name: Check one-H1 source rule
@@ -100,8 +104,9 @@ jobs:
             echo "### Development Source Gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Current booking/pricing/growth/vehicle/payment/landing syntax: PASS"
+            echo "- Development HTTP smoke helper syntax: PASS"
             echo "- Retained Build 271–276 focused guards: PASS"
-            echo "- Current Builds 277–280 service/SEO guards: PASS"
+            echo "- Current Builds 277–281 service/SEO/release-reliability guards: PASS"
             echo "- Cumulative release + one-H1 guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
