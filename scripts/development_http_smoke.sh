@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Build 281 exact-deployment + branch-alias convergence smoke authority.
+# Build 282 exact-deployment + branch-alias smoke authority.
+# Retains Build 281 Functions-aware static/full separation while proving the
+# high-intent use-case acquisition-to-booking artifacts on the accepted SHA.
 
 BASE_URL="${1:-}"
 LABEL="${2:-Development endpoint}"
@@ -65,6 +67,12 @@ retention_code=$(curl_code /tmp/rosie-booking-retention.js "${BASE_URL}/assets/b
 grep -q "Next available slots" /tmp/rosie-booking-retention.js || { report_failure "${LABEL}: booking-retention module missing Next available slots marker."; exit 14; }
 grep -q "booking_funnel_exit" /tmp/rosie-booking-retention.js || { report_failure "${LABEL}: booking-retention module missing booking_funnel_exit marker."; exit 15; }
 
+usecase_code=$(curl_code /tmp/rosie-booking-usecase-v282.js "${BASE_URL}/assets/booking-usecase-entry-v282.js")
+[[ "$usecase_code" == "200" ]] || { report_failure "${LABEL}: Build 282 booking use-case adapter returned HTTP ${usecase_code}."; exit 30; }
+grep -q "booking_usecase_entry" /tmp/rosie-booking-usecase-v282.js || { report_failure "${LABEL}: Build 282 booking adapter missing analytics marker."; exit 31; }
+grep -q "spring_salt" /tmp/rosie-booking-usecase-v282.js || { report_failure "${LABEL}: Build 282 booking adapter missing spring salt preset."; exit 32; }
+grep -q "winter_prep" /tmp/rosie-booking-usecase-v282.js || { report_failure "${LABEL}: Build 282 booking adapter missing winter protection preset."; exit 33; }
+
 if [[ "$SMOKE_SCOPE" == "full" ]]; then
   landing_api_code=$(curl_code /tmp/rosie-landing-pages.json "${BASE_URL}/api/landing_pages_public")
   [[ "$landing_api_code" == "200" ]] || { report_failure "${LABEL}: public landing-page API returned HTTP ${landing_api_code}."; exit 17; }
@@ -82,8 +90,17 @@ for slug in tillsonburg-auto-detailing woodstock-ingersoll-auto-detailing norwic
   grep -q 'data-build278="local-seo-depth"' "/tmp/${slug}.html" || { report_failure "${LABEL}: local page ${slug} is missing Build 278 static-depth marker."; exit 22; }
 done
 
+for slug in pre-sale-lease-return-detailing spring-salt-recovery-detailing fall-winter-protection-detailing; do
+  code=$(curl_code "/tmp/${slug}.html" "${BASE_URL}/${slug}/")
+  [[ "$code" == "200" ]] || { report_failure "${LABEL}: Build 282 use-case page ${slug} returned HTTP ${code}."; exit 34; }
+  grep -q 'data-build282="usecase-conversion"' "/tmp/${slug}.html" || { report_failure "${LABEL}: Build 282 use-case page ${slug} is missing its static identity marker."; exit 35; }
+done
+
 sitemap_code=$(curl_code /tmp/rosie-sitemap.xml "${BASE_URL}/sitemap.xml")
 [[ "$sitemap_code" == "200" ]] || { report_failure "${LABEL}: sitemap returned HTTP ${sitemap_code}."; exit 23; }
 grep 'tillsonburg-auto-detailing/' /tmp/rosie-sitemap.xml | grep -q '2026-08-31' || { report_failure "${LABEL}: sitemap does not expose the Build 280 local lastmod."; exit 24; }
+for slug in pre-sale-lease-return-detailing spring-salt-recovery-detailing fall-winter-protection-detailing; do
+  grep "${slug}/" /tmp/rosie-sitemap.xml | grep -q '2026-08-31' || { report_failure "${LABEL}: sitemap does not expose current Build 282 entry ${slug}."; exit 36; }
+done
 
 echo "${LABEL}: Development ${SMOKE_SCOPE} HTTP smoke PASS at ${BASE_URL}"
