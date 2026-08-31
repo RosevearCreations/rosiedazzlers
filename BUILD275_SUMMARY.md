@@ -71,12 +71,13 @@ A fresh repository sanity pass found that part of the older public-content backl
 - The Build 275 focused guard now protects that Development-acceptance coverage so future edits cannot silently fall back to a Build 274-only proof.
 - Build 275 now also enforces **published add-on route integrity**: every detail route actually emitted by `services.html` must resolve to a real folder-backed page with exactly one H1, a matching canonical URL and matching landing slug.
 - The sanity pass found a real fleet utility-authority drift: `/fleet` still asked commercial customers whether water/power were available and repeated that dependency in FAQ structured data. The fleet utility authority now explicitly states that Rosie brings standard detailing water and power while still collecting parking/work-area access and genuine property/site constraints.
+- The same pass found a maintenance utility-authority drift: `/maintenance` asked for driveway/water/power details and exposed internal “competitor roadmap” wording. The **maintenance utility authority** now uses Rosie-supplied utilities, real access/site constraints, and explicitly avoids publishing invented recurring-plan prices, discounts or perks while those business rules remain undecided.
 
 These five slices remain feature-source changes until exact-SHA Development deployment acceptance proves the promoted Build 275 checkpoint.
 
 ## Build 275 source authority
 
-The focused Build 275 guard pins the utility compatibility bridge, canonical slot projection, returning-customer prefill boundary, funnel-exit suppression/privacy rules, existing bounded analytics authority, retained vehicle-catalogue fail-open behavior, published add-on route integrity, fleet utility authority, and the Build 275 Development acceptance boundary. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
+The focused Build 275 guard pins the utility compatibility bridge, canonical slot projection, returning-customer prefill boundary, funnel-exit suppression/privacy rules, existing bounded analytics authority, retained vehicle-catalogue fail-open behavior, published add-on route integrity, fleet utility authority, maintenance utility authority, and the Build 275 Development acceptance boundary. The Build 275 feature source gate also reruns the cumulative release guard plus retained Builds 271, 272, 273 and 274 guards.
 
 **No Production/main mutation** occurs during this feature-source phase. Development promotion happens only after the Build 275 source gate is green and the bounded slices are reviewed.
 
@@ -86,7 +87,7 @@ The active queue is now narrowed to work not already proven by the current sourc
 
 1. Continue the remaining detailed service/add-on landing pages that still lack enough condition, process, limitation, time and quote-safe depth; do not rewrite already-converged headlight/carpet/seat pages without a real defect.
 2. Continue proof/review mechanics and local SEO/service-area depth, replacing proof placeholders only with real Rosie evidence rather than invented reviews.
-3. Continue maintenance-plan and fleet/workplace paths without inventing undecided pricing, perks or vehicle-count minimums; fleet utility wording is now aligned but commercial pricing/minimum policy remains intentionally undecided.
+3. Continue maintenance-plan and fleet/workplace paths without inventing undecided pricing, perks or vehicle-count minimums; fleet and maintenance utility wording are now aligned while commercial/recurring economics remain intentionally undecided.
 4. Continue analytics-ingest/reliability regression protection and close payment/rollback/manual external evidence where applicable without reintroducing high-frequency telemetry.
 5. Structurally remove the remaining stale inline booking fallback utility source once retained historical guard compatibility can be advanced safely.
 6. After the Build 275 feature gate is green, promote the exact accepted tree to `dev` only and require exact-SHA Cloudflare Development acceptance before calling Build 275 GREEN.
