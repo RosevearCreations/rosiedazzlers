@@ -139,6 +139,7 @@ jobs:
           matched_id=""
           matched_url=""
           matched_status=""
+          matched_uses_functions=""
           ready="false"
           for attempt in $(seq 1 24); do
             curl --fail-with-body --silent --show-error \
@@ -181,15 +182,29 @@ jobs:
             fi
             exit 5
           fi
+
+          curl --fail-with-body --silent --show-error \
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${matched_id}" \
+            "${AUTH[@]}" > /tmp/cf-exact-deployment.json
+          jq -e '.success == true' /tmp/cf-exact-deployment.json >/dev/null
+          matched_url=$(jq -r '.result.url // empty' /tmp/cf-exact-deployment.json)
+          matched_status=$(jq -r '.result.latest_stage.status // "unknown"' /tmp/cf-exact-deployment.json)
+          matched_uses_functions=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' /tmp/cf-exact-deployment.json)
+
           [[ -n "$matched_url" ]] || { echo "::error::Exact successful Development deployment did not return an immutable deployment URL."; exit 25; }
+          [[ "$matched_status" == "success" ]] || { echo "::error::Exact Development deployment regressed from success to ${matched_status}."; exit 27; }
+          [[ "$matched_uses_functions" == "true" ]] || { echo "::error::Exact Development deployment does not report uses_functions=true (reported ${matched_uses_functions})."; exit 28; }
+
           echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
           echo "deployment_url=${matched_url}" >> "$GITHUB_OUTPUT"
           echo "deployment_status=${matched_status}" >> "$GITHUB_OUTPUT"
+          echo "uses_functions=${matched_uses_functions}" >> "$GITHUB_OUTPUT"
           {
             echo "### Exact Development deployment"
             echo "- GitHub SHA: \`${GITHUB_SHA}\`"
             echo "- Cloudflare deployment: \`${matched_id}\`"
             echo "- Deployment status: \`${matched_status}\`"
+            echo "- Deployment reports Functions: \`${matched_uses_functions}\`"
             echo "- Deployment URL: ${matched_url}"
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -199,15 +214,16 @@ jobs:
           EXACT_DEV_URL: ${{ steps.deployment.outputs.deployment_url }}
         run: |
           set -euo pipefail
-          bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
+          SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
           {
             echo "### Exact deployment smoke"
             echo "- Immutable deployment URL: ${EXACT_DEV_URL}"
+            echo "- Cloudflare deployment metadata uses_functions=true: PASS"
             echo "- Build 274 I.T. Connections page: PASS via shared smoke helper"
             echo "- Build 275 booking-retention path /assets/booking-retention-v275.js: PASS via shared smoke helper"
             echo "- Build 275 marker Next available slots: PASS via shared smoke helper"
             echo "- Build 275 marker booking_funnel_exit: PASS via shared smoke helper"
-            echo "- Application/API/service/location/sitemap smoke: PASS"
+            echo "- Static application/service/location/sitemap identity: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Development alias convergence smoke checks
@@ -217,7 +233,7 @@ jobs:
           alias_ready="false"
           for alias_attempt in $(seq 1 12); do
             echo "Checking Development branch alias convergence (attempt ${alias_attempt}/12)."
-            if SMOKE_RETRY_MODE=1 bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"; then
+            if SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"; then
               alias_ready="true"
               echo "Development branch alias converged on attempt ${alias_attempt}/12."
               break
@@ -232,7 +248,7 @@ jobs:
             echo "### Development alias smoke"
             echo "- Alias: ${CF_DEV_URL}"
             echo "- Bounded retry: 12 attempts × 5 seconds maximum spacing"
-            echo "- Application/API/service/location/sitemap smoke: PASS"
+            echo "- Full static + dynamic/API runtime smoke: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Record Production promotion boundary
@@ -265,7 +281,7 @@ jobs:
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 281, exact successful Cloudflare dev deployment, immutable-deployment smoke, bounded dev-alias convergence, retained application smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, sitemap freshness, and the non-mutating Production promotion boundary."
+            echo "This workflow proves cumulative/source guards through Build 281, exact successful Cloudflare dev deployment, exact static artifact identity, Cloudflare Functions attachment metadata, bounded dev-alias convergence, full dynamic/API Development runtime smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, sitemap freshness, and the non-mutating Production promotion boundary."
             echo "Authenticated Finance/application write flows, payment-provider completion, real-device/provider delivery, rollback/restore rehearsals, and Production promotion remain later/manual evidence."
           } >> "$GITHUB_STEP_SUMMARY"
 
