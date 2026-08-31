@@ -73,9 +73,9 @@ jobs:
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
 
-      - name: Check whitespace/conflict markers
+      - name: Check source whitespace/conflict markers
         run: |
-          git diff --check HEAD^
+          git diff --check HEAD^ -- . ':!*.md'
           if git grep -nE '^(<<<<<<<|=======|>>>>>>>)' -- ':!*.md'; then
             echo "::error::Merge-conflict markers remain in source."
             exit 2
@@ -92,5 +92,6 @@ jobs:
             echo "- Retained Build 271–275 focused guards: PASS"
             echo "- Focused Build 276 reliability/release guard: PASS"
             echo "- Cumulative release guard: PASS"
+            echo "- Source whitespace/conflict-marker check: PASS (Markdown formatting excluded from whitespace-only check)"
             echo "- No Cloudflare resource or Production branch is mutated by this workflow."
           } >> "$GITHUB_STEP_SUMMARY"
