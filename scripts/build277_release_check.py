@@ -22,6 +22,21 @@ def read(rel):
         return ""
     return path.read_text(encoding="utf-8", errors="ignore")
 
+
+def has_quote_boundary(body):
+    # Pages may use the shared generic heading or specialist wording. What matters
+    # is that deeper/expanded work cannot silently proceed without scope confirmation.
+    patterns = [
+        r"When we pause and re-quote",
+        r"confirm(?:s|ed)? (?:the )?(?:expanded|extra|deeper|additional) (?:scope|work|labou?r)",
+        r"confirm expanded scope before proceeding",
+        r"before extra work begins",
+        r"stop(?:s)? (?:and )?confirm",
+        r"approval.*(?:deeper|expanded|additional) (?:work|scope|labou?r)",
+    ]
+    return any(re.search(pattern, body, flags=re.I | re.S) for pattern in patterns)
+
+
 sitemap = read("sitemap.xml")
 for slug in ADDON_SLUGS:
     rel = f"{slug}/index.html"
@@ -35,9 +50,11 @@ for slug in ADDON_SLUGS:
         errors.append(f"{rel} missing production canonical {canonical}")
     if f"<loc>{canonical}/</loc>" not in sitemap:
         errors.append(f"sitemap missing {slug}")
-    for marker in ("service-condition-pricing", "When we pause and re-quote", "Frequently asked questions"):
+    for marker in ("service-condition-pricing", "Frequently asked questions"):
         if marker not in body:
             errors.append(f"{rel} missing decision-depth marker: {marker}")
+    if not has_quote_boundary(body):
+        errors.append(f"{rel} missing a clear expanded-work confirmation/re-quote boundary")
     if not re.search(r'<meta name="description" content=".{70,220}"', body, flags=re.I):
         errors.append(f"{rel} needs a useful meta description")
 
@@ -63,5 +80,6 @@ if errors:
     sys.exit(1)
 
 print("Build 277 service/add-on depth check: PASS")
-print(f"- {len(ADDON_SLUGS)} indexed add-on pages retain one-H1, canonical, condition pricing, quote triggers and FAQ depth")
+print(f"- {len(ADDON_SLUGS)} indexed add-on pages retain one-H1, canonical, condition pricing, explicit expanded-work boundaries and FAQ depth")
+print("- specialist pages may use service-specific quote language without being forced into duplicated boilerplate")
 print("- generated fallback guidance is customer-facing rather than SEO-about-SEO")
