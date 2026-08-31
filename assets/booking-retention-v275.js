@@ -10,6 +10,90 @@
 
   const qs = (selector, root = document) => root.querySelector(selector);
   const qsa = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const funnel = {
+    startedAt: Date.now(),
+    currentStep: 1,
+    bookingSessionId: "",
+    lastEvent: "",
+    engaged: false,
+    checkoutStarted: false,
+    checkoutRedirected: false,
+    exitEmitted: false
+  };
+
+  function currentWizardStep() {
+    const visible = qsa(".wizard-step").find((panel) => panel.hidden !== true);
+    const step = Number(visible?.dataset?.step || funnel.currentStep || 1);
+    return Number.isFinite(step) ? Math.max(1, Math.min(5, step)) : 1;
+  }
+
+  function publishBookingEvent(eventName, payload = {}, { immediate = false, dispatch = true } = {}) {
+    const detail = {
+      source: "booking_flow",
+      step: currentWizardStep(),
+      ...payload
+    };
+    try {
+      if (typeof globalThis.RosieAnalytics?.track === "function") {
+        globalThis.RosieAnalytics.track(eventName, detail);
+        if (immediate && typeof globalThis.RosieAnalytics?.flush === "function") {
+          const pending = globalThis.RosieAnalytics.flush({ keepalive: true });
+          pending?.catch?.(() => {});
+        }
+      }
+    } catch {}
+    if (!dispatch) return;
+    try {
+      window.dispatchEvent(new CustomEvent("rd:analytics", { detail: { event: eventName, ...detail } }));
+    } catch {}
+  }
+
+  function observeCanonicalBookingAnalytics() {
+    window.addEventListener("rd:analytics", (event) => {
+      const detail = event?.detail || {};
+      const eventName = String(detail.event || "").trim();
+      if (!eventName) return;
+      const step = Number(detail.step || detail.step_number || 0);
+      if (Number.isFinite(step) && step > 0) funnel.currentStep = Math.max(1, Math.min(5, step));
+      if (detail.session_id) funnel.bookingSessionId = String(detail.session_id).slice(0, 120);
+      funnel.lastEvent = eventName.slice(0, 80);
+      if (eventName === "checkout_started") funnel.checkoutStarted = true;
+      if (eventName === "checkout_error") funnel.checkoutStarted = false;
+      if (eventName === "checkout_redirect") funnel.checkoutRedirected = true;
+      if (eventName !== "booking_session_start" && /^(booking_|checkout_)/.test(eventName)) funnel.engaged = true;
+    }, { passive: true });
+  }
+
+  function funnelSnapshot() {
+    const year = String(qs("#veh_year")?.value || "").trim();
+    const make = String(qs("#veh_make")?.value || "").trim();
+    const model = String(qs("#veh_model")?.value || "").trim();
+    const packageSelected = !!qs("[data-package].active,[data-package-suggest].active");
+    return {
+      booking_session_id: funnel.bookingSessionId || null,
+      exit_reason: "pagehide",
+      step: currentWizardStep(),
+      duration_ms: Math.max(0, Date.now() - funnel.startedAt),
+      last_event: funnel.lastEvent || null,
+      has_service_area: !!String(qs("#service_area")?.value || "").trim(),
+      has_date: !!String(qs("#service_date")?.value || "").trim(),
+      has_slot: !!qs("[data-slot].active"),
+      has_vehicle: !!(year && make && model),
+      has_vehicle_size: !!String(qs("#vehicle_size")?.value || "").trim(),
+      has_package: packageSelected,
+      addon_count: qsa("[data-addon].active").length,
+      checkout_started: funnel.checkoutStarted === true,
+      checkout_redirected: false
+    };
+  }
+
+  function installFunnelExitEvidence() {
+    window.addEventListener("pagehide", (event) => {
+      if (event.persisted === true || funnel.exitEmitted || funnel.checkoutRedirected || !funnel.engaged) return;
+      funnel.exitEmitted = true;
+      publishBookingEvent("booking_funnel_exit", funnelSnapshot(), { immediate: true, dispatch: false });
+    }, { capture: true });
+  }
 
   function ensureStyles() {
     if (qs("style[data-build275-booking-retention]")) return;
@@ -49,11 +133,7 @@
       const slotButton = qs(`[data-slot="${candidate.slot}"]`);
       if (selectedDate === candidate.date && slotButton && !slotButton.disabled) {
         slotButton.click();
-        try {
-          window.dispatchEvent(new CustomEvent("rd:analytics", {
-            detail: { event: "booking_quick_slot_shortcut", service_date: candidate.date, slot: candidate.slot }
-          }));
-        } catch {}
+        publishBookingEvent("booking_quick_slot_shortcut", { service_date: candidate.date, slot: candidate.slot });
         return;
       }
       if (attempts < 40) setTimeout(finish, 50);
@@ -159,11 +239,11 @@
           qs("#garagePickerWrap")?.scrollIntoView({ behavior: "smooth", block: "center" });
         }
       });
-      try {
-        window.dispatchEvent(new CustomEvent("rd:analytics", {
-          detail: { event: "booking_returning_rebook_prefill", package_code: booking.package_code, prior_service_date: booking.service_date || null, vehicle_count: vehicleCount }
-        }));
-      } catch {}
+      publishBookingEvent("booking_returning_rebook_prefill", {
+        package_code: booking.package_code,
+        prior_service_date: booking.service_date || null,
+        vehicle_count: vehicleCount
+      });
     });
   }
 
@@ -209,6 +289,9 @@
 
   function install() {
     ensureStyles();
+    observeCanonicalBookingAnalytics();
+    installFunnelExitEvidence();
+
     const calendar = qs("#availableDates");
     if (!calendar || !renderNextAvailableSlots()) {
       setTimeout(install, 100);

@@ -28,9 +28,6 @@ def forbid(rel, *tokens):
             errors.append(f"{rel} contains forbidden token {token}")
 
 
-# Build 275 starts by making Rosie-supplied utilities an automatic operating
-# authority rather than a customer acknowledgement or quote condition. The
-# legacy DOM hooks remain only while retained Build 274 checks depend on them.
 need(
     "assets/booking-quick-start-v274.js",
     "Build 275 retains this layer",
@@ -52,9 +49,6 @@ need(
     "Saved Garage vehicles",
 )
 
-# Build 275 slot shortcuts must be projections of the existing canonical
-# calendar/date-pill + slot controls. They may not create a parallel API or
-# their own availability truth.
 need(
     "assets/booking-retention-v275.js",
     "canonical date pills",
@@ -77,9 +71,6 @@ forbid(
     "PAYPAL_CLIENT_SECRET",
 )
 
-# Returning-customer acceleration must reuse authenticated dashboard history,
-# prior package selection and existing Garage controls. It is a prefill/review
-# path only and cannot auto-book or infer which of multiple vehicles is correct.
 need(
     "assets/booking-retention-v275.js",
     "/api/client/dashboard",
@@ -95,15 +86,63 @@ need(
     "Optional returning-customer acceleration must never block anonymous booking",
 )
 
+# Funnel evidence uses the existing bounded public analytics client. It records
+# a one-shot booking-specific pagehide exit, not a speculative abandonment.
+# Legitimate outbound checkout redirects and bfcache transitions are excluded.
+need(
+    "assets/booking-retention-v275.js",
+    "booking_funnel_exit",
+    'exit_reason: "pagehide"',
+    'window.addEventListener("pagehide"',
+    "event.persisted === true",
+    "funnel.exitEmitted",
+    "funnel.checkoutRedirected",
+    'eventName === "checkout_redirect"',
+    'eventName === "checkout_error"',
+    "RosieAnalytics?.track",
+    "RosieAnalytics?.flush",
+    "keepalive: true",
+    "has_service_area",
+    "has_date",
+    "has_slot",
+    "has_vehicle",
+    "has_vehicle_size",
+    "has_package",
+    "addon_count",
+    "checkout_started",
+)
+forbid(
+    "assets/booking-retention-v275.js",
+    "visibilitychange",
+    "/api/analytics/ingest",
+    "customer_email",
+    "customer_phone",
+    "address_line1",
+    "customer_name",
+)
+
+# Existing analytics transport and ingest remain bounded/fail-open authorities.
+need(
+    "assets/public-analytics.js",
+    "MAX_QUEUE = 8",
+    "MAX_BATCH = 12",
+    "keepalive",
+    "Telemetry is expendable",
+    "globalScope.RosieAnalytics",
+)
+need(
+    "functions/api/analytics/ingest.js",
+    "MAX_EVENTS_PER_REQUEST = 12",
+    "MAX_BODY_BYTES = 64 * 1024",
+    "site_activity_events",
+)
+
 need(
     "assets/pricing-catalog-client.js",
     'import("./booking-quick-start-v274.js")',
     'import("./booking-retention-v275.js")',
     "legacy booking remains available",
 )
-
-# Retained Build 274 compatibility hooks may still exist in source, but they
-# must not become a new customer-facing authority or payment dependency.
 need("book.html", 'id="ack_power_water"', 'id="need_mobile_water_power"')
 forbid(
     "assets/booking-quick-start-v274.js",
@@ -112,8 +151,6 @@ forbid(
     "PAYPAL_CLIENT_SECRET",
 )
 
-# vPIC remains optional enrichment. A vendor denial/network failure may reduce
-# suggestions but must never make booking bootstrap return 5xx.
 need(
     "functions/api/vehicle_makes.js",
     "fallbackVehicleMakes",
@@ -126,9 +163,6 @@ need(
     "degraded: true",
     "type the model manually",
 )
-
-# Dashboard data needed by short rebook must remain available from the existing
-# authenticated client authority rather than a new customer-history endpoint.
 need(
     "functions/api/client/dashboard.js",
     "bookings:",
@@ -138,14 +172,13 @@ need(
     "service_date",
 )
 
-# Build authority must state what is actually closed and what remains queued.
 need(
     "BUILD275_SUMMARY.md",
     "**Status: ACTIVE — Development-first**",
     "Rosie-supplied utilities",
     "true next-three available slots",
     "returning-customer short rebook",
-    "funnel instrumentation",
+    "funnel exit evidence",
     "No Production/main mutation",
 )
 
