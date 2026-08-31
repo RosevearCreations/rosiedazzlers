@@ -71,7 +71,7 @@ jobs:
         run: python scripts/build274_release_check.py
       - name: Run retained Build 275 focused guard
         run: python scripts/build275_release_check.py
-      - name: Run retained Build 276 focused guard
+      - name: Run current Build 276 focused guard
         run: python scripts/build276_release_check.py
       - name: Run current Build 277 focused guard
         run: python scripts/build277_release_check.py
