@@ -1,0 +1,77 @@
+name: Build 275 Source Gate
+
+on:
+  push:
+    branches:
+      - build275-booking-retention-convergence
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build275-source-gate
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Build 275 source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact feature commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Quick Book syntax
+        run: node --check assets/booking-quick-start-v274.js
+
+      - name: Check vehicle catalogue syntax
+        run: |
+          node --check functions/api/_lib/vehicle-catalog.js
+          node --check functions/api/vehicle_makes.js
+          node --check functions/api/vehicle_models.js
+
+      - name: Check vehicle catalogue resilience
+        run: node scripts/build274_vehicle_catalog_resilience_check.mjs
+
+      - name: Run retained Build 271 focused guard
+        run: python scripts/build271_release_check.py
+
+      - name: Run retained Build 272 focused guard
+        run: python scripts/build272_release_check.py
+
+      - name: Run retained Build 273 focused guard
+        run: python scripts/build273_release_check.py
+
+      - name: Run retained Build 274 focused guard
+        run: python scripts/build274_release_check.py
+
+      - name: Run Build 275 focused guard
+        run: python scripts/build275_release_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Source gate summary
+        run: |
+          {
+            echo "### Build 275 source gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Source branch: \`${GITHUB_REF_NAME}\`"
+            echo "- Quick Book syntax: PASS"
+            echo "- Vehicle catalogue fail-open resilience: PASS"
+            echo "- Retained Build 271/272/273/274 focused guards: PASS"
+            echo "- Focused Build 275 guard: PASS"
+            echo "- Cumulative release guard: PASS"
+            echo "- No Cloudflare resource or external provider was mutated by this workflow."
+          } >> "$GITHUB_STEP_SUMMARY"

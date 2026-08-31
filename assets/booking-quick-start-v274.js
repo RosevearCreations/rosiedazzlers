@@ -1,4 +1,5 @@
 // Build 274 — mobile-first Quick Book presentation layer.
+// Build 275 retains this layer while converging booking/retention authorities.
 // This file does not own pricing, availability, booking, checkout, or conflict rules.
 // It reorganizes the existing /book UI and maps simple customer intent into existing booking authorities.
 (function initBuild274QuickBook() {
@@ -39,6 +40,7 @@
       .qb274__selected{display:none;margin-top:9px;padding:10px 11px;border-radius:13px;background:rgba(36,195,107,.10);border:1px solid rgba(36,195,107,.25)}.qb274__selected.show{display:block}.qb274__account{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:10px 0;padding:9px 10px;border-radius:13px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.08)}
       .qb274__vehicle-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}.qb274__vehicle-grid>div{min-width:0}.qb274__vehicle-grid input,.qb274__vehicle-grid select{width:100%}.qb274__size-note{font-size:.78rem;color:rgba(234,242,255,.68);margin-top:4px}.qb274__advanced{margin-top:10px;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.025);padding:9px 11px}.qb274__advanced summary{cursor:pointer;font-weight:800}.qb274__advanced-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
       .qb274__appointment-heading{margin:16px 0 8px;padding-top:14px;border-top:1px solid rgba(255,255,255,.09)}.qb274__appointment-heading h3{margin:0 0 4px}.qb274__days{display:none;margin:10px 0 4px;padding:10px;border:1px solid rgba(36,195,107,.22);border-radius:14px;background:rgba(36,195,107,.07)}.qb274__days.show{display:block}.qb274__day-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.qb274__day-buttons button{flex:1 1 150px;text-align:left}.qb274__legacy-vehicle-heading{display:none!important}
+      .qb274__utility-authority{margin:10px 0;padding:10px 11px;border:1px solid rgba(36,195,107,.25);border-radius:13px;background:rgba(36,195,107,.09);line-height:1.42}.qb274__utility-authority strong{display:block;margin-bottom:2px}.qb274__utility-authority span{font-size:.84rem;color:rgba(234,242,255,.78)}
       @media(max-width:820px){.qb274__vehicle-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.qb274__needs{grid-template-columns:1fr}}
       @media(max-width:520px){.qb274{padding:12px;margin-left:-2px;margin-right:-2px}.qb274__vehicle-grid,.qb274__advanced-grid{grid-template-columns:1fr}.qb274__need{min-height:68px}.qb274__account .btn{width:100%}}
     `;
@@ -268,6 +270,7 @@
         const button = document.createElement("button");
         button.type = "button";
         button.className = "btn ghost small";
+        button.dataset.qbDay = source.dataset.date || source.textContent.trim();
         button.textContent = source.textContent.trim();
         button.addEventListener("click", () => {
           source.click();
@@ -275,6 +278,15 @@
         });
         host.appendChild(button);
       });
+      if (!qs('[data-qb-day="choose-another"]', host)) {
+        const another = document.createElement("button");
+        another.type = "button";
+        another.className = "btn ghost small";
+        another.dataset.qbDay = "choose-another";
+        another.textContent = "Choose another date";
+        another.addEventListener("click", () => calendar.scrollIntoView({ behavior: "smooth", block: "center" }));
+        host.appendChild(another);
+      }
     };
 
     refresh();
@@ -282,24 +294,71 @@
     observer.observe(calendar, { childList: true, subtree: true, attributes: true, attributeFilter: ["class", "disabled"] });
   }
 
+  function ensureUtilityAuthorityNotice() {
+    if (qs("[data-build275-utility-authority]")) return;
+    const anchor = qs(".service-area-grid") || qs("[data-qb274-appointment-heading]") || qs("#build274QuickBook");
+    if (!anchor) return;
+    const notice = document.createElement("div");
+    notice.className = "qb274__utility-authority";
+    notice.dataset.build275UtilityAuthority = "true";
+    notice.innerHTML = "<strong>Rosie-supplied water/power</strong><span>Rosie brings standard detailing water and power. You only need to provide a safe, private and permitted work area. Unusual parking, property-access or local runoff/site rules can be reviewed before the appointment.</span>";
+    anchor.insertAdjacentElement("afterend", notice);
+  }
+
   function alignWaterPowerCopy() {
     const ack = qs("#ack_power_water");
     const ackLabel = ack?.closest("label");
+    if (ack) {
+      ack.checked = true;
+      ack.required = false;
+      ack.dataset.build275AutoAuthority = "true";
+      ack.setAttribute("aria-hidden", "true");
+      ack.tabIndex = -1;
+    }
     if (ackLabel) {
       const strong = ackLabel.querySelector("strong");
       const copy = ackLabel.querySelector('[data-policy-copy="water_power"]');
-      if (strong) strong.textContent = "Rosie-supplied water/power and site access acknowledged";
+      if (strong) strong.textContent = "Rosie-supplied water/power";
       if (copy) {
         copy.removeAttribute("data-policy-copy");
         copy.textContent = "Rosie brings standard detailing water and power. Please provide a safe/private work area; unusual access, building or local water/runoff restrictions may require confirmation.";
       }
+      ackLabel.hidden = true;
+      ackLabel.dataset.build275CompatibilityOnly = "true";
     }
     const legacyQuote = qs("#need_mobile_water_power");
     if (legacyQuote) {
       legacyQuote.checked = false;
+      legacyQuote.dataset.build275CompatibilityOnly = "true";
       const label = legacyQuote.closest("label");
       if (label) label.hidden = true;
     }
+    ensureUtilityAuthorityNotice();
+  }
+
+  function normalizeUtilityReviewCopy(root = document) {
+    if (!root) return;
+    const replacements = [
+      ["Customer provides water and power", "Rosie brings standard detailing water and power"],
+      ["Quote staff-supplied water/power setup", "Rosie brings standard detailing water and power"]
+    ];
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    let node = walker.nextNode();
+    while (node) {
+      let next = node.nodeValue || "";
+      for (const [from, to] of replacements) next = next.replaceAll(from, to);
+      if (next !== node.nodeValue) node.nodeValue = next;
+      node = walker.nextNode();
+    }
+  }
+
+  function installUtilityReviewGuard() {
+    const review = qs("#reviewVehicleBox");
+    if (!review || review.dataset.build275UtilityReviewGuard === "true") return;
+    review.dataset.build275UtilityReviewGuard = "true";
+    normalizeUtilityReviewCopy(review);
+    const observer = new MutationObserver(() => normalizeUtilityReviewCopy(review));
+    observer.observe(review, { childList: true, subtree: true, characterData: true });
   }
 
   function updateCopy(step1) {
@@ -321,8 +380,15 @@
     addAppointmentHeading(step1, serviceAreaGrid);
     installNextAvailableDays(step1);
     alignWaterPowerCopy();
-    setTimeout(alignWaterPowerCopy, 500);
-    setTimeout(alignWaterPowerCopy, 1500);
+    installUtilityReviewGuard();
+    setTimeout(() => {
+      alignWaterPowerCopy();
+      installUtilityReviewGuard();
+    }, 500);
+    setTimeout(() => {
+      alignWaterPowerCopy();
+      installUtilityReviewGuard();
+    }, 1500);
 
     if (String(params.get("estimate") || "").toLowerCase() === "photos" && panel) {
       applyPhotoEstimateEntry(panel);
