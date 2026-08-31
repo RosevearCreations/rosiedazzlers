@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +27,15 @@ def forbid(rel, *tokens):
     for token in tokens:
         if token in body:
             errors.append(f"{rel} contains forbidden token {token}")
+
+
+def one_h1(rel, body=None):
+    body = text(rel) if body is None else body
+    if not body:
+        return
+    count = len(re.findall(r"<h1(?:\s[^>]*)?>", body, flags=re.I))
+    if count != 1:
+        errors.append(f"{rel} expected exactly one H1, found {count}")
 
 
 need(
@@ -172,6 +182,28 @@ need(
     "service_date",
 )
 
+# Public add-on route integrity: services.html is the actual source of the
+# links customers receive. Every published add-on detail route must resolve to
+# a crawlable landing page with one H1 and matching canonical/landing slug.
+services_body = text("services.html")
+route_map = re.search(r"const\s+ADDON_DETAIL_SLUGS\s*=\s*\{([^}]+)\};", services_body)
+if not route_map:
+    errors.append("services.html missing parseable ADDON_DETAIL_SLUGS map")
+else:
+    published_slugs = sorted(set(re.findall(r":'([^']+)'", route_map.group(1))))
+    if len(published_slugs) < 20:
+        errors.append(f"services.html published add-on route map unexpectedly small: {len(published_slugs)}")
+    for slug in published_slugs:
+        rel = f"{slug}/index.html"
+        body = text(rel)
+        if not body:
+            continue
+        one_h1(rel, body)
+        if f'href="https://rosiedazzlers.ca/{slug}"' not in body:
+            errors.append(f"{rel} missing matching canonical route")
+        if f'data-landing-slug="{slug}"' not in body:
+            errors.append(f"{rel} missing matching landing slug")
+
 # Development acceptance must prove the exact promoted Build 275 module rather
 # than silently stopping at the prior Build 274 boundary.
 need(
@@ -192,6 +224,7 @@ need(
     "returning-customer short rebook",
     "funnel exit evidence",
     "Development acceptance boundary",
+    "published add-on route integrity",
     "No Production/main mutation",
 )
 
