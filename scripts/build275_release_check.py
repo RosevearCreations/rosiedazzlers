@@ -204,6 +204,22 @@ else:
         if f'data-landing-slug="{slug}"' not in body:
             errors.append(f"{rel} missing matching landing slug")
 
+# Fleet utility authority must agree with the standard self-contained mobile
+# operating model in both visible copy and FAQ structured data.
+one_h1("fleet/index.html")
+need(
+    "fleet/index.html",
+    "Rosie brings standard detailing water and power",
+    "parking/work-area access",
+    "unusual site restrictions are reviewed before dispatch",
+)
+forbid(
+    "fleet/index.html",
+    "water/power availability",
+    "whether water/power are available",
+    "water and power access",
+)
+
 # Development acceptance must prove the exact promoted Build 275 module rather
 # than silently stopping at the prior Build 274 boundary.
 need(
@@ -225,6 +241,7 @@ need(
     "funnel exit evidence",
     "Development acceptance boundary",
     "published add-on route integrity",
+    "fleet utility authority",
     "No Production/main mutation",
 )
 
