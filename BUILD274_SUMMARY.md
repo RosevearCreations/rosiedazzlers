@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Build 274 Summary
 
-**Status: FINAL BUILD 274 CONVERGENCE / PROMOTION AUTHORIZED**  
+**Status: ACTIVE** — final Build 274 convergence / promotion authorized  
 **Started:** 2026-08-30  
 **Source branch:** `dev`  
 **Accepted Development checkpoint:** `e923256c5812523a6e89e25560823ad427739515`  
