@@ -199,7 +199,7 @@ After real review authority is connected:
 
 Complete real evidence for Customer ↔ Detailer messaging/deep links and closed-job behavior; role/action/direct-URL/API matrix; phone/tablet/desktop/PWA/accessibility/weak-network behavior; real provider email/SMS/Web Push delivery/retry/failure; rollback/restore rehearsals; and representative Cloudflare runtime evidence.
 
-### 8. Payments / Finance / accounting
+### 9. Payments / Finance / accounting
 
 Retain Build 273 authority and continue Finance closure without weakening permissions:
 
@@ -211,7 +211,7 @@ Retain Build 273 authority and continue Finance closure without weakening permis
 - narrow journal/refund/tax/payroll-sensitive actions;
 - no fabricated tax facts or accountant judgment.
 
-### 9. Continue modular extraction only when it creates value
+### 10. Continue modular extraction only when it creates value
 
 Preferred high-use order remains:
 
