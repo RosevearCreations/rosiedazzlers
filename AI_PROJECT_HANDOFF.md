@@ -34,16 +34,17 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 
 ## Retained Build 272/273 authority
 
-These retained authorities remain live while later customer/business releases advance:
+**Build 273 is the retained Finance/tax-support baseline.** These retained authorities remain live while later customer/business releases advance:
 
 - narrow Operations/Finance action permissions;
 - server-authoritative role/module/action permissions;
+- Finance tax-support writes retain `finance.tax.manage` while reads remain narrowly scoped;
+- persistent Finance tax-support records, evidence links, T2125 workpaper and accountant-package workflow remain retained;
 - Complete = **Best value**;
 - Exterior Detail remains differentiated from Premium Wash;
 - current Small/Mid/Oversized + condition/quote pricing authority;
 - current availability, conflict, deposit, checkout and payment mechanics;
 - one meaningful H1 per indexable public page;
-- persistent Finance tax-support/evidence/accountant-package authority;
 - no fabricated accounting/tax facts, reviews, consent, proof or provider evidence;
 - private/customer media never becomes public without consent/privacy review and explicit publication;
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
@@ -51,7 +52,7 @@ These retained authorities remain live while later customer/business releases ad
 
 ## Completed customer/business work through Build 286
 
-- Build 274 established Mobile Quick Book and the retained public/business foundation.
+- Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
 - Build 276 hardened release mechanics.
 - Builds 277–280 deepened add-on/local SEO and normalized the self-contained mobile operating model.
@@ -168,4 +169,7 @@ Build 283 proof/media publication authority remains retained; explicit publish/u
 <!-- Historical Build 274 retained-guard compatibility only.
 **Build:** 274
 Build 274 active implementation
+I.T. Connections
+Quick Book
+Mobile Auto Detailing & Interior/Exterior Restoration
 -->

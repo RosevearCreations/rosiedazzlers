@@ -15,7 +15,7 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the Finance/tax-support baseline. Builds 274–286 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook and completed-job review authorities without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–286 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook and completed-job review authorities without replacing those foundations.
 
 Do not regress:
 
@@ -139,8 +139,8 @@ Retain Build 273 authority and continue:
 - Stripe test deposit/final balance/refund/webhook/idempotency acceptance;
 - PayPal sandbox parity if retained;
 - settlement/reconciliation into Finance;
-- receipt/evidence linking;
-- accountant-friendly exports;
+- receipt/evidence linking into `accounting_documents`;
+- accountant-friendly export surfaces while preserving one data authority;
 - narrow journal/refund/tax/payroll-sensitive actions;
 - no fabricated tax facts or accountant judgment.
 
