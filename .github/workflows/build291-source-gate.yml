@@ -35,8 +35,11 @@ jobs:
           node --check assets/growth-settings.js
           bash -n scripts/build291_http_smoke.sh
 
-      - name: Run retained Builds 271-290 focused guards
-        run: for build in $(seq 271 290); do python "scripts/build${build}_release_check.py"; done
+      - name: Run retained Builds 271-289 focused guards
+        run: for build in $(seq 271 289); do python "scripts/build${build}_release_check.py"; done
+
+      - name: Run retained Build 290 focused guard
+        run: python scripts/build290_release_check.py
 
       - name: Retain Build 290 executable authorization proof
         run: |
