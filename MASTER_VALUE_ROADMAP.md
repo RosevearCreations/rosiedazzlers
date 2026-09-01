@@ -17,6 +17,8 @@ while server work remains event-driven and dormant modules stay asleep.
 
 Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–286 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook and completed-job review authorities without replacing those foundations.
 
+**Production remains closed.** `main` changes only through deliberate promotion from accepted Development evidence.
+
 Do not regress:
 
 - server-authoritative role/module/action permissions;
