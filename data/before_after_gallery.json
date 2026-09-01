@@ -7,13 +7,15 @@
       "before_url": "/assets/brand/CarPrice2025.PNG",
       "after_kind": "image",
       "after_url": "/assets/brand/CarPriceDetails2025.PNG",
-      "note": "Replace these sample images with real customer-approved before/after work.",
+      "note": "Sample placeholder. Replace with customer-approved work from Gallery Approvals.",
       "town": "Tillsonburg",
       "town_slug": "tillsonburg",
       "service": "Interior detailing",
       "service_slug": "interior-detailing",
       "consent_status": "sample",
-      "media_privacy_status": "approved_public"
+      "media_privacy_status": "approved_public",
+      "publication_status": "published",
+      "proof_kind": "sample"
     },
     {
       "title": "Exterior wash and gloss",
@@ -22,13 +24,15 @@
       "before_url": "/assets/brand/CarSizeChart.PNG",
       "after_kind": "image",
       "after_url": "/assets/brand/CarPrice2025.PNG",
-      "note": "Use paired images of the same angle for the best slider effect.",
+      "note": "Sample placeholder. Use matched before/after angles for best results.",
       "town": "Woodstock",
       "town_slug": "woodstock",
       "service": "Exterior detailing",
       "service_slug": "exterior-detailing",
       "consent_status": "sample",
-      "media_privacy_status": "approved_public"
+      "media_privacy_status": "approved_public",
+      "publication_status": "published",
+      "proof_kind": "sample"
     }
   ]
 }

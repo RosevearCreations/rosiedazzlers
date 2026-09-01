@@ -15,7 +15,6 @@ const LANDING_PAGE_EXPANSIONS = fallbackLandingPagesContent.expansion_pages || {
 const ADDON_LANDING_PAGE_TEMPLATES = fallbackLandingPagesContent.addon_landing_page_templates || {};
 const EXPLICIT_LANDING_PAGES = { pages: fallbackLandingPagesContent.pages || {} };
 
-
 const PRICING_CATALOG_DEFAULT = fallbackPricingCatalog && typeof fallbackPricingCatalog === "object" ? fallbackPricingCatalog : {};
 const PRODUCT_CATALOG_DEFAULT = Array.isArray(fallbackProductCatalog) ? fallbackProductCatalog : [];
 
@@ -46,8 +45,17 @@ const ADDON_LANDING_PAGE_MAP = {
   fleet_vehicle_add_on: "fleet-vehicle-add-on"
 };
 
-const GENERATED_ADDON_LANDING_PAGES = buildGeneratedAddonPages();
+const LOCATION_UTILITY_ASSUMPTION_PATTERNS = [
+  /customer[- ]supplied\s+(?:garden\s+)?hose/i,
+  /customer[- ]supplied\s+(?:water|power|electric(?:ity)?|outlet)/i,
+  /customer(?:'s)?\s+(?:water|power|electric(?:ity)?|outlet|hose)\s+(?:access|supply|connection)/i,
+  /(?:garden\s+)?hose\s+(?:access|connection|required)/i,
+  /(?:standard|exterior|outdoor)\s+(?:electrical\s+)?outlet\s+(?:access|required|available)/i,
+  /household\s+electricity\s+(?:rate|cost|price)/i,
+  /plug(?:ged)?\s+into\s+(?:the\s+)?customer/i
+];
 
+const GENERATED_ADDON_LANDING_PAGES = buildGeneratedAddonPages();
 
 function firstAddonImageUrl(addon) {
   const primary = String(addon?.image_url || "").trim();
@@ -79,10 +87,10 @@ function defaultAddonLandingEquipment(addonName) {
 function defaultAddonLandingHighlights(addonName) {
   const name = String(addonName || "this add-on").trim();
   return [
-    `${name} has its own page because customers often search for this exact problem or service by name.`,
-    "The page explains when the add-on is standalone, package-dependent, or quote-led.",
-    "It gives local search engines a clear, service-specific page instead of hiding the answer inside a long package list.",
-    "It helps customers understand the process before they reach checkout or request a quote."
+    `${name} is useful when the specific problem needs more attention than the selected base package normally includes.`,
+    "The service may be standalone, package-dependent, or quote-led depending on preparation, condition, access, and the requested result.",
+    "Condition photos help us choose the right process and reduce surprises before the appointment.",
+    "Scope, realistic limits, expected time, and any extra authorization are confirmed before deeper work proceeds."
   ];
 }
 
@@ -90,12 +98,11 @@ function defaultAddonThingsToKnow(addonName) {
   const name = String(addonName || "this add-on").trim();
   return [
     `${name} may depend on vehicle condition, surface material, access, weather, and the selected main package.`,
-    "Photos help, but inspection may still change the final recommendation.",
-    "Zero-dollar or missing prices should be treated as Quote required, not as a free service.",
-    "The landing page should stay honest about limits, prep steps, and aftercare."
+    "Photos help with triage, but hands-on inspection can still change the final recommendation.",
+    "Zero-dollar or missing prices mean Quote required, not a free service.",
+    "We confirm limits, preparation, aftercare, and any expanded labour before work moves beyond the accepted scope."
   ];
 }
-
 
 function buildGeneratedAddonPages() {
   const pages = {};
@@ -121,9 +128,9 @@ function buildGeneratedAddonPages() {
       hero_image_url: template.hero_image_url || firstAddonImageUrl(addon),
       gallery_image_urls: template.gallery_image_urls || (firstAddonImageUrl(addon) ? [firstAddonImageUrl(addon)] : []),
       reasons_page_exists: template.reasons_page_exists || [
-        `${addonName} is a service people search for directly, so it deserves a clearer page than a generic add-on row.`,
-        `This page explains how ${addonName.toLowerCase()} fits into a real detailing workflow before someone books or requests a quote.`,
-        `It also gives Rosie Dazzlers a stronger local destination for service-specific search intent.`
+        `${addonName} deserves a separate decision path because condition, preparation, labour, and safe expectations can differ substantially from the base package.`,
+        `The guide shows how ${addonName.toLowerCase()} fits into the detailing workflow before someone books or requests a quote.`,
+        "It keeps pricing basis, process, limitations, aftercare, and the right next step together in one customer-focused place."
       ],
       process: template.process || defaultAddonLandingProcess(addonName),
       equipment: template.equipment || defaultAddonLandingEquipment(addonName),
@@ -145,15 +152,17 @@ function normalizeProductRefList(rows) {
   })).filter((row) => row.name);
 }
 
-const SYSTEM_LANDING_PAGES = applyWaterRestrictionRulesToLandingPages(
-  mergeLandingPages(
+const SYSTEM_LANDING_PAGES = finalizeLandingPages(
+  applyWaterRestrictionRulesToLandingPages(
     mergeLandingPages(
-      mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS),
-      GENERATED_ADDON_LANDING_PAGES
+      mergeLandingPages(
+        mergeLandingPages(DEFAULT_LANDING_PAGES, LANDING_PAGE_EXPANSIONS),
+        GENERATED_ADDON_LANDING_PAGES
+      ),
+      EXPLICIT_LANDING_PAGES
     ),
-    EXPLICIT_LANDING_PAGES
-  ),
-  normalizeWaterRestrictionPayload(fallbackWaterRestrictionRules, "bundled_json_fallback")
+    normalizeWaterRestrictionPayload(fallbackWaterRestrictionRules, "bundled_json_fallback")
+  )
 );
 
 export async function onRequestGet({ env }) {
@@ -174,7 +183,7 @@ async function loadLandingPages(env) {
   const waterRules = await loadEditableWaterRestrictionRules(env, fallbackWaterRestrictionRules);
 
   if (!env?.SUPABASE_URL) {
-    return applyWaterRestrictionRulesToLandingPages(fallback, waterRules);
+    return finalizeLandingPages(applyWaterRestrictionRulesToLandingPages(fallback, waterRules));
   }
 
   const keys = ["landing_pages_content", "landing_pages"];
@@ -192,7 +201,7 @@ async function loadLandingPages(env) {
     merged = mergeLandingPages(merged, flattenEditableLandingPages(row.value));
     found = true;
   }
-  return applyWaterRestrictionRulesToLandingPages(found ? merged : fallback, waterRules);
+  return finalizeLandingPages(applyWaterRestrictionRulesToLandingPages(found ? merged : fallback, waterRules));
 }
 
 function flattenEditableLandingPages(value) {
@@ -242,7 +251,6 @@ function normalizePage(page) {
     hero_title: String(page?.hero_title || page?.name || "Landing page").trim(),
     hero_intro: String(page?.hero_intro || "").trim(),
     hero_image_url: String(page?.hero_image_url || "").trim(),
-    // Build 215: local Rosie-owned hero asset is separate so old editable rows cannot keep a legacy remote placeholder in front of it.
     local_hero_image_url: String(page?.local_hero_image_url || "").trim(),
     local_hero_r2_key: String(page?.local_hero_r2_key || "").trim(),
     local_hero_format: String(page?.local_hero_format || "").trim(),
@@ -270,6 +278,75 @@ function normalizePage(page) {
   };
 }
 
+function isLocationPage(page) {
+  return String(page?.type || "").trim().toLowerCase() === "location"
+    || /-auto-detailing$/i.test(String(page?.slug || "").trim());
+}
+
+function hasCustomerUtilityAssumption(value) {
+  const text = String(value || "").trim();
+  return Boolean(text) && LOCATION_UTILITY_ASSUMPTION_PATTERNS.some((pattern) => pattern.test(text));
+}
+
+function removeCustomerUtilityAssumptions(value) {
+  return normalizeStringArray(value).filter((item) => !hasCustomerUtilityAssumption(item));
+}
+
+function appendUnique(list, item) {
+  const rows = normalizeStringArray(list);
+  if (!rows.some((row) => row.toLowerCase() === String(item).toLowerCase())) rows.push(item);
+  return rows;
+}
+
+function normalizeLocationServiceModel(page) {
+  if (!isLocationPage(page)) return page;
+  const out = { ...page };
+  const listFields = [
+    "reasons_page_exists",
+    "process",
+    "equipment",
+    "highlights",
+    "things_to_know",
+    "scope_includes",
+    "scope_excludes",
+    "customer_prep",
+    "aftercare",
+    "quote_triggers"
+  ];
+  for (const field of listFields) out[field] = removeCustomerUtilityAssumptions(out[field]);
+
+  out.customer_prep = appendUnique(
+    out.customer_prep,
+    "Provide a safe, legal work area with enough room around the vehicle. Rosie Dazzlers brings the operating water and power needed for the booked mobile detailing service."
+  );
+  out.equipment = appendUnique(
+    out.equipment,
+    "self-contained mobile operating water and power so normal detailing does not depend on a customer hose or electrical outlet"
+  );
+  out.things_to_know = appendUnique(
+    out.things_to_know,
+    "Rosie Dazzlers is self-contained for normal mobile detailing and brings its own operating water and power. Local water-use restrictions, site rules, weather, drainage, or safety conditions can still affect whether exterior work can proceed."
+  );
+
+  if (hasCustomerUtilityAssumption(out.hero_intro)) {
+    out.hero_intro = `${out.name} mobile detailing with Rosie Dazzlers' self-contained operating water and power, condition-based service guidance, and a clear booking path.`;
+  }
+  if (hasCustomerUtilityAssumption(out.meta_description)) {
+    out.meta_description = `${out.name} mobile auto detailing with self-contained operating water and power, package guidance, condition-aware scope, and online booking.`;
+  }
+  return out;
+}
+
+function finalizeLandingPages(payload) {
+  const raw = cloneLandingPages(payload);
+  const pages = raw.pages && typeof raw.pages === "object" ? raw.pages : {};
+  for (const [slug, page] of Object.entries(pages)) {
+    pages[slug] = normalizeLocationServiceModel(normalizePage({ ...page, slug }));
+  }
+  raw.pages = pages;
+  return raw;
+}
+
 function normalizeStringArray(value) {
   return (Array.isArray(value) ? value : []).map((item) => String(item || "").trim()).filter(Boolean);
 }
@@ -289,7 +366,6 @@ function normalizeProductArray(value) {
     image_url: String(item?.image_url || "").trim()
   })).filter((item) => item.name || item.image_url);
 }
-
 
 function cloneLandingPages(payload) {
   const raw = JSON.parse(JSON.stringify(payload || SYSTEM_LANDING_PAGES));

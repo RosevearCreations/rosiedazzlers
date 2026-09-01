@@ -1,5 +1,34 @@
 import { serviceHeaders, json, methodNotAllowed } from "./_lib/staff-auth.js";
 
+const SAFE_MEMBERSHIP_PUBLIC_DEFAULTS = Object.freeze({
+  enabled: false,
+  waitlist_enabled: true,
+  plan_name: "Maintenance Plan Interest",
+  cycle_label: "Cadence selected after service review",
+  teaser: "Tell us what recurring schedule would be useful after a completed reset or detail. This is an interest list; no subscription, fixed cadence, price, discount, or perk is promised.",
+  benefits: [
+    "Recurring service starts from current vehicle condition and completed service history",
+    "Rebooking continues through the live booking flow",
+    "Cadence is confirmed around use, season, condition, and service area"
+  ],
+  why_title: "What the waitlist helps us learn",
+  why_lines: [
+    "Preferred cadence | Tell us what schedule would be useful",
+    "Vehicle mix | One vehicle or several",
+    "Season and use | Salt, pets, mileage and work use matter",
+    "Booking path | Final appointments still use the live booking flow"
+  ],
+  waitlist_intro: "Leave the cadence you would prefer and a few vehicle details. We use this as demand and planning evidence; it does not create a membership or lock in pricing, discounts, perks, or appointment frequency.",
+  self_serve_title: "How recurring service should fit booking",
+  self_serve_copy: "Recurring service should make the existing booking flow easier to repeat, not replace current availability, vehicle review, service scope, price, add-on, deposit, or site-access rules.",
+  good_fit_title: "Good fit for the interest list",
+  good_fit_lines: [
+    "Repeat customers who want a more predictable cleaning routine",
+    "Vehicles affected by seasonal salt, pets, frequent use, or work activity",
+    "Households or small businesses exploring repeat service without committing to a fixed membership"
+  ]
+});
+
 const DEFAULTS = {
   quote_booking_settings: {
     prominent_cta: true,
@@ -12,26 +41,20 @@ const DEFAULTS = {
     manual_review: true,
     default_message: "Choose a recipient, add a message, and pick the day you want us to send the gift."
   },
-  membership_plan_settings: {
-    enabled: false,
-    waitlist_enabled: true,
-    plan_name: "Maintain Your Shine Plan",
-    cycle_label: "Every 4 or 8 weeks",
-    teaser: "Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.",
-    benefits: [
-      "Priority reminder before your preferred date",
-      "Faster rebooking using your saved vehicle",
-      "Cleaner predictable maintenance cycle"
-    ],
-    why_title: "Why add this now",
-    why_lines: ["Repeat scheduling | Less back-and-forth","Preferred cycle | Every 4 or 8 weeks","Local planning | Better crew forecasting","Booking path | Still uses the live booking flow"],
-    waitlist_intro: "Leave your preferred cycle and a few details about the vehicles you want covered. We use this to shape the recurring-plan offer while actual reminder timing follows completed service history.",
-    self_serve_title: "How this fits the self-serve direction",
-    self_serve_copy: "Recurring plans should not replace the booking flow. They should make the same booking-led experience easier to repeat with reminder-first scheduling, saved vehicle details, and clearer maintenance timing.",
-    good_fit_title: "Good fit for",
-    good_fit_lines: ["Busy households trying to keep vehicles presentable year-round","Repeat clients who already know their package and preferred clean cycle","Work-from-home or driveway-friendly bookings across Oxford and Norfolk areas"]
-  }
+  membership_plan_settings: { ...SAFE_MEMBERSHIP_PUBLIC_DEFAULTS }
 };
+
+function normalizeMembershipPublicSettings(raw) {
+  const source = raw && typeof raw === "object" ? raw : {};
+  // Build 275: App Management may retain older experimental membership copy.
+  // Until recurring-plan economics/perks are deliberately approved, expose
+  // only the safe waitlist contract and the operational on/off switches.
+  return {
+    ...SAFE_MEMBERSHIP_PUBLIC_DEFAULTS,
+    enabled: source.enabled === true,
+    waitlist_enabled: source.waitlist_enabled !== false
+  };
+}
 
 export async function onRequestGet({ env }) {
   try {
@@ -50,7 +73,10 @@ export async function onRequestGet({ env }) {
         continue;
       }
       const rows = await res.json().catch(() => []);
-      out[key] = { ...DEFAULTS[key], ...((Array.isArray(rows) && rows[0] && typeof rows[0].value === "object") ? rows[0].value : {}) };
+      const stored = (Array.isArray(rows) && rows[0] && typeof rows[0].value === "object") ? rows[0].value : {};
+      out[key] = key === "membership_plan_settings"
+        ? normalizeMembershipPublicSettings(stored)
+        : { ...DEFAULTS[key], ...stored };
     }
 
     return withCors(json(out));

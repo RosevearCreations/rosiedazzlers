@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - build274-full-closure-queue
-      - dev
   workflow_dispatch:
 
 permissions:
@@ -90,5 +89,6 @@ jobs:
             echo "- Retained Build 271/272/273 focused guards: PASS"
             echo "- Focused Build 274 guard: PASS"
             echo "- Cumulative release guard: PASS"
+            echo "- Historical feature gate only; current dev uses Development Source Gate."
             echo "- No Cloudflare resource or external provider was mutated by this workflow."
           } >> "$GITHUB_STEP_SUMMARY"

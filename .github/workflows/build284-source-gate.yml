@@ -1,0 +1,86 @@
+name: Build 284 Source Gate
+
+on:
+  push:
+    branches:
+      - build284-contextual-proof-placement
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build284-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Build 284 source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact feature commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Build 284 proof presentation syntax
+        run: |
+          node --check assets/contextual-proof-v284.js
+          node --check assets/visual-placeholders.js
+          node --check functions/api/_lib/gallery-publication.js
+          node --check functions/api/before_after_gallery_public.js
+          bash -n scripts/build284_http_smoke.sh
+
+      # The loop below explicitly includes the retained Build 283 guard:
+      # python scripts/build283_release_check.py
+      - name: Run retained Builds 271–283 focused guards
+        run: |
+          for build in $(seq 271 283); do
+            python "scripts/build${build}_release_check.py"
+          done
+
+      - name: Run Build 284 focused guard
+        run: python scripts/build284_release_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Check one-H1 source rule
+        run: python scripts/seo_h1_check.py
+
+      - name: Check route-copy parity
+        run: python scripts/sync_route_copies.py --check
+
+      - name: Check source whitespace/conflict markers
+        run: |
+          git diff --check HEAD^ -- . ':!*.md'
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
+
+      - name: Source gate summary
+        run: |
+          {
+            echo "### Build 284 Source Gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Build 283 publication/proof authority retained: PASS"
+            echo "- Shared contextual proof renderer + dedicated HTTP smoke syntax: PASS"
+            echo "- Service/location/use-case context matching: PASS"
+            echo "- Sample/unpublished/unapproved/incomplete proof fail-closed: PASS"
+            echo "- Zero-real-proof hidden state: PASS"
+            echo "- Retained Builds 271–283 + Build 284 + cumulative release chain: PASS"
+            echo "- No schema migration required."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"

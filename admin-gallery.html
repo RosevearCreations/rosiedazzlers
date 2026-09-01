@@ -3,43 +3,200 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Gallery Approvals | Rosie Dazzlers Admin</title>
-  <meta name="description" content="Approve, hide, repair, and add customer-safe before and after Gallery images for Rosie Dazzlers." />
+  <title>Gallery Publication | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Review proof eligibility and explicitly publish or unpublish customer-safe Rosie Dazzlers before and after Gallery media." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .approval-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}.approval-card{display:grid;gap:10px}.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.ba-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(15,23,42,.6)}.status-pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-weight:800;font-size:.78rem;background:rgba(148,163,184,.15);border:1px solid rgba(255,255,255,.12)}.status-pill.approved{background:rgba(34,197,94,.16);color:#bbf7d0}.status-pill.pending{background:rgba(250,204,21,.16);color:#fef08a}.status-pill.private,.status-pill.hidden{background:rgba(59,130,246,.14);color:#bfdbfe}.status-pill.rejected{background:rgba(239,68,68,.16);color:#fecaca}.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.small-actions{display:flex;gap:8px;flex-wrap:wrap}.repair{color:#fef08a}.muted{color:#94a3b8}@media(max-width:720px){.ba-grid{grid-template-columns:1fr}}
+    .approval-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+    .approval-card{display:grid;gap:10px}
+    .ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .ba-grid img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(15,23,42,.6)}
+    .status-pill{display:inline-flex;align-items:center;border-radius:999px;padding:4px 10px;font-weight:800;font-size:.78rem;background:rgba(148,163,184,.15);border:1px solid rgba(255,255,255,.12)}
+    .status-pill.approved,.status-pill.published,.status-pill.ready{background:rgba(34,197,94,.16);color:#bbf7d0}
+    .status-pill.pending,.status-pill.draft{background:rgba(250,204,21,.16);color:#fef08a}
+    .status-pill.private,.status-pill.hidden,.status-pill.unpublished,.status-pill.sample{background:rgba(59,130,246,.14);color:#bfdbfe}
+    .status-pill.rejected,.status-pill.blocked{background:rgba(239,68,68,.16);color:#fecaca}
+    .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+    .small-actions{display:flex;gap:8px;flex-wrap:wrap}
+    .repair{color:#fef08a}
+    .blockers{font-size:.9rem;color:#fecaca}
+    .muted{color:#94a3b8}
+    @media(max-width:720px){.ba-grid{grid-template-columns:1fr}}
   </style>
 </head>
-<body data-page="admin-gallery" data-build210="gallery-final-media-candidates" data-build206="gallery-approvals-screen">
+<body data-page="admin-gallery" data-build283="proof-publication-controls">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-workflow.html">Workflow</a><a href="/admin-app.html">App Management</a><a href="/gallery.html">Public Gallery</a><a href="/admin-media-health.html">Media Health</a></nav></div></header>
   <main class="container">
     <div data-admin-shell-status class="shell-status" hidden></div>
-    <div data-admin-shell-loading class="section"><div class="panel">Loading Gallery approvals…</div></div>
+    <div data-admin-shell-loading class="section"><div class="panel">Loading Gallery publication controls…</div></div>
     <div data-admin-shell-ready hidden>
-      <section class="section"><div class="hero"><div><div class="badge">Build 206</div><h1>Gallery approvals</h1><p class="kicker">Approve, hide, repair, and add before/after proof images without digging through App Management. Public Gallery rows should be customer-safe and consent-approved before publishing.</p></div><div class="panel"><strong>Privacy rule</strong><p class="muted" id="privacyRule">Only approved customer-safe rows should be public.</p></div></div></section>
+      <section class="section"><div class="hero"><div><div class="badge">Build 283</div><h1>Gallery proof &amp; publication</h1><p class="kicker">Prepare real Rosie before/after proof, confirm public-use consent and privacy, then explicitly publish. Approval and publication are separate actions.</p></div><div class="panel"><strong>Fail-closed publication rule</strong><p class="muted" id="privacyRule">Nothing is public merely because a media row exists or was customer-visible.</p><p class="muted" id="proofRule">Real proof also needs problem, process, result, vehicle, and condition context.</p></div></div></section>
+
       <section class="section"><div class="kpi-grid" id="galleryCounts"><div class="kpi-box"><span class="muted">Loading counts…</span><strong>—</strong></div></div></section>
-      <section class="section"><div class="panel"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><div class="badge">Connected final-media queue</div><h2 style="margin:8px 0 0">Approved final photos ready for pairing</h2></div><button id="reloadCandidatesBtn" class="btn ghost" type="button">Reload candidates</button></div><p class="muted">Final proof photos can be reused here without another upload. Pair an approved before image with the final result, confirm consent, then publish through the normal Gallery approval queue.</p><div id="galleryCandidates" class="approval-grid" style="margin-top:14px"><div class="notice">Loading final-media candidates…</div></div></div></section>
-      <section class="section"><div class="panel"><h2 style="margin-top:0">Add before/after item</h2><form id="addForm" class="form-grid"><label>Title<input name="title" placeholder="Interior refresh — Tillsonburg SUV" required></label><label>Service<input name="service" placeholder="Interior detailing" required></label><label>Town / location<input name="town" placeholder="Tillsonburg" required></label><label>Before image URL<input name="before_url" placeholder="/assets/brand/before.jpg" required></label><label>After image URL<input name="after_url" placeholder="/assets/brand/after.jpg" required></label><label>Consent status<select name="consent_status"><option value="pending_review">Needs review</option><option value="customer_approved_public">Customer approved public</option><option value="approved_private">Approved private</option></select></label><label style="grid-column:1/-1">Customer-safe note<textarea name="note" rows="3" placeholder="Short approved note. Avoid private customer details."></textarea></label><div><button class="btn primary" type="submit">Add to approval queue</button></div></form><div id="addStatus" class="notice" style="display:none;margin-top:12px"></div></div></section>
-      <section class="section"><div class="panel"><div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Approval queue</h2><button id="reloadBtn" class="btn ghost" type="button">Reload</button></div><div id="galleryStatus" class="notice" style="display:none;margin-top:12px"></div><div id="approvalRows" class="approval-grid" style="margin-top:14px"></div></div></section>
+
+      <section class="section"><div class="panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><div class="badge">Pairing-eligible final media</div><h2 style="margin:8px 0 0">Approved job photos ready to pair</h2></div><button id="reloadCandidatesBtn" class="btn ghost" type="button">Reload candidates</button></div>
+        <p class="muted">Only internally eligible final media appears here. Selecting a candidate does not make it public; the paired Gallery row still requires public-use review and an explicit Publish action.</p>
+        <div id="candidateStatus" class="notice" style="display:none;margin-top:12px"></div>
+        <div id="galleryCandidates" class="approval-grid" style="margin-top:14px"><div class="notice">Loading final-media candidates…</div></div>
+      </div></section>
+
+      <section class="section"><div class="panel">
+        <h2 style="margin-top:0">Add before/after proof row</h2>
+        <form id="addForm" class="form-grid">
+          <label>Title<input name="title" placeholder="Interior salt recovery — SUV" required></label>
+          <label>Service<input name="service" placeholder="Interior detailing" required></label>
+          <label>Town / location<input name="town" placeholder="Tillsonburg" required></label>
+          <label>Vehicle type / label<input name="vehicle_label" placeholder="Mid-size SUV"></label>
+          <label>Condition summary<input name="condition_summary" placeholder="Crusted winter salt on carpet"></label>
+          <label>Before image URL<input name="before_url" placeholder="/assets/brand/before.jpg" required></label>
+          <label>After image URL<input name="after_url" id="addAfterUrl" placeholder="/assets/brand/after.jpg" required></label>
+          <label>Consent status<select name="consent_status"><option value="pending_review">Needs public-use review</option><option value="customer_approved_public">Customer approved public</option><option value="approved_private">Approved private only</option></select></label>
+          <label>Problem<textarea name="problem" rows="3" placeholder="What condition/problem did we start with?"></textarea></label>
+          <label>Process<textarea name="process" rows="3" placeholder="What did Rosie actually do?"></textarea></label>
+          <label>Result<textarea name="result" rows="3" placeholder="What changed, without guarantees or exaggeration?"></textarea></label>
+          <label style="grid-column:1/-1">Customer-safe note<textarea name="note" rows="3" placeholder="Optional approved note. Avoid private customer details."></textarea></label>
+          <input type="hidden" name="source_booking_id" id="sourceBookingId">
+          <input type="hidden" name="source_job_media_id" id="sourceJobMediaId">
+          <div><button class="btn primary" type="submit">Add as draft</button></div>
+        </form>
+        <div id="addStatus" class="notice" style="display:none;margin-top:12px"></div>
+      </div></section>
+
+      <section class="section"><div class="panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><h2 style="margin:0">Review &amp; publication queue</h2><button id="reloadBtn" class="btn ghost" type="button">Reload</button></div>
+        <div id="galleryStatus" class="notice" style="display:none;margin-top:12px"></div>
+        <div id="approvalRows" class="approval-grid" style="margin-top:14px"></div>
+      </div></section>
     </div>
   </main>
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/chrome.js"></script>
   <script>
   (function(){
-    const $=id=>document.getElementById(id); const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-    function show(id,msg,kind=''){ const el=$(id); el.style.display='block'; el.className='notice '+kind; el.textContent=msg; }
-    function kpi(label,value){ return `<div class="kpi-box"><span class="muted">${esc(label)}</span><strong>${esc(value)}</strong></div>`; }
-    async function loadCandidates(){const box=$('galleryCandidates');if(!box)return;try{const res=await fetch('/api/admin/gallery_media_candidates_list',{credentials:'include',cache:'no-store'});const data=await res.json().catch(()=>({}));if(!res.ok||!data.ok)throw new Error(data.error||'Could not load final-media candidates.');if(data.warning)box.innerHTML=`<div class="notice warn">${esc(data.warning)}</div>`;else box.innerHTML=(data.candidates||[]).map(row=>`<article class="card approval-card">${row.media_url?`<img class="img" loading="lazy" src="${esc(row.media_url)}" alt="${esc(row.caption||'Final detailing result')}">`:'<div class="visual-placeholder" data-visual-placeholder="gallery_before_after"><strong>Final media stored</strong><span>Preview requires a signed storage URL.</span></div>'}<div class="badges"><span class="badge">${esc(row.status||'queued')}</span><span class="badge">${esc(row.consent_status||'needs review')}</span></div><h3>${esc(row.caption||'Final detailing result')}</h3><p class="muted">Use this as the After image when creating a paired Gallery row.</p>${row.media_url?`<button class="btn ghost small" type="button" data-copy-candidate="${esc(row.media_url)}">Copy image URL</button>`:''}</article>`).join('')||'<div class="notice">No final photos are queued yet. Use Admin Progress → Queue for Gallery on approved final media.</div>';}catch(err){box.innerHTML=`<div class="notice bad">${esc(err.message)}</div>`;}}
-    async function load(){ const res=await fetch('/api/admin/gallery_approvals_list',{credentials:'include',cache:'no-store'}); const data=await res.json().catch(()=>({})); if(!res.ok||!data.ok) throw new Error(data.error||'Could not load gallery approvals.'); const c=data.counts||{}; $('privacyRule').textContent=data.privacy_rule||''; $('galleryCounts').innerHTML=[kpi('Total rows',c.total||0),kpi('Approved',c.approved||0),kpi('Pending',c.pending||0),kpi('Needs repair',c.needs_repair||0),kpi('Source',data.source_status||'unknown')].join(''); $('approvalRows').innerHTML=(data.items||[]).map(row=>card(row)).join('')||'<div class="notice">No gallery rows yet.</div>'; document.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>saveAction(btn.dataset.index,btn.dataset.action))); document.querySelectorAll('[data-field]').forEach(el=>el.addEventListener('change',()=>patchRow(el.dataset.index))); }
-    function card(row){ const warnings=(row.repair_warnings||[]).map(w=>`<div class="repair">⚠ ${esc(w)}</div>`).join(''); return `<article class="card approval-card"><div><span class="status-pill ${esc(row.approval_status)}">${esc(row.approval_status)}</span></div><h3>${esc(row.title)}</h3><div class="muted">${esc(row.service)} · ${esc(row.town||row.location)}</div><div class="ba-grid"><figure><img src="${esc(row.before_url)}" alt="Before ${esc(row.title)}" onerror="this.alt='Before image unavailable';this.style.opacity=.35"><figcaption class="muted">Before</figcaption></figure><figure><img src="${esc(row.after_url)}" alt="After ${esc(row.title)}" onerror="this.alt='After image unavailable';this.style.opacity=.35"><figcaption class="muted">After</figcaption></figure></div>${warnings}<label>Title<input data-field="title" data-index="${row.index}" value="${esc(row.title)}"></label><label>Before URL<input data-field="before_url" data-index="${row.index}" value="${esc(row.before_url)}"></label><label>After URL<input data-field="after_url" data-index="${row.index}" value="${esc(row.after_url)}"></label><label>Customer-safe note<textarea data-field="note" data-index="${row.index}" rows="2">${esc(row.note||'')}</textarea></label><div class="small-actions"><button class="btn primary small" type="button" data-action="approve" data-index="${row.index}">Approve public</button><button class="btn ghost small" type="button" data-action="hide" data-index="${row.index}">Hide/private</button><button class="btn ghost small" type="button" data-action="reject" data-index="${row.index}">Reject</button><button class="btn ghost small" type="button" data-action="delete" data-index="${row.index}">Delete</button></div></article>`; }
-    async function saveAction(index, action){ if(action==='delete' && !confirm('Delete this gallery row from the approval queue?')) return; const res=await fetch('/api/admin/gallery_approvals_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:Number(index),action})}); const out=await res.json().catch(()=>({})); if(!res.ok||!out.ok) return show('galleryStatus',out.error||'Could not save gallery action.','bad'); show('galleryStatus','Gallery updated.','ok'); await load(); }
-    async function patchRow(index){ const fields=[...document.querySelectorAll(`[data-index="${CSS.escape(String(index))}"][data-field]`)]; const patch={}; fields.forEach(el=>patch[el.dataset.field]=el.value); const res=await fetch('/api/admin/gallery_approvals_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:Number(index),action:'patch',patch})}); const out=await res.json().catch(()=>({})); if(!res.ok||!out.ok) return show('galleryStatus',out.error||'Could not save edited gallery row.','bad'); show('galleryStatus','Gallery row saved.','ok'); }
-    $('galleryCandidates')?.addEventListener('click',async e=>{const b=e.target.closest('[data-copy-candidate]');if(!b)return;try{await navigator.clipboard.writeText(b.dataset.copyCandidate);show('galleryStatus','Candidate image URL copied. Paste it into the After image URL field.','ok');}catch{show('galleryStatus',b.dataset.copyCandidate,'warn');}});
+    const $=id=>document.getElementById(id);
+    const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    function show(id,msg,kind=''){const el=$(id);if(!el)return;el.style.display='block';el.className='notice '+kind;el.textContent=msg;}
+    function kpi(label,value){return `<div class="kpi-box"><span class="muted">${esc(label)}</span><strong>${esc(value)}</strong></div>`;}
+    function blockers(items){return (items||[]).map(v=>`<div>• ${esc(v)}</div>`).join('');}
+
+    async function loadCandidates(){
+      const box=$('galleryCandidates');if(!box)return;
+      try{
+        const res=await fetch('/api/admin/gallery_media_candidates_list',{credentials:'include',cache:'no-store'});
+        const data=await res.json().catch(()=>({}));
+        if(!res.ok||!data.ok)throw new Error(data.error||'Could not load final-media candidates.');
+        if(data.blocked_count)show('candidateStatus',`${data.blocked_count} candidate row(s) were withheld by the Build 283 pairing-eligibility gate.`,'warn');
+        else $('candidateStatus').style.display='none';
+        box.innerHTML=(data.candidates||[]).map(row=>`<article class="card approval-card">
+          ${row.media_url?`<img class="img" loading="lazy" src="${esc(row.media_url)}" alt="${esc(row.caption||'Final detailing result')}">`:'<div class="visual-placeholder" data-visual-placeholder="gallery_before_after"><strong>Final media stored</strong><span>Preview unavailable.</span></div>'}
+          <div class="badges"><span class="status-pill ready">pairing eligible</span><span class="badge">${esc(row.status||'queued')}</span><span class="badge">${esc(row.consent_status||'pairing review')}</span></div>
+          <h3>${esc(row.caption||'Final detailing result')}</h3>
+          <p class="muted">Source job media stays internal here. Using it as the After image creates/updates only a draft Gallery row.</p>
+          ${row.media_url?`<button class="btn ghost small" type="button" data-use-candidate="1" data-url="${esc(row.media_url)}" data-booking="${esc(row.booking_id||'')}" data-media="${esc(row.job_media_id||'')}">Use as After image</button>`:''}
+        </article>`).join('')||'<div class="notice">No pairing-eligible final photos are queued yet. Use Admin Progress → Queue for Gallery on approved final media.</div>';
+      }catch(err){box.innerHTML=`<div class="notice bad">${esc(err.message)}</div>`;}
+    }
+
+    async function load(){
+      const res=await fetch('/api/admin/gallery_approvals_list',{credentials:'include',cache:'no-store'});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok||!data.ok)throw new Error(data.error||'Could not load Gallery approvals.');
+      const c=data.counts||{};
+      $('privacyRule').textContent=data.privacy_rule||'';
+      $('proofRule').textContent=data.proof_rule||'';
+      $('galleryCounts').innerHTML=[
+        kpi('Total rows',c.total||0),
+        kpi('Public-use approved',c.approved||0),
+        kpi('Publish eligible',c.publish_eligible||0),
+        kpi('Published',c.published||0),
+        kpi('Real proof ready',c.proof_ready||0),
+        kpi('Needs repair',c.needs_repair||0),
+        kpi('Source',data.source_status||'unknown')
+      ].join('');
+      $('approvalRows').innerHTML=(data.items||[]).map(row=>card(row)).join('')||'<div class="notice">No Gallery rows yet.</div>';
+      document.querySelectorAll('[data-action]').forEach(btn=>btn.addEventListener('click',()=>saveAction(btn.dataset.index,btn.dataset.action)));
+      document.querySelectorAll('[data-field]').forEach(el=>el.addEventListener('change',()=>patchRow(el.dataset.index)));
+    }
+
+    function card(row){
+      const warnings=(row.repair_warnings||[]).map(w=>`<div class="repair">⚠ ${esc(w)}</div>`).join('');
+      const publishBlockers=blockers(row.publish_blockers);
+      const proofBlockers=blockers(row.proof_blockers);
+      const published=row.publication_status==='published';
+      return `<article class="card approval-card">
+        <div class="badges"><span class="status-pill ${esc(row.approval_status)}">${esc(row.approval_status)}</span><span class="status-pill ${esc(row.publication_status)}">${esc(row.publication_status)}</span><span class="status-pill ${row.proof_eligible?'ready':'blocked'}">${row.proof_eligible?'real proof ready':'proof incomplete'}</span></div>
+        <h3>${esc(row.title)}</h3><div class="muted">${esc(row.service)} · ${esc(row.town||row.location)}${row.vehicle_label?` · ${esc(row.vehicle_label)}`:''}</div>
+        <div class="ba-grid"><figure><img src="${esc(row.before_url)}" alt="Before ${esc(row.title)}" onerror="this.alt='Before image unavailable';this.style.opacity=.35"><figcaption class="muted">Before</figcaption></figure><figure><img src="${esc(row.after_url)}" alt="After ${esc(row.title)}" onerror="this.alt='After image unavailable';this.style.opacity=.35"><figcaption class="muted">After</figcaption></figure></div>
+        ${warnings}
+        ${!row.publish_eligible?`<div class="blockers"><strong>Cannot publish yet</strong>${publishBlockers}</div>`:''}
+        ${!row.proof_eligible?`<details><summary>Real-proof requirements</summary><div class="muted">${proofBlockers}</div></details>`:''}
+        <label>Title<input data-field="title" data-index="${row.index}" value="${esc(row.title)}"></label>
+        <label>Service<input data-field="service" data-index="${row.index}" value="${esc(row.service)}"></label>
+        <label>Town / location<input data-field="town" data-index="${row.index}" value="${esc(row.town||'')}"></label>
+        <label>Vehicle type / label<input data-field="vehicle_label" data-index="${row.index}" value="${esc(row.vehicle_label||'')}"></label>
+        <label>Condition summary<input data-field="condition_summary" data-index="${row.index}" value="${esc(row.condition_summary||'')}"></label>
+        <label>Before URL<input data-field="before_url" data-index="${row.index}" value="${esc(row.before_url)}"></label>
+        <label>After URL<input data-field="after_url" data-index="${row.index}" value="${esc(row.after_url)}"></label>
+        <label>Problem<textarea data-field="problem" data-index="${row.index}" rows="2">${esc(row.problem||'')}</textarea></label>
+        <label>Process<textarea data-field="process" data-index="${row.index}" rows="2">${esc(row.process||'')}</textarea></label>
+        <label>Result<textarea data-field="result" data-index="${row.index}" rows="2">${esc(row.result||'')}</textarea></label>
+        <label>Customer-safe note<textarea data-field="note" data-index="${row.index}" rows="2">${esc(row.note||'')}</textarea></label>
+        <div class="small-actions">
+          <button class="btn ghost small" type="button" data-action="approve" data-index="${row.index}">Confirm public-use approval</button>
+          ${published?`<button class="btn ghost small" type="button" data-action="unpublish" data-index="${row.index}">Unpublish</button>`:`<button class="btn primary small" type="button" data-action="publish" data-index="${row.index}" ${row.publish_eligible?'':'disabled'}>Publish</button>`}
+          <button class="btn ghost small" type="button" data-action="hide" data-index="${row.index}">Hide/private</button>
+          <button class="btn ghost small" type="button" data-action="reject" data-index="${row.index}">Reject</button>
+          <button class="btn ghost small" type="button" data-action="delete" data-index="${row.index}">Delete</button>
+        </div>
+      </article>`;
+    }
+
+    async function saveAction(index,action){
+      if(action==='delete'&&!confirm('Delete this Gallery row from the approval queue?'))return;
+      if(action==='approve'&&!confirm('Confirm that actual customer/public-use consent and media privacy review are complete for this row? This does not publish it.'))return;
+      if(action==='publish'&&!confirm('Publish this reviewed Gallery row to the public site?'))return;
+      const res=await fetch('/api/admin/gallery_approvals_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:Number(index),action})});
+      const out=await res.json().catch(()=>({}));
+      if(!res.ok||!out.ok){
+        const extra=(out.blockers||[]).length?` ${(out.blockers||[]).join('; ')}`:'';
+        return show('galleryStatus',(out.error||'Could not save Gallery action.')+extra,'bad');
+      }
+      show('galleryStatus',action==='publish'?'Gallery row published.':action==='unpublish'?'Gallery row unpublished.':'Gallery updated.','ok');
+      await load();
+    }
+
+    async function patchRow(index){
+      const fields=[...document.querySelectorAll(`[data-index="${CSS.escape(String(index))}"][data-field]`)];
+      const patch={};fields.forEach(el=>patch[el.dataset.field]=el.value);
+      const res=await fetch('/api/admin/gallery_approvals_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({index:Number(index),action:'patch',patch})});
+      const out=await res.json().catch(()=>({}));
+      if(!res.ok||!out.ok)return show('galleryStatus',out.error||'Could not save edited Gallery row.','bad');
+      show('galleryStatus','Gallery row saved. Publication-sensitive edits require an explicit Publish review.','ok');
+      await load();
+    }
+
+    $('galleryCandidates')?.addEventListener('click',e=>{
+      const b=e.target.closest('[data-use-candidate]');if(!b)return;
+      $('addAfterUrl').value=b.dataset.url||'';
+      $('sourceBookingId').value=b.dataset.booking||'';
+      $('sourceJobMediaId').value=b.dataset.media||'';
+      show('addStatus','Final-media candidate selected as the After image. Add the matching Before image and proof context; the new row will stay draft.','ok');
+      $('addAfterUrl').focus();
+    });
     $('reloadCandidatesBtn')?.addEventListener('click',loadCandidates);
     $('reloadBtn')?.addEventListener('click',()=>load().catch(err=>show('galleryStatus',err.message,'bad')));
-    $('addForm').addEventListener('submit',async e=>{ e.preventDefault(); const item=Object.fromEntries(new FormData(e.currentTarget).entries()); const res=await fetch('/api/admin/gallery_approvals_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'add',item})}); const out=await res.json().catch(()=>({})); if(!res.ok||!out.ok) return show('addStatus',out.error||'Could not add gallery item.','bad'); e.currentTarget.reset(); show('addStatus','Gallery row added to approval queue.','ok'); await load(); });
+    $('addForm').addEventListener('submit',async e=>{
+      e.preventDefault();
+      const item=Object.fromEntries(new FormData(e.currentTarget).entries());
+      const res=await fetch('/api/admin/gallery_approvals_save',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'add',item})});
+      const out=await res.json().catch(()=>({}));
+      if(!res.ok||!out.ok)return show('addStatus',out.error||'Could not add Gallery item.','bad');
+      e.currentTarget.reset();
+      show('addStatus','Gallery row added as a draft. Confirm public-use approval, complete proof context, then publish explicitly.','ok');
+      await load();
+    });
     window.AdminShell.boot({pageKey:'admin-gallery',onReady:async()=>{try{await Promise.all([load(),loadCandidates()]);}catch(err){show('galleryStatus',err.message,'bad');}}});
   })();
   </script>

@@ -17,21 +17,30 @@ export const GROWTH_DEFAULTS = {
   membership_plan_settings: {
     enabled: false,
     waitlist_enabled: true,
-    plan_name: 'Maintain Your Shine Plan',
-    cycle_label: 'Every 4 or 8 weeks',
-    teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.',
+    plan_name: 'Maintenance Plan Interest',
+    cycle_label: 'Cadence selected after service review',
+    teaser: 'Tell us what recurring schedule would be useful after a completed reset or detail. This is an interest list; no subscription, fixed cadence, price, discount, or perk is promised.',
     benefits: [
-      'Priority reminder before your preferred date',
-      'Faster rebooking using your saved vehicle',
-      'Cleaner predictable maintenance cycle'
+      'Recurring service starts from current vehicle condition and completed service history',
+      'Rebooking continues through the live booking flow',
+      'Cadence is confirmed around use, season, condition, and service area'
     ],
-    why_title: 'Why add this now',
-    why_lines: ['Repeat scheduling | Less back-and-forth','Preferred cycle | Every 4 or 8 weeks','Local planning | Better crew forecasting','Booking path | Still uses the live booking flow'],
-    waitlist_intro: 'Leave your preferred cycle and a few details about the vehicles you want covered. We use this to shape the recurring-plan offer while actual reminder timing follows completed service history.',
-    self_serve_title: 'How this fits the self-serve direction',
-    self_serve_copy: 'Recurring plans should not replace the booking flow. They should make the same booking-led experience easier to repeat with reminder-first scheduling, saved vehicle details, and clearer maintenance timing.',
-    good_fit_title: 'Good fit for',
-    good_fit_lines: ['Busy households trying to keep vehicles presentable year-round','Repeat clients who already know their package and preferred clean cycle','Work-from-home or driveway-friendly bookings across Oxford and Norfolk areas'],
+    why_title: 'What the waitlist helps us learn',
+    why_lines: [
+      'Preferred cadence | Tell us what schedule would be useful',
+      'Vehicle mix | One vehicle or several',
+      'Season and use | Salt, pets, mileage and work use matter',
+      'Booking path | Final appointments still use the live booking flow'
+    ],
+    waitlist_intro: 'Leave the cadence you would prefer and a few vehicle details. We use this as demand and planning evidence; it does not create a membership or lock in pricing, discounts, perks, or appointment frequency.',
+    self_serve_title: 'How recurring service should fit booking',
+    self_serve_copy: 'Recurring service should make the existing booking flow easier to repeat, not replace current availability, vehicle review, service scope, price, add-on, deposit, or site-access rules.',
+    good_fit_title: 'Good fit for the interest list',
+    good_fit_lines: [
+      'Repeat customers who want a more predictable cleaning routine',
+      'Vehicles affected by seasonal salt, pets, frequent use, or work activity',
+      'Households or small businesses exploring repeat service without committing to a fixed membership'
+    ],
     reminder_enabled: true,
     reminder_channel: 'email',
     reminder_subject: 'It may be time to book your next Rosie Dazzlers clean',
@@ -41,6 +50,17 @@ export const GROWTH_DEFAULTS = {
   }
 };
 
+function normalizePublicMembershipSettings(raw) {
+  const source = raw && typeof raw === 'object' ? raw : {};
+  // Build 275 public safety boundary: retained database/admin experiments must
+  // not publish unapproved recurring pricing, cadence, discounts or perks.
+  return {
+    ...GROWTH_DEFAULTS.membership_plan_settings,
+    enabled: source.enabled === true,
+    waitlist_enabled: source.waitlist_enabled !== false
+  };
+}
+
 export async function loadGrowthSettings() {
   try {
     const res = await fetch('/api/growth_settings_public', { cache: 'no-store' });
@@ -49,7 +69,7 @@ export async function loadGrowthSettings() {
     return {
       quote_booking_settings: { ...GROWTH_DEFAULTS.quote_booking_settings, ...(out.quote_booking_settings || {}) },
       gift_delivery_settings: { ...GROWTH_DEFAULTS.gift_delivery_settings, ...(out.gift_delivery_settings || {}) },
-      membership_plan_settings: { ...GROWTH_DEFAULTS.membership_plan_settings, ...(out.membership_plan_settings || {}) }
+      membership_plan_settings: normalizePublicMembershipSettings(out.membership_plan_settings)
     };
   } catch {
     return JSON.parse(JSON.stringify(GROWTH_DEFAULTS));

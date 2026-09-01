@@ -77,3 +77,15 @@
 
   globalScope.ClientAuth = { API, loadCurrentCustomer, signUp, signIn, signOut, updateProfile, getCustomer, isAuthenticated, getState };
 })(window);
+
+// Build 285: the authenticated account page owns the history surface, while the
+// rebook handoff itself stays isolated in a fail-open module.
+(function loadBuild285CustomerRebook() {
+  const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path !== "/my-account" || document.querySelector('script[data-build285-customer-rebook]')) return;
+  const script = document.createElement("script");
+  script.type = "module";
+  script.src = "/assets/customer-rebook-v285.js";
+  script.dataset.build285CustomerRebook = "true";
+  document.head.appendChild(script);
+})();

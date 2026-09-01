@@ -137,3 +137,20 @@
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>init(document)); else init(document);
 })(window);
+
+// Build 284 — load the fail-closed contextual proof renderer only on eligible public decision pages.
+(function loadBuild284ContextualProof(){
+  function eligiblePage(){
+    return Boolean(document.querySelector('#rd-landing, [data-landing-slug], [data-build282="usecase-conversion"], [data-build278="local-seo-depth"]'));
+  }
+  function load(){
+    if (!eligiblePage() || document.querySelector('script[data-build284-contextual-proof-bootstrap]')) return;
+    const script=document.createElement('script');
+    script.src='/assets/contextual-proof-v284.js';
+    script.defer=true;
+    script.dataset.build284ContextualProofBootstrap='true';
+    document.head.appendChild(script);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', load, { once:true });
+  else load();
+})();
