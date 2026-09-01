@@ -9,7 +9,7 @@
 
 Build 288 is the active **authenticated customer privacy + device acceptance** slice. It follows the accepted Build 287 review/share checkpoint and keeps the retained Build 285 Production line unchanged until Development evidence is accepted and deliberately promoted.
 
-The exact Build 288 feature candidate is `9f8127861f958d430c094c592b76f96e5abca551`. Its focused source gate and Cloudflare feature preview are green. Development promotion is allowed only as a fast-forward from the accepted Build 287 `dev` lineage; Production promotion must follow accepted Development source/runtime/Cloudflare evidence.
+Build 288 promotion is allowed only after the exact feature head passes its focused source gate and Cloudflare feature preview. Development promotion must be a fast-forward from the accepted Build 287 `dev` lineage; Production promotion must follow accepted Development source/runtime/Cloudflare evidence.
 
 `main` remains at the accepted Build 285 Production promotion until that deliberate Build 288 Production step occurs.
 
