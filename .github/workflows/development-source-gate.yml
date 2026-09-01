@@ -44,6 +44,7 @@ jobs:
           node --check assets/customer-review-share-v287.js
           node --check assets/customer-share-entry-v287.js
           node --check assets/customer-privacy-v288.js
+          node --check assets/account-resilience-v289.js
           node --check assets/client-auth.js
           node --check assets/booking-hours.js
           node --check assets/pricing-catalog-client.js
@@ -86,6 +87,7 @@ jobs:
           bash -n scripts/build286_http_smoke.sh
           bash -n scripts/build287_http_smoke.sh
           bash -n scripts/build288_http_smoke.sh
+          bash -n scripts/build289_http_smoke.sh
 
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
@@ -129,6 +131,8 @@ jobs:
         run: python scripts/build287_release_check.py
       - name: Run current Build 288 focused guard
         run: python scripts/build288_release_check.py
+      - name: Run current Build 289 focused guard
+        run: python scripts/build289_release_check.py
 
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
@@ -160,8 +164,9 @@ jobs:
             echo "- Build 286 completed-booking review authority syntax: PASS"
             echo "- Build 287 review/share attribution syntax: PASS"
             echo "- Build 288 customer/staff privacy boundary syntax: PASS"
-            echo "- Development + Build 284-288 HTTP smoke helper syntax: PASS"
-            echo "- Retained Builds 271-288 focused guards: PASS"
+            echo "- Build 289 account accessibility/weak-network resilience syntax: PASS"
+            echo "- Development + Build 284-289 HTTP smoke helper syntax: PASS"
+            echo "- Retained Builds 271-289 focused guards: PASS"
             echo "- Cumulative release + one-H1 + route-copy guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
