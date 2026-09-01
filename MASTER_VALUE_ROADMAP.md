@@ -90,7 +90,7 @@ Continue completed-job → review/share → rebook → maintenance handoff while
 Build economics only after explicit business approval for qualification, reward value/type, timing, caps, refund handling, abuse controls, tax/accounting and expiry.
 
 ### 7. Payments / Finance / accounting
-Retain Build 273 authority. Development payment-provider configuration is owner-signed-off as present. Real transaction/settlement/reconciliation acceptance remains evidence-driven and should resume only when deliberately tested; no fabricated provider transaction evidence.
+Retain Build 273 authority. Development payment-provider configuration is owner-signed-off as present. Real transaction/settlement/reconciliation acceptance remains evidence-driven and should resume only when deliberately tested; no fabricated provider transaction evidence. Retain evidence links into `accounting_documents` and accountant-friendly export surfaces.
 
 ### 8. Continue modular extraction only when it creates value
 Preferred high-use order: Operations customer/booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
@@ -119,6 +119,12 @@ Never call a release Development-green merely because source exists. Exact featu
 ## Documentation policy
 
 Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are checkpoints; Git history is the archive.
+
+<!-- Historical Build 273 roadmap guard compatibility only.
+### 9. Payments / Finance / accounting
+accounting_documents
+accountant-friendly export surfaces
+-->
 
 <!-- Historical Build 289 retained-guard compatibility only; not the living build number.
 **Build:** 289
