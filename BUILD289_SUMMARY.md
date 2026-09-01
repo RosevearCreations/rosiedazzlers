@@ -4,7 +4,7 @@
 **Baseline:** accepted Build 288 Development  
 **Production:** remains closed
 
-Build 289 is a migration-free reliability/accessibility slice for the authenticated customer account. It does not change package pricing, availability, booking, deposit, checkout, Stripe, PayPal, referral economics, maintenance economics, or fleet economics.
+Build 289 is a migration-free reliability/accessibility slice for the authenticated customer account. Its explicit weak-network boundary is user-controlled recovery only. It does not change package pricing, availability, booking, deposit, checkout, Stripe, PayPal, referral economics, maintenance economics, or fleet economics.
 
 ## Customer account resilience
 
