@@ -101,3 +101,15 @@
   script.dataset.build286CustomerReview = "true";
   document.head.appendChild(script);
 })();
+
+// Build 287: follow a genuinely completed-service review prompt with neutral
+// Google/share actions without creating referral economics or publication authority.
+(function loadBuild287CustomerReviewShare() {
+  const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path !== "/my-account" || document.querySelector('script[data-build287-customer-review-share]')) return;
+  const script = document.createElement("script");
+  script.type = "module";
+  script.src = "/assets/customer-review-share-v287.js";
+  script.dataset.build287CustomerReviewShare = "true";
+  document.head.appendChild(script);
+})();

@@ -48,7 +48,8 @@ if (normalizedPath === "/book") {
   import("./booking-quick-start-v274.js")
     .then(() => import("./booking-retention-v275.js"))
     .then(() => import("./customer-rebook-v285.js"))
+    .then(() => import("./customer-share-entry-v287.js"))
     .catch((error) => {
-      console.warn("Optional Build 285 booking presentation could not be loaded; legacy booking remains available.", error);
+      console.warn("Optional Build 285/287 booking presentation could not be loaded; legacy booking remains available.", error);
     });
 }

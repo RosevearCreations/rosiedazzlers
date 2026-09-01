@@ -19,7 +19,8 @@ export async function onRequestGet({ request, env }) {
     return withCors(json({
       ok: true,
       eligibility_rule: "authenticated_customer_completed_booking",
-      eligible_bookings: eligibleBookings
+      eligible_bookings: eligibleBookings,
+      google_review_url: GOOGLE_REVIEW_URL
     }));
   } catch (err) {
     return withCors(json({ error: safeError(err) }, 500));
@@ -84,7 +85,8 @@ export async function onRequestPost({ request, env }) {
       ok: true,
       review: Array.isArray(rows) ? rows[0] || null : null,
       booking_verified: true,
-      publication_state: "submitted_for_approval"
+      publication_state: "submitted_for_approval",
+      google_review_url: GOOGLE_REVIEW_URL
     }));
   } catch (err) {
     return withCors(json({ error: safeError(err) }, 500));

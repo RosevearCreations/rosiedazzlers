@@ -9,7 +9,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
-
 def run_guard(path: Path) -> int:
     proc = subprocess.run(
         [sys.executable, str(path)],
@@ -22,7 +21,6 @@ def run_guard(path: Path) -> int:
     if proc.stderr.strip():
         print(proc.stderr.strip(), file=sys.stderr)
     return proc.returncode
-
 
 def main() -> int:
     bad = []
@@ -71,16 +69,21 @@ def main() -> int:
             return code
 
     # Build 286 owns the authenticated completed-job -> customer-review authority.
-    # release_check invokes this SEO guard, so the latest customer trust boundary is
-    # retained by Development source and Cloudflare acceptance without changing H1 scope.
     build286 = ROOT / "scripts/build286_release_check.py"
     if build286.exists():
         code = run_guard(build286)
         if code:
             return code
 
-    return 0
+    # Build 287 owns neutral review follow-up + customer-share attribution while
+    # leaving booking/referral economics untouched.
+    build287 = ROOT / "scripts/build287_release_check.py"
+    if build287.exists():
+        code = run_guard(build287)
+        if code:
+            return code
 
+    return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
