@@ -85,6 +85,10 @@ jobs:
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
       - name: Check retained payment money units
         run: node scripts/build274_payment_money_check.mjs
+      - name: Run retained Build 275 focused guard
+        run: python scripts/build275_release_check.py
+      - name: Run current Build 276 focused guard
+        run: python scripts/build276_release_check.py
       - name: Run retained Builds 271-288 focused guards
         run: |
           for build in $(seq 271 288); do python "scripts/build${build}_release_check.py"; done
