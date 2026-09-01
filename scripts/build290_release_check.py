@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
-import re, subprocess, sys
+import subprocess, sys
 
 ROOT = Path(__file__).resolve().parents[1]
 errors = []
@@ -39,7 +39,6 @@ need("functions/api/admin/_middleware.js",
      'quote_pipeline_save: "operations.quote.manage"',
      'quote_deposit_refund_save: "finance.refund.manage"',
      "requireStaffAccess", "requireActionAccess")
-
 need("assets/admin-auth.js", "requireAuth", "canAccessPage", "redirectWithReturn", "redirectToSafeHome", "MODULE_ROLE_CEILINGS")
 need("assets/admin-shell.js", "AdminAuth.requireAuth", "applyVisibility", "setLoading")
 need("admin-customers.html", 'noindex,nofollow,noarchive', '/assets/admin-auth.js', '/assets/admin-shell.js')
@@ -52,7 +51,7 @@ need("scripts/build290_http_smoke.sh",
 need("scripts/build290_rollback_check.py",
      "4464e758e02332138bca039149ecbb9ff475988c",
      "a4e279eae6cb7136d309278b568fa5769a70d796",
-     "HEAD^", "forward restore commit", "No force push")
+     "merge-base", "forward restore commit", "No force push")
 need("BUILD290_ROLLBACK.md",
      "forward restore commit", "git read-tree --reset -u", "git write-tree", "git push origin dev",
      "Do not move `main`", "No force push", "migration-free")
@@ -79,10 +78,9 @@ for rel in ["functions/api/_lib/staff-auth.js", "functions/api/_lib/action-permi
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
     if proc.returncode:
         errors.append(f"node --check failed {rel}: {proc.stderr.strip()}")
-for rel in ["scripts/build290_http_smoke.sh"]:
-    proc = subprocess.run(["bash", "-n", str(ROOT / rel)], capture_output=True, text=True)
-    if proc.returncode:
-        errors.append(f"bash -n failed {rel}: {proc.stderr.strip()}")
+proc = subprocess.run(["bash", "-n", str(ROOT / "scripts/build290_http_smoke.sh")], capture_output=True, text=True)
+if proc.returncode:
+    errors.append(f"bash -n failed scripts/build290_http_smoke.sh: {proc.stderr.strip()}")
 
 if errors:
     print("Build 290 authorization/rollback readiness check: FAIL")
