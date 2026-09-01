@@ -1,15 +1,15 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 287  
+**Build:** 288  
 **Updated:** 2026-09-01  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Development entered Build 287 from the accepted Build 286 checkpoint `c00e118449ece60b39b0d229afdef76ba695ceba`. Build 286 closed the direct customer-review authority gap: a signed-in customer can submit a review only against a booking the server proves belongs to that account and is genuinely completed.
+Development entered Build 288 from the accepted Build 287 checkpoint `8e188489674da3a1f727ea410e202e62216f8880`. Build 287 closed the migration-free completed-service review/share attribution loop while keeping referral economics unapproved.
 
-Build 287 is the active **customer review follow-up + referral sharing mechanics** slice. It extends the completed-service trust loop without introducing referral credits, discounts, payouts, loyalty economics, a parallel review store, or a booking-attribution schema.
+Build 288 is the active **customer/staff privacy boundary + authenticated/mobile/device acceptance** slice. It removes customer authority over staff-private note fields, narrows customer-facing API shapes, restores safe account-preference reload behavior, and brings the cumulative Development source gate current through Build 288.
 
 Production remains closed. `main` remains the deliberately promoted Build 285 Production line at `d99e2a6874e4f387d8b916e7621fb7eb08abf70e`. Never force-move `main` to `dev`; future Production promotion must be a deliberate reconciliation after exact Development evidence is accepted.
 
@@ -50,7 +50,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Completed customer/business work through Build 286
+## Completed customer/business work through Build 287
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
@@ -62,72 +62,64 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Build 284 added fail-closed **contextual proof** placement at relevant service/location/use-case decisions.
 - Build 285 added authenticated customer history → current booking rebook handoff without carrying old price/deposit/payment authority.
 - Build 286 made direct customer reviews completed-booking-only and removed caller authority over vehicle/source/Google URL fields.
+- Build 287 added neutral Google review follow-up, Share Rosie and analytics-only referral-origin booking entry without referral economics.
 
 Do not re-open these items because an older roadmap mentions them.
 
-## Build 287 — active review follow-up + referral sharing mechanics
+## Build 288 — active customer/staff privacy boundary
 
-### Review/provider boundary
+### Staff-private field boundary
 
-`functions/api/client/reviews_save.js` remains the authenticated completed-booking authority. Build 287 returns the server-owned Rosie Google destination from that endpoint so account code does not invent or trust a browser-supplied provider URL.
+Customer-facing profile and vehicle APIs may read broad service-role rows internally, but responses must pass through explicit customer-safe projections before leaving the Worker. `admin_private_notes` is staff-only and must never be customer-readable or customer-writable authority.
 
-The account helper may offer **Review Rosie on Google**, but it must not:
+The existing customer-owned fields remain valid: general notes, client-private preferences, notes for team and detailer-visible notes. Build 288 does not convert those into staff-only fields.
 
-- pre-fill praise or a rating;
-- claim a Google review was returned or verified;
-- auto-approve or auto-publish the first-party review;
-- convert provider activity into public proof without a real later authority.
+### My Account boundary
 
-### Share boundary
+`assets/customer-privacy-v288.js` hides and disables the two legacy admin-only controls on `/my-account`. This is presentation hardening only; server omission of `admin_private_notes` from profile/vehicle writes is the actual authorization boundary.
 
-The My Account helper offers **Share Rosie** only after the account has at least one completed booking eligible under the Build 286 rule.
+The dashboard reloads the authenticated profile and returns only the customer-safe projection so legitimate profile preferences saved by the customer remain available after reload.
 
-The share target is same-origin `/book` with only:
+### Review boundary
 
-`utm_source=customer_share&utm_campaign=customer_referral`
+Build 286/287 completed-booking review authority remains unchanged. Build 288 only projects the returned review row through the customer-safe shape so future staff-only review metadata cannot leak through a broad service-role response.
 
-This is attribution evidence, not a referral reward. Native device sharing is preferred; clipboard copy is a fallback.
+### Auth/device/runtime boundary
 
-### Booking boundary
+Anonymous customer mutation endpoints remain fail-closed. Build 288 runtime smoke verifies profile, vehicle and review denial without a session; signed-out dashboard behavior; the responsive My Account bootstrap; and the deployed privacy helper.
 
-`assets/customer-share-entry-v287.js` recognizes only the exact Build 287 UTM pair. It may show a neutral “shared by a Rosie customer” notice and emit `customer_share_booking_entry`.
+Build 288 does not add a service worker or claim a full PWA implementation. Existing mobile-first viewport/layout behavior is retained while broader real-device/accessibility/weak-network acceptance continues as evidence work.
 
-It must not alter package, vehicle, size, add-ons, slot, availability, price, deposit, checkout, Stripe, PayPal, payment state, promo codes or booking notes. Existing booking authority remains authoritative.
+### Release mechanics
 
-### Analytics boundary
+The cumulative Development Source Gate now runs focused Builds 271–288, including Builds 286 and 287 that previously depended on their separate workflows. Exact feature preview and exact Development evidence remain mandatory before any release is called green.
 
-Build 287 reuses `assets/public-analytics.js` and `/api/analytics/ingest`. Those authorities already capture `utm_source` and `utm_campaign`. No parallel analytics store or referral ledger is introduced.
-
-Build 287 measures **referral-origin traffic**, not a successful/reward-eligible referral. A future commercial referral model still requires explicit business rules.
-
-### Storage boundary
-
-Build 287 requires **no schema migration**. It reuses current review, booking and analytics authorities and introduces no new customer/reward balance.
+Build 288 requires **no schema migration** and changes no pricing, booking, deposit or payment authority.
 
 ## Current validation authority
 
 - cumulative: `scripts/release_check.py`;
 - public H1/current customer guards: `scripts/seo_h1_check.py`;
-- retained Builds 282–286 focused guards;
-- focused Build 287 guard: `scripts/build287_release_check.py`;
-- feature source workflow: `.github/workflows/build287-source-gate.yml`;
-- Build 287 runtime smoke: `scripts/build287_http_smoke.sh`;
-- Build 287 Development runtime workflow: `.github/workflows/build287-development-acceptance.yml`;
+- retained Builds 282–287 focused guards;
+- focused Build 288 guard: `scripts/build288_release_check.py`;
+- feature source workflow: `.github/workflows/build288-source-gate.yml`;
+- Build 288 runtime smoke: `scripts/build288_http_smoke.sh`;
+- Build 288 Development runtime workflow: `.github/workflows/build288-development-acceptance.yml`;
 - Development source workflow: `.github/workflows/development-source-gate.yml`;
 - retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - full Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
 A release is not Development-green merely because source exists. The exact feature SHA must pass its source gate and Cloudflare preview before `dev` moves; then exact Development source/runtime/Cloudflare evidence must agree.
 
-## Next business/product work after Build 287
+## Next business/product work after Build 288
 
 Proceed where work is not blocked by real business/provider evidence:
 
-1. publish genuine consented Rosie proof through the retained Build 283/284 path;
-2. verify Google Business Profile/Search Console ownership and provider evidence when account access is available;
-3. maintenance-plan product/account/booking path after cadence, price/perks and pause/cancel rules are approved;
-4. fleet/workplace acquisition after minimum-vehicle, discount/travel and recurring-service rules are approved;
-5. authenticated/mobile/accessibility/weak-network acceptance;
+1. continue authenticated role/action/direct-URL/API and real-device/accessibility/weak-network acceptance;
+2. publish genuine consented Rosie proof through the retained Build 283/284 path;
+3. verify Google Business Profile/Search Console ownership and provider evidence when account access is available;
+4. maintenance-plan product/account/booking path after cadence, price/perks and pause/cancel rules are approved;
+5. fleet/workplace acquisition after minimum-vehicle, discount/travel and recurring-service rules are approved;
 6. Stripe/PayPal provider acceptance and Finance settlement/reconciliation closure;
 7. continue modular/security/reliability work without waking dormant subsystems.
 
@@ -172,4 +164,9 @@ Build 274 active implementation
 I.T. Connections
 Quick Book
 Mobile Auto Detailing & Interior/Exterior Restoration
+-->
+
+<!-- Historical Build 287 retained-guard compatibility only; not the living build number.
+**Build:** 287
+Build 287 review follow-up + referral sharing mechanics remain retained.
 -->
