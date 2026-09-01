@@ -1,0 +1,61 @@
+name: Build 291 Development Runtime Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build291-development
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Verify Build 291 maintenance retention runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 40
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Reconfirm Build 291 source authority
+        run: |
+          python scripts/build291_release_check.py
+          python scripts/build290_release_check.py
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+
+      - name: Wait for Development alias and run Build 291 smoke
+        run: |
+          for attempt in $(seq 1 24); do
+            if bash scripts/build291_http_smoke.sh https://dev.rosiedazzlers.pages.dev "Build 291 Development runtime"; then
+              exit 0
+            fi
+            echo "Build 291 Development alias not converged yet (attempt $attempt/24)."
+            sleep 10
+          done
+          exit 1
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo "### Build 291 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Maintenance interest source-safe page: PASS"
+            echo "- Missing-email and invalid-cadence fail-before-persistence probes: PASS"
+            echo "- No smoke-test waitlist row created: PASS"
+            echo "- Build 290 authorization + forward restore retained: PASS"
+            echo "- This does not claim maintenance pricing, discounts, perks, cadence commitments, appointments or recurring billing."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"
