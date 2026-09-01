@@ -1,4 +1,5 @@
 import { getCurrentCustomerSession, touchCustomerSession, rotateCustomerSession, appendSetCookie } from "../_lib/customer-session.js";
+import { customerSafeVehicles } from "./_lib/customer-safe-shape.js";
 
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestGet(context){ return handle(context); }
@@ -23,7 +24,7 @@ async function handle(context){
     let headersOut = new Headers({ "Content-Type":"application/json; charset=utf-8", "Cache-Control":"no-store" });
     if (rotatedCookie) headersOut = appendSetCookie(headersOut, rotatedCookie);
     headersOut = applyCors(headersOut);
-    return new Response(JSON.stringify({ ok:true, vehicles:Array.isArray(rows)?rows:[] }), { status:200, headers: headersOut });
+    return new Response(JSON.stringify({ ok:true, vehicles:customerSafeVehicles(rows) }), { status:200, headers: headersOut });
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 function serviceHeaders(env){ return { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type":"application/json" }; }
