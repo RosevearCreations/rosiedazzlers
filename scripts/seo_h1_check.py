@@ -83,6 +83,20 @@ def main() -> int:
         if code:
             return code
 
+    # Build 288 owns the customer/staff privacy boundary.
+    build288 = ROOT / "scripts/build288_release_check.py"
+    if build288.exists():
+        code = run_guard(build288)
+        if code:
+            return code
+
+    # Build 289 owns accessible signed-out recovery and user-initiated weak-network retry.
+    build289 = ROOT / "scripts/build289_release_check.py"
+    if build289.exists():
+        code = run_guard(build289)
+        if code:
+            return code
+
     return 0
 
 if __name__ == "__main__":
