@@ -1,4 +1,6 @@
 import { getCurrentCustomerSession, serviceHeaders } from "../_lib/customer-session.js";
+import { customerSafeProfile } from "./_lib/customer-safe-shape.js";
+
 export async function onRequestOptions(){return new Response("",{status:204,headers:corsHeaders()});}
 export async function onRequestPost(context){ const {request,env}=context; try{
  if(!env.SUPABASE_URL||!env.SUPABASE_SERVICE_ROLE_KEY) return withCors(json({error:"Server configuration is incomplete."},500));
@@ -24,7 +26,6 @@ export async function onRequestPost(context){ const {request,env}=context; try{
    notes: cleanText(body.notes),
    client_private_notes: cleanText(body.client_private_notes),
    detailer_visible_notes: cleanText(body.detailer_visible_notes),
-   admin_private_notes: cleanText(body.admin_private_notes),
    notification_opt_in: toBoolean(body.notification_opt_in),
    notification_channel: normalizeNotificationChannel(body.notification_channel),
    detailer_chat_opt_in: toBoolean(body.detailer_chat_opt_in),
@@ -39,7 +40,7 @@ export async function onRequestPost(context){ const {request,env}=context; try{
  };
  const res=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(current.customer_profile.id)}`,{method:"PATCH",headers:{...serviceHeaders(env),Prefer:"return=representation"},body:JSON.stringify(patch)});
  if(!res.ok) throw new Error(`Could not update profile. ${await res.text()}`);
- const rows=await res.json().catch(()=>[]); return withCors(json({ok:true,message:"Profile updated.",customer:Array.isArray(rows)?rows[0]||null:null}));
+ const rows=await res.json().catch(()=>[]); const customer=customerSafeProfile(Array.isArray(rows)?rows[0]||null:null); return withCors(json({ok:true,message:"Profile updated.",customer}));
  } catch(err){ return withCors(json({error:err?.message||"Unexpected server error."},500)); }}
 function cleanText(v){ const s=String(v??"").trim(); return s||null; }
 function toBoolean(v){ if(typeof v==='boolean') return v; const s=String(v||"").trim().toLowerCase(); return s==='true'||s==='1'||s==='yes'||s==='on'; }

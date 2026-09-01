@@ -1,0 +1,48 @@
+name: Build 288 Development Runtime Acceptance
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-build288-development-runtime
+  cancel-in-progress: true
+jobs:
+  privacy-runtime:
+    name: Verify Build 288 customer privacy/auth runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CF_DEV_URL: https://dev.rosiedazzlers.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - name: Reconfirm Build 288 source authority
+        run: python scripts/build288_release_check.py
+      - name: Wait for Development alias and run Build 288 smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          ready=false
+          for attempt in $(seq 1 24); do
+            echo "Checking Build 288 Development runtime convergence (attempt ${attempt}/24)."
+            if bash scripts/build288_http_smoke.sh "$CF_DEV_URL" "Build 288 Development attempt ${attempt}/24"; then ready=true; break; fi
+            [[ "$attempt" -ge 24 ]] || sleep 10
+          done
+          [[ "$ready" == true ]] || { echo "::error::Build 288 Development runtime did not converge."; exit 26; }
+      - name: Acceptance summary
+        run: |
+          {
+            echo "### Build 288 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Staff-private account controls suppressed: PASS"
+            echo "- Anonymous profile/vehicle/review mutation boundaries: PASS"
+            echo "- Signed-out dashboard remains no-store and staff-private-field free: PASS"
+            echo "- Existing responsive My Account bootstrap retained: PASS"
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"

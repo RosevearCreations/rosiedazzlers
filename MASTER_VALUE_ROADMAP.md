@@ -1,21 +1,23 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 284  
-**Updated:** 2026-08-31  
+**Build:** 288  
+**Updated:** 2026-09-01  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
 ## North star
 
 Build a professional mobile-first detailing platform connecting:
 
-`search / lead → service/use-case recommendation → quote / booking → assigned work → live customer/detailer interaction → proof → payment → accounting/tax workpaper → genuine review/public proof → repeat maintenance`
+`search / lead → service/use-case recommendation → quote / booking → assigned work → live customer/detailer interaction → proof → payment → accounting/tax workpaper → genuine review/public proof → referral/rebook → repeat maintenance`
 
 while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–283 added customer booking, service/local acquisition depth, release reliability and safe Gallery proof/publication mechanics without replacing those authorities.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–287 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook, completed-job review and neutral review/share attribution without replacing those foundations.
+
+**Production remains closed.** `main` changes only through deliberate promotion from accepted Development evidence.
 
 Do not regress:
 
@@ -23,268 +25,116 @@ Do not regress:
 - Complete = **Best value**;
 - Exterior Detail differentiated from Premium Wash;
 - current Small/Mid/Oversized + condition/quote pricing authority;
-- booking/deposit/conflict mechanics;
+- booking/deposit/conflict/payment mechanics;
 - one meaningful H1 per indexable public page;
 - persistent tax-support/evidence/accountant-package authority;
-- no fabricated accounting/tax facts, reviews, consent, proof or provider evidence.
-
-## Current architecture and permanent constraints
-
-The public website is the crawlable acquisition layer. Booking and authenticated Customer/Detailer/Operations/Admin/I.T./Finance/DAIP/Socials experiences remain application workflows optimized for phone/touch first, then tablet/desktop.
-
-Eight modules remain authoritative: Customer, Detailer, Operations / Supervisor, Business Administration, I.T. & Reliability, Finance, DAIP, and Socials & Promotion.
-
-Permanent constraints:
-
-- current package/add-on/vehicle-size pricing has one catalogue authority;
-- booking simplicity cannot bypass availability, quote, conflict, deposit/payment, consent or audit authority;
-- static-first service/local/use-case content, production canonicals and sitemap coverage;
-- no thin doorway pages, fabricated reviews or public customer media without real consent/privacy review and explicit publication;
-- sample fallback media is not real customer proof;
-- Rosie supplies standard detailing water and power; customers supply a safe/private/permitted work area;
-- no background polling merely because a module exists or a user could access it;
+- no fabricated accounting/tax facts, reviews, consent, proof or provider evidence;
 - `main` / Production changes only through deliberate promotion from accepted Development evidence.
 
 ## Delivered customer/business foundation
 
-### Quick Book / retention
+### Booking and retention
+Builds 274–275 and 285 provide problem-first Quick Book, Saved Garage assistance, true next useful openings, returning-customer shortcuts, authenticated rebook handoff, current-rule recalculation and booking-funnel analytics.
 
-Builds 274–275 already provide:
+### Service/local acquisition
+Builds 277–282 provide deep indexed service/add-on destinations, eight differentiated Oxford/Norfolk location destinations, self-contained mobile water/power positioning, one-H1/canonical/sitemap closure and three high-intent use-case booking paths.
 
-- problem-first Quick Book over the retained booking engine;
-- year/make/model and Saved Garage assistance;
-- editable package recommendations;
-- photo/quote branching for condition-dependent work;
-- true next useful AM/PM appointment shortcuts derived from the canonical calendar;
-- returning-customer reuse/rebook acceleration;
-- booking funnel evidence including exit instrumentation.
+### Proof/publication
+Build 283 keeps pairing eligibility separate from consent/privacy approval and explicit publish/unpublish. Build 284 places only eligible real contextual proof; sample fallback never counts as real Rosie proof.
 
-### Service and local acquisition authority
+### Review/share authority
+Build 286 requires a direct customer review to reference a genuinely completed booking belonging to the signed-in customer. Build 287 adds the server-owned Google destination and neutral Share Rosie UTM attribution without commercial referral economics.
 
-Builds 277–280 already provide:
+## Build 288 — customer/staff privacy boundary + authenticated device acceptance
 
-- all indexed add-on destinations guarded for useful decision depth, one H1, canonical, FAQ and scope confirmation;
-- specialist headlight and carpet/spill/restoration authority with condition-aware pricing explanations;
-- self-contained mobile water/power normalization;
-- eight differentiated Oxford/Norfolk static location destinations;
-- sitemap/canonical/H1 closure and useful customer decision/internal-link paths.
+Build 288 closes a concrete customer authorization/privacy gap before continuing broader device work.
 
-### Development reliability
+Rules:
 
-Build 281 already provides exact branch + exact SHA Cloudflare deployment matching, wait-until-success behavior, `uses_functions=true`, immutable exact-deployment static identity checks, bounded `dev` alias convergence with full API/runtime smoke, and non-mutating Production promotion evidence.
-
-### High-intent conversion
-
-Build 282 provides three crawlable customer situations feeding the existing booking authority:
-
-1. **Pre-Sale / Lease-Return Detail** — `/pre-sale-lease-return-detailing` → `need=presale` → Complete Detail starting recommendation.
-2. **Spring Salt Recovery** — `/spring-salt-recovery-detailing` → `need=spring_salt` → Interior Detail starting recommendation + photo review.
-3. **Fall / Winter Protection Prep** — `/fall-winter-protection-detailing` → `need=winter_prep` → Exterior Detail starting recommendation + photo review.
-
-The Build 282 adapter remains presentation-only and does not own prices, availability, deposits, checkout or conflicts.
-
-## Build 283 — retained proof/media eligibility and publication authority
-
-Build 283 closes the safety/mechanics gap before real before/after proof is placed broadly.
-
-### What is authoritative
-
-- existing final job-media reuse remains the source path into Gallery candidate review;
-- the Gallery picker filters out internally ineligible/private/rejected/unusable candidates;
-- pairing eligibility is not public-use consent;
-- public-use consent/privacy confirmation is separate from publication;
-- Gallery publication requires an explicit **Publish** action;
-- legacy approval fields do not silently imply publication;
-- sensitive edits force a published row back to draft review;
-- public output fails closed and uses clearly marked sample fallback when no saved row is explicitly publishable;
-- real proof readiness additionally requires a non-sample published pair with vehicle, condition, **problem → process → result** context;
-- no schema migration or parallel media system is introduced.
-
-## Build 284 — contextual proof placement
-
-Build 284 closes the presentation/mechanics half of “real proof at the point of decision” while leaving the real evidence itself human/provider dependent.
-
-### Shared renderer
-
-`assets/contextual-proof-v284.js` consumes only `/api/before_after_gallery_public` and independently rechecks the Build 283 real-proof boundary before rendering. At most three before/after records are shown, with vehicle, service, town/location, condition and **problem → process → result** context.
-
-The existing first-party visual-placeholder bootstrap loads Build 284 only on eligible decision pages; no new global polling loop or background monitor is introduced.
-
-### Context matching
-
-- service/add-on destinations require a matching Gallery service slug;
-- location destinations require a matching town genuinely represented by that page;
-- Build 282 use-case pages require a relevant starting-service match and present the evidence as **relevant published Rosie work**, never as a claim that every vehicle shares the same condition/result.
-
-If there is no real matching proof, the section stays hidden. Sample fallback, unpublished rows, unapproved consent/privacy, incomplete context or unrelated proof never fills the slot.
-
-### Authority boundary
-
-Build 284 adds no database migration, pricing authority, booking authority, review/testimonial authority, private/admin API dependency or R2 enumeration. Build 283 remains authoritative for consent/privacy/publication and real-proof readiness.
-
-### Build 284 acceptance
-
-Required evidence:
-
-- exact feature SHA passes `.github/workflows/build284-source-gate.yml` including retained Builds 271–283;
-- Cloudflare feature preview succeeds on that exact SHA;
-- `dev` fast-forwards only after those two checks are green;
-- Development Source Gate passes through Build 284;
-- exact Cloudflare Development SHA reaches success and reports Functions attached;
-- retained exact/static smoke plus Build 284 static proof smoke pass;
-- `dev` alias full runtime smoke plus Build 284 public Gallery/context smoke pass;
-- Production remains untouched.
+- customer profile, vehicle and review rows are projected to explicit customer-safe shapes before response;
+- `admin_private_notes` is not customer-readable or customer-writable authority;
+- customer-owned general/private/team/detailer-visible notes remain available;
+- legacy admin-only account controls are hidden and disabled in My Account;
+- legitimate customer profile preferences reload through the safe dashboard projection;
+- unauthenticated customer mutation APIs remain fail-closed;
+- Development source gates now explicitly retain Builds 271–288;
+- no service worker/full-PWA claim is added merely for appearance;
+- no schema, pricing, booking, deposit, Stripe, PayPal or payment authority changes.
 
 ## Ordered next value work
 
-### 1. Publish genuine proof through the completed Build 283/284 path
+### 1. Authenticated/mobile/device acceptance
+Continue role/action/direct-URL/API testing plus phone/tablet/desktop accessibility, keyboard/focus, weak-network behavior, real notification-provider evidence and restore/rollback evidence. Build 288 establishes the customer/staff privacy baseline but does not fabricate real-device evidence.
 
-The mechanics are now available; the evidence itself must remain real.
+### 2. Publish genuine proof
+Use the retained Build 283/284 path only for real, consented Rosie work with accurate vehicle, condition and **problem → process → result** context. Never fabricate proof or consent.
 
-- use Gallery Approvals to publish only genuinely consented Rosie before/after work;
-- complete vehicle, condition and **problem → process → result** context so a row becomes proof-ready;
-- Build 284 will surface a proof-ready row only on service, local or use-case pages it genuinely matches;
-- use Photo Studio/DAIP to prepare evidence only within existing privacy/governance gates;
-- never replace an empty proof state with generic stock claims or imply sample media is customer proof.
+### 3. Google trust and measurable SEO
+When account access is available, verify Google Business Profile ownership/review source and Search Console/sitemap evidence. Do not fabricate provider evidence.
 
-This step is content/evidence dependent. Do not fabricate a real customer job, consent, location, vehicle, result or testimonial to satisfy it.
+### 4. Maintenance-plan product and retention
+Build only after cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise are approved.
 
-### 2. Google trust and measurable SEO
+### 5. Fleet / workplace acquisition
+Create a separate business lead/quote path after minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms are approved.
 
-When account access is available:
+### 6. Customer account refinement
+Continue completed-job → review/share → rebook → maintenance handoff while preserving current availability/conflict/deposit/payment authority.
 
-- verify Google Business Profile ownership and genuine review source;
-- connect/verify Search Console property + sitemap;
-- use query/page/impression/click/CTR/position data to prioritize high-impression/low-CTR and page-two opportunities;
-- surface those opportunities in the I.T./SEO cockpit;
-- keep business identity/LocalBusiness/Organization/Breadcrumb data coherent from one authority.
+### 7. Genuine review/public proof connection
+When real provider/account authority exists, record provider review status only when genuinely returned/verified and publish only through explicit approval/publication.
 
-Do not fabricate Google/provider evidence while credentials or ownership are unavailable.
-
-### 3. Maintenance-plan product and retention
-
-Desired model:
-
-`Initial Reset → recurring maintenance → seasonal deep reset`
-
-Target product behavior:
-
-- job completion suggests the approved next interval;
-- customer account shows recommended next service;
-- rebook reuses the saved vehicle and existing booking engine;
-- Operations can see recurring demand/capacity;
-- Finance can measure plan value/margin;
-- customers can pause/cancel according to approved rules;
-- no polling merely because a plan exists.
-
-**Business checkpoint before final implementation:** approve cadence options, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise. Do not invent these rules.
-
-### 4. Fleet / workplace acquisition
-
-Build a separate business lead/quote path rather than forcing multi-vehicle prospects through the one-vehicle consumer flow.
-
-Capture business/contact and location, vehicle count/type/use, frequency and service priorities, preferred windows, site/access/runoff constraints, photos/fleet list and recurring-contract interest.
-
-Rosie still supplies normal mobile water/power. Ask only about unusual site restrictions.
-
-**Business checkpoint:** minimum vehicle count, same-location economics, discount/travel rules, recurring commitment and cancellation terms.
-
-### 5. Customer account / rebook refinement
-
-Build on the existing Saved Garage/rebook foundation:
-
-- prominent “next recommended service” when an approved rule exists;
-- faster repeat-last-service / maintenance-service choice;
-- use current next-openings authority;
-- preserve existing conflict/deposit/payment rules;
-- improve completed-job → proof/review → rebook handoff;
-- keep all refresh/event behavior bounded and visibility-aware.
-
-### 6. Genuine review and referral loop
-
-After real review authority is connected:
-
-- completion can request a review without fabricating or pre-filling praise;
-- record source/status only when genuinely returned/verified;
-- place genuine review proof near relevant service/local decisions;
-- consider referral/loyalty economics only after the business rules are explicitly approved.
-
-### 7. Authenticated/mobile/device acceptance
-
-Complete real evidence for Customer ↔ Detailer messaging/deep links and closed-job behavior; role/action/direct-URL/API matrix; phone/tablet/desktop/PWA/accessibility/weak-network behavior; real provider email/SMS/Web Push delivery/retry/failure; rollback/restore rehearsals; and representative Cloudflare runtime evidence.
+### 8. Referral/loyalty commercial model
+Build economics only after explicit business approval for qualification, reward value/type, timing, caps, refund handling, abuse controls, tax/accounting and expiry. Build 287/288 do not pre-decide these rules.
 
 ### 9. Payments / Finance / accounting
-
-Retain Build 273 authority and continue Finance closure without weakening permissions:
-
-- Stripe test deposit/final balance/refund/webhook/idempotency acceptance;
-- PayPal sandbox parity if retained;
-- settlement/reconciliation links into Finance;
-- receipt/evidence linking into `accounting_documents`;
-- accountant-friendly export surfaces while preserving one data authority;
-- narrow journal/refund/tax/payroll-sensitive actions;
-- no fabricated tax facts or accountant judgment.
+Retain Build 273 authority and continue Stripe test deposit/final balance/refund/webhook/idempotency acceptance; PayPal sandbox parity if retained; settlement/reconciliation; evidence links into `accounting_documents`; accountant-friendly export surfaces; narrow journal/refund/tax/payroll actions; no fabricated tax judgment.
 
 ### 10. Continue modular extraction only when it creates value
-
-Preferred high-use order remains:
-
-1. Operations customer/booking/quote support;
-2. Finance payments/reconciliation/tax support;
-3. I.T. Startup/Test/Runtime health;
-4. Administration Staff/Inventory/Catalog;
-5. Socials Content/Photo/SEO/Integrations;
-6. DAIP only as privacy/cost/processing gates permit.
-
-Do not broaden roles or wake modules merely to modernize a page.
-
-## Later service breadth decisions
-
-PPF, rustproofing/undercoating or other certification/equipment/insurance-heavy services remain partnership/build-vs-buy decisions. They are not implicit Rosie offerings because a winter-protection detailing page exists.
+Preferred high-use order: Operations customer/booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
 
 ## Business input checkpoints
 
-Ask only when needed to finalize a real business rule:
-
-- material changes to catalog pricing or restoration labour thresholds;
-- seat removal/carpet lifting/water-intrusion availability constraints;
-- any headlight/protection warranty;
-- maintenance-plan price/cadence/perks/pause/cancel rules;
-- fleet minimum/discount/travel/contract rules;
-- referral/loyalty economics;
-- any new insurance/certification/equipment/environmental requirement;
-- real GBP/Search Console property/account selections.
-
-The standard water/power model is resolved and must not be asked again.
+Ask only when needed for a real rule: material pricing/restoration labour, seat-removal/water-intrusion constraints, warranty, maintenance economics, fleet economics, referral economics, insurance/certification/equipment/environmental rules, or real GBP/Search Console account selections. The standard water/power model is resolved and must not be asked again.
 
 ## Validation authority
 
 - `scripts/release_check.py` — cumulative retained platform guard;
-- `scripts/seo_h1_check.py` — public H1 + retained current public guards;
-- `scripts/build282_release_check.py` — retained use-case conversion guard;
-- `scripts/build283_release_check.py` — retained proof/media publication guard;
-- `scripts/build284_release_check.py` — current contextual proof placement guard;
-- `.github/workflows/build284-source-gate.yml` — feature source gate;
-- `scripts/build284_http_smoke.sh` — Build 284 exact/full HTTP proof placement smoke;
-- `.github/workflows/development-source-gate.yml` — Development source gate;
-- `scripts/development_http_smoke.sh` — retained exact/static and alias/full HTTP smoke;
+- `scripts/seo_h1_check.py` — one-H1 + retained current public/customer guards;
+- retained Builds 282–287 focused guards;
+- `scripts/build288_release_check.py` — current customer/staff privacy guard;
+- `.github/workflows/build288-source-gate.yml` — feature source gate;
+- `scripts/build288_http_smoke.sh` — Build 288 HTTP runtime guard;
+- `.github/workflows/build288-development-acceptance.yml` — Build 288 `dev` runtime acceptance;
+- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 288;
+- `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
-Never call a new release Development-green merely because the source exists. The exact `dev` SHA, Cloudflare artifact, and acceptance evidence must agree.
+Never call a release Development-green merely because source exists. Exact feature SHA, feature Cloudflare preview, exact `dev`, Development source/runtime gates and Cloudflare artifact must agree.
 
 ## Documentation policy
 
-Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are release checkpoints. Git history is the archive; older planning documents do not override the current two-file authority.
+Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are checkpoints; Git history is the archive.
 
-<!-- Historical Build 283 retained-guard compatibility only; this is not the living build number or active roadmap section.
-**Build:** 283
-Build 283 publication authority remains retained.
+<!-- Historical Build 284 retained-guard compatibility only; not the living build number.
+**Build:** 284
+Build 284 contextual proof placement remains retained.
 -->
 
-<!-- Historical Build 274 retained-guard compatibility only; this is not the living build number or active roadmap section.
+<!-- Historical Build 283 retained-guard compatibility only; not the living build number.
+**Build:** 283
+Build 283 publication authority remains retained; explicit publish/unpublish governs public proof.
+-->
+
+<!-- Historical Build 274 retained-guard compatibility only.
 **Build:** 274
 Build 274 — active
 contextual help
 Mobile Quick Book
 Google trust and measurable local SEO
+-->
+
+<!-- Historical Build 287 retained-guard compatibility only; not the living build number.
+**Build:** 287
+Build 287 review/share attribution authority remains retained; no referral/loyalty economics are implied.
 -->

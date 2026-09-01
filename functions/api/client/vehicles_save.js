@@ -1,4 +1,5 @@
 import { getCurrentCustomerSession } from "../_lib/customer-session.js";
+import { customerSafeVehicle } from "./_lib/customer-safe-shape.js";
 
 export async function onRequestOptions(){ return new Response("", { status:204, headers:corsHeaders() }); }
 export async function onRequestPost(context){
@@ -16,7 +17,7 @@ export async function onRequestPost(context){
     const res = await fetch(url, { method, headers:{ ...headers, Prefer:'return=representation' }, body: JSON.stringify(vehicle_id ? payload : [payload]) });
     if (!res.ok) return withCors(json({ error:`Could not save vehicle. ${await res.text()}` },500));
     const rows = await res.json().catch(() => []);
-    return withCors(json({ ok:true, vehicle: Array.isArray(rows)? rows[0] || null : null }));
+    return withCors(json({ ok:true, vehicle: customerSafeVehicle(Array.isArray(rows)? rows[0] || null : null) }));
   } catch (err) { return withCors(json({ error: err?.message || 'Unexpected server error.' },500)); }
 }
 function normalize(b, customer_profile_id){ return {
@@ -42,7 +43,6 @@ function normalize(b, customer_profile_id){ return {
   alternate_service_address: text(b.alternate_service_address),
   notes_for_team: text(b.notes_for_team),
   detailer_visible_notes: text(b.detailer_visible_notes),
-  admin_private_notes: text(b.admin_private_notes),
   preferred_contact_name: text(b.preferred_contact_name),
   contact_email: text(b.contact_email),
   contact_phone: text(b.contact_phone),

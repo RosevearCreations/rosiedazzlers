@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check exposed HTML pages for more than one H1 and retain current public conversion/proof guards."""
+"""Check exposed HTML pages for more than one H1 and retain current public conversion/proof/customer guards."""
 from __future__ import annotations
 
 import re
@@ -8,7 +8,6 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-
 
 def run_guard(path: Path) -> int:
     proc = subprocess.run(
@@ -22,7 +21,6 @@ def run_guard(path: Path) -> int:
     if proc.stderr.strip():
         print(proc.stderr.strip(), file=sys.stderr)
     return proc.returncode
-
 
 def main() -> int:
     bad = []
@@ -64,16 +62,28 @@ def main() -> int:
             return code
 
     # Build 285 owns the authenticated customer-history -> current-booking handoff.
-    # The cumulative release check invokes this SEO guard, keeping the latest
-    # customer conversion boundary in the stable source + Cloudflare path.
     build285 = ROOT / "scripts/build285_release_check.py"
     if build285.exists():
         code = run_guard(build285)
         if code:
             return code
 
-    return 0
+    # Build 286 owns the authenticated completed-job -> customer-review authority.
+    build286 = ROOT / "scripts/build286_release_check.py"
+    if build286.exists():
+        code = run_guard(build286)
+        if code:
+            return code
 
+    # Build 287 owns neutral review follow-up + customer-share attribution while
+    # leaving booking/referral economics untouched.
+    build287 = ROOT / "scripts/build287_release_check.py"
+    if build287.exists():
+        code = run_guard(build287)
+        if code:
+            return code
+
+    return 0
 
 if __name__ == "__main__":
     raise SystemExit(main())
