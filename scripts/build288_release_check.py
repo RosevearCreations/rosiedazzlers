@@ -32,7 +32,18 @@ need('assets/customer-privacy-v288.js','acctAdminNotes','vehAdminNotes','control
 need('assets/client-auth.js','/assets/customer-privacy-v288.js','data-build288-customer-privacy')
 need('my-account/index.html','<meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />','<h1>My Account</h1>','/assets/client-auth.js')
 if len(re.findall(r'<h1\b', text('my-account/index.html'), flags=re.I)) != 1: errors.append('my-account/index.html must retain exactly one H1')
-need('.github/workflows/development-source-gate.yml','seq 271 288','build286_http_smoke.sh','build287_http_smoke.sh','build288_http_smoke.sh')
+need(
+    '.github/workflows/development-source-gate.yml',
+    'Run current Build 286 focused guard',
+    'python scripts/build286_release_check.py',
+    'Run current Build 287 focused guard',
+    'python scripts/build287_release_check.py',
+    'Run current Build 288 focused guard',
+    'python scripts/build288_release_check.py',
+    'build286_http_smoke.sh',
+    'build287_http_smoke.sh',
+    'build288_http_smoke.sh'
+)
 need('BUILD288_SUMMARY.md','Build 288','customer/staff privacy boundary','Production remains closed')
 need('AI_PROJECT_HANDOFF.md','**Build:** 288','Build 288','customer/staff privacy boundary','Production remains closed')
 need('MASTER_VALUE_ROADMAP.md','**Build:** 288','Build 288','customer/staff privacy boundary','Production remains closed')
@@ -49,6 +60,6 @@ print('- customer profile/vehicle/review responses use explicit customer-safe pr
 print('- customer profile and vehicle writes cannot mutate admin_private_notes')
 print('- legacy admin-only customer controls are hidden/disabled on My Account')
 print('- unauthenticated customer mutations retain fail-closed server checks')
-print('- cumulative Development source gate now carries Builds 286-288')
+print('- cumulative Development source gate now carries explicit Builds 286-288')
 print('- no schema, pricing, booking, deposit or payment authority changed')
 print('- Production remains closed')
