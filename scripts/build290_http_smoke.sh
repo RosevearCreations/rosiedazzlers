@@ -13,8 +13,10 @@ assert_no_disclosure(){
   done
 }
 
-status=$(curl -sS -o "$tmp/admin-customers.html" -w '%{http_code}' "$BASE_URL/admin-customers.html")
-[[ "$status" == "200" ]] || { echo "$LABEL: protected shell expected static 200, got $status"; exit 42; }
+# Cloudflare clean-URL handling may return a permanent 308 from the .html spelling.
+# Follow that canonical redirect and require the resolved protected shell itself to be 200.
+status=$(curl -sSL -o "$tmp/admin-customers.html" -w '%{http_code}' "$BASE_URL/admin-customers.html")
+[[ "$status" == "200" ]] || { echo "$LABEL: protected shell expected canonical final 200, got $status"; exit 42; }
 grep -Fq 'noindex,nofollow,noarchive' "$tmp/admin-customers.html"
 grep -Fq '/assets/admin-auth.js' "$tmp/admin-customers.html"
 grep -Fq '/assets/admin-shell.js' "$tmp/admin-customers.html"
@@ -36,7 +38,7 @@ status=$(curl -sS -o "$tmp/t2125.json" -w '%{http_code}' "$BASE_URL/api/admin/ac
 assert_no_disclosure "$tmp/t2125.json"
 
 echo "$LABEL: PASS"
-echo "- protected admin direct URL exposes a static noindex shell only; data remains behind authenticated APIs"
+echo "- protected admin direct URL follows the canonical Cloudflare redirect to a static noindex shell; data remains behind authenticated APIs"
 echo "- anonymous Operations/quote/Finance routes fail closed"
 echo "- anonymous mutation denial happens before action disclosure"
 echo "- denial bodies do not expose configuration/secret identifiers"
