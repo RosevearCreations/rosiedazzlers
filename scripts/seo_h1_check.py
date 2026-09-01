@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check exposed HTML pages for more than one H1 and retain current public conversion/proof guards."""
+"""Check exposed HTML pages for more than one H1 and retain current public conversion/proof/customer guards."""
 from __future__ import annotations
 
 import re
@@ -64,11 +64,18 @@ def main() -> int:
             return code
 
     # Build 285 owns the authenticated customer-history -> current-booking handoff.
-    # The cumulative release check invokes this SEO guard, keeping the latest
-    # customer conversion boundary in the stable source + Cloudflare path.
     build285 = ROOT / "scripts/build285_release_check.py"
     if build285.exists():
         code = run_guard(build285)
+        if code:
+            return code
+
+    # Build 286 owns the authenticated completed-job -> customer-review authority.
+    # release_check invokes this SEO guard, so the latest customer trust boundary is
+    # retained by Development source and Cloudflare acceptance without changing H1 scope.
+    build286 = ROOT / "scripts/build286_release_check.py"
+    if build286.exists():
+        code = run_guard(build286)
         if code:
             return code
 

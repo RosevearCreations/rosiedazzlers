@@ -89,3 +89,15 @@
   script.dataset.build285CustomerRebook = "true";
   document.head.appendChild(script);
 })();
+
+// Build 286: keep completed-job review eligibility isolated from the established
+// customer account page and reuse the authenticated customer session authority.
+(function loadBuild286CustomerReview() {
+  const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path !== "/my-account" || document.querySelector('script[data-build286-customer-review]')) return;
+  const script = document.createElement("script");
+  script.type = "module";
+  script.src = "/assets/customer-review-v286.js";
+  script.dataset.build286CustomerReview = "true";
+  document.head.appendChild(script);
+})();
