@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 290  
+**Build:** 291  
 **Updated:** 2026-09-01  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–289 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, and account accessibility/weak-network recovery without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–290 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance and forward-restore readiness without replacing those foundations.
 
-**Production remains closed** for the active Build 290 Development slice. `main` changes only through deliberate promotion from accepted Development evidence. Production remains accepted Build 288 while Build 289 is the accepted Development restore baseline.
+**Production remains closed** for the active Build 291 Development slice. `main` changes only through deliberate promotion from accepted Development evidence. Production remains accepted Build 288; Build 290 is the accepted Development baseline and Build 289 remains its verified restore anchor.
 
 Do not regress:
 
@@ -29,6 +29,7 @@ Do not regress:
 - one meaningful H1 per indexable public page;
 - persistent tax-support/evidence/accountant-package authority;
 - no fabricated accounting/tax facts, reviews, consent, proof or provider evidence;
+- no fabricated maintenance/fleet/referral economics;
 - `main` / Production changes only through deliberate promotion from accepted Development evidence.
 
 ## Delivered customer/business foundation
@@ -48,37 +49,40 @@ Build 286 requires a direct customer review to reference a genuinely completed b
 ### Customer privacy and account resilience
 Build 288 projects customer profile/vehicle/review data through explicit customer-safe shapes and removes customer write authority over `admin_private_notes`. Build 289 adds in-place signed-out account recovery, manual weak-network retry, ARIA live feedback and keyboard focus treatment without new polling or write replay.
 
-## Build 290 — role/action/API authorization + forward restore
+### Authorization / recovery mechanics
+Build 290 retains the existing role/module/action model, adds executable ceiling/narrowing/override acceptance, verifies representative anonymous admin APIs fail closed, makes unexpected staff-auth failures externally generic and defines a non-force forward restore to the exact accepted Build 289 tree.
 
-Build 290 continues the reliability track without inventing a new role system.
+## Build 291 — maintenance retention intake
+
+Build 291 advances repeat-service retention without inventing the commercial maintenance-plan product.
 
 Rules:
 
-- existing role ceilings remain the maximum module authority;
-- staff profile module flags may narrow non-admin authority;
-- explicit action grants may extend only inside the role/module ceiling;
-- explicit action denial may narrow a default action;
-- representative anonymous Operations/quote/Finance mutations must fail at authentication before action disclosure or mutation;
-- unexpected shared staff-auth failures return generic external text rather than raw configuration/exception detail;
-- protected admin direct URLs remain static `noindex` shells, while actual records remain behind authenticated APIs;
-- exact accepted Build 289 SHA/tree are the Development restore anchor;
-- restore uses a **forward restore commit** so `dev` continues forward without force/ref rewind;
-- Build 290 is migration-free; Production `main` is outside the restore procedure.
+- static maintenance source and hydrated growth settings must say the same thing;
+- cadence selections are customer **preferences only**;
+- the form is an interest request, not an appointment, subscription or recurring-billing authorization;
+- no fixed price, discount, perk, priority booking, included recurring scope, pause/cancel term or recurring commitment is approved;
+- current booking availability, vehicle/service review, scope, add-ons, deposit, payment and site-access rules stay authoritative;
+- the public endpoint allowlists cadence tokens, owns its source marker and returns a narrow success shape rather than a stored row;
+- public failures do not expose Supabase/storage details;
+- duplicate clicks are blocked while the write is in flight;
+- runtime acceptance uses validation failures that stop before persistence, so CI does not create waitlist records;
+- Build 291 is migration-free.
 
 ### Provider configuration status
 
-The owner confirmed on 2026-09-01 that Stripe, PayPal and other configured providers are present in Cloudflare Development. This is recorded as **Development configuration-present / owner sign-off** only. It does not fabricate a successful Stripe charge, PayPal sandbox transaction, webhook settlement or other provider-side transaction acceptance.
+The owner confirmed on 2026-09-01 that Stripe, PayPal and other configured providers are present in Cloudflare Development. This remains **Development configuration-present / owner sign-off** only. It does not fabricate a successful Stripe charge, PayPal sandbox transaction, webhook settlement or other provider-side transaction acceptance.
 
 ## Ordered next value work
 
 ### 1. Genuine proof + Google trust
 Continue real consented proof through Builds 283/284 and verify Google Business Profile/Search Console only when real account evidence exists.
 
-### 2. Maintenance-plan product and retention
-Build only after cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise are approved.
+### 2. Maintenance-plan commercial model
+Build 291 now provides a safe interest/demand intake. Commercial plan behavior remains gated on approved cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise.
 
 ### 3. Fleet / workplace acquisition
-Create a separate business lead/quote path after minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms are approved.
+Harden the fleet/workplace lead and qualification path without promising economics. Minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms remain approval-gated.
 
 ### 4. Notification/device evidence
 Collect real email/SMS/Web Push and physical phone/tablet/browser evidence when those systems/devices are available; do not fabricate it.
@@ -103,14 +107,13 @@ Ask only when needed for a real rule: material pricing/restoration labour, seat-
 
 - `scripts/release_check.py` — cumulative retained platform guard;
 - `scripts/seo_h1_check.py` — one-H1 + retained current public/customer guards;
-- retained Builds 282–289 focused guards;
-- `scripts/build290_release_check.py` — current authorization/restore guard;
-- `scripts/build290_action_permission_test.mjs` — executable role/module/action matrix;
-- `scripts/build290_rollback_check.py` — exact Build 289 forward-restore anchor;
-- `.github/workflows/build290-source-gate.yml` — feature source gate;
-- `scripts/build290_http_smoke.sh` — non-mutating direct-URL/API runtime guard;
-- `.github/workflows/build290-development-acceptance.yml` — Build 290 `dev` runtime acceptance;
-- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 290;
+- retained Builds 282–290 focused guards;
+- retained Build 290 action matrix + forward-restore checks;
+- `scripts/build291_release_check.py` — current maintenance retention intake guard;
+- `.github/workflows/build291-source-gate.yml` — feature source gate;
+- `scripts/build291_http_smoke.sh` — non-mutating maintenance runtime guard;
+- `.github/workflows/build291-development-acceptance.yml` — Build 291 `dev` runtime acceptance;
+- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 291;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
@@ -124,6 +127,13 @@ Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Buil
 ### 9. Payments / Finance / accounting
 accounting_documents
 accountant-friendly export surfaces
+-->
+
+<!-- Historical Build 290 retained-guard compatibility only; not the living build number.
+**Build:** 290
+Build 290 forward restore authorization authority remains retained.
+Development configuration-present / owner sign-off remains retained.
+Production remains closed
 -->
 
 <!-- Historical Build 289 retained-guard compatibility only; not the living build number.
