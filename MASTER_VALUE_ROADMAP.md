@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 289  
+**Build:** 290  
 **Updated:** 2026-09-01  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–288 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook, completed-job review, neutral review/share attribution and the customer/staff privacy boundary without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–289 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, and account accessibility/weak-network recovery without replacing those foundations.
 
-**Production remains closed** for the active Build 289 Development slice. `main` changes only through deliberate promotion from accepted Development evidence. Build 288 itself is already accepted in Production through its deliberate reconciliation release.
+**Production remains closed** for the active Build 290 Development slice. `main` changes only through deliberate promotion from accepted Development evidence. Production remains accepted Build 288 while Build 289 is the accepted Development restore baseline.
 
 Do not regress:
 
@@ -45,55 +45,54 @@ Build 283 keeps pairing eligibility separate from consent/privacy approval and e
 ### Review/share authority
 Build 286 requires a direct customer review to reference a genuinely completed booking belonging to the signed-in customer. Build 287 adds the server-owned Google destination and neutral Share Rosie UTM attribution without commercial referral economics.
 
-### Customer privacy boundary
-Build 288 projects customer profile/vehicle/review data through explicit customer-safe shapes and removes customer write authority over `admin_private_notes`. Legacy staff-private account controls remain suppressed while customer/team/detailer-visible fields remain available.
+### Customer privacy and account resilience
+Build 288 projects customer profile/vehicle/review data through explicit customer-safe shapes and removes customer write authority over `admin_private_notes`. Build 289 adds in-place signed-out account recovery, manual weak-network retry, ARIA live feedback and keyboard focus treatment without new polling or write replay.
 
-## Build 289 — account accessibility + weak-network/direct-URL resilience
+## Build 290 — role/action/API authorization + forward restore
 
-Build 289 continues the authenticated/mobile/device acceptance track without claiming physical-device evidence that automation cannot prove.
+Build 290 continues the reliability track without inventing a new role system.
 
 Rules:
 
-- signed-out direct visits to `/my-account` can recover in place through the existing `ClientAuth.signIn()` authority;
-- no parallel password/session authority is introduced;
-- account status and recovery feedback use polite atomic live-region semantics;
-- explicit Rosie-token `:focus-visible` treatment protects keyboard navigation on the recovery surface;
-- narrow-screen recovery actions remain touch-friendly;
-- network/server-load failures expose a manual **Retry account load** action;
-- retry is user-initiated only—no `setInterval`, background polling, automatic write replay or ambiguous non-idempotent retry;
-- Build 288 customer/staff privacy suppression remains retained;
-- no schema migration, pricing, booking, availability, deposit, checkout, Stripe, PayPal or payment authority changes.
+- existing role ceilings remain the maximum module authority;
+- staff profile module flags may narrow non-admin authority;
+- explicit action grants may extend only inside the role/module ceiling;
+- explicit action denial may narrow a default action;
+- representative anonymous Operations/quote/Finance mutations must fail at authentication before action disclosure or mutation;
+- unexpected shared staff-auth failures return generic external text rather than raw configuration/exception detail;
+- protected admin direct URLs remain static `noindex` shells, while actual records remain behind authenticated APIs;
+- exact accepted Build 289 SHA/tree are the Development restore anchor;
+- restore uses a **forward restore commit** so `dev` continues forward without force/ref rewind;
+- Build 290 is migration-free; Production `main` is outside the restore procedure.
+
+### Provider configuration status
+
+The owner confirmed on 2026-09-01 that Stripe, PayPal and other configured providers are present in Cloudflare Development. This is recorded as **Development configuration-present / owner sign-off** only. It does not fabricate a successful Stripe charge, PayPal sandbox transaction, webhook settlement or other provider-side transaction acceptance.
 
 ## Ordered next value work
 
-### 1. Authenticated/mobile/device acceptance
-After Build 289, continue role/action/direct-URL/API testing, notification-provider evidence, restore/rollback rehearsal, and targeted phone/tablet/desktop checks where real device/browser evidence is available. Build 289 closes the first keyboard/focus + weak-network account-recovery slice but does not fabricate physical-device evidence.
+### 1. Genuine proof + Google trust
+Continue real consented proof through Builds 283/284 and verify Google Business Profile/Search Console only when real account evidence exists.
 
-### 2. Publish genuine proof
-Use the retained Build 283/284 path only for real, consented Rosie work with accurate vehicle, condition and **problem → process → result** context. Never fabricate proof or consent.
-
-### 3. Google trust and measurable SEO
-When account access is available, verify Google Business Profile ownership/review source and Search Console/sitemap evidence. Do not fabricate provider evidence.
-
-### 4. Maintenance-plan product and retention
+### 2. Maintenance-plan product and retention
 Build only after cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise are approved.
 
-### 5. Fleet / workplace acquisition
+### 3. Fleet / workplace acquisition
 Create a separate business lead/quote path after minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms are approved.
 
-### 6. Customer account refinement
+### 4. Notification/device evidence
+Collect real email/SMS/Web Push and physical phone/tablet/browser evidence when those systems/devices are available; do not fabricate it.
+
+### 5. Customer account refinement
 Continue completed-job → review/share → rebook → maintenance handoff while preserving current availability/conflict/deposit/payment authority.
 
-### 7. Genuine review/public proof connection
-When real provider/account authority exists, record provider review status only when genuinely returned/verified and publish only through explicit approval/publication.
+### 6. Referral/loyalty commercial model
+Build economics only after explicit business approval for qualification, reward value/type, timing, caps, refund handling, abuse controls, tax/accounting and expiry.
 
-### 8. Referral/loyalty commercial model
-Build economics only after explicit business approval for qualification, reward value/type, timing, caps, refund handling, abuse controls, tax/accounting and expiry. Builds 287–289 do not pre-decide these rules.
+### 7. Payments / Finance / accounting
+Retain Build 273 authority. Development payment-provider configuration is owner-signed-off as present. Real transaction/settlement/reconciliation acceptance remains evidence-driven and should resume only when deliberately tested; no fabricated provider transaction evidence.
 
-### 9. Payments / Finance / accounting
-Retain Build 273 authority. Payment-provider acceptance is currently deferred while the external Stripe work is being handled separately. When that scope is reopened, continue test deposit/final balance/refund/webhook/idempotency acceptance; PayPal sandbox parity if retained; settlement/reconciliation; evidence links into `accounting_documents`; accountant-friendly export surfaces; narrow journal/refund/tax/payroll actions; no fabricated tax judgment.
-
-### 10. Continue modular extraction only when it creates value
+### 8. Continue modular extraction only when it creates value
 Preferred high-use order: Operations customer/booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
 
 ## Business input checkpoints
@@ -104,12 +103,14 @@ Ask only when needed for a real rule: material pricing/restoration labour, seat-
 
 - `scripts/release_check.py` — cumulative retained platform guard;
 - `scripts/seo_h1_check.py` — one-H1 + retained current public/customer guards;
-- retained Builds 282–288 focused guards;
-- `scripts/build289_release_check.py` — current accessibility/weak-network account guard;
-- `.github/workflows/build289-source-gate.yml` — feature source gate;
-- `scripts/build289_http_smoke.sh` — Build 289 non-mutating HTTP runtime guard;
-- `.github/workflows/build289-development-acceptance.yml` — Build 289 `dev` runtime acceptance;
-- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 289;
+- retained Builds 282–289 focused guards;
+- `scripts/build290_release_check.py` — current authorization/restore guard;
+- `scripts/build290_action_permission_test.mjs` — executable role/module/action matrix;
+- `scripts/build290_rollback_check.py` — exact Build 289 forward-restore anchor;
+- `.github/workflows/build290-source-gate.yml` — feature source gate;
+- `scripts/build290_http_smoke.sh` — non-mutating direct-URL/API runtime guard;
+- `.github/workflows/build290-development-acceptance.yml` — Build 290 `dev` runtime acceptance;
+- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 290;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
@@ -118,6 +119,12 @@ Never call a release Development-green merely because source exists. Exact featu
 ## Documentation policy
 
 Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are checkpoints; Git history is the archive.
+
+<!-- Historical Build 289 retained-guard compatibility only; not the living build number.
+**Build:** 289
+Build 289 accessibility and weak-network account resilience remains retained.
+Production remains closed
+-->
 
 <!-- Historical Build 288 retained-guard compatibility only; not the living build number.
 **Build:** 288

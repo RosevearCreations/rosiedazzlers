@@ -79,6 +79,15 @@ jobs:
           node --check functions/api/stripe/webhook.js
           node --check functions/api/checkout.js
 
+      - name: Check Build 290 authorization syntax
+        run: |
+          node --check functions/api/_lib/staff-auth.js
+          node --check functions/api/_lib/action-permissions.js
+          node --check functions/api/admin/_middleware.js
+          node --check assets/admin-auth.js
+          node --check assets/admin-shell.js
+          node --check scripts/build290_action_permission_test.mjs
+
       - name: Check Development smoke helper syntax
         run: |
           bash -n scripts/development_http_smoke.sh
@@ -88,6 +97,7 @@ jobs:
           bash -n scripts/build287_http_smoke.sh
           bash -n scripts/build288_http_smoke.sh
           bash -n scripts/build289_http_smoke.sh
+          bash -n scripts/build290_http_smoke.sh
 
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
@@ -133,6 +143,14 @@ jobs:
         run: python scripts/build288_release_check.py
       - name: Run current Build 289 focused guard
         run: python scripts/build289_release_check.py
+      - name: Run current Build 290 focused guard
+        run: python scripts/build290_release_check.py
+
+      - name: Run Build 290 role/action matrix
+        run: node scripts/build290_action_permission_test.mjs
+
+      - name: Check Build 290 forward-restore readiness
+        run: python scripts/build290_rollback_check.py
 
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
@@ -165,8 +183,9 @@ jobs:
             echo "- Build 287 review/share attribution syntax: PASS"
             echo "- Build 288 customer/staff privacy boundary syntax: PASS"
             echo "- Build 289 account accessibility/weak-network resilience syntax: PASS"
-            echo "- Development + Build 284-289 HTTP smoke helper syntax: PASS"
-            echo "- Retained Builds 271-289 focused guards: PASS"
+            echo "- Build 290 role/action/API + forward-restore readiness syntax: PASS"
+            echo "- Development + Build 284-290 HTTP smoke helper syntax: PASS"
+            echo "- Retained Builds 271-290 focused guards: PASS"
             echo "- Cumulative release + one-H1 + route-copy guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."

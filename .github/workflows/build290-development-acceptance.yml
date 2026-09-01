@@ -1,0 +1,59 @@
+name: Build 290 Development Runtime Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build290-development
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Verify Build 290 authorization/restore runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Reconfirm Build 290 source authority
+        run: |
+          python scripts/build290_release_check.py
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+
+      - name: Wait for Development alias and run Build 290 smoke
+        run: |
+          for attempt in $(seq 1 24); do
+            if bash scripts/build290_http_smoke.sh https://dev.rosiedazzlers.pages.dev "Build 290 Development runtime"; then
+              exit 0
+            fi
+            echo "Build 290 Development alias not converged yet (attempt $attempt/24)."
+            sleep 10
+          done
+          exit 1
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo "### Build 290 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Direct protected-shell / anonymous API fail-closed smoke: PASS"
+            echo "- Role/action matrix: PASS"
+            echo "- Forward-restore readiness: PASS"
+            echo "- This does not fabricate authenticated multi-role credentials or provider transactions."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"

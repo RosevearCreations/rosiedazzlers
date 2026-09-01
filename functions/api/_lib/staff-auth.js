@@ -73,7 +73,11 @@ export async function requireStaffAccess({
     }
     return { ok: false, response: json({ error: "Unauthorized." }, 401) };
   } catch (err) {
-    return { ok: false, response: json({ error: err && err.message ? err.message : "Unexpected auth error." }, 500) };
+    console.error("Staff authorization service failure.", {
+      name: err?.name || "Error",
+      message: err?.message || "Unknown staff authorization error."
+    });
+    return { ok: false, response: json({ error: "Staff authorization service unavailable." }, 500) };
   }
 }
 
