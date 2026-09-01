@@ -1,0 +1,48 @@
+name: Build 289 Development Runtime Acceptance
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-build289-development-runtime
+  cancel-in-progress: true
+jobs:
+  account-resilience-runtime:
+    name: Verify Build 289 account accessibility/resilience runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CF_DEV_URL: https://dev.rosiedazzlers.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 2 }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - name: Reconfirm Build 289 source authority
+        run: python scripts/build289_release_check.py
+      - name: Wait for Development alias and run Build 289 smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          ready=false
+          for attempt in $(seq 1 24); do
+            echo "Checking Build 289 Development runtime convergence (attempt ${attempt}/24)."
+            if bash scripts/build289_http_smoke.sh "$CF_DEV_URL" "Build 289 Development attempt ${attempt}/24"; then ready=true; break; fi
+            [[ "$attempt" -ge 24 ]] || sleep 10
+          done
+          [[ "$ready" == true ]] || { echo "::error::Build 289 Development runtime did not converge."; exit 26; }
+      - name: Acceptance summary
+        run: |
+          {
+            echo "### Build 289 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Accessible status and keyboard-focus assets deployed: PASS"
+            echo "- Signed-out dashboard/account recovery contract: PASS"
+            echo "- User-initiated retry path deployed without polling/write replay: PASS"
+            echo "- Build 288 customer privacy adapter retained: PASS"
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,23 @@
+/* Build 289 — My Account keyboard/accessibility resilience. */
+:where(a,button,input,select,textarea,[tabindex]):focus-visible{
+  outline:3px solid var(--accent);
+  outline-offset:3px;
+  box-shadow:0 0 0 2px var(--bg);
+}
+.account-recovery-v289{
+  display:grid;
+  gap:12px;
+  margin-top:12px;
+  padding:16px;
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  background:var(--panel);
+}
+.account-recovery-v289 h2{margin:0;font-size:1.15rem;}
+.account-recovery-v289 p{margin:0;color:var(--muted);}
+.account-recovery-v289 .form-grid{align-items:end;}
+.account-recovery-v289 .actions{display:flex;gap:10px;flex-wrap:wrap;}
+.account-recovery-v289-status{min-height:1.4em;}
+@media (max-width:640px){
+  .account-recovery-v289 .actions>.btn{width:100%;justify-content:center;}
+}

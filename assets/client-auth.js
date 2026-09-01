@@ -65,3 +65,9 @@
   if (path !== "/my-account" || document.querySelector('script[data-build288-customer-privacy]')) return;
   const script = document.createElement("script"); script.type = "module"; script.src = "/assets/customer-privacy-v288.js"; script.dataset.build288CustomerPrivacy = "true"; document.head.appendChild(script);
 })();
+// Build 289: direct signed-out recovery, weak-network retry and accessible account status/focus.
+(function loadBuild289AccountResilience() {
+  const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path !== "/my-account" || document.querySelector('script[data-build289-account-resilience]')) return;
+  const script = document.createElement("script"); script.type = "module"; script.src = "/assets/account-resilience-v289.js"; script.dataset.build289AccountResilience = "true"; document.head.appendChild(script);
+})();

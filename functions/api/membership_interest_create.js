@@ -1,29 +1,40 @@
 import { json } from "./_lib/http.js";
 
+const PREFERRED_CYCLES = Object.freeze({
+  about_4_weeks: "About every 4 weeks (preference only)",
+  about_6_weeks: "About every 6 weeks (preference only)",
+  about_8_weeks: "About every 8 weeks (preference only)",
+  seasonal_custom: "Seasonal / custom (preference only)",
+  not_sure: "Not sure yet"
+});
+
 export async function onRequestPost({ request, env }) {
   try {
-    if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) {
-      return withCors(json({ error: "Server not configured." }, 500));
+    const serviceKey = getSupabaseServiceRoleKey(env);
+    if (!env?.SUPABASE_URL || !serviceKey) {
+      return withCors(json({ error: "Maintenance interest is temporarily unavailable." }, 503));
     }
 
     const body = await request.json().catch(() => ({}));
-    const full_name = cleanText(body.full_name);
-    const email = cleanText(body.email).toLowerCase();
-    const phone = cleanText(body.phone);
-    const postal_code = cleanText(body.postal_code).toUpperCase();
-    const preferred_cycle = cleanText(body.preferred_cycle) || "Every 4 weeks";
-    const notes = cleanText(body.notes);
-    const source_url = cleanText(body.source_url);
+    const full_name = cleanText(body.full_name, 180);
+    const email = cleanText(body.email, 220).toLowerCase();
+    const phone = cleanText(body.phone, 60);
+    const postal_code = cleanText(body.postal_code, 24).toUpperCase();
+    const preferred_cycle = normalizePreferredCycle(body.preferred_cycle);
+    const notes = cleanText(body.notes, 1200);
     const vehicle_count = clampWhole(body.vehicle_count, 1, 12);
 
     if (!full_name) return withCors(json({ error: "Name is required." }, 400));
     if (!looksLikeEmail(email)) return withCors(json({ error: "A valid email is required." }, 400));
+    if (!preferred_cycle) {
+      return withCors(json({ error: "Choose a maintenance timing preference." }, 400));
+    }
 
     const headers = {
-      apikey: env.SUPABASE_SERVICE_ROLE_KEY,
-      Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
+      apikey: serviceKey,
+      Authorization: `Bearer ${serviceKey}`,
       "Content-Type": "application/json",
-      Prefer: "return=representation"
+      Prefer: "return=minimal"
     };
 
     const row = {
@@ -34,7 +45,7 @@ export async function onRequestPost({ request, env }) {
       vehicle_count,
       preferred_cycle,
       notes: notes || null,
-      source_url: source_url || null,
+      source_url: "/maintenance-plan",
       status: "new"
     };
 
@@ -44,23 +55,21 @@ export async function onRequestPost({ request, env }) {
       body: JSON.stringify([row])
     });
 
-    const out = await res.json().catch(() => null);
-
     if (!res.ok) {
-      const msg = Array.isArray(out)
-        ? out[0]?.message
-        : out?.message || out?.error || "Could not save membership interest.";
-      return withCors(json({ error: msg }, 500));
+      console.error("Maintenance interest persistence failed.", { status: res.status });
+      return withCors(json({ error: "Could not save maintenance interest right now." }, 503));
     }
 
-    return withCors(
-      json({
-        ok: true,
-        request: Array.isArray(out) ? out[0] || null : null
-      })
-    );
+    return withCors(json({
+      ok: true,
+      interest_recorded: true,
+      creates_subscription: false,
+      creates_appointment: false,
+      creates_recurring_billing: false
+    }, 201));
   } catch (err) {
-    return withCors(json({ error: err?.message || "Could not save membership interest." }, 500));
+    console.error("Maintenance interest request failed.", err);
+    return withCors(json({ error: "Could not save maintenance interest right now." }, 500));
   }
 }
 
@@ -72,8 +81,17 @@ export async function onRequestGet() {
   return withCors(methodNotAllowed(["POST", "OPTIONS"]));
 }
 
-function cleanText(value) {
-  return String(value || "").trim();
+function getSupabaseServiceRoleKey(env) {
+  return env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY || "";
+}
+
+function cleanText(value, maxLength = 500) {
+  return String(value || "").trim().slice(0, maxLength);
+}
+
+function normalizePreferredCycle(value) {
+  const key = cleanText(value, 40).toLowerCase();
+  return PREFERRED_CYCLES[key] || "";
 }
 
 function looksLikeEmail(value) {
