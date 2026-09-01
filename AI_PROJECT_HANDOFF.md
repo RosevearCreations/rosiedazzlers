@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 290  
+**Build:** 291  
 **Updated:** 2026-09-01  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 290 is the active **role/action/direct-URL/API authorization + forward-restore readiness** Development slice. It follows the fully accepted Build 289 Development accessibility/weak-network release.
+Build 291 is the active **maintenance retention intake authority** Development slice. It follows the fully accepted Build 290 Development authorization/direct-URL/API + forward-restore release.
 
-Build 289 Development is accepted at SHA `4464e758e02332138bca039149ecbb9ff475988c`, tree `a4e279eae6cb7136d309278b568fa5769a70d796`. Production `main` remains accepted Build 288 at reconciliation SHA `4cf8d97bf522080e3146421e70fdf6726437faed`, tree `5ef49b3b089eed68b25c4e4fee0977be5f4c7edf`.
+Build 290 Development is accepted at SHA `5aa23c8c9b532824d738db6439e30b13cb5f59c3`, tree `8521fa047eb250d293739307a275a68317f0890d`. Build 289 remains the verified Build 290 restore anchor at SHA `4464e758e02332138bca039149ecbb9ff475988c`, tree `a4e279eae6cb7136d309278b568fa5769a70d796`. Production `main` remains accepted Build 288 at reconciliation SHA `4cf8d97bf522080e3146421e70fdf6726437faed`, tree `5ef49b3b089eed68b25c4e4fee0977be5f4c7edf`.
 
-Build 290 must follow the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 290 unless a later deliberate promotion is explicitly authorized.
+Build 291 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 291 unless a later deliberate promotion is explicitly authorized.
 
 ## Application boundary
 
@@ -50,7 +50,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Completed customer/business work through Build 289
+## Completed customer/business work through Build 290
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
@@ -65,24 +65,46 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Build 287 added neutral Google/share follow-up and referral-origin attribution without referral economics.
 - Build 288 closed the customer/staff privacy boundary with customer-safe response projections and no customer write authority over `admin_private_notes`.
 - Build 289 added in-place signed-out account recovery, manual weak-network retry, ARIA live feedback and keyboard focus treatment without new polling or write replay.
+- Build 290 deepened role/module/action acceptance, anonymous direct-API fail-closed behavior, staff-auth non-disclosure and non-force forward restore readiness.
 
 Do not re-open these items because an older roadmap mentions them.
 
-## Build 290 — authorization acceptance + forward restore
+## Retained Build 290 reliability authority
 
-Build 290 strengthens existing authority rather than creating new roles or parallel permissions.
+Build 290 remains authoritative while retention work advances:
 
-### Role/action/API boundary
+- existing role/module/action ceilings remain server-authoritative;
+- executable matrix coverage verifies module narrowing, action grants/denials and cross-module ceiling protection;
+- representative anonymous Operations/quote/Finance requests fail closed before mutation/action disclosure;
+- protected admin direct URLs remain static noindex shells with business/customer records behind authenticated APIs;
+- unexpected shared staff-auth failures return generic external text rather than raw configuration/exception details;
+- exact Build 289 SHA/tree remain the restore anchor;
+- restore uses a **forward restore commit**, never force/ref rewind, and never moves Production `main`.
 
-- the existing role/module/action model remains authoritative;
-- an executable matrix verifies role ceilings, profile module narrowing, explicit action grants/denials and 403 denial behavior;
-- representative anonymous Operations, quote and Finance requests must fail closed before mutation or action disclosure;
-- protected admin direct URLs remain static noindex shells, while customer/business records remain behind authenticated APIs;
-- unexpected shared staff-auth failures return generic external error text instead of raw exception/configuration detail.
+## Build 291 — maintenance retention intake
 
-### Restore boundary
+Build 291 improves repeat-service demand capture without inventing the commercial maintenance product.
 
-Accepted Build 289 SHA `4464e758e02332138bca039149ecbb9ff475988c` and tree `a4e279eae6cb7136d309278b568fa5769a70d796` are the exact Development restore anchor. Restore is a **forward restore commit**, never a branch rewind or force push. `main` is outside the procedure. Build 290 is migration-free, so no database rollback is required for this slice.
+### Public maintenance authority
+
+- static `/maintenance-plan` source must match the safe public growth-settings authority before JavaScript hydration;
+- timing options are **preferences only**, not promised cadence;
+- the page explicitly states that an interest request does not create an appointment, subscription, recurring billing authorization, fixed price, discount, perk or priority-booking promise;
+- current availability, vehicle condition/review, service scope, add-ons, deposits, payments, site access and booking rules remain authoritative;
+- Rosie’s standard water/power model and safe work-area requirement remain unchanged.
+
+### Intake/API authority
+
+- the public endpoint allowlists timing preference tokens;
+- browser-controlled `source_url` is removed; the server records `/maintenance-plan`;
+- successful responses are narrow and do not return the persisted database row;
+- Supabase/storage failure details stay server-side and public errors remain generic;
+- the UI blocks repeat clicks while a write is in flight;
+- runtime acceptance uses only pre-persistence validation failures, so smoke tests do not create waitlist rows.
+
+### Commercial boundary
+
+Build 291 does **not** approve maintenance price, discount, perk, fixed frequency, priority booking, recurring billing, included/excluded recurring scope, pause/cancel policy or an appointment. There is **no schema migration**.
 
 ### Provider configuration sign-off
 
@@ -92,27 +114,26 @@ On 2026-09-01 the owner confirmed PayPal, Stripe and the other configured provid
 
 - cumulative: `scripts/release_check.py`;
 - one-H1/current customer guards: `scripts/seo_h1_check.py`;
-- retained Builds 271–289 focused guards;
-- focused Build 290 guard: `scripts/build290_release_check.py`;
-- Build 290 role/action test: `scripts/build290_action_permission_test.mjs`;
-- Build 290 restore check: `scripts/build290_rollback_check.py`;
-- feature source workflow: `.github/workflows/build290-source-gate.yml`;
-- Build 290 runtime smoke: `scripts/build290_http_smoke.sh`;
-- Build 290 Development runtime workflow: `.github/workflows/build290-development-acceptance.yml`;
+- retained Builds 271–290 focused guards;
+- retained Build 290 executable authorization/restore proofs;
+- focused Build 291 guard: `scripts/build291_release_check.py`;
+- feature source workflow: `.github/workflows/build291-source-gate.yml`;
+- Build 291 runtime smoke: `scripts/build291_http_smoke.sh`;
+- Build 291 Development runtime workflow: `.github/workflows/build291-development-acceptance.yml`;
 - Development source workflow: `.github/workflows/development-source-gate.yml`;
 - retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - full Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Never call Build 290 Development-green until exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
+Never call Build 291 Development-green until exact feature SHA + feature preview, exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
 
-## Next business/product work after Build 290
+## Next business/product work after Build 291
 
 Proceed where real evidence/rules exist:
 
 1. genuine consented proof through the retained Build 283/284 path;
 2. Google Business Profile/Search Console verification when account access exists;
-3. maintenance plan after cadence/economics/pause/cancel rules are approved;
-4. fleet/workplace path after minimum-vehicle/discount/travel/commitment rules are approved;
+3. maintenance commercial rules after cadence/economics/included scope/pause/cancel/priority terms are approved;
+4. fleet/workplace acquisition intake can be hardened without economics, while discounts/minimum vehicle count/travel/commitment rules remain approval-gated;
 5. notification-provider and targeted real-device/browser evidence when available;
 6. payment settlement/reconciliation evidence only when real transaction testing is deliberately reopened;
 7. referral/loyalty economics only after explicit business approval.
@@ -141,6 +162,13 @@ Proceed where real evidence/rules exist:
 ## Documentation policy
 
 Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are release checkpoints; Git history is the archive.
+
+<!-- Historical Build 290 retained-guard compatibility only; not the living build number.
+**Build:** 290
+Build 290 forward restore and authorization acceptance remain retained.
+Development configuration-present / owner sign-off remains retained.
+Production remains closed
+-->
 
 <!-- Historical Build 289 retained-guard compatibility only; not the living build number.
 **Build:** 289
