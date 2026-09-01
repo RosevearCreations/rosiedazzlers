@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 288  
+**Build:** 289  
 **Updated:** 2026-09-01  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 288 is the active **authenticated customer privacy + device acceptance** slice. It follows the accepted Build 287 review/share checkpoint and keeps the retained Build 285 Production line unchanged until Development evidence is accepted and deliberately promoted.
+Build 289 is the active **account accessibility + weak-network/direct-URL resilience** Development slice. It follows the fully accepted Build 288 customer/staff privacy release.
 
-Build 288 promotion is allowed only after the exact feature head passes its focused source gate and Cloudflare feature preview. Development promotion must be a fast-forward from the accepted Build 287 `dev` lineage; Production promotion must follow accepted Development source/runtime/Cloudflare evidence.
+Build 288 is now accepted in both Development and Production. The accepted Development SHA is `dd2c8826eef8ac9fa593c36a9c9238c192bbfab6`; Production `main` uses the deliberate reconciliation commit `4cf8d97bf522080e3146421e70fdf6726437faed` with the same accepted tree.
 
-`main` remains at the accepted Build 285 Production promotion until that deliberate Build 288 Production step occurs.
+Build 289 must follow the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 289 unless a later deliberate promotion is explicitly authorized.
 
 ## Application boundary
 
@@ -50,7 +50,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Completed customer/business work through Build 287
+## Completed customer/business work through Build 288
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
@@ -63,58 +63,52 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Build 285 added authenticated customer history → current booking rebook handoff without carrying old price/deposit/payment authority.
 - Build 286 made direct customer reviews completed-booking-only and removed caller authority over vehicle/source/Google URL fields.
 - Build 287 added neutral Google/share follow-up and referral-origin attribution without referral economics.
+- Build 288 closed the customer/staff privacy boundary with customer-safe response projections and no customer write authority over `admin_private_notes`.
 
 Do not re-open these items because an older roadmap mentions them.
 
-## Build 288 — customer/staff privacy boundary
+## Build 289 — account accessibility + weak-network resilience
 
-Build 288 fixes a real customer/staff authorization defect in the authenticated account surface.
+Build 289 improves the existing authenticated customer account without introducing a new authentication, booking, pricing or payment authority.
 
-### Server-side boundary
+### Direct signed-out recovery
 
-Customer-facing profile, vehicle and review responses now pass through explicit customer-safe shapes. Internal service-role reads may still load full rows, but staff-private fields are removed before browser responses are created.
+`/my-account` retains the existing `ClientAuth.signIn()` authority and gains an in-place recovery panel for direct signed-out visits. Customers can sign in from the account page rather than being stranded at a generic dashboard error.
 
-Customer profile and vehicle writes no longer accept `admin_private_notes`. A handcrafted authenticated request cannot restore that authority.
+The recovery layer does not duplicate password/session logic; `ClientAuth` continues to call the existing server `/api/client/auth_login` endpoint.
 
-Legitimate customer-owned/team-visible fields remain supported, including:
+### Weak-network boundary
 
-- general account notes;
-- client-private preferences;
-- detailer-visible notes;
-- vehicle notes for the team;
-- vehicle detailer-visible notes;
-- communication/contact/service-location preferences.
+Network/server-load failures expose an explicit **Retry account load** action. Retry occurs only after customer input and reloads the page. Build 289 adds no timer loop, background polling, automatic write replay or ambiguous non-idempotent retry.
 
-### My Account boundary
+### Accessibility boundary
 
-Legacy `Admin-only notes` controls are hidden and disabled by the Build 288 account adapter. The server remains authoritative even if browser code is bypassed.
+- account status becomes a polite atomic ARIA status region at runtime;
+- recovery status is announced through its own polite live region;
+- explicit `:focus-visible` treatment uses Rosie theme tokens;
+- narrow-screen recovery actions stack for touch access;
+- existing viewport and one-H1 source rules remain intact.
 
-### Reliability boundary
+### Privacy/storage/business boundary
 
-Build 288 restores a cumulative Development source gate that explicitly retains Builds 271–288. Historical focused guards remain executable with their retained compatibility contracts intact.
-
-Build 288 does **not** add a service worker or claim full PWA completion. It validates the existing responsive/mobile account surface and authenticated API boundary without inventing PWA/provider evidence.
-
-### Storage/business boundary
-
-Build 288 requires **no schema migration** and changes no package price, availability rule, booking rule, deposit, checkout, Stripe, PayPal, payment state, referral economics, maintenance economics or fleet economics.
+Build 288 staff-private field suppression remains loaded and server privacy remains authoritative. Build 289 requires **no schema migration** and changes no package price, availability rule, booking rule, deposit, checkout, Stripe, PayPal, payment state, referral economics, maintenance economics or fleet economics.
 
 ## Current validation authority
 
 - cumulative: `scripts/release_check.py`;
 - one-H1/current customer guards: `scripts/seo_h1_check.py`;
-- retained Builds 271–287 focused guards;
-- focused Build 288 guard: `scripts/build288_release_check.py`;
-- feature source workflow: `.github/workflows/build288-source-gate.yml`;
-- Build 288 runtime smoke: `scripts/build288_http_smoke.sh`;
-- Build 288 Development runtime workflow: `.github/workflows/build288-development-acceptance.yml`;
+- retained Builds 271–288 focused guards;
+- focused Build 289 guard: `scripts/build289_release_check.py`;
+- feature source workflow: `.github/workflows/build289-source-gate.yml`;
+- Build 289 runtime smoke: `scripts/build289_http_smoke.sh`;
+- Build 289 Development runtime workflow: `.github/workflows/build289-development-acceptance.yml`;
 - Development source workflow: `.github/workflows/development-source-gate.yml`;
 - retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - full Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Never call Build 288 Development-green until exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
+Never call Build 289 Development-green until exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
 
-## Next business/product work after Build 288
+## Next business/product work after Build 289
 
 Proceed where real evidence/rules exist:
 
@@ -122,8 +116,8 @@ Proceed where real evidence/rules exist:
 2. Google Business Profile/Search Console verification when account access exists;
 3. maintenance plan after cadence/economics/pause/cancel rules are approved;
 4. fleet/workplace path after minimum-vehicle/discount/travel/commitment rules are approved;
-5. further role/action/direct-URL/API, accessibility, weak-network, notification-provider and restore/rollback acceptance;
-6. Stripe/PayPal provider acceptance and Finance settlement/reconciliation closure;
+5. further role/action/direct-URL/API, notification-provider and restore/rollback acceptance;
+6. payment-provider/Finance settlement-reconciliation closure when that external work is reopened;
 7. referral/loyalty economics only after explicit business approval.
 
 ## Manual / external evidence that must not be fabricated
@@ -133,9 +127,10 @@ Proceed where real evidence/rules exist:
 - Search Console ownership/indexing evidence;
 - maintenance-plan, fleet and referral/loyalty economics not yet approved;
 - real email/SMS/Web Push delivery evidence;
-- Stripe/PayPal provider acceptance;
+- payment-provider acceptance;
 - restore/rollback rehearsal evidence;
-- accountant/tax judgment.
+- accountant/tax judgment;
+- physical-device acceptance beyond what automated responsive/runtime checks can prove.
 
 ## Permanent runtime/cost guardrails
 
@@ -150,6 +145,12 @@ Proceed where real evidence/rules exist:
 ## Documentation policy
 
 Only this file and `MASTER_VALUE_ROADMAP.md` are living planning authorities. Build summaries are release checkpoints; Git history is the archive.
+
+<!-- Historical Build 288 retained-guard compatibility only; not the living build number.
+**Build:** 288
+Build 288 customer/staff privacy boundary remains retained.
+Production remains closed
+-->
 
 <!-- Historical Build 287 retained-guard compatibility only; not the living build number.
 **Build:** 287
