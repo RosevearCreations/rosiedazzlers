@@ -39,6 +39,8 @@ jobs:
           node --check assets/booking-quick-start-v274.js
           node --check assets/booking-retention-v275.js
           node --check assets/booking-usecase-entry-v282.js
+          node --check assets/customer-rebook-v285.js
+          node --check assets/client-auth.js
           node --check assets/booking-hours.js
           node --check assets/pricing-catalog-client.js
           node --check functions/api/_lib/pricing-catalog.js
@@ -70,6 +72,7 @@ jobs:
         run: |
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/build284_http_smoke.sh
+          bash -n scripts/build285_http_smoke.sh
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
       - name: Check retained payment money units
@@ -102,6 +105,8 @@ jobs:
         run: python scripts/build283_release_check.py
       - name: Run current Build 284 focused guard
         run: python scripts/build284_release_check.py
+      - name: Run current Build 285 focused guard
+        run: python scripts/build285_release_check.py
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
       - name: Check one-H1 source rule
@@ -124,9 +129,10 @@ jobs:
             echo "- Build 282 use-case booking adapter syntax: PASS"
             echo "- Build 283 proof/media publication syntax: PASS"
             echo "- Build 284 contextual proof presentation syntax: PASS"
-            echo "- Development + Build 284 HTTP smoke helper syntax: PASS"
+            echo "- Build 285 authenticated customer-history rebook handoff syntax: PASS"
+            echo "- Development + Build 284/285 HTTP smoke helper syntax: PASS"
             echo "- Retained Build 271–276 focused guards: PASS"
-            echo "- Current Builds 277–284 service/SEO/release-reliability/customer-conversion/proof-publication/contextual-proof guards: PASS"
+            echo "- Current Builds 277–285 service/SEO/release-reliability/customer-conversion/proof-publication/contextual-proof/rebook guards: PASS"
             echo "- Cumulative release + one-H1 guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."

@@ -57,11 +57,18 @@ def main() -> int:
             return code
 
     # Build 284 owns contextual placement of real proof on service/location/use-case pages.
-    # The cumulative release check invokes this SEO guard, so this keeps the latest
-    # public conversion/proof contract in the stable cumulative path.
     build284 = ROOT / "scripts/build284_release_check.py"
     if build284.exists():
         code = run_guard(build284)
+        if code:
+            return code
+
+    # Build 285 owns the authenticated customer-history -> current-booking handoff.
+    # The cumulative release check invokes this SEO guard, keeping the latest
+    # customer conversion boundary in the stable source + Cloudflare path.
+    build285 = ROOT / "scripts/build285_release_check.py"
+    if build285.exists():
+        code = run_guard(build285)
         if code:
             return code
 

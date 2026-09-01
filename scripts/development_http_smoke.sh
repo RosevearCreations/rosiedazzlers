@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# Build 283 exact-deployment + branch-alias smoke authority.
-# Retains Build 281 Functions-aware static/full separation, Build 282 high-intent
-# acquisition-to-booking artifacts, and now proves Build 283 Gallery publication UI/API.
+# Current exact-deployment + branch-alias smoke authority.
+# Retains Build 281 Functions-aware static/full separation, Build 282 acquisition,
+# Build 283 Gallery publication, Build 284 contextual proof and Build 285 rebook handoff.
 
 BASE_URL="${1:-}"
 LABEL="${2:-Development endpoint}"
@@ -66,6 +66,20 @@ retention_code=$(curl_code /tmp/rosie-booking-retention.js "${BASE_URL}/assets/b
 [[ "$retention_code" == "200" ]] || { report_failure "${LABEL}: Build 275 booking-retention module returned HTTP ${retention_code}."; exit 13; }
 grep -q "Next available slots" /tmp/rosie-booking-retention.js || { report_failure "${LABEL}: booking-retention module missing Next available slots marker."; exit 14; }
 grep -q "booking_funnel_exit" /tmp/rosie-booking-retention.js || { report_failure "${LABEL}: booking-retention module missing booking_funnel_exit marker."; exit 15; }
+
+rebook_code=$(curl_code /tmp/rosie-customer-rebook-v285.js "${BASE_URL}/assets/customer-rebook-v285.js")
+[[ "$rebook_code" == "200" ]] || { report_failure "${LABEL}: Build 285 customer-rebook module returned HTTP ${rebook_code}."; exit 46; }
+grep -q "Book this service again" /tmp/rosie-customer-rebook-v285.js || { report_failure "${LABEL}: Build 285 account rebook CTA marker missing."; exit 47; }
+grep -q "Using your previous booking as a starting point" /tmp/rosie-customer-rebook-v285.js || { report_failure "${LABEL}: Build 285 booking context marker missing."; exit 48; }
+grep -q "/api/client/dashboard" /tmp/rosie-customer-rebook-v285.js || { report_failure "${LABEL}: Build 285 authenticated dashboard authority missing."; exit 49; }
+
+client_auth_code=$(curl_code /tmp/rosie-client-auth.js "${BASE_URL}/assets/client-auth.js")
+[[ "$client_auth_code" == "200" ]] || { report_failure "${LABEL}: client-auth asset returned HTTP ${client_auth_code}."; exit 50; }
+grep -q "/assets/customer-rebook-v285.js" /tmp/rosie-client-auth.js || { report_failure "${LABEL}: My Account does not bootstrap Build 285 rebook handoff."; exit 51; }
+
+pricing_client_code=$(curl_code /tmp/rosie-pricing-client.js "${BASE_URL}/assets/pricing-catalog-client.js")
+[[ "$pricing_client_code" == "200" ]] || { report_failure "${LABEL}: pricing client returned HTTP ${pricing_client_code}."; exit 52; }
+grep -q "./customer-rebook-v285.js" /tmp/rosie-pricing-client.js || { report_failure "${LABEL}: booking path does not bootstrap Build 285 rebook handoff."; exit 53; }
 
 usecase_code=$(curl_code /tmp/rosie-booking-usecase-v282.js "${BASE_URL}/assets/booking-usecase-entry-v282.js")
 [[ "$usecase_code" == "200" ]] || { report_failure "${LABEL}: Build 282 booking use-case adapter returned HTTP ${usecase_code}."; exit 30; }
