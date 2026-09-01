@@ -32,22 +32,39 @@ Permanent runtime rule:
 
 Server authorization remains authoritative. Dormant modules do not wake merely because they exist.
 
-## Retained authority
+## Retained Build 272/273 authority
 
-Builds 272–287 remain retained. Do not reopen earlier booking, SEO, proof/publication, rebook, direct-review or neutral-share work merely because older checkpoint documents mention it.
+**Build 273 is the retained Finance/tax-support baseline.** These retained authorities remain live while later customer/business releases advance:
 
-In particular, retain:
-
+- narrow Operations/Finance action permissions;
 - server-authoritative role/module/action permissions;
-- Finance tax-support authority from Build 273;
-- Complete = **Best value** and Exterior Detail differentiated from Premium Wash;
+- Finance tax-support writes retain `finance.tax.manage` while reads remain narrowly scoped;
+- persistent Finance tax-support records, evidence links, T2125 workpaper and accountant-package workflow remain retained;
+- Complete = **Best value**;
+- Exterior Detail remains differentiated from Premium Wash;
 - current Small/Mid/Oversized + condition/quote pricing authority;
 - current availability, conflict, deposit, checkout and payment mechanics;
 - one meaningful H1 per indexable public page;
 - no fabricated accounting/tax facts, reviews, consent, proof or provider evidence;
 - private/customer media never becomes public without consent/privacy review and explicit publication;
-- Rosie supplies standard detailing water and power while the customer supplies a safe/private/permitted work area;
+- Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
+
+## Completed customer/business work through Build 287
+
+- Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
+- Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
+- Build 276 hardened release mechanics.
+- Builds 277–280 deepened add-on/local SEO and normalized the self-contained mobile operating model.
+- Build 281 hardened exact Cloudflare SHA/deployment acceptance and mutable `dev` alias convergence.
+- Build 282 added three high-intent acquisition → existing-booking paths.
+- Build 283 separated proof/media pairing, public-use consent/privacy review and explicit publication.
+- Build 284 added fail-closed **contextual proof** placement at relevant service/location/use-case decisions.
+- Build 285 added authenticated customer history → current booking rebook handoff without carrying old price/deposit/payment authority.
+- Build 286 made direct customer reviews completed-booking-only and removed caller authority over vehicle/source/Google URL fields.
+- Build 287 added neutral Google/share follow-up and referral-origin attribution without referral economics.
+
+Do not re-open these items because an older roadmap mentions them.
 
 ## Build 288 — customer/staff privacy boundary
 
@@ -74,13 +91,13 @@ Legacy `Admin-only notes` controls are hidden and disabled by the Build 288 acco
 
 ### Reliability boundary
 
-Build 288 also restores a cumulative Development source gate that explicitly retains Builds 271–288. Historical focused guards remain executable instead of depending on a compact loop that drops their retained textual contracts.
+Build 288 restores a cumulative Development source gate that explicitly retains Builds 271–288. Historical focused guards remain executable with their retained compatibility contracts intact.
 
 Build 288 does **not** add a service worker or claim full PWA completion. It validates the existing responsive/mobile account surface and authenticated API boundary without inventing PWA/provider evidence.
 
 ### Storage/business boundary
 
-Build 288 requires no schema migration and changes no package price, availability rule, booking rule, deposit, checkout, Stripe, PayPal, payment state, referral economics, maintenance economics or fleet economics.
+Build 288 requires **no schema migration** and changes no package price, availability rule, booking rule, deposit, checkout, Stripe, PayPal, payment state, referral economics, maintenance economics or fleet economics.
 
 ## Current validation authority
 
