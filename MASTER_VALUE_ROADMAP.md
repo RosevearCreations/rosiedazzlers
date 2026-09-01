@@ -15,7 +15,7 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Builds 272–286 established the retained permission, pricing, Finance/tax-support, booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook and completed-job review authorities.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the Finance/tax-support baseline. Builds 274–286 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook and completed-job review authorities without replacing those foundations.
 
 Do not regress:
 

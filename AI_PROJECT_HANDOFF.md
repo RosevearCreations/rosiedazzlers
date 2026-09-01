@@ -32,11 +32,12 @@ Permanent runtime rule:
 
 Server authorization remains authoritative. Dormant modules do not wake merely because they exist.
 
-## Retained platform authority
+## Retained Build 272/273 authority
 
-Do not regress:
+These retained authorities remain live while later customer/business releases advance:
 
-- narrow server-authoritative role/module/action permissions;
+- narrow Operations/Finance action permissions;
+- server-authoritative role/module/action permissions;
 - Complete = **Best value**;
 - Exterior Detail remains differentiated from Premium Wash;
 - current Small/Mid/Oversized + condition/quote pricing authority;
