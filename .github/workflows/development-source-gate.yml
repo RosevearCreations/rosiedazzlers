@@ -23,26 +23,33 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-
-      - name: Check current booking, pricing and Gallery syntax
+      - name: Check current booking, pricing, Gallery and customer syntax
         run: |
           node --check assets/booking-quick-start-v274.js
           node --check assets/booking-retention-v275.js
           node --check assets/booking-usecase-entry-v282.js
           node --check assets/customer-rebook-v285.js
+          node --check assets/customer-review-v286.js
+          node --check assets/customer-review-share-v287.js
+          node --check assets/customer-share-entry-v287.js
+          node --check assets/customer-privacy-v288.js
           node --check assets/client-auth.js
           node --check assets/booking-hours.js
           node --check assets/pricing-catalog-client.js
+          node --check functions/api/client/_lib/customer-safe-shape.js
+          node --check functions/api/client/profile_update.js
+          node --check functions/api/client/vehicles_save.js
+          node --check functions/api/client/vehicles_list.js
+          node --check functions/api/client/dashboard.js
+          node --check functions/api/client/reviews_save.js
           node --check functions/api/_lib/pricing-catalog.js
           node --check functions/api/landing_pages_public.js
           node --check assets/landing-page.js
@@ -53,7 +60,6 @@ jobs:
           node --check functions/api/admin/gallery_media_candidates_list.js
           node --check assets/contextual-proof-v284.js
           node --check assets/visual-placeholders.js
-
       - name: Check growth, vehicle and payment syntax
         run: |
           node --check assets/growth-settings.js
@@ -67,51 +73,27 @@ jobs:
           node --check functions/api/paypal/webhook.js
           node --check functions/api/stripe/webhook.js
           node --check functions/api/checkout.js
-
       - name: Check Development smoke helper syntax
         run: |
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/build284_http_smoke.sh
           bash -n scripts/build285_http_smoke.sh
+          bash -n scripts/build286_http_smoke.sh
+          bash -n scripts/build287_http_smoke.sh
+          bash -n scripts/build288_http_smoke.sh
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
       - name: Check retained payment money units
         run: node scripts/build274_payment_money_check.mjs
-      - name: Run retained Build 271 focused guard
-        run: python scripts/build271_release_check.py
-      - name: Run retained Build 272 focused guard
-        run: python scripts/build272_release_check.py
-      - name: Run retained Build 273 focused guard
-        run: python scripts/build273_release_check.py
-      - name: Run retained Build 274 focused guard
-        run: python scripts/build274_release_check.py
-      - name: Run retained Build 275 focused guard
-        run: python scripts/build275_release_check.py
-      - name: Run current Build 276 focused guard
-        run: python scripts/build276_release_check.py
-      - name: Run current Build 277 focused guard
-        run: python scripts/build277_release_check.py
-      - name: Run current Build 278 focused guard
-        run: python scripts/build278_release_check.py
-      - name: Run current Build 279 focused guard
-        run: python scripts/build279_release_check.py
-      - name: Run current Build 280 focused guard
-        run: python scripts/build280_release_check.py
-      - name: Run current Build 281 focused guard
-        run: python scripts/build281_release_check.py
-      - name: Run current Build 282 focused guard
-        run: python scripts/build282_release_check.py
-      - name: Run current Build 283 focused guard
-        run: python scripts/build283_release_check.py
-      - name: Run current Build 284 focused guard
-        run: python scripts/build284_release_check.py
-      - name: Run current Build 285 focused guard
-        run: python scripts/build285_release_check.py
+      - name: Run retained Builds 271-288 focused guards
+        run: |
+          for build in $(seq 271 288); do python "scripts/build${build}_release_check.py"; done
       - name: Run cumulative Rosie release guard
         run: python scripts/release_check.py
       - name: Check one-H1 source rule
         run: python scripts/seo_h1_check.py
-
+      - name: Check route-copy parity
+        run: python scripts/sync_route_copies.py --check
       - name: Check source whitespace/conflict markers
         run: |
           git diff --check HEAD^ -- . ':!*.md'
@@ -119,21 +101,16 @@ jobs:
             echo "::error::Merge-conflict markers remain in source."
             exit 2
           fi
-
       - name: Development source summary
         run: |
           {
             echo "### Development Source Gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
-            echo "- Current booking/pricing/Gallery/growth/vehicle/payment/landing syntax: PASS"
-            echo "- Build 282 use-case booking adapter syntax: PASS"
-            echo "- Build 283 proof/media publication syntax: PASS"
-            echo "- Build 284 contextual proof presentation syntax: PASS"
-            echo "- Build 285 authenticated customer-history rebook handoff syntax: PASS"
-            echo "- Development + Build 284/285 HTTP smoke helper syntax: PASS"
-            echo "- Retained Build 271–276 focused guards: PASS"
-            echo "- Current Builds 277–285 service/SEO/release-reliability/customer-conversion/proof-publication/contextual-proof/rebook guards: PASS"
-            echo "- Cumulative release + one-H1 guard: PASS"
+            echo "- Current booking/pricing/Gallery/growth/vehicle/payment/customer syntax: PASS"
+            echo "- Builds 285-288 customer rebook/review/share/privacy syntax: PASS"
+            echo "- Development + Build 284-288 HTTP smoke helper syntax: PASS"
+            echo "- Retained Builds 271-288 focused guards: PASS"
+            echo "- Cumulative release + one-H1 + route parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
           } >> "$GITHUB_STEP_SUMMARY"
