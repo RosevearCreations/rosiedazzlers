@@ -34,9 +34,11 @@ The accepted Build 295 Production source at `73556e1f41dc204290409294c5e38ad0b20
 - `scripts/build296_release_check.py`
 - `scripts/build296_http_smoke.sh`
 - `.github/workflows/build296-source-gate.yml`
+- `.github/workflows/build296-development-source-gate.yml`
 - `.github/workflows/build296-development-acceptance.yml`
-- cumulative Development source gate through Build 296
-- retained Builds 271–295 guards, including forward-compatible Build 295 source-authority validation
+- retained cumulative `.github/workflows/development-source-gate.yml` through Build 295
+- cumulative Build 296 Development source validation through Builds 271–296
+- retained Builds 271–295 guards, including forward-compatible Build 295 source and runtime authority validation
 - one-H1 and route-copy parity guards
 
-Production remains closed until the exact Build 296 candidate passes feature source/Cloudflare preview, exact `dev` passes Development source/runtime/Cloudflare acceptance, and a deliberate later Production promotion is requested and accepted.
+Production remains closed until the exact Build 296 candidate passes feature source/Cloudflare preview, exact `dev` passes Build 296 cumulative Development source/runtime/Cloudflare acceptance, and a deliberate later Production promotion is requested and accepted.
