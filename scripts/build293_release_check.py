@@ -72,7 +72,11 @@ need(
 )
 
 for rel in ["my-account.html", "my-account/index.html"]:
-    need(rel, 'id="accountNotice"', 'id="bookingHistory"', 'id="maintenanceConversion"', 'id="reviewForm"', "/api/client/dashboard", "/assets/client-auth.js")
+    need(rel, 'id="accountNotice"', 'id="bookingHistory"', 'id="maintenanceConversion"', 'id="reviewForm"', "/assets/client-auth.js")
+account_asset = ROOT / "assets/my-account-v296.js"
+account_runtime = text("assets/my-account-v296.js") if account_asset.exists() else text("my-account.html")
+if "/api/client/dashboard" not in account_runtime:
+    errors.append("customer account runtime missing retained Build 293 dashboard authority")
 
 need(
     "functions/api/client/dashboard.js",

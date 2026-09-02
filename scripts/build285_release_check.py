@@ -70,20 +70,16 @@ need(
     "/assets/customer-rebook-v285.js",
     "data-build285-customer-rebook",
 )
-need(
-    "my-account.html",
-    'id="bookingHistory"',
-    "renderHistory",
-    "/api/client/dashboard",
-    "/assets/client-auth.js",
-)
-need(
-    "my-account/index.html",
-    'id="bookingHistory"',
-    "renderHistory",
-    "/api/client/dashboard",
-    "/assets/client-auth.js",
-)
+for rel in ["my-account.html", "my-account/index.html"]:
+    need(rel, 'id="bookingHistory"', "/assets/client-auth.js")
+
+# Build 296 externalized the mature account module without changing behavior.
+# Retain Build 285 on its original branch by falling back to the inline page.
+account_asset = ROOT / "assets/my-account-v296.js"
+account_runtime = read("assets/my-account-v296.js") if account_asset.exists() else read("my-account.html")
+for token in ["renderHistory", "/api/client/dashboard"]:
+    if token not in account_runtime:
+        errors.append(f"customer account runtime missing retained Build 285 token {token}")
 
 # Build 285 extends, rather than replaces, the retained Build 274/275 booking
 # presentation chain. Current controls/catalogue remain the booking authority.
