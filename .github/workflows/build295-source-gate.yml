@@ -1,0 +1,82 @@
+name: Build 295 Source Gate
+
+on:
+  push:
+    branches:
+      - build-295-customer-account-source-authority
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build295-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Build 295 source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Build 295 syntax
+        run: |
+          python -m py_compile scripts/build295_release_check.py
+          bash -n scripts/build295_http_smoke.sh
+          node --check functions/api/client/profile_update.js
+          node --check functions/api/client/vehicles_save.js
+          node --check assets/customer-privacy-v288.js
+          node --check assets/customer-maintenance-authority-v294.js
+          node --check assets/client-auth.js
+
+      - name: Run retained Builds 271-294 focused guards
+        run: for build in $(seq 271 294); do python "scripts/build${build}_release_check.py"; done
+
+      - name: Run Build 295 focused guard
+        run: python scripts/build295_release_check.py
+
+      - name: Retain Build 290 executable authorization proof
+        run: |
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Check one-H1 source rule
+        run: python scripts/seo_h1_check.py
+
+      - name: Check route-copy parity
+        run: python scripts/sync_route_copies.py --check
+
+      - name: Check source hygiene
+        run: |
+          git diff --check 5d6041501b205a03dd62522a6ffb9a49a822284b HEAD -- . ':!*.md'
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "### Build 295 Source Gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Retained Builds 271-294: PASS"
+            echo "- Static My Account privacy/maintenance authority: PASS"
+            echo "- Exact My Account route parity: PASS"
+            echo "- Build 288/294 server/adapter defenses retained: PASS"
+            echo "- Cumulative release / one-H1 / route parity / hygiene: PASS"
+            echo "- No schema migration or new maintenance economics introduced."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"
