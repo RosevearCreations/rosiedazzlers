@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 300  
+**Build:** 301  
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
@@ -16,10 +16,10 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Current release boundary
 
-- **Active Development slice:** Build 300 — Finance Payments maintainability extraction.
-- **Accepted Development baseline before Build 300:** `d3976aaa8445684b18cf6b44bc2a819d8c8f4914`.
-- **Accepted Production:** Build 299 at `ee010654aea48c12c885ea826bf7cf60f64852b7`.
-- Production remains closed for Build 300 until deliberate promotion from accepted Development evidence.
+- **Active Development slice:** Build 301 — Finance Reconciliation maintainability extraction.
+- **Accepted Development baseline before Build 301:** Build 300 at `ed7c0c6748db6d619fb37e515057666feed1ea70`.
+- **Accepted Production before Build 301 promotion:** Build 299 at `ee010654aea48c12c885ea826bf7cf60f64852b7`.
+- Production promotion of the accepted Build 301 Development head is authorized, but only after exact Development source/runtime/Cloudflare evidence is green.
 
 ## Retained baseline
 
@@ -38,15 +38,15 @@ Build 273 established the retained Finance/tax-support baseline with structured 
 
 Retain Build 273 authority: Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No later maintainability extraction invents accountant/tax judgment.
 
-## Build 300 — Finance Payments maintainability extraction
+## Build 301 — Finance Reconciliation maintainability extraction
 
-Build 300 externalizes the newer root `admin-payments.html` inline runtime into `assets/admin-payments-v300.js` without refactoring it. Webhook review/replay, deposit review, provider/manual refund actions, receipt retry, processor-fee recording, reconciliation/accountant exports and secure final-balance behavior remain unchanged.
+Build 301 externalizes the accepted `admin-accounting.html` runtime into `assets/admin-accounting-v301.js` without refactoring executable behavior. The Build 300 root and folder Accounting routes were identical, and Build 301 keeps both route copies aligned on the same versioned classic-script asset.
 
-The extraction guard exposed a pre-existing duplicate-route boundary: `admin-payments/index.html` is an older Build 185 Payments surface while the root page is Build 217. Build 300 preserves the older folder route byte-for-byte rather than silently changing customer/business behavior. Deliberate convergence or removal belongs to **Build 318 — Whole-application route/API authority sweep**.
+Bank reconciliation reads/rendering, payroll payout reconciliation, payable settlement, journal/remittance behavior, recurring expenses, documents, period-close workflow, statement/tax reports and exports remain unchanged. Build 301 deliberately does not invent a missing reconciliation write path or reinterpret accounting workflow merely because the form exists in the accepted HTML.
 
-Build 300 adds no payment behavior, provider rule, API contract, accounting/tax judgment, database schema or migration. Runtime acceptance is read-only and does not fabricate Stripe/PayPal transaction, settlement, webhook or refund evidence.
+Build 301 adds no matching/posting/approval rule, payment/provider behavior, API contract, accounting/tax judgment, database schema or migration. Runtime acceptance is read-only and uses bounded mutable Development-alias retry so Cloudflare deployment convergence does not create a false negative like the first Build 300 runtime attempt.
 
-## Retained value/authority through Build 299
+## Retained value/authority through Build 300
 
 - Builds 274–280 established Mobile Quick Book, I.T. help, reliable release mechanics and deep service/local SEO while keeping Rosie’s self-contained mobile water/power model.
 - Build 281 hardened exact-SHA Cloudflare acceptance and mutable Development alias convergence.
@@ -60,6 +60,7 @@ Build 300 adds no payment behavior, provider rule, API contract, accounting/tax 
 - Build 297 — Operations customer support maintainability extraction preserves the accepted customer-support runtime in `assets/admin-customers-v297.js`.
 - Build 298 — Operations booking/quote support maintainability extraction preserves the accepted Quote Pipeline runtime in `assets/admin-quotes-v298.js`.
 - Build 299 — Operations booking-dashboard support maintainability extraction preserves the accepted Booking Dashboard runtime in `assets/admin-booking-v299.js`.
+- Build 300 — Finance Payments maintainability extraction preserves the accepted mature root Payments runtime in `assets/admin-payments-v300.js`; its pre-existing older folder route remains deliberately deferred to Build 318.
 
 ## Permanent business/runtime constraints
 
@@ -75,8 +76,8 @@ Build 300 adds no payment behavior, provider rule, API contract, accounting/tax 
 
 ## Finance roadmap — Builds 300–305
 
-1. **Build 300 — Finance Payments maintainability extraction** — complete the behavior-preserving Payments extraction and Development acceptance.
-2. **Build 301 — Finance Reconciliation maintainability extraction** — separate bank/transaction/reconciliation UI runtime while preserving matching, posting and approval behavior exactly.
+1. **Build 300 — Finance Payments maintainability extraction** — complete and accepted on Development before Build 301.
+2. **Build 301 — Finance Reconciliation maintainability extraction** — active behavior-preserving Accounting/reconciliation runtime extraction.
 3. **Build 302 — Statement Import reliability** — harden parsing, validation, duplicate detection and error reporting without changing accounting policy.
 4. **Build 303 — Finance Tax-support maintainability extraction** — externalize retained T2125/tax-support/accountant-package surfaces while preserving Build 273 authority.
 5. **Build 304 — Accountant export integrity** — verify document/evidence references, formats, filenames and privacy boundaries.
@@ -125,16 +126,15 @@ Do not autonomously invent:
 - accountant/tax judgment;
 - physical-device evidence not proven by automation.
 
-## Build 300 acceptance sequence
+## Build 301 acceptance sequence
 
 1. exact feature reconstruction/source gate;
 2. accepted-tree transfer to `dev`;
-3. Build 300 cumulative Development source gate;
-4. read-only Build 300 Development Payments runtime smoke;
+3. Build 301 cumulative Development source gate;
+4. read-only Build 301 Development Finance/Reconciliation runtime smoke with bounded alias convergence retry;
 5. exact Cloudflare Development deployment/artifact acceptance;
-6. only then call Build 300 Development-green.
-
-Production promotion is a separate deliberate boundary.
+6. only then call Build 301 Development-green;
+7. promote the exact accepted Development source to Production `main` under the explicit authorization for this release and verify Production deployment.
 
 ## Retained focused-guard compatibility anchors
 
@@ -156,6 +156,7 @@ These anchors preserve historical focused-guard vocabulary; they are not the liv
 - **Build:** 297 — Build 297 — Operations customer support maintainability extraction; retained historical Production anchor `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
 - **Build:** 298 — Build 298 — Operations booking/quote support maintainability extraction; `assets/admin-quotes-v298.js`; retained historical Production anchor `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
 - **Build:** 299 — Build 299 — Operations booking-dashboard support maintainability extraction; `assets/admin-booking-v299.js`; retained historical Production anchor `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
+- **Build:** 300 — Build 300 — Finance Payments maintainability extraction; `assets/admin-payments-v300.js`; accepted Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`; next retained queue marker Build 301 — Finance Reconciliation maintainability extraction; duplicate-route owner Build 318 — Whole-application route/API authority sweep.
 
 ## Documentation policy
 

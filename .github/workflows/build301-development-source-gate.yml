@@ -1,0 +1,49 @@
+name: Build 301 Development Source Gate
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build301-development-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Development through Build 301
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check Build 301 syntax
+        run: |
+          python -m py_compile scripts/build301_release_check.py
+          bash -n scripts/build301_http_smoke.sh
+          node --check assets/admin-accounting-v301.js
+      - name: Run retained focused guards through Build 300
+        run: |
+          for build in $(seq 271 300); do python "scripts/build${build}_release_check.py"; done
+      - name: Run Build 301 exact extraction guard
+        run: python scripts/build301_release_check.py
+      - name: Run retained authorization and cumulative guards
+        run: |
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Check source hygiene outside byte-for-byte extracted runtime
+        run: git diff --check ed7c0c6748db6d619fb37e515057666feed1ea70 HEAD -- . ':!*.md' ':!assets/admin-accounting-v301.js'

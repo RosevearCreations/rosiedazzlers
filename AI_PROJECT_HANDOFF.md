@@ -1,29 +1,24 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 300  
+**Build:** 301  
 **Updated:** 2026-09-02  
 **Read next:** `MASTER_VALUE_ROADMAP.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
 
 ## Current release state
 
-Build 300 is the active **Finance Payments maintainability extraction** Development-first slice. The accepted source baseline is `dev` at `d3976aaa8445684b18cf6b44bc2a819d8c8f4914`. Accepted Production is **Build 299** at `ee010654aea48c12c885ea826bf7cf60f64852b7`.
+Build 301 is the active **Finance Reconciliation maintainability extraction** Development-first slice. The accepted source baseline is Build 300 `dev` at `ed7c0c6748db6d619fb37e515057666feed1ea70`. Accepted Production remains **Build 299** at `ee010654aea48c12c885ea826bf7cf60f64852b7` until Build 301 Development evidence is green.
 
-Production remains closed for Build 300 until deliberate promotion from accepted Development evidence.
+Production promotion of the final accepted Build 301 Development head is explicitly authorized for this release. Promotion still occurs only after the exact Development source, read-only runtime and Cloudflare deployment evidence agree.
 
-## Build 300 authority
+## Build 301 authority
 
-Build 300 externalizes the mature root `admin-payments.html` runtime into `assets/admin-payments-v300.js` without refactoring or changing payment behavior.
+Build 301 externalizes the accepted `admin-accounting.html` classic-script runtime into `assets/admin-accounting-v301.js` without refactoring its executable behavior. The accepted Build 300 `admin-accounting.html` and `admin-accounting/index.html` sources were identical; Build 301 keeps those route copies aligned and makes both load the same versioned runtime asset.
 
-The focused reconstruction guard discovered a pre-existing route-authority difference:
+This is deliberately a structural extraction rather than a Finance redesign. Bank reconciliation reads/rendering, payroll payout reconciliation, payable settlement, recurring expenses, journal/remittance behavior, documents, period-close workflow, statement/tax reports and exports retain their accepted Build 300 behavior exactly. Build 301 does not invent a reconciliation write path where the accepted runtime did not already provide one.
 
-- `admin-payments.html` is the newer Build 217 secure-final-balance Payments surface;
-- `admin-payments/index.html` is an older Build 185 Payments surface;
-- Build 300 preserves the folder route byte-for-byte instead of silently upgrading it;
-- **Build 318 — Whole-application route/API authority sweep** owns deliberate duplicate-route convergence/removal.
-
-Build 300 changes no payment API contract, provider/refund rule, final-balance rule, reconciliation/accounting judgment, schema or migration. Real Stripe/PayPal transaction, settlement, webhook-delivery or refund evidence is not fabricated. Runtime acceptance is read-only.
+Build 301 changes no matching/posting/approval rule, payment/provider rule, tax/accounting judgment, API contract, schema or migration. Real provider transaction, settlement, approval or reconciliation evidence is not fabricated. Runtime acceptance is read-only.
 
 ## Application boundary
 
@@ -60,7 +55,7 @@ Build 273 is the retained Finance/tax-support baseline. The accepted Build 272/2
 
 ## Retained business/runtime authority
 
-The accepted Builds 272–299 authority remains intact, including:
+The accepted Builds 272–300 authority remains intact, including:
 
 - Build 273 Finance/tax-support and accountant-workpaper authority;
 - Complete = **Best value** and the current Small/Mid/Oversized + condition/quote pricing authority;
@@ -78,24 +73,25 @@ The accepted Builds 272–299 authority remains intact, including:
 - Build 292 fleet/workplace intake remains quote-first with no approved thresholds/rates/discounts/contracts;
 - Build 293 customer next-action orchestration retains current booking/payment authority;
 - Build 294/295 remove customer authority over staff maintenance scheduling fields and stale private controls;
-- Builds 296–299 are behavior-preserving maintainability extractions for My Account, Operations Customers, Quote Pipeline and Booking Dashboard.
+- Builds 296–299 are behavior-preserving maintainability extractions for My Account, Operations Customers, Quote Pipeline and Booking Dashboard;
+- Build 300 is the behavior-preserving Finance Payments extraction in `assets/admin-payments-v300.js`, including its recorded pre-existing Payments duplicate-route boundary for Build 318.
 
-## Build 300 validation authority
+## Build 301 validation authority
 
-- `scripts/build300_release_check.py` — exact root-runtime reconstruction, older folder-route preservation, migration rejection and retained endpoint checks;
-- `scripts/build300_http_smoke.sh` — read-only deployed Payments surface acceptance;
-- `.github/workflows/build300-source-gate.yml` — feature source gate;
-- `.github/workflows/build300-development-source-gate.yml` — Development cumulative source gate;
-- `.github/workflows/build300-development-acceptance.yml` — Development read-only runtime acceptance;
-- retained `scripts/release_check.py`, `scripts/seo_h1_check.py`, route-copy checks and Builds 271–299 focused guards remain cumulative authorities.
+- `scripts/build301_release_check.py` — exact Accounting-runtime reconstruction, route-copy parity, migration rejection and retained Finance endpoint checks;
+- `scripts/build301_http_smoke.sh` — read-only deployed Accounting/Reconciliation acceptance with bounded mutable-alias convergence retry;
+- `.github/workflows/build301-source-gate.yml` — feature source gate;
+- `.github/workflows/build301-development-source-gate.yml` — Development cumulative source gate;
+- `.github/workflows/build301-development-acceptance.yml` — Development read-only runtime acceptance;
+- retained `scripts/release_check.py`, `scripts/seo_h1_check.py`, route-copy checks and Builds 271–300 focused guards remain cumulative authorities.
 
-Do not call Build 300 Development-green until the exact `dev` SHA, Build 300 Development source/runtime gates and Cloudflare Development deployment evidence agree.
+Do not call Build 301 Development-green until the exact `dev` SHA, Build 301 Development source/runtime gates and Cloudflare Development deployment evidence agree. Only then perform the already-authorized Production promotion and verify Production on the promoted source.
 
 ## Next autonomous build
 
-**Build 301 — Finance Reconciliation maintainability extraction:** cleanly separate bank/transaction/reconciliation UI runtime while preserving matching, posting and approval behavior exactly.
+**Build 302 — Statement Import reliability:** harden parsing, validation, duplicate detection and error reporting without changing accounting policy.
 
-After that, continue the recorded Builds 302–319 sequence. Do not invent business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
+After that, continue the recorded Builds 303–319 sequence. Do not invent business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
 
 ## Manual/external evidence that must not be fabricated
 
@@ -137,6 +133,7 @@ These lines preserve historical focused-guard anchors; they are not the living b
 - **Build:** 297 — Operations customer support maintainability extraction; retained accepted Production anchor `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
 - **Build:** 298 — Operations booking/quote support maintainability extraction; `assets/admin-quotes-v298.js`; retained historical Production anchor `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
 - **Build:** 299 — Operations booking-dashboard support maintainability extraction; retained historical Production anchor `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
+- **Build:** 300 — Finance Payments maintainability extraction; `assets/admin-payments-v300.js`; accepted Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`; next retained queue marker Build 301 — Finance Reconciliation maintainability extraction; duplicate-route owner Build 318 — Whole-application route/API authority sweep.
 
 ## Documentation policy
 
