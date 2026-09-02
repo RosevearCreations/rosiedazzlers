@@ -21,17 +21,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 20
+          fetch-depth: 50
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Apply guarded Build 295 patch
+      - name: Apply guarded Build 295 account patch
         run: |
           python scripts/build295_patch_my_account.py
           cp my-account.html my-account/index.html
-      - name: Verify patch source
+      - name: Patch cumulative gate and living authorities
+        run: python scripts/build295_patch_authorities.py
+      - name: Verify patched source
         run: |
           python scripts/build295_patch_my_account.py
+          python scripts/build295_patch_authorities.py
           cmp -s my-account.html my-account/index.html
           git diff --check
           for page in my-account.html my-account/index.html; do
@@ -41,14 +44,17 @@ jobs:
               exit 2
             fi
           done
-      - name: Commit patched account source
+          grep -Fq 'Run current Build 295 focused guard' .github/workflows/development-source-gate.yml
+          grep -Fq '**Build:** 295' AI_PROJECT_HANDOFF.md
+          grep -Fq '**Build:** 295' MASTER_VALUE_ROADMAP.md
+      - name: Commit patched authorities
         run: |
-          if git diff --quiet -- my-account.html my-account/index.html; then
-            echo "No account patch commit required."
+          if git diff --quiet -- my-account.html my-account/index.html .github/workflows/development-source-gate.yml AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md; then
+            echo "No authority patch commit required."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add my-account.html my-account/index.html
-          git commit -m "Keep Build 295 My Account route copies exact"
+          git add my-account.html my-account/index.html .github/workflows/development-source-gate.yml AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md
+          git commit -m "Advance cumulative authorities through Build 295"
           git push origin HEAD:build-295-customer-account-source-authority
