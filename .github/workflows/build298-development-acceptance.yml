@@ -1,0 +1,62 @@
+name: Build 298 Development Runtime Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build298-development-runtime
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Validate Build 298 Development runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Reconfirm Build 298 and retained authorities
+        run: |
+          python scripts/build298_release_check.py
+          python scripts/build297_release_check.py
+          python scripts/build296_release_check.py
+          python scripts/build295_release_check.py
+          python scripts/build290_release_check.py
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+          node --check assets/admin-quotes-v298.js
+      - name: Wait for Development alias and run read-only smoke
+        run: |
+          for attempt in $(seq 1 24); do
+            echo "Build 298 Development runtime attempt ${attempt}/24"
+            if bash scripts/build298_http_smoke.sh https://dev.rosiedazzlers.pages.dev "Build 298 Development runtime"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::Build 298 Development alias did not converge to an acceptable runtime."
+          exit 1
+      - name: Development runtime summary
+        run: |
+          {
+            echo "### Build 298 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- /admin-quotes routes load /assets/admin-quotes-v298.js: PASS"
+            echo "- Quote list/save and booking bridge markers remain present: PASS"
+            echo "- Runtime smoke is read-only"
+            echo "- No quote/booking behavior, API, pricing, recurrence or schema change introduced"
+            echo "- Production remains Build 296 and closed for Build 298"
+          } >> "$GITHUB_STEP_SUMMARY"
