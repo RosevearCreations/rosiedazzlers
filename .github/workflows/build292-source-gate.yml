@@ -35,7 +35,10 @@ jobs:
           bash -n scripts/build292_http_smoke.sh
 
       - name: Run retained Builds 271-291 focused guards
-        run: for build in $(seq 271 292); do python "scripts/build${build}_release_check.py"; done
+        run: for build in $(seq 271 291); do python "scripts/build${build}_release_check.py"; done
+
+      - name: Run Build 292 focused guard
+        run: python scripts/build292_release_check.py
 
       - name: Retain Build 290 executable authorization proof
         run: |
