@@ -16,10 +16,8 @@ echo "Base: ${BASE_URL}"
 fetch "${BASE_URL}/my-account" > "${TMP_DIR}/account.html" || fail "could not load /my-account"
 for token in \
   'data-build295-account-source-authority' \
-  'data-build295-maintenance-interest-only' \
   'Maintenance interest' \
   'Open maintenance interest' \
-  'No fixed cadence, price, discount, priority, appointment, subscription or recurring billing' \
   'id="maintenanceConversion"' \
   'id="bookingHistory"' \
   'id="vehicleForm"' \
@@ -41,6 +39,8 @@ for token in \
   '/api/client/vehicle_media_upload_url' \
   '/api/client/vehicle_media_save' \
   '/api/client/reviews_save' \
+  'data-build295-maintenance-interest-only' \
+  'No fixed cadence, price, discount, priority, appointment, subscription or recurring billing' \
   'setBrandImages(); setFooter();'; do
   grep -Fq "$token" "${TMP_DIR}/account.js" || fail "versioned account module missing runtime marker: $token"
 done
