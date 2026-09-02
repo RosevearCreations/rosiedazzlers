@@ -1,0 +1,49 @@
+name: Build 299 Development Source Gate
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build299-development-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Development through Build 299
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check Build 299 syntax
+        run: |
+          python -m py_compile scripts/build299_release_check.py
+          bash -n scripts/build299_http_smoke.sh
+          node --check assets/admin-booking-v299.js
+      - name: Run retained focused guards through Build 298
+        run: |
+          for build in $(seq 271 298); do python "scripts/build${build}_release_check.py"; done
+      - name: Run Build 299 exact extraction guard
+        run: python scripts/build299_release_check.py
+      - name: Run retained authorization and cumulative guards
+        run: |
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Check source hygiene outside byte-for-byte extracted runtime
+        run: git diff --check 48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b HEAD -- . ':!*.md' ':!assets/admin-booking-v299.js'
