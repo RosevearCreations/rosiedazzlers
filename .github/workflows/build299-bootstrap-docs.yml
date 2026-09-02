@@ -1,0 +1,54 @@
+name: Build 299 bootstrap living docs
+
+on:
+  push:
+    branches:
+      - build-299-operations-booking-dashboard-maintainability-extraction
+
+permissions:
+  contents: write
+
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Advance living Build 299 authorities
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          handoff = Path('AI_PROJECT_HANDOFF.md').read_text(encoding='utf-8')
+          if '**Build:** 299' not in handoff:
+              handoff = handoff.replace('**Build:** 298', '**Build:** 299', 1)
+              handoff = handoff.replace('Build 298 is the active **Operations booking/quote support maintainability extraction** Development-first slice. It follows the accepted Build 297 Development checkpoint at SHA `a034182bf8fd5dc8f8025032834ad7be6ec1d762`; accepted Production remains Build 296 at SHA `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.', 'Build 299 is the active **Operations booking-dashboard support maintainability extraction** Development-first slice. It follows the accepted Build 298 Development checkpoint at SHA `48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b`; accepted Production remains Build 296 at SHA `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.', 1)
+              handoff = handoff.replace('Build 296 is the accepted Production baseline while Build 298 is validated.', 'Build 296 is the accepted Production baseline while Build 299 is validated.', 1)
+              handoff = handoff.replace('**Production remains closed** for Build 298', '**Production remains closed** for Build 299', 1)
+              handoff = handoff.replace('## Completed customer/business work through Build 298', '## Completed customer/business work through Build 299', 1)
+              handoff = handoff.replace('- Build 298 extracts the accepted Quote Pipeline inline runtime byte-for-byte into `assets/admin-quotes-v298.js`, retaining quote list/save behavior and the booking bridge unchanged.', '- Build 298 extracts the accepted Quote Pipeline inline runtime byte-for-byte into `assets/admin-quotes-v298.js`, retaining quote list/save behavior and the booking bridge unchanged.\n- Build 299 extracts the accepted Operations booking-dashboard inline runtime byte-for-byte into `assets/admin-booking-v299.js`, retaining booking, assignment, intake/review, customer-document and existing finance orchestration unchanged.', 1)
+              Path('AI_PROJECT_HANDOFF.md').write_text(handoff, encoding='utf-8')
+
+          roadmap = Path('MASTER_VALUE_ROADMAP.md').read_text(encoding='utf-8')
+          if '**Build:** 299' not in roadmap:
+              roadmap = roadmap.replace('**Build:** 298', '**Build:** 299', 1)
+              roadmap = roadmap.replace('Builds 274–298 added', 'Builds 274–299 added', 1)
+              roadmap = roadmap.replace('Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 297 is the accepted Development checkpoint at `a034182bf8fd5dc8f8025032834ad7be6ec1d762`. Build 298 is the active Development-first Operations booking/quote support maintainability extraction. **Production remains closed** for Build 298 until deliberate promotion from final exact accepted Development evidence.', 'Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 298 is the accepted Development checkpoint at `48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b`. Build 299 is the active Development-first Operations booking-dashboard support maintainability extraction. **Production remains closed** for Build 299 until deliberate promotion from final exact accepted Development evidence.', 1)
+              section = '''\n\n## Build 299 — Operations booking-dashboard support maintainability extraction\n\nRules:\n\n- `assets/admin-booking-v299.js` is byte-for-byte the accepted Build 298 inline booking module;\n- `admin-booking.html` and `admin-booking/index.html` remain exact and differ from Build 298 only by the external module tag;\n- booking loading/status, staff assignment, intake/media review, vehicle-size verification, customer-document helpers and existing finance-entry orchestration remain unchanged;\n- server authorization, booking validation, scheduling/conflict and payment/accounting authorities remain unchanged;\n- Build 299 adds no booking behavior, API authority, pricing/package rule, scheduling/recurrence/commercial rule, polling or schema migration.\n'''
+              anchor = '## Build 298 — Operations booking/quote support maintainability extraction'
+              idx = roadmap.find(anchor)
+              if idx < 0: raise SystemExit('Build 298 roadmap anchor missing')
+              insert_at = roadmap.find('\n## ', idx + len(anchor))
+              if insert_at < 0: insert_at = len(roadmap)
+              roadmap = roadmap[:insert_at] + section + roadmap[insert_at:]
+              Path('MASTER_VALUE_ROADMAP.md').write_text(roadmap, encoding='utf-8')
+          PY
+      - name: Commit living docs only
+        run: |
+          git config user.name "John Rosevear"
+          git config user.email "jfrosevear@gmail.com"
+          git add AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md
+          if git diff --cached --quiet; then echo "Living docs already current."; exit 0; fi
+          git commit -m "Build 299 advance living authorities"
+          git push
