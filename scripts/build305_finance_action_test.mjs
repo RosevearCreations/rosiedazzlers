@@ -1,6 +1,27 @@
 import assert from "node:assert/strict";
+import { readdirSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import { financeActionFor, isFinanceAdminLeaf, BUILD305_FINANCE_ACTIONS } from "../functions/api/_lib/admin-finance-actions.js";
 import { hasActionAccess } from "../functions/api/_lib/action-permissions.js";
+
+const here = dirname(fileURLToPath(import.meta.url));
+const adminDir = join(here, "..", "functions", "api", "admin");
+const financeFiles = readdirSync(adminDir).filter((name) => /^(?:accounting_|payment_|payroll_).+\.js$/.test(name));
+assert.ok(financeFiles.length >= 40, `expected current Finance surface, found ${financeFiles.length}`);
+
+let exportedFinanceMethods = 0;
+for (const filename of financeFiles) {
+  const leaf = filename.replace(/\.js$/, "");
+  assert.equal(isFinanceAdminLeaf(leaf), true, `${leaf} must be recognized as Finance`);
+  const source = readFileSync(join(adminDir, filename), "utf8");
+  const methods = [...source.matchAll(/export\s+async\s+function\s+onRequest(Get|Post|Put|Patch|Delete)\b/g)].map((match) => match[1].toUpperCase());
+  for (const method of methods) {
+    exportedFinanceMethods += 1;
+    assert.ok(financeActionFor(leaf, method), `${method} ${leaf} must resolve to a Finance action`);
+  }
+}
+assert.ok(exportedFinanceMethods >= financeFiles.length, "Finance files should expose protected request methods");
 
 const cases = [
   ["accounting_accounts_list", "GET", "finance.view"],
@@ -58,6 +79,7 @@ assert.equal(hasActionAccess({ role_code: "accountant", module_access: { finance
 assert.equal(hasActionAccess({ role_code: "admin", module_access: {} }, "finance.tax.manage"), true, "admin retains full authority");
 
 console.log("Build 305 Finance action matrix: PASS");
+console.log(`- ${financeFiles.length} current accounting/payment/payroll files and ${exportedFinanceMethods} exported methods scanned`);
 console.log(`- ${cases.length} representative route/method mappings verified`);
 console.log("- role ceiling, module disable and per-action narrowing fail closed");
 console.log("- Operations-owned quote/final-balance request lifecycle remains unchanged");
