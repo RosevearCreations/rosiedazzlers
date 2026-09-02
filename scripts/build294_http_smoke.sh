@@ -14,8 +14,17 @@ echo "== ${LABEL} =="
 echo "Base: ${BASE_URL}"
 
 fetch "${BASE_URL}/my-account" > "${TMP_DIR}/account.html" || fail "could not load /my-account"
-for token in 'id="maintenanceConversion"' 'id="vehNextDue"' 'id="vehNextServiceMileage"' 'id="vehIntervalDays"' 'id="vehAutoSchedule"' '/assets/client-auth.js'; do
+for token in 'id="maintenanceConversion"' '/assets/client-auth.js' '<script type="module" src="/assets/my-account-v296.js"></script>'; do
   grep -Fq "$token" "${TMP_DIR}/account.html" || fail "account missing compatibility marker: $token"
+done
+
+# Build 295 removed staff-owned recurrence/scheduling controls from customer source.
+# Build 294 remains defense in depth: its adapter still closes those controls if an older
+# route copy ever presents them, but current customer HTML must not reintroduce them.
+for token in 'id="vehNextDue"' 'id="vehNextServiceMileage"' 'id="vehIntervalDays"' 'id="vehAutoSchedule"'; do
+  if grep -Fq "$token" "${TMP_DIR}/account.html"; then
+    fail "retired staff-owned customer control returned at runtime: $token"
+  fi
 done
 
 fetch "${BASE_URL}/assets/client-auth.js" > "${TMP_DIR}/client-auth.js" || fail "could not load client auth"
@@ -40,8 +49,8 @@ if grep -Eqi 'admin_private_notes|service_role|supabase_service|password_hash' "
 fi
 
 echo "Build 294 runtime smoke: PASS"
-echo "- customer maintenance/auto-schedule authority adapter is available"
-echo "- legacy recurrence controls remain DOM-compatible but are customer-disabled at runtime"
+echo "- Build 295-retired staff scheduling controls remain absent from customer HTML"
+echo "- Build 294 customer maintenance authority adapter remains available as defense in depth"
 echo "- Build 293 next-action loader remains present"
 echo "- anonymous dashboard remains signed-out and customer-safe"
 echo "- smoke is read-only and must not create or modify customer, vehicle, booking, review or maintenance-interest records"
