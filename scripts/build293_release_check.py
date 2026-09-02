@@ -92,6 +92,21 @@ need("BUILD293_SUMMARY.md", "Build 293", "Customer Retention Next-Action Hub", "
 need("scripts/build293_http_smoke.sh", "/my-account", "/assets/customer-next-actions-v293.js", "/api/client/dashboard", "must not create")
 need(".github/workflows/build293-source-gate.yml", "Build 293 Source Gate", "python scripts/build293_release_check.py")
 need(".github/workflows/build293-development-acceptance.yml", "Build 293 Development Runtime Acceptance", "scripts/build293_http_smoke.sh")
+need(
+    "AI_PROJECT_HANDOFF.md",
+    "**Build:** 293",
+    "Build 293 — customer retention next-action hub",
+    "customer-safe review projection retaining `booking_id`",
+    "Production remains closed",
+)
+need(
+    "MASTER_VALUE_ROADMAP.md",
+    "**Build:** 293",
+    "Build 293 — customer retention next-action hub",
+    "Customer maintenance/auto-schedule authority closure",
+    "accounting_documents",
+    "accountant-friendly export surfaces",
+)
 
 for rel in ["assets/customer-next-actions-v293.js", "assets/client-auth.js"]:
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
@@ -113,5 +128,6 @@ print("- customer-safe review projection retains booking_id so reviewed complete
 print("- Build 285 current booking recalculation boundary remains explicit")
 print("- Build 291 maintenance interest remains free of unapproved cadence, price, discount, appointment and recurring-billing promises")
 print("- Build 289 remains the manual recovery authority; Build 293 does not poll or retry automatically")
+print("- living handoff and roadmap identify Build 293 and the next safe authority-closure slice")
 print("- no schema migration or new customer write authority is introduced")
 print("- Production remains closed")
