@@ -6,6 +6,7 @@ on:
       - feature/build-303-tax-support-extraction
     paths:
       - .github/workflows/build303-bootstrap-doc-sync.yml
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -18,123 +19,21 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
       - name: Synchronize living Build 303 authority
+        run: python scripts/build303_doc_sync.py
+      - name: Validate retained and current release guards
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import re
-
-          handoff = Path('AI_PROJECT_HANDOFF.md')
-          h = handoff.read_text(encoding='utf-8')
-          h = h.replace('**Build:** 301  ', '**Build:** 303  ', 1)
-          current = '''## Current release state
-
-Build 303 is the active **Finance Tax-support maintainability extraction** release candidate, built on accepted Build 302 parent `9ec950384124644d1176a01d381745a3d8f7cfb9`. Build 302 closed the planned statement-import reliability item against the actual surviving Finance authority: no active statement-import parser/API exists, statement reporting remains read-only/fail-closed on POST, and bank reconciliation remains separate.
-
-Build 303 externalizes the retained Build 273 Tax Support & Accountant Readiness browser controller into `assets/admin-tax-support-v303.js` byte-for-byte. The backend authorities `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` remain unchanged. T2125 support, factual mileage/home-office/capital-asset/year-end records, evidence manifest and accountant JSON package behavior are retained without new tax judgment.
-
-The owner has explicitly authorized promotion of the exact accepted Build 303 Development source to `main`. Promotion still occurs only after the exact Development source gate, Cloudflare deployment and read-only runtime acceptance all agree. No schema/database migration, accounting-policy change, payment-provider mutation or Production data mutation belongs to Builds 302–303.
-
-## Build 303 authority
-
-- `assets/admin-tax-support-v303.js` is the exact former inline controller from `admin-tax-support.html`;
-- `scripts/build302_release_check.py` preserves the retired statement-import/fail-closed boundary;
-- `scripts/build303_release_check.py` proves exact tax-support reconstruction and unchanged backend tax authority;
-- `scripts/build303_http_smoke.sh` performs read-only deployed page/asset acceptance;
-- Build 304+ remains untouched until Build 303 is fully accepted and promoted.
-
-## Application boundary'''
-          h, n = re.subn(r'## Current release state\n.*?\n## Application boundary', current, h, count=1, flags=re.S)
-          if n != 1: raise SystemExit('handoff current-release block not found')
-          h = h.replace('The accepted Builds 272–300 authority remains intact, including:', 'The accepted Builds 272–303 authority remains intact, including:', 1)
-          h = h.replace('- Build 300 is the behavior-preserving Finance Payments extraction in `assets/admin-payments-v300.js`, including its recorded pre-existing Payments duplicate-route boundary for Build 318.', '- Build 300 is the behavior-preserving Finance Payments extraction in `assets/admin-payments-v300.js`, including its recorded pre-existing Payments duplicate-route boundary for Build 318.\n- Build 301 is the behavior-preserving Finance Reconciliation extraction in `assets/admin-accounting-v301.js`.\n- Build 302 preserves the retired statement-import/fail-closed boundary without reviving an obsolete importer or changing schema/accounting policy.\n- Build 303 is the behavior-preserving Tax Support extraction in `assets/admin-tax-support-v303.js`; Build 273 tax-support/accountant authority remains unchanged.', 1)
-          validation = '''## Build 303 validation authority
-
-- `scripts/build301_release_check.py` — retained Accounting runtime/reconciliation extraction authority;
-- `scripts/build302_release_check.py` — statement-import convergence/fail-closed guard with schema rejection;
-- `scripts/build303_release_check.py` — exact Tax Support runtime reconstruction, unchanged backend tax authority and migration rejection;
-- `scripts/build303_http_smoke.sh` — read-only deployed Tax Support page/asset acceptance;
-- `.github/workflows/build303-development-source-gate.yml` — Development cumulative source gate through Build 303;
-- `.github/workflows/build303-development-acceptance.yml` — Development read-only runtime acceptance;
-- retained `scripts/release_check.py`, `scripts/seo_h1_check.py` and route-copy checks remain cumulative authorities.
-
-Do not call Build 303 accepted until the exact `dev` SHA, Build 303 Development source gate, Cloudflare Development deployment and read-only runtime evidence agree. Only then promote that exact SHA to `main` under the owner authorization and verify the Production source/deployment boundary.
-
-## Next autonomous build
-
-**Build 304 — Accountant export integrity:** verify document/evidence references, predictable formats, safe filenames and privacy boundaries. Build 304 is not part of Build 303 and remains untouched until this release is complete.
-
-## Manual/external evidence that must not be fabricated'''
-          h, n = re.subn(r'## Build 301 validation authority\n.*?\n## Manual/external evidence that must not be fabricated', validation, h, count=1, flags=re.S)
-          if n != 1: raise SystemExit('handoff validation block not found')
-          anchor = '- **Build:** 300 — Finance Payments maintainability extraction; `assets/admin-payments-v300.js`; accepted Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`; next retained queue marker Build 301 — Finance Reconciliation maintainability extraction; duplicate-route owner Build 318 — Whole-application route/API authority sweep.'
-          replacement = anchor + '\n- **Build:** 301 — Finance Reconciliation maintainability extraction; `assets/admin-accounting-v301.js`.\n- **Build:** 302 — Statement Import reliability convergence guard; retired importer remains fail-closed.\n- **Build:** 303 — Finance Tax-support maintainability extraction; `assets/admin-tax-support-v303.js`; next queue item Build 304 — Accountant export integrity.'
-          if anchor not in h: raise SystemExit('handoff compatibility anchor not found')
-          h = h.replace(anchor, replacement, 1)
-          handoff.write_text(h, encoding='utf-8')
-
-          roadmap = Path('MASTER_VALUE_ROADMAP.md')
-          r = roadmap.read_text(encoding='utf-8')
-          r = r.replace('**Build:** 301  ', '**Build:** 303  ', 1)
-          boundary = '''## Current release boundary
-
-- **Active Development slice:** Build 303 — Finance Tax-support maintainability extraction.
-- **Accepted Build 302 parent:** `9ec950384124644d1176a01d381745a3d8f7cfb9`.
-- **Build 302 boundary:** no active statement-import parser/API survives; statement reporting remains fail-closed on POST and reconciliation remains separate.
-- **Build 303 change:** exact externalization of the retained Build 273 Tax Support browser runtime into `assets/admin-tax-support-v303.js`; backend tax authority remains unchanged.
-- **Promotion authority:** owner-authorized after exact Development source, Cloudflare deployment and read-only runtime acceptance agree; no schema/database or Production data mutation is included.
-
-## Retained baseline'''
-          r, n = re.subn(r'## Current release boundary\n.*?\n## Retained baseline', boundary, r, count=1, flags=re.S)
-          if n != 1: raise SystemExit('roadmap boundary block not found')
-          finance = '''## Builds 301–303 — Finance maintainability/reliability closure
-
-Build 301 externalized the accepted Accounting/Reconciliation runtime into `assets/admin-accounting-v301.js` without changing matching, posting, approval, statement, tax or export behavior.
-
-Build 302 resolved Statement Import reliability against the actual surviving codebase rather than recreating a retired importer. The release guard keeps statement reporting read-only/fail-closed on POST, preserves bank reconciliation authority, rejects hidden import/parser reintroduction and rejects schema changes. Any future importer requires explicit deterministic parsing, validation, error and idempotency coverage.
-
-Build 303 externalizes the retained Build 273 Tax Support & Accountant Readiness runtime into `assets/admin-tax-support-v303.js` byte-for-byte. T2125 support, factual mileage/home-office/capital-asset/year-end records, evidence links and accountant package behavior remain unchanged; no tax judgment or backend tax authority is added or modified.
-
-## Retained value/authority through Build 303'''
-          r, n = re.subn(r'## Build 301 — Finance Reconciliation maintainability extraction\n.*?\n## Retained value/authority through Build 300', finance, r, count=1, flags=re.S)
-          if n != 1: raise SystemExit('roadmap Build301 block not found')
-          r = r.replace('1. **Build 300 — Finance Payments maintainability extraction** — complete and accepted on Development before Build 301.\n2. **Build 301 — Finance Reconciliation maintainability extraction** — active behavior-preserving Accounting/reconciliation runtime extraction.\n3. **Build 302 — Statement Import reliability** — harden parsing, validation, duplicate detection and error reporting without changing accounting policy.\n4. **Build 303 — Finance Tax-support maintainability extraction** — externalize retained T2125/tax-support/accountant-package surfaces while preserving Build 273 authority.', '1. **Build 300 — Finance Payments maintainability extraction** — complete.\n2. **Build 301 — Finance Reconciliation maintainability extraction** — complete.\n3. **Build 302 — Statement Import reliability convergence guard** — complete; retired importer remains fail-closed rather than being recreated.\n4. **Build 303 — Finance Tax-support maintainability extraction** — current release candidate; exact retained Build 273 browser-runtime extraction, pending final Development acceptance/promotion.', 1)
-          acceptance = '''## Build 303 acceptance sequence
-
-1. exact Build 273 Tax Support runtime extraction and focused source guard;
-2. remove all temporary bootstrap workflow authority;
-3. transfer the exact candidate to `dev`;
-4. cumulative Build 303 Development source gate;
-5. exact Cloudflare Development deployment plus read-only Tax Support page/asset smoke;
-6. only then call Build 303 Development accepted;
-7. promote that exact accepted `dev` SHA to Production `main` under owner authorization and verify the Production source/deployment boundary.
-
-## Retained focused-guard compatibility anchors'''
-          r, n = re.subn(r'## Build 301 acceptance sequence\n.*?\n## Retained focused-guard compatibility anchors', acceptance, r, count=1, flags=re.S)
-          if n != 1: raise SystemExit('roadmap acceptance block not found')
-          anchor2 = '- **Build:** 300 — Build 300 — Finance Payments maintainability extraction; `assets/admin-payments-v300.js`; accepted Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`; next retained queue marker Build 301 — Finance Reconciliation maintainability extraction; duplicate-route owner Build 318 — Whole-application route/API authority sweep.'
-          replacement2 = anchor2 + '\n- **Build:** 301 — Finance Reconciliation maintainability extraction; `assets/admin-accounting-v301.js`.\n- **Build:** 302 — Statement Import reliability convergence guard; retired importer remains fail-closed.\n- **Build:** 303 — Finance Tax-support maintainability extraction; `assets/admin-tax-support-v303.js`; next queue item Build 304 — Accountant export integrity.'
-          if anchor2 not in r: raise SystemExit('roadmap compatibility anchor not found')
-          r = r.replace(anchor2, replacement2, 1)
-          roadmap.write_text(r, encoding='utf-8')
-
-          queue = Path('AUTONOMOUS_RELEASE_QUEUE.md')
-          q = queue.read_text(encoding='utf-8')
-          q = q.replace('**Status:** Planned autonomous technical sequence  ', '**Status:** Builds 300–303 complete/current acceptance; next Build 304  ', 1)
-          q = q.replace('1. **Build 300 — Finance Payments maintainability extraction**  \n   Separate the mature Payments admin runtime into versioned assets, preserve all existing payment rules/API authority, add exact reconstruction guards and read-only runtime acceptance.', '1. **Build 300 — Finance Payments maintainability extraction — COMPLETE**  \n   Mature Payments admin runtime externalized with existing payment rules/API authority preserved.', 1)
-          q = q.replace('2. **Build 301 — Finance Reconciliation maintainability extraction**  \n   Cleanly separate bank/transaction/reconciliation UI runtime while preserving matching, posting and approval behavior exactly.', '2. **Build 301 — Finance Reconciliation maintainability extraction — COMPLETE**  \n   Accounting/Reconciliation runtime externalized with matching, posting and approval authority preserved.', 1)
-          q = q.replace('3. **Build 302 — Statement Import reliability**  \n   Harden accounting statement import parsing, validation, error reporting and duplicate protection without changing accounting policy.', '3. **Build 302 — Statement Import reliability convergence guard — COMPLETE**  \n   Resolved against the surviving Finance authority: the retired importer remains fail-closed, and CI prevents hidden parser/import reintroduction without deliberate deterministic validation/idempotency coverage.', 1)
-          q = q.replace('4. **Build 303 — Finance Tax-support maintainability extraction**  \n   Externalize and validate the retained T2125/tax-support/accountant-package surfaces while keeping Build 273 Finance authority intact.', '4. **Build 303 — Finance Tax-support maintainability extraction — CURRENT ACCEPTANCE**  \n   Retained T2125/tax-support/accountant-package browser runtime externalized byte-for-byte while Build 273 backend/tax authority remains intact.', 1)
-          queue.write_text(q, encoding='utf-8')
-          PY
-          git diff --check
-          grep -Fq '**Build:** 303' AI_PROJECT_HANDOFF.md
-          grep -Fq '**Build:** 303' MASTER_VALUE_ROADMAP.md
-          grep -Fq 'Build 304 — Accountant export integrity' AUTONOMOUS_RELEASE_QUEUE.md
-      - name: Commit synchronized Build 303 documentation
+          python scripts/build301_release_check.py
+          python scripts/build302_release_check.py
+          python scripts/build303_release_check.py
+      - name: Commit synchronized documentation
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md AUTONOMOUS_RELEASE_QUEUE.md
+          git diff --cached --check
           git commit -m "Build 303: synchronize living release authority"
           git push origin HEAD:${{ github.ref_name }}
