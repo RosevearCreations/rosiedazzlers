@@ -27,6 +27,13 @@ grep -Fq '/assets/admin-auth.js' "$page"
 grep -Fq '/assets/admin-shell.js' "$page"
 grep -Fq 'id="customerForm"' "$page"
 grep -Fq 'id="helpQueue"' "$page"
+for token in \
+  'data-access-action="send_account_setup"' \
+  'data-access-action="send_password_reset"' \
+  'data-access-action="resend_verification"' \
+  'data-access-action="revoke_sessions"'; do
+  grep -Fq "$token" "$page" || { echo "$LABEL: customer HTML missing retained access action $token"; exit 1; }
+done
 
 status=$(curl -sSL -o "$asset" -w '%{http_code}' "$BASE_URL/assets/admin-customers-v297.js")
 [[ "$status" == "200" ]] || { echo "$LABEL: /assets/admin-customers-v297.js returned $status"; exit 1; }
@@ -37,7 +44,6 @@ for token in \
   '/api/admin/customer_admin_access_action' \
   '/api/admin/customer_account_help_list' \
   '/api/admin/customer_account_help_action' \
-  'send_password_reset' \
   'revoke_sessions' \
   'ARCHIVE CLIENT' \
   "AdminShell.boot({pageKey:'admin-customers'"; do
