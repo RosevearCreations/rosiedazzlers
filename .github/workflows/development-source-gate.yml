@@ -115,6 +115,13 @@ jobs:
           node --check assets/client-auth.js
           bash -n scripts/build294_http_smoke.sh
 
+      - name: Check Build 295 customer account source authority syntax
+        run: |
+          python -m py_compile scripts/build295_release_check.py
+          bash -n scripts/build295_http_smoke.sh
+          node --check functions/api/client/profile_update.js
+          node --check functions/api/client/vehicles_save.js
+
       - name: Check Development smoke helper syntax
         run: |
           bash -n scripts/development_http_smoke.sh
@@ -129,6 +136,7 @@ jobs:
           bash -n scripts/build292_http_smoke.sh
           bash -n scripts/build293_http_smoke.sh
           bash -n scripts/build294_http_smoke.sh
+          bash -n scripts/build295_http_smoke.sh
 
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
@@ -184,6 +192,8 @@ jobs:
         run: python scripts/build293_release_check.py
       - name: Run current Build 294 focused guard
         run: python scripts/build294_release_check.py
+      - name: Run current Build 295 focused guard
+        run: python scripts/build295_release_check.py
 
       - name: Run Build 290 role/action matrix
         run: node scripts/build290_action_permission_test.mjs
@@ -227,8 +237,9 @@ jobs:
             echo "- Build 292 fleet/workplace assessment intake syntax: PASS"
             echo "- Build 293 customer retention next-action syntax: PASS"
             echo "- Build 294 customer maintenance/auto-schedule authority closure syntax: PASS"
-            echo "- Development + Build 284-294 HTTP smoke helper syntax: PASS"
-            echo "- Retained Builds 271-294 focused guards: PASS"
+            echo "- Build 295 customer account static-source authority cleanup: PASS"
+            echo "- Development + Build 284-295 HTTP smoke helper syntax: PASS"
+            echo "- Retained Builds 271-295 focused guards: PASS"
             echo "- Cumulative release + one-H1 + route-copy guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
