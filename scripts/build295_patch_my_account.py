@@ -49,13 +49,14 @@ sub_exact(
     label='maintenance renderer'
 )
 
-# Remove staff-owned recurrence data from the customer garage card source.
-for snippet, label in [
-    (r'<div class="garage-field"><span>Next due</span><strong>\$\{esc\(v\.next_cleaning_due_at \|\| \'not set\'\)\}</strong></div>', 'garage next due'),
-    (r'<div class="garage-field"><span>Cadence</span><strong>\$\{v\.service_interval_days \? esc\(String\(v\.service_interval_days\)\+\' days\'\) : \'not set\'\}</strong></div>', 'garage cadence'),
-    (r'<div class="garage-field"><span>Next service mileage</span><strong>\$\{v\.next_service_mileage_km \? esc\(String\(v\.next_service_mileage_km\)\+\' km\'\) : \'not set\'\}</strong></div>', 'garage next mileage'),
+# Remove staff-owned recurrence presentation from the customer garage card. These
+# matches intentionally anchor on the row label rather than the historical JS expression.
+for row_label, label in [
+    ('Next due', 'garage next due'),
+    ('Cadence', 'garage cadence'),
+    ('Next service mileage', 'garage next mileage'),
 ]:
-    sub_exact(snippet, '', label=label)
+    sub_exact(rf'<div class="garage-field"><span>{re.escape(row_label)}</span><strong>.*?</strong></div>', '', label=label)
 
 # Remove legacy fill assignments that depend on controls no longer present.
 for pattern, label in [
