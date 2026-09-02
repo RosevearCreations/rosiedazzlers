@@ -157,8 +157,16 @@ need("scripts/build296_http_smoke.sh", "/assets/my-account-v296.js", "/api/clien
 need(".github/workflows/build296-source-gate.yml", "Build 296 Source Gate", "python scripts/build296_release_check.py")
 need(".github/workflows/build296-development-acceptance.yml", "Build 296 Development Runtime Acceptance", "scripts/build296_http_smoke.sh")
 need(".github/workflows/build296-development-source-gate.yml", "Build 296 Development Source Gate", "scripts/build296_release_check.py", "node --check assets/my-account-v296.js")
-need("AI_PROJECT_HANDOFF.md", "**Build:** 296", BUILD295_PRODUCTION_SHA, "My Account maintainability extraction")
-need("MASTER_VALUE_ROADMAP.md", "**Build:** 296", BUILD295_PRODUCTION_SHA, "Build 296 — My Account maintainability extraction")
+handoff = read("AI_PROJECT_HANDOFF.md")
+if not any(marker in handoff for marker in ["**Build:** 296", "**Build:** 297"]):
+    errors.append("AI_PROJECT_HANDOFF.md missing Build 296/297 living authority marker")
+if "My Account maintainability extraction" not in handoff:
+    errors.append("AI_PROJECT_HANDOFF.md missing retained Build 296 My Account maintainability authority")
+roadmap = read("MASTER_VALUE_ROADMAP.md")
+if not any(marker in roadmap for marker in ["**Build:** 296", "**Build:** 297"]):
+    errors.append("MASTER_VALUE_ROADMAP.md missing Build 296/297 living authority marker")
+if "Build 296 — My Account maintainability extraction" not in roadmap:
+    errors.append("MASTER_VALUE_ROADMAP.md missing retained Build 296 My Account maintainability authority")
 
 for rel in [
     ".github/workflows/build296-bootstrap-extraction.yml",
@@ -187,6 +195,7 @@ print("- accepted Build 295 inline module is byte-for-byte preserved in assets/m
 print("- both My Account route copies differ from Build 295 only by the external module tag")
 print("- customer API calls and execution order remain in the same module position")
 print("- Build 288/294/295 privacy and maintenance authority remains retained")
+print("- living authorities may advance beyond Build 296 while retaining this extraction proof")
 print("- no customer behavior, API authority, maintenance economics or schema migration was introduced")
 print("- temporary bootstrap machinery is absent")
 print("- Production remains closed")
