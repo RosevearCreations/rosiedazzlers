@@ -48,5 +48,5 @@ jobs:
           python scripts/release_check.py
           python scripts/seo_h1_check.py
           python scripts/sync_route_copies.py --check
-      - name: Check source hygiene
-        run: git diff --check 48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b HEAD -- . ':!*.md'
+      - name: Check source hygiene outside byte-for-byte extracted runtime
+        run: git diff --check 48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b HEAD -- . ':!*.md' ':!assets/admin-booking-v299.js'
