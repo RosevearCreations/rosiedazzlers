@@ -1,0 +1,76 @@
+name: Build 292 Source Gate
+
+on:
+  push:
+    branches:
+      - build292-fleet-workplace-acquisition-intake
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build292-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Build 292 source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 40
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Build 292 syntax
+        run: |
+          node --check functions/api/public_lead_submit.js
+          bash -n scripts/build292_http_smoke.sh
+
+      - name: Run retained Builds 271-291 focused guards
+        run: for build in $(seq 271 291); do python "scripts/build${build}_release_check.py"; done
+
+      - name: Run Build 292 focused guard
+        run: python scripts/build292_release_check.py
+
+      - name: Retain Build 290 executable authorization proof
+        run: |
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Check one-H1 source rule
+        run: python scripts/seo_h1_check.py
+
+      - name: Check route-copy parity
+        run: python scripts/sync_route_copies.py --check
+
+      - name: Check source hygiene
+        run: |
+          git diff --check e6ab73751864a12447657ff263a8787f4718d25c HEAD -- . ':!*.md'
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "### Build 292 Source Gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Retained Builds 271-291: PASS"
+            echo "- Build 292 fleet/workplace assessment source/API safety: PASS"
+            echo "- Build 290 authorization + forward-restore proof retained: PASS"
+            echo "- Cumulative release / one-H1 / route parity / hygiene: PASS"
+            echo "- No schema migration or fleet economics introduced."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"

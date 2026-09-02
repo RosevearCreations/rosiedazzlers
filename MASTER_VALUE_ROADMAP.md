@@ -1,8 +1,8 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 291  
-**Updated:** 2026-09-01  
+**Build:** 292  
+**Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
 ## North star
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–290 then added booking/retention, SEO/local-depth, exact-release, proof/publication, contextual-proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance and forward-restore readiness without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–291 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness and maintenance interest intake without replacing those foundations.
 
-**Production remains closed** for the active Build 291 Development slice. `main` changes only through deliberate promotion from accepted Development evidence. Production remains accepted Build 288; Build 290 is the accepted Development baseline and Build 289 remains its verified restore anchor.
+Build 291 is the accepted Production baseline at `e6ab73751864a12447657ff263a8787f4718d25c`. Build 292 is the active Development-first fleet/workplace acquisition release. **Production remains closed** for Build 292 until deliberate promotion from accepted Development evidence.
 
 Do not regress:
 
@@ -30,6 +30,7 @@ Do not regress:
 - persistent tax-support/evidence/accountant-package authority;
 - no fabricated accounting/tax facts, reviews, consent, proof or provider evidence;
 - no fabricated maintenance/fleet/referral economics;
+- Rosie-supplied standard detailing water and power plus safe/permitted work-area review;
 - `main` / Production changes only through deliberate promotion from accepted Development evidence.
 
 ## Delivered customer/business foundation
@@ -46,32 +47,34 @@ Build 283 keeps pairing eligibility separate from consent/privacy approval and e
 ### Review/share authority
 Build 286 requires a direct customer review to reference a genuinely completed booking belonging to the signed-in customer. Build 287 adds the server-owned Google destination and neutral Share Rosie UTM attribution without commercial referral economics.
 
-### Customer privacy and account resilience
-Build 288 projects customer profile/vehicle/review data through explicit customer-safe shapes and removes customer write authority over `admin_private_notes`. Build 289 adds in-place signed-out account recovery, manual weak-network retry, ARIA live feedback and keyboard focus treatment without new polling or write replay.
+### Customer privacy and resilience
+Build 288 projects customer profile/vehicle/review data through explicit customer-safe shapes. Build 289 adds in-place signed-out account recovery, manual weak-network retry, ARIA live feedback and keyboard focus treatment without new polling or write replay.
 
 ### Authorization / recovery mechanics
-Build 290 retains the existing role/module/action model, adds executable ceiling/narrowing/override acceptance, verifies representative anonymous admin APIs fail closed, makes unexpected staff-auth failures externally generic and defines a non-force forward restore to the exact accepted Build 289 tree.
+Build 290 retains the role/module/action model, adds executable ceiling/narrowing/override acceptance, verifies representative anonymous admin APIs fail closed, makes unexpected staff-auth failures externally generic and defines a non-force forward restore.
 
-## Build 291 — maintenance retention intake
+### Maintenance retention intake
+Build 291 provides a safe interest/demand path. Cadence remains a preference only; no fixed price, discount, perk, priority booking, included recurring scope, pause/cancel term, subscription or recurring billing is approved.
 
-Build 291 advances repeat-service retention without inventing the commercial maintenance-plan product.
+## Build 292 — fleet / workplace acquisition intake
+
+Build 292 hardens the existing fleet/workplace lead and qualification path without inventing fleet economics.
 
 Rules:
 
-- static maintenance source and hydrated growth settings must say the same thing;
-- cadence selections are customer **preferences only**;
-- the form is an interest request, not an appointment, subscription or recurring-billing authorization;
-- no fixed price, discount, perk, priority booking, included recurring scope, pause/cancel term or recurring commitment is approved;
-- current booking availability, vehicle/service review, scope, add-ons, deposit, payment and site-access rules stay authoritative;
-- the public endpoint allowlists cadence tokens, owns its source marker and returns a narrow success shape rather than a stored row;
+- `/fleet` is a quote-first assessment for workplace groups, small-business fleets, contractor/work trucks, household multi-vehicle groups and dealership/overflow review;
+- `/fleet-pricing` explains what can affect a quote without publishing an automatic vehicle threshold, commercial rate, volume discount or recurring cycle;
+- request type and timing preference tokens are server-allowlisted;
+- fleet source attribution is server-owned as `/fleet`;
+- the existing `public_inquiry_leads` table remains the lead authority;
+- public lead success responses are narrow and do not return stored rows;
 - public failures do not expose Supabase/storage details;
-- duplicate clicks are blocked while the write is in flight;
-- runtime acceptance uses validation failures that stop before persistence, so CI does not create waitlist records;
-- Build 291 is migration-free.
+- GET on the write endpoint is 405;
+- duplicate clicks are blocked while the browser write is in flight;
+- runtime acceptance uses pre-persistence validation failures, so CI does not create fleet lead rows;
+- Build 292 is migration-free.
 
-### Provider configuration status
-
-The owner confirmed on 2026-09-01 that Stripe, PayPal and other configured providers are present in Cloudflare Development. This remains **Development configuration-present / owner sign-off** only. It does not fabricate a successful Stripe charge, PayPal sandbox transaction, webhook settlement or other provider-side transaction acceptance.
+No fleet minimum, automatic vehicle threshold, volume discount, commercial rate, same-location/travel economics, fixed cadence, priority/SLA, contract/cancellation economics, recurring billing, quote or appointment is approved by this release.
 
 ## Ordered next value work
 
@@ -79,13 +82,13 @@ The owner confirmed on 2026-09-01 that Stripe, PayPal and other configured provi
 Continue real consented proof through Builds 283/284 and verify Google Business Profile/Search Console only when real account evidence exists.
 
 ### 2. Maintenance-plan commercial model
-Build 291 now provides a safe interest/demand intake. Commercial plan behavior remains gated on approved cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise.
+Build 291 provides safe demand capture. Commercial behavior remains gated on approved cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise.
 
-### 3. Fleet / workplace acquisition
-Harden the fleet/workplace lead and qualification path without promising economics. Minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms remain approval-gated.
+### 3. Fleet commercial model
+Build 292 now provides safe fleet/workplace assessment. Minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms remain approval-gated.
 
 ### 4. Notification/device evidence
-Collect real email/SMS/Web Push and physical phone/tablet/browser evidence when those systems/devices are available; do not fabricate it.
+Collect real email/SMS/Web Push and physical phone/tablet/browser evidence when available; do not fabricate it.
 
 ### 5. Customer account refinement
 Continue completed-job → review/share → rebook → maintenance handoff while preserving current availability/conflict/deposit/payment authority.
@@ -103,17 +106,21 @@ Preferred high-use order: Operations customer/booking/quote support; Finance pay
 
 Ask only when needed for a real rule: material pricing/restoration labour, seat-removal/water-intrusion constraints, warranty, maintenance economics, fleet economics, referral economics, insurance/certification/equipment/environmental rules, or real GBP/Search Console account selections. The standard water/power model is resolved and must not be asked again.
 
+## Provider configuration status
+
+The owner confirmed that Stripe, PayPal and other configured providers are present in Cloudflare Development. This remains **Development configuration-present / owner sign-off** only. It does not fabricate a successful Stripe charge, PayPal sandbox transaction, webhook settlement or other provider-side transaction acceptance.
+
 ## Validation authority
 
 - `scripts/release_check.py` — cumulative retained platform guard;
 - `scripts/seo_h1_check.py` — one-H1 + retained current public/customer guards;
-- retained Builds 282–290 focused guards;
+- retained Builds 271–291 focused guards;
 - retained Build 290 action matrix + forward-restore checks;
-- `scripts/build291_release_check.py` — current maintenance retention intake guard;
-- `.github/workflows/build291-source-gate.yml` — feature source gate;
-- `scripts/build291_http_smoke.sh` — non-mutating maintenance runtime guard;
-- `.github/workflows/build291-development-acceptance.yml` — Build 291 `dev` runtime acceptance;
-- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 291;
+- `scripts/build292_release_check.py` — current fleet/workplace intake guard;
+- `.github/workflows/build292-source-gate.yml` — Build 292 feature source gate;
+- `scripts/build292_http_smoke.sh` — non-mutating fleet/workplace runtime guard;
+- `.github/workflows/build292-development-acceptance.yml` — Build 292 `dev` runtime acceptance;
+- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 292;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
@@ -123,10 +130,13 @@ Never call a release Development-green merely because source exists. Exact featu
 
 Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are checkpoints; Git history is the archive.
 
-<!-- Historical Build 273 roadmap guard compatibility only.
-### 9. Payments / Finance / accounting
+<!-- Historical Build 291 retained-guard compatibility only; not the living build number.
+**Build:** 291
+Build 291 maintenance retention intake remains retained.
 accounting_documents
 accountant-friendly export surfaces
+Development configuration-present / owner sign-off remains retained.
+Production remains closed
 -->
 
 <!-- Historical Build 290 retained-guard compatibility only; not the living build number.
@@ -148,6 +158,11 @@ Build 288 customer/staff privacy boundary remains retained.
 Production remains closed
 -->
 
+<!-- Historical Build 287 retained-guard compatibility only; not the living build number.
+**Build:** 287
+Build 287 review/share attribution authority remains retained; no referral/loyalty economics are implied.
+-->
+
 <!-- Historical Build 284 retained-guard compatibility only; not the living build number.
 **Build:** 284
 Build 284 contextual proof placement remains retained.
@@ -166,7 +181,8 @@ Mobile Quick Book
 Google trust and measurable local SEO
 -->
 
-<!-- Historical Build 287 retained-guard compatibility only; not the living build number.
-**Build:** 287
-Build 287 review/share attribution authority remains retained; no referral/loyalty economics are implied.
+<!-- Historical Build 273 roadmap guard compatibility only.
+### 9. Payments / Finance / accounting
+accounting_documents
+accountant-friendly export surfaces
 -->
