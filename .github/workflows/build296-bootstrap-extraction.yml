@@ -1,0 +1,76 @@
+name: Build 296 Bootstrap Exact Extraction
+
+on:
+  push:
+    branches:
+      - build-296-my-account-maintainability-extraction
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Extract the existing module without changing behavior
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          primary = root / 'my-account.html'
+          copy = root / 'my-account/index.html'
+          asset = root / 'assets/my-account-v296.js'
+
+          source = primary.read_text(encoding='utf-8')
+          route = copy.read_text(encoding='utf-8')
+          if source != route:
+              raise SystemExit('My Account route copies must be exact before Build 296 extraction')
+
+          pattern = re.compile(r'<script type="module">\n(?P<body>.*?)\n</script>', re.S)
+          matches = list(pattern.finditer(source))
+          if len(matches) != 1:
+              raise SystemExit(f'Expected exactly one inline module script, found {len(matches)}')
+
+          body = matches[0].group('body')
+          if 'import { setBrandImages, setFooter } from "/assets/site.js";' not in body:
+              raise SystemExit('Expected mature My Account module signature was not found')
+          if '/api/client/profile_update' not in body or '/api/client/vehicles_save' not in body:
+              raise SystemExit('Expected customer account API calls were not found in extracted module')
+
+          asset.write_text(body + '\n', encoding='utf-8')
+          replacement = '<script type="module" src="/assets/my-account-v296.js"></script>'
+          updated = pattern.sub(replacement, source, count=1)
+          primary.write_text(updated, encoding='utf-8')
+          copy.write_text(updated, encoding='utf-8')
+
+          if primary.read_text(encoding='utf-8') != copy.read_text(encoding='utf-8'):
+              raise SystemExit('Build 296 route copies diverged after extraction')
+          if '<script type="module">' in updated:
+              raise SystemExit('Inline module remains after extraction')
+          if replacement not in updated:
+              raise SystemExit('Versioned My Account module tag missing after extraction')
+          if asset.read_text(encoding='utf-8') != body + '\n':
+              raise SystemExit('Extracted module bytes changed unexpectedly')
+          PY
+      - name: Verify extracted JavaScript syntax
+        run: node --check assets/my-account-v296.js
+      - name: Remove bootstrap workflow before release commit
+        run: rm .github/workflows/build296-bootstrap-extraction.yml
+      - name: Commit exact extraction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add my-account.html my-account/index.html assets/my-account-v296.js .github/workflows/build296-bootstrap-extraction.yml
+          git diff --cached --check
+          git commit -m "Build 296 extract My Account module into versioned asset"
+          git push origin HEAD:build-296-my-account-maintainability-extraction
