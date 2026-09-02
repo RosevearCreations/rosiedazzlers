@@ -26,24 +26,29 @@ jobs:
         with:
           python-version: "3.12"
       - name: Apply guarded Build 295 patch
-        run: python scripts/build295_patch_my_account.py
+        run: |
+          python scripts/build295_patch_my_account.py
+          cp my-account.html my-account/index.html
       - name: Verify patch source
         run: |
           python scripts/build295_patch_my_account.py
+          cmp -s my-account.html my-account/index.html
           git diff --check
-          grep -Fq 'data-build295-account-source-authority' my-account.html
-          if grep -Eq 'acctAdminNotes|vehAdminNotes|vehNextDue|vehNextServiceMileage|vehIntervalDays|vehAutoSchedule|unlock maintenance pricing|reduced maintenance pricing|reduced repeat-clean pricing|Maintenance eligible' my-account.html; then
-            echo "::error::Unsafe legacy account authority remains."
-            exit 2
-          fi
+          for page in my-account.html my-account/index.html; do
+            grep -Fq 'data-build295-account-source-authority' "$page"
+            if grep -Eq 'acctAdminNotes|vehAdminNotes|vehNextDue|vehNextServiceMileage|vehIntervalDays|vehAutoSchedule|unlock maintenance pricing|reduced maintenance pricing|reduced repeat-clean pricing|Maintenance eligible' "$page"; then
+              echo "::error::Unsafe legacy account authority remains in $page."
+              exit 2
+            fi
+          done
       - name: Commit patched account source
         run: |
-          if git diff --quiet -- my-account.html; then
+          if git diff --quiet -- my-account.html my-account/index.html; then
             echo "No account patch commit required."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add my-account.html
-          git commit -m "Close legacy customer account source authority for Build 295"
+          git add my-account.html my-account/index.html
+          git commit -m "Keep Build 295 My Account route copies exact"
           git push origin HEAD:build-295-customer-account-source-authority
