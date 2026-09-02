@@ -83,8 +83,9 @@ need(
 )
 need(
     "functions/api/client/_lib/customer-safe-shape.js",
-    "export function customerSafeReview(row)",
-    "booking_id: optionalString(row?.booking_id)",
+    "const REVIEW_FIELDS = [",
+    "'booking_id'",
+    "export function customerSafeReview(row) { return pick(row, REVIEW_FIELDS); }",
     "export function customerSafeReviews(rows)",
 )
 
