@@ -29,6 +29,18 @@ def need(rel, *tokens):
             errors.append(f"{rel} missing {token}")
 
 
+def require_living_build_at_least(rel, minimum, *historical_tokens):
+    body = read(rel)
+    match = re.search(r"\*\*Build:\*\*\s*(\d+)", body)
+    if not match:
+        errors.append(f"{rel} missing living Build header")
+    elif int(match.group(1)) < minimum:
+        errors.append(f"{rel} living Build {match.group(1)} predates retained Build {minimum} authority")
+    for token in historical_tokens:
+        if token not in body:
+            errors.append(f"{rel} missing retained Build {minimum} authority token {token}")
+
+
 for sha, label in [
     (BUILD297_DEVELOPMENT_SHA, "accepted Build 297 Development"),
     (BUILD296_PRODUCTION_SHA, "accepted Build 296 Production"),
@@ -115,8 +127,20 @@ need("scripts/build298_http_smoke.sh", "/assets/admin-quotes-v298.js", "read-onl
 need(".github/workflows/build298-source-gate.yml", "Build 298 Source Gate", "python scripts/build298_release_check.py")
 need(".github/workflows/build298-development-source-gate.yml", "Build 298 Development Source Gate", "scripts/build298_release_check.py")
 need(".github/workflows/build298-development-acceptance.yml", "Build 298 Development Runtime Acceptance", "scripts/build298_http_smoke.sh")
-need("AI_PROJECT_HANDOFF.md", "**Build:** 298", BUILD296_PRODUCTION_SHA, "Operations booking/quote support maintainability extraction")
-need("MASTER_VALUE_ROADMAP.md", "**Build:** 298", BUILD296_PRODUCTION_SHA, "Build 298 — Operations booking/quote support maintainability extraction")
+require_living_build_at_least(
+    "AI_PROJECT_HANDOFF.md",
+    298,
+    BUILD296_PRODUCTION_SHA,
+    "Operations booking/quote support maintainability extraction",
+    "assets/admin-quotes-v298.js",
+)
+require_living_build_at_least(
+    "MASTER_VALUE_ROADMAP.md",
+    298,
+    BUILD296_PRODUCTION_SHA,
+    "Build 298 — Operations booking/quote support maintainability extraction",
+    "assets/admin-quotes-v298.js",
+)
 
 for rel in [
     ".github/workflows/build298-bootstrap-extraction.yml",
@@ -143,6 +167,7 @@ print("Build 298 Operations booking/quote support maintainability extraction che
 print("- accepted Build 297 quote runtime is byte-for-byte preserved in assets/admin-quotes-v298.js")
 print("- both quote route copies differ from Build 297 only by the external classic-script tag")
 print("- quote list/save behavior and booking bridge remain unchanged")
+print("- living authorities may advance beyond Build 298 while retaining this extraction proof")
 print("- no quote or booking behavior, API contract, pricing, recurrence or schema migration was introduced")
 print("- temporary Build 298 bootstrap/scan machinery is absent")
 print("- accepted Production remains Build 296 and Production stays closed for Build 298")
