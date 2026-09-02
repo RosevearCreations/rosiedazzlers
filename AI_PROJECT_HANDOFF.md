@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 294  
+**Build:** 295  
 **Updated:** 2026-09-02  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 294 is the active **customer maintenance / auto-schedule authority closure** Development-first slice. It follows the accepted Build 293 Production promotion at SHA `449edcfdea101fa9cbc6b0336ad2f17d04327b9a`.
+Build 295 is the active **customer account static source authority cleanup** Development-first slice. It follows the accepted Build 294 Production promotion at SHA `5d6041501b205a03dd62522a6ffb9a49a822284b`.
 
-Build 293 remains the accepted Production baseline until Build 294 is deliberately promoted. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
+Build 294 is the accepted Production baseline while Build 295 is validated in Development. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
 
-Build 294 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 294 until deliberate promotion from accepted Development evidence.
+Build 295 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 295 until deliberate promotion from accepted Development evidence.
 
 ## Application boundary
 
@@ -50,7 +50,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Completed customer/business work through Build 294
+## Completed customer/business work through Build 295
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
@@ -70,6 +70,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Build 292 added quote-first fleet/workplace assessment without inventing fleet thresholds, rates, discounts, cadence or contracts.
 - Build 293 added one authenticated “What’s next?” customer action coordinating retained review, rebook, progress and current-booking authorities.
 - Build 294 removes customer mutation/projection authority for staff-owned maintenance scheduling fields while retaining database history and staff planning authority.
+- Build 295 removes those stale staff/private scheduling controls and unapproved maintenance-pricing language from the static My Account source and browser payloads themselves.
 
 Do not re-open these items because an older roadmap mentions them.
 
@@ -164,27 +165,44 @@ Build 294 does **not** define or approve a due date, service-mileage target, cad
 
 There is **no schema migration**. `/maintenance-plan` remains the dedicated preference/follow-up path.
 
+## Build 295 — customer account static source authority cleanup
+
+Build 295 makes both `/my-account` route copies directly agree with the retained Build 288/291/294 customer boundaries.
+
+- staff-private Admin-only note controls are absent from customer source and browser payloads;
+- customer due-date, service-mileage, cadence and auto-schedule controls are absent from customer source and browser payloads;
+- customer garage cards no longer present those staff-owned scheduling fields;
+- maintenance presentation is interest-only and makes no Complete-Detail unlock, reduced-price or recurring-scheduling promise;
+- `my-account.html` and `my-account/index.html` remain exact route copies;
+- Build 288 privacy and Build 294 maintenance adapters remain retained defense in depth;
+- existing database/history/staff scheduling data is untouched;
+- Build 295 adds no schema migration, cadence, price, discount, priority, appointment, subscription or recurring-billing authority.
+
 ## Current validation authority
 
 - cumulative: `scripts/release_check.py`;
 - one-H1/current customer guards: `scripts/seo_h1_check.py`;
-- retained Builds 271–293 focused guards;
+- retained Builds 271–294 focused guards;
 - retained Build 290 executable authorization/restore proofs;
 - focused Build 294 guard: `scripts/build294_release_check.py`;
 - feature source workflow: `.github/workflows/build294-source-gate.yml`;
 - Build 294 runtime smoke: `scripts/build294_http_smoke.sh`;
 - Build 294 Development runtime workflow: `.github/workflows/build294-development-acceptance.yml`;
-- Development source workflow: `.github/workflows/development-source-gate.yml` through Build 294;
+- focused Build 295 guard: `scripts/build295_release_check.py`;
+- Build 295 runtime smoke: `scripts/build295_http_smoke.sh`;
+- Build 295 feature workflow: `.github/workflows/build295-source-gate.yml`;
+- Build 295 Development runtime workflow: `.github/workflows/build295-development-acceptance.yml`;
+- Development source workflow: `.github/workflows/development-source-gate.yml` through Build 295;
 - retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - full Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Never call Build 294 Development-green until exact feature SHA + feature preview, exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
+Never call Build 295 Development-green until exact feature SHA + feature preview, exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
 
-## Next business/product work after Build 294
+## Next business/product work after Build 295
 
 Proceed where real evidence/rules exist:
 
-1. inspect remaining customer account legacy controls/copy for stale commercial or staff-owned authority and close only objectively unsafe remnants;
+1. extract the mature My Account inline JavaScript into a versioned asset without changing customer behavior, reducing future source-authority drift and making account logic easier to test;
 2. genuine consented proof through the retained Build 283/284 path;
 3. Google Business Profile/Search Console verification when account access exists;
 4. maintenance commercial rules only after cadence/economics/included scope/pause/cancel/priority terms are approved;
@@ -280,4 +298,10 @@ Build 274 active implementation
 I.T. Connections
 Quick Book
 Mobile Auto Detailing & Interior/Exterior Restoration
+-->
+
+<!-- Historical Build 294 retained-guard compatibility only; not the living build number.
+**Build:** 294
+Build 294 customer maintenance / auto-schedule authority closure remains retained.
+Production remains closed
 -->
