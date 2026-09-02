@@ -1,6 +1,11 @@
 name: Build 303 Bootstrap Tax Support Runtime
 
 on:
+  push:
+    branches:
+      - feature/build-303-tax-support-extraction
+    paths:
+      - .github/workflows/build303-bootstrap-tax-support-runtime.yml
   workflow_dispatch:
 
 permissions:
