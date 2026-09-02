@@ -150,12 +150,19 @@ jobs:
         run: |
           set -euo pipefail
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
-          curl --fail-with-body --silent --show-error --request POST \
+          retry_code=$(curl --silent --show-error --output /tmp/cf-retry.json --write-out '%{http_code}' --request POST --data '{}' \
             "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${STUCK_DEPLOYMENT_ID}/retry" \
-            "${AUTH[@]}" > /tmp/cf-retry.json
-          jq -e '.success == true' /tmp/cf-retry.json >/dev/null
-          retry_id=$(jq -r '.result.id // empty' /tmp/cf-retry.json)
-          [[ -n "$retry_id" ]] || { echo "::error::Cloudflare accepted retry request without returning a deployment id."; exit 7; }
+            "${AUTH[@]}" || true)
+          if [[ "$retry_code" != "200" ]]; then
+            retry_error=$(jq -r '.errors[0].message // .messages[0].message // empty' /tmp/cf-retry.json 2>/dev/null || true)
+            echo "::error::Cloudflare retry request returned HTTP ${retry_code}${retry_error:+: ${retry_error}}. The recovery token must have Pages Write authority."
+            exit 7
+          fi
+          if ! jq -e '.success == true and (.result.id // "") != ""' /tmp/cf-retry.json >/dev/null 2>&1; then
+            echo "::error::Cloudflare retry response was not a valid successful Deployment object."
+            exit 7
+          fi
+          retry_id=$(jq -r '.result.id' /tmp/cf-retry.json)
           retry_sha=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' /tmp/cf-retry.json)
           retry_branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' /tmp/cf-retry.json)
           [[ "$retry_sha" == "$GITHUB_SHA" ]] || { echo "::error::Retry deployment commit mismatch: ${retry_sha}."; exit 8; }
