@@ -114,6 +114,32 @@ need("scripts/build295_http_smoke.sh", "data-build295-account-source-authority",
 need(".github/workflows/build295-source-gate.yml", "Build 295 Source Gate", "python scripts/build295_release_check.py")
 need(".github/workflows/build295-development-acceptance.yml", "Build 295 Development Runtime Acceptance", "scripts/build295_http_smoke.sh")
 need(".github/workflows/development-source-gate.yml", "Run current Build 295 focused guard", "python scripts/build295_release_check.py")
+need(
+    "AI_PROJECT_HANDOFF.md",
+    "**Build:** 295",
+    BUILD294_PRODUCTION_SHA,
+    "customer account static source authority cleanup",
+    "My Account maintainability extraction",
+)
+need(
+    "MASTER_VALUE_ROADMAP.md",
+    "**Build:** 295",
+    BUILD294_PRODUCTION_SHA,
+    "Build 295 — customer account static source authority cleanup",
+    "My Account maintainability extraction",
+)
+
+# Temporary bootstrap machinery must never ship with the accepted candidate.
+for rel in [
+    ".github/workflows/build295-bootstrap-authorities.yml",
+    ".github/workflows/build295-bootstrap-account-source.yml",
+    "scripts/build295_patch_my_account.py",
+    "scripts/build295_patch_authorities.py",
+    "scripts/build295_patch_development_gate.py",
+    "BUILD295_BOOTSTRAP_TRIGGER.tmp",
+]:
+    if (ROOT / rel).exists():
+        errors.append(f"temporary Build 295 bootstrap file remains: {rel}")
 
 proc = subprocess.run(["bash", "-n", str(ROOT / "scripts/build295_http_smoke.sh")], capture_output=True, text=True)
 if proc.returncode:
@@ -129,6 +155,8 @@ print("Build 295 customer account static source authority check: PASS")
 print("- My Account source and route copy are privacy-safe and maintenance-interest-only")
 print("- customer browser payloads no longer contain staff-private or staff scheduling keys")
 print("- server-side Build 288/294 boundaries and defensive adapters remain retained")
+print("- living handoff/roadmap identify Build 295 from the accepted Build 294 Production baseline")
+print("- temporary bootstrap machinery is absent from the release candidate")
 print("- no maintenance price/cadence/priority/subscription authority was invented")
 print("- no schema migration was introduced")
 print("- Production remains closed")
