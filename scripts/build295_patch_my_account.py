@@ -39,16 +39,6 @@ sub_exact(
     label='maintenance section'
 )
 
-# Replace the obsolete completed-Complete-Detail commercial conversion renderer.
-safe_renderer = '''function renderMaintenanceConversion(){ const wrap=$('#maintenanceConversion'); if(!wrap) return; wrap.innerHTML = `<article class="maintenance-offer" data-build295-maintenance-interest-only><div class="badge">Maintenance interest</div><h3>Tell Rosie when repeat detailing may be useful</h3><p class="muted">Maintenance timing is an interest preference reviewed after service context is known. Your account does not set a due date, service-mileage target, recurring cadence or automatic schedule.</p><p class="muted">No fixed cadence, price, discount, priority, appointment, subscription or recurring billing is created here.</p><div class="actions"><a class="btn ghost" href="/maintenance-plan">Open maintenance interest</a></div></article>`; }
-const VEHICLE_MAKES_URL'''
-sub_exact(
-    r'function hasCompletedCompleteDetail\(rows\).*?\nconst VEHICLE_MAKES_URL',
-    safe_renderer,
-    flags=re.S,
-    label='maintenance renderer'
-)
-
 # Remove staff-owned recurrence presentation from the customer garage card. These
 # matches intentionally anchor on the row label rather than the historical JS expression.
 for row_label, label in [
@@ -57,6 +47,21 @@ for row_label, label in [
     ('Next service mileage', 'garage next mileage'),
 ]:
     sub_exact(rf'<div class="garage-field"><span>{re.escape(row_label)}</span><strong>.*?</strong></div>', '', label=label)
+
+# Remove only the obsolete maintenance eligibility helpers; retain garage/render functions.
+sub_exact(r'function hasCompletedCompleteDetail\(rows\)\{.*?\}\n', '', label='completed detail helper')
+sub_exact(r'function latestCompletedCompleteDetail\(rows\)\{.*?\}\n', '', label='latest completed detail helper')
+sub_exact(r'function eligibleMaintenanceVehicle\(rows\)\{.*?\}\n', '', label='maintenance vehicle helper')
+
+# Replace only the obsolete commercial maintenance renderer.
+safe_renderer = '''function renderMaintenanceConversion(){ const wrap=$('#maintenanceConversion'); if(!wrap) return; wrap.innerHTML = `<article class="maintenance-offer" data-build295-maintenance-interest-only><div class="badge">Maintenance interest</div><h3>Tell Rosie when repeat detailing may be useful</h3><p class="muted">Maintenance timing is an interest preference reviewed after service context is known. Your account does not set a due date, service-mileage target, recurring cadence or automatic schedule.</p><p class="muted">No fixed cadence, price, discount, priority, appointment, subscription or recurring billing is created here.</p><div class="actions"><a class="btn ghost" href="/maintenance-plan">Open maintenance interest</a></div></article>`; }
+const VEHICLE_MAKES_URL'''
+sub_exact(
+    r'function renderMaintenanceConversion\(bookings, vehicles\)\{.*?\}\nconst VEHICLE_MAKES_URL',
+    safe_renderer,
+    flags=re.S,
+    label='maintenance renderer'
+)
 
 # Remove legacy fill assignments that depend on controls no longer present.
 for pattern, label in [
@@ -93,7 +98,8 @@ for forbidden in [
 for required in [
     MARKER, 'Maintenance interest', 'Open maintenance interest', 'maintenanceConversion',
     'No fixed cadence, price, discount, priority, appointment, subscription or recurring billing',
-    '/api/client/profile_update', '/api/client/vehicles_save', 'bookingHistory', 'vehicleForm'
+    '/api/client/profile_update', '/api/client/vehicles_save', 'bookingHistory', 'vehicleForm',
+    'function garageBay', 'function renderVehicles'
 ]:
     if required not in text:
         raise SystemExit(f'Required Build 295 source token missing: {required}')
