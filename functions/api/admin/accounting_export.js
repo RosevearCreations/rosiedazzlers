@@ -10,6 +10,7 @@ import {
   buildOperationalProfitabilityExport,
   buildYearEndPackageExport
 } from "../_lib/accounting-gl.js";
+import { safeCsvFilenameToken } from "../_lib/accounting-accountant-export.js";
 
 export async function onRequestOptions() { return new Response('', { status: 204, headers: corsHeaders() }); }
 export async function onRequestGet({ request, env }) {
@@ -37,7 +38,7 @@ export async function onRequestGet({ request, env }) {
       filename = `rosie-cash-flow-${year}-${String(month).padStart(2, '0')}.csv`;
     } else if (type === 'payables') {
       csv = await buildPayablesExport(env, { status });
-      filename = `rosie-payables-${status || 'all'}-${year}-${String(month).padStart(2, '0')}.csv`;
+      filename = `rosie-payables-${safeCsvFilenameToken(status, 'all')}-${year}-${String(month).padStart(2, '0')}.csv`;
     } else if (type === 'inventory_missing_costs' || type === 'inventory_costs') {
       csv = await buildInventoryCostExport(env);
       filename = `rosie-inventory-missing-costs-${year}-${String(month).padStart(2, '0')}.csv`;
