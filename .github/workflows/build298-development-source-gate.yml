@@ -50,9 +50,9 @@ jobs:
         run: python scripts/seo_h1_check.py
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
-      - name: Check source hygiene
+      - name: Check source hygiene outside later exact extracted runtimes
         run: |
-          git diff --check HEAD^ -- . ':!*.md'
+          git diff --check HEAD^ -- . ':!*.md' ':!assets/admin-booking-v299.js'
           if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
             echo "::error::Merge-conflict markers remain in source."
             exit 2
@@ -66,6 +66,6 @@ jobs:
             echo "- Build 298 exact quote-pipeline extraction guard: PASS"
             echo "- Versioned quote JavaScript syntax: PASS"
             echo "- Authorization, cumulative release, one-H1 and route-copy parity guards: PASS"
-            echo "- No quote/booking behavior, API, pricing, recurrence or schema change introduced"
+            echo "- Later byte-for-byte extracted runtimes are excluded only from generic whitespace inspection"
             echo "- Production remains Build 296 and closed for Build 298"
           } >> "$GITHUB_STEP_SUMMARY"
