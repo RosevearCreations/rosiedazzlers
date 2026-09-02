@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+BASE_URL="${1:-https://dev.rosiedazzlers.pages.dev}"
+echo "Build 300 read-only Payments smoke against ${BASE_URL}"
+page="$(curl -fsSL --retry 6 --retry-delay 3 "${BASE_URL}/admin-payments.html")"
+asset="$(curl -fsSL --retry 6 --retry-delay 3 "${BASE_URL}/assets/admin-payments-v300.js")"
+grep -Fq '<script src="/assets/admin-payments-v300.js"></script>' <<<"$page"
+grep -Fq 'Payment webhooks, secure links & refunds' <<<"$page"
+grep -Fq '/api/admin/payment_webhook_events_list' <<<"$asset"
+grep -Fq '/api/admin/quote_deposit_requests_list' <<<"$asset"
+grep -Fq '/api/admin/quote_deposit_refund_initiate' <<<"$asset"
+grep -Fq '/api/admin/final_balance_request_manage' <<<"$asset"
+grep -Fq '/api/admin/payment_reconciliation_export' <<<"$asset"
+grep -Fq '/api/admin/payment_accountant_export_full' <<<"$asset"
+echo "Build 300 read-only Payments smoke: PASS"
