@@ -119,7 +119,7 @@ need(
     "**Build:** 295",
     BUILD294_PRODUCTION_SHA,
     "customer account static source authority cleanup",
-    "My Account maintainability extraction",
+    "extract the mature My Account inline JavaScript into a versioned asset",
 )
 need(
     "MASTER_VALUE_ROADMAP.md",
