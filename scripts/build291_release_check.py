@@ -40,15 +40,35 @@ def one_h1(rel):
         errors.append(f"{rel} expected exactly one H1, found {count}")
 
 
+def git_run(*args):
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+
+
+def require_ancestor(anchor, label):
+    shallow = git_run("rev-parse", "--is-shallow-repository")
+    if shallow.returncode:
+        errors.append(f"could not determine repository history depth for {label}: {shallow.stderr.strip()}")
+        return
+    if shallow.stdout.strip().lower() == "true":
+        expanded = git_run("fetch", "--no-tags", "--prune", "--unshallow", "origin")
+        if expanded.returncode:
+            errors.append(f"could not obtain complete history for {label}: {expanded.stderr.strip()}")
+            return
+    probe = git_run("cat-file", "-e", f"{anchor}^{{commit}}")
+    if probe.returncode:
+        fetched = git_run("fetch", "--no-tags", "origin", anchor)
+        if fetched.returncode:
+            errors.append(f"could not fetch {label} anchor {anchor}: {fetched.stderr.strip()}")
+            return
+    proc = git_run("merge-base", "--is-ancestor", anchor, "HEAD")
+    if proc.returncode:
+        errors.append(f"{label} is not an ancestor of the Build 291 candidate")
+
+
 # Build 291 is a forward Development descendant of the accepted Build 290 release.
-proc = subprocess.run(
-    ["git", "merge-base", "--is-ancestor", BUILD290_SHA, "HEAD"],
-    cwd=ROOT,
-    capture_output=True,
-    text=True,
-)
-if proc.returncode:
-    errors.append("accepted Build 290 is not an ancestor of the Build 291 candidate")
+# Historical runtime workflows use shallow checkouts; complete history is required
+# before the exact accepted ancestry assertion can be evaluated.
+require_ancestor(BUILD290_SHA, "accepted Build 290")
 
 for rel in ["maintenance-plan.html", "maintenance-plan/index.html"]:
     one_h1(rel)

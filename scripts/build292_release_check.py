@@ -37,9 +37,34 @@ def one_h1(rel):
         errors.append(f"{rel} expected exactly one H1, found {count}")
 
 
-proc = subprocess.run(["git", "merge-base", "--is-ancestor", BUILD291_PRODUCTION_SHA, "HEAD"], cwd=ROOT)
-if proc.returncode:
-    errors.append("accepted Build 291 Production is not an ancestor of the Build 292 candidate")
+def git_run(*args):
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+
+
+def require_ancestor(anchor, label):
+    shallow = git_run("rev-parse", "--is-shallow-repository")
+    if shallow.returncode:
+        errors.append(f"could not determine repository history depth for {label}: {shallow.stderr.strip()}")
+        return
+    if shallow.stdout.strip().lower() == "true":
+        expanded = git_run("fetch", "--no-tags", "--prune", "--unshallow", "origin")
+        if expanded.returncode:
+            errors.append(f"could not obtain complete history for {label}: {expanded.stderr.strip()}")
+            return
+    probe = git_run("cat-file", "-e", f"{anchor}^{{commit}}")
+    if probe.returncode:
+        fetched = git_run("fetch", "--no-tags", "origin", anchor)
+        if fetched.returncode:
+            errors.append(f"could not fetch {label} anchor {anchor}: {fetched.stderr.strip()}")
+            return
+    proc = git_run("merge-base", "--is-ancestor", anchor, "HEAD")
+    if proc.returncode:
+        errors.append(f"{label} is not an ancestor of the Build 292 candidate")
+
+
+# Historical runtime workflows may be shallow. Require complete history before the
+# exact accepted Build 291 Production ancestry assertion; missing history fails closed.
+require_ancestor(BUILD291_PRODUCTION_SHA, "accepted Build 291 Production")
 
 for rel in ["fleet.html", "fleet/index.html"]:
     one_h1(rel)
