@@ -5,8 +5,6 @@
 **Scope:** Releases that can be implemented, regression-tested, deployed to Development, and accepted without additional business-rule input.  
 **Living planning authority:** `MASTER_VALUE_ROADMAP.md` remains authoritative; this file records the exact agreed execution queue for Builds 300–319.
 
-Before this queue begins, finish the repository/branch cleanup already underway and close the current Build 299 Production/Development acceptance boundary. Those cleanup/closure tasks are not counted among the 20 releases below.
-
 ## Next 20 autonomous RosieDazzlers items
 
 1. **Build 300 — Finance Payments maintainability extraction**  
@@ -16,7 +14,7 @@ Before this queue begins, finish the repository/branch cleanup already underway 
    Cleanly separate bank/transaction/reconciliation UI runtime while preserving matching, posting and approval behavior exactly.
 
 3. **Build 302 — Statement Import reliability**  
-   Harden accounting statement import parsing, validation, error reporting and duplicate protection without changing accounting policy.
+   Harden accounting statement import parsing, validation, error reporting and duplicate protection without changing accounting policy. This item ultimately closed as a fail-closed retired-import convergence guard because no active statement-import parser/API survives in the accepted application.
 
 4. **Build 303 — Finance Tax-support maintainability extraction**  
    Externalize and validate the retained T2125/tax-support/accountant-package surfaces while keeping Build 273 Finance authority intact.
@@ -71,11 +69,17 @@ Before this queue begins, finish the repository/branch cleanup already underway 
 
 ## Current execution checkpoint
 
-Builds 300–303 are implemented through the current Build 303 release candidate. Build 302 is closed as a fail-closed retired-import convergence guard; Build 303 externalizes retained Tax Support runtime without changing Build 273 tax/accounting authority. **Next untouched item: Build 304 — Accountant export integrity.**
+Builds 300–303 are closed. Build 303 is the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+
+Build 304 implementation is complete on Development: the accountant package now has a versioned/predictable JSON export contract, explicit evidence-reference integrity classification, sanitized filenames and a privacy whitelist that excludes raw storage locators, internal document notes, staff identity metadata and raw mileage/booking rows. Build 304 introduced no schema/database migration, accounting/tax-policy change or payment-provider mutation.
+
+Build 304 pre-documentation Development implementation/evidence baseline `6351321a2d33ed8489295a60d8de72adea81a859` passed its Build 304 runtime/source and exact Cloudflare Development acceptance. Final closure requires the same exact-SHA acceptance on the documentation-synchronized `dev` head. **Next untouched item after that closure: Build 305 — Finance authorization sweep.**
+
+Build 304 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Cleanup → close Build 299 → Builds 300–305 Finance → 306–308 I.T./reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–304 Finance complete/closing → Build 305 Finance authorization → 306–308 I.T./reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
