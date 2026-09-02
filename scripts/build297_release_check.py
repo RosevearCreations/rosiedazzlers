@@ -74,7 +74,10 @@ for rel in PAGES:
         '/assets/admin-shell.js',
         'id="customerForm"',
         'id="helpQueue"',
+        'data-access-action="send_account_setup"',
         'data-access-action="send_password_reset"',
+        'data-access-action="resend_verification"',
+        'data-access-action="revoke_sessions"',
         'id="archiveBtn"',
     ]:
         if token not in body:
@@ -91,9 +94,6 @@ need(
     "/api/admin/customer_admin_access_action",
     "/api/admin/customer_account_help_list",
     "/api/admin/customer_account_help_action",
-    "send_account_setup",
-    "send_password_reset",
-    "resend_verification",
     "revoke_sessions",
     "ARCHIVE CLIENT",
     "AdminShell.boot({pageKey:'admin-customers'",
@@ -117,7 +117,7 @@ else:
         if "migration" in low or low.startswith("database") or low.endswith(".sql"):
             errors.append(f"Build 297 unexpectedly changes schema/migration file {name}")
 
-need("BUILD297_SUMMARY.md", "Build 297", "Operations Customer Support Maintainability Extraction", "no admin behavior change", "no schema migration")
+need("BUILD297_SUMMARY.md", "Build 297", "Operations Customer Support Maintainability Extraction", "no admin behavior change", "no database or schema migration")
 need("scripts/build297_http_smoke.sh", "/assets/admin-customers-v297.js", "read-only")
 need(".github/workflows/build297-source-gate.yml", "Build 297 Source Gate", "python scripts/build297_release_check.py")
 need(".github/workflows/build297-development-source-gate.yml", "Build 297 Development Source Gate", "scripts/build297_release_check.py")
