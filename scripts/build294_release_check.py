@@ -7,6 +7,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 BUILD293_PRODUCTION_SHA = "449edcfdea101fa9cbc6b0336ad2f17d04327b9a"
 STAFF_OWNED = ["next_cleaning_due_at", "next_service_mileage_km", "service_interval_days", "auto_schedule_opt_in"]
+LEGACY_CONTROL_IDS = ["vehNextDue", "vehNextServiceMileage", "vehIntervalDays", "vehAutoSchedule"]
 errors = []
 
 
@@ -81,8 +82,26 @@ need(
     "loadBuild293CustomerNextActions",
 )
 
+# Build 294 originally retained hidden compatibility controls in the account source.
+# Build 295 intentionally removes them at source while retaining the Build 294 adapter as
+# defense in depth. Accept either historical shape, but require the stronger Build 295
+# source boundary whenever its marker is present.
 for rel in ["my-account.html", "my-account/index.html"]:
-    need(rel, 'id="vehNextDue"', 'id="vehNextServiceMileage"', 'id="vehIntervalDays"', 'id="vehAutoSchedule"', 'id="maintenanceConversion"', "/assets/client-auth.js")
+    body = text(rel)
+    for token in ['id="maintenanceConversion"', "/assets/client-auth.js"]:
+        if token not in body:
+            errors.append(f"{rel} missing {token}")
+    if "data-build295-account-source-authority" in body:
+        for control_id in LEGACY_CONTROL_IDS:
+            if f'id="{control_id}"' in body:
+                errors.append(f"{rel} Build 295 source still exposes legacy control {control_id}")
+        for token in ["Maintenance interest", "Open maintenance interest", "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing"]:
+            if token not in body:
+                errors.append(f"{rel} Build 295 forward-compatible boundary missing {token}")
+    else:
+        for control_id in LEGACY_CONTROL_IDS:
+            if f'id="{control_id}"' not in body:
+                errors.append(f"{rel} missing retained Build 294 compatibility control {control_id}")
 
 need("BUILD294_SUMMARY.md", "Build 294", "Customer Maintenance / Auto-Schedule Authority Closure", "no schema migration", "staff-owned")
 need("scripts/build294_http_smoke.sh", "/my-account", "/assets/customer-maintenance-authority-v294.js", "/api/client/dashboard", "must not create")
@@ -107,7 +126,8 @@ print("Build 294 customer maintenance authority closure check: PASS")
 print("- customer vehicle writes no longer accept staff-owned due/mileage/cadence/auto-schedule fields")
 print("- customer-safe vehicle projection no longer exposes those scheduling fields")
 print("- existing database/staff historical scheduling authority is not deleted or migrated")
-print("- account recurrence controls are hidden/disabled and maintenance remains interest-only")
+print("- Build 294 account adapter remains interest-only defense in depth")
+print("- Build 295 source-level removal is accepted only when the stronger source boundary is present")
 print("- adapter is event-driven and read-only; no polling, write replay or subscription authority")
 print("- Build 293 review booking linkage remains retained")
 print("- Production remains closed")

@@ -1,0 +1,66 @@
+name: Build 295 Development Runtime Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build295-development
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Verify Build 295 customer account source runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Reconfirm Build 295 source authority
+        run: |
+          python scripts/build295_release_check.py
+          python scripts/build294_release_check.py
+          python scripts/build293_release_check.py
+          python scripts/build288_release_check.py
+          python scripts/build290_release_check.py
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+
+      - name: Wait for Development alias and run Build 295 smoke
+        run: |
+          for attempt in $(seq 1 24); do
+            if bash scripts/build295_http_smoke.sh https://dev.rosiedazzlers.pages.dev "Build 295 Development runtime"; then
+              exit 0
+            fi
+            echo "Build 295 Development alias not converged yet (attempt $attempt/24)."
+            sleep 10
+          done
+          exit 1
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo "### Build 295 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Static My Account source authority: PASS"
+            echo "- Staff-private/scheduling controls absent: PASS"
+            echo "- Interest-only maintenance wording: PASS"
+            echo "- Build 288/294 defensive assets retained: PASS"
+            echo "- Anonymous dashboard isolation: PASS"
+            echo "- Smoke is read-only; no customer, vehicle, booking, review or maintenance record is created."
+            echo "- No schema migration or maintenance economics introduced."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"
