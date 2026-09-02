@@ -71,3 +71,9 @@
   if (path !== "/my-account" || document.querySelector('script[data-build289-account-resilience]')) return;
   const script = document.createElement("script"); script.type = "module"; script.src = "/assets/account-resilience-v289.js"; script.dataset.build289AccountResilience = "true"; document.head.appendChild(script);
 })();
+// Build 293: choose one useful authenticated next action while preserving existing authorities.
+(function loadBuild293CustomerNextActions() {
+  const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path !== "/my-account" || document.querySelector('script[data-build293-customer-next-actions]')) return;
+  const script = document.createElement("script"); script.type = "module"; script.src = "/assets/customer-next-actions-v293.js"; script.dataset.build293CustomerNextActions = "true"; document.head.appendChild(script);
+})();
