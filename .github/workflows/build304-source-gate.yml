@@ -1,0 +1,38 @@
+name: Build 304 Source Gate
+
+on:
+  push:
+    branches: [build-304-accountant-export-integrity]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Retain Builds 301-303 Finance authority
+        run: |
+          python scripts/build301_release_check.py
+          python scripts/build302_release_check.py
+          python scripts/build303_release_check.py
+      - name: Run Build 304 accountant export integrity guard
+        run: python scripts/build304_release_check.py
+      - name: Run cumulative authority guards
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
