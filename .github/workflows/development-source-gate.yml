@@ -22,7 +22,7 @@ jobs:
       - name: Checkout exact dev commit
         uses: actions/checkout@v4
         with:
-          fetch-depth: 40
+          fetch-depth: 50
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -99,6 +99,12 @@ jobs:
           node --check functions/api/public_lead_submit.js
           bash -n scripts/build292_http_smoke.sh
 
+      - name: Check Build 293 customer next-action syntax
+        run: |
+          node --check assets/customer-next-actions-v293.js
+          node --check assets/client-auth.js
+          bash -n scripts/build293_http_smoke.sh
+
       - name: Check Development smoke helper syntax
         run: |
           bash -n scripts/development_http_smoke.sh
@@ -111,6 +117,7 @@ jobs:
           bash -n scripts/build290_http_smoke.sh
           bash -n scripts/build291_http_smoke.sh
           bash -n scripts/build292_http_smoke.sh
+          bash -n scripts/build293_http_smoke.sh
 
       - name: Check retained vehicle catalogue resilience
         run: node scripts/build274_vehicle_catalog_resilience_check.mjs
@@ -162,6 +169,8 @@ jobs:
         run: python scripts/build291_release_check.py
       - name: Run current Build 292 focused guard
         run: python scripts/build292_release_check.py
+      - name: Run current Build 293 focused guard
+        run: python scripts/build293_release_check.py
 
       - name: Run Build 290 role/action matrix
         run: node scripts/build290_action_permission_test.mjs
@@ -203,8 +212,9 @@ jobs:
             echo "- Build 290 role/action/API + forward-restore readiness syntax: PASS"
             echo "- Build 291 maintenance retention intake syntax: PASS"
             echo "- Build 292 fleet/workplace assessment intake syntax: PASS"
-            echo "- Development + Build 284-292 HTTP smoke helper syntax: PASS"
-            echo "- Retained Builds 271-292 focused guards: PASS"
+            echo "- Build 293 customer retention next-action syntax: PASS"
+            echo "- Development + Build 284-293 HTTP smoke helper syntax: PASS"
+            echo "- Retained Builds 271-293 focused guards: PASS"
             echo "- Cumulative release + one-H1 + route-copy guard: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
