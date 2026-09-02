@@ -17,11 +17,21 @@ def git(*args):
         return ""
     return proc.stdout.strip()
 
-# Build 290 may require normal forward compatibility commits. Ensure the accepted
-# Build 289 object is available even when checkout uses a shallow history.
+# Build 290's rollback invariant is historical and must remain provable even as the
+# Development branch grows beyond old workflow checkout depths. If the caller has a
+# shallow repository, obtain complete history before checking the accepted Build 289
+# anchor. Never convert an unavailable ancestry proof into success.
+shallow = run("rev-parse", "--is-shallow-repository")
+if shallow.returncode:
+    errors.append(f"could not determine repository history depth: {shallow.stderr.strip()}")
+elif shallow.stdout.strip().lower() == "true":
+    expanded = run("fetch", "--no-tags", "--prune", "--unshallow", "origin")
+    if expanded.returncode:
+        errors.append(f"could not obtain complete history for rollback ancestry proof: {expanded.stderr.strip()}")
+
 probe = run("cat-file", "-e", f"{ROLLBACK_SHA}^{{commit}}")
 if probe.returncode:
-    fetched = run("fetch", "--no-tags", "--depth=1", "origin", ROLLBACK_SHA)
+    fetched = run("fetch", "--no-tags", "origin", ROLLBACK_SHA)
     if fetched.returncode:
         errors.append(f"could not fetch accepted Build 289 restore anchor: {fetched.stderr.strip()}")
 
@@ -30,11 +40,6 @@ if tree != ROLLBACK_TREE:
     errors.append(f"accepted Build 289 tree mismatch: {tree}")
 
 proc = run("merge-base", "--is-ancestor", ROLLBACK_SHA, "HEAD")
-if proc.returncode:
-    # A depth-1 explicit fetch can leave the connecting history shallow. Deepen the
-    # current branch once, then re-check the real invariant.
-    run("fetch", "--no-tags", "--deepen=8", "origin", "HEAD")
-    proc = run("merge-base", "--is-ancestor", ROLLBACK_SHA, "HEAD")
 if proc.returncode:
     errors.append("accepted Build 289 is not an ancestor of the Build 290 candidate")
 
