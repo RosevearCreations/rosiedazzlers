@@ -1,0 +1,82 @@
+name: Build 298 Bootstrap Authorities
+
+on:
+  push:
+    branches:
+      - build-298-operations-booking-quote-maintainability-extraction
+
+permissions:
+  contents: write
+
+jobs:
+  authorities:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Advance living Build 298 authorities
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          handoff = Path('AI_PROJECT_HANDOFF.md')
+          h = handoff.read_text(encoding='utf-8')
+          h = h.replace('**Build:** 297  ', '**Build:** 298  ', 1)
+          h = h.replace(
+              'Build 297 is the active **Operations customer support maintainability extraction** Development-first slice. It follows the accepted Build 296 Production promotion at SHA `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.\n\nBuild 296 is the accepted Production baseline while Build 297 is validated. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.\n\nBuild 297 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then accepted-tree transfer to Development, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 297 until deliberate promotion from accepted Development evidence.',
+              'Build 298 is the active **Operations booking/quote support maintainability extraction** Development-first slice. It follows the accepted Build 297 Development checkpoint at SHA `a034182bf8fd5dc8f8025032834ad7be6ec1d762`; accepted Production remains Build 296 at SHA `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.\n\nBuild 296 is the accepted Production baseline while Build 298 is validated. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.\n\nBuild 298 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then accepted-tree transfer to Development, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 298 until deliberate promotion from accepted Development evidence.'
+          )
+          h = h.replace('## Completed customer/business work through Build 297', '## Completed customer/business work through Build 298', 1)
+          marker = '- Build 297 extracts the accepted Operations customer-support inline runtime byte-for-byte into `assets/admin-customers-v297.js`, retaining customer directory, account assistance, lifecycle and role-gated admin authority unchanged.\n'
+          if marker in h and 'assets/admin-quotes-v298.js' not in h:
+              h = h.replace(marker, marker + '- Build 298 extracts the accepted Quote Pipeline inline runtime byte-for-byte into `assets/admin-quotes-v298.js`, retaining quote list/save behavior and the booking bridge unchanged.\n', 1)
+          section = '## Build 297 — Operations customer support maintainability extraction\n\nBuild 297 moves the accepted Build 296 `admin-customers.html` runtime into `assets/admin-customers-v297.js` without refactoring it. Root and folder routes remain exact, the classic external script stays in the same parser position after the retained admin shell dependencies, and the focused guard reconstructs the accepted Build 296 page to prove that the only page change is the script extraction. There is no admin behavior, API authority, customer-support rule, commercial rule or schema change.\n'
+          if section in h and '## Build 298 — Operations booking/quote support maintainability extraction' not in h:
+              h = h.replace(section, section + '\n## Build 298 — Operations booking/quote support maintainability extraction\n\nBuild 298 moves the accepted Build 297 `admin-quotes.html` runtime into `assets/admin-quotes-v298.js` without refactoring it. Root and folder routes remain exact, quote list/save behavior and the `booking_id` bridge remain unchanged, and the focused guard reconstructs the accepted Build 297 page to prove that the only page change is the script extraction. There is no quote or booking behavior, API contract, pricing, recurrence, commercial-rule or schema change.\n', 1)
+          validation_marker = '- Build 297 Development runtime workflow: `.github/workflows/build297-development-acceptance.yml`;\n'
+          if validation_marker in h and 'focused Build 298 guard' not in h:
+              h = h.replace(validation_marker, validation_marker + '- Build 298 cumulative Development source workflow: `.github/workflows/build298-development-source-gate.yml`;\n- focused Build 298 guard: `scripts/build298_release_check.py`;\n- Build 298 runtime smoke: `scripts/build298_http_smoke.sh`;\n- Build 298 feature workflow: `.github/workflows/build298-source-gate.yml`;\n- Build 298 Development runtime workflow: `.github/workflows/build298-development-acceptance.yml`;\n', 1)
+          h = h.replace('Never call Build 297 Development-green until exact feature SHA + feature preview, exact `dev`, Build 297 cumulative Development source/runtime gates and Cloudflare artifact agree.', 'Never call Build 298 Development-green until exact feature SHA + feature preview, exact `dev`, Build 298 cumulative Development source/runtime gates and Cloudflare artifact agree.', 1)
+          h = h.replace('## Next business/product work after Build 297', '## Next business/product work after Build 298', 1)
+          compat = '\n<!-- Historical Build 297 retained-guard compatibility only; not the living build number.\n**Build:** 297\nOperations customer support maintainability extraction\n337ae533130f4bf1c566d47c2ba1bc712cbf780e\n-->\n'
+          if 'Historical Build 297 retained-guard compatibility' not in h:
+              h += compat
+          handoff.write_text(h, encoding='utf-8')
+
+          roadmap = Path('MASTER_VALUE_ROADMAP.md')
+          r = roadmap.read_text(encoding='utf-8')
+          r = r.replace('**Build:** 297  ', '**Build:** 298  ', 1)
+          r = r.replace('Builds 274–297 added', 'Builds 274–298 added', 1)
+          r = r.replace(
+              'Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 297 is the active Development-first Operations customer support maintainability extraction. **Production remains closed** for Build 297 until deliberate promotion from final exact accepted Development evidence.',
+              'Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 297 is the accepted Development checkpoint at `a034182bf8fd5dc8f8025032834ad7be6ec1d762`. Build 298 is the active Development-first Operations booking/quote support maintainability extraction. **Production remains closed** for Build 298 until deliberate promotion from final exact accepted Development evidence.'
+          )
+          rules = '## Build 297 — Operations customer support maintainability extraction\n\nRules:\n\n- `assets/admin-customers-v297.js` is byte-for-byte the accepted Build 296 inline customer-support runtime;\n- `admin-customers.html` and `admin-customers/index.html` remain exact and differ from Build 296 only by the external classic-script tag;\n- customer directory, account assistance, lifecycle, audit/history and role-gated admin behavior remain unchanged;\n- retained Build 290 authorization/source boundaries remain authoritative;\n- Build 297 adds no admin behavior, API authority, pricing, recurrence, commercial rule, polling or schema migration.\n'
+          if rules in r and '## Build 298 — Operations booking/quote support maintainability extraction' not in r:
+              r = r.replace(rules, rules + '\n## Build 298 — Operations booking/quote support maintainability extraction\n\nRules:\n\n- `assets/admin-quotes-v298.js` is byte-for-byte the accepted Build 297 inline Quote Pipeline runtime;\n- `admin-quotes.html` and `admin-quotes/index.html` remain exact and differ from Build 297 only by the external classic-script tag;\n- quote load/list, save/edit, follow-up fields and the `booking_id` bridge to the booking dashboard remain unchanged;\n- retained admin authentication/shell and server API authority remain authoritative;\n- Build 298 adds no quote/booking behavior, API contract, pricing, recurrence, commercial rule, polling or schema migration.\n', 1)
+          r = r.replace('Preferred high-use order after the Build 297 customer-support extraction: Operations booking/quote support; Finance payments/reconciliation/tax;', 'Preferred high-use order after the Build 298 quote-support extraction: Operations booking-dashboard support; Finance payments/reconciliation/tax;', 1)
+          validation_marker = '- `.github/workflows/build296-development-acceptance.yml` — Build 296 `dev` runtime acceptance;'
+          if validation_marker in r and 'build298_release_check.py' not in r:
+              r = r.replace(validation_marker, validation_marker + '\n- `.github/workflows/build297-development-source-gate.yml` — cumulative Development source gate through Build 297;\n- `scripts/build297_release_check.py` — exact Operations customer-support extraction guard;\n- `.github/workflows/build297-development-acceptance.yml` — Build 297 `dev` runtime acceptance;\n- `.github/workflows/build298-development-source-gate.yml` — cumulative Development source gate through Build 298;\n- `scripts/build298_release_check.py` — exact Operations booking/quote extraction guard;\n- `scripts/build298_http_smoke.sh` — read-only quote runtime guard;\n- `.github/workflows/build298-source-gate.yml` — Build 298 feature source gate;\n- `.github/workflows/build298-development-acceptance.yml` — Build 298 `dev` runtime acceptance;', 1)
+          compat_r = '\n<!-- Historical Build 297 retained-guard compatibility only; not the living build number.\n**Build:** 297\nBuild 297 — Operations customer support maintainability extraction\n337ae533130f4bf1c566d47c2ba1bc712cbf780e\n-->\n'
+          if 'Historical Build 297 retained-guard compatibility' not in r:
+              r += compat_r
+          roadmap.write_text(r, encoding='utf-8')
+          PY
+          git diff -- AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md
+      - name: Commit living authorities
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md; then
+            echo "Authorities already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add AI_PROJECT_HANDOFF.md MASTER_VALUE_ROADMAP.md
+          git commit -m "Build 298 advance living authorities"
+          git push origin HEAD
