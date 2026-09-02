@@ -1,0 +1,78 @@
+name: Build 293 Source Gate
+
+on:
+  push:
+    branches:
+      - build-293-customer-retention-next-actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build293-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    name: Validate Build 293 source
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 50
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check Build 293 syntax
+        run: |
+          node --check assets/customer-next-actions-v293.js
+          node --check assets/client-auth.js
+          bash -n scripts/build293_http_smoke.sh
+
+      - name: Run retained Builds 271-292 focused guards
+        run: for build in $(seq 271 292); do python "scripts/build${build}_release_check.py"; done
+
+      - name: Run Build 293 focused guard
+        run: python scripts/build293_release_check.py
+
+      - name: Retain Build 290 executable authorization proof
+        run: |
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+
+      - name: Run cumulative Rosie release guard
+        run: python scripts/release_check.py
+
+      - name: Check one-H1 source rule
+        run: python scripts/seo_h1_check.py
+
+      - name: Check route-copy parity
+        run: python scripts/sync_route_copies.py --check
+
+      - name: Check source hygiene
+        run: |
+          git diff --check 0198026b4ded4cb26ee9e0d3b9d298bfa719d5e3 HEAD -- . ':!*.md'
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
+
+      - name: Summary
+        run: |
+          {
+            echo "### Build 293 Source Gate"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Retained Builds 271-292: PASS"
+            echo "- Build 293 customer next-action orchestration: PASS"
+            echo "- Build 291 interest-only maintenance boundary retained: PASS"
+            echo "- Build 290 authorization + forward-restore proof retained: PASS"
+            echo "- Cumulative release / one-H1 / route parity / hygiene: PASS"
+            echo "- No schema migration or new customer write authority introduced."
+            echo "- Production remains closed."
+          } >> "$GITHUB_STEP_SUMMARY"
