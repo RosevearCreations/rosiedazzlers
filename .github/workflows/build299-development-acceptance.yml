@@ -1,0 +1,34 @@
+name: Build 299 Development Runtime Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build299-development-runtime
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Validate Build 299 Development runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate exact source first
+        run: python scripts/build299_release_check.py
+      - name: Validate deployed booking-dashboard surface read-only
+        run: bash scripts/build299_http_smoke.sh https://dev.rosiedazzlers.pages.dev

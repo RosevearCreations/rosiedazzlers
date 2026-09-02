@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 296  
+**Build:** 299  
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–296 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–299 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
 
-Build 295 is the accepted Production baseline at `73556e1f41dc204290409294c5e38ad0b2090fb7`. Build 296 is the active Development-first My Account maintainability extraction. **Production remains closed** for Build 296 until deliberate promotion from final exact accepted Development evidence.
+Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 298 is the accepted Development checkpoint at `48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b`. Build 299 is the active Development-first Operations booking-dashboard support maintainability extraction. **Production remains closed** for Build 299 until deliberate promotion from final exact accepted Development evidence.
 
 Do not regress:
 
@@ -97,6 +97,37 @@ Rules:
 - Builds 288/294/295 remain retained defense in depth;
 - Build 296 adds no customer behavior, API authority, maintenance economics, polling or schema migration.
 
+## Build 297 — Operations customer support maintainability extraction
+
+Rules:
+
+- `assets/admin-customers-v297.js` is byte-for-byte the accepted Build 296 inline customer-support runtime;
+- `admin-customers.html` and `admin-customers/index.html` remain exact and differ from Build 296 only by the external classic-script tag;
+- customer directory, account assistance, lifecycle, audit/history and role-gated admin behavior remain unchanged;
+- retained Build 290 authorization/source boundaries remain authoritative;
+- Build 297 adds no admin behavior, API authority, pricing, recurrence, commercial rule, polling or schema migration.
+
+## Build 298 — Operations booking/quote support maintainability extraction
+
+Rules:
+
+- `assets/admin-quotes-v298.js` is byte-for-byte the accepted Build 297 inline Quote Pipeline runtime;
+- `admin-quotes.html` and `admin-quotes/index.html` remain exact and differ from Build 297 only by the external classic-script tag;
+- quote load/list, save/edit, follow-up fields and the `booking_id` bridge to the booking dashboard remain unchanged;
+- retained admin authentication/shell and server API authority remain authoritative;
+- Build 298 adds no quote/booking behavior, API contract, pricing, recurrence, commercial rule, polling or schema migration.
+
+
+## Build 299 — Operations booking-dashboard support maintainability extraction
+
+Rules:
+
+- `assets/admin-booking-v299.js` is byte-for-byte the accepted Build 298 inline booking module;
+- `admin-booking.html` and `admin-booking/index.html` remain exact and differ from Build 298 only by the external module tag;
+- booking loading/status, staff assignment, intake/media review, vehicle-size verification, customer-document helpers and existing finance-entry orchestration remain unchanged;
+- server authorization, booking validation, scheduling/conflict and payment/accounting authorities remain unchanged;
+- Build 299 adds no booking behavior, API authority, pricing/package rule, scheduling/recurrence/commercial rule, polling or schema migration.
+
 ## Ordered next value work
 
 ### 1. Genuine proof + Google trust
@@ -118,7 +149,7 @@ Build economics only after explicit business approval for qualification, reward 
 Retain Build 273 authority. Development payment-provider configuration is owner-signed-off as present. Real transaction/settlement/reconciliation acceptance remains evidence-driven and should resume only when deliberately tested; no fabricated provider transaction evidence. Retain evidence links into `accounting_documents` and accountant-friendly export surfaces.
 
 ### 7. Continue modular extraction only when it creates value
-Preferred high-use order: Operations customer/booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
+Preferred high-use order after the Build 298 quote-support extraction: Operations booking-dashboard support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
 
 ## Business input checkpoints
 
@@ -148,6 +179,19 @@ The owner confirmed that Stripe, PayPal and other configured providers are prese
 - `.github/workflows/build296-source-gate.yml` — Build 296 feature source gate;
 - `scripts/build296_http_smoke.sh` — read-only versioned My Account runtime guard;
 - `.github/workflows/build296-development-acceptance.yml` — Build 296 `dev` runtime acceptance;
+- `.github/workflows/build297-development-source-gate.yml` — cumulative Development source gate through Build 297;
+- `scripts/build297_release_check.py` — exact Operations customer-support extraction guard;
+- `.github/workflows/build297-development-acceptance.yml` — Build 297 `dev` runtime acceptance;
+- `.github/workflows/build298-development-source-gate.yml` — cumulative Development source gate through Build 298;
+- `scripts/build298_release_check.py` — exact Operations booking/quote extraction guard;
+- `scripts/build298_http_smoke.sh` — read-only quote runtime guard;
+- `.github/workflows/build298-source-gate.yml` — Build 298 feature source gate;
+- `.github/workflows/build298-development-acceptance.yml` — Build 298 `dev` runtime acceptance;
+- `.github/workflows/build297-development-source-gate.yml` — cumulative Development source gate through Build 297;
+- `scripts/build297_release_check.py` — exact Operations customer-support extraction/authority guard;
+- `.github/workflows/build297-source-gate.yml` — Build 297 feature source gate;
+- `scripts/build297_http_smoke.sh` — read-only versioned Operations customer runtime guard;
+- `.github/workflows/build297-development-acceptance.yml` — Build 297 `dev` runtime acceptance;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
@@ -232,4 +276,10 @@ Google trust and measurable local SEO
 ### 9. Payments / Finance / accounting
 accounting_documents
 accountant-friendly export surfaces
+-->
+
+<!-- Historical Build 297 retained-guard compatibility only; not the living build number.
+**Build:** 297
+Build 297 — Operations customer support maintainability extraction
+337ae533130f4bf1c566d47c2ba1bc712cbf780e
 -->

@@ -1,25 +1,25 @@
-name: Build 296 Development Source Gate
+name: Build 297 Source Gate
 
 on:
   push:
     branches:
-      - dev
+      - build-297-operations-customer-maintainability-extraction
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-build296-development-source
+  group: rosiedazzlers-build297-source
   cancel-in-progress: true
 
 jobs:
   source-gate:
-    name: Validate Development through Build 296
+    name: Validate Build 297 source
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Checkout exact Development commit
+      - name: Checkout exact feature commit
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -31,24 +31,21 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Check Build 296 syntax
+      - name: Check Build 297 syntax
         run: |
-          python -m py_compile scripts/build295_release_check.py scripts/build296_release_check.py
-          bash -n scripts/build295_http_smoke.sh
+          python -m py_compile scripts/build296_release_check.py scripts/build297_release_check.py
           bash -n scripts/build296_http_smoke.sh
+          bash -n scripts/build297_http_smoke.sh
           node --check assets/my-account-v296.js
-          node --check assets/client-auth.js
-          node --check assets/customer-privacy-v288.js
-          node --check assets/customer-maintenance-authority-v294.js
-          node --check functions/api/client/dashboard.js
-          node --check functions/api/client/profile_update.js
-          node --check functions/api/client/vehicles_save.js
+          node --check assets/admin-customers-v297.js
       - name: Run retained focused guards through Build 296
         run: |
           for build in $(seq 271 296); do
             echo "== Build ${build} focused guard =="
             python "scripts/build${build}_release_check.py"
           done
+      - name: Run Build 297 exact extraction guard
+        run: python scripts/build297_release_check.py
       - name: Run retained authorization matrix and forward-restore proof
         run: |
           node scripts/build290_action_permission_test.mjs
@@ -59,23 +56,24 @@ jobs:
         run: python scripts/seo_h1_check.py
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
-      - name: Check source hygiene outside later exact extracted runtimes
+      - name: Check Build 297 source hygiene from accepted Production baseline
         run: |
-          git diff --check HEAD^ -- . ':!*.md' ':!assets/admin-booking-v299.js'
+          git diff --check 337ae533130f4bf1c566d47c2ba1bc712cbf780e HEAD -- . ':!*.md'
           if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
             echo "::error::Merge-conflict markers remain in source."
             exit 2
           fi
-      - name: Development source summary
+      - name: Build 297 source summary
         run: |
           {
-            echo "### Build 296 Development Source Gate"
+            echo "### Build 297 Source Gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
-            echo "- Retained focused guards 271–295: PASS"
-            echo "- Build 296 exact My Account extraction guard: PASS"
-            echo "- Versioned My Account JavaScript syntax: PASS"
+            echo "- Accepted Build 296 Production baseline: \`337ae533130f4bf1c566d47c2ba1bc712cbf780e\`"
+            echo "- Exact Operations customer runtime extraction proof: PASS"
+            echo "- Customer route-copy parity: PASS"
+            echo "- Retained focused guards 271–296: PASS"
             echo "- Build 290 authorization/forward-restore proof: PASS"
-            echo "- Cumulative release, one-H1 and route-copy parity guards: PASS"
-            echo "- Later byte-for-byte extracted runtimes are excluded only from generic whitespace inspection"
-            echo "- Production remains closed"
+            echo "- Cumulative release and one-H1 guards: PASS"
+            echo "- No admin behavior/API/schema/commercial-rule change introduced"
+            echo "- Production remains closed for Build 297"
           } >> "$GITHUB_STEP_SUMMARY"
