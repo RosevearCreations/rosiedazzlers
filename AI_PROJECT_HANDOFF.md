@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 298  
+**Build:** 299  
 **Updated:** 2026-09-02  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 298 is the active **Operations booking/quote support maintainability extraction** Development-first slice. It follows the accepted Build 297 Development checkpoint at SHA `a034182bf8fd5dc8f8025032834ad7be6ec1d762`; accepted Production remains Build 296 at SHA `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
+Build 299 is the active **Operations booking-dashboard support maintainability extraction** Development-first slice. It follows the accepted Build 298 Development checkpoint at SHA `48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b`; accepted Production remains Build 296 at SHA `337ae533130f4bf1c566d47c2ba1bc712cbf780e`.
 
-Build 296 is the accepted Production baseline while Build 298 is validated. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
+Build 296 is the accepted Production baseline while Build 299 is validated. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
 
-Build 298 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then accepted-tree transfer to Development, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 298 until deliberate promotion from accepted Development evidence.
+Build 298 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then accepted-tree transfer to Development, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 299 until deliberate promotion from accepted Development evidence.
 
 ## Application boundary
 
@@ -50,7 +50,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Completed customer/business work through Build 298
+## Completed customer/business work through Build 299
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
@@ -74,6 +74,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Build 296 extracts the accepted My Account inline module byte-for-byte into `assets/my-account-v296.js`, leaving customer behavior and API authority unchanged while making the account runtime directly syntax-testable.
 - Build 297 extracts the accepted Operations customer-support inline runtime byte-for-byte into `assets/admin-customers-v297.js`, retaining customer directory, account assistance, lifecycle and role-gated admin authority unchanged.
 - Build 298 extracts the accepted Quote Pipeline inline runtime byte-for-byte into `assets/admin-quotes-v298.js`, retaining quote list/save behavior and the booking bridge unchanged.
+- Build 299 extracts the accepted Operations booking-dashboard inline runtime byte-for-byte into `assets/admin-booking-v299.js`, retaining booking, assignment, intake/review, customer-document and existing finance orchestration unchanged.
 
 Do not re-open these items because an older roadmap mentions them.
 

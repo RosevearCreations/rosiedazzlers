@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 298  
+**Build:** 299  
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–298 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–299 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
 
-Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 297 is the accepted Development checkpoint at `a034182bf8fd5dc8f8025032834ad7be6ec1d762`. Build 298 is the active Development-first Operations booking/quote support maintainability extraction. **Production remains closed** for Build 298 until deliberate promotion from final exact accepted Development evidence.
+Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 298 is the accepted Development checkpoint at `48b2f0f8b8a1f4311b09f79e64e8e8cf64a0f18b`. Build 299 is the active Development-first Operations booking-dashboard support maintainability extraction. **Production remains closed** for Build 299 until deliberate promotion from final exact accepted Development evidence.
 
 Do not regress:
 
@@ -116,6 +116,17 @@ Rules:
 - quote load/list, save/edit, follow-up fields and the `booking_id` bridge to the booking dashboard remain unchanged;
 - retained admin authentication/shell and server API authority remain authoritative;
 - Build 298 adds no quote/booking behavior, API contract, pricing, recurrence, commercial rule, polling or schema migration.
+
+
+## Build 299 — Operations booking-dashboard support maintainability extraction
+
+Rules:
+
+- `assets/admin-booking-v299.js` is byte-for-byte the accepted Build 298 inline booking module;
+- `admin-booking.html` and `admin-booking/index.html` remain exact and differ from Build 298 only by the external module tag;
+- booking loading/status, staff assignment, intake/media review, vehicle-size verification, customer-document helpers and existing finance-entry orchestration remain unchanged;
+- server authorization, booking validation, scheduling/conflict and payment/accounting authorities remain unchanged;
+- Build 299 adds no booking behavior, API authority, pricing/package rule, scheduling/recurrence/commercial rule, polling or schema migration.
 
 ## Ordered next value work
 
