@@ -1,0 +1,40 @@
+name: Build 305 Development Source Gate
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Retain canonical Finance authority through Build 304
+        run: |
+          python scripts/build300_release_check.py
+          python scripts/build301_release_check.py
+          python scripts/build302_release_check.py
+          python scripts/build303_release_check.py
+          python scripts/build304_release_check.py
+      - name: Run Build 305 authorization sweep guard
+        run: |
+          node scripts/build305_finance_action_test.mjs
+          python scripts/build305_release_check.py
+      - name: Run cumulative authority guards
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check

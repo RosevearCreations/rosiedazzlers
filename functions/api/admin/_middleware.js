@@ -1,11 +1,12 @@
-// Build 272 - central action gate for remaining customer, quote, refund, and settlement mutations.
-// This middleware intentionally leaves reads and unrelated admin endpoints unchanged.
+// Build 305 — central admin action gate.
+// Build 272 Operations mappings are retained; Build 305 adds method-aware Finance coverage.
 import { requireStaffAccess } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
+import { financeActionFor } from "../_lib/admin-finance-actions.js";
 
 const WRITE_METHODS = new Set(["POST", "PUT", "PATCH", "DELETE"]);
 
-const ACTION_BY_LEAF = Object.freeze({
+const OPERATIONS_ACTION_BY_LEAF = Object.freeze({
   customer_profiles_save: "operations.customer.manage",
   customer_tiers_save: "operations.customer.manage",
   customer_tiers_delete: "operations.customer.manage",
@@ -17,27 +18,25 @@ const ACTION_BY_LEAF = Object.freeze({
   quote_proposal_deliver: "operations.quote.manage",
   quote_deposit_request_create: "operations.quote.manage",
   final_balance_request_create: "operations.quote.manage",
-  final_balance_request_manage: "operations.quote.manage",
-
-  quote_deposit_request_mark_paid: "finance.settlement.manage",
-  quote_deposit_refund_initiate: "finance.refund.manage",
-  quote_deposit_refund_save: "finance.refund.manage",
-  accounting_payable_settle: "finance.settlement.manage"
+  final_balance_request_manage: "operations.quote.manage"
 });
 
 export async function onRequest(context) {
   const { request, env } = context;
-  if (!WRITE_METHODS.has(String(request.method || "").toUpperCase())) return context.next();
+  const method = String(request.method || "GET").toUpperCase();
+  if (method === "OPTIONS") return context.next();
 
   const pathname = new URL(request.url).pathname;
   const prefix = "/api/admin/";
   if (!pathname.startsWith(prefix)) return context.next();
   const leaf = pathname.slice(prefix.length).replace(/\/+$/, "");
-  const requiredAction = ACTION_BY_LEAF[leaf];
+
+  const requiredAction = financeActionFor(leaf, method)
+    || (WRITE_METHODS.has(method) ? OPERATIONS_ACTION_BY_LEAF[leaf] : null);
   if (!requiredAction) return context.next();
 
   let body = {};
-  if (request.method !== "DELETE") {
+  if (WRITE_METHODS.has(method) && method !== "DELETE") {
     try { body = await request.clone().json(); } catch { body = {}; }
   }
 
