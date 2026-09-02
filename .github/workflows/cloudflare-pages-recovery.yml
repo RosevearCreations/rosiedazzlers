@@ -29,206 +29,168 @@ jobs:
       - name: Checkout exact dev commit
         uses: actions/checkout@v4
 
-      - name: Validate Cloudflare authority
-        id: cloudflare
+      - name: Resolve Cloudflare project authority
+        id: cf
         shell: bash
         run: |
           set -euo pipefail
           [[ -n "${CLOUDFLARE_API_TOKEN:-}" ]] || { echo "::error::ROSIEDAZZLERS_TOKEN is unavailable."; exit 2; }
           echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
-
-          curl --fail-with-body --silent --show-error \
-            "https://api.cloudflare.com/client/v4/user/tokens/verify" \
-            "${AUTH[@]}" > /tmp/cf-token.json
-          jq -e '.success == true and (.result.status // "") == "active"' /tmp/cf-token.json >/dev/null
+          curl --fail-with-body --silent --show-error "https://api.cloudflare.com/client/v4/user/tokens/verify" "${AUTH[@]}" > /tmp/token.json
+          jq -e '.success == true and (.result.status // "") == "active"' /tmp/token.json >/dev/null
 
           account_id="${CONFIGURED_ACCOUNT_ID:-}"
-          project_ok() {
-            local candidate="$1"
-            local code
-            code=$(curl --silent --show-error --output /tmp/cf-project.json --write-out '%{http_code}' \
-              "https://api.cloudflare.com/client/v4/accounts/${candidate}/pages/projects/${CF_PROJECT_NAME}" \
-              "${AUTH[@]}")
-            [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/cf-project.json >/dev/null 2>&1
-          }
-
-          if [[ -n "$account_id" ]]; then
-            project_ok "$account_id" || { echo "::error::Configured CLOUDFLARE_ACCOUNT_ID cannot read Pages project ${CF_PROJECT_NAME}."; exit 3; }
+          if [[ -z "$account_id" ]]; then
+            curl --fail-with-body --silent --show-error "https://api.cloudflare.com/client/v4/accounts?per_page=50" "${AUTH[@]}" > /tmp/accounts.json
+            while IFS= read -r candidate; do
+              code=$(curl --silent --show-error --output /tmp/project.json --write-out '%{http_code}' \
+                "https://api.cloudflare.com/client/v4/accounts/${candidate}/pages/projects/${CF_PROJECT_NAME}" "${AUTH[@]}")
+              if [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/project.json >/dev/null 2>&1; then account_id="$candidate"; break; fi
+            done < <(jq -r '.result[]?.id' /tmp/accounts.json)
           else
             curl --fail-with-body --silent --show-error \
-              "https://api.cloudflare.com/client/v4/accounts?per_page=50" \
-              "${AUTH[@]}" > /tmp/cf-accounts.json
-            jq -e '.success == true' /tmp/cf-accounts.json >/dev/null
-            while IFS= read -r candidate; do
-              [[ -z "$candidate" ]] && continue
-              if project_ok "$candidate"; then account_id="$candidate"; break; fi
-            done < <(jq -r '.result[]?.id' /tmp/cf-accounts.json)
+              "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}" "${AUTH[@]}" > /tmp/project.json
           fi
-
-          [[ -n "$account_id" ]] || { echo "::error::Cloudflare account containing ${CF_PROJECT_NAME} could not be resolved."; exit 4; }
-          production_branch=$(jq -r '.result.production_branch // .result.source.config.production_branch // empty' /tmp/cf-project.json)
-          source_type=$(jq -r '.result.source.type // empty' /tmp/cf-project.json)
-          [[ "$source_type" == "github" ]] || { echo "::error::Expected GitHub-connected Pages project, got ${source_type:-unknown}."; exit 5; }
+          [[ -n "$account_id" ]] || { echo "::error::Cloudflare Pages account could not be resolved."; exit 3; }
+          jq -e '.success == true and .result.source.type == "github"' /tmp/project.json >/dev/null
+          production_branch=$(jq -r '.result.production_branch // .result.source.config.production_branch // empty' /tmp/project.json)
+          [[ -n "$production_branch" ]] || { echo "::error::Pages production branch is unavailable."; exit 4; }
+          [[ "$CF_BRANCH" != "$production_branch" ]] || { echo "::error::This recovery workflow may not delete Production deployments."; exit 5; }
           echo "account_id=${account_id}" >> "$GITHUB_OUTPUT"
           echo "production_branch=${production_branch}" >> "$GITHUB_OUTPUT"
-          echo "Cloudflare token/project authority: PASS"
+          echo "Cloudflare project authority: PASS; production branch=${production_branch}."
 
-      - name: Observe exact SHA before recovery
+      - name: Observe exact Development deployment
         id: observe
         shell: bash
         env:
-          CF_ACCOUNT_ID: ${{ steps.cloudflare.outputs.account_id }}
+          CF_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
         run: |
           set -euo pipefail
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
-          matched_id=""
-          matched_status=""
+          exact_id=""
+          exact_status=""
           for attempt in $(seq 1 9); do
             curl --fail-with-body --silent --show-error \
               "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
-              "${AUTH[@]}" > /tmp/cf-deployments.json
-            jq -e '.success == true' /tmp/cf-deployments.json >/dev/null
-            matched_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_BRANCH" '
-              [.result[]? | select(
-                (.deployment_trigger.metadata.branch // "") == $branch and
-                (.deployment_trigger.metadata.commit_hash // "") == $sha
-              )][0].id // empty
-            ' /tmp/cf-deployments.json)
-            matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/cf-deployments.json | head -n1)
-            if [[ -n "$matched_id" ]]; then
-              echo "Exact deployment ${matched_id} status: ${matched_status} (attempt ${attempt}/9)."
-              case "$matched_status" in
-                success)
-                  echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
-                  echo "already_success=true" >> "$GITHUB_OUTPUT"
-                  exit 0
-                  ;;
-                failure|failed|canceled|cancelled)
-                  echo "::error::Exact deployment ${matched_id} reached terminal status ${matched_status}."
-                  exit 6
-                  ;;
+              "${AUTH[@]}" > /tmp/deployments.json
+            exact_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_BRANCH" '
+              [.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch and (.deployment_trigger.metadata.commit_hash // "") == $sha)][0].id // empty
+            ' /tmp/deployments.json)
+            exact_status=$(jq -r --arg id "$exact_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/deployments.json | head -n1)
+            if [[ -n "$exact_id" ]]; then
+              echo "Exact deployment ${exact_id}: ${exact_status} (attempt ${attempt}/9)."
+              case "$exact_status" in
+                success) echo "deployment_id=${exact_id}" >> "$GITHUB_OUTPUT"; echo "repair=false" >> "$GITHUB_OUTPUT"; exit 0 ;;
+                failure|failed|canceled|cancelled) echo "::error::Exact deployment reached terminal ${exact_status}."; exit 6 ;;
               esac
-            else
-              echo "Exact SHA is not visible yet (attempt ${attempt}/9)."
             fi
             [[ "$attempt" -ge 9 ]] || sleep 10
           done
-          [[ -n "$matched_id" ]] || { echo "::error::Exact SHA never appeared in Cloudflare Pages."; exit 7; }
-          echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
-          echo "already_success=false" >> "$GITHUB_OUTPUT"
+          [[ -n "$exact_id" ]] || { echo "::error::Exact Development SHA never appeared in Pages."; exit 7; }
+          echo "deployment_id=${exact_id}" >> "$GITHUB_OUTPUT"
+          echo "repair=true" >> "$GITHUB_OUTPUT"
 
-      - name: Capture stuck deployment diagnostics
-        if: steps.observe.outputs.already_success != 'true'
+      - name: Diagnose and remove only the stuck preview deployment
+        id: remove
+        if: steps.observe.outputs.repair == 'true'
         shell: bash
         env:
-          CF_ACCOUNT_ID: ${{ steps.cloudflare.outputs.account_id }}
-          STUCK_DEPLOYMENT_ID: ${{ steps.observe.outputs.deployment_id }}
+          CF_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+          STUCK_ID: ${{ steps.observe.outputs.deployment_id }}
+          PRODUCTION_BRANCH: ${{ steps.cf.outputs.production_branch }}
         run: |
           set -euo pipefail
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
-          code=$(curl --silent --show-error --output /tmp/cf-history.json --write-out '%{http_code}' \
-            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${STUCK_DEPLOYMENT_ID}/history/logs" \
-            "${AUTH[@]}" || true)
-          echo "Cloudflare history/log endpoint HTTP ${code}."
-          if [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/cf-history.json >/dev/null 2>&1; then
-            echo "---- Cloudflare deployment log tail ----"
-            jq -r '.result.data[]?.line // empty' /tmp/cf-history.json | tail -n 80 | sed -E 's/(token|secret|password|authorization)([^ ]*)/\1=[MASKED]/Ig' || true
-            echo "---- end Cloudflare deployment log tail ----"
-          fi
-
-      - name: Recover stuck deployment
-        id: recover
-        if: steps.observe.outputs.already_success != 'true'
-        shell: bash
-        env:
-          CF_ACCOUNT_ID: ${{ steps.cloudflare.outputs.account_id }}
-          STUCK_DEPLOYMENT_ID: ${{ steps.observe.outputs.deployment_id }}
-        run: |
-          set -euo pipefail
-          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
-
-          retry_code=$(curl --silent --show-error --output /tmp/cf-retry.json --write-out '%{http_code}' \
-            --request POST --header 'Content-Type: application/json' --data '{}' \
-            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${STUCK_DEPLOYMENT_ID}/retry" \
-            "${AUTH[@]}" || true)
-
-          if [[ "$retry_code" == "200" ]] && jq -e '.success == true and (.result.id // "") != ""' /tmp/cf-retry.json >/dev/null 2>&1; then
-            recovery_id=$(jq -r '.result.id' /tmp/cf-retry.json)
-            echo "Cloudflare retry accepted as ${recovery_id}."
-          elif [[ "$retry_code" == "304" ]]; then
-            echo "Cloudflare will not retry the still-active deployment; creating a fresh ad-hoc deployment from exact Git HEAD/SHA."
-            create_code=$(curl --silent --show-error --output /tmp/cf-create.json --write-out '%{http_code}' \
-              --request POST \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments" \
-              "${AUTH[@]}" \
-              -F "branch=${CF_BRANCH}" \
-              -F 'commit_dirty=false' \
-              -F "commit_hash=${GITHUB_SHA}" \
-              -F "commit_message=RosieDazzlers exact-SHA recovery ${GITHUB_SHA}" || true)
-            if [[ "$create_code" != "200" ]] || ! jq -e '.success == true and (.result.id // "") != ""' /tmp/cf-create.json >/dev/null 2>&1; then
-              create_error=$(jq -r '.errors[0].message // .messages[0].message // empty' /tmp/cf-create.json 2>/dev/null || true)
-              echo "::error::Cloudflare exact-SHA ad-hoc deployment returned HTTP ${create_code}${create_error:+: ${create_error}}."
-              exit 8
-            fi
-            recovery_id=$(jq -r '.result.id' /tmp/cf-create.json)
-            echo "Cloudflare exact-SHA ad-hoc recovery accepted as ${recovery_id}."
-          else
-            retry_error=$(jq -r '.errors[0].message // .messages[0].message // empty' /tmp/cf-retry.json 2>/dev/null || true)
-            echo "::error::Cloudflare retry returned HTTP ${retry_code}${retry_error:+: ${retry_error}}."
-            exit 9
-          fi
-
           curl --fail-with-body --silent --show-error \
-            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${recovery_id}" \
-            "${AUTH[@]}" > /tmp/cf-recovery.json
-          recovery_sha=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' /tmp/cf-recovery.json)
-          recovery_branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' /tmp/cf-recovery.json)
-          [[ "$recovery_sha" == "$GITHUB_SHA" ]] || { echo "::error::Recovery deployment SHA mismatch: ${recovery_sha}."; exit 10; }
-          [[ "$recovery_branch" == "$CF_BRANCH" ]] || { echo "::error::Recovery deployment branch mismatch: ${recovery_branch}."; exit 11; }
-          echo "deployment_id=${recovery_id}" >> "$GITHUB_OUTPUT"
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${STUCK_ID}" \
+            "${AUTH[@]}" > /tmp/stuck.json
+          jq -e --arg sha "$GITHUB_SHA" --arg branch "$CF_BRANCH" '
+            .success == true and .result.environment == "preview" and
+            .result.deployment_trigger.metadata.branch == $branch and
+            .result.deployment_trigger.metadata.commit_hash == $sha
+          ' /tmp/stuck.json >/dev/null || { echo "::error::Refusing to delete a deployment that is not the exact stuck Development preview."; exit 8; }
+          [[ "$CF_BRANCH" != "$PRODUCTION_BRANCH" ]] || { echo "::error::Refusing to delete Production deployment."; exit 9; }
+
+          log_code=$(curl --silent --show-error --output /tmp/history.json --write-out '%{http_code}' \
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${STUCK_ID}/history/logs" \
+            "${AUTH[@]}" || true)
+          log_count=$(jq -r '.result.total // (.result.data | length) // 0' /tmp/history.json 2>/dev/null || echo 0)
+          echo "Stuck preview diagnostics: history HTTP=${log_code}; log lines=${log_count}."
+
+          delete_code=$(curl --silent --show-error --output /tmp/delete.json --write-out '%{http_code}' --request DELETE \
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${STUCK_ID}?force=true" \
+            "${AUTH[@]}" || true)
+          case "$delete_code" in 200|202|204) ;; *)
+            delete_error=$(jq -r '.errors[0].message // .messages[0].message // empty' /tmp/delete.json 2>/dev/null || true)
+            echo "::error::Cloudflare refused deletion of stuck Development preview: HTTP ${delete_code}${delete_error:+: ${delete_error}}."
+            exit 10
+          esac
+          echo "Stuck Development preview ${STUCK_ID} removed with force=true."
+
+      - name: Recreate exact Development SHA
+        id: recreate
+        if: steps.observe.outputs.repair == 'true'
+        shell: bash
+        env:
+          CF_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+        run: |
+          set -euo pipefail
+          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+          create_code=$(curl --silent --show-error --output /tmp/create.json --write-out '%{http_code}' --request POST \
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments" \
+            "${AUTH[@]}" \
+            -F "branch=${CF_BRANCH}" \
+            -F 'commit_dirty=false' \
+            -F "commit_hash=${GITHUB_SHA}" \
+            -F "commit_message=RosieDazzlers exact-SHA recovery ${GITHUB_SHA}" || true)
+          if [[ "$create_code" != "200" ]] || ! jq -e '.success == true and (.result.id // "") != ""' /tmp/create.json >/dev/null 2>&1; then
+            create_error=$(jq -r '.errors[0].message // .messages[0].message // empty' /tmp/create.json 2>/dev/null || true)
+            echo "::error::Cloudflare exact-SHA recreate returned HTTP ${create_code}${create_error:+: ${create_error}}."
+            exit 11
+          fi
+          new_id=$(jq -r '.result.id' /tmp/create.json)
+          new_sha=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' /tmp/create.json)
+          new_branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' /tmp/create.json)
+          [[ "$new_sha" == "$GITHUB_SHA" ]] || { echo "::error::Recreated deployment SHA mismatch: ${new_sha}."; exit 12; }
+          [[ "$new_branch" == "$CF_BRANCH" ]] || { echo "::error::Recreated deployment branch mismatch: ${new_branch}."; exit 13; }
+          echo "deployment_id=${new_id}" >> "$GITHUB_OUTPUT"
+          echo "Exact Development deployment recreated as ${new_id}."
 
       - name: Require successful exact-SHA deployment
         id: accepted
         shell: bash
         env:
-          CF_ACCOUNT_ID: ${{ steps.cloudflare.outputs.account_id }}
-          ORIGINAL_DEPLOYMENT_ID: ${{ steps.observe.outputs.deployment_id }}
-          RECOVERY_DEPLOYMENT_ID: ${{ steps.recover.outputs.deployment_id }}
-          ALREADY_SUCCESS: ${{ steps.observe.outputs.already_success }}
+          CF_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+          ORIGINAL_ID: ${{ steps.observe.outputs.deployment_id }}
+          RECREATED_ID: ${{ steps.recreate.outputs.deployment_id }}
+          REPAIR: ${{ steps.observe.outputs.repair }}
         run: |
           set -euo pipefail
           AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
-          if [[ "$ALREADY_SUCCESS" == "true" ]]; then accepted_id="$ORIGINAL_DEPLOYMENT_ID"; else accepted_id="$RECOVERY_DEPLOYMENT_ID"; fi
-          [[ -n "$accepted_id" ]] || { echo "::error::No deployment id is available for final acceptance."; exit 12; }
-
+          if [[ "$REPAIR" == "true" ]]; then accepted_id="$RECREATED_ID"; else accepted_id="$ORIGINAL_ID"; fi
+          [[ -n "$accepted_id" ]] || { echo "::error::No accepted Pages deployment id."; exit 14; }
           ready=false
           for attempt in $(seq 1 30); do
             curl --fail-with-body --silent --show-error \
               "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${accepted_id}" \
-              "${AUTH[@]}" > /tmp/cf-exact.json
-            jq -e '.success == true' /tmp/cf-exact.json >/dev/null
-            status=$(jq -r '.result.latest_stage.status // "unknown"' /tmp/cf-exact.json)
-            commit_hash=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' /tmp/cf-exact.json)
-            branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' /tmp/cf-exact.json)
-            echo "Acceptance deployment ${accepted_id}: ${status} (attempt ${attempt}/30)."
-            [[ "$commit_hash" == "$GITHUB_SHA" ]] || { echo "::error::Accepted deployment SHA changed to ${commit_hash}."; exit 13; }
-            [[ "$branch" == "$CF_BRANCH" ]] || { echo "::error::Accepted deployment branch changed to ${branch}."; exit 14; }
-            case "$status" in
-              success) ready=true; break ;;
-              failure|failed|canceled|cancelled) echo "::error::Acceptance deployment reached ${status}."; exit 15 ;;
-            esac
+              "${AUTH[@]}" > /tmp/exact.json
+            status=$(jq -r '.result.latest_stage.status // "unknown"' /tmp/exact.json)
+            sha=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' /tmp/exact.json)
+            branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' /tmp/exact.json)
+            echo "Accepted deployment ${accepted_id}: ${status} (attempt ${attempt}/30)."
+            [[ "$sha" == "$GITHUB_SHA" && "$branch" == "$CF_BRANCH" ]] || { echo "::error::Accepted deployment identity changed."; exit 15; }
+            case "$status" in success) ready=true; break ;; failure|failed|canceled|cancelled) echo "::error::Recreated deployment reached ${status}."; exit 16 ;; esac
             [[ "$attempt" -ge 30 ]] || sleep 10
           done
-          [[ "$ready" == "true" ]] || { echo "::error::Exact-SHA recovery did not reach success."; exit 16; }
-
-          deployment_url=$(jq -r '.result.url // empty' /tmp/cf-exact.json)
-          uses_functions=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' /tmp/cf-exact.json)
-          [[ -n "$deployment_url" ]] || { echo "::error::Successful deployment has no immutable URL."; exit 17; }
-          [[ "$uses_functions" == "true" ]] || { echo "::error::Successful deployment does not report uses_functions=true (${uses_functions})."; exit 18; }
+          [[ "$ready" == "true" ]] || { echo "::error::Exact Development deployment did not reach success."; exit 17; }
+          deployment_url=$(jq -r '.result.url // empty' /tmp/exact.json)
+          uses_functions=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' /tmp/exact.json)
+          [[ -n "$deployment_url" ]] || { echo "::error::Successful deployment has no immutable URL."; exit 18; }
+          [[ "$uses_functions" == "true" ]] || { echo "::error::Successful deployment does not report uses_functions=true (${uses_functions})."; exit 19; }
           echo "deployment_url=${deployment_url}" >> "$GITHUB_OUTPUT"
-          echo "deployment_id=${accepted_id}" >> "$GITHUB_OUTPUT"
-          echo "Cloudflare exact-SHA deployment acceptance: PASS (${accepted_id})."
+          echo "Cloudflare exact-SHA deployment acceptance: PASS."
 
       - name: Smoke accepted immutable deployment
         shell: bash
