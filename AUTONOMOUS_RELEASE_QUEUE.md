@@ -69,6 +69,10 @@ Before this queue begins, finish the repository/branch cleanup already underway 
 20. **Build 319 — Runtime efficiency + CI consolidation**  
     Perform a complete polling/timer/background-work audit; sleep inactive modules, remove redundant network requests, consolidate retained Build gates where safe, reduce CI duplication and preserve exact release/rollback evidence.
 
+## Current execution checkpoint
+
+Builds 300–303 are implemented through the current Build 303 release candidate. Build 302 is closed as a fail-closed retired-import convergence guard; Build 303 externalizes retained Tax Support runtime without changing Build 273 tax/accounting authority. **Next untouched item: Build 304 — Accountant export integrity.**
+
 ## Autonomous execution order
 
 **Cleanup → close Build 299 → Builds 300–305 Finance → 306–308 I.T./reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**

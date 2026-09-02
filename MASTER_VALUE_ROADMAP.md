@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 301  
+**Build:** 303
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
@@ -16,10 +16,14 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Current release boundary
 
-- **Active Development slice:** Build 301 — Finance Reconciliation maintainability extraction.
-- **Accepted Development baseline before Build 301:** Build 300 at `ed7c0c6748db6d619fb37e515057666feed1ea70`.
-- **Accepted Production before Build 301 promotion:** Build 299 at `ee010654aea48c12c885ea826bf7cf60f64852b7`.
-- Production promotion of the accepted Build 301 Development head is authorized, but only after exact Development source/runtime/Cloudflare evidence is green.
+- **Active Development slice:** Build 303 — Finance Tax-support maintainability extraction.
+- **Accepted Build 302 parent:** `9ec950384124644d1176a01d381745a3d8f7cfb9`.
+- Build 302 closes **Build 302 — Statement Import reliability** against the surviving fail-closed/report-only authority without recreating a retired importer.
+- Build 303 preserves Build 273 Finance/T2125/accountant-package behavior while moving the tax-support browser controller to `assets/admin-tax-support-v303.js` byte-for-byte.
+- `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` remain unchanged.
+- No schema/database migration, accounting-policy change, payment-provider mutation or new tax judgment is introduced.
+- The owner has authorized promotion of the exact accepted Build 303 Development source to `main` after exact source/runtime/Cloudflare evidence agrees.
+- Retained historical compatibility marker: **Build:** 301 — Build 301 — Finance Reconciliation maintainability extraction in `assets/admin-accounting-v301.js`, with accepted pre-Build-301 Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`.
 
 ## Retained baseline
 
@@ -77,9 +81,9 @@ Build 301 adds no matching/posting/approval rule, payment/provider behavior, API
 ## Finance roadmap — Builds 300–305
 
 1. **Build 300 — Finance Payments maintainability extraction** — complete and accepted on Development before Build 301.
-2. **Build 301 — Finance Reconciliation maintainability extraction** — active behavior-preserving Accounting/reconciliation runtime extraction.
-3. **Build 302 — Statement Import reliability** — harden parsing, validation, duplicate detection and error reporting without changing accounting policy.
-4. **Build 303 — Finance Tax-support maintainability extraction** — externalize retained T2125/tax-support/accountant-package surfaces while preserving Build 273 authority.
+2. **Build 301 — Finance Reconciliation maintainability extraction** — complete; behavior-preserving Accounting/reconciliation runtime extraction.
+3. **Build 302 — Statement Import reliability** — complete as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired ingestion path was recreated.
+4. **Build 303 — Finance Tax-support maintainability extraction** — active release candidate; retained Build 273 controller externalized byte-for-byte with backend authority unchanged.
 5. **Build 304 — Accountant export integrity** — verify document/evidence references, formats, filenames and privacy boundaries.
 6. **Build 305 — Finance authorization sweep** — test every Finance endpoint against role/module/action/direct-API/anonymous/cross-module boundaries.
 

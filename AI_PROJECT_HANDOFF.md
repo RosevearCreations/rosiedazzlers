@@ -1,16 +1,28 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 301  
+**Build:** 303
 **Updated:** 2026-09-02  
 **Read next:** `MASTER_VALUE_ROADMAP.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
 
 ## Current release state
 
-Build 301 is the active **Finance Reconciliation maintainability extraction** Development-first slice. The accepted source baseline is Build 300 `dev` at `ed7c0c6748db6d619fb37e515057666feed1ea70`. Accepted Production remains **Build 299** at `ee010654aea48c12c885ea826bf7cf60f64852b7` until Build 301 Development evidence is green.
+Build 303 is the active **Finance Tax-support maintainability extraction** release candidate, built on accepted Build 302 parent `9ec950384124644d1176a01d381745a3d8f7cfb9`. Build 302 closed the planned **Build 302 — Statement Import reliability** item against the actual surviving Finance authority: no active statement-import parser/API exists, statement reporting remains read-only/fail-closed on POST, and bank reconciliation remains separate.
 
-Production promotion of the final accepted Build 301 Development head is explicitly authorized for this release. Promotion still occurs only after the exact Development source, read-only runtime and Cloudflare deployment evidence agree.
+Build 303 externalizes the retained Build 273 Tax Support & Accountant Readiness browser controller into `assets/admin-tax-support-v303.js` byte-for-byte. Backend authorities `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` remain unchanged. T2125 support, factual mileage/home-office/capital-asset/year-end records, evidence manifest and accountant JSON package behavior are retained without new tax judgment.
+
+The owner has explicitly authorized promotion of the exact accepted Build 303 Development source to `main`. Promotion still occurs only after the exact Development source gate, Cloudflare deployment and read-only runtime acceptance all agree. No schema/database migration, accounting-policy change, payment-provider mutation or Production data mutation belongs to Builds 302–303.
+
+## Build 303 authority
+
+- `assets/admin-tax-support-v303.js` is the exact former inline controller from `admin-tax-support.html`;
+- `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` remain unchanged;
+- retained T2125/accountant-package behavior stays review-first and factual;
+- Build 302 preserves the retired statement-import boundary rather than recreating obsolete ingestion authority;
+- runtime acceptance remains read-only.
+
+Retained historical compatibility marker: **Build:** 301 — Finance Reconciliation maintainability extraction in `assets/admin-accounting-v301.js`, with accepted pre-Build-301 Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7` and next historical queue marker **Build 302 — Statement Import reliability**.
 
 ## Build 301 authority
 
@@ -89,7 +101,7 @@ Do not call Build 301 Development-green until the exact `dev` SHA, Build 301 Dev
 
 ## Next autonomous build
 
-**Build 302 — Statement Import reliability:** harden parsing, validation, duplicate detection and error reporting without changing accounting policy.
+**Build 304 — Accountant export integrity:** verify document/evidence references, predictable formats, safe filenames and privacy boundaries without changing accounting policy.
 
 After that, continue the recorded Builds 303–319 sequence. Do not invent business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
 
