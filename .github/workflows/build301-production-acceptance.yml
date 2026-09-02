@@ -1,0 +1,160 @@
+name: Build 301 Production Acceptance
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build301-production
+  cancel-in-progress: true
+
+env:
+  CF_PROJECT_NAME: rosiedazzlers
+  CF_BRANCH: main
+  PUBLIC_BASE_URL: https://rosiedazzlers.ca
+
+jobs:
+  production:
+    name: Validate exact Build 301 Production deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Checkout exact Production source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate Build 301 source authority
+        run: python scripts/build301_release_check.py
+
+      - name: Resolve Cloudflare Production authority
+        id: cf
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ -n "${CLOUDFLARE_API_TOKEN:-}" ]] || { echo "::error::ROSIEDAZZLERS_TOKEN is unavailable."; exit 2; }
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+          curl --fail-with-body --silent --show-error \
+            "https://api.cloudflare.com/client/v4/user/tokens/verify" "${AUTH[@]}" > /tmp/token.json
+          jq -e '.success == true and (.result.status // "") == "active"' /tmp/token.json >/dev/null
+
+          account_id="${CONFIGURED_ACCOUNT_ID:-}"
+          if [[ -z "$account_id" ]]; then
+            curl --fail-with-body --silent --show-error \
+              "https://api.cloudflare.com/client/v4/accounts?per_page=50" "${AUTH[@]}" > /tmp/accounts.json
+            while IFS= read -r candidate; do
+              code=$(curl --silent --show-error --output /tmp/project.json --write-out '%{http_code}' \
+                "https://api.cloudflare.com/client/v4/accounts/${candidate}/pages/projects/${CF_PROJECT_NAME}" "${AUTH[@]}")
+              if [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/project.json >/dev/null 2>&1; then
+                account_id="$candidate"
+                break
+              fi
+            done < <(jq -r '.result[]?.id' /tmp/accounts.json)
+          else
+            curl --fail-with-body --silent --show-error \
+              "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}" "${AUTH[@]}" > /tmp/project.json
+          fi
+
+          [[ -n "$account_id" ]] || { echo "::error::Cloudflare Pages account could not be resolved."; exit 3; }
+          jq -e '.success == true and .result.source.type == "github"' /tmp/project.json >/dev/null
+          production_branch=$(jq -r '.result.production_branch // .result.source.config.production_branch // empty' /tmp/project.json)
+          [[ "$production_branch" == "$CF_BRANCH" ]] || {
+            echo "::error::Cloudflare production branch is ${production_branch:-missing}, expected ${CF_BRANCH}."
+            exit 4
+          }
+          echo "account_id=${account_id}" >> "$GITHUB_OUTPUT"
+          echo "Cloudflare Production authority: PASS; project=${CF_PROJECT_NAME}; branch=${production_branch}."
+
+      - name: Require successful exact-SHA Production deployment
+        id: exact
+        shell: bash
+        env:
+          CF_ACCOUNT_ID: ${{ steps.cf.outputs.account_id }}
+        run: |
+          set -euo pipefail
+          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}")
+          deployment_id=""
+          ready=false
+          for attempt in $(seq 1 36); do
+            curl --fail-with-body --silent --show-error \
+              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
+              "${AUTH[@]}" > /tmp/deployments.json
+            deployment_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_BRANCH" '
+              [.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch and (.deployment_trigger.metadata.commit_hash // "") == $sha)][0].id // empty
+            ' /tmp/deployments.json)
+            if [[ -n "$deployment_id" ]]; then
+              status=$(jq -r --arg id "$deployment_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/deployments.json | head -n1)
+              environment=$(jq -r --arg id "$deployment_id" '.result[]? | select(.id == $id) | (.environment // "unknown")' /tmp/deployments.json | head -n1)
+              echo "Exact Production deployment ${deployment_id}: ${status}; environment=${environment} (attempt ${attempt}/36)."
+              [[ "$environment" == "production" ]] || { echo "::error::Exact main deployment is not Production."; exit 5; }
+              case "$status" in
+                success) ready=true; break ;;
+                failure|failed|canceled|cancelled) echo "::error::Exact Production deployment reached ${status}."; exit 6 ;;
+              esac
+            else
+              echo "Exact Production SHA not visible in Cloudflare yet (attempt ${attempt}/36)."
+            fi
+            [[ "$attempt" -ge 36 ]] || sleep 10
+          done
+          [[ "$ready" == "true" && -n "$deployment_id" ]] || { echo "::error::Exact Build 301 Production deployment did not reach success."; exit 7; }
+
+          curl --fail-with-body --silent --show-error \
+            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${deployment_id}" \
+            "${AUTH[@]}" > /tmp/exact.json
+          sha=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' /tmp/exact.json)
+          branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' /tmp/exact.json)
+          environment=$(jq -r '.result.environment // empty' /tmp/exact.json)
+          deployment_url=$(jq -r '.result.url // empty' /tmp/exact.json)
+          uses_functions=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' /tmp/exact.json)
+          [[ "$sha" == "$GITHUB_SHA" && "$branch" == "$CF_BRANCH" && "$environment" == "production" ]] || {
+            echo "::error::Exact Production deployment identity changed."; exit 8;
+          }
+          [[ -n "$deployment_url" ]] || { echo "::error::Exact Production deployment has no immutable URL."; exit 9; }
+          [[ "$uses_functions" == "true" ]] || { echo "::error::Production deployment does not report uses_functions=true (${uses_functions})."; exit 10; }
+          echo "deployment_url=${deployment_url}" >> "$GITHUB_OUTPUT"
+          echo "Exact Build 301 Cloudflare Production deployment: PASS."
+
+      - name: Smoke immutable Production deployment read-only
+        shell: bash
+        env:
+          EXACT_URL: ${{ steps.exact.outputs.deployment_url }}
+        run: |
+          set -euo pipefail
+          page=$(curl -fsSL --connect-timeout 10 --max-time 30 "${EXACT_URL}/admin-accounting.html")
+          asset=$(curl -fsSL --connect-timeout 10 --max-time 30 "${EXACT_URL}/assets/admin-accounting-v301.js")
+          grep -Fq '<script src="/assets/admin-accounting-v301.js"></script>' <<<"$page"
+          grep -Fq 'Bank reconciliation' <<<"$page"
+          grep -Fq 'renderBankReconciliation' <<<"$asset"
+          grep -Fq '/api/admin/accounting_bank_reconciliation?' <<<"$asset"
+          grep -Fq '/api/admin/accounting_payroll_payout_reconciliation?' <<<"$asset"
+          echo "Immutable Build 301 Production read-only smoke: PASS."
+
+      - name: Smoke public Production alias read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for attempt in $(seq 1 18); do
+            page=$(curl -fsSL --connect-timeout 10 --max-time 30 "${PUBLIC_BASE_URL}/admin-accounting.html" 2>/dev/null || true)
+            asset=$(curl -fsSL --connect-timeout 10 --max-time 30 "${PUBLIC_BASE_URL}/assets/admin-accounting-v301.js" 2>/dev/null || true)
+            if grep -Fq '<script src="/assets/admin-accounting-v301.js"></script>' <<<"$page" \
+              && grep -Fq 'Bank reconciliation' <<<"$page" \
+              && grep -Fq 'renderBankReconciliation' <<<"$asset" \
+              && grep -Fq '/api/admin/accounting_bank_reconciliation?' <<<"$asset"; then
+              ok=1
+              break
+            fi
+            echo "Public Production alias not converged to exact Build 301 source yet (attempt ${attempt}/18)."
+            [[ "$attempt" -ge 18 ]] || sleep 10
+          done
+          [[ "$ok" == "1" ]] || { echo "::error::Public Production alias did not converge to Build 301."; exit 11; }
+          echo "Public Build 301 Production read-only smoke: PASS."
