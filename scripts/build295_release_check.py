@@ -145,14 +145,14 @@ need(".github/workflows/build295-source-gate.yml", "Build 295 Source Gate", "pyt
 need(".github/workflows/build295-development-acceptance.yml", "Build 295 Development Runtime Acceptance", "scripts/build295_http_smoke.sh")
 need(".github/workflows/development-source-gate.yml", "Run current Build 295 focused guard", "python scripts/build295_release_check.py")
 handoff = read("AI_PROJECT_HANDOFF.md")
-if "**Build:** 295" not in handoff and "**Build:** 296" not in handoff:
-    errors.append("AI_PROJECT_HANDOFF.md missing Build 295/296 living authority marker")
+if not any(marker in handoff for marker in ["**Build:** 295", "**Build:** 296", "**Build:** 297"]):
+    errors.append("AI_PROJECT_HANDOFF.md missing Build 295/296/297 living authority marker")
 for token in ["customer account static source authority cleanup", "My Account maintainability extraction"]:
     if token not in handoff:
         errors.append(f"AI_PROJECT_HANDOFF.md missing retained Build 295 token {token}")
 roadmap = read("MASTER_VALUE_ROADMAP.md")
-if "**Build:** 295" not in roadmap and "**Build:** 296" not in roadmap:
-    errors.append("MASTER_VALUE_ROADMAP.md missing Build 295/296 living authority marker")
+if not any(marker in roadmap for marker in ["**Build:** 295", "**Build:** 296", "**Build:** 297"]):
+    errors.append("MASTER_VALUE_ROADMAP.md missing Build 295/296/297 living authority marker")
 for token in ["Build 295 — customer account static source authority cleanup", "My Account maintainability extraction"]:
     if token not in roadmap:
         errors.append(f"MASTER_VALUE_ROADMAP.md missing retained Build 295 token {token}")
@@ -183,7 +183,7 @@ print("Build 295 customer account static source authority check: PASS")
 print("- My Account source and route copy are privacy-safe and maintenance-interest-only")
 print("- customer browser payloads no longer contain staff-private or staff scheduling keys")
 print("- server-side Build 288/294 boundaries and defensive adapters remain retained")
-print("- living handoff/roadmap identify Build 295 from the accepted Build 294 Production baseline")
+print("- living handoff/roadmap retain Build 295 authority while later living releases may advance")
 print("- temporary bootstrap machinery is absent from the release candidate")
 print("- no maintenance price/cadence/priority/subscription authority was invented")
 print("- no schema migration was introduced")
