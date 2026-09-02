@@ -1,0 +1,100 @@
+name: Build 296 Bootstrap Retained Account Guards V3
+
+on:
+  push:
+    branches:
+      - build-296-my-account-maintainability-extraction
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rosiedazzlers-build296-retained-guards-v3
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build-296-my-account-maintainability-extraction
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Patch retained guards for Build 296 runtime relocation
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new, label):
+              p = Path(path)
+              body = p.read_text(encoding='utf-8')
+              if old in body:
+                  p.write_text(body.replace(old, new, 1), encoding='utf-8')
+                  return
+              if new in body:
+                  return
+              raise SystemExit(f'{label}: expected block not found in {path}')
+
+          replace_once(
+              'scripts/build285_release_check.py',
+              '''need(\n    "my-account.html",\n    'id="bookingHistory"',\n    "renderHistory",\n    "/api/client/dashboard",\n    "/assets/client-auth.js",\n)\nneed(\n    "my-account/index.html",\n    'id="bookingHistory"',\n    "renderHistory",\n    "/api/client/dashboard",\n    "/assets/client-auth.js",\n)\n''',
+              '''for rel in ["my-account.html", "my-account/index.html"]:\n    need(rel, 'id="bookingHistory"', "/assets/client-auth.js")\n\n# Build 296 externalized the mature account module without changing behavior.\n# Retain Build 285 on its original branch by falling back to the inline page.\naccount_asset = ROOT / "assets/my-account-v296.js"\naccount_runtime = read("assets/my-account-v296.js") if account_asset.exists() else read("my-account.html")\nfor token in ["renderHistory", "/api/client/dashboard"]:\n    if token not in account_runtime:\n        errors.append(f"customer account runtime missing retained Build 285 token {token}")\n''',
+              'Build 285 runtime relocation',
+          )
+
+          replace_once(
+              'scripts/build286_release_check.py',
+              '''need(\n    "my-account/index.html",\n    'id="reviewForm"',\n    'id="reviewBooking"',\n    'id="reviewPublic"',\n    "/api/client/reviews_save",\n    "Allow public reuse after approval",\n)\n''',
+              '''need(\n    "my-account/index.html",\n    'id="reviewForm"',\n    'id="reviewBooking"',\n    'id="reviewPublic"',\n    "Allow public reuse after approval",\n)\naccount_asset = ROOT / "assets/my-account-v296.js"\naccount_runtime = read("assets/my-account-v296.js") if account_asset.exists() else read("my-account/index.html")\nif "/api/client/reviews_save" not in account_runtime:\n    errors.append("customer account runtime missing retained Build 286 reviews_save authority")\n''',
+              'Build 286 runtime relocation',
+          )
+
+          replace_once(
+              'scripts/build293_release_check.py',
+              '''for rel in ["my-account.html", "my-account/index.html"]:\n    need(rel, 'id="accountNotice"', 'id="bookingHistory"', 'id="maintenanceConversion"', 'id="reviewForm"', "/api/client/dashboard", "/assets/client-auth.js")\n''',
+              '''for rel in ["my-account.html", "my-account/index.html"]:\n    need(rel, 'id="accountNotice"', 'id="bookingHistory"', 'id="maintenanceConversion"', 'id="reviewForm"', "/assets/client-auth.js")\naccount_asset = ROOT / "assets/my-account-v296.js"\naccount_runtime = text("assets/my-account-v296.js") if account_asset.exists() else text("my-account.html")\nif "/api/client/dashboard" not in account_runtime:\n    errors.append("customer account runtime missing retained Build 293 dashboard authority")\n''',
+              'Build 293 runtime relocation',
+          )
+
+          replace_once(
+              'scripts/build294_release_check.py',
+              '''        for token in ["Maintenance interest", "Open maintenance interest", "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing"]:\n            if token not in body:\n                errors.append(f"{rel} Build 295 forward-compatible boundary missing {token}")\n''',
+              '''        for token in ["Maintenance interest", "Open maintenance interest"]:\n            if token not in body:\n                errors.append(f"{rel} Build 295 forward-compatible boundary missing {token}")\n        account_asset = ROOT / "assets/my-account-v296.js"\n        account_runtime = text("assets/my-account-v296.js") if account_asset.exists() else body\n        token = "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing"\n        if token not in account_runtime:\n            errors.append(f"{rel} Build 295 forward-compatible runtime boundary missing {token}")\n''',
+              'Build 294 runtime relocation',
+          )
+          PY
+
+      - name: Validate retained Builds 271 through 296
+        run: |
+          python -m py_compile scripts/build285_release_check.py scripts/build286_release_check.py scripts/build293_release_check.py scripts/build294_release_check.py scripts/build295_release_check.py scripts/build296_release_check.py
+          node --check assets/my-account-v296.js
+          for build in $(seq 271 296); do
+            echo "== retained Build ${build} =="
+            python "scripts/build${build}_release_check.py"
+          done
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+          git diff --check -- scripts/build285_release_check.py scripts/build286_release_check.py scripts/build293_release_check.py scripts/build294_release_check.py
+
+      - name: Commit retained guard convergence
+        run: |
+          if git diff --quiet -- scripts/build285_release_check.py scripts/build286_release_check.py scripts/build293_release_check.py scripts/build294_release_check.py; then
+            echo "Retained account guards already converged."
+            exit 0
+          fi
+          git config user.name "Rosie Dazzlers Release Bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts/build285_release_check.py scripts/build286_release_check.py scripts/build293_release_check.py scripts/build294_release_check.py
+          git commit -m "Build 296 converge retained account guards"
+          git push origin HEAD:build-296-my-account-maintainability-extraction
