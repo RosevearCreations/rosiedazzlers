@@ -15,7 +15,7 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 remains the retained Finance/tax-support baseline. Builds 274–291 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness and maintenance interest intake without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–291 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness and maintenance interest intake without replacing those foundations.
 
 Build 291 is the accepted Production baseline at `e6ab73751864a12447657ff263a8787f4718d25c`. Build 292 is the active Development-first fleet/workplace acquisition release. **Production remains closed** for Build 292 until deliberate promotion from accepted Development evidence.
 
