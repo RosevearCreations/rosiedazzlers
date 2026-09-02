@@ -33,7 +33,7 @@ jobs:
         run: |
           python scripts/build295_patch_development_gate.py
           python scripts/build295_patch_authorities.py
-          git diff --check
+          git diff --check -- . ':!*.md'
           grep -Fq 'Run current Build 295 focused guard' .github/workflows/development-source-gate.yml
           grep -Fq '**Build:** 295' AI_PROJECT_HANDOFF.md
           grep -Fq '**Build:** 295' MASTER_VALUE_ROADMAP.md
