@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 296  
+**Build:** 297  
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–296 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–297 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
 
-Build 295 is the accepted Production baseline at `73556e1f41dc204290409294c5e38ad0b2090fb7`. Build 296 is the active Development-first My Account maintainability extraction. **Production remains closed** for Build 296 until deliberate promotion from final exact accepted Development evidence.
+Build 296 is the accepted Production baseline at `337ae533130f4bf1c566d47c2ba1bc712cbf780e`. Build 297 is the active Development-first Operations customer support maintainability extraction. **Production remains closed** for Build 297 until deliberate promotion from final exact accepted Development evidence.
 
 Do not regress:
 
@@ -97,6 +97,16 @@ Rules:
 - Builds 288/294/295 remain retained defense in depth;
 - Build 296 adds no customer behavior, API authority, maintenance economics, polling or schema migration.
 
+## Build 297 — Operations customer support maintainability extraction
+
+Rules:
+
+- `assets/admin-customers-v297.js` is byte-for-byte the accepted Build 296 inline customer-support runtime;
+- `admin-customers.html` and `admin-customers/index.html` remain exact and differ from Build 296 only by the external classic-script tag;
+- customer directory, account assistance, lifecycle, audit/history and role-gated admin behavior remain unchanged;
+- retained Build 290 authorization/source boundaries remain authoritative;
+- Build 297 adds no admin behavior, API authority, pricing, recurrence, commercial rule, polling or schema migration.
+
 ## Ordered next value work
 
 ### 1. Genuine proof + Google trust
@@ -118,7 +128,7 @@ Build economics only after explicit business approval for qualification, reward 
 Retain Build 273 authority. Development payment-provider configuration is owner-signed-off as present. Real transaction/settlement/reconciliation acceptance remains evidence-driven and should resume only when deliberately tested; no fabricated provider transaction evidence. Retain evidence links into `accounting_documents` and accountant-friendly export surfaces.
 
 ### 7. Continue modular extraction only when it creates value
-Preferred high-use order: Operations customer/booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
+Preferred high-use order after the Build 297 customer-support extraction: Operations booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
 
 ## Business input checkpoints
 
@@ -148,6 +158,11 @@ The owner confirmed that Stripe, PayPal and other configured providers are prese
 - `.github/workflows/build296-source-gate.yml` — Build 296 feature source gate;
 - `scripts/build296_http_smoke.sh` — read-only versioned My Account runtime guard;
 - `.github/workflows/build296-development-acceptance.yml` — Build 296 `dev` runtime acceptance;
+- `.github/workflows/build297-development-source-gate.yml` — cumulative Development source gate through Build 297;
+- `scripts/build297_release_check.py` — exact Operations customer-support extraction/authority guard;
+- `.github/workflows/build297-source-gate.yml` — Build 297 feature source gate;
+- `scripts/build297_http_smoke.sh` — read-only versioned Operations customer runtime guard;
+- `.github/workflows/build297-development-acceptance.yml` — Build 297 `dev` runtime acceptance;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
