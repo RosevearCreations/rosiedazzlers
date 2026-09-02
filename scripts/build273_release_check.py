@@ -122,14 +122,32 @@ need(
     "allowLegacyAdminFallback:false",
     "requireActionAccess(access.actor, 'finance.view')"
 )
+package_rel = "functions/api/admin/accounting_accountant_package.js"
+package_body = text(package_rel)
 need(
-    "functions/api/admin/accounting_accountant_package.js",
+    package_rel,
     'requireActionAccess(access.actor, "finance.view")',
     "accountant_ready_candidate",
-    "manual_review_required: true",
-    "inventory_cost_completeness",
-    "evidence_manifest"
+    "manual_review_required: true"
 )
+# Build 304 may move export shaping into a dedicated whitelist helper. The historical Build 273 guard
+# follows that authority only when the endpoint imports/calls it, while retaining the original semantic checks.
+if "buildAccountantExportPackage" in package_body:
+    need(
+        package_rel,
+        'buildAccountantExportPackage',
+        'inventoryCostCompleteness: inventoryCoverage',
+        'support,'
+    )
+    need(
+        "functions/api/_lib/accounting-accountant-export.js",
+        "inventory_cost_completeness:",
+        "evidence_manifest:",
+        "business_tax_profile:",
+        "tax_support:"
+    )
+else:
+    need(package_rel, "inventory_cost_completeness", "evidence_manifest")
 
 # Structured facts enrich T2125 without converting judgment-heavy items into automatic filing decisions.
 need(
@@ -214,7 +232,7 @@ need(
     "accountant-friendly export surfaces",
 )
 
-# JavaScript syntax, including inline Finance pages.
+# JavaScript syntax, including inline Finance pages and any later dedicated accountant-export helper.
 for rel in [
     "functions/api/_lib/action-permissions.js",
     "functions/api/_lib/accounting-tax-support.js",
@@ -225,6 +243,8 @@ for rel in [
     "functions/api/admin/accounting_year_end_report.js",
 ]:
     node_check(rel)
+if "buildAccountantExportPackage" in package_body:
+    node_check("functions/api/_lib/accounting-accountant-export.js")
 if extracted_tag in support_html:
     node_check("assets/admin-tax-support-v303.js")
 for rel in ["admin-tax-support.html", "admin-tax-review.html"]:

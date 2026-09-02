@@ -24,8 +24,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - name: Retain Builds 301-303 Finance authority
+      - name: Retain canonical Finance authority through Build 303
         run: |
+          python scripts/build300_release_check.py
           python scripts/build301_release_check.py
           python scripts/build302_release_check.py
           python scripts/build303_release_check.py
