@@ -7,9 +7,11 @@
 
 ## Current release state
 
-Build 292 is the active **fleet / workplace acquisition intake authority** Development-first slice. It starts from accepted Production Build 291 at `e6ab73751864a12447657ff263a8787f4718d25c` and advances the existing public fleet path without inventing commercial fleet economics.
+Build 292 is the active **fleet / workplace acquisition intake authority** Development-first slice. It follows the accepted Build 291 Production promotion at SHA `e6ab73751864a12447657ff263a8787f4718d25c`.
 
-Build 292 follows the normal release boundary: exact feature source gate + Cloudflare feature preview, then a non-force Development fast-forward, then exact Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 292 until deliberate promotion from accepted Development evidence.
+Build 291 remains the accepted Production baseline. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
+
+Build 292 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 292 until deliberate promotion from accepted Development evidence.
 
 ## Application boundary
 
@@ -30,68 +32,114 @@ Permanent runtime rule:
 
 Server authorization remains authoritative. Dormant modules do not wake merely because they exist.
 
-## Retained platform authority
+## Retained Build 272/273 authority
 
-The following remain authoritative while Build 292 advances acquisition:
+**Build 273 is the retained Finance/tax-support baseline.** These retained authorities remain live while later customer/business releases advance:
 
-- server-authoritative role/module/action permissions and Build 290 executable authorization proof;
-- Build 290 non-force forward restore mechanics and Build 289 restore anchor;
-- Build 291 maintenance retention intake remains interest-only and migration-free;
-- Complete = **Best value** and Exterior Detail remains differentiated from Premium Wash;
+- narrow Operations/Finance action permissions;
+- server-authoritative role/module/action permissions;
+- Finance tax-support writes retain `finance.tax.manage` while reads remain narrowly scoped;
+- persistent Finance tax-support records, evidence links, T2125 workpaper and accountant-package workflow remain retained;
+- Complete = **Best value**;
+- Exterior Detail remains differentiated from Premium Wash;
 - current Small/Mid/Oversized + condition/quote pricing authority;
 - current availability, conflict, deposit, checkout and payment mechanics;
 - one meaningful H1 per indexable public page;
-- persistent Finance tax-support/evidence/accountant-package authority;
 - no fabricated accounting/tax facts, reviews, consent, proof or provider evidence;
 - private/customer media never becomes public without consent/privacy review and explicit publication;
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Build 292 — fleet / workplace acquisition intake
+## Completed customer/business work through Build 291
 
-Build 292 converts the existing `/fleet` and `/fleet-pricing` paths into a quote-first assessment experience using the existing `public_inquiry_leads` authority.
+- Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
+- Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
+- Build 276 hardened release mechanics.
+- Builds 277–280 deepened add-on/local SEO and normalized the self-contained mobile operating model.
+- Build 281 hardened exact Cloudflare SHA/deployment acceptance and mutable `dev` alias convergence.
+- Build 282 added three high-intent acquisition → existing-booking paths.
+- Build 283 separated proof/media pairing, public-use consent/privacy review and explicit publication.
+- Build 284 added fail-closed **contextual proof** placement at relevant service/location/use-case decisions.
+- Build 285 added authenticated customer history → current booking rebook handoff without carrying old price/deposit/payment authority.
+- Build 286 made direct customer reviews completed-booking-only and removed caller authority over vehicle/source/Google URL fields.
+- Build 287 added neutral Google/share follow-up and referral-origin attribution without referral economics.
+- Build 288 closed the customer/staff privacy boundary with customer-safe response projections and no customer write authority over `admin_private_notes`.
+- Build 289 added in-place signed-out account recovery, manual weak-network retry, ARIA live feedback and keyboard focus treatment without new polling or write replay.
+- Build 290 deepened role/module/action acceptance, anonymous direct-API fail-closed behavior, staff-auth non-disclosure and non-force forward restore readiness.
+- Build 291 added maintenance retention intake as a preference-only interest request with narrow public responses and no maintenance-plan economics.
 
-### Public acquisition authority
+Do not re-open these items because an older roadmap mentions them.
 
-- `/fleet` covers workplace groups, small-business fleets, contractor/work trucks, household multi-vehicle groups, dealership/overflow review and repeat-service interest;
-- the form gathers contact/business identity, service area, approximate vehicle count, request type, timing preference, photo/media links and vehicle/site-condition notes;
-- timing is a **preference only**;
-- Rosie’s standard water/power authority is retained and unusual site restrictions are reviewed before dispatch;
-- `/fleet-pricing` explains quote planning without publishing an automatic threshold, commercial rate, discount or recurring cycle;
-- one-H1, canonical and existing route-copy parity remain required.
+## Retained Build 290 reliability authority
 
-### Intake/API authority
+Build 290 remains authoritative while later acquisition/retention work advances:
 
-- the existing `functions/api/public_lead_submit.js` and `public_inquiry_leads` remain the single public inquiry authority;
-- fleet request type and timing tokens are server-allowlisted;
-- fleet source is server-owned as `/fleet`;
-- the browser cannot create a quote, appointment or recurring commitment by submitting the assessment;
-- successful responses are narrow and do not return the stored database row;
-- Supabase/storage failures stay server-side and public errors remain generic;
-- GET on the write endpoint is 405;
-- the UI blocks repeat clicks while a write is in flight;
-- Build 292 runtime smoke uses only pre-persistence validation failures and must not create a Development lead row.
-
-### Commercial/data boundary
-
-Build 292 does **not** approve or promise:
-
-- a fleet minimum or automatic vehicle threshold;
-- a volume discount or commercial rate;
-- fixed same-location economics or travel pricing;
-- a fixed recurring cadence;
-- priority booking or an SLA;
-- contract or cancellation economics;
-- recurring billing;
-- a quote or appointment simply because an assessment is submitted.
-
-There is **no schema migration**. Additional fleet context is normalized into the existing public inquiry record rather than creating a second lead/customer/quote authority.
+- existing role/module/action ceilings remain server-authoritative;
+- executable matrix coverage verifies module narrowing, action grants/denials and cross-module ceiling protection;
+- representative anonymous Operations/quote/Finance requests fail closed before mutation/action disclosure;
+- protected admin direct URLs remain static noindex shells with business/customer records behind authenticated APIs;
+- unexpected shared staff-auth failures return generic external text rather than raw configuration/exception details;
+- exact Build 289 SHA/tree remain the restore anchor;
+- restore uses a **forward restore commit**, never force/ref rewind, and never moves Production `main`.
 
 ## Retained Build 291 maintenance authority
 
-Maintenance remains an interest request only. Timing options remain preferences and do not create an appointment, subscription, recurring billing authorization, fixed price, discount, perk or priority-booking promise. Current booking availability, vehicle/service review, scope, add-ons, deposits, payments and site-access rules remain authoritative.
+Build 291 remains the maintenance retention intake authority.
 
-The owner-confirmed Stripe, PayPal and other provider state remains **Development configuration-present / owner sign-off** only. It is not transaction acceptance and must not be rewritten as proof of a real charge, PayPal sandbox transaction, webhook settlement or provider-side acceptance.
+### Public maintenance authority
+
+- static `/maintenance-plan` source must match the safe public growth-settings authority before JavaScript hydration;
+- timing options are **preferences only**, not promised cadence;
+- the page explicitly states that an interest request does not create an appointment, subscription, recurring billing authorization, fixed price, discount, perk or priority-booking promise;
+- current availability, vehicle condition/review, service scope, add-ons, deposits, payments, site access and booking rules remain authoritative;
+- Rosie’s standard water/power model and safe work-area requirement remain unchanged.
+
+### Maintenance intake/API authority
+
+- the public endpoint allowlists timing preference tokens;
+- browser-controlled `source_url` is removed; the server records `/maintenance-plan`;
+- successful responses are narrow and do not return the persisted database row;
+- Supabase/storage failure details stay server-side and public errors remain generic;
+- the UI blocks repeat clicks while a write is in flight;
+- runtime acceptance uses only pre-persistence validation failures, so smoke tests do not create waitlist rows.
+
+### Maintenance commercial boundary
+
+Build 291 does **not** approve maintenance price, discount, perk, fixed frequency, priority booking, recurring billing, included/excluded recurring scope, pause/cancel policy or an appointment. There is **no schema migration**.
+
+### Provider configuration sign-off
+
+On 2026-09-01 the owner confirmed PayPal, Stripe and the other configured providers are already present in Cloudflare Development. Record this as **Development configuration-present / owner sign-off**. It is not transaction acceptance and must not be rewritten as proof of a real Stripe charge, PayPal sandbox transaction, webhook settlement or provider-side acceptance result.
+
+## Build 292 — fleet / workplace acquisition intake
+
+Build 292 hardens the existing fleet/workplace acquisition path without inventing commercial fleet rules.
+
+### Public fleet/workplace authority
+
+- `/fleet` is a quote-first assessment for workplace groups, small-business fleets, contractor/work trucks, household multi-vehicle groups, dealership/overflow review and repeat-service interest;
+- the form gathers contact/business identity, service area, approximate vehicle count, request type, timing preference, optional photo/media links and vehicle/site-condition notes;
+- timing is a **preference only**;
+- Rosie brings standard detailing water and power; unusual site restrictions are reviewed before dispatch;
+- `/fleet-pricing` explains scope-first quote planning without an automatic threshold, commercial rate, volume discount or recurring cycle;
+- one-H1, canonical and route-copy parity remain required.
+
+### Fleet intake/API authority
+
+- `functions/api/public_lead_submit.js` and `public_inquiry_leads` remain the single public inquiry authority;
+- fleet request type and timing tokens are server-allowlisted;
+- fleet source is server-owned as `/fleet`;
+- successful responses are narrow and do not return stored database rows;
+- Supabase/storage failure detail stays server-side and public errors remain generic;
+- GET on the write endpoint returns 405;
+- the UI blocks repeat clicks while a write is in flight;
+- runtime acceptance uses only validation failures that stop before persistence, so smoke tests must not create a Development fleet lead row.
+
+### Fleet commercial/data boundary
+
+Build 292 does **not** approve or promise a fleet minimum, automatic vehicle threshold, volume discount, commercial rate, fixed same-location/travel economics, fixed cadence, priority/SLA, contract/cancellation economics, recurring billing, quote or appointment simply because an assessment was submitted.
+
+There is **no schema migration**. Extra fleet context is normalized into the existing public inquiry record rather than creating a second lead/customer/quote authority.
 
 ## Current validation authority
 
@@ -99,24 +147,24 @@ The owner-confirmed Stripe, PayPal and other provider state remains **Developmen
 - one-H1/current customer guards: `scripts/seo_h1_check.py`;
 - retained Builds 271–291 focused guards;
 - retained Build 290 executable authorization/restore proofs;
-- Build 292 focused guard: `scripts/build292_release_check.py`;
+- focused Build 292 guard: `scripts/build292_release_check.py`;
 - feature source workflow: `.github/workflows/build292-source-gate.yml`;
-- Build 292 non-mutating runtime smoke: `scripts/build292_http_smoke.sh`;
+- Build 292 runtime smoke: `scripts/build292_http_smoke.sh`;
 - Build 292 Development runtime workflow: `.github/workflows/build292-development-acceptance.yml`;
-- cumulative Development source workflow: `.github/workflows/development-source-gate.yml` through Build 292;
+- Development source workflow: `.github/workflows/development-source-gate.yml` through Build 292;
 - retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - full Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
 Never call Build 292 Development-green until exact feature SHA + feature preview, exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
 
-## Next value work after Build 292
+## Next business/product work after Build 292
 
 Proceed where real evidence/rules exist:
 
 1. genuine consented proof through the retained Build 283/284 path;
 2. Google Business Profile/Search Console verification when account access exists;
-3. maintenance commercial rules only after cadence/economics/included scope/pause/cancel/priority terms are approved;
-4. fleet economics only after minimum count, same-location/travel, discount, commitment and cancellation rules are approved;
+3. maintenance commercial rules after cadence/economics/included scope/pause/cancel/priority terms are approved;
+4. fleet commercial rules only after minimum count, same-location/travel, discount, commitment and cancellation terms are approved;
 5. notification-provider and targeted real-device/browser evidence when available;
 6. payment settlement/reconciliation evidence only when real transaction testing is deliberately reopened;
 7. referral/loyalty economics only after explicit business approval.
@@ -128,9 +176,9 @@ Proceed where real evidence/rules exist:
 - Search Console ownership/indexing evidence;
 - maintenance-plan, fleet and referral/loyalty economics not yet approved;
 - real email/SMS/Web Push delivery evidence;
-- provider transaction acceptance beyond Development configuration-present sign-off;
+- provider transaction acceptance beyond the current Development configuration-present sign-off;
 - accountant/tax judgment;
-- physical-device acceptance beyond automated responsive/runtime checks.
+- physical-device acceptance beyond what automated responsive/runtime checks can prove.
 
 ## Permanent runtime/cost guardrails
 
