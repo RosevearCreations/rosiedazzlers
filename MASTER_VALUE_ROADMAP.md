@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 303
+**Build:** 304
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
@@ -16,13 +16,14 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Current release boundary
 
-- **Active Development slice:** Build 303 — Finance Tax-support maintainability extraction.
-- **Accepted Build 302 parent:** `9ec950384124644d1176a01d381745a3d8f7cfb9`.
-- Build 302 closes **Build 302 — Statement Import reliability** against the surviving fail-closed/report-only authority without recreating a retired importer.
-- Build 303 preserves Build 273 Finance/T2125/accountant-package behavior while moving the tax-support browser controller to `assets/admin-tax-support-v303.js` byte-for-byte.
-- `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` remain unchanged.
-- No schema/database migration, accounting-policy change, payment-provider mutation or new tax judgment is introduced.
-- The owner has authorized promotion of the exact accepted Build 303 Development source to `main` after exact source/runtime/Cloudflare evidence agrees.
+- **Active Development slice:** Build 304 — Accountant export integrity.
+- **Accepted Production/main:** Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`.
+- **Accepted pre-documentation Build 304 Development implementation/evidence baseline:** `6351321a2d33ed8489295a60d8de72adea81a859`.
+- Build 304 gives the accountant JSON package a versioned/predictable export contract, explicit evidence-reference integrity states, safe filenames and an export whitelist that keeps private/internal storage/staff metadata out of the package.
+- Build 304 preserves the Build 303 tax-support controller/runtime and Build 273 Finance/T2125/accountant-workpaper calculations.
+- No schema/database migration, accounting/tax-policy change, payment-provider mutation or new tax judgment is introduced.
+- Build 304 has **no Production promotion authorization**. `main` remains on accepted Build 303.
+- Final Build 304 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
 - Retained historical compatibility marker: **Build:** 301 — Build 301 — Finance Reconciliation maintainability extraction in `assets/admin-accounting-v301.js`, with accepted pre-Build-301 Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`.
 
 ## Retained baseline
@@ -40,17 +41,35 @@ Build 273 established the retained Finance/tax-support baseline with structured 
 
 ### 9. Payments / Finance / accounting
 
-Retain Build 273 authority: Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No later maintainability extraction invents accountant/tax judgment.
+Retain Build 273 authority: Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No later maintainability or export-integrity release invents accountant/tax judgment.
 
-## Build 301 — Finance Reconciliation maintainability extraction
+## Build 304 — Accountant export integrity
 
-Build 301 externalizes the accepted `admin-accounting.html` runtime into `assets/admin-accounting-v301.js` without refactoring executable behavior. The Build 300 root and folder Accounting routes were identical, and Build 301 keeps both route copies aligned on the same versioned classic-script asset.
+Build 304 separates export shaping/privacy from the retained tax-support calculations through `functions/api/_lib/accounting-accountant-export.js`.
 
-Bank reconciliation reads/rendering, payroll payout reconciliation, payable settlement, journal/remittance behavior, recurring expenses, documents, period-close workflow, statement/tax reports and exports remain unchanged. Build 301 deliberately does not invent a missing reconciliation write path or reinterpret accounting workflow merely because the form exists in the accepted HTML.
+The accountant JSON contract now provides:
 
-Build 301 adds no matching/posting/approval rule, payment/provider behavior, API contract, accounting/tax judgment, database schema or migration. Runtime acceptance is read-only and uses bounded mutable Development-alias retry so Cloudflare deployment convergence does not create a false negative like the first Build 300 runtime attempt.
+- `schema_version: 2` and export contract `rosie_accountant_workpaper_json`;
+- predictable `application/json` / UTF-8 metadata;
+- deterministic `rosie-accountant-package-YYYY.json` filenames;
+- evidence reference statuses `general`, `verified`, `unverified`, `unresolved`, `missing_related_id`, and `unsupported_type`;
+- evidence-integrity review counts;
+- safe basename-only evidence filenames;
+- masked-only identity fields;
+- no raw storage path/URL, upload/signed URL, internal document note, staff identity metadata or raw mileage-row/booking-ID leakage.
 
-## Retained value/authority through Build 300
+`functions/api/admin/accounting_accountant_package.js` remains read-only and protected by `finance.view`. `functions/api/admin/accounting_export.js` retains CSV behavior while normalizing its dynamic payables-status filename token. Accountant-facing notes remain available where they are deliberately part of the workpaper contract.
+
+Build 304 also repairs historical CI assumptions without weakening their authority: Build 273 follows export shaping into the helper only when delegated there; Build 290/291/292 obtain complete history before strict accepted-anchor ancestry checks; and Build 299/300 source hygiene is frozen to each build's accepted historical release delta.
+
+## Retained Build 301–303 Finance authority
+
+- Build 301 externalized the accepted `admin-accounting.html` runtime into `assets/admin-accounting-v301.js` without changing reconciliation/accounting behavior.
+- Build 302 closed Statement Import reliability as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired importer was recreated.
+- Build 303 externalized the retained Build 273 Tax Support controller into `assets/admin-tax-support-v303.js` byte-for-byte while leaving `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` unchanged.
+- No Build 301–304 maintainability/integrity release invents matching/posting/approval, payment/provider or accountant/tax judgment.
+
+## Retained value/authority through Build 303
 
 - Builds 274–280 established Mobile Quick Book, I.T. help, reliable release mechanics and deep service/local SEO while keeping Rosie’s self-contained mobile water/power model.
 - Build 281 hardened exact-SHA Cloudflare acceptance and mutable Development alias convergence.
@@ -65,6 +84,9 @@ Build 301 adds no matching/posting/approval rule, payment/provider behavior, API
 - Build 298 — Operations booking/quote support maintainability extraction preserves the accepted Quote Pipeline runtime in `assets/admin-quotes-v298.js`.
 - Build 299 — Operations booking-dashboard support maintainability extraction preserves the accepted Booking Dashboard runtime in `assets/admin-booking-v299.js`.
 - Build 300 — Finance Payments maintainability extraction preserves the accepted mature root Payments runtime in `assets/admin-payments-v300.js`; its pre-existing older folder route remains deliberately deferred to Build 318.
+- Build 301 — Finance Reconciliation maintainability extraction preserves the accepted Accounting runtime in `assets/admin-accounting-v301.js`.
+- Build 302 — Statement Import reliability preserves the retired-import/fail-closed boundary.
+- Build 303 — Finance Tax-support maintainability extraction preserves the retained Tax Support runtime in `assets/admin-tax-support-v303.js`.
 
 ## Permanent business/runtime constraints
 
@@ -80,12 +102,12 @@ Build 301 adds no matching/posting/approval rule, payment/provider behavior, API
 
 ## Finance roadmap — Builds 300–305
 
-1. **Build 300 — Finance Payments maintainability extraction** — complete and accepted on Development before Build 301.
+1. **Build 300 — Finance Payments maintainability extraction** — complete and accepted.
 2. **Build 301 — Finance Reconciliation maintainability extraction** — complete; behavior-preserving Accounting/reconciliation runtime extraction.
 3. **Build 302 — Statement Import reliability** — complete as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired ingestion path was recreated.
-4. **Build 303 — Finance Tax-support maintainability extraction** — active release candidate; retained Build 273 controller externalized byte-for-byte with backend authority unchanged.
-5. **Build 304 — Accountant export integrity** — verify document/evidence references, formats, filenames and privacy boundaries.
-6. **Build 305 — Finance authorization sweep** — test every Finance endpoint against role/module/action/direct-API/anonymous/cross-module boundaries.
+4. **Build 303 — Finance Tax-support maintainability extraction** — complete and accepted in Production at `09442c53d385aca7995150ace4bde55abd51d7df`; retained Build 273 controller externalized byte-for-byte.
+5. **Build 304 — Accountant export integrity** — current Development release; implementation complete, final documentation-synchronized exact-SHA acceptance required before closure.
+6. **Build 305 — Finance authorization sweep** — next untouched item; test every Finance endpoint against role/module/action/direct-API/anonymous/cross-module boundaries.
 
 Retained Finance storage and export concepts include `accounting_documents`, structured evidence, T2125 workpapers and **accountant-friendly export surfaces**. Accountant/tax judgment remains external/manual authority.
 
@@ -130,15 +152,17 @@ Do not autonomously invent:
 - accountant/tax judgment;
 - physical-device evidence not proven by automation.
 
-## Build 301 acceptance sequence
+## Build 304 acceptance sequence
 
-1. exact feature reconstruction/source gate;
-2. accepted-tree transfer to `dev`;
-3. Build 301 cumulative Development source gate;
-4. read-only Build 301 Development Finance/Reconciliation runtime smoke with bounded alias convergence retry;
-5. exact Cloudflare Development deployment/artifact acceptance;
-6. only then call Build 301 Development-green;
-7. promote the exact accepted Development source to Production `main` under the explicit authorization for this release and verify Production deployment.
+1. run Build 304 export-contract and retained Finance source guards;
+2. transfer the accepted implementation to `dev`;
+3. run Build 304 and canonical cumulative Development source gates;
+4. run read-only Build 304 accountant-export runtime acceptance;
+5. prove the exact Cloudflare Development deployment SHA, `uses_functions=true`, immutable deployment smoke and mutable alias convergence;
+6. synchronize `BUILD304_SUMMARY.md`, this roadmap, the handoff and execution queue;
+7. repeat exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head;
+8. only then call Build 304 Development-green;
+9. **do not promote Build 304 to `main` without new explicit authorization.**
 
 ## Retained focused-guard compatibility anchors
 
