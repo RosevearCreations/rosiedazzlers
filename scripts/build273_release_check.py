@@ -148,7 +148,9 @@ need(
     "tax_support_readiness"
 )
 
-# Finance UI: one H1, explicit last-4/masked identity language, all factual workpapers, accountant export.
+# Finance UI: one H1, explicit last-4/masked identity language, factual workpapers, and accountant export.
+# Build 303 may externalize the retained controller byte-for-byte; in that case the historical runtime tokens
+# are validated in the exact versioned asset while all presentation/content requirements remain on the page.
 support_html = text("admin-tax-support.html")
 if len(re.findall(r"<h1\b", support_html, flags=re.I)) != 1:
     errors.append("admin-tax-support.html must contain exactly one H1")
@@ -163,11 +165,23 @@ need(
     "Capital assets / CCA support",
     "Year-end inventory / COGS support",
     "Tax evidence manifest",
-    "/api/admin/accounting_tax_support",
-    "/api/admin/accounting_accountant_package",
-    "Download accountant JSON",
-    "pageKey:'admin-tax-review'"
+    "Download accountant JSON"
 )
+extracted_tag = '<script src="/assets/admin-tax-support-v303.js"></script>'
+if extracted_tag in support_html:
+    need(
+        "assets/admin-tax-support-v303.js",
+        "/api/admin/accounting_tax_support",
+        "/api/admin/accounting_accountant_package",
+        "pageKey:'admin-tax-review'"
+    )
+else:
+    need(
+        "admin-tax-support.html",
+        "/api/admin/accounting_tax_support",
+        "/api/admin/accounting_accountant_package",
+        "pageKey:'admin-tax-review'"
+    )
 if "<input name=\"business_number\"" in support_html or "<input name=\"gst_hst_number\"" in support_html:
     errors.append("Tax Support UI must not request/store full CRA identifiers")
 
@@ -211,6 +225,8 @@ for rel in [
     "functions/api/admin/accounting_year_end_report.js",
 ]:
     node_check(rel)
+if extracted_tag in support_html:
+    node_check("assets/admin-tax-support-v303.js")
 for rel in ["admin-tax-support.html", "admin-tax-review.html"]:
     inline_script_check(rel)
 
