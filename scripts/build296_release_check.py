@@ -76,11 +76,8 @@ for rel in PAGES:
         errors.append(f"{rel} still contains the mature inline module")
     for token in [
         "data-build295-account-source-authority",
-        "data-build295-maintenance-interest-only",
         "Maintenance interest",
         "Open maintenance interest",
-        "Maintenance timing is an interest preference",
-        "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing",
         'id="maintenanceConversion"',
         'id="bookingHistory"',
         'id="vehicleForm"',
@@ -95,6 +92,9 @@ if read(PAGES[0]) != read(PAGES[1]):
 need(
     ASSET,
     'import { setBrandImages, setFooter } from "/assets/site.js";',
+    "data-build295-maintenance-interest-only",
+    "Maintenance timing is an interest preference",
+    "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing",
     "/api/client/dashboard",
     "/api/client/profile_update",
     "/api/client/vehicles_save",
@@ -156,13 +156,15 @@ need("BUILD296_SUMMARY.md", "Build 296", "My Account Maintainability Extraction"
 need("scripts/build296_http_smoke.sh", "/assets/my-account-v296.js", "/api/client/dashboard", "read-only")
 need(".github/workflows/build296-source-gate.yml", "Build 296 Source Gate", "python scripts/build296_release_check.py")
 need(".github/workflows/build296-development-acceptance.yml", "Build 296 Development Runtime Acceptance", "scripts/build296_http_smoke.sh")
-need(".github/workflows/development-source-gate.yml", "Run current Build 296 focused guard", "node --check assets/my-account-v296.js")
+need(".github/workflows/build296-development-source-gate.yml", "Build 296 Development Source Gate", "scripts/build296_release_check.py", "node --check assets/my-account-v296.js")
 need("AI_PROJECT_HANDOFF.md", "**Build:** 296", BUILD295_PRODUCTION_SHA, "My Account maintainability extraction")
 need("MASTER_VALUE_ROADMAP.md", "**Build:** 296", BUILD295_PRODUCTION_SHA, "Build 296 — My Account maintainability extraction")
 
 for rel in [
     ".github/workflows/build296-bootstrap-extraction.yml",
     ".github/workflows/build296-bootstrap-authorities.yml",
+    ".github/workflows/build296-bootstrap-authorities-v2.yml",
+    ".github/workflows/build296-bootstrap-code-docs.yml",
 ]:
     if (ROOT / rel).exists():
         errors.append(f"temporary Build 296 bootstrap file remains: {rel}")

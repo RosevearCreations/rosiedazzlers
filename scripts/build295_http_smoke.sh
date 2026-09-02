@@ -16,20 +16,29 @@ echo "Base: ${BASE_URL}"
 fetch "${BASE_URL}/my-account" > "${TMP_DIR}/account.html" || fail "could not load /my-account"
 for token in \
   'data-build295-account-source-authority' \
-  'data-build295-maintenance-interest-only' \
   'Maintenance interest' \
   'Open maintenance interest' \
-  'Maintenance timing is an interest preference' \
-  'No fixed cadence, price, discount, priority, appointment, subscription or recurring billing' \
   'id="maintenanceConversion"' \
   'id="bookingHistory"' \
   'id="vehicleForm"' \
   '/assets/client-auth.js'; do
-  grep -Fq "$token" "${TMP_DIR}/account.html" || fail "account source missing runtime marker: $token"
+  grep -Fq "$token" "${TMP_DIR}/account.html" || fail "account source missing retained static marker: $token"
 done
 
-if grep -Eqi 'acctAdminNotes|vehAdminNotes|vehNextDue|vehNextServiceMileage|vehIntervalDays|vehAutoSchedule|unlock maintenance pricing|reduced maintenance pricing|reduced repeat-clean pricing|Maintenance eligible|Recurring maintenance scheduling only starts|Your account can move into recurring maintenance' "${TMP_DIR}/account.html"; then
-  fail "legacy customer/staff or maintenance commercial authority remains in My Account runtime source"
+ACCOUNT_RUNTIME="${TMP_DIR}/account.html"
+if grep -Fq '/assets/my-account-v296.js' "${TMP_DIR}/account.html"; then
+  fetch "${BASE_URL}/assets/my-account-v296.js" > "${TMP_DIR}/account-runtime.js" || fail "Build 296 versioned My Account module missing"
+  ACCOUNT_RUNTIME="${TMP_DIR}/account-runtime.js"
+fi
+for token in \
+  'data-build295-maintenance-interest-only' \
+  'Maintenance timing is an interest preference' \
+  'No fixed cadence, price, discount, priority, appointment, subscription or recurring billing'; do
+  grep -Fq "$token" "$ACCOUNT_RUNTIME" || fail "account runtime missing retained Build 295 marker: $token"
+done
+
+if grep -Eqi 'acctAdminNotes|vehAdminNotes|vehNextDue|vehNextServiceMileage|vehIntervalDays|vehAutoSchedule|unlock maintenance pricing|reduced maintenance pricing|reduced repeat-clean pricing|Maintenance eligible|Recurring maintenance scheduling only starts|Your account can move into recurring maintenance' "${TMP_DIR}/account.html" "$ACCOUNT_RUNTIME"; then
+  fail "legacy customer/staff or maintenance commercial authority remains in My Account runtime"
 fi
 
 # Defense-in-depth assets remain deployed even though static source no longer depends on them.

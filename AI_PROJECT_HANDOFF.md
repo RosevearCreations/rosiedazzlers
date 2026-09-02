@@ -1,17 +1,17 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 295  
+**Build:** 296  
 **Updated:** 2026-09-02  
 **Read next:** `MASTER_VALUE_ROADMAP.md`
 
 ## Current release state
 
-Build 295 is the active **customer account static source authority cleanup** Development-first slice. It follows the accepted Build 294 Production promotion at SHA `5d6041501b205a03dd62522a6ffb9a49a822284b`.
+Build 296 is the active **My Account maintainability extraction** Development-first slice. It follows the accepted Build 295 Production promotion at SHA `73556e1f41dc204290409294c5e38ad0b2090fb7`.
 
-Build 294 is the accepted Production baseline while Build 295 is validated in Development. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
+Build 295 is the accepted Production baseline while Build 296 is validated. Build 290 remains the retained authorization/direct-URL/API + forward-restore authority, with Build 289 as its verified restore anchor.
 
-Build 295 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 295 until deliberate promotion from accepted Development evidence.
+Build 296 follows the normal boundary: exact feature source gate + Cloudflare feature preview first, then a non-force Development fast-forward, then Development source/runtime/Cloudflare acceptance. **Production remains closed** for Build 296 until deliberate promotion from accepted Development evidence.
 
 ## Application boundary
 
@@ -50,7 +50,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Completed customer/business work through Build 295
+## Completed customer/business work through Build 296
 
 - Build 274 established Mobile Quick Book, I.T. Connections/help and the retained public/business foundation.
 - Build 275 added next useful AM/PM openings, returning-customer acceleration and funnel-exit evidence.
@@ -71,6 +71,7 @@ Server authorization remains authoritative. Dormant modules do not wake merely b
 - Build 293 added one authenticated “What’s next?” customer action coordinating retained review, rebook, progress and current-booking authorities.
 - Build 294 removes customer mutation/projection authority for staff-owned maintenance scheduling fields while retaining database history and staff planning authority.
 - Build 295 removes those stale staff/private scheduling controls and unapproved maintenance-pricing language from the static My Account source and browser payloads themselves.
+- Build 296 extracts the accepted My Account inline module byte-for-byte into `assets/my-account-v296.js`, leaving customer behavior and API authority unchanged while making the account runtime directly syntax-testable.
 
 Do not re-open these items because an older roadmap mentions them.
 
@@ -178,6 +179,10 @@ Build 295 makes both `/my-account` route copies directly agree with the retained
 - existing database/history/staff scheduling data is untouched;
 - Build 295 adds no schema migration, cadence, price, discount, priority, appointment, subscription or recurring-billing authority.
 
+## Build 296 — My Account maintainability extraction
+
+Build 296 moves the accepted Build 295 inline account module into `assets/my-account-v296.js` without refactoring it. Both route copies remain exact and the external module tag stays in the same execution position after `chrome.js` and `client-auth.js`. The focused guard reconstructs the accepted Build 295 page and proves the only page change is that script extraction. There is no customer behavior, API authority, maintenance-economics or schema change.
+
 ## Current validation authority
 
 - cumulative: `scripts/release_check.py`;
@@ -192,24 +197,28 @@ Build 295 makes both `/my-account` route copies directly agree with the retained
 - Build 295 runtime smoke: `scripts/build295_http_smoke.sh`;
 - Build 295 feature workflow: `.github/workflows/build295-source-gate.yml`;
 - Build 295 Development runtime workflow: `.github/workflows/build295-development-acceptance.yml`;
-- Development source workflow: `.github/workflows/development-source-gate.yml` through Build 295;
+- retained Development source workflow: `.github/workflows/development-source-gate.yml` through Build 295;
+- Build 296 cumulative Development source workflow: `.github/workflows/build296-development-source-gate.yml`;
+- focused Build 296 guard: `scripts/build296_release_check.py`;
+- Build 296 runtime smoke: `scripts/build296_http_smoke.sh`;
+- Build 296 feature workflow: `.github/workflows/build296-source-gate.yml`;
+- Build 296 Development runtime workflow: `.github/workflows/build296-development-acceptance.yml`;
 - retained exact/static + alias/full smoke: `scripts/development_http_smoke.sh`;
 - full Development deployment workflow: `.github/workflows/cloudflare-development-acceptance.yml`.
 
-Never call Build 295 Development-green until exact feature SHA + feature preview, exact `dev`, Development source/runtime gates and Cloudflare artifact agree.
+Never call Build 296 Development-green until exact feature SHA + feature preview, exact `dev`, Build 296 cumulative Development source/runtime gates and Cloudflare artifact agree.
 
-## Next business/product work after Build 295
+## Next business/product work after Build 296
 
 Proceed where real evidence/rules exist:
 
-1. extract the mature My Account inline JavaScript into a versioned asset without changing customer behavior, reducing future source-authority drift and making account logic easier to test;
-2. genuine consented proof through the retained Build 283/284 path;
-3. Google Business Profile/Search Console verification when account access exists;
-4. maintenance commercial rules only after cadence/economics/included scope/pause/cancel/priority terms are approved;
-5. fleet commercial rules only after minimum count, same-location/travel, discount, commitment and cancellation terms are approved;
-6. notification-provider and targeted real-device/browser evidence when available;
-7. payment settlement/reconciliation evidence only when real transaction testing is deliberately reopened;
-8. referral/loyalty economics only after explicit business approval.
+1. genuine consented proof through the retained Build 283/284 path;
+2. Google Business Profile/Search Console verification when account access exists;
+3. maintenance commercial rules only after cadence/economics/included scope/pause/cancel/priority terms are approved;
+4. fleet commercial rules only after minimum count, same-location/travel, discount, commitment and cancellation terms are approved;
+5. notification-provider and targeted real-device/browser evidence when available;
+6. payment settlement/reconciliation evidence only when real transaction testing is deliberately reopened;
+7. referral/loyalty economics only after explicit business approval.
 
 ## Manual / external evidence that must not be fabricated
 

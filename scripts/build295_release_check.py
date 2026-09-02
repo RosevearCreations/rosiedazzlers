@@ -37,16 +37,11 @@ if proc.returncode:
 pages = ["my-account.html", "my-account/index.html"]
 required_page = [
     "data-build295-account-source-authority",
-    "data-build295-maintenance-interest-only",
     "Maintenance interest",
     "Open maintenance interest",
-    "Maintenance timing is an interest preference",
-    "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing",
     'id="maintenanceConversion"',
     'id="bookingHistory"',
     'id="vehicleForm"',
-    "/api/client/profile_update",
-    "/api/client/vehicles_save",
     "/assets/client-auth.js",
 ]
 for rel in pages:
@@ -74,6 +69,41 @@ for rel in pages:
 
 if read("my-account.html") != read("my-account/index.html"):
     errors.append("My Account route copies are not exact")
+
+# Build 296 external module extraction is a stronger maintainability shape.
+# On the original Build 295 branch these markers remain inline; after Build 296
+# they must remain in the versioned account module instead.
+account_asset = ROOT / "assets/my-account-v296.js"
+if account_asset.exists():
+    account_runtime = read("assets/my-account-v296.js")
+    for rel in pages:
+        need(rel, '<script type="module" src="/assets/my-account-v296.js"></script>')
+        forbid(rel, '<script type="module">')
+else:
+    account_runtime = read("my-account.html")
+for token in [
+    "data-build295-maintenance-interest-only",
+    "Maintenance timing is an interest preference",
+    "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing",
+    "/api/client/profile_update",
+    "/api/client/vehicles_save",
+]:
+    if token not in account_runtime:
+        errors.append(f"customer account runtime missing {token}")
+if account_asset.exists():
+    forbid(
+        "assets/my-account-v296.js",
+        "acctAdminNotes", "vehAdminNotes", "vehNextDue", "vehNextServiceMileage",
+        "vehIntervalDays", "vehAutoSchedule", "admin_private_notes",
+        "next_cleaning_due_at:$('#vehNextDue')",
+        "next_service_mileage_km:$('#vehNextServiceMileage')",
+        "service_interval_days:$('#vehIntervalDays')",
+        "auto_schedule_opt_in:$('#vehAutoSchedule')",
+        "unlock maintenance pricing", "reduced maintenance pricing",
+        "reduced repeat-clean pricing", "Maintenance eligible",
+        "Recurring maintenance scheduling only starts",
+        "Your account can move into recurring maintenance",
+    )
 
 # Server-side authorities remain the ultimate fail-closed boundary.
 forbid("functions/api/client/profile_update.js", "admin_private_notes: cleanText(body.admin_private_notes)")
@@ -114,20 +144,18 @@ need("scripts/build295_http_smoke.sh", "data-build295-account-source-authority",
 need(".github/workflows/build295-source-gate.yml", "Build 295 Source Gate", "python scripts/build295_release_check.py")
 need(".github/workflows/build295-development-acceptance.yml", "Build 295 Development Runtime Acceptance", "scripts/build295_http_smoke.sh")
 need(".github/workflows/development-source-gate.yml", "Run current Build 295 focused guard", "python scripts/build295_release_check.py")
-need(
-    "AI_PROJECT_HANDOFF.md",
-    "**Build:** 295",
-    BUILD294_PRODUCTION_SHA,
-    "customer account static source authority cleanup",
-    "extract the mature My Account inline JavaScript into a versioned asset",
-)
-need(
-    "MASTER_VALUE_ROADMAP.md",
-    "**Build:** 295",
-    BUILD294_PRODUCTION_SHA,
-    "Build 295 — customer account static source authority cleanup",
-    "My Account maintainability extraction",
-)
+handoff = read("AI_PROJECT_HANDOFF.md")
+if "**Build:** 295" not in handoff and "**Build:** 296" not in handoff:
+    errors.append("AI_PROJECT_HANDOFF.md missing Build 295/296 living authority marker")
+for token in ["customer account static source authority cleanup", "My Account maintainability extraction"]:
+    if token not in handoff:
+        errors.append(f"AI_PROJECT_HANDOFF.md missing retained Build 295 token {token}")
+roadmap = read("MASTER_VALUE_ROADMAP.md")
+if "**Build:** 295" not in roadmap and "**Build:** 296" not in roadmap:
+    errors.append("MASTER_VALUE_ROADMAP.md missing Build 295/296 living authority marker")
+for token in ["Build 295 — customer account static source authority cleanup", "My Account maintainability extraction"]:
+    if token not in roadmap:
+        errors.append(f"MASTER_VALUE_ROADMAP.md missing retained Build 295 token {token}")
 
 # Temporary bootstrap machinery must never ship with the accepted candidate.
 for rel in [
