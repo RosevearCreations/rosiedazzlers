@@ -1,0 +1,62 @@
+name: Build 298 Bootstrap Extraction
+
+on:
+  push:
+    branches:
+      - build-298-operations-booking-quote-maintainability-extraction
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Extract quote pipeline runtime exactly
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          root = Path('.')
+          paths = [root / 'admin-quotes.html', root / 'admin-quotes' / 'index.html']
+          texts = [p.read_text(encoding='utf-8') for p in paths]
+          if texts[0] != texts[1]:
+              raise SystemExit('admin-quotes route copies differ before Build 298 extraction')
+
+          source = texts[0]
+          pattern = re.compile(r'<script>(\n\(function\(\)\{[\s\S]*?\n\}\)\(\);\n)</script>(?=</body></html>\s*$)')
+          match = pattern.search(source)
+          if not match:
+              raise SystemExit('expected mature admin-quotes inline runtime not found')
+          body = match.group(1)
+          if '/api/admin/quote_pipeline_list' not in body or '/api/admin/quote_pipeline_save' not in body:
+              raise SystemExit('quote pipeline authority markers missing from extracted runtime')
+
+          asset = root / 'assets' / 'admin-quotes-v298.js'
+          asset.write_text(body, encoding='utf-8')
+          replacement = '<script src="/assets/admin-quotes-v298.js"></script>'
+          updated = source[:match.start()] + replacement + source[match.end():]
+          for path in paths:
+              path.write_text(updated, encoding='utf-8')
+          PY
+          node --check assets/admin-quotes-v298.js
+          git diff --check -- admin-quotes.html admin-quotes/index.html assets/admin-quotes-v298.js
+      - name: Commit exact extraction
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- admin-quotes.html admin-quotes/index.html assets/admin-quotes-v298.js; then
+            echo "Extraction already present."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin-quotes.html admin-quotes/index.html assets/admin-quotes-v298.js
+          git commit -m "Build 298 extract quote pipeline runtime"
+          git push origin HEAD
