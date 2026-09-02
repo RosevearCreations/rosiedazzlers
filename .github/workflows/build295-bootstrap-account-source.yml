@@ -1,0 +1,49 @@
+name: Build 295 Bootstrap Account Source
+
+on:
+  push:
+    branches:
+      - build-295-customer-account-source-authority
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rosiedazzlers-build295-bootstrap-account-source
+  cancel-in-progress: false
+
+jobs:
+  patch:
+    name: Patch legacy My Account source
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 20
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Apply guarded Build 295 patch
+        run: python scripts/build295_patch_my_account.py
+      - name: Verify patch source
+        run: |
+          python scripts/build295_patch_my_account.py
+          git diff --check
+          grep -Fq 'data-build295-account-source-authority' my-account.html
+          if grep -Eq 'acctAdminNotes|vehAdminNotes|vehNextDue|vehNextServiceMileage|vehIntervalDays|vehAutoSchedule|unlock maintenance pricing|reduced maintenance pricing|reduced repeat-clean pricing|Maintenance eligible' my-account.html; then
+            echo "::error::Unsafe legacy account authority remains."
+            exit 2
+          fi
+      - name: Commit patched account source
+        run: |
+          if git diff --quiet -- my-account.html; then
+            echo "No account patch commit required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add my-account.html
+          git commit -m "Close legacy customer account source authority for Build 295"
+          git push origin HEAD:build-295-customer-account-source-authority
