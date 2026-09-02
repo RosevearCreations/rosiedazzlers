@@ -1,0 +1,66 @@
+name: Build 297 Development Runtime Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build297-development-runtime
+  cancel-in-progress: true
+
+jobs:
+  runtime:
+    name: Validate Build 297 Development runtime
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact Development commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Reconfirm Build 297 and retained authorities
+        run: |
+          python scripts/build297_release_check.py
+          python scripts/build296_release_check.py
+          python scripts/build295_release_check.py
+          python scripts/build294_release_check.py
+          python scripts/build290_release_check.py
+          node scripts/build290_action_permission_test.mjs
+          python scripts/build290_rollback_check.py
+          node --check assets/admin-customers-v297.js
+      - name: Wait for Development alias and run read-only smoke
+        run: |
+          for attempt in $(seq 1 24); do
+            echo "Build 297 Development runtime attempt ${attempt}/24"
+            if bash scripts/build297_http_smoke.sh https://dev.rosiedazzlers.pages.dev "Build 297 Development runtime"; then
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "::error::Build 297 Development alias did not converge to an acceptable runtime."
+          exit 1
+      - name: Development runtime summary
+        run: |
+          {
+            echo "### Build 297 Development Runtime Acceptance"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- /admin-customers routes load /assets/admin-customers-v297.js: PASS"
+            echo "- Customer/support/admin authority markers remain present: PASS"
+            echo "- Root and folder routes are exact at runtime: PASS"
+            echo "- Runtime smoke is read-only"
+            echo "- No admin behavior/API/schema/commercial-rule change introduced by Build 297"
+            echo "- Production remains closed for Build 297"
+          } >> "$GITHUB_STEP_SUMMARY"
