@@ -182,6 +182,8 @@
   }
 
   ensureHub();
+  // Replace legacy pricing/cadence promises immediately, even if dashboard loading later fails.
+  alignMaintenanceInterestBoundary();
   loadDashboard().then((data) => {
     if (!data) return;
     installAfterAccountLoad(data);
