@@ -1,0 +1,27 @@
+name: Build 297 Retained Guard Scan
+
+on:
+  push:
+    branches:
+      - build-297-operations-customer-maintainability-extraction
+    paths:
+      - .github/workflows/build297-retained-guard-scan.yml
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: build-297-operations-customer-maintainability-extraction
+          fetch-depth: 0
+      - name: Scan retained source/runtime assumptions
+        shell: bash
+        run: |
+          echo '===== admin-customers references ====='
+          grep -RInE 'admin-customers\.html|admin-customers|customer_admin_list|customer_admin_detail|customer_admin_save|customer_admin_access_action|customer_account_help_(list|action)' scripts .github/workflows --exclude='build297-retained-guard-scan.yml' || true
+          echo '===== inline script assumptions ====='
+          grep -RInE 'inline.*script|<script>|script.*src' scripts/build*_release_check.py | tail -n 200 || true
