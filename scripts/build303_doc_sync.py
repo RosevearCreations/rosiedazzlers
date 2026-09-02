@@ -9,7 +9,7 @@ def replace_once(text, old, new, label):
 
 handoff_path = Path("AI_PROJECT_HANDOFF.md")
 h = handoff_path.read_text(encoding="utf-8")
-h = replace_once(h, "**Build:** 301  ", "**Build:** 303  ", "handoff build header")
+h = replace_once(h, "**Build:** 301  ", "**Build:** 303", "handoff build header")
 start = h.index("## Current release state")
 end = h.index("## Build 301 authority", start)
 current = '''## Current release state
@@ -39,7 +39,7 @@ handoff_path.write_text(h, encoding="utf-8")
 
 roadmap_path = Path("MASTER_VALUE_ROADMAP.md")
 r = roadmap_path.read_text(encoding="utf-8")
-r = replace_once(r, "**Build:** 301  ", "**Build:** 303  ", "roadmap build header")
+r = replace_once(r, "**Build:** 301  ", "**Build:** 303", "roadmap build header")
 start = r.index("## Current release boundary")
 end = r.index("## Retained baseline", start)
 current = '''## Current release boundary
