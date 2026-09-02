@@ -58,6 +58,9 @@ jobs:
             fi
           done
 
+      - name: Run current Build 295 focused guard
+        run: python scripts/build295_release_check.py
+
       - name: Run retained focused guards through Build 299
         run: |
           for build in $(seq 271 299); do
@@ -94,6 +97,7 @@ jobs:
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Current Build 296–299 extracted runtime syntax: PASS"
             echo "- Retained Builds 271–299 focused guards: PASS"
+            echo "- Build 295 historical canonical-gate marker: PASS"
             echo "- Build 290 authorization/forward-restore proof: PASS"
             echo "- Cumulative release + one-H1 + route-copy guard: PASS"
             echo "- Byte-for-byte Build 299 runtime is excluded only from generic whitespace inspection; its exact extraction guard remains authoritative"
