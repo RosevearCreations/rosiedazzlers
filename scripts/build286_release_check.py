@@ -106,9 +106,12 @@ need(
     'id="reviewForm"',
     'id="reviewBooking"',
     'id="reviewPublic"',
-    "/api/client/reviews_save",
     "Allow public reuse after approval",
 )
+account_asset = ROOT / "assets/my-account-v296.js"
+account_runtime = read("assets/my-account-v296.js") if account_asset.exists() else read("my-account/index.html")
+if "/api/client/reviews_save" not in account_runtime:
+    errors.append("customer account runtime missing retained Build 286 reviews_save authority")
 
 summary = read("BUILD286_SUMMARY.md")
 for token in [

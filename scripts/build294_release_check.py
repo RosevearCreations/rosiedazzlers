@@ -95,9 +95,14 @@ for rel in ["my-account.html", "my-account/index.html"]:
         for control_id in LEGACY_CONTROL_IDS:
             if f'id="{control_id}"' in body:
                 errors.append(f"{rel} Build 295 source still exposes legacy control {control_id}")
-        for token in ["Maintenance interest", "Open maintenance interest", "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing"]:
+        for token in ["Maintenance interest", "Open maintenance interest"]:
             if token not in body:
                 errors.append(f"{rel} Build 295 forward-compatible boundary missing {token}")
+        account_asset = ROOT / "assets/my-account-v296.js"
+        account_runtime = text("assets/my-account-v296.js") if account_asset.exists() else body
+        token = "No fixed cadence, price, discount, priority, appointment, subscription or recurring billing"
+        if token not in account_runtime:
+            errors.append(f"{rel} Build 295 forward-compatible runtime boundary missing {token}")
     else:
         for control_id in LEGACY_CONTROL_IDS:
             if f'id="{control_id}"' not in body:

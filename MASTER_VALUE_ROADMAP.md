@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 295  
+**Build:** 296  
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–295 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration and customer maintenance-authority closure and static customer-account source-authority cleanup without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–296 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration, customer maintenance-authority closure, static customer-account source-authority cleanup and My Account maintainability extraction without replacing those foundations.
 
-Build 294 is the accepted Production baseline at `5d6041501b205a03dd62522a6ffb9a49a822284b`. Build 295 is the active Development-first customer account source-authority release. **Production remains closed** for Build 295 until deliberate promotion from final exact accepted Development evidence.
+Build 295 is the accepted Production baseline at `73556e1f41dc204290409294c5e38ad0b2090fb7`. Build 296 is the active Development-first My Account maintainability extraction. **Production remains closed** for Build 296 until deliberate promotion from final exact accepted Development evidence.
 
 Do not regress:
 
@@ -87,30 +87,37 @@ Rules:
 - existing database/history/staff planning data remains untouched;
 - Build 295 is migration-free and adds no commercial maintenance authority.
 
+## Build 296 — My Account maintainability extraction
+
+Rules:
+
+- `assets/my-account-v296.js` is byte-for-byte the accepted Build 295 inline module;
+- both My Account route copies are exact and differ from Build 295 only by the external module tag;
+- module execution position and current customer API calls remain unchanged;
+- Builds 288/294/295 remain retained defense in depth;
+- Build 296 adds no customer behavior, API authority, maintenance economics, polling or schema migration.
+
 ## Ordered next value work
 
-### 1. My Account maintainability extraction
-Move the mature inline My Account JavaScript into a versioned asset without changing customer behavior. This should reduce future static-source/runtime drift, make syntax testing direct, and keep the current account APIs and authority boundaries intact.
-
-### 2. Genuine proof + Google trust
+### 1. Genuine proof + Google trust
 Continue real consented proof through Builds 283/284 and verify Google Business Profile/Search Console only when real account evidence exists.
 
-### 3. Maintenance-plan commercial model
+### 2. Maintenance-plan commercial model
 Build 291 provides safe demand capture and Build 294 closes customer scheduling authority. Commercial behavior remains gated on approved cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise.
 
-### 4. Fleet commercial model
+### 3. Fleet commercial model
 Build 292 provides safe fleet/workplace assessment. Minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms remain approval-gated.
 
-### 5. Notification/device evidence
+### 4. Notification/device evidence
 Collect real email/SMS/Web Push and physical phone/tablet/browser evidence when available; do not fabricate it.
 
-### 6. Referral/loyalty commercial model
+### 5. Referral/loyalty commercial model
 Build economics only after explicit business approval for qualification, reward value/type, timing, caps, refund handling, abuse controls, tax/accounting and expiry.
 
-### 7. Payments / Finance / accounting
+### 6. Payments / Finance / accounting
 Retain Build 273 authority. Development payment-provider configuration is owner-signed-off as present. Real transaction/settlement/reconciliation acceptance remains evidence-driven and should resume only when deliberately tested; no fabricated provider transaction evidence. Retain evidence links into `accounting_documents` and accountant-friendly export surfaces.
 
-### 8. Continue modular extraction only when it creates value
+### 7. Continue modular extraction only when it creates value
 Preferred high-use order: Operations customer/booking/quote support; Finance payments/reconciliation/tax; I.T. health; Administration Staff/Inventory/Catalog; Socials Content/Photo/SEO/Integrations; DAIP only as privacy/cost/processing gates permit.
 
 ## Business input checkpoints
@@ -135,7 +142,12 @@ The owner confirmed that Stripe, PayPal and other configured providers are prese
 - `.github/workflows/build295-source-gate.yml` — Build 295 feature source gate;
 - `scripts/build295_http_smoke.sh` — read-only My Account runtime guard;
 - `.github/workflows/build295-development-acceptance.yml` — Build 295 `dev` runtime acceptance;
-- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 295;
+- `.github/workflows/development-source-gate.yml` — retained cumulative Development source gate through Build 295;
+- `.github/workflows/build296-development-source-gate.yml` — cumulative Development source gate through Build 296;
+- `scripts/build296_release_check.py` — exact My Account extraction/authority guard;
+- `.github/workflows/build296-source-gate.yml` — Build 296 feature source gate;
+- `scripts/build296_http_smoke.sh` — read-only versioned My Account runtime guard;
+- `.github/workflows/build296-development-acceptance.yml` — Build 296 `dev` runtime acceptance;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
