@@ -8,6 +8,7 @@ import {
 import { buildT2125WorkpaperFromYearEnd } from "../_lib/t2125-workpaper.js";
 import { loadTaxSupport, calculateHomeOfficeWorkpaper } from "../_lib/accounting-tax-support.js";
 import { enrichT2125WithTaxSupport } from "../_lib/t2125-tax-support.js";
+import { buildAccountantExportPackage } from "../_lib/accounting-accountant-export.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -57,30 +58,25 @@ export async function onRequestGet({ request, env }) {
       manual_review_required: true
     };
 
-    const accountantPackage = {
-      schema_version: 1,
-      package_type: "Rosie Dazzlers accountant year-end package",
-      tax_year: year,
-      generated_at: new Date().toISOString(),
-      generated_by: access.actor?.full_name || access.actor?.email || "Finance user",
-      disclaimer: "Accounting workpaper package only. Review filing eligibility, elections, CCA classes/rates, GST/HST treatment and source evidence before filing.",
+    const exported = buildAccountantExportPackage({
+      year,
+      generatedAt: new Date().toISOString(),
       readiness,
-      business_tax_profile: support.profile || null,
-      year_end_report: yearEnd,
-      balance_sheet: balanceSheet,
-      t2125_workpaper: t2125,
-      tax_support: {
-        readiness: support.readiness || [],
-        mileage_summary: support.mileage_summary || null,
-        home_office_calculation: support.home_office_calculation || null,
-        capital_asset_summary: support.capital_asset_summary || null,
-        tax_year_support: support.tax_year_support || null
-      },
-      inventory_cost_completeness: inventoryCoverage,
-      evidence_manifest: support.documents || []
-    };
+      businessTaxProfile: support.profile || null,
+      yearEndReport: yearEnd,
+      balanceSheet,
+      t2125Workpaper: t2125,
+      support,
+      inventoryCostCompleteness: inventoryCoverage
+    });
 
-    return withCors(json({ ok: true, year, accountant_package: accountantPackage }));
+    return withCors(json({
+      ok: true,
+      year,
+      export_format: exported.package.format,
+      download_filename: exported.download_filename,
+      accountant_package: exported.package
+    }));
   } catch (err) {
     return withCors(json({ error: err?.message || "Unexpected server error." }, 500));
   }
