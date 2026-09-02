@@ -81,6 +81,12 @@ need(
     "reviews",
     "authenticated: true",
 )
+need(
+    "functions/api/client/_lib/customer-safe-shape.js",
+    "export function customerSafeReview(row)",
+    "booking_id: optionalString(row?.booking_id)",
+    "export function customerSafeReviews(rows)",
+)
 
 need("BUILD293_SUMMARY.md", "Build 293", "Customer Retention Next-Action Hub", "no schema migration", "navigation/orchestration only")
 need("scripts/build293_http_smoke.sh", "/my-account", "/assets/customer-next-actions-v293.js", "/api/client/dashboard", "must not create")
@@ -103,6 +109,7 @@ if errors:
 
 print("Build 293 customer retention next-action check: PASS")
 print("- one authenticated next-action panel coordinates retained review/rebook/progress/booking authorities")
+print("- customer-safe review projection retains booking_id so reviewed completed jobs are not re-prompted")
 print("- Build 285 current booking recalculation boundary remains explicit")
 print("- Build 291 maintenance interest remains free of unapproved cadence, price, discount, appointment and recurring-billing promises")
 print("- Build 289 remains the manual recovery authority; Build 293 does not poll or retry automatically")
