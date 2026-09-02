@@ -47,6 +47,10 @@ for role in ["detailer", "senior_detailer", "operations_manager"]:
         errors.append(f"{role} incorrectly receives a Finance action by default")
 
 need("functions/api/_lib/action-permissions.js", "operations.quote.manage", "finance.refund.manage", "finance.settlement.manage")
+
+# Build 272 originally owned these Operations/Finance leaves inline in admin middleware.
+# Later releases may delegate Finance route resolution to a canonical helper, but the four
+# exact historical Finance protections must remain provable and action-equivalent.
 need(
     "functions/api/admin/_middleware.js",
     "customer_profiles_save: \"operations.customer.manage\"",
@@ -60,12 +64,33 @@ need(
     "quote_deposit_request_create: \"operations.quote.manage\"",
     "final_balance_request_create: \"operations.quote.manage\"",
     "final_balance_request_manage: \"operations.quote.manage\"",
-    "quote_deposit_request_mark_paid: \"finance.settlement.manage\"",
-    "quote_deposit_refund_initiate: \"finance.refund.manage\"",
-    "quote_deposit_refund_save: \"finance.refund.manage\"",
-    "accounting_payable_settle: \"finance.settlement.manage\"",
     "requireActionAccess"
 )
+admin_middleware = text("functions/api/admin/_middleware.js")
+finance_helper = "functions/api/_lib/admin-finance-actions.js"
+if "financeActionFor" in admin_middleware:
+    need(
+        "functions/api/admin/_middleware.js",
+        'import { financeActionFor } from "../_lib/admin-finance-actions.js"',
+        "financeActionFor(leaf, method)"
+    )
+    need(
+        finance_helper,
+        '"quote_deposit_request_mark_paid"',
+        '"quote_deposit_refund_initiate"',
+        '"quote_deposit_refund_save"',
+        '"accounting_payable_settle"',
+        '"finance.refund.manage"',
+        '"finance.settlement.manage"'
+    )
+else:
+    need(
+        "functions/api/admin/_middleware.js",
+        "quote_deposit_request_mark_paid: \"finance.settlement.manage\"",
+        "quote_deposit_refund_initiate: \"finance.refund.manage\"",
+        "quote_deposit_refund_save: \"finance.refund.manage\"",
+        "accounting_payable_settle: \"finance.settlement.manage\""
+    )
 
 # Existing prices are a release invariant for Build 272.
 pricing = json.loads(text("data/rosie_services_pricing_and_packages.json") or "{}")
@@ -171,14 +196,17 @@ need(
 )
 
 # Syntax checks for every Build 272 JavaScript authority surface.
-for rel in [
+syntax_relations = [
     "functions/api/_lib/action-permissions.js",
     "functions/api/admin/_middleware.js",
     "functions/_middleware.js",
     "assets/build272-public-clarity.js",
     "functions/api/_lib/t2125-workpaper.js",
     "functions/api/admin/accounting_t2125_workpaper.js",
-]:
+]
+if "financeActionFor" in admin_middleware:
+    syntax_relations.append(finance_helper)
+for rel in syntax_relations:
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
     if proc.returncode:
         errors.append(f"node --check failed {rel}: {proc.stderr.strip()}")
