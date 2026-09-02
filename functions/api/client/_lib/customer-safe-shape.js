@@ -9,11 +9,10 @@ const PROFILE_FIELDS = [
 
 const VEHICLE_FIELDS = [
   'id','created_at','updated_at','customer_profile_id','vehicle_name','model_year','make','model','vehicle_size','body_style',
-  'vehicle_category','is_exotic','color','mileage_km','next_service_mileage_km','last_wash_at','next_cleaning_due_at',
-  'service_interval_days','auto_schedule_opt_in','last_package_code','last_addons','parking_location','alternate_service_address',
-  'notes_for_team','detailer_visible_notes','preferred_contact_name','contact_email','contact_phone','text_updates_opt_in',
-  'live_updates_opt_in','has_water_hookup','has_power_hookup','save_billing_on_file','billing_label','is_primary','display_order',
-  'garage_display_media_url','garage_display_media_kind'
+  'vehicle_category','is_exotic','color','mileage_km','last_wash_at','last_package_code','last_addons','parking_location',
+  'alternate_service_address','notes_for_team','detailer_visible_notes','preferred_contact_name','contact_email','contact_phone',
+  'text_updates_opt_in','live_updates_opt_in','has_water_hookup','has_power_hookup','save_billing_on_file','billing_label',
+  'is_primary','display_order','garage_display_media_url','garage_display_media_kind'
 ];
 
 const TIER_FIELDS = ['id','code','name','description','discount_percent'];
@@ -38,3 +37,6 @@ export function customerSafeVehicles(rows) { return (Array.isArray(rows) ? rows 
 export function customerSafeReviews(rows) { return (Array.isArray(rows) ? rows : []).map(customerSafeReview).filter(Boolean); }
 
 export const STAFF_PRIVATE_CUSTOMER_FIELDS = Object.freeze(['admin_private_notes']);
+export const STAFF_OWNED_VEHICLE_SCHEDULING_FIELDS = Object.freeze([
+  'next_cleaning_due_at','next_service_mileage_km','service_interval_days','auto_schedule_opt_in'
+]);

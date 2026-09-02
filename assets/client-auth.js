@@ -77,3 +77,9 @@
   if (path !== "/my-account" || document.querySelector('script[data-build293-customer-next-actions]')) return;
   const script = document.createElement("script"); script.type = "module"; script.src = "/assets/customer-next-actions-v293.js"; script.dataset.build293CustomerNextActions = "true"; document.head.appendChild(script);
 })();
+// Build 294: remove customer scheduling authority while preserving staff-owned history/planning data.
+(function loadBuild294CustomerMaintenanceAuthority() {
+  const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
+  if (path !== "/my-account" || document.querySelector('script[data-build294-customer-maintenance-authority]')) return;
+  const script = document.createElement("script"); script.type = "module"; script.src = "/assets/customer-maintenance-authority-v294.js"; script.dataset.build294CustomerMaintenanceAuthority = "true"; document.head.appendChild(script);
+})();

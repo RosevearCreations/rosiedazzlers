@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 293  
+**Build:** 294  
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`
 
@@ -15,9 +15,9 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Retained baseline
 
-Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–293 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment and customer next-action orchestration without replacing those foundations.
+Build 272 closed the retained permission/package-clarity/T2125 increment. Build 273 established the retained Finance/tax-support baseline. Builds 274–294 added booking/retention, SEO/local depth, exact-release mechanics, proof/publication, contextual proof, authenticated rebook, completed-job review, neutral review/share attribution, customer/staff privacy, account resilience, deeper authorization acceptance, forward-restore readiness, maintenance interest intake, fleet/workplace assessment, customer next-action orchestration and customer maintenance-authority closure without replacing those foundations.
 
-Build 292 is the accepted Production baseline at `0198026b4ded4cb26ee9e0d3b9d298bfa719d5e3`. Build 293 is the active accepted-Development customer retention release. **Production remains closed** for Build 293 until deliberate promotion from the final exact accepted Development evidence.
+Build 293 is the accepted Production baseline at `449edcfdea101fa9cbc6b0336ad2f17d04327b9a`. Build 294 is the active Development-first authority-closure release. **Production remains closed** for Build 294 until deliberate promotion from final exact accepted Development evidence.
 
 Do not regress:
 
@@ -53,37 +53,37 @@ Build 288 projects customer profile/vehicle/review data through explicit custome
 ### Authorization / recovery mechanics
 Build 290 retains the role/module/action model, adds executable ceiling/narrowing/override acceptance, verifies representative anonymous admin APIs fail closed, makes unexpected staff-auth failures externally generic and defines a non-force forward restore.
 
-### Maintenance retention intake
-Build 291 provides a safe interest/demand path. Cadence remains a preference only; no fixed price, discount, perk, priority booking, included recurring scope, pause/cancel term, subscription or recurring billing is approved. Build 293 reasserts this interest-only boundary in its account next-action layer rather than turning maintenance history into a commercial promise.
+### Maintenance retention and authority
+Build 291 provides the safe interest/demand path. Build 293 reasserts the interest-only customer presentation. Build 294 removes customer mutation/projection authority for the legacy due-date, service-mileage, cadence and auto-schedule fields while preserving existing database/history/staff planning authority. No fixed price, discount, perk, priority booking, recurring scope, pause/cancel term, appointment, subscription or recurring billing is approved.
 
 ### Fleet / workplace acquisition
 Build 292 provides the quote-first fleet/workplace lead and qualification path. The existing `public_inquiry_leads` authority is retained and no automatic threshold, commercial rate, discount, cadence, contract, quote or appointment is created.
 
-## Build 293 — customer retention next-action hub
+## Build 294 — customer maintenance / auto-schedule authority closure
 
-Build 293 coordinates existing customer authorities instead of creating another customer service.
+Build 294 closes customer scheduling authority without deleting operational history.
 
 Rules:
 
-- the hub is authenticated account-only;
-- `/api/client/dashboard` remains the read authority for booking history, vehicles and customer-safe reviews;
-- the hub chooses one useful route: completed-service review, retained rebook handoff, existing progress, or current booking;
-- customer-safe review output must retain `booking_id` so an already-reviewed completed booking is not re-prompted;
-- Build 285 rebook safety remains authoritative: old service/date evidence may seed the handoff, while current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated;
-- Build 289 owns manual recovery; Build 293 does not add polling, background retry or write replay;
-- the account maintenance prompt remains interest-only and does not authorize fixed cadence, price, discount, priority, appointment, subscription or recurring billing;
-- Build 293 is migration-free and creates no new review, quote, appointment, subscription, recurring-billing, reward or discount write authority.
+- `functions/api/client/vehicles_save.js` does not trust or persist customer-supplied `next_cleaning_due_at`, `next_service_mileage_km`, `service_interval_days` or `auto_schedule_opt_in`;
+- customer-safe vehicle output does not expose those staff-owned scheduling fields;
+- database columns/historical values remain untouched for legitimate staff planning/history;
+- legacy account controls remain DOM-compatible but are hidden and disabled by the bounded Build 294 customer adapter;
+- `/maintenance-plan` remains the customer maintenance preference/follow-up route;
+- the adapter is event-driven and creates no write, polling loop, automatic schedule or background retry;
+- Build 293 review/rebook/progress/booking orchestration remains retained;
+- Build 294 is migration-free and does not define due dates, mileage targets, cadence, prices, discounts, priority, appointments, subscriptions or recurring billing.
 
 ## Ordered next value work
 
-### 1. Customer maintenance/auto-schedule authority closure
-The account still contains legacy source-level recurring-maintenance/auto-schedule controls from before the Build 291 commercial boundary was finalized. Remove customer authority to auto-schedule, stop accepting that customer write path, and make the static account renderer itself interest-only so safety does not depend only on a later adapter repaint. Do this without inventing cadence, price, discount, priority or subscription rules.
+### 1. Remaining customer-account authority and UX cleanup
+Inspect the customer account for any remaining legacy staff-only or commercially misleading controls/copy. Remove only objectively stale authority while retaining useful customer-owned preferences and avoiding a rewrite of the mature account surface.
 
 ### 2. Genuine proof + Google trust
 Continue real consented proof through Builds 283/284 and verify Google Business Profile/Search Console only when real account evidence exists.
 
 ### 3. Maintenance-plan commercial model
-Build 291 provides safe demand capture. Commercial behavior remains gated on approved cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise.
+Build 291 provides safe demand capture and Build 294 closes customer scheduling authority. Commercial behavior remains gated on approved cadence, price/discount or perk model, included/excluded work, pause/cancel policy and any priority-booking promise.
 
 ### 4. Fleet commercial model
 Build 292 provides safe fleet/workplace assessment. Minimum vehicle count, same-location economics, travel/discount rules, recurring commitment and cancellation terms remain approval-gated.
@@ -112,13 +112,13 @@ The owner confirmed that Stripe, PayPal and other configured providers are prese
 
 - `scripts/release_check.py` — cumulative retained platform guard;
 - `scripts/seo_h1_check.py` — one-H1 + retained current public/customer guards;
-- retained Builds 271–292 focused guards;
+- retained Builds 271–293 focused guards;
 - retained Build 290 action matrix + forward-restore checks;
-- `scripts/build293_release_check.py` — current customer next-action guard, including customer-safe review booking linkage;
-- `.github/workflows/build293-source-gate.yml` — Build 293 feature source gate;
-- `scripts/build293_http_smoke.sh` — non-mutating account/runtime guard;
-- `.github/workflows/build293-development-acceptance.yml` — Build 293 `dev` runtime acceptance;
-- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 293;
+- `scripts/build294_release_check.py` — current customer maintenance/auto-schedule authority closure guard;
+- `.github/workflows/build294-source-gate.yml` — Build 294 feature source gate;
+- `scripts/build294_http_smoke.sh` — non-mutating account/runtime guard;
+- `.github/workflows/build294-development-acceptance.yml` — Build 294 `dev` runtime acceptance;
+- `.github/workflows/development-source-gate.yml` — cumulative Development source gate through Build 294;
 - `scripts/development_http_smoke.sh` — retained exact/static + alias/full smoke;
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact Development deployment acceptance.
 
@@ -127,6 +127,14 @@ Never call a release Development-green merely because source exists. Exact featu
 ## Documentation policy
 
 Only `AI_PROJECT_HANDOFF.md` and this file are living planning authorities. Build summaries are checkpoints; Git history is the archive.
+
+<!-- Historical Build 293 retained-guard compatibility only; not the living build number.
+**Build:** 293
+Build 293 — customer retention next-action hub
+Customer maintenance/auto-schedule authority closure
+customer-safe review booking linkage
+Production remains closed
+-->
 
 <!-- Historical Build 292 retained-guard compatibility only; not the living build number.
 **Build:** 292
