@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 304
+**Build:** 305
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
@@ -16,14 +16,15 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Current release boundary
 
-- **Active Development slice:** Build 304 — Accountant export integrity.
+- **Active Development slice:** Build 305 — Finance authorization sweep, documentation synchronization/closure.
 - **Accepted Production/main:** Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`.
-- **Accepted pre-documentation Build 304 Development implementation/evidence baseline:** `6351321a2d33ed8489295a60d8de72adea81a859`.
-- Build 304 gives the accountant JSON package a versioned/predictable export contract, explicit evidence-reference integrity states, safe filenames and an export whitelist that keeps private/internal storage/staff metadata out of the package.
-- Build 304 preserves the Build 303 tax-support controller/runtime and Build 273 Finance/T2125/accountant-workpaper calculations.
-- No schema/database migration, accounting/tax-policy change, payment-provider mutation or new tax judgment is introduced.
-- Build 304 has **no Production promotion authorization**. `main` remains on accepted Build 303.
-- Final Build 304 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
+- **Accepted pre-documentation Build 305 Development implementation/evidence baseline:** `00571a39172052cbf42b2bec41ec25633803891b`.
+- Build 305 makes the established Finance action model exhaustive across current Finance-prefixed admin APIs without changing its seven-action vocabulary, role ceilings, role defaults, accounting/tax rules or provider behavior.
+- The accepted Build 305 scan covers 40 Finance files / 80 exported HTTP methods and verifies role ceiling, module disablement, explicit action narrowing, anonymous access and cross-module escalation boundaries.
+- Cloudflare Development Acceptance run `33697631645` passed exact deployment `467003c1-6d58-48f3-8d9b-1aea116bb107`, `uses_functions=true`, immutable smoke and full Development alias runtime/API smoke.
+- Build 305 introduces no schema/database migration, accounting/tax-policy change, payment-provider mutation or new tax judgment.
+- Build 305 has **no Production promotion authorization**. `main` remains on accepted Build 303.
+- Final Build 305 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
 - Retained historical compatibility marker: **Build:** 301 — Build 301 — Finance Reconciliation maintainability extraction in `assets/admin-accounting-v301.js`, with accepted pre-Build-301 Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`.
 
 ## Retained baseline
@@ -41,13 +42,13 @@ Build 273 established the retained Finance/tax-support baseline with structured 
 
 ### 9. Payments / Finance / accounting
 
-Retain Build 273 authority: Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No later maintainability or export-integrity release invents accountant/tax judgment.
+Retain Build 273 authority: Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No later maintainability, export-integrity or authorization release invents accountant/tax judgment.
 
 ## Build 304 — Accountant export integrity
 
 Build 304 separates export shaping/privacy from the retained tax-support calculations through `functions/api/_lib/accounting-accountant-export.js`.
 
-The accountant JSON contract now provides:
+The accountant JSON contract provides:
 
 - `schema_version: 2` and export contract `rosie_accountant_workpaper_json`;
 - predictable `application/json` / UTF-8 metadata;
@@ -62,14 +63,34 @@ The accountant JSON contract now provides:
 
 Build 304 also repairs historical CI assumptions without weakening their authority: Build 273 follows export shaping into the helper only when delegated there; Build 290/291/292 obtain complete history before strict accepted-anchor ancestry checks; and Build 299/300 source hygiene is frozen to each build's accepted historical release delta.
 
+## Build 305 — Finance authorization sweep
+
+Build 305 adds `functions/api/_lib/admin-finance-actions.js` as the centralized method-aware Finance admin route resolver while retaining the existing action authority in `functions/api/_lib/action-permissions.js`.
+
+The accepted boundary is:
+
+- `finance.view` for current Finance-prefixed reads;
+- `finance.post` for ordinary Finance writes;
+- `finance.reconcile` for reconciliation mutations;
+- `finance.period.close` for period/month-end closure mutations;
+- `finance.refund.manage` for refund mutations/provider refund status refresh;
+- `finance.settlement.manage` for settlement/checkout/paid-state mutations;
+- `finance.tax.manage` for tax-support/remittance mutations.
+
+The Accountant role still has the same seven Finance defaults and cannot escape the Finance module ceiling. Explicit action denial and module disablement win. Operations-owned quote/final-balance request lifecycle remains Operations authority; hosted final-balance checkout creation remains Finance settlement authority; booking-scoped operational finance notes retain booking-work authority.
+
+The Build 305 regression suite scans the actual admin directory, covers all current `accounting_*`, `payment_*`, and `payroll_*` route/method pairs, and fails if a new Finance-prefixed route is introduced without an action resolution. The accepted pre-documentation tree covered 40 files / 80 exported methods.
+
+Build 305 also repairs retained Build 272 and Build 290 guard location assumptions without weakening their protected actions. Both guards follow exact historical Finance mappings into the canonical resolver only when delegation is present.
+
 ## Retained Build 301–303 Finance authority
 
 - Build 301 externalized the accepted `admin-accounting.html` runtime into `assets/admin-accounting-v301.js` without changing reconciliation/accounting behavior.
 - Build 302 closed Statement Import reliability as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired importer was recreated.
 - Build 303 externalized the retained Build 273 Tax Support controller into `assets/admin-tax-support-v303.js` byte-for-byte while leaving `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` unchanged.
-- No Build 301–304 maintainability/integrity release invents matching/posting/approval, payment/provider or accountant/tax judgment.
+- No Build 301–305 maintainability/integrity/authorization release invents matching/posting/approval, payment/provider or accountant/tax judgment.
 
-## Retained value/authority through Build 303
+## Retained value/authority through Build 305
 
 - Builds 274–280 established Mobile Quick Book, I.T. help, reliable release mechanics and deep service/local SEO while keeping Rosie’s self-contained mobile water/power model.
 - Build 281 hardened exact-SHA Cloudflare acceptance and mutable Development alias convergence.
@@ -87,6 +108,8 @@ Build 304 also repairs historical CI assumptions without weakening their authori
 - Build 301 — Finance Reconciliation maintainability extraction preserves the accepted Accounting runtime in `assets/admin-accounting-v301.js`.
 - Build 302 — Statement Import reliability preserves the retired-import/fail-closed boundary.
 - Build 303 — Finance Tax-support maintainability extraction preserves the retained Tax Support runtime in `assets/admin-tax-support-v303.js`.
+- Build 304 — Accountant export integrity preserves Finance/tax authority while hardening evidence/export privacy and predictable formats.
+- Build 305 — Finance authorization sweep makes current Finance-prefixed admin routes exhaustive under the existing action model without broadening roles.
 
 ## Permanent business/runtime constraints
 
@@ -106,14 +129,14 @@ Build 304 also repairs historical CI assumptions without weakening their authori
 2. **Build 301 — Finance Reconciliation maintainability extraction** — complete; behavior-preserving Accounting/reconciliation runtime extraction.
 3. **Build 302 — Statement Import reliability** — complete as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired ingestion path was recreated.
 4. **Build 303 — Finance Tax-support maintainability extraction** — complete and accepted in Production at `09442c53d385aca7995150ace4bde55abd51d7df`; retained Build 273 controller externalized byte-for-byte.
-5. **Build 304 — Accountant export integrity** — current Development release; implementation complete, final documentation-synchronized exact-SHA acceptance required before closure.
-6. **Build 305 — Finance authorization sweep** — next untouched item; test every Finance endpoint against role/module/action/direct-API/anonymous/cross-module boundaries.
+5. **Build 304 — Accountant export integrity** — complete on Development; export contract/privacy integrity hardened without tax/accounting policy change.
+6. **Build 305 — Finance authorization sweep** — technically complete; documentation-synchronized exact-SHA Development acceptance is the final closure step.
 
 Retained Finance storage and export concepts include `accounting_documents`, structured evidence, T2125 workpapers and **accountant-friendly export surfaces**. Accountant/tax judgment remains external/manual authority.
 
 ## I.T. / reliability roadmap — Builds 306–308
 
-- Build 306 — I.T. Health dashboard extraction.
+- **Build 306 — I.T. Health dashboard extraction** — next untouched item after Build 305 closure; modularize existing I.T./System Health runtime while preserving readiness semantics exactly.
 - Build 307 — readiness diagnostics upgrade with explicit GREEN/AMBER/RED configuration-vs-transaction distinction and corrective mechanics.
 - Build 308 — Cloudflare deployment/recovery consolidation around the proven exact-SHA Development path.
 
@@ -152,17 +175,18 @@ Do not autonomously invent:
 - accountant/tax judgment;
 - physical-device evidence not proven by automation.
 
-## Build 304 acceptance sequence
+## Build 305 acceptance sequence
 
-1. run Build 304 export-contract and retained Finance source guards;
-2. transfer the accepted implementation to `dev`;
-3. run Build 304 and canonical cumulative Development source gates;
-4. run read-only Build 304 accountant-export runtime acceptance;
+1. run Build 305 Finance action-matrix/exhaustive route scan and retained Finance source guards;
+2. merge the accepted implementation to `dev`;
+3. run Build 305 and canonical cumulative Development source gates;
+4. run anonymous/direct-API Build 305 runtime authorization acceptance;
 5. prove the exact Cloudflare Development deployment SHA, `uses_functions=true`, immutable deployment smoke and mutable alias convergence;
-6. synchronize `BUILD304_SUMMARY.md`, this roadmap, the handoff and execution queue;
-7. repeat exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head;
-8. only then call Build 304 Development-green;
-9. **do not promote Build 304 to `main` without new explicit authorization.**
+6. repair only historical guard location assumptions exposed by the centralized resolver, preserving exact protected actions;
+7. synchronize `BUILD305_SUMMARY.md`, this roadmap, the handoff and execution queue;
+8. repeat exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head;
+9. only then call Build 305 Development-green/closed;
+10. **do not promote Build 305 to `main` without new explicit authorization.**
 
 ## Retained focused-guard compatibility anchors
 
