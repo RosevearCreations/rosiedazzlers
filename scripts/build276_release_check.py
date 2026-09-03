@@ -26,26 +26,28 @@ def trigger_block(body):
     return body.split("permissions:", 1)[0]
 
 
-# Build 276 closes the false-red race discovered during Build 275 promotion.
-# Finding the exact deployment is not sufficient: the matching Pages deployment
-# must reach a successful terminal stage before Development HTTP smoke begins.
+# Build 276 closed the false-red readiness race. Build 308 may delegate the
+# mechanics to a canonical helper, but the exact-SHA success wait and the
+# non-mutating Production boundary remain mandatory.
 need(
     ".github/workflows/cloudflare-development-acceptance.yml",
     "fetch-depth: 0",
     "Run Build 276 focused guard",
     "python scripts/build276_release_check.py",
-    "Confirm exact dev SHA reached successful Cloudflare Pages deployment",
-    'ready="false"',
-    "for attempt in $(seq 1 24)",
-    'case "$matched_status" in',
-    "success)",
-    "failure|failed|canceled|cancelled)",
-    "was found but did not become successful",
-    "Record Production promotion boundary",
+    "Confirm exact dev SHA reached successful Cloudflare Pages deployment via canonical helper",
+    "bash scripts/cloudflare_pages_development.sh accept",
+    "Record acceptance boundary",
+)
+need(
+    "scripts/cloudflare_pages_development.sh",
+    "wait_for_exact_success 24 10",
+    'case "$EXACT_STATUS" in',
+    "failure|failed|canceled|cancelled",
+    "record_production_boundary",
     "git merge-base origin/main origin/dev",
     "Development moved during acceptance",
     "never force-move main to dev",
-    "through Build 276",
+    "Cloudflare Development exact-SHA acceptance: PASS",
 )
 
 # Historical build gates stay historical. They must not continue presenting
@@ -106,7 +108,7 @@ if errors:
     sys.exit(1)
 
 print("Build 276 focused release checks passed.")
-print("- exact-SHA Cloudflare acceptance waits for deployment success")
-print("- stale Build 274 dev gate ownership is removed")
+print("- exact-SHA Cloudflare acceptance still waits for deployment success")
+print("- Build 308 may delegate that mechanism to the canonical Development helper")
 print("- current dev uses a cumulative Development Source Gate")
-print("- Production promotion boundary is explicit and non-mutating")
+print("- Production promotion boundary remains explicit and non-mutating")
