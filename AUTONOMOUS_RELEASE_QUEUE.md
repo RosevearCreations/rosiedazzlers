@@ -69,7 +69,7 @@
 
 ## Current execution checkpoint
 
-Builds 300–308 are technically complete on Development before Build 308 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–309 are technically complete on Development before Build 309 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
 Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves current Finance-prefixed admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Final documentation-synchronized Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
@@ -77,17 +77,21 @@ Build 306 closed the I.T. System Health extraction on final documentation-synchr
 
 Build 307 upgrades those observations through `functions/api/_lib/system-health-readiness.js` and `assets/admin-system-health-v307.js`. GREEN remains direct evidence only; database/R2/provider configuration remains distinct from transaction/object/provider acceptance; corrective guidance remains manual/read-only with `automatic: false`.
 
-Build 308 consolidates Development Cloudflare acceptance/recovery in `scripts/cloudflare_pages_development.sh`. Normal acceptance is read-only. Recovery is manual `workflow_dispatch` only, defaults to `observe`, and `repair` requires exact current-`dev` SHA confirmation before a non-terminal Development preview can be mutated. Terminal and Production targets fail closed. Historical Build 274/275/276/281/283/284 release semantics remain protected through successor-aware guards.
+Build 308 consolidates Development Cloudflare acceptance/recovery in `scripts/cloudflare_pages_development.sh`. Normal acceptance is read-only. Recovery is manual `workflow_dispatch` only, defaults to `observe`, and `repair` requires exact current-`dev` SHA confirmation before a non-terminal Development preview can be mutated. Terminal and Production targets fail closed. Historical Build 274/275/276/281/283/284 release semantics remain protected through successor-aware guards. Final documentation-synchronized Build 308 Development SHA: `d14a63c62913edf125a3e2bd8d69f110a6942dad`.
 
-The accepted pre-documentation Build 308 Development SHA is `5147b13f07d6eeef29162c69c4f46b76722956f7`. Build 308 Development Runtime Acceptance run `33704055168`, Build 308 Development Source Gate run `33704055304`, canonical Development Source Gate run `33704055243`, and Cloudflare Development Acceptance run `33704055178` all succeeded on that exact SHA. Cloudflare accepted exact deployment `3fd42f73-1053-4cfd-8919-4ba94a6ddc62`; immutable smoke passed and the mutable `dev` alias passed full runtime/API smoke with convergence on attempt 1/12. Final pre-documentation queries returned zero failed, zero queued and zero in-progress runs.
+Build 309 externalizes the accepted root Staff Administration controller into `assets/admin-staff-v309.js` while preserving authentication and role-management rules, role/module ceilings, per-profile narrowing, forced full Admin module access, staff list/save orchestration and existing payroll/profile presentation exactly. The pre-existing older `admin-staff/index.html` route remains unchanged and is deliberately deferred to **Build 318 — Whole-application route/API authority sweep**.
 
-Final Build 308 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next autonomous item after that closure: Build 309 — Staff Administration maintainability extraction.**
+The accepted pre-documentation Build 309 Development SHA is `d579eba52090755cfa5248565e45fdd7358052d3`. Build 309 Development Runtime Acceptance run `33708957648`, Build 309 Development Source Gate run `33708957679`, canonical Development Source Gate run `33708957663`, and Cloudflare Development Acceptance run `33708957640` all succeeded on that exact SHA. Cloudflare accepted exact deployment `c1473523-7924-4f3c-92e2-da54d8d0e097`; immutable smoke passed and the mutable `dev` alias passed full runtime/API smoke with convergence on attempt 1/12. The exact 40-workflow fan-out returned zero failed, zero queued and zero in-progress runs.
 
-Build 308 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+Build 309 acceptance also repaired the retained Build 294 ancestry check for shallow historical workflow checkouts without weakening its exact accepted-Build-293-Production ancestry assertion. Build 309 permits only that specific historical guard repair inside its source scope.
+
+Final Build 309 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next autonomous item after that closure: Build 310 — Admin full-access acceptance matrix.**
+
+Build 309 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete/closing → Build 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Build 309 Staff Administration complete/closing → Builds 310–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
