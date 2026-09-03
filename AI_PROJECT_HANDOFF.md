@@ -128,37 +128,37 @@ Permanent rule: **role defines the maximum module set; a staff profile may narro
 
 These are historical focused-guard anchors, not the living build number.
 
-- **Build:** 274 — I.T. Connections; Quick Book; Mobile Auto Detailing & Interior/Exterior Restoration.
-- **Build:** 283 — proof/media publication authority remains retained; explicit publish/unpublish governs public proof.
-- **Build:** 284 — contextual proof placement remains retained.
-- **Build:** 287 — review/share attribution authority remains retained.
-- **Build:** 288 — customer/staff privacy boundary remains retained.
-- **Build:** 289 — account accessibility and weak-network resilience remains retained.
-- **Build:** 290 — forward restore and authorization acceptance remain retained.
-- **Build:** 291 — maintenance retention intake remains retained.
-- **Build:** 292 — fleet/workplace acquisition intake remains retained.
-- **Build:** 293 — customer retention next-action hub remains retained.
-- **Build:** 294 — customer maintenance / auto-schedule authority closure remains retained.
-- **Build:** 295 — customer account static source authority cleanup remains retained.
-- **Build:** 296 — My Account maintainability extraction remains retained.
-- **Build:** 297 — Operations customer support maintainability extraction remains retained.
-- **Build:** 298 — Operations booking/quote support maintainability extraction remains retained.
-- **Build:** 299 — Operations booking-dashboard support maintainability extraction remains retained.
-- **Build:** 300 — Finance Payments maintainability extraction remains retained; duplicate-route cleanup belongs to Build 318.
-- **Build:** 301 — Finance Reconciliation maintainability extraction remains retained.
-- **Build:** 302 — retired Statement Import boundary remains retained.
-- **Build:** 303 — Tax Support maintainability extraction remains retained as historical authority.
-- **Build:** 304 — Accountant export integrity remains retained.
-- **Build:** 305 — Finance authorization sweep remains retained.
-- **Build:** 306 — I.T. Health dashboard extraction remains retained.
-- **Build:** 307 — I.T. readiness diagnostics upgrade remains retained.
-- **Build:** 308 — Cloudflare deployment/recovery consolidation remains retained.
-- **Build:** 309 — Staff Administration maintainability extraction remains retained.
-- **Build:** 310 — Admin full-access acceptance matrix remains retained.
-- **Build:** 311 — Inventory Operations maintainability extraction remains retained.
-- **Build:** 312 — Inventory data-integrity sweep remains retained.
-- **Build:** 313 — Catalog/Product Administration extraction remains retained and is the current Production boundary.
-- **Build:** 314 — Media/Photo Studio reliability is the current Development closeout.
+- **Build:** 274 — Build 274 I.T. Connections, Quick Book, Mobile Auto Detailing & Interior/Exterior Restoration authority remains retained.
+- **Build:** 283 — Build 283 proof/media publication authority remains retained; explicit publish/unpublish governs public proof.
+- **Build:** 284 — Build 284 contextual proof placement remains retained.
+- **Build:** 287 — Build 287 review/share attribution authority remains retained.
+- **Build:** 288 — Build 288 customer/staff privacy boundary remains retained.
+- **Build:** 289 — Build 289 account accessibility and weak-network resilience remains retained.
+- **Build:** 290 — Build 290 forward restore and authorization acceptance remain retained.
+- **Build:** 291 — Build 291 maintenance retention intake remains retained.
+- **Build:** 292 — Build 292 fleet/workplace acquisition intake remains retained.
+- **Build:** 293 — Build 293 customer retention next-action hub remains retained.
+- **Build:** 294 — Build 294 customer maintenance / auto-schedule authority closure remains retained.
+- **Build:** 295 — Build 295 customer account static source authority cleanup remains retained.
+- **Build:** 296 — Build 296 My Account maintainability extraction remains retained.
+- **Build:** 297 — Build 297 Operations customer support maintainability extraction remains retained.
+- **Build:** 298 — Build 298 Operations booking/quote support maintainability extraction remains retained.
+- **Build:** 299 — Build 299 Operations booking-dashboard support maintainability extraction remains retained.
+- **Build:** 300 — Build 300 Finance Payments maintainability extraction remains retained; duplicate-route cleanup belongs to Build 318.
+- **Build:** 301 — Build 301 Finance Reconciliation maintainability extraction remains retained.
+- **Build:** 302 — Build 302 retired Statement Import boundary remains retained.
+- **Build:** 303 — Build 303 Tax Support maintainability extraction remains retained as historical authority.
+- **Build:** 304 — Build 304 Accountant export integrity remains retained.
+- **Build:** 305 — Build 305 Finance authorization sweep remains retained.
+- **Build:** 306 — Build 306 I.T. Health dashboard extraction remains retained.
+- **Build:** 307 — Build 307 I.T. readiness diagnostics upgrade remains retained.
+- **Build:** 308 — Build 308 Cloudflare deployment/recovery consolidation remains retained.
+- **Build:** 309 — Build 309 Staff Administration maintainability extraction remains retained.
+- **Build:** 310 — Build 310 Admin full-access acceptance matrix remains retained.
+- **Build:** 311 — Build 311 Inventory Operations maintainability extraction remains retained.
+- **Build:** 312 — Build 312 Inventory data-integrity sweep remains retained.
+- **Build:** 313 — Build 313 Catalog/Product Administration extraction remains retained and is the current Production boundary.
+- **Build:** 314 — Build 314 Media/Photo Studio reliability is the current Development closeout.
 
 ## Documentation policy
 
