@@ -69,7 +69,7 @@
 
 ## Current execution checkpoint
 
-Builds 300–312 are technically complete on Development before Build 312 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–313 are technically complete on Development before Build 313 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
 Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves current Finance-prefixed admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Final documentation-synchronized Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
@@ -85,15 +85,17 @@ Build 310 proves the existing seven-module / 28-action Admin authorization bound
 
 Build 311 externalizes the accepted Inventory Operations runtime from `admin-catalog.html` into `assets/admin-catalog-v311.js`, keeps `admin-catalog/index.html` synchronized and preserves the accepted runtime byte-for-byte. Final accepted Development boundary: `1364289339555ba31d7c84b7ef1b8a48c28ece76` after exact source/runtime/Cloudflare acceptance.
 
-Build 312 hardens deterministic inventory integrity: stock overdraw is rejected rather than clamped, quantity arithmetic remains three-decimal, purchase-order receipt is replay-safe and records movement evidence, and malformed future numeric writes fail before persistence. The connected Rosie database was audited read-only: 39 inventory items, no duplicate-name/ASIN/vendor-SKU groups, no negative stock/cost/rating defects and no populated movement/posting/order/reservation relationships requiring repair. One legacy reorderable item with `reorder_qty = 0` was reported but deliberately not mutated. PR #59 merged to pre-documentation Development SHA `33aa012a0fcedb51bc7d23e3f8fb6095b4eb9290`; Build 312 Development Source Gate `33770506099`, Runtime Acceptance `33770506175` and Cloudflare Development Acceptance `33770505966` / #104 are green on that exact SHA. The only fan-out failure was Build 301's generic whitespace scan rediscovering a byte deliberately preserved by Build 311; this closeout excludes only that immutable extracted asset from that historical scan.
+Build 312 hardens deterministic inventory integrity: stock overdraw is rejected rather than clamped, quantity arithmetic remains three-decimal, purchase-order receipt is replay-safe and records movement evidence, and malformed future numeric writes fail before persistence. The connected Rosie database was audited read-only: 39 inventory items, no duplicate-name/ASIN/vendor-SKU groups, no negative stock/cost/rating defects and no populated movement/posting/order/reservation relationships requiring repair. One legacy reorderable item with `reorder_qty = 0` was reported but deliberately not mutated. Final documentation-synchronized Build 312 Development SHA: `032bd2fab73b6cba4ab48c9db45b828c34c88d70`.
 
-**Next autonomous item after Build 312 documentation-synchronized closure: Build 313 — Catalog/Product Administration extraction.**
+Build 313 externalizes the accepted App Management/Product Catalog controller from `admin-app.html` into `assets/admin-app-v313.js`, keeps `admin-app/index.html` synchronized and preserves the accepted Product/Pricing runtime byte-for-byte. Packages, add-ons, service areas, public requirements, `pricing_catalog`, `app_settings_get` and `app_settings_save` authority remain unchanged; no pricing, schema, authentication, business-data or polling behavior changed. PR #61 merged to pre-documentation Development SHA `9b253ee3e13ee45fbb35d3d757f9c5c07a205170`; Build 313 Development Source Gate `33773589749`, Runtime Acceptance `33773589777` and Cloudflare Development Acceptance `33773589753` / #106 are green on that exact SHA, with zero failures across the 47-run fan-out.
 
-Build 312 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+**Next autonomous item after Build 313 documentation-synchronized closure: Build 314 — Media/Photo Studio reliability.**
+
+Build 313 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Builds 309–312 Administration/Inventory complete/closing → Build 313 Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Builds 309–313 Administration/Inventory/Catalog complete/closing → Builds 314–316 Media/Social/SEO → Build 317 DAIP → Builds 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
