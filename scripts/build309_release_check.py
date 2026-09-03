@@ -132,6 +132,7 @@ else:
     allowed = {
         ROOT_PAGE,
         ASSET,
+        "scripts/build294_release_check.py",
         "scripts/build309_release_check.py",
         "scripts/build309_http_smoke.sh",
         ".github/workflows/build309-source-gate.yml",
