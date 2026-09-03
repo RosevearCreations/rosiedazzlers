@@ -51,7 +51,7 @@ Build 272 closed the narrow Operations/Finance action-permission and public pack
 
 Build 273 established the retained Finance/tax-support baseline with structured evidence, T2125 workpapers and accountant-package support. That authority remains active while later builds advance.
 
-## Payments / Finance / accounting retained authority
+### 9. Payments / Finance / accounting
 
 Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No maintainability, export-integrity or authorization release invents accountant/tax judgment.
 
