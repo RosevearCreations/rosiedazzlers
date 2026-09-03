@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { roundInventoryQuantity } from "../_lib/catalog-integrity.js";
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -13,7 +14,14 @@ export async function onRequestPost(context) {
     const item = (await itemRes.json().catch(()=>[]))?.[0] || null;
     if (!item) return withCors(json({ error: 'Inventory item not found.' }, 404));
     if (String(item.reuse_policy || 'reorder') === 'never_reuse') return withCors(json({ error: 'This item is marked never reuse / no reorder.' }, 400));
-    const po = { item_id: item.id, item_key: item.item_key, item_name: item.name, vendor_name: String(body?.vendor_name || item.preferred_vendor || '').trim() || null, qty_ordered: Number(body?.qty_ordered || item.reorder_qty || 1), unit_cost_cents: body?.unit_cost_cents == null ? item.cost_cents ?? null : Number(body.unit_cost_cents), status: String(body?.status || 'requested').trim(), reminder_at: body?.reminder_at || null, ordered_at: ['ordered','received'].includes(String(body?.status || '').trim()) ? new Date().toISOString() : null, purchase_url: String(body?.purchase_url || item.amazon_url || '').trim() || null, note: [String(body?.note || '').trim() || null, `Requested by ${access.actor.full_name || 'Staff'}`].filter(Boolean).join(' · ') };
+    const status = String(body?.status || 'requested').trim();
+    if (!['draft','requested','ordered'].includes(status)) return withCors(json({ error:'Invalid initial purchase-order status.' },400));
+    const explicitQty = body?.qty_ordered !== undefined && body?.qty_ordered !== null && body?.qty_ordered !== '';
+    let qtyOrdered = roundInventoryQuantity(explicitQty ? body.qty_ordered : item.reorder_qty);
+    if (!Number.isFinite(qtyOrdered) || !(qtyOrdered > 0)) qtyOrdered = explicitQty ? NaN : 1;
+    if (!Number.isFinite(qtyOrdered) || !(qtyOrdered > 0)) return withCors(json({ error:'qty_ordered must be a finite number greater than zero.', integrity_validation:true },400));
+    const po = { item_id: item.id, item_key: item.item_key, item_name: item.name, vendor_name: String(body?.vendor_name || item.preferred_vendor || '').trim() || null, qty_ordered: qtyOrdered, unit_cost_cents: body?.unit_cost_cents == null ? item.cost_cents ?? null : Number(body.unit_cost_cents), status, reminder_at: body?.reminder_at || null, ordered_at: ['ordered'].includes(status) ? new Date().toISOString() : null, purchase_url: String(body?.purchase_url || item.amazon_url || '').trim() || null, note: [String(body?.note || '').trim() || null, `Requested by ${access.actor.full_name || 'Staff'}`].filter(Boolean).join(' · ') };
+    if (po.unit_cost_cents != null && (!Number.isFinite(po.unit_cost_cents) || po.unit_cost_cents < 0)) return withCors(json({ error:'unit_cost_cents must be a finite non-negative number.', integrity_validation:true },400));
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_purchase_orders`, { method: 'POST', headers: { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, 'Content-Type': 'application/json', Prefer: 'return=representation' }, body: JSON.stringify([po]) });
     if (!res.ok) return withCors(json({ error: await res.text() }, 500));
     return withCors(json({ ok: true, purchase_order: (await res.json().catch(()=>[]))?.[0] || null }));

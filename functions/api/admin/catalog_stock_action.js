@@ -1,5 +1,6 @@
 import { requireStaffAccess, json, isUuid } from "../_lib/staff-auth.js";
 import { insertCatalogMovement } from "../_lib/catalog-movements.js";
+import { planInventoryAdjustment } from "../_lib/catalog-integrity.js";
 import { postJournalEntry, roundMoney } from "../_lib/accounting-gl.js";
 
 const ACTIONS = {
@@ -22,7 +23,7 @@ export async function onRequestPost({ request, env }){
     const actionType = String(body?.action_type || '').trim();
     const qty = Number(body?.qty || 0);
     if (!itemKey || !ACTIONS[actionType]) return withCors(json({ error:'Item and action_type are required.' },400));
-    if (!(qty > 0)) return withCors(json({ error:'qty must be greater than zero.' },400));
+    if (!(qty > 0) || !Number.isFinite(qty)) return withCors(json({ error:'qty must be a finite number greater than zero.' },400));
 
     const action = ACTIONS[actionType];
     const headers = { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, Accept:'application/json' };
@@ -31,20 +32,26 @@ export async function onRequestPost({ request, env }){
     const item = (await itemRes.json().catch(()=>[]))?.[0] || null;
     if (!item) return withCors(json({ error:'Inventory item not found.' },404));
 
-    const prevQty = Number(item.qty_on_hand || 0);
-    const delta = action.sign * qty;
-    const nextQty = Math.max(0, roundMoney(prevQty + delta));
+    const plan = planInventoryAdjustment(item.qty_on_hand, qty, action.sign);
+    if (!plan.ok) return withCors(json({ error:plan.error, integrity_validation:true },409));
+    const prevQty = plan.previous_qty;
+    const delta = plan.qty_delta;
+    const nextQty = plan.new_qty;
     const patchRes = await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?id=eq.${encodeURIComponent(item.id)}`, { method:'PATCH', headers:{ ...headers, 'Content-Type':'application/json', Prefer:'return=representation' }, body: JSON.stringify({ qty_on_hand: nextQty, updated_at:new Date().toISOString() }) });
     if (!patchRes.ok) return withCors(json({ error: await patchRes.text() },500));
 
     const baseNote = String(body?.note || '').trim();
     const note = `${action.label}${baseNote ? ` — ${baseNote}` : ''}`;
-    const movement = await insertCatalogMovement(env, { item_id:item.id, item_key:item.item_key, booking_id:bookingId || null, movement_type:action.movement_type, qty_delta:delta, previous_qty:prevQty, new_qty:nextQty, unit_label:item.unit_label || null, note, actor_name: access.actor.full_name || access.actor.email || 'Staff', actor_staff_user_id: access.actor.id || null });
+    const movement = await insertCatalogMovement(env, { item_id:item.id, item_key:item.item_key, booking_id:bookingId || null, movement_type:action.movement_type, qty_delta:delta, previous_qty:prevQty, new_qty:nextQty, unit_label:item.unit_label || null, note, actor_name: access.actor.full_name || access.actor.email || 'Staff', actor_staff_user_id: access.actor.id || null, source_kind:'manual' });
+    if (!movement.ok) {
+      await fetch(`${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?id=eq.${encodeURIComponent(item.id)}`, { method:'PATCH', headers:{ ...headers, 'Content-Type':'application/json' }, body: JSON.stringify({ qty_on_hand: prevQty, updated_at:new Date().toISOString() }) }).catch(()=>null);
+      return withCors(json({ error:'Inventory movement could not be recorded; stock rollback was attempted.', detail:movement.error || null, integrity_validation:true },500));
+    }
 
     let accounting = null;
     const costCents = Number(item.cost_cents || 0);
     if (action.postsAccounting && costCents > 0) {
-      const totalCost = roundMoney((qty * costCents) / 100);
+      const totalCost = roundMoney((plan.quantity * costCents) / 100);
       if (totalCost > 0) {
         accounting = await postJournalEntry(env, {
           entry_date: new Date().toISOString().slice(0, 10),

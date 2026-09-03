@@ -1,5 +1,6 @@
 import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
 import { evaluateCatalogReadiness } from "../_lib/catalog-readiness.js";
+import { validateInventoryPayloadNumbers } from "../_lib/catalog-integrity.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -54,6 +55,8 @@ export async function onRequestPost(context) {
 
     if (!payload.item_key || !payload.name || !["tool", "consumable"].includes(payload.item_type)) return withCors(json({ error: "Missing required fields." }, 400));
     if (!["reorder", "single_use", "never_reuse"].includes(payload.reuse_policy)) return withCors(json({ error: "Invalid reuse policy." }, 400));
+    const numericErrors = validateInventoryPayloadNumbers(payload);
+    if (numericErrors.length) return withCors(json({ error: numericErrors.join(' '), integrity_validation: true }, 400));
 
     const readiness = evaluateCatalogReadiness(payload);
     if (payload.is_public && !readiness.ready) return withCors(json({ error: "This item cannot be public until its publishing blockers are corrected.", publish_readiness: readiness }, 409));
@@ -112,7 +115,6 @@ function detectMissingColumn(text) {
   }
   return null;
 }
-
 
 function normalizeGalleryImages(value) {
   let list = [];

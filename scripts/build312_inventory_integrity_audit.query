@@ -1,0 +1,72 @@
+-- Build 312 read-only inventory integrity audit query.
+-- This artifact intentionally contains only read operations and CTEs.
+with
+item_name_dupes as (
+  select lower(regexp_replace(trim(name),'\s+',' ','g')) k
+  from public.catalog_inventory_items
+  where trim(coalesce(name,''))<>''
+  group by 1 having count(*)>1
+),
+asin_dupes as (
+  select lower(trim(amazon_asin)) k
+  from public.catalog_inventory_items
+  where trim(coalesce(amazon_asin,''))<>''
+  group by 1 having count(*)>1
+),
+vendor_sku_dupes as (
+  select lower(trim(coalesce(preferred_vendor,''))) v, lower(trim(vendor_sku)) s
+  from public.catalog_inventory_items
+  where trim(coalesce(vendor_sku,''))<>''
+  group by 1,2 having count(*)>1
+),
+latest_move as (
+  select distinct on (coalesce(item_id::text,item_key)) item_id,item_key,new_qty,created_at
+  from public.catalog_inventory_movements
+  where new_qty is not null and (item_id is not null or item_key is not null)
+  order by coalesce(item_id::text,item_key), created_at desc, id desc
+),
+batch_rollup as (
+  select b.id,b.row_count,b.total_quantity,b.status,
+         count(r.id)::int actual_rows,
+         coalesce(sum(r.quantity),0)::numeric actual_qty,
+         count(*) filter (where r.status='reversed')::int reversed_rows
+  from public.catalog_inventory_posting_batches b
+  left join public.catalog_inventory_posting_rows r on r.batch_id=b.id
+  group by b.id
+)
+select * from (
+  select 'inventory_items' metric, count(*)::bigint value from public.catalog_inventory_items
+  union all select 'inventory_negative_qty', count(*) from public.catalog_inventory_items where qty_on_hand<0
+  union all select 'inventory_negative_reorder_point', count(*) from public.catalog_inventory_items where reorder_point<0
+  union all select 'inventory_nonpositive_reorder_qty', count(*) from public.catalog_inventory_items where reorder_qty<=0 and reuse_policy<>'never_reuse'
+  union all select 'inventory_blank_unit_active', count(*) from public.catalog_inventory_items where is_active and trim(coalesce(unit_label,''))=''
+  union all select 'inventory_negative_cost', count(*) from public.catalog_inventory_items where cost_cents<0
+  union all select 'inventory_rating_out_of_range', count(*) from public.catalog_inventory_items where rating_value is not null and (rating_value<0 or rating_value>5)
+  union all select 'inventory_negative_rating_count', count(*) from public.catalog_inventory_items where rating_count<0
+  union all select 'inventory_duplicate_normalized_name_groups', count(*) from item_name_dupes
+  union all select 'inventory_duplicate_asin_groups', count(*) from asin_dupes
+  union all select 'inventory_duplicate_vendor_sku_groups', count(*) from vendor_sku_dupes
+  union all select 'movements', count(*) from public.catalog_inventory_movements
+  union all select 'movement_item_reference_mismatch', count(*) from public.catalog_inventory_movements m join public.catalog_inventory_items i on i.id=m.item_id where m.item_key is not null and m.item_key<>i.item_key
+  union all select 'movement_arithmetic_mismatch', count(*) from public.catalog_inventory_movements where previous_qty is not null and new_qty is not null and round(previous_qty+qty_delta,3)<>round(new_qty,3)
+  union all select 'movement_posting_batch_without_source', count(*) from public.catalog_inventory_movements where posting_batch_id is not null and (source_kind is null or source_reference_id is null)
+  union all select 'posting_batches', count(*) from public.catalog_inventory_posting_batches
+  union all select 'posting_batch_rollup_mismatch', count(*) from batch_rollup where row_count<>actual_rows or round(total_quantity,3)<>round(actual_qty,3)
+  union all select 'posting_batch_status_row_mismatch', count(*) from batch_rollup where (status='reversed' and reversed_rows<>actual_rows) or (status='posted' and reversed_rows>0)
+  union all select 'posting_rows', count(*) from public.catalog_inventory_posting_rows
+  union all select 'posting_row_item_key_mismatch', count(*) from public.catalog_inventory_posting_rows r join public.catalog_inventory_items i on i.id=r.inventory_item_id where r.item_key<>i.item_key
+  union all select 'posting_row_arithmetic_mismatch', count(*) from public.catalog_inventory_posting_rows where round(previous_qty-quantity,3)<>round(new_qty,3)
+  union all select 'posting_row_missing_movement', count(*) from public.catalog_inventory_posting_rows where status='posted' and movement_id is null
+  union all select 'posting_row_movement_mismatch', count(*) from public.catalog_inventory_posting_rows r join public.catalog_inventory_movements m on m.id=r.movement_id where m.posting_batch_id is distinct from r.batch_id or m.item_key is distinct from r.item_key or round(abs(m.qty_delta),3)<>round(r.quantity,3)
+  union all select 'purchase_orders', count(*) from public.catalog_purchase_orders
+  union all select 'purchase_order_invalid_status', count(*) from public.catalog_purchase_orders where status not in ('draft','requested','ordered','received','cancelled')
+  union all select 'purchase_order_nonpositive_qty', count(*) from public.catalog_purchase_orders where qty_ordered<=0
+  union all select 'purchase_order_item_reference_mismatch', count(*) from public.catalog_purchase_orders p join public.catalog_inventory_items i on i.id=p.item_id where p.item_key is not null and p.item_key<>i.item_key
+  union all select 'purchase_order_orphan_key', count(*) from public.catalog_purchase_orders p where p.item_key is not null and not exists (select 1 from public.catalog_inventory_items i where i.item_key=p.item_key)
+  union all select 'purchase_order_received_missing_date', count(*) from public.catalog_purchase_orders where status='received' and received_at is null
+  union all select 'reservations', count(*) from public.creative_project_inventory_reservations
+  union all select 'reservation_posted_without_mutation', count(*) from public.creative_project_inventory_reservations where status='posted' and inventory_mutated is not true
+  union all select 'reservation_mutated_without_batch', count(*) from public.creative_project_inventory_reservations where inventory_mutated is true and posting_batch_id is null
+  union all select 'reservation_posting_batch_source_mismatch', count(*) from public.creative_project_inventory_reservations r join public.catalog_inventory_posting_batches b on b.id=r.posting_batch_id where b.source_kind<>'creative_project' or b.source_reference_id<>r.project_id
+  union all select 'inventory_latest_movement_tail_mismatch', count(*) from latest_move m join public.catalog_inventory_items i on (m.item_id=i.id or (m.item_id is null and m.item_key=i.item_key)) where round(i.qty_on_hand,3)<>round(m.new_qty,3)
+) q order by metric;
