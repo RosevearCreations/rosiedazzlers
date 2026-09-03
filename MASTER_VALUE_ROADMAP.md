@@ -49,7 +49,7 @@ Build 272 closed the narrow Operations/Finance action-permission and public pack
 - one meaningful H1 per indexable public page;
 - Rosie provides normal detailing water and power while the customer provides a safe/private/permitted work area.
 
-Build 273 established the retained Finance/tax-support baseline with structured evidence, T2125 workpapers and accountant-package support. That authority remains active while later builds advance.
+Build 273 established the retained Finance/tax-support baseline with structured evidence, T2125 workpapers and accountant-package support. That authority remains active while later builds advance. **Retain Build 273 authority.**
 
 ### 9. Payments / Finance / accounting
 
