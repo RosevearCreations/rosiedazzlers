@@ -15,6 +15,7 @@ def text(rel: str) -> str:
 
 smoke = text("scripts/development_http_smoke.sh")
 workflow = text(".github/workflows/cloudflare-development-acceptance.yml")
+helper = text("scripts/cloudflare_pages_development.sh")
 dev_gate = text(".github/workflows/development-source-gate.yml")
 summary = text("BUILD281_SUMMARY.md")
 routes = text("_routes.json")
@@ -34,22 +35,30 @@ for token in [
     if token not in smoke:
         errors.append(f"Development smoke helper missing {token}")
 
+# Build 308 centralizes the exact-deployment mechanics. Retain Build 281's
+# evidence semantics in the helper instead of requiring duplicated inline YAML.
 for token in [
     "Run Build 281 focused guard",
-    "Exact deployment HTTP smoke checks",
-    "Development alias convergence smoke checks",
-    "steps.deployment.outputs.deployment_url",
-    "matched_uses_functions",
-    'deployments/${matched_id}',
-    'uses_functions=true',
-    'SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"',
-    'for alias_attempt in $(seq 1 12)',
-    'SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"',
-    "sleep 5",
-    "Production remains closed",
+    "bash scripts/cloudflare_pages_development.sh accept",
+    "Production promotion",
 ]:
     if token not in workflow:
-        errors.append(f"Development acceptance missing Build 281 contract: {token}")
+        errors.append(f"Development acceptance missing retained Build 281 contract: {token}")
+
+for token in [
+    "wait_for_exact_success 24 10",
+    "EXACT_USES_FUNCTIONS",
+    '[[ "$EXACT_USES_FUNCTIONS" == "true" ]]',
+    "smoke_exact",
+    "smoke_alias",
+    'for attempt in $(seq 1 12)',
+    "SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full",
+    "sleep 5",
+    "record_production_boundary",
+    "Production remains closed",
+]:
+    if token not in helper:
+        errors.append(f"Canonical Development helper missing Build 281 contract: {token}")
 
 if '"/api/*"' not in routes:
     errors.append("Pages _routes.json no longer declares /api/* Functions routing")
@@ -76,8 +85,8 @@ if errors:
     raise SystemExit(1)
 
 print("Build 281 focused release check: PASS")
-print(" - exact Cloudflare deployment proves successful SHA + static artifact identity")
-print(" - Cloudflare deployment metadata must report uses_functions=true for this /api/* Pages Functions project")
-print(" - full dynamic/API smoke is reserved for the mutable dev alias and rejects missing 404 API routes")
-print(" - dev alias convergence uses bounded retry; intermediate propagation misses are warnings")
-print(" - Production remains closed and non-mutating")
+print(" - exact Cloudflare deployment still proves successful SHA + static artifact identity")
+print(" - Cloudflare deployment metadata must still report uses_functions=true")
+print(" - full dynamic/API smoke remains reserved for the mutable dev alias")
+print(" - dev alias convergence still uses bounded retry")
+print(" - Build 308 may centralize those mechanics without weakening Production isolation")
