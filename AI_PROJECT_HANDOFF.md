@@ -1,40 +1,53 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 304
+**Build:** 305
 **Updated:** 2026-09-02  
 **Read next:** `MASTER_VALUE_ROADMAP.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
 
 ## Current release state
 
-Build 304 is the current **Accountant export integrity** Development release. It builds on accepted Build 303 Production source `09442c53d385aca7995150ace4bde55abd51d7df` and hardens only the accountant-package/export boundary.
+Build 305 is the current **Finance authorization sweep** Development release. It builds on the accepted Build 304 accountant-export integrity boundary and closes Finance route/action coverage without changing Finance business rules, schema, provider behavior, or the established seven-action Finance permission vocabulary.
 
-The accepted pre-documentation Build 304 Development implementation/evidence baseline is `6351321a2d33ed8489295a60d8de72adea81a859`. On that exact SHA, Build 304 runtime acceptance, the canonical Development source gate, retained Build 290/291/292 runtime checks and Cloudflare Development acceptance were green; Cloudflare deployment `be586bf6-fc84-4030-a1c7-d534913bab0f` reached `success`, reported `uses_functions=true`, passed immutable static smoke, and the Development alias passed full runtime/API smoke on the first convergence attempt. Documentation synchronization is allowed to advance `dev`; final Build 304 closure is based on the exact documentation-synchronized `dev` SHA and its full acceptance.
+The accepted pre-documentation Build 305 Development implementation/evidence baseline is `00571a39172052cbf42b2bec41ec25633803891b`. On that exact SHA, the full workflow fan-out finished with zero failed, queued, or in-progress runs. Build 305 source/runtime acceptance and the canonical cumulative Development source authority were green. Cloudflare Development Acceptance run `33697631645` passed on exact deployment `467003c1-6d58-48f3-8d9b-1aea116bb107`, which reached `success`, reported `uses_functions=true`, passed immutable static smoke at `https://467003c1.rosiedazzlers.pages.dev`, and passed full static + dynamic/API smoke on `https://dev.rosiedazzlers.pages.dev` with alias convergence on attempt 1/12.
 
-Production `main` remains accepted Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`. **Build 304 has no Production promotion authorization. Do not move `main`.**
+Production `main` remains accepted Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`. **Build 305 has no Production promotion authorization. Do not move `main`.**
 
-Build 304 introduces no schema/database migration, accounting/tax-policy change, tax judgment, payment-provider mutation or Production data mutation. Build 305 remains untouched until Build 304 final Development acceptance is clean.
+Build 305 introduces no schema/database migration, accounting/tax-policy change, tax judgment, payment-provider mutation, pricing/booking business-rule change, or Production data mutation. Final Build 305 closure is based on the exact documentation-synchronized `dev` SHA and its complete source/runtime/Cloudflare acceptance. Build 306 remains untouched until that evidence is clean.
 
-## Build 304 authority
+## Build 305 authority
 
-- `functions/api/_lib/accounting-accountant-export.js` is the dedicated accountant-export shaping/privacy authority.
+- `functions/api/_lib/admin-finance-actions.js` is the centralized method-aware Finance admin route/action resolver.
+- Every current `accounting_*`, `payment_*`, and `payroll_*` admin route/method is covered by the Build 305 exhaustive scan.
+- Finance GET/HEAD reads resolve to `finance.view`.
+- Finance mutations resolve to the narrow existing authority: `finance.post`, `finance.reconcile`, `finance.period.close`, `finance.refund.manage`, `finance.settlement.manage`, or `finance.tax.manage`.
+- The established seven-action Finance vocabulary and Accountant defaults are unchanged.
+- Role ceilings, Finance-module disablement, and explicit per-action denial continue to fail closed.
+- Operations-owned quote/final-balance request lifecycle remains Operations authority; hosted final-balance checkout creation is Finance settlement authority; booking-scoped operational Finance notes retain their existing booking-work authority.
+- `scripts/build305_finance_action_test.mjs` verifies representative mappings, role/module/action boundaries and exhaustively scans the accepted Finance API surface. The accepted Build 305 tree covered 40 Finance files / 80 exported HTTP methods.
+- `scripts/build305_release_check.py`, `scripts/build305_http_smoke.sh`, and the Build 305 source/Development source/runtime workflows protect the boundary.
+
+## Historical CI convergence completed during Build 305
+
+Build 305 centralized Finance route resolution and exposed two historical guards whose protected intent remained correct but whose inline-location assumption had become stale. Both were repaired without weakening authority:
+
+- Build 272 still requires its exact customer/quote Operations mappings and exact four historical refund/settlement Finance leaves/actions. When Build 305 delegation is present, the guard follows those Finance leaves into `admin-finance-actions.js` and syntax-checks the helper.
+- Build 290 still requires its exact `quote_deposit_refund_save -> finance.refund.manage` protection plus all staff-auth, authorization-matrix, forward-restore, documentation and Production-closed authority. When delegation is present, it follows that exact action into the helper.
+
+These repairs do not create new permissions or broaden any role.
+
+## Retained Build 304 authority
+
+Build 304 remains the accepted accountant-export integrity boundary beneath Build 305:
+
+- `functions/api/_lib/accounting-accountant-export.js` owns accountant-export shaping/privacy.
 - Accountant JSON uses `schema_version: 2`, export contract `rosie_accountant_workpaper_json`, predictable JSON/UTF-8 metadata and deterministic `rosie-accountant-package-YYYY.json` filenames.
-- Evidence references are classified as `general`, `verified`, `unverified`, `unresolved`, `missing_related_id` or `unsupported_type`, with an `evidence_integrity` review summary.
-- Exported evidence keeps stable document/reference IDs while omitting raw storage paths/URLs, upload/signed URLs, internal document notes, staff identity metadata and raw mileage rows/booking IDs.
-- Evidence filenames are sanitized basenames; dynamic CSV payables-status filename tokens are sanitized before `Content-Disposition`.
+- Evidence references remain integrity-classified and storage locators, internal document notes, staff identity metadata and raw mileage/booking rows remain excluded from exports.
 - `functions/api/admin/accounting_accountant_package.js` remains GET-only, `finance.view` protected and review-first.
-- `assets/admin-tax-support-v303.js`, `admin-tax-support.html`, the retained T2125/tax-support calculations and Build 303 backend tax-support authority remain unchanged.
-- `scripts/build304_export_contract_test.mjs`, `scripts/build304_release_check.py`, `scripts/build304_http_smoke.sh` and the Build 304 Development source/runtime workflows protect the boundary.
+- Build 304 changed no tax/accounting judgment, provider behavior or schema.
 
-## Historical CI convergence completed during Build 304
-
-Build 304 acceptance exposed historical guards that were valid in intent but were evaluating later source/history with obsolete assumptions. They were repaired without relaxing their protected authority:
-
-- Build 273 follows accountant-export shaping into the Build 304 helper only when the endpoint imports/calls that helper; retained Finance/action/accountant-readiness checks remain mandatory.
-- Build 290 rollback readiness obtains complete history before proving the unchanged accepted Build 289 SHA/tree ancestry and fails closed if the proof cannot be obtained.
-- Build 291 and Build 292 release guards likewise obtain complete history before asserting their unchanged exact accepted ancestry anchors.
-- Build 299 and Build 300 source-hygiene checks inspect their frozen accepted release deltas instead of unrelated later byte-for-byte extracted assets.
+Historical CI convergence completed during Build 304 also remains retained: Build 273 follows delegated accountant-export shaping; Build 290/291/292 obtain sufficient history before strict ancestry checks; Build 299/300 source-hygiene checks inspect their frozen accepted release deltas.
 
 ## Retained Build 303 authority
 
@@ -87,7 +100,7 @@ Build 273 is the retained Finance/tax-support baseline. The accepted Build 272/2
 
 ## Retained business/runtime authority
 
-The accepted Builds 272–303 authority remains intact, including:
+The accepted Builds 272–305 authority remains intact, including:
 
 - Build 273 Finance/tax-support and accountant-workpaper authority;
 - Complete = **Best value** and the current Small/Mid/Oversized + condition/quote pricing authority;
@@ -109,25 +122,27 @@ The accepted Builds 272–303 authority remains intact, including:
 - Build 300 is the behavior-preserving Finance Payments extraction in `assets/admin-payments-v300.js`, including its recorded pre-existing Payments duplicate-route boundary for Build 318;
 - Build 301 is the behavior-preserving Finance Reconciliation extraction;
 - Build 302 preserves the retired statement-import boundary;
-- Build 303 is the byte-for-byte Tax Support controller extraction retained by Build 304.
+- Build 303 is the byte-for-byte Tax Support controller extraction;
+- Build 304 hardens accountant export integrity without changing accounting/tax authority;
+- Build 305 makes the existing Finance action model exhaustive across Finance-prefixed admin routes without broadening roles or business authority.
 
-## Build 304 validation authority
+## Build 305 validation authority
 
-- `scripts/build304_release_check.py` — exact export contract/privacy boundary, retained Build 303 authority and migration rejection;
-- `scripts/build304_export_contract_test.mjs` — hostile/private fixture export-leakage regression protection;
-- `scripts/build304_http_smoke.sh` — read-only deployed accountant-package fail-closed smoke;
-- `.github/workflows/build304-source-gate.yml` — feature/PR source gate;
-- `.github/workflows/build304-development-source-gate.yml` — Development cumulative source gate;
-- `.github/workflows/build304-development-acceptance.yml` — Development read-only runtime acceptance;
-- retained `scripts/release_check.py`, `scripts/seo_h1_check.py`, route-copy checks and historical focused guards remain cumulative authorities.
+- `scripts/build305_finance_action_test.mjs` — route/action matrix plus exhaustive Finance file/method coverage and cross-module escalation checks;
+- `scripts/build305_release_check.py` — seven-action vocabulary, centralized resolver, no-schema boundary and retained Build 304 authority;
+- `scripts/build305_http_smoke.sh` — anonymous read/write fail-closed checks across representative Finance action classes;
+- `.github/workflows/build305-source-gate.yml` — feature source gate;
+- `.github/workflows/build305-development-source-gate.yml` — Development cumulative Finance source gate;
+- `.github/workflows/build305-development-acceptance.yml` — Development runtime authorization acceptance;
+- retained `scripts/release_check.py`, historical focused guards, route-copy checks, SEO guards and Cloudflare exact-SHA acceptance remain cumulative authorities.
 
-Do not call Build 304 Development-green until the exact documentation-synchronized `dev` SHA, Build 304 Development source/runtime gates and Cloudflare Development deployment evidence agree with zero remaining failed/queued/in-progress acceptance runs relevant to that SHA.
+Do not call Build 305 fully closed until the exact documentation-synchronized `dev` SHA, Build 305 Development source/runtime gates, canonical Development source gate and Cloudflare Development deployment evidence agree with zero remaining failed/queued/in-progress acceptance runs relevant to that SHA.
 
 ## Next autonomous build
 
-**Build 305 — Finance authorization sweep:** test every Finance endpoint against role/module/action permissions, direct API access, anonymous access and cross-module privilege escalation without changing Finance business rules.
+**Build 306 — I.T. Health dashboard extraction:** cleanly modularize the I.T./System Health runtime so deployment, API, D1, storage, authentication and provider readiness can be tested independently while preserving existing readiness semantics and provider authority exactly.
 
-After that, continue the recorded Builds 306–319 sequence. Do not invent business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
+Build 307—not Build 306—owns the later GREEN/AMBER/RED readiness normalization, configuration-vs-transaction distinction, clearer failure messages and corrective mechanics. Continue the recorded Builds 306–319 sequence without inventing business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
 
 ## Manual/external evidence that must not be fabricated
 
