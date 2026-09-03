@@ -1,0 +1,53 @@
+name: Build 312 Source Gate
+
+on:
+  push:
+    branches: [build312-inventory-data-integrity-sweep]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build312-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check Build 312 syntax and focused integrity tests
+        run: |
+          node --check functions/api/_lib/catalog-integrity.js
+          node --check functions/api/admin/catalog_inventory_save.js
+          node --check functions/api/admin/catalog_stock_action.js
+          node --check functions/api/admin/catalog_reorder_request.js
+          node --check functions/api/admin/catalog_purchase_order_update.js
+          node scripts/build312_inventory_integrity_test.mjs
+          bash -n scripts/build312_http_smoke.sh
+          python -m py_compile scripts/build312_release_check.py
+      - name: Validate Build 312 inventory integrity boundary
+        run: python scripts/build312_release_check.py
+      - name: Run cumulative source authorities
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Source hygiene
+        run: |
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
