@@ -69,7 +69,7 @@
 
 ## Current execution checkpoint
 
-Builds 300–309 are technically complete on Development before Build 309 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–310 are technically complete on Development before Build 310 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
 Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves current Finance-prefixed admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Final documentation-synchronized Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
@@ -79,19 +79,17 @@ Build 307 upgrades those observations through `functions/api/_lib/system-health-
 
 Build 308 consolidates Development Cloudflare acceptance/recovery in `scripts/cloudflare_pages_development.sh`. Normal acceptance is read-only. Recovery is manual `workflow_dispatch` only, defaults to `observe`, and `repair` requires exact current-`dev` SHA confirmation before a non-terminal Development preview can be mutated. Terminal and Production targets fail closed. Historical Build 274/275/276/281/283/284 release semantics remain protected through successor-aware guards. Final documentation-synchronized Build 308 Development SHA: `d14a63c62913edf125a3e2bd8d69f110a6942dad`.
 
-Build 309 externalizes the accepted root Staff Administration controller into `assets/admin-staff-v309.js` while preserving authentication and role-management rules, role/module ceilings, per-profile narrowing, forced full Admin module access, staff list/save orchestration and existing payroll/profile presentation exactly. The pre-existing older `admin-staff/index.html` route remains unchanged and is deliberately deferred to **Build 318 — Whole-application route/API authority sweep**.
+Build 309 externalizes the accepted root Staff Administration controller into `assets/admin-staff-v309.js` while preserving authentication and role-management rules, role/module ceilings, per-profile narrowing, forced full Admin module access, staff list/save orchestration and existing payroll/profile presentation exactly. The pre-existing older `admin-staff/index.html` route remains unchanged and is deliberately deferred to **Build 318 — Whole-application route/API authority sweep**. Final documentation-synchronized Build 309 Development SHA: `1eea3569da3ea402eb3cd7cedb1f107194265c71`.
 
-The accepted pre-documentation Build 309 Development SHA is `d579eba52090755cfa5248565e45fdd7358052d3`. Build 309 Development Runtime Acceptance run `33708957648`, Build 309 Development Source Gate run `33708957679`, canonical Development Source Gate run `33708957663`, and Cloudflare Development Acceptance run `33708957640` all succeeded on that exact SHA. Cloudflare accepted exact deployment `c1473523-7924-4f3c-92e2-da54d8d0e097`; immutable smoke passed and the mutable `dev` alias passed full runtime/API smoke with convergence on attempt 1/12. The exact 40-workflow fan-out returned zero failed, zero queued and zero in-progress runs.
+Build 310 proves the existing seven-module / 28-action Admin authorization boundary without changing permission policy. `scripts/build310_admin_full_access_test.mjs` proves Admin accepts every registered action even under a deliberately narrowed profile, while non-Admin role ceilings and profile narrowing remain fail-closed. `scripts/build310_http_smoke.sh` keeps deployed acceptance read-only/credential-free. Build 310 Source Gate run `33759860596` succeeded on feature SHA `d4fbdd8843d8bb9e476c984ec9a614452fc8843e`; PR #55 merged to pre-documentation Development SHA `c7db8fed785851f167167e8c1a1ca9d43066ab5e`; Build 310 Development Runtime Acceptance run `33759971667` and Cloudflare Development Acceptance run `33759971634` succeeded on that exact Development SHA.
 
-Build 309 acceptance also repaired the retained Build 294 ancestry check for shallow historical workflow checkouts without weakening its exact accepted-Build-293-Production ancestry assertion. Build 309 permits only that specific historical guard repair inside its source scope.
+Final Build 310 closure requires the same exact-SHA cumulative source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next autonomous item after that closure: Build 311 — Inventory Operations maintainability extraction.**
 
-Final Build 309 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next autonomous item after that closure: Build 310 — Admin full-access acceptance matrix.**
-
-Build 309 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+Build 310 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Build 309 Staff Administration complete/closing → Builds 310–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Builds 309–310 Administration complete/closing → Builds 311–313 Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
