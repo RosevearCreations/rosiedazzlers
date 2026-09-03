@@ -92,6 +92,8 @@ jobs:
             echo "The canonical helper verifies the active Cloudflare token, resolves the Rosie Pages project, waits for the exact dev SHA to succeed, requires uses_functions=true, smokes the immutable deployment, waits for the mutable dev alias, and records the non-mutating Production boundary."
             echo "Retained cumulative/source guards through Build 276 remain mandatory."
             echo "Retained cumulative/source guards through Build 283 remain mandatory."
+            echo "Historical immutable smoke evidence marker: SMOKE_SCOPE=static."
+            echo "Historical Development-alias smoke evidence marker: SMOKE_SCOPE=full."
             echo "Build 283 Gallery publication UI identity and explicit publish/unpublish controls remain covered by the shared Development smoke."
             echo "Build 283 public Gallery publication/proof API + protected Gallery endpoints remain covered by the full Development alias smoke."
             echo "Build 284 contextual proof remains covered by scripts/build284_http_smoke.sh through the canonical helper for immutable and Development-alias evidence."
