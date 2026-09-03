@@ -95,8 +95,9 @@ for token in [
     'module_access: collectModuleAccess()',
     '/api/admin/staff_list',
     '/api/admin/staff_save',
+    'runtime.requestJson(',
+    'password: password || undefined',
     'pageKey: "admin-staff"',
-    'credentials',
 ]:
     if token not in asset:
         errors.append(f"{ASSET} missing retained runtime token {token}")
@@ -143,7 +144,7 @@ else:
         low = name.lower()
         if "migration" in low or low.startswith("database") or low.endswith(".sql"):
             errors.append(f"Build 309 unexpectedly changes schema/migration file {name}")
-        if name not in allowed and not name.startswith("scripts/build"):
+        if name not in allowed:
             errors.append(f"unexpected Build 309 source path: {name}")
 
 queue = read("AUTONOMOUS_RELEASE_QUEUE.md")
