@@ -7,6 +7,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASELINE = "1049f25205b3ea1cfa04dbdc72b2e3e726e1344a"
 PRODUCTION = "09442c53d385aca7995150ace4bde55abd51d7df"
 PAGE = "admin-catalog.html"
+FOLDER_PAGE = "admin-catalog/index.html"
 ASSET = "assets/admin-catalog-v311.js"
 TAG = '<script src="/assets/admin-catalog-v311.js"></script>'
 errors = []
@@ -59,6 +60,9 @@ require_ancestor(BASELINE, "accepted Build 310 Development")
 require_ancestor(PRODUCTION, "accepted Build 303 Production")
 
 baseline_page = baseline_file(PAGE)
+baseline_folder = baseline_file(FOLDER_PAGE)
+if baseline_page and baseline_folder and baseline_page != baseline_folder:
+    errors.append("accepted Build 310 Inventory root/folder route copies unexpectedly diverge")
 parts = split_inventory_runtime(baseline_page, "accepted Build 310 admin-catalog.html") if baseline_page else None
 if parts:
     start, body_start, end, close_end = parts
@@ -68,8 +72,13 @@ if parts:
     expected_page = baseline_page[:start] + TAG + baseline_page[close_end:]
     if read(PAGE) != expected_page:
         errors.append(f"{PAGE} differs from accepted Build 310 source beyond exact runtime extraction")
+    if read(FOLDER_PAGE) != expected_page:
+        errors.append(f"{FOLDER_PAGE} differs from the exact Build 311 canonical Inventory route copy")
 
 page = read(PAGE)
+folder_page = read(FOLDER_PAGE)
+if folder_page != page:
+    errors.append(f"{FOLDER_PAGE} is not byte-for-byte synchronized with {PAGE}")
 asset = read(ASSET)
 
 for token in [
@@ -113,6 +122,7 @@ if changed.returncode:
 else:
     allowed = {
         PAGE,
+        FOLDER_PAGE,
         ASSET,
         "scripts/build309_release_check.py",
         "scripts/build311_release_check.py",
@@ -167,7 +177,7 @@ if errors:
 
 print("Build 311 Inventory Operations maintainability extraction check: PASS")
 print("- accepted Build 310 Inventory Operations runtime is byte-for-byte preserved in assets/admin-catalog-v311.js")
-print("- admin-catalog.html differs from accepted Build 310 only by the external runtime-script tag")
+print("- admin-catalog.html and admin-catalog/index.html differ from accepted Build 310 only by the external runtime-script tag")
 print("- inventory list/save, stock adjustment, usage, low-stock, reorder, purchase-order and supplier-link API identities remain unchanged")
 print("- no server/API authority, schema, inventory data, stock/accounting rule or polling behavior changed")
 print("- Build 312 remains the authority for deterministic inventory data-integrity investigation and repair")

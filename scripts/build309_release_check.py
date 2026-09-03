@@ -152,6 +152,7 @@ else:
         # Successor-aware Build 311 Inventory Operations extraction. Only the
         # exact structural runtime, guard and acceptance paths are permitted.
         "admin-catalog.html",
+        "admin-catalog/index.html",
         "assets/admin-catalog-v311.js",
         "scripts/build311_release_check.py",
         "scripts/build311_http_smoke.sh",
