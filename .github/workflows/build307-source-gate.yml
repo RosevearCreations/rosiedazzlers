@@ -1,0 +1,44 @@
+name: Build 307 Source Gate
+
+on:
+  push:
+    branches: [build307-it-readiness-diagnostics-upgrade]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build307-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Retain accepted Build 306 raw health authority
+        run: python scripts/build306_release_check.py
+      - name: Validate Build 307 readiness diagnostics
+        run: python scripts/build307_release_check.py
+      - name: Run cumulative source authorities
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Source hygiene
+        run: |
+          git diff --check 202a62c271ddf42caedf13c9dc3a0cf139e55b8e...HEAD -- . ':!*.md'
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
