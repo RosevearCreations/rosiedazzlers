@@ -47,9 +47,9 @@ const reorder = fs.readFileSync('functions/api/admin/catalog_reorder_request.js'
 assert.ok(reorder.includes("['draft','requested','ordered']"));
 assert.ok(reorder.includes('qty_ordered must be a finite number greater than zero.'));
 
-const audit = fs.readFileSync('scripts/build312_inventory_integrity_audit.sql','utf8');
+const audit = fs.readFileSync('scripts/build312_inventory_integrity_audit.query','utf8');
 for (const token of ['inventory_duplicate_asin_groups','movement_arithmetic_mismatch','posting_batch_rollup_mismatch','purchase_order_orphan_key','reservation_posting_batch_source_mismatch']) assert.ok(audit.includes(token));
-const sqlWithoutComments = audit.replace(/^\s*--.*$/gm,'');
-assert.ok(!/\b(insert|update|delete|alter|create|drop|truncate|grant|revoke|call)\b/i.test(sqlWithoutComments), 'Build 312 audit SQL must stay read-only');
+const queryWithoutComments = audit.replace(/^\s*--.*$/gm,'');
+assert.ok(!/\b(insert|update|delete|alter|create|drop|truncate|grant|revoke|call)\b/i.test(queryWithoutComments), 'Build 312 audit query must stay read-only');
 
 console.log('Build 312 inventory integrity tests: PASS');

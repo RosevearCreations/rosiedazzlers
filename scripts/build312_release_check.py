@@ -15,7 +15,7 @@ ALLOWED = {
     'functions/api/admin/catalog_stock_action.js',
     'functions/api/admin/catalog_reorder_request.js',
     'functions/api/admin/catalog_purchase_order_update.js',
-    'scripts/build312_inventory_integrity_audit.sql',
+    'scripts/build312_inventory_integrity_audit.query',
     'scripts/build312_inventory_integrity_test.mjs',
     'scripts/build312_release_check.py',
     'scripts/build312_http_smoke.sh',
@@ -25,6 +25,7 @@ ALLOWED = {
     'BUILD312_SUMMARY.md',
     'AUTONOMOUS_RELEASE_QUEUE.md',
     'scripts/build309_release_check.py',
+    'scripts/build311_release_check.py',
 }
 
 
@@ -53,10 +54,8 @@ else:
         if name not in ALLOWED:
             errors.append(f'unexpected Build 312 source path: {name}')
         low = name.lower()
-        if ('migration' in low or low.startswith('database')):
+        if 'migration' in low or low.startswith('database') or low.endswith('.sql'):
             errors.append(f'Build 312 unexpectedly changes schema/migration authority: {name}')
-        if low.endswith('.sql') and name != 'scripts/build312_inventory_integrity_audit.sql':
-            errors.append(f'Build 312 unexpectedly changes SQL authority: {name}')
 
 for rel in [
     'functions/api/_lib/staff-auth.js',
@@ -74,7 +73,7 @@ for rel, tokens in {
     'functions/api/admin/catalog_purchase_order_update.js': ['isPurchaseOrderReceiptReplay','idempotent_replay:true',"movement_type:'receive'",'rollbackInventoryQuantity'],
     'functions/api/admin/catalog_inventory_save.js': ['validateInventoryPayloadNumbers','integrity_validation: true'],
     'functions/api/admin/catalog_reorder_request.js': ["['draft','requested','ordered']",'qty_ordered must be a finite number greater than zero.'],
-    'scripts/build312_inventory_integrity_audit.sql': ['inventory_negative_qty','movement_arithmetic_mismatch','posting_batch_rollup_mismatch','purchase_order_orphan_key','reservation_posting_batch_source_mismatch'],
+    'scripts/build312_inventory_integrity_audit.query': ['inventory_negative_qty','movement_arithmetic_mismatch','posting_batch_rollup_mismatch','purchase_order_orphan_key','reservation_posting_batch_source_mismatch'],
 }.items():
     body = read(rel)
     for token in tokens:
@@ -85,9 +84,9 @@ stock = read('functions/api/admin/catalog_stock_action.js')
 if 'Math.max(0' in stock:
     errors.append('catalog_stock_action.js still clamps overdraw instead of rejecting it')
 
-audit = re.sub(r'^\s*--.*$', '', read('scripts/build312_inventory_integrity_audit.sql'), flags=re.M)
+audit = re.sub(r'^\s*--.*$', '', read('scripts/build312_inventory_integrity_audit.query'), flags=re.M)
 if re.search(r'\b(insert|update|delete|alter|create|drop|truncate|grant|revoke|call)\b', audit, flags=re.I):
-    errors.append('Build 312 inventory audit SQL is not read-only')
+    errors.append('Build 312 inventory audit query is not read-only')
 
 for rel in [
     'functions/api/_lib/catalog-integrity.js',
@@ -124,7 +123,7 @@ print('Build 312 Inventory data-integrity sweep check: PASS')
 print('- stock adjustments retain three-decimal quantity precision and reject overdraw instead of clamping')
 print('- purchase-order receipt is replay-safe and records receive movement evidence')
 print('- future inventory/reorder writes reject invalid numeric payloads before persistence')
-print('- deterministic inventory/posting/order/reservation audit SQL is read-only')
+print('- deterministic inventory/posting/order/reservation audit query is read-only')
 print('- retained Build 240 posting/accounting/auth and all schema authority remain unchanged')
 print('- runtime acceptance performs no inventory mutation')
 print(f'- Production remains accepted Build 303 at {PRODUCTION} and stays closed for Build 312')

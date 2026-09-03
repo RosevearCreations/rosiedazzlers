@@ -61,8 +61,6 @@ parts = split_module_runtime(baseline_root, "accepted Build 308 admin-staff.html
 if parts:
     start, body_start, end, close_end = parts
     expected_asset = baseline_root[body_start:end].lstrip("\n")
-    # Ignore only terminal structural whitespace contributed by the indented closing
-    # </script> line; all executable/source bytes before it remain exact.
     if read(ASSET).rstrip() != expected_asset.rstrip():
         errors.append("versioned Staff asset is not byte-for-byte the accepted Build 308 root inline runtime")
     expected_page = baseline_root[:start] + TAG + baseline_root[close_end:]
@@ -106,14 +104,11 @@ for token in [
 if 'setInterval(' in asset:
     errors.append(f"{ASSET} introduces prohibited idle polling")
 
-# Build 309 deliberately does not converge the pre-existing older folder route.
-# Build 318 owns whole-application duplicate-route authority cleanup.
 if baseline_folder and folder != baseline_folder:
     errors.append(f"{FOLDER_PAGE} changed even though Build 309 must preserve its pre-existing route behavior exactly")
 if 'data-module-access="admin"' in folder or 'MODULE_KEYS' in folder or 'module_access: collectModuleAccess()' in folder:
     errors.append(f"{FOLDER_PAGE} was silently converged with newer root Staff behavior")
 
-# The extraction must not change server-side authentication/authorization authority.
 for rel in [
     "functions/api/_lib/staff-auth.js",
     "functions/api/_lib/action-permissions.js",
@@ -142,15 +137,11 @@ else:
         "AI_PROJECT_HANDOFF.md",
         "MASTER_VALUE_ROADMAP.md",
         "AUTONOMOUS_RELEASE_QUEUE.md",
-        # Successor-aware Build 310 proof/acceptance files. These paths are
-        # explicitly enumerated so future runtime/business source remains denied.
         "scripts/build310_admin_full_access_test.mjs",
         "scripts/build310_http_smoke.sh",
         ".github/workflows/build310-source-gate.yml",
         ".github/workflows/build310-development-acceptance.yml",
         "BUILD310_SUMMARY.md",
-        # Successor-aware Build 311 Inventory Operations extraction. Only the
-        # exact structural runtime, guard and acceptance paths are permitted.
         "admin-catalog.html",
         "admin-catalog/index.html",
         "assets/admin-catalog-v311.js",
@@ -159,6 +150,20 @@ else:
         ".github/workflows/build311-source-gate.yml",
         ".github/workflows/build311-development-source-gate.yml",
         ".github/workflows/build311-development-acceptance.yml",
+        # Successor-aware Build 312 inventory integrity package. Every path is
+        # exact; no broad functions/scripts prefix is permitted.
+        "functions/api/_lib/catalog-integrity.js",
+        "functions/api/admin/catalog_inventory_save.js",
+        "functions/api/admin/catalog_purchase_order_update.js",
+        "functions/api/admin/catalog_reorder_request.js",
+        "functions/api/admin/catalog_stock_action.js",
+        "scripts/build312_inventory_integrity_audit.query",
+        "scripts/build312_inventory_integrity_test.mjs",
+        "scripts/build312_release_check.py",
+        "scripts/build312_http_smoke.sh",
+        ".github/workflows/build312-source-gate.yml",
+        ".github/workflows/build312-development-source-gate.yml",
+        ".github/workflows/build312-development-acceptance.yml",
     }
     for name in changed.stdout.splitlines():
         low = name.lower()

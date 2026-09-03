@@ -1,5 +1,5 @@
--- Build 312 read-only inventory integrity audit.
--- This file intentionally contains only read operations and CTEs.
+-- Build 312 read-only inventory integrity audit query.
+-- This artifact intentionally contains only read operations and CTEs.
 with
 item_name_dupes as (
   select lower(regexp_replace(trim(name),'\s+',' ','g')) k

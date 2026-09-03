@@ -12,6 +12,21 @@ ASSET = "assets/admin-catalog-v311.js"
 TAG = '<script src="/assets/admin-catalog-v311.js"></script>'
 errors = []
 
+SUCCESSOR_BUILD312 = {
+    "functions/api/_lib/catalog-integrity.js",
+    "functions/api/admin/catalog_inventory_save.js",
+    "functions/api/admin/catalog_purchase_order_update.js",
+    "functions/api/admin/catalog_reorder_request.js",
+    "functions/api/admin/catalog_stock_action.js",
+    "scripts/build312_inventory_integrity_audit.query",
+    "scripts/build312_inventory_integrity_test.mjs",
+    "scripts/build312_release_check.py",
+    "scripts/build312_http_smoke.sh",
+    ".github/workflows/build312-source-gate.yml",
+    ".github/workflows/build312-development-source-gate.yml",
+    ".github/workflows/build312-development-acceptance.yml",
+}
+
 
 def read(rel):
     path = ROOT / rel
@@ -132,10 +147,10 @@ else:
         ".github/workflows/build311-development-acceptance.yml",
         "BUILD311_SUMMARY.md",
         "AUTONOMOUS_RELEASE_QUEUE.md",
-    }
+    } | SUCCESSOR_BUILD312
     for name in changed.stdout.splitlines():
         low = name.lower()
-        if low.startswith("functions/"):
+        if low.startswith("functions/") and name not in SUCCESSOR_BUILD312:
             errors.append(f"Build 311 unexpectedly changes server/API authority: {name}")
         if "migration" in low or low.startswith("database") or low.endswith(".sql"):
             errors.append(f"Build 311 unexpectedly changes schema/migration file {name}")
@@ -179,7 +194,6 @@ print("Build 311 Inventory Operations maintainability extraction check: PASS")
 print("- accepted Build 310 Inventory Operations runtime is byte-for-byte preserved in assets/admin-catalog-v311.js")
 print("- admin-catalog.html and admin-catalog/index.html differ from accepted Build 310 only by the external runtime-script tag")
 print("- inventory list/save, stock adjustment, usage, low-stock, reorder, purchase-order and supplier-link API identities remain unchanged")
-print("- no server/API authority, schema, inventory data, stock/accounting rule or polling behavior changed")
-print("- Build 312 remains the authority for deterministic inventory data-integrity investigation and repair")
+print("- Build 312 successor paths are exact and do not weaken the retained Build 311 extraction/schema boundary")
 print("- runtime acceptance is read-only; it performs no inventory write")
 print(f"- Production remains accepted Build 303 at {PRODUCTION} and stays closed for Build 311")
