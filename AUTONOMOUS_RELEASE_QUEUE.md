@@ -69,17 +69,21 @@
 
 ## Current execution checkpoint
 
-Builds 300–303 are closed. Build 303 is the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–305 are technically complete on Development. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
-Build 304 implementation is complete on Development: the accountant package now has a versioned/predictable JSON export contract, explicit evidence-reference integrity classification, sanitized filenames and a privacy whitelist that excludes raw storage locators, internal document notes, staff identity metadata and raw mileage/booking rows. Build 304 introduced no schema/database migration, accounting/tax-policy change or payment-provider mutation.
+Build 304 closed the accountant-export integrity slice: the accountant package has a versioned/predictable JSON export contract, explicit evidence-reference integrity classification, sanitized filenames and a privacy whitelist that excludes raw storage locators, internal document notes, staff identity metadata and raw mileage/booking rows. Build 304 introduced no schema/database migration, accounting/tax-policy change or payment-provider mutation.
 
-Build 304 pre-documentation Development implementation/evidence baseline `6351321a2d33ed8489295a60d8de72adea81a859` passed its Build 304 runtime/source and exact Cloudflare Development acceptance. Final closure requires the same exact-SHA acceptance on the documentation-synchronized `dev` head. **Next untouched item after that closure: Build 305 — Finance authorization sweep.**
+Build 305 closes the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` now resolves all current `accounting_*`, `payment_*` and `payroll_*` admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. The accepted pre-documentation Build 305 Development SHA `00571a39172052cbf42b2bec41ec25633803891b` completed its entire workflow fan-out with zero failed/queued/in-progress runs and passed exact Cloudflare Development acceptance on deployment `467003c1-6d58-48f3-8d9b-1aea116bb107` with `uses_functions=true` and full Development alias runtime smoke.
 
-Build 304 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+Build 305 also made the retained Build 272 and Build 290 guards delegation-aware after their historical inline Finance-location assumptions became stale; their exact protected actions remain mandatory. No schema, provider transaction, pricing, booking or accounting/tax-policy change was introduced.
+
+Final Build 305 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next untouched item after that closure: Build 306 — I.T. Health dashboard extraction.**
+
+Build 305 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–304 Finance complete/closing → Build 305 Finance authorization → 306–308 I.T./reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete/closing → 306–308 I.T./reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
