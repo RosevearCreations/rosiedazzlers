@@ -25,6 +25,8 @@ SUCCESSOR_BUILD312 = {
     ".github/workflows/build312-source-gate.yml",
     ".github/workflows/build312-development-source-gate.yml",
     ".github/workflows/build312-development-acceptance.yml",
+    ".github/workflows/build301-development-source-gate.yml",
+    "BUILD312_SUMMARY.md",
 }
 
 
