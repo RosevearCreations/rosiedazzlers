@@ -90,6 +90,7 @@ jobs:
             echo "### Acceptance boundary"
             echo "Build 308 routes normal exact-SHA Development acceptance through scripts/cloudflare_pages_development.sh."
             echo "The canonical helper verifies the active Cloudflare token, resolves the Rosie Pages project, waits for the exact dev SHA to succeed, requires uses_functions=true, smokes the immutable deployment, waits for the mutable dev alias, and records the non-mutating Production promotion boundary."
+            echo "Build 274 I.T. Connections remains covered by the shared Development smoke and retained focused guard."
             echo "Retained cumulative/source guards through Build 276 remain mandatory."
             echo "Retained cumulative/source guards through Build 283 remain mandatory."
             echo "Historical immutable smoke evidence marker: SMOKE_SCOPE=static."
