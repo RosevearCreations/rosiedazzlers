@@ -142,6 +142,13 @@ else:
         "AI_PROJECT_HANDOFF.md",
         "MASTER_VALUE_ROADMAP.md",
         "AUTONOMOUS_RELEASE_QUEUE.md",
+        # Successor-aware Build 310 proof/acceptance files. These paths are
+        # explicitly enumerated so future runtime/business source remains denied.
+        "scripts/build310_admin_full_access_test.mjs",
+        "scripts/build310_http_smoke.sh",
+        ".github/workflows/build310-source-gate.yml",
+        ".github/workflows/build310-development-acceptance.yml",
+        "BUILD310_SUMMARY.md",
     }
     for name in changed.stdout.splitlines():
         low = name.lower()
