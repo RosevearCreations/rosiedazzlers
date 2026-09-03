@@ -69,7 +69,7 @@
 
 ## Current execution checkpoint
 
-Builds 300–310 are technically complete on Development before Build 310 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–312 are technically complete on Development before Build 312 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
 Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves current Finance-prefixed admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Final documentation-synchronized Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
@@ -81,15 +81,19 @@ Build 308 consolidates Development Cloudflare acceptance/recovery in `scripts/cl
 
 Build 309 externalizes the accepted root Staff Administration controller into `assets/admin-staff-v309.js` while preserving authentication and role-management rules, role/module ceilings, per-profile narrowing, forced full Admin module access, staff list/save orchestration and existing payroll/profile presentation exactly. The pre-existing older `admin-staff/index.html` route remains unchanged and is deliberately deferred to **Build 318 — Whole-application route/API authority sweep**. Final documentation-synchronized Build 309 Development SHA: `1eea3569da3ea402eb3cd7cedb1f107194265c71`.
 
-Build 310 proves the existing seven-module / 28-action Admin authorization boundary without changing permission policy. `scripts/build310_admin_full_access_test.mjs` proves Admin accepts every registered action even under a deliberately narrowed profile, while non-Admin role ceilings and profile narrowing remain fail-closed. `scripts/build310_http_smoke.sh` keeps deployed acceptance read-only/credential-free. Build 310 Source Gate run `33759860596` succeeded on feature SHA `d4fbdd8843d8bb9e476c984ec9a614452fc8843e`; PR #55 merged to pre-documentation Development SHA `c7db8fed785851f167167e8c1a1ca9d43066ab5e`; Build 310 Development Runtime Acceptance run `33759971667` and Cloudflare Development Acceptance run `33759971634` succeeded on that exact Development SHA.
+Build 310 proves the existing seven-module / 28-action Admin authorization boundary without changing permission policy. Its final accepted Development boundary is `1049f25205b3ea1cfa04dbdc72b2e3e726e1344a`; Admin full-action proof, non-Admin role ceilings, read-only runtime acceptance and successor-aware retained guards are green there.
 
-Final Build 310 closure requires the same exact-SHA cumulative source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next autonomous item after that closure: Build 311 — Inventory Operations maintainability extraction.**
+Build 311 externalizes the accepted Inventory Operations runtime from `admin-catalog.html` into `assets/admin-catalog-v311.js`, keeps `admin-catalog/index.html` synchronized and preserves the accepted runtime byte-for-byte. Final accepted Development boundary: `1364289339555ba31d7c84b7ef1b8a48c28ece76` after exact source/runtime/Cloudflare acceptance.
 
-Build 310 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+Build 312 hardens deterministic inventory integrity: stock overdraw is rejected rather than clamped, quantity arithmetic remains three-decimal, purchase-order receipt is replay-safe and records movement evidence, and malformed future numeric writes fail before persistence. The connected Rosie database was audited read-only: 39 inventory items, no duplicate-name/ASIN/vendor-SKU groups, no negative stock/cost/rating defects and no populated movement/posting/order/reservation relationships requiring repair. One legacy reorderable item with `reorder_qty = 0` was reported but deliberately not mutated. PR #59 merged to pre-documentation Development SHA `33aa012a0fcedb51bc7d23e3f8fb6095b4eb9290`; Build 312 Development Source Gate `33770506099`, Runtime Acceptance `33770506175` and Cloudflare Development Acceptance `33770505966` / #104 are green on that exact SHA. The only fan-out failure was Build 301's generic whitespace scan rediscovering a byte deliberately preserved by Build 311; this closeout excludes only that immutable extracted asset from that historical scan.
+
+**Next autonomous item after Build 312 documentation-synchronized closure: Build 313 — Catalog/Product Administration extraction.**
+
+Build 312 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Builds 309–310 Administration complete/closing → Builds 311–313 Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Builds 309–312 Administration/Inventory complete/closing → Build 313 Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
