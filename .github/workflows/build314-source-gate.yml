@@ -38,8 +38,6 @@ jobs:
           python -m py_compile scripts/build314_release_check.py
       - name: Validate Build 314 Media and Photo Studio reliability
         run: python scripts/build314_release_check.py
-      - name: Retain Build 313 authority
-        run: python scripts/build313_release_check.py
       - name: Run cumulative source authorities
         run: |
           python scripts/release_check.py
