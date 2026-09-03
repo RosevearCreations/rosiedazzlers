@@ -61,7 +61,9 @@ parts = split_module_runtime(baseline_root, "accepted Build 308 admin-staff.html
 if parts:
     start, body_start, end, close_end = parts
     expected_asset = baseline_root[body_start:end].lstrip("\n")
-    if read(ASSET).rstrip("\n") != expected_asset.rstrip("\n"):
+    # Ignore only terminal structural whitespace contributed by the indented closing
+    # </script> line; all executable/source bytes before it remain exact.
+    if read(ASSET).rstrip() != expected_asset.rstrip():
         errors.append("versioned Staff asset is not byte-for-byte the accepted Build 308 root inline runtime")
     expected_page = baseline_root[:start] + TAG + baseline_root[close_end:]
     if read(ROOT_PAGE).rstrip("\n") != expected_page.rstrip("\n"):
