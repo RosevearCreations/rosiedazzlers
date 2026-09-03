@@ -1,0 +1,50 @@
+name: Build 311 Source Gate
+
+on:
+  push:
+    branches: [build311-inventory-operations-maintainability-extraction]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build311-source-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check Build 311 syntax
+        run: |
+          node --check assets/admin-catalog-v311.js
+          bash -n scripts/build311_http_smoke.sh
+          python -m py_compile scripts/build311_release_check.py
+      - name: Retain Build 309 release authority
+        run: python scripts/build309_release_check.py
+      - name: Validate Build 311 Inventory Operations extraction
+        run: python scripts/build311_release_check.py
+      - name: Run cumulative source authorities
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Source hygiene outside accepted extracted runtime
+        run: |
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
