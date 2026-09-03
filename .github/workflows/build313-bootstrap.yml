@@ -1,0 +1,73 @@
+name: Build 313 Bootstrap Exact Product Catalog Extraction
+
+on:
+  push:
+    branches: [build313-catalog-product-administration-extraction]
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: build313-catalog-product-administration-extraction
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Extract accepted Build 312 App Management runtime byte-for-byte
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import subprocess
+
+          baseline = '032bd2fab73b6cba4ab48c9db45b828c34c88d70'
+          page = 'admin-app.html'
+          folder = 'admin-app/index.html'
+          asset = 'assets/admin-app-v313.js'
+          tag = '<script src="/assets/admin-app-v313.js"></script>'
+          marker = '<script>\n(function(){'
+
+          def accepted(rel):
+              return subprocess.check_output(['git','show',f'{baseline}:{rel}'], text=True)
+
+          root = accepted(page)
+          routed = accepted(folder)
+          if root != routed:
+              raise SystemExit('accepted Build 312 admin-app root/folder route copies diverge')
+          start = root.find(marker)
+          if start < 0 or root.find(marker, start + 1) >= 0:
+              raise SystemExit('expected one mature App Management inline controller')
+          body_start = start + len('<script>\n')
+          end = root.find('</script>', body_start)
+          if end < 0:
+              raise SystemExit('missing App Management inline controller close')
+          runtime = root[body_start:end]
+          if '/api/admin/app_settings_get' not in runtime or '/api/admin/app_settings_save' not in runtime:
+              raise SystemExit('accepted App Management API authority not found in extracted controller')
+          if 'setPricingCatalogState' not in runtime:
+              raise SystemExit('accepted pricing/catalog controller authority not found')
+          expected = root[:start] + tag + root[end + len('</script>'):]
+          Path(asset).write_text(runtime, encoding='utf-8', newline='')
+          Path(page).write_text(expected, encoding='utf-8', newline='')
+          Path(folder).write_text(expected, encoding='utf-8', newline='')
+          if Path(asset).read_text(encoding='utf-8') != runtime:
+              raise SystemExit('asset byte reconstruction failed')
+          reconstructed = Path(page).read_text(encoding='utf-8').replace(tag, '<script>\n' + runtime + '</script>', 1)
+          if reconstructed != root:
+              raise SystemExit('root reconstruction failed')
+          print(f'Build 313 exact runtime extraction: PASS ({len(runtime.encode("utf-8"))} bytes)')
+          PY
+      - name: Remove one-time bootstrap and commit exact extraction
+        run: |
+          rm .github/workflows/build313-bootstrap.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin-app.html admin-app/index.html assets/admin-app-v313.js .github/workflows/build313-bootstrap.yml
+          git diff --cached --name-status
+          git commit -m "Build 313: extract Product Catalog administration runtime"
+          git push origin HEAD:build313-catalog-product-administration-extraction
