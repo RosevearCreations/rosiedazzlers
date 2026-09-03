@@ -1,105 +1,78 @@
 # Rosie Dazzlers — Autonomous Release Queue
 
-**Status:** Planned autonomous technical sequence  
+**Status:** Active autonomous technical sequence  
 **Recorded:** 2026-09-03  
-**Scope:** Releases that can be implemented, regression-tested, deployed to Development, and accepted without additional business-rule input.  
-**Living planning authority:** `MASTER_VALUE_ROADMAP.md` remains authoritative; this file records the exact agreed execution queue for Builds 300–319.
+**Scope:** Releases that can be implemented, regression-tested, deployed to Development and accepted without additional business-rule input.  
+**Living planning authority:** `MASTER_VALUE_ROADMAP.md` remains authoritative; this file records the agreed execution queue for Builds 300–319.
 
-## Next 20 autonomous RosieDazzlers items
+## Builds 300–319
 
-1. **Build 300 — Finance Payments maintainability extraction**  
-   Separate the mature Payments admin runtime into versioned assets, preserve all existing payment rules/API authority, add exact reconstruction guards and read-only runtime acceptance.
-
-2. **Build 301 — Finance Reconciliation maintainability extraction**  
-   Cleanly separate bank/transaction/reconciliation UI runtime while preserving matching, posting and approval behavior exactly.
-
-3. **Build 302 — Statement Import reliability**  
-   Harden accounting statement import parsing, validation, error reporting and duplicate protection without changing accounting policy. This item ultimately closed as a fail-closed retired-import convergence guard because no active statement-import parser/API survives in the accepted application.
-
-4. **Build 303 — Finance Tax-support maintainability extraction**  
-   Externalize and validate the retained T2125/tax-support/accountant-package surfaces while keeping Build 273 Finance authority intact.
-
-5. **Build 304 — Accountant export integrity**  
-   Verify accountant exports contain consistent document/evidence references, predictable formats, safe filenames and no private/internal leakage.
-
-6. **Build 305 — Finance authorization sweep**  
-   Test every Finance endpoint against role/module/action permissions, direct API access, anonymous access and cross-module privilege escalation.
-
-7. **Build 306 — I.T. Health dashboard extraction**  
-   Cleanly modularize the I.T./System Health runtime so deployment, API, D1, storage, authentication and provider readiness can be tested independently.
-
-8. **Build 307 — I.T. readiness diagnostics upgrade**  
-   Normalize GREEN/AMBER/RED readiness reporting, distinguish configuration from transaction acceptance, eliminate vague “service unavailable” failures and expose corrective mechanics.
-
-9. **Build 308 — Cloudflare deployment/recovery consolidation**  
-   Integrate the newly proven exact-SHA Development recovery path into normal release tooling and remove redundant deployment/recovery mechanics.
-
-10. **Build 309 — Staff Administration maintainability extraction**  
-    Externalize staff/profile/account administration runtime while preserving authentication and role-management rules.
-
-11. **Build 310 — Admin full-access acceptance matrix**  
-    Automatically prove the Admin role can access every enabled module/action while narrower staff profiles remain correctly restricted.
-
-12. **Build 311 — Inventory Operations maintainability extraction**  
-    Modularize inventory, supplies, tools, consumption, reorder and kit administration without changing stock/accounting rules.
-
-13. **Build 312 — Inventory data-integrity sweep**  
-    Detect duplicates, orphaned links, invalid quantities, stale external identifiers, broken kit relationships and inconsistent units; repair only deterministic integrity problems.
-
-14. **Build 313 — Catalog/Product Administration extraction**  
-    Separate Product/Catalog administration runtime, preserving pricing and product authority exactly while improving maintainability and testability.
-
-15. **Build 314 — Media/Photo Studio reliability**  
-    Harden photo-library synchronization, assignment tracking, before/after pairing, deletion safety and Cloudflare subrequest/resource-limit behaviour.
-
-16. **Build 315 — Content/Socials maintainability extraction**  
-    Modularize Content Studio/Socials publishing administration while keeping external publishing disabled unless real provider authority exists.
-
-17. **Build 316 — SEO/Integration administration cleanup**  
-    Consolidate SEO controls, canonical metadata, sitemap handling, image metadata and integration health without inventing Search Console/Google verification evidence.
-
-18. **Build 317 — DAIP privacy/cost/runtime audit**  
-    Verify DAIP only wakes when authorized and necessary, private media remains private, expensive processing stays gated, and dormant jobs create no unnecessary Cloudflare/database load.
-
-19. **Build 318 — Whole-application route/API authority sweep**  
-    Check every root/folder route pair, duplicate page, `/api/*` endpoint, authentication boundary, noindex admin shell, one-H1 public requirement and stale route reference. Remove demonstrably obsolete copies.
-
-20. **Build 319 — Runtime efficiency + CI consolidation**  
-    Perform a complete polling/timer/background-work audit; sleep inactive modules, remove redundant network requests, consolidate retained Build gates where safe, reduce CI duplication and preserve exact release/rollback evidence.
+1. **Build 300 — Finance Payments maintainability extraction** — complete.
+2. **Build 301 — Finance Reconciliation maintainability extraction** — complete.
+3. **Build 302 — Statement Import reliability** — complete as fail-closed retired-import convergence guard.
+4. **Build 303 — Finance Tax-support maintainability extraction** — complete.
+5. **Build 304 — Accountant export integrity** — complete.
+6. **Build 305 — Finance authorization sweep** — complete.
+7. **Build 306 — I.T. Health dashboard extraction** — complete.
+8. **Build 307 — I.T. readiness diagnostics upgrade** — complete.
+9. **Build 308 — Cloudflare deployment/recovery consolidation** — complete.
+10. **Build 309 — Staff Administration maintainability extraction** — complete.
+11. **Build 310 — Admin full-access acceptance matrix** — complete.
+12. **Build 311 — Inventory Operations maintainability extraction** — complete.
+13. **Build 312 — Inventory data-integrity sweep** — complete.
+14. **Build 313 — Catalog/Product Administration extraction** — complete and accepted on Development and Production.
+15. **Build 314 — Media/Photo Studio reliability** — implementation/source acceptance complete; Development closeout in progress.
+16. **Build 315 — Content/Socials maintainability extraction** — next after Build 314 Development acceptance. Modularize Content Studio/Socials publishing administration while keeping external publishing disabled unless real provider authority exists.
+17. **Build 316 — SEO/Integration administration cleanup** — consolidate SEO controls, canonical metadata, sitemap handling, image metadata and integration health without inventing Search Console/Google verification evidence.
+18. **Build 317 — DAIP privacy/cost/runtime audit** — verify DAIP wakes only when authorized/necessary, private media stays private, expensive processing stays gated and dormant jobs create no unnecessary Cloudflare/database load.
+19. **Build 318 — Whole-application route/API authority sweep** — check root/folder route pairs, duplicate pages, `/api/*` endpoints, authentication boundaries, noindex admin shells, one-H1 public requirements and stale route references; remove only demonstrably obsolete copies.
+20. **Build 319 — Runtime efficiency + CI consolidation** — audit polling/timers/background work, sleep inactive modules, remove redundant requests and safely consolidate retained CI while preserving release/rollback evidence.
 
 ## Current execution checkpoint
 
-Builds 300–313 are technically complete on Development before Build 313 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–313 are complete.
 
-Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves current Finance-prefixed admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Final documentation-synchronized Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
+Build 313 was documentation-synchronized and deliberately promoted so the accepted source boundary is now:
 
-Build 306 closed the I.T. System Health extraction on final documentation-synchronized `dev` SHA `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`. Raw observations remain isolated, GET-only, `it.runtime.view` protected and free of readiness semantics or provider/database/storage mutation.
+- `main`: `813cf492841503ad972168cb630d28054d2774d0`
+- `dev`: `813cf492841503ad972168cb630d28054d2774d0` before the Build 314 Development promotion
+- Production Acceptance run `33786314308`: **SUCCESS** on that exact SHA, including exact-SHA Cloudflare deployment, immutable Production smoke and public Production-alias smoke.
 
-Build 307 upgrades those observations through `functions/api/_lib/system-health-readiness.js` and `assets/admin-system-health-v307.js`. GREEN remains direct evidence only; database/R2/provider configuration remains distinct from transaction/object/provider acceptance; corrective guidance remains manual/read-only with `automatic: false`.
+This supersedes the historical note that Build 303 was the Production boundary. Build 303 remains retained historical Tax-support authority, but Build 313 is the current accepted Production source.
 
-Build 308 consolidates Development Cloudflare acceptance/recovery in `scripts/cloudflare_pages_development.sh`. Normal acceptance is read-only. Recovery is manual `workflow_dispatch` only, defaults to `observe`, and `repair` requires exact current-`dev` SHA confirmation before a non-terminal Development preview can be mutated. Terminal and Production targets fail closed. Historical Build 274/275/276/281/283/284 release semantics remain protected through successor-aware guards. Final documentation-synchronized Build 308 Development SHA: `d14a63c62913edf125a3e2bd8d69f110a6942dad`.
+### Build 314 closeout
 
-Build 309 externalizes the accepted root Staff Administration controller into `assets/admin-staff-v309.js` while preserving authentication and role-management rules, role/module ceilings, per-profile narrowing, forced full Admin module access, staff list/save orchestration and existing payroll/profile presentation exactly. The pre-existing older `admin-staff/index.html` route remains unchanged and is deliberately deferred to **Build 318 — Whole-application route/API authority sweep**. Final documentation-synchronized Build 309 Development SHA: `1eea3569da3ea402eb3cd7cedb1f107194265c71`.
+Build 314 began only after `main` and `dev` were verified identical at the accepted Build 313 SHA above.
 
-Build 310 proves the existing seven-module / 28-action Admin authorization boundary without changing permission policy. Its final accepted Development boundary is `1049f25205b3ea1cfa04dbdc72b2e3e726e1344a`; Admin full-action proof, non-Admin role ceilings, read-only runtime acceptance and successor-aware retained guards are green there.
+Build 314 hardens the existing Media/Photo Studio without a schema migration or business-rule change:
 
-Build 311 externalizes the accepted Inventory Operations runtime from `admin-catalog.html` into `assets/admin-catalog-v311.js`, keeps `admin-catalog/index.html` synchronized and preserves the accepted runtime byte-for-byte. Final accepted Development boundary: `1364289339555ba31d7c84b7ef1b8a48c28ece76` after exact source/runtime/Cloudflare acceptance.
+- ordinary Photo Studio loads remain database-only;
+- explicit R2 sync remains prefix/page bounded to at most 100 approved objects per Worker invocation;
+- managed photos expose exact active `assignment_count`, `assigned_targets` and `before_after_slots` tracking;
+- a `before_after_pair` cannot use the same managed photo for both sides;
+- deletion remains blocked by active Photo Studio assignments and now also fails closed when a draft/published Gallery `before_url` or `after_url` references the photo;
+- existing database-FK race protection and R2-delete compensation remain intact.
 
-Build 312 hardens deterministic inventory integrity: stock overdraw is rejected rather than clamped, quantity arithmetic remains three-decimal, purchase-order receipt is replay-safe and records movement evidence, and malformed future numeric writes fail before persistence. The connected Rosie database was audited read-only: 39 inventory items, no duplicate-name/ASIN/vendor-SKU groups, no negative stock/cost/rating defects and no populated movement/posting/order/reservation relationships requiring repair. One legacy reorderable item with `reorder_qty = 0` was reported but deliberately not mutated. Final documentation-synchronized Build 312 Development SHA: `032bd2fab73b6cba4ab48c9db45b828c34c88d70`.
+Build 314 Source Gate run `33790777028` is **SUCCESS** on feature SHA `5e018b905b7a5014d90c7e8f8089a1f521702e3d`, including syntax, focused Build 314 invariants, cumulative source checks, SEO/H1, route-copy and source-hygiene authorities.
 
-Build 313 externalizes the accepted App Management/Product Catalog controller from `admin-app.html` into `assets/admin-app-v313.js`, keeps `admin-app/index.html` synchronized and preserves the accepted Product/Pricing runtime byte-for-byte. Packages, add-ons, service areas, public requirements, `pricing_catalog`, `app_settings_get` and `app_settings_save` authority remain unchanged; no pricing, schema, authentication, business-data or polling behavior changed. PR #61 merged to pre-documentation Development SHA `9b253ee3e13ee45fbb35d3d757f9c5c07a205170`; Build 313 Development Source Gate `33773589749`, Runtime Acceptance `33773589777` and Cloudflare Development Acceptance `33773589753` / #106 are green on that exact SHA, with zero failures across the 47-run fan-out.
+The final documentation-synchronized Build 314 branch must pass the same source gate before it is fast-forwarded to `dev`. `main` must remain on accepted Build 313 during Build 314 Development closeout.
 
-**Next autonomous item after Build 313 documentation-synchronized closure: Build 314 — Media/Photo Studio reliability.**
+**Next autonomous item after Build 314 Development acceptance: Build 315 — Content/Socials maintainability extraction.**
 
-Build 313 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+## Retained technical/business boundaries
 
-## Autonomous execution order
-
-**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete → Builds 309–313 Administration/Inventory/Catalog complete/closing → Builds 314–316 Media/Social/SEO → Build 317 DAIP → Builds 318–319 whole-system hardening.**
+- server-side authorization remains authoritative;
+- role defines the maximum module set; profiles may narrow non-admin access; module switches may disable a module; workflow state decides whether an authorized module wakes;
+- no idle polling merely because a module exists;
+- current pricing/packages/add-ons/service-area/public-requirement authority remains unchanged unless a deliberately scoped future build says otherwise;
+- one meaningful H1 per indexable public page remains mandatory;
+- private/customer media never becomes public without consent/privacy review and explicit publication;
+- configuration-present evidence must never be described as provider transaction/delivery/publishing acceptance;
+- exact-SHA Development/Production evidence remains required before a release is called accepted.
 
 ## Explicitly excluded from autonomous implementation
 
-Do not invent or silently approve any of the following while executing Builds 300–319:
+Do not invent or silently approve:
 
 - material pricing or restoration labour rules;
 - maintenance pricing, cadence, discounts, perks, recurring scope, pause/cancel terms or priority booking;
@@ -108,8 +81,8 @@ Do not invent or silently approve any of the following while executing Builds 30
 - accountant/tax judgment;
 - genuine customer/public-use consent or fabricated proof;
 - Google Business Profile or Search Console ownership/verification evidence;
-- real payment-provider transaction, settlement or webhook acceptance evidence unless deliberate provider testing is separately reopened;
+- real payment-provider transaction, settlement or webhook acceptance unless deliberate provider testing is separately reopened;
 - real email/SMS/Web Push delivery evidence;
-- physical-device acceptance that cannot be established by automated testing.
+- physical-device acceptance not established by automated testing.
 
 For these items, preserve the current safe authority and leave the feature gated until real business input or external evidence exists.
