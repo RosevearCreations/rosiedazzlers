@@ -1,0 +1,34 @@
+name: Build 311 Apply Inventory Extraction v2
+
+on:
+  push:
+    branches:
+      - build311-inventory-operations-maintainability-extraction
+    paths:
+      - .github/workflows/build311-apply-extraction-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Build 311 feature branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply exact Inventory Operations runtime extraction
+        run: python scripts/build311_apply_extraction.py
+
+      - name: Commit structural extraction and remove one-time helpers
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm scripts/build311_apply_extraction.py .github/workflows/build311-apply-extraction.yml .github/workflows/build311-apply-extraction-v2.yml
+          git add admin-catalog.html assets/admin-catalog-v311.js
+          git commit -m "Build 311: extract Inventory Operations runtime"
+          git push origin HEAD:build311-inventory-operations-maintainability-extraction
