@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Autonomous Release Queue
 
 **Status:** Planned autonomous technical sequence  
-**Recorded:** 2026-09-02  
+**Recorded:** 2026-09-03  
 **Scope:** Releases that can be implemented, regression-tested, deployed to Development, and accepted without additional business-rule input.  
 **Living planning authority:** `MASTER_VALUE_ROADMAP.md` remains authoritative; this file records the exact agreed execution queue for Builds 300–319.
 
@@ -69,25 +69,23 @@
 
 ## Current execution checkpoint
 
-Builds 300–306 are technically complete on Development. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–307 are technically complete on Development before Build 307 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
-Build 304 closed the accountant-export integrity slice: the accountant package has a versioned/predictable JSON export contract, explicit evidence-reference integrity classification, sanitized filenames and a privacy whitelist that excludes raw storage locators, internal document notes, staff identity metadata and raw mileage/booking rows. Build 304 introduced no schema/database migration, accounting/tax-policy change or payment-provider mutation.
+Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves all current `accounting_*`, `payment_*` and `payroll_*` admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Its final documentation-synchronized Development SHA is `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`. Build 305 has no Production promotion authorization.
 
-Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves all current `accounting_*`, `payment_*` and `payroll_*` admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Its final documentation-synchronized Development SHA is `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`; exact source/runtime/Cloudflare acceptance drained with zero failed/queued/in-progress runs. Build 305 has no Production promotion authorization.
+Build 306 closed the I.T. System Health extraction on final documentation-synchronized `dev` SHA `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`. Its six raw families remain `deployment`, `api`, `d1` release-key/database data plane, `storage`, `authentication` and `providers`; the `d1` release key accurately reports Supabase when that is Rosie's configured database authority. Raw observations remain isolated, GET-only, `it.runtime.view` protected and free of readiness semantics or provider/database/storage mutation.
 
-Build 306 extracts I.T. System Health into six independently observable families: deployment, API, `d1` release-key/database data plane, storage, authentication and providers. The `d1` release key does not falsely claim the active backend: the observer reports `supabase` when Rosie's configured Supabase service authority is present, `d1` only when an actual `DB` binding exists, otherwise unconfigured. The family collector uses `Promise.allSettled`, and every family can also be requested independently.
+Build 307 upgrades those raw observations through `functions/api/_lib/system-health-readiness.js` and versioned dashboard runtime `assets/admin-system-health-v307.js`. GREEN is reserved for conditions this diagnostic directly proves; database/R2/provider configuration remains AMBER when no live transaction/object/provider acceptance was performed; missing required database/R2 authority or an observation failure is RED. Provider configuration is never described as successful payment, webhook, delivery, publishing or external API acceptance. Corrective guidance is manual/read-only with `automatic: false`.
 
-The Build 306 API is GET-only, requires `it.runtime.view`, exposes no provider secrets/session tokens/staff email or IDs, performs no provider/database/storage mutation, and leaves GREEN/AMBER/RED readiness interpretation and corrective mechanics to Build 307. The standalone protected dashboard is `admin-system-health.html` with versioned runtime `assets/admin-system-health-v306.js`.
+The accepted pre-documentation Build 307 Development SHA is `069bb7d7bff9c1f50974b7018634e16594907c61`. Build 307 Development Source Gate run `33701368432` succeeded. Cloudflare Development Acceptance run `33701368256` succeeded on exact deployment `c6696a18-964d-4f3b-a540-335ff1665b9e`, which reached success, reported Functions attached, passed immutable deployment smoke and full Development alias smoke with convergence on attempt 1/12. Build 307 runtime acceptance initially raced deployment; after Cloudflare convergence, the same job was rerun without a source change and passed. Final pre-documentation queries returned zero failed, zero queued and zero in-progress runs.
 
-The accepted pre-documentation Build 306 Development SHA is `fc3cf314f419c7b7209892262cc0cce8a7a0c61b`. Cloudflare Development Acceptance run `33699582911` succeeded on that exact SHA with Functions attached, immutable smoke and Development alias convergence. The first Build 306 runtime attempt raced deployment and saw a `404` for the new page before Cloudflare had deployed it; after exact-SHA Cloudflare acceptance, the same job was rerun without any source change and both exact source validation and deployed read-only System Health smoke passed. Final pre-documentation workflow queries returned zero failed, zero queued and zero in-progress runs.
+Final Build 307 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next untouched item after that closure: Build 308 — Cloudflare deployment/recovery consolidation.**
 
-Final Build 306 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next untouched item after that closure: Build 307 — I.T. readiness diagnostics upgrade.**
-
-Build 306 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+Build 307 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–305 Finance complete → 306 I.T. Health closing → 307–308 I.T./reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete → Builds 306–307 I.T. Health/readiness complete/closing → Build 308 Cloudflare release reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
