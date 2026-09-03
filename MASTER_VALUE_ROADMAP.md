@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 305
+**Build:** 306
 **Updated:** 2026-09-02  
 **Read first:** `AI_PROJECT_HANDOFF.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
@@ -16,15 +16,19 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Current release boundary
 
-- **Active Development slice:** Build 305 — Finance authorization sweep, documentation synchronization/closure.
+- **Active Development slice:** Build 306 — I.T. Health dashboard extraction, documentation synchronization/closure.
 - **Accepted Production/main:** Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`.
-- **Accepted pre-documentation Build 305 Development implementation/evidence baseline:** `00571a39172052cbf42b2bec41ec25633803891b`.
-- Build 305 makes the established Finance action model exhaustive across current Finance-prefixed admin APIs without changing its seven-action vocabulary, role ceilings, role defaults, accounting/tax rules or provider behavior.
-- The accepted Build 305 scan covers 40 Finance files / 80 exported HTTP methods and verifies role ceiling, module disablement, explicit action narrowing, anonymous access and cross-module escalation boundaries.
-- Cloudflare Development Acceptance run `33697631645` passed exact deployment `467003c1-6d58-48f3-8d9b-1aea116bb107`, `uses_functions=true`, immutable smoke and full Development alias runtime/API smoke.
-- Build 305 introduces no schema/database migration, accounting/tax-policy change, payment-provider mutation or new tax judgment.
-- Build 305 has **no Production promotion authorization**. `main` remains on accepted Build 303.
-- Final Build 305 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
+- **Accepted pre-documentation Build 306 Development implementation/evidence baseline:** `fc3cf314f419c7b7209892262cc0cce8a7a0c61b`.
+- Build 306 extracts six independently observable System Health families: deployment, API, `d1` release-key/database data plane, storage, authentication and providers.
+- The `d1` release key reports the actual configured database mode accurately: Supabase when Rosie's Supabase authority is present, D1 only when a real `DB` binding exists, otherwise unconfigured.
+- The family collector uses `Promise.allSettled`; one failed family cannot suppress the others, and each family can be refreshed independently.
+- The Build 306 API is GET-only, protected by `it.runtime.view`, exposes no provider secrets/session tokens/staff identifiers and performs no provider/database/storage mutation.
+- Cloudflare Development Acceptance run `33699582911` passed exact `fc3cf314f419c7b7209892262cc0cce8a7a0c61b` with Functions attached, immutable deployment smoke and full Development alias convergence/runtime smoke.
+- The first Build 306 runtime attempt raced the new deployment and saw `404` for the new page. After Cloudflare exact-SHA acceptance, the same job was rerun with no source change and both exact source validation and deployed read-only System Health smoke passed.
+- Final pre-documentation exact-SHA queries returned zero failed, queued and in-progress workflows.
+- Build 306 does not assign GREEN/AMBER/RED state, diagnose expected degradation versus defects, or prescribe corrective mechanics; Build 307 owns those semantics.
+- Build 306 has **no Production promotion authorization**. `main` remains on accepted Build 303.
+- Final Build 306 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
 - Retained historical compatibility marker: **Build:** 301 — Build 301 — Finance Reconciliation maintainability extraction in `assets/admin-accounting-v301.js`, with accepted pre-Build-301 Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`.
 
 ## Retained baseline
@@ -79,9 +83,28 @@ The accepted boundary is:
 
 The Accountant role still has the same seven Finance defaults and cannot escape the Finance module ceiling. Explicit action denial and module disablement win. Operations-owned quote/final-balance request lifecycle remains Operations authority; hosted final-balance checkout creation remains Finance settlement authority; booking-scoped operational finance notes retain booking-work authority.
 
-The Build 305 regression suite scans the actual admin directory, covers all current `accounting_*`, `payment_*`, and `payroll_*` route/method pairs, and fails if a new Finance-prefixed route is introduced without an action resolution. The accepted pre-documentation tree covered 40 files / 80 exported methods.
+The Build 305 regression suite scans the actual admin directory, covers all current `accounting_*`, `payment_*`, and `payroll_*` route/method pairs, and fails if a new Finance-prefixed route is introduced without an action resolution. The accepted tree covered 40 files / 80 exported methods.
 
 Build 305 also repairs retained Build 272 and Build 290 guard location assumptions without weakening their protected actions. Both guards follow exact historical Finance mappings into the canonical resolver only when delegation is present.
+
+## Build 306 — I.T. Health dashboard extraction
+
+Build 306 adds `functions/api/_lib/system-health-families.js` as the observation-only System Health family authority and `functions/api/admin/system_health_families.js` as its protected GET-only API.
+
+The six isolated families are:
+
+- `deployment` — Pages deployment identity inputs independent of runtime checks;
+- `api` — protected Pages Functions request-path observation;
+- `d1` — historical release family key for the database/data plane, accurately reporting `supabase`, `d1`, or `unconfigured`;
+- `storage` — safe Cloudflare R2 binding-presence metadata only;
+- `authentication` — authenticated role/admin authority without staff identity or token leakage;
+- `providers` — existing integration-registry configuration presence only, with no provider transaction/API call.
+
+`admin-system-health.html` and `assets/admin-system-health-v306.js` provide a standalone protected dashboard with all-family and individual-family refresh. A family observation failure is contained to that family.
+
+The Build 306 test suite verifies independent family addressing, accurate Supabase-vs-D1 mode, secret/staff-identity non-disclosure, anonymous fail-closed behavior, mutation rejection and the explicit Build 307 semantic boundary.
+
+Build 306 changes no readiness policy. GREEN/AMBER/RED normalization, configuration-vs-transaction interpretation, diagnosis and corrective mechanics are Build 307 work.
 
 ## Retained Build 301–303 Finance authority
 
@@ -90,7 +113,7 @@ Build 305 also repairs retained Build 272 and Build 290 guard location assumptio
 - Build 303 externalized the retained Build 273 Tax Support controller into `assets/admin-tax-support-v303.js` byte-for-byte while leaving `functions/api/admin/accounting_tax_support.js` and `functions/api/_lib/accounting-tax-support.js` unchanged.
 - No Build 301–305 maintainability/integrity/authorization release invents matching/posting/approval, payment/provider or accountant/tax judgment.
 
-## Retained value/authority through Build 305
+## Retained value/authority through Build 306
 
 - Builds 274–280 established Mobile Quick Book, I.T. help, reliable release mechanics and deep service/local SEO while keeping Rosie’s self-contained mobile water/power model.
 - Build 281 hardened exact-SHA Cloudflare acceptance and mutable Development alias convergence.
@@ -110,6 +133,7 @@ Build 305 also repairs retained Build 272 and Build 290 guard location assumptio
 - Build 303 — Finance Tax-support maintainability extraction preserves the retained Tax Support runtime in `assets/admin-tax-support-v303.js`.
 - Build 304 — Accountant export integrity preserves Finance/tax authority while hardening evidence/export privacy and predictable formats.
 - Build 305 — Finance authorization sweep makes current Finance-prefixed admin routes exhaustive under the existing action model without broadening roles.
+- Build 306 — I.T. Health dashboard extraction creates independent, read-only health observations without redefining readiness/provider authority.
 
 ## Permanent business/runtime constraints
 
@@ -130,14 +154,14 @@ Build 305 also repairs retained Build 272 and Build 290 guard location assumptio
 3. **Build 302 — Statement Import reliability** — complete as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired ingestion path was recreated.
 4. **Build 303 — Finance Tax-support maintainability extraction** — complete and accepted in Production at `09442c53d385aca7995150ace4bde55abd51d7df`; retained Build 273 controller externalized byte-for-byte.
 5. **Build 304 — Accountant export integrity** — complete on Development; export contract/privacy integrity hardened without tax/accounting policy change.
-6. **Build 305 — Finance authorization sweep** — technically complete; documentation-synchronized exact-SHA Development acceptance is the final closure step.
+6. **Build 305 — Finance authorization sweep** — complete on Development; final docs-synchronized accepted SHA `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
 Retained Finance storage and export concepts include `accounting_documents`, structured evidence, T2125 workpapers and **accountant-friendly export surfaces**. Accountant/tax judgment remains external/manual authority.
 
 ## I.T. / reliability roadmap — Builds 306–308
 
-- **Build 306 — I.T. Health dashboard extraction** — next untouched item after Build 305 closure; modularize existing I.T./System Health runtime while preserving readiness semantics exactly.
-- Build 307 — readiness diagnostics upgrade with explicit GREEN/AMBER/RED configuration-vs-transaction distinction and corrective mechanics.
+- **Build 306 — I.T. Health dashboard extraction** — technically complete; documentation-synchronized exact-SHA Development acceptance is the final closure step.
+- **Build 307 — I.T. readiness diagnostics upgrade** — next untouched item after Build 306 closure; normalize GREEN/AMBER/RED state, distinguish configuration from transaction acceptance, improve diagnosis and expose corrective mechanics using Build 306 observations.
 - Build 308 — Cloudflare deployment/recovery consolidation around the proven exact-SHA Development path.
 
 ## Administration / inventory / catalog — Builds 309–313
@@ -175,18 +199,18 @@ Do not autonomously invent:
 - accountant/tax judgment;
 - physical-device evidence not proven by automation.
 
-## Build 305 acceptance sequence
+## Build 306 acceptance sequence
 
-1. run Build 305 Finance action-matrix/exhaustive route scan and retained Finance source guards;
+1. run Build 306 family-isolation/non-disclosure contract and retained Build 305 source guard;
 2. merge the accepted implementation to `dev`;
-3. run Build 305 and canonical cumulative Development source gates;
-4. run anonymous/direct-API Build 305 runtime authorization acceptance;
-5. prove the exact Cloudflare Development deployment SHA, `uses_functions=true`, immutable deployment smoke and mutable alias convergence;
-6. repair only historical guard location assumptions exposed by the centralized resolver, preserving exact protected actions;
-7. synchronize `BUILD305_SUMMARY.md`, this roadmap, the handoff and execution queue;
+3. run Build 306 and canonical cumulative Development source gates;
+4. prove exact Cloudflare Development deployment SHA, Functions attachment, immutable deployment smoke and mutable alias convergence;
+5. run Build 306 deployed read-only page/API smoke after deployment convergence;
+6. require zero failed, queued and in-progress workflows on the exact pre-documentation SHA;
+7. synchronize `BUILD306_SUMMARY.md`, this roadmap, the handoff and execution queue;
 8. repeat exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head;
-9. only then call Build 305 Development-green/closed;
-10. **do not promote Build 305 to `main` without new explicit authorization.**
+9. only then call Build 306 Development-green/closed;
+10. **do not promote Build 306 to `main` without new explicit authorization.**
 
 ## Retained focused-guard compatibility anchors
 
