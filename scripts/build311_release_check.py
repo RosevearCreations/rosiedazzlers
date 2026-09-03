@@ -30,6 +30,18 @@ SUCCESSOR_BUILD312 = {
 }
 
 
+SUCCESSOR_BUILD313 = {
+    "admin-app.html",
+    "admin-app/index.html",
+    "assets/admin-app-v313.js",
+    "scripts/build313_release_check.py",
+    "scripts/build313_http_smoke.sh",
+    ".github/workflows/build313-source-gate.yml",
+    ".github/workflows/build313-development-source-gate.yml",
+    ".github/workflows/build313-development-acceptance.yml",
+    "BUILD313_SUMMARY.md",
+}
+
 def read(rel):
     path = ROOT / rel
     if not path.exists():
@@ -149,7 +161,7 @@ else:
         ".github/workflows/build311-development-acceptance.yml",
         "BUILD311_SUMMARY.md",
         "AUTONOMOUS_RELEASE_QUEUE.md",
-    } | SUCCESSOR_BUILD312
+    } | SUCCESSOR_BUILD312 | SUCCESSOR_BUILD313
     for name in changed.stdout.splitlines():
         low = name.lower()
         if low.startswith("functions/") and name not in SUCCESSOR_BUILD312:

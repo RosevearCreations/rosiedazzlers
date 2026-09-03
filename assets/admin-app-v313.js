@@ -1,0 +1,1695 @@
+(function(){
+  function setShellStatus(message, type) {
+    const node = document.querySelector('[data-admin-shell-status]');
+    if (!node) return;
+    node.hidden = !message;
+    node.textContent = message || '';
+    node.dataset.state = type || '';
+  }
+  function flashSavedButton(button, label) {
+    if (!button || !button.classList) return;
+    const originalText = button.dataset.originalText || button.textContent || '';
+    button.dataset.originalText = originalText;
+    button.classList.add('just-saved', 'saved');
+    button.textContent = label || 'Saved';
+    button.setAttribute('aria-live', 'polite');
+    window.clearTimeout(button._savedFlashTimer);
+    button._savedFlashTimer = window.setTimeout(function () {
+      button.classList.remove('just-saved', 'saved');
+      button.textContent = button.dataset.originalText || originalText;
+    }, 2600);
+  }
+  async function saveSetting(key, value, successText) {
+    const activeButton = document.activeElement && document.activeElement.closest ? document.activeElement.closest('button') : null;
+    const res = await fetch('/api/admin/app_settings_save', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ key, value }) });
+    const out = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(out?.error || 'Could not save settings.');
+    setShellStatus(successText, 'success');
+    if (activeButton && (/save/i.test(activeButton.id || '') || /save/i.test(activeButton.textContent || '') || activeButton.hasAttribute('data-save-addon') || activeButton.id === 'saveSelectedServiceAreaBtn')) {
+      flashSavedButton(activeButton, 'Saved ✓');
+    }
+    return out;
+  }
+  function applySetting(setting, fallback={}){ return setting && typeof setting.value === 'object' ? setting.value : fallback; }
+
+  function qsa(selector, root){ return Array.from((root || document).querySelectorAll(selector)); }
+  function escapeHtml(value){ return String(value == null ? '' : value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+  function build201LooksLikeUrl(value){ return !value || /^(https?:\/\/|\/)/i.test(String(value).trim()); }
+  function build201CharHint(label, value, limit){ var len = String(value || '').length; return { state: !len ? 'warn' : (len <= limit ? 'ok' : 'warn'), text: label + ': ' + len + '/' + limit + ' characters' }; }
+  function build201SlugHint(value){ var text = String(value || '').trim(); return { state: text && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(text) ? 'ok' : 'warn', text: text ? 'Slug format: ' + (text.match(/^[a-z0-9]+(?:-[a-z0-9]+)*$/) ? 'clean' : 'use lowercase words and hyphens') : 'Slug is missing' }; }
+  function build201UrlHint(value){ var text = String(value || '').trim(); return { state: build201LooksLikeUrl(text) ? (text ? 'ok' : 'warn') : 'error', text: text ? (build201LooksLikeUrl(text) ? 'URL format looks usable' : 'Use https://, http://, or a site path starting with /') : 'URL/image field is empty' }; }
+  function build201FieldHintFor(input){
+    var id = input.id || '';
+    var field = input.getAttribute('data-pkg-detail-field') || input.getAttribute('data-addon-editor-field') || input.getAttribute('data-gallery-field') || input.getAttribute('data-social-item-field') || '';
+    var label = (input.closest('label') && input.closest('label').innerText || id || field || 'Field').replace(/\s+/g,' ').trim();
+    var value = input.value || '';
+    if (/meta_title/i.test(id)) return build201CharHint('Meta title', value, 70);
+    if (/meta_description/i.test(id)) return build201CharHint('Meta description', value, 160);
+    if (/hero_title/i.test(id)) return build201CharHint('Hero/H1 title', value, 90);
+    if (/slug/i.test(id) || field === 'code') return build201SlugHint(value);
+    if (/url/i.test(id) || /url/i.test(field)) return build201UrlHint(value);
+    if (field === 'seo_focus') return { state: value.length >= 12 ? 'ok' : 'warn', text: value ? 'SEO focus phrase set' : 'Add the local/service phrase people may search for' };
+    if (field === 'description') return build201CharHint('Description', value, 280);
+    if (field === 'consent_status') return { state: /approved_public|sample/i.test(value) ? 'ok' : 'warn', text: value ? 'Consent/privacy status: ' + value : 'Set consent/privacy status before publishing' };
+    if (field === 'url') return build201UrlHint(value);
+    return null;
+  }
+  function build201KnownMediaUrls(){
+    var urls = [];
+    function add(value){ value = String(value || '').trim(); if (value && build201LooksLikeUrl(value) && !urls.includes(value)) urls.push(value); }
+    (pricingCatalogState.packages || []).forEach(function(row){ add(row.image_url); });
+    (pricingCatalogState.addons || []).forEach(function(row){ add(row.image_url); add(row.image_fallback_url); });
+    Object.keys((landingPagesState && landingPagesState.pages) || {}).forEach(function(slug){ var page = landingPagesState.pages[slug] || {}; add(page.hero_image_url); (page.gallery_image_urls || []).forEach(add); (page.related_products || []).forEach(function(item){ add(item.image_url); }); });
+    ((beforeAfterGalleryEditorState && beforeAfterGalleryEditorState.items) || []).forEach(function(row){ add(row.before_url); add(row.after_url); });
+    return urls;
+  }
+  function build201MediaBadgeFor(input){
+    var value = String(input.value || '').trim();
+    var row = input.closest('.friendly-json-row');
+    var statusInput = row ? row.querySelector('[data-gallery-field="consent_status"]') : null;
+    var status = statusInput ? String(statusInput.value || '').trim() : '';
+    if (status === 'approved_public') return { state:'ok', text:'Approved public media' };
+    if (status === 'private') return { state:'warn', text:'Private / do not publish' };
+    if (status === 'needs_review') return { state:'warn', text:'Media consent needs review' };
+    if (/assets\.rosiedazzlers\.ca|^\//i.test(value)) return { state:'ok', text:'Owned/R2 media likely' };
+    if (value) return { state:'warn', text:'Confirm source/consent before public use' };
+    return { state:'warn', text:'No media selected' };
+  }
+  function build201AttachFieldHint(input){
+    if (!input || input.type === 'hidden' || input.dataset.build201HintBound === '1') return;
+    input.dataset.build201HintBound = '1';
+    var host = input.closest('.field') || input.parentElement;
+    if (!host) return;
+    var hint = document.createElement('div');
+    hint.className = 'build201-hint';
+    hint.setAttribute('data-build201-hint-for', input.id || input.getAttribute('data-pkg-detail-field') || input.getAttribute('data-addon-editor-field') || input.getAttribute('data-gallery-field') || 'field');
+    host.appendChild(hint);
+    function refresh(){ var data = build201FieldHintFor(input); if (!data) { hint.hidden = true; return; } hint.hidden = false; hint.dataset.state = data.state || 'warn'; hint.textContent = data.text || ''; }
+    input.addEventListener('input', refresh);
+    input.addEventListener('change', refresh);
+    refresh();
+  }
+  function build201AttachMediaTools(input){
+    if (!input || input.dataset.build201MediaBound === '1') return;
+    var id = input.id || '';
+    var field = input.getAttribute('data-pkg-detail-field') || input.getAttribute('data-addon-editor-field') || input.getAttribute('data-gallery-field') || '';
+    if (!/url/i.test(id) && !/url/i.test(field)) return;
+    if (!/(image|hero|gallery|photo|before_url|after_url|media)/i.test(id + ' ' + field)) return;
+    input.dataset.build201MediaBound = '1';
+    var host = input.closest('.field') || input.parentElement;
+    if (!host) return;
+    var tools = document.createElement('div');
+    tools.className = 'build201-media-tools';
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn';
+    button.textContent = 'Pick saved media URL';
+    var badge = document.createElement('span');
+    badge.className = 'build201-media-badge';
+    tools.appendChild(button);
+    tools.appendChild(badge);
+    host.appendChild(tools);
+    function refreshBadge(){ var info = build201MediaBadgeFor(input); badge.dataset.state = info.state; badge.textContent = info.text; }
+    button.addEventListener('click', function(){
+      var urls = build201KnownMediaUrls();
+      if (!urls.length) { setShellStatus('No saved package/add-on/landing/gallery media URLs are available yet.', 'warning'); return; }
+      var current = String(input.value || '').trim();
+      var nextIndex = Math.max(-1, urls.indexOf(current)) + 1;
+      if (nextIndex >= urls.length) nextIndex = 0;
+      input.value = urls[nextIndex];
+      input.dispatchEvent(new Event('input', { bubbles:true }));
+      input.dispatchEvent(new Event('change', { bubbles:true }));
+      refreshBadge();
+      setShellStatus('Media URL inserted from saved editor media. Confirm consent/source before publishing.', 'success');
+    });
+    input.addEventListener('input', refreshBadge);
+    input.addEventListener('change', refreshBadge);
+    refreshBadge();
+  }
+  function build201EnhanceFriendlyEditors(root){
+    root = root || document;
+    qsa('input, textarea, select', root).forEach(function(input){ build201AttachFieldHint(input); build201AttachMediaTools(input); });
+  }
+  function build201LandingSchemaPreview(page){
+    page = normalizeLandingPage(page || {}, {});
+    var schema = {
+      '@context':'https://schema.org',
+      '@type':'Service',
+      name: page.hero_title || page.name || 'Mobile auto detailing',
+      description: page.meta_description || page.hero_intro || '',
+      areaServed: page.type === 'location' ? (page.name || page.slug || 'Oxford and Norfolk Counties') : 'Oxford County and Norfolk County, Ontario',
+      provider: { '@type':'LocalBusiness', name:'Rosie Dazzlers Mobile Auto Detailing' },
+      url: page.slug ? (location.origin + (page.slug.indexOf('/') === 0 ? page.slug : '/landing/' + page.slug)) : location.origin + '/services'
+    };
+    return '<details class="panel-lite" data-build201="landing-schema-preview"><summary><strong>LocalBusiness/service schema preview</strong></summary><pre class="build201-schema-preview">' + escapeHtml(JSON.stringify(schema, null, 2)) + '</pre></details>';
+  }
+  function build201RequireSaveReview(label, value){
+    var json = JSON.stringify(value || {});
+    var summary = label + ' save review: ' + Math.round(json.length / 1024) + ' KB payload. Friendly fields will update the DB-backed editable setting with bundled fallback still available.';
+    setShellStatus(summary, 'success');
+    return true;
+  }
+  // Build 196: shared option-library hydration used esc() from another module; keep a local alias so Admin App never crashes on dropdown refresh.
+  function esc(value){ return escapeHtml(value); }
+  function documentTemplatesDefaults(){
+    return {
+      confirmation_intro: 'Thank you for booking Rosie Dazzlers. Your booking details are below.',
+      invoice_footer: 'Please review your service summary before arrival. On-site discounts, weather adjustments, and refunds should be documented through the office workflow.',
+      gift_footer: 'Gift certificates are valid for one year from purchase and are non-refundable.'
+    };
+  }
+  function readDocumentTemplates(){
+    return {
+      confirmation_intro: byId('doc_confirmation_intro').value || documentTemplatesDefaults().confirmation_intro,
+      invoice_footer: byId('doc_invoice_footer').value || documentTemplatesDefaults().invoice_footer,
+      gift_footer: byId('doc_gift_footer').value || documentTemplatesDefaults().gift_footer
+    };
+  }
+  function socialFeedsDefaults(){
+    return {
+      platforms: [
+        { platform: 'youtube', title: 'YouTube', intro: 'Latest videos and shorts.', items: [] },
+        { platform: 'facebook', title: 'Facebook', intro: 'Latest Facebook posts.', items: [] },
+        { platform: 'instagram', title: 'Instagram', intro: 'Latest Instagram posts.', items: [] },
+        { platform: 'tiktok', title: 'TikTok', intro: 'Latest TikTok posts.', items: [] },
+        { platform: 'x', title: 'X', intro: 'Latest X posts.', items: [] }
+      ]
+    };
+  }
+  function normalizeSocialFeeds(value){
+    var defaults = socialFeedsDefaults();
+    var src = value && typeof value === 'object' ? cloneValue(value) : cloneValue(defaults);
+    var rows = Array.isArray(src.platforms) ? src.platforms : [];
+    if (!rows.length) rows = defaults.platforms;
+    src.platforms = rows.map(function(platform, index){
+      var fallback = defaults.platforms[index] || { platform: 'platform_' + (index + 1), title: 'Platform ' + (index + 1), intro: '', items: [] };
+      var items = Array.isArray(platform && platform.items) ? platform.items : [];
+      return {
+        platform: (platform && platform.platform) || fallback.platform,
+        title: (platform && platform.title) || fallback.title,
+        intro: (platform && platform.intro) || fallback.intro,
+        items: items.slice(0, 5).map(function(item){
+          return {
+            title: item && item.title ? String(item.title) : '',
+            url: item && item.url ? String(item.url) : '',
+            published_at: item && item.published_at ? String(item.published_at) : '',
+            note: item && item.note ? String(item.note) : ''
+          };
+        })
+      };
+    });
+    return src;
+  }
+  function beforeAfterGalleryDefaults(){
+    return {
+      items: [
+        {
+          title: 'Interior refresh',
+          location: 'Tillsonburg, ON',
+          before_kind: 'image',
+          before_url: 'https://assets.rosiedazzlers.ca/brand/CarPrice2025.PNG',
+          after_kind: 'image',
+          after_url: 'https://assets.rosiedazzlers.ca/brand/CarPriceDetails2025.PNG',
+          note: 'Replace this sample pair with customer-approved work.',
+          consent_status: 'sample'
+        }
+      ]
+    };
+  }
+  function normalizeBeforeAfterGallery(value){
+    var src = value && typeof value === 'object' ? cloneValue(value) : cloneValue(beforeAfterGalleryDefaults());
+    var items = Array.isArray(src.items) ? src.items : [];
+    src.items = items.map(function(item){
+      return {
+        title: String(item && item.title || 'Detail result'),
+        location: String(item && item.location || 'Oxford / Norfolk Counties'),
+        before_kind: String(item && item.before_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image',
+        before_url: String(item && item.before_url || ''),
+        after_kind: String(item && item.after_kind || 'image').toLowerCase() === 'video' ? 'video' : 'image',
+        after_url: String(item && item.after_url || ''),
+        note: String(item && item.note || ''),
+        consent_status: String(item && item.consent_status || ''),
+        customer_name: String(item && item.customer_name || ''),
+        vehicle_label: String(item && item.vehicle_label || '')
+      };
+    }).filter(function(item){ return item.before_url || item.after_url || item.title; });
+    if (!src.items.length) src.items = cloneValue(beforeAfterGalleryDefaults().items);
+    return src;
+  }
+  var socialFeedEditorState = socialFeedsDefaults();
+  var beforeAfterGalleryEditorState = beforeAfterGalleryDefaults();
+
+  function syncSocialFeedsJsonFromState(){
+    var node = byId('social_feeds_json');
+    if (node) node.value = JSON.stringify(normalizeSocialFeeds(socialFeedEditorState), null, 2);
+  }
+  function socialFeedPlatformLabel(platform, index){
+    return String(platform && (platform.title || platform.platform) || ('Platform ' + (index + 1))).trim();
+  }
+  function renderSocialFeedsStructuredEditor(){
+    var host = byId('socialFeedStructuredEditor');
+    if (!host) return;
+    var platforms = Array.isArray(socialFeedEditorState.platforms) ? socialFeedEditorState.platforms : [];
+    if (!platforms.length) {
+      host.innerHTML = '<div class="catalog-empty">No social platforms yet. Use Add platform or Reset to template.</div>';
+      return;
+    }
+    host.innerHTML = platforms.map(function(platform, platformIndex){
+      var items = Array.isArray(platform.items) ? platform.items : [];
+      var itemHtml = items.length ? items.map(function(item, itemIndex){
+        return '<div class="friendly-json-item">' +
+          '<div class="friendly-json-row__head"><h4>Post ' + (itemIndex + 1) + '</h4><button class="btn" type="button" data-delete-social-item="' + platformIndex + ':' + itemIndex + '">Delete post</button></div>' +
+          '<div class="friendly-json-grid">' +
+            '<label class="field"><span>Post title</span><input data-social-item-field="title" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.title || '') + '"></label>' +
+            '<label class="field"><span>Public URL</span><input data-social-item-field="url" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.url || '') + '" placeholder="https://..."></label>' +
+            '<label class="field"><span>Published date</span><input data-social-item-field="published_at" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.published_at || '') + '" placeholder="2026-06-07"></label>' +
+            '<label class="field"><span>Short note</span><input data-social-item-field="note" data-social-platform-index="' + platformIndex + '" data-social-item-index="' + itemIndex + '" value="' + escapeHtml(item.note || '') + '"></label>' +
+          '</div>' +
+        '</div>';
+      }).join('') : '<div class="catalog-empty">No posts yet for this platform.</div>';
+      return '<section class="friendly-json-row">' +
+        '<div class="friendly-json-row__head"><strong>' + escapeHtml(socialFeedPlatformLabel(platform, platformIndex)) + '</strong><div class="actions"><button class="btn" type="button" data-add-social-item="' + platformIndex + '">Add post</button><button class="btn" type="button" data-delete-social-platform="' + platformIndex + '">Delete platform</button></div></div>' +
+        '<div class="friendly-json-grid">' +
+          '<label class="field"><span>Platform key</span><input data-social-platform-field="platform" data-social-platform-index="' + platformIndex + '" value="' + escapeHtml(platform.platform || '') + '" placeholder="youtube"></label>' +
+          '<label class="field"><span>Public title</span><input data-social-platform-field="title" data-social-platform-index="' + platformIndex + '" value="' + escapeHtml(platform.title || '') + '" placeholder="YouTube"></label>' +
+          '<label class="field wide"><span>Intro text</span><textarea data-social-platform-field="intro" data-social-platform-index="' + platformIndex + '">' + escapeHtml(platform.intro || '') + '</textarea></label>' +
+        '</div>' + itemHtml +
+      '</section>';
+    }).join('');
+    bindSocialFeedsStructuredEditor();
+    build201EnhanceFriendlyEditors(host);
+  }
+  function bindSocialFeedsStructuredEditor(){
+    qsa('[data-social-platform-field]').forEach(function(input){
+      input.addEventListener('input', function(){
+        var index = Number(input.getAttribute('data-social-platform-index'));
+        var field = input.getAttribute('data-social-platform-field');
+        if (!socialFeedEditorState.platforms[index]) return;
+        socialFeedEditorState.platforms[index][field] = input.value;
+        syncSocialFeedsJsonFromState();
+      });
+    });
+    qsa('[data-social-item-field]').forEach(function(input){
+      input.addEventListener('input', function(){
+        var platformIndex = Number(input.getAttribute('data-social-platform-index'));
+        var itemIndex = Number(input.getAttribute('data-social-item-index'));
+        var field = input.getAttribute('data-social-item-field');
+        var platform = socialFeedEditorState.platforms[platformIndex];
+        if (!platform || !platform.items || !platform.items[itemIndex]) return;
+        platform.items[itemIndex][field] = input.value;
+        syncSocialFeedsJsonFromState();
+      });
+    });
+    qsa('[data-add-social-item]').forEach(function(button){
+      button.addEventListener('click', function(){
+        var index = Number(button.getAttribute('data-add-social-item'));
+        if (!socialFeedEditorState.platforms[index]) return;
+        socialFeedEditorState.platforms[index].items = Array.isArray(socialFeedEditorState.platforms[index].items) ? socialFeedEditorState.platforms[index].items : [];
+        socialFeedEditorState.platforms[index].items.push({ title: '', url: '', published_at: '', note: '' });
+        syncSocialFeedsJsonFromState();
+        renderSocialFeedsStructuredEditor();
+      });
+    });
+    qsa('[data-delete-social-item]').forEach(function(button){
+      button.addEventListener('click', function(){
+        var parts = String(button.getAttribute('data-delete-social-item') || '').split(':').map(Number);
+        var platform = socialFeedEditorState.platforms[parts[0]];
+        if (!platform || !Array.isArray(platform.items)) return;
+        platform.items.splice(parts[1], 1);
+        syncSocialFeedsJsonFromState();
+        renderSocialFeedsStructuredEditor();
+      });
+    });
+    qsa('[data-delete-social-platform]').forEach(function(button){
+      button.addEventListener('click', function(){
+        var index = Number(button.getAttribute('data-delete-social-platform'));
+        socialFeedEditorState.platforms.splice(index, 1);
+        syncSocialFeedsJsonFromState();
+        renderSocialFeedsStructuredEditor();
+      });
+    });
+  }
+  function setSocialFeedsEditor(value){
+    socialFeedEditorState = normalizeSocialFeeds(value);
+    syncSocialFeedsJsonFromState();
+    renderSocialFeedsStructuredEditor();
+  }
+  function readSocialFeedsEditor(){
+    return normalizeSocialFeeds(socialFeedEditorState);
+  }
+  function applySocialFeedsJsonToStructuredEditor(){
+    var raw = byId('social_feeds_json').value || '{}';
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Social feed JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Social feed JSON must be a JSON object.');
+    setSocialFeedsEditor(parsed);
+    setShellStatus('Advanced social JSON was applied to the friendly editor.', 'success');
+  }
+
+  function syncBeforeAfterGalleryJsonFromState(){
+    var node = byId('before_after_gallery_json');
+    if (node) node.value = JSON.stringify(normalizeBeforeAfterGallery(beforeAfterGalleryEditorState), null, 2);
+  }
+  function renderBeforeAfterGalleryStructuredEditor(){
+    var host = byId('beforeAfterGalleryStructuredEditor');
+    if (!host) return;
+    var items = Array.isArray(beforeAfterGalleryEditorState.items) ? beforeAfterGalleryEditorState.items : [];
+    if (!items.length) {
+      host.innerHTML = '<div class="catalog-empty">No gallery rows yet. Use Add gallery row or Reset to template.</div>';
+      return;
+    }
+    host.innerHTML = items.map(function(item, index){
+      var previewUrl = item.after_url || item.before_url || '';
+      return '<section class="friendly-json-row">' +
+        '<div class="friendly-json-row__head"><strong>' + escapeHtml(item.title || ('Gallery row ' + (index + 1))) + '</strong><button class="btn" type="button" data-delete-gallery-item="' + index + '">Delete row</button></div>' +
+        (previewUrl ? '<img src="' + escapeHtml(previewUrl) + '" alt="Preview for ' + escapeHtml(item.title || 'gallery row') + '" loading="lazy">' : '') +
+        '<div class="friendly-json-grid">' +
+          '<label class="field"><span>Title</span><input data-gallery-field="title" data-gallery-index="' + index + '" value="' + escapeHtml(item.title || '') + '"></label>' +
+          '<label class="field"><span>Location</span><input data-gallery-field="location" data-gallery-index="' + index + '" value="' + escapeHtml(item.location || '') + '"></label>' +
+          '<label class="field"><span>Before media type</span><select data-gallery-field="before_kind" data-gallery-index="' + index + '"><option value="image"' + (item.before_kind !== 'video' ? ' selected' : '') + '>Image</option><option value="video"' + (item.before_kind === 'video' ? ' selected' : '') + '>Video</option></select></label>' +
+          '<label class="field"><span>Before URL</span><input data-gallery-field="before_url" data-gallery-index="' + index + '" value="' + escapeHtml(item.before_url || '') + '" placeholder="https://..."></label>' +
+          '<label class="field"><span>After media type</span><select data-gallery-field="after_kind" data-gallery-index="' + index + '"><option value="image"' + (item.after_kind !== 'video' ? ' selected' : '') + '>Image</option><option value="video"' + (item.after_kind === 'video' ? ' selected' : '') + '>Video</option></select></label>' +
+          '<label class="field"><span>After URL</span><input data-gallery-field="after_url" data-gallery-index="' + index + '" value="' + escapeHtml(item.after_url || '') + '" placeholder="https://..."></label>' +
+          '<label class="field"><span>Consent status</span><select data-gallery-field="consent_status" data-gallery-index="' + index + '"><option value="sample"' + (item.consent_status === 'sample' ? ' selected' : '') + '>Sample / placeholder</option><option value="approved_public"' + (item.consent_status === 'approved_public' ? ' selected' : '') + '>Approved public</option><option value="needs_review"' + (item.consent_status === 'needs_review' ? ' selected' : '') + '>Needs review</option><option value="private"' + (item.consent_status === 'private' ? ' selected' : '') + '>Private / do not publish</option></select></label>' +
+          '<label class="field"><span>Vehicle label</span><input data-gallery-field="vehicle_label" data-gallery-index="' + index + '" value="' + escapeHtml(item.vehicle_label || '') + '"></label>' +
+          '<label class="field"><span>Customer name / initials</span><input data-gallery-field="customer_name" data-gallery-index="' + index + '" value="' + escapeHtml(item.customer_name || '') + '"></label>' +
+          '<label class="field wide"><span>Public note</span><textarea data-gallery-field="note" data-gallery-index="' + index + '">' + escapeHtml(item.note || '') + '</textarea></label>' +
+        '</div>' +
+      '</section>';
+    }).join('');
+    bindBeforeAfterGalleryStructuredEditor();
+    build201EnhanceFriendlyEditors(host);
+  }
+  function bindBeforeAfterGalleryStructuredEditor(){
+    qsa('[data-gallery-field]').forEach(function(input){
+      var eventName = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventName, function(){
+        var index = Number(input.getAttribute('data-gallery-index'));
+        var field = input.getAttribute('data-gallery-field');
+        if (!beforeAfterGalleryEditorState.items[index]) return;
+        beforeAfterGalleryEditorState.items[index][field] = input.value;
+        syncBeforeAfterGalleryJsonFromState();
+      });
+      input.addEventListener('change', function(){ syncBeforeAfterGalleryJsonFromState(); renderBeforeAfterGalleryStructuredEditor(); });
+    });
+    qsa('[data-delete-gallery-item]').forEach(function(button){
+      button.addEventListener('click', function(){
+        beforeAfterGalleryEditorState.items.splice(Number(button.getAttribute('data-delete-gallery-item')), 1);
+        syncBeforeAfterGalleryJsonFromState();
+        renderBeforeAfterGalleryStructuredEditor();
+      });
+    });
+  }
+  function setBeforeAfterGalleryEditor(value){
+    beforeAfterGalleryEditorState = normalizeBeforeAfterGallery(value);
+    syncBeforeAfterGalleryJsonFromState();
+    renderBeforeAfterGalleryStructuredEditor();
+  }
+  function readBeforeAfterGalleryEditor(){
+    return normalizeBeforeAfterGallery(beforeAfterGalleryEditorState);
+  }
+  function applyBeforeAfterGalleryJsonToStructuredEditor(){
+    var raw = byId('before_after_gallery_json').value || '{}';
+    var parsed;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Before / after gallery JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Before / after gallery JSON must be a JSON object.');
+    setBeforeAfterGalleryEditor(parsed);
+    setShellStatus('Advanced gallery JSON was applied to the friendly editor.', 'success');
+  }
+  function renderMediaPrivacySummary(summary){
+    var body = byId('mediaPrivacyReviewSummaryBody');
+    if (!body) return;
+    summary = summary || {};
+    var warnings = Array.isArray(summary.warnings) ? summary.warnings : [];
+    var uploadWarnings = Array.isArray(summary.upload_warnings) ? summary.upload_warnings : [];
+    var warningHtml = warnings.concat(uploadWarnings).slice(0, 12).map(function(row){
+      return '<li><strong>' + escapeHtml(row.title || row.source || 'Media item') + '</strong> — ' + escapeHtml(row.reason || row.privacy_status || row.media_privacy_status || 'needs review') + '</li>';
+    }).join('');
+    body.innerHTML = '<div class="subgrid"><div><strong>Gallery ready:</strong> ' + escapeHtml(summary.gallery_ready || 0) + ' / ' + escapeHtml(summary.gallery_items || 0) + '</div><div><strong>Gallery needing review:</strong> ' + escapeHtml(summary.gallery_needs_review || 0) + '</div><div><strong>Uploads checked:</strong> ' + escapeHtml(summary.upload_records_checked || 0) + '</div><div><strong>Uploads not public-ready:</strong> ' + escapeHtml(summary.uploads_not_public_ready || 0) + '</div></div>' + (warningHtml ? '<ul style="margin:10px 0 0;padding-left:20px">' + warningHtml + '</ul>' : '<p class="note" style="margin-top:10px">No privacy warnings in the checked rows.</p>');
+  }
+  async function loadMediaPrivacySummary(){
+    var res = await fetch('/api/admin/media_privacy_review_summary', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 100 }) });
+    var out = await res.json().catch(function(){ return null; });
+    if (!res.ok) throw new Error(out?.error || 'Could not load media privacy readiness summary.');
+    renderMediaPrivacySummary(out?.summary || {});
+    if (out?.summary?.gallery_needs_review || out?.summary?.uploads_not_public_ready) setShellStatus('Media privacy warnings found. Review before public gallery/social reuse.', 'warning');
+    else setShellStatus('Media privacy readiness check passed for the sampled rows.', 'success');
+  }
+  function readVisibility(){ return { customer_detailer_notes: byId('vis_customer_detailer_notes').checked, customer_admin_notes_admin_only: byId('vis_customer_admin_notes').checked, detailer_admin_notes_admin_only: byId('vis_detailer_admin_notes').checked }; }
+  function readScheduling(){ return { manual_schedule_admin_only: byId('manual_schedule_admin_only').checked, blocking_admin_only: byId('blocking_admin_only').checked, notes: byId('manual_schedule_notes').value || '' }; }
+  function readFlags(){ return { live_updates_default: byId('flag_live_updates_default').checked, customer_chat_enabled: byId('flag_customer_chat_enabled').checked, picture_first_observations: byId('flag_picture_first_observations').checked, tier_discount_badges: byId('flag_tier_discount_badges').checked, annotation_moderation_enabled: byId('flag_annotation_moderation_enabled').checked, two_sided_thread_controls_enabled: byId('flag_two_sided_thread_controls_enabled').checked, low_stock_alerts_enabled: byId('flag_low_stock_alerts_enabled').checked }; }
+  function quoteSettingsDefaults(){ return { prominent_cta: true, show_exact_total: true, show_time_expectation: true, teaser_text: 'Choose your vehicle, package, and add-ons to see your expected total before checkout.' }; }
+  function readQuoteSettings(){ return { prominent_cta: byId('quote_prominent_cta').checked, show_exact_total: byId('quote_show_exact_total').checked, show_time_expectation: byId('quote_show_time_expectation').checked, teaser_text: byId('quote_teaser_text').value || quoteSettingsDefaults().teaser_text }; }
+  function giftDeliveryDefaults(){ return { enabled: true, manual_review: false, automation_enabled: true, default_message: 'Choose a recipient, add a message, and pick the day you want us to send the gift.', default_send_hour_local: 9, timezone_label: 'America/Toronto', send_copy_to_purchaser: true }; }
+  function readGiftDeliverySettings(){ return { enabled: byId('gift_delivery_enabled').checked, manual_review: byId('gift_delivery_manual_review').checked, automation_enabled: byId('gift_delivery_automation_enabled').checked, send_copy_to_purchaser: byId('gift_delivery_send_copy_to_purchaser').checked, default_send_hour_local: Number(byId('gift_delivery_send_hour').value || giftDeliveryDefaults().default_send_hour_local), timezone_label: byId('gift_delivery_timezone').value || giftDeliveryDefaults().timezone_label, default_message: byId('gift_delivery_default_message').value || giftDeliveryDefaults().default_message }; }
+  function membershipPlanDefaults(){ return { enabled: false, waitlist_enabled: true, plan_name: 'Maintain Your Shine Plan', cycle_label: 'Every 4 or 8 weeks', teaser: 'Keep your vehicle on a repeating clean schedule with priority reminders and simpler rebooking.', benefits: ['Priority reminder before your preferred date','Faster rebooking using your saved vehicle','Cleaner predictable maintenance cycle'], why_title:'Why add this now', why_lines:['Repeat scheduling | Less back-and-forth','Preferred cycle | Every 4 or 8 weeks','Local planning | Better crew forecasting','Booking path | Still uses the live booking flow'], waitlist_intro:'Leave your preferred cycle and a few details about the vehicles you want covered. We use this to shape the recurring-plan offer while actual reminder timing follows completed service history.', self_serve_title:'How this fits the self-serve direction', self_serve_copy:'Recurring plans should not replace the booking flow. They should make the same booking-led experience easier to repeat with reminder-first scheduling, saved vehicle details, and clearer maintenance timing.', good_fit_title:'Good fit for', good_fit_lines:['Busy households trying to keep vehicles presentable year-round','Repeat clients who already know their package and preferred clean cycle','Work-from-home or driveway-friendly bookings across Oxford and Norfolk areas'], reminder_enabled: true, reminder_channel: 'email', reminder_subject: 'It may be time to book your next Rosie Dazzlers clean', reminder_intro: 'Use the booking-led planner to pick your next clean while your preferred timing is still open.', reminder_send_hour_local: 9, timezone_label: 'America/Toronto' }; }
+  function readMembershipPlanSettings(){ var d=membershipPlanDefaults(); return { enabled: byId('membership_enabled').checked, waitlist_enabled: byId('membership_waitlist_enabled').checked, reminder_enabled: byId('membership_reminder_enabled').checked, plan_name: byId('membership_name').value || d.plan_name, cycle_label: byId('membership_cycle').value || d.cycle_label, teaser: byId('membership_teaser').value || d.teaser, benefits: (byId('membership_benefits').value || '').split(/\n+/).map(function (row) { return row.trim(); }).filter(Boolean), why_title:byId('membership_why_title').value||d.why_title, why_lines:(byId('membership_why_lines').value||'').split(/\n+/).map(function(r){return r.trim();}).filter(Boolean), waitlist_intro:byId('membership_waitlist_intro').value||d.waitlist_intro, self_serve_title:byId('membership_self_serve_title').value||d.self_serve_title, self_serve_copy:byId('membership_self_serve_copy').value||d.self_serve_copy, good_fit_title:byId('membership_good_fit_title').value||d.good_fit_title, good_fit_lines:(byId('membership_good_fit_lines').value||'').split(/\n+/).map(function(r){return r.trim();}).filter(Boolean), reminder_subject: byId('membership_reminder_subject').value || d.reminder_subject, reminder_intro: byId('membership_reminder_intro').value || d.reminder_intro, reminder_channel: 'email', reminder_send_hour_local: d.reminder_send_hour_local, timezone_label: d.timezone_label }; }
+  function renderMembershipInterestList(rows){
+    var host = byId('membershipInterestList');
+    if (!host) return;
+    var list = Array.isArray(rows) ? rows : [];
+    if (!list.length) { host.innerHTML = '<div class="catalog-empty">No recurring reminder candidates yet.</div>'; return; }
+    host.innerHTML = list.map(function (row) {
+      var lastService = row && row.last_service_at ? new Date(row.last_service_at).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }) : 'Unknown';
+      var nextReminder = row && row.next_reminder_at ? new Date(row.next_reminder_at).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }) : 'TBD';
+      var dueBadge = row && row.due ? '<span class="tag warn">Due now</span>' : '<span class="tag ok">Waiting</span>';
+      var bookingLink = row && row.booking_url ? '<div style="margin-top:10px"><a class="btn ghost small" href="' + escapeHtml(row.booking_url) + '" target="_blank" rel="noopener">Open booking path</a></div>' : '';
+      return '<div class="panel-lite"><div class="section-head"><strong>' + escapeHtml(row.full_name || 'Recurring reminder candidate') + '</strong><span class="note">' + dueBadge + '</span></div><div class="subgrid"><div class="stack-sm"><div><strong>Email:</strong> ' + escapeHtml(row.email || '—') + '</div><div><strong>Phone:</strong> ' + escapeHtml(row.phone || '—') + '</div><div><strong>Last service:</strong> ' + escapeHtml(lastService) + '</div></div><div class="stack-sm"><div><strong>Cycle:</strong> ' + escapeHtml(row.cycle_label || '—') + '</div><div><strong>Completed bookings:</strong> ' + escapeHtml(row.booking_count == null ? '—' : row.booking_count) + '</div><div><strong>Next reminder:</strong> ' + escapeHtml(nextReminder) + '</div></div></div><div class="subgrid" style="margin-top:10px"><div class="stack-sm"><div><strong>Last package:</strong> ' + escapeHtml(row.latest_package_code || '—') + '</div><div><strong>Last area:</strong> ' + escapeHtml(row.latest_service_area || '—') + '</div></div><div class="stack-sm"><div><strong>Reminder status:</strong> ' + escapeHtml(row.reminder_status || row.due_reason || 'pending') + '</div><div><strong>Last reminder:</strong> ' + escapeHtml(row.last_reminder_at ? new Date(row.last_reminder_at).toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' }) : '—') + '</div></div></div>' + bookingLink + '</div>';
+    }).join('');
+  }
+  async function loadMembershipInterest(){
+    var res = await fetch('/api/admin/membership_interest_list', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 10 }) });
+    var out = await res.json().catch(function(){ return null; });
+    if (!res.ok) throw new Error(out?.error || 'Could not load recurring reminder candidates.');
+    renderMembershipInterestList(out?.requests || []);
+  }
+  function readModeration(){ return { annotation_customer_visibility_default: byId('mod_annotation_customer_visibility_default').checked, comment_customer_visibility_default: byId('mod_comment_customer_visibility_default').checked, client_reply_depth_limit: Number(byId('mod_client_reply_depth_limit').value || 4), staff_reply_depth_limit: Number(byId('mod_staff_reply_depth_limit').value || 8), allow_client_annotation_replies: byId('mod_allow_client_annotation_replies').checked, allow_staff_hide_without_delete: byId('mod_allow_staff_hide_without_delete').checked }; }
+  function readRecoveryTemplates(){ return { abandoned_checkout_subject: byId('recovery_subject').value || '', abandoned_checkout_body_text: byId('recovery_body_text').value || '', abandoned_checkout_body_html: byId('recovery_body_html').value || '' }; }
+  function readRecoveryRules(){ return { abandoned_recovery_enabled: byId('recovery_enabled').checked, minimum_page_events: Number(byId('recovery_min_events').value || 0), require_email: true, cooldown_hours: Number(byId('recovery_cooldown_hours').value || 24), default_recovery_channel: byId('recovery_default_channel').value || 'email' }; }
+  function readProviderRules(){ return { email: { enabled: byId('provider_email_enabled').checked, provider_key: byId('provider_email_key').value || 'default_email', recovery_webhook_url: byId('provider_email_webhook').value || '', send_test_to: byId('provider_email_test_to').value || '' }, sms: { enabled: byId('provider_sms_enabled').checked, provider_key: byId('provider_sms_key').value || 'default_sms', recovery_webhook_url: byId('provider_sms_webhook').value || '', send_test_to: byId('provider_sms_test_to').value || '' } }; }
+  function serviceAreaDefaults(){
+    // Build 188: mutable service-area and water-rule rows are not embedded in this HTML.
+    // They load from /api/service_area_rules_public with bundled JSON fallback.
+    return [];
+  }
+  function pricingCatalogDefaults(){
+    return {
+      charts: [],
+      packages: [],
+      service_matrix: [],
+      addons: [],
+      service_areas: serviceAreaDefaults(),
+      booking_rules: {
+        availability_window_days: 21,
+        default_service_area: 'Tillsonburg, Oxford County',
+        hold_minutes: 30,
+        slot_labels: { AM: 'AM half day', PM: 'PM half day', FULL: 'Full day' },
+        public_requirements: [
+          'Driveway required',
+          'Customer provides power and water or additional fees may apply',
+          'One vehicle per day unless half-day jobs are confirmed'
+        ],
+        travel_pricing: { urban: 0, township: 0, hamlet: 10, coastal: 20, rural: 20, out_of_zone: 50, notes: '' },
+        price_controls: { fuel_surcharge_cad: 0, material_surcharge_cad: 0, minimum_callout_cad: 0, tax_rate_percent: 13 }
+      },
+      public_requirements: [
+        'Driveway required',
+        'Customer provides power and water or additional fees may apply',
+        'One vehicle per day unless half-day jobs are confirmed'
+      ]
+    };
+  }
+  function cloneValue(value){ return JSON.parse(JSON.stringify(value)); }
+  function moneyNum(value, fallback){
+    var n = Number(value);
+    return Number.isFinite(n) ? n : (fallback == null ? 0 : fallback);
+  }
+  function cleanTextValue(value){ return String(value == null ? '' : value).trim(); }
+  function hasTextValue(value){ return cleanTextValue(value).length > 0; }
+  function isSvgMediaUrl(value){ return /\.svg(?:[?#]|$)/i.test(cleanTextValue(value)); }
+  function preferPhotoMediaUrl(currentValue, fallbackValue){
+    var current = cleanTextValue(currentValue);
+    var fallback = cleanTextValue(fallbackValue);
+    if (!current) return fallback;
+    if (isSvgMediaUrl(current) && fallback && !isSvgMediaUrl(fallback)) return fallback;
+    return current;
+  }
+  function firstAddonMediaUrl(addon){
+    var primary = cleanTextValue(addon && addon.image_url);
+    var fallback = cleanTextValue(addon && addon.image_fallback_url);
+    if (primary && !isSvgMediaUrl(primary)) return primary;
+    if (fallback && !isSvgMediaUrl(fallback)) return fallback;
+    return primary || fallback || '';
+  }
+  function uniqueTextValues(rows, getter, extras){
+    var seen = new Set();
+    return (Array.isArray(extras) ? extras : []).concat((Array.isArray(rows) ? rows : []).map(getter)).map(cleanTextValue).filter(function(value){
+      if (!value || seen.has(value.toLowerCase())) return false;
+      seen.add(value.toLowerCase());
+      return true;
+    }).sort(function(a, b){ return a.localeCompare(b); });
+  }
+  function renderDatalist(id, values){
+    return '<datalist id="' + escapeHtml(id) + '">' + (values || []).map(function(value){ return '<option value="' + escapeHtml(value) + '"></option>'; }).join('') + '</datalist>';
+  }
+  function catalogDropdownOptionsDefaults(){
+    return {
+      addon_categories: ['paint correction','paint protection','interior protection','odor treatment','engine bay','glass services','appearance modifications','seasonal protection'],
+      addon_types: ['add-on','quote-led add-on','standalone service','package-required service','inspection-required service'],
+      inventory_categories: ['cleaning liquids','interior cleaners','paint protection','microfiber towels','pads and polishers','brushes','buckets and wash tools','safety gear','shop supplies','marketing materials'],
+      inventory_subcategories: ['chemicals','linens','scrubbers','sprayers','polishing pads','clay media','glass care','engine bay','interior protection','exterior protection','black','white','grey','blue','red','green','yellow','clear','assorted colours','matte finish','gloss finish'],
+      inventory_vendors: ['Amazon','Canadian Tire','Costco','Home Depot','Princess Auto','Walmart','Uline','Local supplier'],
+      inventory_units: ['bottle','jug','litre','gallon','pad','piece','pack','roll','box','pair','kit','towel','brush'],
+      service_tiers: ["urban", "town", "township", "hamlet", "coastal", "rural", "remote", "out_of_zone", "quote_required"],
+      service_zones: ["Other Oxford County location", "Oxford County", "Other Norfolk County location", "Norfolk County", "Tillsonburg, ON", "Tillsonburg", "Woodstock, ON", "Woodstock", "Ingersoll, ON", "Ingersoll", "Beachville, ON", "Beachville", "Bright, ON", "Bright", "Brownsville, ON", "Brownsville", "Dereham Centre, ON", "Dereham Centre", "Drumbo, ON", "Drumbo", "Princeton, ON", "Princeton", "Embro, ON", "Embro", "Hickson, ON", "Hickson", "Innerkip, ON", "Innerkip", "Lakeside, ON", "Lakeside", "Mount Elgin, ON", "Mount Elgin", "Norwich, ON", "Norwich", "Otterville, ON", "Otterville", "Springford, ON", "Springford", "Sweaburg, ON", "Sweaburg", "Plattsville, ON", "Plattsville", "Tavistock, ON", "Tavistock", "Thamesford, ON", "Thamesford", "Salford, ON", "Salford", "Foldens, ON", "Foldens", "Ostrander, ON", "Ostrander", "Simcoe, ON", "Simcoe", "Delhi, ON", "Delhi", "Port Dover, ON", "Port Dover", "Waterford, ON", "Waterford", "Port Rowan, ON", "Port Rowan", "Langton, ON", "Langton", "Courtland, ON", "Courtland", "Vittoria, ON", "Vittoria", "Walsh, ON", "Walsh", "St. Williams, ON", "St. Williams", "Turkey Point, ON", "Turkey Point", "Boston, ON", "Boston", "Teeterville, ON", "Teeterville", "Vanessa, ON", "Vanessa", "Lynedoch, ON", "Lynedoch", "Bill's Corners, ON", "Bill's Corners", "Renton, ON", "Renton", "Nixon, ON", "Nixon", "Bloomsburg, ON", "Bloomsburg", "Townsend, ON", "Townsend", "Port Ryerse, ON", "Port Ryerse", "La Salette, ON", "La Salette", "Windham Centre, ON", "Windham Centre", "Walsingham, ON", "Walsingham", "Fairground, ON", "Fairground", "Woodstock / Ingersoll, ON", "Woodstock / Ingersoll", "Norwich / Otterville, ON", "Norwich / Otterville", "Simcoe / Delhi, ON", "Simcoe / Delhi", "Courtland / Langton, ON", "Courtland / Langton"],
+      service_counties: ['Oxford County','Norfolk County']
+    };
+  }
+  var catalogDropdownOptionsState = catalogDropdownOptionsDefaults();
+  var optionLibrariesState = {};
+  async function loadSharedOptionLibraries(){
+    try {
+      const res = await fetch('/api/site_settings_public?key=option_libraries', { credentials:'include', cache:'no-store' });
+      const out = await res.json().catch(function(){ return null; });
+      const value = out && (out.settings?.option_libraries?.value || out.value || out.setting || out.option_libraries || out);
+      optionLibrariesState = value && typeof value === 'object' ? normalizeCatalogDropdownOptions(value) : catalogDropdownOptionsDefaults();
+    } catch (err) {
+      optionLibrariesState = catalogDropdownOptionsDefaults();
+      console.warn('Could not load shared option libraries:', err);
+    }
+    applyOptionLibrarySelects();
+    return optionLibrariesState;
+  }
+  function optionLibraryValues(key, fallbackValues){
+    const rows = optionLibrariesState && Array.isArray(optionLibrariesState[key]) ? optionLibrariesState[key] : [];
+    return rows.length ? rows : (Array.isArray(fallbackValues) ? fallbackValues : []);
+  }
+  function applyOptionLibrarySelects(){
+    qsa('[data-option-library]').forEach(function(select){
+      const key = select.getAttribute('data-option-library');
+      const current = select.value || select.getAttribute('data-default-value') || '';
+      const values = optionLibraryValues(key, Array.from(select.options || []).map(function(option){ return option.value || option.textContent || ''; }));
+      select.innerHTML = values.map(function(value){ const clean = String(value || '').trim(); const label = clean.replace(/_/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase();}); return `<option value="${esc(clean)}">${esc(label)}</option>`; }).join('');
+      if (current && Array.from(select.options).some(function(option){ return option.value === current; })) select.value = current;
+    });
+  }
+  function optionLinesToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
+  function normalizeCatalogDropdownOptions(value){
+    var defaults = catalogDropdownOptionsDefaults();
+    var src = value && typeof value === 'object' ? value : {};
+    var out = {};
+    Object.keys(defaults).forEach(function(key){
+      out[key] = uniqueTextValues([], function(){ return ''; }, (Array.isArray(src[key]) ? src[key] : []).concat(defaults[key]));
+    });
+    return out;
+  }
+  function setCatalogDropdownOptionsEditor(value){
+    catalogDropdownOptionsState = normalizeCatalogDropdownOptions(value);
+    var map = {
+      dropdown_addon_categories: 'addon_categories',
+      dropdown_addon_types: 'addon_types',
+      dropdown_inventory_categories: 'inventory_categories',
+      dropdown_inventory_subcategories: 'inventory_subcategories',
+      dropdown_inventory_vendors: 'inventory_vendors',
+      dropdown_inventory_units: 'inventory_units',
+      dropdown_service_tiers: 'service_tiers',
+      dropdown_service_zones: 'service_zones',
+      dropdown_service_counties: 'service_counties'
+    };
+    Object.keys(map).forEach(function(id){ if (byId(id)) byId(id).value = catalogDropdownOptionsState[map[id]].join('\n'); });
+  }
+  function readCatalogDropdownOptionsEditor(){
+    var current = catalogDropdownOptionsDefaults();
+    var map = { addon_categories:'dropdown_addon_categories', addon_types:'dropdown_addon_types', inventory_categories:'dropdown_inventory_categories', inventory_subcategories:'dropdown_inventory_subcategories', inventory_vendors:'dropdown_inventory_vendors', inventory_units:'dropdown_inventory_units', service_tiers:'dropdown_service_tiers', service_zones:'dropdown_service_zones', service_counties:'dropdown_service_counties' };
+    Object.keys(map).forEach(function(key){ var el = byId(map[key]); current[key] = optionLinesToArray(el ? el.value : '').concat(catalogDropdownOptionsDefaults()[key]); });
+    return normalizeCatalogDropdownOptions(current);
+  }
+  function addonSuggestionDatalists(rows){
+    return renderDatalist('addonCategoryOptions', uniqueTextValues(rows, function(row){ return row && row.category; }, catalogDropdownOptionsState.addon_categories)) +
+    renderDatalist('addonTypeOptions', uniqueTextValues(rows, function(row){ return row && row.type; }, catalogDropdownOptionsState.addon_types)) +
+    renderDatalist('addonImageUrlOptions', uniqueTextValues(rows, function(row){ return firstAddonMediaUrl(row); }, []));
+  }
+  async function fetchBundledPricingCatalog(){
+    try {
+      const res = await fetch('/data/rosie_services_pricing_and_packages.json', { credentials:'include', cache:'no-store' });
+      const out = await res.json().catch(function(){ return null; });
+      if (!res.ok || !out || typeof out !== 'object') return null;
+      return out;
+    } catch (err) {
+      console.warn('Could not load bundled pricing catalog fallback:', err);
+      return null;
+    }
+  }
+  async function fetchEditableServiceAreaRules(){
+    try {
+      const res = await fetch('/api/service_area_rules_public', { credentials:'include', cache:'no-store' });
+      const out = await res.json().catch(function(){ return null; });
+      if (res.ok && Array.isArray(out && out.service_areas) && out.service_areas.length) return out.service_areas;
+    } catch (err) {
+      console.warn('Could not load editable service-area rules API:', err);
+    }
+    try {
+      const res = await fetch('/data/service_area_rules.json', { credentials:'include', cache:'no-store' });
+      const out = await res.json().catch(function(){ return null; });
+      return Array.isArray(out && out.service_areas) ? out.service_areas : [];
+    } catch (err) {
+      console.warn('Could not load bundled service-area fallback:', err);
+      return [];
+    }
+  }
+
+  function serviceAreaMergeKey(row){
+    var value = cleanTextValue(row && (row.value || row.label || row.municipality || row.zone));
+    var county = cleanTextValue(row && row.county);
+    var municipality = cleanTextValue(row && row.municipality);
+    var zone = cleanTextValue(row && row.zone);
+    return (value || [county, municipality, zone].filter(Boolean).join(' | ')).toLowerCase();
+  }
+  function mergeServiceAreaRows(currentRows, fallbackRows){
+    var map = new Map();
+    function put(row, preferExisting){
+      if (!row || typeof row !== 'object') return;
+      var key = serviceAreaMergeKey(row);
+      if (!key) return;
+      var existing = map.get(key);
+      if (!existing) {
+        map.set(key, Object.assign({}, row));
+        return;
+      }
+      map.set(key, preferExisting ? Object.assign({}, row, existing) : Object.assign({}, existing, row));
+    }
+    (Array.isArray(fallbackRows) ? fallbackRows : []).forEach(function(row){ put(row, false); });
+    (Array.isArray(currentRows) ? currentRows : []).forEach(function(row){ put(row, false); });
+    return Array.from(map.values()).sort(function(a, b){
+      var ac = cleanTextValue(a && a.county).toLowerCase();
+      var bc = cleanTextValue(b && b.county).toLowerCase();
+      var av = cleanTextValue(a && (a.label || a.value || a.municipality || a.zone)).toLowerCase();
+      var bv = cleanTextValue(b && (b.label || b.value || b.municipality || b.zone)).toLowerCase();
+      if (av.indexOf('other ') === 0 && bv.indexOf('other ') !== 0) return -1;
+      if (bv.indexOf('other ') === 0 && av.indexOf('other ') !== 0) return 1;
+      if (ac !== bc) return ac.localeCompare(bc);
+      return av.localeCompare(bv);
+    });
+  }
+
+  function hydratePricingCatalogFromDefaultMedia(catalog, fallbackCatalog){
+    var shaped = ensurePricingCatalogShape(catalog);
+    if (!fallbackCatalog || typeof fallbackCatalog !== 'object') return shaped;
+    var fallback = ensurePricingCatalogShape(fallbackCatalog);
+
+    // Build 196: if the editable DB row only contains partial pricing data, keep the DB values
+    // but backfill missing arrays from the bundled pricing catalog so the landing-page builder
+    // never shows "No add-ons loaded" just because a saved setting omitted add-ons.
+    if ((!Array.isArray(shaped.charts) || !shaped.charts.length) && Array.isArray(fallback.charts) && fallback.charts.length) shaped.charts = fallback.charts.slice();
+    if ((!Array.isArray(shaped.packages) || !shaped.packages.length) && Array.isArray(fallback.packages) && fallback.packages.length) shaped.packages = fallback.packages.slice();
+    if ((!Array.isArray(shaped.service_matrix) || !shaped.service_matrix.length) && Array.isArray(fallback.service_matrix) && fallback.service_matrix.length) shaped.service_matrix = fallback.service_matrix.slice();
+    if ((!Array.isArray(shaped.addons) || !shaped.addons.length) && Array.isArray(fallback.addons) && fallback.addons.length) shaped.addons = fallback.addons.map(function(row){ return Object.assign({}, row); });
+
+    var fallbackAddons = new Map((fallback.addons || []).map(function(row){ return [String(row && row.code || ''), row]; }));
+    shaped.addons = (shaped.addons || []).map(function(addon){
+      var fallbackAddon = fallbackAddons.get(String(addon && addon.code || '')) || null;
+      if (!fallbackAddon) return addon;
+      var hydrated = Object.assign({}, addon);
+      hydrated.image_url = preferPhotoMediaUrl(hydrated.image_url, fallbackAddon.image_url);
+      hydrated.image_fallback_url = preferPhotoMediaUrl(hydrated.image_fallback_url, fallbackAddon.image_fallback_url);
+      if (!hasTextValue(hydrated.category)) hydrated.category = cleanTextValue(fallbackAddon.category);
+      if (!hasTextValue(hydrated.type)) hydrated.type = cleanTextValue(fallbackAddon.type);
+      if (!hasTextValue(hydrated.requirement_note)) hydrated.requirement_note = cleanTextValue(fallbackAddon.requirement_note);
+      if (!Array.isArray(hydrated.requires_package_codes_any) || !hydrated.requires_package_codes_any.length) hydrated.requires_package_codes_any = Array.isArray(fallbackAddon.requires_package_codes_any) ? fallbackAddon.requires_package_codes_any.slice() : [];
+      if ((!Array.isArray(hydrated.notes) || !hydrated.notes.length) && Array.isArray(fallbackAddon.notes)) hydrated.notes = fallbackAddon.notes.slice();
+      if ((!hydrated.prices_cad || !Object.keys(hydrated.prices_cad).length) && fallbackAddon.prices_cad) hydrated.prices_cad = Object.assign({}, fallbackAddon.prices_cad);
+      if (!Number(hydrated.price_cad) && Number(fallbackAddon.price_cad)) hydrated.price_cad = Number(fallbackAddon.price_cad);
+      return hydrated;
+    });
+    if (Array.isArray(fallback.service_areas) && fallback.service_areas.length) {
+      shaped.service_areas = mergeServiceAreaRows(shaped.service_areas, fallback.service_areas);
+    }
+    if ((!Array.isArray(shaped.public_requirements) || !shaped.public_requirements.length) && Array.isArray(fallback.public_requirements) && fallback.public_requirements.length) {
+      shaped.public_requirements = fallback.public_requirements.slice();
+      shaped.booking_rules.public_requirements = shaped.public_requirements.slice();
+    }
+    return shaped;
+  }
+  function ensurePricingCatalogShape(value){
+    var defaults = pricingCatalogDefaults();
+    var catalog = value && typeof value === 'object' ? cloneValue(value) : cloneValue(defaults);
+    catalog.charts = Array.isArray(catalog.charts) ? catalog.charts : [];
+    catalog.service_matrix = Array.isArray(catalog.service_matrix) ? catalog.service_matrix : [];
+    catalog.packages = Array.isArray(catalog.packages) ? catalog.packages : [];
+    catalog.addons = Array.isArray(catalog.addons) ? catalog.addons : [];
+    catalog.service_areas = Array.isArray(catalog.service_areas) && catalog.service_areas.length ? catalog.service_areas : serviceAreaDefaults();
+    catalog.booking_rules = catalog.booking_rules && typeof catalog.booking_rules === 'object' ? catalog.booking_rules : {};
+    catalog.booking_rules.slot_labels = catalog.booking_rules.slot_labels && typeof catalog.booking_rules.slot_labels === 'object' ? catalog.booking_rules.slot_labels : {};
+    catalog.booking_rules.travel_pricing = catalog.booking_rules.travel_pricing && typeof catalog.booking_rules.travel_pricing === 'object' ? catalog.booking_rules.travel_pricing : {};
+    catalog.booking_rules.price_controls = catalog.booking_rules.price_controls && typeof catalog.booking_rules.price_controls === 'object' ? catalog.booking_rules.price_controls : {};
+    catalog.booking_rules.availability_window_days = Number(catalog.booking_rules.availability_window_days || defaults.booking_rules.availability_window_days);
+    catalog.booking_rules.hold_minutes = Number(catalog.booking_rules.hold_minutes || defaults.booking_rules.hold_minutes);
+    catalog.booking_rules.default_service_area = catalog.booking_rules.default_service_area || defaults.booking_rules.default_service_area;
+    catalog.booking_rules.slot_labels = Object.assign({}, defaults.booking_rules.slot_labels, catalog.booking_rules.slot_labels || {});
+    catalog.booking_rules.travel_pricing = {
+      urban: moneyNum(catalog.booking_rules.travel_pricing.urban, defaults.booking_rules.travel_pricing.urban),
+      township: moneyNum(catalog.booking_rules.travel_pricing.township, defaults.booking_rules.travel_pricing.township),
+      hamlet: moneyNum(catalog.booking_rules.travel_pricing.hamlet, defaults.booking_rules.travel_pricing.hamlet),
+      coastal: moneyNum(catalog.booking_rules.travel_pricing.coastal, defaults.booking_rules.travel_pricing.coastal),
+      rural: moneyNum(catalog.booking_rules.travel_pricing.rural, defaults.booking_rules.travel_pricing.rural),
+      remote: moneyNum(catalog.booking_rules.travel_pricing.remote, defaults.booking_rules.travel_pricing.remote),
+      out_of_zone: moneyNum(catalog.booking_rules.travel_pricing.out_of_zone, defaults.booking_rules.travel_pricing.out_of_zone),
+      notes: catalog.booking_rules.travel_pricing.notes || defaults.booking_rules.travel_pricing.notes
+    };
+    catalog.booking_rules.price_controls = {
+      fuel_surcharge_cad: moneyNum(catalog.booking_rules.price_controls.fuel_surcharge_cad, defaults.booking_rules.price_controls.fuel_surcharge_cad),
+      material_surcharge_cad: moneyNum(catalog.booking_rules.price_controls.material_surcharge_cad, defaults.booking_rules.price_controls.material_surcharge_cad),
+      minimum_callout_cad: moneyNum(catalog.booking_rules.price_controls.minimum_callout_cad, defaults.booking_rules.price_controls.minimum_callout_cad),
+      tax_rate_percent: moneyNum(catalog.booking_rules.price_controls.tax_rate_percent, defaults.booking_rules.price_controls.tax_rate_percent)
+    };
+    catalog.public_requirements = Array.isArray(catalog.public_requirements) ? catalog.public_requirements.slice() : [];
+    if (!catalog.public_requirements.length) catalog.public_requirements = (Array.isArray(catalog.booking_rules.public_requirements) ? catalog.booking_rules.public_requirements.slice() : defaults.public_requirements.slice());
+    catalog.booking_rules.public_requirements = catalog.public_requirements.slice();
+    catalog.packages = catalog.packages.map(function (pkg, index) {
+      return {
+        code: pkg && pkg.code || ('package_' + (index + 1)),
+        name: pkg && pkg.name || ('Package ' + (index + 1)),
+        subtitle: pkg && pkg.subtitle || '',
+        prices_cad: {
+          small: moneyNum(pkg && pkg.prices_cad && pkg.prices_cad.small, 0),
+          mid: moneyNum(pkg && pkg.prices_cad && pkg.prices_cad.mid, 0),
+          oversize: moneyNum(pkg && pkg.prices_cad && pkg.prices_cad.oversize, 0)
+        },
+        deposit_cad: moneyNum(pkg && pkg.deposit_cad, 0),
+        images_by_size: pkg && pkg.images_by_size && typeof pkg.images_by_size === 'object' ? pkg.images_by_size : {},
+        included_services: Array.isArray(pkg && pkg.included_services) ? pkg.included_services : [],
+        notes: Array.isArray(pkg && pkg.notes) ? pkg.notes : []
+      };
+    });
+    catalog.addons = catalog.addons.map(function (addon, index) {
+      return {
+        code: addon && addon.code || ('addon_' + (index + 1)),
+        name: addon && addon.name || ('Add-on ' + (index + 1)),
+        category: addon && addon.category || '',
+        type: addon && addon.type || '',
+        prices_cad: {
+          small: moneyNum(addon && addon.prices_cad && addon.prices_cad.small, addon && addon.price_cad),
+          mid: moneyNum(addon && addon.prices_cad && addon.prices_cad.mid, addon && addon.price_cad),
+          oversize: moneyNum(addon && addon.prices_cad && addon.prices_cad.oversize, addon && addon.price_cad)
+        },
+        price_cad: moneyNum(addon && addon.price_cad, 0),
+        quote_required: addon && addon.quote_required === true,
+        standalone_allowed: addon ? addon.standalone_allowed === true : false,
+        requires_package_codes_any: Array.isArray(addon && addon.requires_package_codes_any) ? addon.requires_package_codes_any.slice() : [],
+        requirement_note: addon && addon.requirement_note || '',
+        image_url: addon && addon.image_url || '',
+        image_fallback_url: addon && addon.image_fallback_url || '',
+        notes: Array.isArray(addon && addon.notes) ? addon.notes : []
+      };
+    });
+    catalog.service_areas = catalog.service_areas.map(function (row, index) {
+      return {
+        county: row && row.county || '',
+        label: row && row.label || ('Service Area ' + (index + 1)),
+        value: row && row.value || row && row.label || ('Service Area ' + (index + 1)),
+        municipality: row && row.municipality || '',
+        zone: row && row.zone || '',
+        travel_tier: row && row.travel_tier || 'township',
+        area_type: row && row.area_type || '',
+        bylaw_note: row && row.bylaw_note || '',
+        parking_rule: row && row.parking_rule || '',
+        noise_rule: row && row.noise_rule || '',
+        water_rule_key: row && row.water_rule_key || '',
+        water_rule: row && row.water_rule || '',
+        access_rule: row && row.access_rule || '',
+        official_links: Array.isArray(row && row.official_links) ? row.official_links : []
+      };
+    });
+    return catalog;
+  }
+
+  function landingPagesDefaults(){ return { pages: {} }; }
+  function cloneJson(value){ return JSON.parse(JSON.stringify(value)); }
+  var landingPagesState = landingPagesDefaults();
+  var selectedAddonCode = '';
+  var selectedPackageCode = '';
+  var selectedServiceAreaIndex = 0;
+  function normalizeLandingFaq(value){ return (Array.isArray(value) ? value : []).map(function(item){ return { q: String(item && item.q || '').trim(), a: String(item && item.a || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
+  function normalizeLandingArray(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item || '').trim(); }).filter(Boolean); }
+  function normalizeLandingPage(page, fallback){
+    var source = page && typeof page === 'object' ? cloneJson(page) : {};
+    source.type = source.type || (fallback && fallback.type) || 'addon';
+    source.related_code = source.related_code || (fallback && fallback.related_code) || '';
+    source.enabled = source.enabled !== false;
+    source.slug = String(source.slug || (fallback && fallback.slug) || '').trim();
+    source.nav_group = String(source.nav_group || (fallback && fallback.nav_group) || 'other').trim() || 'other';
+    source.name = String(source.name || (fallback && fallback.name) || source.slug || 'Landing page').trim();
+    source.meta_title = String(source.meta_title || '').trim();
+    source.meta_description = String(source.meta_description || '').trim();
+    source.badge = String(source.badge || 'Landing page').trim();
+    source.hero_title = String(source.hero_title || source.name || '').trim();
+    source.hero_intro = String(source.hero_intro || '').trim();
+    source.hero_image_url = String(source.hero_image_url || '').trim();
+    source.region_photo_caption = String(source.region_photo_caption || '').trim();
+    source.region_photo_source = String(source.region_photo_source || '').trim();
+    source.region_photo_source_url = String(source.region_photo_source_url || '').trim();
+    source.gallery_image_urls = normalizeLandingArray(source.gallery_image_urls || source.gallery_urls || source.gallery_images);
+    source.related_products = (Array.isArray(source.related_products) ? source.related_products : []).map(function(item){ return {
+      name: String(item && (item.name || item.title) || '').trim(),
+      role: String(item && item.role || '').trim(),
+      note: String(item && item.note || '').trim(),
+      image_url: String(item && item.image_url || '').trim()
+    }; }).filter(function(item){ return item.name || item.image_url; });
+    source.reasons_page_exists = normalizeLandingArray(source.reasons_page_exists);
+    source.process = normalizeLandingArray(source.process);
+    source.equipment = normalizeLandingArray(source.equipment);
+    source.highlights = normalizeLandingArray(source.highlights);
+    source.things_to_know = normalizeLandingArray(source.things_to_know);
+    source.official_links = (Array.isArray(source.official_links) ? source.official_links : []).map(function(item){ return { label: String(item && item.label || 'Official source').trim(), url: String(item && item.url || '').trim() }; }).filter(function(item){ return item.url; });
+    source.faq = normalizeLandingFaq(source.faq);
+    return source;
+  }
+  function ensureLandingPagesShape(value){
+    var pages = value && value.pages && typeof value.pages === 'object' ? value.pages : {};
+    var next = { pages: {} };
+    Object.keys(pages).forEach(function(slug){ next.pages[slug] = normalizeLandingPage(pages[slug], { slug: slug }); });
+    return next;
+  }
+  function setLandingPagesState(value){ landingPagesState = ensureLandingPagesShape(value); renderLandingBuilder(); }
+  function landingArrayToText(value){ return normalizeLandingArray(value).join('\n'); }
+  function landingFaqToText(value){ return normalizeLandingFaq(value).map(function(item){ return item.q + ' || ' + item.a; }).join('\n'); }
+  function landingLinksToText(value){ return (Array.isArray(value) ? value : []).map(function(item){ return String(item && item.label || 'Official source').trim() + ' || ' + String(item && item.url || '').trim(); }).filter(function(line){ return line.replace(/^[^|]*\|\|/, '').trim(); }).join('\n'); }
+  function landingProductsToText(value){ return (Array.isArray(value) ? value : []).map(function(item){ return [item && item.name || '', item && item.role || '', item && item.note || '', item && item.image_url || ''].map(function(part){ return String(part || '').trim(); }).join(' || '); }).filter(function(line){ return line.replace(/\|/g, '').trim(); }).join('\n'); }
+  function landingTextToArray(value){ return String(value || '').split(/\r?\n/).map(function(line){ return line.trim(); }).filter(Boolean); }
+  function landingTextToFaq(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { q: String(parts[0] || '').trim(), a: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.q && item.a; }); }
+  function landingTextToLinks(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { label: String(parts[0] || 'Official source').trim(), url: String(parts.slice(1).join('||') || '').trim() }; }).filter(function(item){ return item.url; }); }
+  function landingTextToProducts(value){ return String(value || '').split(/\r?\n/).map(function(line){ var parts = line.split('||'); return { name: String(parts[0] || '').trim(), role: String(parts[1] || '').trim(), note: String(parts[2] || '').trim(), image_url: String(parts.slice(3).join('||') || '').trim() }; }).filter(function(item){ return item.name || item.image_url; }); }
+  function slugify(value){ return String(value || '').toLowerCase().replace(/&/g, ' and ').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').replace(/-{2,}/g, '-'); }
+  function addonLandingEntry(code){ var slug = Object.keys(landingPagesState.pages).find(function(key){ return landingPagesState.pages[key] && landingPagesState.pages[key].type === 'addon' && String(landingPagesState.pages[key].related_code || '') === String(code || ''); }); return slug ? landingPagesState.pages[slug] : null; }
+  function locationLandingOptions(){ return Object.keys(landingPagesState.pages).filter(function(slug){ return landingPagesState.pages[slug] && landingPagesState.pages[slug].type === 'location'; }).sort(); }
+  function landingReadinessRows(page){
+    page = normalizeLandingPage(page || {}, {});
+    var rows = [];
+    function add(label, ok, detail){ rows.push({ label: label, ok: !!ok, detail: detail || '' }); }
+    add('One clear H1 / hero title', !!page.hero_title && page.hero_title.length <= 90, page.hero_title ? (page.hero_title.length + '/90 characters') : 'Missing hero title');
+    add('SEO title', !!page.meta_title && page.meta_title.length <= 70, page.meta_title ? (page.meta_title.length + '/70 characters') : 'Missing meta title');
+    add('Meta description', !!page.meta_description && page.meta_description.length <= 160, page.meta_description ? (page.meta_description.length + '/160 characters') : 'Missing meta description');
+    add('Clean slug', !!page.slug && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(page.slug), page.slug || 'Missing slug');
+    add('Hero or gallery image', !!(page.hero_image_url || (page.gallery_image_urls || []).length), page.hero_image_url ? 'Hero image set' : ((page.gallery_image_urls || []).length + ' gallery image(s)'));
+    add('Local/service proof fields', !!((page.reasons_page_exists || []).length && (page.process || []).length), 'Reasons ' + (page.reasons_page_exists || []).length + ' · process ' + (page.process || []).length);
+    return rows;
+  }
+  function landingReadinessHtml(page, url){
+    var rows = landingReadinessRows(page);
+    var warnings = rows.filter(function(row){ return !row.ok; }).length;
+    var chips = rows.map(function(row){ return '<span class="pill-note" data-state="' + (row.ok ? 'ok' : 'warn') + '">' + escapeHtml(row.label) + ': ' + escapeHtml(row.detail) + '</span>'; }).join(' ');
+    return '<div class="panel-lite" data-build197="landing-seo-readiness" data-build198="friendly-json-editors" data-build200="friendly-pricing-editors" data-build201="inline-validation"><div class="section-label">SEO/readiness preview</div><p class="note">Before saving, keep one clear hero title/H1, a title under 70 characters, a meta description under 160 characters, a clean slug, and at least one image/proof cue.</p><div class="stack-sm">' + chips + '</div><div class="toolbar" style="margin-top:10px">' + (url ? '<a class="btn ghost" target="_blank" rel="noopener" href="' + escapeHtml(url) + '">Open public preview</a>' : '') + '<span class="note">' + (warnings ? warnings + ' warning(s) to review before publishing.' : 'Looks ready for local search preview.') + '</span></div></div>' + build201LandingSchemaPreview(page);
+  }
+  function validateLandingPageBeforeSave(page, label){
+    var warnings = landingReadinessRows(page).filter(function(row){ return !row.ok; });
+    if (warnings.length) setShellStatus((label || 'Landing page') + ' has ' + warnings.length + ' SEO/readiness warning(s): ' + warnings.slice(0, 3).map(function(row){ return row.label; }).join(', '), 'warning');
+    return warnings;
+  }
+  function buildLandingEditorHtml(page, prefix){
+    page = normalizeLandingPage(page || {}, {});
+    var url = page.slug ? ((page.type === 'addon' || page.type === 'location') && ['ceramic-coating','pet-hair-removal','odor-removal','headlight-restoration','paint-correction','tillsonburg-auto-detailing','woodstock-ingersoll-auto-detailing','simcoe-delhi-auto-detailing','port-dover-auto-detailing','norwich-otterville-auto-detailing','zorra-thamesford-embro-auto-detailing','waterford-vittoria-auto-detailing','port-rowan-turkey-point-auto-detailing'].includes(page.slug) ? '/' + page.slug : '/landing/' + page.slug) : '';
+    return landingReadinessHtml(page, url) + '<div class="checkrow"><input id="' + prefix + '_enabled" type="checkbox" ' + (page.enabled ? 'checked' : '') + '><label for="' + prefix + '_enabled">Landing page enabled</label></div>' +
+      '<div class="field"><label for="' + prefix + '_slug">Slug</label><input id="' + prefix + '_slug" value="' + escapeHtml(page.slug || '') + '" placeholder="my-new-landing-page"></div>' +
+      '<div class="note">Preview path: ' + escapeHtml(url || '/landing/your-slug') + '</div>' +
+      '<div class="field"><label for="' + prefix + '_name">Page label</label><input id="' + prefix + '_name" value="' + escapeHtml(page.name || '') + '"></div>' +
+      '<div class="field"><label for="' + prefix + '_meta_title">Meta title</label><input id="' + prefix + '_meta_title" value="' + escapeHtml(page.meta_title || '') + '"></div>' +
+      '<div class="field"><label for="' + prefix + '_meta_description">Meta description</label><textarea id="' + prefix + '_meta_description">' + escapeHtml(page.meta_description || '') + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_badge">Badge</label><input id="' + prefix + '_badge" value="' + escapeHtml(page.badge || '') + '"></div>' +
+      '<div class="field"><label for="' + prefix + '_hero_title">Hero title</label><input id="' + prefix + '_hero_title" value="' + escapeHtml(page.hero_title || '') + '"></div>' +
+      '<div class="field"><label for="' + prefix + '_hero_intro">Hero intro</label><textarea id="' + prefix + '_hero_intro">' + escapeHtml(page.hero_intro || '') + '</textarea></div>' +
+      renderDatalist(prefix + '_image_options', uniqueTextValues(pricingCatalogState.addons, function(row){ return firstAddonMediaUrl(row); }, [])) +
+      '<div class="field"><label for="' + prefix + '_hero_image_url">Hero / regional image URL</label><input list="' + prefix + '_image_options" id="' + prefix + '_hero_image_url" value="' + escapeHtml(page.hero_image_url || '') + '" placeholder="Use a Rosie-owned/R2 image, add-on PNG, or a credited regional photo URL"></div>' +
+      '<div class="field"><label for="' + prefix + '_region_photo_caption">Photo caption / why this image fits</label><textarea id="' + prefix + '_region_photo_caption">' + escapeHtml(page.region_photo_caption || '') + '</textarea></div>' +
+      '<div class="grid2"><div class="field"><label for="' + prefix + '_region_photo_source">Photo source / credit</label><input id="' + prefix + '_region_photo_source" value="' + escapeHtml(page.region_photo_source || '') + '"></div><div class="field"><label for="' + prefix + '_region_photo_source_url">Photo source URL</label><input id="' + prefix + '_region_photo_source_url" value="' + escapeHtml(page.region_photo_source_url || '') + '"></div></div>' +
+      '<div class="field"><label for="' + prefix + '_gallery_image_urls">Gallery image URLs (one per line)</label><textarea class="link-lines" id="' + prefix + '_gallery_image_urls">' + escapeHtml(landingArrayToText(page.gallery_image_urls)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_related_products">Related products using Name || Role || Note || Image URL</label><textarea class="link-lines" id="' + prefix + '_related_products">' + escapeHtml(landingProductsToText(page.related_products)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_reasons">Why this page exists (one line per point)</label><textarea id="' + prefix + '_reasons">' + escapeHtml(landingArrayToText(page.reasons_page_exists)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_process">Process (one line per step)</label><textarea id="' + prefix + '_process">' + escapeHtml(landingArrayToText(page.process)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_equipment">Equipment / workflow (one line per point)</label><textarea id="' + prefix + '_equipment">' + escapeHtml(landingArrayToText(page.equipment)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_highlights">Best fit / highlights (one line per point)</label><textarea id="' + prefix + '_highlights">' + escapeHtml(landingArrayToText(page.highlights)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_things_to_know">Things to know / local facts (one line per point)</label><textarea id="' + prefix + '_things_to_know">' + escapeHtml(landingArrayToText(page.things_to_know)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_official_links">Official links using Label || URL</label><textarea class="link-lines" id="' + prefix + '_official_links">' + escapeHtml(landingLinksToText(page.official_links)) + '</textarea></div>' +
+      '<div class="field"><label for="' + prefix + '_faq">FAQ lines using Question || Answer</label><textarea id="' + prefix + '_faq">' + escapeHtml(landingFaqToText(page.faq)) + '</textarea></div>';
+  }
+  function readLandingEditor(prefix, seed){
+    return normalizeLandingPage({
+      ...(seed || {}),
+      enabled: byId(prefix + '_enabled').checked,
+      slug: byId(prefix + '_slug').value || '',
+      name: byId(prefix + '_name').value || '',
+      meta_title: byId(prefix + '_meta_title').value || '',
+      meta_description: byId(prefix + '_meta_description').value || '',
+      badge: byId(prefix + '_badge').value || '',
+      hero_title: byId(prefix + '_hero_title').value || '',
+      hero_intro: byId(prefix + '_hero_intro').value || '',
+      hero_image_url: byId(prefix + '_hero_image_url').value || '',
+      region_photo_caption: byId(prefix + '_region_photo_caption').value || '',
+      region_photo_source: byId(prefix + '_region_photo_source').value || '',
+      region_photo_source_url: byId(prefix + '_region_photo_source_url').value || '',
+      gallery_image_urls: landingTextToArray(byId(prefix + '_gallery_image_urls').value || ''),
+      related_products: landingTextToProducts(byId(prefix + '_related_products').value || ''),
+      reasons_page_exists: landingTextToArray(byId(prefix + '_reasons').value || ''),
+      process: landingTextToArray(byId(prefix + '_process').value || ''),
+      equipment: landingTextToArray(byId(prefix + '_equipment').value || ''),
+      highlights: landingTextToArray(byId(prefix + '_highlights').value || ''),
+      things_to_know: landingTextToArray(byId(prefix + '_things_to_know').value || ''),
+      official_links: landingTextToLinks(byId(prefix + '_official_links').value || ''),
+      faq: landingTextToFaq(byId(prefix + '_faq').value || '')
+    }, seed || {});
+  }
+  function renderLandingBuilder(preferredAddonCode, preferredLocationSlug){
+    var addonSelect = byId('landing_addon_select');
+    var previousAddon = preferredAddonCode || (addonSelect && addonSelect.value) || byId('landing_addon_editor')?.dataset?.currentCode || '';
+    var addonOptions = (pricingCatalogState.addons || []).map(function(addon){ var page = addonLandingEntry(addon.code); return '<option value="' + escapeHtml(addon.code) + '">' + escapeHtml(addon.name || addon.code) + (page ? ' — landing ready' : '') + '</option>'; }).join('');
+    addonSelect.innerHTML = addonOptions || '<option value="">No add-ons loaded</option>';
+    if (!addonOptions) setShellStatus('Landing page builder could not find add-ons. Build 196 will backfill from bundled pricing data; reload or save pricing catalog if this repeats.', 'warning');
+    if (previousAddon && Array.prototype.some.call(addonSelect.options, function(opt){ return opt.value === previousAddon; })) addonSelect.value = previousAddon;
+    if (!addonSelect.value && addonSelect.options.length) addonSelect.value = addonSelect.options[0].value;
+    var addonCode = addonSelect.value || '';
+    var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === addonCode; }) || null;
+    var addonImage = addon ? firstAddonMediaUrl(addon) : '';
+    var addonPage = addonLandingEntry(addonCode) || normalizeLandingPage({ type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page', slug: slugify((addon && addon.name) || addonCode), name: addon && addon.name || addonCode, hero_title: addon && addon.name || addonCode, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: addon ? ((addon.name || addon.code) + ' | Rosie Dazzlers') : '', meta_description: addon && addon.notes && addon.notes.length ? addon.notes.join(' ') : '' }, {});
+    byId('landing_addon_editor').dataset.currentCode = addonCode;
+    byId('landing_addon_editor').innerHTML = buildLandingEditorHtml(addonPage, 'landing_addon');
+
+    var locationSelect = byId('landing_location_select');
+    var previousLocation = preferredLocationSlug || (locationSelect && locationSelect.value) || byId('landing_location_editor')?.dataset?.currentSlug || '';
+    var locationOpts = locationLandingOptions().map(function(slug){ var page = landingPagesState.pages[slug]; return '<option value="' + escapeHtml(slug) + '">' + escapeHtml(page.name || slug) + '</option>'; }).join('');
+    locationSelect.innerHTML = locationOpts || '<option value="">No location pages yet</option>';
+    if (previousLocation && Array.prototype.some.call(locationSelect.options, function(opt){ return opt.value === previousLocation; })) locationSelect.value = previousLocation;
+    if (!locationSelect.value && locationSelect.options.length) locationSelect.value = locationSelect.options[0].value;
+    var locationSlug = locationSelect.value || '';
+    var locationPage = landingPagesState.pages[locationSlug] || normalizeLandingPage({ type: 'location', nav_group: 'town', badge: 'Town-focused detailing page', slug: '', name: '', hero_title: '', meta_title: '', meta_description: '' }, {});
+    byId('landing_location_editor').dataset.currentSlug = locationSlug;
+    byId('landing_location_editor').innerHTML = buildLandingEditorHtml(locationPage, 'landing_location');
+    build201EnhanceFriendlyEditors(byId('landing_addon_editor'));
+    build201EnhanceFriendlyEditors(byId('landing_location_editor'));
+  }
+  function saveCurrentLandingEditorsToState(){
+    var addonCode = byId('landing_addon_editor').dataset.currentCode || byId('landing_addon_select').value || '';
+    var addonSeed = addonLandingEntry(addonCode) || { type: 'addon', related_code: addonCode, nav_group: 'special-service', badge: 'Special service landing page' };
+    var addonPage = readLandingEditor('landing_addon', addonSeed);
+    addonPage.related_code = addonCode; addonPage.type = 'addon'; addonPage.nav_group = 'special-service';
+    validateLandingPageBeforeSave(addonPage, 'Add-on landing page');
+    if (addonPage.slug) landingPagesState.pages[addonPage.slug] = addonPage;
+    Object.keys(landingPagesState.pages).forEach(function(slug){ var page = landingPagesState.pages[slug]; if (page && page.type === 'addon' && page.related_code === addonCode && slug !== addonPage.slug) delete landingPagesState.pages[slug]; });
+
+    var locationSeedSlug = byId('landing_location_editor').dataset.currentSlug || byId('landing_location_select').value || '';
+    var locationSeed = landingPagesState.pages[locationSeedSlug] || { type: 'location', nav_group: 'town', badge: 'Town-focused detailing page' };
+    var locationPage = readLandingEditor('landing_location', locationSeed);
+    locationPage.type = 'location'; locationPage.nav_group = 'town';
+    validateLandingPageBeforeSave(locationPage, 'Location landing page');
+    if (locationPage.slug) landingPagesState.pages[locationPage.slug] = locationPage;
+    if (locationSeedSlug && locationSeedSlug !== locationPage.slug) delete landingPagesState.pages[locationSeedSlug];
+  }
+  async function loadLandingPagesEditor(savedSetting){
+    const res = await fetch('/api/landing_pages_public', { credentials:'include', cache:'no-store' }).catch(function(){ return null; });
+    const out = res ? await res.json().catch(function(){ return null; }) : null;
+    const fallback = res && res.ok && out ? ensureLandingPagesShape(out) : landingPagesDefaults();
+    if (savedSetting && typeof savedSetting === 'object') {
+      var saved = ensureLandingPagesShape(savedSetting);
+      setLandingPagesState({ pages: Object.assign({}, fallback.pages || {}, saved.pages || {}) });
+      return;
+    }
+    setLandingPagesState(fallback);
+  }
+  var pricingCatalogState = pricingCatalogDefaults();
+  function setPricingCatalogEditor(value){
+    var shaped = ensurePricingCatalogShape(value);
+    byId('pricing_catalog_json').value = JSON.stringify(shaped, null, 2);
+    window.__rosiePricingCatalogState = shaped;
+  }
+  function setPricingCatalogState(value){ pricingCatalogState = ensurePricingCatalogShape(value); window.__rosiePricingCatalogState = pricingCatalogState; setPricingCatalogEditor(pricingCatalogState); renderPricingDashboard(); }
+  function readPricingCatalog(){
+    const raw = byId('pricing_catalog_json').value || '{}';
+    let parsed = null;
+    try { parsed = JSON.parse(raw); } catch { throw new Error('Pricing catalog JSON is invalid.'); }
+    if (!parsed || typeof parsed !== 'object') throw new Error('Pricing catalog must be a JSON object.');
+    return ensurePricingCatalogShape(parsed);
+  }
+  function syncPricingEditorToJson(){ setPricingCatalogEditor(pricingCatalogState); }
+  function updatePricingPath(path, value){
+    var parts = String(path || '').split('.');
+    var target = pricingCatalogState;
+    while (parts.length > 1) {
+      var key = parts.shift();
+      if (!target[key] || typeof target[key] !== 'object') target[key] = {};
+      target = target[key];
+    }
+    target[parts[0]] = value;
+    if (parts[0] === 'public_requirements') pricingCatalogState.public_requirements = value;
+    pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice();
+    syncPricingEditorToJson();
+    renderPricingDashboard();
+  }
+  function renderPricingDashboard(){
+    var catalog = pricingCatalogState;
+    byId('pricingCatalogSummary').innerHTML = [
+      ['Package families', catalog.packages.length],
+      ['Package price points', packagePricePointCount(catalog.packages)],
+      ['Add-ons', catalog.addons.length],
+      ['Priced catalog lines', packagePricePointCount(catalog.packages) + catalog.addons.length],
+      ['Service areas', catalog.service_areas.length],
+      ['Public requirements', catalog.public_requirements.length],
+      ['Default service area', catalog.booking_rules.default_service_area || '—']
+    ].map(function (row) { return '<div class="stat"><div class="note">' + row[0] + '</div><strong>' + row[1] + '</strong></div>'; }).join('');
+
+    var packagePointCount = packagePricePointCount(catalog.packages);
+    byId('packageSectionNote').textContent = catalog.packages.length + ' package families with ' + packagePointCount + ' editable size-price entries. Small, mid, and oversize / exotic pricing stay together here so the whole site reads one source of truth.';
+
+    byId('travel_charge_urban').value = Number(catalog.booking_rules.travel_pricing.urban || 0).toFixed(2);
+    byId('travel_charge_township').value = Number(catalog.booking_rules.travel_pricing.township || 0).toFixed(2);
+    byId('travel_charge_hamlet').value = Number(catalog.booking_rules.travel_pricing.hamlet || 0).toFixed(2);
+    byId('travel_charge_coastal').value = Number(catalog.booking_rules.travel_pricing.coastal || 0).toFixed(2);
+    byId('travel_charge_rural').value = Number(catalog.booking_rules.travel_pricing.rural || 0).toFixed(2);
+    byId('travel_charge_remote').value = Number(catalog.booking_rules.travel_pricing.remote || 0).toFixed(2);
+    byId('travel_charge_out_of_zone').value = Number(catalog.booking_rules.travel_pricing.out_of_zone || 0).toFixed(2);
+    byId('travel_charge_notes').value = catalog.booking_rules.travel_pricing.notes || '';
+    byId('price_control_fuel').value = Number(catalog.booking_rules.price_controls.fuel_surcharge_cad || 0).toFixed(2);
+    byId('price_control_material').value = Number(catalog.booking_rules.price_controls.material_surcharge_cad || 0).toFixed(2);
+    byId('price_control_minimum').value = Number(catalog.booking_rules.price_controls.minimum_callout_cad || 0).toFixed(2);
+    byId('price_control_tax').value = Number(catalog.booking_rules.price_controls.tax_rate_percent || 0).toFixed(2);
+
+    renderPackageDetailsEditor(catalog.packages);
+    byId('packageTable').innerHTML = renderPackageRows(catalog.packages);
+    renderAddonEditor(catalog.addons, catalog.packages);
+    byId('serviceAreaTable').innerHTML = renderServiceAreaRows(catalog.service_areas);
+    byId('requirementList').innerHTML = renderRequirementRows(catalog.public_requirements);
+    bindPricingCatalogRowInputs();
+    build201EnhanceFriendlyEditors(byId('pricingCatalogCard') || document);
+  }
+  function packagePricePointCount(rows){
+    return (Array.isArray(rows) ? rows : []).reduce(function (sum, pkg) {
+      var prices = pkg && pkg.prices_cad && typeof pkg.prices_cad === 'object' ? pkg.prices_cad : {};
+      return sum + ['small','mid','oversize'].filter(function (key) { return prices[key] !== undefined && prices[key] !== null && prices[key] !== ''; }).length;
+    }, 0);
+  }
+  function renderPackageRows(rows){
+    if (!rows.length) return '<div class="catalog-empty">No packages yet.</div>';
+    return rows.map(function (pkg, index) {
+      return '<div class="catalog-row package">' +
+        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Subtitle</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize / exotic</div><div class="catalog-row__head">Deposit</div><div></div>' +
+        '<label class="field"><input data-pkg-field="code" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.code || '') + '"></label>' +
+        '<label class="field"><input data-pkg-field="name" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.name || '') + '"></label>' +
+        '<label class="field"><input data-pkg-field="subtitle" data-pkg-index="' + index + '" value="' + escapeHtml(pkg.subtitle || '') + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-pkg-field="prices_cad.small" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.small ?? 0)) + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-pkg-field="prices_cad.mid" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.mid ?? 0)) + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-pkg-field="prices_cad.oversize" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.prices_cad.oversize ?? 0)) + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-pkg-field="deposit_cad" data-pkg-index="' + index + '" value="' + escapeHtml(String(pkg.deposit_cad ?? 0)) + '"></label>' +
+        '<button class="btn" type="button" data-delete-package="' + index + '">Delete</button>' +
+      '</div>';
+    }).join('');
+  }
+  function packageLineText(value){
+    return Array.isArray(value) ? value.map(function(row){ return String(row || '').trim(); }).filter(Boolean).join('\n') : '';
+  }
+  function packageLinesFromText(value){
+    return String(value || '').split(/\r?\n/).map(function(row){ return row.trim(); }).filter(Boolean);
+  }
+  function renderPackageDetailsEditor(rows){
+    rows = Array.isArray(rows) ? rows : [];
+    var select = byId('packageEditorSelect');
+    if (!select) return;
+    var options = rows.map(function(pkg){ return '<option value="' + escapeHtml(pkg.code || '') + '">' + escapeHtml(pkg.name || pkg.code || 'Package') + '</option>'; }).join('');
+    select.innerHTML = options || '<option value="">No packages loaded</option>';
+    if (!selectedPackageCode && rows.length) selectedPackageCode = rows[0].code || '';
+    if (selectedPackageCode && rows.some(function(pkg){ return pkg.code === selectedPackageCode; })) select.value = selectedPackageCode;
+    if (!select.value && rows.length) select.value = rows[0].code || '';
+    selectedPackageCode = select.value || '';
+    var index = rows.findIndex(function(pkg){ return pkg.code === selectedPackageCode; });
+    if (index < 0) {
+      byId('packageDetailsEditorPanel').innerHTML = '<div class="catalog-empty">No package selected.</div>';
+      return;
+    }
+    var pkg = rows[index] || {};
+    byId('packageDetailsEditorPanel').innerHTML =
+      '<div class="addon-editor-grid">' +
+        '<label class="field"><span>Package code</span><input data-pkg-detail-field="code" value="' + escapeHtml(pkg.code || '') + '"></label>' +
+        '<label class="field"><span>Public package name</span><input data-pkg-detail-field="name" value="' + escapeHtml(pkg.name || '') + '"></label>' +
+        '<label class="field"><span>Subtitle / short promise</span><input data-pkg-detail-field="subtitle" value="' + escapeHtml(pkg.subtitle || '') + '"></label>' +
+        '<label class="field"><span>Estimated duration label</span><input data-pkg-detail-field="duration_label" value="' + escapeHtml(pkg.duration_label || pkg.estimated_duration || '') + '" placeholder="Example: 3–5 hours"></label>' +
+        '<label class="field"><span>Primary public image URL</span><input data-pkg-detail-field="image_url" value="' + escapeHtml(pkg.image_url || '') + '"></label>' +
+        '<label class="field"><span>Landing/SEO focus phrase</span><input data-pkg-detail-field="seo_focus" value="' + escapeHtml(pkg.seo_focus || '') + '" placeholder="Example: mobile interior detailing Oxford County"></label>' +
+      '</div>' +
+      '<div class="field"><label>Customer-facing description<textarea data-pkg-detail-field="description" placeholder="Explain who this package is for and what result to expect.">' + escapeHtml(pkg.description || '') + '</textarea></label></div>' +
+      '<div class="field"><label>Included services (one line per item)<textarea data-pkg-detail-lines="included_services" placeholder="Vacuum carpets\nClean plastics and console\nExterior wash">' + escapeHtml(packageLineText(pkg.included_services || pkg.includes)) + '</textarea></label></div>' +
+      '<div class="field"><label>Chart detail bullets (one line per bullet)<textarea data-pkg-detail-lines="chart_details" placeholder="Shown in package-service chart helpers.">' + escapeHtml(packageLineText(pkg.chart_details || pkg.service_details)) + '</textarea></label></div>' +
+      '<div class="field"><label>Best for / selling points (one line per point)<textarea data-pkg-detail-lines="best_for" placeholder="Daily drivers\nPre-sale cleanup\nWinter salt reset">' + escapeHtml(packageLineText(pkg.best_for)) + '</textarea></label></div>' +
+      '<div class="field"><label>Internal/package notes (one line per note)<textarea data-pkg-detail-lines="notes" placeholder="Staff notes, quoting reminders, or future chart notes.">' + escapeHtml(packageLineText(pkg.notes)) + '</textarea></label></div>' +
+      '<div class="actions"><button class="btn primary" type="button" data-save-package-detail="' + index + '">Save selected package</button><button class="btn" type="button" data-duplicate-package-detail="' + index + '">Duplicate package</button></div>';
+  }
+
+  function renderAddonRows(rows){
+    if (!rows.length) return '<div class="catalog-empty">No add-ons yet.</div>';
+    return rows.map(function (addon, index) {
+      return '<div class="catalog-row addon">' +
+        '<div class="catalog-row__head">Code</div><div class="catalog-row__head">Name</div><div class="catalog-row__head">Category</div><div class="catalog-row__head">Type</div><div class="catalog-row__head">Small</div><div class="catalog-row__head">Mid</div><div class="catalog-row__head">Oversize / exotic</div><div class="catalog-row__head">Quote?</div><div></div>' +
+        '<label class="field"><input data-addon-field="code" data-addon-index="' + index + '" value="' + escapeHtml(addon.code || '') + '"></label>' +
+        '<label class="field"><input data-addon-field="name" data-addon-index="' + index + '" value="' + escapeHtml(addon.name || '') + '"></label>' +
+        '<label class="field"><input data-addon-field="category" data-addon-index="' + index + '" value="' + escapeHtml(addon.category || '') + '"></label>' +
+        '<label class="field"><input data-addon-field="type" data-addon-index="' + index + '" value="' + escapeHtml(addon.type || '') + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.small" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.mid" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
+        '<label class="field"><input type="number" step="0.01" data-addon-field="prices_cad.oversize" data-addon-index="' + index + '" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
+        '<label class="checkrow inline-check"><input type="checkbox" data-addon-field="quote_required" data-addon-index="' + index + '" ' + (addon.quote_required ? 'checked' : '') + '><span>Quote</span></label>' +
+        '<button class="btn" type="button" data-delete-addon="' + index + '">Delete</button>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderAddonEditor(rows, packages){
+    rows = Array.isArray(rows) ? rows : [];
+    packages = Array.isArray(packages) ? packages : [];
+    var select = byId('addonEditorSelect');
+    var options = rows.map(function(addon){ return '<option value="' + escapeHtml(addon.code || '') + '">' + escapeHtml(addon.name || addon.code || 'Add-on') + '</option>'; }).join('');
+    select.innerHTML = options || '<option value="">No add-ons loaded</option>';
+    if (!selectedAddonCode && rows.length) selectedAddonCode = rows[0].code;
+    if (selectedAddonCode && rows.some(function(addon){ return addon.code === selectedAddonCode; })) select.value = selectedAddonCode;
+    if (!select.value && rows.length) select.value = rows[0].code;
+    selectedAddonCode = select.value || '';
+    var index = rows.findIndex(function(addon){ return addon.code === selectedAddonCode; });
+    if (index < 0) {
+      byId('addonEditorPanel').innerHTML = '<div class="catalog-empty">No add-on selected.</div>';
+      return;
+    }
+    var addon = rows[index];
+    var previewUrl = firstAddonMediaUrl(addon);
+    var previewHtml = previewUrl
+      ? '<img id="addonCurrentImagePreview" src="' + escapeHtml(previewUrl) + '" alt="Current add-on image preview" loading="lazy">'
+      : '<div class="empty-preview">No image URL is currently saved for this add-on. Paste a primary or fallback image URL below.</div>';
+    var pkgChecks = packages.map(function(pkg){
+      var checked = Array.isArray(addon.requires_package_codes_any) && addon.requires_package_codes_any.includes(pkg.code);
+      return '<label class="checkrow"><input type="checkbox" data-addon-requires-pkg="' + escapeHtml(pkg.code) + '" ' + (checked ? 'checked' : '') + '><span>' + escapeHtml(pkg.name || pkg.code) + '</span></label>';
+    }).join('');
+    byId('addonEditorPanel').innerHTML =
+      '<div class="addon-editor-grid">' +
+        '<label class="field"><span>Code</span><input data-addon-editor-field="code" value="' + escapeHtml(addon.code || '') + '"></label>' +
+        '<label class="field"><span>Name</span><input data-addon-editor-field="name" value="' + escapeHtml(addon.name || '') + '"></label>' +
+        '<label class="field"><span>Category</span><input list="addonCategoryOptions" data-addon-editor-field="category" value="' + escapeHtml(addon.category || '') + '"></label>' +
+        '<label class="field"><span>Type</span><input list="addonTypeOptions" data-addon-editor-field="type" value="' + escapeHtml(addon.type || '') + '"></label>' +
+        '<label class="field"><span>Estimated time addition</span><input data-addon-editor-field="duration_label" placeholder="45–90 min" value="' + escapeHtml(addon.duration_label || addon.estimated_duration || '') + '"></label>' +
+        '<label class="field"><span>Small</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.small" value="' + escapeHtml(String(addon.prices_cad.small ?? 0)) + '"></label>' +
+        '<label class="field"><span>Mid</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.mid" value="' + escapeHtml(String(addon.prices_cad.mid ?? 0)) + '"></label>' +
+        '<label class="field"><span>Oversize / exotic</span><input type="number" step="0.01" data-addon-editor-field="prices_cad.oversize" value="' + escapeHtml(String(addon.prices_cad.oversize ?? 0)) + '"></label>' +
+        '<label class="field"><span>Primary image URL</span><input list="addonImageUrlOptions" data-addon-editor-field="image_url" value="' + escapeHtml(addon.image_url || '') + '"></label>' +
+        '<label class="field"><span>Fallback image URL</span><input list="addonImageUrlOptions" data-addon-editor-field="image_fallback_url" value="' + escapeHtml(addon.image_fallback_url || '') + '"></label>' +
+      '</div>' +
+      addonSuggestionDatalists(rows) +
+      '<div class="panel-lite addon-image-preview">' + previewHtml + '<div class="stack-sm"><div class="section-label">Current image loaded</div><div class="pill-note">This preview prefers the saved PNG/JPG/R2 photo image first, then uses the SVG outline only as a fallback. Leave the URLs alone to keep the current picture, or replace either URL and save the pricing catalog.</div><div class="link-lines">Primary: ' + escapeHtml(addon.image_url || '—') + '<br>Fallback: ' + escapeHtml(addon.image_fallback_url || '—') + '</div></div></div>' +
+      '<div class="checkrow"><input id="addon_editor_quote_required" type="checkbox" data-addon-editor-field="quote_required" ' + (addon.quote_required ? 'checked' : '') + '><label for="addon_editor_quote_required">Quote required</label></div>' +
+      '<div class="checkrow"><input id="addon_editor_standalone_allowed" type="checkbox" data-addon-editor-field="standalone_allowed" ' + (addon.standalone_allowed ? 'checked' : '') + '><label for="addon_editor_standalone_allowed">Standalone allowed</label></div>' +
+      '<div class="field"><label for="addon_requirement_note">Requirement note shown on booking</label><textarea id="addon_requirement_note" data-addon-editor-field="requirement_note">' + escapeHtml(addon.requirement_note || '') + '</textarea></div>' +
+      '<div class="field"><label for="addon_notes_lines">Notes (one line per point)</label><textarea id="addon_notes_lines" data-addon-editor-notes>' + escapeHtml(Array.isArray(addon.notes) ? addon.notes.join('\n') : '') + '</textarea></div>' +
+      '<div class="panel-lite stack-sm"><div class="section-label">Allowed main packages</div><div class="pill-note">Use this to set one-to-one, one-to-many, or many-to-one rules. Leave standalone on for add-ons that can be booked by themselves.</div><div class="addon-dependency-grid">' + pkgChecks + '</div></div>' +
+      '<div class="actions"><button class="btn primary" type="button" data-save-addon="' + index + '">Update / save add-on</button><button class="btn" type="button" data-delete-addon="' + index + '">Delete add-on</button></div>';
+  }
+
+  function serviceAreaLabel(row, index) {
+    var label = cleanTextValue(row && (row.label || row.value || row.municipality || row.zone));
+    var county = cleanTextValue(row && row.county);
+    var tier = cleanTextValue(row && row.travel_tier);
+    return (label || ('Service area ' + (index + 1))) + (county ? ' · ' + county : '') + (tier ? ' · ' + tier : '');
+  }
+  function ensureSelectedServiceAreaIndex(rows) {
+    if (!Array.isArray(rows) || !rows.length) {
+      selectedServiceAreaIndex = 0;
+      return 0;
+    }
+    selectedServiceAreaIndex = Number(selectedServiceAreaIndex);
+    if (!Number.isFinite(selectedServiceAreaIndex) || selectedServiceAreaIndex < 0) selectedServiceAreaIndex = 0;
+    if (selectedServiceAreaIndex >= rows.length) selectedServiceAreaIndex = rows.length - 1;
+    return selectedServiceAreaIndex;
+  }
+  function renderServiceAreaRows(rows){
+    rows = Array.isArray(rows) ? rows : [];
+    if (!rows.length) return '<div class="catalog-empty">No service areas yet. Use Add service area or reload the bundled pricing fallback.</div>';
+    var selectedIndex = ensureSelectedServiceAreaIndex(rows);
+    var row = rows[selectedIndex] || {};
+    var tierOptions = uniqueTextValues(rows, function(area){ return area && area.travel_tier; }, catalogDropdownOptionsState.service_tiers);
+    var zoneOptions = uniqueTextValues(rows, function(area){ return area && area.zone; }, catalogDropdownOptionsState.service_zones);
+    var countyOptions = uniqueTextValues(rows, function(area){ return area && area.county; }, catalogDropdownOptionsState.service_counties || ['Oxford County','Norfolk County']);
+    var tierDatalist = renderDatalist('serviceTierOptions', tierOptions);
+    var zoneDatalist = renderDatalist('serviceZoneOptions', zoneOptions);
+    var countyDatalist = renderDatalist('serviceCountyOptions', countyOptions);
+    var areaOptions = rows.map(function(area, index) {
+      return '<option value="' + index + '"' + (index === selectedIndex ? ' selected' : '') + '>' + escapeHtml(serviceAreaLabel(area, index)) + '</option>';
+    }).join('');
+    var oxfordCount = rows.filter(function(area){ return /oxford/i.test(String(area && area.county || '')); }).length;
+    var norfolkCount = rows.filter(function(area){ return /norfolk/i.test(String(area && area.county || '')); }).length;
+    return countyDatalist + tierDatalist + zoneDatalist +
+      '<div class="service-area-editor-summary">' +
+        '<div class="stat"><strong>' + rows.length + '</strong><span class="note">service-area rows</span></div>' +
+        '<div class="stat"><strong>' + oxfordCount + '</strong><span class="note">Oxford rows</span></div>' +
+        '<div class="stat"><strong>' + norfolkCount + '</strong><span class="note">Norfolk rows</span></div>' +
+        '<div class="stat"><strong>' + escapeHtml(row.travel_tier || 'quote_required') + '</strong><span class="note">selected travel tier</span></div>' +
+      '</div>' +
+      '<div class="actions" style="align-items:end">' +
+        '<label class="field" style="min-width:min(100%,520px);flex:1"><span>Select service area to edit</span><select id="serviceAreaEditorSelect" aria-label="Choose service area or travel tier to edit">' + areaOptions + '</select></label>' +
+        '<button class="btn primary" type="button" id="saveSelectedServiceAreaBtn">Save selected service area</button>' +
+        '<button class="btn" type="button" id="duplicateSelectedServiceAreaBtn">Duplicate</button>' +
+        '<button class="btn" type="button" id="deleteSelectedServiceAreaBtn">Delete selected</button>' +
+      '</div>' +
+      '<div class="service-area-editor-grid">' +
+        '<label class="field"><span>County</span><input list="serviceCountyOptions" data-area-editor-field="county" value="' + escapeHtml(row.county || '') + '"></label>' +
+        '<label class="field"><span>Town / label</span><input list="serviceZoneOptions" data-area-editor-field="label" value="' + escapeHtml(row.label || '') + '"></label>' +
+        '<label class="field"><span>Booking value</span><input list="serviceZoneOptions" data-area-editor-field="value" value="' + escapeHtml(row.value || '') + '"></label>' +
+        '<label class="field"><span>Municipality</span><input list="serviceZoneOptions" data-area-editor-field="municipality" value="' + escapeHtml(row.municipality || '') + '"></label>' +
+        '<label class="field"><span>Zone</span><input list="serviceZoneOptions" data-area-editor-field="zone" value="' + escapeHtml(row.zone || '') + '"></label>' +
+        '<label class="field"><span>Travel tier</span><input list="serviceTierOptions" data-area-editor-field="travel_tier" value="' + escapeHtml(row.travel_tier || 'quote_required') + '"></label>' +
+        '<label class="field"><span>Area type</span><input data-area-editor-field="area_type" value="' + escapeHtml(row.area_type || '') + '" placeholder="town, county-fallback, rural, custom"></label>' +
+        '<label class="field wide"><span>County / by-law note</span><textarea rows="2" data-area-editor-field="bylaw_note">' + escapeHtml(row.bylaw_note || '') + '</textarea></label>' +
+        '<label class="field"><span>Water-rule key</span><input data-area-editor-field="water_rule_key" value="' + escapeHtml(row.water_rule_key || '') + '" placeholder="oxford-county-seasonal"></label>' +
+        '<label class="field wide"><span>Derived water-use reminder</span><textarea rows="2" readonly aria-readonly="true">' + escapeHtml(row.water_rule || 'Loaded from the editable water-restriction authority.') + '</textarea></label>' +
+        '<label class="field wide"><span>Parking/access reminder</span><textarea rows="2" data-area-editor-field="parking_rule">' + escapeHtml(row.parking_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Noise / arrival reminder</span><textarea rows="2" data-area-editor-field="noise_rule">' + escapeHtml(row.noise_rule || '') + '</textarea></label>' +
+        '<label class="field wide"><span>Access / setup reminder</span><textarea rows="2" data-area-editor-field="access_rule">' + escapeHtml(row.access_rule || '') + '</textarea></label>' +
+      '</div>';
+  }
+  function renderRequirementRows(rows){
+    if (!rows.length) return '<div class="catalog-empty">No public requirements yet.</div>';
+    return rows.map(function (row, index) {
+      return '<div class="catalog-row requirement"><label class="field"><input data-requirement-index="' + index + '" value="' + escapeHtml(row || '') + '"></label><button class="btn" type="button" data-delete-requirement="' + index + '">Delete</button></div>';
+    }).join('');
+  }
+  function setNestedValue(target, path, value){
+    var parts = String(path || '').split('.');
+    while (parts.length > 1) {
+      var key = parts.shift();
+      if (!target[key] || typeof target[key] !== 'object') target[key] = {};
+      target = target[key];
+    }
+    target[parts[0]] = value;
+  }
+  function bindPricingCatalogRowInputs(){
+    var packageSelect = byId('packageEditorSelect');
+    if (packageSelect) {
+      packageSelect.addEventListener('change', function () {
+        selectedPackageCode = packageSelect.value || '';
+        renderPricingDashboard();
+      });
+    }
+    qsa('[data-pkg-detail-field]').forEach(function (input) {
+      var eventName = input.tagName === 'TEXTAREA' ? 'input' : 'input';
+      input.addEventListener(eventName, function () {
+        var index = pricingCatalogState.packages.findIndex(function (row) { return row.code === selectedPackageCode; });
+        if (index < 0) return;
+        var field = input.getAttribute('data-pkg-detail-field');
+        setNestedValue(pricingCatalogState.packages[index], field, input.value);
+        if (field === 'code') selectedPackageCode = input.value;
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-pkg-detail-lines]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var index = pricingCatalogState.packages.findIndex(function (row) { return row.code === selectedPackageCode; });
+        if (index < 0) return;
+        pricingCatalogState.packages[index][input.getAttribute('data-pkg-detail-lines')] = packageLinesFromText(input.value);
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-save-package-detail]').forEach(function (button) {
+      button.addEventListener('click', async function () {
+        var index = Number(button.getAttribute('data-save-package-detail'));
+        var pkg = pricingCatalogState.packages[index] || null;
+        if (!pkg) { setShellStatus('No package is selected to save.', 'error'); return; }
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Package details saved: ' + (pkg.name || pkg.code || 'selected package') + '.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected package.', 'error');
+        }
+      });
+    });
+    qsa('[data-duplicate-package-detail]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var index = Number(button.getAttribute('data-duplicate-package-detail'));
+        var clone = JSON.parse(JSON.stringify(pricingCatalogState.packages[index] || {}));
+        clone.code = (clone.code || 'package') + '_copy';
+        clone.name = (clone.name || 'Package') + ' copy';
+        pricingCatalogState.packages.splice(index + 1, 0, clone);
+        selectedPackageCode = clone.code;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    });
+    qsa('[data-pkg-index]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var index = Number(input.getAttribute('data-pkg-index'));
+        var field = input.getAttribute('data-pkg-field');
+        var value = input.type === 'number' ? moneyNum(input.value, 0) : input.value;
+        setNestedValue(pricingCatalogState.packages[index], field, value);
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    });
+    var addonSelect = byId('addonEditorSelect');
+    if (addonSelect) {
+      addonSelect.addEventListener('change', function () {
+        selectedAddonCode = addonSelect.value || '';
+        renderPricingDashboard();
+      });
+    }
+    qsa('[data-addon-editor-field]').forEach(function (input) {
+      var eventName = input.type === 'checkbox' ? 'change' : 'input';
+      input.addEventListener(eventName, function () {
+        var index = pricingCatalogState.addons.findIndex(function (row) { return row.code === selectedAddonCode; });
+        if (index < 0) return;
+        var field = input.getAttribute('data-addon-editor-field');
+        var value = input.type === 'checkbox' ? input.checked : (input.type === 'number' ? moneyNum(input.value, 0) : input.value);
+        setNestedValue(pricingCatalogState.addons[index], field, value);
+        syncPricingEditorToJson();
+        if (field === 'image_url' || field === 'image_fallback_url') {
+          var preview = byId('addonCurrentImagePreview');
+          var nextUrl = firstAddonMediaUrl(pricingCatalogState.addons[index]);
+          if (preview && nextUrl) preview.src = nextUrl;
+        }
+        renderPricingDashboard();
+      });
+    });
+    qsa('[data-addon-editor-notes]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var index = pricingCatalogState.addons.findIndex(function (row) { return row.code === selectedAddonCode; });
+        if (index < 0) return;
+        pricingCatalogState.addons[index].notes = String(input.value || '').split(/\r?\n/).map(function (row) { return row.trim(); }).filter(Boolean);
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-addon-requires-pkg]').forEach(function (input) {
+      input.addEventListener('change', function () {
+        var index = pricingCatalogState.addons.findIndex(function (row) { return row.code === selectedAddonCode; });
+        if (index < 0) return;
+        var selected = qsa('[data-addon-requires-pkg]').filter(function (row) { return row.checked; }).map(function (row) { return row.getAttribute('data-addon-requires-pkg'); });
+        pricingCatalogState.addons[index].requires_package_codes_any = selected;
+        syncPricingEditorToJson();
+      });
+    });
+    var serviceAreaSelect = byId('serviceAreaEditorSelect');
+    if (serviceAreaSelect) {
+      serviceAreaSelect.addEventListener('change', function () {
+        selectedServiceAreaIndex = Number(serviceAreaSelect.value || 0);
+        renderPricingDashboard();
+      });
+    }
+    qsa('[data-area-editor-field]').forEach(function (input) {
+      var eventName = input.tagName === 'SELECT' ? 'change' : 'input';
+      input.addEventListener(eventName, function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        if (!rows[index]) return;
+        var field = input.getAttribute('data-area-editor-field');
+        setNestedValue(rows[index], field, input.value);
+        if ((field === 'label' || field === 'value') && !rows[index].value) rows[index].value = input.value;
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+      });
+      input.addEventListener('change', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        if (!rows[index]) return;
+        var field = input.getAttribute('data-area-editor-field');
+        setNestedValue(rows[index], field, input.value);
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    });
+    var saveSelectedServiceAreaBtn = byId('saveSelectedServiceAreaBtn');
+    if (saveSelectedServiceAreaBtn) {
+      saveSelectedServiceAreaBtn.addEventListener('click', async function () {
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Selected service area saved. Booking, pricing, services, and checkout now use this travel/water-rule row.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected service area.', 'error');
+        }
+      });
+    }
+    var duplicateSelectedServiceAreaBtn = byId('duplicateSelectedServiceAreaBtn');
+    if (duplicateSelectedServiceAreaBtn) {
+      duplicateSelectedServiceAreaBtn.addEventListener('click', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        var index = ensureSelectedServiceAreaIndex(rows);
+        var clone = JSON.parse(JSON.stringify(rows[index] || {}));
+        clone.label = (clone.label || clone.value || 'Service Area') + ' copy';
+        clone.value = clone.label;
+        rows.splice(index + 1, 0, clone);
+        selectedServiceAreaIndex = index + 1;
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    }
+    var deleteSelectedServiceAreaBtn = byId('deleteSelectedServiceAreaBtn');
+    if (deleteSelectedServiceAreaBtn) {
+      deleteSelectedServiceAreaBtn.addEventListener('click', function () {
+        var rows = Array.isArray(pricingCatalogState.service_areas) ? pricingCatalogState.service_areas : [];
+        if (!rows.length) return;
+        var index = ensureSelectedServiceAreaIndex(rows);
+        rows.splice(index, 1);
+        selectedServiceAreaIndex = Math.max(0, index - 1);
+        pricingCatalogState.service_areas = rows;
+        syncPricingEditorToJson();
+        renderPricingDashboard();
+      });
+    }
+    qsa('[data-requirement-index]').forEach(function (input) {
+      input.addEventListener('input', function () {
+        var index = Number(input.getAttribute('data-requirement-index'));
+        pricingCatalogState.public_requirements[index] = input.value;
+        pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice();
+        syncPricingEditorToJson();
+      });
+    });
+    qsa('[data-delete-package]').forEach(function (button) {
+      button.addEventListener('click', function () { pricingCatalogState.packages.splice(Number(button.getAttribute('data-delete-package')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
+    });
+    qsa('[data-save-addon]').forEach(function (button) {
+      button.addEventListener('click', async function () {
+        var index = Number(button.getAttribute('data-save-addon'));
+        var addon = pricingCatalogState.addons[index] || null;
+        if (!addon) { setShellStatus('No add-on is selected to save.', 'error'); return; }
+        try {
+          syncPricingEditorToJson();
+          await saveSetting('pricing_catalog', pricingCatalogState, 'Add-on saved: ' + (addon.name || addon.code || 'selected add-on') + '.');
+          renderPricingDashboard();
+        } catch (err) {
+          setShellStatus(err && err.message ? err.message : 'Could not save the selected add-on.', 'error');
+        }
+      });
+    });
+    qsa('[data-delete-addon]').forEach(function (button) {
+      button.addEventListener('click', function () { pricingCatalogState.addons.splice(Number(button.getAttribute('data-delete-addon')), 1); syncPricingEditorToJson(); renderPricingDashboard(); });
+    });
+    qsa('[data-delete-requirement]').forEach(function (button) {
+      button.addEventListener('click', function () { pricingCatalogState.public_requirements.splice(Number(button.getAttribute('data-delete-requirement')), 1); pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice(); syncPricingEditorToJson(); renderPricingDashboard(); });
+    });
+  }
+  async function loadPricingCatalogEditor(savedSetting){
+    const bundledFallback = await fetchBundledPricingCatalog();
+    const editableServiceAreas = await fetchEditableServiceAreaRules();
+    let source = null;
+
+    if (savedSetting && typeof savedSetting === 'object') {
+      source = hydratePricingCatalogFromDefaultMedia(savedSetting, bundledFallback);
+    } else {
+      const res = await fetch('/api/pricing_catalog_public', { credentials:'include', cache:'no-store' }).catch(function(){ return null; });
+      const out = res ? await res.json().catch(() => null) : null;
+      if (!res || !res.ok || !out) {
+        if (!bundledFallback) throw new Error(out?.error || 'Could not load pricing catalog.');
+        source = hydratePricingCatalogFromDefaultMedia(bundledFallback, bundledFallback);
+        setShellStatus('Live pricing catalog API was unavailable, so bundled fallback pricing/add-ons were loaded.', 'warning');
+      } else {
+        source = hydratePricingCatalogFromDefaultMedia(out, bundledFallback);
+      }
+    }
+
+    if ((!Array.isArray(source.addons) || !source.addons.length) && bundledFallback && Array.isArray(bundledFallback.addons) && bundledFallback.addons.length) {
+      source = hydratePricingCatalogFromDefaultMedia(bundledFallback, bundledFallback);
+      setShellStatus('Pricing catalog add-ons were missing from the editable/API row, so the bundled fallback add-ons were loaded for the landing-page builder.', 'warning');
+    }
+    if (editableServiceAreas.length) {
+      source.service_areas = mergeServiceAreaRows(editableServiceAreas, source.service_areas || []);
+    }
+    setPricingCatalogState(source);
+  }
+  async function loadSettings(){
+    await loadSharedOptionLibraries().catch(function(){ return null; });
+    const res = await fetch('/api/admin/app_settings_get', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({}) });
+    const out = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(out?.error || 'Could not load settings.');
+    const s = out?.settings || {};
+    const visibility = applySetting(s.visibility_matrix);
+    const scheduling = applySetting(s.manual_scheduling_rules);
+    const flags = applySetting(s.feature_flags);
+    const quoteSettings = applySetting(s.quote_booking_settings, quoteSettingsDefaults());
+    const giftDeliverySettings = applySetting(s.gift_delivery_settings, giftDeliveryDefaults());
+    const membershipPlanSettings = applySetting(s.membership_plan_settings, membershipPlanDefaults());
+    const moderation = applySetting(s.moderation_rules);
+    const recoveryTemplates = applySetting(s.recovery_templates);
+    const recoveryRules = applySetting(s.recovery_rules);
+    const providerRules = applySetting(s.recovery_provider_rules);
+    const pricingCatalog = applySetting(s.pricing_catalog, null);
+    const documentTemplates = applySetting(s.document_templates, documentTemplatesDefaults());
+    const socialFeeds = applySetting(s.social_feeds, socialFeedsDefaults());
+    const beforeAfterGallery = applySetting(s.before_after_gallery, beforeAfterGalleryDefaults());
+    const landingPages = applySetting(s.landing_pages, landingPagesDefaults());
+    const catalogDropdownOptions = applySetting(s.catalog_dropdown_options, catalogDropdownOptionsDefaults());
+
+    setCatalogDropdownOptionsEditor(catalogDropdownOptions);
+
+    byId('vis_customer_detailer_notes').checked = !!visibility.customer_detailer_notes;
+    byId('vis_customer_admin_notes').checked = visibility.customer_admin_notes_admin_only !== false;
+    byId('vis_detailer_admin_notes').checked = visibility.detailer_admin_notes_admin_only !== false;
+    byId('manual_schedule_admin_only').checked = scheduling.manual_schedule_admin_only !== false;
+    byId('blocking_admin_only').checked = scheduling.blocking_admin_only !== false;
+    byId('manual_schedule_notes').value = scheduling.notes || '';
+
+    byId('flag_live_updates_default').checked = !!flags.live_updates_default;
+    byId('flag_customer_chat_enabled').checked = flags.customer_chat_enabled !== false;
+    byId('flag_picture_first_observations').checked = flags.picture_first_observations !== false;
+    byId('flag_tier_discount_badges').checked = flags.tier_discount_badges !== false;
+    byId('flag_annotation_moderation_enabled').checked = flags.annotation_moderation_enabled !== false;
+    byId('flag_two_sided_thread_controls_enabled').checked = flags.two_sided_thread_controls_enabled !== false;
+    byId('flag_low_stock_alerts_enabled').checked = flags.low_stock_alerts_enabled !== false;
+
+    byId('quote_prominent_cta').checked = quoteSettings.prominent_cta !== false;
+    byId('quote_show_exact_total').checked = quoteSettings.show_exact_total !== false;
+    byId('quote_show_time_expectation').checked = quoteSettings.show_time_expectation !== false;
+    byId('quote_teaser_text').value = quoteSettings.teaser_text || quoteSettingsDefaults().teaser_text;
+
+    byId('gift_delivery_enabled').checked = giftDeliverySettings.enabled !== false;
+    byId('gift_delivery_manual_review').checked = giftDeliverySettings.manual_review !== false;
+    byId('gift_delivery_automation_enabled').checked = giftDeliverySettings.automation_enabled !== false;
+    byId('gift_delivery_send_copy_to_purchaser').checked = giftDeliverySettings.send_copy_to_purchaser !== false;
+    byId('gift_delivery_send_hour').value = Number(giftDeliverySettings.default_send_hour_local || giftDeliveryDefaults().default_send_hour_local);
+    byId('gift_delivery_timezone').value = giftDeliverySettings.timezone_label || giftDeliveryDefaults().timezone_label;
+    byId('gift_delivery_default_message').value = giftDeliverySettings.default_message || giftDeliveryDefaults().default_message;
+
+    byId('membership_enabled').checked = !!membershipPlanSettings.enabled;
+    byId('membership_waitlist_enabled').checked = membershipPlanSettings.waitlist_enabled !== false;
+    byId('membership_reminder_enabled').checked = membershipPlanSettings.reminder_enabled !== false;
+    byId('membership_name').value = membershipPlanSettings.plan_name || membershipPlanDefaults().plan_name;
+    byId('membership_cycle').value = membershipPlanSettings.cycle_label || membershipPlanDefaults().cycle_label;
+    byId('membership_teaser').value = membershipPlanSettings.teaser || membershipPlanDefaults().teaser;
+    byId('membership_benefits').value = Array.isArray(membershipPlanSettings.benefits) ? membershipPlanSettings.benefits.join('\n') : membershipPlanDefaults().benefits.join('\n');
+    byId('membership_why_title').value = membershipPlanSettings.why_title || membershipPlanDefaults().why_title;
+    byId('membership_why_lines').value = Array.isArray(membershipPlanSettings.why_lines) ? membershipPlanSettings.why_lines.join('\n') : membershipPlanDefaults().why_lines.join('\n');
+    byId('membership_waitlist_intro').value = membershipPlanSettings.waitlist_intro || membershipPlanDefaults().waitlist_intro;
+    byId('membership_self_serve_title').value = membershipPlanSettings.self_serve_title || membershipPlanDefaults().self_serve_title;
+    byId('membership_self_serve_copy').value = membershipPlanSettings.self_serve_copy || membershipPlanDefaults().self_serve_copy;
+    byId('membership_good_fit_title').value = membershipPlanSettings.good_fit_title || membershipPlanDefaults().good_fit_title;
+    byId('membership_good_fit_lines').value = Array.isArray(membershipPlanSettings.good_fit_lines) ? membershipPlanSettings.good_fit_lines.join('\n') : membershipPlanDefaults().good_fit_lines.join('\n');
+    byId('membership_reminder_subject').value = membershipPlanSettings.reminder_subject || membershipPlanDefaults().reminder_subject;
+    byId('membership_reminder_intro').value = membershipPlanSettings.reminder_intro || membershipPlanDefaults().reminder_intro;
+
+    byId('mod_annotation_customer_visibility_default').checked = moderation.annotation_customer_visibility_default !== false;
+    byId('mod_comment_customer_visibility_default').checked = moderation.comment_customer_visibility_default !== false;
+    byId('mod_client_reply_depth_limit').value = moderation.client_reply_depth_limit ?? 4;
+    byId('mod_staff_reply_depth_limit').value = moderation.staff_reply_depth_limit ?? 8;
+    byId('mod_allow_client_annotation_replies').checked = moderation.allow_client_annotation_replies !== false;
+    byId('mod_allow_staff_hide_without_delete').checked = moderation.allow_staff_hide_without_delete !== false;
+
+    byId('recovery_subject').value = recoveryTemplates.abandoned_checkout_subject || '';
+    byId('recovery_body_text').value = recoveryTemplates.abandoned_checkout_body_text || '';
+    byId('recovery_body_html').value = recoveryTemplates.abandoned_checkout_body_html || '';
+    byId('recovery_enabled').checked = recoveryRules.abandoned_recovery_enabled !== false;
+    byId('recovery_min_events').value = recoveryRules.minimum_page_events ?? 2;
+    byId('recovery_cooldown_hours').value = recoveryRules.cooldown_hours ?? 24;
+    applyOptionLibrarySelects();
+    byId('recovery_default_channel').value = recoveryRules.default_recovery_channel || 'email';
+
+    byId('provider_email_enabled').checked = providerRules?.email?.enabled !== false;
+    byId('provider_email_key').value = providerRules?.email?.provider_key || 'default_email';
+    byId('provider_email_webhook').value = providerRules?.email?.recovery_webhook_url || '';
+    byId('provider_email_test_to').value = providerRules?.email?.send_test_to || '';
+    byId('provider_sms_enabled').checked = providerRules?.sms?.enabled === true;
+    byId('provider_sms_key').value = providerRules?.sms?.provider_key || 'default_sms';
+    byId('provider_sms_webhook').value = providerRules?.sms?.recovery_webhook_url || '';
+    byId('provider_sms_test_to').value = providerRules?.sms?.send_test_to || '';
+    byId('doc_confirmation_intro').value = documentTemplates.confirmation_intro || '';
+    byId('doc_invoice_footer').value = documentTemplates.invoice_footer || '';
+    byId('doc_gift_footer').value = documentTemplates.gift_footer || '';
+    setSocialFeedsEditor(socialFeeds);
+    setBeforeAfterGalleryEditor(beforeAfterGallery);
+    await loadPricingCatalogEditor(pricingCatalog);
+    await loadLandingPagesEditor(landingPages);
+    await loadMembershipInterest().catch(function(){ renderMembershipInterestList([]); });
+  }
+  function byId(id){ return document.getElementById(id); }
+  function bindById(id, eventName, handler){
+    const node = byId(id);
+    if (!node) {
+      console.warn('admin-app missing element for event binding:', id, eventName);
+      return null;
+    }
+    node.addEventListener(eventName, handler);
+    return node;
+  }
+  async function previewRecovery(sendTest){
+    const res = await fetch('/api/admin/recovery_message_preview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ channel: byId('preview_channel').value, customer_name: byId('preview_customer_name').value, customer_email: byId('preview_customer_email').value, recipient_phone: byId('preview_recipient_phone').value, test_recipient: byId('preview_test_recipient').value, recovery_url: byId('preview_recovery_url').value, send_test: sendTest === true }) });
+    const out = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(out?.error || 'Could not build recovery preview.');
+    byId('previewSubject').textContent = out?.preview?.subject || '';
+    byId('previewText').textContent = out?.preview?.body_text || '';
+    byId('previewHtml').textContent = out?.preview?.body_html || '';
+    if (sendTest) {
+      if (out?.dispatch?.ok) setShellStatus('Recovery test sent successfully.', 'success');
+      else throw new Error(out?.dispatch?.error || 'Preview generated but the test send failed.');
+    }
+  }
+
+  ['travel_charge_urban','travel_charge_township','travel_charge_hamlet','travel_charge_coastal','travel_charge_rural','travel_charge_remote','travel_charge_out_of_zone'].forEach(function (id) {
+    bindById(id, 'input', function () {
+      var key = id.replace('travel_charge_', '');
+      pricingCatalogState.booking_rules.travel_pricing[key] = moneyNum(byId(id).value, 0);
+      syncPricingEditorToJson();
+    });
+  });
+  bindById('travel_charge_notes', 'input', function () {
+    pricingCatalogState.booking_rules.travel_pricing.notes = byId('travel_charge_notes').value || '';
+    syncPricingEditorToJson();
+  });
+  bindById('price_control_fuel', 'input', function () { pricingCatalogState.booking_rules.price_controls.fuel_surcharge_cad = moneyNum(byId('price_control_fuel').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_material', 'input', function () { pricingCatalogState.booking_rules.price_controls.material_surcharge_cad = moneyNum(byId('price_control_material').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_minimum', 'input', function () { pricingCatalogState.booking_rules.price_controls.minimum_callout_cad = moneyNum(byId('price_control_minimum').value, 0); syncPricingEditorToJson(); });
+  bindById('price_control_tax', 'input', function () { pricingCatalogState.booking_rules.price_controls.tax_rate_percent = moneyNum(byId('price_control_tax').value, 0); syncPricingEditorToJson(); });
+  bindById('addPackageBtn', 'click', function () {
+    pricingCatalogState.packages.push({ code: 'new_package', name: 'New Package', subtitle: '', prices_cad: { small: 0, mid: 0, oversize: 0 }, deposit_cad: 0, images_by_size: {}, included_services: [], notes: [] });
+    syncPricingEditorToJson(); renderPricingDashboard();
+  });
+  bindById('addAddonBtn', 'click', function () {
+    pricingCatalogState.addons.push({ code: 'new_addon', name: 'New Add-on', category: '', type: '', duration_label: 'Time varies by condition', prices_cad: { small: 0, mid: 0, oversize: 0 }, price_cad: 0, quote_required: false, image_url: '', image_fallback_url: '', notes: [] });
+    syncPricingEditorToJson(); renderPricingDashboard();
+  });
+  bindById('addServiceAreaBtn', 'click', function () {
+    pricingCatalogState.service_areas.push({ county: 'Oxford County', label: 'New Service Area', value: 'New Service Area', municipality: '', zone: '', travel_tier: 'quote_required', area_type: 'custom', water_rule_key: 'oxford-county-seasonal', bylaw_note: 'Custom service area. If there is no local override, use the selected editable county rule.', parking_rule: 'Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.', noise_rule: 'Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.', water_rule: '', access_rule: 'Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.', official_links: [] });
+    selectedServiceAreaIndex = pricingCatalogState.service_areas.length - 1;
+    syncPricingEditorToJson(); renderPricingDashboard();
+  });
+  bindById('addRequirementBtn', 'click', function () {
+    pricingCatalogState.public_requirements.push('New public requirement');
+    pricingCatalogState.booking_rules.public_requirements = pricingCatalogState.public_requirements.slice();
+    syncPricingEditorToJson(); renderPricingDashboard();
+  });
+  bindById('applyPricingJsonBtn', 'click', function () { try { setPricingCatalogState(readPricingCatalog()); setShellStatus('Pricing JSON applied to the structured editor.', 'success'); } catch (err) { setShellStatus(err?.message || 'Could not apply pricing JSON.', 'error'); } });
+  bindById('syncPricingJsonBtn', 'click', function () { syncPricingEditorToJson(); setShellStatus('Emergency pricing JSON refreshed from the friendly editor state.', 'success'); });
+  bindById('saveVisibilityBtn', 'click', async ()=>{ try{ await saveSetting('visibility_matrix', readVisibility(), 'Visibility settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save visibility settings.', 'error'); } });
+  bindById('saveSchedulingBtn', 'click', async ()=>{ try{ await saveSetting('manual_scheduling_rules', readScheduling(), 'Scheduling policy saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save scheduling policy.', 'error'); } });
+  bindById('saveFlagsBtn', 'click', async ()=>{ try{ await saveSetting('feature_flags', readFlags(), 'Feature flags saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save feature flags.', 'error'); } });
+  bindById('saveQuoteSettingsBtn', 'click', async ()=>{ try{ await saveSetting('quote_booking_settings', readQuoteSettings(), 'Booking-led self-serve settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save booking-led self-serve settings.', 'error'); } });
+  bindById('saveGiftDeliverySettingsBtn', 'click', async ()=>{ try{ await saveSetting('gift_delivery_settings', readGiftDeliverySettings(), 'E-gift delivery settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save e-gift settings.', 'error'); } });
+  bindById('runGiftDeliveryProcessBtn', 'click', async ()=>{ try{ const res = await fetch('/api/gifts/scheduled_delivery_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run gift delivery automation.'); setShellStatus('Gift delivery automation scanned ' + (out?.scanned || 0) + ' gifts and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run gift delivery automation.', 'error'); } });
+  bindById('saveMembershipSettingsBtn', 'click', async ()=>{ try{ await saveSetting('membership_plan_settings', readMembershipPlanSettings(), 'Maintenance plan settings saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save maintenance plan settings.', 'error'); } });
+  bindById('runMembershipReminderProcessBtn', 'click', async ()=>{ try{ const res = await fetch('/api/membership_reminders_process', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 50 }) }); const out = await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not run maintenance reminders.'); await loadMembershipInterest().catch(function(){}); setShellStatus('Maintenance reminders scanned ' + (out?.scanned || 0) + ' customers and processed ' + (out?.processed || 0) + '.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not run maintenance reminders.', 'error'); } });
+  bindById('reloadMembershipInterestBtn', 'click', async ()=>{ try{ await loadMembershipInterest(); setShellStatus('Recurring reminder candidates reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload recurring reminder candidates.', 'error'); } });
+  bindById('saveModerationBtn', 'click', async ()=>{ try{ await saveSetting('moderation_rules', readModeration(), 'Moderation defaults saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save moderation defaults.', 'error'); } });
+  bindById('saveRecoveryBtn', 'click', async ()=>{ try{ await saveSetting('recovery_templates', readRecoveryTemplates(), 'Recovery templates saved.'); await saveSetting('recovery_rules', readRecoveryRules(), 'Recovery rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save recovery settings.', 'error'); } });
+  bindById('saveProviderRulesBtn', 'click', async ()=>{ try{ await saveSetting('recovery_provider_rules', readProviderRules(), 'Recovery provider rules saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save provider rules.', 'error'); } });
+  bindById('saveDocumentTemplatesBtn', 'click', async ()=>{ try{ await saveSetting('document_templates', readDocumentTemplates(), 'Document templates saved.'); } catch(err){ setShellStatus(err?.message || 'Could not save document templates.', 'error'); } });
+  bindById('addSocialPlatformBtn', 'click', ()=>{ socialFeedEditorState.platforms.push({ platform:'new_platform', title:'New platform', intro:'', items:[] }); syncSocialFeedsJsonFromState(); renderSocialFeedsStructuredEditor(); setShellStatus('New social platform row added. Fill in the platform key and public links before saving.', 'success'); });
+  bindById('applySocialFeedsJsonBtn', 'click', ()=>{ try{ applySocialFeedsJsonToStructuredEditor(); } catch(err){ setShellStatus(err?.message || 'Could not apply social feed JSON.', 'error'); } });
+  bindById('reloadSocialFeedsBtn', 'click', async ()=>{ try{ const res = await fetch('/api/social_feed_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load social feeds.'); setSocialFeedsEditor(out?.social_feeds || socialFeedsDefaults()); setShellStatus(out?.warning ? `Social feeds reloaded with fallback defaults. ${out.warning}` : 'Social feeds reloaded into the friendly editor.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload social feeds.', 'error'); } });
+  bindById('resetSocialFeedsBtn', 'click', ()=>{ setSocialFeedsEditor(socialFeedsDefaults()); setShellStatus('Social feed editor reset to the template structure.', 'success'); });
+  bindById('saveSocialFeedsBtn', 'click', async ()=>{ try{ const socialValue = readSocialFeedsEditor(); if (!build201RequireSaveReview('Social feeds', socialValue)) return; await saveSetting('social_feeds', socialValue, 'Social feeds saved from the friendly editor.'); } catch(err){ setShellStatus(err?.message || 'Could not save social feeds.', 'error'); } });
+  bindById('addBeforeAfterItemBtn', 'click', ()=>{ beforeAfterGalleryEditorState.items.push({ title:'New before / after result', location:'Oxford / Norfolk Counties', before_kind:'image', before_url:'', after_kind:'image', after_url:'', note:'', consent_status:'needs_review', customer_name:'', vehicle_label:'' }); syncBeforeAfterGalleryJsonFromState(); renderBeforeAfterGalleryStructuredEditor(); setShellStatus('New before / after gallery row added. Keep consent as needs review until approved.', 'success'); });
+  bindById('applyBeforeAfterGalleryJsonBtn', 'click', ()=>{ try{ applyBeforeAfterGalleryJsonToStructuredEditor(); } catch(err){ setShellStatus(err?.message || 'Could not apply gallery JSON.', 'error'); } });
+  bindById('reloadBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const res = await fetch('/api/before_after_gallery_public', { credentials:'include', cache:'no-store' }); const out = await res.json().catch(()=>null); if (!res.ok) throw new Error(out?.error || 'Could not load before / after gallery.'); setBeforeAfterGalleryEditor(out || beforeAfterGalleryDefaults()); setShellStatus(out?.warning ? `Before / after gallery reloaded with fallback defaults. ${out.warning}` : 'Before / after gallery reloaded into the friendly editor.', out?.warning ? 'warning' : 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload before / after gallery.', 'error'); } });
+  bindById('resetBeforeAfterGalleryBtn', 'click', ()=>{ setBeforeAfterGalleryEditor(beforeAfterGalleryDefaults()); setShellStatus('Before / after gallery editor reset to the template structure.', 'success'); });
+  bindById('saveBeforeAfterGalleryBtn', 'click', async ()=>{ try{ const galleryValue = readBeforeAfterGalleryEditor(); if (!build201RequireSaveReview('Before / after gallery', galleryValue)) return; await saveSetting('before_after_gallery', galleryValue, 'Before / after gallery saved from the friendly editor.'); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not save before / after gallery.', 'error'); } });
+  bindById('reloadMediaPrivacySummaryBtn', 'click', async ()=>{ try{ await loadMediaPrivacySummary(); } catch(err){ setShellStatus(err?.message || 'Could not load media privacy readiness summary.', 'error'); } });
+  bindById('saveCatalogDropdownOptionsBtn', 'click', async ()=>{ try{ const value = readCatalogDropdownOptionsEditor(); setCatalogDropdownOptionsEditor(value); await saveSetting('catalog_dropdown_options', value, 'Dropdown option library saved. Admin App and Admin Catalog can now use these suggestions.'); renderPricingDashboard(); } catch(err){ setShellStatus(err?.message || 'Could not save dropdown option library.', 'error'); } });
+  bindById('reloadPricingCatalogBtn', 'click', async ()=>{ try{ await loadPricingCatalogEditor(null); setShellStatus('Pricing catalog reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload pricing catalog.', 'error'); } });
+  bindById('landing_addon_select', 'change', function(){ var nextAddon = this.value || ''; var currentLocation = byId('landing_location_select') ? byId('landing_location_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(nextAddon, currentLocation); });
+  bindById('landing_location_select', 'change', function(){ var nextLocation = this.value || ''; var currentAddon = byId('landing_addon_select') ? byId('landing_addon_select').value : ''; saveCurrentLandingEditorsToState(); renderLandingBuilder(currentAddon, nextLocation); });
+  bindById('landing_addon_create_btn', 'click', function(){ var code = byId('landing_addon_select').value || ''; var addon = (pricingCatalogState.addons || []).find(function(row){ return row.code === code; }) || { code: code, name: code }; var slug = slugify(addon.name || addon.code); var addonImage = firstAddonMediaUrl(addon); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'addon', related_code: code, enabled: true, slug: slug, nav_group: 'special-service', name: addon.name || addon.code, badge: 'Special service landing page', hero_title: addon.name || addon.code, hero_image_url: addonImage, gallery_image_urls: addonImage ? [addonImage] : [], meta_title: (addon.name || addon.code) + ' | Rosie Dazzlers', meta_description: Array.isArray(addon.notes) ? addon.notes.join(' ') : '' }, {}); renderLandingBuilder(code, byId('landing_location_select') ? byId('landing_location_select').value : ''); setShellStatus('Add-on landing draft created for ' + (addon.name || addon.code) + '.', 'success'); });
+  bindById('landing_location_create_btn', 'click', function(){ saveCurrentLandingEditorsToState(); var label = prompt('New location page name (example: Norwich auto detailing)'); if (!label) return; var slug = slugify(label); landingPagesState.pages[slug] = normalizeLandingPage({ type: 'location', enabled: true, slug: slug, nav_group: 'town', name: label, badge: 'Town-focused detailing page', hero_title: label, meta_title: label + ' | Rosie Dazzlers' }, {}); renderLandingBuilder(); byId('landing_location_select').value = slug; renderLandingBuilder(); setShellStatus('Location landing draft created for ' + label + '.', 'success'); });
+  bindById('reloadLandingPagesBtn', 'click', async ()=>{ try{ await loadLandingPagesEditor(null); setShellStatus('Landing pages reloaded.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not reload landing pages.', 'error'); } });
+  bindById('saveLandingPagesBtn', 'click', async ()=>{ try{ saveCurrentLandingEditorsToState(); if (!build201RequireSaveReview('Landing pages', landingPagesState)) return; await saveSetting('landing_pages', landingPagesState, 'Landing pages saved. Known pages and generic /landing/ routes now use this content.'); } catch(err){ setShellStatus(err?.message || 'Could not save landing pages.', 'error'); } });
+  bindById('savePricingCatalogBtn', 'click', async ()=>{ try{ syncPricingEditorToJson(); if (!build201RequireSaveReview('Pricing catalog', pricingCatalogState)) return; await saveSetting('pricing_catalog', pricingCatalogState, 'Pricing catalog saved. Booking, pricing, services, checkout, and pricing controls now share this source.'); } catch(err){ setShellStatus(err?.message || 'Could not save pricing catalog.', 'error'); } });
+  bindById('previewRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(false); setShellStatus('Recovery preview generated.', 'success'); } catch(err){ setShellStatus(err?.message || 'Could not build recovery preview.', 'error'); } });
+  bindById('sendTestRecoveryBtn', 'click', async ()=>{ try{ await previewRecovery(true); } catch(err){ setShellStatus(err?.message || 'Could not send recovery test.', 'error'); } });
+
+  window.AdminPageInit.init({ pageKey:'admin-app', onReady: async ()=>{ try { await loadSettings(); await loadMediaPrivacySummary().catch(function(){}); } catch(err){ setShellStatus(err?.message || 'Could not initialize app management.', 'error'); } } });
+})();
