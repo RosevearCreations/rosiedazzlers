@@ -135,6 +135,8 @@ Permanent rule: **role defines the maximum module set; a staff profile may narro
 
 ## Retained Build 272/273 authority
 
+Build 273 is the retained Finance/tax-support baseline. Its persistent Finance tax-support records, structured evidence, T2125 workpaper and accountant-package workflow remain review-first.
+
 The retained baseline includes narrow Operations/Finance action permissions and Finance/tax-support authority:
 
 - server-authoritative role/module/action permissions;
