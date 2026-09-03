@@ -12,7 +12,7 @@ Build 314 is the current **Media / Photo Studio reliability** Development candid
 
 `813cf492841503ad972168cb630d28054d2774d0`
 
-That exact Build 313 SHA is also the accepted Production `main` boundary. Production Acceptance run `33786314308` succeeded on that exact source, including exact-SHA Cloudflare deployment resolution, immutable Production smoke and public Production-alias smoke. Build 314 does **not** authorize a Production promotion; `main` remains on Build 313 while Build 314 is accepted on Development.
+That exact Build 313 SHA is also the accepted Production `main` boundary. Production Acceptance run `33786314308` succeeded on that exact source, including exact-SHA Cloudflare deployment resolution, immutable Production smoke and public Production-alias smoke. Build 314 does **not** authorize a Production promotion; `main` remains on Build 313 while Build 314 is accepted on Development. **For Build 314, Production remains closed.**
 
 The Build 314 feature branch is `build314-media-photo-studio-reliability`. Build 314 Source Gate run `33790777028` is GREEN on feature SHA `5e018b905b7a5014d90c7e8f8089a1f521702e3d`: JavaScript/Python syntax, Build 314 reliability invariants, cumulative release checks, SEO/H1 checks, route-copy checks and source hygiene all passed.
 
