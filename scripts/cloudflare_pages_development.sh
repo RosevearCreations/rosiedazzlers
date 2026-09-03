@@ -14,7 +14,11 @@ CONFIGURED_ACCOUNT_ID="${CONFIGURED_ACCOUNT_ID:-${CLOUDFLARE_ACCOUNT_ID:-}}"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
-fail() { echo "::error::$*" >&2; exit "${2:-1}"; }
+fail() {
+  local message="$1" code="${2:-1}"
+  echo "::error::${message}" >&2
+  exit "$code"
+}
 note() { echo "$*"; }
 summary() { if [[ -n "${GITHUB_STEP_SUMMARY:-}" ]]; then printf '%s\n' "$*" >> "$GITHUB_STEP_SUMMARY"; fi; }
 
@@ -113,6 +117,24 @@ validate_exact_identity() {
   [[ "$EXACT_USES_FUNCTIONS" == "true" ]] || fail "Development deployment does not report uses_functions=true (${EXACT_USES_FUNCTIONS})." 17
 }
 
+wait_for_exact_detail_success() {
+  local deployment_id="$1" attempts="${2:-12}" sleep_seconds="${3:-2}" attempt ready=false
+  for attempt in $(seq 1 "$attempts"); do
+    fetch_exact_by_id "$deployment_id"
+    [[ "$EXACT_ID" == "$deployment_id" ]] || fail "Cloudflare detail lookup changed deployment identity from ${deployment_id} to ${EXACT_ID:-missing}." 42
+    [[ "$EXACT_SHA" == "$TARGET_SHA" ]] || fail "Exact deployment SHA mismatch during detail consistency wait: ${EXACT_SHA:-missing}." 43
+    [[ "$EXACT_BRANCH" == "$CF_DEV_BRANCH" ]] || fail "Exact deployment branch mismatch during detail consistency wait: ${EXACT_BRANCH:-missing}." 44
+    note "Exact deployment detail metadata ${deployment_id}: ${EXACT_STATUS:-unknown} (consistency attempt ${attempt}/${attempts})."
+    case "$EXACT_STATUS" in
+      success) ready=true; break ;;
+      failure|failed|canceled|cancelled) fail "Exact Development deployment detail reached terminal status ${EXACT_STATUS}." 45 ;;
+    esac
+    [[ "$attempt" -ge "$attempts" ]] || sleep "$sleep_seconds"
+  done
+  [[ "$ready" == "true" ]] || fail "Cloudflare deployment list reported success, but exact deployment detail did not converge to success within ${attempts} attempts; last status was ${EXACT_STATUS:-unknown}." 46
+  validate_exact_identity
+}
+
 wait_for_exact_success() {
   local attempts="${1:-24}" sleep_seconds="${2:-10}" attempt ready=false
   EXACT_ID=""; EXACT_STATUS=""
@@ -139,9 +161,7 @@ wait_for_exact_success() {
     fi
     fail "Exact Development deployment ${EXACT_ID} was found but did not become successful; last status was ${EXACT_STATUS}." 20
   fi
-  fetch_exact_by_id "$EXACT_ID"
-  [[ "$EXACT_STATUS" == "success" ]] || fail "Exact Development deployment regressed from success to ${EXACT_STATUS}." 21
-  validate_exact_identity
+  wait_for_exact_detail_success "$EXACT_ID" 12 2
 
   summary "### Exact Development deployment"
   summary "- GitHub SHA: \`${TARGET_SHA}\`"
@@ -206,7 +226,7 @@ observe_recovery_target() {
     if [[ -n "$EXACT_ID" ]]; then
       note "Recovery observation ${EXACT_ID}: ${EXACT_STATUS:-unknown} (attempt ${attempt}/9)."
       case "$EXACT_STATUS" in
-        success) fetch_exact_by_id "$EXACT_ID"; validate_exact_identity; return 0 ;;
+        success) wait_for_exact_detail_success "$EXACT_ID" 12 2; return 0 ;;
         failure|failed|canceled|cancelled) fail "Exact Development deployment reached terminal ${EXACT_STATUS}; automatic deletion/retry is refused." 24 ;;
       esac
     fi

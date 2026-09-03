@@ -31,6 +31,10 @@ helper = need(
     "verify_token",
     "resolve_project",
     "wait_for_exact_success 24 10",
+    "wait_for_exact_detail_success",
+    'wait_for_exact_detail_success "$EXACT_ID" 12 2',
+    "detail metadata",
+    "did not converge to success",
     "validate_exact_identity",
     '[[ "$EXACT_USES_FUNCTIONS" == "true" ]]',
     "smoke_exact",
@@ -46,6 +50,9 @@ helper = need(
     "recreate_exact",
     "Cloudflare Development exact-SHA manual recovery: PASS",
 )
+
+if "regressed from success" in helper:
+    errors.append("canonical helper still treats one stale detail read as an immediate success regression")
 
 acceptance = need(
     ".github/workflows/cloudflare-development-acceptance.yml",
@@ -138,6 +145,7 @@ if errors:
 print("Build 308 deployment/recovery consolidation check: PASS")
 print(" - normal Development acceptance uses one read-only canonical Cloudflare helper")
 print(" - exact-SHA success, Functions metadata, immutable smoke and alias convergence remain mandatory")
+print(" - list/detail stage disagreement is handled only by a bounded same-ID consistency retry")
 print(" - retained Build 274 I.T. Connections evidence remains explicit")
 print(" - retained Build 275 static/full smoke evidence remains explicit without duplicate execution")
 print(" - recovery is manual workflow_dispatch only and defaults to observe")
