@@ -1,0 +1,56 @@
+name: Build 310 Source Gate
+
+on:
+  push:
+    branches: [build310-admin-full-access-matrix]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build310-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check Build 310 test syntax
+        run: |
+          node --check scripts/build310_admin_full_access_test.mjs
+          bash -n scripts/build310_http_smoke.sh
+      - name: Retain Build 309 release authority
+        run: python scripts/build309_release_check.py
+      - name: Prove Build 310 seven-module Admin matrix
+        run: node scripts/build310_admin_full_access_test.mjs
+      - name: Restrict Build 310 to proof-only files
+        run: |
+          unexpected="$(git diff --name-only 1eea3569da3ea402eb3cd7cedb1f107194265c71...HEAD | grep -vE '^(scripts/build310_|\.github/workflows/build310-)' || true)"
+          if [ -n "$unexpected" ]; then
+            echo "::error::Build 310 changed runtime/business source unexpectedly:"
+            printf '%s\n' "$unexpected"
+            exit 2
+          fi
+      - name: Run cumulative source authorities
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Source hygiene
+        run: |
+          git diff --check 1eea3569da3ea402eb3cd7cedb1f107194265c71...HEAD -- .
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 2
+          fi
