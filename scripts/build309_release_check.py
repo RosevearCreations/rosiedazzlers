@@ -166,6 +166,15 @@ else:
         ".github/workflows/build312-development-acceptance.yml",
         ".github/workflows/build301-development-source-gate.yml",
         "BUILD312_SUMMARY.md",
+        "admin-app.html",
+        "admin-app/index.html",
+        "assets/admin-app-v313.js",
+        "scripts/build313_release_check.py",
+        "scripts/build313_http_smoke.sh",
+        ".github/workflows/build313-source-gate.yml",
+        ".github/workflows/build313-development-source-gate.yml",
+        ".github/workflows/build313-development-acceptance.yml",
+        "BUILD313_SUMMARY.md",
     }
     for name in changed.stdout.splitlines():
         low = name.lower()

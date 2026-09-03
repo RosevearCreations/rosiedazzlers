@@ -9,6 +9,18 @@ BASELINE = '1364289339555ba31d7c84b7ef1b8a48c28ece76'
 PRODUCTION = '09442c53d385aca7995150ace4bde55abd51d7df'
 errors = []
 
+SUCCESSOR_BUILD313 = {
+    'admin-app.html',
+    'admin-app/index.html',
+    'assets/admin-app-v313.js',
+    'scripts/build313_release_check.py',
+    'scripts/build313_http_smoke.sh',
+    '.github/workflows/build313-source-gate.yml',
+    '.github/workflows/build313-development-source-gate.yml',
+    '.github/workflows/build313-development-acceptance.yml',
+    'BUILD313_SUMMARY.md',
+}
+
 ALLOWED = {
     'functions/api/_lib/catalog-integrity.js',
     'functions/api/admin/catalog_inventory_save.js',
@@ -27,7 +39,7 @@ ALLOWED = {
     'AUTONOMOUS_RELEASE_QUEUE.md',
     'scripts/build309_release_check.py',
     'scripts/build311_release_check.py',
-}
+} | SUCCESSOR_BUILD313
 
 
 def read(rel):
