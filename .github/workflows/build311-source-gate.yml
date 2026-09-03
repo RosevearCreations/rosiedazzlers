@@ -38,6 +38,7 @@ jobs:
       - name: Validate Build 311 Inventory Operations extraction
         run: python scripts/build311_release_check.py
       - name: Run cumulative source authorities
+        # Canonical root/folder route-copy parity remains part of the retained source boundary.
         run: |
           python scripts/release_check.py
           python scripts/seo_h1_check.py
