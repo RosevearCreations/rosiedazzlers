@@ -22,37 +22,16 @@ jobs:
   verify-development:
     name: Verify Development deployment
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 15
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
       CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
     steps:
       - name: Checkout exact dev commit
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Validate ROSIEDAZZLERS_TOKEN secret presence
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ -z "${CLOUDFLARE_API_TOKEN:-}" ]]; then
-            echo "::error::GitHub Actions secret ROSIEDAZZLERS_TOKEN is empty or unavailable to this repository workflow."
-            exit 2
-          fi
-          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
-          echo "ROSIEDAZZLERS_TOKEN secret is present."
-
-      - name: Verify Cloudflare API token
-        shell: bash
-        run: |
-          set -euo pipefail
-          curl --fail-with-body --silent --show-error \
-            "https://api.cloudflare.com/client/v4/user/tokens/verify" \
-            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
-            --header "Content-Type: application/json" > /tmp/cf-token.json
-          jq -e '.success == true and (.result.status // "") == "active"' /tmp/cf-token.json >/dev/null
-          echo "ROSIEDAZZLERS_TOKEN is an active Cloudflare API token."
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -89,218 +68,28 @@ jobs:
         run: python scripts/build283_release_check.py
       - name: Run Build 284 focused guard
         run: python scripts/build284_release_check.py
-      - name: Check Development smoke helper syntax
+      - name: Retain Build 307 readiness authority
+        run: python scripts/build307_release_check.py
+      - name: Validate Build 308 deployment/recovery consolidation
+        run: python scripts/build308_release_check.py
+
+      - name: Check canonical Cloudflare and HTTP helper syntax
         run: |
+          bash -n scripts/cloudflare_pages_development.sh
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/build284_http_smoke.sh
 
-      - name: Resolve Rosie Dazzlers Cloudflare account and Pages project
-        id: cloudflare
+      - name: Confirm exact dev SHA reached successful Cloudflare Pages deployment via canonical helper
         shell: bash
-        run: |
-          set -euo pipefail
-          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
-          account_id="${CONFIGURED_ACCOUNT_ID:-}"
-          project_ok() {
-            local candidate="$1"
-            local code
-            code=$(curl --silent --show-error --output /tmp/cf-project.json --write-out '%{http_code}' \
-              "https://api.cloudflare.com/client/v4/accounts/${candidate}/pages/projects/${CF_PROJECT_NAME}" \
-              "${AUTH[@]}")
-            [[ "$code" == "200" ]] && jq -e '.success == true' /tmp/cf-project.json >/dev/null 2>&1
-          }
-          if [[ -n "$account_id" ]]; then
-            project_ok "$account_id" || { echo "::error::Configured CLOUDFLARE_ACCOUNT_ID cannot read Pages project ${CF_PROJECT_NAME}."; exit 3; }
-          else
-            curl --fail-with-body --silent --show-error \
-              "https://api.cloudflare.com/client/v4/accounts?per_page=50" "${AUTH[@]}" > /tmp/cf-accounts.json
-            jq -e '.success == true' /tmp/cf-accounts.json >/dev/null
-            while IFS= read -r candidate; do
-              [[ -z "$candidate" ]] && continue
-              if project_ok "$candidate"; then account_id="$candidate"; break; fi
-            done < <(jq -r '.result[]?.id' /tmp/cf-accounts.json)
-          fi
-          [[ -n "$account_id" ]] || { echo "::error::ROSIEDAZZLERS_TOKEN cannot discover/read Pages project ${CF_PROJECT_NAME}."; exit 4; }
-          project_name=$(jq -r '.result.name // empty' /tmp/cf-project.json)
-          production_branch=$(jq -r '.result.production_branch // empty' /tmp/cf-project.json)
-          subdomain=$(jq -r '.result.subdomain // empty' /tmp/cf-project.json)
-          source_type=$(jq -r '.result.source.type // empty' /tmp/cf-project.json)
-          source_repo=$(jq -r '.result.source.config.repo_name // empty' /tmp/cf-project.json)
-          echo "account_id=${account_id}" >> "$GITHUB_OUTPUT"
-          {
-            echo "### Cloudflare project authority"
-            echo "- Project: \`${project_name}\`"
-            echo "- Production branch: \`${production_branch:-unknown}\`"
-            echo "- Pages subdomain: \`${subdomain:-unknown}\`"
-            echo "- Source type: \`${source_type:-unknown}\`"
-            echo "- Source repository: \`${source_repo:-unknown}\`"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Confirm exact dev SHA reached successful Cloudflare Pages deployment
-        id: deployment
-        shell: bash
-        env:
-          CF_ACCOUNT_ID: ${{ steps.cloudflare.outputs.account_id }}
-        run: |
-          set -euo pipefail
-          AUTH=(-H "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" -H "Content-Type: application/json")
-          matched_id=""
-          matched_url=""
-          matched_status=""
-          matched_uses_functions=""
-          ready="false"
-          for attempt in $(seq 1 24); do
-            curl --fail-with-body --silent --show-error \
-              "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" \
-              "${AUTH[@]}" > /tmp/cf-deployments.json
-            jq -e '.success == true' /tmp/cf-deployments.json >/dev/null
-            matched_id=$(jq -r --arg sha "$GITHUB_SHA" --arg branch "$CF_DEV_BRANCH" '
-              [.result[]? | select(
-                (.deployment_trigger.metadata.branch // "") == $branch and
-                (.deployment_trigger.metadata.commit_hash // "") == $sha
-              )][0].id // empty
-            ' /tmp/cf-deployments.json)
-            if [[ -n "$matched_id" ]]; then
-              matched_url=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | .url // empty' /tmp/cf-deployments.json | head -n1)
-              matched_status=$(jq -r --arg id "$matched_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' /tmp/cf-deployments.json | head -n1)
-              echo "Exact dev deployment ${matched_id} is visible with status ${matched_status}."
-              case "$matched_status" in
-                success)
-                  ready="true"
-                  break
-                  ;;
-                failure|failed|canceled|cancelled)
-                  echo "::error::Exact dev deployment ${matched_id} reached terminal status ${matched_status}."
-                  exit 5
-                  ;;
-              esac
-            else
-              echo "Exact dev SHA is not visible in Cloudflare Pages yet (attempt ${attempt}/24)."
-            fi
-            [[ "$attempt" -ge 24 ]] || sleep 10
-          done
-          if [[ "$ready" != "true" ]]; then
-            if [[ -z "$matched_id" ]]; then
-              latest_sha=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].deployment_trigger.metadata.commit_hash // "none"' /tmp/cf-deployments.json)
-              latest_url=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].url // "none"' /tmp/cf-deployments.json)
-              latest_env=$(jq -r --arg branch "$CF_DEV_BRANCH" '[.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)][0].environment // "none"' /tmp/cf-deployments.json)
-              echo "::error::Cloudflare does not show exact dev commit ${GITHUB_SHA}. Latest visible dev deployment is ${latest_sha} (${latest_env}) at ${latest_url}."
-            else
-              echo "::error::Exact dev deployment ${matched_id} was found but did not become successful; last status was ${matched_status}."
-            fi
-            exit 5
-          fi
-
-          curl --fail-with-body --silent --show-error \
-            "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${matched_id}" \
-            "${AUTH[@]}" > /tmp/cf-exact-deployment.json
-          jq -e '.success == true' /tmp/cf-exact-deployment.json >/dev/null
-          matched_url=$(jq -r '.result.url // empty' /tmp/cf-exact-deployment.json)
-          matched_status=$(jq -r '.result.latest_stage.status // "unknown"' /tmp/cf-exact-deployment.json)
-          matched_uses_functions=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' /tmp/cf-exact-deployment.json)
-
-          [[ -n "$matched_url" ]] || { echo "::error::Exact successful Development deployment did not return an immutable deployment URL."; exit 25; }
-          [[ "$matched_status" == "success" ]] || { echo "::error::Exact Development deployment regressed from success to ${matched_status}."; exit 27; }
-          [[ "$matched_uses_functions" == "true" ]] || { echo "::error::Exact Development deployment does not report uses_functions=true (reported ${matched_uses_functions})."; exit 28; }
-
-          echo "deployment_id=${matched_id}" >> "$GITHUB_OUTPUT"
-          echo "deployment_url=${matched_url}" >> "$GITHUB_OUTPUT"
-          echo "deployment_status=${matched_status}" >> "$GITHUB_OUTPUT"
-          echo "uses_functions=${matched_uses_functions}" >> "$GITHUB_OUTPUT"
-          {
-            echo "### Exact Development deployment"
-            echo "- GitHub SHA: \`${GITHUB_SHA}\`"
-            echo "- Cloudflare deployment: \`${matched_id}\`"
-            echo "- Deployment status: \`${matched_status}\`"
-            echo "- Deployment reports Functions: \`${matched_uses_functions}\`"
-            echo "- Deployment URL: ${matched_url}"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Exact deployment HTTP smoke checks
-        shell: bash
-        env:
-          EXACT_DEV_URL: ${{ steps.deployment.outputs.deployment_url }}
-        run: |
-          set -euo pipefail
-          SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
-          SMOKE_SCOPE=static bash scripts/build284_http_smoke.sh "$EXACT_DEV_URL" "Exact Development deployment"
-          {
-            echo "### Exact deployment smoke"
-            echo "- Immutable deployment URL: ${EXACT_DEV_URL}"
-            echo "- Cloudflare deployment metadata uses_functions=true: PASS"
-            echo "- Build 274 I.T. Connections page: PASS via shared smoke helper"
-            echo "- Build 275 booking-retention path: PASS via shared smoke helper"
-            echo "- Build 282 high-intent use-case routes + booking adapter: PASS via shared smoke helper"
-            echo "- Build 283 Gallery publication UI identity and explicit publish/unpublish controls: PASS via shared smoke helper"
-            echo "- Build 284 contextual proof asset + fail-closed identity: PASS via dedicated smoke helper"
-            echo "- Static application/service/location/sitemap identity: PASS"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Development alias convergence smoke checks
-        shell: bash
-        run: |
-          set -euo pipefail
-          alias_ready="false"
-          for alias_attempt in $(seq 1 12); do
-            echo "Checking Development branch alias convergence (attempt ${alias_attempt}/12)."
-            if SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh "$CF_DEV_URL" "Development alias attempt ${alias_attempt}/12"; then
-              alias_ready="true"
-              echo "Development branch alias converged on attempt ${alias_attempt}/12."
-              break
-            fi
-            [[ "$alias_attempt" -ge 12 ]] || sleep 5
-          done
-          if [[ "$alias_ready" != "true" ]]; then
-            echo "::error::Development branch alias did not converge to the accepted deployment within 12 attempts."
-            exit 26
-          fi
-          SMOKE_SCOPE=full bash scripts/build284_http_smoke.sh "$CF_DEV_URL" "Development alias contextual proof"
-          {
-            echo "### Development alias smoke"
-            echo "- Alias: ${CF_DEV_URL}"
-            echo "- Bounded retry: 12 attempts × 5 seconds maximum spacing"
-            echo "- Full static + dynamic/API runtime smoke: PASS"
-            echo "- Build 282 acquisition-to-Quick-Book paths: PASS"
-            echo "- Build 283 public Gallery publication/proof API + protected Gallery endpoints: PASS"
-            echo "- Build 284 contextual proof presentation uses the same public Gallery authority and remains valid when zero real matching rows exist: PASS"
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Record Production promotion boundary
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch --no-tags origin main dev
-          dev_sha=$(git rev-parse origin/dev)
-          main_sha=$(git rev-parse origin/main)
-          merge_base=$(git merge-base origin/main origin/dev)
-          dev_ahead=$(git rev-list --count origin/main..origin/dev)
-          main_ahead=$(git rev-list --count origin/dev..origin/main)
-          if [[ "$dev_sha" != "$GITHUB_SHA" ]]; then
-            echo "::error::Development moved during acceptance. Expected ${GITHUB_SHA}, current origin/dev is ${dev_sha}."
-            exit 16
-          fi
-          {
-            echo "### Production promotion boundary"
-            echo "- Accepted Development SHA: \`${dev_sha}\`"
-            echo "- Current Production/main SHA: \`${main_sha}\`"
-            echo "- Merge base: \`${merge_base}\`"
-            echo "- dev-only commits vs main: \`${dev_ahead}\`"
-            echo "- main-only commits vs dev: \`${main_ahead}\`"
-            echo "- Status: **Development evidence only — Production remains closed.**"
-            echo "- Promotion rule: reconcile/merge the accepted dev tree deliberately; never force-move main to dev."
-          } >> "$GITHUB_STEP_SUMMARY"
+        run: bash scripts/cloudflare_pages_development.sh accept
 
       - name: Record acceptance boundary
         shell: bash
         run: |
           {
             echo "### Acceptance boundary"
-            echo "This workflow proves cumulative/source guards through Build 284, exact successful Cloudflare dev deployment, exact static artifact identity, Cloudflare Functions attachment metadata, bounded dev-alias convergence, full dynamic/API Development runtime smoke, public service/location landing-page integrity, Build 278 self-contained water/power normalization, eight local static fallbacks, Build 282 high-intent use-case conversion paths, Build 283 Gallery publication/proof controls, Build 284 contextual real-proof placement, sitemap freshness, and the non-mutating Production promotion boundary."
-            echo "Authenticated Gallery mutation, creation of real customer proof evidence/consent, Finance/application write flows, payment-provider completion, real-device/provider delivery, rollback/restore rehearsals, and Production promotion remain later/manual evidence."
+            echo "Build 308 routes normal exact-SHA Development acceptance through scripts/cloudflare_pages_development.sh."
+            echo "The canonical helper verifies the active Cloudflare token, resolves the Rosie Pages project, waits for the exact dev SHA to succeed, requires uses_functions=true, smokes the immutable deployment, waits for the mutable dev alias, and records the non-mutating Production boundary."
+            echo "Normal acceptance contains no deployment DELETE or recreate request. Recovery mutation is isolated to the manual Cloudflare Pages Recovery workflow and requires exact-SHA confirmation."
+            echo "Production promotion, payment/provider transactions, database mutation, and application business-data mutation remain outside this workflow."
           } >> "$GITHUB_STEP_SUMMARY"
-
-# Historical Development acceptance through Build 275 remains retained.
-# Historical release-reliability acceptance through Build 276 remains retained.
-# Historical compatibility: cumulative/source guards through Build 283.
-# Retained Development acceptance through Build 283 remains part of the cumulative boundary.
-# Current Development acceptance through Build 284 includes contextual proof placement.
