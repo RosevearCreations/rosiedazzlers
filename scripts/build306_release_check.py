@@ -39,6 +39,7 @@ else:
         if "migration" in low or low.startswith("database") or low.endswith(".sql"):
             errors.append(f"Build 306 unexpectedly changes schema/migration file {name}")
 
+# Build 306's raw observation authority must remain intact even after later readiness layers consume it.
 need("functions/api/_lib/system-health-families.js",
      '"deployment"', '"api"', '"d1"', '"storage"', '"authentication"', '"providers"',
      "Promise.allSettled", 'contract: "rosie_it_health_families_v1"',
@@ -50,9 +51,17 @@ need("functions/api/admin/system_health_families.js",
 need("assets/admin-system-health-v306.js",
      "['deployment','api','d1','storage','authentication','providers']",
      "/api/admin/system_health_families?family=", "refreshFamily", "refreshAll")
-need("admin-system-health.html", "I.T. System Health", "Build 306 boundary", "/assets/admin-system-health-v306.js", "Build 307")
-# Build 307 status semantics must not be encoded as returned Build 306 values.
-# The runtime contract test below verifies this against the serialized observation payload.
+
+html = read("admin-system-health.html")
+for token in ["I.T. System Health", "Build 307"]:
+    if token not in html:
+        errors.append(f"admin-system-health.html missing {token}")
+if "/assets/admin-system-health-v306.js" not in html and "/assets/admin-system-health-v307.js" not in html:
+    errors.append("admin-system-health.html no longer loads a recognized System Health runtime")
+if "/assets/admin-system-health-v307.js" in html:
+    need("assets/admin-system-health-v307.js", "refreshFamily", "refreshAll", "/api/admin/system_health_families")
+
+# Build 307 readiness semantics may wrap the raw report, but must never be encoded inside Build 306 observations.
 forbid("functions/api/_lib/system-health-families.js", 'status: "GREEN"', 'status: "AMBER"', 'status: "RED"', 'corrective_action:')
 
 for rel in [
@@ -62,6 +71,8 @@ for rel in [
     "scripts/build306_health_family_test.mjs",
 ]:
     node_check(rel)
+if (ROOT / "assets/admin-system-health-v307.js").exists():
+    node_check("assets/admin-system-health-v307.js")
 
 test = subprocess.run(["node", "scripts/build306_health_family_test.mjs"], cwd=ROOT, capture_output=True, text=True)
 if test.returncode:
@@ -73,8 +84,8 @@ if errors:
     sys.exit(1)
 
 print("Build 306 I.T. Health dashboard extraction: PASS")
-print("- six observation families are independently testable")
+print("- six raw observation families remain independently testable")
 print("- deployment and runtime observations remain separate")
 print("- database mode does not falsely claim D1 when Rosie uses Supabase")
-print("- endpoint is read-only and requires it.runtime.view")
-print("- no schema change and no Build 307 diagnosis/remediation semantics")
+print("- endpoint remains read-only and requires it.runtime.view")
+print("- later readiness semantics remain outside the raw Build 306 observation helper")
