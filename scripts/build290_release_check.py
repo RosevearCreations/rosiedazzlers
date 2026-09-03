@@ -37,8 +37,19 @@ need("functions/api/_lib/action-permissions.js",
 need("functions/api/admin/_middleware.js",
      'customer_profiles_save: "operations.customer.manage"',
      'quote_pipeline_save: "operations.quote.manage"',
-     'quote_deposit_refund_save: "finance.refund.manage"',
      "requireStaffAccess", "requireActionAccess")
+admin_middleware = text("functions/api/admin/_middleware.js")
+finance_helper = "functions/api/_lib/admin-finance-actions.js"
+if "financeActionFor" in admin_middleware:
+    need("functions/api/admin/_middleware.js",
+         'import { financeActionFor } from "../_lib/admin-finance-actions.js"',
+         "financeActionFor(leaf, method)")
+    need(finance_helper,
+         '"quote_deposit_refund_save"',
+         '"finance.refund.manage"')
+else:
+    need("functions/api/admin/_middleware.js",
+         'quote_deposit_refund_save: "finance.refund.manage"')
 need("assets/admin-auth.js", "requireAuth", "canAccessPage", "redirectWithReturn", "redirectToSafeHome", "MODULE_ROLE_CEILINGS")
 need("assets/admin-shell.js", "AdminAuth.requireAuth", "applyVisibility", "setLoading")
 need("admin-customers.html", 'noindex,nofollow,noarchive', '/assets/admin-auth.js', '/assets/admin-shell.js')
@@ -74,7 +85,10 @@ need(".github/workflows/development-source-gate.yml",
 need("AI_PROJECT_HANDOFF.md", "**Build:** 290", "Build 290", "forward restore", "configuration-present", "Production remains closed")
 need("MASTER_VALUE_ROADMAP.md", "**Build:** 290", "Build 290", "forward restore", "configuration-present", "Production remains closed")
 
-for rel in ["functions/api/_lib/staff-auth.js", "functions/api/_lib/action-permissions.js", "functions/api/admin/_middleware.js", "assets/admin-auth.js", "assets/admin-shell.js", "scripts/build290_action_permission_test.mjs"]:
+syntax_relations = ["functions/api/_lib/staff-auth.js", "functions/api/_lib/action-permissions.js", "functions/api/admin/_middleware.js", "assets/admin-auth.js", "assets/admin-shell.js", "scripts/build290_action_permission_test.mjs"]
+if "financeActionFor" in admin_middleware:
+    syntax_relations.append(finance_helper)
+for rel in syntax_relations:
     proc = subprocess.run(["node", "--check", str(ROOT / rel)], capture_output=True, text=True)
     if proc.returncode:
         errors.append(f"node --check failed {rel}: {proc.stderr.strip()}")
