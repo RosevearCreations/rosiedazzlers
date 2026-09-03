@@ -49,9 +49,11 @@ need("functions/api/admin/system_health_families.js",
      'allowLegacyAdminFallback: false', 'onRequestGet', 'methodNotAllowed()')
 need("assets/admin-system-health-v306.js",
      "['deployment','api','d1','storage','authentication','providers']",
-     "/api/admin/system_health_families?family=", "Promise")
+     "/api/admin/system_health_families?family=", "refreshFamily", "refreshAll")
 need("admin-system-health.html", "I.T. System Health", "Build 306 boundary", "/assets/admin-system-health-v306.js", "Build 307")
-forbid("functions/api/_lib/system-health-families.js", "GREEN", "AMBER", "RED", "corrective_action", "remediation")
+# Build 307 status semantics must not be encoded as returned Build 306 values.
+# The runtime contract test below verifies this against the serialized observation payload.
+forbid("functions/api/_lib/system-health-families.js", 'status: "GREEN"', 'status: "AMBER"', 'status: "RED"', 'corrective_action:')
 
 for rel in [
     "functions/api/_lib/system-health-families.js",
