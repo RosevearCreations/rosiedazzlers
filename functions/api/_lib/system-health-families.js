@@ -122,7 +122,7 @@ function observeAuthentication({ actor }) {
 
 function observeProviders({ env }) {
   const integrations = buildIntegrationStatus(env);
-  const rows = Array.isArray(integrations) ? integrations : [];
+  const rows = collectIntegrationRows(integrations);
   return {
     family: "providers",
     label: "Provider readiness inputs",
@@ -138,6 +138,15 @@ function observeProviders({ env }) {
     })),
     note: "Configuration presence only; no provider API call or transaction is made."
   };
+}
+
+function collectIntegrationRows(value, output = [], seen = new Set()) {
+  if (!value || typeof value !== "object" || seen.has(value)) return output;
+  seen.add(value);
+  if (!Array.isArray(value) && typeof value.key === "string" && Object.prototype.hasOwnProperty.call(value, "configured")) output.push(value);
+  if (Array.isArray(value)) for (const item of value) collectIntegrationRows(item, output, seen);
+  else for (const item of Object.values(value)) collectIntegrationRows(item, output, seen);
+  return output.filter((row, index, all) => all.findIndex((candidate) => candidate.key === row.key) === index);
 }
 
 function clean(value) { return String(value || "").trim(); }
