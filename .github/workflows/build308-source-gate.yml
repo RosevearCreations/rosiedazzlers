@@ -1,0 +1,64 @@
+name: Build 308 Source Gate
+
+on:
+  push:
+    branches: [build308-cloudflare-deployment-recovery-consolidation]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build308-source
+  cancel-in-progress: true
+
+jobs:
+  source-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check shell syntax
+        run: |
+          bash -n scripts/cloudflare_pages_development.sh
+          bash -n scripts/build308_http_smoke.sh
+      - name: Retain Build 276 release-race authority
+        run: python scripts/build276_release_check.py
+      - name: Retain Build 281 exact-deployment authority
+        run: python scripts/build281_release_check.py
+      - name: Retain Build 307 readiness authority
+        run: python scripts/build307_release_check.py
+      - name: Validate Build 308 consolidation
+        run: python scripts/build308_release_check.py
+      - name: Run cumulative source authorities
+        run: |
+          python scripts/release_check.py
+          python scripts/seo_h1_check.py
+          python scripts/sync_route_copies.py --check
+      - name: Enforce Build 308 bounded source scope
+        run: |
+          set -euo pipefail
+          base=44f9396fcca7a9b85170f413640c1741a1808d44
+          git diff --name-only "${base}...HEAD" > /tmp/build308-changed.txt
+          if grep -E '\.sql$' /tmp/build308-changed.txt; then
+            echo "::error::Build 308 must not contain schema/SQL changes."
+            exit 2
+          fi
+          while IFS= read -r path; do
+            case "$path" in
+              scripts/cloudflare_pages_development.sh|scripts/build276_release_check.py|scripts/build281_release_check.py|scripts/build308_release_check.py|scripts/build308_http_smoke.sh|.github/workflows/cloudflare-development-acceptance.yml|.github/workflows/cloudflare-pages-recovery.yml|.github/workflows/build308-source-gate.yml|.github/workflows/build308-development-source-gate.yml|.github/workflows/build308-development-acceptance.yml) ;;
+              *) echo "::error::Unexpected Build 308 source path: $path"; exit 3 ;;
+            esac
+          done < /tmp/build308-changed.txt
+      - name: Source hygiene
+        run: |
+          git diff --check 44f9396fcca7a9b85170f413640c1741a1808d44...HEAD -- . ':!*.md'
+          if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
+            echo "::error::Merge-conflict markers remain in source."
+            exit 4
+          fi
