@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="robots" content="noindex,nofollow,noarchive"/>
+<title>I.T. System Health | Rosie Dazzlers Admin</title>
+<meta name="description" content="Protected Rosie Dazzlers I.T. System Health observations for deployment, API, database, storage, authentication and provider configuration."/>
+<link rel="stylesheet" href="/assets/site.css?v=20260820build262"/>
+<style>
+.health-shell{display:grid;gap:14px;padding-bottom:70px}.health-hero{display:flex;justify-content:space-between;gap:14px;align-items:flex-start}.health-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.health-card{display:grid;gap:10px;min-width:0}.health-card[data-observation="error"]{border-color:rgba(248,113,113,.48)}.health-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.health-head h2{margin:0}.health-kv{display:grid;grid-template-columns:minmax(150px,.45fr) minmax(0,1fr);gap:10px;padding:7px 0;border-bottom:1px solid rgba(148,163,184,.15)}.health-kv span{text-transform:capitalize}.health-kv strong{overflow-wrap:anywhere}.health-provider-list{display:grid;gap:7px;margin-top:9px}.health-provider-list>div{display:grid;grid-template-columns:minmax(170px,.7fr) minmax(110px,.25fr) minmax(0,1fr);gap:8px;padding:7px;border:1px solid rgba(148,163,184,.15);border-radius:8px}.health-provider-list span,.health-provider-list small{overflow-wrap:anywhere}.health-boundary{border-left:4px solid #60a5fa}.health-actions{display:flex;gap:8px;flex-wrap:wrap}@media(max-width:800px){.health-grid{grid-template-columns:1fr}.health-hero{display:grid}.health-kv,.health-provider-list>div{grid-template-columns:1fr}.health-actions .btn{width:100%}}
+</style>
+</head>
+<body data-build306="it-system-health">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container health-shell">
+<section class="panel health-hero"><div><span class="badge">Build 306 · I.T. extraction</span><h1>I.T. System Health</h1><p class="kicker">Six independently testable, read-only diagnostic families. A failure in one family does not prevent the others from returning observations.</p></div><div class="health-actions"><button id="refreshHealthAll" class="btn primary" type="button">Refresh all families</button><a class="btn ghost" href="/admin-startup-guide.html">Startup Command Center</a><a class="btn ghost" href="/admin.html">Admin home</a></div></section>
+<div id="healthGlobalStatus" class="notice" role="status" aria-live="polite">Loading isolated observations…</div>
+<section class="panel health-boundary"><strong>Build 306 boundary</strong><p class="mini">This page reports observations only. It does not assign GREEN/AMBER/RED readiness, diagnose expected degradation versus defects, or prescribe corrective mechanics. Those semantics belong to Build 307.</p></section>
+<section class="health-grid">
+<article class="panel health-card" data-health-family="deployment"><div class="health-head"><div><span class="badge">Deployment</span><h2>Deployment identity</h2></div><button class="btn small ghost" data-health-refresh type="button">Refresh family</button></div><div data-health-body class="notice soft">Waiting…</div><p class="mini">Last observed <span data-health-stamp>—</span></p></article>
+<article class="panel health-card" data-health-family="api"><div class="health-head"><div><span class="badge">API</span><h2>Pages Functions runtime</h2></div><button class="btn small ghost" data-health-refresh type="button">Refresh family</button></div><div data-health-body class="notice soft">Waiting…</div><p class="mini">Last observed <span data-health-stamp>—</span></p></article>
+<article class="panel health-card" data-health-family="d1"><div class="health-head"><div><span class="badge">Data plane</span><h2>Database / D1 authority</h2></div><button class="btn small ghost" data-health-refresh type="button">Refresh family</button></div><div data-health-body class="notice soft">Waiting…</div><p class="mini">Rosie currently reports its configured database mode rather than assuming D1. Last observed <span data-health-stamp>—</span></p></article>
+<article class="panel health-card" data-health-family="storage"><div class="health-head"><div><span class="badge">Storage</span><h2>Cloudflare R2 bindings</h2></div><button class="btn small ghost" data-health-refresh type="button">Refresh family</button></div><div data-health-body class="notice soft">Waiting…</div><p class="mini">Last observed <span data-health-stamp>—</span></p></article>
+<article class="panel health-card" data-health-family="authentication"><div class="health-head"><div><span class="badge">Authentication</span><h2>Protected staff authority</h2></div><button class="btn small ghost" data-health-refresh type="button">Refresh family</button></div><div data-health-body class="notice soft">Waiting…</div><p class="mini">No token, session secret or email address is displayed. Last observed <span data-health-stamp>—</span></p></article>
+<article class="panel health-card" data-health-family="providers"><div class="health-head"><div><span class="badge">Providers</span><h2>Provider configuration inputs</h2></div><button class="btn small ghost" data-health-refresh type="button">Refresh family</button></div><div data-health-body class="notice soft">Waiting…</div><p class="mini">Configuration presence only; refreshing does not call Stripe, PayPal, notification or social provider APIs. Last observed <span data-health-stamp>—</span></p></article>
+</section>
+</main>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script src="/assets/admin-system-health-v306.js"></script>
+<script>window.DDAdminShell?.boot?.({pageKey:'admin-startup-guide'});</script>
+</body>
+</html>
