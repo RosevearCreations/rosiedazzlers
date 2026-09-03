@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Master Value Roadmap
 
 **Living authority 2 of 2**  
-**Build:** 307
+**Build:** 308  
 **Updated:** 2026-09-03  
 **Read first:** `AI_PROJECT_HANDOFF.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
@@ -16,23 +16,26 @@ while server work remains event-driven and dormant modules stay asleep.
 
 ## Current release boundary
 
-- **Active Development slice:** Build 307 — I.T. readiness diagnostics upgrade, documentation synchronization/closure.
+- **Active Development slice:** Build 308 — Cloudflare deployment/recovery consolidation, documentation synchronization/closure.
 - **Accepted Production/main:** Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`.
 - **Accepted final Build 306 Development SHA:** `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`.
-- **Accepted pre-documentation Build 307 Development implementation/evidence baseline:** `069bb7d7bff9c1f50974b7018634e16594907c61`.
-- Build 307 layers evidence-scoped GREEN/AMBER/RED readiness over the six raw Build 306 observations without altering the raw observation authority.
-- GREEN is reserved for a runtime condition the diagnostic itself proves.
-- Database/D1/Supabase, R2 and provider configuration remains AMBER when no live transaction/object/provider acceptance was performed.
-- Missing required database/R2 authority or an independently failed observation is RED.
-- Provider configuration never counts as successful payment, webhook, delivery, publishing or external API transaction acceptance.
-- Corrective mechanics are explicit but read-only/manual: `automatic: false`.
-- Build 307 Development Source Gate run `33701368432` passed on exact `069bb7d7bff9c1f50974b7018634e16594907c61`.
-- Cloudflare Development Acceptance run `33701368256` passed exact deployment `c6696a18-964d-4f3b-a540-335ff1665b9e`, which reached success, reported Functions attached, passed immutable smoke and full Development alias runtime/API smoke with convergence on attempt 1/12.
-- Build 307 runtime acceptance initially raced alias deployment. After Cloudflare convergence the same job was rerun without source changes and passed exact source plus deployed read-only readiness smoke.
-- Final pre-documentation exact-SHA queries returned zero failed, queued and in-progress workflows.
-- Build 307 introduces no schema/database migration, provider transaction, pricing/booking rule, accounting/tax judgment, or Production mutation.
-- Build 307 has **no Production promotion authorization**. `main` remains on accepted Build 303.
-- Final Build 307 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
+- **Accepted pre-documentation Build 308 Development implementation/evidence baseline:** `5147b13f07d6eeef29162c69c4f46b76722956f7`.
+- Build 307 readiness semantics remain retained and unchanged.
+- Build 308 centralizes normal exact-SHA Development Cloudflare acceptance and manual recovery in `scripts/cloudflare_pages_development.sh`.
+- normal Development acceptance is read-only and contains no deployment DELETE/recreate mechanic.
+- recovery is manual `workflow_dispatch` only, defaults to `observe`, and `repair` requires exact current-`dev` SHA confirmation.
+- exact-SHA success, `uses_functions=true`, immutable deployment smoke and bounded mutable-`dev` alias convergence remain mandatory.
+- Cloudflare list/detail propagation disagreement is tolerated only through a bounded same-deployment-ID detail consistency retry.
+- Production targets and terminal deployment states remain fail-closed for recovery.
+- Build 308 Development Runtime Acceptance run `33704055168` passed on exact `5147b13f07d6eeef29162c69c4f46b76722956f7`.
+- Build 308 Development Source Gate run `33704055304` passed on that same SHA.
+- canonical Development Source Gate run `33704055243` passed on that same SHA.
+- Cloudflare Development Acceptance run `33704055178` passed exact deployment `3fd42f73-1053-4cfd-8919-4ba94a6ddc62`.
+- the immutable deployment passed static Development smoke; the mutable `dev` alias passed full runtime/API smoke and converged on attempt 1/12.
+- final pre-documentation exact-SHA fan-out returned zero failed, queued and in-progress workflows.
+- Build 308 introduces no schema/database migration, provider transaction, pricing/booking rule, staff permission change, accounting/tax judgment or Production mutation.
+- Build 308 has **no Production promotion authorization**. `main` remains on accepted Build 303.
+- Final Build 308 closure is determined from the exact documentation-synchronized `dev` SHA and its complete Development source/runtime/Cloudflare acceptance.
 - Retained historical compatibility marker: **Build:** 301 — Build 301 — Finance Reconciliation maintainability extraction in `assets/admin-accounting-v301.js`, with accepted pre-Build-301 Production anchor `ee010654aea48c12c885ea826bf7cf60f64852b7`.
 
 ## Retained baseline
@@ -48,91 +51,102 @@ Build 272 closed the narrow Operations/Finance action-permission and public pack
 
 Build 273 established the retained Finance/tax-support baseline with structured evidence, T2125 workpapers and accountant-package support. That authority remains active while later builds advance.
 
-### 9. Payments / Finance / accounting
+## Payments / Finance / accounting retained authority
 
-Retain Build 273 authority: Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No later maintainability, export-integrity or authorization release invents accountant/tax judgment.
+Finance reads remain narrowly scoped, tax-support writes retain `finance.tax.manage`, persistent Finance support records remain evidence-backed, and `accounting_documents` plus accountant-friendly export surfaces remain review-first. No maintainability, export-integrity or authorization release invents accountant/tax judgment.
 
-## Build 304 — Accountant export integrity
+### Build 304 — Accountant export integrity
 
-Build 304 separates export shaping/privacy from retained tax-support calculations through `functions/api/_lib/accounting-accountant-export.js`.
-
-The accountant JSON contract retains:
+Build 304 separates export shaping/privacy through `functions/api/_lib/accounting-accountant-export.js` while retaining:
 
 - `schema_version: 2` and export contract `rosie_accountant_workpaper_json`;
 - predictable JSON/UTF-8 metadata and deterministic `rosie-accountant-package-YYYY.json` filenames;
 - explicit evidence-reference integrity statuses;
-- safe basename-only evidence filenames and masked-only identity fields;
 - no raw storage path/URL, upload/signed URL, internal document note, staff identity metadata or raw mileage-row/booking-ID leakage.
 
-`functions/api/admin/accounting_accountant_package.js` remains read-only and protected by `finance.view`. Build 304 changes no tax/accounting judgment, provider behavior or schema.
+`functions/api/admin/accounting_accountant_package.js` remains read-only and protected by `finance.view`.
 
-## Build 305 — Finance authorization sweep
+### Build 305 — Finance authorization sweep
 
-Build 305 adds `functions/api/_lib/admin-finance-actions.js` as the centralized method-aware Finance admin route resolver while retaining the existing action authority in `functions/api/_lib/action-permissions.js`.
+`functions/api/_lib/admin-finance-actions.js` remains the centralized method-aware Finance admin route resolver. The accepted action boundary remains:
 
-The accepted action boundary remains:
-
-- `finance.view` for current Finance-prefixed reads;
+- `finance.view` for Finance-prefixed reads;
 - `finance.post` for ordinary Finance writes;
 - `finance.reconcile` for reconciliation mutations;
-- `finance.period.close` for period/month-end closure mutations;
+- `finance.period.close` for period/month-end closure;
 - `finance.refund.manage` for refund mutations/provider refund status refresh;
 - `finance.settlement.manage` for settlement/checkout/paid-state mutations;
 - `finance.tax.manage` for tax-support/remittance mutations.
 
-The Accountant role retains the same seven Finance defaults and cannot escape the Finance module ceiling. Explicit action denial and module disablement win. The accepted exhaustive scan covered 40 files / 80 exported methods. Final docs-synchronized Build 305 SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
+The Accountant role retains the same Finance ceiling and explicit module/action denial remains fail-closed. Final docs-synchronized Build 305 SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
-## Build 306 — I.T. Health dashboard extraction
+## I.T. / reliability authority
 
-Build 306 adds `functions/api/_lib/system-health-families.js` as the observation-only System Health family authority and `functions/api/admin/system_health_families.js` as its protected GET-only API.
+### Build 306 — I.T. Health dashboard extraction
+
+`functions/api/_lib/system-health-families.js` remains the observation-only family authority and `functions/api/admin/system_health_families.js` remains its protected GET-only API.
 
 The six isolated families remain:
 
-- `deployment` — Pages deployment identity inputs independent of runtime checks;
-- `api` — protected Pages Functions request-path observation;
-- `d1` — historical release family key for the database/data plane, accurately reporting `supabase`, `d1`, or `unconfigured`;
-- `storage` — safe Cloudflare R2 binding-presence metadata only;
-- `authentication` — authenticated role/admin authority without staff identity or token leakage;
-- `providers` — existing integration-registry configuration presence only, with no provider transaction/API call.
+- `deployment`
+- `api`
+- `d1` historical release-key/database data plane, accurately reporting `supabase`, `d1`, or `unconfigured`
+- `storage`
+- `authentication`
+- `providers`
 
-The collector uses `Promise.allSettled`; a family failure stays isolated. The raw helper remains semantics-free. Final docs-synchronized Build 306 SHA: `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`.
+The collector uses `Promise.allSettled`; a family failure remains isolated. Provider/storage observations expose safe configuration/binding presence only. Final docs-synchronized Build 306 SHA: `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`.
 
-## Build 307 — I.T. readiness diagnostics upgrade
+### Build 307 — I.T. readiness diagnostics upgrade
 
-Build 307 adds `functions/api/_lib/system-health-readiness.js` above the raw Build 306 observation layer.
+`functions/api/_lib/system-health-readiness.js` remains the readiness layer above Build 306 raw observations. The `rosie_it_readiness_diagnostics_v1` contract retains:
 
-The `rosie_it_readiness_diagnostics_v1` contract adds:
-
-- explicit `GREEN`, `AMBER`, `RED` state;
-- an `evidence_class` explaining what was actually proved;
-- a separate `transaction_acceptance` field;
-- stable diagnostic codes rather than vague service-unavailable wording;
+- `GREEN`, `AMBER`, `RED` state;
+- `evidence_class`;
+- separate `transaction_acceptance`;
+- stable diagnostic codes;
 - plain-language summaries;
-- `corrective_action` with `automatic: false`, title, safe steps and a link to the Startup Command Center.
+- `corrective_action` with `automatic: false`.
 
-Evidence rules are intentionally conservative:
+GREEN is reserved for a directly proved runtime condition. Database/R2/provider configuration remains separate from transaction/object/provider acceptance. Missing required local authority or an independently failed family observation is RED. Corrective mechanics remain read-only/manual.
 
-- Deployment and API can become GREEN where the protected runtime itself proves the condition.
-- Authentication becomes GREEN only after the protected staff request passes `it.runtime.view`.
-- Database/data-plane configuration remains AMBER because Build 307 does not execute a database transaction; missing supported database authority is RED.
-- R2 binding presence remains AMBER because Build 307 does not read/write/list/delete an object; missing required Rosie binding is RED.
-- Providers remain AMBER for configuration-only or missing/optional state; provider configuration is never provider transaction acceptance.
-- An independently failed family observation is RED without suppressing healthy families.
+### Build 308 — Cloudflare deployment/recovery consolidation
 
-`admin-system-health.html` and `assets/admin-system-health-v307.js` show state, evidence class, transaction status, diagnostic code, raw observations, and read-only corrective guidance. `functions/api/admin/system_health_families.js` remains GET-only, `allowLegacyAdminFallback:false`, and `it.runtime.view` protected.
+Build 308 makes `scripts/cloudflare_pages_development.sh` the canonical exact-SHA Development Cloudflare authority.
 
-`scripts/build306_release_check.py` was repaired forward-compatibly: it still requires the raw Build 306 helper to be semantics-free while permitting the dashboard page to consume the v307 successor runtime.
+Normal `accept` mode:
+
+- validates Cloudflare token/project authority;
+- waits for the exact `dev` SHA to reach success;
+- verifies exact SHA/branch identity;
+- requires `uses_functions=true`;
+- performs immutable deployment static smoke;
+- waits for bounded mutable `dev` alias convergence;
+- performs full runtime/API smoke only on the mutable alias;
+- records the non-mutating Production promotion boundary.
+
+Manual `recover` mode:
+
+- is reachable only through `workflow_dispatch`;
+- defaults to `observe`;
+- requires explicit `repair` plus exact current `dev` SHA confirmation before mutation;
+- refuses terminal deployments;
+- refuses Production/non-preview targets;
+- keeps DELETE/recreate mechanics inside the canonical helper only.
+
+During acceptance Build 308 found a Cloudflare metadata propagation race: list-side exact deployment success could precede detail-side success. The helper now performs a bounded same-deployment-ID detail consistency retry without relaxing SHA/branch, terminal-state, Functions, smoke or Production-safety requirements.
+
+Retained historical Build 274/275/276/281/283/284 guards are successor-aware and continue to protect their original semantics after mechanics moved into the canonical helper.
 
 ## Retained Build 301–303 Finance authority
 
-- Build 301 externalized the accepted `admin-accounting.html` runtime into `assets/admin-accounting-v301.js` without changing reconciliation/accounting behavior.
-- Build 302 closed Statement Import reliability as a fail-closed convergence guard because the accepted application has no active statement-import parser/API; no retired importer was recreated.
-- Build 303 externalized the retained Build 273 Tax Support controller into `assets/admin-tax-support-v303.js` byte-for-byte while leaving its backend authorities unchanged.
-- No Build 301–307 maintainability/integrity/authorization/readiness release invents matching/posting/approval, payment/provider or accountant/tax judgment.
+- Build 301 externalized the accepted Accounting runtime into `assets/admin-accounting-v301.js` without changing reconciliation/accounting behavior.
+- Build 302 closed Statement Import reliability as a fail-closed retired-import convergence guard.
+- Build 303 externalized the retained Tax Support controller into `assets/admin-tax-support-v303.js` byte-for-byte while leaving backend authorities unchanged and remains the current accepted Production boundary.
 
-## Retained value/authority through Build 307
+## Retained value/authority through Build 308
 
-- Builds 274–280 established Mobile Quick Book, I.T. help, reliable release mechanics and deep service/local SEO while keeping Rosie’s self-contained mobile water/power model.
+- Builds 274–280 established Mobile Quick Book, I.T. help, reliable release mechanics and deep service/local SEO while keeping Rosie's self-contained mobile water/power model.
 - Build 281 hardened exact-SHA Cloudflare acceptance and mutable Development alias convergence.
 - Build 282 created high-intent acquisition paths into current booking authority.
 - Builds 283–284 established explicit proof/media publication authority and fail-closed contextual proof placement.
@@ -140,18 +154,19 @@ Evidence rules are intentionally conservative:
 - Builds 288–290 closed customer/staff privacy, weak-network recovery and server-authoritative authorization/rollback boundaries.
 - Builds 291–293 added maintenance/fleet interest and customer next-action coordination without inventing cadence, pricing, contracts or recurring billing.
 - Builds 294–295 removed customer authority over staff-owned maintenance scheduling/private fields and stale customer-source controls.
-- Build 296 — My Account maintainability extraction preserves the accepted account runtime in `assets/my-account-v296.js`.
-- Build 297 — Operations customer support maintainability extraction preserves the accepted customer-support runtime in `assets/admin-customers-v297.js`.
-- Build 298 — Operations booking/quote support maintainability extraction preserves the accepted Quote Pipeline runtime in `assets/admin-quotes-v298.js`.
-- Build 299 — Operations booking-dashboard support maintainability extraction preserves the accepted Booking Dashboard runtime in `assets/admin-booking-v299.js`.
-- Build 300 — Finance Payments maintainability extraction preserves the accepted mature root Payments runtime in `assets/admin-payments-v300.js`; its pre-existing older folder route remains deliberately deferred to Build 318.
-- Build 301 — Finance Reconciliation maintainability extraction preserves the accepted Accounting runtime in `assets/admin-accounting-v301.js`.
-- Build 302 — Statement Import reliability preserves the retired-import/fail-closed boundary.
-- Build 303 — Finance Tax-support maintainability extraction preserves the retained Tax Support runtime in `assets/admin-tax-support-v303.js`.
-- Build 304 — Accountant export integrity preserves Finance/tax authority while hardening evidence/export privacy and predictable formats.
-- Build 305 — Finance authorization sweep makes current Finance-prefixed admin routes exhaustive under the existing action model without broadening roles.
-- Build 306 — I.T. Health dashboard extraction creates independent semantics-free read-only observations.
-- Build 307 — I.T. readiness diagnostics upgrade adds conservative readiness interpretation and manual corrective guidance without fabricating external evidence.
+- Build 296 preserves My Account runtime in `assets/my-account-v296.js`.
+- Build 297 preserves Operations Customer Support runtime in `assets/admin-customers-v297.js`.
+- Build 298 preserves Quote Pipeline runtime in `assets/admin-quotes-v298.js`.
+- Build 299 preserves Booking Dashboard runtime in `assets/admin-booking-v299.js`.
+- Build 300 preserves Finance Payments runtime in `assets/admin-payments-v300.js`; its pre-existing older folder route remains deferred to Build 318.
+- Build 301 preserves Finance Reconciliation runtime in `assets/admin-accounting-v301.js`.
+- Build 302 preserves the retired-import/fail-closed boundary.
+- Build 303 preserves Tax Support runtime in `assets/admin-tax-support-v303.js`.
+- Build 304 hardens accountant export integrity.
+- Build 305 makes Finance-prefixed admin route authorization exhaustive under the existing action model.
+- Build 306 isolates semantics-free System Health observations.
+- Build 307 adds conservative readiness interpretation and manual corrective guidance.
+- Build 308 consolidates exact-SHA Development Cloudflare acceptance/recovery without weakening release evidence or Production isolation.
 
 ## Permanent business/runtime constraints
 
@@ -165,26 +180,24 @@ Evidence rules are intentionally conservative:
 - private/customer media stays private until consent/privacy review plus explicit publication;
 - no automatic replay of ambiguous non-idempotent writes.
 
-## Finance roadmap — Builds 300–305
+## Completed Finance roadmap — Builds 300–305
 
-1. **Build 300 — Finance Payments maintainability extraction** — complete and accepted.
+1. **Build 300 — Finance Payments maintainability extraction** — complete.
 2. **Build 301 — Finance Reconciliation maintainability extraction** — complete.
-3. **Build 302 — Statement Import reliability** — complete as a fail-closed retired-import convergence guard.
+3. **Build 302 — Statement Import reliability** — complete as fail-closed retired-import convergence.
 4. **Build 303 — Finance Tax-support maintainability extraction** — complete and accepted in Production at `09442c53d385aca7995150ace4bde55abd51d7df`.
 5. **Build 304 — Accountant export integrity** — complete on Development.
-6. **Build 305 — Finance authorization sweep** — complete on Development; final accepted SHA `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
-
-Retained Finance storage and export concepts include `accounting_documents`, structured evidence, T2125 workpapers and **accountant-friendly export surfaces**. Accountant/tax judgment remains external/manual authority.
+6. **Build 305 — Finance authorization sweep** — complete on Development.
 
 ## I.T. / reliability roadmap — Builds 306–308
 
 - **Build 306 — I.T. Health dashboard extraction** — complete on Development; final docs-synchronized SHA `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`.
-- **Build 307 — I.T. readiness diagnostics upgrade** — technically complete; documentation-synchronized exact-SHA Development acceptance is the final closure step.
-- **Build 308 — Cloudflare deployment/recovery consolidation** — next untouched item after Build 307 closure; integrate the proven exact-SHA Development recovery path into normal release tooling and remove redundant deployment/recovery mechanics without weakening release evidence.
+- **Build 307 — I.T. readiness diagnostics upgrade** — complete on Development.
+- **Build 308 — Cloudflare deployment/recovery consolidation** — technically complete on pre-documentation exact SHA `5147b13f07d6eeef29162c69c4f46b76722956f7`; documentation-synchronized exact-SHA acceptance is the final closure step.
 
 ## Administration / inventory / catalog — Builds 309–313
 
-- Build 309 — Staff Administration maintainability extraction.
+- **Build 309 — Staff Administration maintainability extraction** — next autonomous build after Build 308 closure; externalize staff/profile/account administration runtime while preserving authentication and role-management authority.
 - Build 310 — Admin full-access acceptance matrix.
 - Build 311 — Inventory Operations maintainability extraction.
 - Build 312 — deterministic inventory data-integrity sweep.
@@ -217,19 +230,19 @@ Do not autonomously invent:
 - accountant/tax judgment;
 - physical-device evidence not proven by automation.
 
-## Build 307 acceptance sequence
+## Build 308 acceptance sequence
 
-1. retain Build 306 raw family-isolation/non-disclosure authority;
-2. run Build 307 readiness semantics/privacy/no-schema source guard;
-3. merge the exact green feature head to `dev`;
-4. run Build 307 and canonical cumulative Development source gates;
-5. prove exact Cloudflare Development deployment SHA, Functions attachment, immutable deployment smoke and mutable alias convergence;
-6. run Build 307 deployed read-only readiness page/API smoke only after deployment convergence; a deployment-order race may be rerun without changing source;
+1. retain Build 307 readiness and all earlier source/runtime authority;
+2. run Build 308 deployment/recovery consolidation source guard;
+3. merge the exact green feature head and narrow forward-compatible guard repairs to `dev`;
+4. run Build 308 and canonical cumulative Development source gates;
+5. prove exact Cloudflare Development SHA, Functions attachment, immutable deployment smoke and bounded mutable-alias convergence through the canonical helper;
+6. run Build 308 read-only runtime acceptance;
 7. require zero failed, queued and in-progress workflows on the exact pre-documentation SHA;
-8. synchronize `BUILD307_SUMMARY.md`, this roadmap, the handoff and execution queue;
+8. synchronize `BUILD308_SUMMARY.md`, this roadmap, the handoff and execution queue;
 9. repeat exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head;
-10. only then call Build 307 Development-green/closed;
-11. **do not promote Build 307 to `main` without new explicit authorization.**
+10. only then call Build 308 Development-green/closed and cut Build 309 from that exact head;
+11. **do not promote Build 308 to `main` without new explicit authorization.**
 
 ## Retained focused-guard compatibility anchors
 
