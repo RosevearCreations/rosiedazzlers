@@ -135,7 +135,7 @@ Permanent rule: **role defines the maximum module set; a staff profile may narro
 
 ## Retained Build 272/273 authority
 
-The narrow Operations/Finance action-permission and Finance/tax-support baseline remains live:
+The retained baseline includes narrow Operations/Finance action permissions and Finance/tax-support authority:
 
 - server-authoritative role/module/action permissions;
 - Finance tax-support writes retain `finance.tax.manage` while reads remain narrowly scoped;
