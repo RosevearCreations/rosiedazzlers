@@ -1,5 +1,42 @@
+// Build 314: managed-photo deletion protects active assignments and Gallery before/after references.
 import { requireStaffAccess, serviceHeaders, json } from '../_lib/staff-auth.js';
-import { getPublicAssetsBucket, isApprovedImageKey, photoSchemaStatus, safeText } from '../_lib/photo-library.js';
+import { loadEditableSetting } from '../_lib/editable-settings.js';
+import { getPublicAssetsBucket, isApprovedImageKey, photoSchemaStatus, publicUrlForKey, safeText } from '../_lib/photo-library.js';
+import galleryFallback from '../../../data/before_after_gallery.json';
+
+const BUILD=314;
+
+function canonicalMediaRef(value=''){
+  const raw=safeText(value,1500);
+  if(!raw)return'';
+  try{
+    const parsed=new URL(raw,'https://rosiedazzlers.ca');
+    return decodeURIComponent(parsed.pathname).replace(/^\/+/, '').replace(/\/{2,}/g,'/').toLowerCase();
+  }catch{
+    try{return decodeURIComponent(raw).replace(/^\/+/, '').replace(/\/{2,}/g,'/').split(/[?#]/)[0].toLowerCase();}
+    catch{return raw.replace(/^\/+/, '').replace(/\/{2,}/g,'/').split(/[?#]/)[0].toLowerCase();}
+  }
+}
+function galleryReferences(gallery,photo,env){
+  const r2Key=safeText(photo?.r2_key,600);
+  const candidates=new Set([
+    canonicalMediaRef(photo?.media_url),
+    canonicalMediaRef(r2Key),
+    canonicalMediaRef(r2Key?publicUrlForKey(env,r2Key):''),
+    canonicalMediaRef(r2Key?`/assets/${r2Key}`:'')
+  ].filter(Boolean));
+  const rows=Array.isArray(gallery?.items)?gallery.items:[];
+  const refs=[];
+  rows.forEach((item,index)=>{
+    for(const field of ['before_url','after_url']){
+      const value=safeText(item?.[field]||item?.[field.replace('_url','Url')],1500);
+      if(!value)continue;
+      const canonical=canonicalMediaRef(value);
+      if(canonical&&candidates.has(canonical))refs.push({index,field,title:safeText(item?.title||item?.name||`Gallery row ${index+1}`,240),publication_status:safeText(item?.publication_status||'draft',40),url:value});
+    }
+  });
+  return refs;
+}
 
 export async function onRequestPost({ request, env }) {
   let body = {};
@@ -13,12 +50,12 @@ export async function onRequestPost({ request, env }) {
     if (!id) return json({ ok:false, error:'Photo id is required.' },400);
     const headers = serviceHeaders(env);
 
-    // Current usage is authoritative for delete safety. Any active placement blocks deletion.
+    // Current explicit Photo Studio usage is authoritative for assignment delete safety.
     const activeResponse = await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_assignments?select=id,target_key,target_label,is_active&media_id=eq.${encodeURIComponent(id)}&is_active=eq.true&limit=25`, { headers });
     if (!activeResponse.ok) return json({ ok:false, error:`Could not verify active image assignments: ${await activeResponse.text()}` },500);
     const activeRows = await activeResponse.json().catch(()=>[]);
     if (Array.isArray(activeRows) && activeRows.length) {
-      return json({ ok:false, assigned:true, error:'This image is currently assigned and cannot be deleted. Remove its active placement(s) first.', assignments:activeRows.map((row)=>({target_key:row.target_key,target_label:row.target_label,is_active:true})) },409);
+      return json({ ok:false, build:BUILD, assigned:true, error:'This image is currently assigned and cannot be deleted. Remove its active placement(s) first.', assignments:activeRows.map((row)=>({target_key:row.target_key,target_label:row.target_label,is_active:true})) },409);
     }
 
     const [photoResponse, historyResponse] = await Promise.all([
@@ -33,6 +70,19 @@ export async function onRequestPost({ request, env }) {
     const inactiveHistory = await historyResponse.json().catch(()=>[]);
     const r2Key = safeText(photo.r2_key,500);
     if (!isApprovedImageKey(r2Key)) return json({ ok:false, error:'Only approved public R2 image keys can be deleted from Photo Studio.' },400);
+
+    // Gallery proof is stored outside app_media_assignments. Protect both draft and published before/after rows.
+    const loadedGallery=await loadEditableSetting(env,'before_after_gallery',{headers,fallback:galleryFallback});
+    const galleryRefs=galleryReferences(loadedGallery?.value,photo,env);
+    if(galleryRefs.length){
+      return json({
+        ok:false,build:BUILD,gallery_referenced:true,
+        error:'This image is used by a Gallery Before/After row and cannot be deleted. Replace or remove that Gallery reference first.',
+        gallery_references:galleryRefs,
+        gallery_source_status:loadedGallery?.source_status||'unknown'
+      },409);
+    }
+
     const bucket = getPublicAssetsBucket(env);
     if (!bucket || typeof bucket.delete !== 'function') return json({ ok:false, error:'Public R2 bucket binding is not configured for deletion.' },501);
 
@@ -62,8 +112,8 @@ export async function onRequestPost({ request, env }) {
       } catch {}
       return json({ ok:false, error:`R2 deletion failed, so the managed record was restored. ${r2Error?.message || r2Error}`, restored:true, r2_key:r2Key },502);
     }
-    return json({ ok:true, build:258, deleted:true, id, r2_key:r2Key, inactive_history_removed:Array.isArray(inactiveHistory)?inactiveHistory.length:0, label:photo.label || photo.filename || r2Key });
+    return json({ ok:true, build:BUILD, deleted:true, id, r2_key:r2Key, inactive_history_removed:Array.isArray(inactiveHistory)?inactiveHistory.length:0, label:photo.label || photo.filename || r2Key });
   } catch (err) {
-    return json({ ok:false, error:err?.message || 'Could not delete the photo.' },500);
+    return json({ ok:false, build:BUILD, error:err?.message || 'Could not delete the photo.' },500);
   }
 }
