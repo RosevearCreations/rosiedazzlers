@@ -69,23 +69,25 @@
 
 ## Current execution checkpoint
 
-Builds 300–307 are technically complete on Development before Build 307 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
+Builds 300–308 are technically complete on Development before Build 308 documentation synchronization. Build 303 remains the accepted Production/main boundary at `09442c53d385aca7995150ace4bde55abd51d7df`.
 
-Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves all current `accounting_*`, `payment_*` and `payroll_*` admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Its final documentation-synchronized Development SHA is `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`. Build 305 has no Production promotion authorization.
+Build 305 closed the Finance authorization sweep without changing the established seven-action Finance vocabulary or role defaults. `functions/api/_lib/admin-finance-actions.js` resolves current Finance-prefixed admin route/method pairs to `finance.view` or the narrow existing Finance mutation action. Final documentation-synchronized Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
-Build 306 closed the I.T. System Health extraction on final documentation-synchronized `dev` SHA `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`. Its six raw families remain `deployment`, `api`, `d1` release-key/database data plane, `storage`, `authentication` and `providers`; the `d1` release key accurately reports Supabase when that is Rosie's configured database authority. Raw observations remain isolated, GET-only, `it.runtime.view` protected and free of readiness semantics or provider/database/storage mutation.
+Build 306 closed the I.T. System Health extraction on final documentation-synchronized `dev` SHA `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`. Raw observations remain isolated, GET-only, `it.runtime.view` protected and free of readiness semantics or provider/database/storage mutation.
 
-Build 307 upgrades those raw observations through `functions/api/_lib/system-health-readiness.js` and versioned dashboard runtime `assets/admin-system-health-v307.js`. GREEN is reserved for conditions this diagnostic directly proves; database/R2/provider configuration remains AMBER when no live transaction/object/provider acceptance was performed; missing required database/R2 authority or an observation failure is RED. Provider configuration is never described as successful payment, webhook, delivery, publishing or external API acceptance. Corrective guidance is manual/read-only with `automatic: false`.
+Build 307 upgrades those observations through `functions/api/_lib/system-health-readiness.js` and `assets/admin-system-health-v307.js`. GREEN remains direct evidence only; database/R2/provider configuration remains distinct from transaction/object/provider acceptance; corrective guidance remains manual/read-only with `automatic: false`.
 
-The accepted pre-documentation Build 307 Development SHA is `069bb7d7bff9c1f50974b7018634e16594907c61`. Build 307 Development Source Gate run `33701368432` succeeded. Cloudflare Development Acceptance run `33701368256` succeeded on exact deployment `c6696a18-964d-4f3b-a540-335ff1665b9e`, which reached success, reported Functions attached, passed immutable deployment smoke and full Development alias smoke with convergence on attempt 1/12. Build 307 runtime acceptance initially raced deployment; after Cloudflare convergence, the same job was rerun without a source change and passed. Final pre-documentation queries returned zero failed, zero queued and zero in-progress runs.
+Build 308 consolidates Development Cloudflare acceptance/recovery in `scripts/cloudflare_pages_development.sh`. Normal acceptance is read-only. Recovery is manual `workflow_dispatch` only, defaults to `observe`, and `repair` requires exact current-`dev` SHA confirmation before a non-terminal Development preview can be mutated. Terminal and Production targets fail closed. Historical Build 274/275/276/281/283/284 release semantics remain protected through successor-aware guards.
 
-Final Build 307 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next untouched item after that closure: Build 308 — Cloudflare deployment/recovery consolidation.**
+The accepted pre-documentation Build 308 Development SHA is `5147b13f07d6eeef29162c69c4f46b76722956f7`. Build 308 Development Runtime Acceptance run `33704055168`, Build 308 Development Source Gate run `33704055304`, canonical Development Source Gate run `33704055243`, and Cloudflare Development Acceptance run `33704055178` all succeeded on that exact SHA. Cloudflare accepted exact deployment `3fd42f73-1053-4cfd-8919-4ba94a6ddc62`; immutable smoke passed and the mutable `dev` alias passed full runtime/API smoke with convergence on attempt 1/12. Final pre-documentation queries returned zero failed, zero queued and zero in-progress runs.
 
-Build 307 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
+Final Build 308 closure requires the same exact-SHA source/runtime/Cloudflare acceptance on the documentation-synchronized `dev` head. **Next autonomous item after that closure: Build 309 — Staff Administration maintainability extraction.**
+
+Build 308 has no Production promotion authorization; `main` must remain on accepted Build 303 unless separately authorized.
 
 ## Autonomous execution order
 
-**Builds 300–305 Finance complete → Builds 306–307 I.T. Health/readiness complete/closing → Build 308 Cloudflare release reliability → 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
+**Builds 300–305 Finance complete → Builds 306–308 I.T./release reliability complete/closing → Build 309–313 Administration/Inventory/Catalog → 314–316 Media/Social/SEO → 317 DAIP → 318–319 whole-system hardening.**
 
 ## Explicitly excluded from autonomous implementation
 
