@@ -1,44 +1,63 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 306
-**Updated:** 2026-09-02  
+**Build:** 307
+**Updated:** 2026-09-03  
 **Read next:** `MASTER_VALUE_ROADMAP.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
 
 ## Current release state
 
-Build 306 is the current **I.T. Health dashboard extraction** Development release. It builds on the accepted Build 305 Finance authorization boundary and extracts System Health into independently observable diagnostic families without changing readiness policy, schema, provider behavior, business rules, or Production.
+Build 307 is the current **I.T. readiness diagnostics upgrade** Development release. It builds directly on the accepted Build 306 isolated System Health observations and adds evidence-scoped GREEN/AMBER/RED interpretation, explicit configuration-vs-transaction evidence, specific diagnostic codes, and read-only corrective guidance without changing schema, provider authority, business rules, or Production.
 
-The accepted pre-documentation Build 306 Development implementation/evidence baseline is `fc3cf314f419c7b7209892262cc0cce8a7a0c61b`. On that exact SHA, the full workflow fan-out finished with zero failed, queued, or in-progress runs after one deployment-order retry. Build 306 source validation passed before and after deployment; Cloudflare Development Acceptance run `33699582911` passed on the exact SHA with Functions attached, immutable deployment smoke, and full Development alias convergence/runtime smoke. The first Build 306 runtime attempt saw the new static page as `404` before Cloudflare had deployed the merge; after Cloudflare acceptance completed, the same runtime job was rerun without a source change and both exact source validation and the deployed read-only System Health smoke passed.
+The accepted pre-documentation Build 307 Development implementation/evidence baseline is `069bb7d7bff9c1f50974b7018634e16594907c61`. On that exact SHA, Build 307 Development Source Gate run `33701368432` passed. Cloudflare Development Acceptance run `33701368256` passed on exact deployment `c6696a18-964d-4f3b-a540-335ff1665b9e`, which reached `success`, reported Functions attached, passed immutable deployment smoke at `https://c6696a18.rosiedazzlers.pages.dev`, and passed full Development alias runtime/API smoke with convergence on attempt 1/12.
 
-Production `main` remains accepted Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`. **Build 306 has no Production promotion authorization. Do not move `main`.**
+The first Build 307 runtime attempt executed before Cloudflare alias convergence. Exact source validation passed, while the deployed v307 identity check hit the previous Development surface. After Cloudflare acceptance completed, the same Build 307 runtime job was rerun without a source change and both exact source validation and the deployed read-only readiness smoke passed. Final exact-SHA queries returned zero failed, queued, and in-progress runs.
 
-Build 306 introduces no schema/database migration, accounting/tax-policy change, payment-provider mutation, pricing/booking business-rule change, Production data mutation, or readiness-policy redesign. Final Build 306 closure is based on the exact documentation-synchronized `dev` SHA and its complete source/runtime/Cloudflare acceptance. Build 307 remains untouched until that evidence is clean.
+Production `main` remains accepted Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`. **Build 307 has no Production promotion authorization. Do not move `main`.**
 
-## Build 306 authority
+Build 307 introduces no schema/database migration, payment-provider transaction, provider API acceptance, pricing/booking business-rule change, accounting/tax judgment, external delivery/publishing proof, or Production data mutation. Final Build 307 closure is based on the exact documentation-synchronized `dev` SHA and its complete source/runtime/Cloudflare acceptance. Build 308 remains untouched until that evidence is clean.
 
-- `functions/api/_lib/system-health-families.js` owns the six isolated System Health observations: `deployment`, `api`, `d1`, `storage`, `authentication`, and `providers`.
-- The family collector uses `Promise.allSettled`, so a failed observation does not suppress unrelated families; each family can also be requested independently.
-- The historical release key `d1` is retained, but the observation reports Rosie's actual configured data plane accurately: `supabase` when Supabase service authority is present, `d1` only when an actual `DB` binding is present, otherwise `unconfigured`.
-- `functions/api/admin/system_health_families.js` is GET-only, requires authenticated staff plus `it.runtime.view`, accepts optional `?family=<family>`, and rejects mutation methods.
-- Provider observations reuse the existing integration registry but expose only safe configuration-presence metadata. No Stripe, PayPal, notification, social, database, or storage provider transaction is performed.
-- Storage observations expose binding-name presence only; no bucket contents or credentials are returned.
-- Authentication observations expose role/admin authority only; staff email, staff IDs, tokens and session secrets are excluded.
-- `admin-system-health.html` and `assets/admin-system-health-v306.js` provide the standalone protected I.T. System Health surface with all-family and individual-family refresh.
-- Build 306 deliberately does **not** assign GREEN/AMBER/RED state, diagnose expected degradation versus defects, prescribe corrective mechanics, or redesign notification/readiness semantics. Those responsibilities belong to Build 307.
+## Build 307 authority
 
-## Build 306 validation authority
+- `functions/api/_lib/system-health-readiness.js` owns the Build 307 readiness interpretation layered over Build 306 raw observations.
+- Readiness contract: `rosie_it_readiness_diagnostics_v1`.
+- Visible states are **GREEN**, **AMBER**, and **RED**.
+- GREEN is reserved for a condition the diagnostic itself directly proves.
+- AMBER represents configuration-only/partial evidence or an optional provider boundary where transaction acceptance has not been tested.
+- RED represents a missing required local authority or an independently failed family observation.
+- Every diagnostic includes an `evidence_class`, `transaction_acceptance`, stable diagnostic code, plain-language summary, and `corrective_action`.
+- Corrective mechanics are deliberately read-only/manual: `automatic: false`; the dashboard does not silently edit Cloudflare, Supabase, D1, R2, Stripe, PayPal, auth, notification, or social/provider configuration.
+- Database/data-plane configuration is AMBER until separate database acceptance proves connectivity; missing supported database authority is RED.
+- R2 binding presence is AMBER until separate object-level acceptance exists; missing required Rosie R2 binding is RED.
+- Provider configuration remains AMBER and can never be called payment, webhook, message, delivery, publishing, or external API transaction acceptance by this dashboard.
+- Optional provider absence does not falsely make the core app RED.
+- Authentication is GREEN only when the protected request resolves authenticated staff and passes `it.runtime.view`.
+- `functions/api/admin/system_health_families.js` remains GET-only, `allowLegacyAdminFallback:false`, and `it.runtime.view` protected. It returns the raw Build 306 observations plus Build 307 diagnostics.
+- `admin-system-health.html` and `assets/admin-system-health-v307.js` present state, evidence class, transaction status, diagnostic code, and read-only corrective guidance while preserving raw observations for troubleshooting.
 
-- `scripts/build306_health_family_test.mjs` — six-family isolation, single-family addressing, accurate Supabase-vs-D1 mode and secret/staff-identity non-disclosure;
-- `scripts/build306_release_check.py` — six-family contract, GET-only `it.runtime.view` authority, no-schema boundary and Build 307 semantic boundary;
-- `scripts/build306_http_smoke.sh` — protected page deployment, anonymous API fail-closed behavior and mutation rejection, read-only only;
-- `.github/workflows/build306-source-gate.yml` — feature source gate retaining Build 305;
-- `.github/workflows/build306-development-source-gate.yml` — Development cumulative Build 306 source gate;
-- `.github/workflows/build306-development-acceptance.yml` — Development read-only System Health runtime acceptance;
-- retained `scripts/release_check.py`, historical focused guards, route-copy checks, SEO guards and Cloudflare exact-SHA acceptance remain cumulative authorities.
+## Build 307 validation authority
 
-Do not call Build 306 fully closed until the exact documentation-synchronized `dev` SHA, Build 306 Development source/runtime gates, canonical Development source gate and Cloudflare Development deployment evidence agree with zero remaining failed/queued/in-progress acceptance runs relevant to that SHA.
+- `scripts/build307_readiness_diagnostics_test.mjs` — deterministic GREEN/AMBER/RED semantics, configuration-vs-transaction separation, optional-provider behavior, observation failure behavior, corrective-action non-automation, and secret/staff-identity non-disclosure.
+- `scripts/build307_release_check.py` — no-schema/no-provider-call boundary, contract checks, v307 dashboard checks, and retained Build 306 observation authority.
+- `scripts/build307_http_smoke.sh` — deployed page identity, anonymous API fail-closed behavior, mutation rejection, and read-only-only runtime boundary.
+- `.github/workflows/build307-source-gate.yml` — feature source gate retaining Build 306 first.
+- `.github/workflows/build307-development-source-gate.yml` — Development cumulative Build 307 source gate.
+- `.github/workflows/build307-development-acceptance.yml` — Development read-only readiness runtime acceptance.
+- retained `scripts/release_check.py`, historical focused guards, route-copy checks, SEO guards, canonical Development Source Gate and Cloudflare exact-SHA acceptance remain cumulative authorities.
+
+Do not call Build 307 fully closed until the exact documentation-synchronized `dev` SHA, Build 307 Development source/runtime gates, canonical Development source gate and Cloudflare Development deployment evidence agree with zero remaining failed/queued/in-progress acceptance runs relevant to that SHA.
+
+## Retained Build 306 authority
+
+- `functions/api/_lib/system-health-families.js` remains the semantics-free six-family System Health observation authority: `deployment`, `api`, `d1`, `storage`, `authentication`, and `providers`.
+- The collector uses `Promise.allSettled`, so one failed observation cannot suppress unrelated families and every family can be requested independently.
+- Historical family key `d1` reports Rosie's actual configured database mode accurately: `supabase` when Supabase service authority is present, `d1` only for a real `DB` binding, otherwise `unconfigured`.
+- Raw provider observations expose configuration-presence metadata only and perform no provider API/transaction.
+- Raw storage observations expose binding presence only and perform no R2 object operation.
+- Raw authentication observations exclude staff email/IDs, tokens and session secrets.
+- `scripts/build306_release_check.py` remains successor-aware but still forbids GREEN/AMBER/RED/corrective semantics from entering the raw Build 306 observation helper.
+- Final documentation-synchronized Build 306 Development SHA: `202a62c271ddf42caedf13c9dc3a0cf139e55b8e`.
 
 ## Retained Build 305 authority
 
@@ -49,8 +68,8 @@ Do not call Build 306 fully closed until the exact documentation-synchronized `d
 - The established seven-action Finance vocabulary and Accountant defaults are unchanged.
 - Role ceilings, Finance-module disablement, and explicit per-action denial continue to fail closed.
 - Operations-owned quote/final-balance request lifecycle remains Operations authority; hosted final-balance checkout creation is Finance settlement authority; booking-scoped operational Finance notes retain their existing booking-work authority.
-- `scripts/build305_finance_action_test.mjs` verifies representative mappings, role/module/action boundaries and exhaustively scans the accepted Finance API surface. The accepted Build 305 tree covered 40 Finance files / 80 exported HTTP methods.
-- `scripts/build305_release_check.py`, `scripts/build305_http_smoke.sh`, and the Build 305 source/Development source/runtime workflows protect the boundary.
+- The accepted Build 305 tree covered 40 Finance files / 80 exported HTTP methods.
+- Final documentation-synchronized Build 305 Development SHA: `fbbc6f4c3f0533c1bc7faafac36f7ad6befe6605`.
 
 ## Historical CI convergence completed during Build 305
 
@@ -63,15 +82,13 @@ These repairs do not create new permissions or broaden any role.
 
 ## Retained Build 304 authority
 
-Build 304 remains the accepted accountant-export integrity boundary beneath Build 305:
-
 - `functions/api/_lib/accounting-accountant-export.js` owns accountant-export shaping/privacy.
 - Accountant JSON uses `schema_version: 2`, export contract `rosie_accountant_workpaper_json`, predictable JSON/UTF-8 metadata and deterministic `rosie-accountant-package-YYYY.json` filenames.
 - Evidence references remain integrity-classified and storage locators, internal document notes, staff identity metadata and raw mileage/booking rows remain excluded from exports.
 - `functions/api/admin/accounting_accountant_package.js` remains GET-only, `finance.view` protected and review-first.
 - Build 304 changed no tax/accounting judgment, provider behavior or schema.
 
-Historical CI convergence completed during Build 304 also remains retained: Build 273 follows delegated accountant-export shaping; Build 290/291/292 obtain sufficient history before strict ancestry checks; Build 299/300 source-hygiene checks inspect their frozen accepted release deltas.
+Historical CI convergence completed during Build 304 remains retained: Build 273 follows delegated accountant-export shaping; Build 290/291/292 obtain sufficient history before strict ancestry checks; Build 299/300 source-hygiene checks inspect their frozen accepted historical release deltas.
 
 ## Retained Build 303 authority
 
@@ -124,10 +141,10 @@ Build 273 is the retained Finance/tax-support baseline. The accepted Build 272/2
 
 ## Retained business/runtime authority
 
-The accepted Builds 272–306 authority remains intact, including:
+The accepted Builds 272–307 authority remains intact, including:
 
 - Build 273 Finance/tax-support and accountant-workpaper authority;
-- Complete = **Best value** and the current Small/Mid/Oversized + condition/quote pricing authority;
+- Complete = **Best value** and current Small/Mid/Oversized + condition/quote pricing authority;
 - Rosie supplies normal detailing water/power while the customer supplies a safe/private/permitted work area;
 - one meaningful H1 per indexable public page;
 - no fabricated accounting/tax facts, customer proof, consent, reviews, provider evidence or Google verification;
@@ -148,14 +165,15 @@ The accepted Builds 272–306 authority remains intact, including:
 - Build 302 preserves the retired statement-import boundary;
 - Build 303 is the byte-for-byte Tax Support controller extraction;
 - Build 304 hardens accountant export integrity without changing accounting/tax authority;
-- Build 305 makes the existing Finance action model exhaustive across Finance-prefixed admin routes without broadening roles or business authority;
-- Build 306 extracts I.T. System Health into isolated read-only observations without redefining readiness or provider authority.
+- Build 305 makes the existing Finance action model exhaustive without broadening roles/business authority;
+- Build 306 extracts I.T. System Health into isolated semantics-free read-only observations;
+- Build 307 adds evidence-scoped readiness interpretation and read-only corrective guidance without fabricating transaction acceptance.
 
 ## Next autonomous build
 
-**Build 307 — I.T. readiness diagnostics upgrade:** normalize GREEN/AMBER/RED readiness reporting, explicitly distinguish configuration-present evidence from transaction acceptance, improve failure messages, and expose corrective mechanics using the isolated Build 306 observation families.
+**Build 308 — Cloudflare deployment/recovery consolidation:** integrate the proven exact-SHA Development deployment/recovery path into normal release tooling and remove redundant recovery mechanics while preserving immutable deployment evidence, bounded Development-alias convergence, rollback/promote boundaries, and non-mutating Production safety.
 
-Build 307 must not silently turn configuration presence into provider transaction acceptance, invent external evidence, change business rules, or promote Production. Continue the recorded Builds 307–319 sequence without inventing business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
+Build 308 must not weaken the exact-SHA gate, silently deploy to Production, force-move `main`, or convert recovery tooling into an automatic destructive action. Continue the recorded Builds 308–319 sequence without inventing business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
 
 ## Manual/external evidence that must not be fabricated
 
