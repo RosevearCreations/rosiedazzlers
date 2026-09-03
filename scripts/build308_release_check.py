@@ -56,6 +56,9 @@ acceptance = need(
     "python scripts/build308_release_check.py",
     "bash scripts/cloudflare_pages_development.sh accept",
     "Build 274 I.T. Connections",
+    "through Build 275",
+    "SMOKE_SCOPE=static bash scripts/development_http_smoke.sh",
+    "SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh",
     "Normal acceptance contains no deployment DELETE or recreate request",
     "Production promotion",
 )
@@ -136,6 +139,7 @@ print("Build 308 deployment/recovery consolidation check: PASS")
 print(" - normal Development acceptance uses one read-only canonical Cloudflare helper")
 print(" - exact-SHA success, Functions metadata, immutable smoke and alias convergence remain mandatory")
 print(" - retained Build 274 I.T. Connections evidence remains explicit")
+print(" - retained Build 275 static/full smoke evidence remains explicit without duplicate execution")
 print(" - recovery is manual workflow_dispatch only and defaults to observe")
 print(" - repair requires exact dev SHA confirmation and a non-terminal preview target")
 print(" - terminal deployments and Production targets fail closed")
