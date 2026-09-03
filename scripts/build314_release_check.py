@@ -26,9 +26,12 @@ assignment = read("functions/api/admin/photo_assignment_save.js")
 delete = read("functions/api/admin/photo_library_delete.js")
 studio = read("admin-photo-studio.html")
 
-# Cloudflare/R2 safety: one explicit sync call is a bounded page, while ordinary
-# Photo Studio loads remain database-only.
-require(sync, "limit:100", "bounded R2 sync page")
+# Cloudflare/R2 safety: the route requires a single approved prefix, and the
+# helper caps that prefix to one 100-object R2 page. Ordinary Photo Studio loads
+# remain database-only.
+require(sync, "single_prefix_page", "single-prefix sync route")
+require(photo_lib, "limitPerPrefix:100,maxPerPrefix:100", "100-object R2 sync page")
+require(photo_lib, "maxListPagesPerPrefix:1", "single R2 list page per Worker invocation")
 require(photo_lib, "loadMediaLibraryRowsByR2Keys", "bounded sync reconciliation")
 require(listing, "r2_scan_per_load:false", "database-only ordinary Photo Studio load")
 reject(listing, "listApprovedR2Images", "ordinary library load")
