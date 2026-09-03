@@ -149,6 +149,16 @@ else:
         ".github/workflows/build310-source-gate.yml",
         ".github/workflows/build310-development-acceptance.yml",
         "BUILD310_SUMMARY.md",
+        # Successor-aware Build 311 Inventory Operations extraction. Only the
+        # exact structural runtime, guard and acceptance paths are permitted.
+        "admin-catalog.html",
+        "admin-catalog/index.html",
+        "assets/admin-catalog-v311.js",
+        "scripts/build311_release_check.py",
+        "scripts/build311_http_smoke.sh",
+        ".github/workflows/build311-source-gate.yml",
+        ".github/workflows/build311-development-source-gate.yml",
+        ".github/workflows/build311-development-acceptance.yml",
     }
     for name in changed.stdout.splitlines():
         low = name.lower()
