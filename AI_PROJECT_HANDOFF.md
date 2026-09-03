@@ -1,36 +1,68 @@
 # Rosie Dazzlers — Current Implementation Handoff
 
 **Living authority 1 of 2**  
-**Build:** 308  
+**Build:** 309  
 **Updated:** 2026-09-03  
 **Read next:** `MASTER_VALUE_ROADMAP.md`  
 **Execution queue:** `AUTONOMOUS_RELEASE_QUEUE.md`
 
 ## Current release state
 
-Build 308 is the current **Cloudflare deployment/recovery consolidation** Development release. It centralizes exact-SHA Development acceptance and manual recovery around `scripts/cloudflare_pages_development.sh` without changing application business logic, schema, pricing, booking, Finance/tax policy, staff authorization, provider transaction behavior or Production.
+Build 309 is the current **Staff Administration maintainability extraction** Development release. It externalizes the accepted root `admin-staff.html` browser controller into `assets/admin-staff-v309.js` without changing authentication, role/module/action authority, staff-management behavior, schema, payroll/business rules, provider behavior, polling behavior or Production.
 
-The accepted pre-documentation Build 308 Development implementation/evidence baseline is `5147b13f07d6eeef29162c69c4f46b76722956f7`.
+The accepted final Build 308 Development SHA is `d14a63c62913edf125a3e2bd8d69f110a6942dad`. The accepted pre-documentation Build 309 Development implementation/evidence baseline is `d579eba52090755cfa5248565e45fdd7358052d3`.
 
-On that exact SHA:
+On exact `d579eba52090755cfa5248565e45fdd7358052d3`:
 
-- Build 308 Development Runtime Acceptance run `33704055168`: **SUCCESS**.
-- Build 308 Development Source Gate run `33704055304`: **SUCCESS**.
-- canonical Development Source Gate run `33704055243`: **SUCCESS**.
-- Cloudflare Development Acceptance run `33704055178`: **SUCCESS**.
-- exact Cloudflare deployment: `3fd42f73-1053-4cfd-8919-4ba94a6ddc62`.
-- exact deployment reached `success`, retained `uses_functions=true`, and passed immutable Development static smoke at `https://3fd42f73.rosiedazzlers.pages.dev`.
+- Build 309 Development Runtime Acceptance run `33708957648`: **SUCCESS**.
+- Build 309 Development Source Gate run `33708957679`: **SUCCESS**.
+- canonical Development Source Gate run `33708957663`: **SUCCESS**.
+- Cloudflare Development Acceptance run `33708957640`: **SUCCESS**.
+- exact Cloudflare deployment: `c1473523-7924-4f3c-92e2-da54d8d0e097`.
+- exact deployment reached `success`, retained `uses_functions=true`, and passed immutable Development static smoke at `https://c1473523.rosiedazzlers.pages.dev`.
 - the mutable `dev` alias passed full static + runtime/API smoke and converged on attempt 1/12.
 - retained Build 284 contextual-proof smoke passed on both immutable and mutable Development surfaces.
-- final pre-documentation exact-SHA workflow fan-out drained with zero failed, queued and in-progress runs.
+- the exact 40-workflow pre-documentation fan-out drained with zero failed, queued and in-progress runs.
 
-Production `main` remains accepted Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`. **Build 308 has no Production promotion authorization. Do not move `main`.**
+Production `main` remains accepted Build 303 at `09442c53d385aca7995150ace4bde55abd51d7df`. **Build 309 has no Production promotion authorization. Do not move `main`.**
 
-Build 308 introduces no schema/database migration, payment-provider transaction, pricing/booking business-rule change, accounting/tax judgment, external delivery/publishing proof, role/action change, or Production data mutation. Final Build 308 closure is based on the exact documentation-synchronized `dev` SHA and its complete source/runtime/Cloudflare acceptance.
+Build 309 introduces no schema/database migration, payment-provider transaction, pricing/booking business-rule change, accounting/tax judgment, external delivery/publishing proof, role/action change, staff permission broadening or Production data mutation. Final Build 309 closure is based on the exact documentation-synchronized `dev` SHA and its complete source/runtime/Cloudflare acceptance.
 
-## Build 308 authority
+## Build 309 authority
 
-- `scripts/cloudflare_pages_development.sh` is the canonical Cloudflare Pages Development acceptance/recovery helper.
+- `assets/admin-staff-v309.js` owns the accepted root Staff Administration browser controller.
+- `admin-staff.html` differs from the accepted Build 308 root source only by replacing the inline module with the versioned module-script tag.
+- Existing `MODULE_KEYS` / `ROLE_MODULES` ceilings remain unchanged.
+- Per-profile module narrowing remains unchanged.
+- Administrator accounts remain forced to every internal module under the existing authority; Build 309 does not broaden or reduce that rule.
+- `/api/admin/staff_list` and `/api/admin/staff_save` orchestration, staff/profile/payroll fields and optional legacy password fallback presentation remain behavior-preserving.
+- `admin-staff/index.html` remains the pre-existing older route and is byte-for-byte unchanged by Build 309. Build 318 — Whole-application route/API authority sweep owns deliberate route convergence/removal.
+- no idle polling was introduced.
+- `scripts/build309_http_smoke.sh` is read-only and never saves or mutates a staff record.
+
+## Build 309 historical guard convergence
+
+Build 309 exposed one historical checkout-depth issue rather than a runtime regression:
+
+- PR #52 makes the retained Build 294 exact accepted-Build-293-Production ancestry assertion shallow-history safe by obtaining complete history/exact anchor before evaluating the same `merge-base --is-ancestor` requirement.
+- missing history and false ancestry remain fail-closed.
+- PR #53 permits only `scripts/build294_release_check.py` as that narrow forward-compatible exception inside the Build 309 scope allowlist.
+- no application source, schema, authorization, business rule, Cloudflare mechanic or Production state changed in those repairs.
+
+## Build 309 validation authority
+
+- `scripts/build309_release_check.py` — exact Build 308 root reconstruction, Staff controller authority, unchanged server authorization files, unchanged older folder route, no-schema/no-polling/no-scope-creep checks.
+- `scripts/build309_http_smoke.sh` — read-only Development Staff page/asset acceptance.
+- `.github/workflows/build309-source-gate.yml` — focused feature source authority.
+- `.github/workflows/build309-development-source-gate.yml` — cumulative Development Build 309 source gate.
+- `.github/workflows/build309-development-acceptance.yml` — read-only Development runtime acceptance.
+- retained `scripts/release_check.py`, historical focused guards, route-copy checks, SEO/H1 checks, Build 308 canonical Cloudflare helper and canonical Development Source Gate remain cumulative authorities.
+
+Do not call Build 309 fully closed until the documentation-synchronized exact `dev` SHA passes Build 309 source/runtime, canonical Development source and Cloudflare exact-SHA acceptance with zero remaining failed/queued/in-progress workflows relevant to that SHA.
+
+## Retained Build 308 authority
+
+- `scripts/cloudflare_pages_development.sh` remains the canonical Cloudflare Pages Development acceptance/recovery helper.
 - Normal `.github/workflows/cloudflare-development-acceptance.yml` delegates to the canonical helper in read-only `accept` mode.
 - Normal acceptance contains no deployment DELETE or recreate request.
 - Exact-SHA success, `uses_functions=true`, immutable deployment smoke and bounded mutable-`dev` alias convergence remain mandatory.
@@ -40,31 +72,7 @@ Build 308 introduces no schema/database migration, payment-provider transaction,
 - `repair` requires exact current `dev` SHA confirmation before mutation is considered.
 - Recovery can target only a non-terminal preview deployment; terminal or Production targets fail closed.
 - Recovery DELETE/recreate mechanics exist only in the canonical helper.
-- Production promotion remains a separate deliberate authority and is not performed by Build 308 tooling.
-
-## Build 308 historical guard convergence
-
-Build 308 moved release mechanics out of duplicated workflow YAML. Retained historical guards were repaired forward-compatibly rather than weakened:
-
-- Build 274 I.T. Connections evidence remains explicit.
-- Build 275 static/full smoke evidence remains explicit without duplicate execution.
-- Build 276 follows the canonical exact-SHA success mechanism while retaining the Production promotion boundary.
-- Build 281 follows the canonical helper while still requiring successful exact SHA, `uses_functions=true`, immutable smoke and bounded alias convergence.
-- Build 283/284 evidence remains explicit in the normal acceptance summary and smoke path.
-- Build 308's release guard protects these successor-aware compatibility markers.
-
-## Build 308 validation authority
-
-- `scripts/build308_release_check.py` — canonical helper/recovery contract, no duplicate Cloudflare mechanics, bounded list/detail consistency, retained historical markers and fail-closed Production/terminal-deployment rules.
-- `scripts/build308_http_smoke.sh` — read-only Development acceptance boundary.
-- `.github/workflows/build308-source-gate.yml` — focused feature source authority.
-- `.github/workflows/build308-development-source-gate.yml` — cumulative Development Build 308 source gate.
-- `.github/workflows/build308-development-acceptance.yml` — read-only Development runtime acceptance.
-- `.github/workflows/cloudflare-development-acceptance.yml` — canonical exact-SHA Cloudflare Development acceptance.
-- `.github/workflows/cloudflare-pages-recovery.yml` — manual-only observe/repair recovery entrypoint.
-- retained `scripts/release_check.py`, historical focused guards, route-copy checks, SEO/H1 checks and canonical Development Source Gate remain cumulative authorities.
-
-Do not call Build 308 fully closed until the documentation-synchronized exact `dev` SHA passes Build 308 source/runtime, canonical Development source and Cloudflare exact-SHA acceptance with zero remaining failed/queued/in-progress workflows relevant to that SHA.
+- final documentation-synchronized Build 308 Development SHA: `d14a63c62913edf125a3e2bd8d69f110a6942dad`.
 
 ## Retained Build 307 authority
 
@@ -152,7 +160,7 @@ The retained baseline includes narrow Operations/Finance action permissions and 
 - Rosie brings standard detailing water and power; customers provide a safe/private/permitted work area;
 - no background polling merely because a module exists.
 
-## Retained business/runtime authority through Build 308
+## Retained business/runtime authority through Build 309
 
 - Builds 274–280 retain Mobile Quick Book, I.T. help, release mechanics and service/local SEO authority.
 - Build 281 retains exact-SHA Cloudflare acceptance and bounded mutable Development alias convergence.
@@ -172,12 +180,13 @@ The retained baseline includes narrow Operations/Finance action permissions and 
 - Build 306 extracts I.T. System Health into isolated semantics-free read-only observations.
 - Build 307 adds evidence-scoped readiness interpretation and read-only corrective guidance without fabricating transaction acceptance.
 - Build 308 centralizes exact-SHA Cloudflare Development acceptance/recovery without weakening release evidence or Production isolation.
+- Build 309 externalizes the accepted root Staff Administration runtime while preserving authentication, role/module ceilings, profile narrowing and staff-management behavior; the older folder route remains deferred to Build 318.
 
 ## Next autonomous build
 
-**Build 309 — Staff Administration maintainability extraction:** externalize the accepted staff/profile/account administration runtime while preserving authentication, role/module/action authority and staff-management behavior exactly.
+**Build 310 — Admin full-access acceptance matrix:** automatically prove that the Admin role can access every enabled module/action while narrower staff profiles remain correctly restricted.
 
-Build 309 must not broaden Admin or staff permissions, redesign authentication, create a schema migration, or pre-empt Build 310's Admin full-access acceptance matrix. Continue the recorded Builds 309–319 sequence without inventing business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
+Build 310 must test the existing server-authoritative role/module/action model. It must not broaden Admin or staff permissions, redesign authentication, create a schema migration, or invent access solely to make the matrix pass. Continue the recorded Builds 310–319 sequence without inventing business rules excluded by `AUTONOMOUS_RELEASE_QUEUE.md`.
 
 ## Manual/external evidence that must not be fabricated
 
