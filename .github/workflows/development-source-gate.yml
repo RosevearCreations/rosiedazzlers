@@ -63,6 +63,8 @@ jobs:
           node --check functions/api/before_after_gallery_public.js
           node --check functions/api/membership_interest_create.js
           node --check functions/api/admin/membership_interest_list.js
+          node --check assets/admin-final-balance-v317.js
+          node --check functions/api/admin/final_balance_readiness.js
 
       - name: Check durable gate syntax
         run: |
@@ -72,6 +74,7 @@ jobs:
           python -m py_compile scripts/release_hygiene_check.py
           python -m py_compile scripts/responsive_static_check.py
           python -m py_compile scripts/maintenance_retention_check.py
+          python -m py_compile scripts/final_balance_readiness_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
@@ -91,6 +94,9 @@ jobs:
 
       - name: Validate maintenance retention contracts
         run: python scripts/maintenance_retention_check.py
+
+      - name: Validate final balance readiness contracts
+        run: python scripts/final_balance_readiness_check.py
 
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
@@ -114,6 +120,7 @@ jobs:
             echo "- Release hygiene authority: PASS"
             echo "- Responsive source contract: PASS"
             echo "- Maintenance/retention authority: PASS"
+            echo "- Final-balance readiness authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
