@@ -43,6 +43,7 @@ if "@media(max-width:" not in admin_page.replace(" ", ""):
 
 for token in [
     "customer_vehicles",
+    "customer_vehicle_id",
     "vehicle_year",
     "vehicle_make",
     "vehicle_model",
@@ -50,12 +51,17 @@ for token in [
     "groupCompletedBookings",
     "vehicle_identity_required",
     "maintenance_vehicle_key",
+    "booking_vehicle_link",
+    "booking_vehicle_link_invalid",
     "saved_vehicle",
     "staff_vehicle_override",
     'maintenance_source: "vehicle_history"',
 ]:
     if token not in reminder_helper:
         errors.append(f"vehicle-aware maintenance helper missing {token}")
+
+if '"id", "customer_profile_id", "customer_vehicle_id"' not in reminder_helper:
+    errors.append("completed-booking reader must select durable customer_vehicle_id")
 
 for forbidden in [
     "next_reminder_at: profile?.maintenance_next_reminder_at",
@@ -89,7 +95,9 @@ if errors:
 print("Maintenance/retention authority: PASS")
 print(" - public capture remains interest-only and non-billing")
 print(" - API explicitly denies automatic enrollment, appointment creation and recurring billing")
-print(" - maintenance eligibility, cadence, reminder history and rebooking are vehicle-aware")
+print(" - durable booking-to-vehicle identity is preferred before legacy matching")
+print(" - invalid durable links fail closed instead of falling back heuristically")
+print(" - legacy unlinked bookings retain vehicle-aware compatibility matching")
 print(" - staff-owned vehicle cadence/due controls remain protected from customer writes")
 print(" - ambiguous vehicle history fails closed instead of blending household/fleet vehicles")
 print(" - operating help and responsive admin presentation remain protected")
