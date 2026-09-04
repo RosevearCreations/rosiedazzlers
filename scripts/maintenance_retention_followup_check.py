@@ -46,6 +46,23 @@ for token in ('name="viewport"', 'noindex,nofollow', '@media(max-width:520px)', 
     if token not in page:
         errors.append(f'maintenance retention workbench missing UI contract: {token}')
 
+inline_scripts = [
+    body for attrs, body in re.findall(r'<script([^>]*)>(.*?)</script>', page, re.I | re.S)
+    if 'src=' not in attrs.lower() and body.strip()
+]
+if not inline_scripts:
+    errors.append('maintenance retention workbench has no inline application script to validate')
+for index, script in enumerate(inline_scripts, 1):
+    inline_proc = subprocess.run(
+        ['node', '-e', 'new Function(require("fs").readFileSync(0,"utf8"));'],
+        cwd=ROOT,
+        input=script,
+        text=True,
+        capture_output=True
+    )
+    if inline_proc.returncode != 0:
+        errors.append(f'maintenance retention inline script {index} failed syntax parse: ' + (inline_proc.stdout + inline_proc.stderr).strip())
+
 if '/admin-maintenance-retention.html' not in fleet_page:
     errors.append('fleet operations surface must link to maintenance retention review')
 
@@ -68,4 +85,5 @@ print(' - waitlist follow-up matches the live status model and cannot manufactur
 print(' - unsubscribed interest cannot be reactivated from the workbench')
 print(' - reminder review writes only internal vehicle-history evidence')
 print(' - no message dispatch, reminder suppression, booking, payment or recurring billing authority')
+print(' - workbench inline JavaScript parse: PASS')
 print(' - executable contract tests passed')
