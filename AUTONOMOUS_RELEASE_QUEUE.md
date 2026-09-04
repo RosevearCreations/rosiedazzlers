@@ -2,28 +2,40 @@
 
 This queue records only current actionable work. Completed release history belongs in Git history and archived evidence.
 
-## Active — Build 315
+## Last accepted — Build 316
 
-Scope: release hygiene, durable SEO authority, current contextual help and responsive release protections.
+Build 316 is GREEN at exact SHA `3bbd91f1ea4a4e9e285069b32ad7e38dc4edf87b`. Before Build 317 began, both `dev` and `main` were verified on that exact SHA. No Build 316 database migration was required.
+
+## Active — Build 317
+
+Scope: Final Balance Readiness & Manual Payment Handoff.
 
 Acceptance checklist:
 
-- Shared source workflow contains no dependency on historical numbered Build guards.
-- Cumulative current source authority passes on the exact candidate SHA.
-- Every sitemap page has exactly one meaningful H1.
-- Public titles, descriptions, canonicals, robots/noindex behavior and JSON-LD are consistent.
-- Central authenticated contextual help is current and release-number independent.
-- Living handoff/queue/branch documentation describes current authority instead of historical release archaeology.
-- Generated Python cache artifacts are not tracked.
-- Route-copy parity and source conflict/whitespace checks pass.
-- Responsive source contract passes, followed by exact-deployment mobile, desktop and wide-layout acceptance.
-- Exact candidate SHA is accepted on Development before the identical SHA can be promoted to `main`.
-- Exact-main source and Cloudflare evidence must be successful before GREEN is declared.
+- A single operator-facing final-balance readiness cockpit reuses the existing booking, finance and final-balance authorities.
+- Readiness distinguishes Ready, Blocked, Requested and Paid / Closed.
+- Every blocked row explains why it is blocked.
+- Calculated service balance uses the booking total and recorded finance entries without counting tips toward the service balance.
+- The readiness API is GET/read-only and does not create requests, checkout sessions, notifications or charges.
+- No automatic charge is permitted.
+- No automatic final-balance request is permitted.
+- No recurring billing is introduced.
+- Request creation requires an explicit operator action and confirmation.
+- Hosted-checkout creation/refresh requires an explicit operator action and confirmation.
+- The cockpit passes `notify_customer: false`; customer communication remains a separate deliberate action.
+- Existing final-balance request/checkout/payment infrastructure is reused rather than duplicated.
+- Operating Help explains every readiness state and the manual workflow.
+- The admin presentation remains usable on mobile, normal desktop and wide layouts.
+- `scripts/final_balance_readiness_check.py` passes and is part of the Current Source Gate.
+- Build 317 introduces no database migration.
+- Exact feature SHA must pass the Current Source Gate before promotion.
+- The identical SHA must pass Development/Cloudflare acceptance on `dev` before `main` promotion.
+- Exact-main source and Cloudflare deployment evidence must be successful before GREEN is declared.
 
 ## Promotion status
 
-Until every item above is proven, the build remains NOT GREEN and Production remains closed to release mutation.
+Build 317 remains AMBER until the final feature SHA passes, the identical SHA is accepted on `dev`, and the identical SHA is verified on `main` including Cloudflare Production deployment evidence.
 
-## After Build 315
+## After Build 317
 
-Select the next business/product scope only after Build 315 is GREEN on `main`. Do not pre-allocate implementation work to a new build while the active release still has an unresolved gate.
+Select Build 318 only after Build 317 is GREEN on exact `main`. Do not pre-allocate or promote Build 318 while Build 317 has an unresolved release gate.
