@@ -64,6 +64,7 @@ export async function onRequestPost({ request, env }) {
       ok: true,
       interest_recorded: true,
       creates_subscription: false,
+      creates_automatic_enrollment: false,
       creates_appointment: false,
       creates_recurring_billing: false
     }, 201));
