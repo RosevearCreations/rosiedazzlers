@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Final Balance Readiness | Rosie Dazzlers Admin</title>
+  <style>
+    :root{color-scheme:light;--ink:#18212a;--muted:#5d6975;--line:#d9e0e6;--panel:#fff;--soft:#f5f7f9;--ok:#126b3a;--warn:#855d00;--bad:#a12828;--accent:#154f76}
+    *{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--soft);line-height:1.45}a{color:var(--accent)}button,input,select{font:inherit}.shell{width:min(1180px,calc(100% - 32px));margin:0 auto}.topbar{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}.topbar .shell{display:flex;gap:16px;align-items:center;justify-content:space-between;padding:14px 0;flex-wrap:wrap}.brand{font-weight:800}.nav{display:flex;gap:12px;flex-wrap:wrap}.nav a{text-decoration:none;font-weight:650}.hero{padding:28px 0 16px}.hero h1{margin:0 0 8px;font-size:clamp(1.6rem,3vw,2.35rem)}.hero p{max-width:850px;margin:0;color:var(--muted)}.contract{margin:18px 0;padding:16px 18px;border:2px solid var(--accent);border-radius:12px;background:#eef7fc}.contract strong{display:block;margin-bottom:6px}.contract ul{margin:6px 0 0 20px;padding:0}.notice{padding:12px 14px;border-radius:10px;background:#fff;border:1px solid var(--line);margin:14px 0}.notice.ok{border-color:#9cc9ad;background:#f1faf4}.notice.warn{border-color:#d6bf83;background:#fff9e8}.notice.bad{border-color:#dfaaaa;background:#fff3f3}.toolbar{display:grid;grid-template-columns:minmax(220px,1fr) auto auto;gap:10px;align-items:end;margin:18px 0}.field label{display:block;font-weight:700;margin-bottom:5px}.field input,.field select{width:100%;padding:10px 11px;border:1px solid #bbc6cf;border-radius:8px;background:#fff}.btn{border:0;border-radius:8px;padding:10px 14px;font-weight:750;cursor:pointer;background:var(--accent);color:#fff}.btn.secondary{background:#e9eef2;color:#1d3444}.btn.danger{background:#8d3030}.btn:disabled{opacity:.5;cursor:not-allowed}.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:16px 0}.metric,.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px}.metric{padding:14px}.metric .value{font-size:1.65rem;font-weight:850}.metric .label{color:var(--muted);font-size:.9rem}.panel{padding:18px;margin:16px 0}.panel h2{margin:0 0 12px;font-size:1.2rem}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px}table{width:100%;border-collapse:collapse;min-width:920px;background:#fff}th,td{text-align:left;padding:10px 11px;border-bottom:1px solid #e7ebef;vertical-align:top}th{font-size:.82rem;text-transform:uppercase;letter-spacing:.04em;background:#f6f8fa;position:sticky;top:0}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:4px 8px;font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.035em}.badge.ready{background:#e8f7ee;color:var(--ok)}.badge.blocked{background:#fff4d8;color:var(--warn)}.badge.requested{background:#e9f2ff;color:#174d83}.badge.paid{background:#edf1f4;color:#45515c}.small{font-size:.86rem;color:var(--muted)}.actions{display:flex;gap:6px;flex-wrap:wrap}.actions button,.actions a{font-size:.82rem;padding:7px 9px}.details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.detail{padding:12px;background:#f8fafb;border-radius:9px}.detail strong{display:block;font-size:.8rem;text-transform:uppercase;color:var(--muted);margin-bottom:4px}.help details{border-top:1px solid var(--line);padding:10px 0}.help details:first-of-type{border-top:0}.help summary{cursor:pointer;font-weight:750}.empty{padding:28px;text-align:center;color:var(--muted)}.footer{padding:28px 0 50px;color:var(--muted);font-size:.88rem}
+    @media(max-width:820px){.shell{width:min(100% - 20px,1180px)}.toolbar{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.details-grid{grid-template-columns:1fr}.topbar{position:static}.panel{padding:14px}.actions{min-width:180px}}
+    @media(max-width:480px){.metrics{grid-template-columns:1fr}.nav{font-size:.9rem}.contract{padding:13px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell">
+      <div class="brand">Rosie Dazzlers · Admin</div>
+      <nav class="nav" aria-label="Admin links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Booking Workbench</a>
+        <a href="/admin-final-balance.html" aria-current="page">Final Balance</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <h1>Final Balance Readiness</h1>
+      <p>Build 317 turns the existing booking, finance and final-balance authorities into one operator queue. It is a readiness and handoff surface; it does not charge customers or create payment requests while loading.</p>
+    </section>
+
+    <section class="contract" id="operatorContract" aria-label="Operator payment contract">
+      <strong>Operator-controlled payment contract</strong>
+      <ul>
+        <li>No automatic charge.</li>
+        <li>No automatic final-balance request.</li>
+        <li>No recurring billing.</li>
+        <li>An authorized operator must explicitly create a request and, separately, explicitly create or send a hosted checkout.</li>
+      </ul>
+    </section>
+
+    <div id="pageNotice" class="notice" role="status">Loading final-balance readiness…</div>
+
+    <section class="toolbar" aria-label="Queue filters">
+      <div class="field">
+        <label for="searchInput">Search booking/customer</label>
+        <input id="searchInput" type="search" placeholder="Name, email, booking ID or date" autocomplete="off">
+      </div>
+      <div class="field">
+        <label for="statusFilter">Readiness</label>
+        <select id="statusFilter">
+          <option value="all">All</option>
+          <option value="ready">Ready</option>
+          <option value="blocked">Blocked</option>
+          <option value="requested">Requested</option>
+          <option value="paid">Paid / Closed</option>
+        </select>
+      </div>
+      <button class="btn secondary" id="refreshBtn" type="button">Refresh readiness</button>
+    </section>
+
+    <section class="metrics" aria-label="Final balance readiness totals">
+      <div class="metric"><div class="value" id="readyCount">—</div><div class="label">Ready</div></div>
+      <div class="metric"><div class="value" id="blockedCount">—</div><div class="label">Blocked</div></div>
+      <div class="metric"><div class="value" id="requestedCount">—</div><div class="label">Requested</div></div>
+      <div class="metric"><div class="value" id="paidCount">—</div><div class="label">Paid / Closed</div></div>
+    </section>
+
+    <section class="panel">
+      <h2>Operator queue</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Readiness</th><th>Booking</th><th>Customer</th><th>Job state</th><th>Total</th><th>Calculated due</th><th>Reason / request</th><th>Manual actions</th></tr></thead>
+          <tbody id="queueBody"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="selectedPanel">
+      <h2>Selected booking handoff</h2>
+      <div id="selectedDetails" class="empty">Select a queue row to review its calculation and manual next step.</div>
+    </section>
+
+    <section class="panel help" id="operatingHelp">
+      <h2>Operating Help</h2>
+      <details open><summary>Ready</summary><p>A positive service balance remains, the job is in progress or completed, and there is no active final-balance request. Review the calculation, then use <strong>Create request</strong> only when you intend to open a tracked payment request.</p></details>
+      <details><summary>Blocked</summary><p>The cockpit found a condition that should be resolved first, such as a missing/zero booking total, a job that has not reached the payment handoff stage, an unavailable finance read, or an expired/cancelled request requiring review.</p></details>
+      <details><summary>Requested</summary><p>A tracked final-balance request is already open or sent. Do not create a duplicate. Open the request handoff details and deliberately create a hosted checkout only when required.</p></details>
+      <details><summary>Paid / Closed</summary><p>The local finance ledger calculates no remaining service balance, or the tracked payment request reports paid. No new request should be created without first reconciling the booking.</p></details>
+      <details><summary>How the amount is calculated</summary><p>Calculated due uses the booking total minus recorded deposits, final payments, discounts and other service collections, plus recorded refunds. Tips are intentionally excluded from the service-balance calculation.</p></details>
+    </section>
+  </main>
+
+  <footer class="shell footer">Build 317 · Final Balance Readiness &amp; Manual Payment Handoff</footer>
+  <script type="module" src="/assets/admin-final-balance-v317.js"></script>
+</body>
+</html>
