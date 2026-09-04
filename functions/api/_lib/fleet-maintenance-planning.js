@@ -19,8 +19,8 @@ export function normalizeFleetMaintenancePatch(input, currentVehicle = {}) {
   const patch = {};
   if (Object.prototype.hasOwnProperty.call(body, "service_interval_days")) {
     const value = nullableWholeNumber(body.service_interval_days);
-    if (value !== null && (value < 14 || value > 84)) {
-      return { ok: false, error: "Service interval must be between 14 and 84 days." };
+    if (value !== null && (!Number.isFinite(value) || value < 14 || value > 84)) {
+      return { ok: false, error: "Service interval must be a whole number between 14 and 84 days." };
     }
     patch.service_interval_days = value;
   }
@@ -33,8 +33,8 @@ export function normalizeFleetMaintenancePatch(input, currentVehicle = {}) {
 
   if (Object.prototype.hasOwnProperty.call(body, "next_service_mileage_km")) {
     const value = nullableWholeNumber(body.next_service_mileage_km);
-    if (value !== null && (value < 0 || value > 2000000)) {
-      return { ok: false, error: "Next service mileage must be between 0 and 2,000,000 km." };
+    if (value !== null && (!Number.isFinite(value) || value < 0 || value > 2000000)) {
+      return { ok: false, error: "Next service mileage must be a whole number between 0 and 2,000,000 km." };
     }
     const currentMileage = finiteNumber(currentVehicle?.mileage_km);
     if (value !== null && currentMileage !== null && value < currentMileage) {
