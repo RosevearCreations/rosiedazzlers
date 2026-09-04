@@ -17,7 +17,9 @@ def require(path, token):
 
 helper = require('functions/api/_lib/maintenance-retention-followup.js', 'Scheduling and conversion must come from the approved booking workflow')
 api = require('functions/api/admin/customer_maintenance_followup.js', 'reminder_engine_suppressed: false')
+legacy = require('functions/api/admin/membership_interest_list.js', "'interested','scheduled','converted','closed','unsubscribed'")
 page = require('admin-maintenance-retention.html', 'No action here sends email/SMS')
+fleet_page = require('admin-fleet-accounts.html', '/admin-maintenance-retention.html')
 require('scripts/maintenance_retention_followup_test.mjs', 'Maintenance retention follow-up contract: PASS')
 
 for forbidden in ('processMembershipReminderCandidate', 'dispatchNotificationThroughProvider', '/rest/v1/notification_events', 'stripe', 'paypal'):
@@ -31,15 +33,21 @@ for token in ('"new", "contacted", "interested", "closed", "unsubscribed"', '"sc
     if token not in helper:
         errors.append(f'maintenance follow-up helper missing boundary: {token}')
 
-for token in ('capability: "manage_bookings"', '/rest/v1/membership_interest_requests', '/rest/v1/vehicle_history_events', 'sends_notification: false', 'conversion_authority: false', 'recurring_billing: false'):
+for token in ('capability: "manage_bookings"', '/rest/v1/membership_interest_requests', '/rest/v1/vehicle_history_events', 'sends_notification: false', 'conversion_authority: false', 'recurring_billing: false', 'Unsubscribed maintenance interest cannot be reactivated'):
     if token not in api:
         errors.append(f'maintenance follow-up API missing authority: {token}')
+
+if "qualified_count: counts.interested" not in legacy or "counts.qualified" in legacy:
+    errors.append('legacy maintenance readiness metrics are not aligned to live interested status')
 
 if len(re.findall(r'<h1\b', page, re.I)) != 1:
     errors.append('maintenance retention workbench must have exactly one H1')
 for token in ('name="viewport"', 'noindex,nofollow', '@media(max-width:520px)', 'Reminder suppression', 'Appointment creation', 'Recurring billing'):
     if token not in page:
         errors.append(f'maintenance retention workbench missing UI contract: {token}')
+
+if '/admin-maintenance-retention.html' not in fleet_page:
+    errors.append('fleet operations surface must link to maintenance retention review')
 
 sql_candidates = [p for p in ROOT.rglob('*.sql') if '330' in p.name.lower() or 'build330' in p.name.lower()]
 if sql_candidates:
@@ -56,7 +64,8 @@ if errors:
     raise SystemExit(1)
 
 print('MAINTENANCE RETENTION FOLLOW-UP: PASS')
-print(' - waitlist follow-up cannot manufacture scheduled or converted state')
+print(' - waitlist follow-up matches the live status model and cannot manufacture scheduled or converted state')
+print(' - unsubscribed interest cannot be reactivated from the workbench')
 print(' - reminder review writes only internal vehicle-history evidence')
 print(' - no message dispatch, reminder suppression, booking, payment or recurring billing authority')
 print(' - executable contract tests passed')
