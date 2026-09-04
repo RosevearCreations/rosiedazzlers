@@ -5,30 +5,34 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- Last fully accepted/synchronized release: **Build 325 — Booking Wizard Responsive UX**.
-- Exact accepted SHA: `7d8b5cb4b85986636a4a70c4bd298f6d7bc51de2`.
+- Last fully accepted/synchronized release: **Build 326 — Booking Completion + Retention/Rebooking Lifecycle**.
+- Exact accepted SHA: `3f3cf6a6c109b99a82bfb8bf38ebd62856908b4f`.
 - At the active-work start boundary, both `dev` and `main` were exactly that SHA.
-- Active work: **Build 326 — Booking Completion + Retention/Rebooking Lifecycle**.
-- Active branch: `build326-booking-retention-rebooking`.
-- The active scope is application/routing work and introduces no database migration.
+- Active work: **Build 327 — Vehicle-Aware Maintenance & Fleet Rules**.
+- Active branch: `build327-vehicle-aware-maintenance-fleet`.
+- The active scope is application/business-rule work and introduces no database migration.
 
-## Why the active scope expanded
+## Why this scope is active
 
-The planned retention/rebooking review found a higher-priority checkout boundary defect. Canonical Stripe and PayPal checkout success URLs returned customers to `/complete`, but `/complete` is the existing token-protected customer job completion/sign-off page backed by `/api/progress/*`. Those are different lifecycle stages and must not share an unverified browser-success contract.
+The maintenance reminder engine already supports interest capture, reminder candidates and staff readiness while correctly blocking automatic enrollment, recurring billing and appointment creation. Review of the current reminder helper found one material fleet/household defect: completed-service history was grouped by customer profile/email rather than by vehicle.
 
-The active work therefore repairs payment completion first, then exposes retention/rebooking only after provider evidence agrees with the stored booking.
+That allowed multiple vehicles owned by one customer to share inferred cadence and Complete Detail eligibility, and customer-wide reminder history could suppress a different vehicle. The active work makes those authorities vehicle-specific without enabling automatic scheduling or billing.
 
 ## Active operating contract
 
-- `/complete?token=...` remains customer job completion/sign-off only.
-- Existing payment-provider returns from `/complete?provider=stripe|paypal...` are narrowly redirected to `/booking-confirmed` before the sign-off page handles them.
-- Stripe confirmation is read/verify only. It cross-checks the stored Stripe Session ID, Stripe Checkout Session, booking metadata, CAD currency, expected payable deposit and `payment_status=paid` server-side.
-- The signed Stripe webhook remains the only active authority that changes a Stripe booking into its settled/confirmed state.
-- PayPal browser return is captured through the existing `/api/paypal/capture-order` endpoint, which matches the stored PayPal order, validates CAD/amount and is replay safe before persisting confirmation.
-- Gift-covered deposits remain checkout-authoritative: only a successful `gift_only_confirm` response receives a local booking-confirmation URL.
-- `/booking-confirmed` is `noindex` and never renders booking/customer/payment identifiers.
-- Rebooking carries only previous package and vehicle-size hints. Date, slot, location, customer/contact/address details, policies and payment are fresh booking decisions.
-- Established funnel events remain unchanged. The active scope adds `booking_confirmation_view`, `booking_rebook_prompt_view`, `booking_rebook_start`, and `booking_rebook_prefill_applied`.
+- Maintenance interest/waitlist state remains customer-level.
+- Completed-service history is grouped by a reliable vehicle identity before eligibility or cadence is calculated.
+- A unique normalized year/make/model/size match to `customer_vehicles` uses that saved vehicle UUID as the stable authority.
+- When no unique saved vehicle can be resolved, a normalized booking plate may identify the vehicle internally; raw plate text is never returned in reminder keys or notification payloads.
+- If neither a unique saved vehicle nor a usable plate exists, that booking history is isolated and reminder eligibility fails closed with `vehicle_identity_required` rather than blending uncertain vehicles.
+- Complete Detail eligibility is vehicle-specific.
+- Inferred cleaning cadence is vehicle-specific. A staff-owned `customer_vehicles.service_interval_days` override takes precedence; the customer profile/plan cadence is fallback only.
+- A staff-owned `customer_vehicles.next_cleaning_due_at` value is the vehicle-level due-date override.
+- Customer writes remain blocked from `next_cleaning_due_at`, `next_service_mileage_km`, `service_interval_days` and `auto_schedule_opt_in`.
+- Reminder history is keyed by an opaque vehicle key. New Vehicle A reminders do not suppress Vehicle B.
+- Legacy reminder events without a vehicle key are treated only as compatibility evidence until a vehicle-specific reminder exists.
+- Rebooking continues to carry only safe package/vehicle-size/service choices already supported by the booking flow; it does not carry payment secrets or expose plate data.
+- `auto_schedule_opt_in` remains informational only in this scope: no automatic appointment creation is introduced.
 
 ## Current release procedure
 
@@ -47,16 +51,18 @@ A RosieDazzlers release is not GREEN merely because its feature code exists.
 ## Durable release authorities
 
 - `.github/workflows/development-source-gate.yml` — cumulative current-source authority.
+- `scripts/maintenance_retention_check.py` — maintenance interest-only boundary plus vehicle/fleet reminder authority.
+- `scripts/vehicle_maintenance_rules_test.mjs` — executable household/fleet separation and fail-closed identity evidence.
 - `scripts/booking_funnel_device_check.py` — aggregate funnel/device/privacy authority.
 - `scripts/booking_wizard_responsive_ux_check.py` — responsive/touch/focus/route-parity authority.
-- `scripts/booking_completion_retention_check.py` — active payment-completion boundary, provider verification, privacy and rebooking authority.
+- `scripts/booking_completion_retention_check.py` — payment-completion boundary, provider verification, privacy and rebooking authority.
 - `scripts/production_readiness_check.py` — I.T. Production-readiness authority.
 - `scripts/release_rollback_recovery_check.py` — rollback/recovery safety authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 
 ## Public SEO contract
 
-Every URL listed in `sitemap.xml` must resolve to a local public source page with exactly one meaningful H1, one non-empty title, one non-empty meta description and one canonical URL matching the sitemap route. Sitemap pages must not be `noindex`. JSON-LD blocks, where present, must be valid JSON. `robots.txt` must advertise the canonical sitemap. Payment/confirmation utility pages that are deliberately excluded from the sitemap may use `noindex`.
+Every URL listed in `sitemap.xml` must resolve to a local public source page with exactly one meaningful H1, one non-empty title, one non-empty meta description and one canonical URL matching the sitemap route. Sitemap pages must not be `noindex`. JSON-LD blocks, where present, must be valid JSON. `robots.txt` must advertise the canonical sitemap. Payment/confirmation utility pages deliberately excluded from the sitemap may use `noindex`.
 
 ## Help and responsive contracts
 
@@ -64,6 +70,6 @@ Authenticated work screens must include useful operating/contextual Help and mus
 
 ## Restart point
 
-If interrupted during the active work, do not redo the two previously accepted booking-analysis/UX slices and do not trust old Production-freeze notes. Verify the current head of `build326-booking-retention-rebooking`, inspect the first failing Current Source Gate authority, and continue there. `dev` and `main` must remain on the accepted baseline until the feature SHA passes feature source and Cloudflare evidence.
+If interrupted during the active work, verify the current head of `build327-vehicle-aware-maintenance-fleet`, inspect the first failing Current Source Gate authority, and continue there. Do not redo the accepted payment-completion/rebooking work. `dev` and `main` must remain on the accepted baseline until the feature SHA passes feature source and Cloudflare evidence.
 
-After the active scope is fully synchronized GREEN, choose the next unfinished roadmap slice from current repository evidence rather than a stale build number. The broader agreed sequence remains retention/booking analytics follow-through, maintenance/fleet business rules, and then deeper payment/Production-readiness work unless a higher-priority defect is discovered.
+After the active scope is fully synchronized GREEN, choose the next unfinished roadmap slice from current repository evidence rather than stale release notes. The broader agreed sequence continues through deeper fleet/maintenance operations and then payment/Production-readiness depth unless a higher-priority defect is discovered.
