@@ -45,6 +45,8 @@ jobs:
           node --check assets/admin-shell.js
           node --check assets/contextual-help-catalog.js
           node --check assets/contextual-help.js
+          node --check functions/_middleware.js
+          node --check functions/api/booking_confirmation.js
           node --check functions/api/admin/photo_library_sync.js
           node --check functions/api/admin/photo_library_list.js
           node --check functions/api/admin/photo_assignment_save.js
@@ -99,6 +101,7 @@ jobs:
           python -m py_compile scripts/production_readiness_check.py
           python -m py_compile scripts/booking_funnel_device_check.py
           python -m py_compile scripts/booking_wizard_responsive_ux_check.py
+          python -m py_compile scripts/booking_completion_retention_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
@@ -147,6 +150,9 @@ jobs:
       - name: Validate booking wizard responsive UX contracts
         run: python scripts/booking_wizard_responsive_ux_check.py
 
+      - name: Validate booking completion and retention contracts
+        run: python scripts/booking_completion_retention_check.py
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -178,6 +184,7 @@ jobs:
             echo "- Production readiness authority: PASS"
             echo "- Booking funnel/device authority: PASS"
             echo "- Booking wizard responsive UX authority: PASS"
+            echo "- Booking completion/retention authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
