@@ -6,14 +6,14 @@ This file is a living operational authority, not a release diary. Git history an
 
 - Repository: `RosevearCreations/rosiedazzlers`
 - Accepted source branches: `main` for accepted release source and `dev` for the verified Development candidate.
-- Last accepted release: Build 316 at exact SHA `3bbd91f1ea4a4e9e285069b32ad7e38dc4edf87b` on both `main` and `dev` before Build 317 work began.
+- Last accepted release: Build 316 at exact SHA `3bbd91f1ea4a4e9e285069b32ad7e38dc4edf87b` on both `main` and `dev` before current work began.
 - Active work: Build 317 — Final Balance Readiness & Manual Payment Handoff.
 - Feature branch: `build317-final-balance-readiness`.
-- Build 317 is source-only. It adds no database migration and does not change Production data during source promotion.
+- The active release is source-only. It adds no database migration and does not change Production data during source promotion.
 
-## Build 317 operating contract
+## Active operating contract
 
-Build 317 reuses the existing booking finance, tracked final-balance request and hosted-checkout authorities. The readiness surface is fail-closed and read-only until an authorized operator deliberately chooses an action.
+The active release reuses the existing booking finance, tracked final-balance request and hosted-checkout authorities. The readiness surface is fail-closed and read-only until an authorized operator deliberately chooses an action.
 
 - No automatic charge.
 - No automatic final-balance request.
@@ -57,4 +57,4 @@ Public and active application shells must retain a device-width viewport and mus
 
 ## Restart point
 
-If work is interrupted during Build 317, first verify the feature SHA and its Current Source Gate. After that passes, promote the identical SHA to `dev`, require Development/Cloudflare acceptance, then promote the identical SHA to `main` and require exact-main source/deployment evidence. Do not redo accepted Build 316 work and do not promote around a failed gate.
+If work is interrupted, first verify the active feature SHA and its Current Source Gate. After that passes, promote the identical SHA to `dev`, require Development/Cloudflare acceptance, then promote the identical SHA to `main` and require exact-main source/deployment evidence. Do not redo the accepted release and do not promote around a failed gate.
