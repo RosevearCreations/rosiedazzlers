@@ -4,33 +4,34 @@ This is the current branch authority. Historical branch names and old release se
 
 ## Branch roles
 
-- `main` — accepted release source only.
-- `dev` — exact Development candidate after feature-source acceptance.
-- Active build branch — isolated implementation until its exact SHA is source-green.
+- `main` — frozen accepted Production source until the user explicitly authorizes another Production promotion.
+- `dev` — accepted Development line and base for sequential new builds.
+- Active build branch — isolated implementation created from exact `dev` until its candidate SHA is source-green.
 
-## Promotion rule
+## Current promotion rule
 
-Promote the same exact commit SHA through the release path. Do not recreate a change separately on `dev` or `main`, and do not call a branch current merely because it has a newer timestamp.
+Promote the same exact commit SHA through the authorized Development path. Do not recreate changes separately and do not call a branch current merely because it has a newer timestamp.
 
 Sequence:
 
-1. Implement and commit on the active build branch.
-2. Require successful exact-SHA feature source validation.
-3. Fast-forward `dev` to that exact SHA.
-4. Require Development source and Cloudflare/runtime acceptance on that SHA.
-5. Fast-forward `main` to the same SHA.
-6. Require exact-main source and deployment evidence.
-7. Mark GREEN only after those checks succeed.
+1. Create the active feature branch from exact `dev`.
+2. Implement and commit the bounded build there.
+3. Require successful exact-SHA Current Source Gate validation and Cloudflare feature preview.
+4. Fast-forward `dev` to that exact SHA.
+5. Require Development source and Cloudflare/runtime acceptance on the identical SHA.
+6. Mark the build GREEN for Development only after those checks succeed.
+7. Continue the next sequential build from the new `dev` head when appropriate.
+8. Do not move `main` unless the user explicitly asks for Production promotion.
 
 ## Safety boundaries
 
 - A source promotion does not authorize a database migration.
-- Database migrations are applied deliberately, Development first, with the same migration promoted only after verification.
-- Production business data must not be copied, replaced or mutated as a side effect of source cleanup.
-- Cloudflare deployment/recovery workflows and canonical SQL migrations are operational authorities and are not historical clutter.
+- Database migrations, when required, are applied deliberately to Development first and receive their own acceptance evidence.
+- Production business data must not be copied, replaced or mutated as a side effect of Development source work.
+- Payment-provider readiness must never expose credentials or perform charges merely to inspect configuration.
 - Failed or missing checks are blockers, not warnings to route around.
 - Temporary build branches may be deleted only after accepted promotion and confirmation that they contain no unique unmerged work.
 
 ## Repository hygiene
 
-Current shared workflows and living documents must be release-number independent wherever the rule is meant to survive future builds. Historical numbered checks can be retained as evidence until their useful protection has been absorbed into a durable authority; once obsolete and unreferenced, they can be removed separately without deleting migration or recovery history.
+Current shared workflows and living documents must remain release-number independent wherever the rule is intended to survive future builds. Cloudflare deployment/recovery workflows and canonical migrations are operational authorities, not historical clutter.
