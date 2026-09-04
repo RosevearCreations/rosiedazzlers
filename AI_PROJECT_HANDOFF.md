@@ -20,11 +20,15 @@ This file is a living operational authority, not a release diary. Git history an
 6. Verify exact-main CI/deployment evidence before calling the release GREEN.
 7. Do not infer deployment health from branch names, elapsed time or an older successful run.
 
-## Durable source authorities
+## Durable release authorities
 
-The shared source gate is intentionally release-number independent. It protects cumulative application authority, sitemap one-H1 rules, public metadata/canonical/robots/JSON-LD consistency, responsive source contracts, route-copy parity, repository hygiene, and source syntax/conflict safety.
+The active GitHub Actions surface is deliberately small and release-number independent:
 
-Historical numbered guards may remain temporarily as archived implementation evidence, but they must not be dependencies of the current shared release path. SQL migrations and Cloudflare deployment/recovery mechanisms are historical-operational authorities and must not be removed merely to reduce file count.
+- `development-source-gate.yml` — cumulative source, SEO, hygiene, responsive, parity and syntax authority.
+- `cloudflare-development-acceptance.yml` — exact-SHA Development deployment and runtime acceptance.
+- `cloudflare-pages-recovery.yml` — manual-only observe/repair path with exact-SHA confirmation and Production exclusion.
+
+Historical numbered workflow launchers are not part of the current repository. Git history remains their archive. SQL migrations and current Cloudflare deployment/recovery mechanisms remain protected operational authorities and must not be removed merely to reduce file count.
 
 ## Public SEO contract
 
@@ -40,4 +44,4 @@ Public and active application shells must retain a device-width viewport and mus
 
 ## Restart point
 
-If work is interrupted, first verify the active feature branch SHA and the latest exact-SHA workflow results. Continue from the first failing durable authority. Do not redo accepted work and do not promote around a failed gate.
+If work is interrupted, first verify the active feature/dev SHA and the latest exact-SHA workflow results. Continue from the first failing durable authority. Do not redo accepted work and do not promote around a failed gate.
