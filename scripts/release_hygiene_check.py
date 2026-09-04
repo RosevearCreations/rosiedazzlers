@@ -7,7 +7,17 @@ import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ACTIVE_WORKFLOW = ROOT / ".github/workflows/development-source-gate.yml"
+WORKFLOW_DIR = ROOT / ".github/workflows"
+ACTIVE_WORKFLOWS = [
+    WORKFLOW_DIR / "development-source-gate.yml",
+    WORKFLOW_DIR / "cloudflare-development-acceptance.yml",
+    WORKFLOW_DIR / "cloudflare-pages-recovery.yml",
+]
+ACTIVE_HELPERS = [
+    ROOT / "scripts/cloudflare_pages_development.sh",
+    ROOT / "scripts/development_http_smoke.sh",
+    ROOT / "scripts/contextual_proof_http_smoke.sh",
+]
 LIVING_DOCS = [
     ROOT / "AI_PROJECT_HANDOFF.md",
     ROOT / "AUTONOMOUS_RELEASE_QUEUE.md",
@@ -32,13 +42,30 @@ def main() -> int:
     if generated:
         errors.append("tracked Python cache artifacts remain: " + ", ".join(generated[:20]))
 
-    workflow = ACTIVE_WORKFLOW.read_text(encoding="utf-8", errors="ignore") if ACTIVE_WORKFLOW.exists() else ""
-    if not workflow:
-        errors.append("current shared source workflow is missing")
-    if re.search(r"(?i)build\s*[-_ ]?\d{3}", workflow):
-        errors.append("current shared source workflow still names historical numbered Builds")
-    if re.search(r"(?i)(build|test_build)\d{3}", workflow):
-        errors.append("current shared source workflow still calls numbered guard files")
+    if not WORKFLOW_DIR.exists():
+        errors.append("workflow directory is missing")
+    else:
+        numbered_workflows = sorted(path.name for path in WORKFLOW_DIR.iterdir() if path.is_file() and re.match(r"(?i)^build\d", path.name))
+        if numbered_workflows:
+            errors.append("numbered workflow launchers remain: " + ", ".join(numbered_workflows[:20]))
+
+    for path in ACTIVE_WORKFLOWS:
+        if not path.exists():
+            errors.append(f"active workflow missing: {path.name}")
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if re.search(r"(?i)build\s*[-_ ]?\d{3}", text):
+            errors.append(f"{path.name} still names a historical numbered Build")
+        if re.search(r"(?i)scripts/(?:build|test_build)\d{3}", text):
+            errors.append(f"{path.name} still calls a numbered guard/helper")
+
+    for path in ACTIVE_HELPERS:
+        if not path.exists():
+            errors.append(f"active helper missing: {path.name}")
+            continue
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if re.search(r"(?i)scripts/(?:build|test_build)\d{3}", text):
+            errors.append(f"{path.name} still calls a numbered guard/helper")
 
     gitignore = (ROOT / ".gitignore").read_text(encoding="utf-8", errors="ignore")
     for token in ("__pycache__/", "*.py[cod]"):
@@ -61,7 +88,8 @@ def main() -> int:
         return 1
 
     print("Release hygiene check: PASS")
-    print(" - shared source gate is release-number independent")
+    print(" - active workflows and helpers are release-number independent")
+    print(" - numbered workflow launchers are absent")
     print(" - living authority documents are current-state focused")
     print(" - generated Python cache files are not tracked")
     return 0

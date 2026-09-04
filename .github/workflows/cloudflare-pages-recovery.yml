@@ -45,6 +45,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Require manual Development dispatch
         shell: bash
         run: |
@@ -57,10 +62,12 @@ jobs:
             [[ "$RECOVERY_CONFIRM_SHA" == "$TARGET_SHA" ]] || { echo "::error::confirm_sha must exactly match the selected dev SHA."; exit 6; }
           fi
 
-      - name: Validate canonical helper and Build 308 guard
+      - name: Validate current recovery authority
         run: |
           bash -n scripts/cloudflare_pages_development.sh
-          python scripts/build308_release_check.py
+          bash -n scripts/development_http_smoke.sh
+          bash -n scripts/contextual_proof_http_smoke.sh
+          python scripts/release_hygiene_check.py
 
       - name: Observe or recover exact Development deployment through canonical helper
         shell: bash

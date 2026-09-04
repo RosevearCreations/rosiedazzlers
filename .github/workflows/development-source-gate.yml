@@ -71,6 +71,8 @@ jobs:
           python -m py_compile scripts/responsive_static_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
+          bash -n scripts/contextual_proof_http_smoke.sh
+          bash -n scripts/cloudflare_pages_development.sh
 
       - name: Run cumulative source authority
         run: python scripts/release_check.py

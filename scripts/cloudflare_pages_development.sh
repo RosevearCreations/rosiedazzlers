@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build 308 — canonical Cloudflare Pages Development acceptance/recovery helper.
+# Canonical Cloudflare Pages Development acceptance/recovery helper.
 # Normal acceptance is read-only. Recovery mutation is manual-only and requires
 # an exact SHA confirmation plus proof that the target is a Development preview.
 
@@ -173,11 +173,11 @@ wait_for_exact_success() {
 
 smoke_exact() {
   SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_URL" "Exact Development deployment"
-  SMOKE_SCOPE=static bash scripts/build284_http_smoke.sh "$EXACT_URL" "Exact Development deployment"
+  SMOKE_SCOPE=static bash scripts/contextual_proof_http_smoke.sh "$EXACT_URL" "Exact Development deployment"
   summary "### Exact deployment smoke"
   summary "- Immutable deployment URL: ${EXACT_URL}"
   summary "- Cloudflare deployment metadata uses_functions=true: PASS"
-  summary "- Static application/service/location/sitemap identity: PASS"
+  summary "- Static application/service/location/sitemap/contextual-proof identity: PASS"
 }
 
 smoke_alias() {
@@ -192,7 +192,7 @@ smoke_alias() {
     [[ "$attempt" -ge 12 ]] || sleep 5
   done
   [[ "$alias_ready" == "true" ]] || fail "Development branch alias did not converge to the accepted deployment within 12 attempts." 22
-  SMOKE_SCOPE=full bash scripts/build284_http_smoke.sh "$CF_DEV_URL" "Development alias contextual proof"
+  SMOKE_SCOPE=full bash scripts/contextual_proof_http_smoke.sh "$CF_DEV_URL" "Development alias contextual proof"
   summary "### Development alias smoke"
   summary "- Alias: ${CF_DEV_URL}"
   summary "- Bounded retry: 12 attempts × 5 seconds maximum spacing"

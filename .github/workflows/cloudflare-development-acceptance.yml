@@ -22,7 +22,7 @@ jobs:
   verify-development:
     name: Verify Development deployment
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
       CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -38,48 +38,28 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run cumulative Rosie release guard
+      - name: Run cumulative source authority
         run: python scripts/release_check.py
-      - name: Run Build 271 focused guard
-        run: python scripts/build271_release_check.py
-      - name: Run Build 272 focused guard
-        run: python scripts/build272_release_check.py
-      - name: Run Build 273 focused guard
-        run: python scripts/build273_release_check.py
-      - name: Run Build 274 focused guard
-        run: python scripts/build274_release_check.py
-      - name: Run Build 275 focused guard
-        run: python scripts/build275_release_check.py
-      - name: Run Build 276 focused guard
-        run: python scripts/build276_release_check.py
-      - name: Run Build 277 focused guard
-        run: python scripts/build277_release_check.py
-      - name: Run Build 278 focused guard
-        run: python scripts/build278_release_check.py
-      - name: Run Build 279 focused guard
-        run: python scripts/build279_release_check.py
-      - name: Run Build 280 focused guard
-        run: python scripts/build280_release_check.py
-      - name: Run Build 281 focused guard
-        run: python scripts/build281_release_check.py
-      - name: Run Build 282 focused guard
-        run: python scripts/build282_release_check.py
-      - name: Run Build 283 focused guard
-        run: python scripts/build283_release_check.py
-      - name: Run Build 284 focused guard
-        run: python scripts/build284_release_check.py
-      - name: Retain Build 307 readiness authority
-        run: python scripts/build307_release_check.py
-      - name: Validate Build 308 deployment/recovery consolidation
-        run: python scripts/build308_release_check.py
+
+      - name: Validate public SEO metadata
+        run: python scripts/seo_metadata_check.py
+
+      - name: Validate release hygiene
+        run: python scripts/release_hygiene_check.py
+
+      - name: Validate responsive source contract
+        run: python scripts/responsive_static_check.py
+
+      - name: Check route-copy parity
+        run: python scripts/sync_route_copies.py --check
 
       - name: Check canonical Cloudflare and HTTP helper syntax
         run: |
           bash -n scripts/cloudflare_pages_development.sh
           bash -n scripts/development_http_smoke.sh
-          bash -n scripts/build284_http_smoke.sh
+          bash -n scripts/contextual_proof_http_smoke.sh
 
-      - name: Confirm exact dev SHA reached successful Cloudflare Pages deployment via canonical helper
+      - name: Confirm exact dev SHA reached successful Cloudflare Pages deployment
         shell: bash
         run: bash scripts/cloudflare_pages_development.sh accept
 
@@ -87,20 +67,12 @@ jobs:
         shell: bash
         run: |
           {
-            echo "### Acceptance boundary"
-            echo "Build 308 routes normal exact-SHA Development acceptance through scripts/cloudflare_pages_development.sh."
-            echo "The canonical helper verifies the active Cloudflare token, resolves the Rosie Pages project, waits for the exact dev SHA to succeed, requires uses_functions=true, smokes the immutable deployment, waits for the mutable dev alias, and records the non-mutating Production promotion boundary."
-            echo "Build 274 I.T. Connections remains covered by the shared Development smoke and retained focused guard."
-            echo "Retained cumulative/source guards through Build 275 remain mandatory."
-            echo "Retained cumulative/source guards through Build 276 remain mandatory."
-            echo "Retained cumulative/source guards through Build 283 remain mandatory."
-            echo "Historical Build 275 immutable smoke command evidence: SMOKE_SCOPE=static bash scripts/development_http_smoke.sh."
-            echo "Historical Build 275 Development-alias smoke command evidence: SMOKE_RETRY_MODE=1 SMOKE_SCOPE=full bash scripts/development_http_smoke.sh."
-            echo "Historical immutable smoke evidence marker: SMOKE_SCOPE=static."
-            echo "Historical Development-alias smoke evidence marker: SMOKE_SCOPE=full."
-            echo "Build 283 Gallery publication UI identity and explicit publish/unpublish controls remain covered by the shared Development smoke."
-            echo "Build 283 public Gallery publication/proof API + protected Gallery endpoints remain covered by the full Development alias smoke."
-            echo "Build 284 contextual proof remains covered by scripts/build284_http_smoke.sh through the canonical helper for immutable and Development-alias evidence."
-            echo "Normal acceptance contains no deployment DELETE or recreate request. Recovery mutation is isolated to the manual Cloudflare Pages Recovery workflow and requires exact-SHA confirmation."
-            echo "Production promotion, payment/provider transactions, database mutation, and application business-data mutation remain outside this workflow."
+            echo "### Development acceptance boundary"
+            echo "- Exact GitHub SHA: \`${GITHUB_SHA}\`"
+            echo "- Current cumulative source, SEO, hygiene, responsive and route-copy authorities: PASS"
+            echo "- Canonical Cloudflare helper verifies the active token/project, exact dev SHA, successful Functions deployment, immutable smoke and dev-alias convergence."
+            echo "- Contextual public proof is verified by the durable HTTP smoke helper."
+            echo "- Normal acceptance performs no deployment deletion or recreation."
+            echo "- Recovery mutation remains isolated to the manual recovery workflow and requires exact-SHA confirmation."
+            echo "- Production promotion, payment/provider transactions, database mutation and business-data mutation remain outside this workflow."
           } >> "$GITHUB_STEP_SUMMARY"
