@@ -4,9 +4,9 @@ This queue records only current actionable work. Completed implementation histor
 
 ## Accepted synchronized checkpoint
 
-**Build 327 — Vehicle-Aware Maintenance & Fleet Rules** is GREEN and closed at exact application SHA `673d39a7d3a53a4965a0e41c455f824cdaa1b395`.
+The last fully accepted application release is **Build 327 — Vehicle-Aware Maintenance & Fleet Rules**, exact application SHA `673d39a7d3a53a4965a0e41c455f824cdaa1b395`.
 
-A content-neutral cleanup checkpoint has `dev == main` at `cd92d3fa5276b8db12a1da11de467222b079293b`; its tree is identical to the accepted Build 327 tree.
+A content-neutral cleanup checkpoint has `dev == main` at `cd92d3fa5276b8db12a1da11de467222b079293b`; its tree is identical to the accepted application tree.
 
 ## Active — Build 328
 
@@ -14,13 +14,13 @@ Branch: `build328-fleet-maintenance-workbench`
 
 Scope: **Fleet Maintenance Workbench & Staff Planning**.
 
-Build 327 fixed vehicle-specific reminder/eligibility rules. Build 328 makes the existing staff-owned `customer_vehicles` planning fields operational without turning on automatic scheduling, recurring billing, or enrollment.
+The accepted vehicle-aware rules fixed per-vehicle reminder/eligibility behavior. The active release makes the existing staff-owned `customer_vehicles` planning fields operational without turning on automatic scheduling, recurring billing, or enrollment.
 
 ### Acceptance checklist
 
 - Add a focused authenticated `/admin-fleet-maintenance.html` staff workbench.
 - List all saved customer vehicles, even when no completed-service history exists.
-- Merge Build 327 reminder evidence when a stable `customer_vehicle_id` exists.
+- Merge accepted vehicle-aware reminder evidence when a stable `customer_vehicle_id` exists.
 - Show ambiguous/unmatched completed-service histories separately and keep them fail-closed.
 - Anchor all writes to a valid saved `customer_vehicles.id`.
 - Permit writes only to `service_interval_days`, `next_cleaning_due_at`, and `next_service_mileage_km`.
@@ -41,7 +41,7 @@ Build 327 fixed vehicle-specific reminder/eligibility rules. Build 328 makes the
 
 ## Next sequential scope
 
-Do not assign the next release number until Build 328 is fully GREEN and synchronized. Continue through the next unfinished fleet/maintenance operating gap from current repository evidence before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
+Do not assign the next release number until the active work is fully GREEN and synchronized. Continue through the next unfinished fleet/maintenance operating gap from current repository evidence before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
 
 ## Continuing rule
 
