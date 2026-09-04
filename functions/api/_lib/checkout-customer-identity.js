@@ -1,5 +1,7 @@
 import { getCurrentCustomerSession, serviceHeaders } from "../client/_lib/customer-session.js";
 
+const BOOKING_VEHICLE_SELECTOR_COOKIE = "rd_booking_vehicle_selector";
+
 export async function resolveCheckoutCustomerIdentity({
   request,
   env,
@@ -12,7 +14,13 @@ export async function resolveCheckoutCustomerIdentity({
     return fail(400, "customer_profile_id is server-managed and cannot be supplied by checkout.", "client_profile_id_rejected");
   }
 
-  const selectedVehicleId = cleanText(body?.customer_vehicle_id);
+  const bodyVehicleId = cleanText(body?.customer_vehicle_id);
+  const cookieVehicleId = readCookie(request, BOOKING_VEHICLE_SELECTOR_COOKIE);
+  if (bodyVehicleId && cookieVehicleId && bodyVehicleId !== cookieVehicleId) {
+    return fail(400, "Saved vehicle selection changed. Choose the garage vehicle again before checkout.", "saved_vehicle_selector_conflict");
+  }
+  const selectedVehicleId = bodyVehicleId || cookieVehicleId;
+
   const sessionState = await sessionResolver({ env, request });
   const profile = sessionState?.customer_profile || null;
   const profileId = cleanText(profile?.id);
@@ -69,6 +77,23 @@ export async function loadOwnedCustomerVehicle({ env, customerProfileId, custome
   if (!res.ok) throw new Error(`Could not verify saved vehicle ownership. ${await res.text()}`);
   const rows = await res.json().catch(() => []);
   return Array.isArray(rows) ? rows[0] || null : null;
+}
+
+export function bookingVehicleSelectorCookieName() {
+  return BOOKING_VEHICLE_SELECTOR_COOKIE;
+}
+
+function readCookie(request, name) {
+  const cookieHeader = request?.headers?.get?.("cookie") || "";
+  for (const part of String(cookieHeader).split(";")) {
+    const idx = part.indexOf("=");
+    if (idx === -1) continue;
+    const key = part.slice(0, idx).trim();
+    const value = part.slice(idx + 1).trim();
+    if (key !== name) continue;
+    try { return cleanText(decodeURIComponent(value)); } catch { return cleanText(value); }
+  }
+  return "";
 }
 
 function fail(status, error, reason) {
