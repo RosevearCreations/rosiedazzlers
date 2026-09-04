@@ -77,7 +77,7 @@ async function fetchInterestRequests(env, limit) {
 }
 
 function buildMetrics(interestRequests, candidates) {
-  const counts = { new: 0, contacted: 0, qualified: 0, converted: 0, closed: 0, other: 0 };
+  const counts = { new: 0, contacted: 0, interested: 0, scheduled: 0, converted: 0, closed: 0, unsubscribed: 0, other: 0 };
   for (const row of interestRequests) {
     const status = normalizeStatus(row?.status);
     if (Object.prototype.hasOwnProperty.call(counts, status)) counts[status] += 1;
@@ -87,9 +87,12 @@ function buildMetrics(interestRequests, candidates) {
     waitlist_total: interestRequests.length,
     new_interest_count: counts.new,
     contacted_count: counts.contacted,
-    qualified_count: counts.qualified,
+    interested_count: counts.interested,
+    qualified_count: counts.interested,
+    scheduled_count: counts.scheduled,
     converted_count: counts.converted,
     closed_count: counts.closed,
+    unsubscribed_count: counts.unsubscribed,
     other_status_count: counts.other,
     reminder_candidate_count: candidates.length,
     due_reminder_count: candidates.filter((row) => row?.due === true).length
@@ -98,7 +101,7 @@ function buildMetrics(interestRequests, candidates) {
 
 function normalizeStatus(value) {
   const status = String(value || 'new').trim().toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
-  if (['new','contacted','qualified','converted','closed'].includes(status)) return status;
+  if (['new','contacted','interested','scheduled','converted','closed','unsubscribed'].includes(status)) return status;
   return status || 'new';
 }
 
