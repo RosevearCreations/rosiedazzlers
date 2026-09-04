@@ -1,5 +1,8 @@
-// Build 272 - narrow public HTML clarity layer.
-// Static source and booking/payment APIs remain untouched; only selected public HTML responses are clarified.
+// Build 326 - narrow public HTML clarity + booking completion routing layer.
+// Static source and booking/payment APIs remain authoritative. This middleware only:
+// 1) preserves the existing Build 272 public wording clarifications,
+// 2) routes provider payment returns away from the customer job-signoff /complete page, and
+// 3) gives already-confirmed gift-covered checkouts a browser confirmation URL.
 const TARGETS = new Set([
   "/", "/index.html",
   "/book", "/book.html",
@@ -25,9 +28,27 @@ const PUBLIC_SCOPE_GUIDE = `
 
 export async function onRequest(context) {
   const request = context.request;
+  const url = new URL(request.url);
+
+  // Build 326: the canonical checkout can legitimately return a confirmed booking with
+  // no external payment URL when a gift certificate covers the full deposit. The public
+  // wizard already follows checkout_url, so add a local confirmation target only after the
+  // authoritative checkout endpoint has returned gift_only_confirm.
+  if (request.method === "POST" && url.pathname === "/api/checkout") {
+    return handleCheckoutResponse(context, url);
+  }
+
   if (request.method !== "GET") return context.next();
 
-  const url = new URL(request.url);
+  // /complete is the existing token-protected customer job sign-off page. Stripe and
+  // PayPal historically returned there with provider parameters, which do not satisfy the
+  // sign-off token contract. Move only those provider returns to the dedicated booking
+  // confirmation route and preserve every provider query parameter (session_id/token/etc.).
+  if ((url.pathname === "/complete" || url.pathname === "/complete.html") && isPaymentProvider(url.searchParams.get("provider"))) {
+    url.pathname = "/booking-confirmed";
+    return Response.redirect(url.toString(), 302);
+  }
+
   if (!TARGETS.has(url.pathname)) return context.next();
 
   const response = await context.next();
@@ -79,4 +100,56 @@ export async function onRequest(context) {
   headers.delete("etag");
   headers.set("cache-control", "no-cache");
   return new Response(html, { status: response.status, statusText: response.statusText, headers });
+}
+
+async function handleCheckoutResponse(context, requestUrl) {
+  let intake = {};
+  try {
+    intake = await context.request.clone().json();
+  } catch {
+    intake = {};
+  }
+
+  const response = await context.next();
+  if (!response.ok) return response;
+
+  const contentType = String(response.headers.get("content-type") || "").toLowerCase();
+  if (!contentType.includes("application/json")) return response;
+
+  let payload = null;
+  try {
+    payload = await response.clone().json();
+  } catch {
+    return response;
+  }
+
+  if (!payload?.ok || payload.mode !== "gift_only_confirm" || payload.checkout_url) return response;
+
+  const target = new URL("/booking-confirmed", requestUrl.origin);
+  target.searchParams.set("provider", "gift");
+
+  const packageCode = safeChoice(intake?.package_code, 80);
+  const vehicleSize = ["small", "mid", "oversize"].includes(String(intake?.vehicle_size || "").toLowerCase())
+    ? String(intake.vehicle_size).toLowerCase()
+    : "";
+  if (packageCode) target.searchParams.set("package", packageCode);
+  if (vehicleSize) target.searchParams.set("size", vehicleSize);
+
+  const body = JSON.stringify({ ...payload, checkout_url: `${target.pathname}${target.search}` });
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  headers.delete("etag");
+  headers.set("content-type", "application/json; charset=utf-8");
+  headers.set("cache-control", "no-store");
+  return new Response(body, { status: response.status, statusText: response.statusText, headers });
+}
+
+function isPaymentProvider(value) {
+  return ["stripe", "paypal"].includes(String(value || "").trim().toLowerCase());
+}
+
+function safeChoice(value, maxLength) {
+  const text = String(value || "").trim();
+  if (!text || text.length > maxLength) return "";
+  return /^[a-z0-9_-]+$/i.test(text) ? text : "";
 }
