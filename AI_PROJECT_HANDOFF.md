@@ -7,24 +7,25 @@ This file is a living operational authority, not a release diary. Git history an
 - Repository: `RosevearCreations/rosiedazzlers`.
 - `main` remains frozen at the last user-authorized Production release until the user explicitly asks for another Production promotion.
 - `dev` is the accepted Development line and the base for ongoing sequential feature work.
-- Accepted Development checkpoint: Build 318 at exact SHA `9d206c7c0a78894e337894dd3b796c64b52559c6`.
-- Active work: Build 319 — Payment Acceptance Evidence & Sandbox Verification.
-- Feature branch: `build319-payment-acceptance-evidence`.
+- Accepted Development checkpoint: Build 319 at exact SHA `498c7cb83910f09df67a51b444278733d825b0f2`.
+- Active work: Build 320 — Payment Recovery & Customer Handoff.
+- Feature branch: `build320-payment-recovery-customer-handoff`.
 - The active build is source-only and introduces no database migration.
 
 ## Active operating contract
 
-The active build extends provider readiness with a read-only Development evidence cockpit and ledger based on existing final-balance payment records.
+The active build closes duplicate-payment risk around failed, expired and interrupted final-balance checkout handoffs.
 
-- Stripe secret mode is classified server-side as test/live/unknown/not-configured; no secret value is returned.
-- A live or unclassifiable Stripe credential blocks Development provider acceptance.
-- Persisted Stripe checkout ID plus checkout-created time counts only as checkout-creation evidence, never payment-completion proof.
-- Persisted paid state is reported conservatively as application evidence. It is not labelled webhook verified because current source does not establish that assurance.
-- Existing provider event/payment-intent references may be recognized as present without returning their values.
-- PayPal remains explicitly not integrated; no sandbox acceptance is fabricated.
-- Manual payment remains an operational fallback and is excluded from Stripe provider acceptance.
-- No automatic charge, provider mutation, checkout creation, customer notification, or recurring billing is permitted by the evidence surface.
-- Mobile, tablet and desktop layouts are part of the acceptance contract; narrow screens use stacked evidence cards instead of clipped desktop tables.
+- Recovery readiness is read-only and groups tracked requests into recovery-required, existing-checkout-guarded, checkout-needed/manual, and paid/closed states.
+- The hosted-checkout mutation verifies an existing Stripe Checkout Session before any replacement is considered.
+- Stripe sessions that remain open are reused rather than duplicated.
+- A replacement Stripe session is permitted only after the provider reports the persisted prior session as expired.
+- Provider-paid, complete-but-unreconciled, or unknown states fail closed and require reconciliation instead of creating another payment path.
+- Expired/cancelled request recovery requires explicit operator confirmation, a recovery reason, and a new future expiry.
+- The recovery cockpit never automatically charges or notifies a customer and always submits `notify_customer: false`.
+- A customer returning from checkout is treated as unconfirmed until Rosie Dazzlers data records the payment. While confirmation is unresolved, the public page hides pay-again actions.
+- A customer who cancels checkout may return to the same persisted checkout URL; cancellation does not create another provider session.
+- Mobile, tablet and desktop layouts remain part of the acceptance contract with touch-friendly actions and stacked narrow-screen recovery cards.
 
 ## Current promotion rule
 
@@ -37,8 +38,8 @@ The active build extends provider readiness with a read-only Development evidenc
 
 ## Durable release authorities
 
-- `development-source-gate.yml` — cumulative source, SEO, hygiene, responsive, maintenance/retention, final-balance, provider-readiness, payment-evidence, parity and syntax authority.
-- `payment_acceptance_evidence_check.py` — fail-closed payment evidence plus mobile/tablet/desktop regression authority.
+- `development-source-gate.yml` — cumulative source, SEO, hygiene, responsive, maintenance/retention, final-balance and payment authorities.
+- `payment_recovery_customer_handoff_check.py` — duplicate-checkout, recovery confirmation, customer-return and mobile regression authority.
 - `cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 - `cloudflare-pages-recovery.yml` — manual-only observe/repair path with exact-SHA confirmation and Production exclusion.
 
