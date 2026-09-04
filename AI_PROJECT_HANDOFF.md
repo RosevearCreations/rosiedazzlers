@@ -7,26 +7,24 @@ This file is a living operational authority, not a release diary. Git history an
 - Repository: `RosevearCreations/rosiedazzlers`.
 - `main` remains frozen at the last user-authorized Production release until the user explicitly asks for another Production promotion.
 - `dev` is the accepted Development line and the base for ongoing sequential feature work.
-- Accepted Development checkpoint: Build 320 at exact SHA `5a414276e1a2abcbe2d31ac1f24583599647df07`.
-- Active work: Build 321 — Payment Reconciliation Evidence.
-- Feature branch: `build321-payment-reconciliation`.
+- Accepted Development checkpoint: Build 321 at exact SHA `09d4ba2e1986e1857c31451915d164fd7694e2c0`.
+- Active work: Build 322 — Release Rollback & Recovery Acceptance.
+- Feature branch: `build322-release-rollback-recovery-acceptance`.
 - The active build is source-only and introduces no database migration.
 
 ## Active operating contract
 
-The active build closes the visibility gap between Stripe Checkout Session state, the tracked final-balance request, and the booking final-payment ledger.
+The active build closes the rollback/recovery roadmap item without opening a Production mutation path.
 
-- Reconciliation is read-only. It does not charge, create a checkout, write finance, notify a customer or alter payment state.
-- The server queries the exact persisted Stripe Checkout Session by GET only when environment policy permits provider contact.
-- Live Stripe credentials are blocked for Development reconciliation; unknown credential mode also fails closed.
-- Provider amount, currency and Rosie Dazzlers request identity must match before provider-paid evidence is considered actionable.
-- Provider-paid/local-unpaid and provider-paid/finance-missing states are surfaced as reconciliation-required, not silently repaired.
-- Matched provider-paid + local-paid + finance-covered state is reported as reconciled with no action required.
-- Identity mismatch, local/provider disagreement, complete-but-unpaid, provider errors and inconclusive states are blocked for manual review.
-- Unpaid open provider sessions remain active; unpaid expired sessions route back to Payment Recovery.
-- Webhook verification is not asserted and provider reference values are not exposed to the browser.
-- The existing booking-finance writer appends events but has no database-enforced provider idempotency key. Automatic finance posting is therefore intentionally out of scope rather than risking a duplicate final-payment event.
-- Mobile, tablet and desktop layouts remain part of the release contract.
+- Existing stuck-deployment recovery remains manual-only, `dev`-only, exact-current-SHA confirmed and restricted to non-terminal Development preview deployments.
+- Recovery observe mode is non-mutating. Repair may mutate only the exact stuck Development preview after the canonical helper independently revalidates branch, SHA, preview environment and non-terminal status.
+- A new Development rollback-readiness workflow is manual-only and read-only. It never moves Git refs and never mutates Cloudflare.
+- A rollback candidate must be a full exact SHA, present in repository history, strictly older than current `dev`, and an ancestor of current `dev` rather than unrelated/divergent history.
+- The exact candidate must already have a successful Cloudflare Pages deployment on branch `dev`.
+- The immutable candidate deployment must report `environment=preview`, `uses_functions=true`, exact SHA/branch identity and must pass static plus contextual smoke checks.
+- Production branch identity is resolved from the live Cloudflare project and both rollback verification and recovery reject Production targets.
+- Rollback evidence is not authorization to move `dev`; any future Git rollback remains a separate explicit human-authorized action.
+- The rollback verifier performs Cloudflare GET/read operations only and grants GitHub Actions `contents: read` permission only.
 
 ## Current promotion rule
 
@@ -39,9 +37,10 @@ The active build closes the visibility gap between Stripe Checkout Session state
 
 ## Durable release authorities
 
-- `development-source-gate.yml` — cumulative source, SEO, hygiene, responsive, maintenance/retention, final-balance and payment authorities.
-- `payment_reconciliation_check.py` — provider/local/finance comparison, read-only, credential-boundary and responsive regression authority.
-- `payment_recovery_customer_handoff_check.py` — duplicate-checkout, recovery confirmation and customer-return authority.
+- `development-source-gate.yml` — cumulative source, SEO, responsive, payment and rollback/recovery authorities.
+- `release_rollback_recovery_check.py` — rollback read-only, prior-SHA ancestry, immutable preview and recovery safety regression authority.
+- `development-rollback-readiness.yml` — manual read-only prior-SHA rollback candidate drill.
+- `cloudflare-pages-recovery.yml` — manual observe/repair path for one exact stuck Development deployment.
 - `cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 
 ## Public SEO contract
@@ -54,4 +53,4 @@ Authenticated work screens must include useful operating/contextual Help and mus
 
 ## Restart point
 
-If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction.
+If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction. The next remaining accepted roadmap item after rollback/recovery is the Production-readiness dashboard, but Production itself remains closed.
