@@ -7,16 +7,16 @@ This file is the living operational authority for restarting work. Git history a
 - Repository: `RosevearCreations/rosiedazzlers`.
 - Last fully accepted application release: **Build 327 — Vehicle-Aware Maintenance & Fleet Rules**.
 - Exact accepted application SHA: `673d39a7d3a53a4965a0e41c455f824cdaa1b395`.
-- A content-neutral cleanup checkpoint now has `dev == main` at `cd92d3fa5276b8db12a1da11de467222b079293b`; GitHub comparison shows zero file changes versus the accepted Build 327 tree.
+- A content-neutral cleanup checkpoint has `dev == main` at `cd92d3fa5276b8db12a1da11de467222b079293b`; GitHub comparison shows zero file changes versus the accepted application tree.
 - Active work: **Build 328 — Fleet Maintenance Workbench & Staff Planning**.
 - Active branch: `build328-fleet-maintenance-workbench`.
 - The active scope uses existing `customer_vehicles` columns and introduces no database migration.
 
 ## Why this scope is active
 
-Build 327 made maintenance eligibility, cadence, reminder history and rebooking vehicle-aware. The next operational gap is that staff-owned vehicle planning fields already exist in `customer_vehicles`, but there is no focused staff workbench for safely managing those values.
+The accepted vehicle-aware maintenance release made eligibility, cadence, reminder history and rebooking vehicle-specific. The next operational gap is that staff-owned vehicle planning fields already exist in `customer_vehicles`, but there is no focused staff workbench for safely managing those values.
 
-Build 328 exposes those existing vehicle-level controls without enabling automatic enrollment, recurring billing, or appointment creation.
+The active release exposes those existing vehicle-level controls without enabling automatic enrollment, recurring billing, or appointment creation.
 
 ## Active operating contract
 
@@ -27,7 +27,7 @@ Build 328 exposes those existing vehicle-level controls without enabling automat
 - Next service mileage must be a whole number from 0–2,000,000 km or null and cannot be below the stored current vehicle mileage.
 - `auto_schedule_opt_in` is read-only/informational in this scope and cannot be changed by the workbench.
 - Saving a vehicle plan does not create a booking, reserve calendar capacity, enroll a membership, authorize recurring billing, or change customer/contact data.
-- The workbench merges saved vehicles with Build 327 reminder evidence when a stable `customer_vehicle_id` is available.
+- The workbench merges saved vehicles with the accepted vehicle-aware reminder evidence when a stable `customer_vehicle_id` is available.
 - Completed-service histories that cannot be mapped reliably to one saved vehicle appear in a separate review queue and remain reminder-ineligible.
 - The staff surface is `/admin-fleet-maintenance.html`; it uses the existing authenticated admin shell and Operations/customer route authority.
 - Customer-facing vehicle APIs remain unchanged and continue blocking staff-owned planning fields.
@@ -50,7 +50,7 @@ A RosieDazzlers release is not GREEN merely because its feature code exists.
 
 - `.github/workflows/development-source-gate.yml` — cumulative current-source authority.
 - `scripts/maintenance_retention_check.py` and `scripts/vehicle_maintenance_rules_test.mjs` — vehicle-aware reminder/retention authority.
-- `scripts/fleet_maintenance_planning_check.py` and `scripts/fleet_maintenance_planning_test.mjs` — Build 328 staff planning/write-boundary authority.
+- `scripts/fleet_maintenance_planning_check.py` and `scripts/fleet_maintenance_planning_test.mjs` — active staff planning/write-boundary authority.
 - `scripts/booking_funnel_device_check.py` — aggregate funnel/device/privacy authority.
 - `scripts/booking_wizard_responsive_ux_check.py` — responsive/touch/focus/route-parity authority.
 - `scripts/booking_completion_retention_check.py` — payment-completion boundary, provider verification, privacy and rebooking authority.
@@ -68,6 +68,6 @@ Authenticated work screens must include useful operating/contextual Help and mus
 
 ## Restart point
 
-If interrupted during Build 328, verify the current head of `build328-fleet-maintenance-workbench`, then inspect the first failing Current Source Gate authority. Do not redo the accepted Build 327 vehicle-reminder rules. `dev` and `main` must not receive the Build 328 feature SHA until the exact feature SHA passes source and Cloudflare evidence.
+If interrupted during **Build 328**, verify the current head of `build328-fleet-maintenance-workbench`, then inspect the first failing Current Source Gate authority. Do not redo the accepted vehicle-reminder rules. `dev` and `main` must not receive the active feature SHA until that exact SHA passes source and Cloudflare evidence.
 
-After Build 328 is fully synchronized GREEN, select the next unfinished roadmap slice from current repository evidence. Continue through remaining fleet/maintenance operating depth before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
+After the active release is fully synchronized GREEN, select the next unfinished roadmap slice from current repository evidence. Continue through remaining fleet/maintenance operating depth before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
