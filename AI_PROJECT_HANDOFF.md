@@ -5,50 +5,47 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- Last fully accepted/synchronized release: **Build 332 — Durable Maintenance Vehicle Identity Preference**.
-- Exact accepted SHA: `53efa5d2b616ab0694a5ea9e3165119856b15953`.
+- Last fully accepted/synchronized release: **Build 333 — Authenticated Booking Vehicle Persistence**.
+- Exact accepted SHA: `c87c66786be8d24a1883109f6f84efa4ed3f6a84`.
 - At active-work start, `dev == main` on that exact SHA.
-- Active work: **Build 333 — Authenticated Booking Vehicle Persistence**.
-- Active branch: `build333-authenticated-booking-vehicle-persistence`.
-- No database migration is introduced. This release consumes the already-live nullable booking customer/profile and saved-vehicle identity authorities.
+- Active work: **Build 334 — Durable Completed-Service Vehicle History Sync**.
+- Active branch: `build334-durable-vehicle-service-history-sync`.
+- No database migration is introduced; the live `customer_vehicles` history fields already exist.
 
 ## Why this scope is active
 
-The booking wizard already lets a signed-in customer choose a saved garage vehicle, but checkout discards that identity and stores only the vehicle snapshot. The customer session is HttpOnly and server-resolved, and saved-vehicle APIs are already profile-scoped, so checkout can now persist durable identity prospectively without trusting a browser-supplied profile ID.
+Authenticated checkout can now establish a durable booking→saved-vehicle identity, and maintenance readers prefer that identity. The remaining lifecycle gap is post-service: authoritative staff completion marks the booking complete but does not copy verified service facts back to the owned garage vehicle.
 
 ## Active operating contract
 
-- Guest checkout remains valid with `customer_profile_id = null` and `customer_vehicle_id = null`.
-- When a valid customer session exists, checkout derives `customer_profile_id` from that server-resolved session. A browser-supplied profile ID is rejected.
-- The existing garage picker emits only an untrusted saved-vehicle selector. The selector grants no ownership authority by itself.
-- A selected saved vehicle may be persisted only after the server reloads `customer_vehicles` using both the selected vehicle UUID and the authenticated profile UUID.
-- Anonymous saved-vehicle selection, cross-profile selection and conflicting selectors fail closed.
-- If an authenticated customer books without choosing a saved vehicle, the trusted profile may still be persisted while `customer_vehicle_id` remains null.
-- The booking-only selector bridge clears stale state on page entry and clears selection when year/make/model/size is manually changed.
-- No historical booking is backfilled or mutated.
-- No customer vehicle is automatically created or edited during checkout.
-- Pricing, package/add-on authority, booking status, slot capacity, payment settlement, membership and recurring scheduling remain unchanged.
+- Synchronization runs only after the authoritative detailer completion transition has successfully stored `job_status = completed`.
+- The booking must carry both `customer_profile_id` and `customer_vehicle_id`.
+- The saved vehicle is reloaded using both IDs; missing or mismatched ownership fails closed and leaves the garage vehicle unchanged.
+- No year/make/model/plate heuristic may substitute for the durable link.
+- Completion may update only factual service history: `last_package_code`, normalized `last_addons`, and non-regressing `mileage_km`.
+- `last_wash_at` advances only for `premium_wash`, `complete_detail`, or `exterior_detail`, which are the current packages containing an exterior hand wash.
+- A lower/invalid booking mileage never overwrites a higher saved-vehicle mileage.
+- Completion may not write `service_interval_days`, `next_cleaning_due_at`, `next_service_mileage_km`, or `auto_schedule_opt_in`.
+- No saved vehicle is created, no historical booking is backfilled, and no payment, price, membership, schedule, or appointment state is changed.
+- The completion event records the vehicle-history sync outcome so ancillary sync failure is visible without reversing legitimate completed work.
 
 ## Release procedure
 
 1. Feature exact SHA must pass Current Source Gate, Booking Vehicle Identity Authority, Maintenance Retention Follow-up Authority, Fleet Account Pipeline Authority and Cloudflare feature deployment.
-2. No schema application is required for this release.
-3. Fast-forward `dev` with `force=false`; require source authorities plus Cloudflare Development Acceptance on the identical SHA.
+2. No schema application is required.
+3. Fast-forward `dev` with `force=false`; require exact-SHA source authorities plus Cloudflare Development Acceptance.
 4. Only after Development is GREEN, fast-forward `main` with `force=false`.
 5. Require source authorities plus Cloudflare Production deployment on that exact SHA.
 6. Verify `dev == main`; only then call the release GREEN/closed.
 
 ## Durable authorities
 
-- `.github/workflows/development-source-gate.yml` — cumulative source authority.
-- `.github/workflows/booking-vehicle-identity-authority.yml` — durable booking/saved-vehicle identity boundary, now including authenticated checkout ownership proof.
-- `scripts/booking_vehicle_identity_check.py` — schema, staff-linkage, checkout ownership and selector safety source authority.
-- `scripts/checkout_customer_vehicle_identity_test.mjs` — executable guest/authenticated/cross-profile injection behavior proof.
-- `scripts/maintenance_retention_check.py` and `scripts/vehicle_maintenance_rules_test.mjs` — durable maintenance identity consumption.
-- `.github/workflows/maintenance-retention-followup-authority.yml` — accepted retention follow-up authority.
-- `.github/workflows/fleet-account-pipeline-authority.yml` — fleet intake/pipeline authority.
-- `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
-- Existing payment, Production-readiness, rollback/recovery, booking funnel, responsive UX and SEO authorities remain cumulative.
+- `.github/workflows/development-source-gate.yml` — cumulative source authority, including booking completion/retention checks.
+- `.github/workflows/booking-vehicle-identity-authority.yml` — durable identity authority through checkout and completed-service vehicle synchronization.
+- `scripts/booking_vehicle_identity_check.py` — schema, staff linkage, authenticated checkout, durable completion ownership and no-migration guard.
+- `scripts/customer_vehicle_service_history_test.mjs` — executable completion/history behavior proof.
+- `scripts/booking_completion_retention_check.py` — payment-return/signoff separation plus authoritative completion sync contract.
+- Existing maintenance, fleet, payment, Production-readiness, rollback/recovery, booking UX and SEO authorities remain cumulative.
 
 ## Public/SEO and help contracts
 
@@ -56,4 +53,4 @@ Every sitemap public page retains one meaningful H1, valid metadata/canonical/ro
 
 ## Restart point
 
-If interrupted during active work, verify `build333-authenticated-booking-vehicle-persistence`, inspect the first failing source/identity/Cloudflare authority, and continue there. Do not weaken the server-session ownership boundary to make a selector pass, and do not add a schema migration unless read-only evidence proves one is actually required.
+If interrupted during active work, verify `build334-durable-vehicle-service-history-sync` and inspect the first failing completion/identity/source/Cloudflare authority. Never make completion history synchronization depend on snapshot identity heuristics, and never write staff-owned scheduling fields from job completion.
