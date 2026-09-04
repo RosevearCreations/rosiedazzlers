@@ -60,7 +60,7 @@ api = require(API, [
     'method: "GET"',
     "payment_status === \"paid\"",
     'reconciliationState = "finance_reconciliation_required"',
-    'reconciliationState = "request_state_reconciliation_required"',
+    '"request_state_reconciliation_required"',
     'reconciliationState = "matched_paid"',
     'reconciliationState = "blocked_identity_mismatch"',
     'reconciliationState = "local_provider_discrepancy"',
@@ -109,13 +109,15 @@ for needle in ["secret_value:", "secret_key:", "api_key:", "client_secret:", "ex
         errors.append(f"payment reconciliation API may expose a secret/provider reference value: {needle}")
 
 # Direct provider evidence must match amount, currency and request identity before a paid mismatch is actionable.
-identity_block = re.search(r"const identityMatches =[\s\S]{0,600}?amountMatches[\s\S]{0,300}?currencyMatches", api)
+identity_block = re.search(r"const identityMatches =[^;]*amountMatches[^;]*currencyMatches", api)
 if not identity_block:
     errors.append("reconciliation API does not visibly combine request identity, amount and currency checks")
 if "providerPaid && !localPaid" not in api:
     errors.append("provider-paid/local-unpaid reconciliation state is missing")
 if "providerPaid && localPaid && financeCoversRequest" not in api:
     errors.append("matched provider/local/finance paid state is missing")
+if '"request_state_reconciliation_required"' not in api or '"finance_reconciliation_required"' not in api:
+    errors.append("provider-paid mismatch does not expose both request-state and finance reconciliation outcomes")
 
 # Current finance POST has no provider idempotency field/unique key; Build 321 must remain read-only for finance.
 for unsupported in ["provider_payment_intent_id", "provider_event_id", "idempotency_key"]:
