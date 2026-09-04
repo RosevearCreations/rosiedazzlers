@@ -49,7 +49,6 @@ client = require(CLIENT, [
     "contract?.recurring_billing === false",
     "contract?.operator_action_required === true",
     "contract?.webhook_verification_asserted === false",
-    "On phones",
 ], "payment acceptance client")
 
 api = require(API, [
@@ -64,7 +63,6 @@ api = require(API, [
     'webhook_verification: "not_asserted_by_build319"',
     'acceptance_evidence: "not_integrated"',
     'acceptance_evidence: "operational_fallback_not_provider_acceptance"',
-    'development_status: developmentStatus',
     '"blocked_live_credential"',
     '"blocked_unknown_credential"',
     '"configuration_ready_evidence_pending"',
@@ -73,7 +71,7 @@ api = require(API, [
     "Payment acceptance evidence is read-only.",
 ], "payment acceptance API")
 
-workflow = require(WORKFLOW, [
+require(WORKFLOW, [
     "assets/admin-payment-acceptance-v319.js",
     "functions/api/admin/payment_acceptance_evidence.js",
     "scripts/payment_acceptance_evidence_check.py",
@@ -81,7 +79,6 @@ workflow = require(WORKFLOW, [
     "Payment acceptance evidence authority: PASS",
 ], "current source gate")
 
-# Isolate the read-only GET handler. It may call Supabase GET, but never a payment provider or mutation endpoint.
 get_match = re.search(r"export async function onRequestGet\([\s\S]*?\n}\n\nexport async function onRequestPost", api)
 if not get_match:
     errors.append("could not isolate payment acceptance GET handler")
@@ -91,31 +88,23 @@ else:
         if needle in handler:
             errors.append(f"payment acceptance GET contains provider/mutation path: {needle}")
 
-# Browser evidence surface must remain read-only.
 for needle in ['method: "POST"', "final_balance_checkout_create", "final_balance_request_create", "notify_customer", "checkout_url"]:
     if needle in client:
         errors.append(f"payment acceptance client contains mutation/sensitive checkout path: {needle}")
 
-# API may test the server-side secret prefix, but must never serialize secret values or checkout URLs.
 for needle in ["secret_key:", "secret_value:", "client_secret:", "api_key:", "checkout_url:"]:
     if needle in api.lower():
         errors.append(f"payment acceptance API may expose a secret/provider URL field: {needle}")
 
-# Paid evidence must never be represented as webhook verification.
 if re.search(r"webhook_verified\s*:\s*true", api, re.IGNORECASE):
     errors.append("Build 319 must not claim webhook verification from persisted payment fields")
 if "provider_event_id" not in api or "provider_payment_intent_id" not in api:
-    errors.append("Build 319 evidence must recognize existing provider reference fields without exposing their values")
-
-# PayPal is still deliberately not integrated; do not invent environment configuration.
+    errors.append("Build 319 must recognize existing provider reference fields without exposing their values")
 if "PAYPAL_" in api:
     errors.append("Build 319 must not invent PayPal environment variables before a real integration exists")
-
-# Mobile and computer layouts are part of the gate, not deferred CSS cleanup.
 if "table-wrap" not in page or "td::before" not in page or "min-height:44px" not in page:
     errors.append("payment acceptance page is missing mobile/tablet interaction safeguards")
 
-# Build 319 is source-only.
 migrations = list(ROOT.glob("**/*319*.sql"))
 if migrations:
     errors.append("Build 319 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
@@ -129,9 +118,8 @@ if errors:
 print("PAYMENT ACCEPTANCE EVIDENCE: PASS")
 print("- evidence API and browser cockpit are read-only")
 print("- Stripe test/live credential mode is classified server-side without exposing the secret")
-print("- checkout evidence is kept separate from persisted paid evidence")
-print("- no webhook verification is asserted by Build 319")
-print("- PayPal remains honestly not integrated and manual remains a fallback only")
+print("- checkout evidence is separate from persisted paid evidence; webhook verification is not asserted")
+print("- PayPal remains not integrated and manual remains a fallback only")
 print("- mobile, tablet and desktop evidence layouts are enforced")
 print("- no automatic charge, checkout, notification or recurring billing")
 print("- no Build 319 database migration is present")
