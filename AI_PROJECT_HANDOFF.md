@@ -1,56 +1,69 @@
 # Rosie Dazzlers — Current Project Handoff
 
-This file is a living operational authority, not a release diary. Git history and archived release artifacts are the source for historical implementation detail.
+This file is the living operational authority for restarting work. Git history and archived release artifacts remain the historical implementation record.
 
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- `main` remains frozen at the last user-authorized Production release until the user explicitly asks for another Production promotion.
-- `dev` is the accepted Development line and the base for ongoing sequential feature work.
-- Accepted Development checkpoint: Build 323 at exact SHA `740d809eb069808bec2ccb411f694d5aa974f129`.
-- Active work: Build 324 — Booking Funnel Analytics & Conversion.
-- Feature branch: `build324-booking-funnel-analytics`.
-- The active build is source-only and introduces no database migration.
+- Last fully accepted/synchronized release: **Build 325 — Booking Wizard Responsive UX**.
+- Exact Build 325 SHA: `7d8b5cb4b85986636a4a70c4bd298f6d7bc51de2`.
+- At Build 326 start, both `dev` and `main` were exactly that SHA.
+- Active work: **Build 326 — Booking Completion + Retention/Rebooking Lifecycle**.
+- Active branch: `build326-booking-retention-rebooking`.
+- Build 326 is application/routing work and introduces no database migration.
 
-## Active operating contract
+## Why Build 326 expanded
 
-The active build makes the real five-step booking funnel measurable by device without adding new customer tracking or recreating the previous high-CPU analytics pattern.
+The planned retention/rebooking review found a higher-priority checkout boundary defect. Canonical Stripe and PayPal checkout success URLs returned customers to `/complete`, but `/complete` is the existing token-protected customer job completion/sign-off page backed by `/api/progress/*`. Those are different lifecycle stages and must not share an unverified browser-success contract.
 
-- Existing public analytics already records `booking_step_view`, checkout start/completion and a server-classified `device_type`; this build reuses that authority rather than adding a parallel event model.
-- Funnel metrics count unique sessions that reached each stage at least once, so page refreshes and repeated clicks do not inflate conversion.
-- The five stages are Date + Vehicle, Package, Add-ons, Customer Details, and Deposit / Payment, followed by Checkout Started and Checkout Completed.
-- Mobile, tablet, desktop and unknown-device sessions are aggregated separately.
-- Start-to-completion and checkout-completion rates are calculated per device; mobile-vs-desktop completion gaps over five percentage points are surfaced directionally.
-- The endpoint is read-only and returns only aggregate counts/rates. Raw session IDs, visitor IDs, names, email, phone and IP details are not serialized to the browser.
-- The raw-event evidence window is capped at 30 days and 2,500 rows. Reaching the cap is disclosed as bounded/truncated evidence rather than treated as exhaustive.
-- There is no background polling. The cockpit loads once and refreshes only on explicit user action/window change.
-- Desktop, tablet and mobile layouts remain part of acceptance with device-width viewport, 44px controls and narrow-screen device cards.
+Build 326 therefore repairs payment completion first, then exposes retention/rebooking only after provider evidence agrees with the stored booking.
 
-## Current promotion rule
+## Active Build 326 contract
 
-1. Implement on an isolated feature branch created from exact `dev`.
-2. Require exact-SHA feature source validation and Cloudflare preview success.
-3. Fast-forward `dev` to that identical SHA only after feature acceptance.
-4. Require Current Source Gate plus Cloudflare Development Acceptance on exact `dev`.
-5. Stop there. Do not move `main` unless the user explicitly asks for Production promotion.
-6. A source promotion never authorizes a database migration.
+- `/complete?token=...` remains customer job completion/sign-off only.
+- Existing payment-provider returns from `/complete?provider=stripe|paypal...` are narrowly redirected to `/booking-confirmed` before the sign-off page handles them.
+- Stripe confirmation is read/verify only. It cross-checks the stored Stripe Session ID, Stripe Checkout Session, booking metadata, CAD currency, expected payable deposit and `payment_status=paid` server-side.
+- The signed Stripe webhook remains the only Build 326 authority that changes a Stripe booking into its settled/confirmed state.
+- PayPal browser return is captured through the existing `/api/paypal/capture-order` endpoint, which matches the stored PayPal order, validates CAD/amount and is replay safe before persisting confirmation.
+- Gift-covered deposits remain checkout-authoritative: only a successful `gift_only_confirm` response receives a local booking-confirmation URL.
+- `/booking-confirmed` is `noindex` and never renders booking/customer/payment identifiers.
+- Rebooking carries only previous package and vehicle-size hints. Date, slot, location, customer/contact/address details, policies and payment are fresh booking decisions.
+- Existing Build 324 funnel events remain unchanged. Build 326 adds `booking_confirmation_view`, `booking_rebook_prompt_view`, `booking_rebook_start`, and `booking_rebook_prefill_applied`.
+
+## Current release procedure
+
+A RosieDazzlers build is not GREEN merely because its feature code exists.
+
+1. Start the feature branch from the exact prior synchronized GREEN SHA.
+2. Require exact-SHA Current Source Gate success on the feature branch.
+3. Require Cloudflare feature deployment/runtime evidence on that same SHA.
+4. Fast-forward `dev` to that identical SHA; never force or synthesize history.
+5. Require exact-SHA Current Source Gate plus Cloudflare Development Acceptance on `dev`.
+6. Only after Development is GREEN, fast-forward `main` to the identical SHA.
+7. Require exact-SHA Current Source Gate plus Cloudflare Production deployment on `main`.
+8. Verify `dev == main`; only then call the build GREEN/closed and select the next build.
+9. Source promotion never authorizes a database migration. Schema work has its own migration/acceptance boundary.
 
 ## Durable release authorities
 
-- `development-source-gate.yml` — cumulative source, SEO, responsive, payment, release-safety, Production-readiness and booking-funnel authorities.
-- `booking_funnel_device_check.py` — unique-session/device, privacy, CPU-bound and responsive regression authority.
-- `production_readiness_check.py` — I.T. evidence-only Production-readiness authority.
-- `release_rollback_recovery_check.py` — rollback/recovery safety authority.
-- `cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
+- `.github/workflows/development-source-gate.yml` — cumulative current-source authority.
+- `scripts/booking_funnel_device_check.py` — Build 324 aggregate funnel/device/privacy authority.
+- `scripts/booking_wizard_responsive_ux_check.py` — Build 325 responsive/touch/focus/route-parity authority.
+- `scripts/booking_completion_retention_check.py` — Build 326 payment-completion boundary, provider verification, privacy and rebooking authority.
+- `scripts/production_readiness_check.py` — I.T. Production-readiness authority.
+- `scripts/release_rollback_recovery_check.py` — rollback/recovery safety authority.
+- `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 
 ## Public SEO contract
 
-Every URL listed in `sitemap.xml` must resolve to a local public source page with exactly one meaningful H1, one non-empty title, one non-empty meta description and one canonical URL matching the sitemap route. Sitemap pages must not be `noindex`. JSON-LD blocks, where present, must be valid JSON. `robots.txt` must advertise the canonical sitemap.
+Every URL listed in `sitemap.xml` must resolve to a local public source page with exactly one meaningful H1, one non-empty title, one non-empty meta description and one canonical URL matching the sitemap route. Sitemap pages must not be `noindex`. JSON-LD blocks, where present, must be valid JSON. `robots.txt` must advertise the canonical sitemap. Payment/confirmation utility pages that are deliberately excluded from the sitemap may use `noindex`.
 
 ## Help and responsive contracts
 
-Authenticated work screens must include useful operating/contextual Help and must never expose server secrets. Public and active application shells retain a device-width viewport and avoid oversized root-level minimum widths that block mobile rendering. New admin workflows must have usable touch targets, loading/error/empty states, and a deliberate narrow-screen layout. Static checks are the regression floor; exact Development deployment remains the acceptance boundary.
+Authenticated work screens must include useful operating/contextual Help and must never expose server secrets. Public and active application shells retain a device-width viewport and usable narrow-screen layouts. New interaction workflows must have usable touch targets, loading/error/empty states, and fail-safe recovery. Static checks are the regression floor; exact Cloudflare deployment evidence remains part of release acceptance.
 
 ## Restart point
 
-If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction. The next natural roadmap slice is booking-wizard mobile/desktop UX refinement using this funnel evidence; Production remains closed.
+If interrupted during Build 326, do **not** redo Builds 324/325 and do not trust old Production-freeze notes. Verify the current head of `build326-booking-retention-rebooking`, inspect the first failing Current Source Gate authority, and continue there. `dev` and `main` must remain on Build 325 until the Build 326 feature SHA passes feature source and Cloudflare evidence.
+
+After Build 326 is fully synchronized GREEN, choose the next unfinished roadmap slice from current repository evidence rather than a stale build number. The broader agreed sequence remains retention/booking analytics follow-through, maintenance/fleet business rules, and then deeper payment/Production-readiness work unless a higher-priority defect is discovered.
