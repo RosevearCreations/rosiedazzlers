@@ -37,8 +37,12 @@ export async function onRequestPost({ request, env }) {
     if (normalized.kind === "interest_status") {
       const current = await fetchInterestById(env, normalized.interest_id);
       if (!current) return withCors(json({ ok: false, error: "Maintenance interest request not found." }, 404));
-      if (["scheduled", "converted"].includes(String(current.status || "").toLowerCase())) {
+      const currentStatus = String(current.status || "").toLowerCase();
+      if (["scheduled", "converted"].includes(currentStatus) || current.converted_at) {
         return withCors(json({ ok: false, error: "Scheduled or converted interest is locked to its approved booking workflow." }, 409));
+      }
+      if (currentStatus === "unsubscribed" && normalized.status !== "unsubscribed") {
+        return withCors(json({ ok: false, error: "Unsubscribed maintenance interest cannot be reactivated from this workbench." }, 409));
       }
       const updated = await updateInterestStatus(env, normalized.interest_id, normalized.status);
       return withCors(json({
@@ -145,7 +149,7 @@ async function fetchInterestRows(env, limit) {
 }
 
 async function fetchInterestById(env, id) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?select=id,status&id=eq.${encodeURIComponent(id)}&limit=1`, {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?select=id,status,converted_at,closed_at&id=eq.${encodeURIComponent(id)}&limit=1`, {
     headers: serviceHeaders(env)
   });
   if (!res.ok) throw new Error(`maintenance_interest_lookup_failed_${res.status}`);
@@ -154,10 +158,11 @@ async function fetchInterestById(env, id) {
 }
 
 async function updateInterestStatus(env, id, status) {
+  const now = new Date().toISOString();
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/membership_interest_requests?id=eq.${encodeURIComponent(id)}`, {
     method: "PATCH",
     headers: { ...serviceHeaders(env), Prefer: "return=representation" },
-    body: JSON.stringify({ status, updated_at: new Date().toISOString() })
+    body: JSON.stringify({ status, updated_at: now, closed_at: status === "closed" ? now : null })
   });
   const rows = await res.json().catch(() => []);
   if (!res.ok || !Array.isArray(rows) || !rows[0]) throw new Error(`maintenance_interest_update_failed_${res.status}`);
