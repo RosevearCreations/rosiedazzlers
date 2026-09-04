@@ -65,9 +65,11 @@ jobs:
       - name: Validate current recovery authority
         run: |
           bash -n scripts/cloudflare_pages_development.sh
+          bash -n scripts/cloudflare_development_rollback.sh
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
           python scripts/release_hygiene_check.py
+          python scripts/release_rollback_recovery_check.py
 
       - name: Observe or recover exact Development deployment through canonical helper
         shell: bash
@@ -84,5 +86,6 @@ jobs:
             echo "- Requested action: \`${RECOVERY_ACTION}\`"
             echo "- Observe is non-mutating."
             echo "- Repair requires exact SHA confirmation and the canonical helper independently proves a non-terminal Development preview before deletion/recreation."
+            echo "- Rollback readiness is a separate read-only prior-SHA drill and never moves Git refs."
             echo "- Production deployment mutation is forbidden."
           } >> "$GITHUB_STEP_SUMMARY"
