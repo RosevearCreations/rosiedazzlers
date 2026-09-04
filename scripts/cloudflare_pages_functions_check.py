@@ -10,6 +10,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 FUNCTIONS = ROOT / "functions"
 API = FUNCTIONS / "api"
+NODE_CHECK_TIMEOUT_SECONDS = 30
 
 
 def fail(msg: str) -> None:
@@ -56,6 +57,9 @@ def main() -> int:
 
     # Full repo syntax checks are expensive in the ChatGPT sandbox. Keep the broad static
     # Cloudflare checks above, then syntax-check the files most likely to break this pass.
+    # GitHub hosted runners can occasionally take more than 10 seconds to start one node
+    # syntax process under load, so allow a bounded 30 seconds per critical file and report
+    # a clean file-specific failure instead of leaking a Python TimeoutExpired traceback.
     critical_patterns = (
         "functions/api/admin/social_",
         "functions/api/social_",
@@ -76,9 +80,20 @@ def main() -> int:
     )
     critical_files = [path for path in js_files if path.relative_to(ROOT).as_posix().startswith(critical_patterns)]
     for path in critical_files:
-        proc = subprocess.run(["node", "--check", str(path)], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, timeout=10)
+        rel = path.relative_to(ROOT).as_posix()
+        try:
+            proc = subprocess.run(
+                ["node", "--check", str(path)],
+                cwd=ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=NODE_CHECK_TIMEOUT_SECONDS,
+            )
+        except subprocess.TimeoutExpired:
+            fail(f"node --check timed out for {rel} after {NODE_CHECK_TIMEOUT_SECONDS} seconds")
         if proc.returncode != 0:
-            fail(f"node --check failed for {path.relative_to(ROOT).as_posix()}\n{proc.stderr or proc.stdout}")
+            fail(f"node --check failed for {rel}\n{proc.stderr or proc.stdout}")
 
     print(f"Cloudflare Pages Functions static check passed across {len(js_files)} JS files; syntax-checked {len(critical_files)} critical changed files.")
     return 0
