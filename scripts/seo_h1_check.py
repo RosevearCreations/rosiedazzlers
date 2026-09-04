@@ -1,103 +1,89 @@
 #!/usr/bin/env python3
-"""Check exposed HTML pages for more than one H1 and retain current public conversion/proof/customer guards."""
+"""Validate the one-H1 contract for every public URL published in sitemap.xml."""
 from __future__ import annotations
 
-import re
-import subprocess
 import sys
+import xml.etree.ElementTree as ET
+from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
+SITEMAP = ROOT / "sitemap.xml"
 
-def run_guard(path: Path) -> int:
-    proc = subprocess.run(
-        [sys.executable, str(path)],
-        cwd=ROOT,
-        text=True,
-        capture_output=True,
-    )
-    if proc.stdout.strip():
-        print(proc.stdout.strip())
-    if proc.stderr.strip():
-        print(proc.stderr.strip(), file=sys.stderr)
-    return proc.returncode
+
+class PageParser(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.h1_depth = 0
+        self.h1s: list[list[str]] = []
+        self.noindex = False
+
+    def handle_starttag(self, tag: str, attrs) -> None:
+        tag = tag.lower()
+        attr = {str(k).lower(): (v or "") for k, v in attrs}
+        if tag == "h1":
+            self.h1_depth += 1
+            if self.h1_depth == 1:
+                self.h1s.append([])
+        elif tag == "meta" and attr.get("name", "").lower() == "robots":
+            if "noindex" in attr.get("content", "").lower():
+                self.noindex = True
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag.lower() == "h1" and self.h1_depth:
+            self.h1_depth -= 1
+
+    def handle_data(self, data: str) -> None:
+        if self.h1_depth and self.h1s:
+            self.h1s[-1].append(data)
+
+
+def resolve_public_file(url: str) -> Path | None:
+    path = urlparse(url).path
+    if path in ("", "/"):
+        candidates = [ROOT / "index.html"]
+    else:
+        rel = path.strip("/")
+        candidates = [ROOT / rel / "index.html", ROOT / f"{rel}.html"]
+    return next((candidate for candidate in candidates if candidate.is_file()), None)
+
+
+def sitemap_urls() -> list[str]:
+    root = ET.parse(SITEMAP).getroot()
+    return [node.text.strip() for node in root.findall("{*}url/{*}loc") if node.text and node.text.strip()]
+
 
 def main() -> int:
-    bad = []
-    for path in ROOT.rglob("*.html"):
-        rel = path.relative_to(ROOT).as_posix()
-        if rel.startswith(("archive/", "node_modules/")):
+    errors: list[str] = []
+    urls = sitemap_urls()
+    if not urls:
+        errors.append("sitemap.xml contains no public URLs")
+
+    for url in urls:
+        path = resolve_public_file(url)
+        if path is None:
+            errors.append(f"{url}: no local HTML source found")
             continue
-        text = path.read_text(encoding="utf-8", errors="ignore")
-        count = len(re.findall(r"<h1\b", text, flags=re.I))
-        if count > 1:
-            bad.append((rel, count))
-    if bad:
-        print("ERROR: Pages with more than one H1:")
-        for rel, count in bad[:50]:
-            print(f"- {rel}: {count}")
+        parser = PageParser()
+        parser.feed(path.read_text(encoding="utf-8", errors="ignore"))
+        headings = [" ".join("".join(parts).split()) for parts in parser.h1s]
+        if parser.noindex:
+            errors.append(f"{url}: sitemap page is marked noindex")
+        if len(headings) != 1:
+            errors.append(f"{url}: expected exactly one H1, found {len(headings)}")
+        elif len(headings[0]) < 2:
+            errors.append(f"{url}: H1 is empty or not meaningful")
+
+    if errors:
+        print("SEO/H1 check: FAIL")
+        for error in errors:
+            print(f" - {error}")
         return 1
 
-    print("SEO/H1 check passed: no HTML file has more than one H1.")
-
-    # Build 282 is retained because it owns current public acquisition/booking paths.
-    build282 = ROOT / "scripts/build282_release_check.py"
-    if build282.exists():
-        code = run_guard(build282)
-        if code:
-            return code
-
-    # Build 283 owns the public proof/publication safety boundary.
-    build283 = ROOT / "scripts/build283_release_check.py"
-    if build283.exists():
-        code = run_guard(build283)
-        if code:
-            return code
-
-    # Build 284 owns contextual placement of real proof on service/location/use-case pages.
-    build284 = ROOT / "scripts/build284_release_check.py"
-    if build284.exists():
-        code = run_guard(build284)
-        if code:
-            return code
-
-    # Build 285 owns the authenticated customer-history -> current-booking handoff.
-    build285 = ROOT / "scripts/build285_release_check.py"
-    if build285.exists():
-        code = run_guard(build285)
-        if code:
-            return code
-
-    # Build 286 owns the authenticated completed-job -> customer-review authority.
-    build286 = ROOT / "scripts/build286_release_check.py"
-    if build286.exists():
-        code = run_guard(build286)
-        if code:
-            return code
-
-    # Build 287 owns neutral review follow-up + customer-share attribution while
-    # leaving booking/referral economics untouched.
-    build287 = ROOT / "scripts/build287_release_check.py"
-    if build287.exists():
-        code = run_guard(build287)
-        if code:
-            return code
-
-    # Build 288 owns the customer/staff privacy boundary.
-    build288 = ROOT / "scripts/build288_release_check.py"
-    if build288.exists():
-        code = run_guard(build288)
-        if code:
-            return code
-
-    # Build 289 owns accessible signed-out recovery and user-initiated weak-network retry.
-    build289 = ROOT / "scripts/build289_release_check.py"
-    if build289.exists():
-        code = run_guard(build289)
-        if code:
-            return code
-
+    print(f"SEO/H1 check: PASS ({len(urls)} sitemap pages, exactly one meaningful H1 each)")
     return 0
+
 
 if __name__ == "__main__":
     raise SystemExit(main())

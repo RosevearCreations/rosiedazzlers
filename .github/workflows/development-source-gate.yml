@@ -1,25 +1,31 @@
-name: Development Source Gate
+name: Current Source Gate
 
 on:
   push:
     branches:
       - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-development-source-gate
+  group: rosiedazzlers-current-source-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   source-gate:
-    name: Validate current Development source
+    name: Validate current source
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
-      - name: Checkout exact dev commit
+      - name: Checkout exact commit
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -34,256 +40,72 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Check current booking, pricing and Gallery syntax
+      - name: Check current JavaScript syntax
         run: |
-          node --check assets/booking-quick-start-v274.js
-          node --check assets/booking-retention-v275.js
-          node --check assets/booking-usecase-entry-v282.js
-          node --check assets/customer-rebook-v285.js
-          node --check assets/customer-review-v286.js
-          node --check assets/customer-review-share-v287.js
-          node --check assets/customer-share-entry-v287.js
-          node --check assets/customer-privacy-v288.js
-          node --check assets/account-resilience-v289.js
-          node --check assets/customer-next-actions-v293.js
-          node --check assets/customer-maintenance-authority-v294.js
+          node --check assets/admin-shell.js
+          node --check assets/contextual-help-catalog.js
+          node --check assets/contextual-help.js
+          node --check functions/api/admin/photo_library_sync.js
+          node --check functions/api/admin/photo_library_list.js
+          node --check functions/api/admin/photo_assignment_save.js
+          node --check functions/api/admin/photo_library_delete.js
+          node --check functions/api/_lib/photo-library.js
+          node --check functions/api/_lib/staff-auth.js
+          node --check functions/api/_lib/action-permissions.js
+          node --check functions/api/admin/_middleware.js
           node --check assets/client-auth.js
           node --check assets/booking-hours.js
           node --check assets/pricing-catalog-client.js
-          node --check functions/api/client/_lib/customer-safe-shape.js
-          node --check functions/api/client/profile_update.js
-          node --check functions/api/client/vehicles_save.js
-          node --check functions/api/client/vehicles_list.js
-          node --check functions/api/client/dashboard.js
-          node --check functions/api/client/reviews_save.js
           node --check functions/api/_lib/pricing-catalog.js
           node --check functions/api/landing_pages_public.js
           node --check assets/landing-page.js
           node --check functions/api/_lib/gallery-publication.js
           node --check functions/api/before_after_gallery_public.js
-          node --check functions/api/admin/gallery_approvals_list.js
-          node --check functions/api/admin/gallery_approvals_save.js
-          node --check functions/api/admin/gallery_media_candidates_list.js
-          node --check assets/contextual-proof-v284.js
-          node --check assets/visual-placeholders.js
 
-      - name: Check growth, vehicle and payment syntax
+      - name: Check durable gate syntax
         run: |
-          node --check assets/growth-settings.js
-          node --check functions/api/growth_settings_public.js
-          node --check functions/api/_lib/vehicle-catalog.js
-          node --check functions/api/vehicle_makes.js
-          node --check functions/api/vehicle_models.js
-          node --check functions/api/_lib/payment-money.js
-          node --check functions/api/_lib/quote-deposit-payments.js
-          node --check functions/api/paypal/capture-order.js
-          node --check functions/api/paypal/webhook.js
-          node --check functions/api/stripe/webhook.js
-          node --check functions/api/checkout.js
-
-      - name: Check Build 290 authorization syntax
-        run: |
-          node --check functions/api/_lib/staff-auth.js
-          node --check functions/api/_lib/action-permissions.js
-          node --check functions/api/admin/_middleware.js
-          node --check assets/admin-auth.js
-          node --check assets/admin-shell.js
-          node --check scripts/build290_action_permission_test.mjs
-
-      - name: Check Build 291 maintenance retention syntax
-        run: |
-          node --check functions/api/membership_interest_create.js
-          node --check assets/growth-settings.js
-          bash -n scripts/build291_http_smoke.sh
-
-      - name: Check Build 292 fleet workplace intake syntax
-        run: |
-          node --check functions/api/public_lead_submit.js
-          bash -n scripts/build292_http_smoke.sh
-
-      - name: Check Build 293 customer next-action syntax
-        run: |
-          node --check assets/customer-next-actions-v293.js
-          node --check assets/client-auth.js
-          bash -n scripts/build293_http_smoke.sh
-
-      - name: Check Build 294 customer maintenance authority syntax
-        run: |
-          node --check functions/api/client/vehicles_save.js
-          node --check functions/api/client/_lib/customer-safe-shape.js
-          node --check assets/customer-maintenance-authority-v294.js
-          node --check assets/client-auth.js
-          bash -n scripts/build294_http_smoke.sh
-
-      - name: Check Build 295 customer account source authority syntax
-        run: |
-          python -m py_compile scripts/build295_release_check.py
-          bash -n scripts/build295_http_smoke.sh
-          node --check functions/api/client/profile_update.js
-          node --check functions/api/client/vehicles_save.js
-
-      - name: Check Build 296 My Account maintainability extraction syntax
-        run: |
-          python -m py_compile scripts/build296_release_check.py
-          bash -n scripts/build296_http_smoke.sh
-          node --check assets/my-account-v296.js
-
-      - name: Check Build 297 Operations customer maintainability extraction syntax
-        run: |
-          python -m py_compile scripts/build297_release_check.py
-          bash -n scripts/build297_http_smoke.sh
-          node --check assets/admin-customers-v297.js
-
-      - name: Check Build 298 Operations booking quote maintainability extraction syntax
-        run: |
-          python -m py_compile scripts/build298_release_check.py
-          bash -n scripts/build298_http_smoke.sh
-          node --check assets/admin-quotes-v298.js
-
-      - name: Check Build 299 Operations booking dashboard maintainability extraction syntax
-        run: |
-          python -m py_compile scripts/build299_release_check.py
-          bash -n scripts/build299_http_smoke.sh
-          node --check assets/admin-booking-v299.js
-
-      - name: Check Development smoke helper syntax
-        run: |
+          python -m py_compile scripts/release_check.py
+          python -m py_compile scripts/seo_h1_check.py
+          python -m py_compile scripts/seo_metadata_check.py
+          python -m py_compile scripts/release_hygiene_check.py
+          python -m py_compile scripts/responsive_static_check.py
+          python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
-          bash -n scripts/build284_http_smoke.sh
-          bash -n scripts/build285_http_smoke.sh
-          bash -n scripts/build286_http_smoke.sh
-          bash -n scripts/build287_http_smoke.sh
-          bash -n scripts/build288_http_smoke.sh
-          bash -n scripts/build289_http_smoke.sh
-          bash -n scripts/build290_http_smoke.sh
-          bash -n scripts/build291_http_smoke.sh
-          bash -n scripts/build292_http_smoke.sh
-          bash -n scripts/build293_http_smoke.sh
-          bash -n scripts/build294_http_smoke.sh
-          bash -n scripts/build295_http_smoke.sh
-          bash -n scripts/build296_http_smoke.sh
-          bash -n scripts/build297_http_smoke.sh
-          bash -n scripts/build298_http_smoke.sh
-          bash -n scripts/build299_http_smoke.sh
 
-      - name: Check retained vehicle catalogue resilience
-        run: node scripts/build274_vehicle_catalog_resilience_check.mjs
-
-      - name: Check retained payment money units
-        run: node scripts/build274_payment_money_check.mjs
-
-      - name: Run retained Build 271 focused guard
-        run: python scripts/build271_release_check.py
-      - name: Run retained Build 272 focused guard
-        run: python scripts/build272_release_check.py
-      - name: Run retained Build 273 focused guard
-        run: python scripts/build273_release_check.py
-      - name: Run retained Build 274 focused guard
-        run: python scripts/build274_release_check.py
-      - name: Run retained Build 275 focused guard
-        run: python scripts/build275_release_check.py
-      - name: Run current Build 276 focused guard
-        run: python scripts/build276_release_check.py
-      - name: Run current Build 277 focused guard
-        run: python scripts/build277_release_check.py
-      - name: Run current Build 278 focused guard
-        run: python scripts/build278_release_check.py
-      - name: Run current Build 279 focused guard
-        run: python scripts/build279_release_check.py
-      - name: Run current Build 280 focused guard
-        run: python scripts/build280_release_check.py
-      - name: Run current Build 281 focused guard
-        run: python scripts/build281_release_check.py
-      - name: Run current Build 282 focused guard
-        run: python scripts/build282_release_check.py
-      - name: Run current Build 283 focused guard
-        run: python scripts/build283_release_check.py
-      - name: Run current Build 284 focused guard
-        run: python scripts/build284_release_check.py
-      - name: Run current Build 285 focused guard
-        run: python scripts/build285_release_check.py
-      - name: Run current Build 286 focused guard
-        run: python scripts/build286_release_check.py
-      - name: Run current Build 287 focused guard
-        run: python scripts/build287_release_check.py
-      - name: Run current Build 288 focused guard
-        run: python scripts/build288_release_check.py
-      - name: Run current Build 289 focused guard
-        run: python scripts/build289_release_check.py
-      - name: Run current Build 290 focused guard
-        run: python scripts/build290_release_check.py
-      - name: Run current Build 291 focused guard
-        run: python scripts/build291_release_check.py
-      - name: Run current Build 292 focused guard
-        run: python scripts/build292_release_check.py
-      - name: Run current Build 293 focused guard
-        run: python scripts/build293_release_check.py
-      - name: Run current Build 294 focused guard
-        run: python scripts/build294_release_check.py
-      - name: Run current Build 295 focused guard
-        run: python scripts/build295_release_check.py
-      - name: Run current Build 296 focused guard
-        run: python scripts/build296_release_check.py
-      - name: Run current Build 297 focused guard
-        run: python scripts/build297_release_check.py
-      - name: Run current Build 298 focused guard
-        run: python scripts/build298_release_check.py
-      - name: Run current Build 299 focused guard
-        run: python scripts/build299_release_check.py
-
-      - name: Run Build 290 role/action matrix
-        run: node scripts/build290_action_permission_test.mjs
-
-      - name: Check Build 290 forward-restore readiness
-        run: python scripts/build290_rollback_check.py
-
-      - name: Run cumulative Rosie release guard
+      - name: Run cumulative source authority
         run: python scripts/release_check.py
 
-      - name: Check one-H1 source rule
-        run: python scripts/seo_h1_check.py
+      - name: Validate public SEO metadata
+        run: python scripts/seo_metadata_check.py
+
+      - name: Validate release hygiene
+        run: python scripts/release_hygiene_check.py
+
+      - name: Validate responsive source contract
+        run: python scripts/responsive_static_check.py
 
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
-      - name: Check source whitespace/conflict markers
+      - name: Check source whitespace and conflict markers
         run: |
-          git diff --check HEAD^ -- . ':!*.md' ':!assets/admin-booking-v299.js'
+          git diff --check HEAD^ HEAD -- . ':!*.md'
           if git grep -nE '^(<<<<<<< .+|=======|>>>>>>> .+)$' -- ':!*.md'; then
             echo "::error::Merge-conflict markers remain in source."
             exit 2
           fi
 
-      - name: Development source summary
+      - name: Current source summary
         run: |
           {
-            echo "### Development Source Gate"
+            echo "### Current Source Gate"
             echo "- SHA: \`${GITHUB_SHA}\`"
-            echo "- Current booking/pricing/Gallery/growth/vehicle/payment/landing/customer syntax: PASS"
-            echo "- Build 282 use-case booking adapter syntax: PASS"
-            echo "- Build 283 proof/media publication syntax: PASS"
-            echo "- Build 284 contextual proof presentation syntax: PASS"
-            echo "- Build 285 authenticated customer-history rebook handoff syntax: PASS"
-            echo "- Build 286 completed-booking review authority syntax: PASS"
-            echo "- Build 287 review/share attribution syntax: PASS"
-            echo "- Build 288 customer/staff privacy boundary syntax: PASS"
-            echo "- Build 289 account accessibility/weak-network resilience syntax: PASS"
-            echo "- Build 290 role/action/API + forward-restore readiness syntax: PASS"
-            echo "- Build 291 maintenance retention intake syntax: PASS"
-            echo "- Build 292 fleet/workplace assessment intake syntax: PASS"
-            echo "- Build 293 customer retention next-action syntax: PASS"
-            echo "- Build 294 customer maintenance/auto-schedule authority closure syntax: PASS"
-            echo "- Build 295 customer account static-source authority cleanup: PASS"
-            echo "- Development + Build 284-295 HTTP smoke helper syntax: PASS"
-            echo "- Retained Builds 271-295 focused guards: PASS"
-            echo "- Cumulative release + one-H1 + route-copy guard: PASS"
+            echo "- Cumulative source authority: PASS"
+            echo "- Sitemap one-H1 authority: PASS"
+            echo "- Public SEO metadata/canonical/robots/structured-data authority: PASS"
+            echo "- Release hygiene authority: PASS"
+            echo "- Responsive source contract: PASS"
+            echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
-            echo "- Build 296 My Account extraction syntax/guard: PASS"
-            echo "- Build 297 Operations customer extraction syntax/guard: PASS"
-            echo "- Build 298 Operations quote extraction syntax/guard: PASS"
-            echo "- Build 299 Operations booking-dashboard extraction syntax/guard: PASS"
-            echo "- Development + Build 284-299 HTTP smoke helper syntax: PASS"
-            echo "- Retained Builds 271-299 focused guards: PASS"
-            echo "- Build 299 byte-for-byte runtime excluded only from generic whitespace inspection"
-            echo "- This gate is source-only; Cloudflare Development acceptance remains separate."
+            echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
           } >> "$GITHUB_STEP_SUMMARY"
