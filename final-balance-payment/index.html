@@ -8,7 +8,9 @@
   <meta name="robots" content="noindex,nofollow,noarchive" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .payment-shell{max-width:760px;margin:0 auto}.payment-card{padding:clamp(20px,4vw,38px)}.payment-amount{font-size:clamp(2rem,7vw,3.2rem);font-weight:800;letter-spacing:-.04em;margin:.35rem 0 1rem}.payment-state{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.payment-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.payment-meta{display:grid;gap:8px;margin-top:18px}.payment-meta div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}
+    .payment-shell{max-width:760px;margin:0 auto}.payment-card{padding:clamp(20px,4vw,38px)}.payment-amount{font-size:clamp(2rem,7vw,3.2rem);font-weight:800;letter-spacing:-.04em;margin:.35rem 0 1rem}.payment-state{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.payment-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}.payment-actions .btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}.payment-meta{display:grid;gap:8px;margin-top:18px}.payment-meta div{padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.08)}.payment-safety{margin-top:18px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
+    @media(max-width:600px){.payment-shell{max-width:100%}.payment-card{padding:18px 16px}.payment-actions{display:grid;grid-template-columns:1fr}.payment-actions .btn{width:100%;text-align:center}.payment-amount{font-size:clamp(2rem,12vw,2.8rem)}}
+    @media(max-width:420px){.payment-card{padding:16px 12px}.payment-state{align-items:flex-start;flex-direction:column}.payment-safety{padding:10px 11px}}
   </style>
 </head>
 <body data-page="final-balance-payment">
@@ -25,40 +27,13 @@
         <h1 style="margin:10px 0 6px">Final balance payment</h1>
         <p class="kicker" id="paymentIntro">Checking your secure payment request…</p>
         <div id="paymentContent" aria-live="polite"><div class="notice">Loading payment status…</div></div>
+        <div class="payment-safety"><strong>Duplicate-payment protection</strong><p class="muted" style="margin:.4rem 0 0">If you return from checkout while payment confirmation is still pending, Rosie Dazzlers temporarily hides the pay-again action. If you cancelled checkout, the same existing secure checkout is reused instead of creating another payment path.</p></div>
         <div class="panel" data-needs-visual data-visual-placeholder="secure_payment" aria-hidden="true" style="margin-top:18px;padding:0;overflow:hidden"></div>
       </article>
     </section>
   </main>
   <footer class="footer container" data-footer></footer>
   <script src="/assets/chrome.js"></script>
-  <script>
-    (function(){
-      const content=document.getElementById('paymentContent');
-      const intro=document.getElementById('paymentIntro');
-      const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-      const money=(c,currency)=>new Intl.NumberFormat('en-CA',{style:'currency',currency:currency||'CAD'}).format(Number(c||0)/100);
-      const when=value=>{try{return new Intl.DateTimeFormat('en-CA',{dateStyle:'medium',timeStyle:'short'}).format(new Date(value));}catch{return ''}};
-      const query=new URLSearchParams(location.search);
-      const requestId=(query.get('request_id')||'').trim(); const token=(query.get('token')||'').trim(); const returned=query.get('payment');
-      function problem(message){intro.textContent='Payment assistance';content.innerHTML=`<div class="notice bad"><strong>We could not open this payment request.</strong><p>${esc(message)}</p><div class="payment-actions"><a class="btn primary" href="/contact.html">Contact Rosie Dazzlers</a></div></div>`;}
-      function render(payment){
-        const state=String(payment.state||payment.status||'open').toLowerCase();
-        const amount=money(payment.amount_cents,payment.currency);
-        if(state==='paid'){
-          intro.textContent='Payment received'; content.innerHTML=`<div class="payment-state"><span class="badge">Payment received</span></div><div class="payment-amount">${esc(amount)}</div><div class="notice ok">Thank you. Rosie Dazzlers has recorded this final-balance payment${payment.paid_at?` on ${esc(when(payment.paid_at))}`:''}.</div>`; return;
-        }
-        if(state==='cancelled'||state==='expired'){
-          intro.textContent=state==='expired'?'This link has expired':'This request is closed'; content.innerHTML=`<div class="payment-state"><span class="badge">${state==='expired'?'Link expired':'Payment request closed'}</span></div><div class="payment-amount">${esc(amount)}</div><div class="notice warn">Please contact Rosie Dazzlers for an updated payment request.</div><div class="payment-actions"><a class="btn primary" href="/contact.html">Contact Rosie Dazzlers</a></div>`; return;
-        }
-        intro.textContent=returned==='cancelled'?'Your payment was not completed. The request remains open.':'Review your secure final-balance payment request.';
-        content.innerHTML=`<div class="payment-state"><span class="badge">Secure checkout</span>${payment.expires_at?`<span class="badge">Expires ${esc(when(payment.expires_at))}</span>`:''}</div><div class="payment-amount">${esc(amount)}</div><div class="payment-actions">${payment.checkout_url?`<a class="btn primary" target="_blank" rel="noopener" href="${esc(payment.checkout_url)}">Continue to secure checkout</a>`:'<a class="btn primary" href="/contact.html">Contact us to pay</a>'}<a class="btn ghost" href="/contact.html">Need help?</a></div><div class="payment-meta"><div><strong>Your card details are handled by the payment provider.</strong><br><span class="muted">Rosie Dazzlers does not ask for card numbers by email or text.</span></div></div>`;
-      }
-      async function load(){
-        if(!requestId||!token){problem('This secure link is incomplete. Please use the full link supplied by Rosie Dazzlers.');return;}
-        try{const res=await fetch(`/api/final_balance_payment_view?request_id=${encodeURIComponent(requestId)}&token=${encodeURIComponent(token)}`,{cache:'no-store',headers:{Accept:'application/json'}});const data=await res.json().catch(()=>({})); if(!res.ok && !data.payment)throw new Error(data.error||'This payment request is unavailable.'); if(data.payment){render(data.payment);if(data.error&&data.payment.state!=='open')intro.textContent=data.error;} else throw new Error(data.error||'This payment request is unavailable.');}catch(err){problem(err.message||'This payment request is unavailable.');}
-      }
-      load();
-    })();
-  </script>
+  <script type="module" src="/assets/final-balance-payment-v320.js"></script>
 </body>
 </html>
