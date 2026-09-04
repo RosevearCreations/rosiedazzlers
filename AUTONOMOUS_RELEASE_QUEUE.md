@@ -4,45 +4,40 @@ This queue records only current actionable work. Completed implementation histor
 
 ## Accepted synchronized checkpoint
 
-The last fully accepted application release is **Build 327 — Vehicle-Aware Maintenance & Fleet Rules**, exact application SHA `673d39a7d3a53a4965a0e41c455f824cdaa1b395`.
+**Build 328 — Fleet Maintenance Workbench & Staff Planning** is GREEN and closed at exact SHA `ad2e80bae60f296e6fe190c7b90516ee2b9a52a3`. At active-work start, `dev == main` on that SHA.
 
-A content-neutral cleanup checkpoint has `dev == main` at `cd92d3fa5276b8db12a1da11de467222b079293b`; its tree is identical to the accepted application tree.
+## Active — Build 329
 
-## Active — Build 328
+Branch: `build329-live-fleet-account-pipeline`
 
-Branch: `build328-fleet-maintenance-workbench`
+Scope: **Live Fleet Account Intake & Pipeline**.
 
-Scope: **Fleet Maintenance Workbench & Staff Planning**.
-
-The accepted vehicle-aware rules fixed per-vehicle reminder/eligibility behavior. The active release makes the existing staff-owned `customer_vehicles` planning fields operational without turning on automatic scheduling, recurring billing, or enrollment.
+The public fleet assessment already captures real fleet/workplace requests, but staff follow-up is not operational: the old Fleet mini-CRM is static/report-oriented and the existing lead API is read-only. The active release adds a narrow live staff pipeline over the existing `public_inquiry_leads` table.
 
 ### Acceptance checklist
 
-- Add a focused authenticated `/admin-fleet-maintenance.html` staff workbench.
-- List all saved customer vehicles, even when no completed-service history exists.
-- Merge accepted vehicle-aware reminder evidence when a stable `customer_vehicle_id` exists.
-- Show ambiguous/unmatched completed-service histories separately and keep them fail-closed.
-- Anchor all writes to a valid saved `customer_vehicles.id`.
-- Permit writes only to `service_interval_days`, `next_cleaning_due_at`, and `next_service_mileage_km`.
-- Require service intervals of 14–84 whole days or null.
-- Require due dates in `YYYY-MM-DD` format or null.
-- Require mileage targets to be whole numbers from 0–2,000,000 km, never below stored current mileage, or null.
-- Reject attempts to write customer/profile/contact fields or `auto_schedule_opt_in`.
-- Keep automatic appointment creation, recurring billing, membership enrollment and payment actions disabled.
-- Keep customer-facing vehicle APIs unchanged.
-- `scripts/fleet_maintenance_planning_test.mjs` must exercise safe writes, invalid values, automatic-scheduling rejection and deterministic due state.
-- `scripts/fleet_maintenance_planning_check.py` must remain GREEN in the cumulative Current Source Gate.
-- No database migration is introduced by this scope.
-- Exact feature SHA must pass Current Source Gate and Cloudflare feature deployment evidence.
-- Only then fast-forward `dev` to the identical SHA and require Current Source Gate plus Cloudflare Development Acceptance.
-- Only after Development is GREEN may `main` fast-forward to the identical accepted SHA.
-- Require exact-SHA `main` Current Source Gate plus Cloudflare Production deployment before calling the release GREEN.
+- Add authenticated `/admin-fleet-accounts.html` with live fleet assessment KPIs, filters, request context and follow-up controls.
+- Hard-filter pipeline reads and writes to `topic=fleet`.
+- Reuse Operations/manage-bookings staff authority; do not create a new permission model.
+- Permit staff writes only to `status` and internal `staff_note`.
+- Allow `new`, `reviewing`, `contacted`, `quoted`, `closed` and `spam` as staff-managed statuses.
+- Keep `converted` read-only; conversion must come from approved booking/quote evidence.
+- Reject attempts to edit customer/contact fields, vehicle count/cadence, booking IDs, quote IDs, converted booking IDs, recurring-service state or payment data.
+- Keep the public `/fleet` submission contract assessment-only: no quote, appointment, conversion or recurring commitment is created.
+- Render customer-supplied media as links only for HTTP/HTTPS URLs.
+- Keep quote creation in the existing quote workflow and saved-vehicle planning in `/admin-fleet-maintenance.html`.
+- Add release-number-independent durable `Fleet Account Pipeline Authority` for every `build*`, `dev` and `main` push.
+- Executable tests must prove write-field restriction, converted-status blocking, message parsing and pipeline metrics.
+- No database migration is introduced.
+- Exact feature SHA must pass Current Source Gate, Fleet Account Pipeline Authority and Cloudflare feature deployment.
+- Fast-forward `dev` only after feature GREEN; require both source authorities plus Cloudflare Development Acceptance.
+- Fast-forward `main` only after Development GREEN; require both source authorities plus Cloudflare Production deployment.
 - Finish with `dev == main` on the accepted SHA.
 
 ## Next sequential scope
 
-Do not assign the next release number until the active work is fully GREEN and synchronized. Continue through the next unfinished fleet/maintenance operating gap from current repository evidence before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
+After synchronization, choose the next unfinished fleet/maintenance operating-depth gap from current repository evidence before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
 
 ## Continuing rule
 
-Never start the next RosieDazzlers release from stale Markdown. First verify current `dev` and `main`, the prior exact accepted SHA, source gates and Cloudflare deployment evidence. Database work is never implied by a source promotion; schema changes require their own explicit migration/acceptance boundary.
+Never start the next RosieDazzlers release from stale Markdown. Verify `dev`, `main`, the prior accepted SHA and exact-SHA gates first. Source promotion never authorizes a database migration.
