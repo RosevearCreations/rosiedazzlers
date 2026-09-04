@@ -4,36 +4,34 @@ This queue records only current actionable Development work. Completed release h
 
 ## Accepted Development checkpoint
 
-Build 320 is GREEN at exact SHA `5a414276e1a2abcbe2d31ac1f24583599647df07`. Production `main` remains frozen at its last user-authorized checkpoint until the user explicitly requests another Production promotion.
+Build 321 is GREEN at exact SHA `09d4ba2e1986e1857c31451915d164fd7694e2c0`. Production `main` remains frozen at its last user-authorized checkpoint until the user explicitly requests another Production promotion.
 
-## Active — Build 321
+## Active — Build 322
 
-Scope: Payment Reconciliation Evidence.
+Scope: Release Rollback & Recovery Acceptance.
 
 Acceptance checklist:
 
-- Add one authenticated reconciliation cockpit and one read-only reconciliation authority.
-- Compare the exact persisted Stripe Checkout Session with the tracked final-balance request and booking final-payment ledger.
-- Query Stripe by GET only; never create or modify a provider object during reconciliation.
-- Block live Stripe credentials on Development and fail closed for unknown credential mode.
-- Require provider amount, currency and Rosie Dazzlers request identity to match before provider-paid evidence is treated as actionable.
-- Surface provider-paid/local-unpaid and provider-paid/finance-missing states as reconciliation-required.
-- Surface matched provider-paid + local-paid + finance-covered state as no-action-required.
-- Block identity mismatch, local/provider disagreement, complete-but-unpaid and inconclusive provider states for manual review.
-- Route unpaid expired sessions back to Payment Recovery and leave unpaid open sessions alone.
-- Do not expose Stripe session, payment-intent or provider-event reference values to the browser.
-- Do not assert webhook verification.
-- Keep finance mutation disabled because the current booking-finance writer lacks a database-enforced provider idempotency key.
-- Enforce mobile, tablet and desktop reconciliation layouts with touch-friendly controls and stacked narrow-screen cards.
-- `scripts/payment_reconciliation_check.py` must pass as part of the Current Source Gate.
+- Preserve the existing Cloudflare stuck-deployment recovery path as manual-only and Development-only.
+- Recovery observe mode must remain non-mutating.
+- Recovery repair must require the exact current `dev` SHA and independently prove the target is the exact non-terminal Development preview before mutation.
+- Add a separate manual rollback-readiness workflow for a prior exact Development SHA.
+- Rollback readiness must be read-only: no Git ref move, no Cloudflare POST/DELETE/PATCH/retry/rollback mutation and no Production mutation.
+- Require the rollback candidate to be a full 40-character SHA, present in repository history, strictly older than current `dev`, and an ancestor of current `dev`.
+- Resolve the real Cloudflare project Production branch and reject any rollback/recovery target that crosses the Production boundary.
+- Require a successful exact-SHA Cloudflare deployment for the rollback candidate on branch `dev`.
+- Require immutable deployment identity, `environment=preview`, `uses_functions=true`, static smoke and contextual-proof smoke.
+- Record current `dev`, rollback candidate, candidate distance, immutable deployment evidence and current `main` without mutating either branch.
+- Add `scripts/release_rollback_recovery_check.py` as a durable Current Source Gate authority.
+- Harden the existing recovery workflow to run the same rollback/recovery contract checks before observe/repair.
 - No database migration is introduced.
-- Exact feature SHA must pass source validation and Cloudflare feature preview.
+- Exact feature SHA must pass Current Source Gate and Cloudflare feature preview.
 - The identical SHA must then be fast-forwarded to `dev` and pass Current Source Gate plus Cloudflare Development Acceptance.
 - Stop after Development acceptance. `main` remains unchanged unless the user explicitly requests Production promotion.
 
 ## Next sequential Development scope
 
-After exact Development acceptance, select and implement the next bounded roadmap item from the remaining improvement sequence, grounded in current source.
+After Build 322 is exact-SHA GREEN on Development, implement the final remaining accepted roadmap item: a Production-readiness dashboard. It must report readiness/evidence only and must not itself authorize or perform Production promotion.
 
 ## Continuing rule
 
