@@ -7,24 +7,24 @@ This file is a living operational authority, not a release diary. Git history an
 - Repository: `RosevearCreations/rosiedazzlers`.
 - `main` remains frozen at the last user-authorized Production release until the user explicitly asks for another Production promotion.
 - `dev` is the accepted Development line and the base for ongoing sequential feature work.
-- Accepted Development checkpoint: Build 322 at exact SHA `bee75b7201ca5510b48a3bc2c0f07d487dcfb4ba`.
-- Active work: Build 323 — Production Readiness Dashboard.
-- Feature branch: `build323-production-readiness-dashboard`.
+- Accepted Development checkpoint: Build 323 at exact SHA `740d809eb069808bec2ccb411f694d5aa974f129`.
+- Active work: Build 324 — Booking Funnel Analytics & Conversion.
+- Feature branch: `build324-booking-funnel-analytics`.
 - The active build is source-only and introduces no database migration.
 
 ## Active operating contract
 
-The active build provides one I.T.-authorized evidence-only view of Production readiness without creating a Production control plane.
+The active build makes the real five-step booking funnel measurable by device without adding new customer tracking or recreating the previous high-CPU analytics pattern.
 
-- Access requires authenticated staff plus the existing `it.runtime.view` action permission; administrators retain full authorized access through the canonical role authority.
-- The readiness endpoint is GET/read-only. It performs no Git, Cloudflare, database, payment-provider or Production mutation.
-- The dashboard separates source policy from runtime evidence. Source workflow presence is not represented as a live CI run result.
-- Cloudflare Pages runtime branch/SHA/URL metadata is used only when actually present. Missing or partial runtime metadata becomes incomplete evidence rather than inferred deployment state.
-- A Production-like runtime is a blocker for Development readiness review.
-- A live Stripe credential on a Development-like runtime is a blocker. Unknown Stripe credential mode also fails closed; an unconfigured provider remains incomplete evidence.
-- The dashboard may report `ready_for_human_review`, `evidence_incomplete` or `blocked`. Ready for human review is explicitly not promotion authorization.
-- `main` remains frozen. Production promotion still requires explicit user authorization and the normal exact-SHA release process.
-- Desktop, tablet and mobile layouts are part of the acceptance contract, including device-width viewport, 44px touch controls, loading/error states and narrow-screen evidence cards.
+- Existing public analytics already records `booking_step_view`, checkout start/completion and a server-classified `device_type`; this build reuses that authority rather than adding a parallel event model.
+- Funnel metrics count unique sessions that reached each stage at least once, so page refreshes and repeated clicks do not inflate conversion.
+- The five stages are Date + Vehicle, Package, Add-ons, Customer Details, and Deposit / Payment, followed by Checkout Started and Checkout Completed.
+- Mobile, tablet, desktop and unknown-device sessions are aggregated separately.
+- Start-to-completion and checkout-completion rates are calculated per device; mobile-vs-desktop completion gaps over five percentage points are surfaced directionally.
+- The endpoint is read-only and returns only aggregate counts/rates. Raw session IDs, visitor IDs, names, email, phone and IP details are not serialized to the browser.
+- The raw-event evidence window is capped at 30 days and 2,500 rows. Reaching the cap is disclosed as bounded/truncated evidence rather than treated as exhaustive.
+- There is no background polling. The cockpit loads once and refreshes only on explicit user action/window change.
+- Desktop, tablet and mobile layouts remain part of acceptance with device-width viewport, 44px controls and narrow-screen device cards.
 
 ## Current promotion rule
 
@@ -37,10 +37,10 @@ The active build provides one I.T.-authorized evidence-only view of Production r
 
 ## Durable release authorities
 
-- `development-source-gate.yml` — cumulative source, SEO, responsive, payment, rollback/recovery and Production-readiness authorities.
-- `production_readiness_check.py` — I.T. permission, evidence-only, fail-closed runtime/provider and responsive regression authority.
+- `development-source-gate.yml` — cumulative source, SEO, responsive, payment, release-safety, Production-readiness and booking-funnel authorities.
+- `booking_funnel_device_check.py` — unique-session/device, privacy, CPU-bound and responsive regression authority.
+- `production_readiness_check.py` — I.T. evidence-only Production-readiness authority.
 - `release_rollback_recovery_check.py` — rollback/recovery safety authority.
-- `development-rollback-readiness.yml` — manual read-only prior-SHA rollback candidate drill.
 - `cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 
 ## Public SEO contract
@@ -53,4 +53,4 @@ Authenticated work screens must include useful operating/contextual Help and mus
 
 ## Restart point
 
-If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction. Production remains closed until explicitly authorized.
+If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction. The next natural roadmap slice is booking-wizard mobile/desktop UX refinement using this funnel evidence; Production remains closed.
