@@ -6,6 +6,7 @@
 
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
+import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -42,6 +43,11 @@ export async function onRequestPost({ request, env }) {
     if (!vModel) return corsJson({ error: "Missing vehicle.model" }, 400);
 
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return corsJson({ error: "Server not configured (Supabase env vars missing)" }, 500);
+
+    const customerIdentity = await resolveCheckoutCustomerIdentity({ request, env, body });
+    if (!customerIdentity.ok) {
+      return corsJson({ error: customerIdentity.error, reason: customerIdentity.reason }, customerIdentity.status || 400);
+    }
 
     const pricing = await loadPricingCatalog(env);
     const serviceAreaRaw = String(body.service_area || "").trim();
@@ -231,6 +237,8 @@ export async function onRequestPost({ request, env }) {
       vehicle_size_original: vehicleSize,
       vehicle_size_catalog_expected: vehicleSizeCatalogExpected,
       vehicle_size_review_reason: vehicleSizeReviewStatus === "needs_review" ? String(body.vehicle_size_review_reason || "Vehicle size could not be verified automatically.").trim().slice(0,500) : null,
+      customer_profile_id: customerIdentity.customer_profile_id,
+      customer_vehicle_id: customerIdentity.customer_vehicle_id,
       customer_name: body.customer_name,
       customer_email: body.customer_email,
       customer_phone: body.customer_phone || null,
