@@ -1,37 +1,46 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records only current actionable Development work. Completed release history belongs in Git history and archived evidence.
+This queue records only current actionable work. Completed implementation history belongs in Git history and archived gate/deployment evidence.
 
-## Accepted Development checkpoint
+## Accepted synchronized checkpoint
 
-Build 323 is GREEN at exact SHA `740d809eb069808bec2ccb411f694d5aa974f129`. Production `main` remains frozen at its last user-authorized checkpoint until the user explicitly requests another Production promotion.
+Build 325 — Booking Wizard Responsive UX — is GREEN and closed at exact SHA `7d8b5cb4b85986636a4a70c4bd298f6d7bc51de2`.
 
-## Active — Build 324
+At the Build 326 start boundary, both `dev` and `main` were exactly that SHA. The old instruction to keep `main` indefinitely frozen is obsolete. A build is now closed only after the accepted SHA is proven through feature, Development and Production gates and `dev == main` again.
 
-Scope: Booking Funnel Analytics & Conversion.
+## Active — Build 326
 
-Acceptance checklist:
+Branch: `build326-booking-retention-rebooking`
 
-- Reuse the existing analytics event model and server-side mobile/tablet/desktop classifier; do not add duplicate customer telemetry.
-- Add a read-only booking-funnel authority that counts unique sessions, not repeated event clicks.
-- Measure Date + Vehicle, Package, Add-ons, Customer Details, Deposit / Payment, Checkout Started and Checkout Completed.
-- Separate mobile, tablet, desktop and unknown-device funnel results.
-- Calculate start-to-completion, checkout-completion and stage drop-off rates per device.
-- Surface the mobile-vs-desktop completion gap and classify directional gaps greater than five percentage points.
-- Return aggregate evidence only; do not expose session IDs, visitor IDs, names, emails, phones or IP addresses.
-- Keep the raw-event evidence query bounded to at most 30 days and 2,500 rows and explicitly report truncation when the cap is reached.
-- No background polling; refresh only on page load or explicit window/refresh actions.
-- Add a responsive admin cockpit with mobile/tablet/desktop device cards and 44px controls.
-- `scripts/booking_funnel_device_check.py` must pass in the cumulative Current Source Gate.
-- No database migration is introduced.
-- Exact feature SHA must pass Current Source Gate and Cloudflare feature preview.
-- The identical SHA must then be fast-forwarded to `dev` and pass Current Source Gate plus Cloudflare Development Acceptance.
-- Stop after Development acceptance. `main` remains unchanged unless the user explicitly requests Production promotion.
+Scope: **Booking Completion + Retention/Rebooking Lifecycle**.
 
-## Next sequential Development scope
+The initial retention review exposed a higher-priority checkout boundary defect: Stripe and PayPal checkout success returned to `/complete`, but `/complete` is the token-protected customer job completion/sign-off page. Build 326 therefore repairs payment completion first and then adds a privacy-minimized rebooking path.
 
-After exact Development acceptance, use the funnel evidence contract as the base for the next booking-wizard mobile/desktop UX refinement build. Preserve one shared backend/business-rule authority across form factors.
+### Acceptance checklist
+
+- Keep `/complete?token=...` exclusively for customer job completion/sign-off through `/api/progress/*`.
+- Route Stripe/PayPal checkout returns to a dedicated `/booking-confirmed` surface without weakening the existing provider authorities.
+- Stripe browser confirmation must verify stored session identity, Stripe metadata booking identity, CAD currency, exact deposit amount and Stripe payment status server-side.
+- Stripe browser confirmation must not mark a booking confirmed; the signed Stripe webhook remains settlement authority.
+- PayPal return handling must continue through the existing replay-safe `/api/paypal/capture-order` authority before booking confirmation is shown.
+- Fully gift-covered checkout must receive a browser confirmation URL only after canonical `/api/checkout` has already returned `gift_only_confirm`.
+- Never expose names, emails, phones, street addresses, postal codes, plates, gift codes, booking IDs or payment IDs as rebooking prefill.
+- Rebooking may carry forward only low-risk package and vehicle-size choices; date, slot, location, contact details, acknowledgements and payment must be chosen/confirmed again.
+- Preserve the Build 324 booking funnel event vocabulary.
+- Add `booking_confirmation_view`, `booking_rebook_prompt_view`, `booking_rebook_start` and `booking_rebook_prefill_applied` evidence.
+- `booking-confirmed.html` must remain `noindex` and contain one meaningful H1.
+- `scripts/booking_completion_retention_check.py` must pass in the cumulative Current Source Gate.
+- No Build 326 database migration is introduced.
+- Exact feature SHA must pass Current Source Gate and Cloudflare feature deployment/runtime evidence.
+- Only then fast-forward `dev` to the identical SHA and require Current Source Gate plus Cloudflare Development Acceptance.
+- Only after Development is GREEN may `main` fast-forward to the identical accepted SHA.
+- Require exact-SHA `main` Current Source Gate plus Cloudflare Production deployment before calling Build 326 GREEN.
+- Finish with `dev == main` on the accepted Build 326 SHA.
+
+## Next sequential scope
+
+Do not number Build 327 until Build 326 is fully GREEN and synchronized. After Build 326 closes, select the next unfinished roadmap slice from the current repository evidence. The broader agreed direction remains retention/booking analytics follow-through, then maintenance/fleet business rules, then payment/Production-readiness depth unless a higher-priority defect is discovered.
 
 ## Continuing rule
 
-After the active build is GREEN on exact `dev`, implement the next sequential Development build from that SHA. Keep Production frozen unless the user changes the instruction.
+Never start the next RosieDazzlers build from stale Markdown. First verify current `dev` and `main`, the prior build's exact accepted SHA, source gates and Cloudflare deployment evidence. Database work is never implied by a source promotion; schema changes require their own explicit migration/acceptance boundary.
