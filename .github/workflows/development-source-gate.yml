@@ -69,6 +69,11 @@ jobs:
           node --check functions/api/admin/payment_provider_readiness.js
           node --check assets/admin-payment-acceptance-v319.js
           node --check functions/api/admin/payment_acceptance_evidence.js
+          node --check assets/admin-payment-recovery-v320.js
+          node --check functions/api/admin/payment_recovery_readiness.js
+          node --check functions/api/admin/final_balance_checkout_create.js
+          node --check assets/final-balance-payment-v320.js
+          node --check functions/api/final_balance_payment_view.js
 
       - name: Check durable gate syntax
         run: |
@@ -81,6 +86,7 @@ jobs:
           python -m py_compile scripts/final_balance_readiness_check.py
           python -m py_compile scripts/payment_provider_readiness_check.py
           python -m py_compile scripts/payment_acceptance_evidence_check.py
+          python -m py_compile scripts/payment_recovery_customer_handoff_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
@@ -110,6 +116,9 @@ jobs:
       - name: Validate payment acceptance evidence contracts
         run: python scripts/payment_acceptance_evidence_check.py
 
+      - name: Validate payment recovery and customer handoff contracts
+        run: python scripts/payment_recovery_customer_handoff_check.py
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -135,6 +144,7 @@ jobs:
             echo "- Final-balance readiness authority: PASS"
             echo "- Payment-provider readiness authority: PASS"
             echo "- Payment acceptance evidence authority: PASS"
+            echo "- Payment recovery/customer handoff authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
