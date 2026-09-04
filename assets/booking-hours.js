@@ -2,6 +2,7 @@
 // Build 191: lightweight business-hours/holiday status helper for booking-facing pages.
 // Build 282: fail-open loader for high-intent use-case booking entry presets.
 // Build 325: fail-open loader for booking wizard responsive/focus UX.
+// Build 326: measure verified rebooking entry/prefill without storing customer or payment data.
 (function attachRosieBookingHours(globalScope){
   async function loadStatus(date){
     const qs = date ? `?date=${encodeURIComponent(date)}` : '';
@@ -19,6 +20,40 @@
 
   function canonicalPath(){
     return String(location.pathname || '/').replace(/\.html$/i,'').replace(/\/+$/,'') || '/';
+  }
+
+  function analyticsTrack(event, detail={}){
+    try { globalScope.dispatchEvent(new CustomEvent('rd:analytics', { detail:{ event, ...detail } })); } catch {}
+  }
+
+  function measureBuild326RebookPrefill(){
+    if (canonicalPath() !== '/book') return;
+    const params = new URLSearchParams(location.search);
+    if (!["1","true","yes"].includes(String(params.get('rebook') || '').toLowerCase())) return;
+
+    const packageCode = String(params.get('package') || '').trim();
+    const vehicleSize = String(params.get('size') || '').trim().toLowerCase();
+    const validSize = ["small","mid","oversize"].includes(vehicleSize) ? vehicleSize : '';
+    let attempts = 0;
+
+    const check = () => {
+      attempts += 1;
+      const sizeApplied = !validSize || String(document.querySelector('#vehicle_size')?.value || '').toLowerCase() === validSize;
+      const packageApplied = !packageCode || Array.from(document.querySelectorAll('[data-package]')).some((node) =>
+        String(node.getAttribute('data-package') || '') === packageCode && node.classList.contains('active')
+      );
+
+      if (sizeApplied && packageApplied) {
+        analyticsTrack('booking_rebook_prefill_applied', {
+          has_package_prefill: !!packageCode,
+          has_size_prefill: !!validSize
+        });
+        return;
+      }
+      if (attempts < 25) setTimeout(check, 200);
+    };
+
+    check();
   }
 
   function loadBuild325WizardUX(){
@@ -49,6 +84,7 @@
     render(document);
     loadBuild325WizardUX();
     loadBuild282UseCaseEntry();
+    measureBuild326RebookPrefill();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',boot,{ once:true });
