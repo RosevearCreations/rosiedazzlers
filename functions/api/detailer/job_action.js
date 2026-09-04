@@ -2,6 +2,7 @@ import { requireStaffAccess, json, methodNotAllowed, serviceHeaders, cleanText }
 import { compareAgainstTrustedLocation } from "../_lib/booking-location.js";
 import { loadProofOfWorkStatus, saveProofOfWorkStatus } from "../_lib/proof-of-work.js";
 import { queueCustomerLiveAlert } from "../_lib/live-interaction-alerts.js";
+import { syncCompletedBookingVehicleHistory } from "../_lib/customer-vehicle-service-history.js";
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -137,13 +138,37 @@ export async function onRequestPost(context) {
 
   const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`, { method:'PATCH', headers:{...serviceHeaders(env), Prefer:'return=representation'}, body: JSON.stringify(patch) });
   if (!bookingRes.ok) return json({ error: `Could not update booking workflow. ${await bookingRes.text()}` }, 500);
-  await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, { method:'POST', headers:{...serviceHeaders(env), Prefer:'return=minimal'}, body: JSON.stringify(event) }).catch(()=>null);
   const rows = await bookingRes.json().catch(()=>[]);
+  const updatedBooking = Array.isArray(rows) ? rows[0] || null : null;
+
+  let vehicleServiceHistorySync = null;
+  if (action === 'complete' && updatedBooking) {
+    vehicleServiceHistorySync = await syncCompletedBookingVehicleHistory({ env, booking: updatedBooking }).catch((error) => ({
+      ok: false,
+      skipped: false,
+      reason: 'vehicle_history_sync_exception',
+      error: error?.message || String(error || 'Unexpected vehicle history sync error.')
+    }));
+    event.payload.vehicle_service_history_sync = {
+      ok: vehicleServiceHistorySync.ok === true,
+      skipped: vehicleServiceHistorySync.skipped === true,
+      reason: vehicleServiceHistorySync.reason || null,
+      updated_fields: Array.isArray(vehicleServiceHistorySync.updated_fields) ? vehicleServiceHistorySync.updated_fields : []
+    };
+  }
+
+  await fetch(`${env.SUPABASE_URL}/rest/v1/booking_events`, { method:'POST', headers:{...serviceHeaders(env), Prefer:'return=minimal'}, body: JSON.stringify(event) }).catch(()=>null);
   if (['dispatch','arrive','start','complete'].includes(action)) {
     const messages={dispatch:'Your detailer is on the way.',arrive:'Your detailer has arrived.',start:'Detailing work has started.',complete:'Your detailing work is complete. A summary and final payment information will follow.'};
     await queueCustomerLiveAlert({env,bookingId,eventType:`job_${action}`,title:'Rosie Dazzlers job update',message:messages[action],payload:{action}}).catch(()=>null);
   }
-  return json({ ok:true, booking: Array.isArray(rows)?rows[0]||null:null, action, next_step:action==='complete'?'generate_completed_job_summary':null });
+  return json({
+    ok:true,
+    booking:updatedBooking,
+    action,
+    vehicle_service_history_sync:vehicleServiceHistorySync,
+    next_step:action==='complete'?'generate_completed_job_summary':null
+  });
 }
 
 export const onRequestGet = methodNotAllowed;
