@@ -61,7 +61,8 @@ api = require(API, [
     'readiness = "blocked"',
     'readiness = "requested"',
     'readiness = "paid"',
-    "Tips are intentionally excluded",
+    "totalCents - depositCents - finalPaymentCents - discountCents - otherCents + refundCents",
+    "tip_cents: cents(finance.tip)",
     "Readiness is read-only.",
 ], "final-balance readiness API")
 
@@ -114,5 +115,6 @@ print("- readiness GET is read-only and fail-closed")
 print("- automatic charge/request/recurring billing are prohibited")
 print("- request and checkout mutations require explicit operator confirmation")
 print("- customer notification remains explicit and disabled in the cockpit")
+print("- service-balance formula excludes tips")
 print("- responsive UI and Operating Help are present")
 print("- no Build 317 database migration is present")
