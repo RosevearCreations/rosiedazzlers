@@ -7,24 +7,24 @@ This file is a living operational authority, not a release diary. Git history an
 - Repository: `RosevearCreations/rosiedazzlers`.
 - `main` remains frozen at the last user-authorized Production release until the user explicitly asks for another Production promotion.
 - `dev` is the accepted Development line and the base for ongoing sequential feature work.
-- Accepted Development checkpoint: Build 321 at exact SHA `09d4ba2e1986e1857c31451915d164fd7694e2c0`.
-- Active work: Build 322 — Release Rollback & Recovery Acceptance.
-- Feature branch: `build322-release-rollback-recovery-acceptance`.
+- Accepted Development checkpoint: Build 322 at exact SHA `bee75b7201ca5510b48a3bc2c0f07d487dcfb4ba`.
+- Active work: Build 323 — Production Readiness Dashboard.
+- Feature branch: `build323-production-readiness-dashboard`.
 - The active build is source-only and introduces no database migration.
 
 ## Active operating contract
 
-The active build closes the rollback/recovery roadmap item without opening a Production mutation path.
+The active build provides one I.T.-authorized evidence-only view of Production readiness without creating a Production control plane.
 
-- Existing stuck-deployment recovery remains manual-only, `dev`-only, exact-current-SHA confirmed and restricted to non-terminal Development preview deployments.
-- Recovery observe mode is non-mutating. Repair may mutate only the exact stuck Development preview after the canonical helper independently revalidates branch, SHA, preview environment and non-terminal status.
-- A new Development rollback-readiness workflow is manual-only and read-only. It never moves Git refs and never mutates Cloudflare.
-- A rollback candidate must be a full exact SHA, present in repository history, strictly older than current `dev`, and an ancestor of current `dev` rather than unrelated/divergent history.
-- The exact candidate must already have a successful Cloudflare Pages deployment on branch `dev`.
-- The immutable candidate deployment must report `environment=preview`, `uses_functions=true`, exact SHA/branch identity and must pass static plus contextual smoke checks.
-- Production branch identity is resolved from the live Cloudflare project and both rollback verification and recovery reject Production targets.
-- Rollback evidence is not authorization to move `dev`; any future Git rollback remains a separate explicit human-authorized action.
-- The rollback verifier performs Cloudflare GET/read operations only and grants GitHub Actions `contents: read` permission only.
+- Access requires authenticated staff plus the existing `it.runtime.view` action permission; administrators retain full authorized access through the canonical role authority.
+- The readiness endpoint is GET/read-only. It performs no Git, Cloudflare, database, payment-provider or Production mutation.
+- The dashboard separates source policy from runtime evidence. Source workflow presence is not represented as a live CI run result.
+- Cloudflare Pages runtime branch/SHA/URL metadata is used only when actually present. Missing or partial runtime metadata becomes incomplete evidence rather than inferred deployment state.
+- A Production-like runtime is a blocker for Development readiness review.
+- A live Stripe credential on a Development-like runtime is a blocker. Unknown Stripe credential mode also fails closed; an unconfigured provider remains incomplete evidence.
+- The dashboard may report `ready_for_human_review`, `evidence_incomplete` or `blocked`. Ready for human review is explicitly not promotion authorization.
+- `main` remains frozen. Production promotion still requires explicit user authorization and the normal exact-SHA release process.
+- Desktop, tablet and mobile layouts are part of the acceptance contract, including device-width viewport, 44px touch controls, loading/error states and narrow-screen evidence cards.
 
 ## Current promotion rule
 
@@ -37,10 +37,10 @@ The active build closes the rollback/recovery roadmap item without opening a Pro
 
 ## Durable release authorities
 
-- `development-source-gate.yml` — cumulative source, SEO, responsive, payment and rollback/recovery authorities.
-- `release_rollback_recovery_check.py` — rollback read-only, prior-SHA ancestry, immutable preview and recovery safety regression authority.
+- `development-source-gate.yml` — cumulative source, SEO, responsive, payment, rollback/recovery and Production-readiness authorities.
+- `production_readiness_check.py` — I.T. permission, evidence-only, fail-closed runtime/provider and responsive regression authority.
+- `release_rollback_recovery_check.py` — rollback/recovery safety authority.
 - `development-rollback-readiness.yml` — manual read-only prior-SHA rollback candidate drill.
-- `cloudflare-pages-recovery.yml` — manual observe/repair path for one exact stuck Development deployment.
 - `cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 
 ## Public SEO contract
@@ -53,4 +53,4 @@ Authenticated work screens must include useful operating/contextual Help and mus
 
 ## Restart point
 
-If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction. The next remaining accepted roadmap item after rollback/recovery is the Production-readiness dashboard, but Production itself remains closed.
+If interrupted, verify the active feature SHA and Current Source Gate first. Continue from the first failing authority. After the feature is accepted, promote only to `dev`, verify exact-SHA Development acceptance, and then continue to the next sequential Development build unless the user changes direction. Production remains closed until explicitly authorized.
