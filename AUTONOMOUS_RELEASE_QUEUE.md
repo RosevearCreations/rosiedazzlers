@@ -1,41 +1,33 @@
-# Rosie Dazzlers — Autonomous Release Queue
+# Rosie Dazzlers — Autonomous Development Queue
 
-This queue records only current actionable work. Completed release history belongs in Git history and archived evidence.
+This queue records only current actionable Development work. Completed release history belongs in Git history and archived evidence.
 
-## Last accepted — Build 316
+## Accepted Development checkpoint
 
-The accepted release is GREEN at exact SHA `3bbd91f1ea4a4e9e285069b32ad7e38dc4edf87b`. Before current work began, both `dev` and `main` were verified on that exact SHA. No database migration was required.
+Build 317 is GREEN at exact SHA `512ae93a7867b897a26c532cf25282997858e82f`. That SHA is also the frozen `main` checkpoint until the user explicitly requests another Production promotion.
 
-## Active — Build 317
+## Active — Build 318
 
-Scope: Final Balance Readiness & Manual Payment Handoff.
+Scope: Payment Provider Readiness & Test Acceptance.
 
 Acceptance checklist:
 
-- A single operator-facing final-balance readiness cockpit reuses the existing booking, finance and final-balance authorities.
-- Readiness distinguishes Ready, Blocked, Requested and Paid / Closed.
-- Every blocked row explains why it is blocked.
-- Calculated service balance uses the booking total and recorded finance entries without counting tips toward the service balance.
-- The readiness API is GET/read-only and does not create requests, checkout sessions, notifications or charges.
-- No automatic charge is permitted.
-- No automatic final-balance request is permitted.
-- No recurring billing is introduced.
-- Request creation requires an explicit operator action and confirmation.
-- Hosted-checkout creation/refresh requires an explicit operator action and confirmation.
-- The cockpit passes `notify_customer: false`; customer communication remains a separate deliberate action.
-- Existing final-balance request/checkout/payment infrastructure is reused rather than duplicated.
-- Operating Help explains every readiness state and the manual workflow.
-- The admin presentation remains usable on mobile, normal desktop and wide layouts.
-- `scripts/final_balance_readiness_check.py` passes and is part of the Current Source Gate.
-- The active release introduces no database migration.
-- Exact feature SHA must pass the Current Source Gate before promotion.
-- The identical SHA must pass Development/Cloudflare acceptance on `dev` before `main` promotion.
-- Exact-main source and Cloudflare deployment evidence must be successful before GREEN is declared.
+- Add one authenticated, read-only payment-provider readiness cockpit.
+- Report only derived provider state; never expose secret values.
+- Recognize the existing Stripe hosted-checkout integration without creating a checkout during readiness loading.
+- Classify Stripe credentials as test, live, unknown or not configured based only on server-side prefix inspection.
+- Block Development provider acceptance when a live Stripe secret is detected.
+- Report PayPal as not integrated until a real source integration exists; do not invent PayPal variables or sandbox success.
+- Keep the existing manual payment path available as the fail-closed fallback.
+- No automatic charge, checkout creation, customer notification or recurring billing.
+- Operating Help must explain test-ready, live-key blocking, PayPal status and manual fallback.
+- Responsive presentation must work on mobile, normal desktop and wide layouts.
+- `scripts/payment_provider_readiness_check.py` must pass as part of the Current Source Gate.
+- No database migration is introduced.
+- Exact feature SHA must pass source validation and Cloudflare feature preview.
+- The identical SHA must then be fast-forwarded to `dev` and pass Current Source Gate plus Cloudflare Development Acceptance.
+- Stop after Development acceptance. `main` remains unchanged unless the user explicitly requests Production promotion.
 
-## Promotion status
+## Continuing rule
 
-The active release remains AMBER until the final feature SHA passes, the identical SHA is accepted on `dev`, and the identical SHA is verified on `main` including Cloudflare Production deployment evidence.
-
-## After the active release
-
-Select the next business/product scope only after this release is GREEN on exact `main`. Do not pre-allocate or promote later work while the current release has an unresolved gate.
+After the active build is GREEN on exact `dev`, select and implement the next sequential Development build from that SHA. Keep Production frozen unless the user changes the instruction.
