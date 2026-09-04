@@ -280,7 +280,7 @@ export async function processMembershipReminderCandidate(env, candidate, setting
 
 async function fetchCompletedBookings(env, limit) {
   const select = [
-    "id", "customer_profile_id", "customer_name", "customer_email", "customer_phone", "postal_code",
+    "id", "customer_profile_id", "customer_vehicle_id", "customer_name", "customer_email", "customer_phone", "postal_code",
     "service_date", "service_area", "package_code", "vehicle_size", "vehicle_year", "vehicle_make", "vehicle_model", "vehicle_plate",
     "addons", "completed_at", "detailing_completed_at", "job_status", "status"
   ].join(",");
@@ -342,6 +342,12 @@ export function groupCompletedBookings(rows, savedVehiclesByProfile = new Map())
       postal_code: cleanText(row?.postal_code) || null,
       bookings: []
     };
+    if (identity.source === "booking_vehicle_link" && entry.vehicle_identity_source !== "booking_vehicle_link") {
+      entry.customer_vehicle = identity.customer_vehicle || entry.customer_vehicle;
+      entry.vehicle_identity_source = identity.source;
+      entry.vehicle_identity_reliable = true;
+      entry.vehicle_label = identity.label || entry.vehicle_label;
+    }
     entry.bookings.push({ ...row, service_at: serviceAt });
     if (!entry.full_name && row?.customer_name) entry.full_name = cleanText(row.customer_name);
     if (!entry.email && email) entry.email = email;
@@ -381,6 +387,33 @@ export function groupCompletedBookings(rows, savedVehiclesByProfile = new Map())
 
 function resolveVehicleIdentity(row, savedVehicles, customerKey) {
   const spec = bookingVehicleSpec(row);
+  const linkedVehicleId = cleanText(row?.customer_vehicle_id);
+  if (linkedVehicleId) {
+    const linked = (Array.isArray(savedVehicles) ? savedVehicles : []).find((vehicle) => cleanText(vehicle?.id) === linkedVehicleId) || null;
+    if (linked?.id) {
+      const internalKey = `saved:${linkedVehicleId}`;
+      return {
+        internal_key: internalKey,
+        maintenance_vehicle_key: opaqueVehicleKey(`${customerKey}|${internalKey}`),
+        source: "booking_vehicle_link",
+        reliable: true,
+        label: vehicleLabel(spec, linked),
+        customer_vehicle: linked
+      };
+    }
+
+    const bookingId = cleanText(row?.id) || linkedVehicleId;
+    const internalKey = `linked-invalid:${bookingId}`;
+    return {
+      internal_key: internalKey,
+      maintenance_vehicle_key: opaqueVehicleKey(`${customerKey}|${internalKey}`),
+      source: "booking_vehicle_link_invalid",
+      reliable: false,
+      label: vehicleLabel(spec, null),
+      customer_vehicle: null
+    };
+  }
+
   const saved = matchSavedVehicle(spec, savedVehicles);
   const label = vehicleLabel(spec, saved);
   if (saved?.id) {
@@ -506,7 +539,7 @@ function inferCycleDays(bookings, preferredCycleDays, fallbackDays) {
   if (!Array.isArray(bookings) || bookings.length < 2) return preferred;
   const diffs = [];
   const sorted = [...bookings].sort((a, b) => String(a.service_at).localeCompare(String(b.service_at)));
-  for (let i = 1; i < sorted.length; i++) {
+  for (let i = 1; i < sorted.length; i += 1) {
     const prev = parseDate(sorted[i - 1].service_at);
     const curr = parseDate(sorted[i].service_at);
     if (!prev || !curr) continue;
