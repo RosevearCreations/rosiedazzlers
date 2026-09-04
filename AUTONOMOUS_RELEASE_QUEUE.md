@@ -4,39 +4,39 @@ This queue records only current actionable work. Completed implementation histor
 
 ## Accepted synchronized checkpoint
 
-**Build 329 — Live Fleet Account Intake & Pipeline** is GREEN and closed at exact SHA `7a498b084b5f777418b8974517017be39bfb89c0`. At active-work start, `dev == main` on that SHA.
+**Build 330 — Maintenance Retention Review & Follow-up** is GREEN and closed at exact SHA `89aeab07d9e8f88fa020e3713649e21aa4a4a875`. At active-work start, `dev == main` on that SHA.
 
-## Active — Build 330
+## Active — Build 331
 
-Branch: `build330-maintenance-retention-followup`
+Branch: `build331-durable-booking-vehicle-identity`
 
-Scope: **Maintenance Retention Review & Follow-up**.
+Scope: **Durable Booking Vehicle Identity**.
 
-The current Value Additions page can display maintenance waitlist and reminder-candidate evidence but cannot operate a controlled staff follow-up workflow. The live database already supplies suitable schema authorities, so this release remains schema-free.
+The accepted maintenance workflow still has to reconstruct completed-booking vehicle identity from snapshots. This release adds a nullable durable booking→saved-vehicle authority and an explicit staff resolution workflow. It does not auto-link historical data and does not trust anonymous browser-supplied saved-vehicle IDs.
 
 ### Acceptance checklist
 
-- Add authenticated `/admin-maintenance-retention.html` with live waitlist and vehicle-aware reminder-candidate review.
-- Permit maintenance-interest writes only to `new`, `contacted`, `interested`, `closed`, or `unsubscribed`.
-- Explicitly block `scheduled` and `converted`; those states require approved booking/conversion evidence.
-- Fix the active staff workflow to align with the live membership-interest database status constraint.
-- Derive reminder review targets server-side from the current vehicle-aware candidate engine; never trust client-supplied customer/vehicle identity.
-- Record review evidence only in existing `vehicle_history_events` with `customer_visible=false`.
-- Allow internal review outcomes only: `reviewed`, `contacted`, `no_contact_needed`.
-- Block `contacted` when vehicle identity is unresolved.
-- Do not write to `notification_events`, send email/SMS, suppress the reminder engine, create bookings, reserve capacity, mark conversion, touch payment providers, or enable recurring billing.
-- Add release-number-independent Maintenance Retention Follow-up Authority for every `build*`, `dev`, and `main` push.
-- Executable synthetic tests must prove safe status transitions, forbidden conversion/scheduling, internal-only review events, and metrics because the live database currently has no completed bookings.
-- No database migration is introduced.
-- Exact feature SHA must pass Current Source Gate, Maintenance Retention Follow-up Authority and Cloudflare feature deployment.
-- Fast-forward `dev` only after feature GREEN; require both source authorities plus Cloudflare Development Acceptance.
-- Fast-forward `main` only after Development GREEN; require both source authorities plus Cloudflare Production deployment.
+- Add nullable `bookings.customer_vehicle_id uuid`.
+- Add FK to `customer_vehicles(id)` with `ON DELETE SET NULL` plus a partial index.
+- Require a booking customer profile whenever `customer_vehicle_id` is non-null.
+- Do not auto-backfill any historical booking during migration.
+- Add staff-only `/api/admin/booking_vehicle_identity` using `manage_bookings` authority.
+- Verify the selected saved vehicle belongs to the booking's existing `customer_profile_id` before linking.
+- Permit explicit unlinking without changing customer ownership or any other booking field.
+- Add authenticated `/admin-booking-vehicle-identity.html` with unresolved/all views and saved-vehicle candidates scoped to the booking profile.
+- Keep booking status, job status, date/slot, pricing, payment, membership and recurring scheduling out of this write path.
+- Keep guest checkout valid and nullable; do not trust a client-supplied saved-vehicle UUID.
+- Add release-number-independent Booking Vehicle Identity Authority for every `build*`, `dev`, and `main` push.
+- Exact feature SHA must pass Current Source Gate, Booking Vehicle Identity Authority and Cloudflare feature deployment.
+- Apply and verify the additive schema as a separate deliberate migration step; source promotion alone does not apply it.
+- Fast-forward `dev` only after feature/source/schema evidence is GREEN; require source authorities plus Cloudflare Development Acceptance.
+- Fast-forward `main` only after Development is GREEN; require source authorities plus Cloudflare Production deployment.
 - Finish with `dev == main` on the accepted SHA.
 
 ## Next sequential scope
 
-After synchronization, re-inspect current fleet/maintenance evidence. Historical booking-to-saved-vehicle identity resolution remains a likely next candidate, but it requires explicit schema authority because bookings currently do not carry a durable `customer_vehicle_id` link.
+After synchronization, re-inspect the maintenance reader and checkout ownership path. A likely next slice is to make completed-history grouping prefer the durable booking vehicle key and, only where authenticated ownership can be proved server-side, persist the saved vehicle prospectively at booking time.
 
 ## Continuing rule
 
-Never start the next RosieDazzlers release from stale Markdown. Verify `dev`, `main`, the prior accepted SHA and exact-SHA gates first. Source promotion never authorizes a database migration.
+Never start the next RosieDazzlers release from stale Markdown. Verify `dev`, `main`, the prior accepted SHA and exact-SHA gates first. Database migrations remain a separate acceptance boundary from source promotion.
