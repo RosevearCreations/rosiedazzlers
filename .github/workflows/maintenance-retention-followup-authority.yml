@@ -1,0 +1,56 @@
+name: Maintenance Retention Follow-up Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-maintenance-retention-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate maintenance retention follow-up
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check functions/api/_lib/maintenance-retention-followup.js
+          node --check functions/api/admin/customer_maintenance_followup.js
+          node --check scripts/maintenance_retention_followup_test.mjs
+      - name: Check authority syntax
+        run: python -m py_compile scripts/maintenance_retention_followup_check.py
+      - name: Validate maintenance retention follow-up contract
+        run: python scripts/maintenance_retention_followup_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo '### Maintenance Retention Follow-up Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Safe maintenance-interest status authority: PASS'
+            echo '- Internal vehicle-history review authority: PASS'
+            echo '- No notification dispatch, booking mutation, conversion, payment or recurring billing authority: PASS'
+            echo '- Executable contract tests: PASS'
+          } >> "$GITHUB_STEP_SUMMARY"
