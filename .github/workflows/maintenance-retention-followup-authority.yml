@@ -39,6 +39,7 @@ jobs:
         run: |
           node --check functions/api/_lib/maintenance-retention-followup.js
           node --check functions/api/admin/customer_maintenance_followup.js
+          node --check functions/api/admin/membership_interest_list.js
           node --check scripts/maintenance_retention_followup_test.mjs
       - name: Check authority syntax
         run: python -m py_compile scripts/maintenance_retention_followup_check.py
@@ -49,7 +50,8 @@ jobs:
           {
             echo '### Maintenance Retention Follow-up Authority'
             echo "- SHA: \`${GITHUB_SHA}\`"
-            echo '- Safe maintenance-interest status authority: PASS'
+            echo '- Live maintenance-interest status alignment: PASS'
+            echo '- Unsubscribe reactivation lock: PASS'
             echo '- Internal vehicle-history review authority: PASS'
             echo '- No notification dispatch, booking mutation, conversion, payment or recurring billing authority: PASS'
             echo '- Executable contract tests: PASS'
