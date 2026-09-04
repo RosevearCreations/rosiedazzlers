@@ -4,36 +4,35 @@ This queue records only current actionable work. Completed implementation histor
 
 ## Accepted synchronized checkpoint
 
-**Build 326 — Booking Completion + Retention/Rebooking Lifecycle** is GREEN and closed at exact SHA `3f3cf6a6c109b99a82bfb8bf38ebd62856908b4f`.
+**Build 327 — Vehicle-Aware Maintenance & Fleet Rules** is GREEN and closed at exact application SHA `673d39a7d3a53a4965a0e41c455f824cdaa1b395`.
 
-At the current-work start boundary, both `dev` and `main` were exactly that SHA. A release is closed only after the accepted SHA is proven through feature, Development and Production gates and `dev == main` again.
+A content-neutral cleanup checkpoint has `dev == main` at `cd92d3fa5276b8db12a1da11de467222b079293b`; its tree is identical to the accepted Build 327 tree.
 
-## Active — Build 327
+## Active — Build 328
 
-Branch: `build327-vehicle-aware-maintenance-fleet`
+Branch: `build328-fleet-maintenance-workbench`
 
-Scope: **Vehicle-Aware Maintenance & Fleet Rules**.
+Scope: **Fleet Maintenance Workbench & Staff Planning**.
 
-The existing maintenance system correctly keeps membership capture interest-only and blocks automatic enrollment, recurring billing and appointment creation. The active defect is that reminder eligibility/cadence/history were customer-wide, allowing multiple household/fleet vehicles to influence one another.
+Build 327 fixed vehicle-specific reminder/eligibility rules. Build 328 makes the existing staff-owned `customer_vehicles` planning fields operational without turning on automatic scheduling, recurring billing, or enrollment.
 
 ### Acceptance checklist
 
-- Keep maintenance interest/waitlist state customer-level.
-- Group completed-service history by reliable vehicle identity before calculating Complete Detail eligibility, service cadence or reminder due state.
-- Prefer an unambiguous saved `customer_vehicles` match using normalized year/make/model/size.
-- When no saved vehicle match exists, permit a normalized plate to identify the vehicle internally but never expose raw plate text in reminder keys/payloads.
-- When neither reliable path exists, isolate the booking and fail reminder eligibility closed with `vehicle_identity_required`; never blend uncertain histories by customer or generic vehicle spec.
-- Keep Complete Detail eligibility vehicle-specific.
-- Infer cadence only within one vehicle history.
-- Honor staff-owned `service_interval_days` before profile/plan fallback cadence.
-- Honor staff-owned `next_cleaning_due_at` as the vehicle-level due-date override.
-- Keep customer writes blocked from `next_cleaning_due_at`, `next_service_mileage_km`, `service_interval_days` and `auto_schedule_opt_in`.
-- Key new reminder history by an opaque vehicle key so one vehicle cannot suppress another vehicle's reminder.
-- Keep `auto_schedule_opt_in` non-operative in this scope; no automatic appointment creation.
-- Preserve the interest-only, no-recurring-billing contracts.
-- `scripts/vehicle_maintenance_rules_test.mjs` must prove multi-vehicle separation, saved-vehicle stability and ambiguous-history fail-closed behavior.
-- `scripts/maintenance_retention_check.py` must execute the vehicle rule test and remain GREEN in the cumulative Current Source Gate.
-- No database migration is introduced by this active scope.
+- Add a focused authenticated `/admin-fleet-maintenance.html` staff workbench.
+- List all saved customer vehicles, even when no completed-service history exists.
+- Merge Build 327 reminder evidence when a stable `customer_vehicle_id` exists.
+- Show ambiguous/unmatched completed-service histories separately and keep them fail-closed.
+- Anchor all writes to a valid saved `customer_vehicles.id`.
+- Permit writes only to `service_interval_days`, `next_cleaning_due_at`, and `next_service_mileage_km`.
+- Require service intervals of 14–84 whole days or null.
+- Require due dates in `YYYY-MM-DD` format or null.
+- Require mileage targets to be whole numbers from 0–2,000,000 km, never below stored current mileage, or null.
+- Reject attempts to write customer/profile/contact fields or `auto_schedule_opt_in`.
+- Keep automatic appointment creation, recurring billing, membership enrollment and payment actions disabled.
+- Keep customer-facing vehicle APIs unchanged.
+- `scripts/fleet_maintenance_planning_test.mjs` must exercise safe writes, invalid values, automatic-scheduling rejection and deterministic due state.
+- `scripts/fleet_maintenance_planning_check.py` must remain GREEN in the cumulative Current Source Gate.
+- No database migration is introduced by this scope.
 - Exact feature SHA must pass Current Source Gate and Cloudflare feature deployment evidence.
 - Only then fast-forward `dev` to the identical SHA and require Current Source Gate plus Cloudflare Development Acceptance.
 - Only after Development is GREEN may `main` fast-forward to the identical accepted SHA.
@@ -42,7 +41,7 @@ The existing maintenance system correctly keeps membership capture interest-only
 
 ## Next sequential scope
 
-Do not assign the next release number until the active work is fully GREEN and synchronized. Then select the next unfinished roadmap slice from current repository evidence. Continue through remaining fleet/maintenance operating depth before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
+Do not assign the next release number until Build 328 is fully GREEN and synchronized. Continue through the next unfinished fleet/maintenance operating gap from current repository evidence before deeper payment/Production-readiness work unless a higher-priority defect is discovered.
 
 ## Continuing rule
 
