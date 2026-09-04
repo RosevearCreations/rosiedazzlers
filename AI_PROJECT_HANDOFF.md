@@ -7,25 +7,26 @@ This file is a living operational authority, not a release diary. Git history an
 - Repository: `RosevearCreations/rosiedazzlers`.
 - `main` remains frozen at the last user-authorized Production release until the user explicitly asks for another Production promotion.
 - `dev` is the accepted Development line and the base for ongoing sequential feature work.
-- Accepted Development checkpoint: Build 319 at exact SHA `498c7cb83910f09df67a51b444278733d825b0f2`.
-- Active work: Build 320 — Payment Recovery & Customer Handoff.
-- Feature branch: `build320-payment-recovery-customer-handoff`.
+- Accepted Development checkpoint: Build 320 at exact SHA `5a414276e1a2abcbe2d31ac1f24583599647df07`.
+- Active work: Build 321 — Payment Reconciliation Evidence.
+- Feature branch: `build321-payment-reconciliation`.
 - The active build is source-only and introduces no database migration.
 
 ## Active operating contract
 
-The active build closes duplicate-payment risk around failed, expired and interrupted final-balance checkout handoffs.
+The active build closes the visibility gap between Stripe Checkout Session state, the tracked final-balance request, and the booking final-payment ledger.
 
-- Recovery readiness is read-only and groups tracked requests into recovery-required, existing-checkout-guarded, checkout-needed/manual, and paid/closed states.
-- The hosted-checkout mutation verifies an existing Stripe Checkout Session before any replacement is considered.
-- Stripe sessions that remain open are reused rather than duplicated.
-- A replacement Stripe session is permitted only after the provider reports the persisted prior session as expired.
-- Provider-paid, complete-but-unreconciled, or unknown states fail closed and require reconciliation instead of creating another payment path.
-- Expired/cancelled request recovery requires explicit operator confirmation, a recovery reason, and a new future expiry.
-- The recovery cockpit never automatically charges or notifies a customer and always submits `notify_customer: false`.
-- A customer returning from checkout is treated as unconfirmed until Rosie Dazzlers data records the payment. While confirmation is unresolved, the public page hides pay-again actions.
-- A customer who cancels checkout may return to the same persisted checkout URL; cancellation does not create another provider session.
-- Mobile, tablet and desktop layouts remain part of the acceptance contract with touch-friendly actions and stacked narrow-screen recovery cards.
+- Reconciliation is read-only. It does not charge, create a checkout, write finance, notify a customer or alter payment state.
+- The server queries the exact persisted Stripe Checkout Session by GET only when environment policy permits provider contact.
+- Live Stripe credentials are blocked for Development reconciliation; unknown credential mode also fails closed.
+- Provider amount, currency and Rosie Dazzlers request identity must match before provider-paid evidence is considered actionable.
+- Provider-paid/local-unpaid and provider-paid/finance-missing states are surfaced as reconciliation-required, not silently repaired.
+- Matched provider-paid + local-paid + finance-covered state is reported as reconciled with no action required.
+- Identity mismatch, local/provider disagreement, complete-but-unpaid, provider errors and inconclusive states are blocked for manual review.
+- Unpaid open provider sessions remain active; unpaid expired sessions route back to Payment Recovery.
+- Webhook verification is not asserted and provider reference values are not exposed to the browser.
+- The existing booking-finance writer appends events but has no database-enforced provider idempotency key. Automatic finance posting is therefore intentionally out of scope rather than risking a duplicate final-payment event.
+- Mobile, tablet and desktop layouts remain part of the release contract.
 
 ## Current promotion rule
 
@@ -39,9 +40,9 @@ The active build closes duplicate-payment risk around failed, expired and interr
 ## Durable release authorities
 
 - `development-source-gate.yml` — cumulative source, SEO, hygiene, responsive, maintenance/retention, final-balance and payment authorities.
-- `payment_recovery_customer_handoff_check.py` — duplicate-checkout, recovery confirmation, customer-return and mobile regression authority.
+- `payment_reconciliation_check.py` — provider/local/finance comparison, read-only, credential-boundary and responsive regression authority.
+- `payment_recovery_customer_handoff_check.py` — duplicate-checkout, recovery confirmation and customer-return authority.
 - `cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
-- `cloudflare-pages-recovery.yml` — manual-only observe/repair path with exact-SHA confirmation and Production exclusion.
 
 ## Public SEO contract
 
