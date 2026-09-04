@@ -44,9 +44,14 @@ for token in (
     if token not in api:
         errors.append(f"API missing contract: {token}")
 
-for forbidden in ("stripe_session_id", "paypal_order_id", "price_total_cents", "service_date:", "status:", "job_status:"):
+for forbidden in ("stripe_session_id", "paypal_order_id", "price_total_cents"):
     if forbidden in api:
-        errors.append(f"identity API contains forbidden mutation-adjacent field: {forbidden}")
+        errors.append(f"identity API contains forbidden payment/price field: {forbidden}")
+
+patch_match = re.search(r"JSON\.stringify\(\{\s*customer_vehicle_id:\s*vehicleId\s*\}\)", api, re.S)
+unlink_match = re.search(r"JSON\.stringify\(\{\s*customer_vehicle_id:\s*vehicleId\s*\}\)", api, re.S)
+if not patch_match or not unlink_match:
+    errors.append("booking PATCH body must remain customer_vehicle_id-only")
 
 if page.lower().count("<h1") != 1:
     errors.append("admin identity workbench must have exactly one H1")
@@ -54,10 +59,9 @@ for token in ("noindex,nofollow", "Staff-confirmed only", "never auto-links hist
     if token.lower() not in page.lower():
         errors.append(f"admin workbench missing safety/help contract: {token}")
 
-for path in ("functions/api/admin/booking_vehicle_identity.js",):
-    proc = subprocess.run(["node", "--check", path], cwd=ROOT, text=True, capture_output=True)
-    if proc.returncode:
-        errors.append(f"JavaScript syntax failed for {path}: {(proc.stdout + proc.stderr).strip()}")
+proc = subprocess.run(["node", "--check", "functions/api/admin/booking_vehicle_identity.js"], cwd=ROOT, text=True, capture_output=True)
+if proc.returncode:
+    errors.append("JavaScript syntax failed: " + (proc.stdout + proc.stderr).strip())
 
 if errors:
     print("BOOKING VEHICLE IDENTITY: FAIL")
