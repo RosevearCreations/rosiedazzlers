@@ -1,0 +1,55 @@
+name: Fleet Account Pipeline Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-fleet-account-pipeline-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fleet-account-pipeline:
+    name: Validate fleet account pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check functions/api/_lib/fleet-account-pipeline.js
+          node --check functions/api/admin/fleet_account_pipeline.js
+      - name: Check authority syntax
+        run: python -m py_compile scripts/fleet_account_pipeline_check.py
+      - name: Validate fleet account pipeline contract
+        run: python scripts/fleet_account_pipeline_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo "### Fleet Account Pipeline Authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Staff write boundary: status + internal note only"
+            echo "- Conversion authority remains outside this workbench"
+            echo "- Quote/appointment/recurring billing creation: blocked"
+            echo "- Executable fleet pipeline tests: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"
