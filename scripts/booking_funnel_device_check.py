@@ -28,11 +28,8 @@ page = require(PAGE, [
     "Unique-session conversion",
     "No customer identity or raw session IDs are returned",
     "No background polling",
-    "Date + vehicle",
-    "Package",
-    "Add-ons",
-    "Customer details",
-    "Deposit / payment",
+    "What do the five stages mean?",
+    "Step 1 is date and vehicle",
     "Operating Help",
     "@media(max-width:820px)",
     "@media(max-width:600px)",
@@ -59,6 +56,11 @@ api = require(API, [
     "MAX_DAYS = 30",
     "MAX_ROWS = 2500",
     '"mobile", "tablet", "desktop", "unknown"',
+    '{ key: "step_1", label: "Date + vehicle" }',
+    '{ key: "step_2", label: "Package" }',
+    '{ key: "step_3", label: "Add-ons" }',
+    '{ key: "step_4", label: "Customer details" }',
+    '{ key: "step_5", label: "Deposit / payment" }',
     'event_type === "booking_step_view"',
     'event_type === "checkout_started"',
     'event_type === "checkout_completed"',
@@ -129,6 +131,7 @@ if errors:
 
 print("BOOKING FUNNEL / DEVICE ANALYTICS: PASS")
 print("- existing analytics device classification is reused")
+print("- canonical stage labels are enforced at the API authority and explained in the page help")
 print("- booking stages are aggregated by unique session")
 print("- mobile/tablet/desktop conversion and checkout abandonment are separated")
 print("- no raw session/customer identity is returned to the browser")
