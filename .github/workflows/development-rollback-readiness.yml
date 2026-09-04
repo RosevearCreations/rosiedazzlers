@@ -1,0 +1,69 @@
+name: Development Rollback Readiness
+
+on:
+  workflow_dispatch:
+    inputs:
+      rollback_sha:
+        description: "Exact prior dev SHA to verify as a rollback candidate"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-development-rollback-readiness
+  cancel-in-progress: false
+
+env:
+  CF_PROJECT_NAME: rosiedazzlers
+  CF_DEV_BRANCH: dev
+
+jobs:
+  verify-rollback-candidate:
+    name: Verify prior exact-SHA Development rollback candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      ROLLBACK_SHA: ${{ inputs.rollback_sha }}
+      CURRENT_DEV_SHA: ${{ github.sha }}
+    steps:
+      - name: Checkout exact Development ref
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require manual dev-only dispatch
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_EVENT_NAME" == "workflow_dispatch" ]] || { echo "::error::Rollback readiness is manual-only."; exit 2; }
+          [[ "$GITHUB_REF_NAME" == "dev" ]] || { echo "::error::Rollback readiness must be dispatched from dev."; exit 3; }
+          [[ "$ROLLBACK_SHA" =~ ^[0-9a-f]{40}$ ]] || { echo "::error::rollback_sha must be a full 40-character commit SHA."; exit 4; }
+
+      - name: Validate rollback/recovery source authority
+        run: |
+          bash -n scripts/cloudflare_development_rollback.sh
+          bash -n scripts/cloudflare_pages_development.sh
+          python scripts/release_rollback_recovery_check.py
+
+      - name: Verify rollback candidate without mutation
+        shell: bash
+        run: bash scripts/cloudflare_development_rollback.sh
+
+      - name: Record rollback safety boundary
+        shell: bash
+        run: |
+          {
+            echo "### Rollback readiness safety boundary"
+            echo "- Trigger: manual workflow_dispatch only"
+            echo "- Selected ref: \`${GITHUB_REF_NAME}\`"
+            echo "- Current dev SHA: \`${CURRENT_DEV_SHA}\`"
+            echo "- Candidate rollback SHA: \`${ROLLBACK_SHA}\`"
+            echo "- Git mutation: none"
+            echo "- Cloudflare mutation: none"
+            echo "- Production mutation: forbidden"
+            echo "- A rollback candidate is accepted only after ancestry, immutable successful preview identity, Functions metadata and static/contextual smoke all pass."
+          } >> "$GITHUB_STEP_SUMMARY"
