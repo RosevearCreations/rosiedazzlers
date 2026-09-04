@@ -4,26 +4,28 @@ This queue records only current actionable Development work. Completed release h
 
 ## Accepted Development checkpoint
 
-Build 321 is GREEN at exact SHA `09d4ba2e1986e1857c31451915d164fd7694e2c0`. Production `main` remains frozen at its last user-authorized checkpoint until the user explicitly requests another Production promotion.
+Build 322 is GREEN at exact SHA `bee75b7201ca5510b48a3bc2c0f07d487dcfb4ba`. Production `main` remains frozen at its last user-authorized checkpoint until the user explicitly requests another Production promotion.
 
-## Active — Build 322
+## Active — Build 323
 
-Scope: Release Rollback & Recovery Acceptance.
+Scope: Production Readiness Dashboard.
 
 Acceptance checklist:
 
-- Preserve the existing Cloudflare stuck-deployment recovery path as manual-only and Development-only.
-- Recovery observe mode must remain non-mutating.
-- Recovery repair must require the exact current `dev` SHA and independently prove the target is the exact non-terminal Development preview before mutation.
-- Add a separate manual rollback-readiness workflow for a prior exact Development SHA.
-- Rollback readiness must be read-only: no Git ref move, no Cloudflare POST/DELETE/PATCH/retry/rollback mutation and no Production mutation.
-- Require the rollback candidate to be a full 40-character SHA, present in repository history, strictly older than current `dev`, and an ancestor of current `dev`.
-- Resolve the real Cloudflare project Production branch and reject any rollback/recovery target that crosses the Production boundary.
-- Require a successful exact-SHA Cloudflare deployment for the rollback candidate on branch `dev`.
-- Require immutable deployment identity, `environment=preview`, `uses_functions=true`, static smoke and contextual-proof smoke.
-- Record current `dev`, rollback candidate, candidate distance, immutable deployment evidence and current `main` without mutating either branch.
-- Add `scripts/release_rollback_recovery_check.py` as a durable Current Source Gate authority.
-- Harden the existing recovery workflow to run the same rollback/recovery contract checks before observe/repair.
+- Add one authenticated I.T. Production-readiness dashboard and one read-only readiness authority.
+- Require the canonical `it.runtime.view` action permission rather than borrowing booking/finance permissions.
+- Keep the endpoint evidence-only: no Git, Cloudflare, database, provider or Production mutation.
+- Keep Production closed and explicitly state that readiness is not promotion authorization.
+- Separate source policy from runtime evidence; source workflow presence must not masquerade as current live-run success.
+- Use Cloudflare runtime branch/SHA/URL metadata only when actually available. Missing or partial metadata must be incomplete evidence, never guessed state.
+- Treat a Production-like runtime as a blocker for Development readiness review.
+- Treat a live Stripe credential on a Development-like runtime as a blocker and unknown Stripe mode as fail-closed.
+- Report unconfigured Stripe or unavailable runtime metadata as incomplete evidence rather than falsely ready.
+- Preserve safe source-policy evidence for the frozen Production branch and previously accepted Development checkpoint without exposing secrets.
+- Surface durable Current Source Gate, Development Acceptance and rollback/recovery authorities with `live_run_verified: false` because runtime code does not independently query GitHub Actions.
+- Support explicit `ready_for_human_review`, `evidence_incomplete` and `blocked` states.
+- Enforce desktop, tablet and mobile behavior with device-width viewport, 44px touch controls, loading/error states and narrow-screen evidence cards.
+- `scripts/production_readiness_check.py` must pass in the Current Source Gate.
 - No database migration is introduced.
 - Exact feature SHA must pass Current Source Gate and Cloudflare feature preview.
 - The identical SHA must then be fast-forwarded to `dev` and pass Current Source Gate plus Cloudflare Development Acceptance.
@@ -31,7 +33,7 @@ Acceptance checklist:
 
 ## Next sequential Development scope
 
-After Build 322 is exact-SHA GREEN on Development, implement the final remaining accepted roadmap item: a Production-readiness dashboard. It must report readiness/evidence only and must not itself authorize or perform Production promotion.
+After exact Development acceptance, choose the next bounded improvement from the current RosieDazzlers roadmap/source gaps. Continue the same mobile/desktop, permission, failure-state and exact-SHA release standards rather than opening Production.
 
 ## Continuing rule
 
