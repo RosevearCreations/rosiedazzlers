@@ -22,7 +22,10 @@ checkout = read("functions/api/checkout.js")
 checkout_identity = read("functions/api/_lib/checkout-customer-identity.js")
 selector_bridge = read("assets/booking-vehicle-selector.js")
 site_policies = read("assets/site-policies.js")
+job_action = read("functions/api/detailer/job_action.js")
+service_history = read("functions/api/_lib/customer-vehicle-service-history.js")
 checkout_test = ROOT / "scripts/checkout_customer_vehicle_identity_test.mjs"
+service_history_test = ROOT / "scripts/customer_vehicle_service_history_test.mjs"
 
 for token in (
     "add column if not exists customer_vehicle_id uuid null",
@@ -107,10 +110,51 @@ for token in (
 if 'booking-vehicle-selector.js?v=20260904build333' not in site_policies:
     errors.append("site policies must load the booking-only vehicle selector bridge")
 
+for token in (
+    'syncCompletedBookingVehicleHistory',
+    "action === 'complete'",
+    'vehicle_service_history_sync',
+    "patch.job_status='completed'",
+):
+    if token not in job_action:
+        errors.append(f"job completion missing durable vehicle-history contract: {token}")
+
+for token in (
+    'String(row.job_status || "").trim().toLowerCase() !== "completed"',
+    'durable_vehicle_identity_required',
+    'vehicle_ownership_mismatch',
+    'vehicle_not_owned_by_profile',
+    '&id=eq.${encodeURIComponent(vehicleId)}',
+    '&customer_profile_id=eq.${encodeURIComponent(profileId)}',
+    'last_package_code',
+    'last_addons',
+    'last_wash_at',
+    'mileage_km',
+    'premium_wash',
+    'complete_detail',
+    'exterior_detail',
+):
+    if token not in service_history:
+        errors.append(f"completed-service history helper missing contract: {token}")
+
+for forbidden in (
+    'patch.service_interval_days',
+    'patch.next_cleaning_due_at',
+    'patch.next_service_mileage_km',
+    'patch.auto_schedule_opt_in',
+    'vehicle_make',
+    'vehicle_model',
+    'vehicle_plate',
+):
+    if forbidden in service_history:
+        errors.append(f"completed-service sync contains forbidden authority/heuristic: {forbidden}")
+
 for path in (
     "functions/api/admin/booking_vehicle_identity.js",
     "functions/api/checkout.js",
     "functions/api/_lib/checkout-customer-identity.js",
+    "functions/api/detailer/job_action.js",
+    "functions/api/_lib/customer-vehicle-service-history.js",
     "assets/booking-vehicle-selector.js",
     "assets/site-policies.js",
 ):
@@ -118,12 +162,20 @@ for path in (
     if proc.returncode:
         errors.append(f"JavaScript syntax failed for {path}: " + (proc.stdout + proc.stderr).strip())
 
-if not checkout_test.exists():
-    errors.append("missing scripts/checkout_customer_vehicle_identity_test.mjs")
-else:
-    proc = subprocess.run(["node", str(checkout_test)], cwd=ROOT, text=True, capture_output=True)
-    if proc.returncode:
-        errors.append("authenticated checkout vehicle identity test failed: " + (proc.stdout + proc.stderr).strip())
+for test_path, label in (
+    (checkout_test, "authenticated checkout vehicle identity"),
+    (service_history_test, "completed-service vehicle history"),
+):
+    if not test_path.exists():
+        errors.append(f"missing {test_path.relative_to(ROOT)}")
+    else:
+        proc = subprocess.run(["node", str(test_path)], cwd=ROOT, text=True, capture_output=True)
+        if proc.returncode:
+            errors.append(f"{label} test failed: " + (proc.stdout + proc.stderr).strip())
+
+migrations_334 = list(ROOT.glob("**/*334*.sql"))
+if migrations_334:
+    errors.append("completed-service vehicle history sync must not introduce a database migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations_334))
 
 if errors:
     print("BOOKING VEHICLE IDENTITY: FAIL")
@@ -137,5 +189,8 @@ print(" - no historical auto-backfill is permitted")
 print(" - staff linkage must remain within the booking customer profile")
 print(" - authenticated checkout derives customer profile from the server session")
 print(" - saved vehicle persistence requires same-profile ownership proof")
+print(" - completed-service history sync requires the same durable ownership pair")
+print(" - completion updates only service facts and never staff planning/scheduling authority")
+print(" - mileage cannot regress and interior-only work cannot advance exterior wash history")
 print(" - guest checkout remains valid and injected ownership IDs fail closed")
-print(" - booking status, schedule, price and payment remain out of identity scope")
+print(" - booking price and payment remain out of identity/history scope")
