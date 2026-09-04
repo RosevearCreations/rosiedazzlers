@@ -50,7 +50,19 @@
     main.appendChild(box);
   }
 
+  async function wireBookingVehicleSelector() {
+    const path = String(globalScope.location?.pathname || '').replace(/\/+$/, '') || '/';
+    if (path !== '/book') return;
+    try {
+      const module = await import('/assets/booking-vehicle-selector.js?v=20260904build333');
+      module.wireBookingVehicleSelector?.(document);
+    } catch {}
+  }
+
   function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-  document.addEventListener('DOMContentLoaded', () => applyPolicies(document));
+  document.addEventListener('DOMContentLoaded', () => {
+    applyPolicies(document);
+    wireBookingVehicleSelector();
+  });
   globalScope.RosieSitePolicies = { loadPolicies, applyPolicies, get policies() { return state.policies; } };
 })(window);
