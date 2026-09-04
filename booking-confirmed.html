@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Booking confirmation | Rosie Dazzlers</title>
+  <meta name="description" content="Secure booking confirmation for Rosie Dazzlers mobile auto detailing." />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260309y" />
+  <style>
+    .confirmation-shell{max-width:820px;margin:0 auto;padding:32px 16px 56px}
+    .confirmation-card{padding:clamp(22px,4vw,38px)}
+    .confirmation-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .confirmation-actions .btn{min-height:46px}
+    .confirmation-state{margin-top:16px}
+    .confirmation-state[hidden],#rebookPanel[hidden]{display:none!important}
+    .confirmation-kicker{margin:0 0 8px;text-transform:uppercase;letter-spacing:.08em;font-size:.82rem;opacity:.75}
+    #rebookPanel{margin-top:18px}
+    @media (max-width:640px){
+      .confirmation-shell{padding:20px 12px 40px}
+      .confirmation-actions{display:grid;grid-template-columns:1fr}
+      .confirmation-actions .btn{width:100%;justify-content:center}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/book">Book now</a>
+    </div>
+  </div>
+
+  <main class="confirmation-shell">
+    <section class="panel confirmation-card" aria-labelledby="confirmationTitle">
+      <p class="confirmation-kicker">Secure booking completion</p>
+      <h1 id="confirmationTitle" style="margin-top:0">Confirming your booking</h1>
+      <p id="confirmationLead" class="kicker">We are checking the payment result against the booking before showing it as confirmed.</p>
+
+      <div id="processingState" class="notice warn confirmation-state" role="status" aria-live="polite">
+        Verifying your booking…
+      </div>
+      <div id="confirmedState" class="notice ok confirmation-state" role="status" aria-live="polite" hidden>
+        <strong>Your booking is confirmed.</strong> We will use the contact details from your booking for the normal confirmation and service updates.
+      </div>
+      <div id="pendingState" class="notice warn confirmation-state" role="status" aria-live="polite" hidden>
+        <strong>Your payment was verified, but booking settlement is still finishing.</strong> Please use the emailed confirmation as the final scheduling record. You do not need to pay again.
+      </div>
+      <div id="errorState" class="notice bad confirmation-state" role="alert" hidden>
+        We could not verify this booking from the return information. Please do not submit another payment until the booking status is checked.
+      </div>
+
+      <section id="rebookPanel" class="panel" hidden aria-labelledby="rebookTitle">
+        <h2 id="rebookTitle" style="margin-top:0">Planning another vehicle or future detail?</h2>
+        <p class="muted">Start a fresh booking with only the previous package and vehicle-size choices carried forward. Date, time, service location, contact details, policies, and payment must all be chosen or confirmed again.</p>
+        <div class="confirmation-actions">
+          <a id="rebookBtn" class="btn primary" href="/book?rebook=1">Book another service</a>
+          <a class="btn ghost" href="/my-account">My account &amp; garage</a>
+        </div>
+      </section>
+
+      <div class="confirmation-actions" id="fallbackActions">
+        <a class="btn ghost" href="/">Back to home</a>
+        <a class="btn ghost" href="/contact">Contact Rosie Dazzlers</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="footer" data-footer></div>
+
+  <script>
+    (() => {
+      const params = new URLSearchParams(window.location.search);
+      const provider = String(params.get("provider") || "").trim().toLowerCase();
+      const processing = document.getElementById("processingState");
+      const confirmed = document.getElementById("confirmedState");
+      const pending = document.getElementById("pendingState");
+      const error = document.getElementById("errorState");
+      const rebookPanel = document.getElementById("rebookPanel");
+      const rebookBtn = document.getElementById("rebookBtn");
+      const title = document.getElementById("confirmationTitle");
+      const lead = document.getElementById("confirmationLead");
+      let confirmationViewTracked = false;
+      let rebookPromptTracked = false;
+
+      function track(event, detail = {}) {
+        try {
+          window.dispatchEvent(new CustomEvent("rd:analytics", { detail: { event, provider: provider || null, ...detail } }));
+        } catch {}
+      }
+
+      function hideStates() {
+        [processing, confirmed, pending, error].forEach((node) => { node.hidden = true; });
+      }
+
+      function safeChoice(value, maxLength = 80) {
+        const text = String(value || "").trim();
+        if (!text || text.length > maxLength || !/^[a-z0-9_-]+$/i.test(text)) return "";
+        return text;
+      }
+
+      function safeSize(value) {
+        const text = String(value || "").trim().toLowerCase();
+        return ["small", "mid", "oversize"].includes(text) ? text : "";
+      }
+
+      function buildRebookUrl(hints = {}) {
+        const next = new URLSearchParams();
+        next.set("rebook", "1");
+        const packageCode = safeChoice(hints.package_code || hints.package || params.get("package"));
+        const vehicleSize = safeSize(hints.vehicle_size || hints.size || params.get("size"));
+        if (packageCode) next.set("package", packageCode);
+        if (vehicleSize) next.set("size", vehicleSize);
+        return `/book?${next.toString()}`;
+      }
+
+      function showConfirmed(hints = {}, method = provider) {
+        hideStates();
+        confirmed.hidden = false;
+        rebookPanel.hidden = false;
+        title.textContent = "Your booking is confirmed";
+        lead.textContent = method === "gift"
+          ? "Your gift-covered deposit was accepted and the booking was created without an additional payment."
+          : "The payment result matches the booking and the booking is confirmed.";
+        rebookBtn.href = buildRebookUrl(hints);
+        track("booking_confirmation_view", { verification_state: "confirmed" });
+        confirmationViewTracked = true;
+        if (!rebookPromptTracked) {
+          track("booking_rebook_prompt_view", {
+            has_package_prefill: !!safeChoice(hints.package_code || hints.package || params.get("package")),
+            has_size_prefill: !!safeSize(hints.vehicle_size || hints.size || params.get("size"))
+          });
+          rebookPromptTracked = true;
+        }
+      }
+
+      function showPending() {
+        hideStates();
+        pending.hidden = false;
+        title.textContent = "Payment received — confirmation finishing";
+        lead.textContent = "The payment provider reports the payment as received, but the signed settlement record has not finished updating the booking yet.";
+        if (!confirmationViewTracked) {
+          track("booking_confirmation_view", { verification_state: "settlement_processing" });
+          confirmationViewTracked = true;
+        }
+      }
+
+      function showError(message) {
+        hideStates();
+        error.hidden = false;
+        if (message) error.textContent = message;
+        title.textContent = "Booking confirmation needs review";
+        lead.textContent = "We could not safely prove this booking from the return information alone.";
+        track("booking_confirmation_view", { verification_state: "verification_failed" });
+        confirmationViewTracked = true;
+      }
+
+      async function getConfirmation(query) {
+        const res = await fetch(`/api/booking_confirmation?${query.toString()}`, { cache: "no-store", credentials: "same-origin" });
+        const out = await res.json().catch(() => null);
+        if (!res.ok || !out?.ok) throw new Error(out?.error || "Booking confirmation could not be verified.");
+        return out;
+      }
+
+      async function confirmStripe() {
+        const bookingId = String(params.get("booking_id") || "").trim();
+        const sessionId = String(params.get("session_id") || "").trim();
+        if (!bookingId || !sessionId) throw new Error("Stripe returned without the required booking confirmation references.");
+
+        const query = new URLSearchParams({ provider: "stripe", booking_id: bookingId, session_id: sessionId });
+        let latest = null;
+        for (let attempt = 0; attempt < 4; attempt += 1) {
+          latest = await getConfirmation(query);
+          if (!latest.payment_verified) throw new Error("Stripe has not reported this Checkout Session as paid.");
+          if (latest.booking_confirmed) {
+            showConfirmed(latest.rebook || {}, "stripe");
+            return;
+          }
+          processing.textContent = "Payment verified. Waiting for the signed Stripe settlement record to finish updating the booking…";
+          if (attempt < 3) await new Promise((resolve) => setTimeout(resolve, 1200));
+        }
+        if (latest?.payment_verified) showPending();
+      }
+
+      async function confirmPayPal() {
+        const bookingId = String(params.get("booking_id") || "").trim();
+        const orderId = String(params.get("token") || "").trim();
+        if (!bookingId || !orderId) throw new Error("PayPal returned without the required booking/order references.");
+
+        processing.textContent = "Finalizing the approved PayPal deposit…";
+        const captureRes = await fetch("/api/paypal/capture-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ booking_id: bookingId, order_id: orderId })
+        });
+        const capture = await captureRes.json().catch(() => null);
+        if (!captureRes.ok || !capture?.ok) throw new Error(capture?.error || "PayPal capture could not be verified.");
+
+        const query = new URLSearchParams({ provider: "paypal", booking_id: bookingId, order_id: orderId });
+        const out = await getConfirmation(query);
+        if (!out.payment_verified || !out.booking_confirmed) throw new Error("PayPal capture completed but the booking confirmation record is not ready.");
+        showConfirmed(out.rebook || {}, "paypal");
+      }
+
+      async function start() {
+        track("booking_confirmation_view", { verification_state: "started" });
+        if (provider === "gift") {
+          showConfirmed({ package: params.get("package"), size: params.get("size") }, "gift");
+          return;
+        }
+        if (provider === "stripe") {
+          await confirmStripe();
+          return;
+        }
+        if (provider === "paypal") {
+          await confirmPayPal();
+          return;
+        }
+        throw new Error("No supported payment confirmation provider was supplied.");
+      }
+
+      rebookBtn.addEventListener("click", () => {
+        const target = new URL(rebookBtn.href, window.location.origin);
+        track("booking_rebook_start", {
+          has_package_prefill: target.searchParams.has("package"),
+          has_size_prefill: target.searchParams.has("size")
+        });
+      });
+
+      start().catch((err) => showError(err?.message || "Booking confirmation could not be verified."));
+    })();
+  </script>
+  <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
+</body>
+</html>
