@@ -26,8 +26,11 @@ export async function onRequestGet({ request, env }) {
     if (provider === "stripe") {
       return confirmStripe({ url, env, booking, bookingId });
     }
+    if (provider === "paypal") {
+      return confirmPayPal({ url, booking, bookingId });
+    }
 
-    return confirmPayPal({ url, booking, bookingId });
+    return jsonResponse({ error: "Unsupported payment provider." }, 400);
   } catch (err) {
     return jsonResponse({ error: err?.message || "Could not verify booking confirmation." }, 500);
   }
