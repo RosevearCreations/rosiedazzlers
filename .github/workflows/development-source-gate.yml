@@ -55,6 +55,7 @@ jobs:
           node --check functions/api/admin/_middleware.js
           node --check assets/client-auth.js
           node --check assets/booking-hours.js
+          node --check assets/booking-wizard-responsive-v325.js
           node --check assets/pricing-catalog-client.js
           node --check functions/api/_lib/pricing-catalog.js
           node --check functions/api/landing_pages_public.js
@@ -97,6 +98,7 @@ jobs:
           python -m py_compile scripts/release_rollback_recovery_check.py
           python -m py_compile scripts/production_readiness_check.py
           python -m py_compile scripts/booking_funnel_device_check.py
+          python -m py_compile scripts/booking_wizard_responsive_ux_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
@@ -142,6 +144,9 @@ jobs:
       - name: Validate booking funnel device contracts
         run: python scripts/booking_funnel_device_check.py
 
+      - name: Validate booking wizard responsive UX contracts
+        run: python scripts/booking_wizard_responsive_ux_check.py
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -172,6 +177,7 @@ jobs:
             echo "- Rollback/recovery acceptance authority: PASS"
             echo "- Production readiness authority: PASS"
             echo "- Booking funnel/device authority: PASS"
+            echo "- Booking wizard responsive UX authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
