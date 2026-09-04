@@ -1,0 +1,52 @@
+name: Booking Vehicle Identity Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-booking-vehicle-identity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  booking-vehicle-identity:
+    name: Validate booking vehicle identity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check authority syntax
+        run: python -m py_compile scripts/booking_vehicle_identity_check.py
+      - name: Validate booking vehicle identity contract
+        run: python scripts/booking_vehicle_identity_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo '### Booking Vehicle Identity Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Additive nullable booking-to-saved-vehicle schema: PASS'
+            echo '- No historical auto-backfill: PASS'
+            echo '- Staff same-profile linkage boundary: PASS'
+            echo '- Booking/payment/schedule neutrality: PASS'
+            echo '- Database migration/acceptance remains separately controlled.'
+          } >> "$GITHUB_STEP_SUMMARY"
