@@ -14,7 +14,9 @@ def need(path, token):
 helper = need('functions/api/_lib/fleet-account-pipeline.js', 'Conversion must come from the booking/quote workflow')
 api = need('functions/api/admin/fleet_account_pipeline.js', 'topic=eq.fleet')
 page = need('admin-fleet-accounts.html', 'Status and internal follow-up note only')
-public = need('functions/api/public_lead_submit.js', 'creates_appointment: false')
+need('admin-fleet-accounts.html', 'safeMediaUrl')
+need('admin-fleet-maintenance.html', '/admin-fleet-accounts.html')
+need('functions/api/public_lead_submit.js', 'creates_appointment: false')
 need('fleet.html', 'it does not create a quote, appointment or recurring commitment')
 
 for forbidden in ('converted_booking_id =', 'booking_id =', 'quote_id =', 'auto_schedule_opt_in', 'recurring_billing', 'stripe', 'paypal'):
@@ -27,6 +29,9 @@ for token in ('"status", "staff_note"', 'marks_conversion: false', 'creates_quot
 
 if "['new','reviewing','contacted','quoted','closed','spam']" not in page:
     errors.append('admin workbench must not offer converted as a writable status')
+
+if "u.protocol==='http:'||u.protocol==='https:'" not in page:
+    errors.append('customer-supplied media links must be restricted to HTTP/HTTPS')
 
 if 'topic: "eq.fleet"' not in api and 'topic=eq.fleet' not in api:
     errors.append('fleet pipeline list must hard-filter to fleet topic')
@@ -52,4 +57,5 @@ print('FLEET ACCOUNT PIPELINE: PASS')
 print(' - live fleet intake remains quote/booking/billing neutral')
 print(' - staff pipeline writes are limited to status and internal note')
 print(' - conversion is read-only and delegated to approved workflow')
+print(' - customer media links are protocol constrained')
 print(' - executable contract tests passed')
