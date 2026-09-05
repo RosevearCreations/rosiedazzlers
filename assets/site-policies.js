@@ -1,5 +1,5 @@
 // assets/site-policies.js
-// Build 338: public policy copy renderer plus booking-page enhancement hooks.
+// Build 339: public policy copy renderer plus booking-page enhancement hooks.
 (function attachRosieSitePolicies(globalScope) {
   const FALLBACK_POLICIES = {
     deposit: 'Deposits may be requested to hold a quote-led appointment. Final balance, add-ons, travel, and heavy-condition adjustments are confirmed before the appointment is finalized.',
@@ -50,9 +50,16 @@
     main.appendChild(box);
   }
 
+  function currentPath() {
+    return String(globalScope.location?.pathname || '').replace(/\/+$/, '') || '/';
+  }
+
   function isBookingPage() {
-    const path = String(globalScope.location?.pathname || '').replace(/\/+$/, '') || '/';
-    return path === '/book';
+    return currentPath() === '/book';
+  }
+
+  function isBookingPlannerPage() {
+    return currentPath() === '/booking-planner';
   }
 
   async function wireBookingVehicleSelector() {
@@ -73,11 +80,22 @@
     }
   }
 
+  async function wireBookingVehicleFormUX() {
+    if (!isBookingPlannerPage()) return;
+    try {
+      const module = await import('/assets/booking-vehicle-form-ux.js?v=20260904build339');
+      module.wireBookingVehicleFormUX?.(document);
+    } catch (error) {
+      console.warn('Vehicle-form visual enhancement unavailable; base booking controls remain usable.', error);
+    }
+  }
+
   function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   document.addEventListener('DOMContentLoaded', () => {
     applyPolicies(document);
     wireBookingVehicleSelector();
     wireBookingSpecialtyCards();
+    wireBookingVehicleFormUX();
   });
   globalScope.RosieSitePolicies = { loadPolicies, applyPolicies, get policies() { return state.policies; } };
 })(window);
