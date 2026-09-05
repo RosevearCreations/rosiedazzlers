@@ -45,7 +45,11 @@ for (const token of requiredModuleTokens) {
 if (!hookSource.includes('/assets/booking-specialty-cards.js?v=20260904build338')) {
   fail('booking page does not load the Build 338 rich-card enhancer');
 }
-if (!hookSource.includes("path === '/book'")) {
+const canonicalBookScoped =
+  hookSource.includes("path === '/book'") ||
+  hookSource.includes("currentPath() === '/book'") ||
+  hookSource.includes("return currentPath() === '/book';");
+if (!canonicalBookScoped) {
   fail('rich-card enhancer is not scoped to the canonical /book route');
 }
 
