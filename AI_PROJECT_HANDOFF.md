@@ -5,33 +5,34 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- Last fully accepted/synchronized release: **Build 333 — Authenticated Booking Vehicle Persistence**.
-- Exact accepted SHA: `c87c66786be8d24a1883109f6f84efa4ed3f6a84`.
+- Last fully accepted/synchronized release: **Build 334 — Durable Completed-Service Vehicle History Sync**.
+- Exact accepted SHA: `a5feaa71df1d87581674f93526ae44e2f861d244`.
 - At active-work start, `dev == main` on that exact SHA.
-- Active work: **Build 334 — Durable Completed-Service Vehicle History Sync**.
-- Active branch: `build334-durable-vehicle-service-history-sync`.
-- No database migration is introduced; the live `customer_vehicles` history fields already exist.
+- Active work: **Build 335 — Controlled Fleet Lead → Draft Quote Handoff**.
+- Active branch: `build335-controlled-fleet-quote-handoff`.
+- No database migration is introduced; the live fleet-lead and quote-pipeline tables already contain the required authorities.
 
 ## Why this scope is active
 
-Authenticated checkout can now establish a durable booking→saved-vehicle identity, and maintenance readers prefer that identity. The remaining lifecycle gap is post-service: authoritative staff completion marks the booking complete but does not copy verified service facts back to the owned garage vehicle.
+The live fleet pipeline safely captures and reviews fleet/workplace inquiries, while the existing quote dashboard owns durable `quote_pipeline_items`. Until now staff had to manually copy a fleet lead into the quote system, and the generic fleet PATCH correctly prohibited quote/conversion writes. This release adds one explicit server-authorized bridge without turning fleet status edits into quote, customer, booking, scheduling or payment authority.
 
 ## Active operating contract
 
-- Synchronization runs only after the authoritative detailer completion transition has successfully stored `job_status = completed`.
-- The booking must carry both `customer_profile_id` and `customer_vehicle_id`.
-- The saved vehicle is reloaded using both IDs; missing or mismatched ownership fails closed and leaves the garage vehicle unchanged.
-- No year/make/model/plate heuristic may substitute for the durable link.
-- Completion may update only factual service history: `last_package_code`, normalized `last_addons`, and non-regressing `mileage_km`.
-- `last_wash_at` advances only for `premium_wash`, `complete_detail`, or `exterior_detail`, which are the current packages containing an exterior hand wash.
-- A lower/invalid booking mileage never overwrites a higher saved-vehicle mileage.
-- Completion may not write `service_interval_days`, `next_cleaning_due_at`, `next_service_mileage_km`, or `auto_schedule_opt_in`.
-- No saved vehicle is created, no historical booking is backfilled, and no payment, price, membership, schedule, or appointment state is changed.
-- The completion event records the vehicle-history sync outcome so ancillary sync failure is visible without reversing legitimate completed work.
+- Only authenticated staff with `manage_bookings` may invoke fleet quote handoff.
+- The server reloads the requested row from `public_inquiry_leads` with `topic=fleet`; the browser cannot supply customer, quote or booking ownership.
+- `converted`, `closed` and `spam` leads cannot create a new draft quote.
+- Existing quotes linked by `quote_pipeline_items.lead_id` are reused rather than duplicated.
+- More than one existing quote for a lead is treated as ambiguous and fails closed for staff cleanup.
+- When no quote exists, the draft quote UUID is deterministically the fleet lead UUID. The quote table primary key therefore prevents concurrent retry duplication without a new schema constraint.
+- New handoff quotes start as `draft`, with quoted/accepted amounts at zero and follow-up stage `prepare_quote`. Pricing remains staff-controlled in the Quote dashboard.
+- Handoff does not change the fleet lead status. Staff may use `quoted` only after the quote is actually prepared/sent.
+- Handoff does not create or mutate a customer profile, booking, appointment, schedule, recurring-service enrollment or payment.
+- The Quote dashboard accepts `quote_id` only as a UI selection hint after loading the authorized quote list; it does not create authority from the URL.
+- The existing generic fleet pipeline remains limited to writable status + internal staff note.
 
 ## Release procedure
 
-1. Feature exact SHA must pass Current Source Gate, Booking Vehicle Identity Authority, Maintenance Retention Follow-up Authority, Fleet Account Pipeline Authority and Cloudflare feature deployment.
+1. Feature exact SHA must pass Current Source Gate, Fleet Account Pipeline Authority, Booking Vehicle Identity Authority, Maintenance Retention Follow-up Authority and Cloudflare feature deployment.
 2. No schema application is required.
 3. Fast-forward `dev` with `force=false`; require exact-SHA source authorities plus Cloudflare Development Acceptance.
 4. Only after Development is GREEN, fast-forward `main` with `force=false`.
@@ -40,12 +41,12 @@ Authenticated checkout can now establish a durable booking→saved-vehicle ident
 
 ## Durable authorities
 
-- `.github/workflows/development-source-gate.yml` — cumulative source authority, including booking completion/retention checks.
-- `.github/workflows/booking-vehicle-identity-authority.yml` — durable identity authority through checkout and completed-service vehicle synchronization.
-- `scripts/booking_vehicle_identity_check.py` — schema, staff linkage, authenticated checkout, durable completion ownership and no-migration guard.
-- `scripts/customer_vehicle_service_history_test.mjs` — executable completion/history behavior proof.
-- `scripts/booking_completion_retention_check.py` — payment-return/signoff separation plus authoritative completion sync contract.
-- Existing maintenance, fleet, payment, Production-readiness, rollback/recovery, booking UX and SEO authorities remain cumulative.
+- `.github/workflows/fleet-account-pipeline-authority.yml` — fleet intake/follow-up plus controlled draft-quote handoff authority.
+- `scripts/fleet_account_pipeline_check.py` — source boundary, no-migration guard and executable fleet tests.
+- `scripts/fleet_quote_handoff_test.mjs` — deterministic draft identity, reuse, duplicate ambiguity and blocked-status behavior proof.
+- `functions/api/_lib/fleet-quote-handoff.js` — pure handoff eligibility/draft identity rules.
+- `functions/api/admin/fleet_quote_handoff.js` — staff-authorized runtime handoff and retry-race recovery.
+- `.github/workflows/development-source-gate.yml` and existing booking, maintenance, payment, Production-readiness, rollback/recovery, responsive UX and SEO authorities remain cumulative.
 
 ## Public/SEO and help contracts
 
@@ -53,4 +54,4 @@ Every sitemap public page retains one meaningful H1, valid metadata/canonical/ro
 
 ## Restart point
 
-If interrupted during active work, verify `build334-durable-vehicle-service-history-sync` and inspect the first failing completion/identity/source/Cloudflare authority. Never make completion history synchronization depend on snapshot identity heuristics, and never write staff-owned scheduling fields from job completion.
+If interrupted during active work, verify `build335-controlled-fleet-quote-handoff` and inspect the first failing fleet/source/Cloudflare authority. Do not make generic fleet status writes create quotes, do not infer/create customer identity from a fleet inquiry, and do not add booking/payment side effects to draft handoff.
