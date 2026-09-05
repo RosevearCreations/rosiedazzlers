@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for Build 325 booking wizard responsive UX."""
+"""Fail-closed source authority for Build 325 booking wizard responsive UX after Build 336 convergence."""
 from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOK = ROOT / "book.html"
-BOOK_ROUTE = ROOT / "book" / "index.html"
+PUBLIC_BOOK = ROOT / "book.html"
+PUBLIC_ROUTE = ROOT / "book" / "index.html"
+PLANNER = ROOT / "booking-planner.html"
 LOADER = ROOT / "assets" / "booking-hours.js"
 HELPER = ROOT / "assets" / "booking-wizard-responsive-v325.js"
 WORKFLOW = ROOT / ".github" / "workflows" / "development-source-gate.yml"
@@ -14,7 +15,7 @@ errors = []
 
 def require(path: Path, needles, label):
     if not path.exists():
-        errors.append(f"missing {label}: {path.relative_to(ROOT)}")
+        errors.append(f'missing {label}: {path.relative_to(ROOT)}')
         return ""
     text = path.read_text(encoding="utf-8")
     for needle in needles:
@@ -23,7 +24,18 @@ def require(path: Path, needles, label):
     return text
 
 
-book = require(BOOK, [
+public_book = require(PUBLIC_BOOK, [
+    'id="bookingPlannerFrame"',
+    'id="services"',
+    'id="addons"',
+    'id="booking"',
+    'return `/booking-planner?${next.toString()}`',
+], "Build 336 public booking shell")
+public_route = require(PUBLIC_ROUTE, [
+    'id="bookingPlannerFrame"',
+    'return `/booking-planner?${next.toString()}`',
+], "Build 336 public booking route copy")
+planner = require(PLANNER, [
     'new CustomEvent("rd:analytics"',
     'analyticsTrack("booking_step_view", { step_number: state.currentStep })',
     'analyticsTrack("booking_date_pick"',
@@ -32,17 +44,12 @@ book = require(BOOK, [
     'async function validateStep(step)',
     'id="wizardNav"',
     'id="bookingStatus"',
-], "canonical booking page")
-
-route = require(BOOK_ROUTE, [
-    'new CustomEvent("rd:analytics"',
-    'analyticsTrack("booking_step_view", { step_number: state.currentStep })',
-], "booking route copy")
+], "retained booking planner")
 
 loader = require(LOADER, [
     "Build 325: fail-open loader for booking wizard responsive/focus UX.",
     "function loadBuild325WizardUX()",
-    "canonicalPath() !== '/book'",
+    "canonicalPath() !== '/booking-planner'",
     "/assets/booking-wizard-responsive-v325.js",
     "data-build325-booking-wizard-ux",
     "Standard booking remains available.",
@@ -86,17 +93,16 @@ helper = require(HELPER, [
     'document.documentElement.dataset.bookingWizardUxBuild = BUILD',
 ], "Build 325 booking UX helper")
 
-workflow = require(WORKFLOW, [
+require(WORKFLOW, [
     "assets/booking-wizard-responsive-v325.js",
     "scripts/booking_wizard_responsive_ux_check.py",
     "python scripts/booking_wizard_responsive_ux_check.py",
     "Booking wizard responsive UX authority: PASS",
 ], "current source gate")
 
-if book and route and book != route:
+if public_book and public_route and public_book != public_route:
     errors.append("book.html and book/index.html are not byte-identical")
 
-# Build 325 must not alter the canonical Build 324 analytics event contract.
 for event in [
     'booking_step_view',
     'booking_date_pick',
@@ -104,20 +110,17 @@ for event in [
     'booking_condition_recommendation_apply',
     'booking_photo_estimate_requested',
 ]:
-    if event not in book or event not in route:
-        errors.append(f"Build 324 booking telemetry event missing from route copies: {event}")
+    if event not in planner:
+        errors.append(f"Build 324 booking telemetry event missing from retained planner: {event}")
 
-# The helper is presentation/accessibility only. Network or booking mutation belongs to the canonical booking client.
 for primitive in ["fetch(", "XMLHttpRequest", "sendBeacon(", "/api/"]:
     if primitive in helper:
         errors.append(f"Build 325 UX helper contains forbidden network primitive: {primitive}")
 
-# The loader must remain fail-open; never block booking on optional UX enhancement.
 for primitive in ["throw new Error", "location.reload(", "window.location="]:
     if primitive in loader:
         errors.append(f"Build 325 loader contains blocking primitive: {primitive}")
 
-# Build 325 is source-only and must not introduce a schema migration.
 migrations = list(ROOT.glob("**/*325*.sql"))
 if migrations:
     errors.append("Build 325 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
@@ -129,13 +132,9 @@ if errors:
     sys.exit(1)
 
 print("BOOKING WIZARD RESPONSIVE UX: PASS")
-print("- canonical /book route copies remain byte-identical")
-print("- Build 324 booking funnel telemetry event names remain intact")
-print("- responsive navigation and card layout are protected at 720px/480px")
-print("- touch targets and mobile safe-area actions are protected")
-print("- current-step semantics and panel relationships are protected")
-print("- stage transitions recover scroll/focus with reduced-motion support")
-print("- validation errors recover focus to the relevant control")
-print("- availability/conflict/error messages expose live-region semantics")
-print("- Build 325 helper is DOM-only and fail-open")
+print("- Build 336 public /book route copies remain byte-identical")
+print("- retained /booking-planner owns the established booking wizard telemetry and validation contract")
+print("- responsive/focus helper now loads on the retained planner route")
+print("- touch, focus, validation, live-region and reduced-motion protections remain intact")
+print("- Build 325 helper remains DOM-only and fail-open")
 print("- no Build 325 database migration is present")
