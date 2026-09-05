@@ -8,6 +8,8 @@ const book = read('book.html');
 const planner = read('booking-planner.html');
 const services = read('services.html');
 const pricing = read('pricing.html');
+const servicesRoute = read('services/index.html');
+const pricingRoute = read('pricing/index.html');
 const redirects = read('_redirects');
 const catalogClient = read('assets/pricing-catalog-client.js');
 
@@ -22,6 +24,8 @@ must(planner.includes('/api/availability?date='), 'Preserved booking planner mus
 must(planner.includes('loadGarageVehicles'), 'Preserved booking planner must retain authenticated garage vehicle persistence.');
 must(count(services, /<h1\b/gi) === 1 && services.includes('noindex,follow') && services.includes("location.replace('/book'"), '/services must be a thin canonical migration bridge, not a second service implementation.');
 must(count(pricing, /<h1\b/gi) === 1 && pricing.includes('noindex,follow') && pricing.includes("location.replace('/book'"), '/pricing must be a thin canonical migration bridge, not a second pricing implementation.');
+must(servicesRoute === services, 'services.html and services/index.html must remain byte-identical route copies.');
+must(pricingRoute === pricing, 'pricing.html and pricing/index.html must remain byte-identical route copies.');
 must(redirects.includes('/services /book 301') && redirects.includes('/pricing /book 301'), 'Services and Pricing must server-redirect to the unified /book funnel.');
 must(catalogClient.includes('"/booking-planner"'), 'Pricing wrapper must retain optional booking modules on the internal planner route.');
 
