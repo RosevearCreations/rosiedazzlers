@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for booking completion + rebooking lifecycle."""
+"""Fail-closed source authority for booking completion + rebooking lifecycle after Build 336 convergence."""
 from pathlib import Path
 import subprocess
 import sys
@@ -10,8 +10,9 @@ CONFIRM_API = ROOT / "functions" / "api" / "booking_confirmation.js"
 PAYPAL_CAPTURE = ROOT / "functions" / "api" / "paypal" / "capture-order.js"
 CONFIRM_PAGE = ROOT / "booking-confirmed.html"
 SIGNOFF_PAGE = ROOT / "complete.html"
-BOOK = ROOT / "book.html"
-BOOK_ROUTE = ROOT / "book" / "index.html"
+PUBLIC_BOOK = ROOT / "book.html"
+PUBLIC_ROUTE = ROOT / "book" / "index.html"
+PLANNER = ROOT / "booking-planner.html"
 BOOKING_HELPER = ROOT / "assets" / "booking-hours.js"
 JOB_ACTION = ROOT / "functions" / "api" / "detailer" / "job_action.js"
 VEHICLE_HISTORY = ROOT / "functions" / "api" / "_lib" / "customer-vehicle-service-history.js"
@@ -92,22 +93,27 @@ signoff = require(SIGNOFF_PAGE, [
 helper = require(BOOKING_HELPER, [
     'Build 326: measure verified rebooking entry/prefill',
     'measureBuild326RebookPrefill()',
-    "params.get('rebook')",
+    "plannerParam('rebook')",
     "booking_rebook_prefill_applied",
     "has_package_prefill",
     "has_size_prefill",
+    "canonicalPath() !== '/booking-planner'",
 ], "booking helper")
 
-book = require(BOOK, [
+public_book = require(PUBLIC_BOOK, [
+    'id="bookingPlannerFrame"',
+    'return `/booking-planner?${next.toString()}`',
+], "Build 336 public booking shell")
+public_route = require(PUBLIC_ROUTE, [
+    'id="bookingPlannerFrame"',
+    'return `/booking-planner?${next.toString()}`',
+], "Build 336 public booking route copy")
+planner = require(PLANNER, [
     'new CustomEvent("rd:analytics"',
     'analyticsTrack("booking_step_view"',
     'analyticsTrack("checkout_started"',
     'analyticsTrack("checkout_redirect"',
-], "canonical booking page")
-route = require(BOOK_ROUTE, [
-    'new CustomEvent("rd:analytics"',
-    'analyticsTrack("booking_step_view"',
-], "booking route copy")
+], "retained booking planner")
 
 job_action = require(JOB_ACTION, [
     "case 'complete':",
@@ -130,7 +136,7 @@ vehicle_history = require(VEHICLE_HISTORY, [
     'auto_schedule_opt_in',
 ], "completed-service vehicle history helper")
 
-workflow = require(WORKFLOW, [
+require(WORKFLOW, [
     'functions/_middleware.js',
     'functions/api/booking_confirmation.js',
     'assets/booking-hours.js',
@@ -139,19 +145,16 @@ workflow = require(WORKFLOW, [
     'Booking completion/retention authority: PASS',
 ], "current source gate")
 
-if book and route and book != route:
+if public_book and public_route and public_book != public_route:
     errors.append("book.html and book/index.html are not byte-identical")
 
-# /complete must remain the token-based job-signoff page. Provider returns are rerouted before it.
 if 'provider", "stripe"' in signoff or 'provider", "paypal"' in signoff:
     errors.append("customer job sign-off page contains payment-provider completion handling")
 
-# Stripe confirmation is read/verify only. Signed webhook settlement remains authoritative.
 for primitive in ['method: "PATCH"', 'method: "POST"', 'status: "confirmed"', 'job_status: "scheduled"']:
     if primitive in confirm_api:
         errors.append(f"booking confirmation API contains forbidden browser-return settlement primitive: {primitive}")
 
-# Rebooking may only carry low-risk service choices. Never carry identity, address, appointment or payment identifiers forward.
 for forbidden in [
     'next.set("customer', 'next.set("email', 'next.set("phone', 'next.set("address',
     'next.set("postal', 'next.set("city', 'next.set("plate', 'next.set("date',
@@ -161,7 +164,6 @@ for forbidden in [
     if forbidden in confirm_page:
         errors.append(f"rebooking page carries forbidden prior-booking value: {forbidden}")
 
-# Gift confirmation middleware may expose only package and vehicle size from intake.
 for forbidden in [
     'target.searchParams.set("customer', 'target.searchParams.set("email', 'target.searchParams.set("phone',
     'target.searchParams.set("address', 'target.searchParams.set("postal', 'target.searchParams.set("booking_id',
@@ -171,15 +173,13 @@ for forbidden in [
     if forbidden in middleware:
         errors.append(f"gift confirmation URL carries forbidden intake value: {forbidden}")
 
-# Preserve the established booking funnel event vocabulary.
 for event in [
     'booking_step_view', 'booking_date_pick', 'booking_slot_pick',
     'checkout_started', 'checkout_redirect', 'checkout_error'
 ]:
-    if event not in book or event not in route:
-        errors.append(f"established booking funnel telemetry event missing from route copies: {event}")
+    if event not in planner:
+        errors.append(f"established booking funnel telemetry event missing from retained planner: {event}")
 
-# Vehicle history synchronization may consume only durable same-profile identity and must never mutate planning authority.
 for forbidden_patch in [
     'patch.service_interval_days', 'patch.next_cleaning_due_at',
     'patch.next_service_mileage_km', 'patch.auto_schedule_opt_in'
@@ -202,7 +202,6 @@ else:
     if proc.returncode:
         errors.append("completed-service vehicle history behavior test failed: " + (proc.stdout + proc.stderr).strip())
 
-# Completion/retention and durable vehicle-history work remain schema-free.
 for build_number in (326, 334):
     migrations = list(ROOT.glob(f"**/*{build_number}*.sql"))
     if migrations:
@@ -219,8 +218,8 @@ print("- /complete remains the token-protected customer job-signoff surface")
 print("- Stripe/PayPal payment returns remain isolated on /booking-confirmed")
 print("- Stripe browser confirmation remains verify-only; signed webhook settlement remains authoritative")
 print("- PayPal confirmation remains capture-order-authoritative and replay safe")
-print("- rebooking carries only package and vehicle-size hints; fresh booking validation remains mandatory")
+print("- rebooking still carries only package and vehicle-size hints into the unified /book shell")
+print("- retained /booking-planner owns established checkout and funnel telemetry")
 print("- authoritative staff completion synchronizes only same-profile durable saved-vehicle service facts")
 print("- completed-service mileage cannot regress and staff scheduling/planning fields remain untouched")
-print("- completion/rebooking analytics are present and established funnel events remain intact")
 print("- no completion/retention database migration is present")
