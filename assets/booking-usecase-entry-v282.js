@@ -1,10 +1,11 @@
 // Build 282 — high-intent acquisition-to-booking entry adapter.
 // This layer never owns pricing, availability, checkout, deposits, add-on prices, or conflicts.
 // It maps public use-case URLs onto the retained Quick Book recommendation UI and preserves staff review notes.
+// Build 336 — the retained Quick Book UI now runs inside /booking-planner from the unified /book shell.
 (function initBuild282UseCaseEntry() {
   const normalizedPath = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
   const params = new URLSearchParams(location.search);
-  if (normalizedPath !== "/book") return;
+  if (normalizedPath !== "/booking-planner") return;
   if (["1", "true", "yes"].includes(String(params.get("embed") || "").toLowerCase())) return;
   if (window.__ROSIE_BUILD282_USECASE_ENTRY__) return;
 
