@@ -20,6 +20,7 @@ for (const id of ['veh_year','veh_make','veh_model','veh_color','veh_mileage','v
 
 requireText(planner, '<script src="/assets/site-policies.js" defer></script>', 'planner enhancement hook');
 requireText(policies, "currentPath() === '/booking-planner'", 'planner route guard');
+requireText(policies, "return currentPath() === '/book';", 'public /book hook remains isolated');
 requireText(policies, '/assets/booking-vehicle-form-ux.js?v=20260904build339', 'Build 339 module import');
 requireText(policies, 'wireBookingVehicleFormUX();', 'Build 339 DOMContentLoaded wiring');
 
@@ -44,6 +45,5 @@ if (/remove\s*\(\s*\)/.test(ux)) fail('enhancer must not remove booking controls
 
 requireText(ux, 'control.parentElement', 'in-place field enhancement');
 requireText(ux, 'classList.add', 'in-place CSS class enhancement');
-requireText(ux, "return currentPath() === '/book';", 'public /book hook remains isolated');
 
 if (!process.exitCode) console.log('BUILD 339 PASS: vehicle form UX is structured, responsive, accessible, and preserves live planner controls.');
