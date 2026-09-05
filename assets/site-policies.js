@@ -1,5 +1,5 @@
 // assets/site-policies.js
-// Build 191: public policy copy renderer using editable site_policies with bundled fallback.
+// Build 338: public policy copy renderer plus booking-page enhancement hooks.
 (function attachRosieSitePolicies(globalScope) {
   const FALLBACK_POLICIES = {
     deposit: 'Deposits may be requested to hold a quote-led appointment. Final balance, add-ons, travel, and heavy-condition adjustments are confirmed before the appointment is finalized.',
@@ -50,19 +50,34 @@
     main.appendChild(box);
   }
 
-  async function wireBookingVehicleSelector() {
+  function isBookingPage() {
     const path = String(globalScope.location?.pathname || '').replace(/\/+$/, '') || '/';
-    if (path !== '/book') return;
+    return path === '/book';
+  }
+
+  async function wireBookingVehicleSelector() {
+    if (!isBookingPage()) return;
     try {
       const module = await import('/assets/booking-vehicle-selector.js?v=20260904build333');
       module.wireBookingVehicleSelector?.(document);
     } catch {}
   }
 
+  async function wireBookingSpecialtyCards() {
+    if (!isBookingPage()) return;
+    try {
+      const module = await import('/assets/booking-specialty-cards.js?v=20260904build338');
+      await module.wireBookingSpecialtyCards?.(document);
+    } catch (error) {
+      console.warn('Rich specialty-card enhancement unavailable; base booking controls remain usable.', error);
+    }
+  }
+
   function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   document.addEventListener('DOMContentLoaded', () => {
     applyPolicies(document);
     wireBookingVehicleSelector();
+    wireBookingSpecialtyCards();
   });
   globalScope.RosieSitePolicies = { loadPolicies, applyPolicies, get policies() { return state.policies; } };
 })(window);
