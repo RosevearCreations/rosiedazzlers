@@ -38,7 +38,11 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check functions/api/_lib/fleet-account-pipeline.js
+          node --check functions/api/_lib/fleet-quote-handoff.js
           node --check functions/api/admin/fleet_account_pipeline.js
+          node --check functions/api/admin/fleet_quote_handoff.js
+          node --check assets/admin-quotes-v298.js
+          node --check scripts/fleet_quote_handoff_test.mjs
       - name: Check authority syntax
         run: python -m py_compile scripts/fleet_account_pipeline_check.py
       - name: Validate fleet account pipeline contract
@@ -48,8 +52,10 @@ jobs:
           {
             echo "### Fleet Account Pipeline Authority"
             echo "- SHA: \`${GITHUB_SHA}\`"
-            echo "- Staff write boundary: status + internal note only"
-            echo "- Conversion authority remains outside this workbench"
-            echo "- Quote/appointment/recurring billing creation: blocked"
+            echo "- Generic fleet write boundary: status + internal note only"
+            echo "- Eligible lead -> draft quote handoff: deterministic, replay-safe and staff-authorized"
+            echo "- Existing linked quote: reused; ambiguous duplicate links: fail closed"
+            echo "- Draft handoff does not mark the lead quoted or create customer/booking/payment state"
+            echo "- Booking conversion and recurring billing remain outside this workbench"
             echo "- Executable fleet pipeline tests: PASS"
           } >> "$GITHUB_STEP_SUMMARY"
