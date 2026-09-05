@@ -22,6 +22,12 @@ must(book.includes('pricing-catalog-client-legacy.js'), 'Unified /book must use 
 must(book.includes('id="packageGrid"') && book.includes('id="addonGrid"'), 'Unified /book must own package and add-on discovery.');
 must(book.includes('/booking-planner?'), 'Unified /book must embed the preserved booking planner.');
 must(book.includes('package') && book.includes('size') && book.includes('addons'), 'Unified /book must prefill planner package, vehicle size and add-ons.');
+must(book.includes('data-addon-card=') && book.includes('aria-pressed='), 'Specialty add-ons must expose full-card button controls with selected-state semantics.');
+must(book.includes('function setAddonSelection(code, selected)'), 'Specialty add-ons must use one explicit selection path instead of implicit label behavior.');
+must(book.includes('setAddonSelection(code,!state.addons.has(code))'), 'Clicking a specialty card must deterministically toggle its selection.');
+must(book.includes('if(!addon || !addonAllowed(addon)) return;'), 'Disabled or ineligible specialty cards must fail closed.');
+must(book.includes('if (state.addons.size) next.set("addons", [...state.addons].join(","));'), 'Selected specialty cards must propagate into the booking planner query.');
+must(!book.includes('<label class="addon-card'), 'Specialty cards must not regress to implicit label-only activation.');
 must(planner.includes('id="checkoutBtn"') && planner.includes('/api/checkout'), 'Preserved booking planner must retain checkout behavior.');
 must(planner.includes('/api/availability?date='), 'Preserved booking planner must retain live availability checks.');
 must(planner.includes('loadGarageVehicles'), 'Preserved booking planner must retain authenticated garage vehicle persistence.');
@@ -34,4 +40,4 @@ must(sitemap.includes('https://rosiedazzlers.ca/book/'), 'Sitemap must retain th
 must(!sitemap.includes('https://rosiedazzlers.ca/services/') && !sitemap.includes('https://rosiedazzlers.ca/pricing/'), 'Redirected Services/Pricing URLs must not remain in the indexable sitemap.');
 must(catalogClient.includes('"/booking-planner"'), 'Pricing wrapper must retain optional booking modules on the internal planner route.');
 
-console.log('Build 336 unified Services/Pricing/Booking gate: PASS');
+console.log('Build 337 unified Services/Pricing/Booking specialty-card gate: PASS');

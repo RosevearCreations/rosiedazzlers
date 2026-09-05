@@ -39,8 +39,14 @@
     .price-chip.current{border-color:rgba(77,119,255,.65);background:rgba(77,119,255,.18)}
     .addon-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .addon-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
-    .addon-card{display:flex;gap:9px;align-items:flex-start;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(255,255,255,.035);cursor:pointer;min-width:0}
-    .addon-card.disabled{opacity:.58;cursor:not-allowed}.addon-card input{margin-top:4px;flex:0 0 auto}.addon-card strong{display:block}.addon-card span{display:block;color:rgba(234,242,255,.67);font-size:.84rem;margin-top:3px;overflow-wrap:anywhere}
+    .addon-card{appearance:none;width:100%;display:flex;gap:9px;align-items:flex-start;text-align:left;color:inherit;font:inherit;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(255,255,255,.035);cursor:pointer;min-width:0}
+    .addon-card:hover{border-color:rgba(77,119,255,.45);background:rgba(77,119,255,.08)}
+    .addon-card.active{outline:2px solid #4d77ff;border-color:rgba(77,119,255,.65);background:rgba(77,119,255,.12)}
+    .addon-card:focus-visible{outline:3px solid rgba(124,155,255,.9);outline-offset:2px}
+    .addon-card:disabled{opacity:.58;cursor:not-allowed}.addon-card:disabled:hover{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.035)}
+    .addon-indicator{display:inline-grid!important;place-items:center;flex:0 0 24px;width:24px;height:24px;margin-top:1px;border:1px solid rgba(255,255,255,.18);border-radius:7px;color:rgba(234,242,255,.85)!important;font-size:.86rem!important;font-weight:800;background:rgba(255,255,255,.04)}
+    .addon-card.active .addon-indicator{border-color:rgba(77,119,255,.75);background:rgba(77,119,255,.24);color:#fff!important}
+    .addon-card strong{display:block}.addon-card .addon-copy{display:block;color:inherit;font-size:inherit;margin:0}.addon-card .addon-meta{display:block;color:rgba(234,242,255,.67);font-size:.84rem;margin-top:3px;overflow-wrap:anywhere}
     .selection-bar{position:sticky;top:8px;z-index:8;display:grid;gap:8px;border:1px solid rgba(77,119,255,.35);background:rgba(10,18,34,.94);backdrop-filter:blur(12px);border-radius:18px;padding:14px}
     .selection-line{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.selection-line strong{text-align:right}
     .booking-layout{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(280px,.45fr);gap:14px;align-items:start}
@@ -67,7 +73,7 @@
   <main class="container unified-shell">
     <section class="panel unified-hero">
       <div>
-        <span class="tag ok">Build 336 unified customer journey</span>
+        <span class="tag ok">Build 337 booking interaction reliability</span>
         <h1 style="margin:10px 0 6px">Mobile detailing services, prices & booking</h1>
         <p class="kicker" style="margin:0">Choose what your vehicle needs, see the price for its size, add specialty work, then check availability and book—all without bouncing between three different pages.</p>
         <div class="journey" aria-label="Booking journey">
@@ -96,10 +102,10 @@
 
     <section class="panel" id="addons" aria-labelledby="addonsHeading">
       <div class="addon-head">
-        <div><h2 id="addonsHeading" style="margin:0">2. Add specialty work only when you need it</h2><p class="muted" style="margin:5px 0 0">Add-ons are filtered by the selected base package. Quote-required work stays clearly marked instead of pretending every condition has one fixed price.</p></div>
+        <div><h2 id="addonsHeading" style="margin:0">2. Add specialty work only when you need it</h2><p class="muted" style="margin:5px 0 0">Add-ons are filtered by the selected base package. Tap or click anywhere on an available card to add or remove it. Quote-required work stays clearly marked instead of pretending every condition has one fixed price.</p></div>
         <button class="btn ghost" id="clearAddonsBtn" type="button">Clear add-ons</button>
       </div>
-      <div id="addonGrid" class="addon-grid"></div>
+      <div id="addonGrid" class="addon-grid" aria-live="polite"></div>
     </section>
 
     <section id="booking" class="booking-layout" aria-labelledby="bookingHeading">
@@ -211,16 +217,23 @@
         analytics("unified_service_pick",{package_code:state.packageCode,vehicle_size:state.size||null});
       }));
     }
+    function setAddonSelection(code, selected) {
+      const addon=(state.catalog?.addons||[]).find((row)=>row.code===code);
+      if(!addon || !addonAllowed(addon)) return;
+      if(selected) state.addons.add(code); else state.addons.delete(code);
+      renderAddons(); renderSummary(); syncUrl(); maybeRefreshPlanner();
+      analytics("unified_addon_toggle",{addon_code:code,selected});
+    }
     function renderAddons() {
       const rows = state.catalog?.addons || [];
       qs("#addonGrid").innerHTML = rows.map((addon)=>{
         const allowed=addonAllowed(addon); const checked=state.addons.has(addon.code);
         const note = !allowed ? (addon.requirement_note || "Choose a compatible main package first.") : (addon.category || addon.type || "Optional service");
-        return `<label class="addon-card ${allowed?"":"disabled"}"><input type="checkbox" data-addon="${escapeHtml(addon.code)}" ${checked?"checked":""} ${allowed?"":"disabled"}/><span><strong>${escapeHtml(addon.name)}</strong><span>${escapeHtml(addonPrice(addon))} · ${escapeHtml(note)}</span></span></label>`;
+        return `<button class="addon-card ${checked?"active":""}" type="button" data-addon-card="${escapeHtml(addon.code)}" aria-pressed="${checked?"true":"false"}" ${allowed?"":"disabled"}><span class="addon-indicator" aria-hidden="true">${checked?"✓":"+"}</span><span class="addon-copy"><strong>${escapeHtml(addon.name)}</strong><span class="addon-meta">${escapeHtml(addonPrice(addon))} · ${escapeHtml(note)}</span></span></button>`;
       }).join("");
-      qsa("[data-addon]").forEach((box)=>box.addEventListener("change",()=>{
-        if(box.checked) state.addons.add(box.dataset.addon); else state.addons.delete(box.dataset.addon);
-        renderSummary(); syncUrl(); maybeRefreshPlanner(); analytics("unified_addon_toggle",{addon_code:box.dataset.addon,selected:box.checked});
+      qsa("[data-addon-card]").forEach((card)=>card.addEventListener("click",()=>{
+        const code=card.dataset.addonCard||"";
+        setAddonSelection(code,!state.addons.has(code));
       }));
     }
     function renderSummary() {
@@ -273,6 +286,7 @@
         state.packageCode=String(params.get("package")||params.get("pkg")||"").trim();
         if(!(state.catalog?.packages||[]).some((row)=>row.code===state.packageCode)) state.packageCode="";
         String(params.get("addons")||"").split(",").map((v)=>v.trim()).filter(Boolean).forEach((code)=>{if((state.catalog?.addons||[]).some((row)=>row.code===code))state.addons.add(code);});
+        [...state.addons].forEach((code)=>{ const addon=(state.catalog?.addons||[]).find((row)=>row.code===code); if(!addon || !addonAllowed(addon)) state.addons.delete(code); });
         qs("#vehicleSize").value=state.size;
         renderPackages(); renderAddons(); renderSummary(); syncUrl();
         const sizeChart=chartUrl(state.catalog||{},"Vehicle Size Chart"); if(sizeChart) qs("#sizeChartImg").src=sizeChart;
