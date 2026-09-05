@@ -3,6 +3,7 @@
 // Build 282: fail-open loader for high-intent use-case booking entry presets.
 // Build 325: fail-open loader for booking wizard responsive/focus UX.
 // Build 326: measure verified rebooking entry/prefill without storing customer or payment data.
+// Build 336: the proven wizard now runs at /booking-planner inside the unified /book shell.
 (function attachRosieBookingHours(globalScope){
   async function loadStatus(date){
     const qs = date ? `?date=${encodeURIComponent(date)}` : '';
@@ -22,17 +23,27 @@
     return String(location.pathname || '/').replace(/\.html$/i,'').replace(/\/+$/,'') || '/';
   }
 
+  function plannerParam(name){
+    const own = new URLSearchParams(location.search).get(name);
+    if (own != null && String(own).trim() !== '') return String(own);
+    if (canonicalPath() !== '/booking-planner' || !document.referrer) return '';
+    try {
+      const ref = new URL(document.referrer, location.origin);
+      if (ref.origin !== location.origin) return '';
+      return String(ref.searchParams.get(name) || '');
+    } catch { return ''; }
+  }
+
   function analyticsTrack(event, detail={}){
     try { globalScope.dispatchEvent(new CustomEvent('rd:analytics', { detail:{ event, ...detail } })); } catch {}
   }
 
   function measureBuild326RebookPrefill(){
-    if (canonicalPath() !== '/book') return;
-    const params = new URLSearchParams(location.search);
-    if (!["1","true","yes"].includes(String(params.get('rebook') || '').toLowerCase())) return;
+    if (canonicalPath() !== '/booking-planner') return;
+    if (!["1","true","yes"].includes(String(plannerParam('rebook') || '').toLowerCase())) return;
 
-    const packageCode = String(params.get('package') || '').trim();
-    const vehicleSize = String(params.get('size') || '').trim().toLowerCase();
+    const packageCode = String(plannerParam('package') || '').trim();
+    const vehicleSize = String(plannerParam('size') || '').trim().toLowerCase();
     const validSize = ["small","mid","oversize"].includes(vehicleSize) ? vehicleSize : '';
     let attempts = 0;
 
@@ -57,7 +68,7 @@
   }
 
   function loadBuild325WizardUX(){
-    if (canonicalPath() !== '/book') return;
+    if (canonicalPath() !== '/booking-planner') return;
     if (document.querySelector('script[data-build325-booking-wizard-ux]')) return;
     const script = document.createElement('script');
     script.src = '/assets/booking-wizard-responsive-v325.js';
@@ -67,10 +78,17 @@
   }
 
   function loadBuild282UseCaseEntry(){
-    if (canonicalPath() !== '/book') return;
+    if (canonicalPath() !== '/booking-planner') return;
+    const need = String(plannerParam('need') || '').trim();
+    if (!need) return;
     const params = new URLSearchParams(location.search);
-    if (!String(params.get('need') || '').trim()) return;
-    if (["1","true","yes"].includes(String(params.get('embed') || '').toLowerCase())) return;
+    if (!params.get('need')) {
+      params.set('need', need);
+      const estimate = plannerParam('estimate');
+      if (estimate && !params.get('estimate')) params.set('estimate', estimate);
+      history.replaceState(null, '', `${location.pathname}?${params.toString()}${location.hash || ''}`);
+    }
+    if (["1","true","yes"].includes(String(plannerParam('embed') || '').toLowerCase())) return;
     if (document.querySelector('script[data-build282-usecase-entry]')) return;
     const script = document.createElement('script');
     script.src = '/assets/booking-usecase-entry-v282.js';
