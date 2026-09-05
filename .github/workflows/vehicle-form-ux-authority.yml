@@ -1,0 +1,29 @@
+name: Vehicle Form UX Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build339-vehicle-form-ux
+    paths:
+      - booking-planner.html
+      - assets/site-policies.js
+      - assets/booking-vehicle-form-ux.js
+      - scripts/build339-vehicle-form-ux-gate.mjs
+      - .github/workflows/vehicle-form-ux-authority.yml
+  pull_request:
+    paths:
+      - booking-planner.html
+      - assets/site-policies.js
+      - assets/booking-vehicle-form-ux.js
+      - scripts/build339-vehicle-form-ux-gate.mjs
+      - .github/workflows/vehicle-form-ux-authority.yml
+
+jobs:
+  vehicle-form-ux-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Build 339 vehicle form UX contract
+        run: node scripts/build339-vehicle-form-ux-gate.mjs
