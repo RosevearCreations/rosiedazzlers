@@ -1,0 +1,44 @@
+name: Rich Specialty Service Cards Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build338-rich-specialty-service-cards
+    paths:
+      - 'assets/booking-specialty-cards.js'
+      - 'assets/site-policies.js'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'sitemap.xml'
+      - 'scripts/build338-rich-specialty-cards-gate.mjs'
+      - '.github/workflows/rich-specialty-service-cards-authority.yml'
+  pull_request:
+    paths:
+      - 'assets/booking-specialty-cards.js'
+      - 'assets/site-policies.js'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'sitemap.xml'
+      - 'scripts/build338-rich-specialty-cards-gate.mjs'
+      - '.github/workflows/rich-specialty-service-cards-authority.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-rich-specialty-cards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JavaScript syntax
+        run: |
+          node --check assets/booking-specialty-cards.js
+          node --check assets/site-policies.js
+          node --check scripts/build338-rich-specialty-cards-gate.mjs
+      - name: Verify rich specialty-card authority
+        run: node scripts/build338-rich-specialty-cards-gate.mjs
