@@ -3,3 +3,8 @@
 /headlight-restoration-addon /headlight-restoration 301
 /odor-treatment /odor-removal 301
 /external-ceramic-coating /ceramic-coating 301
+# Build 336: root Services + Pricing converge on the canonical unified /book funnel.
+/services /book 301
+/pricing /book 301
+/services.html /book 301
+/pricing.html /book 301

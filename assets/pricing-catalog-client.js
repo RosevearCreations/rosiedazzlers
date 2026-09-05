@@ -1,4 +1,4 @@
-// Build 274 compatibility + operating-rule wrapper.
+// Build 336 compatibility + operating-rule wrapper.
 // The original pricing catalogue implementation is retained verbatim in pricing-catalog-client-legacy.js.
 // This wrapper keeps that API stable while converging public booking presentation on the retained Rosie rule:
 // Rosie brings standard detailing water and power; customers provide a safe/private work area.
@@ -44,7 +44,7 @@ export async function loadPricingCatalogClient(options = {}) {
 }
 
 const normalizedPath = String(globalThis.location?.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
-if (normalizedPath === "/book") {
+if (["/book", "/booking-planner"].includes(normalizedPath)) {
   import("./booking-quick-start-v274.js")
     .then(() => import("./booking-retention-v275.js"))
     .then(() => import("./customer-rebook-v285.js"))

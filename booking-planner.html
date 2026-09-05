@@ -1,0 +1,2279 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Book Mobile Auto Detailing | Rosie Dazzlers</title>
+  <meta name="description" content="Choose your vehicle, package, add-ons and available date for mobile auto detailing in Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi and nearby areas." />
+  <link rel="canonical" href="https://rosiedazzlers.ca/book" />
+  <meta property="og:title" content="Book Mobile Auto Detailing | Rosie Dazzlers" />
+  <meta property="og:description" content="Choose your date, town, vehicle, package, add-ons, and deposit payment for mobile detailing across Oxford and Norfolk communities." />
+  <meta name="robots" content="index,follow" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260412bookfix1" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "AutoDetailing",
+    "name": "Rosie Dazzlers",
+    "url": "https://rosiedazzlers.ca/book",
+    "image": "https://assets.rosiedazzlers.ca/brand/Untitled.png",
+    "areaServed": [
+      {"@type":"AdministrativeArea","name":"Oxford County, Ontario"},
+      {"@type":"AdministrativeArea","name":"Norfolk County, Ontario"}
+    ],
+    "address": {"@type":"PostalAddress","addressRegion":"ON","addressCountry":"CA"},
+    "telephone": "+1-226-752-7613"
+  }
+  </script>
+
+  <style>
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid2 > *, .grid3 > *{min-width:0}
+    input, select, textarea{min-width:0}
+    .muted{color:rgba(234,242,255,.72)}
+    .mini{font-size:.92rem}
+    .summary-box{display:grid;gap:8px}
+    .summary-row{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}
+    .summary-row strong{font-weight:800;text-align:right}
+    .wizard-step[hidden]{display:none !important}
+    .wizard-actions{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px}
+    .step-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+    .step-head h2,.step-head h3{margin:0}
+    .slot-row{display:flex;gap:10px;flex-wrap:wrap}
+    .slot-row .btn{flex:1 1 0;color:rgba(248,250,252,.96)!important}
+    .slot-row .btn.active{background:linear-gradient(135deg,var(--accent),#2b5bff);border-color:rgba(77,119,255,.55);color:#fff!important}
+    .requirements-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .requirements-grid label{display:flex;gap:10px;align-items:flex-start;border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;background:rgba(255,255,255,.03)}
+    .package-note{min-height:44px;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .mobile-toolbar{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+    .page-kicker{margin:0;color:rgba(234,242,255,.72)}
+    .field-error{color:#ffb4b4;font-size:.95rem;margin-top:8px}
+    .service-area-panel .notice{margin:0}
+    .service-area-grid{display:grid;grid-template-columns:minmax(180px,.56fr) minmax(420px,1.44fr);gap:12px;align-items:start}
+    .preferred-date-field{max-width:15rem}
+    .date-input-wrap{position:relative;width:min(100%,14rem);max-width:100%}
+    .date-input-wrap input[type="date"]{width:100%;padding-right:52px;color-scheme:dark}
+    .date-picker-button{
+      position:absolute;right:8px;top:50%;transform:translateY(-50%);
+      width:36px;height:36px;border-radius:10px;border:1px solid rgba(255,255,255,.16);
+      background:rgba(255,255,255,.12);color:#fff;font-size:1rem;line-height:1;cursor:pointer
+    }
+    .date-picker-button:hover{background:rgba(255,255,255,.18)}
+    #service_area{min-width:0;width:100%}
+
+    .service-area-input-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end}
+    @media(max-width:720px){.service-area-input-row{grid-template-columns:1fr}.service-area-input-row .btn{width:100%;justify-content:center}}
+    .service-area-picker{
+      display:none;margin-top:8px;padding:10px;border:1px solid rgba(255,255,255,.12);border-radius:16px;
+      background:rgba(15,23,42,.82);box-shadow:0 14px 36px rgba(0,0,0,.22)
+    }
+    .service-area-picker.open{display:block}
+    .service-area-picker-head{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+    .service-area-picker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;max-height:300px;overflow:auto;padding-right:4px}
+    .service-area-choice{
+      border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.08);color:#fff;
+      text-align:left;padding:9px 10px;cursor:pointer;min-height:58px
+    }
+    .service-area-choice:hover,.service-area-choice:focus{background:rgba(77,119,255,.22);outline:2px solid rgba(109,168,255,.45)}
+    .service-area-choice strong{display:block;font-size:.95rem}
+    .service-area-choice span{display:block;color:rgba(234,242,255,.72);font-size:.82rem;margin-top:2px}
+    .booking-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}
+    .booking-legend span{display:inline-flex;align-items:center;gap:6px;font-size:.9rem;color:rgba(248,250,252,.92)}
+    .booking-legend i{display:inline-block;width:12px;height:12px;border-radius:999px}
+    .booking-legend .open i{background:#24c36b}
+    .booking-legend .partial i{background:#ffb020}
+    .booking-legend .closed i{background:#ff6b6b}
+    .booking-legend .selected i{background:#4d77ff}
+    .calendar-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px}
+    .calendar-toolbar .range{font-weight:700;color:rgba(234,242,255,.84)}
+    .calendar-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+    .date-pill{
+      display:flex;flex-direction:column;align-items:flex-start;gap:4px;
+      border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;background:rgba(255,255,255,.04);
+      text-align:left;min-height:82px;cursor:pointer
+    }
+    .date-pill strong,.date-pill span,#availabilityNote,.wizard-nav button{color:rgba(248,250,252,.96)!important}
+    .date-pill.is-open{border-color:rgba(36,195,107,.45);background:rgba(36,195,107,.12)}
+    .date-pill.is-partial{border-color:rgba(255,176,32,.45);background:rgba(255,176,32,.12)}
+    .date-pill.is-closed{border-color:rgba(255,107,107,.30);background:rgba(255,107,107,.10);opacity:.75}
+    .date-pill.is-selected{outline:2px solid #4d77ff}
+    .date-pill[disabled]{cursor:not-allowed}
+    .wizard-nav{display:flex;gap:10px;flex-wrap:wrap}
+    .wizard-nav .btn{min-width:120px}
+    .vehicle-option{
+      display:flex;flex-direction:column;align-items:flex-start;gap:4px;width:100%;min-width:0;overflow:hidden;
+      border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:12px;background:rgba(255,255,255,.04)
+    }
+    .vehicle-option strong,.vehicle-option span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .vehicle-option.active{outline:2px solid #4d77ff}
+    .service-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;align-items:stretch}
+    .booking-choice-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:12px}
+    .booking-choice-card{border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px;background:rgba(255,255,255,.04);display:flex;flex-direction:column;gap:8px}
+    .booking-choice-card h3{margin:0;font-size:1.02rem}
+    .booking-choice-card p{margin:0;color:rgba(234,242,255,.76);font-size:.94rem}
+    .booking-choice-card .btn{align-self:flex-start;margin-top:auto}
+    .photo-estimate-guide{border:1px solid rgba(77,119,255,.28);border-radius:18px;background:rgba(77,119,255,.10);padding:14px;margin-top:12px}
+    .photo-estimate-guide ul{margin:.5rem 0 0;padding-left:1.1rem}
+    .condition-recommender{border:1px solid rgba(36,195,107,.30);border-radius:18px;background:rgba(36,195,107,.08);padding:14px;margin-top:12px}
+    .condition-recommender h3{margin:.1rem 0 .35rem}
+    .condition-chip-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}
+    .condition-chip{display:flex;gap:8px;align-items:flex-start;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:10px;background:rgba(255,255,255,.05);cursor:pointer}
+    .condition-chip input{margin-top:3px;flex:0 0 auto}
+    .condition-chip span{font-size:.92rem;color:rgba(234,242,255,.86);line-height:1.35}
+    .recommendation-output{display:none;border:1px solid rgba(77,119,255,.25);border-radius:14px;background:rgba(77,119,255,.10);padding:12px;margin-top:12px}
+    .recommendation-output.show{display:block}
+    .media-consent-grid{display:grid;gap:8px;margin-top:8px}
+    .media-consent-grid label{display:flex;gap:9px;align-items:flex-start;border:1px solid rgba(255,255,255,.10);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)}
+    .media-consent-grid input{margin-top:3px;flex:0 0 auto}
+    .package-alias{font-weight:800;color:rgba(255,255,255,.96)}
+    .service-card{
+      display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
+      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
+    }
+    .service-card strong,.service-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .service-card.active{outline:2px solid #4d77ff}
+    .service-card > *, .addon-card > *{max-width:100%;min-width:0}
+    .service-card .row, .addon-card .row{width:100%;max-width:100%;min-width:0}
+    .service-card img{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
+    .addon-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .addon-card{
+      display:flex;flex-direction:column;align-items:flex-start;gap:8px;border:1px solid rgba(255,255,255,.08);min-width:0;overflow:hidden;
+      border-radius:18px;padding:12px;background:rgba(255,255,255,.04);text-align:left;width:100%;min-height:100%;box-sizing:border-box
+    }
+    .addon-card strong,.addon-card span{max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .addon-card.active{outline:2px solid #4d77ff}
+    .addon-card.disabled{opacity:.6;filter:saturate(.75);cursor:not-allowed;border-color:rgba(255,255,255,.08)}
+    .addon-card.disabled .tag{opacity:.85}
+    .addon-thumb{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;flex:0 0 auto}
+    .tag{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
+    .tag.ok{background:rgba(36,195,107,.15);color:#d7ffe8}
+    .tag.warn{background:rgba(255,176,32,.18);color:#ffe6b3}
+    .service-area-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .modalBack{
+      position:fixed;inset:0;background:rgba(6,10,18,.82);display:none;align-items:center;justify-content:center;
+      padding:24px;z-index:70
+    }
+    .modal{width:min(980px,100%);background:#0d1526;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px}
+    .modalHead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .modal img{width:100%;height:auto;display:block;border-radius:14px}
+    body.is-embed .nav,
+    body.is-embed .footer{display:none}
+    body.is-embed{background:transparent}
+    body.is-embed main.container{max-width:1280px;padding-top:0}
+    body.is-embed .wizard-top{margin-top:0}
+    body.is-embed .wizard-top .step-head .row a[href="/pricing"]{display:none}
+    body.is-embed .wizard-shell{padding-bottom:0}
+    body.is-embed .panel, body.is-embed .card, body.is-embed .service-card, body.is-embed .addon-card{overflow:hidden}
+    body.is-embed .service-card strong, body.is-embed .service-card span, body.is-embed .addon-card strong, body.is-embed .addon-card span{display:block;max-width:100%;overflow-wrap:anywhere;word-break:break-word}
+    .step-bottom-actions{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.08)}
+    body.is-embed .step-bottom-actions{position:sticky;bottom:0;z-index:6;background:linear-gradient(180deg,rgba(13,21,38,.86),rgba(13,21,38,.98));padding:10px 0 0}
+    .sr-only{position:absolute;left:-9999px;opacity:0;pointer-events:none}
+    @media (max-width:980px){
+      .grid2,.grid3,.requirements-grid,.service-area-grid{grid-template-columns:1fr}
+      .preferred-date-field,.date-input-wrap{max-width:100%;width:100%}
+      .slot-row{display:grid;grid-template-columns:1fr}
+      .wizard-actions .btn{width:100%}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/">
+        <img data-logo alt="Rosie Dazzlers logo" />
+        <strong>Rosie Dazzlers</strong>
+      </a>
+      <button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button>
+      <div class="nav-links" id="navLinks"></div>
+      <a class="btn primary" href="/book">Book now</a>
+    </div>
+  </div>
+
+  <main class="container wizard-shell">
+    <div class="container"><p class="status" data-business-hours-status>Loading appointment-hours notes…</p></div>
+    <section class="panel wizard-top" id="wizardTop">
+      <div class="step-head">
+        <div>
+          <h1>Book mobile detailing</h1>
+          <p class="page-kicker">Phone-friendly booking for Oxford County and Norfolk County communities. Pick your date, exact service area, vehicle, package, and add-ons, then lock in your booking with a deposit.</p>
+        </div>
+        <div class="row">
+          <button class="btn ghost" id="openSizeChartBtn" type="button">Size chart</button>
+                    <a class="btn ghost" href="/pricing">Pricing page</a>
+        </div>
+      </div>
+      <div id="bookingStatus" class="notice" style="display:none;margin-top:12px"></div>
+      <div class="wizard-nav" id="wizardNav" style="margin-top:14px"></div>
+      <div class="mobile-toolbar" style="margin-top:14px">
+        <div class="kicker" id="wizardHint">Step 1 of 5</div>
+        <div class="row">
+          <button class="btn ghost" id="prevStepBtn" type="button">Back</button>
+          <button class="btn primary" id="nextStepBtn" type="button">Step 2</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section panel wizard-card wizard-step" data-step="1">
+      <div class="step-head">
+        <div>
+          <h2>Step 1 — Date, time, and vehicle</h2>
+          <p class="muted">Choose an available day, then confirm which vehicle you want us to detail.</p>
+        </div>
+      </div>
+
+      <div class="service-area-grid" style="margin-top:12px">
+        <div class="preferred-date-field">
+          <label for="service_date">Preferred date</label>
+          <div class="date-input-wrap">
+            <input id="service_date" type="date" required />
+            <button id="serviceDatePickerBtn" class="date-picker-button" type="button" aria-label="Show date picker" title="Show date picker">📅</button>
+          </div>
+          <div class="mini muted" style="margin-top:6px">Use the quick choices below or pick another date from the calendar. Available, partially open, and unavailable days are shown below.</div>
+        </div>
+
+        <div>
+          <label for="service_area">Service area</label>
+          <div class="service-area-input-row">
+            <input id="service_area" list="service_area_options" autocomplete="off" placeholder="Start typing a town, county, or service zone…" />
+            <button class="btn ghost small" id="showServiceAreasBtn" type="button">Show all towns</button>
+          </div>
+          <datalist id="service_area_options"></datalist>
+          <div id="serviceAreaPicker" class="service-area-picker" aria-live="polite">
+            <div class="service-area-picker-head">
+              <strong>Oxford and Norfolk service areas</strong>
+              <button class="btn ghost small" id="hideServiceAreasBtn" type="button">Hide list</button>
+            </div>
+            <div id="serviceAreaPickerGrid" class="service-area-picker-grid"></div>
+          </div>
+          <div id="serviceAreaPanel" class="service-area-panel" style="margin-top:8px">
+            <div id="serviceAreaNote" class="notice mini">Choose the closest town or service zone so we can apply the right travel, parking, and local bylaw rules before dispatch.</div>
+            <ul id="serviceAreaRules">
+              <li>Select a town or zone to load parking, noise, runoff, and access reminders.</li>
+            </ul>
+            <div id="serviceAreaLinks" class="service-area-links"></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="kicker">Booking calendar snapshot</div>
+        <div class="booking-legend" aria-hidden="true">
+          <span class="open"><i></i>Open</span>
+          <span class="partial"><i></i>Partly open</span>
+          <span class="closed"><i></i>Unavailable</span>
+          <span class="selected"><i></i>Selected</span>
+        </div>
+        <div class="calendar-toolbar">
+          <button class="btn ghost" id="availabilityPrevBtn" type="button">Previous 21 days</button>
+          <div id="availabilityWindowLabel" class="range">Loading availability window…</div>
+          <button class="btn ghost" id="availabilityNextBtn" type="button">Next 21 days</button>
+        </div>
+        <div id="availableDates" class="calendar-strip" style="margin-top:8px"></div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="kicker">Time slot</div>
+        <div class="slot-row" style="margin-top:8px">
+          <button class="btn ghost" type="button" data-slot="AM">AM half day</button>
+          <button class="btn ghost" type="button" data-slot="PM">PM half day</button>
+          <button class="btn ghost" type="button" data-slot="FULL">Full day</button>
+        </div>
+        <div id="availabilityNote" class="mini muted" style="margin-top:8px">Choose a date to load available time slots.</div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="step-head">
+        <div>
+          <h3>Vehicle</h3>
+          <p class="muted">Use a saved garage vehicle if you already have an account, or enter the vehicle now.</p>
+        </div>
+        <a class="btn ghost" href="/login">Login / create account</a>
+      </div>
+
+      <div id="garagePickerWrap" style="margin-top:12px;display:none">
+        <div class="kicker">Saved garage vehicles</div>
+        <div id="garageVehicleList" class="vehicle-quick-list" style="margin-top:8px"></div>
+      </div>
+
+      <div class="grid3" style="margin-top:12px">
+        <div>
+          <label for="veh_year">Year</label>
+          <input id="veh_year" list="veh_year_list" inputmode="numeric" autocomplete="off" placeholder="Start typing year" />
+          <datalist id="veh_year_list"></datalist>
+        </div>
+        <div>
+          <label for="veh_make">Make</label>
+          <input id="veh_make" list="veh_make_list" autocomplete="off" placeholder="Start typing make" />
+          <datalist id="veh_make_list"></datalist>
+        </div>
+        <div>
+          <label for="veh_model">Model</label>
+          <input id="veh_model" list="veh_model_list" autocomplete="off" placeholder="Start typing model" />
+          <datalist id="veh_model_list"></datalist>
+        </div>
+      </div>
+
+      <div class="grid3" style="margin-top:12px">
+        <div>
+          <label for="veh_color">Colour</label>
+          <input id="veh_color" type="text" placeholder="Black, silver, blue" />
+        </div>
+        <div>
+          <label for="veh_mileage">Current mileage (km)</label>
+          <input id="veh_mileage" type="number" min="0" step="1" placeholder="Optional" />
+        </div>
+        <div>
+          <label for="vehicle_size">Vehicle size</label>
+          <select id="vehicle_size">
+            <option value="">Select size</option>
+            <option value="small">Small car</option>
+            <option value="mid">Mid-sized</option>
+            <option value="oversize">Oversized / large</option>
+          </select>
+        </div>
+        <div>
+          <label for="veh_category">Vehicle category</label>
+          <select id="veh_category">
+            <option value="">Select category</option>
+            <option value="small">Small car</option>
+            <option value="mid">Medium / standard</option>
+            <option value="oversize">Oversized</option>
+            <option value="exotic">Exotic / luxury</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="veh_body">Body style</label>
+          <select id="veh_body">
+            <option value="">Select body style</option>
+            <option value="sedan">Sedan / Coupe</option>
+            <option value="hatch">Hatchback</option>
+            <option value="crossover">Crossover</option>
+            <option value="suv">SUV</option>
+            <option value="truck">Truck</option>
+            <option value="van">Van</option>
+            <option value="exotic">Exotic / Supercar</option>
+          </select>
+        </div>
+        <div>
+          <label for="veh_plate">Plate (optional)</label>
+          <input id="veh_plate" type="text" placeholder="ABC123" />
+        </div>
+      </div>
+
+      <div id="sizeVerificationNotice" class="notice warn" style="display:none;margin-top:10px"></div>
+      <div id="sizeHint" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="vehicleServiceHint" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="step1Error" class="field-error"></div>
+      <div class="step-bottom-actions">
+        <button class="btn primary step-next-inline" type="button" data-inline-next-step="1">Go to Step 2 — Choose service</button>
+      </div>
+    </section>
+
+    <section class="section panel wizard-card wizard-step" data-step="2" hidden>
+      <div class="step-head">
+        <div>
+          <h2>Step 2 — Choose your main service</h2>
+          <p class="muted">Packages are shown using the price for the vehicle size you selected.</p>
+        </div>
+      </div>
+      <div class="photo-estimate-guide" id="bookingServiceChooser">
+        <strong>Not sure which one to pick?</strong>
+        <p class="muted" style="margin:6px 0 0">Start with the result you want. These quick choices select the closest package, and we can still adjust after photos or notes.</p>
+        <div class="booking-choice-grid">
+          <article class="booking-choice-card">
+            <h3>Quick exterior cleanup</h3>
+            <p>For maintained vehicles that mostly need exterior wash, glass, wheels, and a light dash reset.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="premium_wash">Choose Exterior Wash</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Quick interior refresh</h3>
+            <p>For dust, crumbs, windows, mats, and a basic cabin tidy without deeper shampoo work.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="basic_detail">Choose Interior Refresh</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Interior mess, pets, salt, or odour</h3>
+            <p>For deeper seats, carpets, mats, cargo areas, salt marks, pet hair, and interior recovery.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="interior_detail">Choose Interior Detail</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Best all-around reset</h3>
+            <p>For a full inside/outside reset, pre-sale cleanup, family vehicles, or when you are unsure.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="complete_detail">Choose Full Detail</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Exterior gloss or protection prep</h3>
+            <p>For paint, trim, wheels, road film, clay, sealant, wax, paint correction, or coating-prep talks.</p>
+            <button class="btn ghost small" type="button" data-package-suggest="exterior_detail">Choose Exterior Detail</button>
+          </article>
+          <article class="booking-choice-card">
+            <h3>Quote first from photos</h3>
+            <p>Send 2–6 photos if there are stains, pet hair, oxidation, headlights, paint defects, or coating questions.</p>
+            <button class="btn ghost small" type="button" data-jump-notes="photos">Add photo notes</button>
+          </article>
+        </div>
+      </div>
+      <div class="condition-recommender" id="bookingConditionRecommender">
+        <div class="badges">
+          <span class="badge">Condition helper</span>
+          <span class="badge">Photo estimate friendly</span>
+          <span class="badge">Optional</span>
+        </div>
+        <h3>Tell us what the vehicle needs</h3>
+        <p class="muted" style="margin:0">Pick what applies and we will suggest the closest package, useful add-ons, and notes for staff review. This keeps the choice simple without locking you in.</p>
+        <div class="condition-chip-grid" aria-label="Vehicle condition choices">
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="maintained_interior" /><span>Mostly maintained interior: dust, crumbs, mats, glass, light wipe-down</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="maintained_exterior" /><span>Mostly maintained exterior: wash, wheels, glass, light shine</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="pet_hair" /><span>Pet hair, fur in carpets/seats, or extra vacuum detail</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="salt_stains" /><span>Salt stains, winter mats, carpet marks, or floor buildup</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="odor" /><span>Odour concern, spills, smoke, food smell, or unknown smell source</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="stains_shampoo" /><span>Seat/carpet stains, shampoo/extraction questions, or cargo-area mess</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="paint_swirls" /><span>Swirls, dull paint, scratches, oxidation, or polishing question</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="protection" /><span>Wax, sealant, ceramic spray, coating prep, or longer protection</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="headlights" /><span>Cloudy headlights or exterior detail question</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="full_reset" /><span>Best all-around reset: family vehicle, resale prep, or not sure</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="work_truck" /><span>Work truck, farm vehicle, fleet vehicle, or multiple vehicles</span></label>
+          <label class="condition-chip"><input type="checkbox" data-condition-flag="photo_quote" /><span>I want a photo-based quote before final recommendation</span></label>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button class="btn primary small" type="button" id="conditionRecommendBtn">Recommend package</button>
+          <button class="btn ghost small" type="button" id="conditionClearBtn">Clear helper</button>
+        </div>
+        <div class="recommendation-output" id="conditionRecommendationResult"></div>
+      </div>
+
+      <div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>
+      <div id="step2Error" class="field-error"></div>
+    </section>
+
+    <section class="section panel wizard-card wizard-step" data-step="3" hidden>
+      <div class="step-head">
+        <div>
+          <h2>Step 3 — Add-ons</h2>
+          <p class="muted">Optional extras. Quote-required items are requested now but not charged automatically.</p>
+        </div>
+      </div>
+      <div id="addonsBox" class="addon-grid" style="margin-top:12px"></div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="gift_code">Gift code (optional)</label>
+          <input id="gift_code" type="text" placeholder="RD-XXXX-XXXX" />
+        </div>
+        <div>
+          <label for="promo_code">Promo code (optional)</label>
+          <input id="promo_code" type="text" placeholder="SPRING10" />
+        </div>
+      </div>
+      <div id="step3Error" class="field-error"></div>
+    </section>
+
+    <section class="section panel wizard-card wizard-step" data-step="4" hidden>
+      <div class="step-head">
+        <div>
+          <h2>Step 4 — Review vehicle, requirements, and notes</h2>
+          <p class="muted">Confirm setup needs before you continue to payment.</p>
+        </div>
+      </div>
+      <div id="reviewVehicleBox" class="summary-box" style="margin-top:12px"></div>
+
+      <div class="requirements-grid" style="margin-top:16px">
+        <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway and safe access required</strong><br><span data-policy-copy="driveway_access">We need safe working space at the vehicle.</span></span></label>
+        <label><input id="ack_power_water" type="checkbox" /><span><strong>Power / water access acknowledged</strong><br><span data-policy-copy="water_power">Extra fees can apply if either is unavailable.</span></span></label>
+        <label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br><span data-policy-copy="water_power">Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></span></label>
+        <label><input id="ack_bylaw" type="checkbox" /><span><strong>Environmental / bylaw responsibility acknowledged</strong><br><span data-policy-copy="driveway_access">Customer confirms safe access and any local bylaw requirements.</span></span></label>
+        <label><input id="ack_cancellation" type="checkbox" /><span><strong>Deposit and weather rescheduling policy acknowledged</strong><br><span data-policy-copy="cancellation">Unsafe weather or site conditions can require rescheduling.</span></span></label>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="special_notes">Special notes</label>
+          <textarea id="special_notes" placeholder="Pet hair, stains, access notes, allergies, observed damage, or anything else we should know."></textarea>
+        </div>
+        <div>
+          <label for="veh_photo">Vehicle photo link (optional)</label>
+          <input id="veh_photo" type="url" placeholder="https://..." />
+          <div class="mini muted" style="margin-top:6px"><span data-policy-copy="media_privacy">Helpful for size verification and planning, but not required.</span></div>
+          <div class="photo-estimate-guide">
+            <strong>Photo estimate checklist</strong>
+            <div class="mini muted" style="margin-top:6px">For quotes, attach or link 2–6 clear photos when possible:</div>
+            <ul class="mini muted">
+              <li>Front and rear exterior, especially paint or headlight issues</li>
+              <li>Driver seat, passenger seat, carpets, mats, and cargo area</li>
+              <li>Close-up of pet hair, salt stains, odour source, scratches, oxidation, or coating concerns</li>
+            </ul>
+            <label for="photo_estimate_links" style="margin-top:10px">Photo estimate links (optional)</label>
+            <textarea id="photo_estimate_links" rows="3" placeholder="Paste Google Drive, Dropbox, iCloud, Facebook, or other share links here — one per line."></textarea>
+            <div class="mini muted" id="photoEstimateLinkHelp" style="margin-top:6px">Links and uploaded estimate media are saved with booking notes and, after migration, stored for staff quote review.</div>
+            <label for="photo_estimate_files" style="margin-top:10px">Upload estimate photos/videos (optional)</label>
+            <input id="photo_estimate_files" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime,video/webm" multiple />
+            <div class="mini muted" id="photoEstimateUploadStatus" style="margin-top:6px">Direct upload is optional. If uploads are not enabled yet, paste shared photo links above.</div>
+            <label class="condition-chip" style="margin-top:10px">
+              <input id="photo_estimate_requested" type="checkbox" />
+              <span>Please treat this as a photo-estimate / quote-review booking before final service confirmation.</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="photo-estimate-guide" id="bookingMediaConsentGuide">
+        <strong>Photo and public-use preference</strong>
+        <p class="mini muted" style="margin:6px 0 0">Estimate photos are for quoting and job planning by default. Public gallery or social use should only happen after customer permission and staff privacy review.</p>
+        <div class="media-consent-grid">
+          <label><input type="radio" name="media_consent_preference" value="estimate_only" checked /><span><strong>Estimate use only</strong><br><span class="mini muted">Use my photos for quote/job planning, not public posts.</span></span></label>
+          <label><input type="radio" name="media_consent_preference" value="ask_first" /><span><strong>Ask me first</strong><br><span class="mini muted">You may ask later about before/after gallery or social use.</span></span></label>
+          <label><input type="radio" name="media_consent_preference" value="public_after_review" /><span><strong>Public use may be okay after review</strong><br><span class="mini muted">Staff must still remove/avoid plates, faces, addresses, paperwork, and private identifiers before any post.</span></span></label>
+        </div>
+      </div>
+
+      <div id="step4Error" class="field-error"></div>
+    </section>
+
+    <section class="section panel wizard-card wizard-step" data-step="5" hidden>
+      <div class="step-head">
+        <div>
+          <h2>Step 5 — Contact details, summary, and pay</h2>
+          <p class="muted">Finalize your booking and continue to deposit payment.</p>
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="customer_name">Full name</label>
+          <input id="customer_name" type="text" required />
+        </div>
+        <div>
+          <label for="customer_email">Email</label>
+          <input id="customer_email" type="email" required />
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="customer_phone">Phone</label>
+          <input id="customer_phone" type="tel" placeholder="(555) 555-5555" />
+        </div>
+        <div>
+          <label for="address_line1">Service address</label>
+          <input id="address_line1" type="text" placeholder="123 Main St" required />
+        </div>
+      </div>
+
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="city">City</label>
+          <input id="city" type="text" list="city_options" autocomplete="address-level2" placeholder="Town or municipality" />
+          <datalist id="city_options"></datalist>
+        </div>
+        <div>
+          <label for="postal_code">Postal code</label>
+          <input id="postal_code" type="text" placeholder="N0E 1W0" />
+        </div>
+      </div>
+      <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
+
+      <div class="hr"></div>
+      <div id="finalSummary" class="summary-box"></div>
+      <div id="step5Error" class="field-error"></div>
+
+      <div class="wizard-actions">
+        <a class="btn ghost" href="/waiver">Terms, waiver, and requirements</a>
+        <button class="btn primary" id="checkoutBtn" type="button">Book and pay deposit</button>
+      </div>
+    </section>
+
+    <div class="footer" data-footer></div>
+  </main>
+
+  <div class="modalBack" id="modalBack" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHead">
+        <strong id="modalTitle">Preview</strong>
+        <button class="btn ghost" id="modalCloseBtn" type="button">Close</button>
+      </div>
+      <img id="modalImg" alt="Preview image" />
+    </div>
+  </div>
+
+  <script type="module">
+    import {
+      loadPricingCatalogClient,
+      fetchJsonStrict,
+      money,
+      escapeHtml,
+      bookingRules,
+      serviceAreaRows,
+      findServiceArea,
+      addonPrimaryImage as sharedAddonPrimaryImage,
+      addonFallbackImage as sharedAddonFallbackImage,
+      packageImageForSize as sharedPackageImageForSize,
+      packagePrice as sharedPackagePrice,
+      chartUrl
+    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+    import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
+
+    const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
+    const VEHICLE_MAKES_URL = "/api/vehicle_makes";
+    const VEHICLE_MODELS_URL = "/api/vehicle_models";
+    const BRAND_BASE = "https://assets.rosiedazzlers.ca/brand";
+    const PACKAGE_BASE = "https://assets.rosiedazzlers.ca/packages/";
+
+    const qs = (s) => document.querySelector(s);
+    const qsa = (s) => [...document.querySelectorAll(s)];
+    const pageParams = new URLSearchParams(window.location.search);
+    const embedMode = ["1", "true", "yes"].includes(String(pageParams.get("embed") || "").toLowerCase());
+
+    const steps = [
+      { title:"Step 1", subtitle:"Date & vehicle" },
+      { title:"Step 2", subtitle:"Main service" },
+      { title:"Step 3", subtitle:"Add-ons" },
+      { title:"Step 4", subtitle:"Verify & requirements" },
+      { title:"Step 5", subtitle:"Review & pay" }
+    ];
+
+    const state = {
+      pricing: null,
+      currentStep: 1,
+      selectedPackageCode: "",
+      selectedSlotChoice: "",
+      addons: new Set(),
+      conditionFlags: new Set(),
+      conditionRecommendationSummary: "",
+      photoEstimateRequested: false,
+      uploadedPhotoEstimateLinks: [],
+      mediaConsentPreference: "estimate_only",
+      garageVehicles: [],
+      availabilityCache: new Map(),
+      availabilityOffset: 0,
+      vehicleCatalog: { years: [], makes: [], models: [] },
+      activeGarageVehicleId: null
+    };
+
+    const DEFAULT_AVAILABILITY_WINDOW_DAYS = 21;
+
+    function analyticsTrack(event, detail = {}) {
+      try {
+        window.dispatchEvent(new CustomEvent("rd:analytics", { detail: { event, ...detail } }));
+      } catch {}
+    }
+
+    const CONDITION_LABELS = {
+      maintained_interior: "Mostly maintained interior",
+      maintained_exterior: "Mostly maintained exterior",
+      pet_hair: "Pet hair",
+      salt_stains: "Salt stains",
+      odor: "Odour concern",
+      stains_shampoo: "Stains or shampoo/extraction question",
+      paint_swirls: "Paint swirls/dull paint/scratches",
+      protection: "Wax/sealant/coating protection",
+      headlights: "Cloudy headlights",
+      full_reset: "Full reset",
+      work_truck: "Work truck/fleet/multiple vehicles",
+      photo_quote: "Photo quote requested"
+    };
+
+    function selectedConditionFlags() {
+      const flags = qsa("[data-condition-flag]:checked").map((node) => node.getAttribute("data-condition-flag")).filter(Boolean);
+      state.conditionFlags = new Set(flags);
+      state.photoEstimateRequested = flags.includes("photo_quote") || qs("#photo_estimate_requested")?.checked === true;
+      return flags;
+    }
+
+    function conditionFlagLabels(flags = selectedConditionFlags()) {
+      return flags.map((flag) => CONDITION_LABELS[flag] || flag).filter(Boolean);
+    }
+
+    function buildConditionRecommendation(flags = selectedConditionFlags()) {
+      const set = new Set(flags);
+      const notes = [];
+      const addonCodes = [];
+      let packageCode = "complete_detail";
+      let headline = "Full Detail is the safest starting point.";
+
+      if (set.has("maintained_exterior") && !set.has("maintained_interior") && flags.length === 1) {
+        packageCode = "premium_wash";
+        headline = "Premium Wash looks like the closest fit.";
+      } else if (set.has("maintained_interior") && !set.has("maintained_exterior") && flags.length === 1) {
+        packageCode = "basic_detail";
+        headline = "Basic Detail / Express Interior Refresh looks like the closest fit.";
+      } else if (["pet_hair", "salt_stains", "odor", "stains_shampoo"].some((flag) => set.has(flag))) {
+        packageCode = "interior_detail";
+        headline = "Interior Detail is the best starting point for this condition.";
+      } else if (["paint_swirls", "protection", "headlights"].some((flag) => set.has(flag))) {
+        packageCode = "exterior_detail";
+        headline = "Exterior Detail is the best starting point for paint/protection questions.";
+      }
+
+      if (set.has("full_reset") || (set.has("maintained_interior") && set.has("maintained_exterior"))) {
+        packageCode = "complete_detail";
+        headline = "Complete Detail / Full Detail is the best all-around reset.";
+      }
+      if (set.has("work_truck")) notes.push("Work truck/fleet/multiple vehicle note: staff should confirm access, timing, soil level, and whether this should become a quote or recurring-plan lead.");
+      if (set.has("photo_quote")) notes.push("Customer asked for photo-based quote review before final recommendation.");
+      if (set.has("pet_hair")) notes.push("Pet hair noted; staff should confirm severity and whether extra labour/quote handling is needed.");
+      if (set.has("salt_stains")) notes.push("Salt staining noted; staff should review mats/carpets and quote deeper extraction if needed.");
+      if (set.has("odor")) notes.push("Odour concern noted; staff should identify source before promising removal.");
+      if (set.has("stains_shampoo")) notes.push("Seat/carpet stain or shampoo/extraction question noted; photos recommended.");
+      if (set.has("paint_swirls")) addonCodes.push("two_stage_polish");
+      if (set.has("protection")) addonCodes.push("high_grade_paint_sealant");
+      if (set.has("paint_swirls") || set.has("protection")) addonCodes.push("full_clay_treatment");
+      if (set.has("headlights")) notes.push("Headlight haze noted; staff should inspect and quote if restoration is needed.");
+
+      return { packageCode, headline, addonCodes: [...new Set(addonCodes)], notes };
+    }
+
+    function appendBookingNote(text) {
+      const notes = qs("#special_notes");
+      if (!notes || !text) return;
+      const existing = notes.value.trim();
+      if (existing.includes(text)) return;
+      notes.value = existing ? `${existing}\n\n${text}` : text;
+    }
+
+    function parsePhotoEstimateLinks() {
+      const raw = qs("#photo_estimate_links")?.value || "";
+      return raw
+        .split(/[\n,]+/)
+        .map((item) => item.trim())
+        .filter(Boolean)
+        .filter((item, index, all) => all.indexOf(item) === index)
+        .slice(0, 12);
+    }
+
+    function appendPhotoEstimateLinks(links) {
+      const field = qs("#photo_estimate_links");
+      if (!field) return;
+      const merged = [...parsePhotoEstimateLinks(), ...links.map((link) => String(link || "").trim()).filter(Boolean)]
+        .filter((item, index, all) => all.indexOf(item) === index)
+        .slice(0, 12);
+      field.value = merged.join("\n");
+      state.uploadedPhotoEstimateLinks = merged;
+      state.photoEstimateRequested = true;
+      const photoBox = qs("#photo_estimate_requested");
+      if (photoBox) photoBox.checked = true;
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    }
+
+    function setPhotoEstimateUploadStatus(message, tone = "muted") {
+      const box = qs("#photoEstimateUploadStatus");
+      if (!box) return;
+      box.textContent = message;
+      box.className = tone === "error" ? "mini field-error" : tone === "ok" ? "mini notice ok" : "mini muted";
+    }
+
+    async function uploadPhotoEstimateFiles(files) {
+      const selected = Array.from(files || []).slice(0, 8);
+      if (!selected.length) return;
+      setPhotoEstimateUploadStatus(`Preparing ${selected.length} estimate upload${selected.length === 1 ? "" : "s"}…`);
+      const uploaded = [];
+      for (const file of selected) {
+        try {
+          const signRes = await fetch("/api/public_photo_estimate_upload_url", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              filename: file.name,
+              content_type: file.type || "image/jpeg",
+              file_size_bytes: file.size || 0,
+              customer_name: qs("#customer_name")?.value || "",
+              customer_email: qs("#customer_email")?.value || ""
+            })
+          });
+          const sign = await signRes.json().catch(() => null);
+          if (!signRes.ok || !sign?.ok || !sign.upload_url) {
+            throw new Error(sign?.error || "Upload link could not be prepared.");
+          }
+          const putRes = await fetch(sign.upload_url, {
+            method: sign.method || "PUT",
+            headers: { "Content-Type": file.type || "application/octet-stream" },
+            body: file
+          });
+          if (!putRes.ok) throw new Error(`Upload failed for ${file.name}.`);
+          uploaded.push(sign.public_url || sign.media_url || sign.object_path);
+          setPhotoEstimateUploadStatus(`Uploaded ${uploaded.length}/${selected.length} estimate file${selected.length === 1 ? "" : "s"}…`, "ok");
+        } catch (err) {
+          setPhotoEstimateUploadStatus(`${err?.message || err} Paste a shared photo link instead if needed.`, "error");
+          break;
+        }
+      }
+      if (uploaded.length) {
+        appendPhotoEstimateLinks(uploaded);
+        setPhotoEstimateUploadStatus(`${uploaded.length} uploaded estimate file${uploaded.length === 1 ? "" : "s"} added to the booking intake.`, "ok");
+      }
+    }
+
+    function renderPhotoEstimateLinkHelp() {
+      const help = qs("#photoEstimateLinkHelp");
+      if (!help) return;
+      const links = parsePhotoEstimateLinks();
+      const requested = qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true;
+      help.textContent = links.length
+        ? `${links.length} photo/media link${links.length === 1 ? "" : "s"} will be attached to the estimate intake for staff review.`
+        : requested
+          ? "Add share links if we should quote from photos. You can still submit without links and staff can request them later."
+          : "Links and uploaded estimate media are saved with booking notes and, after migration, stored for staff quote review.";
+    }
+
+    function renderConditionRecommendation(result, flags = selectedConditionFlags()) {
+      const box = qs("#conditionRecommendationResult");
+      if (!box) return;
+      if (!flags.length) {
+        box.classList.remove("show");
+        box.innerHTML = "";
+        return;
+      }
+      const pkg = (state.pricing?.packages || []).find((row) => row.code === result.packageCode);
+      const addonRows = result.addonCodes
+        .map((code) => (state.pricing?.addons || []).find((addon) => addon.code === code))
+        .filter(Boolean);
+      box.classList.add("show");
+      box.innerHTML = `<strong>${escapeHtml(result.headline)}</strong>
+        <div class="mini muted" style="margin-top:6px">Selected condition flags: ${escapeHtml(conditionFlagLabels(flags).join(", "))}</div>
+        <div class="mini muted" style="margin-top:6px">Recommended package: <strong>${escapeHtml(pkg?.display_alias || pkg?.name || result.packageCode)}</strong></div>
+        ${addonRows.length ? `<div class="mini muted" style="margin-top:6px">Suggested add-ons to review: ${escapeHtml(addonRows.map((addon) => addon.name).join(", "))}</div>` : ""}
+        ${result.notes.length ? `<ul class="mini muted">${result.notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}`;
+    }
+
+    function applyConditionRecommendation() {
+      const flags = selectedConditionFlags();
+      if (!flags.length) {
+        renderConditionRecommendation({ packageCode: "", headline: "", addonCodes: [], notes: [] }, flags);
+        showStatus("Choose at least one vehicle condition first.", "warn");
+        return;
+      }
+      const result = buildConditionRecommendation(flags);
+      const packageExists = (state.pricing?.packages || []).some((pkg) => pkg.code === result.packageCode);
+      if (packageExists) state.selectedPackageCode = result.packageCode;
+      for (const code of result.addonCodes) {
+        const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+        if (addon && addonAllowedForPackage(addon, state.selectedPackageCode)) state.addons.add(code);
+      }
+      state.photoEstimateRequested = flags.includes("photo_quote") || ["pet_hair", "salt_stains", "odor", "stains_shampoo", "paint_swirls", "headlights", "work_truck"].some((flag) => flags.includes(flag));
+      const photoBox = qs("#photo_estimate_requested");
+      if (photoBox && state.photoEstimateRequested) photoBox.checked = true;
+      state.conditionRecommendationSummary = `${result.headline} Flags: ${conditionFlagLabels(flags).join(", ")}. ${result.notes.join(" ")}`.trim();
+      appendBookingNote(`Condition helper: ${state.conditionRecommendationSummary}`);
+      if (state.photoEstimateRequested) appendBookingNote("Photo estimate requested: please review linked/attached photos before final package/add-on confirmation.");
+      renderConditionRecommendation(result, flags);
+      pruneInvalidSelectedAddons();
+      renderPackages();
+      renderAddons();
+      renderFinalSummary();
+      showStatus("Condition helper applied. Review the selected package, add-ons, and notes before checkout.", "ok");
+      analyticsTrack("booking_condition_recommendation_apply", { package_code: state.selectedPackageCode || null, flags });
+    }
+
+    function clearConditionRecommendation() {
+      qsa("[data-condition-flag]").forEach((node) => { node.checked = false; });
+      state.conditionFlags.clear();
+      state.conditionRecommendationSummary = "";
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      renderConditionRecommendation({ packageCode: "", headline: "", addonCodes: [], notes: [] }, []);
+      showStatus("Condition helper cleared. Your selected package/add-ons were left unchanged.", "warn");
+      analyticsTrack("booking_condition_recommendation_clear", {});
+    }
+
+    function openModal(title, src) {
+      const back = qs("#modalBack");
+      const img = qs("#modalImg");
+      const titleNode = qs("#modalTitle");
+      if (!back || !img || !titleNode || !src) return;
+      titleNode.textContent = title || "Preview";
+      img.src = src;
+      back.style.display = "flex";
+    }
+
+    function closeModal() {
+      const back = qs("#modalBack");
+      const img = qs("#modalImg");
+      if (img) img.removeAttribute("src");
+      if (back) back.style.display = "none";
+    }
+
+    function applyEmbedMode() {
+      if (!embedMode) return;
+      document.body.classList.add("is-embed");
+      const title = qs("#wizardTop h1");
+      const kicker = qs("#wizardTop .page-kicker");
+      if (title) title.textContent = "Start your self-serve booking";
+      if (kicker) kicker.textContent = "Use the live booking planner below to see location restrictions, 21-day availability windows, exact package/add-on choices, and deposit-ready booking details before checkout.";
+    }
+
+    function postEmbedHeight() {
+      if (!embedMode || window.parent === window) return;
+      const shell = document.querySelector("main.container") || document.querySelector(".wizard-shell") || document.body;
+      const rawHeight = Math.max(
+        shell ? shell.scrollHeight : 0,
+        shell ? shell.offsetHeight : 0,
+        980
+      );
+      const height = Math.min(window.innerWidth <= 980 ? 1600 : 1280, rawHeight);
+      window.parent.postMessage({ type: "rd-book-embed-size", height }, "*");
+    }
+
+    function buildEmbedBookingUrl() {
+      const params = new URLSearchParams();
+      params.set('embed', '1');
+      if (state.selectedPackageCode) params.set('package', state.selectedPackageCode);
+      if (selectedSize()) params.set('size', selectedSize());
+      if (qs('#service_area').value) params.set('area', qs('#service_area').value);
+      if (selectedDate()) params.set('date', selectedDate());
+      if (state.selectedSlotChoice) params.set('slot', state.selectedSlotChoice);
+      if (state.addons.size) params.set('addons', Array.from(state.addons).join(','));
+      if (qs('#gift_code')?.value?.trim()) params.set('gift_code', qs('#gift_code').value.trim());
+      return `/book?${params.toString()}`;
+    }
+
+    function buildEmbedState() {
+      const pkg = selectedPackage();
+      const totals = computeTotals();
+      const area = findServiceArea(state.pricing || {}, qs('#service_area').value);
+      const addonRows = selectedAddons();
+      return {
+        current_step: state.currentStep,
+        current_step_title: steps[state.currentStep - 1]?.title || `Step ${state.currentStep}`,
+        selected_date: selectedDate() || null,
+        selected_slot: state.selectedSlotChoice || null,
+        service_area: qs('#service_area').value || null,
+        service_area_label: area?.label || qs('#service_area').value || null,
+        local_rules_label: area?.municipality || null,
+        vehicle_label: [qs('#veh_year').value, qs('#veh_make').value, qs('#veh_model').value, qs('#veh_color').value].filter(Boolean).join(' · ') || null,
+        vehicle_size: selectedSize() || null,
+        package_code: state.selectedPackageCode || null,
+        package_name: pkg?.name || null,
+        addon_codes: addonRows.map((addon) => addon.code),
+        addon_names: addonRows.map((addon) => addon.name),
+        quote_only: totals.quoteOnly,
+        subtotal_cad: totals.subtotal || 0,
+        deposit_cad: totals.deposit || 0,
+        booking_url: buildEmbedBookingUrl()
+      };
+    }
+
+    function postEmbedState() {
+      if (!embedMode || window.parent === window) return;
+      window.parent.postMessage({ type: 'rd-book-embed-state', state: buildEmbedState() }, '*');
+    }
+
+    function wireEmbedResize() {
+      if (!embedMode) return;
+      const send = () => window.requestAnimationFrame(postEmbedHeight);
+      window.addEventListener("load", send);
+      window.addEventListener("resize", send);
+      if ("ResizeObserver" in window) {
+        const observer = new ResizeObserver(send);
+        if (document.body) observer.observe(document.body);
+        if (document.documentElement) observer.observe(document.documentElement);
+      }
+    }
+
+    function applyInitialPrefill() {
+      const size = String(pageParams.get("size") || "").trim().toLowerCase();
+      const packageCode = String(pageParams.get("package") || "").trim();
+      const serviceArea = String(pageParams.get("area") || "").trim();
+      const pickedDate = String(pageParams.get("date") || "").trim();
+      const pickedSlot = String(pageParams.get("slot") || "").trim().toUpperCase();
+      const addonCodes = String(pageParams.get("addons") || "")
+        .split(",")
+        .map((row) => row.trim())
+        .filter(Boolean);
+      const giftCode = String(pageParams.get("gift_code") || "").trim();
+
+      if (["small", "mid", "oversize"].includes(size)) {
+        qs("#vehicle_size").value = size;
+      }
+
+      if (serviceArea) {
+        qs("#service_area").value = serviceArea;
+      }
+
+      if (/^\d{4}-\d{2}-\d{2}$/.test(pickedDate)) {
+        qs("#service_date").value = pickedDate;
+        const diff = Math.max(0, Math.floor((new Date(`${pickedDate}T12:00:00`) - startOfLocalDay()) / 86400000));
+        const windowDays = availabilityWindowDays();
+        state.availabilityOffset = Math.floor(diff / windowDays) * windowDays;
+      }
+
+      if (["AM", "PM", "FULL"].includes(pickedSlot)) {
+        state.selectedSlotChoice = pickedSlot;
+      }
+
+      if ((state.pricing?.packages || []).some((pkg) => pkg.code === packageCode)) {
+        state.selectedPackageCode = packageCode;
+      }
+
+      state.addons.clear();
+      addonCodes.forEach((code) => {
+        if ((state.pricing?.addons || []).some((addon) => addon.code === code)) {
+          state.addons.add(code);
+        }
+      });
+
+      if (giftCode && qs('#gift_code')) {
+        qs('#gift_code').value = giftCode;
+      }
+
+      updateServiceAreaNote();
+      updateSizeHint();
+      postEmbedState();
+    }
+
+    applyEmbedMode();
+    wireEmbedResize();
+
+    qs("#modalCloseBtn").addEventListener("click", closeModal);
+    qs("#modalBack").addEventListener("click", (event) => {
+      if (event.target === qs("#modalBack")) closeModal();
+    });
+
+    qsa("[data-package-suggest]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const code = btn.getAttribute("data-package-suggest") || "";
+        if (!(state.pricing?.packages || []).some((pkg) => pkg.code === code)) return;
+        state.selectedPackageCode = code;
+        pruneInvalidSelectedAddons();
+        renderPackages();
+        renderAddons();
+        renderFinalSummary();
+        showStatus("Recommended package selected. You can still change it before checkout.", "ok");
+        analyticsTrack("booking_package_recommendation_click", { package_code: code });
+      });
+    });
+
+    qsa("[data-jump-notes]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.currentStep = 4;
+        renderStep();
+        const notes = qs("#special_notes");
+        if (notes && !notes.value.trim()) {
+          notes.value = "Photo estimate requested: please review attached/linked photos for condition, package fit, and add-ons.";
+        }
+        showStatus("Add a photo link or notes here, then continue when ready.", "warn");
+        analyticsTrack("booking_photo_estimate_jump", {});
+        notes?.focus();
+      });
+    });
+
+    qs("#conditionRecommendBtn")?.addEventListener("click", applyConditionRecommendation);
+    qs("#conditionClearBtn")?.addEventListener("click", clearConditionRecommendation);
+    qsa("[data-condition-flag]").forEach((node) => {
+      node.addEventListener("change", () => {
+        selectedConditionFlags();
+        renderConditionRecommendation(buildConditionRecommendation(), selectedConditionFlags());
+      });
+    });
+    qsa("input[name='media_consent_preference']").forEach((node) => {
+      node.addEventListener("change", () => {
+        state.mediaConsentPreference = qs("input[name='media_consent_preference']:checked")?.value || "estimate_only";
+        analyticsTrack("booking_media_consent_preference", { preference: state.mediaConsentPreference });
+      });
+    });
+    qs("#photo_estimate_requested")?.addEventListener("change", () => {
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      analyticsTrack("booking_photo_estimate_requested", { requested: state.photoEstimateRequested });
+    });
+
+    qs("#serviceDatePickerBtn").addEventListener("click", () => {
+      const input = qs("#service_date");
+      if (!input) return;
+      if (typeof input.showPicker === "function") {
+        try {
+          input.showPicker();
+          return;
+        } catch {}
+      }
+      input.focus();
+      input.click();
+    });
+
+    const activeBookingRules = () => bookingRules(state.pricing || {});
+
+    function availabilityWindowDays() {
+      const raw = Number(activeBookingRules().availability_window_days || DEFAULT_AVAILABILITY_WINDOW_DAYS);
+      return Number.isFinite(raw) && raw > 0 ? raw : DEFAULT_AVAILABILITY_WINDOW_DAYS;
+    }
+
+    function syncBookingRuleLabels() {
+      const days = availabilityWindowDays();
+      const prevBtn = qs("#availabilityPrevBtn");
+      const nextBtn = qs("#availabilityNextBtn");
+      if (prevBtn) prevBtn.textContent = `Previous ${days} days`;
+      if (nextBtn) nextBtn.textContent = `Next ${days} days`;
+    }
+
+    function configuredServiceAreas() {
+      return serviceAreaRows(state.pricing || {});
+    }
+
+    function selectedDate() { return qs("#service_date").value; }
+    function selectedSize() { return qs("#vehicle_size").value; }
+    function selectedPackage() {
+      return (state.pricing?.packages || []).find((pkg) => pkg.code === state.selectedPackageCode) || null;
+    }
+
+    function showStatus(msg, kind = "") {
+      const el = qs("#bookingStatus");
+      el.style.display = "block";
+      el.className = `notice ${kind}`.trim();
+      el.textContent = msg;
+    }
+
+    function hideStatus() {
+      qs("#bookingStatus").style.display = "none";
+    }
+
+    function showFieldError(step, msg) {
+      const el = qs(`#step${step}Error`);
+      if (el) el.textContent = msg || "";
+      return false;
+    }
+
+    function clearFieldErrors() {
+      for (let i = 1; i <= 5; i++) showFieldError(i, "");
+    }
+
+    function startOfLocalDay(date = new Date()) {
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
+    function addDaysLocal(date, days) {
+      const copy = new Date(date);
+      copy.setDate(copy.getDate() + days);
+      return copy;
+    }
+
+    function toIsoLocal(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function normalizeChoice(value) {
+      return String(value || "").trim();
+    }
+
+    function choiceExists(values, value) {
+      const needle = normalizeChoice(value).toLowerCase();
+      return !!needle && (values || []).some((row) => normalizeChoice(row).toLowerCase() === needle);
+    }
+
+    function setDatalistOptions(id, values) {
+      const el = qs(id);
+      if (!el) return;
+      el.innerHTML = (values || []).map((v) => `<option value="${escapeHtml(v)}"></option>`).join("");
+    }
+
+    function packagePrice(pkg, size) {
+      return sharedPackagePrice(pkg, size);
+    }
+
+    function packageImageForSize(pkg, size) {
+      return sharedPackageImageForSize(pkg, size) || `${PACKAGE_BASE}${encodeURIComponent(pkg.code || "package")}.png`;
+    }
+
+    function addonPrimaryImage(code) {
+      const addon = (state.pricing?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
+      return sharedAddonPrimaryImage(addon) || "/assets/addons/generic_addon.png";
+    }
+
+    function addonFallbackImage(code) {
+      const addon = (state.pricing?.addons || []).find((row) => row?.code === String(code || "").trim()) || { code };
+      return sharedAddonFallbackImage(addon);
+    }
+
+    async function loadPricingData() {
+      return await loadPricingCatalogClient({ fallbackUrl: DATA_FALLBACK_URL, credentials: "include" });
+    }
+
+    function serviceAreaDisplayValue(row) {
+      return String(row?.value || row?.label || row?.municipality || row?.zone || "").trim();
+    }
+
+    function serviceAreaCountyFallbackRows() {
+      const rows = Array.isArray(state.pricing?.service_areas) ? state.pricing.service_areas : [];
+      const countyRows = rows.filter((row) => {
+        const areaType = String(row?.area_type || "").trim().toLowerCase();
+        const value = serviceAreaDisplayValue(row).toLowerCase();
+        return areaType === "county" || value.startsWith("other oxford") || value.startsWith("other norfolk");
+      });
+
+      if (countyRows.length) return countyRows;
+
+      return [
+        {
+          county: "Oxford County",
+          label: "Other Oxford County location",
+          value: "Other Oxford County location",
+          municipality: "Oxford County",
+          zone: "Oxford County",
+          travel_tier: "quote_required",
+          area_type: "county",
+          water_rule_key: "oxford-county-seasonal",
+          bylaw_note: "Oxford County fallback. Current water-use wording is loaded from the editable water-restriction authority.",
+          parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+          noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+          access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+          official_links: []
+        },
+        {
+          county: "Norfolk County",
+          label: "Other Norfolk County location",
+          value: "Other Norfolk County location",
+          municipality: "Norfolk County",
+          zone: "Norfolk County",
+          travel_tier: "quote_required",
+          area_type: "county",
+          water_rule_key: "norfolk-county-seasonal",
+          bylaw_note: "Norfolk County fallback. Current water-use wording is loaded from the editable water-restriction authority.",
+          parking_rule: "Use driveway/private property where possible; confirm safe legal parking and enough work space before dispatch.",
+          noise_rule: "Respect local residential quiet expectations; avoid early/late machine noise unless the customer confirms it is acceptable.",
+          access_rule: "Confirm hose/power availability, driveway slope, apartment/condo access, and any building rules before arrival.",
+          official_links: []
+        }
+      ];
+    }
+
+    function normalizeServiceAreaOptionRows(rows) {
+      const merged = [];
+      const seen = new Set();
+
+      const addRow = (row) => {
+        if (!row || typeof row !== "object") return;
+        const value = serviceAreaDisplayValue(row);
+        if (!value) return;
+        const key = value.toLowerCase();
+        if (seen.has(key)) return;
+        seen.add(key);
+        merged.push({
+          ...row,
+          value,
+          label: String(row.label || value).trim(),
+          county: String(row.county || "").trim(),
+          municipality: String(row.municipality || "").trim(),
+          zone: String(row.zone || "").trim(),
+          travel_tier: String(row.travel_tier || row.tier || "").trim()
+        });
+      };
+
+      serviceAreaCountyFallbackRows().forEach(addRow);
+      (Array.isArray(rows) ? rows : []).forEach(addRow);
+
+      return merged.sort((a, b) => {
+        const aLabel = serviceAreaDisplayValue(a).toLowerCase();
+        const bLabel = serviceAreaDisplayValue(b).toLowerCase();
+        const aCounty = String(a.county || "").toLowerCase();
+        const bCounty = String(b.county || "").toLowerCase();
+        if (aLabel.startsWith("other ")) return -1;
+        if (bLabel.startsWith("other ")) return 1;
+        if (aCounty !== bCounty) return aCounty.localeCompare(bCounty);
+        return aLabel.localeCompare(bLabel);
+      });
+    }
+
+    function renderServiceAreas(rowsOverride = null) {
+      const datalist = qs("#service_area_options");
+      const field = qs("#service_area");
+      if (!datalist || !field) return;
+
+      const currentValue = String(field.value || "").trim();
+      const rows = normalizeServiceAreaOptionRows(
+        Array.isArray(rowsOverride) && rowsOverride.length
+          ? rowsOverride
+          : configuredServiceAreas()
+      );
+
+      state.serviceAreaRows = rows;
+
+      datalist.innerHTML = rows.map((row) => {
+        const value = serviceAreaDisplayValue(row);
+        const labelParts = [
+          row.county,
+          row.municipality && row.municipality !== value ? row.municipality : "",
+          row.travel_tier ? `tier: ${row.travel_tier}` : ""
+        ].filter(Boolean);
+        return `<option value="${escapeHtml(value)}" label="${escapeHtml(labelParts.join(" · "))}"></option>`;
+      }).join("");
+
+      /*
+        Do not auto-fill Tillsonburg here.
+        Native datalist dropdowns filter against the current typed value, so a pre-filled
+        default makes the menu look like only one town exists.
+      */
+      if (!currentValue) field.value = "";
+      field.placeholder = "Start typing a town, county, or service zone…";
+      field.setAttribute("autocomplete", "off");
+
+      renderCityOptions(rows);
+      renderServiceAreaPicker(rows, { showAll: false });
+      updateServiceAreaNote();
+    }
+
+    function renderCityOptions(rows = state.serviceAreaRows || []) {
+      const cityList = qs("#city_options");
+      if (!cityList) return;
+      const seen = new Set();
+      const values = [];
+      rows.forEach((row) => {
+        [row.label, row.value, row.municipality].forEach((value) => {
+          const clean = String(value || "").replace(/\s*,\s*ON$/i, "").trim();
+          if (!clean || clean.toLowerCase().startsWith("other ")) return;
+          const key = clean.toLowerCase();
+          if (seen.has(key)) return;
+          seen.add(key);
+          values.push(clean);
+        });
+      });
+      cityList.innerHTML = values.sort((a, b) => a.localeCompare(b)).map((value) => `<option value="${escapeHtml(value)}"></option>`).join("");
+    }
+
+    function renderServiceAreaPicker(rows = state.serviceAreaRows || [], options = {}) {
+      const picker = qs("#serviceAreaPicker");
+      const grid = qs("#serviceAreaPickerGrid");
+      const field = qs("#service_area");
+      if (!picker || !grid || !field) return;
+
+      const term = options.showAll ? "" : String(field.value || "").trim().toLowerCase();
+      const filtered = rows.filter((row) => {
+        if (!term) return true;
+        const haystack = [
+          row.label,
+          row.value,
+          row.county,
+          row.municipality,
+          row.zone,
+          ...(Array.isArray(row.aliases) ? row.aliases : [])
+        ].join(" ").toLowerCase();
+        return haystack.includes(term);
+      });
+
+      const displayRows = (filtered.length ? filtered : rows).slice(0, 120);
+      grid.innerHTML = displayRows.map((row) => {
+        const value = serviceAreaDisplayValue(row);
+        const meta = [row.county, row.municipality && row.municipality !== value ? row.municipality : "", row.travel_tier ? `tier: ${row.travel_tier}` : ""].filter(Boolean).join(" · ");
+        return `<button class="service-area-choice" type="button" data-service-area-choice="${escapeHtml(value)}"><strong>${escapeHtml(value)}</strong><span>${escapeHtml(meta || "Service area")}</span></button>`;
+      }).join("");
+
+      qsa("[data-service-area-choice]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const value = btn.getAttribute("data-service-area-choice") || "";
+          field.value = value;
+          const city = qs("#city");
+          const chosen = (state.serviceAreaRows || []).find((row) => serviceAreaDisplayValue(row) === value);
+          if (city && !city.value.trim() && chosen && !String(chosen.label || "").toLowerCase().startsWith("other ")) {
+            city.value = String(chosen.label || chosen.municipality || value).replace(/\s*,\s*ON$/i, "").trim();
+          }
+          picker.classList.remove("open");
+          updateServiceAreaNote();
+          renderReviewVehicle();
+          renderFinalSummary();
+        });
+      });
+    }
+
+    function showServiceAreaPicker(showAll = true) {
+      const picker = qs("#serviceAreaPicker");
+      if (!picker) return;
+      renderServiceAreaPicker(state.serviceAreaRows || normalizeServiceAreaOptionRows(configuredServiceAreas()), { showAll });
+      picker.classList.add("open");
+    }
+
+    function hideServiceAreaPicker() {
+      qs("#serviceAreaPicker")?.classList.remove("open");
+    }
+
+    function validateCanadianPostalCode(value) {
+      const clean = String(value || "").trim().toUpperCase();
+      if (!clean) return true;
+      return /^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ -]?\d[ABCEGHJ-NPRSTV-Z]\d$/.test(clean);
+    }
+
+    function updateAddressAreaWarning() {
+      const warning = qs("#addressAreaWarning");
+      if (!warning) return;
+      const city = String(qs("#city")?.value || "").trim();
+      const serviceArea = String(qs("#service_area")?.value || "").trim();
+      const postal = String(qs("#postal_code")?.value || "").trim();
+      const resolved = selectedServiceAreaMeta();
+
+      const messages = [];
+      if (postal && !validateCanadianPostalCode(postal)) {
+        messages.push("Postal code format looks unusual. Please use a Canadian format like N4G 1A1.");
+      }
+      if (city && serviceArea && resolved) {
+        const haystack = [resolved.label, resolved.value, resolved.municipality, resolved.county, ...(Array.isArray(resolved.aliases) ? resolved.aliases : [])].join(" ").toLowerCase();
+        if (!haystack.includes(city.toLowerCase()) && !String(serviceArea).toLowerCase().includes(city.toLowerCase())) {
+          messages.push("City and service area do not appear to match exactly. Staff will confirm the county/travel tier before dispatch.");
+        }
+      }
+      if (serviceArea && !resolved) {
+        messages.push("Custom service area entered. Staff should confirm Oxford/Norfolk county coverage before final scheduling.");
+      }
+
+      if (!messages.length) {
+        warning.style.display = "none";
+        warning.textContent = "";
+        return;
+      }
+      warning.style.display = "block";
+      warning.className = "notice warn mini";
+      warning.textContent = messages.join(" ");
+    }
+
+    function findCountyFallbackForTypedArea(value) {
+      const text = String(value || "").trim().toLowerCase();
+      if (!text) return null;
+
+      const rows = serviceAreaCountyFallbackRows();
+      if (text.includes("oxford")) return rows.find((row) => row.county === "Oxford County") || null;
+      if (text.includes("norfolk")) return rows.find((row) => row.county === "Norfolk County") || null;
+
+      const oxfordHints = [
+        "tillsonburg", "woodstock", "ingersoll", "norwich", "otterville", "burgessville",
+        "springford", "ostrand", "sweaburg", "beachville", "embro", "tavistock",
+        "drumbo", "princeton", "plattsville", "thorndale", "hickson", "kintore",
+        "mount elgin", "brownsville", "salford", "innerkip"
+      ];
+      const norfolkHints = [
+        "simcoe", "delhi", "port dover", "waterford", "port rowan", "langton",
+        "courtland", "teeterville", "windham centre", "walsh", "turkey point",
+        "vittoria", "st williams", "st. williams", "lynedoch", "la salette",
+        "clear creek", "long point", "port ryerse"
+      ];
+
+      if (oxfordHints.some((town) => text.includes(town))) return rows.find((row) => row.county === "Oxford County") || null;
+      if (norfolkHints.some((town) => text.includes(town))) return rows.find((row) => row.county === "Norfolk County") || null;
+      return null;
+    }
+
+    function selectedServiceAreaMeta() {
+      const value = qs("#service_area")?.value || "";
+      return findServiceArea(state.pricing || {}, value) || findCountyFallbackForTypedArea(value) || null;
+    }
+
+    function updateServiceAreaNote() {
+      const field = qs("#service_area");
+      const note = qs("#serviceAreaNote");
+      const rules = qs("#serviceAreaRules");
+      const links = qs("#serviceAreaLinks");
+      if (!field || !note || !rules || !links) return;
+
+      const typedServiceArea = String(field.value || "").trim();
+      const exactMatch = findServiceArea(state.pricing || {}, typedServiceArea);
+      const selected = exactMatch || findCountyFallbackForTypedArea(typedServiceArea);
+
+      if (!typedServiceArea) {
+        note.className = "notice mini";
+        note.textContent = "Choose or type the closest town, county, or service zone so we can apply travel, parking, water-use, and local bylaw reminders before dispatch.";
+        rules.innerHTML = "<li>Start typing to choose from the full Oxford County and Norfolk County service list.</li>";
+        links.innerHTML = "";
+        updateAddressAreaWarning();
+        return;
+      }
+
+      if (!selected) {
+        note.className = "notice warn mini";
+        note.textContent = "Custom service area entered. We will confirm the town/county before dispatch and apply the closest county water-use reminder when possible.";
+        rules.innerHTML = "<li>Staff should confirm whether this address is in Oxford County, Norfolk County, or outside the normal service zone before final dispatch.</li>";
+        links.innerHTML = "";
+        updateAddressAreaWarning();
+        renderReviewVehicle();
+        renderFinalSummary();
+        return;
+      }
+
+      note.className = "notice warn mini";
+      note.textContent = exactMatch
+        ? (selected.bylaw_note || `${selected.label || selected.value} selected.`)
+        : `${typedServiceArea} was matched to ${selected.county || "the closest county"} fallback rules. Staff should confirm before dispatch.`;
+
+      const ruleItems = [
+        selected.parking_rule,
+        selected.noise_rule,
+        selected.water_rule,
+        selected.access_rule
+      ].filter(Boolean);
+      rules.innerHTML = ruleItems.length
+        ? ruleItems.map((item) => `<li>${escapeHtml(item)}</li>`).join("")
+        : "<li>No extra rules found for this zone.</li>";
+
+      const linkRows = Array.isArray(selected.official_links) ? selected.official_links : [];
+      links.innerHTML = linkRows.map((row) => {
+        const url = String(row.url || "").trim();
+        const label = String(row.label || "Official source").trim();
+        if (!url) return "";
+        return `<a class="btn ghost small" href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)}</a>`;
+      }).join("");
+
+      renderReviewVehicle();
+      renderFinalSummary();
+    }
+
+    function renderWizardNav() {
+      const nav = qs("#wizardNav");
+      nav.innerHTML = steps.map((step, idx) => {
+        const n = idx + 1;
+        return `<button class="btn ${n === state.currentStep ? "primary" : "ghost"}" type="button" data-step-nav="${n}" ${n > state.currentStep + 1 ? "disabled" : ""}><span>${step.title}</span><br><small>${step.subtitle}</small></button>`;
+      }).join("");
+
+      qsa("[data-step-nav]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const target = Number(btn.getAttribute("data-step-nav"));
+          if (target <= state.currentStep) return gotoStep(target);
+          const ok = await validateStep(state.currentStep);
+          if (ok) gotoStep(target);
+        });
+      });
+
+      qs("#wizardHint").textContent = `Step ${state.currentStep} of ${steps.length}`;
+      qs("#prevStepBtn").disabled = state.currentStep === 1;
+      qs("#nextStepBtn").style.display = state.currentStep === steps.length ? "none" : "inline-flex";
+      qs("#nextStepBtn").textContent = state.currentStep < steps.length ? `Go to ${steps[state.currentStep].title}` : "Next";
+    }
+
+    function gotoStep(step) {
+      state.currentStep = Math.max(1, Math.min(steps.length, step));
+      qsa(".wizard-step").forEach((panel) => {
+        panel.hidden = Number(panel.dataset.step) !== state.currentStep;
+      });
+      renderWizardNav();
+      if (state.currentStep === 4) renderReviewVehicle();
+      if (state.currentStep === 5) renderFinalSummary();
+      analyticsTrack("booking_step_view", { step_number: state.currentStep });
+      postEmbedState();
+    }
+
+    qs("#prevStepBtn").addEventListener("click", () => gotoStep(state.currentStep - 1));
+    qs("#nextStepBtn").addEventListener("click", async () => {
+      const ok = await validateStep(state.currentStep);
+      if (ok) gotoStep(state.currentStep + 1);
+    });
+    qsa("[data-inline-next-step]").forEach((button) => {
+      button.addEventListener("click", async () => {
+        const fromStep = Number(button.getAttribute("data-inline-next-step") || state.currentStep || 1);
+        const ok = await validateStep(fromStep);
+        if (ok) gotoStep(fromStep + 1);
+      });
+    });
+
+    function recommendedSize() {
+      const body = (qs("#veh_body").value || "").toLowerCase();
+      const category = (qs("#veh_category").value || "").toLowerCase();
+      if (category === "exotic" || body === "exotic") return "oversize";
+      if (["truck", "van", "suv"].includes(body)) return "oversize";
+      if (["crossover"].includes(body)) return "mid";
+      if (["sedan", "coupe", "hatchback", "hatch"].includes(body)) return "small";
+      return category && ["small", "mid", "oversize"].includes(category) ? category : null;
+    }
+
+
+    function selectedCatalogModelRecord() {
+      const model=normalizeChoice(qs("#veh_model").value).toLowerCase();
+      return state.vehicleCatalog.models.find((row)=>normalizeChoice(row.model).toLowerCase()===model) || null;
+    }
+
+    function vehicleSizeVerificationState() {
+      const row=selectedCatalogModelRecord();
+      const selected=selectedSize();
+      const expected=String(row?.size_bucket||'').trim();
+      if(row && ["small","mid","oversize"].includes(expected) && selected===expected) return {verified:true,status:'verified',expected,reason:'Vehicle model matched the Rosie size catalog.'};
+      if(row && ["small","mid","oversize"].includes(expected)) return {verified:false,status:'needs_review',expected,reason:`Catalog suggests ${expected}, while ${selected||'no size'} was selected.`};
+      return {verified:false,status:'needs_review',expected:null,reason:'This year/make/model could not be confidently matched to a verified Rosie vehicle-size record.'};
+    }
+
+    function renderVehicleSizeVerificationNotice(){
+      const node=qs('#sizeVerificationNotice');if(!node)return;const review=vehicleSizeVerificationState();
+      if(review.verified){node.style.display='block';node.className='notice ok';node.textContent='Vehicle size matched our catalog. We will still correct obvious data errors before service.';return;}
+      node.style.display='block';node.className='notice warn';node.textContent='Vehicle size is provisional. We could not confidently verify this selection automatically. Staff will review upcoming orders. If the correct size changes the price, we will email you a secure link to confirm the updated size/price or cancel the booking before service.';
+    }
+
+    function updateSizeHint() {
+      const rec = recommendedSize();
+      const chosen = selectedSize();
+      const hint = qs("#sizeHint");
+      if (rec && chosen && rec !== chosen) {
+        hint.style.display = "block";
+        hint.className = "notice warn";
+        hint.textContent = `Based on the vehicle details, we suggest "${rec}" instead of "${chosen}".`;
+      } else if (rec) {
+        hint.style.display = "block";
+        hint.className = "notice ok";
+        hint.textContent = `Suggested size for this vehicle: ${rec}.`;
+      } else {
+        hint.style.display = "none";
+      }
+      renderPackages();
+      renderAddons();
+      renderReviewVehicle();
+      renderFinalSummary();
+      renderVehicleServiceHint();
+      renderVehicleSizeVerificationNotice();
+    }
+
+    async function loadGarageVehicles() {
+      try {
+        const res = await fetch("/api/client/dashboard", { credentials:"include", cache:"no-store" });
+        const out = await res.json().catch(() => null);
+        if (!res.ok || !out?.ok) return;
+        state.garageVehicles = Array.isArray(out.vehicles) ? out.vehicles : [];
+
+        if (out.customer) {
+          if (!qs("#customer_name").value) qs("#customer_name").value = out.customer.full_name || "";
+          if (!qs("#customer_email").value) qs("#customer_email").value = out.customer.email || "";
+          if (!qs("#customer_phone").value) qs("#customer_phone").value = out.customer.phone || out.customer.sms_phone || "";
+          if (!qs("#address_line1").value) qs("#address_line1").value = out.customer.address_line1 || "";
+          if (!qs("#city").value) qs("#city").value = out.customer.city || "";
+          if (!qs("#postal_code").value) qs("#postal_code").value = out.customer.postal_code || "";
+        }
+
+        const wrap = qs("#garagePickerWrap");
+        const list = qs("#garageVehicleList");
+        if (!state.garageVehicles.length) {
+          wrap.style.display = "none";
+          return;
+        }
+
+        wrap.style.display = "block";
+        list.innerHTML = state.garageVehicles.map((vehicle, idx) => {
+          const title = vehicle.vehicle_name || [vehicle.model_year, vehicle.make, vehicle.model].filter(Boolean).join(" ");
+          const meta = [vehicle.color, vehicle.vehicle_size, vehicle.vehicle_category].filter(Boolean).join(" · ");
+          return `<button class="vehicle-option" type="button" data-garage-index="${idx}"><strong>${escapeHtml(title)}</strong><span class="kicker">${escapeHtml(meta)}</span></button>`;
+        }).join("");
+
+        qsa("[data-garage-index]").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const vehicle = state.garageVehicles[Number(btn.getAttribute("data-garage-index"))];
+            if (!vehicle) return;
+            qsa("[data-garage-index]").forEach((node) => node.classList.remove("active"));
+            state.activeGarageVehicleId = vehicle.id || null;
+            btn.classList.add("active");
+            qs("#veh_year").value = vehicle.model_year || "";
+            qs("#veh_make").value = vehicle.make || "";
+            qs("#veh_color").value = vehicle.color || "";
+            qs("#veh_mileage").value = vehicle.mileage_km || "";
+            qs("#vehicle_size").value = vehicle.vehicle_size || "";
+            qs("#veh_category").value = vehicle.vehicle_category || "";
+            qs("#veh_body").value = vehicle.body_style || "";
+            qs("#veh_plate").value = vehicle.plate || "";
+            await loadVehicleModels();
+            qs("#veh_model").value = vehicle.model || "";
+            applyVehicleModelMetadata();
+            showStatus("Garage vehicle loaded into the booking form.", "ok");
+          });
+        });
+      } catch {}
+    }
+
+    async function loadVehicleMakes() {
+      const out = await fetchJsonStrict(VEHICLE_MAKES_URL);
+      state.vehicleCatalog.years = Array.isArray(out.years) ? out.years.map(String) : [];
+      state.vehicleCatalog.makes = Array.isArray(out.makes) ? out.makes.map((row) => String(row.make || "").trim()).filter(Boolean) : [];
+      state.vehicleCatalog.models = [];
+      setDatalistOptions("#veh_year_list", state.vehicleCatalog.years);
+      setDatalistOptions("#veh_make_list", state.vehicleCatalog.makes);
+      setDatalistOptions("#veh_model_list", []);
+    }
+
+    async function loadVehicleModels() {
+      const year = normalizeChoice(qs("#veh_year").value);
+      const make = normalizeChoice(qs("#veh_make").value);
+      const modelInput = qs("#veh_model");
+
+      if (!choiceExists(state.vehicleCatalog.years, year) || !choiceExists(state.vehicleCatalog.makes, make)) {
+        state.vehicleCatalog.models = [];
+        setDatalistOptions("#veh_model_list", []);
+        modelInput.value = "";
+        return;
+      }
+
+      modelInput.placeholder = "Loading models…";
+      const out = await fetchJsonStrict(`${VEHICLE_MODELS_URL}?year=${encodeURIComponent(year)}&make=${encodeURIComponent(make)}`);
+      state.vehicleCatalog.models = Array.isArray(out.models) ? out.models : [];
+      setDatalistOptions("#veh_model_list", state.vehicleCatalog.models.map((row) => row.model).filter(Boolean));
+      modelInput.placeholder = "Start typing model";
+    }
+
+    function applyVehicleModelMetadata() {
+      const chosen = state.vehicleCatalog.models.find((row) => normalizeChoice(row.model).toLowerCase() === normalizeChoice(qs("#veh_model").value).toLowerCase());
+      if (!chosen) { updateSizeHint(); return; }
+      if (chosen.size_bucket && !qs("#vehicle_size").value) qs("#vehicle_size").value = chosen.size_bucket;
+      if (chosen.vehicle_type && !qs("#veh_body").value) {
+        const t = String(chosen.vehicle_type).toLowerCase();
+        if (t.includes("truck")) qs("#veh_body").value = "truck";
+        else if (t.includes("van")) qs("#veh_body").value = "van";
+        else if (t.includes("suv")) qs("#veh_body").value = "suv";
+        else if (t.includes("crossover")) qs("#veh_body").value = "crossover";
+        else if (t.includes("hatch")) qs("#veh_body").value = "hatch";
+        else qs("#veh_body").value = "sedan";
+      }
+      if (chosen.is_exotic && !qs("#veh_category").value) qs("#veh_category").value = "exotic";
+      updateSizeHint();
+    }
+
+    async function onVehicleYearCommit() {
+      await loadVehicleModels();
+      analyticsTrack("booking_vehicle_year", { year: qs("#veh_year").value || null });
+    }
+
+    async function onVehicleMakeCommit() {
+      await loadVehicleModels();
+      analyticsTrack("booking_vehicle_make", { make: qs("#veh_make").value || null });
+    }
+
+    function onVehicleModelCommit() {
+      applyVehicleModelMetadata();
+      analyticsTrack("booking_vehicle_model", { model: qs("#veh_model").value || null });
+    }
+
+    ["change", "blur"].forEach((evt) => qs("#veh_year").addEventListener(evt, () => onVehicleYearCommit()));
+    ["change", "blur"].forEach((evt) => qs("#veh_make").addEventListener(evt, () => onVehicleMakeCommit()));
+    ["change", "blur"].forEach((evt) => qs("#veh_model").addEventListener(evt, () => onVehicleModelCommit()));
+    ["#veh_body", "#veh_category", "#vehicle_size"].forEach((selector) => qs(selector).addEventListener("change", updateSizeHint));
+
+    async function fetchAvailability(date) {
+      if (!date) return null;
+      if (state.availabilityCache.has(date)) return state.availabilityCache.get(date);
+      try {
+        const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
+        const out = await res.json().catch(() => null);
+        if (!res.ok || !out?.ok) throw new Error(out?.error || "Could not load availability.");
+        state.availabilityCache.set(date, out);
+        return out;
+      } catch {
+        state.availabilityCache.set(date, null);
+        return null;
+      }
+    }
+
+    function availabilityStatus(out) {
+      if (!out) return "closed";
+      if (out.blocked || (!out.AM && !out.PM)) return "closed";
+      if (out.AM && out.PM) return "open";
+      return "partial";
+    }
+
+    async function loadAvailabilityWindow() {
+      const start = addDaysLocal(startOfLocalDay(), state.availabilityOffset);
+      const items = [];
+
+      const windowDays = availabilityWindowDays();
+
+      for (let i = 0; i < windowDays; i++) {
+        const d = addDaysLocal(start, i);
+        const iso = toIsoLocal(d);
+        const out = await fetchAvailability(iso);
+        items.push({ iso, out, status: availabilityStatus(out) });
+      }
+
+      const end = addDaysLocal(start, windowDays - 1);
+      qs("#availabilityWindowLabel").textContent = `${start.toLocaleDateString("en-CA", { month:"short", day:"numeric" })} to ${end.toLocaleDateString("en-CA", { month:"short", day:"numeric", year:"numeric" })}`;
+      qs("#availabilityPrevBtn").disabled = state.availabilityOffset === 0;
+
+      qs("#availableDates").innerHTML = items.map((item) => {
+        const dt = new Date(`${item.iso}T12:00:00`);
+        const label = dt.toLocaleDateString("en-CA", { weekday:"short", month:"short", day:"numeric" });
+        const out = item.out || {};
+        const desc = out.business_hours_conflict || out.business_hours?.is_closed
+          ? `Closed/limited · ${out.business_hours?.reason || out.business_hours?.hours_label || out.reason || "business hours"}`
+          : item.status === "open"
+            ? "AM open · PM open"
+            : item.status === "partial"
+              ? `AM ${out.AM ? "open" : "booked"} · PM ${out.PM ? "open" : "booked"}`
+              : out.blocked ? `Unavailable · ${out.reason || "blocked"}` : "Unavailable · booked";
+        const disabled = item.status === "closed" ? "disabled" : "";
+        const selected = item.iso === selectedDate() ? "is-selected" : "";
+        return `<button class="date-pill is-${item.status} ${selected}" type="button" data-date-pill="${item.iso}" ${disabled}><strong>${label}</strong><span>${escapeHtml(desc)}</span></button>`;
+      }).join("");
+
+      qsa("[data-date-pill]").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          if (btn.disabled) return;
+          qs("#service_date").value = btn.getAttribute("data-date-pill");
+          analyticsTrack("booking_date_pick", { service_date: qs("#service_date").value });
+          await refreshAvailability();
+          await loadAvailabilityWindow();
+        });
+      });
+
+      if (!selectedDate()) {
+        const firstOpen = items.find((item) => item.status !== "closed");
+        if (firstOpen) qs("#service_date").value = firstOpen.iso;
+      }
+    }
+
+    async function refreshAvailability() {
+      const date = selectedDate();
+      if (!date) return;
+
+      const out = await fetchAvailability(date);
+      if (!out?.ok) {
+        qs("#availabilityNote").textContent = out?.error || "Could not load availability.";
+        return;
+      }
+
+      const businessHours = out.business_hours || {};
+      const hoursClosed = out.business_hours_conflict === true || businessHours.is_closed === true;
+      const map = {
+        AM: !hoursClosed && !!out.AM,
+        PM: !hoursClosed && !!out.PM,
+        FULL: !hoursClosed && !!out.AM && !!out.PM
+      };
+
+      qsa("[data-slot]").forEach((btn) => {
+        const slot = btn.getAttribute("data-slot");
+        const open = map[slot];
+        btn.disabled = !open;
+        btn.classList.toggle("active", state.selectedSlotChoice === slot);
+        if (!open) btn.textContent = slot === "FULL" ? "Full day unavailable" : `${slot} unavailable`;
+        else btn.textContent = (activeBookingRules().slot_labels || {})[slot] || (slot === "FULL" ? "Full day" : `${slot} half day`);
+      });
+
+      const hoursNote = hoursClosed ? ` • Business hours/holiday warning: ${businessHours.reason || businessHours.hours_label || out.reason || "closed"}` : (businessHours.hours_label ? ` • Hours: ${businessHours.hours_label}` : "");
+      qs("#availabilityNote").textContent = `Availability for ${date}: AM ${map.AM ? "open" : "booked/closed"}, PM ${map.PM ? "open" : "booked/closed"}${out.blocked ? ` • ${out.reason || "blocked"}` : ""}${hoursNote}.`;
+
+      if (!map[state.selectedSlotChoice]) {
+        state.selectedSlotChoice = map.AM ? "AM" : map.PM ? "PM" : "";
+      }
+
+      qsa("[data-slot]").forEach((btn) => btn.classList.toggle("active", btn.getAttribute("data-slot") === state.selectedSlotChoice));
+      renderReviewVehicle();
+      renderFinalSummary();
+    }
+
+    qsa("[data-slot]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        if (btn.disabled) return;
+        state.selectedSlotChoice = btn.getAttribute("data-slot");
+        qsa("[data-slot]").forEach((node) => node.classList.toggle("active", node === btn));
+        analyticsTrack("booking_slot_pick", { slot: state.selectedSlotChoice, service_date: selectedDate() || null });
+        renderReviewVehicle();
+        renderFinalSummary();
+      });
+    });
+
+    qs("#service_date").addEventListener("change", async () => {
+      const picked = selectedDate() || null;
+      if (picked) {
+        const diff = Math.max(0, Math.floor((new Date(`${picked}T12:00:00`) - startOfLocalDay()) / 86400000));
+        const windowDays = availabilityWindowDays();
+        state.availabilityOffset = Math.floor(diff / windowDays) * windowDays;
+      }
+      analyticsTrack("booking_date_pick", { service_date: picked, source:"native_picker" });
+      await refreshAvailability();
+      await loadAvailabilityWindow();
+    });
+
+    qs("#availabilityPrevBtn").addEventListener("click", async () => {
+      state.availabilityOffset = Math.max(0, state.availabilityOffset - availabilityWindowDays());
+      analyticsTrack("booking_calendar_page", { direction:"prev", offset_days: state.availabilityOffset });
+      await loadAvailabilityWindow();
+    });
+
+    qs("#availabilityNextBtn").addEventListener("click", async () => {
+      state.availabilityOffset += availabilityWindowDays();
+      analyticsTrack("booking_calendar_page", { direction:"next", offset_days: state.availabilityOffset });
+      await loadAvailabilityWindow();
+    });
+
+    function renderPackages() {
+      const wrap = qs("#packageCards");
+      const size = selectedSize();
+      const packages = state.pricing?.packages || [];
+      wrap.innerHTML = packages.map((pkg) => {
+        const price = size ? packagePrice(pkg, size) : null;
+        const img = packageImageForSize(pkg, size || "small");
+        return `<button class="service-card ${state.selectedPackageCode === pkg.code ? "active" : ""}" type="button" data-package="${escapeHtml(pkg.code)}">
+          <img src="${escapeHtml(img)}" alt="${escapeHtml(pkg.name)}" loading="lazy" />
+          <strong>${escapeHtml(pkg.name)}</strong>
+          ${pkg.display_alias ? `<span class="package-alias">${escapeHtml(pkg.display_alias)}</span>` : ""}
+          <span class="muted package-note">${escapeHtml(pkg.best_for || pkg.subtitle || "")}</span>
+          ${pkg.customer_goal ? `<span class="tag warn">${escapeHtml(pkg.customer_goal)}</span>` : ""}
+          <span class="tag ok">${price != null ? money(price) : "Choose size first"}</span>
+          <span class="muted mini">Deposit ${money(pkg.deposit_cad || 0)}</span>
+        </button>`;
+      }).join("");
+
+      qsa("[data-package]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.selectedPackageCode = btn.getAttribute("data-package");
+          pruneInvalidSelectedAddons();
+          analyticsTrack("booking_package_pick", { package_code: state.selectedPackageCode, vehicle_size: selectedSize() || null });
+          renderPackages();
+          renderAddons();
+          renderFinalSummary();
+        });
+      });
+    }
+
+    function addonAllowedForPackage(addon, packageCode) {
+      const allowed = Array.isArray(addon?.requires_package_codes_any)
+        ? addon.requires_package_codes_any.map((row) => String(row || "").trim()).filter(Boolean)
+        : [];
+      if (addon?.standalone_allowed === true) return true;
+      if (!allowed.length) return true;
+      return allowed.includes(String(packageCode || "").trim());
+    }
+
+    function addonRequirementText(addon) {
+      return String(addon?.requirement_note || "").trim() || "Requires a different base package first.";
+    }
+
+    function pruneInvalidSelectedAddons() {
+      const packageCode = selectedPackage()?.code || "";
+      Array.from(state.addons).forEach((code) => {
+        const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+        if (addon && !addonAllowedForPackage(addon, packageCode)) state.addons.delete(code);
+      });
+    }
+
+    function addonDisplayPrice(addon) {
+      const sizeKey = String(state.vehicle_size || "mid").toLowerCase();
+      const prices = addon?.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
+      const raw = prices[sizeKey] ?? prices.mid ?? prices.small ?? addon?.price_cad;
+      const amount = Number(raw);
+      if (addon?.quote_required === true) {
+        return Number.isFinite(amount) && amount > 0
+          ? `From ${money(amount)} · condition assessed`
+          : "Condition quote";
+      }
+      return Number.isFinite(amount) && amount > 0 ? `From ${money(amount)}` : "Ask for price";
+    }
+
+    function renderAddons() {
+      const wrap = qs("#addonsBox");
+      const addons = state.pricing?.addons || [];
+      const packageCode = selectedPackage()?.code || "";
+      pruneInvalidSelectedAddons();
+      wrap.innerHTML = addons.map((addon) => {
+        const src = addon.image_url || addonPrimaryImage(addon.code);
+        const fallback = addon.image_fallback_url || addonFallbackImage(addon.code);
+        const allowed = addonAllowedForPackage(addon, packageCode);
+        const noteParts = [];
+        if (Array.isArray(addon.notes) && addon.notes.length) noteParts.push((addon.notes || []).join(" • "));
+        if (!allowed) noteParts.push(addonRequirementText(addon));
+        return `<button class="addon-card ${state.addons.has(addon.code) ? "active" : ""} ${allowed ? "" : "disabled"}" type="button" data-addon="${escapeHtml(addon.code)}" ${allowed ? "" : "data-disabled=1"}>
+          <img class="addon-thumb" data-media-source="${escapeHtml(src)}" data-fallback="${escapeHtml(fallback)}" alt="${escapeHtml(addon.name)}" loading="lazy" />
+          <strong>${escapeHtml(addon.name)}</strong>
+          <span class="muted mini">${escapeHtml(addon.category || "")}${addon.type ? ` · ${escapeHtml(addon.type)}` : ""}</span>
+          <span class="tag ${addon.quote_required ? "warn" : (allowed ? "ok" : "warn")}">${escapeHtml(addonDisplayPrice(addon))}</span>
+          <span class="muted mini">${escapeHtml(noteParts.join(" • "))}</span>
+        </button>`;
+      }).join("");
+
+      qsa(".addon-thumb").forEach((img) => {
+        bindImageWithCandidates(img, img.dataset.mediaSource || "", {
+          fallback: img.dataset.fallback || "/assets/addons/generic_addon.png",
+          onExhausted: (node) => { node.src = "/assets/placeholders/service-photo-needed.svg"; node.classList.add("visual-placeholder-img"); }
+        });
+      });
+
+      qsa("[data-addon]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          if (btn.hasAttribute("data-disabled")) {
+            const code = btn.getAttribute("data-addon");
+            const addon = (state.pricing?.addons || []).find((row) => row.code === code);
+            showStatus(addonRequirementText(addon), "bad");
+            return;
+          }
+          const code = btn.getAttribute("data-addon");
+          if (state.addons.has(code)) state.addons.delete(code);
+          else state.addons.add(code);
+          analyticsTrack("booking_addon_toggle", { addon_code: code, selected: state.addons.has(code), addon_count: state.addons.size });
+          renderAddons();
+          renderFinalSummary();
+        });
+      });
+    }
+
+    function selectedAddons() {
+      return (state.pricing?.addons || []).filter((addon) => state.addons.has(addon.code));
+    }
+
+    function computeTotals() {
+      const pkg = selectedPackage();
+      const size = selectedSize();
+      let subtotal = Number(pkg?.prices_cad?.[size] || 0);
+      let quoteOnly = false;
+
+      selectedAddons().forEach((addon) => {
+        if (addon.quote_required) quoteOnly = true;
+        else if (addon.prices_cad && addon.prices_cad[size] != null) subtotal += Number(addon.prices_cad[size] || 0);
+        else if (addon.price_cad != null) subtotal += Number(addon.price_cad || 0);
+      });
+
+      return {
+        subtotal,
+        deposit: Number(pkg?.deposit_cad || 0),
+        quoteOnly
+      };
+    }
+
+    function renderVehicleServiceHint() {
+      const hint = qs('#vehicleServiceHint');
+      const saved = state.garageVehicles.find((v)=> normalizeChoice(v.id) === normalizeChoice(state.activeGarageVehicleId)) || null;
+      const nextDue = saved?.next_cleaning_due_at || '';
+      const nextMileage = saved?.next_service_mileage_km || '';
+      if (!saved || (!nextDue && !nextMileage)) { hint.style.display='none'; return; }
+      hint.style.display='block';
+      hint.className='notice';
+      hint.textContent = `Garage record: ${nextDue ? `next scheduled ${nextDue}` : 'no next date set'}${nextMileage ? ` • next service mileage ${nextMileage} km` : ''}.`;
+    }
+
+    function renderReviewVehicle() {
+      const area = selectedServiceAreaMeta();
+      const rows = [
+        ["Date", selectedDate() || "Not chosen"],
+        ["Time", state.selectedSlotChoice || "Not chosen"],
+        ["Service area", qs("#service_area").value || "Not chosen"],
+        ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
+        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
+        ["Vehicle", [qs("#veh_year").value, qs("#veh_make").value, qs("#veh_model").value, qs("#veh_color").value].filter(Boolean).join(" · ") || "Vehicle details incomplete"],
+        ["Mileage", qs('#veh_mileage').value ? `${qs('#veh_mileage').value} km` : 'Optional / not entered'],
+        ["Vehicle size", selectedSize() || "Not chosen"],
+        ["Category", qs("#veh_category").value || "Not chosen"]
+      ];
+      qs("#reviewVehicleBox").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+    }
+
+    function renderFinalSummary() {
+      const pkg = selectedPackage();
+      const totals = computeTotals();
+      const area = selectedServiceAreaMeta();
+      const rows = [
+        ["Date", selectedDate() || "Not chosen"],
+        ["Time", state.selectedSlotChoice || "Not chosen"],
+        ["Service area", qs("#service_area").value || "Not chosen"],
+        ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
+        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
+        ["Package", pkg ? `${pkg.name} (${selectedSize() || "size pending"})` : "Not chosen"],
+        ["Add-ons", selectedAddons().length ? selectedAddons().map((addon) => addon.name).join(", ") : "None"],
+        ["Estimated subtotal", totals.subtotal ? money(totals.subtotal) : "Package required"],
+        ["Deposit due now", money(totals.deposit)],
+        ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"],
+        ["Photo estimate", (qs("#photo_estimate_requested")?.checked || state.photoEstimateRequested || parsePhotoEstimateLinks().length) ? `Requested/reviewable${parsePhotoEstimateLinks().length ? ` · ${parsePhotoEstimateLinks().length} link(s)` : ""}` : "Not requested"]
+      ];
+      qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      postEmbedState();
+    }
+
+    async function validateStep(step) {
+      clearFieldErrors();
+      hideStatus();
+
+      if (step === 1) {
+        if (!selectedDate()) return showFieldError(1, "Choose a date.");
+        if (!qs("#service_area").value) return showFieldError(1, "Choose the closest service area or town.");
+        if (!state.selectedSlotChoice) return showFieldError(1, "Choose an available time slot.");
+        if (!qs("#veh_year").value || !qs("#veh_make").value || !qs("#veh_model").value) return showFieldError(1, "Choose the vehicle year, make, and model.");
+        if (!selectedSize()) return showFieldError(1, "Choose the vehicle size.");
+        return true;
+      }
+
+      if (step === 2) {
+        if (!state.selectedPackageCode) return showFieldError(2, "Choose a main service package.");
+        return true;
+      }
+
+      if (step === 3) {
+        return true;
+      }
+
+      if (step === 4) {
+        if (!qs("#ack_driveway").checked || !qs("#ack_power_water").checked || !qs("#ack_bylaw").checked || !qs("#ack_cancellation").checked) {
+          return showFieldError(4, "Please confirm all requirements and policy acknowledgements before moving on.");
+        }
+        return true;
+      }
+
+      if (step === 5) {
+        if (!qs("#customer_name").value.trim()) return showFieldError(5, "Enter your full name.");
+        if (!qs("#customer_email").value.trim()) return showFieldError(5, "Enter your email address.");
+        if (!qs("#address_line1").value.trim()) return showFieldError(5, "Enter the service address.");
+        if (!validateCanadianPostalCode(qs("#postal_code").value)) return showFieldError(5, "Check the postal code format or leave it blank until staff confirm it.");
+        return true;
+      }
+
+      return true;
+    }
+
+    qs("#checkoutBtn").addEventListener("click", async () => {
+      for (let i = 1; i <= 5; i++) {
+        const ok = await validateStep(i);
+        if (!ok) {
+          gotoStep(i);
+          return;
+        }
+      }
+
+      const slotChoice = state.selectedSlotChoice;
+      const start_slot = slotChoice === "FULL" ? "AM" : slotChoice;
+      const duration_slots = slotChoice === "FULL" ? 2 : 1;
+
+      const payload = {
+        service_date: selectedDate(),
+        start_slot,
+        duration_slots,
+        service_area: qs("#service_area").value,
+        service_area_label: selectedServiceAreaMeta()?.label || qs("#service_area").value,
+        service_area_county: selectedServiceAreaMeta()?.county || null,
+        service_area_municipality: selectedServiceAreaMeta()?.municipality || null,
+        service_area_travel_tier: selectedServiceAreaMeta()?.travel_tier || null,
+        service_area_water_rule: selectedServiceAreaMeta()?.water_rule || null,
+        service_area_meta: selectedServiceAreaMeta(),
+        package_code: state.selectedPackageCode,
+        vehicle_size: selectedSize(),
+        vehicle_size_review_status: vehicleSizeVerificationState().status,
+        vehicle_size_catalog_expected: vehicleSizeVerificationState().expected,
+        vehicle_size_review_reason: vehicleSizeVerificationState().reason,
+        customer_name: qs("#customer_name").value.trim(),
+        customer_email: qs("#customer_email").value.trim(),
+        customer_phone: qs("#customer_phone").value.trim() || null,
+        address_line1: qs("#address_line1").value.trim(),
+        city: qs("#city").value.trim() || null,
+        postal_code: qs("#postal_code").value.trim() || null,
+        addon_codes: Array.from(state.addons),
+        gift_code: qs("#gift_code").value.trim() || null,
+        promo_code: qs("#promo_code").value.trim() || null,
+        vehicle: {
+          year: Number(qs("#veh_year").value),
+          make: qs("#veh_make").value,
+          model: qs("#veh_model").value,
+          plate: qs("#veh_plate").value.trim() || null,
+          photo_url: qs("#veh_photo").value.trim() || null,
+          body_style: qs("#veh_body").value || null,
+          category: qs("#veh_category").value || null,
+          color: qs("#veh_color").value.trim() || null,
+          mileage: qs('#veh_mileage').value || null
+        },
+        special_notes: qs("#special_notes").value.trim() || null,
+        condition_flags: conditionFlagLabels(selectedConditionFlags()),
+        condition_flag_codes: Array.from(state.conditionFlags),
+        condition_recommendation: state.conditionRecommendationSummary || null,
+        photo_estimate_requested: qs("#photo_estimate_requested")?.checked === true || state.photoEstimateRequested === true || parsePhotoEstimateLinks().length > 0,
+        photo_estimate_links: parsePhotoEstimateLinks(),
+        media_consent_preference: qs("input[name='media_consent_preference']:checked")?.value || state.mediaConsentPreference || "estimate_only",
+        ack_driveway: true,
+        ack_power_water: true,
+        need_mobile_water_power_quote: qs("#need_mobile_water_power")?.checked === true,
+        ack_bylaw: true,
+        ack_cancellation: true
+      };
+
+      const btn = qs("#checkoutBtn");
+      btn.disabled = true;
+      btn.textContent = "Preparing payment…";
+      analyticsTrack("checkout_started", {
+        package_code: state.selectedPackageCode,
+        service_area: qs("#service_area").value || null,
+        addon_count: state.addons.size,
+        service_date: selectedDate() || null
+      });
+
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const out = await res.json().catch(() => null);
+        if (!res.ok || !out?.ok || !out?.checkout_url) throw new Error(out?.error || "Checkout failed.");
+        analyticsTrack("checkout_redirect", { booking_id: out.booking_id || null, provider:"stripe" });
+        location.href = out.checkout_url;
+      } catch (err) {
+        analyticsTrack("checkout_error", { message: err?.message || "Checkout failed." });
+        showStatus(err.message || "Checkout failed.", "bad");
+        btn.disabled = false;
+        btn.textContent = "Book and pay deposit";
+      }
+    });
+
+    qs("#service_area").addEventListener("input", () => {
+      updateServiceAreaNote();
+      analyticsTrack("booking_service_area_type", { service_area: qs("#service_area").value || null });
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
+    qs("#service_area").addEventListener("change", () => {
+      updateServiceAreaNote();
+      analyticsTrack("booking_service_area_pick", { service_area: qs("#service_area").value || null });
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
+    qs("#showServiceAreasBtn")?.addEventListener("click", () => showServiceAreaPicker(true));
+    qs("#hideServiceAreasBtn")?.addEventListener("click", () => hideServiceAreaPicker());
+    qs("#service_area").addEventListener("focus", () => showServiceAreaPicker(!qs("#service_area").value.trim()));
+    qs("#city")?.addEventListener("input", () => updateAddressAreaWarning());
+    qs("#postal_code")?.addEventListener("input", () => updateAddressAreaWarning());
+    qs("#need_mobile_water_power")?.addEventListener("change", () => {
+      renderReviewVehicle();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_requested")?.addEventListener("change", () => {
+      state.photoEstimateRequested = qs("#photo_estimate_requested")?.checked === true;
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_links")?.addEventListener("input", () => {
+      if (parsePhotoEstimateLinks().length) {
+        state.photoEstimateRequested = true;
+        const photoBox = qs("#photo_estimate_requested");
+        if (photoBox) photoBox.checked = true;
+      }
+      renderPhotoEstimateLinkHelp();
+      renderFinalSummary();
+    });
+
+    qs("#photo_estimate_files")?.addEventListener("change", async (event) => {
+      await uploadPhotoEstimateFiles(event.target.files);
+      event.target.value = "";
+    });
+
+
+    renderServiceAreas(configuredServiceAreas());
+    syncBookingRuleLabels();
+
+    try {
+      state.pricing = await loadPricingData();
+      renderServiceAreas();
+      syncBookingRuleLabels();
+      qs("#openSizeChartBtn").addEventListener("click", () => openModal("Vehicle size chart", chartUrl(state.pricing || {}, "Vehicle Size Chart") || `${BRAND_BASE}/CarSizeChart.PNG`));
+      await Promise.all([
+        loadVehicleMakes(),
+        loadGarageVehicles(),
+        loadAvailabilityWindow()
+      ]);
+
+      applyInitialPrefill();
+
+      if (!selectedDate()) {
+        qs("#service_date").value = toIsoLocal(startOfLocalDay());
+      }
+
+      qs("#service_date").min = toIsoLocal(startOfLocalDay());
+      await refreshAvailability();
+      renderPackages();
+      renderAddons();
+      renderReviewVehicle();
+      renderFinalSummary();
+      renderVehicleServiceHint();
+      gotoStep(1);
+      postEmbedHeight();
+    } catch (err) {
+      showStatus(`Failed to load booking data: ${err.message || err}`, "bad");
+    }
+  </script>
+
+  <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
+  <script src="/assets/site-policies.js" defer></script>
+  <script src="/assets/booking-hours.js" defer></script>
+</body>
+</html>

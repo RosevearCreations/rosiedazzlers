@@ -1,0 +1,31 @@
+name: Unified Services Pricing Booking Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - build336-unified-services-pricing-booking
+    paths:
+      - 'book.html'
+      - 'booking-planner.html'
+      - 'services.html'
+      - 'pricing.html'
+      - '_redirects'
+      - 'assets/pricing-catalog-client.js'
+      - 'scripts/build336-unified-services-pricing-booking-gate.mjs'
+      - '.github/workflows/unified-services-pricing-booking-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify unified Services, Pricing and Booking authority
+        run: node scripts/build336-unified-services-pricing-booking-gate.mjs
