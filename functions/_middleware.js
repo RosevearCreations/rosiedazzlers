@@ -1,13 +1,27 @@
-// Build 326 - narrow public HTML clarity + booking completion routing layer.
+// Build 341 - public HTML clarity + booking completion routing + universal public page-editor bootstrap.
 // Static source and booking/payment APIs remain authoritative. This middleware only:
 // 1) preserves the existing Build 272 public wording clarifications,
-// 2) routes provider payment returns away from the customer job-signoff /complete page, and
-// 3) gives already-confirmed gift-covered checkouts a browser confirmation URL.
+// 2) routes provider payment returns away from the customer job-signoff /complete page,
+// 3) gives already-confirmed gift-covered checkouts a browser confirmation URL, and
+// 4) loads the admin-only Build 341 editor on public content HTML pages.
 const TARGETS = new Set([
   "/", "/index.html",
   "/book", "/book.html",
   "/pricing", "/pricing.html",
   "/services", "/services.html"
+]);
+
+const EDITOR_EXCLUDED_PREFIXES = ["/admin", "/api", "/client", "/detailer", "/app/detailer"];
+const EDITOR_EXCLUDED_PATHS = new Set([
+  "/login", "/login.html",
+  "/my-account", "/my-account.html",
+  "/progress", "/progress.html",
+  "/checkout", "/checkout.html",
+  "/complete", "/complete.html",
+  "/invoice", "/invoice.html",
+  "/quote-payment", "/quote-payment.html",
+  "/final-balance-payment", "/final-balance-payment.html",
+  "/booking-confirmed", "/booking-confirmed.html"
 ]);
 
 const PACKAGE_GUIDE = `
@@ -49,7 +63,9 @@ export async function onRequest(context) {
     return Response.redirect(url.toString(), 302);
   }
 
-  if (!TARGETS.has(url.pathname)) return context.next();
+  const applyLegacyClarity = TARGETS.has(url.pathname);
+  const applyPageEditor = isEditorEligiblePath(url.pathname);
+  if (!applyLegacyClarity && !applyPageEditor) return context.next();
 
   const response = await context.next();
   const contentType = String(response.headers.get("content-type") || "").toLowerCase();
@@ -57,49 +73,65 @@ export async function onRequest(context) {
 
   let html = await response.text();
 
-  html = html
-    .replaceAll("Customer provides power + water", "We bring our own water + power")
-    .replaceAll("Our #1 choice", "Best value")
-    .replaceAll("Quote staff-supplied water/power setup", "Rosie brings its own water and power")
-    .replaceAll("Customer provides water and power", "Rosie brings its own water and power")
-    .replaceAll("If power/water are not available, additional charges may apply.", "Rosie brings the water and power needed for standard detailing.");
+  if (applyLegacyClarity) {
+    html = html
+      .replaceAll("Customer provides power + water", "We bring our own water + power")
+      .replaceAll("Our #1 choice", "Best value")
+      .replaceAll("Quote staff-supplied water/power setup", "Rosie brings its own water and power")
+      .replaceAll("Customer provides water and power", "Rosie brings its own water and power")
+      .replaceAll("If power/water are not available, additional charges may apply.", "Rosie brings the water and power needed for standard detailing.");
 
-  if (url.pathname === "/" || url.pathname === "/index.html") {
-    html = html.replace(
-      "<strong>Note:</strong> Rosie brings the water and power needed for standard detailing.\n            Customer accepts responsibility for local bylaw considerations regarding runoff/chemicals.",
-      "<strong>Fully mobile:</strong> Rosie brings its own water and power for standard detailing. A safe driveway/work area and vehicle access are still required. Customer accepts responsibility for local bylaw considerations regarding runoff/chemicals."
-    );
+    if (url.pathname === "/" || url.pathname === "/index.html") {
+      html = html.replace(
+        "<strong>Note:</strong> Rosie brings the water and power needed for standard detailing.\n            Customer accepts responsibility for local bylaw considerations regarding runoff/chemicals.",
+        "<strong>Fully mobile:</strong> Rosie brings its own water and power for standard detailing. A safe driveway/work area and vehicle access are still required. Customer accepts responsibility for local bylaw considerations regarding runoff/chemicals."
+      );
+    }
+
+    if (url.pathname === "/book" || url.pathname === "/book.html") {
+      html = html.replace(
+        '<div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>',
+        `${PACKAGE_GUIDE}\n      <div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>`
+      );
+      html = html.replace(
+        '<label><input id="ack_power_water" type="checkbox" /><span><strong>Power / water access acknowledged</strong><br><span data-policy-copy="water_power">Extra fees can apply if either is unavailable.</span></span></label>',
+        '<label><input id="ack_power_water" type="checkbox" checked disabled /><span><strong>Rosie brings its own water and power</strong><br><span>We arrive fully mobile for standard detailing; safe driveway/work access is still required.</span></span></label>'
+      );
+      html = html.replace(
+        '<label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br><span data-policy-copy="water_power">Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></span></label>',
+        '<label hidden><input id="need_mobile_water_power" type="checkbox" /><span><strong>Mobile water/power included</strong></span></label>'
+      );
+      html = html.replace("Confirm setup needs before you continue to payment.", "Confirm safe site access and vehicle notes before payment. Rosie brings its own water and power for standard detailing.");
+    }
+
+    if (["/pricing", "/pricing.html", "/services", "/services.html"].includes(url.pathname)) {
+      html = html.replace(/(<h1\b[^>]*>[\s\S]*?<\/h1>)/i, `$1${PUBLIC_SCOPE_GUIDE}`);
+    }
+
+    if (!html.includes("/assets/build272-public-clarity.js")) {
+      html = html.replace("</body>", '<script src="/assets/build272-public-clarity.js?v=272" defer></script>\n</body>');
+    }
   }
 
-  if (url.pathname === "/book" || url.pathname === "/book.html") {
+  if (applyPageEditor && !html.includes("/assets/universal-page-editor-bootstrap.js")) {
     html = html.replace(
-      '<div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>',
-      `${PACKAGE_GUIDE}\n      <div id="packageCards" class="service-card-grid" style="margin-top:12px"></div>`
+      "</body>",
+      '<script type="module" src="/assets/universal-page-editor-bootstrap.js?v=20260906build341"></script>\n</body>'
     );
-    html = html.replace(
-      '<label><input id="ack_power_water" type="checkbox" /><span><strong>Power / water access acknowledged</strong><br><span data-policy-copy="water_power">Extra fees can apply if either is unavailable.</span></span></label>',
-      '<label><input id="ack_power_water" type="checkbox" checked disabled /><span><strong>Rosie brings its own water and power</strong><br><span>We arrive fully mobile for standard detailing; safe driveway/work access is still required.</span></span></label>'
-    );
-    html = html.replace(
-      '<label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br><span data-policy-copy="water_power">Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></span></label>',
-      '<label hidden><input id="need_mobile_water_power" type="checkbox" /><span><strong>Mobile water/power included</strong></span></label>'
-    );
-    html = html.replace("Confirm setup needs before you continue to payment.", "Confirm safe site access and vehicle notes before payment. Rosie brings its own water and power for standard detailing.");
-  }
-
-  if (["/pricing", "/pricing.html", "/services", "/services.html"].includes(url.pathname)) {
-    html = html.replace(/(<h1\b[^>]*>[\s\S]*?<\/h1>)/i, `$1${PUBLIC_SCOPE_GUIDE}`);
-  }
-
-  if (!html.includes("/assets/build272-public-clarity.js")) {
-    html = html.replace("</body>", '<script src="/assets/build272-public-clarity.js?v=272" defer></script>\n</body>');
   }
 
   const headers = new Headers(response.headers);
   headers.delete("content-length");
   headers.delete("etag");
-  headers.set("cache-control", "no-cache");
+  if (applyLegacyClarity) headers.set("cache-control", "no-cache");
   return new Response(html, { status: response.status, statusText: response.statusText, headers });
+}
+
+function isEditorEligiblePath(pathname) {
+  const path = String(pathname || "/");
+  if (EDITOR_EXCLUDED_PATHS.has(path)) return false;
+  if (EDITOR_EXCLUDED_PREFIXES.some((prefix) => path === prefix || path.startsWith(`${prefix}/`) || path.startsWith(`${prefix}.`))) return false;
+  return true;
 }
 
 async function handleCheckoutResponse(context, requestUrl) {
