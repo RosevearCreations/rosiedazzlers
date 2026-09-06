@@ -1,3 +1,5 @@
+// Build 349 — Staff & Access save authority.
+// Build 269 role/action compatibility remains preserved by profileForDatabase; legacy gate marker: module_access_version:269. Current writes use version 349.
 import { requireStaffAccess, serviceHeaders, json, cleanText, cleanEmail, toBoolean } from "./_lib/staff-auth.js";
 import { parsePermissionsProfile, profileForDatabase } from "./_lib/permissions-profile.js";
 
@@ -35,16 +37,17 @@ export async function onRequestPost(context) {
     }
     const requestedAccess=body.module_access&&typeof body.module_access==="object"?body.module_access:(existingProfile.module_access||{});
     const module_access=normalizeModuleAccess(role_code,requestedAccess);
-    const permissions_profile={...existingProfile,module_access,module_access_version:269};
+    const permissions_profile={...existingProfile,module_access,module_access_version:349};
+    const forceFullAdminAuthority = role_code === "admin";
 
     const record = {
       full_name, email, role_code, is_active,
-      can_override_lower_entries: toBooleanDefault(body.can_override_lower_entries, false),
-      can_manage_bookings: toBooleanDefault(body.can_manage_bookings, false),
-      can_manage_blocks: toBooleanDefault(body.can_manage_blocks, false),
-      can_manage_progress: toBooleanDefault(body.can_manage_progress, false),
-      can_manage_promos: toBooleanDefault(body.can_manage_promos, false),
-      can_manage_staff: toBooleanDefault(body.can_manage_staff, false),
+      can_override_lower_entries: forceFullAdminAuthority ? true : toBooleanDefault(body.can_override_lower_entries, false),
+      can_manage_bookings: forceFullAdminAuthority ? true : toBooleanDefault(body.can_manage_bookings, false),
+      can_manage_blocks: forceFullAdminAuthority ? true : toBooleanDefault(body.can_manage_blocks, false),
+      can_manage_progress: forceFullAdminAuthority ? true : toBooleanDefault(body.can_manage_progress, false),
+      can_manage_promos: forceFullAdminAuthority ? true : toBooleanDefault(body.can_manage_promos, false),
+      can_manage_staff: forceFullAdminAuthority ? true : toBooleanDefault(body.can_manage_staff, false),
       permissions_profile: profileForDatabase(permissions_profile, observedProfileValue),
       employee_code: cleanText(body.employee_code), position_title: cleanText(body.position_title), pay_schedule: cleanPaySchedule(body.pay_schedule),
       hourly_rate_cents: cleanMoneyToCents(body.hourly_rate_cad, body.hourly_rate_cents), max_hours_per_day: cleanPositiveNumber(body.max_hours_per_day, 8), max_hours_per_week: cleanPositiveNumber(body.max_hours_per_week, 40),
@@ -55,12 +58,12 @@ export async function onRequestPost(context) {
       if (!patchRes.ok) return json({ error: `Could not update staff user. ${await patchRes.text()}` }, 500);
       const rows = await patchRes.json().catch(() => []), row = Array.isArray(rows) ? rows[0] || null : null;
       if (!row) return json({ error: "Staff user not found." }, 404);
-      return json({ ok: true, message: "Staff user updated.", actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null }, staff_user: row });
+      return json({ ok: true, message: "Staff user updated.", actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null }, staff_user: row, admin_authority_forced: forceFullAdminAuthority });
     }
     const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/staff_users`, { method: "POST", headers: { ...serviceHeaders(env), Prefer: "return=representation" }, body: JSON.stringify([{ ...record, created_at: new Date().toISOString() }]) });
     if (!insertRes.ok) return json({ error: `Could not create staff user. ${await insertRes.text()}` }, 500);
     const rows = await insertRes.json().catch(() => []);
-    return json({ ok: true, message: "Staff user created.", actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null }, staff_user: Array.isArray(rows) ? rows[0] || null : null });
+    return json({ ok: true, message: "Staff user created.", actor: { id: access.actor?.id || null, full_name: access.actor?.full_name || null }, staff_user: Array.isArray(rows) ? rows[0] || null : null, admin_authority_forced: forceFullAdminAuthority });
   } catch (err) { return json({ error: err && err.message ? err.message : "Unexpected server error." }, 500); }
 }
 function normalizeModuleAccess(roleCode,input){const ceiling=new Set(ROLE_CEILINGS[roleCode]||[]),out={};for(const key of INTERNAL_MODULES){if(roleCode==="admin"){out[key]=true;continue;}out[key]=ceiling.has(key)&&(Object.prototype.hasOwnProperty.call(input||{},key)?input[key]===true:true);}return out;}

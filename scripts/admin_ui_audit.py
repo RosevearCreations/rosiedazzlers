@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-"""Build 347 protected-page UI/navigation/permission source audit.
+"""Build 349 protected-page UI/navigation/staff-authority source audit.
 
-The goal is to stop discovering unformatted admin pages manually. Current
-AdminShell pages are required to have a resolvable page key and durable shared
-layout/auth contracts. Older markup is normalized by AdminShell at runtime.
+The goal is to stop discovering unformatted admin pages or broken Staff & Access
+profiles manually. Current AdminShell pages must retain shared layout/auth
+contracts, and Administrator / Owner profiles must remain full-authority while
+optional profile dependencies fail independently.
 """
 from __future__ import annotations
 
@@ -126,20 +127,69 @@ if admin_role.get("modules") != expected_modules:
     errors.append(f"admin module ceiling mismatch: {admin_role.get('modules')!r}")
 
 
+# Build 349 Staff & Access contract. A missing optional customer-tier or payroll
+# field must not hide the staff profiles, admin rows must serialize with all
+# modules/capabilities on, and password hashes must never be returned to the UI.
+staff_list_api = read("functions/api/admin/staff_list.js")
+staff_save_api = read("functions/api/staff_save.js")
+staff_ui = read("assets/admin-staff-v309.js")
+staff_html = read("admin-staff.html")
+
+for token in [
+    "CORE_STAFF_SELECT",
+    "Customer tiers are temporarily unavailable. Staff profiles and module access remain available.",
+    "admin_authority",
+    "module_access_version: 349",
+    "can_manage_staff: true",
+]:
+    if token not in staff_list_api:
+        errors.append(f"staff_list.js missing Build 349 resilience/authority token: {token}")
+if "password_hash" in staff_list_api:
+    errors.append("staff_list.js must not expose password_hash to the Staff & Access client")
+
+for token in [
+    'const forceFullAdminAuthority = role_code === "admin"',
+    "forceFullAdminAuthority ? true : toBooleanDefault(body.can_manage_staff, false)",
+    "module_access_version:349",
+]:
+    if token not in staff_save_api:
+        errors.append(f"staff_save.js missing Build 349 full-admin persistence token: {token}")
+
+for token in [
+    "renderAuthority()",
+    "syncLegacyCapabilities()",
+    "staffWarnings",
+    "adminAuthority",
+    "Administrator accounts always receive this capability.",
+]:
+    if token not in staff_ui:
+        errors.append(f"admin-staff-v309.js missing Build 349 authority UI token: {token}")
+
+for token in [
+    'data-build349="staff-access-authority"',
+    'id="authorityBox"',
+    "/assets/admin-staff-v309.js?v=20260906build349",
+]:
+    if token not in staff_html:
+        errors.append(f"admin-staff.html missing Build 349 profile/authority token: {token}")
+
+
 if warnings:
-    print("Build 347 admin UI audit warnings:")
+    print("Build 349 admin UI audit warnings:")
     for warning in warnings:
         print(" -", warning)
 
 if errors:
-    print("Build 347 admin UI audit: FAIL")
+    print("Build 349 admin UI audit: FAIL")
     for error in errors:
         print(" -", error)
     raise SystemExit(1)
 
-print("Build 347 admin UI audit: PASS")
+print("Build 349 admin UI audit: PASS")
 print(f" - inventoried {len(admin_pages)} root admin-* HTML routes")
 print(f" - validated {len(protected_pages)} current AdminShell protected routes")
 print(f" - validated {len(nav_hrefs)} canonical admin navigation targets")
 print(" - shared admin design system covers canonical and legacy AdminShell markup")
-print(" - admin retains full detailer/operations/admin/I.T./finance/DAIP/socials authority")
+print(" - Staff & Access survives optional tier/payroll-profile drift without hiding staff profiles")
+print(" - password hashes are excluded from the Staff & Access response")
+print(" - admin retains full detailer/operations/admin/I.T./finance/DAIP/socials and management authority")
