@@ -1,0 +1,62 @@
+name: Staff API Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build350-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-staff-api-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  staff-api-authority:
+    name: Validate Staff API convergence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate canonical Staff route syntax
+        run: |
+          node --check functions/api/_lib/staff-list-handler.js
+          node --check functions/api/staff_list.js
+          node --check functions/api/admin/staff_list.js
+
+      - name: Validate Staff profile and Admin authority contracts
+        run: python scripts/admin_ui_audit.py
+
+      - name: Record Staff API authority
+        run: |
+          {
+            echo "### Build 350 Staff API Authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Legacy and /admin Staff list routes delegate to one canonical handler: PASS"
+            echo "- Sensitive authentication hashes excluded from both response paths: PASS"
+            echo "- Optional tier/payroll-profile drift remains non-blocking: PASS"
+            echo "- Administrator / Owner full-module authority remains unchanged: PASS"
+            echo "- No schema/database migration or business-data backfill is introduced."
+          } >> "$GITHUB_STEP_SUMMARY"
