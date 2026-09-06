@@ -1,0 +1,39 @@
+name: Page-Wide Live Editor Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build343-page-wide-live-editor
+    paths:
+      - functions/_middleware.js
+      - functions/api/admin/page_editor.js
+      - assets/universal-page-editor.js
+      - assets/universal-page-editor-bootstrap.js
+      - assets/universal-page-editor-build343.js
+      - index.html
+      - about.html
+      - blog.html
+      - scripts/build343-page-wide-live-editor-gate.mjs
+      - .github/workflows/page-wide-live-editor-authority.yml
+  pull_request:
+    paths:
+      - functions/_middleware.js
+      - functions/api/admin/page_editor.js
+      - assets/universal-page-editor.js
+      - assets/universal-page-editor-bootstrap.js
+      - assets/universal-page-editor-build343.js
+      - index.html
+      - about.html
+      - blog.html
+      - scripts/build343-page-wide-live-editor-gate.mjs
+      - .github/workflows/page-wide-live-editor-authority.yml
+
+jobs:
+  page-wide-live-editor-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Build 343 page-wide live editor
+        run: node scripts/build343-page-wide-live-editor-gate.mjs
