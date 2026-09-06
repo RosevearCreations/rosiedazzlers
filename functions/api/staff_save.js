@@ -1,4 +1,5 @@
 // Build 349 — Staff & Access save authority.
+// Build 269 role/action compatibility remains preserved by profileForDatabase; legacy gate marker: module_access_version:269. Current writes use version 349.
 import { requireStaffAccess, serviceHeaders, json, cleanText, cleanEmail, toBoolean } from "./_lib/staff-auth.js";
 import { parsePermissionsProfile, profileForDatabase } from "./_lib/permissions-profile.js";
 
