@@ -19,17 +19,19 @@ export async function onRequestGet({ request, env }) {
       version: Number(setting?.value?.version || 1),
       overrides,
       updated_at: setting?.updated_at || setting?.value?.updated_at || null
-    }, 200, { "Cache-Control": "no-store" });
+    });
   } catch (error) {
-    return json({ ok: false, error: error?.message || "Could not load page overrides." }, 500, { "Cache-Control": "no-store" });
+    return json({ ok: false, error: error?.message || "Could not load page overrides." }, 500);
   }
 }
 
 async function loadSetting(env) {
-  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return { value: { version: 1, pages: {} } };
+  if (!env?.SUPABASE_URL) return { value: { version: 1, pages: {} } };
+  const headers = serviceHeaders(env);
+  if (!headers.apikey) return { value: { version: 1, pages: {} } };
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.${SETTING_KEY}&limit=1`,
-    { headers: serviceHeaders(env) }
+    { headers }
   );
   if (!res.ok) return { value: { version: 1, pages: {} } };
   const rows = await res.json().catch(() => []);
