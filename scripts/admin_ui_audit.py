@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Build 349 protected-page UI/navigation/staff-authority source audit.
+"""Build 350 protected-page UI/navigation/staff-authority source audit.
 
 The goal is to stop discovering unformatted admin pages or broken Staff & Access
 profiles manually. Current AdminShell pages must retain shared layout/auth
-contracts, and Administrator / Owner profiles must remain full-authority while
-optional profile dependencies fail independently.
+contracts, Administrator / Owner profiles must remain full-authority while
+optional profile dependencies fail independently, and every Staff list route
+must delegate to one canonical profile authority.
 """
 from __future__ import annotations
 
@@ -127,25 +128,45 @@ if admin_role.get("modules") != expected_modules:
     errors.append(f"admin module ceiling mismatch: {admin_role.get('modules')!r}")
 
 
-# Build 349 Staff & Access contract. A missing optional customer-tier or payroll
-# field must not hide the staff profiles, admin rows must serialize with all
-# modules/capabilities on, and password hashes must never be returned to the UI.
-staff_list_api = read("functions/api/admin/staff_list.js")
+# Build 349 Staff & Access behavior is now owned by one Build 350 canonical
+# handler. Both /api/staff_list and /api/admin/staff_list must be thin delegates.
+# This prevents legacy-route drift from reintroducing sensitive authentication
+# fields or making optional customer-tier/payroll schema availability fatal.
+staff_handler = read("functions/api/_lib/staff-list-handler.js")
+staff_root_api = read("functions/api/staff_list.js")
+staff_admin_api = read("functions/api/admin/staff_list.js")
 staff_save_api = read("functions/api/staff_save.js")
 staff_ui = read("assets/admin-staff-v309.js")
 staff_html = read("admin-staff.html")
 
 for token in [
+    "Build 350",
     "CORE_STAFF_SELECT",
     "Customer tiers are temporarily unavailable. Staff profiles and module access remain available.",
     "admin_authority",
     "module_access_version: 349",
     "can_manage_staff: true",
 ]:
-    if token not in staff_list_api:
-        errors.append(f"staff_list.js missing Build 349 resilience/authority token: {token}")
-if "password_hash" in staff_list_api:
-    errors.append("staff_list.js must not expose password_hash to the Staff & Access client")
+    if token not in staff_handler:
+        errors.append(f"staff-list-handler.js missing Staff resilience/authority token: {token}")
+
+sensitive_field = "password_hash"
+for rel, body in [
+    ("functions/api/_lib/staff-list-handler.js", staff_handler),
+    ("functions/api/staff_list.js", staff_root_api),
+    ("functions/api/admin/staff_list.js", staff_admin_api),
+]:
+    if sensitive_field in body:
+        errors.append(f"{rel} must not select or expose {sensitive_field}")
+
+for rel, body, import_token in [
+    ("functions/api/staff_list.js", staff_root_api, 'from "./_lib/staff-list-handler.js"'),
+    ("functions/api/admin/staff_list.js", staff_admin_api, 'from "../_lib/staff-list-handler.js"'),
+]:
+    if "handleStaffListRequest(context)" not in body or import_token not in body:
+        errors.append(f"{rel} is not delegated to the canonical Staff list handler")
+    if "SUPABASE_URL" in body or "select=" in body:
+        errors.append(f"{rel} regained direct Staff data-query authority")
 
 for token in [
     'const forceFullAdminAuthority = role_code === "admin"',
@@ -175,21 +196,22 @@ for token in [
 
 
 if warnings:
-    print("Build 349 admin UI audit warnings:")
+    print("Build 350 admin UI audit warnings:")
     for warning in warnings:
         print(" -", warning)
 
 if errors:
-    print("Build 349 admin UI audit: FAIL")
+    print("Build 350 admin UI audit: FAIL")
     for error in errors:
         print(" -", error)
     raise SystemExit(1)
 
-print("Build 349 admin UI audit: PASS")
+print("Build 350 admin UI audit: PASS")
 print(f" - inventoried {len(admin_pages)} root admin-* HTML routes")
 print(f" - validated {len(protected_pages)} current AdminShell protected routes")
 print(f" - validated {len(nav_hrefs)} canonical admin navigation targets")
 print(" - shared admin design system covers canonical and legacy AdminShell markup")
 print(" - Staff & Access survives optional tier/payroll-profile drift without hiding staff profiles")
-print(" - password hashes are excluded from the Staff & Access response")
+print(" - root and /admin Staff list routes share one canonical profile authority")
+print(" - sensitive authentication hashes are excluded from both Staff list response paths")
 print(" - admin retains full detailer/operations/admin/I.T./finance/DAIP/socials and management authority")
