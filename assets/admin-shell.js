@@ -1,4 +1,4 @@
-// Build 274 — shared protected-page shell and legacy contextual-help bridge.
+// Build 347 — shared protected-page shell, design-system loader and contextual-help bridge.
 // Expected dependency: /assets/admin-auth.js
 (function attachAdminShell(globalScope) {
   let helpPromise = null;
@@ -60,9 +60,9 @@
     });
   }
 
-  // Build 274: AdminShell is the compatibility bridge for protected screens that have
-  // not yet migrated to AdminPageInit/AdminMenu. Help is intentionally fail-open and
-  // must never prevent authentication or page startup.
+  // Build 347: AdminShell is the compatibility bridge for current protected screens.
+  // Shared admin layout loads independently of contextual help so formatting cannot
+  // disappear just because optional help assets fail or are delayed.
   function ensureContextualHelp(pageKey) {
     const resolvedPageKey = String(pageKey || document.body?.dataset?.page || "").trim();
     if (resolvedPageKey) document.documentElement.dataset.helpPage = resolvedPageKey;
@@ -87,6 +87,7 @@
     });
   }
 
+  ensureStylesheet("/assets/admin-design-system.css?v=20260906build347", "rosie-admin-design-system-css");
   ensureAdminCssFallback();
   void ensureContextualHelp(document.body?.dataset?.page || "");
 
