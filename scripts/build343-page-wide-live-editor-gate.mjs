@@ -9,6 +9,7 @@ const bootstrap = read('assets/universal-page-editor-bootstrap.js');
 const runtime = read('assets/universal-page-editor-build343.js');
 const core = read('assets/universal-page-editor.js');
 const adminApi = read('functions/api/admin/page_editor.js');
+const legacyRuntimeGate = read('scripts/build342-page-editor-runtime-gate.mjs');
 const home = read('index.html');
 const about = read('about.html');
 const help = read('blog.html');
@@ -21,6 +22,7 @@ need(runtime.includes("'[role=\"main\"]'"), 'role=main compatibility is missing'
 need(runtime.includes("'#main-content'"), '#main-content compatibility is missing');
 need(runtime.includes("'body > .container'"), 'mature container-only public pages are unsupported');
 need(!runtime.includes('return document.body') && !runtime.includes('return root.body'), 'runtime must not fall back to editing the whole body/shared chrome');
+need(legacyRuntimeGate.includes('/<div\\s+class=["\']container["\'][^>]*>/i.test(home)'), 'Build 342 compatibility gate does not allow the established container shell to carry editor-root attributes');
 
 for (const [label, html] of [['homepage', home], ['About page', about], ['Help page', help]]) {
   need(html.includes('data-page-editor-root'), `${label} has no explicit page-wide editor root`);
