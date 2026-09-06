@@ -93,6 +93,7 @@ jobs:
           python -m py_compile scripts/seo_metadata_check.py
           python -m py_compile scripts/release_hygiene_check.py
           python -m py_compile scripts/responsive_static_check.py
+          python -m py_compile scripts/admin_ui_audit.py
           python -m py_compile scripts/maintenance_retention_check.py
           python -m py_compile scripts/fleet_maintenance_planning_check.py
           python -m py_compile scripts/final_balance_readiness_check.py
@@ -122,6 +123,9 @@ jobs:
 
       - name: Validate responsive source contract
         run: python scripts/responsive_static_check.py
+
+      - name: Validate protected admin UI contracts
+        run: python scripts/admin_ui_audit.py
 
       - name: Validate maintenance retention contracts
         run: python scripts/maintenance_retention_check.py
@@ -180,6 +184,7 @@ jobs:
             echo "- Public SEO metadata/canonical/robots/structured-data authority: PASS"
             echo "- Release hygiene authority: PASS"
             echo "- Responsive source contract: PASS"
+            echo "- Protected Admin UI/navigation/permission contract: PASS"
             echo "- Maintenance/retention authority: PASS"
             echo "- Fleet maintenance planning authority: PASS"
             echo "- Final-balance readiness authority: PASS"
