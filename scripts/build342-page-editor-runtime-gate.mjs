@@ -19,7 +19,7 @@ need(adapter.includes("root.querySelector?.('main')"), 'semantic main remains un
 need(adapter.includes("root.querySelector?.('body > .container')"), 'container-based mature public pages remain unsupported');
 need(adapter.includes("root.querySelector?.('[data-page-editor-root]')"), 'explicit page-editor root override is missing');
 need(!adapter.includes("return document.body") && !adapter.includes("return root.body"), 'adapter must not fall back to editing the entire body/chrome');
-need(home.includes('<div class="container">'), 'homepage no longer exposes the established container shell used by the compatibility proof');
+need(/<div\s+class=["']container["'][^>]*>/i.test(home), 'homepage no longer exposes the established container shell used by the compatibility proof');
 need(!/<main\b/i.test(home), 'homepage unexpectedly gained a main element; this gate must continue proving the container-only compatibility case');
 need(adapter.includes("#rosieStickyCtaBar"), 'editor toggle is not aware of the sticky conversion CTA');
 need(adapter.includes('getBoundingClientRect'), 'editor toggle does not dynamically clear the sticky CTA height');
