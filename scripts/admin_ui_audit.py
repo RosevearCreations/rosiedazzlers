@@ -75,8 +75,9 @@ for path in admin_pages:
     page_key = body_key or boot_key
     protected_pages.append((path, body, page_key))
 
-    if not page_key.startswith("admin-"):
-        errors.append(f"{path.name}: AdminShell page has no resolvable admin-* page key")
+    # account is intentionally cross-module; all other root admin routes use admin-*.
+    if not (page_key.startswith("admin-") or page_key == "account"):
+        errors.append(f"{path.name}: AdminShell page has no resolvable protected page key")
     if body_key and boot_key and body_key != boot_key:
         errors.append(f"{path.name}: body data-page ({body_key}) disagrees with AdminShell pageKey ({boot_key})")
     if 'name="viewport"' not in body and "name='viewport'" not in body:
@@ -109,6 +110,8 @@ for href in nav_hrefs:
 
 nav_page_keys = set(re.findall(r"[\"']?page_key[\"']?\s*:\s*['\"]([^'\"]+)", nav_js))
 for path, _body, page_key in protected_pages:
+    if page_key == "account":
+        continue
     if page_key and page_key not in nav_page_keys:
         warnings.append(f"{path.name}: protected page is contextual/not listed in canonical module navigation ({page_key})")
 
