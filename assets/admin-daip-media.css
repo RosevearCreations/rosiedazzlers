@@ -1,0 +1,484 @@
+/* Build 346 — DAIP Media Intake layout repair.
+   Scoped to admin-daip-media so no other Rosie admin screen is changed. */
+
+body[data-page="admin-daip-media"]{
+  margin:0;
+  color-scheme:dark;
+}
+
+body[data-page="admin-daip-media"] .site-header{
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:grid;
+  grid-template-columns:minmax(190px,260px) minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+  padding:12px clamp(12px,2vw,28px);
+  border-bottom:1px solid var(--border);
+  background:rgba(7,11,16,.94);
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,0,0,.24);
+}
+
+body[data-page="admin-daip-media"] .site-header>.brand{
+  min-height:44px;
+  align-self:start;
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  font-weight:900;
+  text-decoration:none;
+}
+
+body[data-page="admin-daip-media"] #adminMenu{
+  min-width:0;
+  max-height:250px;
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:rgba(15,23,42,.82);
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu{
+  display:grid;
+  grid-template-columns:minmax(220px,.8fr) minmax(0,2.2fr);
+  gap:12px;
+  padding:12px;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__head h2{
+  margin:6px 0 3px;
+  font-size:1.05rem;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__head p{
+  margin:0 0 8px;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__head .row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__group{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:7px;
+  min-width:0;
+  align-content:start;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__group>.kicker{
+  grid-column:1/-1;
+  margin:2px 0 0;
+  font-weight:800;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__item{
+  display:grid;
+  gap:3px;
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  text-decoration:none;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__item span{
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.35;
+}
+
+body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__item.active{
+  border-color:rgba(77,119,255,.62);
+  background:rgba(77,119,255,.16);
+}
+
+body[data-page="admin-daip-media"] main.dm{
+  width:min(1420px,calc(100% - 28px));
+  max-width:1420px;
+  margin:0 auto;
+  padding:20px 0 40px;
+  display:grid;
+  gap:18px;
+}
+
+body[data-page="admin-daip-media"] main.dm>.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);
+  gap:16px;
+  align-items:stretch;
+  padding:0;
+  border:0;
+  background:none;
+  box-shadow:none;
+}
+
+body[data-page="admin-daip-media"] main.dm>.section,
+body[data-page="admin-daip-media"] main.dm>#status,
+body[data-page="admin-daip-media"] main.dm>.hero{
+  margin:0;
+}
+
+body[data-page="admin-daip-media"] .card,
+body[data-page="admin-daip-media"] .panel{
+  min-width:0;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  box-shadow:0 10px 26px rgba(0,0,0,.18);
+}
+
+body[data-page="admin-daip-media"] .hero>.card:first-child{
+  background:linear-gradient(135deg,rgba(77,119,255,.16),rgba(255,255,255,.025));
+}
+
+body[data-page="admin-daip-media"] .hero>.private{
+  display:grid;
+  align-content:center;
+  min-height:180px;
+  border-left:4px solid #22c55e;
+  background:linear-gradient(135deg,rgba(34,197,94,.10),rgba(255,255,255,.025));
+}
+
+body[data-page="admin-daip-media"] .setup{
+  border-left:4px solid #4d77ff;
+}
+
+body[data-page="admin-daip-media"] .warnbox{
+  border-left:4px solid #f59e0b;
+  background:rgba(245,158,11,.05);
+}
+
+body[data-page="admin-daip-media"] h1,
+body[data-page="admin-daip-media"] h2,
+body[data-page="admin-daip-media"] h3{
+  margin-top:0;
+}
+
+body[data-page="admin-daip-media"] h1{
+  margin-bottom:10px;
+  line-height:1.08;
+}
+
+body[data-page="admin-daip-media"] .card p,
+body[data-page="admin-daip-media"] .section p{
+  line-height:1.55;
+}
+
+body[data-page="admin-daip-media"] .grid2,
+body[data-page="admin-daip-media"] .grid3,
+body[data-page="admin-daip-media"] .job-grid,
+body[data-page="admin-daip-media"] .media-review-grid{
+  min-width:0;
+}
+
+body[data-page="admin-daip-media"] .grid2{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+body[data-page="admin-daip-media"] .grid3{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+}
+
+body[data-page="admin-daip-media"] .button-row,
+body[data-page="admin-daip-media"] .job-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+}
+
+body[data-page="admin-daip-media"] label{
+  display:grid;
+  gap:6px;
+  min-width:0;
+  align-content:start;
+  font-weight:700;
+  line-height:1.35;
+}
+
+body[data-page="admin-daip-media"] input,
+body[data-page="admin-daip-media"] select,
+body[data-page="admin-daip-media"] textarea{
+  display:block;
+  width:100%;
+  min-width:0;
+  margin:0;
+}
+
+body[data-page="admin-daip-media"] textarea{
+  min-height:88px;
+  line-height:1.45;
+}
+
+body[data-page="admin-daip-media"] select:disabled,
+body[data-page="admin-daip-media"] input:disabled{
+  opacity:.8;
+  cursor:not-allowed;
+}
+
+body[data-page="admin-daip-media"] #status{
+  border-left:4px solid rgba(77,119,255,.72);
+}
+
+body[data-page="admin-daip-media"] #status.success,
+body[data-page="admin-daip-media"] #status.ok{
+  border-left-color:#22c55e;
+}
+
+body[data-page="admin-daip-media"] #status.warn{
+  border-left-color:#f59e0b;
+}
+
+body[data-page="admin-daip-media"] #status.error,
+body[data-page="admin-daip-media"] #status.bad{
+  border-left-color:#ef4444;
+}
+
+body[data-page="admin-daip-media"] .steps{
+  margin:10px 0 0;
+  padding-left:24px;
+}
+
+body[data-page="admin-daip-media"] .steps li{
+  margin:.55rem 0;
+  line-height:1.45;
+}
+
+body[data-page="admin-daip-media"] code,
+body[data-page="admin-daip-media"] .route{
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+body[data-page="admin-daip-media"] .drop{
+  margin-top:14px;
+  min-height:170px;
+  display:grid;
+  place-items:center;
+  align-content:center;
+  gap:8px;
+  padding:26px;
+  border:2px dashed rgba(148,163,184,.44);
+  border-radius:16px;
+  background:linear-gradient(135deg,rgba(77,119,255,.06),rgba(255,255,255,.018));
+  text-align:center;
+  transition:border-color .15s ease,background .15s ease,transform .15s ease;
+}
+
+body[data-page="admin-daip-media"] .drop:hover,
+body[data-page="admin-daip-media"] .drop:focus-visible,
+body[data-page="admin-daip-media"] .drop.drag{
+  border-color:#4d77ff;
+  background:rgba(77,119,255,.10);
+  outline:none;
+}
+
+body[data-page="admin-daip-media"] .drop input[type="file"]{
+  max-width:720px;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(7,11,16,.72);
+}
+
+body[data-page="admin-daip-media"] .upload-list,
+body[data-page="admin-daip-media"] .asset-list,
+body[data-page="admin-daip-media"] .job-list{
+  display:grid;
+  gap:10px;
+  min-width:0;
+}
+
+body[data-page="admin-daip-media"] .upload-row{
+  display:grid;
+  grid-template-columns:minmax(220px,1.5fr) minmax(120px,.55fr) minmax(170px,.75fr) auto;
+  gap:10px;
+  align-items:center;
+  min-width:0;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:rgba(255,255,255,.025);
+}
+
+body[data-page="admin-daip-media"] .file-name{
+  min-width:0;
+  overflow-wrap:anywhere;
+  font-weight:800;
+}
+
+body[data-page="admin-daip-media"] progress{
+  width:100%;
+  min-width:120px;
+  height:14px;
+}
+
+body[data-page="admin-daip-media"] .media-card{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  min-width:0;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:rgba(255,255,255,.025);
+}
+
+body[data-page="admin-daip-media"] .media-card>.status-pill{
+  align-self:start;
+}
+
+body[data-page="admin-daip-media"] .media-review{
+  grid-column:1/-1;
+  min-width:0;
+  border-top:1px solid var(--border);
+  padding-top:10px;
+}
+
+body[data-page="admin-daip-media"] .media-review>summary{
+  cursor:pointer;
+  font-weight:800;
+  color:rgba(234,242,255,.92);
+}
+
+body[data-page="admin-daip-media"] .media-review-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+body[data-page="admin-daip-media"] .status-pill{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  max-width:100%;
+  padding:5px 9px;
+  border:1px solid var(--border);
+  border-radius:999px;
+  font-size:.78rem;
+  font-weight:800;
+  line-height:1.2;
+  text-align:center;
+}
+
+body[data-page="admin-daip-media"] .job-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:10px;
+}
+
+body[data-page="admin-daip-media"] .job{
+  min-width:0;
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+}
+
+body[data-page="admin-daip-media"] .job strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+body[data-page="admin-daip-media"] .mini,
+body[data-page="admin-daip-media"] .small-note{
+  line-height:1.45;
+}
+
+body[data-page="admin-daip-media"] .admin-return-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  margin:0;
+}
+
+body[data-page="admin-daip-media"] .admin-return-bar .crumb{
+  color:var(--muted);
+  font-size:.82rem;
+  overflow-wrap:anywhere;
+}
+
+@media(max-width:1180px){
+  body[data-page="admin-daip-media"] .site-header{
+    grid-template-columns:1fr;
+  }
+  body[data-page="admin-daip-media"] #adminMenu{
+    max-height:210px;
+  }
+  body[data-page="admin-daip-media"] #adminMenu .admin-module-menu{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:900px){
+  body[data-page="admin-daip-media"] main.dm>.hero,
+  body[data-page="admin-daip-media"] .grid2,
+  body[data-page="admin-daip-media"] .grid3,
+  body[data-page="admin-daip-media"] .upload-row,
+  body[data-page="admin-daip-media"] .media-review-grid{
+    grid-template-columns:1fr;
+  }
+
+  body[data-page="admin-daip-media"] .media-card{
+    grid-template-columns:1fr;
+  }
+
+  body[data-page="admin-daip-media"] .media-review{
+    grid-column:auto;
+  }
+}
+
+@media(max-width:680px){
+  body[data-page="admin-daip-media"] main.dm{
+    width:min(100% - 18px,1420px);
+    padding-top:12px;
+    gap:12px;
+  }
+
+  body[data-page="admin-daip-media"] .site-header{
+    padding:9px;
+  }
+
+  body[data-page="admin-daip-media"] #adminMenu{
+    max-height:180px;
+  }
+
+  body[data-page="admin-daip-media"] #adminMenu .admin-module-menu{
+    padding:9px;
+  }
+
+  body[data-page="admin-daip-media"] #adminMenu .admin-module-menu__group{
+    grid-template-columns:1fr;
+  }
+
+  body[data-page="admin-daip-media"] .button-row>.btn,
+  body[data-page="admin-daip-media"] .button-row>button,
+  body[data-page="admin-daip-media"] .job-actions>.btn,
+  body[data-page="admin-daip-media"] .job-actions>button{
+    width:100%;
+  }
+
+  body[data-page="admin-daip-media"] .drop{
+    min-height:145px;
+    padding:18px 12px;
+  }
+
+  body[data-page="admin-daip-media"] .card,
+  body[data-page="admin-daip-media"] .panel{
+    padding:13px;
+  }
+}
