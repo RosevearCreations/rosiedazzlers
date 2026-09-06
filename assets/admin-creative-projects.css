@@ -1,0 +1,417 @@
+/* Build 345 — Creative Project Intelligence layout repair.
+   Scoped to admin-creative-projects so no other Rosie admin screen is changed. */
+
+body[data-page="admin-creative-projects"]{
+  margin:0;
+  color-scheme:dark;
+}
+
+body[data-page="admin-creative-projects"] .site-header{
+  position:sticky;
+  top:0;
+  z-index:80;
+  display:grid;
+  grid-template-columns:minmax(190px,260px) minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+  padding:12px clamp(12px,2vw,28px);
+  border-bottom:1px solid var(--border);
+  background:rgba(7,11,16,.94);
+  backdrop-filter:blur(14px);
+  box-shadow:0 10px 30px rgba(0,0,0,.24);
+}
+
+body[data-page="admin-creative-projects"] .site-header>.brand{
+  min-height:44px;
+  align-self:start;
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:rgba(255,255,255,.045);
+  font-weight:900;
+  text-decoration:none;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu{
+  min-width:0;
+  max-height:250px;
+  overflow:auto;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:rgba(15,23,42,.82);
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu{
+  display:grid;
+  grid-template-columns:minmax(220px,.8fr) minmax(0,2.2fr);
+  gap:12px;
+  padding:12px;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__head{
+  min-width:0;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__head h2{
+  margin:6px 0 3px;
+  font-size:1.05rem;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__head p{
+  margin:0 0 8px;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__head .row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__group{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:7px;
+  min-width:0;
+  align-content:start;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__group>.kicker{
+  grid-column:1/-1;
+  margin:2px 0 0;
+  font-weight:800;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__item{
+  display:grid;
+  gap:3px;
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:11px;
+  background:rgba(255,255,255,.035);
+  text-decoration:none;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__item span{
+  color:var(--muted);
+  font-size:.78rem;
+  line-height:1.35;
+}
+
+body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__item.active{
+  border-color:rgba(77,119,255,.62);
+  background:rgba(77,119,255,.16);
+}
+
+body[data-page="admin-creative-projects"] main.cp{
+  width:min(1440px,calc(100% - 28px));
+  max-width:1440px;
+  margin:0 auto;
+  padding:20px 0 36px;
+  display:grid;
+  gap:18px;
+}
+
+body[data-page="admin-creative-projects"] main.cp>.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.35fr) minmax(280px,.65fr);
+  gap:16px;
+  padding:0;
+  border:0;
+  background:none;
+  box-shadow:none;
+}
+
+body[data-page="admin-creative-projects"] main.cp>.grid{
+  display:grid;
+  grid-template-columns:minmax(260px,320px) minmax(0,1fr);
+  gap:18px;
+  align-items:start;
+}
+
+body[data-page="admin-creative-projects"] main.cp>.grid>section{
+  min-width:0;
+  display:grid;
+  gap:16px;
+}
+
+body[data-page="admin-creative-projects"] .card,
+body[data-page="admin-creative-projects"] .panel{
+  min-width:0;
+}
+
+body[data-page="admin-creative-projects"] main.cp>.panel,
+body[data-page="admin-creative-projects"] main.cp>.grid,
+body[data-page="admin-creative-projects"] main.cp>.hero,
+body[data-page="admin-creative-projects"] #status{
+  margin:0;
+}
+
+body[data-page="admin-creative-projects"] .card h1,
+body[data-page="admin-creative-projects"] .card h2,
+body[data-page="admin-creative-projects"] .card h3,
+body[data-page="admin-creative-projects"] .panel h1,
+body[data-page="admin-creative-projects"] .panel h2,
+body[data-page="admin-creative-projects"] .panel h3{
+  margin-top:0;
+}
+
+body[data-page="admin-creative-projects"] .card p,
+body[data-page="admin-creative-projects"] .panel p{
+  line-height:1.55;
+}
+
+body[data-page="admin-creative-projects"] .button-row,
+body[data-page="admin-creative-projects"] .editor-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  align-items:center;
+  margin-top:12px;
+}
+
+body[data-page="admin-creative-projects"] .formgrid,
+body[data-page="admin-creative-projects"] .split,
+body[data-page="admin-creative-projects"] .triple,
+body[data-page="admin-creative-projects"] .output-grid{
+  min-width:0;
+}
+
+body[data-page="admin-creative-projects"] form{
+  display:grid;
+  gap:12px;
+  min-width:0;
+}
+
+body[data-page="admin-creative-projects"] form label:not(.checkrow){
+  display:grid;
+  gap:6px;
+  min-width:0;
+  align-content:start;
+  font-weight:700;
+  line-height:1.35;
+}
+
+body[data-page="admin-creative-projects"] form input:not([type="checkbox"]),
+body[data-page="admin-creative-projects"] form select,
+body[data-page="admin-creative-projects"] form textarea{
+  display:block;
+  width:100%;
+  min-width:0;
+  margin:0;
+}
+
+body[data-page="admin-creative-projects"] form textarea{
+  min-height:92px;
+  line-height:1.45;
+}
+
+body[data-page="admin-creative-projects"] #projectForm textarea,
+body[data-page="admin-creative-projects"] #draftForm textarea{
+  min-height:110px;
+}
+
+body[data-page="admin-creative-projects"] .checkrow{
+  display:grid;
+  grid-template-columns:20px minmax(0,1fr);
+  gap:9px;
+  align-items:start;
+  min-width:0;
+  padding:8px 0;
+  color:var(--text);
+  font-weight:700;
+  line-height:1.4;
+}
+
+body[data-page="admin-creative-projects"] .checkrow input[type="checkbox"]{
+  width:18px !important;
+  min-width:18px !important;
+  max-width:18px !important;
+  height:18px !important;
+  margin:1px 0 0 !important;
+  padding:0 !important;
+  align-self:start;
+  accent-color:var(--accent);
+}
+
+body[data-page="admin-creative-projects"] .projects{
+  display:grid;
+  gap:8px;
+  margin-top:12px;
+  max-height:70vh;
+  overflow:auto;
+  padding-right:3px;
+}
+
+body[data-page="admin-creative-projects"] .projects button{
+  margin:0;
+  min-height:54px;
+  align-items:flex-start;
+  justify-content:flex-start;
+  white-space:normal;
+}
+
+body[data-page="admin-creative-projects"] .sticky{
+  position:sticky;
+  top:274px;
+  align-self:start;
+}
+
+body[data-page="admin-creative-projects"] #detail:not([hidden]){
+  display:grid;
+  gap:16px;
+}
+
+body[data-page="admin-creative-projects"] .tabs{
+  position:sticky;
+  top:274px;
+  z-index:30;
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0;
+  padding:10px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:rgba(7,11,16,.94);
+  backdrop-filter:blur(12px);
+}
+
+body[data-page="admin-creative-projects"] .tabs .tab{
+  flex:1 1 150px;
+  min-width:0;
+  padding:10px 12px;
+  white-space:normal;
+  text-align:center;
+}
+
+body[data-page="admin-creative-projects"] .tab[aria-selected="true"]{
+  outline:0;
+  border-color:rgba(77,119,255,.72);
+  background:rgba(77,119,255,.2);
+  box-shadow:inset 0 0 0 1px rgba(77,119,255,.3);
+}
+
+body[data-page="admin-creative-projects"] .line,
+body[data-page="admin-creative-projects"] .output{
+  overflow-wrap:anywhere;
+  background:rgba(255,255,255,.025);
+}
+
+body[data-page="admin-creative-projects"] .output{
+  display:grid;
+  gap:8px;
+}
+
+body[data-page="admin-creative-projects"] .output p{
+  margin:0;
+}
+
+body[data-page="admin-creative-projects"] #costTotals>div,
+body[data-page="admin-creative-projects"] #profitabilitySummary>div{
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(255,255,255,.025);
+}
+
+body[data-page="admin-creative-projects"] .visual{
+  min-height:180px;
+  overflow:hidden;
+}
+
+body[data-page="admin-creative-projects"] .editor-dialog{
+  max-height:90vh;
+  overflow:auto;
+  border:1px solid rgba(255,255,255,.14);
+  background:#0f172a;
+  color:var(--text);
+}
+
+body[data-page="admin-creative-projects"] .editor-actions{
+  justify-content:flex-end;
+}
+
+body[data-page="admin-creative-projects"] .admin-return-bar{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  margin-bottom:0;
+}
+
+body[data-page="admin-creative-projects"] .admin-return-bar .crumb{
+  color:var(--muted);
+  font-size:.82rem;
+  overflow-wrap:anywhere;
+}
+
+@media(max-width:1180px){
+  body[data-page="admin-creative-projects"] .site-header{
+    grid-template-columns:1fr;
+  }
+  body[data-page="admin-creative-projects"] #adminMenu{
+    max-height:210px;
+  }
+  body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu{
+    grid-template-columns:1fr;
+  }
+  body[data-page="admin-creative-projects"] .sticky,
+  body[data-page="admin-creative-projects"] .tabs{
+    top:250px;
+  }
+}
+
+@media(max-width:980px){
+  body[data-page="admin-creative-projects"] main.cp>.hero,
+  body[data-page="admin-creative-projects"] main.cp>.grid,
+  body[data-page="admin-creative-projects"] .formgrid,
+  body[data-page="admin-creative-projects"] .split,
+  body[data-page="admin-creative-projects"] .triple,
+  body[data-page="admin-creative-projects"] .output-grid{
+    grid-template-columns:1fr;
+  }
+  body[data-page="admin-creative-projects"] .sticky,
+  body[data-page="admin-creative-projects"] .tabs{
+    position:static;
+  }
+  body[data-page="admin-creative-projects"] .projects{
+    max-height:none;
+  }
+}
+
+@media(max-width:680px){
+  body[data-page="admin-creative-projects"] main.cp{
+    width:min(100% - 18px,1440px);
+    padding-top:12px;
+    gap:12px;
+  }
+  body[data-page="admin-creative-projects"] .site-header{
+    padding:9px;
+  }
+  body[data-page="admin-creative-projects"] #adminMenu{
+    max-height:180px;
+  }
+  body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu{
+    padding:9px;
+  }
+  body[data-page="admin-creative-projects"] #adminMenu .admin-module-menu__group{
+    grid-template-columns:1fr;
+  }
+  body[data-page="admin-creative-projects"] .button-row>.btn,
+  body[data-page="admin-creative-projects"] .button-row>button,
+  body[data-page="admin-creative-projects"] form>.btn,
+  body[data-page="admin-creative-projects"] form>button{
+    width:100%;
+  }
+  body[data-page="admin-creative-projects"] .tabs .tab{
+    flex:1 1 100%;
+    width:100%;
+  }
+  body[data-page="admin-creative-projects"] .card,
+  body[data-page="admin-creative-projects"] .panel{
+    padding:13px;
+  }
+}
