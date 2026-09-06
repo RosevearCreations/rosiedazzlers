@@ -1,0 +1,35 @@
+name: Page Editor Runtime Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build342-page-editor-runtime
+    paths:
+      - functions/_middleware.js
+      - functions/api/admin/page_editor.js
+      - assets/universal-page-editor.js
+      - assets/universal-page-editor-bootstrap.js
+      - assets/universal-page-editor-build342.js
+      - index.html
+      - scripts/build342-page-editor-runtime-gate.mjs
+      - .github/workflows/page-editor-runtime-authority.yml
+  pull_request:
+    paths:
+      - functions/_middleware.js
+      - functions/api/admin/page_editor.js
+      - assets/universal-page-editor.js
+      - assets/universal-page-editor-bootstrap.js
+      - assets/universal-page-editor-build342.js
+      - index.html
+      - scripts/build342-page-editor-runtime-gate.mjs
+      - .github/workflows/page-editor-runtime-authority.yml
+
+jobs:
+  page-editor-runtime-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Build 342 page editor runtime compatibility
+        run: node scripts/build342-page-editor-runtime-gate.mjs
