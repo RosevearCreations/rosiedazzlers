@@ -45,8 +45,10 @@ jobs:
           node --check assets/admin-shell.js
           node --check assets/contextual-help-catalog.js
           node --check assets/contextual-help.js
+          node --check apps/it/it-app.js
           node --check functions/_middleware.js
           node --check functions/api/booking_confirmation.js
+          node --check functions/api/admin/system_gate.js
           node --check functions/api/admin/photo_library_sync.js
           node --check functions/api/admin/photo_library_list.js
           node --check functions/api/admin/photo_assignment_save.js
@@ -108,6 +110,7 @@ jobs:
           python -m py_compile scripts/booking_completion_retention_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
+          bash -n scripts/admin_protected_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
           bash -n scripts/cloudflare_pages_development.sh
           bash -n scripts/cloudflare_development_rollback.sh
@@ -185,6 +188,8 @@ jobs:
             echo "- Release hygiene authority: PASS"
             echo "- Responsive source contract: PASS"
             echo "- Protected Admin UI/navigation/permission contract: PASS"
+            echo "- I.T. System Gate source contract: PASS"
+            echo "- Protected Admin runtime-smoke helper syntax: PASS"
             echo "- Maintenance/retention authority: PASS"
             echo "- Fleet maintenance planning authority: PASS"
             echo "- Final-balance readiness authority: PASS"
