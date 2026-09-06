@@ -3,6 +3,18 @@
 (function attachAdminShell(globalScope) {
   let helpPromise = null;
 
+  function markProtectedPage(pageKey) {
+    const apply = () => {
+      if (!document.body) return;
+      document.body.dataset.adminProtected = "true";
+      if (pageKey && !document.body.dataset.page) document.body.dataset.page = String(pageKey);
+    };
+    if (document.body) apply();
+    else document.addEventListener("DOMContentLoaded", apply, { once:true });
+  }
+
+  markProtectedPage(document.body?.dataset?.page || "");
+
   function ensureAdminCssFallback() {
     const styleId = "rosie-admin-emergency-css";
     if (document.getElementById(styleId)) return;
@@ -228,6 +240,7 @@
     const root = options.root || document;
     const pageKey = options.pageKey || null;
     const loginUrl = options.loginUrl || "/admin-login";
+    markProtectedPage(pageKey);
     void ensureContextualHelp(pageKey);
     setLoading(root, true);
     setStatus(root, "", "");
