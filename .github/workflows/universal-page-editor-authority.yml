@@ -1,0 +1,33 @@
+name: Universal Page Editor Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build341-universal-page-editor
+    paths:
+      - functions/_middleware.js
+      - functions/api/public_page_editor.js
+      - functions/api/admin/page_editor.js
+      - assets/universal-page-editor.js
+      - assets/universal-page-editor-bootstrap.js
+      - scripts/build341-universal-page-editor-gate.mjs
+      - .github/workflows/universal-page-editor-authority.yml
+  pull_request:
+    paths:
+      - functions/_middleware.js
+      - functions/api/public_page_editor.js
+      - functions/api/admin/page_editor.js
+      - assets/universal-page-editor.js
+      - assets/universal-page-editor-bootstrap.js
+      - scripts/build341-universal-page-editor-gate.mjs
+      - .github/workflows/universal-page-editor-authority.yml
+
+jobs:
+  universal-page-editor-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Build 341 universal page editor contract
+        run: node scripts/build341-universal-page-editor-gate.mjs
