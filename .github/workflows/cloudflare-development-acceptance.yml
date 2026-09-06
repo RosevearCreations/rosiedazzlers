@@ -50,6 +50,9 @@ jobs:
       - name: Validate responsive source contract
         run: python scripts/responsive_static_check.py
 
+      - name: Validate protected Admin UI contracts
+        run: python scripts/admin_ui_audit.py
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -57,11 +60,16 @@ jobs:
         run: |
           bash -n scripts/cloudflare_pages_development.sh
           bash -n scripts/development_http_smoke.sh
+          bash -n scripts/admin_protected_http_smoke.sh
           bash -n scripts/contextual_proof_http_smoke.sh
 
       - name: Confirm exact dev SHA reached successful Cloudflare Pages deployment
         shell: bash
         run: bash scripts/cloudflare_pages_development.sh accept
+
+      - name: Smoke every current protected Admin route and shared shell asset
+        shell: bash
+        run: bash scripts/admin_protected_http_smoke.sh "$CF_DEV_URL" "Development protected Admin"
 
       - name: Record acceptance boundary
         shell: bash
@@ -69,8 +77,9 @@ jobs:
           {
             echo "### Development acceptance boundary"
             echo "- Exact GitHub SHA: \`${GITHUB_SHA}\`"
-            echo "- Current cumulative source, SEO, hygiene, responsive and route-copy authorities: PASS"
+            echo "- Current cumulative source, SEO, hygiene, responsive, protected-Admin and route-copy authorities: PASS"
             echo "- Canonical Cloudflare helper verifies the active token/project, exact dev SHA, successful Functions deployment, immutable smoke and dev-alias convergence."
+            echo "- Every current AdminShell protected route and shared Admin shell/CSS asset passed Development HTTP smoke."
             echo "- Contextual public proof is verified by the durable HTTP smoke helper."
             echo "- Normal acceptance performs no deployment deletion or recreation."
             echo "- Recovery mutation remains isolated to the manual recovery workflow and requires exact-SHA confirmation."
