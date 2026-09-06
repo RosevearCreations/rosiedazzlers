@@ -14,15 +14,12 @@ export async function onRequestGet(context) {
     if (!page) return json({ ok: false, error: "Invalid public page path." }, 400);
 
     const setting = await loadSetting(context.env);
-    const overrides = pageOverrides(setting.value, page);
-    const media = await loadApprovedMedia(context.env);
-
     return json({
       ok: true,
       can_edit: true,
       page,
-      overrides,
-      media,
+      overrides: pageOverrides(setting.value, page),
+      media: await loadApprovedMedia(context.env),
       actor: { email: access.actor?.email || null, role_code: access.actor?.role_code || null },
       updated_at: setting.updated_at || setting.value?.updated_at || null
     });
@@ -44,19 +41,18 @@ export async function onRequestPost(context) {
     if (!contentKey) return json({ ok: false, error: "Invalid content key." }, 400);
     if (!["text", "image", "link"].includes(kind)) return json({ ok: false, error: "Unsupported editor content kind." }, 400);
 
-    const entry = await normalizeEntry(context.env, kind, body.value || {});
     const setting = await loadSetting(context.env);
     const next = normalizeSettingValue(setting.value);
     if (!next.pages[page] || typeof next.pages[page] !== "object") next.pages[page] = {};
     next.pages[page][contentKey] = {
-      ...entry,
+      ...(await normalizeEntry(context.env, kind, body.value || {})),
       kind,
       updated_at: new Date().toISOString(),
       updated_by: access.actor?.email || access.actor?.id || "admin"
     };
     next.updated_at = new Date().toISOString();
 
-    await saveSetting(context.env, next, access.actor);
+    await saveSetting(context.env, next);
     return json({ ok: true, page, content_key: contentKey, override: next.pages[page][contentKey] });
   } catch (error) {
     return json({ ok: false, error: error?.message || "Could not save page edit." }, Number(error?.status || 500));
@@ -79,9 +75,8 @@ export async function onRequestDelete(context) {
       delete next.pages[page][contentKey];
       if (!Object.keys(next.pages[page]).length) delete next.pages[page];
       next.updated_at = new Date().toISOString();
-      await saveSetting(context.env, next, access.actor);
+      await saveSetting(context.env, next);
     }
-
     return json({ ok: true, page, content_key: contentKey, reset: true });
   } catch (error) {
     return json({ ok: false, error: error?.message || "Could not reset page edit." }, 500);
@@ -99,7 +94,8 @@ async function requireAdminEditor({ request, env }, body = {}) {
     allowLegacyAdminFallback: true
   });
   if (!access.ok) return access;
-  if (!access.actor?.is_admin && !access.actor?.is_legacy_admin && String(access.actor?.role_code || "").toLowerCase() !== "admin") {
+  const role = String(access.actor?.role_code || "").trim().toLowerCase();
+  if (!access.actor?.is_admin && !access.actor?.is_legacy_admin && role !== "admin") {
     return { ok: false, response: json({ ok: false, error: "Page editing is restricted to administrators." }, 403) };
   }
   return access;
@@ -132,7 +128,7 @@ async function normalizeEntry(env, kind, raw) {
 }
 
 async function loadSetting(env) {
-  if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Supabase page-editor storage is not configured.");
+  assertStorageEnv(env);
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/app_management_settings?select=value,updated_at&key=eq.${SETTING_KEY}&limit=1`,
     { headers: serviceHeaders(env) }
@@ -145,18 +141,15 @@ async function loadSetting(env) {
     : { value: { version: 1, pages: {} }, updated_at: null };
 }
 
-async function saveSetting(env, value, actor) {
+async function saveSetting(env, value) {
+  assertStorageEnv(env);
   const now = new Date().toISOString();
   const headers = serviceHeaders(env);
-  const history = {
-    key: SETTING_KEY,
-    value,
-    created_at: now
-  };
+
   await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_setting_history`, {
     method: "POST",
     headers: { ...headers, Prefer: "return=minimal" },
-    body: JSON.stringify([history])
+    body: JSON.stringify([{ key: SETTING_KEY, value, created_at: now }])
   }).catch(() => null);
 
   const res = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?on_conflict=key`, {
@@ -165,8 +158,7 @@ async function saveSetting(env, value, actor) {
     body: JSON.stringify([{
       key: SETTING_KEY,
       value: { ...value, updated_at: now, source_status: "app_management_settings" },
-      updated_at: now,
-      updated_by: actor?.email || actor?.id || "admin"
+      updated_at: now
     }])
   });
   if (!res.ok) throw new Error(await safeText(res) || "Could not save page editor setting.");
@@ -185,6 +177,7 @@ async function findApprovedMedia(env, src) {
 }
 
 async function loadMediaRows(env) {
+  assertStorageEnv(env);
   const headers = serviceHeaders(env);
   try {
     const res = await fetch(
@@ -247,8 +240,7 @@ function pageOverrides(value, page) {
 
 function normalizeSettingValue(value) {
   const sourcePages = value?.pages && typeof value.pages === "object" ? value.pages : {};
-  const pages = JSON.parse(JSON.stringify(sourcePages));
-  return { version: 1, pages };
+  return { version: 1, pages: JSON.parse(JSON.stringify(sourcePages)) };
 }
 
 function normalizePagePath(value) {
@@ -272,6 +264,12 @@ function isSafeHref(href) {
   if (!href) return false;
   if (href.startsWith("/") && !href.startsWith("//")) return true;
   return /^(https?:\/\/|mailto:|tel:)/i.test(href);
+}
+
+function assertStorageEnv(env) {
+  if (!env?.SUPABASE_URL) throw new Error("Supabase page-editor storage is not configured.");
+  const headers = serviceHeaders(env);
+  if (!headers.apikey) throw new Error("Supabase service-role access is not configured.");
 }
 
 function cleanLimited(value, max, trim = true) {
