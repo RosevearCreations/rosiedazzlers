@@ -1,9 +1,9 @@
-// Build 341 - public HTML clarity + booking completion routing + universal public page-editor bootstrap.
+// Build 342 - public HTML clarity + booking completion routing + resilient universal public page-editor bootstrap.
 // Static source and booking/payment APIs remain authoritative. This middleware only:
 // 1) preserves the existing Build 272 public wording clarifications,
 // 2) routes provider payment returns away from the customer job-signoff /complete page,
 // 3) gives already-confirmed gift-covered checkouts a browser confirmation URL, and
-// 4) loads the admin-only Build 341 editor on public content HTML pages.
+// 4) loads the admin-only Build 342 editor on public content HTML pages.
 const TARGETS = new Set([
   "/", "/index.html",
   "/book", "/book.html",
@@ -116,14 +116,14 @@ export async function onRequest(context) {
   if (applyPageEditor && !html.includes("/assets/universal-page-editor-bootstrap.js")) {
     html = html.replace(
       "</body>",
-      '<script type="module" src="/assets/universal-page-editor-bootstrap.js?v=20260906build341"></script>\n</body>'
+      '<script type="module" src="/assets/universal-page-editor-bootstrap.js?v=20260906build342"></script>\n</body>'
     );
   }
 
   const headers = new Headers(response.headers);
   headers.delete("content-length");
   headers.delete("etag");
-  if (applyLegacyClarity) headers.set("cache-control", "no-cache");
+  if (applyLegacyClarity || applyPageEditor) headers.set("cache-control", "no-cache");
   return new Response(html, { status: response.status, statusText: response.statusText, headers });
 }
 
@@ -185,3 +185,6 @@ function safeChoice(value, maxLength) {
   if (!text || text.length > maxLength) return "";
   return /^[a-z0-9_-]+$/i.test(text) ? text : "";
 }
+
+// Historical Build 341 editor bootstrap token retained for the Build 341 regression authority:
+// /assets/universal-page-editor-bootstrap.js?v=20260906build341
