@@ -1,18 +1,18 @@
 /* Build 347 — shared protected-page design system.
-   Loaded by AdminShell on every current admin-* protected screen. Page-specific
-   styles may override these rules, but common shell/form/layout behaviour lives here. */
+   AdminShell marks every current protected page with data-admin-protected=true,
+   including older pages that predate the canonical data-page attribute. */
 
-body[data-page^="admin-"]{
+body[data-admin-protected="true"]{
   margin:0;
   color-scheme:dark;
   color:var(--text,#eef6ff);
 }
 
-body[data-page^="admin-"] *,
-body[data-page^="admin-"] *::before,
-body[data-page^="admin-"] *::after{box-sizing:border-box}
+body[data-admin-protected="true"] *,
+body[data-admin-protected="true"] *::before,
+body[data-admin-protected="true"] *::after{box-sizing:border-box}
 
-body[data-page^="admin-"] .site-header{
+body[data-admin-protected="true"] .site-header{
   position:sticky;
   top:0;
   z-index:70;
@@ -27,7 +27,7 @@ body[data-page^="admin-"] .site-header{
   box-shadow:0 10px 28px rgba(0,0,0,.22);
 }
 
-body[data-page^="admin-"] .site-header>.brand{
+body[data-admin-protected="true"] .site-header>.brand{
   display:flex;
   align-items:center;
   gap:9px;
@@ -42,10 +42,10 @@ body[data-page^="admin-"] .site-header>.brand{
   text-decoration:none;
 }
 
-body[data-page^="admin-"] #adminMenu,
-body[data-page^="admin-"] [data-admin-menu-mount]{min-width:0}
+body[data-admin-protected="true"] #adminMenu,
+body[data-admin-protected="true"] [data-admin-menu-mount]{min-width:0}
 
-body[data-page^="admin-"] .admin-module-menu{
+body[data-admin-protected="true"] .admin-module-menu{
   display:grid;
   grid-template-columns:minmax(210px,.75fr) minmax(0,2.25fr);
   gap:12px;
@@ -56,16 +56,12 @@ body[data-page^="admin-"] .admin-module-menu{
   background:rgba(15,23,42,.78);
 }
 
-body[data-page^="admin-"] .admin-module-menu__head{min-width:0}
-body[data-page^="admin-"] .admin-module-menu__head h2{margin:5px 0 3px;font-size:1.05rem}
-body[data-page^="admin-"] .admin-module-menu__head p{margin:0 0 8px}
-body[data-page^="admin-"] .admin-module-menu__head .row{
-  display:flex;
-  flex-wrap:wrap;
-  gap:6px;
-}
+body[data-admin-protected="true"] .admin-module-menu__head{min-width:0}
+body[data-admin-protected="true"] .admin-module-menu__head h2{margin:5px 0 3px;font-size:1.05rem}
+body[data-admin-protected="true"] .admin-module-menu__head p{margin:0 0 8px}
+body[data-admin-protected="true"] .admin-module-menu__head .row{display:flex;flex-wrap:wrap;gap:6px}
 
-body[data-page^="admin-"] .admin-module-menu__group{
+body[data-admin-protected="true"] .admin-module-menu__group{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(175px,1fr));
   gap:7px;
@@ -73,13 +69,13 @@ body[data-page^="admin-"] .admin-module-menu__group{
   align-content:start;
 }
 
-body[data-page^="admin-"] .admin-module-menu__group>.kicker{
+body[data-admin-protected="true"] .admin-module-menu__group>.kicker{
   grid-column:1/-1;
   margin:2px 0 0;
   font-weight:800;
 }
 
-body[data-page^="admin-"] .admin-module-menu__item{
+body[data-admin-protected="true"] .admin-module-menu__item{
   display:grid;
   gap:3px;
   min-width:0;
@@ -92,40 +88,25 @@ body[data-page^="admin-"] .admin-module-menu__item{
   overflow-wrap:anywhere;
 }
 
-body[data-page^="admin-"] .admin-module-menu__item span{
-  color:var(--muted,#a8b4c5);
-  font-size:.78rem;
-  line-height:1.35;
-}
+body[data-admin-protected="true"] .admin-module-menu__item span{color:var(--muted,#a8b4c5);font-size:.78rem;line-height:1.35}
+body[data-admin-protected="true"] .admin-module-menu__item:hover,
+body[data-admin-protected="true"] .admin-module-menu__item:focus-visible{background:rgba(255,255,255,.075);border-color:rgba(148,163,184,.45)}
+body[data-admin-protected="true"] .admin-module-menu__item.active,
+body[data-admin-protected="true"] .admin-module-menu__item[aria-current="page"]{border-color:rgba(77,119,255,.65);background:rgba(77,119,255,.16)}
 
-body[data-page^="admin-"] .admin-module-menu__item:hover,
-body[data-page^="admin-"] .admin-module-menu__item:focus-visible{
-  background:rgba(255,255,255,.075);
-  border-color:rgba(148,163,184,.45);
-}
-
-body[data-page^="admin-"] .admin-module-menu__item.active,
-body[data-page^="admin-"] .admin-module-menu__item[aria-current="page"]{
-  border-color:rgba(77,119,255,.65);
-  background:rgba(77,119,255,.16);
-}
-
-body[data-page^="admin-"] main{
-  min-width:0;
-}
-
-body[data-page^="admin-"] .container,
-body[data-page^="admin-"] .shell,
-body[data-page^="admin-"] main.cp,
-body[data-page^="admin-"] main.dm,
-body[data-page^="admin-"] main.rx,
-body[data-page^="admin-"] main.dr,
-body[data-page^="admin-"] main.gc-wrap{
+body[data-admin-protected="true"] main{min-width:0}
+body[data-admin-protected="true"] .container,
+body[data-admin-protected="true"] .shell,
+body[data-admin-protected="true"] main.cp,
+body[data-admin-protected="true"] main.dm,
+body[data-admin-protected="true"] main.rx,
+body[data-admin-protected="true"] main.dr,
+body[data-admin-protected="true"] main.gc-wrap{
   width:min(1420px,calc(100% - 28px));
   margin-inline:auto;
 }
 
-body[data-page^="admin-"] .admin-return-bar{
+body[data-admin-protected="true"] .admin-return-bar{
   display:flex;
   flex-wrap:wrap;
   gap:8px;
@@ -133,64 +114,33 @@ body[data-page^="admin-"] .admin-return-bar{
   min-width:0;
   margin:12px 0;
 }
+body[data-admin-protected="true"] .admin-return-bar .crumb{min-width:0;color:var(--muted,#a8b4c5);font-size:.82rem;overflow-wrap:anywhere}
 
-body[data-page^="admin-"] .admin-return-bar .crumb{
-  min-width:0;
-  color:var(--muted,#a8b4c5);
-  font-size:.82rem;
-  overflow-wrap:anywhere;
-}
+body[data-admin-protected="true"] .panel,
+body[data-admin-protected="true"] .card,
+body[data-admin-protected="true"] .item,
+body[data-admin-protected="true"] .kpi{min-width:0;overflow-wrap:anywhere}
 
-body[data-page^="admin-"] .panel,
-body[data-page^="admin-"] .card,
-body[data-page^="admin-"] .item,
-body[data-page^="admin-"] .kpi{
-  min-width:0;
-  overflow-wrap:anywhere;
-}
+body[data-admin-protected="true"] .stack{display:grid;gap:12px}
+body[data-admin-protected="true"] .button-row,
+body[data-admin-protected="true"] .toolbar-wrap,
+body[data-admin-protected="true"] .actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
 
-body[data-page^="admin-"] .stack{display:grid;gap:12px}
-body[data-page^="admin-"] .button-row,
-body[data-page^="admin-"] .toolbar-wrap,
-body[data-page^="admin-"] .actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  align-items:center;
-}
+body[data-admin-protected="true"] form{min-width:0}
+body[data-admin-protected="true"] form label:not(.checkbox):not(.checkrow){min-width:0}
+body[data-admin-protected="true"] input,
+body[data-admin-protected="true"] select,
+body[data-admin-protected="true"] textarea,
+body[data-admin-protected="true"] button{max-width:100%;font:inherit}
+body[data-admin-protected="true"] input:not([type="checkbox"]):not([type="radio"]),
+body[data-admin-protected="true"] select,
+body[data-admin-protected="true"] textarea{min-width:0}
+body[data-admin-protected="true"] textarea{resize:vertical;line-height:1.45}
 
-body[data-page^="admin-"] form{min-width:0}
-body[data-page^="admin-"] form label:not(.checkbox):not(.checkrow){
-  min-width:0;
-}
-
-body[data-page^="admin-"] input,
-body[data-page^="admin-"] select,
-body[data-page^="admin-"] textarea,
-body[data-page^="admin-"] button{
-  max-width:100%;
-  font:inherit;
-}
-
-body[data-page^="admin-"] input:not([type="checkbox"]):not([type="radio"]),
-body[data-page^="admin-"] select,
-body[data-page^="admin-"] textarea{
-  min-width:0;
-}
-
-body[data-page^="admin-"] textarea{
-  resize:vertical;
-  line-height:1.45;
-}
-
-body[data-page^="admin-"] .checkbox,
-body[data-page^="admin-"] .checkrow{
-  min-width:0;
-  color:var(--text,#eef6ff);
-}
-
-body[data-page^="admin-"] .checkbox input[type="checkbox"],
-body[data-page^="admin-"] .checkrow input[type="checkbox"]{
+body[data-admin-protected="true"] .checkbox,
+body[data-admin-protected="true"] .checkrow{min-width:0;color:var(--text,#eef6ff)}
+body[data-admin-protected="true"] .checkbox input[type="checkbox"],
+body[data-admin-protected="true"] .checkrow input[type="checkbox"]{
   width:18px!important;
   min-width:18px!important;
   max-width:18px!important;
@@ -199,92 +149,45 @@ body[data-page^="admin-"] .checkrow input[type="checkbox"]{
   accent-color:var(--accent,#4d77ff);
 }
 
-body[data-page^="admin-"] .btn,
-body[data-page^="admin-"] button{
-  overflow-wrap:anywhere;
-}
-
-body[data-page^="admin-"] .table-wrap,
-body[data-page^="admin-"] .compare-wrap{
-  max-width:100%;
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
-}
-
-body[data-page^="admin-"] table{
-  width:100%;
-  border-collapse:collapse;
-}
-
-body[data-page^="admin-"] th,
-body[data-page^="admin-"] td{
-  overflow-wrap:anywhere;
-  vertical-align:top;
-}
-
-body[data-page^="admin-"] .tabs{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  min-width:0;
-}
-
-body[data-page^="admin-"] .tabs .tab{
-  min-width:0;
-  white-space:normal;
-}
-
-body[data-page^="admin-"] dialog{
-  max-width:calc(100vw - 24px);
-  max-height:90vh;
-  overflow:auto;
-  color:var(--text,#eef6ff);
-}
-
-body[data-page^="admin-"] img,
-body[data-page^="admin-"] video,
-body[data-page^="admin-"] canvas{
-  max-width:100%;
-}
-
-body[data-page^="admin-"] code,
-body[data-page^="admin-"] pre,
-body[data-page^="admin-"] .route{
-  overflow-wrap:anywhere;
-  word-break:break-word;
-}
+body[data-admin-protected="true"] .btn,
+body[data-admin-protected="true"] button{overflow-wrap:anywhere}
+body[data-admin-protected="true"] .table-wrap,
+body[data-admin-protected="true"] .compare-wrap{max-width:100%;overflow:auto;-webkit-overflow-scrolling:touch}
+body[data-admin-protected="true"] table{width:100%;border-collapse:collapse}
+body[data-admin-protected="true"] th,
+body[data-admin-protected="true"] td{overflow-wrap:anywhere;vertical-align:top}
+body[data-admin-protected="true"] .tabs{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+body[data-admin-protected="true"] .tabs .tab{min-width:0;white-space:normal}
+body[data-admin-protected="true"] dialog{max-width:calc(100vw - 24px);max-height:90vh;overflow:auto;color:var(--text,#eef6ff)}
+body[data-admin-protected="true"] img,
+body[data-admin-protected="true"] video,
+body[data-admin-protected="true"] canvas{max-width:100%}
+body[data-admin-protected="true"] code,
+body[data-admin-protected="true"] pre,
+body[data-admin-protected="true"] .route{overflow-wrap:anywhere;word-break:break-word}
 
 @media(max-width:1100px){
-  body[data-page^="admin-"] .site-header{grid-template-columns:1fr}
-  body[data-page^="admin-"] .admin-module-menu{grid-template-columns:1fr}
+  body[data-admin-protected="true"] .site-header{grid-template-columns:1fr}
+  body[data-admin-protected="true"] .admin-module-menu{grid-template-columns:1fr}
 }
 
 @media(max-width:760px){
-  body[data-page^="admin-"] .container,
-  body[data-page^="admin-"] .shell,
-  body[data-page^="admin-"] main.cp,
-  body[data-page^="admin-"] main.dm,
-  body[data-page^="admin-"] main.rx,
-  body[data-page^="admin-"] main.dr,
-  body[data-page^="admin-"] main.gc-wrap{
-    width:min(100% - 18px,1420px);
-  }
-
-  body[data-page^="admin-"] .site-header{padding:9px}
-  body[data-page^="admin-"] .admin-module-menu__group{grid-template-columns:1fr}
-  body[data-page^="admin-"] .row,
-  body[data-page^="admin-"] .row3,
-  body[data-page^="admin-"] .grid2,
-  body[data-page^="admin-"] .grid3,
-  body[data-page^="admin-"] .surface-grid-2{
-    grid-template-columns:1fr!important;
-  }
-  body[data-page^="admin-"] .button-row>.btn,
-  body[data-page^="admin-"] .button-row>button{
-    flex:1 1 100%;
-  }
-  body[data-page^="admin-"] .btn,
-  body[data-page^="admin-"] button{
-    min-height:44px;
-  }
+  body[data-admin-protected="true"] .container,
+  body[data-admin-protected="true"] .shell,
+  body[data-admin-protected="true"] main.cp,
+  body[data-admin-protected="true"] main.dm,
+  body[data-admin-protected="true"] main.rx,
+  body[data-admin-protected="true"] main.dr,
+  body[data-admin-protected="true"] main.gc-wrap{width:min(100% - 18px,1420px)}
+  body[data-admin-protected="true"] .site-header{padding:9px}
+  body[data-admin-protected="true"] .admin-module-menu__group{grid-template-columns:1fr}
+  body[data-admin-protected="true"] .row,
+  body[data-admin-protected="true"] .row3,
+  body[data-admin-protected="true"] .grid2,
+  body[data-admin-protected="true"] .grid3,
+  body[data-admin-protected="true"] .surface-grid-2{grid-template-columns:1fr!important}
+  body[data-admin-protected="true"] .button-row>.btn,
+  body[data-admin-protected="true"] .button-row>button{flex:1 1 100%}
+  body[data-admin-protected="true"] .btn,
+  body[data-admin-protected="true"] button{min-height:44px}
 }
