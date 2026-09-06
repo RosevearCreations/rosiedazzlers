@@ -1,4 +1,4 @@
-<!-- /index.html — Build 274 public trust + mobile operating model -->
+<!-- /index.html — Build 344 suppress legacy homepage review-image panel -->
 <!doctype html>
 <html lang="en">
 <head>
@@ -61,6 +61,10 @@
       <a class="btn primary" href="/book">Book now</a>
     </div>
   </div>
+
+  <!-- The homepage uses verified review mounts. This hidden sentinel prevents the
+       legacy chrome.js image-only review panel from being injected above the page. -->
+  <div id="globalReviewsPanel" hidden aria-hidden="true"></div>
 
   <div class="container" data-page-editor-root>
     <div class="hero">
