@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Admin Staff | Rosie Dazzlers</title>
-  <meta name="description" content="Manage staff access and customer tiers for Rosie Dazzlers." />
+  <meta name="description" content="Manage Rosie Dazzlers staff profiles, module access and administrator authority." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
 
@@ -12,6 +12,9 @@
     .staff-shell{display:grid;grid-template-columns:minmax(240px,300px) minmax(0,1fr);gap:18px;align-items:start}
     .staff-shell__menu{position:sticky;top:96px}
     .staff-shell__content{display:grid;gap:18px;min-width:0}
+    #authorityBox[data-state="ok"]{border-color:rgba(74,222,128,.35)}
+    #authorityBox[data-state="warn"]{border-color:rgba(251,191,36,.35)}
+    .warning-row{padding:9px 10px;margin-top:8px;border-radius:10px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.07)}
     @media (max-width: 980px){
       .staff-shell{grid-template-columns:1fr}
       .staff-shell__menu{position:static}
@@ -19,7 +22,7 @@
   </style>
 
 </head>
-<body data-page="admin-staff">
+<body data-page="admin-staff" data-build349="staff-access-authority">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html">
@@ -50,134 +53,137 @@
         <div class="staff-shell__content">
           <section class="section">
             <div class="hero">
-        <div>
-          <div class="badge">Admin Staff</div>
-          <h1>Manage staff access</h1>
-          <p>Create and update Admin, Senior Detailer, and Detailer records using the signed-in staff session. Payroll setup, work caps, and preferred hours now live with the staff record so the crew-time screen can flag overloads sooner.</p>
-          <div class="badges">
-            <div class="badge">Admins</div>
-            <div class="badge">Senior Detailers</div>
-            <div class="badge">Detailers</div>
-            <a class="btn ghost small" href="/admin-payroll.html">Crew Time &amp; Payroll</a>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="kicker">Selected staff user</div>
-          <h3 id="staffTitle" style="margin:6px 0 8px">No staff selected</h3>
-          <div id="staffMeta" class="kicker">Staff list will load automatically when your session is active.</div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section"><div id="pageNotice" class="notice">Ready.</div></section>
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Staff session</h2>
-          <p id="sessionMeta" class="kicker">Signed-in staff access is required. Optional password fallback can still be supplied while older endpoints are being retired.</p>
-          <form id="adminForm" class="form">
-            <label>
-              Optional legacy fallback
-              <input id="adminPassword" type="password" autocomplete="off" placeholder="Only needed if temporary fallback is enabled" />
-            </label>
-            <div><button class="btn primary" type="submit">Refresh staff</button></div>
-          </form>
-        </div>
-        <div class="panel">
-          <h2>Customer tiers</h2>
-          <div id="tiersBox" class="kicker">Not loaded yet.</div>
-        </div>
-      </div>
-    </section>
-
-
-    <section class="section">
-      <div class="grid cards">
-        <div class="panel">
-          <h2>Staff list</h2>
-          <div id="staffList" class="grid" style="margin-top:12px"><div class="notice">Staff have not been loaded yet.</div></div>
-        </div>
-
-        <div class="panel">
-          <h2>Create / edit staff</h2>
-          <form id="staffForm" class="form">
-            <input id="staffId" type="hidden" />
-            <label>Full name<input id="fullName" type="text" placeholder="Full name" required /></label>
-            <label>Email<input id="email" type="email" placeholder="Email address" required /></label>
-            <label>Role
-              <select id="roleCode" required>
-                <option value="detailer">Detailer</option>
-                <option value="senior_detailer">Senior Detailer</option>
-                <option value="operations_manager">Operations Manager</option>
-                <option value="accountant">Accountant / Finance</option>
-                <option value="it_specialist">I.T. Specialist</option>
-                <option value="promoter">Promoter / Marketing</option>
-                <option value="daip_manager">DAIP Manager</option>
-                <option value="admin">Administrator / Owner — all modules</option>
-              </select>
-            </label>
-            <label>Active
-              <select id="isActive">
-                <option value="true">true</option>
-                <option value="false">false</option>
-              </select>
-            </label>
-
-            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-              <label class="row"><input id="canOverride" type="checkbox" /> <div><strong>Can override lower entries</strong></div></label>
-              <label class="row"><input id="canManageBookings" type="checkbox" /> <div><strong>Can manage bookings</strong></div></label>
-              <label class="row"><input id="canManageBlocks" type="checkbox" /> <div><strong>Can manage blocks</strong></div></label>
-              <label class="row"><input id="canManageProgress" type="checkbox" /> <div><strong>Can manage progress</strong></div></label>
-              <label class="row"><input id="canManagePromos" type="checkbox" /> <div><strong>Can manage promos</strong></div></label>
-              <label class="row"><input id="canManageStaff" type="checkbox" /> <div><strong>Can manage staff</strong></div></label>
-            </div>
-
-            <fieldset class="panel" style="padding:14px;margin:0">
-              <legend><strong>Application module access</strong></legend>
-              <p class="kicker">Build 267 uses role templates as a hard ceiling, then per-person module grants can narrow access. Admin accounts are always granted every internal module and cannot be reduced here. Accountants, I.T. Specialists, Promoters and DAIP Managers only see their own module by default.</p>
-              <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
-                <label class="row"><input type="checkbox" data-module-access="detailer" /> <div><strong>Detailer</strong><div class="kicker">Assigned mobile field work</div></div></label>
-                <label class="row"><input type="checkbox" data-module-access="operations" /> <div><strong>Operations</strong><div class="kicker">Schedule, blocks, assignment, oversight</div></div></label>
-                <label class="row"><input type="checkbox" data-module-access="admin" /> <div><strong>Administration</strong><div class="kicker">Staff, inventory, site/content</div></div></label>
-                <label class="row"><input type="checkbox" data-module-access="it" /> <div><strong>I.T.</strong><div class="kicker">Tests, preflights, diagnostics, recovery</div></div></label>
-                <label class="row"><input type="checkbox" data-module-access="finance" /> <div><strong>Finance</strong><div class="kicker">Accounting, payments, payroll, tax</div></div></label>
-                <label class="row"><input type="checkbox" data-module-access="daip" /> <div><strong>DAIP</strong><div class="kicker">Private governed media/evidence</div></div></label>
-                <label class="row"><input type="checkbox" data-module-access="socials" /> <div><strong>Socials & Integrations</strong><div class="kicker">Social/content/provider connections</div></div></label>
+              <div>
+                <div class="badge">Staff &amp; Access · Build 349</div>
+                <h1>Manage staff access</h1>
+                <p>Create and update staff profiles using the signed-in staff session. Staff profile loading now stays available when optional customer-tier or payroll-profile data is temporarily unavailable, while Administrator / Owner accounts are always forced to full internal access.</p>
+                <div class="badges">
+                  <div class="badge">Admins</div>
+                  <div class="badge">Senior Detailers</div>
+                  <div class="badge">Detailers</div>
+                  <a class="btn ghost small" href="/admin-payroll.html">Crew Time &amp; Payroll</a>
+                </div>
               </div>
-            </fieldset>
-
-            <label class="row"><input id="payrollEnabled" type="checkbox" checked /> <div><strong>Payroll enabled</strong><div class="kicker">Include this staff member in payroll runs.</div></div></label>
-
-            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-              <label>Employee code<input id="employeeCode" type="text" placeholder="RD-001" /></label>
-              <label>Position title<input id="positionTitle" type="text" placeholder="Senior Detailer" /></label>
-              <label>Pay schedule
-                <select id="paySchedule">
-                  <option value="weekly">weekly</option>
-                  <option value="biweekly">biweekly</option>
-                  <option value="semimonthly">semimonthly</option>
-                  <option value="monthly">monthly</option>
-                  <option value="contractor">contractor</option>
-                </select>
-              </label>
-              <label>Hourly rate (CAD)<input id="hourlyRateCad" type="number" step="0.01" min="0" placeholder="0.00" /></label>
-              <label>Max hours / day<input id="maxHoursPerDay" type="number" step="0.25" min="0" placeholder="8" /></label>
-              <label>Max hours / week<input id="maxHoursPerWeek" type="number" step="0.25" min="0" placeholder="40" /></label>
+              <div class="panel">
+                <div class="kicker">Selected staff user</div>
+                <h3 id="staffTitle" style="margin:6px 0 8px">No staff selected</h3>
+                <div id="staffMeta" class="kicker">Staff list will load automatically when your session is active.</div>
+              </div>
             </div>
+          </section>
 
-            <label>Preferred work hours / notes<textarea id="preferredWorkHours" rows="3" placeholder='Example: {"monday":"8-4","tuesday":"8-4"} or simple text notes'></textarea></label>
-            <label>Tips payout notes<textarea id="tipsPayoutNotes" rows="2" placeholder="Optional note for tips payout handling"></textarea></label>
-            <label>Payroll notes<textarea id="payrollNotes" rows="2" placeholder="Internal payroll reminder or exception"></textarea></label>
-            <label>Notes<textarea id="notes" rows="4" placeholder="Optional internal notes"></textarea></label>
-            <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
-              <button id="saveStaffBtn" class="btn primary" type="submit" disabled>Save staff user</button>
-              <button id="newStaffBtn" class="btn ghost" type="button" disabled>Create new</button>
+          <section class="section"><div id="pageNotice" class="notice">Ready.</div></section>
+
+          <section class="section">
+            <div class="grid cards">
+              <div class="panel">
+                <h2>Staff session</h2>
+                <p id="sessionMeta" class="kicker">Signed-in staff access is required. Optional password fallback can still be supplied while older endpoints are being retired.</p>
+                <form id="adminForm" class="form">
+                  <label>
+                    Optional legacy fallback
+                    <input id="adminPassword" type="password" autocomplete="off" placeholder="Only needed if temporary fallback is enabled" />
+                  </label>
+                  <div><button class="btn primary" type="submit">Refresh staff</button></div>
+                </form>
+              </div>
+              <div class="panel">
+                <h2>Administrator authority</h2>
+                <div id="authorityBox" class="panel" data-state="loading" style="padding:14px">Authority will be verified when staff profiles load.</div>
+              </div>
+              <div class="panel">
+                <h2>Customer tiers</h2>
+                <div id="tiersBox" class="kicker">Not loaded yet.</div>
+              </div>
             </div>
-          </form>
-        </div>
-      </div>
-    </section>
+          </section>
+
+          <section class="section">
+            <div class="grid cards">
+              <div class="panel">
+                <h2>Staff list</h2>
+                <div id="staffList" class="grid" style="margin-top:12px"><div class="notice">Staff have not been loaded yet.</div></div>
+              </div>
+
+              <div class="panel">
+                <h2>Create / edit staff</h2>
+                <form id="staffForm" class="form">
+                  <input id="staffId" type="hidden" />
+                  <label>Full name<input id="fullName" type="text" placeholder="Full name" required /></label>
+                  <label>Email<input id="email" type="email" placeholder="Email address" required /></label>
+                  <label>Role
+                    <select id="roleCode" required>
+                      <option value="detailer">Detailer</option>
+                      <option value="senior_detailer">Senior Detailer</option>
+                      <option value="operations_manager">Operations Manager</option>
+                      <option value="accountant">Accountant / Finance</option>
+                      <option value="it_specialist">I.T. Specialist</option>
+                      <option value="promoter">Promoter / Marketing</option>
+                      <option value="daip_manager">DAIP Manager</option>
+                      <option value="admin">Administrator / Owner — all modules</option>
+                    </select>
+                  </label>
+                  <label>Active
+                    <select id="isActive">
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+                  </label>
+
+                  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+                    <label class="row"><input id="canOverride" type="checkbox" /> <div><strong>Can override lower entries</strong></div></label>
+                    <label class="row"><input id="canManageBookings" type="checkbox" /> <div><strong>Can manage bookings</strong></div></label>
+                    <label class="row"><input id="canManageBlocks" type="checkbox" /> <div><strong>Can manage blocks</strong></div></label>
+                    <label class="row"><input id="canManageProgress" type="checkbox" /> <div><strong>Can manage progress</strong></div></label>
+                    <label class="row"><input id="canManagePromos" type="checkbox" /> <div><strong>Can manage promos</strong></div></label>
+                    <label class="row"><input id="canManageStaff" type="checkbox" /> <div><strong>Can manage staff</strong></div></label>
+                  </div>
+
+                  <fieldset class="panel" style="padding:14px;margin:0">
+                    <legend><strong>Application module access</strong></legend>
+                    <p class="kicker">Role templates are the hard ceiling, then per-person grants can narrow access. Administrator / Owner accounts are always granted every internal module and every management capability; those controls are intentionally locked on when the admin role is selected.</p>
+                    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px">
+                      <label class="row"><input type="checkbox" data-module-access="detailer" /> <div><strong>Detailer</strong><div class="kicker">Assigned mobile field work</div></div></label>
+                      <label class="row"><input type="checkbox" data-module-access="operations" /> <div><strong>Operations</strong><div class="kicker">Schedule, blocks, assignment, oversight</div></div></label>
+                      <label class="row"><input type="checkbox" data-module-access="admin" /> <div><strong>Administration</strong><div class="kicker">Staff, inventory, site/content</div></div></label>
+                      <label class="row"><input type="checkbox" data-module-access="it" /> <div><strong>I.T.</strong><div class="kicker">Tests, preflights, diagnostics, recovery</div></div></label>
+                      <label class="row"><input type="checkbox" data-module-access="finance" /> <div><strong>Finance</strong><div class="kicker">Accounting, payments, payroll, tax</div></div></label>
+                      <label class="row"><input type="checkbox" data-module-access="daip" /> <div><strong>DAIP</strong><div class="kicker">Private governed media/evidence</div></div></label>
+                      <label class="row"><input type="checkbox" data-module-access="socials" /> <div><strong>Socials &amp; Integrations</strong><div class="kicker">Social/content/provider connections</div></div></label>
+                    </div>
+                  </fieldset>
+
+                  <label class="row"><input id="payrollEnabled" type="checkbox" checked /> <div><strong>Payroll enabled</strong><div class="kicker">Include this staff member in payroll runs.</div></div></label>
+
+                  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
+                    <label>Employee code<input id="employeeCode" type="text" placeholder="RD-001" /></label>
+                    <label>Position title<input id="positionTitle" type="text" placeholder="Senior Detailer" /></label>
+                    <label>Pay schedule
+                      <select id="paySchedule">
+                        <option value="weekly">weekly</option>
+                        <option value="biweekly">biweekly</option>
+                        <option value="semimonthly">semimonthly</option>
+                        <option value="monthly">monthly</option>
+                        <option value="contractor">contractor</option>
+                      </select>
+                    </label>
+                    <label>Hourly rate (CAD)<input id="hourlyRateCad" type="number" step="0.01" min="0" placeholder="0.00" /></label>
+                    <label>Max hours / day<input id="maxHoursPerDay" type="number" step="0.25" min="0" placeholder="8" /></label>
+                    <label>Max hours / week<input id="maxHoursPerWeek" type="number" step="0.25" min="0" placeholder="40" /></label>
+                  </div>
+
+                  <label>Preferred work hours / notes<textarea id="preferredWorkHours" rows="3" placeholder='Example: {"monday":"8-4","tuesday":"8-4"} or simple text notes'></textarea></label>
+                  <label>Tips payout notes<textarea id="tipsPayoutNotes" rows="2" placeholder="Optional note for tips payout handling"></textarea></label>
+                  <label>Payroll notes<textarea id="payrollNotes" rows="2" placeholder="Internal payroll reminder or exception"></textarea></label>
+                  <label>Notes<textarea id="notes" rows="4" placeholder="Optional internal notes"></textarea></label>
+                  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px">
+                    <button id="saveStaffBtn" class="btn primary" type="submit" disabled>Save staff user</button>
+                    <button id="newStaffBtn" class="btn ghost" type="button" disabled>Create new</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -191,6 +197,6 @@
   <script src="/assets/admin-menu.js"></script>
   <script src="/assets/admin-page-init.js"></script>
   <script src="/assets/chrome.js"></script>
-  <script type="module" src="/assets/admin-staff-v309.js"></script>
+  <script type="module" src="/assets/admin-staff-v309.js?v=20260906build349"></script>
 </body>
 </html>
