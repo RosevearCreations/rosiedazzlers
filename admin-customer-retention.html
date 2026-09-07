@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Customer Retention | Rosie Dazzlers Admin</title>
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <meta name="description" content="Read-only customer retention dashboard for Rosie Dazzlers staff." />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .retention-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+    .retention-kpi{padding:14px;border:1px solid rgba(255,255,255,.10);border-radius:14px;background:rgba(255,255,255,.04)}
+    .retention-kpi strong{display:block;font-size:1.5rem;margin-top:5px}
+    .retention-list{display:grid;gap:10px}.retention-row{padding:12px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.035)}
+    .retention-note{font-size:.92rem;color:#94a3b8}.retention-good{color:#86efac}.retention-unknown{color:#fcd34d}
+    select,input{width:100%}
+  </style>
+</head>
+<body data-page="admin-customer-retention" data-build359="customer-retention-dashboard">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Admin</strong></a>
+      <nav class="nav-links">
+        <a href="/admin.html">Dashboard</a>
+        <a href="/admin-booking.html">Bookings</a>
+        <a href="/admin-customer-retention.html" aria-current="page">Retention</a>
+        <a href="/admin-leads.html">Leads</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <div class="panel">
+        <div class="badge">Build 359 · Read only</div>
+        <h1>Customer retention dashboard</h1>
+        <p class="kicker">Review completed-service history, repeat activity, open bookings, saved vehicles and explicit maintenance planning without creating a CRM queue or changing customer data.</p>
+        <div id="pageNotice" class="notice">Loading customers…</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="panel">
+        <div class="grid2">
+          <label>Find customer<input id="customerSearch" type="search" placeholder="Name, email, phone or city" /></label>
+          <label>Customer<select id="customerSelect"><option value="">Loading…</option></select></label>
+        </div>
+        <div style="margin-top:12px"><button id="loadRetention" class="btn primary" type="button" disabled>Load retention view</button></div>
+      </div>
+    </section>
+
+    <section id="retentionView" class="section" hidden>
+      <div class="panel">
+        <div class="badge">Exact customer-profile linkage</div>
+        <h2 id="customerName" style="margin-bottom:4px">Customer</h2>
+        <div id="customerMeta" class="kicker"></div>
+      </div>
+
+      <div class="retention-grid" style="margin-top:12px">
+        <div class="retention-kpi"><span class="retention-note">Completed services</span><strong id="completedCount">0</strong></div>
+        <div class="retention-kpi"><span class="retention-note">Repeat services</span><strong id="repeatCount">0</strong></div>
+        <div class="retention-kpi"><span class="retention-note">Open bookings</span><strong id="openCount">0</strong></div>
+        <div class="retention-kpi"><span class="retention-note">Saved vehicles</span><strong id="vehicleCount">0</strong></div>
+      </div>
+
+      <div class="grid cards" style="margin-top:12px">
+        <div class="panel"><h2>Service history</h2><div id="serviceHistory" class="retention-list"></div></div>
+        <div class="panel"><h2>Retention signals</h2><div id="signals" class="retention-list"></div></div>
+        <div class="panel"><h2>Open bookings</h2><div id="openBookings" class="retention-list"></div></div>
+        <div class="panel"><h2>Saved vehicles</h2><div id="savedVehicles" class="retention-list"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state={customers:[],filtered:[]};
+    const $=(id)=>document.getElementById(id);
+    const esc=(value)=>String(value??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const fmt=(value)=>value?new Date(value).toLocaleString():'None recorded';
+    const money=(cents)=>new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(Number(cents||0)/100);
+
+    async function api(url,options={}){
+      const res=await fetch(url,{credentials:'same-origin',...options,headers:{'Content-Type':'application/json',...(options.headers||{})}});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok) throw new Error(data.error||`Request failed (${res.status})`);
+      return data;
+    }
+
+    function notice(message,error=false){$('pageNotice').textContent=message;$('pageNotice').dataset.state=error?'error':'ok';}
+
+    function renderCustomers(){
+      const needle=$('customerSearch').value.trim().toLowerCase();
+      state.filtered=needle?state.customers.filter((row)=>[row.full_name,row.email,row.phone,row.city,row.tier_code].join(' ').toLowerCase().includes(needle)):state.customers.slice();
+      $('customerSelect').innerHTML='<option value="">Choose a customer</option>'+state.filtered.map((row)=>`<option value="${esc(row.id)}">${esc(row.full_name||row.email||row.id)}${row.email?` · ${esc(row.email)}`:''}</option>`).join('');
+      $('loadRetention').disabled=true;
+    }
+
+    async function loadCustomers(){
+      try{
+        const data=await api('/api/admin/customer_admin_list?status=all&limit=500');
+        state.customers=Array.isArray(data.customers)?data.customers:[];
+        renderCustomers();
+        notice(state.customers.length?`${state.customers.length} customer profiles available.`:'No customer profiles found.');
+      }catch(error){
+        $('customerSelect').innerHTML='<option value="">Unable to load customers</option>';
+        notice(error.message,true);
+      }
+    }
+
+    function serviceCard(label,row){
+      if(!row) return `<div class="retention-row"><strong>${esc(label)}</strong><div class="retention-note">No completed service recorded.</div></div>`;
+      return `<div class="retention-row"><strong>${esc(label)}</strong><div>${esc(fmt(row.completed_at||row.service_date))}</div><div class="retention-note">Booking ${esc(row.booking_id||'—')} · ${esc(money(row.price_total_cents))}</div></div>`;
+    }
+
+    function render(data){
+      const customer=data.customer||{}; const r=data.retention||{};
+      $('retentionView').hidden=false;
+      $('customerName').textContent=customer.full_name||customer.email||'Customer';
+      $('customerMeta').textContent=[customer.email,customer.tier_code&&`Tier ${customer.tier_code}`,data.identity_rule].filter(Boolean).join(' · ');
+      $('completedCount').textContent=Number(r.completed_service_count||0);
+      $('repeatCount').textContent=Number(r.repeat_service_count||0);
+      $('openCount').textContent=Number(r.open_booking_count||0);
+      $('vehicleCount').textContent=Number(r.saved_vehicle_count||0);
+      $('serviceHistory').innerHTML=serviceCard('First completed service',r.first_completed_service)+serviceCard('Last completed service',r.last_completed_service);
+      const maintenance=r.maintenance_interest||{}; const fleet=r.fleet_interest||{};
+      $('signals').innerHTML=`
+        <div class="retention-row"><strong>Repeat customer</strong><div class="${r.repeat_customer?'retention-good':''}">${r.repeat_customer?'Yes':'Not yet'}</div><div class="retention-note">Based only on exact linked completed bookings.</div></div>
+        <div class="retention-row"><strong>Maintenance interest</strong><div class="${maintenance.value?'retention-good':''}">${maintenance.value?'Yes':'No explicit planning signal'}</div><div class="retention-note">${esc(maintenance.source||'—')} · ${Number(maintenance.vehicle_count||0)} vehicle(s)</div></div>
+        <div class="retention-row"><strong>Fleet interest</strong><div class="retention-unknown">${fleet.value===null?'Unknown':fleet.value?'Yes':'No'}</div><div class="retention-note">${esc(fleet.note||fleet.source||'No explicit source.')}</div></div>`;
+      $('openBookings').innerHTML=(r.open_bookings||[]).length?(r.open_bookings||[]).map((row)=>`<div class="retention-row"><strong>${esc(row.service_date||'Unscheduled')}</strong><div>${esc(row.status||row.job_status||'open')}</div><div class="retention-note">${esc(row.booking_id||'—')}</div></div>`).join(''):'<div class="retention-row">No open bookings.</div>';
+      $('savedVehicles').innerHTML=(r.saved_vehicles||[]).length?(r.saved_vehicles||[]).map((row)=>`<div class="retention-row"><strong>${esc(row.vehicle_name||[row.model_year,row.make,row.model].filter(Boolean).join(' ')||'Saved vehicle')}</strong><div class="retention-note">${row.is_primary?'Primary · ':''}${row.service_interval_days?`${esc(row.service_interval_days)}-day interval · `:''}${row.next_cleaning_due_at?`next due ${esc(row.next_cleaning_due_at)}`:'no due date set'}</div></div>`).join(''):'<div class="retention-row">No saved vehicles.</div>';
+      notice('Retention view loaded. No customer data was changed.');
+    }
+
+    $('customerSearch').addEventListener('input',renderCustomers);
+    $('customerSelect').addEventListener('change',()=>{$('loadRetention').disabled=!$('customerSelect').value;});
+    $('loadRetention').addEventListener('click',async()=>{
+      const id=$('customerSelect').value;if(!id)return;
+      $('loadRetention').disabled=true;notice('Loading exact linked retention history…');
+      try{render(await api('/api/admin/customer_retention_dashboard',{method:'POST',body:JSON.stringify({customer_profile_id:id})}));}
+      catch(error){notice(error.message,true);}finally{$('loadRetention').disabled=false;}
+    });
+    loadCustomers();
+  </script>
+</body>
+</html>
