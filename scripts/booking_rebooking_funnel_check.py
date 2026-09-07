@@ -10,6 +10,7 @@ API = ROOT / "functions" / "api" / "admin" / "booking_rebooking_funnel.js"
 PAGE = ROOT / "admin-booking-rebooking-funnel.html"
 TEST = ROOT / "scripts" / "booking_rebooking_funnel_test.mjs"
 CONFIRM = ROOT / "booking-confirmed.html"
+BOOKING_PLANNER = ROOT / "booking-planner.html"
 BOOKING_HOURS = ROOT / "assets" / "booking-hours.js"
 CUSTOMER_REBOOK = ROOT / "assets" / "customer-rebook-v285.js"
 INGEST = ROOT / "functions" / "api" / "analytics" / "ingest.js"
@@ -86,7 +87,8 @@ require(TEST, [
     "GREEN: Build 361 booking and rebooking funnel executable contract passed.",
 ], "Build 361 executable contract")
 require(CONFIRM, ["booking_rebook_prompt_view", "booking_rebook_start"], "retained booking confirmation telemetry")
-require(BOOKING_HOURS, ["booking_rebook_prefill_applied", "booking_step_view", "checkout_started"], "retained booking funnel telemetry")
+require(BOOKING_PLANNER, ["booking_step_view", "checkout_started"], "retained booking planner funnel telemetry")
+require(BOOKING_HOURS, ["booking_rebook_prefill_applied"], "retained rebook prefill telemetry")
 require(CUSTOMER_REBOOK, ["booking_history_rebook_handoff", "current_catalog_verified: true"], "retained authenticated rebook handoff")
 require(INGEST, ["site_activity_events", "sanitizePayload", "Analytics always fails open"], "retained analytics ingestion")
 
