@@ -18,9 +18,9 @@ Connect **Creative Project → Private Media Intake → Evidence Review → Cont
 
 ### Acceptance checklist
 
-- A single read-only Build 352 workflow model derives state from existing Creative Project, DAIP media, processing-job and content-package records.
+- A single read-only workflow model derives state from existing Creative Project, DAIP media, processing-job and content-package records.
 - DAIP App exposes the consolidated governed workflow as a first-class entry point.
-- Raw DAIP masters remain private and are never copied to a public destination by Build 352.
+- Raw DAIP masters remain private and are never copied to a public destination by the current release.
 - Raw R2 object keys and raw URLs are excluded from the public-handoff manifest.
 - At least one uploaded private asset must be explicitly selected before handoff can become eligible.
 - At least one Creative Project session must be approved for story/content use.
@@ -38,12 +38,12 @@ Connect **Creative Project → Private Media Intake → Evidence Review → Cont
 - Focused **DAIP Media Workflow Authority** validates source syntax and convergence contracts.
 - No database migration, historical backfill, payment/provider transaction, or Production business-data mutation.
 - Feature branch must pass focused authority plus retained source/sanity gates before synchronizing `dev`.
-- Exact synchronized `dev` SHA must pass retained current-source/DAIP authority and Cloudflare Development acceptance before Build 352 closes.
+- Exact synchronized `dev` SHA must pass retained current-source/DAIP authority and Cloudflare Development acceptance before the current release closes.
 - Keep `main` unchanged unless Production promotion is explicitly authorized.
 
 ## Next
 
-Do not assign Build 353 from stale roadmap text. After Build 352 is Development GREEN, re-read the current roadmap/execution authorities and choose the next bounded release from that live state.
+Do not assign the next numbered release from stale roadmap text. After the current release is Development GREEN, re-read the current roadmap/execution authorities and choose the next bounded release from that live state.
 
 ## Continuing rule
 
