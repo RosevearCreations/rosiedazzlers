@@ -1,4 +1,5 @@
-// Build 285 retained authority + Builds 356–357 successor compatibility.
+// Build 285 retained authority + Build 356 successor compatibility.
+// Build 357 adds current-catalog/pricing revalidation while preserving that handoff.
 // This layer carries only prior package/date evidence. It never carries old slot,
 // vehicle size, price, add-ons, deposit, payment state, customer identity or booking state.
 // Build 357 also requires the historical service to resolve against the current public pricing catalog before selection.
