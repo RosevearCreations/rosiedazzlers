@@ -1,0 +1,61 @@
+name: DAIP Media Workflow Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build352-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-daip-media-workflow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  daip-media-workflow-authority:
+    name: Validate DAIP media workflow authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate workflow API syntax
+        run: node --check functions/api/admin/daip_media_workflow.js
+
+      - name: Validate DAIP workflow authority contracts
+        run: python scripts/daip_media_workflow_audit.py
+
+      - name: Record DAIP media workflow authority
+        run: |
+          {
+            echo "### Build 352 DAIP Media Workflow Authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Creative Project → private Media Intake → review → Content Package → Photo Studio handoff is explicit: PASS"
+            echo "- Raw DAIP media remains private and raw object keys/URLs are excluded from handoff: PASS"
+            echo "- Content-package approval, project consent and explicit publish authority are required: PASS"
+            echo "- Every selected handoff asset requires approved-public consent: PASS"
+            echo "- Photo Studio remains the approved-public image/placement authority: PASS"
+            echo "- Workflow endpoint is read-only and starts no processing/background polling: PASS"
+            echo "- No schema/database migration or Production business-data mutation is introduced."
+          } >> "$GITHUB_STEP_SUMMARY"
