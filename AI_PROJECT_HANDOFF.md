@@ -1,57 +1,55 @@
 # Rosie Dazzlers — Current Project Handoff
 
-This file is the living operational authority for restarting work. Git history and archived gate/deployment evidence remain the historical record.
+This file is the living operational authority for restarting work. Git history and Build summaries remain the historical record.
 
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- Last fully accepted/synchronized release: **Build 334 — Durable Completed-Service Vehicle History Sync**.
-- Exact accepted SHA: `a5feaa71df1d87581674f93526ae44e2f861d244`.
-- At active-work start, `dev == main` on that exact SHA.
-- Active work: **Build 335 — Controlled Fleet Lead → Draft Quote Handoff**.
-- Active branch: `build335-controlled-fleet-quote-handoff`.
-- No database migration is introduced; the live fleet-lead and quote-pipeline tables already contain the required authorities.
+- Last fully accepted/synchronized release before this active build: **Build 349 — Staff & Access authority resilience**.
+- Accepted Build 349 SHA: `48815644ed4f296345f995c73d71899b0c5a4fb8`.
+- At Build 350 start, `dev == main` on that exact SHA.
+- Active work: **Build 350 — Staff API Authority Convergence**.
+- Active branch: `build350-staff-api-authority-convergence`.
+- Build 350 introduces **no database migration** and no business-data backfill.
 
-## Why this scope is active
+## Why Build 350 is active
 
-The live fleet pipeline safely captures and reviews fleet/workplace inquiries, while the existing quote dashboard owns durable `quote_pipeline_items`. Until now staff had to manually copy a fleet lead into the quote system, and the generic fleet PATCH correctly prohibited quote/conversion writes. This release adds one explicit server-authorized bridge without turning fleet status edits into quote, customer, booking, scheduling or payment authority.
+Build 349 made `/api/admin/staff_list` resilient and removed authentication hashes from that response, but the older `/api/staff_list` route still owned a separate direct Staff-table query. That legacy path selected an authentication hash field and treated customer-tier failure as fatal. Build 350 removes that split authority rather than allowing two Staff-list implementations to drift.
 
-## Active operating contract
+## Build 350 operating contract
 
-- Only authenticated staff with `manage_bookings` may invoke fleet quote handoff.
-- The server reloads the requested row from `public_inquiry_leads` with `topic=fleet`; the browser cannot supply customer, quote or booking ownership.
-- `converted`, `closed` and `spam` leads cannot create a new draft quote.
-- Existing quotes linked by `quote_pipeline_items.lead_id` are reused rather than duplicated.
-- More than one existing quote for a lead is treated as ambiguous and fails closed for staff cleanup.
-- When no quote exists, the draft quote UUID is deterministically the fleet lead UUID. The quote table primary key therefore prevents concurrent retry duplication without a new schema constraint.
-- New handoff quotes start as `draft`, with quoted/accepted amounts at zero and follow-up stage `prepare_quote`. Pricing remains staff-controlled in the Quote dashboard.
-- Handoff does not change the fleet lead status. Staff may use `quoted` only after the quote is actually prepared/sent.
-- Handoff does not create or mutate a customer profile, booking, appointment, schedule, recurring-service enrollment or payment.
-- The Quote dashboard accepts `quote_id` only as a UI selection hint after loading the authorized quote list; it does not create authority from the URL.
-- The existing generic fleet pipeline remains limited to writable status + internal staff note.
-
-## Release procedure
-
-1. Feature exact SHA must pass Current Source Gate, Fleet Account Pipeline Authority, Booking Vehicle Identity Authority, Maintenance Retention Follow-up Authority and Cloudflare feature deployment.
-2. No schema application is required.
-3. Fast-forward `dev` with `force=false`; require exact-SHA source authorities plus Cloudflare Development Acceptance.
-4. Only after Development is GREEN, fast-forward `main` with `force=false`.
-5. Require source authorities plus Cloudflare Production deployment on that exact SHA.
-6. Verify `dev == main`; only then call the release GREEN/closed.
+- `functions/api/_lib/staff-list-handler.js` is the only Staff-list data/query implementation.
+- `/api/staff_list` and `/api/admin/staff_list` are thin delegates to the same handler.
+- Neither route may directly query Supabase Staff rows.
+- Sensitive authentication hashes are never selected or returned by either Staff-list path.
+- Optional payroll/profile schema drift may fall back to core Staff profile fields.
+- Customer-tier failure remains non-blocking for Staff profile/module administration.
+- Administrator / Owner continues to receive all seven internal modules and retained management capabilities.
+- Non-admin role ceilings and per-profile narrowing remain unchanged.
+- No customer, booking, scheduling, payment, provider, schema, or Production business-data mutation is introduced.
 
 ## Durable authorities
 
-- `.github/workflows/fleet-account-pipeline-authority.yml` — fleet intake/follow-up plus controlled draft-quote handoff authority.
-- `scripts/fleet_account_pipeline_check.py` — source boundary, no-migration guard and executable fleet tests.
-- `scripts/fleet_quote_handoff_test.mjs` — deterministic draft identity, reuse, duplicate ambiguity and blocked-status behavior proof.
-- `functions/api/_lib/fleet-quote-handoff.js` — pure handoff eligibility/draft identity rules.
-- `functions/api/admin/fleet_quote_handoff.js` — staff-authorized runtime handoff and retry-race recovery.
-- `.github/workflows/development-source-gate.yml` and existing booking, maintenance, payment, Production-readiness, rollback/recovery, responsive UX and SEO authorities remain cumulative.
+- `functions/api/_lib/staff-list-handler.js` — canonical Staff list/profile authority.
+- `functions/api/staff_list.js` — legacy compatibility route delegate.
+- `functions/api/admin/staff_list.js` — protected Admin route delegate.
+- `scripts/admin_ui_audit.py` — shared Admin UI plus Staff route-convergence guard.
+- `.github/workflows/staff-api-authority.yml` — focused Build 350 syntax/security/authority gate.
+- `.github/workflows/development-source-gate.yml` — cumulative source authority.
+- `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance after promotion to `dev`.
 
-## Public/SEO and help contracts
+## Release procedure
 
-Every sitemap public page retains one meaningful H1, valid metadata/canonical/robots/structured data, and responsive behavior. Authenticated admin pages remain `noindex`. Admin work screens must include useful operating help, safe loading/error/empty states and must never expose server secrets.
+1. Require the documentation-synchronized feature SHA to pass Current Source Gate and Staff API Authority plus retained focused authorities.
+2. Fast-forward `dev` only if it still descends cleanly from accepted Build 349.
+3. Require Current Source Gate, Staff API Authority and Cloudflare Development Acceptance on the exact promoted `dev` SHA.
+4. Call Build 350 GREEN for Development only after those checks pass.
+5. Keep `main` unchanged unless Production promotion is explicitly authorized.
+
+## Next sequential scope
+
+**Build 351 — Staff Access Matrix.** Add one explicit, bounded view in the I.T./Staff administration experience showing each staff profile's effective role ceiling, granted modules, and global runtime-switch state. It must use the canonical Build 350 Staff authority, remain read-only unless the user deliberately edits through Staff & Access, load no unrelated business datasets, and introduce no polling.
 
 ## Restart point
 
-If interrupted during active work, verify `build335-controlled-fleet-quote-handoff` and inspect the first failing fleet/source/Cloudflare authority. Do not make generic fleet status writes create quotes, do not infer/create customer identity from a fleet inquiry, and do not add booking/payment side effects to draft handoff.
+If interrupted, verify `build350-staff-api-authority-convergence`, compare it to exact Build 349 SHA `48815644ed4f296345f995c73d71899b0c5a4fb8`, and inspect the first failing Build 350 Staff/API/source authority. Do not restore an independent direct query to either Staff-list route and do not expose authentication hashes to the client.
