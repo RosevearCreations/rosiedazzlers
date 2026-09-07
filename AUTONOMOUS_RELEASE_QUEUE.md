@@ -1,45 +1,44 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records only current actionable work. Completed implementation history belongs in Git history and archived gate/deployment evidence.
+This queue records only current actionable work. Completed implementation history belongs in Git history and Build summaries.
 
 ## Accepted synchronized checkpoint
 
-**Build 334 — Durable Completed-Service Vehicle History Sync** is GREEN and closed at exact SHA `a5feaa71df1d87581674f93526ae44e2f861d244`. At active-work start, `dev == main` on that SHA.
+**Build 349 — Staff & Access authority resilience** is GREEN and synchronized at exact SHA `48815644ed4f296345f995c73d71899b0c5a4fb8`. Build 350 started with `dev == main` on that SHA.
 
-## Active — Build 335
+## Active — Build 350
 
-Branch: `build335-controlled-fleet-quote-handoff`
+Branch: `build350-staff-api-authority-convergence`
 
-Scope: **Controlled Fleet Lead → Draft Quote Handoff**.
+Scope: **Staff API Authority Convergence / Legacy Authentication-Hash Closure**.
 
-The accepted fleet pipeline and existing quote dashboard now gain one explicit, staff-authorized bridge. Eligible fleet inquiries may create or reopen one durable draft quote without granting the generic fleet status editor quote, customer, booking, scheduling or payment authority.
+Build 350 removes the remaining split between the legacy `/api/staff_list` route and the protected `/api/admin/staff_list` route. Both must use one canonical server handler so Staff profile resilience, Administrator full authority, and sensitive-field exclusion cannot drift independently.
 
 ### Acceptance checklist
 
-- Require authenticated `manage_bookings` staff authority.
-- Reload the lead server-side by UUID with `topic=fleet` before handoff.
-- Block new draft quote creation for converted, closed and spam leads.
-- Reuse an existing `quote_pipeline_items` row linked to the lead.
-- Fail closed when multiple quote rows already point to the same fleet lead.
-- When no quote exists, use the fleet lead UUID as the deterministic quote UUID so concurrent retries converge on one primary-key identity.
-- Create only a `draft` quote with zero quoted/accepted amounts and follow-up stage `prepare_quote`.
-- Pre-fill only low-risk inquiry context such as business/contact display name, service area and vehicle-count scope label.
-- Do not create or mutate `customer_profiles`, bookings, appointments, schedules, recurring-service enrollment or payments.
-- Do not automatically set the fleet lead to `quoted`; staff owns that status after a real quote is prepared/sent.
-- Preserve the generic fleet PATCH boundary as status + internal staff note only.
-- Deep-link the Quote dashboard to the exact authorized quote returned by the handoff.
-- Keep public fleet intake quote/booking/billing neutral.
-- No database migration or historical/business-data backfill is introduced.
-- Extend durable Fleet Account Pipeline Authority with syntax/source guards and executable deterministic/reuse/ambiguity tests.
-- Exact feature SHA must pass Current Source Gate, Fleet Account Pipeline Authority, Booking Vehicle Identity Authority, Maintenance Retention Follow-up Authority and Cloudflare feature deployment.
-- Fast-forward `dev` only after feature GREEN; require exact-SHA source authorities plus Cloudflare Development Acceptance.
-- Fast-forward `main` only after Development is GREEN; require exact-SHA source authorities plus Cloudflare Production deployment.
-- Finish with `dev == main` on the accepted SHA.
+- One canonical Staff-list handler owns Staff-table reads and client shaping.
+- Legacy `/api/staff_list` delegates to the canonical handler.
+- `/api/admin/staff_list` delegates to the same canonical handler.
+- Neither route directly owns a Supabase Staff query.
+- Sensitive authentication hashes are never selected or returned.
+- Optional payroll/profile-column drift falls back to core Staff profile fields.
+- Customer-tier failure remains non-blocking for Staff profile/module administration.
+- Administrator / Owner remains forced to all seven internal modules and retained management capabilities.
+- Non-admin role ceilings and profile narrowing remain unchanged.
+- `scripts/admin_ui_audit.py` guards both routes and the canonical handler.
+- Focused Staff API Authority validates route syntax and convergence.
+- No database migration, historical backfill, payment/provider transaction, or Production business-data mutation.
+- Documentation-synchronized feature SHA must pass Current Source Gate, Staff API Authority and retained focused authorities.
+- Fast-forward `dev` only after feature source-green.
+- Require exact-SHA Current Source Gate, Staff API Authority and Cloudflare Development Acceptance on `dev` before closure.
+- Keep `main` at Build 349 unless Production promotion is explicitly authorized.
 
-## Next sequential scope
+## Next — Build 351
 
-After synchronization, inspect the accepted fleet quote → verified customer/account/booking conversion path. Any future conversion must reuse a confidently matched customer profile or require explicit staff resolution; phone-only leads must never force a fabricated email/customer identity. Quote acceptance must not itself capture payment, reserve capacity or create recurring service without its own approved workflow.
+Scope: **Staff Access Matrix**.
+
+Add an explicit, bounded Administrator view that shows each staff profile's effective role ceiling, granted modules, and current global module-switch state. The matrix should make access problems visible without loading unrelated business datasets or introducing polling. It must consume the canonical Build 350 Staff authority and must not broaden permissions merely to make the matrix appear green.
 
 ## Continuing rule
 
-Never start the next RosieDazzlers release from stale Markdown. Verify `dev`, `main`, the prior accepted SHA and exact-SHA gates first. Database migrations remain a separate acceptance boundary from source promotion.
+Never start the next Rosie Dazzlers release from stale Markdown. Verify `dev`, `main`, the prior accepted SHA and exact-SHA gates first. Database migrations remain a separate acceptance boundary from source promotion.
