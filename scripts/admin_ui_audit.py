@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Build 350 protected-page UI/navigation/staff-authority source audit.
+"""Build 351 protected-page UI/navigation/staff-authority source audit.
 
 The goal is to stop discovering unformatted admin pages or broken Staff & Access
 profiles manually. Current AdminShell pages must retain shared layout/auth
 contracts, Administrator / Owner profiles must remain full-authority while
-optional profile dependencies fail independently, and every Staff list route
-must delegate to one canonical profile authority.
+optional profile dependencies fail independently, every Staff list route must
+delegate to one canonical profile authority, and the Staff Access Matrix must use
+the shared runtime module resolver instead of inventing a second permission model.
 """
 from __future__ import annotations
 
@@ -128,16 +129,18 @@ if admin_role.get("modules") != expected_modules:
     errors.append(f"admin module ceiling mismatch: {admin_role.get('modules')!r}")
 
 
-# Build 349 Staff & Access behavior is now owned by one Build 350 canonical
-# handler. Both /api/staff_list and /api/admin/staff_list must be thin delegates.
-# This prevents legacy-route drift from reintroducing sensitive authentication
-# fields or making optional customer-tier/payroll schema availability fatal.
+# Staff list behavior is owned by one canonical handler. Both /api/staff_list and
+# /api/admin/staff_list remain thin delegates. This prevents legacy-route drift
+# from reintroducing sensitive authentication fields or making optional profile
+# dependencies fatal.
 staff_handler = read("functions/api/_lib/staff-list-handler.js")
 staff_root_api = read("functions/api/staff_list.js")
 staff_admin_api = read("functions/api/admin/staff_list.js")
 staff_save_api = read("functions/api/staff_save.js")
 staff_ui = read("assets/admin-staff-v309.js")
 staff_html = read("admin-staff.html")
+module_resolver = read("assets/app-core/module-resolver.js")
+module_flags_api = read("functions/api/admin/module_flags.js")
 
 for token in [
     "Build 350",
@@ -174,7 +177,7 @@ for token in [
     "module_access_version:349",
 ]:
     if token not in staff_save_api:
-        errors.append(f"staff_save.js missing Build 349 full-admin persistence token: {token}")
+        errors.append(f"staff_save.js missing full-admin persistence token: {token}")
 
 for token in [
     "renderAuthority()",
@@ -184,29 +187,91 @@ for token in [
     "Administrator accounts always receive this capability.",
 ]:
     if token not in staff_ui:
-        errors.append(f"admin-staff-v309.js missing Build 349 authority UI token: {token}")
+        errors.append(f"admin-staff-v309.js missing Staff authority UI token: {token}")
+
+
+# Build 351 Staff Access Matrix must consume the same resolver used by the app
+# launcher/runtime. It is a read-only view: staff editing remains in Staff & Access
+# and global availability remains in I.T. The matrix may refresh explicitly but
+# must not poll.
+for token in [
+    "Build 351",
+    "renderAccessMatrix()",
+    "loadAccessSnapshot({ force = true }",
+    "moduleResolver.withinRoleCeiling",
+    "moduleResolver.profileAllows",
+    "moduleResolver.canAccess",
+    "moduleResolver.isEnabled",
+    "moduleResolver.loadRuntimeFlags({ force })",
+    "No polling is running.",
+]:
+    if token not in staff_ui:
+        errors.append(f"admin-staff-v309.js missing Build 351 matrix token: {token}")
+
+if "const ROLE_MODULES" in staff_ui:
+    errors.append("admin-staff-v309.js must not duplicate the canonical role/module ceiling map")
+if "setInterval(" in staff_ui or "setTimeout(" in staff_ui:
+    errors.append("Staff Access Matrix must not introduce background polling/timers")
+
+for token in [
+    "ROLE_CEILINGS",
+    "withinRoleCeiling",
+    "profileAllows",
+    "canAccess",
+    "loadRuntimeFlags",
+    "getRuntimeFlags",
+]:
+    if token not in module_resolver:
+        errors.append(f"module-resolver.js missing matrix authority token: {token}")
+
+for token in [
+    'const KEY="module_runtime_flags"',
+    "flags.it=true",
+    "allowLegacyAdminFallback:false",
+    'source:"app_management_settings"',
+]:
+    if token not in module_flags_api:
+        errors.append(f"module_flags.js missing global runtime-switch authority token: {token}")
 
 for token in [
     'data-build349="staff-access-authority"',
+    'data-build351="staff-access-matrix"',
     'id="authorityBox"',
-    "/assets/admin-staff-v309.js?v=20260906build349",
+    'id="accessMatrixWrap"',
+    'id="accessMatrixStatus"',
+    'id="globalSwitchSummary"',
+    'id="refreshAccessMatrixBtn"',
+    "/assets/app-core/module-resolver.js?v=20260907build351",
+    "/assets/admin-staff-v309.js?v=20260907build351",
 ]:
     if token not in staff_html:
-        errors.append(f"admin-staff.html missing Build 349 profile/authority token: {token}")
+        errors.append(f"admin-staff.html missing Build 351 profile/matrix token: {token}")
+
+# The matrix's own new runtime dependency is only the existing lightweight module
+# flag authority. It must not start reaching into unrelated business domains.
+for forbidden in [
+    "/api/admin/bookings",
+    "/api/admin/inventory",
+    "/api/admin/finance",
+    "/api/admin/daip",
+    "/api/admin/analytics",
+]:
+    if forbidden in staff_ui:
+        errors.append(f"Staff Access Matrix introduced unrelated business-data dependency: {forbidden}")
 
 
 if warnings:
-    print("Build 350 admin UI audit warnings:")
+    print("Build 351 admin UI audit warnings:")
     for warning in warnings:
         print(" -", warning)
 
 if errors:
-    print("Build 350 admin UI audit: FAIL")
+    print("Build 351 admin UI audit: FAIL")
     for error in errors:
         print(" -", error)
     raise SystemExit(1)
 
-print("Build 350 admin UI audit: PASS")
+print("Build 351 admin UI audit: PASS")
 print(f" - inventoried {len(admin_pages)} root admin-* HTML routes")
 print(f" - validated {len(protected_pages)} current AdminShell protected routes")
 print(f" - validated {len(nav_hrefs)} canonical admin navigation targets")
@@ -214,4 +279,6 @@ print(" - shared admin design system covers canonical and legacy AdminShell mark
 print(" - Staff & Access survives optional tier/payroll-profile drift without hiding staff profiles")
 print(" - root and /admin Staff list routes share one canonical profile authority")
 print(" - sensitive authentication hashes are excluded from both Staff list response paths")
+print(" - Staff Access Matrix uses the shared role/profile/runtime resolver with no polling")
+print(" - matrix adds no unrelated business-data dependency")
 print(" - admin retains full detailer/operations/admin/I.T./finance/DAIP/socials and management authority")
