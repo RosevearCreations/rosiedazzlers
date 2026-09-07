@@ -1,25 +1,20 @@
-// Build 349 — Staff & Access profile resilience and administrator authority UI.
+// Build 351 — Staff & Access profiles plus read-only effective-access matrix.
 import { setBrandImages, setFooter } from "/assets/site.js";
 
 const runtime = window.AdminRuntime;
+const moduleResolver = window.RosieAppCore?.ModuleResolver;
+if (!moduleResolver) throw new Error("Rosie module resolver is required for the Staff access matrix.");
+
 let currentPassword = "";
 let staffUsers = [];
 let customerTiers = [];
 let staffWarnings = [];
 let adminAuthority = null;
 let selectedStaffId = "";
-const MODULE_KEYS = ["detailer","operations","admin","it","finance","daip","socials"];
+let runtimeSnapshot = { loaded: false, flags: null, source: "not-loaded", updated_at: null, error: null };
+const MODULE_KEYS = [...moduleResolver.INTERNAL_MODULES];
+const MODULE_LABELS = Object.freeze({ detailer: "Detailer", operations: "Operations", admin: "Admin", it: "I.T.", finance: "Finance", daip: "DAIP", socials: "Socials" });
 const LEGACY_CAPABILITY_IDS = ["canOverride","canManageBookings","canManageBlocks","canManageProgress","canManagePromos","canManageStaff"];
-const ROLE_MODULES = {
-  detailer: ["detailer"],
-  senior_detailer: ["detailer","operations"],
-  operations_manager: ["detailer","operations"],
-  accountant: ["finance"],
-  it_specialist: ["it"],
-  promoter: ["socials"],
-  daip_manager: ["daip"],
-  admin: [...MODULE_KEYS]
-};
 
 function escapeHtml(value) {
   return String(value ?? "")
@@ -89,11 +84,11 @@ function syncLegacyCapabilities() {
 }
 function syncModuleAccess(row = null, useRoleDefaults = false) {
   const role = document.querySelector("#roleCode").value || "detailer";
-  const ceiling = new Set(ROLE_MODULES[role] || []);
+  const roleActor = { role_code: role, is_admin: role === "admin" };
   const profile = row?.permissions_profile?.module_access && typeof row.permissions_profile.module_access === "object" ? row.permissions_profile.module_access : {};
   document.querySelectorAll("[data-module-access]").forEach((input) => {
     const key = input.getAttribute("data-module-access");
-    const allowed = ceiling.has(key);
+    const allowed = moduleResolver.withinRoleCeiling(key, roleActor);
     const hasExplicit = Object.prototype.hasOwnProperty.call(profile, key);
     const forcedAdmin = role === "admin";
     input.disabled = !allowed || forcedAdmin;
@@ -134,7 +129,7 @@ function fillForm(row) {
   syncModuleAccess(row, !row);
 }
 function renderSelectedStaff() {
-  const row = staffUsers.find((s) => s.id === selectedStaffId) || null;
+  const row = staffUsers.find((s) => String(s.id) === String(selectedStaffId)) || null;
   document.querySelector("#staffTitle").textContent = row?.full_name || "No staff selected";
   document.querySelector("#staffMeta").textContent = row ? `${row.role_code || "detailer"} · ${row.email || "—"}` : "Choose a staff user from the list or create a new one.";
 }
@@ -151,13 +146,98 @@ function renderStaffList() {
       <button class="btn primary" type="button" data-staff-id="${escapeHtml(row.id)}">Edit staff</button>
     </article>`).join("");
   wrap.querySelectorAll("[data-staff-id]").forEach((btn) => {
-    btn.addEventListener("click", () => { selectedStaffId = btn.getAttribute("data-staff-id"); fillForm(staffUsers.find((s) => s.id === selectedStaffId) || null); renderSelectedStaff(); });
+    btn.addEventListener("click", () => { selectedStaffId = btn.getAttribute("data-staff-id"); fillForm(staffUsers.find((s) => String(s.id) === String(selectedStaffId)) || null); renderSelectedStaff(); });
   });
 }
 function syncSessionMeta(actor) {
   const meta = document.querySelector("#sessionMeta");
   if (!meta) return;
   meta.textContent = runtime.bridgeLabel(actor || window.AdminAuth.getActor(), currentPassword);
+}
+function formatSnapshotTime(value) {
+  if (!value) return "not recorded";
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? String(value) : parsed.toLocaleString("en-CA");
+}
+function roleLabel(row) {
+  const role = String(row?.role_code || "detailer").trim().toLowerCase();
+  return moduleResolver.ROLE_LABELS?.[role] || role.replaceAll("_", " ");
+}
+function renderGlobalSwitchSummary() {
+  const box = document.querySelector("#globalSwitchSummary");
+  if (!box) return;
+  if (!runtimeSnapshot.loaded) {
+    box.innerHTML = `<span class="access-switch-chip">Global switches not loaded yet</span>`;
+    return;
+  }
+  box.innerHTML = MODULE_KEYS.map((key) => {
+    const enabled = moduleResolver.isEnabled(key);
+    return `<span class="access-switch-chip" data-enabled="${enabled}"><strong>${escapeHtml(MODULE_LABELS[key] || key)}</strong><span>${enabled ? "ON" : "OFF"}</span></span>`;
+  }).join("");
+}
+function renderAccessMatrix() {
+  const wrap = document.querySelector("#accessMatrixWrap");
+  const status = document.querySelector("#accessMatrixStatus");
+  if (!wrap || !status) return;
+  renderGlobalSwitchSummary();
+  if (!staffUsers.length) {
+    wrap.innerHTML = `<div class="notice">No staff profiles are available for the access matrix.</div>`;
+    status.className = "notice";
+    status.textContent = runtimeSnapshot.loaded ? "Runtime switches loaded; no staff profiles are available." : "Access snapshot will load with the staff list. No polling is running.";
+    return;
+  }
+  if (!runtimeSnapshot.loaded) {
+    wrap.innerHTML = `<div class="notice">Staff profiles loaded. Waiting for the module-switch snapshot.</div>`;
+    status.className = "notice";
+    status.textContent = "Staff profiles loaded; module switches are not loaded yet.";
+    return;
+  }
+
+  const header = MODULE_KEYS.map((key) => `<th scope="col">${escapeHtml(MODULE_LABELS[key] || key)}</th>`).join("");
+  const rows = staffUsers.map((row) => {
+    const active = row?.is_active !== false;
+    const moduleCells = MODULE_KEYS.map((key) => {
+      const ceiling = moduleResolver.withinRoleCeiling(key, row);
+      const grant = moduleResolver.profileAllows(key, row);
+      const globalOn = moduleResolver.isEnabled(key);
+      const effective = active && moduleResolver.canAccess(key, row);
+      return `<td><div class="access-cell" data-effective="${effective}">
+        <span class="access-cell__effective">${effective ? "ACCESS" : "NO ACCESS"}</span>
+        <div class="access-cell__detail">
+          <span>Ceiling: <strong>${ceiling ? "ON" : "OFF"}</strong></span>
+          <span>Grant: <strong>${grant ? "ON" : "OFF"}</strong></span>
+          <span>Switch: <strong>${globalOn ? "ON" : "OFF"}</strong></span>
+          ${active ? "" : "<span><strong>Profile inactive</strong></span>"}
+        </div>
+      </div></td>`;
+    }).join("");
+    return `<tr>
+      <td><div class="access-matrix__person"><strong>${escapeHtml(row?.full_name || "Unnamed")}</strong><span>${escapeHtml(roleLabel(row))}</span><span>${active ? "Active" : "Inactive"}</span></div></td>
+      ${moduleCells}
+    </tr>`;
+  }).join("");
+
+  wrap.innerHTML = `<table class="access-matrix" aria-label="Staff effective module access matrix"><thead><tr><th scope="col">Staff profile</th>${header}</tr></thead><tbody>${rows}</tbody></table>`;
+  const suffix = runtimeSnapshot.error ? ` Fallback state is shown because the runtime-switch read reported: ${runtimeSnapshot.error}` : " No polling is running.";
+  status.className = runtimeSnapshot.error ? "notice" : "notice ok";
+  status.textContent = `Access snapshot loaded from ${runtimeSnapshot.source} · switch update ${formatSnapshotTime(runtimeSnapshot.updated_at)}.${suffix}`;
+}
+async function loadAccessSnapshot({ force = true } = {}) {
+  const status = document.querySelector("#accessMatrixStatus");
+  if (status) {
+    status.className = "notice";
+    status.textContent = "Loading one bounded module-switch snapshot…";
+  }
+  const state = await moduleResolver.loadRuntimeFlags({ force });
+  runtimeSnapshot = {
+    loaded: true,
+    flags: state?.flags || moduleResolver.getRuntimeFlags(),
+    source: state?.source || "unknown",
+    updated_at: state?.updated_at || null,
+    error: state?.error || null
+  };
+  renderAccessMatrix();
+  return runtimeSnapshot;
 }
 
 async function refreshStaff() {
@@ -168,10 +248,11 @@ async function refreshStaff() {
   staffWarnings = Array.isArray(data.warnings) ? data.warnings : [];
   adminAuthority = data.admin_authority && typeof data.admin_authority === "object" ? data.admin_authority : null;
   syncSessionMeta(data && data.actor ? data.actor : null);
-  renderStaffList(); renderTiers(); renderSelectedStaff(); renderAuthority();
+  renderStaffList(); renderTiers(); renderSelectedStaff(); renderAuthority(); renderAccessMatrix();
+  await loadAccessSnapshot({ force: true });
   document.querySelector("#saveStaffBtn").disabled = false;
   document.querySelector("#newStaffBtn").disabled = false;
-  if (selectedStaffId) fillForm(staffUsers.find((s) => s.id === selectedStaffId) || null);
+  if (selectedStaffId) fillForm(staffUsers.find((s) => String(s.id) === String(selectedStaffId)) || null);
 }
 function collectPayload() {
   return {
@@ -205,6 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   setBrandImages();
   setFooter();
   syncSessionMeta();
+  renderGlobalSwitchSummary();
   document.querySelector("#roleCode").addEventListener("change", () => syncModuleAccess(null, true));
   document.querySelector("#adminPassword").addEventListener("input", () => {
     currentPassword = document.querySelector("#adminPassword").value.trim();
@@ -214,10 +296,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     event.preventDefault();
     currentPassword = document.querySelector("#adminPassword").value.trim();
     try {
-      setNotice("Loading staff users…");
+      setNotice("Loading staff users and access snapshot…");
       await refreshStaff();
-      setNotice(staffWarnings.length ? `Staff users loaded with ${staffWarnings.length} non-blocking warning${staffWarnings.length === 1 ? "" : "s"}.` : "Staff users loaded.", staffWarnings.length ? "" : "ok");
+      setNotice(staffWarnings.length ? `Staff users loaded with ${staffWarnings.length} non-blocking warning${staffWarnings.length === 1 ? "" : "s"}.` : "Staff users and access snapshot loaded.", staffWarnings.length ? "" : "ok");
     } catch (err) { setNotice(err.message || "Could not load staff users.", "bad"); }
+  });
+  document.querySelector("#refreshAccessMatrixBtn").addEventListener("click", async () => {
+    const button = document.querySelector("#refreshAccessMatrixBtn");
+    button.disabled = true;
+    try { await loadAccessSnapshot({ force: true }); }
+    catch (err) {
+      const status = document.querySelector("#accessMatrixStatus");
+      status.className = "notice bad";
+      status.textContent = err.message || "Could not refresh the access snapshot.";
+    } finally { button.disabled = false; }
   });
   document.querySelector("#staffForm").addEventListener("submit", async (event) => {
     event.preventDefault();
