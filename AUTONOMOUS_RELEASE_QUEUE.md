@@ -1,12 +1,12 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records only current actionable work. Completed implementation history belongs in Git history and release summaries. The durable forward sequence is recorded in `FORWARD_BUILD_ROADMAP_356_377.md`.
+This queue records only current actionable work. Completed implementation history belongs in Git history and release summaries. The durable numbered forward sequence is recorded in `FORWARD_BUILD_ROADMAP_356_377.md`.
 
 ## Accepted checkpoint
 
 **Build 358 — Per-Vehicle Service Timeline** is implemented and Development GREEN at runtime SHA `1a84273f28f01b477d4697b2035c1562dfd59dd8`. Current Source Gate #490 and Cloudflare Development Acceptance #167 passed on that exact SHA, all retained same-SHA workflows completed without failure, and `main` was fast-forwarded non-force to the same runtime commit.
 
-The repository still exposes no separate Production exact-SHA acceptance workflow or public build-identity endpoint, so that evidence limitation remains explicit. Build 358 required no database migration and created no duplicate service-history authority or write path.
+The repository still exposes no separate Production exact-SHA acceptance workflow or public build-identity endpoint, so that evidence limitation remains explicit. The accepted release required no database migration and created no duplicate service-history authority or write path.
 
 ## Next — Build 359
 

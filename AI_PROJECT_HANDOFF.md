@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Project Handoff
 
-This file is the living operational authority for restarting work. Git history and release summaries remain the historical record. The durable forward sequence is `FORWARD_BUILD_ROADMAP_356_377.md`.
+This file is the living operational authority for restarting work. Git history and release summaries remain the historical record. The durable numbered forward sequence is `FORWARD_BUILD_ROADMAP_356_377.md`.
 
 ## Current release boundary
 
@@ -9,15 +9,15 @@ This file is the living operational authority for restarting work. Git history a
 - Current Source Gate #490 passed on that exact runtime SHA.
 - Cloudflare Development Acceptance #167 passed on that exact runtime SHA, including exact deployment confirmation and retained protected-route smoke.
 - All retained same-SHA workflows completed without failure before promotion.
-- The same runtime SHA was promoted to `main` by non-force fast-forward; `dev` and `main` were synchronized on the proven runtime boundary before this documentation closure.
+- The same runtime SHA was promoted to `main` by non-force fast-forward; `dev` and `main` were synchronized on the proven runtime boundary before documentation closure.
 - The repository still exposes no separate Production exact-SHA acceptance workflow or public build-identity endpoint. Do not convert that missing runtime identity evidence into a stronger Production-GREEN claim.
-- Build 358 introduced no database migration, duplicate service-history table, provider transaction, pricing change, scheduler, polling loop or Production business-data mutation.
+- The accepted release introduced no database migration, duplicate service-history table, provider transaction, pricing change, scheduler, polling loop or Production business-data mutation.
 - Next sequential scope: **Build 359 — Customer Retention Dashboard**.
 
 ## Accepted operating contract
 
 - `functions/api/client/dashboard.js` remains the authenticated customer dashboard and canonical completed-service read authority.
-- `service_history` remains derived from the authenticated customer's completed booking history and canonical saved vehicles; Build 358 did not create a second ledger.
+- `service_history` remains derived from the authenticated customer's completed booking history and canonical saved vehicles; no second ledger was created.
 - `assets/my-account-v355.js` now presents an additive per-vehicle timeline while preserving the general completed-service history.
 - A per-vehicle timeline entry is accepted only when its `vehicle_id` resolves to one unique canonical saved vehicle in the authenticated dashboard payload.
 - Unknown, missing, conflicting or ambiguous vehicle linkage fails closed and is never blended across household vehicles.
@@ -39,10 +39,10 @@ This file is the living operational authority for restarting work. Git history a
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/HTTP acceptance.
 
-## Next build boundary
+## Next release boundary
 
-Build 359 should add an Operations-facing customer retention dashboard using existing customer, canonical vehicle, booking, completed-service, maintenance-interest and fleet-interest authorities. It must remain evidence-backed and read-focused: no duplicate CRM ledger, fabricated retention state, broad customer-data leakage, permanent polling or automatic outreach.
+The next release should add an Operations-facing customer retention dashboard using existing customer, canonical vehicle, booking, completed-service, maintenance-interest and fleet-interest authorities. It must remain evidence-backed and read-focused: no duplicate CRM ledger, fabricated retention state, broad customer-data leakage, permanent polling or automatic outreach.
 
 ## Restart point
 
-Start from the latest exact synchronized `dev`/`main` checkpoint recorded by GitHub after this documentation closure. Inspect the existing admin/customer lookup and retention-related authorities before implementing Build 359. Preserve the exact-SHA Source → Development → non-force `main` promotion discipline.
+Start from the latest exact synchronized `dev`/`main` checkpoint recorded by GitHub after documentation closure. Inspect the existing admin/customer lookup and retention-related authorities before implementing the next bounded release. Preserve the exact-SHA Source → Development → non-force `main` promotion discipline.
