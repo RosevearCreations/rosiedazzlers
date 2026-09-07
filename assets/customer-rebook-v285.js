@@ -1,11 +1,14 @@
-// Build 285 retained authority + Build 356 successor compatibility.
+// Build 285 retained authority + Builds 356–357 successor compatibility.
 // This layer carries only prior package/date evidence. It never carries old slot,
 // vehicle size, price, add-ons, deposit, payment state, customer identity or booking state.
+// Build 357 also requires the historical service to resolve against the current public pricing catalog before selection.
 const hasLocation = typeof location !== "undefined";
 const normalizedPath = hasLocation ? (String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/") : "/";
 const params = new URLSearchParams(hasLocation ? location.search : "");
 const DASHBOARD_API = "/api/client/dashboard";
+const CURRENT_CATALOG_API = "/api/pricing_catalog_public";
 const REJECTED_STATUS = /cancel|refund|failed|declin|void/i;
+const RETIRED_CATALOG_STATUS = /retired|inactive|disabled|archived|unavailable/i;
 
 function localTodayIso() {
   const now = new Date();
@@ -28,11 +31,41 @@ export function isRepeatableBooking(row) {
   return !!packageCode && !!serviceDate && serviceDate < localTodayIso() && !REJECTED_STATUS.test(status);
 }
 
+export function isCurrentCatalogPackageBookable(pkg) {
+  if (!pkg || !cleanPackage(pkg.code)) return false;
+  if (pkg.active === false || pkg.enabled === false || pkg.bookable === false) return false;
+  const lifecycle = `${pkg.status || ""} ${pkg.lifecycle_status || ""}`;
+  if (RETIRED_CATALOG_STATUS.test(lifecycle)) return false;
+  const prices = pkg.prices_cad && typeof pkg.prices_cad === "object" ? pkg.prices_cad : {};
+  return ["small", "mid", "oversize"].some((size) => {
+    const value = Number(prices[size]);
+    return Number.isFinite(value) && value > 0;
+  });
+}
+
+export function resolveCurrentCatalogPackage(catalog, packageCode) {
+  const requestedCode = cleanPackage(packageCode);
+  if (!requestedCode || !catalog || !Array.isArray(catalog.packages)) return null;
+  const current = catalog.packages.find((pkg) => cleanPackage(pkg?.code) === requestedCode) || null;
+  return isCurrentCatalogPackageBookable(current) ? current : null;
+}
+
 async function loadAuthenticatedDashboard() {
   try {
     const response = await fetch(DASHBOARD_API, { credentials: "include", cache: "no-store" });
     const data = await response.json().catch(() => null);
     if (!response.ok || data?.authenticated !== true || !Array.isArray(data.bookings)) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+async function loadCurrentPricingCatalog() {
+  try {
+    const response = await fetch(CURRENT_CATALOG_API, { credentials: "same-origin", cache: "no-store" });
+    const data = await response.json().catch(() => null);
+    if (!response.ok || data?.ok !== true || !Array.isArray(data.packages)) return null;
     return data;
   } catch {
     return null;
@@ -120,7 +153,7 @@ function rebookContextAnchor() {
     document.querySelector("main .panel");
 }
 
-function showRebookContext({ packageCode = "", priorDate = "", tone = "ok", message = "" } = {}) {
+function showRebookContext({ packageCode = "", packageName = "", priorDate = "", tone = "ok", message = "" } = {}) {
   let panel = document.querySelector("[data-build285-rebook-context]");
   if (!panel) {
     panel = document.createElement("div");
@@ -133,8 +166,11 @@ function showRebookContext({ packageCode = "", priorDate = "", tone = "ok", mess
   }
   panel.className = tone === "bad" ? "notice bad" : tone === "warn" ? "notice warn" : "notice ok";
   if (tone === "ok") {
-    panel.innerHTML = `<strong>Using your previous booking as a starting point</strong><div>${packageCode ? `Previous service: ${escapeText(packageCode)}${priorDate ? ` · ${escapeText(priorDate)}` : ""}. ` : ""}${escapeText(message || "Only the previous service choice is being reused. Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority.")}</div>`;
+    panel.setAttribute("data-build357-current-catalog-verified", "true");
+    const serviceLabel = packageName || packageCode;
+    panel.innerHTML = `<strong>Using your previous booking as a starting point</strong><div>${serviceLabel ? `Current service: ${escapeText(serviceLabel)}${priorDate ? ` · previously booked ${escapeText(priorDate)}` : ""}. ` : ""}${escapeText(message || "The service was verified against the current catalog. Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority.")}</div>`;
   } else {
+    panel.removeAttribute("data-build357-current-catalog-verified");
     panel.innerHTML = `<strong>Previous booking could not be reused automatically.</strong><div>${escapeText(message || "Choose a current service below.")}</div>`;
   }
   return panel;
@@ -186,19 +222,31 @@ async function installBookHandoff() {
     return;
   }
 
+  const currentCatalog = await loadCurrentPricingCatalog();
+  if (!currentCatalog) {
+    showRebookContext({ tone: "warn", message: "The current service catalog and pricing could not be verified. Choose a current service below instead of reusing historical commercial terms." });
+    return;
+  }
+
+  const currentPackage = resolveCurrentCatalogPackage(currentCatalog, requestedPackage);
+  if (!currentPackage) {
+    showRebookContext({ tone: "warn", message: "That previous service is retired, unavailable, or no longer has current bookable pricing. Choose a current service below; Rosie will not silently substitute another service." });
+    return;
+  }
+
   waitForCurrentPackage(requestedPackage, (control) => {
     if (!control) {
-      showRebookContext({ tone: "warn", message: "That previous service is no longer available to repeat. Choose a current service below; Rosie will not silently substitute another service." });
+      showRebookContext({ tone: "warn", message: "The current catalog recognizes the service, but the live booking control is not available. Choose a current service below; Rosie will not silently substitute another service." });
       return;
     }
 
     control.click();
     optionallyPrefillSingleGarageVehicle(data);
     const vehicleMessage = Array.isArray(data.vehicles) && data.vehicles.length > 1
-      ? "Choose the correct saved Garage vehicle before continuing. Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority."
-      : "Only the previous service choice is being reused. Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority.";
-    showRebookContext({ packageCode: requestedPackage, priorDate: requestedDate, message: vehicleMessage });
-    publishRebookEvent({ package_code: requestedPackage, prior_service_date: requestedDate, vehicle_count: Array.isArray(data.vehicles) ? data.vehicles.length : 0 });
+      ? "The service was verified against the current catalog. Choose the correct saved Garage vehicle before continuing. Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority."
+      : "The service was verified against the current catalog. Only the service choice is being reused. Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority.";
+    showRebookContext({ packageCode: requestedPackage, packageName: String(currentPackage.name || "").trim(), priorDate: requestedDate, message: vehicleMessage });
+    publishRebookEvent({ package_code: requestedPackage, prior_service_date: requestedDate, vehicle_count: Array.isArray(data.vehicles) ? data.vehicles.length : 0, current_catalog_verified: true });
   });
 }
 

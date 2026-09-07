@@ -1,8 +1,16 @@
 # Rosie Dazzlers — Forward Build Roadmap 356–377
 
-**Planning baseline:** Production-GREEN Build 355 at `0df31eacb53ac76e98f4cce07989285b309ef8c8`.
+**Planning baseline:** Build 356 is source/Development GREEN and promoted to synchronized `dev`/`main` at exact SHA `6ab62823c9b995bb8a9968bd1d9ba7ed15573961`. The live site is responding on the promoted boundary, while exact Production runtime SHA identity is not currently exposed by a separate repo workflow or public build-identity endpoint.
 
-This is a durable forward plan, not a statement that the listed work is already implemented. The current operational handoff and execution queue remain `AI_PROJECT_HANDOFF.md` and `AUTONOMOUS_RELEASE_QUEUE.md`.
+**Current active build:** Build 357 — Rebook Catalog & Pricing Revalidation.
+
+This is a durable forward plan, not a statement that every listed build is already implemented. The current operational handoff and execution queue remain `AI_PROJECT_HANDOFF.md` and `AUTONOMOUS_RELEASE_QUEUE.md`.
+
+## Progress
+
+- **Build 356 — implemented, Development GREEN, promoted to `main`.** Safe rebook now starts from canonical completed-service history, re-authenticates historical package/date against the signed-in customer, enters the current `/book` shell, and carries no stale commercial/payment/customer state.
+- **Build 357 — active.** Historical service choice must additionally resolve through the current public catalog/pricing authority before current booking controls are selected.
+- **Builds 358–377 — queued** in the sequence below.
 
 ## Sequence
 
@@ -83,3 +91,4 @@ Prove the end-to-end business path from anonymous acquisition through booking, p
 - Keep dormant modules event-driven; do not add background polling without a real operational need.
 - Preserve one meaningful H1 per indexable public page.
 - Historical service/quote data may provide context, but current catalog, pricing, availability, payment and booking rules remain authoritative.
+- When exact Production runtime SHA identity is not exposed, report the evidence gap explicitly instead of inferring Production GREEN from source promotion alone.
