@@ -57,7 +57,7 @@ function appendRebookAction(card, row, source = "history") {
   const action = document.createElement("a");
   action.className = "btn small primary";
   action.dataset.build285RebookAction = "true";
-  action.dataset.build356SafeRebookAction = "true";
+  action.setAttribute("data-build356-safe-rebook-action", "true");
   action.href = href;
   action.textContent = "Book this service again";
   const actions = document.createElement("p");
