@@ -48,6 +48,7 @@ require(api, "System Gate is read-only", "POST remains fail-closed")
 
 require(page, "I.T. Readiness & Release Control", "I.T. shell exposes release control as the first-class workspace")
 require(page, "Opening I.T. runs no readiness test", "opening I.T. starts no diagnostic automatically")
+require(page, "Run read-only readiness gate", "readiness proof requires explicit operator initiation")
 require(page, "GitHub exact-SHA gates", "I.T. shell links to the external exact-SHA authority")
 require(page, "Secret values are never returned to the browser", "I.T. shell states the secret boundary")
 require(page, "Production business-data mutation", "I.T. shell states the Production mutation boundary")
@@ -55,7 +56,6 @@ require(page, "data-build=\"353\"", "I.T. shell carries the current build marker
 forbid(page, "setInterval(", "I.T. shell has no polling interval")
 
 require(client, "/api/admin/system_gate", "client uses the canonical System Gate endpoint")
-require(client, "Run read-only readiness gate", "client retains explicit operator initiation") if False else None
 require(client, "github_ci_authority", "client renders the exact-SHA CI authority statement")
 require(client, "production_business_data_mutation", "client renders the Production mutation state")
 require(client, "corrective_action", "client renders diagnostic correction guidance")
