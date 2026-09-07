@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for booking completion + rebooking lifecycle after Build 336 convergence."""
+"""Fail-closed source authority for booking completion, rebooking and customer service-history convergence through Build 354."""
 from pathlib import Path
 import subprocess
 import sys
@@ -17,6 +17,7 @@ BOOKING_HELPER = ROOT / "assets" / "booking-hours.js"
 JOB_ACTION = ROOT / "functions" / "api" / "detailer" / "job_action.js"
 VEHICLE_HISTORY = ROOT / "functions" / "api" / "_lib" / "customer-vehicle-service-history.js"
 VEHICLE_HISTORY_TEST = ROOT / "scripts" / "customer_vehicle_service_history_test.mjs"
+CLIENT_DASHBOARD = ROOT / "functions" / "api" / "client" / "dashboard.js"
 WORKFLOW = ROOT / ".github" / "workflows" / "development-source-gate.yml"
 errors = []
 
@@ -118,6 +119,7 @@ planner = require(PLANNER, [
 job_action = require(JOB_ACTION, [
     "case 'complete':",
     "patch.job_status='completed'",
+    'patch.detailing_completed_at=now',
     'syncCompletedBookingVehicleHistory({ env, booking: updatedBooking })',
     'event.payload.vehicle_service_history_sync',
     'vehicle_service_history_sync:vehicleServiceHistorySync',
@@ -135,6 +137,18 @@ vehicle_history = require(VEHICLE_HISTORY, [
     'next_service_mileage_km',
     'auto_schedule_opt_in',
 ], "completed-service vehicle history helper")
+
+client_dashboard = require(CLIENT_DASHBOARD, [
+    'customer_vehicle_id,detailing_completed_at&customer_email=eq.${encodeURIComponent(email)}',
+    'const serviceHistory = buildCustomerServiceHistory(Array.isArray(bookings) ? bookings : [], vehicles);',
+    'function buildCustomerServiceHistory(bookings, vehicles)',
+    'String(row?.job_status || "").trim().toLowerCase() !== "completed" && !row?.detailing_completed_at',
+    'const canonicalVehicle = row.customer_vehicle_id ? byVehicleId.get(String(row.customer_vehicle_id)) || null : null;',
+    'const key = `${String(row.id || "")}:${String(completedAt || "")}`;',
+    'history.sort((a, b) => timestampValue(b.completed_at) - timestampValue(a.completed_at)',
+    'service_history: serviceHistory',
+    'reviews: [], service_history: []',
+], "Build 354 customer dashboard service history")
 
 require(WORKFLOW, [
     'functions/_middleware.js',
@@ -190,7 +204,15 @@ for heuristic in ['vehicle_make', 'vehicle_model', 'vehicle_plate']:
     if heuristic in vehicle_history:
         errors.append(f"completion vehicle-history helper contains forbidden identity heuristic: {heuristic}")
 
-for path in (JOB_ACTION, VEHICLE_HISTORY):
+for mutation in ['method: "PATCH"', 'method: "PUT"', 'method: "DELETE"']:
+    if mutation in client_dashboard:
+        errors.append(f"Build 354 customer service-history dashboard contains forbidden mutation primitive: {mutation}")
+if '&customer_email=eq.${encodeURIComponent(email)}' not in client_dashboard:
+    errors.append("Build 354 booking/service-history read is not scoped to the authenticated customer email")
+if 'customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}' not in client_dashboard:
+    errors.append("Build 354 canonical vehicle read is not scoped to the authenticated customer profile")
+
+for path in (JOB_ACTION, VEHICLE_HISTORY, CLIENT_DASHBOARD):
     proc = subprocess.run(["node", "--check", str(path.relative_to(ROOT))], cwd=ROOT, text=True, capture_output=True)
     if proc.returncode:
         errors.append(f"JavaScript syntax failed for {path.relative_to(ROOT)}: " + (proc.stdout + proc.stderr).strip())
@@ -202,7 +224,7 @@ else:
     if proc.returncode:
         errors.append("completed-service vehicle history behavior test failed: " + (proc.stdout + proc.stderr).strip())
 
-for build_number in (326, 334):
+for build_number in (326, 334, 354):
     migrations = list(ROOT.glob(f"**/*{build_number}*.sql"))
     if migrations:
         errors.append(f"Build {build_number} must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
@@ -222,4 +244,6 @@ print("- rebooking still carries only package and vehicle-size hints into the un
 print("- retained /booking-planner owns established checkout and funnel telemetry")
 print("- authoritative staff completion synchronizes only same-profile durable saved-vehicle service facts")
 print("- completed-service mileage cannot regress and staff scheduling/planning fields remain untouched")
-print("- no completion/retention database migration is present")
+print("- Build 354 exposes read-only, deduplicated completed-service history linked to canonical customer vehicles")
+print("- Build 354 service history remains scoped to the authenticated customer and introduces no mutation path")
+print("- no completion/retention/service-history database migration is present")
