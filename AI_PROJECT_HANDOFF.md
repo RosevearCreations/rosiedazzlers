@@ -13,7 +13,7 @@ This file is the living operational authority for restarting work. Git history a
 
 ## Why this release is active
 
-Staff profile authority is now resilient and centralized, but an Administrator still needs one explicit view explaining effective module access. Build 351 adds that view without creating another permission system: each staff/module result is derived from the existing role ceiling, normalized profile grant, global runtime switch, profile active state and shared module resolver.
+Staff profile authority is now resilient and centralized, but an Administrator still needs one explicit view explaining effective module access. The current release adds that view without creating another permission system: each staff/module result is derived from the existing role ceiling, normalized profile grant, global runtime switch, profile active state and shared module resolver.
 
 ## Operating contract
 
@@ -32,11 +32,11 @@ Staff profile authority is now resilient and centralized, but an Administrator s
 ## Durable authorities
 
 - `admin-staff.html` — Staff workspace and matrix markup.
-- `assets/admin-staff-v309.js` — Staff UI plus Build 351 effective-access matrix runtime.
+- `assets/admin-staff-v309.js` — Staff UI plus current effective-access matrix runtime.
 - `assets/app-core/module-resolver.js` — shared role/profile/runtime access resolver.
 - `functions/api/admin/module_flags.js` — global runtime module-switch authority.
 - `scripts/admin_ui_audit.py` — protected Admin plus Staff/matrix source guard.
-- `.github/workflows/staff-access-matrix-authority.yml` — focused Build 351 matrix authority gate.
+- `.github/workflows/staff-access-matrix-authority.yml` — focused matrix authority gate.
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment and protected-route HTTP acceptance.
 
@@ -45,7 +45,7 @@ Staff profile authority is now resilient and centralized, but an Administrator s
 1. Require the documentation-synchronized feature SHA to pass Current Source Gate and Staff Access Matrix Authority plus retained focused authorities.
 2. Fast-forward `dev` only if it still descends cleanly from accepted Development SHA `1b0a77b5fb6775ddc791e721a0335306f3b0aa18`.
 3. Require Current Source Gate, Staff Access Matrix Authority, Staff API Authority and Cloudflare Development Acceptance on the exact promoted `dev` SHA.
-4. Call Build 351 GREEN for Development only after those checks pass.
+4. Call the active release GREEN for Development only after those checks pass.
 5. Keep `main` unchanged unless Production promotion is explicitly authorized.
 
 ## Next sequential scope
