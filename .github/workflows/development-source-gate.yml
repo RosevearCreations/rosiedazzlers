@@ -62,6 +62,9 @@ jobs:
           node --check functions/api/_lib/crm-operational-work-queue.js
           node --check functions/api/admin/customer_crm_work_queue.js
           node --check scripts/crm_operational_work_queue_test.mjs
+          node --check functions/api/_lib/booking-rebooking-funnel.js
+          node --check functions/api/admin/booking_rebooking_funnel.js
+          node --check scripts/booking_rebooking_funnel_test.mjs
           node --check functions/api/admin/_middleware.js
           node --check assets/client-auth.js
           node --check assets/booking-hours.js
@@ -114,6 +117,7 @@ jobs:
           python -m py_compile scripts/booking_completion_retention_check.py
           python -m py_compile scripts/customer_retention_dashboard_check.py
           python -m py_compile scripts/crm_operational_work_queue_check.py
+          python -m py_compile scripts/booking_rebooking_funnel_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/admin_protected_http_smoke.sh
@@ -180,6 +184,11 @@ jobs:
           python scripts/crm_operational_work_queue_check.py
           node scripts/crm_operational_work_queue_test.mjs
 
+      - name: Validate booking and rebooking funnel analytics authority
+        run: |
+          python scripts/booking_rebooking_funnel_check.py
+          node scripts/booking_rebooking_funnel_test.mjs
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -218,6 +227,7 @@ jobs:
             echo "- Booking completion/retention authority: PASS"
             echo "- Customer-retention dashboard authority: PASS"
             echo "- CRM operational work queue authority: PASS"
+            echo "- Booking/rebooking funnel analytics authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
