@@ -4,6 +4,7 @@
 // Build 325: fail-open loader for booking wizard responsive/focus UX.
 // Build 326: measure verified rebooking entry/prefill without storing customer or payment data.
 // Build 336: the proven wizard now runs at /booking-planner inside the unified /book shell.
+// Build 356: bridge retained authenticated rebook verification into the current unified /book shell.
 (function attachRosieBookingHours(globalScope){
   async function loadStatus(date){
     const qs = date ? `?date=${encodeURIComponent(date)}` : '';
@@ -67,6 +68,19 @@
     check();
   }
 
+  function loadBuild356SafeRebookHandoff(){
+    if (canonicalPath() !== '/book') return;
+    const query = new URLSearchParams(location.search);
+    if (!String(query.get('rebook_package') || '').trim() || !String(query.get('rebook_date') || '').trim()) return;
+    if (document.querySelector('script[data-build356-safe-rebook]')) return;
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = '/assets/customer-rebook-v285.js?v=20260907build356';
+    script.dataset.build356SafeRebook = 'true';
+    script.onerror = () => console.warn('Safe rebook verification could not be loaded. Choose a current service below.');
+    document.head.appendChild(script);
+  }
+
   function loadBuild325WizardUX(){
     if (canonicalPath() !== '/booking-planner') return;
     if (document.querySelector('script[data-build325-booking-wizard-ux]')) return;
@@ -100,6 +114,7 @@
 
   function boot(){
     render(document);
+    loadBuild356SafeRebookHandoff();
     loadBuild325WizardUX();
     loadBuild282UseCaseEntry();
     measureBuild326RebookPrefill();

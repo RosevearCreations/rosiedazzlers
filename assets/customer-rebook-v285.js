@@ -1,8 +1,9 @@
-// Build 285 — authenticated customer-history to current-booking rebook handoff.
+// Build 285 retained authority + Build 356 successor compatibility.
 // This layer carries only prior package/date evidence. It never carries old slot,
-// vehicle size, price, add-ons, deposit or payment state into a new booking.
-const normalizedPath = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
-const params = new URLSearchParams(location.search);
+// vehicle size, price, add-ons, deposit, payment state, customer identity or booking state.
+const hasLocation = typeof location !== "undefined";
+const normalizedPath = hasLocation ? (String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/") : "/";
+const params = new URLSearchParams(hasLocation ? location.search : "");
 const DASHBOARD_API = "/api/client/dashboard";
 const REJECTED_STATUS = /cancel|refund|failed|declin|void/i;
 
@@ -11,16 +12,16 @@ function localTodayIso() {
   return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 }
 
-function cleanPackage(value) {
+export function cleanPackage(value) {
   return String(value || "").trim().slice(0, 120);
 }
 
-function cleanDate(value) {
+export function cleanDate(value) {
   const date = String(value || "").slice(0, 10);
   return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : "";
 }
 
-function isRepeatableBooking(row) {
+export function isRepeatableBooking(row) {
   const packageCode = cleanPackage(row?.package_code);
   const serviceDate = cleanDate(row?.service_date);
   const status = `${row?.status || ""} ${row?.job_status || ""}`;
@@ -38,36 +39,58 @@ async function loadAuthenticatedDashboard() {
   }
 }
 
-function rebookHref(row) {
+export function rebookHref(row) {
+  const packageCode = cleanPackage(row?.package_code);
+  const serviceDate = cleanDate(row?.service_date);
+  if (!packageCode || !serviceDate) return "";
   const query = new URLSearchParams({
-    rebook_package: cleanPackage(row.package_code),
-    rebook_date: cleanDate(row.service_date)
+    rebook_package: packageCode,
+    rebook_date: serviceDate
   });
   return `/book?${query.toString()}`;
+}
+
+function appendRebookAction(card, row, source = "history") {
+  if (!card || !row || !isRepeatableBooking(row) || card.querySelector("[data-build285-rebook-action]")) return;
+  const href = rebookHref(row);
+  if (!href) return;
+  const action = document.createElement("a");
+  action.className = "btn small primary";
+  action.dataset.build285RebookAction = "true";
+  action.dataset.build356SafeRebookAction = "true";
+  action.href = href;
+  action.textContent = "Book this service again";
+  const actions = document.createElement("p");
+  actions.dataset.build285Rebook = source;
+  actions.dataset.build356SafeRebook = source;
+  actions.appendChild(action);
+  card.appendChild(actions);
 }
 
 function installAccountHistoryActions(data, attempt = 0) {
   const host = document.querySelector("#bookingHistory");
   if (!host) return;
+
+  const serviceRows = Array.isArray(data?.service_history) ? data.service_history : [];
+  const completedCards = [...host.querySelectorAll("[data-build355-completed-service]")];
+  const expectsCanonicalHistory = !!document.querySelector('script[src*="my-account-v355.js"]');
+
+  if (expectsCanonicalHistory && serviceRows.length && !completedCards.length && attempt < 50) {
+    setTimeout(() => installAccountHistoryActions(data, attempt + 1), 100);
+    return;
+  }
+
+  if (completedCards.length) {
+    completedCards.forEach((card, index) => appendRebookAction(card, serviceRows[index], "service-history"));
+    return;
+  }
+
   const cards = [...host.querySelectorAll(":scope > article.card")];
   if (!cards.length && data.bookings.length && attempt < 50) {
     setTimeout(() => installAccountHistoryActions(data, attempt + 1), 100);
     return;
   }
-
-  cards.forEach((card, index) => {
-    const row = data.bookings[index];
-    if (!row || !isRepeatableBooking(row) || card.querySelector("[data-build285-rebook-action]")) return;
-    const action = document.createElement("a");
-    action.className = "btn small primary";
-    action.dataset.build285RebookAction = "true";
-    action.href = rebookHref(row);
-    action.textContent = "Book this service again";
-    const actions = document.createElement("p");
-    actions.dataset.build285Rebook = "history";
-    actions.appendChild(action);
-    card.appendChild(actions);
-  });
+  cards.forEach((card, index) => appendRebookAction(card, data.bookings[index], "history"));
 }
 
 async function installAccountHistoryHandoff() {
@@ -85,8 +108,8 @@ function publishRebookEvent(payload = {}) {
 }
 
 function findCurrentPackageControl(packageCode) {
-  return [...document.querySelectorAll("[data-package-suggest],[data-package]")].find((node) =>
-    String(node.getAttribute("data-package-suggest") || node.getAttribute("data-package") || "") === packageCode
+  return [...document.querySelectorAll("[data-choose-package],[data-package-suggest],[data-package]")].find((node) =>
+    String(node.getAttribute("data-choose-package") || node.getAttribute("data-package-suggest") || node.getAttribute("data-package") || "") === packageCode
   ) || null;
 }
 
@@ -102,6 +125,7 @@ function showRebookContext({ packageCode = "", priorDate = "", tone = "ok", mess
   if (!panel) {
     panel = document.createElement("div");
     panel.dataset.build285RebookContext = "true";
+    panel.dataset.build356SafeRebookContext = "true";
     panel.className = "notice";
     const anchor = rebookContextAnchor();
     if (!anchor) return null;

@@ -47,7 +47,7 @@
 (function loadBuild285CustomerRebook() {
   const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
   if (path !== "/my-account" || document.querySelector('script[data-build285-customer-rebook]')) return;
-  const script = document.createElement("script"); script.type = "module"; script.src = "/assets/customer-rebook-v285.js"; script.dataset.build285CustomerRebook = "true"; document.head.appendChild(script);
+  const script = document.createElement("script"); script.type = "module"; script.src = "/assets/customer-rebook-v285.js?v=20260907build356"; script.dataset.build285CustomerRebook = "true"; document.head.appendChild(script);
 })();
 (function loadBuild286CustomerReview() {
   const path = String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";

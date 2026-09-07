@@ -1,32 +1,30 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records only current actionable work. Completed implementation history belongs in Git history and release summaries.
+This queue records only current actionable work. Completed implementation history belongs in Git history and release summaries. The durable forward sequence is recorded in `FORWARD_BUILD_ROADMAP_356_377.md`.
 
 ## Accepted checkpoint
 
-Development `dev` and Production `main` were synchronized at **Build 354 — Customer + Vehicle + Service History Convergence** exact SHA `c48646ffe807fce9d85c7448e7bb6436420fcd67` before the current release began.
+Development `dev` and Production `main` are synchronized at **Build 355 — My Account Completed Service History Convergence** exact SHA `0df31eacb53ac76e98f4cce07989285b309ef8c8` before the current release begins.
 
-## Active — Build 355
+## Active — Build 356
 
-Scope: **My Account Completed Service History Convergence**.
+Scope: **Safe Rebook From Service History**.
 
-Preserve the accepted My Account runtime, separate current/upcoming bookings from completed services, render completed work only from the authenticated `service_history` dashboard contract, show canonical saved-vehicle identity where available, and use the latest completed service only as non-authoritative maintenance context.
+Expose a customer-safe rebook action from the canonical completed-service presentation while reusing the retained authenticated rebook verification authority and the current unified booking shell.
 
 ### Acceptance checklist
 
-- `functions/api/client/dashboard.js` remains the single authenticated customer dashboard/service-history read authority.
-- The current release creates no service-history table, duplicate service-history endpoint or maintenance scheduler.
-- `assets/my-account-v296.js` remains the accepted underlying My Account runtime.
-- `assets/my-account-v355.js` observes the retained dashboard request and must not issue a second `/api/client/dashboard` fetch.
-- Current/upcoming booking cards exclude completed bookings and preserve progress access.
-- Completed-service cards consume `service_history` rather than rebuilding completed history from generic bookings in the browser.
-- Canonical saved-vehicle name/year/make/model is shown when available, with a safe vehicle-size fallback when no saved vehicle link exists.
-- The latest completed service may be shown in Maintenance Interest as historical context only.
-- No due date, cadence, pricing, discount, priority, appointment, subscription or recurring billing is inferred from history.
-- No polling/background loop is introduced.
-- Focused behavior proof covers completed/current separation, canonical vehicle labeling and maintenance-history context.
-- The cumulative completion/retention authority fails closed if the adapter bypasses the retained dashboard or introduces a mutation path.
-- No database migration, historical backfill or Production business-data mutation is introduced.
+- Completed-service cards continue to consume authenticated `service_history`; no second service-history table or endpoint is created.
+- The rebook action is offered only when a usable historical `package_code` and `service_date` exist.
+- The handoff carries only `rebook_package` and `rebook_date` verification evidence.
+- Historical price, deposit, payment state, appointment/slot, add-ons, customer identity/contact fields, booking state and private notes are not carried into the new booking.
+- `/book` re-authenticates the requested package/date pair against the signed-in customer's current dashboard history.
+- The current unified booking shell recognizes the retained rebook authority and its current `data-choose-package` service control.
+- Retired/unavailable services fail closed; no silent substitution occurs.
+- Current vehicle choice/size, availability, add-ons, price, deposit and payment rules remain authoritative.
+- The build creates no parallel booking engine, checkout path, availability authority or provider transaction.
+- No database migration or Production business-data mutation is introduced.
+- Focused behavior proof covers safe query construction, canonical completed-service integration, current unified booking-shell bridging and forbidden stale-state fields.
 - Exact `dev` SHA must pass Current Source and all retained focused gates.
 - Exact `dev` SHA must pass Cloudflare Development deployment/HTTP acceptance before Production promotion.
 - Production promotion is by fast-forwarding `main` to the same exact Development-GREEN SHA only.
@@ -34,7 +32,7 @@ Preserve the accepted My Account runtime, separate current/upcoming bookings fro
 
 ## Next
 
-After the current release is GREEN on Production, re-read current source and continue the customer retention sequence. Prefer a bounded rebook-from-history improvement only if it reuses the existing verified rebooking authority and carries no stale price, customer identity, schedule, payment or booking-state data.
+After the current release is Production GREEN, continue with current-catalog/current-pricing revalidation for rebooking as defined in the durable forward roadmap.
 
 ## Continuing rule
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for booking completion, rebooking and customer service-history convergence through Build 355."""
+"""Fail-closed source authority for booking completion, rebooking and customer service-history convergence through Build 356."""
 from pathlib import Path
 import subprocess
 import sys
@@ -21,6 +21,9 @@ CLIENT_DASHBOARD = ROOT / "functions" / "api" / "client" / "dashboard.js"
 MY_ACCOUNT_PAGE = ROOT / "my-account.html"
 MY_ACCOUNT_HISTORY = ROOT / "assets" / "my-account-v355.js"
 MY_ACCOUNT_HISTORY_TEST = ROOT / "scripts" / "my_account_service_history_test.mjs"
+CUSTOMER_REBOOK = ROOT / "assets" / "customer-rebook-v285.js"
+CLIENT_AUTH = ROOT / "assets" / "client-auth.js"
+SAFE_REBOOK_TEST = ROOT / "scripts" / "my_account_safe_rebook_test.mjs"
 WORKFLOW = ROOT / ".github" / "workflows" / "development-source-gate.yml"
 errors = []
 
@@ -102,6 +105,11 @@ helper = require(BOOKING_HELPER, [
     "has_package_prefill",
     "has_size_prefill",
     "canonicalPath() !== '/booking-planner'",
+    'loadBuild356SafeRebookHandoff()',
+    "canonicalPath() !== '/book'",
+    "query.get('rebook_package')",
+    "query.get('rebook_date')",
+    '/assets/customer-rebook-v285.js?v=20260907build356',
 ], "booking helper")
 
 public_book = require(PUBLIC_BOOK, [
@@ -171,6 +179,28 @@ my_account_history = require(MY_ACCOUNT_HISTORY, [
     'Linked to your saved vehicle.',
     'This history does not create a due date, fixed cadence, price, discount, priority, appointment, subscription or recurring billing.',
 ], "Build 355 My Account service-history adapter")
+
+customer_rebook = require(CUSTOMER_REBOOK, [
+    'Build 356 successor compatibility',
+    'DASHBOARD_API = "/api/client/dashboard"',
+    'credentials: "include"',
+    'data-build355-completed-service',
+    'data.service_history',
+    'data-build356-safe-rebook-action',
+    'rebook_package',
+    'rebook_date',
+    'Book this service again',
+    '[data-choose-package],[data-package-suggest],[data-package]',
+    'That request does not match a repeatable booking in your authenticated history',
+    'will not silently substitute another service',
+    "Current vehicle size, availability, add-ons, price, deposit and payment rules are recalculated from today's booking authority",
+], "Build 356 safe service-history rebook handoff")
+
+client_auth = require(CLIENT_AUTH, [
+    'loadBuild285CustomerRebook',
+    '/assets/customer-rebook-v285.js?v=20260907build356',
+    'data-build285-customer-rebook',
+], "Build 356 My Account rebook bootstrap")
 
 require(WORKFLOW, [
     'functions/_middleware.js',
@@ -244,7 +274,17 @@ if '/assets/my-account-v296.js' not in my_account_history:
 if '/assets/my-account-v296.js' in my_account_page:
     errors.append("Build 355 My Account page must enter through the Build 355 adapter, not load Build 296 twice")
 
-for path in (JOB_ACTION, VEHICLE_HISTORY, CLIENT_DASHBOARD, MY_ACCOUNT_HISTORY):
+for unsafe_token in [
+    'rebook_price', 'rebook_deposit', 'rebook_slot', 'rebook_customer', 'rebook_email',
+    'rebook_phone', 'rebook_booking_id', 'rebook_payment', 'rebook_addons', 'rebook_status'
+]:
+    if unsafe_token in customer_rebook:
+        errors.append(f"Build 356 safe rebook handoff contains forbidden stale-state query token: {unsafe_token}")
+for forbidden_authority in ['/api/checkout', '/api/availability', 'STRIPE_SECRET', 'PAYPAL_CLIENT_SECRET', 'auto_schedule_opt_in']:
+    if forbidden_authority in customer_rebook:
+        errors.append(f"Build 356 rebook helper contains forbidden authority: {forbidden_authority}")
+
+for path in (JOB_ACTION, VEHICLE_HISTORY, CLIENT_DASHBOARD, MY_ACCOUNT_HISTORY, CUSTOMER_REBOOK, BOOKING_HELPER, CLIENT_AUTH):
     proc = subprocess.run(["node", "--check", str(path.relative_to(ROOT))], cwd=ROOT, text=True, capture_output=True)
     if proc.returncode:
         errors.append(f"JavaScript syntax failed for {path.relative_to(ROOT)}: " + (proc.stdout + proc.stderr).strip())
@@ -263,7 +303,14 @@ else:
     if proc.returncode:
         errors.append("Build 355 My Account service-history behavior test failed: " + (proc.stdout + proc.stderr).strip())
 
-for build_number in (326, 334, 354, 355):
+if not SAFE_REBOOK_TEST.exists():
+    errors.append("missing scripts/my_account_safe_rebook_test.mjs")
+else:
+    proc = subprocess.run(["node", str(SAFE_REBOOK_TEST)], cwd=ROOT, text=True, capture_output=True)
+    if proc.returncode:
+        errors.append("Build 356 My Account safe-rebook behavior test failed: " + (proc.stdout + proc.stderr).strip())
+
+for build_number in (326, 334, 354, 355, 356):
     migrations = list(ROOT.glob(f"**/*{build_number}*.sql"))
     if migrations:
         errors.append(f"Build {build_number} must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
@@ -279,7 +326,7 @@ print("- /complete remains the token-protected customer job-signoff surface")
 print("- Stripe/PayPal payment returns remain isolated on /booking-confirmed")
 print("- Stripe browser confirmation remains verify-only; signed webhook settlement remains authoritative")
 print("- PayPal confirmation remains capture-order-authoritative and replay safe")
-print("- rebooking still carries only package and vehicle-size hints into the unified /book shell")
+print("- rebooking still carries only bounded historical hints into current booking authority")
 print("- retained /booking-planner owns established checkout and funnel telemetry")
 print("- authoritative staff completion synchronizes only same-profile durable saved-vehicle service facts")
 print("- completed-service mileage cannot regress and staff scheduling/planning fields remain untouched")
@@ -288,4 +335,7 @@ print("- Build 354 service history remains scoped to the authenticated customer 
 print("- Build 355 separates current/upcoming bookings from completed service history in My Account")
 print("- Build 355 consumes the existing authenticated dashboard read without a duplicate dashboard request")
 print("- Build 355 maintenance context is historical only and cannot create cadence, due dates, pricing or recurring billing")
-print("- no completion/retention/service-history database migration is present")
+print("- Build 356 rebook CTA is attached to canonical completed-service cards and carries only package/date verification evidence")
+print("- Build 356 re-authenticates historical package/date on /book and recognizes the current unified service selector")
+print("- Build 356 does not carry historical price, slot, payment, identity, add-ons or booking state")
+print("- no completion/retention/service-history/rebook database migration is present")
