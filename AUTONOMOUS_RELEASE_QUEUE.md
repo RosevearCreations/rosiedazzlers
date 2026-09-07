@@ -2,49 +2,45 @@
 
 This queue records only current actionable work. Completed implementation history belongs in Git history and release summaries.
 
-## Accepted Development checkpoint
+## Accepted checkpoint
 
-Build 351 is the prior accepted Development source checkpoint at exact SHA `2eb059b42d1097c1ebffa1bf6b1f9217dc9d9020`.
+Development `dev` and Production `main` were deliberately synchronized at **Build 352** exact SHA `db2829fdd8e2d3e0ff8d7c418ad7bec56dd8eede` before the current release began.
 
-Production `main` remains the deliberately promoted Build 349 package at exact SHA `48815644ed4f296345f995c73d71899b0c5a4fb8` and must remain unchanged unless a later Production promotion is explicitly authorized.
+## Active — Build 353
 
-## Active — Build 352
+Branch: `build353-it-readiness-release-control`
 
-Branch: `build352-daip-media-workflow-consolidation`
+Scope: **I.T. Readiness & Release Control**.
 
-Scope: **DAIP Media Workflow Consolidation**.
-
-Connect **Creative Project → Private Media Intake → Evidence Review → Content Package → Approved-Public Photo Studio Handoff** as one explicit governed flow. Reuse the existing DAIP and Photo Studio authorities instead of creating another upload, permission, storage, or publishing system.
+Extend the existing I.T. shell and canonical System Gate so an authorized operator can explicitly run one bounded readiness proof that identifies the current runtime branch/SHA, returns GREEN / AMBER / RED, classifies deployment/database/configuration/provider problems, and supplies a corrective action without exposing credentials or creating a second monitoring system.
 
 ### Acceptance checklist
 
-- A single read-only workflow model derives state from existing Creative Project, DAIP media, processing-job and content-package records.
-- DAIP App exposes the consolidated governed workflow as a first-class entry point.
-- Raw DAIP masters remain private and are never copied to a public destination by the current release.
-- Raw R2 object keys and raw URLs are excluded from the public-handoff manifest.
-- At least one uploaded private asset must be explicitly selected before handoff can become eligible.
-- At least one Creative Project session must be approved for story/content use.
-- Required before/after evidence must be present when the project is a transformation story.
-- Failed, blocked and dead-lettered media processing problems block public handoff.
-- Creative Project content-package status must be explicitly `approved`.
-- Project consent must be explicitly `approved_public`.
-- `public_publish_allowed` must be explicitly enabled on the Creative Project.
-- Every selected private asset must itself have `approved_public` consent.
-- Photo Studio remains the approved-public image/placement authority.
-- Passing the handoff gate only enables deliberate navigation to Photo Studio; it does not publish or assign anything automatically.
-- Loading/refreshing the workflow starts no media processing job.
-- No polling interval or automatic retry timer is introduced.
-- `scripts/daip_media_workflow_audit.py` protects the authority/privacy/runtime boundaries.
-- Focused **DAIP Media Workflow Authority** validates source syntax and convergence contracts.
-- No database migration, historical backfill, payment/provider transaction, or Production business-data mutation.
-- Feature branch must pass focused authority plus retained source/sanity gates before synchronizing `dev`.
-- Exact synchronized `dev` SHA must pass retained current-source/DAIP authority and Cloudflare Development acceptance before the current release closes.
-- Keep `main` unchanged unless Production promotion is explicitly authorized.
+- Existing `/app/it/` remains the canonical I.T. control/recovery workspace.
+- Existing `/api/admin/system_gate` remains the canonical bounded runtime proof.
+- Runtime branch and exact Cloudflare commit SHA are surfaced when available.
+- GitHub exact-SHA checks remain the release authority and are not fetched by runtime with a GitHub token.
+- Supabase proof is a minimal read only.
+- Public and private R2 proofs are bounded list reads only.
+- Stripe and PayPal configuration is represented by safe presence/mode state only.
+- Secret values are never returned to browser code.
+- Readiness state is GREEN / AMBER / RED with diagnostic category and corrective action.
+- Production business-data mutation is closed from the readiness endpoint.
+- Schema, R2, provider and deployment mutation are closed from the readiness endpoint.
+- Loading I.T. starts no readiness test or provider action automatically.
+- No polling/background readiness loop is introduced.
+- Existing module-switch and notification-test controls remain explicit and separate.
+- Focused **I.T. Readiness & Release Control Authority** validates source/security/runtime contracts.
+- No database migration, historical backfill or Production business-data mutation is introduced by the release.
+- Exact feature SHA must pass focused authority plus retained Current Source / Staff API / Staff Access / safety gates before synchronizing `dev`.
+- Exact synchronized `dev` SHA must pass Cloudflare Development deployment/HTTP acceptance before Production promotion.
+- Production promotion is authorized only by fast-forwarding `main` to the same exact Development-GREEN SHA.
+- Exact `main` SHA must pass Production Cloudflare deployment/checks before the release closes.
 
 ## Next
 
-Do not assign the next numbered release from stale roadmap text. After the current release is Development GREEN, re-read the current roadmap/execution authorities and choose the next bounded release from that live state.
+After the current release is GREEN on Production, re-read current source and begin the agreed Customer → Vehicle → Booking → Job → Completed Service → Maintenance-history convergence scope, extending existing identity/maintenance authorities rather than duplicating them.
 
 ## Continuing rule
 
-Never start the next Rosie Dazzlers release from stale Markdown. Verify `dev`, `main`, the prior accepted Development SHA and exact-SHA gates first. Database migrations remain a separate acceptance boundary from source promotion.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve exact tested SHAs through feature, Development and authorized Production promotion; keep database migrations as a separate acceptance boundary.
