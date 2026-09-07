@@ -4,29 +4,28 @@ This queue records only current actionable work. Completed implementation histor
 
 ## Accepted checkpoint
 
-**Build 357 — Rebook Catalog & Pricing Revalidation** is accepted at exact SHA `8c7b438bd12179a68c9be838992318eafe453a66`. Current Source and Cloudflare Development acceptance passed on that exact SHA, and `main` was fast-forwarded non-force to the same commit. `dev` and `main` are synchronized.
+**Build 358 — Per-Vehicle Service Timeline** is implemented and Development GREEN at runtime SHA `1a84273f28f01b477d4697b2035c1562dfd59dd8`. Current Source Gate #490 and Cloudflare Development Acceptance #167 passed on that exact SHA, all retained same-SHA workflows completed without failure, and `main` was fast-forwarded non-force to the same runtime commit.
 
-The live homepage and `/book` are responding after promotion. Exact Production runtime SHA identity remains unexposed by the current repo workflow/public runtime, so that evidence limitation remains explicit.
+The repository still exposes no separate Production exact-SHA acceptance workflow or public build-identity endpoint, so that evidence limitation remains explicit. Build 358 required no database migration and created no duplicate service-history authority or write path.
 
-## Next — Build 358
+## Next — Build 359
 
-Scope: **Per-Vehicle Service Timeline**.
+Scope: **Customer Retention Dashboard**.
 
-Present completed customer services grouped by canonical saved vehicle, using the existing authenticated dashboard/service-history authority. Do not create a second service-history ledger or heuristic vehicle-matching authority.
+Give Operations a customer-level retention view using existing customer, saved-vehicle, booking, completed-service, maintenance-interest and fleet-interest authorities. This should be an evidence-backed operational read model, not a duplicate CRM ledger or automated outreach engine.
 
 ### Acceptance checklist
 
-- Use canonical saved vehicle IDs from `customer_vehicles` and the existing customer-isolated dashboard path.
-- Consume the existing completed-service authority; no duplicate service-history table, migration or write path.
-- Group/timeline entries only when canonical vehicle linkage is known and belongs to the authenticated customer.
-- Ambiguous, missing or invalid vehicle linkage must fail closed rather than blending household vehicles.
-- Show customer-safe service facts only: service/package, completion date, canonical vehicle context, and approved public/customer evidence where already authorized.
-- Do not expose staff-private checklist rows, private notes, internal margins/costs, payment secrets or unrelated customer data.
-- Preserve deterministic descending chronology and stable deduplication.
-- Preserve the general completed-service history view while adding vehicle-specific navigation/presentation.
-- Keep rebook actions on eligible completed-service entries and preserve current-catalog/pricing revalidation.
-- No polling, scheduler, recurring billing, provider mutation or background loop.
-- Add focused regression proof for vehicle isolation, invalid-link fail-closed behavior, chronology, deduplication and existing response compatibility.
+- Reuse canonical customer identity and existing customer-scoped booking/service authorities.
+- Show evidence-backed first service, most recent completed service, completed-service count/repeat activity, saved-vehicle count and open/upcoming booking context.
+- Surface maintenance interest and fleet interest only when existing authoritative records support them.
+- Keep customer and vehicle linkage deterministic; no fuzzy household/customer merging.
+- Preserve server-authoritative Admin/Operations access and prevent customer data from leaking to public or unauthorized staff routes.
+- Do not expose payment secrets, staff-private notes, internal credentials or unrelated customer records.
+- Define retention indicators from source facts; do not fabricate lifecycle labels or infer outreach consent.
+- Keep the dashboard read-focused and on-demand/event-driven. No permanent polling, scheduler or automatic communications.
+- No duplicate CRM/customer-history ledger unless a later explicit business requirement proves one is necessary.
+- Add focused regression proof for authorization, customer isolation, completed-service metrics, vehicle counts, open bookings, maintenance/fleet indicators and empty-state behavior.
 - Exact `dev` SHA must pass Current Source and retained focused gates.
 - Exact `dev` SHA must pass Cloudflare Development deployment/HTTP acceptance before Production promotion.
 - Promote `main` only by non-force fast-forward to the exact same Development-GREEN SHA.

@@ -1,8 +1,8 @@
 # Rosie Dazzlers — Forward Build Roadmap 356–377
 
-**Planning baseline:** Builds 356 and 357 are implemented, Development GREEN, and promoted by non-force fast-forward to synchronized `dev`/`main`. The accepted Build 357 runtime SHA is `8c7b438bd12179a68c9be838992318eafe453a66`. The live homepage and `/book` are responding after promotion; exact Production runtime SHA identity is not currently exposed by a separate repository workflow or public build-identity endpoint.
+**Planning baseline:** Builds 356–358 are implemented, Development GREEN, and promoted by non-force fast-forward through the Build 358 runtime boundary. Build 358 runtime SHA `1a84273f28f01b477d4697b2035c1562dfd59dd8` passed Current Source Gate #490 and Cloudflare Development Acceptance #167. Exact Production runtime SHA identity is not currently exposed by a separate repository workflow or public build-identity endpoint.
 
-**Next build:** Build 358 — Per-Vehicle Service Timeline.
+**Next build:** Build 359 — Customer Retention Dashboard.
 
 This is the durable forward plan. The current operational handoff and execution queue remain `AI_PROJECT_HANDOFF.md` and `AUTONOMOUS_RELEASE_QUEUE.md`.
 
@@ -10,8 +10,9 @@ This is the durable forward plan. The current operational handoff and execution 
 
 - **Build 356 — complete.** Safe rebook starts from canonical completed-service history, re-authenticates historical package/date against the signed-in customer, enters the current `/book` shell, and carries no stale commercial/payment/customer state.
 - **Build 357 — complete.** Rebook additionally resolves the historical package through the current public pricing catalog before current booking controls can be selected. Missing, retired, disabled, unavailable or unpriced services fail closed without substitution.
-- **Build 358 — next.** Add a customer-safe per-vehicle completed-service timeline using canonical saved-vehicle identity and the existing service-history authority.
-- **Builds 359–377 — queued** in the sequence below.
+- **Build 358 — complete.** My Account now presents completed services by unique canonical saved vehicle while preserving general completed-service history. Unknown, conflicting, ambiguous and unlinked vehicle records fail closed from vehicle timelines; chronology and duplicate booking projections are deterministic.
+- **Build 359 — next.** Add an Operations-facing customer retention dashboard using existing customer, booking, service-history, vehicle, maintenance-interest and fleet-interest authorities.
+- **Builds 360–377 — queued** in the sequence below.
 
 ## Sequence
 
