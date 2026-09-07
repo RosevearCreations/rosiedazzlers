@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for booking completion, rebooking and customer service-history convergence through Build 354."""
+"""Fail-closed source authority for booking completion, rebooking and customer service-history convergence through Build 355."""
 from pathlib import Path
 import subprocess
 import sys
@@ -18,6 +18,9 @@ JOB_ACTION = ROOT / "functions" / "api" / "detailer" / "job_action.js"
 VEHICLE_HISTORY = ROOT / "functions" / "api" / "_lib" / "customer-vehicle-service-history.js"
 VEHICLE_HISTORY_TEST = ROOT / "scripts" / "customer_vehicle_service_history_test.mjs"
 CLIENT_DASHBOARD = ROOT / "functions" / "api" / "client" / "dashboard.js"
+MY_ACCOUNT_PAGE = ROOT / "my-account.html"
+MY_ACCOUNT_HISTORY = ROOT / "assets" / "my-account-v355.js"
+MY_ACCOUNT_HISTORY_TEST = ROOT / "scripts" / "my_account_service_history_test.mjs"
 WORKFLOW = ROOT / ".github" / "workflows" / "development-source-gate.yml"
 errors = []
 
@@ -150,6 +153,25 @@ client_dashboard = require(CLIENT_DASHBOARD, [
     'reviews: [], service_history: []',
 ], "Build 354 customer dashboard service history")
 
+my_account_page = require(MY_ACCOUNT_PAGE, [
+    'Booking activity & completed service history',
+    'Completed work is shown separately from the canonical customer service-history record',
+    '/assets/my-account-v355.js?v=20260907build355',
+], "Build 355 My Account page")
+
+my_account_history = require(MY_ACCOUNT_HISTORY, [
+    'import(\'/assets/my-account-v296.js\')',
+    'response.clone().json()',
+    "pathname === '/api/client/dashboard'",
+    'payload?.service_history',
+    'currentBookings: bookings.filter((row) => !bookingIsCompleted(row))',
+    'data-build355-current-booking',
+    'data-build355-completed-service',
+    'data-build355-service-history',
+    'Linked to your saved vehicle.',
+    'This history does not create a due date, fixed cadence, price, discount, priority, appointment, subscription or recurring billing.',
+], "Build 355 My Account service-history adapter")
+
 require(WORKFLOW, [
     'functions/_middleware.js',
     'functions/api/booking_confirmation.js',
@@ -212,7 +234,17 @@ if '&customer_email=eq.${encodeURIComponent(email)}' not in client_dashboard:
 if 'customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}' not in client_dashboard:
     errors.append("Build 354 canonical vehicle read is not scoped to the authenticated customer profile")
 
-for path in (JOB_ACTION, VEHICLE_HISTORY, CLIENT_DASHBOARD):
+for mutation in ['method: \'POST\'', 'method: \'PATCH\'', 'method: \'PUT\'', 'method: \'DELETE\'']:
+    if mutation in my_account_history:
+        errors.append(f"Build 355 service-history adapter contains forbidden new mutation primitive: {mutation}")
+if "fetch('/api/client/dashboard'" in my_account_history or 'fetch("/api/client/dashboard"' in my_account_history:
+    errors.append("Build 355 adapter must observe the retained My Account dashboard read instead of issuing a duplicate dashboard request")
+if '/assets/my-account-v296.js' not in my_account_history:
+    errors.append("Build 355 must retain the accepted Build 296 My Account runtime")
+if '/assets/my-account-v296.js' in my_account_page:
+    errors.append("Build 355 My Account page must enter through the Build 355 adapter, not load Build 296 twice")
+
+for path in (JOB_ACTION, VEHICLE_HISTORY, CLIENT_DASHBOARD, MY_ACCOUNT_HISTORY):
     proc = subprocess.run(["node", "--check", str(path.relative_to(ROOT))], cwd=ROOT, text=True, capture_output=True)
     if proc.returncode:
         errors.append(f"JavaScript syntax failed for {path.relative_to(ROOT)}: " + (proc.stdout + proc.stderr).strip())
@@ -224,7 +256,14 @@ else:
     if proc.returncode:
         errors.append("completed-service vehicle history behavior test failed: " + (proc.stdout + proc.stderr).strip())
 
-for build_number in (326, 334, 354):
+if not MY_ACCOUNT_HISTORY_TEST.exists():
+    errors.append("missing scripts/my_account_service_history_test.mjs")
+else:
+    proc = subprocess.run(["node", str(MY_ACCOUNT_HISTORY_TEST)], cwd=ROOT, text=True, capture_output=True)
+    if proc.returncode:
+        errors.append("Build 355 My Account service-history behavior test failed: " + (proc.stdout + proc.stderr).strip())
+
+for build_number in (326, 334, 354, 355):
     migrations = list(ROOT.glob(f"**/*{build_number}*.sql"))
     if migrations:
         errors.append(f"Build {build_number} must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
@@ -246,4 +285,7 @@ print("- authoritative staff completion synchronizes only same-profile durable s
 print("- completed-service mileage cannot regress and staff scheduling/planning fields remain untouched")
 print("- Build 354 exposes read-only, deduplicated completed-service history linked to canonical customer vehicles")
 print("- Build 354 service history remains scoped to the authenticated customer and introduces no mutation path")
+print("- Build 355 separates current/upcoming bookings from completed service history in My Account")
+print("- Build 355 consumes the existing authenticated dashboard read without a duplicate dashboard request")
+print("- Build 355 maintenance context is historical only and cannot create cadence, due dates, pricing or recurring billing")
 print("- no completion/retention/service-history database migration is present")
