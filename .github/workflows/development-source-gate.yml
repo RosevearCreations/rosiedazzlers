@@ -88,7 +88,6 @@ jobs:
           node --check functions/api/admin/production_readiness.js
           node --check assets/admin-booking-funnel-v324.js
           node --check functions/api/admin/booking_funnel_device.js
-          node --check scripts/prove-retention-dashboard.mjs
 
       - name: Check durable gate syntax
         run: |
@@ -110,6 +109,7 @@ jobs:
           python -m py_compile scripts/booking_funnel_device_check.py
           python -m py_compile scripts/booking_wizard_responsive_ux_check.py
           python -m py_compile scripts/booking_completion_retention_check.py
+          python -m py_compile scripts/customer_retention_dashboard_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/admin_protected_http_smoke.sh
@@ -168,8 +168,8 @@ jobs:
       - name: Validate booking completion and retention contracts
         run: python scripts/booking_completion_retention_check.py
 
-      - name: Prove Build 359 customer retention dashboard
-        run: node scripts/prove-retention-dashboard.mjs
+      - name: Validate customer retention dashboard authority
+        run: python scripts/customer_retention_dashboard_check.py
 
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
@@ -207,7 +207,7 @@ jobs:
             echo "- Booking funnel/device authority: PASS"
             echo "- Booking wizard responsive UX authority: PASS"
             echo "- Booking completion/retention authority: PASS"
-            echo "- Build 359 customer-retention dashboard proof: PASS"
+            echo "- Customer-retention dashboard authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
