@@ -5,53 +5,60 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- Prior fully accepted Development checkpoint: Staff API authority convergence at SHA `1b0a77b5fb6775ddc791e721a0335306f3b0aa18`.
-- Production `main` remains at SHA `48815644ed4f296345f995c73d71899b0c5a4fb8` unless a deliberate Production promotion is authorized.
-- Active work: **Build 351 — Staff Access Matrix**.
-- Active branch: `build351-staff-access-matrix`.
-- This release introduces **no database migration** and no business-data backfill.
+- Prior accepted Development checkpoint: **Build 351 — Staff Access Matrix** at exact SHA `2eb059b42d1097c1ebffa1bf6b1f9217dc9d9020`.
+- Production `main`: deliberate **Build 349** promotion at exact SHA `48815644ed4f296345f995c73d71899b0c5a4fb8`.
+- Active work: **Build 352 — DAIP Media Workflow Consolidation**.
+- Active branch: `build352-daip-media-workflow-consolidation`.
+- `main` must remain unchanged unless a later Production promotion is explicitly authorized.
+- Build 352 introduces **no database migration**, no historical backfill and no Production business-data mutation.
 
 ## Why this release is active
 
-Staff profile authority is now resilient and centralized, but an Administrator still needs one explicit view explaining effective module access. The current release adds that view without creating another permission system: each staff/module result is derived from the existing role ceiling, normalized profile grant, global runtime switch, profile active state and shared module resolver.
+Rosie already has separate mature authorities for Creative Projects, private DAIP media intake/review, content-package approval and approved-public Photo Studio management. Build 352 does not replace them. It converges their existing state into one explicit governed flow so we can see exactly why a project is or is not eligible to move from private evidence into deliberate approved-public image work.
+
+The canonical path is:
+
+**Creative Project → Private Media Intake → Evidence Review → Content Package → Approved-Public Photo Studio Handoff**
 
 ## Operating contract
 
-- `functions/api/_lib/staff-list-handler.js` remains the canonical Staff profile/list authority.
-- `assets/app-core/module-resolver.js` remains the canonical client-side role/profile/runtime resolver.
-- `/api/admin/module_flags` remains the lightweight global module-switch authority.
-- `admin-staff.html` and `assets/admin-staff-v309.js` render the read-only matrix from those authorities.
-- Every internal module cell shows role ceiling, profile grant, global switch and effective access.
-- Inactive staff profiles are shown as blocked.
-- Administrator / Owner remains full-authority across all seven internal modules and retained management capabilities.
-- Profile changes continue through Staff & Access; global switch changes continue through the I.T. module workspace.
-- The matrix performs one explicit module-switch snapshot read and introduces no polling or background timers.
-- The matrix loads no booking, inventory, finance, DAIP, analytics or other unrelated business dataset.
-- No customer, booking, payment, provider, schema or Production business-data mutation is introduced.
+- `creative_projects` remains the authority for project purpose, project consent, content-package status and explicit `public_publish_allowed` state.
+- Existing DAIP private-media APIs/tables remain the authority for raw uploads, story-evidence selection, asset consent and processing-job health.
+- Raw DAIP masters remain private. Build 352 does not copy raw media to public storage.
+- The Build 352 handoff manifest contains selected private asset IDs only; it contains no private R2 object keys or raw-media URLs.
+- Public handoff is blocked unless the content package is `approved`, project consent is `approved_public`, public publishing is explicitly enabled, required before/after evidence is ready, processing problems are resolved, and every selected asset has approved-public consent.
+- `admin-photo-studio.html` remains the authority for approved-public image metadata, upload/replacement and explicit website placement.
+- Becoming handoff-eligible does **not** upload, publish, assign or replace a public image. It only enables deliberate navigation to Photo Studio.
+- `functions/api/admin/daip_media_workflow.js` is read-only. Loading/refreshing it does not enqueue or start media processing.
+- The Build 352 workspace has no polling interval or background retry timer.
+- Existing private DAIP processing remains asleep unless an actual media job has already been explicitly created by its owning workflow.
 
 ## Durable authorities
 
-- `admin-staff.html` — Staff workspace and matrix markup.
-- `assets/admin-staff-v309.js` — Staff UI plus current effective-access matrix runtime.
-- `assets/app-core/module-resolver.js` — shared role/profile/runtime access resolver.
-- `functions/api/admin/module_flags.js` — global runtime module-switch authority.
-- `scripts/admin_ui_audit.py` — protected Admin plus Staff/matrix source guard.
-- `.github/workflows/staff-access-matrix-authority.yml` — focused matrix authority gate.
+- `admin-daip-media-workflow.html` — consolidated governed workflow/status workspace.
+- `functions/api/admin/daip_media_workflow.js` — bounded read-only workflow convergence model.
+- `admin-creative-projects.html` and Creative Project APIs — project/session/content-package authority.
+- `admin-daip-media.html` and existing DAIP media APIs — private raw-media intake/review/processing authority.
+- `admin-photo-studio.html` and existing Photo Studio APIs — approved-public image/placement authority.
+- `app/daip/index.html` — DAIP module entry point with explicit Build 352 workflow link.
+- `scripts/daip_media_workflow_audit.py` — privacy, consent, handoff and runtime source guard.
+- `.github/workflows/daip-media-workflow-authority.yml` — focused Build 352 authority gate.
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment and protected-route HTTP acceptance.
 
 ## Release procedure
 
-1. Require the documentation-synchronized feature SHA to pass Current Source Gate and Staff Access Matrix Authority plus retained focused authorities.
-2. Fast-forward `dev` only if it still descends cleanly from accepted Development SHA `1b0a77b5fb6775ddc791e721a0335306f3b0aa18`.
-3. Require Current Source Gate, Staff Access Matrix Authority, Staff API Authority and Cloudflare Development Acceptance on the exact promoted `dev` SHA.
-4. Call the active release GREEN for Development only after those checks pass.
-5. Keep `main` unchanged unless Production promotion is explicitly authorized.
+1. Require the documentation-synchronized Build 352 feature SHA to pass **DAIP Media Workflow Authority** plus retained Current Source/repository sanity authorities.
+2. Confirm `dev` still equals or cleanly descends from accepted Build 351 SHA `2eb059b42d1097c1ebffa1bf6b1f9217dc9d9020` and has not moved independently.
+3. Fast-forward/synchronize `dev` only from the exact green Build 352 feature SHA.
+4. Require the focused DAIP authority, retained Current Source authority and Cloudflare Development acceptance on that exact synchronized `dev` SHA.
+5. Call Build 352 Development GREEN only after those exact-SHA checks pass.
+6. Keep `main` unchanged unless Production promotion is explicitly authorized.
 
 ## Next sequential scope
 
-**Build 352 — DAIP Media Workflow Consolidation.** Connect Creative Project → Media Intake → Review → Content Package → Approved Public Asset as one explicit governed flow. Preserve private raw-media boundaries, require deliberate approval before public promotion, reuse existing DAIP/Photo Studio authorities, and avoid background processing unless a job actually requires it.
+Do not invent Build 353 from stale roadmap prose. After Build 352 is Development GREEN, re-read the current roadmap/execution authorities and choose the next bounded release from that live state.
 
 ## Restart point
 
-If interrupted, verify `build351-staff-access-matrix`, compare it to accepted Development SHA `1b0a77b5fb6775ddc791e721a0335306f3b0aa18`, and inspect the first failing matrix/source authority. Do not duplicate the module role-ceiling map inside Staff UI, do not introduce polling, and do not broaden a staff profile merely to make the matrix appear green.
+If interrupted, start from `build352-daip-media-workflow-consolidation`, compare it against accepted Development SHA `2eb059b42d1097c1ebffa1bf6b1f9217dc9d9020`, and inspect **DAIP Media Workflow Authority** first. Do not create a second media library, second permission model, raw-public copy path, auto-publisher, polling loop, or background processing trigger to make the workflow appear green.
