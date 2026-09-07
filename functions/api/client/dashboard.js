@@ -34,7 +34,7 @@ async function handle(context) {
     const tierCode = current.customer_profile.tier_code || current.customer_profile.customer_tier_code || null;
     const [profileRes, bookRes, giftRes, redeemRes, vehicleRes, vehicleMediaRes, tierRes, reviewRes] = await Promise.all([
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=*&id=eq.${encodeURIComponent(current.customer_profile.id)}&limit=1`, { headers }).catch(() => null),
-      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,created_at,service_date,start_slot,status,job_status,package_code,vehicle_size,price_total_cents,deposit_cents,progress_enabled,progress_token,customer_tier_code,assigned_staff_name,vehicle_mileage_km&customer_email=eq.${encodeURIComponent(email)}&order=created_at.desc`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,created_at,service_date,start_slot,status,job_status,package_code,vehicle_size,price_total_cents,deposit_cents,progress_enabled,progress_token,customer_tier_code,assigned_staff_name,vehicle_mileage_km,customer_vehicle_id,detailing_completed_at&customer_email=eq.${encodeURIComponent(email)}&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?select=id,code,sku,type,status,remaining_cents,face_value_cents,expires_at,currency,package_code,vehicle_size,created_at,purchaser_email,recipient_email&or=(purchaser_email.eq.${encodeURIComponent(email)},recipient_email.eq.${encodeURIComponent(email)})&order=created_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificate_redemptions?select=id,gift_certificate_id,booking_id,amount_cents,created_at,notes,gift_certificate:gift_certificates(code,purchaser_email,recipient_email),booking:bookings(service_date,package_code,status)&order=created_at.desc`, { headers }).catch(() => null),
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_vehicles?select=*&customer_profile_id=eq.${encodeURIComponent(current.customer_profile.id)}&order=display_order.asc,created_at.desc`, { headers }).catch(() => null),
@@ -64,17 +64,77 @@ async function handle(context) {
     const reviews = customerSafeReviews(reviewRows);
     const giftSummary = summarizeGiftCertificates(Array.isArray(gifts) ? gifts : [], Array.isArray(redemptions) ? redemptions : []);
     const vehiclesWithMedia = vehicles.map((v) => ({ ...v, media: Array.isArray(vehicleMedia) ? vehicleMedia.filter((m) => String(m.vehicle_id) === String(v.id)) : [] }));
+    const serviceHistory = buildCustomerServiceHistory(Array.isArray(bookings) ? bookings : [], vehicles);
 
     return dashboardJson({ ok: true, authenticated: true, customer: profile, tier, bookings: Array.isArray(bookings) ? bookings : [], vehicles: vehiclesWithMedia,
       vehicle_media: Array.isArray(vehicleMedia) ? vehicleMedia : [], gift_certificates: Array.isArray(gifts) ? gifts : [], redemptions: Array.isArray(redemptions) ? redemptions : [],
-      gift_summary: giftSummary, reviews }, 200, rotatedCookie);
+      gift_summary: giftSummary, reviews, service_history: serviceHistory }, 200, rotatedCookie);
   } catch (err) {
     return dashboardJson(emptyDashboardPayload({ code: "dashboard_unavailable", error: "Customer dashboard is temporarily unavailable.", detail: safeErrorMessage(err) }));
   }
 }
 
+function buildCustomerServiceHistory(bookings, vehicles) {
+  const byVehicleId = new Map((Array.isArray(vehicles) ? vehicles : []).map((vehicle) => [String(vehicle.id), vehicle]));
+  const seen = new Set();
+  const history = [];
+
+  for (const row of Array.isArray(bookings) ? bookings : []) {
+    if (String(row?.job_status || "").trim().toLowerCase() !== "completed" && !row?.detailing_completed_at) continue;
+
+    const completedAt = row.detailing_completed_at || row.service_date || row.created_at || null;
+    const key = `${String(row.id || "")}:${String(completedAt || "")}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    const canonicalVehicle = row.customer_vehicle_id ? byVehicleId.get(String(row.customer_vehicle_id)) || null : null;
+    history.push({
+      booking_id: row.id || null,
+      completed_at: completedAt,
+      service_date: row.service_date || null,
+      package_code: row.package_code || null,
+      price_total_cents: finiteNumberOrNull(row.price_total_cents),
+      vehicle_mileage_km: finiteNumberOrNull(row.vehicle_mileage_km),
+      vehicle_id: canonicalVehicle?.id || null,
+      vehicle: canonicalVehicle ? {
+        id: canonicalVehicle.id,
+        vehicle_name: canonicalVehicle.vehicle_name || null,
+        model_year: canonicalVehicle.model_year || null,
+        make: canonicalVehicle.make || null,
+        model: canonicalVehicle.model || null,
+        vehicle_size: canonicalVehicle.vehicle_size || row.vehicle_size || null,
+        body_style: canonicalVehicle.body_style || null,
+        color: canonicalVehicle.color || null
+      } : {
+        id: null,
+        vehicle_name: null,
+        model_year: null,
+        make: null,
+        model: null,
+        vehicle_size: row.vehicle_size || null,
+        body_style: null,
+        color: null
+      }
+    });
+  }
+
+  history.sort((a, b) => timestampValue(b.completed_at) - timestampValue(a.completed_at) || String(b.booking_id || "").localeCompare(String(a.booking_id || "")));
+  return history;
+}
+
+function timestampValue(value) {
+  const parsed = value ? Date.parse(value) : NaN;
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function finiteNumberOrNull(value) {
+  if (value === null || value === undefined || String(value).trim() === "") return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
 function emptyDashboardPayload({ code = "not_authenticated", error = "Sign in required to view the customer dashboard.", detail = null } = {}) {
-  return { ok: false, authenticated: false, signed_out: code === "not_authenticated", code, error, detail, customer: null, tier: null, bookings: [], vehicles: [], vehicle_media: [], gift_certificates: [], redemptions: [], gift_summary: summarizeGiftCertificates([], []), reviews: [] };
+  return { ok: false, authenticated: false, signed_out: code === "not_authenticated", code, error, detail, customer: null, tier: null, bookings: [], vehicles: [], vehicle_media: [], gift_certificates: [], redemptions: [], gift_summary: summarizeGiftCertificates([], []), reviews: [], service_history: [] };
 }
 function dashboardJson(data, status = 200, setCookie = null) {
   let headersOut = new Headers({ "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
