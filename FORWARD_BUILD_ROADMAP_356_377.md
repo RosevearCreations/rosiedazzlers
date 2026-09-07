@@ -1,16 +1,17 @@
 # Rosie Dazzlers — Forward Build Roadmap 356–377
 
-**Planning baseline:** Build 356 is source/Development GREEN and promoted to synchronized `dev`/`main` at exact SHA `6ab62823c9b995bb8a9968bd1d9ba7ed15573961`. The live site is responding on the promoted boundary, while exact Production runtime SHA identity is not currently exposed by a separate repo workflow or public build-identity endpoint.
+**Planning baseline:** Builds 356 and 357 are implemented, Development GREEN, and promoted by non-force fast-forward to synchronized `dev`/`main`. The accepted Build 357 runtime SHA is `8c7b438bd12179a68c9be838992318eafe453a66`. The live homepage and `/book` are responding after promotion; exact Production runtime SHA identity is not currently exposed by a separate repository workflow or public build-identity endpoint.
 
-**Current active build:** Build 357 — Rebook Catalog & Pricing Revalidation.
+**Next build:** Build 358 — Per-Vehicle Service Timeline.
 
-This is a durable forward plan, not a statement that every listed build is already implemented. The current operational handoff and execution queue remain `AI_PROJECT_HANDOFF.md` and `AUTONOMOUS_RELEASE_QUEUE.md`.
+This is the durable forward plan. The current operational handoff and execution queue remain `AI_PROJECT_HANDOFF.md` and `AUTONOMOUS_RELEASE_QUEUE.md`.
 
 ## Progress
 
-- **Build 356 — implemented, Development GREEN, promoted to `main`.** Safe rebook now starts from canonical completed-service history, re-authenticates historical package/date against the signed-in customer, enters the current `/book` shell, and carries no stale commercial/payment/customer state.
-- **Build 357 — active.** Historical service choice must additionally resolve through the current public catalog/pricing authority before current booking controls are selected.
-- **Builds 358–377 — queued** in the sequence below.
+- **Build 356 — complete.** Safe rebook starts from canonical completed-service history, re-authenticates historical package/date against the signed-in customer, enters the current `/book` shell, and carries no stale commercial/payment/customer state.
+- **Build 357 — complete.** Rebook additionally resolves the historical package through the current public pricing catalog before current booking controls can be selected. Missing, retired, disabled, unavailable or unpriced services fail closed without substitution.
+- **Build 358 — next.** Add a customer-safe per-vehicle completed-service timeline using canonical saved-vehicle identity and the existing service-history authority.
+- **Builds 359–377 — queued** in the sequence below.
 
 ## Sequence
 
