@@ -1,0 +1,65 @@
+name: I.T. Readiness & Release Control Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build353-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-it-readiness-release-control-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  it-readiness-release-control-authority:
+    name: Validate I.T. readiness and release control
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate I.T. source syntax
+        run: |
+          node --check functions/api/admin/system_gate.js
+          node --check apps/it/it-app.js
+          python -m py_compile scripts/it_readiness_release_control_audit.py
+
+      - name: Validate I.T. readiness and release-control contracts
+        run: python scripts/it_readiness_release_control_audit.py
+
+      - name: Record I.T. readiness and release-control authority
+        run: |
+          {
+            echo "### Build 353 I.T. Readiness & Release Control Authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Runtime branch and exact Cloudflare commit identity are surfaced when available: PASS"
+            echo "- GREEN / AMBER / RED readiness plus categorized corrective guidance is explicit: PASS"
+            echo "- Supabase, public R2, private DAIP R2 and payment configuration remain bounded proofs: PASS"
+            echo "- GitHub exact-SHA checks remain external release authority; runtime requires no GitHub token: PASS"
+            echo "- Secret values are not returned to the browser: PASS"
+            echo "- Readiness endpoint cannot mutate schema, business data, R2, providers or deployments: PASS"
+            echo "- No polling/background readiness loop is introduced: PASS"
+            echo "- No database migration or Production business-data mutation is introduced by this release."
+          } >> "$GITHUB_STEP_SUMMARY"
