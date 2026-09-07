@@ -1,0 +1,64 @@
+name: Staff Access Matrix Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build351-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-staff-access-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  staff-access-matrix-authority:
+    name: Validate Staff access matrix
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate matrix runtime syntax
+        run: |
+          node --check assets/admin-staff-v309.js
+          node --check assets/app-core/module-resolver.js
+          node --check functions/api/admin/module_flags.js
+
+      - name: Validate Staff matrix authority contracts
+        run: python scripts/admin_ui_audit.py
+
+      - name: Record Staff access matrix authority
+        run: |
+          {
+            echo "### Build 351 Staff Access Matrix Authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Canonical Staff profile response remains the staff-data authority: PASS"
+            echo "- Shared role/profile/runtime resolver calculates module access: PASS"
+            echo "- Global module availability comes from the existing bounded module-flags authority: PASS"
+            echo "- Matrix is read-only and introduces no polling: PASS"
+            echo "- No unrelated business-data endpoint is introduced: PASS"
+            echo "- Administrator / Owner full-module authority remains enforced: PASS"
+            echo "- No schema/database migration or business-data backfill is introduced."
+          } >> "$GITHUB_STEP_SUMMARY"
