@@ -36,10 +36,15 @@ export function decideReviewRequestLifecycle({ request = null, hasReview = false
   }
 
   if (hasReview) {
-    if (current === "sent" || current === "completed" || Boolean(request.sent_at)) {
-      return { action: current === "completed" ? "preserve" : "update", status: "completed", reason: "sent_request_has_review_evidence" };
+    const delivered = current === "sent" || Boolean(request.sent_at);
+    if (delivered) {
+      return {
+        action: current === "completed" ? "preserve" : "update",
+        status: "completed",
+        reason: "sent_request_has_review_evidence"
+      };
     }
-    return { action: current === "suppressed" ? "preserve" : "update", status: "suppressed", reason: "review_exists_before_send" };
+    return { action: "update", status: "suppressed", reason: "review_exists_before_send" };
   }
 
   if (current === "sent" || Boolean(request.sent_at)) {
@@ -62,6 +67,6 @@ export function decideReviewRequestLifecycle({ request = null, hasReview = false
 
 export function shouldSuppressDuplicateReviewRequest(row) {
   const status = normalizeReviewRequestStatus(row?.status);
-  if (PRESERVED_TERMINAL_STATUSES.has(status) || status === "completed" || status === "sent" || Boolean(row?.sent_at)) return false;
-  return UNSENT_ACTIVE_STATUSES.has(status) || !status;
+  if (PRESERVED_TERMINAL_STATUSES.has(status) || status === "sent" || Boolean(row?.sent_at)) return false;
+  return UNSENT_ACTIVE_STATUSES.has(status) || status === "completed" || !status;
 }
