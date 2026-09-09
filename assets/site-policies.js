@@ -1,5 +1,5 @@
 // assets/site-policies.js
-// Build 339: public policy copy renderer plus booking-page enhancement hooks.
+// Build 366: public policy renderer plus booking-page enhancement hooks.
 (function attachRosieSitePolicies(globalScope) {
   const FALLBACK_POLICIES = {
     deposit: 'Deposits may be requested to hold a quote-led appointment. Final balance, add-ons, travel, and heavy-condition adjustments are confirmed before the appointment is finalized.',
@@ -80,6 +80,16 @@
     }
   }
 
+  async function wireBookingServiceRecommendation() {
+    if (!isBookingPage()) return;
+    try {
+      const module = await import('/assets/booking-service-recommendation.js?v=20260909build366');
+      await module.wireBookingServiceRecommendation?.(document);
+    } catch (error) {
+      console.warn('Service recommendation enhancement unavailable; normal booking controls remain usable.', error);
+    }
+  }
+
   async function wireBookingVehicleFormUX() {
     if (!isBookingPlannerPage()) return;
     try {
@@ -95,6 +105,7 @@
     applyPolicies(document);
     wireBookingVehicleSelector();
     wireBookingSpecialtyCards();
+    wireBookingServiceRecommendation();
     wireBookingVehicleFormUX();
   });
   globalScope.RosieSitePolicies = { loadPolicies, applyPolicies, get policies() { return state.policies; } };
