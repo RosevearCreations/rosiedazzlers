@@ -1,5 +1,5 @@
 import { requireStaffAccess, serviceHeaders, json, isUuid } from "../_lib/staff-auth.js";
-import { queueCustomerLiveAlert } from "../_lib/live-interaction-alerts.js";
+import { queueReviewRequestInvitation } from "../_lib/review-request-dispatch.js";
 import {
   bookingHasCompletionEvidence,
   chooseCanonicalReviewRequest,
@@ -82,7 +82,8 @@ export async function onRequestPost({ request, env }) {
           replay: true,
           already_reviewed: true,
           review,
-          request: null
+          request: null,
+          dispatch_queue: null
         })
       );
     }
@@ -105,14 +106,12 @@ export async function onRequestPost({ request, env }) {
       const saved = shouldPatch ? await patchQueueRow(env, canonical.id, patch) : canonical;
       await updateBookingBlockedReason(env, bookingId, review ? null : blockers.join(" ") || null);
 
+      let dispatchQueue = null;
       if (!review && decision.status === "queued" && previousStatus !== "queued") {
-        await queueCustomerLiveAlert({
-          env,
-          bookingId,
-          eventType: "review_request_queued",
-          message: "Thank you for choosing Rosie Dazzlers. A review invitation will be sent after your completed service.",
-          payload: { review_request_id: saved?.id || canonical.id || null }
-        }).catch(() => null);
+        dispatchQueue = await queueReviewRequestInvitation({ env, booking, request: saved }).catch((err) => ({
+          ok: false,
+          error: err?.message || "Could not queue review invitation notification."
+        }));
       }
 
       return withCors(
@@ -126,7 +125,8 @@ export async function onRequestPost({ request, env }) {
           already_reviewed: Boolean(review),
           lifecycle_reason: decision.reason,
           review,
-          request: saved
+          request: saved,
+          dispatch_queue: dispatchQueue
         })
       );
     }
@@ -155,14 +155,12 @@ export async function onRequestPost({ request, env }) {
     const saved = (await res.json().catch(() => []))?.[0] || row;
 
     await updateBookingBlockedReason(env, bookingId, blockers.join(" ") || null);
+    let dispatchQueue = null;
     if (!blockers.length) {
-      await queueCustomerLiveAlert({
-        env,
-        bookingId,
-        eventType: "review_request_queued",
-        message: "Thank you for choosing Rosie Dazzlers. A review invitation will be sent after your completed service.",
-        payload: { review_request_id: saved.id || null }
-      }).catch(() => null);
+      dispatchQueue = await queueReviewRequestInvitation({ env, booking, request: saved }).catch((err) => ({
+        ok: false,
+        error: err?.message || "Could not queue review invitation notification."
+      }));
     }
 
     return withCors(
@@ -175,7 +173,8 @@ export async function onRequestPost({ request, env }) {
         replay: false,
         already_reviewed: false,
         lifecycle_reason: blockers.length ? "eligibility_blocked" : "eligible",
-        request: saved
+        request: saved,
+        dispatch_queue: dispatchQueue
       })
     );
   } catch (err) {
