@@ -73,7 +73,7 @@ summary "- Production branch: \`${production_branch}\`"
 exact_id=""
 exact_status=""
 for attempt in $(seq 1 30); do
-  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=50" > "$TMP_DIR/deployments.json"
+  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/deployments.json"
   jq -e '.success == true' "$TMP_DIR/deployments.json" >/dev/null || fail "Cloudflare deployment listing failed." 13
   exact_id=$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
     [.result[]? | select(
