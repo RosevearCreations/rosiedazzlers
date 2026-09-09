@@ -1,0 +1,46 @@
+name: Review Proof Local SEO Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build365-review-proof-local-seo-loop
+    paths:
+      - 'functions/api/admin/review_proof_local_seo_loop.js'
+      - 'scripts/build365_review_proof_local_seo_check.py'
+      - '.github/workflows/review-proof-local-seo-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check Build 365 JavaScript syntax
+        run: node --check functions/api/admin/review_proof_local_seo_loop.js
+      - name: Check Build 365 authority script syntax
+        run: python -m py_compile scripts/build365_review_proof_local_seo_check.py
+      - name: Run Build 365 source authority
+        run: python scripts/build365_review_proof_local_seo_check.py
+      - name: Build 365 authority summary
+        run: |
+          {
+            echo '### Review -> Proof -> Local SEO Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Approved/public review evidence only: PASS'
+            echo '- Genuine completed-booking evidence required: PASS'
+            echo '- Published privacy-approved non-sample proof only: PASS'
+            echo '- Town + service proof-gap output: PASS'
+            echo '- Read-only; no auto-publication or schema mutation: PASS'
+          } >> "$GITHUB_STEP_SUMMARY"
