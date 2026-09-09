@@ -1,0 +1,59 @@
+name: Review Request Dispatch Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build364-review-request-dispatch-authority
+    paths:
+      - 'functions/api/_lib/notification-hooks.js'
+      - 'functions/api/_lib/review-request-dispatch.js'
+      - 'functions/api/admin/review_request_queue_safe.js'
+      - 'functions/api/notifications_process.js'
+      - 'scripts/build364_review_request_dispatch_test.mjs'
+      - 'scripts/build364_review_request_dispatch_check.py'
+      - '.github/workflows/review-request-dispatch-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check review dispatch JavaScript syntax
+        run: |
+          node --check functions/api/_lib/notification-hooks.js
+          node --check functions/api/_lib/review-request-dispatch.js
+          node --check functions/api/admin/review_request_queue_safe.js
+          node --check functions/api/notifications_process.js
+          node --check scripts/build364_review_request_dispatch_test.mjs
+      - name: Check durable review dispatch gate syntax
+        run: python -m py_compile scripts/build364_review_request_dispatch_check.py
+      - name: Run review dispatch regression cases
+        run: node scripts/build364_review_request_dispatch_test.mjs
+      - name: Run review dispatch source authority
+        run: python scripts/build364_review_request_dispatch_check.py
+      - name: Review dispatch authority summary
+        run: |
+          {
+            echo '### Review Request Dispatch Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Completed-job review notification path: PASS'
+            echo '- Review send_after scheduling authority: PASS'
+            echo '- Dispatch-time cancellation/suppression gate: PASS'
+            echo '- Provider-success delivery evidence: PASS'
+            echo '- Review lifecycle sent reconciliation: PASS'
+            echo '- Failed provider attempts remain unsent/retryable: PASS'
+            echo '- No schema mutation introduced by Build 364.'
+          } >> "$GITHUB_STEP_SUMMARY"
