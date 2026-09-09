@@ -1,0 +1,66 @@
+name: Build 362 Quote Booking Acceptance
+
+on:
+  push:
+    branches:
+      - dev
+      - build362-quote-booking-acceptance
+    paths:
+      - 'functions/api/_lib/quote-booking-terms.js'
+      - 'functions/api/_lib/quote-booking-authority.js'
+      - 'functions/api/quote_proposal_respond.js'
+      - 'functions/api/admin/quote_proposal_deliver.js'
+      - 'functions/api/admin/quote_proposal_drafts_list.js'
+      - 'functions/api/admin/lead_conversion_price_reconcile.js'
+      - 'functions/api/admin/lead_conversion_create_booking.js'
+      - 'sql/2026-09-09_build362_quote_booking_acceptance.sql'
+      - 'scripts/build362_quote_booking_acceptance_test.mjs'
+      - 'scripts/build362_quote_booking_acceptance_check.py'
+      - '.github/workflows/build362-quote-booking-acceptance.yml'
+      - '.github/workflows/development-source-gate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check Build 362 JavaScript syntax
+        run: |
+          node --check functions/api/_lib/quote-booking-terms.js
+          node --check functions/api/_lib/quote-booking-authority.js
+          node --check functions/api/quote_proposal_respond.js
+          node --check functions/api/admin/quote_proposal_deliver.js
+          node --check functions/api/admin/quote_proposal_drafts_list.js
+          node --check functions/api/admin/lead_conversion_price_reconcile.js
+          node --check functions/api/admin/lead_conversion_create_booking.js
+          node --check scripts/build362_quote_booking_acceptance_test.mjs
+      - name: Check durable Build 362 gate syntax
+        run: python -m py_compile scripts/build362_quote_booking_acceptance_check.py
+      - name: Run Build 362 regression cases
+        run: node scripts/build362_quote_booking_acceptance_test.mjs
+      - name: Run Build 362 source authority
+        run: python scripts/build362_quote_booking_acceptance_check.py
+      - name: Build 362 summary
+        run: |
+          {
+            echo '### Build 362 Quote-to-Booking Acceptance'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Structured commercial terms + explicit expiry: PASS'
+            echo '- Immutable customer acceptance + replay handling: PASS'
+            echo '- Current catalog price revalidation: PASS'
+            echo '- Current blocked/conflicting slot revalidation: PASS'
+            echo '- Database source-id duplicate protection: PASS'
+            echo '- Six regression cases: PASS'
+            echo '- Development database migration and runtime acceptance remain separate gates.'
+          } >> "$GITHUB_STEP_SUMMARY"
