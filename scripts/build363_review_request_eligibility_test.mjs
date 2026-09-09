@@ -50,6 +50,10 @@ assert.equal(bookingHasCompletionEvidence({ ...completedBooking, completed_at: n
   const result = decideReviewRequestLifecycle({ request: { status: 'queued', sent_at: null }, hasReview: true, blocked: false });
   assert.equal(result.status, 'suppressed');
   assert.equal(result.reason, 'review_exists_before_send');
+
+  const falseCompleted = decideReviewRequestLifecycle({ request: { status: 'completed', sent_at: null }, hasReview: true, blocked: false });
+  assert.equal(falseCompleted.status, 'suppressed');
+  assert.equal(falseCompleted.reason, 'review_exists_before_send');
 }
 
 // 7. review evidence after real delivery completes the sent lifecycle.
@@ -57,6 +61,10 @@ assert.equal(bookingHasCompletionEvidence({ ...completedBooking, completed_at: n
   const result = decideReviewRequestLifecycle({ request: { status: 'sent', sent_at: '2026-09-09T19:00:00.000Z' }, hasReview: true, blocked: false });
   assert.equal(result.status, 'completed');
   assert.equal(result.reason, 'sent_request_has_review_evidence');
+
+  const alreadyCompleted = decideReviewRequestLifecycle({ request: { status: 'completed', sent_at: '2026-09-09T19:00:00.000Z' }, hasReview: true, blocked: false });
+  assert.equal(alreadyCompleted.status, 'completed');
+  assert.equal(alreadyCompleted.action, 'preserve');
 }
 
 // 8. a false completed state without review evidence is repaired instead of trusted.
@@ -79,6 +87,7 @@ for (const status of ['suppressed', 'cancelled']) {
 // 10. historical duplicate rows are neutralized only when they are unsent.
 assert.equal(shouldSuppressDuplicateReviewRequest({ status: 'queued', sent_at: null }), true);
 assert.equal(shouldSuppressDuplicateReviewRequest({ status: 'blocked', sent_at: null }), true);
+assert.equal(shouldSuppressDuplicateReviewRequest({ status: 'completed', sent_at: null }), true);
 assert.equal(shouldSuppressDuplicateReviewRequest({ status: 'sent', sent_at: '2026-09-09T19:00:00.000Z' }), false);
 assert.equal(shouldSuppressDuplicateReviewRequest({ status: 'cancelled', sent_at: null }), false);
 
