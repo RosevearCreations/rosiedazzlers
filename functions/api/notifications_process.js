@@ -3,6 +3,10 @@ import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "./_l
 import { requireActionAccess } from "./_lib/action-permissions.js";
 import { loadFeatureFlags } from "./_lib/app-settings.js";
 import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js";
+import {
+  loadReviewRequestDispatchGate,
+  reconcileReviewRequestSent
+} from "./_lib/review-request-dispatch.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -36,6 +40,38 @@ export async function onRequestPost(context) {
     const results = [];
 
     for (const item of rows) {
+      const reviewGate = await loadReviewRequestDispatchGate({ env, event: item });
+      if (reviewGate.applies && !reviewGate.decision.dispatch) {
+        if (reviewGate.decision.reason === "not_due") {
+          await patchEvent(env, item.id, {
+            status: "queued",
+            last_error: null,
+            next_attempt_at: reviewGate.decision.next_attempt_at
+          });
+          results.push({
+            id: item.id,
+            ok: true,
+            status: "deferred",
+            reason: "review_request_not_due",
+            next_attempt_at: reviewGate.decision.next_attempt_at
+          });
+        } else {
+          await patchEvent(env, item.id, {
+            status: "cancelled",
+            last_error: null,
+            processed_at: new Date().toISOString(),
+            next_attempt_at: null
+          });
+          results.push({
+            id: item.id,
+            ok: true,
+            status: "cancelled",
+            reason: `review_request_${reviewGate.decision.reason}`
+          });
+        }
+        continue;
+      }
+
       const currentAttempts = Number(item.attempt_count || 0);
       const maxAttempts = Number(item.max_attempts || 5);
       const channel = String(item.channel || "").trim().toLowerCase();
@@ -67,14 +103,33 @@ export async function onRequestPost(context) {
       const dispatch = await dispatchNotificationThroughProvider(env, item);
 
       if (dispatch.ok) {
+        const deliveredAt = new Date().toISOString();
         await patchEvent(env, item.id, {
           status: "sent",
+          sent_at: deliveredAt,
           attempt_count: currentAttempts + 1,
           last_error: null,
-          processed_at: new Date().toISOString(),
+          processed_at: deliveredAt,
           next_attempt_at: null
         });
-        results.push({ id: item.id, ok: true, status: "sent", provider: dispatch.provider_response || null });
+
+        let reviewReconciliation = { ok: true, skipped: true, reason: "not_review_request" };
+        try {
+          reviewReconciliation = await reconcileReviewRequestSent({ env, event: item, sentAt: deliveredAt });
+        } catch (err) {
+          reviewReconciliation = {
+            ok: false,
+            error: err?.message || "Review request delivery reconciliation failed."
+          };
+        }
+
+        results.push({
+          id: item.id,
+          ok: true,
+          status: "sent",
+          provider: dispatch.provider_response || null,
+          review_request_reconciliation: reviewReconciliation
+        });
       } else {
         const nextAttemptAt = new Date(Date.now() + computeBackoffMinutes(currentAttempts) * 60000).toISOString();
         await patchEvent(env, item.id, {
