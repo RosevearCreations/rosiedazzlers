@@ -1,0 +1,69 @@
+name: Cloudflare Feature Preview Acceptance
+
+on:
+  push:
+    branches:
+      - 'build**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-cloudflare-feature-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CF_PROJECT_NAME: rosiedazzlers
+
+jobs:
+  verify-feature-preview:
+    name: Verify exact feature preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_FEATURE_BRANCH: ${{ github.ref_name }}
+    steps:
+      - name: Checkout exact feature commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run cumulative source authority
+        run: python scripts/release_check.py
+
+      - name: Validate public SEO metadata
+        run: python scripts/seo_metadata_check.py
+
+      - name: Validate release hygiene
+        run: python scripts/release_hygiene_check.py
+
+      - name: Validate feature-preview helper syntax
+        run: |
+          bash -n scripts/cloudflare_pages_feature_preview.sh
+          bash -n scripts/development_http_smoke.sh
+          bash -n scripts/contextual_proof_http_smoke.sh
+
+      - name: Confirm exact feature SHA reached successful Cloudflare Pages preview
+        shell: bash
+        run: bash scripts/cloudflare_pages_feature_preview.sh
+
+      - name: Record feature-preview boundary
+        shell: bash
+        run: |
+          {
+            echo '### Feature-preview promotion boundary'
+            echo "- Exact GitHub SHA: \`${GITHUB_SHA}\`"
+            echo "- Feature branch: \`${GITHUB_REF_NAME}\`"
+            echo '- Cumulative source, SEO and release-hygiene authorities: PASS'
+            echo '- Exact Cloudflare preview deployment and immutable static smoke: PASS'
+            echo '- This workflow performs no Production source promotion, database mutation or business-data mutation.'
+          } >> "$GITHUB_STEP_SUMMARY"
