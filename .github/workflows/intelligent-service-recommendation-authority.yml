@@ -1,0 +1,60 @@
+name: Intelligent Service Recommendation Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build366-intelligent-service-recommendation
+    paths:
+      - 'assets/service-recommendation.js'
+      - 'assets/booking-service-recommendation.js'
+      - 'assets/site-policies.js'
+      - 'book.html'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'scripts/build366_intelligent_service_recommendation_test.mjs'
+      - 'scripts/build366_intelligent_service_recommendation_check.py'
+      - '.github/workflows/intelligent-service-recommendation-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check recommendation JavaScript syntax
+        run: |
+          node --check assets/service-recommendation.js
+          node --check assets/booking-service-recommendation.js
+          node --check assets/site-policies.js
+          node --check scripts/build366_intelligent_service_recommendation_test.mjs
+      - name: Check source authority gate syntax
+        run: python -m py_compile scripts/build366_intelligent_service_recommendation_check.py
+      - name: Run recommendation regression cases
+        run: node scripts/build366_intelligent_service_recommendation_test.mjs
+      - name: Run recommendation source authority
+        run: python scripts/build366_intelligent_service_recommendation_check.py
+      - name: Intelligent recommendation authority summary
+        run: |
+          {
+            echo '### Intelligent Service Recommendation Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Existing catalogue/package authority reused: PASS'
+            echo '- Deterministic recommendation scoring: PASS'
+            echo '- Vehicle condition and customer-goal inputs: PASS'
+            echo '- Unknown input / empty catalogue fail-safe: PASS'
+            echo '- No automatic booking package selection: PASS'
+            echo '- Lower-price semantic tie-break / no price-driven upsell: PASS'
+            echo '- Booking remains usable if enhancement fails: PASS'
+            echo '- No schema, pricing, checkout, payment, or Production business-data mutation.'
+          } >> "$GITHUB_STEP_SUMMARY"
