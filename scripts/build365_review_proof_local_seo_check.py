@@ -5,9 +5,9 @@ text = p.read_text(encoding='utf-8')
 
 required = [
     'customer_reviews?select=*',
-    'status === "completed"',
-    'job_status).toLowerCase() === "completed"',
-    'completed_at || row.detailing_completed_at',
+    'clean(row.status).toLowerCase() === "completed"',
+    'clean(row.job_status).toLowerCase() === "completed"',
+    'row.completed_at || row.detailing_completed_at',
     'publication === "published"',
     'proofKind !== "sample"',
     'review_proof_opportunities',
