@@ -1,0 +1,57 @@
+name: Review Request Eligibility Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - build363-review-request-eligibility
+    paths:
+      - 'functions/api/_lib/review-request-eligibility.js'
+      - 'functions/api/admin/review_request_queue_safe.js'
+      - 'functions/api/client/reviews_save.js'
+      - 'scripts/build363_review_request_eligibility_test.mjs'
+      - 'scripts/build363_review_request_eligibility_check.py'
+      - '.github/workflows/review-request-eligibility-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check review eligibility JavaScript syntax
+        run: |
+          node --check functions/api/_lib/review-request-eligibility.js
+          node --check functions/api/admin/review_request_queue_safe.js
+          node --check functions/api/client/reviews_save.js
+          node --check scripts/build363_review_request_eligibility_test.mjs
+      - name: Check durable review eligibility gate syntax
+        run: python -m py_compile scripts/build363_review_request_eligibility_check.py
+      - name: Run review eligibility regression cases
+        run: node scripts/build363_review_request_eligibility_test.mjs
+      - name: Run review eligibility source authority
+        run: python scripts/build363_review_request_eligibility_check.py
+      - name: Review eligibility authority summary
+        run: |
+          {
+            echo '### Review Request Eligibility Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Genuine completed-work evidence: PASS'
+            echo '- Existing review evidence before queueing: PASS'
+            echo '- One canonical queue lifecycle / replay handling: PASS'
+            echo '- Suppression and cancellation preservation: PASS'
+            echo '- Truthful sent/completed state reconciliation: PASS'
+            echo '- Idempotent customer review capture: PASS'
+            echo '- Historical unsent duplicate neutralization: PASS'
+            echo '- Production mutation remains outside this Development gate.'
+          } >> "$GITHUB_STEP_SUMMARY"
