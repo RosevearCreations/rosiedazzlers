@@ -7,6 +7,8 @@ on:
       - build362-quote-booking-acceptance
     paths:
       - 'admin-leads.html'
+      - 'assets/admin-option-libraries.js'
+      - 'assets/admin-quote-delivery.js'
       - 'functions/api/_lib/quote-booking-terms.js'
       - 'functions/api/_lib/quote-booking-authority.js'
       - 'functions/api/quote_proposal_respond.js'
@@ -38,6 +40,8 @@ jobs:
           python-version: '3.12'
       - name: Check quote booking JavaScript syntax
         run: |
+          node --check assets/admin-option-libraries.js
+          node --check assets/admin-quote-delivery.js
           node --check functions/api/_lib/quote-booking-terms.js
           node --check functions/api/_lib/quote-booking-authority.js
           node --check functions/api/quote_proposal_respond.js
@@ -57,6 +61,7 @@ jobs:
           {
             echo '### Quote-to-Booking Acceptance Authority'
             echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Explicit staff-selected quote expiry UI: PASS'
             echo '- Structured commercial terms + explicit expiry: PASS'
             echo '- Immutable customer acceptance + replay handling: PASS'
             echo '- Current catalog price revalidation: PASS'
