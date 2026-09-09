@@ -1,7 +1,7 @@
 // functions/api/_lib/notification-hooks.js
 // Build 270 event-driven notification queue helpers for email/SMS/Web Push.
 
-export async function queueNotificationEvent({ env, event_type, channel = null, booking_id = null, customer_profile_id = null, recipient_staff_user_id = null, recipient_email = null, recipient_phone = null, subject = null, body_text = null, payload = {} }) {
+export async function queueNotificationEvent({ env, event_type, channel = null, booking_id = null, customer_profile_id = null, recipient_staff_user_id = null, recipient_email = null, recipient_phone = null, subject = null, body_text = null, payload = {}, next_attempt_at = null }) {
   try {
     if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY || !event_type) return { ok: false, skipped: true };
     const headers = {
@@ -26,7 +26,7 @@ export async function queueNotificationEvent({ env, event_type, channel = null, 
         payload,
         status: 'queued',
         attempt_count: 0,
-        next_attempt_at: new Date().toISOString(),
+        next_attempt_at: next_attempt_at || new Date().toISOString(),
         max_attempts: 5
       }])
     });
@@ -77,7 +77,7 @@ export async function hasActivePushSubscription({ env, owner_type, owner_id }) {
   }
 }
 
-export async function maybeQueueCustomerNotification({ env, booking = null, customer_profile = null, event_type, message, channel_hint = null, payload = {} }) {
+export async function maybeQueueCustomerNotification({ env, booking = null, customer_profile = null, event_type, message, channel_hint = null, payload = {}, next_attempt_at = null }) {
   if (!booking && !customer_profile) return { ok: false, skipped: true };
   const profile = customer_profile || await loadCustomerNotificationProfile({
     env,
@@ -96,7 +96,8 @@ export async function maybeQueueCustomerNotification({ env, booking = null, cust
     recipient_email: profile.email || null,
     recipient_phone: profile.phone || null,
     body_text: message || null,
-    payload: { message, ...payload }
+    payload: { message, ...payload },
+    next_attempt_at
   };
 
   if (channel === 'push') {
