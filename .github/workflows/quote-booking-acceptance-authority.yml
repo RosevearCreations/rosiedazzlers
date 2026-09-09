@@ -6,6 +6,7 @@ on:
       - dev
       - build362-quote-booking-acceptance
     paths:
+      - 'admin-leads.html'
       - 'functions/api/_lib/quote-booking-terms.js'
       - 'functions/api/_lib/quote-booking-authority.js'
       - 'functions/api/quote_proposal_respond.js'
