@@ -69,6 +69,17 @@
       if (current && Array.from(select.options).some(function(option){ return option.value === current; })) select.value = current;
     });
   }
+  function loadQuoteDeliveryControl(){
+    if (document.body?.dataset?.page !== 'admin-leads' || window.RosieAdminQuoteDelivery) return;
+    if (document.querySelector('script[data-admin-quote-delivery]')) return;
+    const script = document.createElement('script');
+    script.src = '/assets/admin-quote-delivery.js';
+    script.async = false;
+    script.setAttribute('data-admin-quote-delivery','true');
+    script.addEventListener('error', function(){ console.warn('Explicit quote expiry control could not be loaded.'); }, { once:true });
+    document.head.appendChild(script);
+  }
   window.AdminOptionLibraries = { load, hydrate, values: function(key){ return (cached || DEFAULTS)[key] || []; } };
-  document.addEventListener('DOMContentLoaded', function(){ hydrate().catch(function(err){ console.warn('Could not hydrate option-library dropdowns:', err); }); });
+  document.addEventListener('DOMContentLoaded', function(){ hydrate().catch(function(err){ console.warn('Could not hydrate option-library dropdowns:', err); }); loadQuoteDeliveryControl(); });
+  if (document.readyState !== 'loading') loadQuoteDeliveryControl();
 })();
