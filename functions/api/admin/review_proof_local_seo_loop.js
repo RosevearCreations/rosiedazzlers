@@ -1,7 +1,7 @@
 // Build 365 — Review -> Proof -> Local SEO loop.
 // Read-only authority that turns approved customer review evidence into actionable
 // local proof opportunities without publishing media or mutating SEO/content state.
-import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders } from "../_lib/staff-auth.js";
 
 const TARGET_TOWNS = ["Tillsonburg", "Woodstock", "Ingersoll", "Simcoe", "Delhi", "Port Dover", "Norwich", "Aylmer"];
 const TARGET_SERVICES = ["Interior detailing", "Exterior detailing", "Complete detail", "Ceramic coating", "Paint correction", "Pet hair removal", "Odour removal", "Headlight restoration"];
