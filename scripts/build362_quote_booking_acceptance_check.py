@@ -15,6 +15,8 @@ respond = text("functions/api/quote_proposal_respond.js")
 deliver = text("functions/api/admin/quote_proposal_deliver.js")
 reconcile = text("functions/api/admin/lead_conversion_price_reconcile.js")
 create_booking = text("functions/api/admin/lead_conversion_create_booking.js")
+admin_quote_delivery = text("assets/admin-quote-delivery.js")
+admin_option_libraries = text("assets/admin-option-libraries.js")
 migration = text("sql/2026-09-09_build362_quote_booking_acceptance.sql")
 tests = text("scripts/build362_quote_booking_acceptance_test.mjs")
 
@@ -30,6 +32,15 @@ assert "Date.now()" in terms
 assert "accepted_terms: checked.terms" in respond
 assert "accepted_terms_hash: existing.structured_terms_hash" in respond
 assert "QUOTE_ALREADY_ACCEPTED" in respond
+
+# Admin must explicitly choose expiry; there is intentionally no baked-in validity period.
+assert "data-delivery-expiry" in admin_quote_delivery
+assert "datetime-local" in admin_quote_delivery
+assert "parsed <= Date.now()" in admin_quote_delivery
+assert "body.expires_at = pendingExpiryIso" in admin_quote_delivery
+assert "/assets/admin-quote-delivery.js" in admin_option_libraries
+assert "7 * 24" not in deliver + admin_quote_delivery
+assert "30 * 24" not in deliver + admin_quote_delivery
 
 # Current catalog and current appointment state are the booking authority.
 assert "resolveCurrentQuotePrice" in reconcile
