@@ -35,7 +35,8 @@ for token in [
     assert token in queue + reviews + lifecycle, f"missing existing review lifecycle authority: {token}"
 
 # Queue creation never fabricates delivery or completion.
-assert 'status: "queued"' in queue
+assert 'const status = blockers.length ? "blocked" : "queued";' in queue
+assert "status," in queue
 assert 'sent_at: null' in queue
 assert 'status: "pending"' not in queue
 assert "scheduled_for" not in queue
