@@ -1,8 +1,8 @@
-// Build 317 — read-only final-balance readiness authority.
+// Build 374 — read-only final-balance readiness using the shared financial lifecycle authority.
 // This endpoint never creates a request, checkout, notification, charge, or recurring billing instruction.
 import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
+import { FINANCE_EVENT_TYPES, deriveFinancialLifecycle, emptyFinanceSummary, summarizeFinance } from "../_lib/financial-lifecycle.js";
 
-const FINANCE_EVENT_TYPES = ["deposit", "final_payment", "tip", "refund", "discount", "other"].map((type) => `booking_finance_${type}`);
 const PAYMENT_STAGE_STATUSES = new Set(["completed", "complete", "in_progress", "in-progress", "in progress"]);
 const PAID_REQUEST_STATUSES = new Set(["paid", "succeeded", "complete", "completed"]);
 const CLOSED_REQUEST_STATUSES = new Set(["cancelled", "canceled", "expired", "void"]);
@@ -87,25 +87,6 @@ async function loadFinalBalanceRequests(env) {
   return { ok: true, rows: safeArray(text), warning: null };
 }
 
-function summarizeFinance(rows) {
-  const map = new Map();
-  for (const row of Array.isArray(rows) ? rows : []) {
-    const bookingId = String(row?.booking_id || "");
-    if (!bookingId) continue;
-    const summary = map.get(bookingId) || emptyFinanceSummary();
-    const payload = row && typeof row.payload === "object" && row.payload ? row.payload : {};
-    const type = String(payload.entry_type || row.event_type || "").replace("booking_finance_", "");
-    const amount = Number(payload.amount_cad || 0);
-    if (Object.prototype.hasOwnProperty.call(summary, type) && Number.isFinite(amount)) summary[type] += amount;
-    map.set(bookingId, summary);
-  }
-  return map;
-}
-
-function emptyFinanceSummary() {
-  return { deposit: 0, final_payment: 0, tip: 0, refund: 0, discount: 0, other: 0 };
-}
-
 function groupRequests(rows) {
   const map = new Map();
   for (const row of Array.isArray(rows) ? rows : []) {
@@ -118,13 +99,9 @@ function groupRequests(rows) {
 }
 
 function deriveReadiness({ booking, finance, financeAvailable, requests, requestsAvailable }) {
-  const totalCents = Math.max(0, Math.round(Number(booking?.price_total_cents || 0)));
-  const depositCents = cents(finance.deposit);
-  const finalPaymentCents = cents(finance.final_payment);
-  const discountCents = cents(finance.discount);
-  const refundCents = cents(finance.refund);
-  const otherCents = cents(finance.other);
-  const calculatedDueCents = Math.max(0, totalCents - depositCents - finalPaymentCents - discountCents - otherCents + refundCents);
+  const lifecycle = deriveFinancialLifecycle({ totalCents: booking?.price_total_cents, finance, financeAvailable });
+  const totalCents = lifecycle.service_total_cents;
+  const calculatedDueCents = lifecycle.remaining_balance_cents;
   const latestRequest = Array.isArray(requests) && requests.length ? requests[0] : null;
   const paidRequest = (requests || []).find(isPaidRequest) || null;
   const activeRequest = (requests || []).find(isActiveRequest) || null;
@@ -170,13 +147,14 @@ function deriveReadiness({ booking, finance, financeAvailable, requests, request
     total_cents: totalCents,
     calculated_due_cents: calculatedDueCents,
     finance: {
-      deposit_cents: depositCents,
-      final_payment_cents: finalPaymentCents,
-      discount_cents: discountCents,
-      refund_cents: refundCents,
-      other_cents: otherCents,
-      tip_cents: cents(finance.tip)
+      deposit_cents: lifecycle.deposit_cents,
+      final_payment_cents: lifecycle.final_payment_cents,
+      discount_cents: lifecycle.discount_cents,
+      refund_cents: lifecycle.refund_cents,
+      other_cents: lifecycle.other_adjustment_cents,
+      tip_cents: lifecycle.tip_cents
     },
+    financial_lifecycle: lifecycle,
     readiness,
     reasons,
     active_request: activeRequest ? safeRequest(activeRequest) : null,
@@ -222,11 +200,6 @@ function safeRequest(row) {
     created_at: row.created_at || null,
     updated_at: row.updated_at || null
   };
-}
-
-function cents(cad) {
-  const value = Number(cad || 0);
-  return Number.isFinite(value) ? Math.round(value * 100) : 0;
 }
 
 function normalizeStatus(value) {
