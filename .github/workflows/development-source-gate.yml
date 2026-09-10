@@ -59,6 +59,7 @@ jobs:
           node --check functions/api/_lib/fleet-maintenance-planning.js
           node --check functions/api/_lib/maintenance-plan-pilot.js
           node --check functions/api/_lib/fleet-business-rulebook.js
+          node --check functions/api/admin/fleet_account_operations.js
           node --check functions/api/admin/customer_vehicle_maintenance_planning.js
           node --check functions/api/admin/customer_retention_dashboard.js
           node --check functions/api/_lib/crm-operational-work-queue.js
@@ -111,6 +112,7 @@ jobs:
           python -m py_compile scripts/maintenance_plan_business_rulebook_check.py
           python -m py_compile scripts/maintenance_plan_pilot_activation_check.py
           python -m py_compile scripts/fleet_business_rulebook_check.py
+          python -m py_compile scripts/fleet_account_operations_check.py
           python -m py_compile scripts/fleet_maintenance_planning_check.py
           python -m py_compile scripts/final_balance_readiness_check.py
           python -m py_compile scripts/payment_provider_readiness_check.py
@@ -162,6 +164,9 @@ jobs:
         run: |
           python scripts/fleet_business_rulebook_check.py
           node scripts/fleet_business_rulebook_test.mjs
+
+      - name: Validate fleet account operations authority
+        run: python scripts/fleet_account_operations_check.py
 
       - name: Validate fleet maintenance planning contracts
         run: python scripts/fleet_maintenance_planning_check.py
@@ -237,6 +242,7 @@ jobs:
             echo "- Maintenance plan business rulebook authority: PASS"
             echo "- Maintenance plan pilot activation authority: PASS"
             echo "- Fleet business rulebook authority: PASS"
+            echo "- Fleet account operations authority: PASS"
             echo "- Fleet maintenance planning authority: PASS"
             echo "- Final-balance readiness authority: PASS"
             echo "- Payment-provider readiness authority: PASS"
