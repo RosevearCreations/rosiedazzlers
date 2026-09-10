@@ -104,6 +104,7 @@ jobs:
           python -m py_compile scripts/responsive_static_check.py
           python -m py_compile scripts/admin_ui_audit.py
           python -m py_compile scripts/maintenance_retention_check.py
+          python -m py_compile scripts/maintenance_plan_business_rulebook_check.py
           python -m py_compile scripts/fleet_maintenance_planning_check.py
           python -m py_compile scripts/final_balance_readiness_check.py
           python -m py_compile scripts/payment_provider_readiness_check.py
@@ -142,6 +143,9 @@ jobs:
 
       - name: Validate maintenance retention contracts
         run: python scripts/maintenance_retention_check.py
+
+      - name: Validate maintenance plan business rulebook authority
+        run: python scripts/maintenance_plan_business_rulebook_check.py
 
       - name: Validate fleet maintenance planning contracts
         run: python scripts/fleet_maintenance_planning_check.py
@@ -214,6 +218,7 @@ jobs:
             echo "- I.T. System Gate source contract: PASS"
             echo "- Protected Admin runtime-smoke helper syntax: PASS"
             echo "- Maintenance/retention authority: PASS"
+            echo "- Maintenance plan business rulebook authority: PASS"
             echo "- Fleet maintenance planning authority: PASS"
             echo "- Final-balance readiness authority: PASS"
             echo "- Payment-provider readiness authority: PASS"
