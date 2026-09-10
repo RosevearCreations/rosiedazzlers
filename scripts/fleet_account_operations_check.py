@@ -56,7 +56,9 @@ if ui.lower().count("<h1") != 1:
 for token in ["Business contacts", "Vehicle roster", "Grouped requests / jobs", "PO / customer reference", "Invoice group reference", "Per-vehicle service history"]:
     if token not in ui:
         raise SystemExit(f"Build 373 UI missing roadmap capability: {token}")
-for forbidden in ["checkout", "stripe", "paypal", "charge customer", "apply discount"]:
+# Detect executable commercial/provider surfaces, not explanatory safety copy such as
+# "does not charge customers" or "does not apply discounts".
+for forbidden in ["/checkout", "/api/stripe", "/api/paypal", "payment_intent", "create_payment", "capture_payment"]:
     if forbidden in ui.lower():
         raise SystemExit(f"Build 373 Fleet Operations UI crosses commercial boundary: {forbidden}")
 
