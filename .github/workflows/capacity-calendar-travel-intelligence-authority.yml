@@ -1,0 +1,59 @@
+name: Capacity Calendar Travel Intelligence Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build368-capacity-calendar-travel-intelligence
+    paths:
+      - 'functions/api/availability.js'
+      - 'functions/api/checkout.js'
+      - 'functions/api/_lib/capacity-calendar-intelligence.js'
+      - 'functions/api/_lib/pricing-catalog.js'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'scripts/build368_capacity_calendar_travel_test.mjs'
+      - 'scripts/build368_capacity_calendar_travel_check.py'
+      - '.github/workflows/capacity-calendar-travel-intelligence-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check JavaScript syntax
+        run: |
+          node --check functions/api/_lib/capacity-calendar-intelligence.js
+          node --check functions/api/availability.js
+          node --check scripts/build368_capacity_calendar_travel_test.mjs
+      - name: Check Python gate syntax
+        run: python -m py_compile scripts/build368_capacity_calendar_travel_check.py
+      - name: Run capacity calendar travel regression cases
+        run: node scripts/build368_capacity_calendar_travel_test.mjs
+      - name: Run capacity calendar travel source authority
+        run: python scripts/build368_capacity_calendar_travel_check.py
+      - name: Build 368 authority summary
+        run: |
+          {
+            echo '### Capacity, Calendar & Travel Intelligence Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Existing AM/PM availability authority preserved: PASS'
+            echo '- One-vehicle/day default + half-day exception semantics: PASS'
+            echo '- Full-day and half-day capacity fit: PASS'
+            echo '- Blocked-date and blocked-slot reasons preserved: PASS'
+            echo '- Optional trusted service-area/travel context: PASS'
+            echo '- Booking-slot duration expectations: PASS'
+            echo '- Checkout collision revalidation remains authoritative: PASS'
+            echo '- No schema, payment, pricing, booking write, or Production business-data mutation.'
+          } >> "$GITHUB_STEP_SUMMARY"
