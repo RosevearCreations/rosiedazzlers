@@ -1,11 +1,14 @@
 // /functions/api/availability.js
-// Build 192: availability now includes editable business-hours / holiday-closure checks.
+// Build 368: availability includes read-only capacity/calendar/travel intelligence.
+// Existing AM/PM booleans remain authoritative; checkout revalidates collisions before booking.
 //
-// GET /api/availability?date=YYYY-MM-DD
-// Returns: { ok:true, date, blocked, reason?, AM, PM, business_hours, business_hours_conflict }
+// GET /api/availability?date=YYYY-MM-DD&service_area=<optional>&start_slot=<optional>&duration_slots=<optional>
+// Returns existing availability fields plus capacity_intelligence.
 
 import { loadEditableSetting } from "./_lib/editable-settings.js";
 import { serviceHeaders } from "./_lib/staff-auth.js";
+import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
+import { buildCapacityCalendarIntelligence, resolveTravelContext } from "./_lib/capacity-calendar-intelligence.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: corsHeaders() });
@@ -15,6 +18,9 @@ export async function onRequestGet({ request, env }) {
   try {
     const url = new URL(request.url);
     const date = (url.searchParams.get("date") || "").trim();
+    const requestedServiceArea = (url.searchParams.get("service_area") || "").trim();
+    const requestedStartSlot = (url.searchParams.get("start_slot") || "").trim();
+    const requestedDurationSlots = (url.searchParams.get("duration_slots") || "").trim();
 
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
       return json({ ok: false, error: "Missing or invalid date (YYYY-MM-DD)" }, 400);
@@ -44,6 +50,7 @@ export async function onRequestGet({ request, env }) {
 
     const businessHours = await loadBusinessHoursStatus(env, date);
     const holidayClosed = businessHours?.is_closed === true;
+    const travelContext = await loadRequestedTravelContext(env, requestedServiceArea);
 
     // ---- 1) Full-day block? ----
     const dayBlock = await supaGet(
@@ -55,15 +62,26 @@ export async function onRequestGet({ request, env }) {
     }
 
     if (Array.isArray(dayBlock.data) && dayBlock.data.length > 0) {
+      const reason = dayBlock.data[0]?.reason ?? "Blocked";
       return json({
         ok: true,
         date,
         blocked: true,
-        reason: dayBlock.data[0]?.reason ?? "Blocked",
+        reason,
         AM: false,
         PM: false,
         business_hours: businessHours,
         business_hours_conflict: holidayClosed,
+        capacity_intelligence: buildCapacityCalendarIntelligence({
+          AM: false,
+          PM: false,
+          blocked: true,
+          reason,
+          businessHours,
+          requestedStartSlot,
+          requestedDurationSlots,
+          travelContext
+        }),
       });
     }
 
@@ -105,19 +123,43 @@ export async function onRequestGet({ request, env }) {
       if (dur === 1 && start === "PM") PM = false;
     }
 
+    const reason = holidayClosed ? (businessHours?.reason || businessHours?.hours_label || "Closed by business-hours settings") : null;
     return json({
       ok: true,
       date,
       blocked: holidayClosed,
-      reason: holidayClosed ? (businessHours?.reason || businessHours?.hours_label || "Closed by business-hours settings") : null,
+      reason,
       AM,
       PM,
       business_hours: businessHours,
       business_hours_conflict: holidayClosed,
+      capacity_intelligence: buildCapacityCalendarIntelligence({
+        AM,
+        PM,
+        blocked: holidayClosed,
+        reason,
+        businessHours,
+        slotBlockReasons: slots,
+        activeBookingCount: Array.isArray(bookings.data) ? bookings.data.length : 0,
+        requestedStartSlot,
+        requestedDurationSlots,
+        travelContext
+      }),
     });
 
   } catch (e) {
     return json({ ok: false, error: "Server error", details: String(e) }, 500);
+  }
+}
+
+async function loadRequestedTravelContext(env, requestedServiceArea) {
+  if (!requestedServiceArea) return null;
+  try {
+    const catalog = await loadPricingCatalog(env);
+    return resolveTravelContext(catalog, requestedServiceArea);
+  } catch {
+    // Travel context is descriptive only. Never fail or alter slot availability if it cannot load.
+    return null;
   }
 }
 
