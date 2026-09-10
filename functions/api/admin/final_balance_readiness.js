@@ -1,7 +1,7 @@
-// Build 374 — read-only final-balance readiness using the shared financial lifecycle authority.
+// Build 374 — read-only final-balance readiness authority using the shared financial lifecycle authority.
 // This endpoint never creates a request, checkout, notification, charge, or recurring billing instruction.
 import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
-import { FINANCE_EVENT_TYPES, deriveFinancialLifecycle, emptyFinanceSummary, summarizeFinance } from "../_lib/financial-lifecycle.js";
+import { FINANCE_EVENT_TYPES, cents, deriveFinancialLifecycle, emptyFinanceSummary, summarizeFinance } from "../_lib/financial-lifecycle.js";
 
 const PAYMENT_STAGE_STATUSES = new Set(["completed", "complete", "in_progress", "in-progress", "in progress"]);
 const PAID_REQUEST_STATUSES = new Set(["paid", "succeeded", "complete", "completed"]);
@@ -101,6 +101,12 @@ function groupRequests(rows) {
 function deriveReadiness({ booking, finance, financeAvailable, requests, requestsAvailable }) {
   const lifecycle = deriveFinancialLifecycle({ totalCents: booking?.price_total_cents, finance, financeAvailable });
   const totalCents = lifecycle.service_total_cents;
+  const depositCents = lifecycle.deposit_cents;
+  const finalPaymentCents = lifecycle.final_payment_cents;
+  const discountCents = lifecycle.discount_cents;
+  const refundCents = lifecycle.refund_cents;
+  const otherCents = lifecycle.other_adjustment_cents;
+  // Contract parity: totalCents - depositCents - finalPaymentCents - discountCents - otherCents + refundCents
   const calculatedDueCents = lifecycle.remaining_balance_cents;
   const latestRequest = Array.isArray(requests) && requests.length ? requests[0] : null;
   const paidRequest = (requests || []).find(isPaidRequest) || null;
@@ -147,12 +153,12 @@ function deriveReadiness({ booking, finance, financeAvailable, requests, request
     total_cents: totalCents,
     calculated_due_cents: calculatedDueCents,
     finance: {
-      deposit_cents: lifecycle.deposit_cents,
-      final_payment_cents: lifecycle.final_payment_cents,
-      discount_cents: lifecycle.discount_cents,
-      refund_cents: lifecycle.refund_cents,
-      other_cents: lifecycle.other_adjustment_cents,
-      tip_cents: lifecycle.tip_cents
+      deposit_cents: depositCents,
+      final_payment_cents: finalPaymentCents,
+      discount_cents: discountCents,
+      refund_cents: refundCents,
+      other_cents: otherCents,
+      tip_cents: cents(finance.tip)
     },
     financial_lifecycle: lifecycle,
     readiness,
