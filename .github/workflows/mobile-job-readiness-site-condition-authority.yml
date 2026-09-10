@@ -1,0 +1,57 @@
+name: Build 369 — Mobile Job Readiness & Site Condition Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build369-mobile-job-readiness
+    paths:
+      - 'apps/detailer/detailer-app.js'
+      - 'functions/api/jobsite_intake_get.js'
+      - 'functions/api/jobsite_intake_save.js'
+      - 'scripts/build369_mobile_job_readiness_check.py'
+      - '.github/workflows/mobile-job-readiness-site-condition-authority.yml'
+  pull_request:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'apps/detailer/detailer-app.js'
+      - 'functions/api/jobsite_intake_get.js'
+      - 'functions/api/jobsite_intake_save.js'
+      - 'scripts/build369_mobile_job_readiness_check.py'
+      - '.github/workflows/mobile-job-readiness-site-condition-authority.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    name: Build 369 authority
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact SHA
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: JavaScript syntax checks
+        run: |
+          node --check apps/detailer/detailer-app.js
+          node --check functions/api/jobsite_intake_get.js
+          node --check functions/api/jobsite_intake_save.js
+
+      - name: Compile authority check
+        run: python3 -m py_compile scripts/build369_mobile_job_readiness_check.py
+
+      - name: Verify mobile job-readiness authority
+        run: python3 scripts/build369_mobile_job_readiness_check.py
+
+      - name: Verify booking-flow contracts remain GREEN
+        run: |
+          bash scripts/booking_flow_contract_check.sh
+          bash scripts/booking_flow_check.sh
