@@ -15,6 +15,7 @@ def require(text, needle, label):
 
 # Mobile Detailer App must load the canonical staff-authorized intake on demand.
 require(APP, "/api/jobsite_intake_get", "canonical intake endpoint")
+require(APP, "out.intake", "canonical intake response")
 require(APP, "Pre-visit site readiness", "readiness heading")
 require(APP, "safe, private/permitted work area", "work-area business rule")
 require(APP, "Rosie supplies normal detailing water and power", "Rosie utility-supply rule")
@@ -25,8 +26,9 @@ canonical_fields = [
     "keys_collected",
     "keys_handed_over_acknowledged",
     "owner_present_for_visual_inspection",
-    "owner_damage_acknowledged",
-    "entire_vehicle_accessible",
+    "inspection_acknowledged",
+    "existing_condition_acknowledged",
+    "existing_damage_notes",
     "site_weather_notes",
     "owner_notes",
     "detailer_pre_job_notes",
@@ -36,11 +38,13 @@ for field in canonical_fields:
     require(APP, field, f"mobile canonical field {field}")
     require(SAVE, field, f"saved canonical field {field}")
 
-# The read endpoint must remain staff-authorized and booking-scoped.
+# The read endpoint must remain staff-authorized, booking-scoped and read from the canonical intake table.
 require(GET, "requireStaffAccess", "staff authorization")
-require(GET, "capability: 'work_booking'", "work_booking capability")
-require(GET, "booking_id", "booking scope")
-require(GET, "booking_jobsite?select=*", "canonical booking_jobsite projection")
+require(GET, 'capability: "work_booking"', "work_booking capability")
+require(GET, "bookingId: booking_id", "booking scope")
+require(GET, "/rest/v1/jobsite_intake?select=*", "canonical jobsite_intake projection")
+require(GET, "return json({ ok: true", "explicit successful response")
+require(GET, "intake });", "canonical intake response property")
 
 # Build 369 must preserve the no-recurring-network-work invariant.
 if "setInterval(" in APP:
