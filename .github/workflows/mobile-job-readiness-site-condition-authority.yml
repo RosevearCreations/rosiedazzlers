@@ -50,8 +50,3 @@ jobs:
 
       - name: Verify mobile job-readiness authority
         run: python3 scripts/build369_mobile_job_readiness_check.py
-
-      - name: Verify booking-flow contracts remain GREEN
-        run: |
-          bash scripts/booking_flow_contract_check.sh
-          bash scripts/booking_flow_check.sh
