@@ -1,0 +1,55 @@
+name: Build 371 — Maintenance Plan Pilot Activation Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-maintenance-plan-pilot-activation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: Validate maintenance plan pilot activation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate pilot activation authority
+        run: python scripts/maintenance_plan_pilot_activation_check.py
+
+      - name: Build 371 summary
+        run: |
+          {
+            echo "### Build 371 — Maintenance Plan Pilot Activation"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Vehicle-specific activation decision mechanics: PASS"
+            echo "- Seven Build 370 approvals remain mandatory: PASS"
+            echo "- Explicit staff activation intent required: PASS"
+            echo "- Automatic enrolment/renewal/billing/guaranteed priority: PROHIBITED"
+            echo "- Persistence/provider mutation authority: NONE"
+            echo "- Schema migration introduced: NO"
+          } >> "$GITHUB_STEP_SUMMARY"
