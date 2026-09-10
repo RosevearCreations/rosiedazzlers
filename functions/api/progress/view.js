@@ -1,4 +1,6 @@
 import { hydrateMediaRows, publicWorkflowEvents, schemaLooksLegacy } from "../_lib/job-live-feed.js";
+import { deriveFinancialLifecycle, emptyFinanceSummary, summarizeFinance } from "../_lib/financial-lifecycle.js";
+import { publicPaymentView } from "../_lib/final-balance-links.js";
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -9,7 +11,7 @@ export async function onRequestGet(context) {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return json({ error: "Server configuration is incomplete." }, 500);
 
     const headers = serviceHeaders(env);
-    const bookingUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,assigned_to,progress_enabled,progress_token,current_workflow_stage,detailer_response_status,detailer_response_reason,dispatched_at,arrived_at,detailing_started_at,detailing_completed_at,progress_last_viewed_at,completed_summary_status&progress_token=eq.${encodeURIComponent(token)}&limit=1`;
+    const bookingUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,customer_name,service_date,start_slot,package_code,vehicle_size,price_total_cents,assigned_to,progress_enabled,progress_token,current_workflow_stage,detailer_response_status,detailer_response_reason,dispatched_at,arrived_at,detailing_started_at,detailing_completed_at,progress_last_viewed_at,completed_summary_status&progress_token=eq.${encodeURIComponent(token)}&limit=1`;
     const bookingRes = await fetch(bookingUrl, { headers });
     if (!bookingRes.ok) return json({ error: `Could not load booking. ${await bookingRes.text()}` }, 500);
     const booking = (await bookingRes.json().catch(() => []))?.[0] || null;
@@ -30,7 +32,7 @@ export async function onRequestGet(context) {
       fetch(`${env.SUPABASE_URL}/rest/v1/booking_events?select=id,created_at,event_type,event_note,actor_name,payload&booking_id=eq.${bookingId}&order=created_at.asc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/incident_reports?select=id,created_at,updated_at,incident_type,severity,title,vehicle_area,equipment_name,decision_status,approved_customer_summary,approved_customer_discussion,public_evidence_items,customer_visible_at&booking_id=eq.${bookingId}&public_visible=eq.true&order=customer_visible_at.desc,updated_at.desc`, { headers }),
       fetch(`${env.SUPABASE_URL}/rest/v1/completed_job_summaries?select=*&booking_id=eq.${bookingId}&customer_visible=eq.true&limit=1`, { headers }).catch(()=>null),
-      fetch(`${env.SUPABASE_URL}/rest/v1/final_balance_payment_requests?select=id,booking_id,status,amount_cents,currency,checkout_url,payment_url,provider_status,notes,created_at&booking_id=eq.${bookingId}&order=created_at.desc`, { headers }).catch(()=>null)
+      fetch(`${env.SUPABASE_URL}/rest/v1/final_balance_payment_requests?select=id,booking_id,status,amount_cents,currency,checkout_url,payment_url,provider_status,notes,paid_at,expires_at,cancelled_at,created_at&booking_id=eq.${bookingId}&order=created_at.desc`, { headers }).catch(()=>null)
     ]);
 
     if (!updatesResult.response.ok) return json({ error: `Could not load updates. ${await updatesResult.response.text()}` }, 500);
@@ -53,18 +55,23 @@ export async function onRequestGet(context) {
     const paymentLinkRows = paymentLinksRes && paymentLinksRes.ok ? await paymentLinksRes.json().catch(()=>[]) : [];
     const now = new Date();
     const paymentLinks = (Array.isArray(paymentLinkRows) ? paymentLinkRows : []).map((row) => {
-      const rawStatus = String(row.status || 'open').toLowerCase();
-      const state = row.paid_at || /paid|succeeded|settled|complete/.test(rawStatus) ? 'paid' : (row.cancelled_at || /cancel/.test(rawStatus) ? 'cancelled' : (row.expires_at && new Date(row.expires_at) <= now ? 'expired' : 'open'));
+      const payment = publicPaymentView({ ...row, checkout_url: row.checkout_url || row.payment_url }, now);
       return {
-        id:row.id, status:row.status || state, state, amount_cents:row.amount_cents, currency:row.currency || 'CAD',
-        url:state === 'open' ? (row.checkout_url || row.payment_url || null) : null,
-        provider_status:row.provider_status || null, notes:row.notes || null, created_at:row.created_at,
-        paid_at:row.paid_at || null, expires_at:row.expires_at || null
+        ...payment,
+        url: payment.checkout_url,
+        notes: safeCustomerNote(row.notes),
+        cancelled_at: row.cancelled_at || null
       };
     });
     const updates = customerRows(updatesRaw);
     const media = await hydrateMediaRows(env, customerRows(mediaRaw));
     const workflowEvents = publicWorkflowEvents(bookingEvents);
+    const financeByBooking = summarizeFinance(bookingEvents);
+    const financialLifecycle = deriveFinancialLifecycle({
+      totalCents: booking.price_total_cents,
+      finance: financeByBooking.get(String(bookingId)) || emptyFinanceSummary(),
+      financeAvailable: true
+    });
     const previousViewedAt = booking.progress_last_viewed_at ? new Date(booking.progress_last_viewed_at).getTime() : 0;
     const unreadCount = [...updates, ...media].filter((row) => {
       if (String(row.source_channel || "staff").toLowerCase() === "customer") return false;
@@ -105,6 +112,7 @@ export async function onRequestGet(context) {
       workflow_events: workflowEvents,
       incident_reports: Array.isArray(incidentReports) ? incidentReports : [],
       completed_job_summary: completedJobSummary,
+      financial_lifecycle: financialLifecycle,
       payment_links: paymentLinks,
       unread_count: unreadCount,
       incident_report_notice: incidentsRes.ok ? null : "Incident report sharing is not available yet.",
@@ -144,9 +152,13 @@ async function markViewed(env, bookingId) {
   }).catch(() => null);
 }
 
+function safeCustomerNote(value) {
+  return String(value || "").replace(/[\r\n]+/g, " ").trim().slice(0, 280) || null;
+}
+
 function serviceHeaders(env) {
   return { apikey: env.SUPABASE_SERVICE_ROLE_KEY, Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`, "Content-Type": "application/json" };
 }
 function json(data, status = 200) {
-  return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
+  return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex, nofollow" } });
 }
