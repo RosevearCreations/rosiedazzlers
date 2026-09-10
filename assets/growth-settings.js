@@ -17,6 +17,7 @@ export const GROWTH_DEFAULTS = {
   membership_plan_settings: {
     enabled: false,
     waitlist_enabled: true,
+    rulebook_status: 'awaiting_business_approval',
     plan_name: 'Maintenance Plan Interest',
     cycle_label: 'Cadence selected after service review',
     teaser: 'Tell us what recurring schedule would be useful after a completed reset or detail. This is an interest list; no subscription, fixed cadence, price, discount, or perk is promised.',
@@ -52,11 +53,13 @@ export const GROWTH_DEFAULTS = {
 
 function normalizePublicMembershipSettings(raw) {
   const source = raw && typeof raw === 'object' ? raw : {};
-  // Build 275 public safety boundary: retained database/admin experiments must
-  // not publish unapproved recurring pricing, cadence, discounts or perks.
+  // Build 370 fail-closed activation boundary: retained database/admin experiments
+  // may support waitlist operations but cannot publish an active maintenance plan
+  // until the canonical business rulebook is explicitly approved in a later build.
   return {
     ...GROWTH_DEFAULTS.membership_plan_settings,
-    enabled: source.enabled === true,
+    enabled: false,
+    rulebook_status: 'awaiting_business_approval',
     waitlist_enabled: source.waitlist_enabled !== false
   };
 }
