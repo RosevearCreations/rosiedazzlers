@@ -1,6 +1,6 @@
 // Historical Build 264 live bundle token: /apps/detailer/live-job-module.js?v=20260825build264
 // Build 271 — Detailer Mobile App shell with role/module ceiling, deep-link job selection and cached runtime flags.
-// Build 369 — Canonical pre-visit job readiness is loaded on demand from booking_jobsite; no background polling.
+// Build 369 — Canonical pre-visit job readiness is loaded on demand from jobsite_intake; no background polling.
 // Acceptance rule: no eligible active job = zero recurring live-job network activity.
 (function bootDetailerApp(globalScope){
   'use strict';
@@ -33,14 +33,16 @@
     if(readiness.state==='error')return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong><div class="notice bad">${esc(readiness.error||'Job-site intake could not be loaded.')} No automatic retry was started. Use Refresh assigned jobs or reselect the job to try again.</div>${serviceRule}</section>`;
     const intake=readiness.intake;
     if(!intake)return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong><div class="notice warn">No job-site intake is recorded. Before dispatch, confirm the work area, vehicle access, key handoff, weather/site concerns and special notes.</div>${serviceRule}</section>`;
+    const completion=String(intake.intake_complete??'').trim();
     return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong>`+
-      `<div class="mini">Intake: ${intake.intake_complete?'Complete':'Not marked complete'}</div>`+
+      `<div class="mini"><strong>Intake status:</strong> ${esc(completion||'Not marked complete')}</div>`+
       readinessLine('Safe work area / vehicle access',intake.vehicle_accessible_and_safe)+
       readinessLine('Keys collected',intake.keys_collected)+
       readinessLine('Key handoff acknowledged',intake.keys_handed_over_acknowledged)+
       readinessLine('Owner present for visual inspection',intake.owner_present_for_visual_inspection)+
-      readinessLine('Owner damage acknowledgement',intake.owner_damage_acknowledged)+
-      readinessLine('Entire vehicle accessible',intake.entire_vehicle_accessible)+
+      readinessLine('Inspection acknowledged',intake.inspection_acknowledged)+
+      readinessLine('Existing condition acknowledged',intake.existing_condition_acknowledged)+
+      readinessNote('Existing damage / condition concerns',intake.existing_damage_notes)+
       readinessNote('Weather / site concerns',intake.site_weather_notes)+
       readinessNote('Customer special notes',intake.owner_notes)+
       readinessNote('Detailer pre-job notes',intake.detailer_pre_job_notes)+
@@ -87,7 +89,7 @@
     try{
       const out=await api.requestJson('/api/jobsite_intake_get',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({booking_id:jobId})});
       if(requestId!==readinessRequest||String(selected?.id||'')!==jobId)return;
-      readiness={jobId,state:'ready',intake:out.jobsite||null,error:''};
+      readiness={jobId,state:'ready',intake:out.intake||null,error:''};
       renderSelected();
     }catch(error){
       if(requestId!==readinessRequest||String(selected?.id||'')!==jobId)return;
