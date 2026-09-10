@@ -1,4 +1,4 @@
-import { requireStaffAccess, json, serviceHeaders, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
 
 const TABLES = Object.freeze({
   contacts: "fleet_account_contacts",
@@ -48,7 +48,7 @@ async function handlePost({ request, env }) {
     if (!access.ok) return withCors(access.response);
 
     const action = normalizeToken(body.action, 60);
-    const actorId = normalizeUuid(access.staff?.id || access.user?.id || body.staff_user_id);
+    const actorId = normalizeUuid(access.actor?.id || body.staff_user_id);
     let result;
     if (action === "create_account") result = await createAccount(env, body, actorId);
     else if (action === "add_contact") result = await addContact(env, body, actorId);
