@@ -1,0 +1,27 @@
+{
+  "schema_version": "build-371-v1",
+  "status": "prepared_fail_closed",
+  "scope": "vehicle_specific_pilot",
+  "canonical_rulebook": "config/maintenance-plan-business-rulebook.json",
+  "requires": {
+    "all_rulebook_domains_approved": true,
+    "canonical_customer_identity": true,
+    "canonical_vehicle_identity": true,
+    "vehicle_customer_match": true,
+    "explicit_staff_activation_intent": true,
+    "pilot_enrollment_flag": true,
+    "plan_enabled_flag": true
+  },
+  "prohibited": {
+    "automatic_enrollment": true,
+    "automatic_renewal": true,
+    "recurring_billing": true,
+    "guaranteed_priority": true,
+    "provider_mutation": true,
+    "parallel_customer_or_vehicle_model": true
+  },
+  "mutation_authority": false,
+  "provider_mutation_authority": false,
+  "persistence_authority": false,
+  "notes": "Build 371 prepares the vehicle-specific pilot activation decision path only. It does not enrol a customer, create a booking, charge a payment method, renew a plan, reserve capacity, or persist plan membership until the Build 370 business rulebook is explicitly approved and a later activation boundary authorizes those mutations."
+}
