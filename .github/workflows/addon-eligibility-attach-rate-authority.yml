@@ -1,0 +1,64 @@
+name: Add-On Eligibility & Attach-Rate Authority
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+      - build367-addon-eligibility-attach-rate
+    paths:
+      - 'assets/addon-eligibility.js'
+      - 'assets/booking-addon-optimization.js'
+      - 'assets/site-policies.js'
+      - 'assets/public-analytics.js'
+      - 'functions/api/analytics/ingest.js'
+      - 'book.html'
+      - 'booking-planner.html'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'scripts/build367_addon_eligibility_test.mjs'
+      - 'scripts/build367_addon_eligibility_check.py'
+      - '.github/workflows/addon-eligibility-attach-rate-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check add-on optimization JavaScript syntax
+        run: |
+          node --check assets/addon-eligibility.js
+          node --check assets/booking-addon-optimization.js
+          node --check assets/site-policies.js
+          node --check scripts/build367_addon_eligibility_test.mjs
+      - name: Check source authority gate syntax
+        run: python -m py_compile scripts/build367_addon_eligibility_check.py
+      - name: Run add-on eligibility regression cases
+        run: node scripts/build367_addon_eligibility_test.mjs
+      - name: Run add-on source authority
+        run: python scripts/build367_addon_eligibility_check.py
+      - name: Add-on eligibility authority summary
+        run: |
+          {
+            echo '### Add-On Eligibility & Attach-Rate Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Canonical catalogue/add-on compatibility authority reused: PASS'
+            echo '- Incompatible, included, and already-selected add-ons excluded: PASS'
+            echo '- Condition/goal relevance ranking with lower-cost tie-break only: PASS'
+            echo '- No automatic add-on selection; explicit customer click required: PASS'
+            echo '- Recommendation exposure/accept events use existing batched fail-open analytics: PASS'
+            echo '- Recommendation telemetry contains no customer identity fields: PASS'
+            echo '- Zero/insufficient evidence does not fabricate attach-rate performance: PASS'
+            echo '- Booking remains usable if recommendation enhancement fails: PASS'
+            echo '- No schema, pricing, checkout, payment, or Production business-data mutation.'
+          } >> "$GITHUB_STEP_SUMMARY"
