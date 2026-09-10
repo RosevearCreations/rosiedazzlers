@@ -1,0 +1,62 @@
+{
+  "schema_version": "build-372-v1",
+  "status": "awaiting_business_approval",
+  "business_approval_required": true,
+  "decisions": {
+    "fleet_minimums": {
+      "approved": false,
+      "minimum_vehicles": null,
+      "minimum_service_frequency": null,
+      "minimum_account_spend_cents": null
+    },
+    "service_tiers": {
+      "approved": false,
+      "tiers": []
+    },
+    "travel_limits": {
+      "approved": false,
+      "included_radius_km": null,
+      "maximum_radius_km": null,
+      "travel_fee_model": null,
+      "travel_fee_cents": null
+    },
+    "volume_pricing": {
+      "approved": false,
+      "pricing_model": null,
+      "bands": [],
+      "discount_percent": null
+    },
+    "invoicing": {
+      "approved": false,
+      "billing_model": null,
+      "payment_terms_days": null,
+      "deposit_policy": null,
+      "statement_cycle": null
+    },
+    "cancellation": {
+      "approved": false,
+      "notice_hours": null,
+      "late_cancel_fee_cents": null,
+      "missed_visit_policy": null,
+      "reschedule_policy": null
+    }
+  },
+  "operational_authority": {
+    "fleet_account_activation_allowed": false,
+    "automatic_discount_application_allowed": false,
+    "invoice_creation_allowed": false,
+    "booking_creation_allowed": false,
+    "recurring_billing_allowed": false,
+    "provider_mutation_allowed": false,
+    "database_mutation_allowed": false
+  },
+  "existing_authority": {
+    "fleet_lead_pipeline_remains_authoritative": true,
+    "draft_quote_handoff_remains_authoritative": true,
+    "booking_flow_remains_authoritative": true,
+    "current_service_area_rules_apply": true,
+    "current_site_access_rules_apply": true,
+    "current_payment_and_deposit_rules_apply": true
+  },
+  "notes": "Build 372 records the fleet commercial decision domains without inventing fleet economics. All commercial values remain unresolved until explicitly approved. Build 373 owns fleet account operations after this rulebook is approved."
+}
