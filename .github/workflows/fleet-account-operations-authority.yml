@@ -1,0 +1,61 @@
+name: Build 373 — Fleet Account Operations Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build373-fleet-ops-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: Validate Build 373 fleet operations
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate fleet operations authority
+        run: python scripts/fleet_account_operations_check.py
+      - name: Validate migration is additive SQL
+        run: |
+          grep -q "create table if not exists public.fleet_account_contacts" supabase/migrations/20260910171324_build373_fleet_account_operations.sql
+          grep -q "create table if not exists public.fleet_account_vehicles" supabase/migrations/20260910171324_build373_fleet_account_operations.sql
+          grep -q "create table if not exists public.fleet_request_groups" supabase/migrations/20260910171324_build373_fleet_account_operations.sql
+          grep -q "create table if not exists public.fleet_request_jobs" supabase/migrations/20260910171324_build373_fleet_account_operations.sql
+          grep -q "create table if not exists public.fleet_vehicle_service_history" supabase/migrations/20260910171324_build373_fleet_account_operations.sql
+      - name: Build 373 summary
+        run: |
+          {
+            echo "### Build 373 — Fleet Account Operations"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Staff-only fleet contacts: PASS"
+            echo "- Vehicle roster: PASS"
+            echo "- Per-vehicle service history: PASS"
+            echo "- Grouped requests/jobs: PASS"
+            echo "- PO/reference metadata: PASS"
+            echo "- Invoice grouping metadata: PASS"
+            echo "- Booking/payment/provider mutation boundary: PASS"
+          } >> "$GITHUB_STEP_SUMMARY"
