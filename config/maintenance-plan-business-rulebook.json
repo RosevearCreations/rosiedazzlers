@@ -1,0 +1,75 @@
+{
+  "schema_version": "build-370-v1",
+  "status": "awaiting_business_approval",
+  "business_approval_required": true,
+  "activation": {
+    "plan_enabled": false,
+    "pilot_enrollment_allowed": false,
+    "automatic_enrollment_allowed": false,
+    "recurring_billing_allowed": false,
+    "automatic_renewal_allowed": false
+  },
+  "authority": {
+    "booking_flow_remains_authoritative": true,
+    "current_service_area_rules_apply": true,
+    "current_site_access_rules_apply": true,
+    "current_weather_and_safety_rules_apply": true,
+    "current_vehicle_condition_review_applies": true,
+    "current_payment_and_deposit_rules_apply": true
+  },
+  "decisions": {
+    "eligibility": {
+      "approved": false,
+      "eligible_customer_types": [],
+      "eligible_vehicle_types": [],
+      "required_prior_service": null,
+      "minimum_vehicle_condition": null,
+      "notes": null
+    },
+    "cadence": {
+      "approved": false,
+      "allowed_intervals": [],
+      "seasonal_adjustment_allowed": null,
+      "reschedule_policy": null,
+      "notes": null
+    },
+    "price": {
+      "approved": false,
+      "pricing_model": null,
+      "amount_cents": null,
+      "discount_percent": null,
+      "price_lock_policy": null,
+      "notes": null
+    },
+    "inclusions": {
+      "approved": false,
+      "service_codes": [],
+      "included_add_on_codes": [],
+      "condition_limits": [],
+      "notes": null
+    },
+    "exclusions": {
+      "approved": false,
+      "excluded_service_codes": [],
+      "excluded_add_on_codes": [],
+      "condition_exclusions": [],
+      "notes": null
+    },
+    "cancellation": {
+      "approved": false,
+      "notice_hours": null,
+      "late_cancel_fee_cents": null,
+      "missed_visit_policy": null,
+      "pause_policy": null,
+      "termination_policy": null,
+      "notes": null
+    },
+    "priority": {
+      "approved": false,
+      "priority_booking_allowed": null,
+      "guaranteed_slot_allowed": false,
+      "capacity_reservation_policy": null,
+      "notes": null
+    }
+  }
+}
