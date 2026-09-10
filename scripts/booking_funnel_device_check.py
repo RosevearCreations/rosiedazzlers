@@ -118,8 +118,13 @@ if "Math.min(MAX_DAYS" not in api or "limit=${MAX_ROWS}" not in api:
 if "data.length >= MAX_ROWS" not in api:
     errors.append("booking funnel does not report row-limit truncation")
 
-# Build is source-only.
-migrations = list(ROOT.glob("**/*324*.sql"))
+# Build 324 itself was source-only. Scope this guard to migrations explicitly
+# belonging to Build 324 so unrelated future migration timestamps cannot collide
+# with the digits "324" (for example a timestamp ending in 1324).
+migrations = [
+    path for path in ROOT.glob("**/*.sql")
+    if re.search(r"(?:^|[_-])build[_-]?324(?:[_-]|$)", path.name, re.IGNORECASE)
+]
 if migrations:
     errors.append("Build 324 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
 
