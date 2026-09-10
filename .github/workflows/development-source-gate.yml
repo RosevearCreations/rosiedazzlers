@@ -57,6 +57,7 @@ jobs:
           node --check functions/api/_lib/staff-auth.js
           node --check functions/api/_lib/action-permissions.js
           node --check functions/api/_lib/fleet-maintenance-planning.js
+          node --check functions/api/_lib/maintenance-plan-pilot.js
           node --check functions/api/admin/customer_vehicle_maintenance_planning.js
           node --check functions/api/admin/customer_retention_dashboard.js
           node --check functions/api/_lib/crm-operational-work-queue.js
@@ -65,6 +66,7 @@ jobs:
           node --check functions/api/_lib/booking-rebooking-funnel.js
           node --check functions/api/admin/booking_rebooking_funnel.js
           node --check scripts/booking_rebooking_funnel_test.mjs
+          node --check scripts/maintenance_plan_pilot_activation_test.mjs
           node --check functions/api/admin/_middleware.js
           node --check assets/client-auth.js
           node --check assets/booking-hours.js
@@ -105,6 +107,7 @@ jobs:
           python -m py_compile scripts/admin_ui_audit.py
           python -m py_compile scripts/maintenance_retention_check.py
           python -m py_compile scripts/maintenance_plan_business_rulebook_check.py
+          python -m py_compile scripts/maintenance_plan_pilot_activation_check.py
           python -m py_compile scripts/fleet_maintenance_planning_check.py
           python -m py_compile scripts/final_balance_readiness_check.py
           python -m py_compile scripts/payment_provider_readiness_check.py
@@ -146,6 +149,11 @@ jobs:
 
       - name: Validate maintenance plan business rulebook authority
         run: python scripts/maintenance_plan_business_rulebook_check.py
+
+      - name: Validate maintenance plan pilot activation authority
+        run: |
+          python scripts/maintenance_plan_pilot_activation_check.py
+          node scripts/maintenance_plan_pilot_activation_test.mjs
 
       - name: Validate fleet maintenance planning contracts
         run: python scripts/fleet_maintenance_planning_check.py
@@ -219,6 +227,7 @@ jobs:
             echo "- Protected Admin runtime-smoke helper syntax: PASS"
             echo "- Maintenance/retention authority: PASS"
             echo "- Maintenance plan business rulebook authority: PASS"
+            echo "- Maintenance plan pilot activation authority: PASS"
             echo "- Fleet maintenance planning authority: PASS"
             echo "- Final-balance readiness authority: PASS"
             echo "- Payment-provider readiness authority: PASS"
