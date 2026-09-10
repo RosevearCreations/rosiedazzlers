@@ -1,5 +1,6 @@
 // Historical Build 264 live bundle token: /apps/detailer/live-job-module.js?v=20260825build264
 // Build 271 — Detailer Mobile App shell with role/module ceiling, deep-link job selection and cached runtime flags.
+// Build 369 — Canonical pre-visit job readiness is loaded on demand from booking_jobsite; no background polling.
 // Acceptance rule: no eligible active job = zero recurring live-job network activity.
 (function bootDetailerApp(globalScope){
   'use strict';
@@ -13,12 +14,38 @@
   const requestedJobId=String(new URLSearchParams(location.search).get('job')||'').trim();
   const requestedMessages=location.hash==='#liveJobHost';
   let actor=null,jobs=[],selected=null,liveModule=null,currentPolicy=null,deepLinkHandled=false;
+  let readiness={jobId:null,state:'idle',intake:null,error:''};
+  let readinessRequest=0;
 
   function status(message,type=''){
     const box=$('appStatus');box.hidden=!message;box.className=`notice ${type}`.trim();box.textContent=message||'';
   }
   function modeLabel(mode){return mode==='live'?'LIVE JOB':mode==='ready'?'READY / STANDBY':'IDLE';}
   function jobStage(job){return policy.stage(job)||'pending';}
+  function readinessValue(value){return value===true?'Confirmed':value===false?'Not confirmed':'Not recorded';}
+  function readinessLine(label,value){return `<div class="mini"><strong>${esc(label)}:</strong> ${esc(readinessValue(value))}</div>`;}
+  function readinessNote(label,value){const text=String(value??'').trim();return `<div class="mini"><strong>${esc(label)}:</strong> ${esc(text||'Not provided')}</div>`;}
+  function renderReadinessCard(){
+    if(!selected)return '';
+    const serviceRule='<div class="notice"><strong>Service setup rule</strong><div class="mini">Rosie supplies normal detailing water and power. The customer provides an appropriate safe, private/permitted work area; unusual property, runoff, access or utility restrictions must be reviewed before dispatch.</div></div>';
+    if(readiness.jobId!==String(selected.id)||readiness.state==='idle')return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong><div class="mini">Readiness has not been loaded for this job.</div>${serviceRule}</section>`;
+    if(readiness.state==='loading')return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong><div class="mini">Loading the current staff-authorized job-site intake…</div>${serviceRule}</section>`;
+    if(readiness.state==='error')return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong><div class="notice bad">${esc(readiness.error||'Job-site intake could not be loaded.')} No automatic retry was started. Use Refresh assigned jobs or reselect the job to try again.</div>${serviceRule}</section>`;
+    const intake=readiness.intake;
+    if(!intake)return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong><div class="notice warn">No job-site intake is recorded. Before dispatch, confirm the work area, vehicle access, key handoff, weather/site concerns and special notes.</div>${serviceRule}</section>`;
+    return `<section class="panel" aria-label="Pre-visit site readiness"><strong>Pre-visit site readiness</strong>`+
+      `<div class="mini">Intake: ${intake.intake_complete?'Complete':'Not marked complete'}</div>`+
+      readinessLine('Safe work area / vehicle access',intake.vehicle_accessible_and_safe)+
+      readinessLine('Keys collected',intake.keys_collected)+
+      readinessLine('Key handoff acknowledged',intake.keys_handed_over_acknowledged)+
+      readinessLine('Owner present for visual inspection',intake.owner_present_for_visual_inspection)+
+      readinessLine('Owner damage acknowledgement',intake.owner_damage_acknowledged)+
+      readinessLine('Entire vehicle accessible',intake.entire_vehicle_accessible)+
+      readinessNote('Weather / site concerns',intake.site_weather_notes)+
+      readinessNote('Customer special notes',intake.owner_notes)+
+      readinessNote('Detailer pre-job notes',intake.detailer_pre_job_notes)+
+      serviceRule+'</section>';
+  }
   function renderRuntime(){
     currentPolicy=policy.deriveDetailer({jobs,selectedJob:selected,documentVisible:!document.hidden});
     $('runtimeMode').textContent=modeLabel(currentPolicy.mode);
@@ -35,7 +62,7 @@
     host.querySelectorAll('[data-job-id]').forEach((button)=>button.addEventListener('click',()=>selectJob(button.dataset.jobId)));
   }
   function renderSelected(){
-    $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}`:'Choose an assigned job.';
+    $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}${renderReadinessCard()}`:'Choose an assigned job.';
     const stage=jobStage(selected);
     const allowed=new Set();
     if(selected){
@@ -50,9 +77,27 @@
     renderRuntime();
   }
   function chooseSuggested(){return policy.chooseActive(jobs)||null;}
+  async function loadSelectedReadiness(){
+    const job=selected;
+    const jobId=String(job?.id||'').trim();
+    const requestId=++readinessRequest;
+    if(!jobId){readiness={jobId:null,state:'idle',intake:null,error:''};renderSelected();return;}
+    readiness={jobId,state:'loading',intake:null,error:''};
+    renderSelected();
+    try{
+      const out=await api.requestJson('/api/jobsite_intake_get',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({booking_id:jobId})});
+      if(requestId!==readinessRequest||String(selected?.id||'')!==jobId)return;
+      readiness={jobId,state:'ready',intake:out.jobsite||null,error:''};
+      renderSelected();
+    }catch(error){
+      if(requestId!==readinessRequest||String(selected?.id||'')!==jobId)return;
+      readiness={jobId,state:'error',intake:null,error:error.message||'Job-site intake could not be loaded.'};
+      renderSelected();
+    }
+  }
   function selectJob(id){
     selected=jobs.find((job)=>String(job.id)===String(id))||null;
-    renderJobs();renderSelected();
+    renderJobs();renderSelected();void loadSelectedReadiness();
   }
   function resolveDeepLink(){
     if(deepLinkHandled||!requestedJobId)return null;
@@ -68,7 +113,7 @@
       actor=out.actor||actor;jobs=Array.isArray(out.jobs)?out.jobs:[];
       const keep=selected?.id;
       selected=resolveDeepLink()||(keep&&jobs.find((job)=>String(job.id)===String(keep)))||chooseSuggested();
-      renderJobs();renderSelected();
+      renderJobs();renderSelected();void loadSelectedReadiness();
       if(out.workspace?.bounded===true && manual) status(`Assigned jobs refreshed. ${jobs.length} bounded workspace job(s) loaded.`,'ok');
       else if(manual)status('Assigned jobs refreshed.','ok');
     }catch(error){status(error.message||'Could not load assigned jobs.','bad');$('jobsList').innerHTML='<div class="notice bad">Assigned jobs could not be loaded. No automatic retry was started.</div>';}
