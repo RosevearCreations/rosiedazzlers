@@ -1,0 +1,54 @@
+name: Build 370 — Maintenance Plan Business Rulebook Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-maintenance-plan-business-rulebook-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: Validate maintenance plan business rulebook
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate rulebook authority
+        run: python scripts/maintenance_plan_business_rulebook_check.py
+
+      - name: Build 370 summary
+        run: |
+          {
+            echo "### Build 370 — Maintenance Plan Business Rulebook"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Seven required business-decision domains: PASS"
+            echo "- Unapproved economics/entitlements fail closed: PASS"
+            echo "- Public maintenance-plan activation fail closed: PASS"
+            echo "- Existing booking/operations authority preserved: PASS"
+            echo "- Schema migration introduced: NO"
+          } >> "$GITHUB_STEP_SUMMARY"
