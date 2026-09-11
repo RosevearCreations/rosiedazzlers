@@ -4,30 +4,30 @@ This queue records current actionable work. Completed implementation history bel
 
 ## Accepted checkpoint
 
-**Build 382 — Customer Account & Retention UX Convergence** is the accepted synchronized source and Production deployment boundary before the current release begins. Its authenticated customer projection, truthful retention lifecycle presentation, safe rebooking handoff and exact-SHA Production authority remain retained release protections.
+**Build 383 — Mobile Detailer Field Workflow Hardening** is the accepted synchronized source and Production deployment boundary before the current release begins. Its field evidence gates, server-authoritative readiness, bounded staff permissions and exact-SHA Production authority remain retained release protections.
 
 ## Current release
 
-**Build 383 — Mobile Detailer Field Workflow Hardening** is the active bounded release.
+**Build 384 — Finance Cockpit & Month-End UX** is the active bounded release.
 
 Current scope:
 
-- retain the existing server-authoritative arrival/readiness and keys/access checks rather than creating a second field-readiness ledger;
-- require booking-scoped before-service photo evidence plus a saved field checklist before the Detailer App enables **Start job**;
-- record the field checklist, approved-scope/add-on record, product-use record and completion evidence through the existing staff-authorized booking note authority;
-- keep approved add-ons truthful: a detailer record may document already-approved scope or “None”, but it does not approve, price or charge work;
-- keep product usage operational: the field record documents meaningful usage but does not independently post inventory/accounting transactions;
-- require approved-scope, product-use, completion-evidence and after-photo records before the Detailer App enables **Complete**;
-- retain the existing booking-scoped signed media-upload and media-post authorities for before/during/after evidence;
-- expose the customer final-balance page as a handoff only; the Detailer App cannot mark a balance paid or mutate Square/provider/payment state;
-- preserve bounded staff authorization, customer privacy, event-driven runtime behaviour and zero recurring live-job polling;
+- converge the existing Build 374–375 Finance authorities into one operator-facing Finance cockpit instead of creating a second ledger or parallel payment record;
+- present the financial workflow from quote/commercial terms through deposit evidence, approved changes/final balance, refunds/tips, settlement reconciliation, HST support, month-end close and accountant handoff;
+- keep the Finance module lazy: opening the cockpit performs authentication/module checks only and does not load accounting datasets automatically;
+- load the retained Build 375 month-end closure snapshot only after an explicit operator action for a selected month/year;
+- display genuine booking-finance, provider-payment, bank-reconciliation, HST, receivables, payables and checklist evidence without fabricating provider/accounting state;
+- fail closed as review-required whenever required evidence is missing, unavailable or unresolved;
+- preserve existing explicit posting, reconciliation, close, remittance and provider/payment workflows as the only mutation authorities;
+- never auto-post accounting entries, auto-close a month, mutate a booking, charge/refund a customer, or mutate payment-provider state from the cockpit;
+- preserve operator approval even when the computed state is `close_ready_candidate`;
 - keep the current release schema-neutral: no database migration is part of this release.
 
-The exact candidate SHA must pass the focused mobile Detailer field-workflow authority and retained source/feature gates before Development promotion. Development must pass retained runtime/deployment gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime authority passes.
+The exact candidate SHA must pass the focused Build 384 Finance cockpit authority and retained source/feature gates before Development promotion. Development must pass retained runtime/deployment gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime authority passes.
 
 ## Next release
 
-**Build 384 — Finance Cockpit & Month-End UX** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
+**Build 385 — Backup, Restore & Release Recovery Drill** is next after the current release. Its durable scope remains preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Continuing rule
 
