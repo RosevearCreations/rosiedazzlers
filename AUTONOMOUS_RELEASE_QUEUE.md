@@ -4,26 +4,27 @@ This queue records current actionable work. Completed implementation history bel
 
 ## Accepted checkpoint
 
-**Build 378 — Release Authority & Documentation Convergence** is the accepted synchronized source and Production deployment boundary before the current release begins. Its durable release-number-independent exact-SHA authority keeps the living release documents aligned with the actual Production boundary and preserves read-only Cloudflare deployment/runtime proof.
+**Build 379 — Production Observability & Self-Diagnostics** is the accepted synchronized source and Production deployment boundary before the current release begins. Its authenticated, bounded diagnostics authority remains read-only and the durable exact-SHA Production deployment/runtime authority remains the release proof.
 
 ## Current release
 
-**Build 379 — Production Observability & Self-Diagnostics** is the active bounded release.
+**Build 380 — Booking Recovery & Failure Handling** is the active bounded release.
 
 Current scope:
 
-- make `/admin/it.html` the definitive authenticated operator view for deployment and runtime health;
-- classify failures as `source`, `build`, `deploy`, `configuration`, or `runtime` instead of collapsing them into a generic failure;
-- expose bounded read-only checks for Pages deployment/build identity, Supabase, R2/media, staff authorization and critical API runtime;
-- report Stripe and PayPal configuration presence/readiness without revealing sensitive values or creating provider transactions;
-- show corrective instructions for degraded/failed checks;
-- prohibit permanent polling, subrequest storms, schema changes and business/provider mutation.
+- restore interrupted in-progress booking details across refresh/back/payment-cancel returns within the same browser tab;
+- preserve explicit booking-link query choices over saved draft state and provide a customer-controlled discard/start-clean path;
+- route checkout through a narrow recovery wrapper while keeping canonical `/api/checkout` pricing, availability, acknowledgements, booking creation and payment rules authoritative;
+- recognize the same recent pending booking by service date, overlapping slot, customer email, package and vehicle size, and resume its already attached Stripe/PayPal payment session instead of creating a duplicate;
+- fail closed when another active booking owns the slot, refresh the existing availability path after 409 collisions, and preserve the rest of the customer draft;
+- retry one network interruption safely through the recovery endpoint so a lost response does not encourage duplicate submission;
+- preserve tab-scoped privacy, avoid durable local storage, background polling, direct booking-table mutation and incidental schema change.
 
-The exact candidate SHA must pass the focused observability authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. A `main` push is complete only when the durable exact-SHA Production deployment/runtime authority passes on that same SHA.
+The exact candidate SHA must pass the focused booking-recovery authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime acceptance passes.
 
 ## Next release
 
-**Build 380 — Booking Recovery & Failure Handling** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
+**Build 381 — Operations Daily Command Centre** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Continuing rule
 
