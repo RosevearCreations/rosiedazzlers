@@ -1,11 +1,11 @@
-name: Build 377 — Production Business Acceptance / Launch Readiness
+name: Production Business Acceptance & Exact-SHA Authority
 
 on:
   push:
     branches:
       - dev
       - main
-      - 'build377-*'
+      - 'build*'
   pull_request:
     branches:
       - dev
@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-build377-${{ github.ref }}
+  group: rosiedazzlers-production-business-acceptance-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Validate Build 377 authority syntax
+      - name: Validate Production authority syntax
         run: |
           python -m py_compile scripts/production_business_acceptance_check.py
           bash -n scripts/cloudflare_pages_production_acceptance.sh
@@ -99,7 +99,7 @@ jobs:
       - name: Source acceptance summary
         run: |
           {
-            echo "### Build 377 business-path authority"
+            echo "### Production business-path authority"
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Acquisition → booking: PASS"
             echo "- Payment → final finance: PASS"
