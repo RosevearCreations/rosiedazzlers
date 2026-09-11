@@ -67,7 +67,7 @@ export async function onRequest(context) {
   // confirmation route and preserve every provider query parameter (session_id/token/etc.).
   if ((url.pathname === "/complete" || url.pathname === "/complete.html") && isPaymentProvider(url.searchParams.get("provider"))) {
     url.pathname = "/booking-confirmed";
-    return hardenResponse(request, Response.redirect(url.toString(), 302));
+    return hardenResponse(request, paymentProviderRedirect(url));
   }
 
   const applyLegacyClarity = TARGETS.has(url.pathname);
@@ -190,6 +190,10 @@ async function handleCheckoutResponse(context, requestUrl) {
   headers.set("content-type", "application/json; charset=utf-8");
   headers.set("cache-control", "no-store");
   return new Response(body, { status: response.status, statusText: response.statusText, headers });
+}
+
+function paymentProviderRedirect(url) {
+  return Response.redirect(url.toString(), 302);
 }
 
 function isPaymentProvider(value) {
