@@ -19,7 +19,7 @@ Current scope:
 - show corrective instructions for degraded/failed checks;
 - prohibit permanent polling, subrequest storms, schema changes and business/provider mutation.
 
-The exact candidate SHA must pass the focused Build 379 authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. A `main` push is complete only when the durable exact-SHA Production deployment/runtime authority passes on that same SHA.
+The exact candidate SHA must pass the focused observability authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. A `main` push is complete only when the durable exact-SHA Production deployment/runtime authority passes on that same SHA.
 
 ## Next release
 
