@@ -1,0 +1,58 @@
+name: Build 382 — Customer Account & Retention UX Convergence
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build382-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build382-customer-retention-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Build 382 customer account/retention authority
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate SHA
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate bounded customer-retention authority
+        run: python3 scripts/customer_account_retention_ux_check.py
+      - name: Syntax-check customer retention JavaScript
+        run: |
+          node --check functions/api/client/_lib/customer-retention.js
+          node --check functions/api/client/retention.js
+          node --check assets/my-account-v355.js
+          node --check assets/my-account-v382.js
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    needs: source-authority
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Check out exact Production SHA
+        uses: actions/checkout@v4
+      - name: Prove exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
