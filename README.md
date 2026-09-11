@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 268 — repository hygiene + current modular runtime baseline**.
+Current source direction: **Build 378 — Release Authority & Documentation Convergence**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -8,10 +8,11 @@ Rosie Dazzlers is one platform with a static-first public website and eight inde
 
 For a new chat, AI, or developer, read only:
 
-1. `AI_PROJECT_HANDOFF.md` — exact current implementation/deployment truth.
-2. `MASTER_VALUE_ROADMAP.md` — ordered next work and unresolved gates.
+1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
+2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
+3. `FORWARD_BUILD_ROADMAP_378_385.md` — approved forward sequence and continuing release rules.
 
-Use `DOC_INDEX.md` only to locate specialist references and `STARTUP_GO_LIVE_BLOCKERS.md` for Development/go-live acceptance.
+Use `DOC_INDEX.md` only to locate specialist references and `STARTUP_GO_LIVE_BLOCKERS.md` for Development/go-live acceptance details.
 
 ## Canonical source locations
 
@@ -25,12 +26,22 @@ Use `DOC_INDEX.md` only to locate specialist references and `STARTUP_GO_LIVE_BLO
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Release check
+## Release authority
 
-Run:
+Run the cumulative source check with:
 
 ```bash
 python scripts/release_check.py
 ```
 
-The current check validates repository hygiene, Cloudflare Functions structure, module/role boundaries, lazy/no-poll runtime rules, PWA/push-event foundations, service/pricing convergence, route-copy parity, and public one-H1 SEO requirements.
+Run the living release/documentation convergence guard with:
+
+```bash
+python scripts/release_authority_documentation_convergence_check.py
+```
+
+The Current Source Gate also executes these durable authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through its retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
+
+Production is not considered GREEN from source promotion alone. `.github/workflows/production-business-acceptance-authority.yml` independently requires the exact `main` SHA to match a successful Cloudflare Production deployment with Functions metadata, then smokes both the immutable deployment and `https://rosiedazzlers.ca`. Its acceptance helper is observation-only and does not deploy, retry, roll back, charge providers or mutate business data.
+
+The cumulative release checks retain repository hygiene, Cloudflare Functions structure, module/role boundaries, lazy/no-poll runtime rules, service/pricing convergence, route-copy parity, public one-H1 SEO requirements, release-document convergence and exact-SHA release discipline.
