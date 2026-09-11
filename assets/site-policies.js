@@ -1,5 +1,5 @@
 // assets/site-policies.js
-// Build 367: public policy renderer plus booking-page enhancement hooks.
+// Build 380: public policy renderer plus booking-page enhancement hooks.
 (function attachRosieSitePolicies(globalScope) {
   const FALLBACK_POLICIES = {
     deposit: 'Deposits may be requested to hold a quote-led appointment. Final balance, add-ons, travel, and heavy-condition adjustments are confirmed before the appointment is finalized.',
@@ -51,7 +51,7 @@
   }
 
   function currentPath() {
-    return String(globalScope.location?.pathname || '').replace(/\/+$/, '') || '/';
+    return String(globalScope.location?.pathname || '').replace(/\.html$/i, '').replace(/\/+$/, '') || '/';
   }
 
   function isBookingPage() {
@@ -110,6 +110,17 @@
     }
   }
 
+  async function wireBookingRecovery() {
+    const path = currentPath();
+    if (!['/book', '/booking-planner', '/complete', '/booking-confirmed'].includes(path)) return;
+    try {
+      const module = await import('/assets/booking-recovery.js?v=20260911build380');
+      module.wireBookingRecovery?.(document);
+    } catch (error) {
+      console.warn('Booking recovery enhancement unavailable; canonical booking and checkout remain usable.', error);
+    }
+  }
+
   function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   document.addEventListener('DOMContentLoaded', () => {
     applyPolicies(document);
@@ -118,6 +129,7 @@
     wireBookingServiceRecommendation();
     wireBookingAddonOptimization();
     wireBookingVehicleFormUX();
+    wireBookingRecovery();
   });
   globalScope.RosieSitePolicies = { loadPolicies, applyPolicies, get policies() { return state.policies; } };
 })(window);
