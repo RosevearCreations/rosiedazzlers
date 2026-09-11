@@ -19,7 +19,7 @@ Current scope:
 - route operational changes to the existing Bookings, Assignment, Job Site, Progress, Payments, Inventory and Today Needs Attention authorities;
 - keep the command centre operator-driven with no recurring polling, browser-side operations ledger, direct operational mutation or incidental schema change.
 
-The exact candidate SHA must pass the focused Operations authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime acceptance passes.
+The exact candidate SHA must pass the focused Operations authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime authority passes.
 
 ## Next release
 
