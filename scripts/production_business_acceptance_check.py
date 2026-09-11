@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for Build 377 Production business acceptance."""
+"""Fail-closed source authority for durable Production business acceptance."""
 from pathlib import Path
 import re
 import sys
@@ -8,7 +8,6 @@ ROOT = Path(__file__).resolve().parents[1]
 WORKFLOW = ROOT / ".github" / "workflows" / "production-business-acceptance-authority.yml"
 PRODUCTION_HELPER = ROOT / "scripts" / "cloudflare_pages_production_acceptance.sh"
 CONTRACT = ROOT / "PRODUCTION_BUSINESS_ACCEPTANCE.md"
-QUEUE = ROOT / "AUTONOMOUS_RELEASE_QUEUE.md"
 errors = []
 
 
@@ -99,8 +98,8 @@ helper = require(PRODUCTION_HELPER, [
 ], "Production exact-SHA helper")
 
 workflow = require(WORKFLOW, [
-    "name: Build 377 — Production Business Acceptance / Launch Readiness",
-    "build377-*",
+    "name: Production Business Acceptance & Exact-SHA Authority",
+    "- 'build*'",
     "Validate Production business acceptance source contract",
     "python scripts/production_business_acceptance_check.py",
     "Validate acquisition and booking authorities",
@@ -113,14 +112,8 @@ workflow = require(WORKFLOW, [
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
     "bash scripts/cloudflare_pages_production_acceptance.sh",
     "ROSIEDAZZLERS_TOKEN",
-], "Build 377 workflow")
-
-queue = require(QUEUE, [
-    "Build 376",
-    "Build 377",
-    "Build 378",
-    "FORWARD_BUILD_ROADMAP_378_385.md",
-], "autonomous release queue")
+    "CLOUDFLARE_ACCOUNT_ID",
+], "Production business acceptance workflow")
 
 # Production acceptance helper is strictly retrieval + HTTP smoke. Block known
 # Cloudflare/Git mutation primitives even if later edits accidentally add them.
@@ -139,15 +132,17 @@ for match in re.finditer(r'https://api\.cloudflare\.com/client/v4/[^"\s]+', help
     if not any(part in url for part in allowed):
         errors.append(f"Production helper contains unexpected Cloudflare endpoint: {url}")
 
-# The workflow must not grant write permissions or perform provider/business mutations.
+# The workflow must remain read-only and release-number independent.
 if re.search(r"\b(contents|deployments|actions):\s*write\b", workflow):
-    errors.append("Build 377 workflow grants write permissions")
+    errors.append("Production workflow grants write permissions")
+if re.search(r"(?i)\bbuild\s+\d{3}\b", workflow):
+    errors.append("Production workflow names a historical numbered release")
 for needle in [
     "git push", "update-ref", "wrangler pages deploy", "stripe trigger", "paypal",
-    "curl -X POST", "curl -X DELETE", "curl -X PATCH",
+    "curl -x post", "curl -x delete", "curl -x patch",
 ]:
     if needle in workflow.lower():
-        errors.append(f"Build 377 workflow contains mutation/provider primitive: {needle}")
+        errors.append(f"Production workflow contains mutation/provider primitive: {needle}")
 
 # The detailed acceptance contract must explicitly separate software proof from real-world evidence.
 for phrase in [
@@ -156,16 +151,6 @@ for phrase in [
 ]:
     if phrase not in contract:
         errors.append(f"acceptance contract lost fail-closed evidence boundary: {phrase!r}")
-
-# Build 377 is deliberately schema-neutral.
-migrations = list(ROOT.glob("**/*377*.sql"))
-if migrations:
-    errors.append("Build 377 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
-
-# Keep the living queue release-hygienic: accepted/current/next only.
-numbered_builds = re.findall(r"\bBuild\s+\d{3}\b", queue)
-if len(numbered_builds) > 3:
-    errors.append(f"autonomous release queue contains too many numbered build references: {len(numbered_builds)}")
 
 if errors:
     print("PRODUCTION BUSINESS ACCEPTANCE: FAIL")
@@ -178,5 +163,5 @@ print("- acquisition through booking, payment, account/vehicle, staff work and c
 print("- final finance, genuine review, rebook, maintenance and fleet authorities are present")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")
+print("- workflow is durable across sequential releases and does not carry a numbered-release dependency")
 print("- real customer/provider/review/accounting evidence is never fabricated")
-print("- Build 377 is schema-neutral")
