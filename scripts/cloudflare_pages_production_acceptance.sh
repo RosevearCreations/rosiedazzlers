@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Build 377 — read-only Cloudflare Pages Production exact-SHA acceptance.
+# Durable read-only Cloudflare Pages Production exact-SHA acceptance.
 # This helper observes the Git-backed Production deployment only. It cannot
 # deploy, retry, delete, roll back, move Git refs, or mutate business data.
 
