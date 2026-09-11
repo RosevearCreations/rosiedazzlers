@@ -1,0 +1,58 @@
+name: Build 383 — Mobile Detailer Field Workflow Hardening
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build383-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build383-mobile-detailer-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Build 383 mobile Detailer field workflow
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate SHA
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate bounded mobile field authority
+        run: python3 scripts/mobile_detailer_field_workflow_check.py
+      - name: Syntax-check Detailer JavaScript
+        run: |
+          node --check apps/detailer/detailer-app.js
+          node --check apps/detailer/live-job-module.js
+          node --check functions/api/detailer/job_note_post.js
+          node --check functions/api/admin/progress_media_post.js
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    needs: source-authority
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Check out exact Production SHA
+        uses: actions/checkout@v4
+      - name: Prove exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
