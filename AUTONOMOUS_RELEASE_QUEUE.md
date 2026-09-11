@@ -4,26 +4,26 @@ This queue records current actionable work. Completed implementation history bel
 
 ## Accepted checkpoint
 
-**Build 377 — Production Business Acceptance / Launch Readiness** is the accepted synchronized source and Production deployment boundary before the current release begins. The accepted path proved the coherent acquisition-to-retention business authority plus read-only Cloudflare exact-SHA Production deployment identity, immutable deployment smoke and canonical Production runtime smoke. Missing deployment identity remains fail-closed rather than inferred.
+**Build 378 — Release Authority & Documentation Convergence** is the accepted synchronized source and Production deployment boundary before the current release begins. Its durable release-number-independent exact-SHA authority keeps the living release documents aligned with the actual Production boundary and preserves read-only Cloudflare deployment/runtime proof.
 
 ## Current release
 
-**Build 378 — Release Authority & Documentation Convergence** is the active bounded release.
+**Build 379 — Production Observability & Self-Diagnostics** is the active bounded release.
 
 Current scope:
 
-- converge `AI_PROJECT_HANDOFF.md`, this queue, README and branch/release guidance to the actual accepted Production boundary;
-- convert the Production business/exact-SHA workflow from a one-release launcher into a durable release-number-independent authority;
-- require living release documents to agree on accepted/current/next state without embedding stale commit SHAs;
-- retain read-only exact-SHA Cloudflare Production identity, Functions metadata, immutable deployment smoke and canonical runtime smoke;
-- add a durable convergence guard to the Current Source Gate;
-- remain schema-neutral and perform no provider, customer, accounting or Production business-data mutation.
+- make `/admin/it.html` the definitive authenticated operator view for deployment and runtime health;
+- classify failures as `source`, `build`, `deploy`, `configuration`, or `runtime` instead of collapsing them into a generic failure;
+- expose bounded read-only checks for Pages deployment/build identity, Supabase, R2/media, staff authorization and critical API runtime;
+- report Stripe and PayPal configuration presence/readiness without revealing sensitive values or creating provider transactions;
+- show corrective instructions for degraded/failed checks;
+- prohibit permanent polling, subrequest storms, schema changes and business/provider mutation.
 
-The exact candidate SHA must pass the focused convergence authority, Current Source Gate and feature preview before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. A `main` push is complete only when the durable exact-SHA Production deployment/runtime authority also passes.
+The exact candidate SHA must pass the focused Build 379 authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. A `main` push is complete only when the durable exact-SHA Production deployment/runtime authority passes on that same SHA.
 
 ## Next release
 
-**Build 379 — Production Observability & Self-Diagnostics** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
+**Build 380 — Booking Recovery & Failure Handling** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Continuing rule
 

@@ -1,0 +1,48 @@
+name: Build 379 — Production Observability & Self-Diagnostics
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build379-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build379-observability-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Build 379 observability source authority
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out exact candidate SHA
+        uses: actions/checkout@v4
+      - name: Validate bounded read-only diagnostics contract
+        run: python3 scripts/production_observability_self_diagnostics_check.py
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    needs: source-authority
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Check out exact Production SHA
+        uses: actions/checkout@v4
+      - name: Prove exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh

@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>I.T. Diagnostics | Rosie Dazzlers</title>
+  <meta name="description" content="Authenticated Rosie Dazzlers production observability and self-diagnostics." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .it-shell{max-width:1180px;margin:0 auto;padding:28px 18px 60px}.it-head{display:flex;gap:18px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.it-actions{display:flex;gap:8px;flex-wrap:wrap}.it-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}.it-kpi,.it-check{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:16px;padding:15px}.it-kpi strong{display:block;font-size:1.35rem;margin-top:4px}.it-checks{display:grid;gap:12px}.it-check-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.it-status{font-weight:800;text-transform:uppercase;font-size:.8rem;letter-spacing:.05em}.it-check[data-state="ok"]{border-color:rgba(74,222,128,.3)}.it-check[data-state="degraded"]{border-color:rgba(251,191,36,.35)}.it-check[data-state="failed"]{border-color:rgba(248,113,113,.4)}.it-meta{color:#94a3b8;font-size:.92rem}.it-remediation{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.42)}.it-evidence{margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;white-space:pre-wrap;word-break:break-word}.it-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}.it-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}
+  </style>
+</head>
+<body data-build379="production-observability-self-diagnostics">
+  <header class="nav">
+    <div class="nav-inner">
+      <a class="brand" href="/admin.html"><strong>Rosie Dazzlers I.T.</strong></a>
+      <nav class="nav-links"><a href="/admin.html">Admin Dashboard</a><a href="/admin-security.html">Security</a><a href="/admin-app">App Management</a></nav>
+    </div>
+  </header>
+
+  <main class="it-shell">
+    <section class="panel">
+      <div class="it-head">
+        <div>
+          <div class="badge">Build 379</div>
+          <h1>Production observability &amp; self-diagnostics</h1>
+          <p class="kicker">One bounded, authenticated view of deployment identity, Supabase, R2/media, staff auth, critical API runtime and payment configuration.</p>
+        </div>
+        <div class="it-actions">
+          <button id="refreshDiagnostics" class="btn primary" type="button">Refresh Diagnostics</button>
+          <a class="btn ghost" href="/api/health" target="_blank" rel="noopener">Open Public Health</a>
+        </div>
+      </div>
+      <p class="it-note">Diagnostics are on-demand only. This page does not run a recurring timer, create payments, write business data, upload media or mutate provider state.</p>
+      <div id="diagnosticMessage" class="it-note" role="status">Run or refresh diagnostics to inspect the current deployed environment.</div>
+      <div id="diagnosticSummary" class="it-summary" hidden></div>
+      <div id="diagnosticChecks" class="it-checks" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const button = document.getElementById('refreshDiagnostics');
+      const message = document.getElementById('diagnosticMessage');
+      const summary = document.getElementById('diagnosticSummary');
+      const checks = document.getElementById('diagnosticChecks');
+
+      function text(value) { return value == null ? '—' : String(value); }
+      function card(label, value) {
+        const node = document.createElement('div');
+        node.className = 'it-kpi';
+        const small = document.createElement('div'); small.className = 'it-meta'; small.textContent = label;
+        const strong = document.createElement('strong'); strong.textContent = text(value);
+        node.append(small, strong); return node;
+      }
+      function renderCheck(check) {
+        const node = document.createElement('article');
+        node.className = 'it-check'; node.dataset.state = check.status || 'degraded';
+        const head = document.createElement('div'); head.className = 'it-check-head';
+        const title = document.createElement('h2'); title.style.margin = '0'; title.textContent = text(check.name);
+        const state = document.createElement('span'); state.className = 'it-status'; state.textContent = text(check.status);
+        head.append(title, state); node.append(head);
+        const detail = document.createElement('p'); detail.textContent = text(check.detail); node.append(detail);
+        const family = document.createElement('div'); family.className = 'it-meta'; family.textContent = `Failure family: ${check.failure_family || 'none'}`; node.append(family);
+        if (check.remediation) {
+          const fix = document.createElement('div'); fix.className = 'it-remediation';
+          const label = document.createElement('strong'); label.textContent = 'Corrective action';
+          const copy = document.createElement('div'); copy.textContent = check.remediation;
+          fix.append(label, copy); node.append(fix);
+        }
+        if (check.evidence && Object.keys(check.evidence).length) {
+          const evidence = document.createElement('div'); evidence.className = 'it-evidence'; evidence.textContent = JSON.stringify(check.evidence, null, 2); node.append(evidence);
+        }
+        return node;
+      }
+
+      async function loadDiagnostics() {
+        button.disabled = true; button.textContent = 'Checking…';
+        message.className = 'it-note'; message.textContent = 'Running bounded read-only diagnostics…';
+        summary.hidden = true; summary.replaceChildren(); checks.replaceChildren();
+        try {
+          const response = await fetch('/api/admin/production_diagnostics', { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
+          const data = await response.json().catch(() => null);
+          if (!response.ok || !data) {
+            if (response.status === 401 || response.status === 403) throw new Error('You must sign in with an authorized Admin or I.T. staff account before diagnostics can run.');
+            throw new Error(data?.error || `Diagnostics returned HTTP ${response.status}.`);
+          }
+          summary.append(card('Overall', data.overall), card('Build authority', data.build), card('Duration', `${data.duration_ms} ms`), card('Runtime role', data.actor?.role));
+          summary.hidden = false;
+          for (const check of Array.isArray(data.checks) ? data.checks : []) checks.append(renderCheck(check));
+          message.textContent = `Diagnostics completed at ${text(data.generated_at)}. Overall state: ${text(data.overall)}.`;
+          if (data.overall === 'failed') message.classList.add('it-error');
+        } catch (error) {
+          message.className = 'it-note it-error';
+          message.textContent = error?.message || 'Diagnostics could not be loaded.';
+        } finally {
+          button.disabled = false; button.textContent = 'Refresh Diagnostics';
+        }
+      }
+
+      button.addEventListener('click', loadDiagnostics);
+      loadDiagnostics();
+    })();
+  </script>
+</body>
+</html>
