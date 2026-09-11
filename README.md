@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 380 — Booking Recovery & Failure Handling**.
+Current source direction: **Build 381 — Operations Daily Command Centre**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -42,7 +42,7 @@ python scripts/release_authority_documentation_convergence_check.py
 
 The Current Source Gate also executes these durable authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through its retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
 
-The current release adds customer-safe booking recovery without changing the canonical checkout authority. Same-tab draft state survives refresh/back/payment-cancel interruption, 409 collisions refresh the existing availability path, and `/api/checkout_recovery` can resume the already attached Stripe/PayPal session for the same recent pending booking instead of creating a duplicate. Drafts use `sessionStorage`, not durable local storage; the recovery wrapper performs no direct booking-table mutation and requires no database migration.
+The current release adds a protected Operations Daily Command Centre without creating a second operational ledger. It aggregates the current service day's appointment, customer/vehicle, assignment, job-progress, site/readiness and booking-finance evidence from existing authorities, marks unavailable travel/equipment evidence unknown instead of inventing it, and routes operational changes back to their canonical admin surfaces. The command centre is read-only, operator-driven, performs no recurring polling or direct operational mutation, and requires no database migration.
 
 Production is not considered GREEN from source promotion alone. `.github/workflows/production-business-acceptance-authority.yml` independently requires the exact `main` SHA to match a successful Cloudflare Production deployment with Functions metadata, then smokes both the immutable deployment and `https://rosiedazzlers.ca`. Its acceptance helper is observation-only and does not deploy, retry, roll back, charge providers or mutate business data.
 
