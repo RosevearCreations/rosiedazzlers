@@ -1,19 +1,53 @@
-// Build 266 — lazy Detailer live-job module (Build 264 architecture retained).
+// Build 383 — field-ready Detailer live-job workflow. Build 264 lazy/event-driven architecture retained.
 // Loaded only for Arrived/Detailing/Paused jobs. No setInterval, no background polling.
 const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=(v)=>{try{return v?new Date(v).toLocaleString('en-CA'):'';}catch{return String(v||'');}};
+const FIELD_PREFIX={checklist:'[FIELD CHECKLIST]',products:'[PRODUCT USAGE]',addons:'[APPROVED ADD-ONS]',completion:'[COMPLETION EVIDENCE]'};
 
-export async function mount({host,job,policy,api,onJobPatch}){
+export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   let currentJob=job,currentPolicy=policy,feed={updates:[],media:[],proof_media_status:{stage_counts:{}}},uploadXhr=null,lastFile=null,visible=true;
+  let lastFieldSignature='';
   host.innerHTML=`
-    <section class="panel stack" data-live-module="build264">
-      <div class="job-actions" style="justify-content:space-between"><div><span class="badge">Lazy live-job module</span><h2 style="margin:8px 0 0">Two-way job messages, media & customer progress</h2></div><button class="btn ghost" id="liveRefreshFeed" type="button">Refresh feed</button></div>
-      <div class="notice ok">This module was loaded because the selected job is open. It performs no automatic refresh.</div>
+    <section class="panel stack" data-live-module="build383">
+      <div class="job-actions" style="justify-content:space-between"><div><span class="badge">Build 383 field workflow</span><h2 style="margin:8px 0 0">Field evidence, scope control & customer handoff</h2></div><button class="btn ghost" id="liveRefreshFeed" type="button">Refresh feed</button></div>
+      <div class="notice ok">This module loads only for an open assigned job. Every field record is user-driven; no automatic refresh or background polling is created.</div>
+
+      <section class="stack" aria-label="Build 383 field workflow">
+        <div class="job-actions" style="justify-content:space-between"><div><strong>Field workflow readiness</strong><div class="mini">Arrival/readiness and keys/access remain server-authoritative. Before-service and completion evidence below are booking-scoped.</div></div><span class="badge" id="fieldOverallState">CHECKING</span></div>
+        <div class="runtime-strip" id="fieldWorkflowStatus"></div>
+        <div class="notice" id="fieldGateMessage">Load the job feed to calculate field readiness.</div>
+      </section>
+
       <div class="runtime-strip"><div class="runtime-card"><span class="mini">Photo/video capture</span><strong id="liveMediaState">ON</strong></div><div class="runtime-card"><span class="mini">Customer progress</span><strong id="liveProgressState">${currentJob.progress_enabled?'ON':'OFF'}</strong></div><div class="runtime-card"><span class="mini">Background polling</span><strong>OFF</strong></div></div>
       <div class="job-actions"><button class="btn ghost" id="enableLiveProgress" type="button">Enable customer progress</button><button class="btn ghost" id="copyLiveProgress" type="button">Copy customer link</button><a class="btn ghost" id="liveIncidentLink" href="/admin-incident-reports.html">Incident report</a></div>
+
+      <div class="hr"></div>
+      <section class="stack" aria-label="Before-service evidence">
+        <h3 style="margin:0">3. Before photos</h3>
+        <div class="mini">Capture at least one arrival/pre-service photo before starting work. Existing damage should be visible and described.</div>
+        <button class="btn ghost" id="prepareBeforePhoto" type="button">Prepare before-photo upload</button>
+
+        <h3 style="margin:8px 0 0">4. Service checklist</h3>
+        <label class="check-row"><input type="checkbox" data-field-check="condition"/> Vehicle condition and pre-existing concerns reviewed</label>
+        <label class="check-row"><input type="checkbox" data-field-check="scope"/> Package/service scope confirmed</label>
+        <label class="check-row"><input type="checkbox" data-field-check="hazards"/> Valuables, accessories, hazards and special instructions reviewed</label>
+        <label class="check-row"><input type="checkbox" data-field-check="setup"/> Work area, keys/access and safe setup confirmed</label>
+        <button class="btn ghost" id="saveFieldChecklist" type="button">Save checklist evidence</button>
+
+        <h3 style="margin:8px 0 0">5. Approved add-ons / scope changes</h3>
+        <div class="mini">Record only add-ons already approved through the existing authority, or enter “None”. A detailer note does not approve, price or charge an add-on.</div>
+        <textarea id="fieldAddons" rows="2" maxlength="1200" placeholder="Example: None — or approved Pet Hair Removal per current job authority"></textarea>
+        <button class="btn ghost" id="saveFieldAddons" type="button">Save approved-scope record</button>
+
+        <h3 style="margin:8px 0 0">6. Product usage</h3>
+        <div class="mini">Record meaningful product/chemical usage or “Standard package consumables only”. This is operational evidence, not inventory posting.</div>
+        <textarea id="fieldProducts" rows="2" maxlength="1200" placeholder="Example: Interior APC 150 mL; extractor rinse 2 L"></textarea>
+        <button class="btn ghost" id="saveFieldProducts" type="button">Save product-use record</button>
+      </section>
+
       <div class="hr"></div>
       <div class="stack">
-        <label>Stage<select id="liveStage"><option value="arrival">Arrival / setup</option><option value="pre_existing">Pre-existing condition</option><option value="during" selected>During the detail</option><option value="final">Final result</option><option value="recommendation">Recommendation</option><option value="issue">Issue / concern</option><option value="general">General update</option></select></label>
+        <label>Stage<select id="liveStage"><option value="arrival">Arrival / before service</option><option value="pre_existing">Pre-existing condition</option><option value="during" selected>During the detail</option><option value="final">Final / after service</option><option value="recommendation">Recommendation</option><option value="issue">Issue / concern</option><option value="general">General update</option></select></label>
         <label>Visibility<select id="liveAudience"><option value="customer">Customer now</option><option value="review">Admin review first</option><option value="internal">Staff only</option></select></label>
         <label>Message / update<textarea id="liveNote" rows="3" maxlength="4000" placeholder="What should the customer or team know?"></textarea></label>
         <label class="check-row"><input id="liveActionRequired" type="checkbox"/> Customer response or decision is requested</label>
@@ -21,6 +55,7 @@ export async function mount({host,job,policy,api,onJobPatch}){
       </div>
       <div class="hr"></div>
       <div class="stack">
+        <div class="job-actions"><button class="btn ghost" id="prepareBeforePhoto2" type="button">Before photo</button><button class="btn ghost" id="prepareAfterPhoto" type="button">After photo</button></div>
         <label>Photo or video<input id="liveMediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime" capture="environment"/></label>
         <label>Caption<input id="liveMediaCaption" maxlength="240" placeholder="Example: Driver seat after extraction"/></label>
         <label>Retention<select id="liveMediaRetention"><option value="standard_365_days">Job + 365 days</option><option value="temporary_90_days">Job + 90 days</option><option value="permanent_proof">Permanent evidence</option></select></label>
@@ -28,6 +63,19 @@ export async function mount({host,job,policy,api,onJobPatch}){
         <div class="job-actions"><button class="btn primary" id="uploadLiveMedia" type="button">Upload media</button><button class="btn ghost" id="cancelLiveUpload" type="button" disabled>Cancel upload</button><button class="btn ghost" id="retryLiveUpload" type="button" disabled>Retry manually</button></div>
         <div class="mini" id="liveUploadStatus">Direct storage upload is event-driven. Rosie only requests a signed upload URL and then saves the completed media record.</div>
       </div>
+
+      <div class="hr"></div>
+      <section class="stack" aria-label="Completion evidence and handoff">
+        <h3 style="margin:0">7. Completion evidence</h3>
+        <textarea id="fieldCompletion" rows="3" maxlength="1600" placeholder="Summarize completed scope, unresolved concerns, customer discussion and anything Operations should know."></textarea>
+        <button class="btn ghost" id="saveFieldCompletion" type="button">Save completion evidence</button>
+        <h3 style="margin:8px 0 0">8. After photos</h3>
+        <button class="btn ghost" id="prepareAfterPhoto2" type="button">Prepare after-photo upload</button>
+        <h3 style="margin:8px 0 0">9. Customer / final-balance handoff</h3>
+        <div class="mini">This handoff opens or copies the customer payment page only. The Detailer App never marks a balance paid and never changes provider/payment state.</div>
+        <div class="job-actions"><a class="btn ghost" id="finalBalanceLink" href="#">Open customer final-balance page</a><button class="btn ghost" id="copyFinalBalance" type="button">Copy final-balance link</button></div>
+      </section>
+
       <div class="hr"></div>
       <div id="liveProof" class="runtime-strip"></div>
       <div id="liveFeedStats" class="badges"></div>
@@ -36,12 +84,44 @@ export async function mount({host,job,policy,api,onJobPatch}){
 
   const q=(id)=>host.querySelector(`#${id}`);
   function isUsable(){return visible&&currentPolicy?.selected_job_open===true;}
-  function setControls(){const enabled=isUsable();q('liveMediaState').textContent=enabled?'ON':'SUSPENDED';q('liveProgressState').textContent=currentJob?.progress_enabled?'ON':'OFF';['postLiveNote','uploadLiveMedia','enableLiveProgress'].forEach((id)=>{if(q(id))q(id).disabled=!enabled;});q('liveIncidentLink').href=currentJob?`/admin-incident-reports.html?booking_id=${encodeURIComponent(currentJob.id)}`:'/admin-incident-reports.html';}
+  function setControls(){
+    const enabled=isUsable();
+    q('liveMediaState').textContent=enabled?'ON':'SUSPENDED';
+    q('liveProgressState').textContent=currentJob?.progress_enabled?'ON':'OFF';
+    ['postLiveNote','uploadLiveMedia','enableLiveProgress','saveFieldChecklist','saveFieldAddons','saveFieldProducts','saveFieldCompletion','prepareBeforePhoto','prepareBeforePhoto2','prepareAfterPhoto','prepareAfterPhoto2'].forEach((id)=>{if(q(id))q(id).disabled=!enabled;});
+    q('liveIncidentLink').href=currentJob?`/admin-incident-reports.html?booking_id=${encodeURIComponent(currentJob.id)}`:'/admin-incident-reports.html';
+    const handoff=currentJob?`/final-balance-payment.html?booking_id=${encodeURIComponent(currentJob.id)}`:'#';
+    q('finalBalanceLink').href=handoff;
+    q('finalBalanceLink').setAttribute('aria-disabled',enabled?'false':'true');
+    q('copyFinalBalance').disabled=!enabled;
+  }
   function stage(){return q('liveStage').value;}
   function audience(){return q('liveAudience').value;}
+  function hasFieldRecord(prefix){return (Array.isArray(feed.updates)?feed.updates:[]).some((x)=>String(x.note||'').includes(prefix));}
+  function calculateFieldState(){
+    const counts=feed?.proof_media_status?.stage_counts||feed?.proof_media_status?.counts||{};
+    const beforePhoto=Number(counts.arrival||0)>0||Number(counts.pre_existing||0)>0;
+    const afterPhoto=Number(counts.final||0)>0;
+    const checklist=hasFieldRecord(FIELD_PREFIX.checklist);
+    const addons=hasFieldRecord(FIELD_PREFIX.addons);
+    const products=hasFieldRecord(FIELD_PREFIX.products);
+    const completion=hasFieldRecord(FIELD_PREFIX.completion);
+    return {jobId:String(currentJob?.id||''),loaded:true,beforePhoto,checklist,addons,products,completion,afterPhoto,canStart:beforePhoto&&checklist,canComplete:beforePhoto&&checklist&&addons&&products&&completion&&afterPhoto};
+  }
+  function renderFieldWorkflow(){
+    const state=calculateFieldState();
+    const entries=[['Before photo',state.beforePhoto],['Checklist',state.checklist],['Approved add-ons',state.addons],['Product usage',state.products],['Completion evidence',state.completion],['After photo',state.afterPhoto]];
+    q('fieldWorkflowStatus').innerHTML=entries.map(([label,ok])=>`<div class="runtime-card"><span class="mini">${esc(label)}</span><strong>${ok?'DONE':'OPEN'}</strong></div>`).join('');
+    q('fieldOverallState').textContent=state.canComplete?'READY TO HAND OFF':state.canStart?'IN PROGRESS':'PRE-SERVICE OPEN';
+    q('fieldGateMessage').className=`notice ${state.canComplete?'ok':state.canStart?'':'warn'}`.trim();
+    q('fieldGateMessage').innerHTML=state.canComplete?'<strong>Field evidence complete.</strong> The job may proceed to customer/final-balance handoff and the normal server-authoritative completion action.':state.canStart?'<strong>Start evidence complete.</strong> Continue the approved work, then finish product/add-on records, completion evidence and after photos before completing the job.':'<strong>Before-service gate open.</strong> Save the service checklist and at least one arrival/pre-service photo before starting the job.';
+    const signature=JSON.stringify(state);
+    if(signature!==lastFieldSignature){lastFieldSignature=signature;onFieldState?.(state);}
+    return state;
+  }
   function renderFeed(){
     const counts=feed?.proof_media_status?.stage_counts||feed?.proof_media_status?.counts||{};
-    q('liveProof').innerHTML=['arrival','during','final'].map((key)=>`<div class="runtime-card"><span class="mini">${key[0].toUpperCase()+key.slice(1)} proof</span><strong>${Number(counts[key]||0)}</strong></div>`).join('');
+    q('liveProof').innerHTML=['arrival','during','final'].map((key)=>`<div class="runtime-card"><span class="mini">${key==='arrival'?'Before':key==='final'?'After':'During'} proof</span><strong>${Number(counts[key]||0)}</strong></div>`).join('');
     const updates=Array.isArray(feed.updates)?feed.updates:[],media=Array.isArray(feed.media)?feed.media:[];
     const rows=[...updates.map((x)=>({...x,_type:'note'})),...media.map((x)=>({...x,_type:'media'}))].sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0));
     const customer=rows.filter((r)=>r.visibility==='customer').length,review=rows.filter((r)=>r.review_status==='pending'||r.requires_admin_review===true).length;
@@ -52,23 +132,51 @@ export async function mount({host,job,policy,api,onJobPatch}){
       const customerOrigin=String(item.source_channel||'').toLowerCase()==='customer';
       return `<article class="card stack">${mediaHtml}<div class="badges"><span class="badge">${esc(item.stage||'general')}</span><span class="badge">${esc(item.visibility||'internal')}</span><span class="badge">${item._type}</span>${customerOrigin?'<span class="badge">CUSTOMER MESSAGE</span>':''}</div><strong>${esc(item._type==='media'?(item.caption||item.kind||'Media'):(item.created_by||'Update'))}</strong>${item._type==='note'?`<p>${esc(item.note||'')}</p>`:''}<span class="mini">${esc(fmt(item.created_at))}</span></article>`;
     }).join(''):'<div class="notice">No live updates yet.</div>';
+    renderFieldWorkflow();
   }
   async function loadFeed({manual=false}={}){
     if(!currentJob||!isUsable())return;
     if(manual)q('liveFeed').innerHTML='<div class="notice">Refreshing feed…</div>';
     try{feed=await api.requestJson('/api/detailer/live_feed',{method:'POST',body:JSON.stringify({booking_id:currentJob.id})});renderFeed();}
-    catch(error){q('liveFeed').innerHTML=`<div class="notice bad">${esc(error.message||'Could not load feed.')} No automatic retry was started.</div>`;}
+    catch(error){q('liveFeed').innerHTML=`<div class="notice bad">${esc(error.message||'Could not load feed.')} No automatic retry was started.</div>`;onFieldState?.({jobId:String(currentJob?.id||''),loaded:false,canStart:false,canComplete:false,error:error.message||'feed unavailable'});}
+  }
+  async function postUpdate({note,noteStage='general',noteAudience='internal',customerActionRequired=false}){
+    const out=await api.requestJson('/api/detailer/job_note_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,note,audience:noteAudience,stage:noteStage,customer_action_required:customerActionRequired})});
+    if(out.update){feed.updates=Array.isArray(feed.updates)?feed.updates:[];feed.updates.unshift(out.update);}else await loadFeed();
+    renderFeed();
+    return out;
   }
   async function postNote(){
     if(!isUsable())return;
     const note=q('liveNote').value.trim();if(!note)return;
     q('postLiveNote').disabled=true;
-    try{
-      const out=await api.requestJson('/api/detailer/job_note_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,note,audience:audience(),stage:stage(),customer_action_required:q('liveActionRequired').checked})});
-      if(out.update){feed.updates=Array.isArray(feed.updates)?feed.updates:[];feed.updates.unshift(out.update);}
-      q('liveNote').value='';q('liveActionRequired').checked=false;renderFeed();
-    }catch(error){alert(error.ambiguousMutation?`${error.message}\nVerify the feed before repeating the note.`:(error.message||'Could not post note.'));}
+    try{await postUpdate({note,noteStage:stage(),noteAudience:audience(),customerActionRequired:q('liveActionRequired').checked});q('liveNote').value='';q('liveActionRequired').checked=false;}
+    catch(error){alert(error.ambiguousMutation?`${error.message}\nVerify the feed before repeating the note.`:(error.message||'Could not post note.'));}
     finally{setControls();}
+  }
+  async function saveFieldRecord(kind,value){
+    if(!isUsable())return;
+    const prefix=FIELD_PREFIX[kind];
+    const text=String(value||'').trim();
+    if(!prefix||!text){alert('Enter the field record before saving.');return;}
+    const button=q(kind==='checklist'?'saveFieldChecklist':kind==='products'?'saveFieldProducts':kind==='addons'?'saveFieldAddons':'saveFieldCompletion');
+    if(button)button.disabled=true;
+    try{await postUpdate({note:`${prefix} ${text}`.slice(0,4000),noteStage:kind==='completion'?'final':kind==='addons'?'recommendation':'during',noteAudience:'internal'});q('liveUploadStatus').textContent=`${kind==='checklist'?'Checklist':kind==='products'?'Product usage':kind==='addons'?'Approved-scope':'Completion evidence'} saved to the booking-scoped staff feed.`;}
+    catch(error){alert(error.ambiguousMutation?`${error.message}\nVerify the feed before repeating this record.`:(error.message||'Could not save field record.'));}
+    finally{setControls();}
+  }
+  function saveChecklist(){
+    const checks=[...host.querySelectorAll('[data-field-check]')];
+    const missing=checks.filter((x)=>!x.checked);
+    if(missing.length){alert('Complete all four service-checklist confirmations before saving.');return;}
+    saveFieldRecord('checklist','Condition, approved package scope, hazards/special instructions, work area and keys/access confirmed.');
+  }
+  function preparePhoto(photoStage){
+    q('liveStage').value=photoStage;
+    q('liveAudience').value='internal';
+    q('liveMediaCaption').placeholder=photoStage==='arrival'?'Example: Driver-side condition before service':'Example: Driver-side result after service';
+    q('liveMediaFile').focus();
+    q('liveUploadStatus').textContent=photoStage==='arrival'?'Before-photo mode selected. Choose a file, review it locally, then upload.':'After-photo mode selected. Choose a file, review it locally, then upload.';
   }
   function preview(){const file=q('liveMediaFile').files?.[0],box=q('livePreview');if(!file){box.innerHTML='<span class="mini">Choose a file to preview locally. No upload occurs until you press Upload.</span>';return;}const url=URL.createObjectURL(file);box.innerHTML=file.type.startsWith('video/')?`<video controls preload="metadata" style="width:100%;max-height:280px" src="${url}"></video>`:`<img style="width:100%;max-height:280px;object-fit:contain" src="${url}" alt="Selected local preview">`;}
   function directPut(url,file){return new Promise((resolve,reject)=>{const xhr=new XMLHttpRequest();uploadXhr=xhr;xhr.open('PUT',url,true);xhr.setRequestHeader('Content-Type',file.type||'application/octet-stream');xhr.upload.onprogress=(e)=>{if(e.lengthComputable)q('liveUploadStatus').textContent=`Uploading directly to storage… ${Math.round(e.loaded/e.total*100)}%`;};xhr.onload=()=>xhr.status>=200&&xhr.status<300?resolve():reject(new Error(`Direct storage upload failed (${xhr.status}).`));xhr.onerror=()=>reject(new Error('Direct storage upload failed.'));xhr.onabort=()=>reject(new Error('Upload cancelled.'));xhr.send(file);});}
@@ -85,7 +193,7 @@ export async function mount({host,job,policy,api,onJobPatch}){
       await directPut(signed.upload_url,file);
       q('liveUploadStatus').textContent='Saving completed media record…';
       const out=await api.requestJson('/api/detailer/media_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,kind:mediaKind==='image'?'photo':'video',caption:q('liveMediaCaption').value.trim()||file.name,audience:audience(),stage:stage(),customer_action_required:q('liveActionRequired').checked,storage_bucket:signed.bucket,storage_path:signed.path,content_type:file.type,file_size_bytes:file.size,duration_seconds:duration,retention_policy:q('liveMediaRetention').value,upload_session_id:signed.upload_session_id})});
-      if(out.media){feed.media=Array.isArray(feed.media)?feed.media:[];feed.media.unshift(out.media);const key=stage();if(['arrival','during','final'].includes(key)){feed.proof_media_status=feed.proof_media_status||{};feed.proof_media_status.stage_counts=feed.proof_media_status.stage_counts||{};feed.proof_media_status.stage_counts[key]=Number(feed.proof_media_status.stage_counts[key]||0)+1;}}
+      if(out.media){feed.media=Array.isArray(feed.media)?feed.media:[];feed.media.unshift(out.media);const key=stage();if(['arrival','pre_existing','during','final'].includes(key)){feed.proof_media_status=feed.proof_media_status||{};feed.proof_media_status.stage_counts=feed.proof_media_status.stage_counts||{};feed.proof_media_status.stage_counts[key]=Number(feed.proof_media_status.stage_counts[key]||0)+1;}}
       q('liveMediaFile').value='';q('liveMediaCaption').value='';preview();renderFeed();q('liveUploadStatus').textContent='Media saved. No feed reload or background sync was required.';lastFile=null;
     }catch(error){
       if(signed?.upload_session_id){try{await api.requestJson('/api/detailer/media_upload_session',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:signed.upload_session_id,action:String(error.message).includes('cancel')?'cancelled':'failed',error:String(error.message||'upload failed').slice(0,300)})});}catch{}}
@@ -98,13 +206,36 @@ export async function mount({host,job,policy,api,onJobPatch}){
     catch(error){alert(error.message||'Could not enable customer progress.');}
   }
   async function copyProgress(){if(!currentJob?.progress_token){alert('Enable customer progress first.');return;}const url=`${location.origin}/progress.html?token=${encodeURIComponent(currentJob.progress_token)}`;try{await navigator.clipboard.writeText(url);q('liveUploadStatus').textContent='Customer progress link copied.';}catch{prompt('Copy customer progress link:',url);}}
+  async function copyFinalBalance(){if(!currentJob)return;const url=`${location.origin}/final-balance-payment.html?booking_id=${encodeURIComponent(currentJob.id)}`;try{await navigator.clipboard.writeText(url);q('liveUploadStatus').textContent='Customer final-balance handoff link copied. Payment state was not changed.';}catch{prompt('Copy customer final-balance link:',url);}}
 
-  q('liveRefreshFeed').addEventListener('click',()=>loadFeed({manual:true}));q('postLiveNote').addEventListener('click',postNote);q('liveMediaFile').addEventListener('change',preview);q('uploadLiveMedia').addEventListener('click',()=>upload());q('retryLiveUpload').addEventListener('click',()=>lastFile&&upload(lastFile));q('cancelLiveUpload').addEventListener('click',()=>uploadXhr?.abort());q('enableLiveProgress').addEventListener('click',enableProgress);q('copyLiveProgress').addEventListener('click',copyProgress);
+  q('liveRefreshFeed').addEventListener('click',()=>loadFeed({manual:true}));
+  q('postLiveNote').addEventListener('click',postNote);
+  q('liveMediaFile').addEventListener('change',preview);
+  q('uploadLiveMedia').addEventListener('click',()=>upload());
+  q('retryLiveUpload').addEventListener('click',()=>lastFile&&upload(lastFile));
+  q('cancelLiveUpload').addEventListener('click',()=>uploadXhr?.abort());
+  q('enableLiveProgress').addEventListener('click',enableProgress);
+  q('copyLiveProgress').addEventListener('click',copyProgress);
+  q('copyFinalBalance').addEventListener('click',copyFinalBalance);
+  q('saveFieldChecklist').addEventListener('click',saveChecklist);
+  q('saveFieldAddons').addEventListener('click',()=>saveFieldRecord('addons',q('fieldAddons').value));
+  q('saveFieldProducts').addEventListener('click',()=>saveFieldRecord('products',q('fieldProducts').value));
+  q('saveFieldCompletion').addEventListener('click',()=>saveFieldRecord('completion',q('fieldCompletion').value));
+  q('prepareBeforePhoto').addEventListener('click',()=>preparePhoto('arrival'));
+  q('prepareBeforePhoto2').addEventListener('click',()=>preparePhoto('arrival'));
+  q('prepareAfterPhoto').addEventListener('click',()=>preparePhoto('final'));
+  q('prepareAfterPhoto2').addEventListener('click',()=>preparePhoto('final'));
   setControls();
   await loadFeed();
 
   return {
-    setJob(nextJob,nextPolicy){currentJob=nextJob||currentJob;currentPolicy=nextPolicy||currentPolicy;setControls();},
+    setJob(nextJob,nextPolicy){
+      const oldId=String(currentJob?.id||''),newId=String(nextJob?.id||oldId);
+      currentJob=nextJob||currentJob;currentPolicy=nextPolicy||currentPolicy;setControls();
+      if(newId&&newId!==oldId){feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};lastFieldSignature='';q('liveFeed').innerHTML='<div class="notice">Loading selected job field evidence once…</div>';void loadFeed();}
+      else renderFieldWorkflow();
+    },
+    getFieldState(){return calculateFieldState();},
     setVisibility(nextVisible){visible=nextVisible!==false;setControls();},
     suspend(){visible=false;setControls();},
     resume(){visible=true;setControls();}
