@@ -94,11 +94,18 @@ if re.search(r"permissions:\s*\n\s*contents:\s*write", workflow):
 if any(token in workflow for token in ["wrangler pages deploy", "curl -X POST", "curl --request POST", "git push --force"]):
     fail("Build 379 workflow contains a prohibited mutation primitive")
 
-for needle in ["Build 378", "Build 379", "Build 380", "Production Observability & Self-Diagnostics"]:
-    if needle not in queue:
-        fail(f"release queue is missing converged release state: {needle}")
-if "**Build 379 — Production Observability & Self-Diagnostics** is the active bounded release." not in queue:
-    fail("release queue does not mark Build 379 current")
+# The retained Build 379 gate must validate the enduring observability capability,
+# not freeze the release queue at Build 379. Require exactly one active bounded
+# release and ensure release numbering has not moved backwards past this authority.
+active_release_matches = re.findall(
+    r"\*\*Build\s+(\d+)\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.",
+    queue,
+)
+if len(active_release_matches) != 1:
+    fail("release queue must identify exactly one active bounded release")
+active_build = int(active_release_matches[0])
+if active_build < 379:
+    fail(f"release queue regressed behind Build 379 authority: Build {active_build}")
 
 if "PRODUCTION EXACT-SHA ACCEPTANCE: PASS" not in production_helper:
     fail("durable Production exact-SHA helper contract is missing")
@@ -112,5 +119,6 @@ print("- authenticated I.T. diagnostics authority present")
 print("- source/build/deploy/configuration/runtime failure taxonomy present")
 print("- Supabase/R2/API probes are bounded and read-only")
 print("- Stripe/PayPal configuration is presence-only; secrets remain hidden")
+print("- release queue advances independently while retaining Build 379 authority")
 print("- no recurring polling or Build 379 schema migration")
 print("- durable Production exact-SHA authority retained")
