@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 378 — Release Authority & Documentation Convergence**.
+Current source direction: **Build 379 — Production Observability & Self-Diagnostics**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -41,6 +41,8 @@ python scripts/release_authority_documentation_convergence_check.py
 ```
 
 The Current Source Gate also executes these durable authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through its retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
+
+Build 379 adds bounded, authenticated Production observability through `/admin/it.html` and `/api/admin/production_diagnostics`. Diagnostics remain manual/read-only, classify failures by source/build/deploy/configuration/runtime family, hide sensitive values, and do not perform schema, payment-provider, customer, accounting, R2-object or business-data mutation.
 
 Production is not considered GREEN from source promotion alone. `.github/workflows/production-business-acceptance-authority.yml` independently requires the exact `main` SHA to match a successful Cloudflare Production deployment with Functions metadata, then smokes both the immutable deployment and `https://rosiedazzlers.ca`. Its acceptance helper is observation-only and does not deploy, retry, roll back, charge providers or mutate business data.
 
