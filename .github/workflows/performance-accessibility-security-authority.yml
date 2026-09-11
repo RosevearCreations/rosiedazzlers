@@ -56,7 +56,8 @@ jobs:
         run: |
           echo "### Build 376 — Performance, Accessibility & Security Authority" >> "$GITHUB_STEP_SUMMARY"
           echo "- Exact source SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
-          echo "- Public editor-wide no-cache policy: removed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Editor-eligible transformed HTML: cacheable with required freshness revalidation" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Static assets, APIs and non-editor routes: retain their independent cache policy" >> "$GITHUB_STEP_SUMMARY"
           echo "- Keyboard focus / reduced-motion baseline: enforced" >> "$GITHUB_STEP_SUMMARY"
           echo "- Private/authenticated cache boundary: no-store" >> "$GITHUB_STEP_SUMMARY"
           echo "- Conservative security response headers: enforced" >> "$GITHUB_STEP_SUMMARY"
