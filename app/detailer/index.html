@@ -6,15 +6,15 @@
   <meta name="theme-color" content="#0f172a"/>
   <meta name="robots" content="noindex,nofollow"/>
   <title>Detailer Mobile App | Rosie Dazzlers</title><link rel="manifest" href="/manifest.webmanifest">
-  <meta name="description" content="Rosie Dazzlers mobile-first field application for assigned jobs. Live-job tools remain asleep until a job is open."/>
+  <meta name="description" content="Rosie Dazzlers mobile-first field application for assigned jobs. Build 383 keeps arrival, evidence, approved scope, completion and customer handoff bounded to existing authorities."/>
   <link rel="stylesheet" href="/assets/site.css?v=20260829build271"/><link rel="stylesheet" href="/assets/app-core/module-shell.css?v=20260829build271"/>
   <style>
     .app-shell{width:min(1120px,calc(100% - 24px));margin:0 auto;padding:18px 0 90px}.app-head{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:16px}.app-brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}.app-brand img{width:42px;height:42px;object-fit:contain}.module-grid{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(0,1.5fr);gap:16px;align-items:start}.stack{display:grid;gap:12px}.runtime-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.runtime-card{padding:12px;border:1px solid var(--border);border-radius:14px;background:var(--surface)}.runtime-card strong{display:block;font-size:1.1rem}.job-button{width:100%;text-align:left;display:grid;gap:4px}.job-button[aria-current="true"]{outline:2px solid rgba(56,189,248,.75);background:rgba(56,189,248,.08)}.job-actions{display:flex;gap:8px;flex-wrap:wrap}.job-actions .btn{min-height:44px}.idle-panel{padding:20px;border:1px dashed var(--border);border-radius:16px}.live-host[data-loaded="false"]{min-height:150px;display:grid;place-items:center}.mobile-bar{position:fixed;left:12px;right:12px;bottom:max(10px,env(safe-area-inset-bottom));z-index:40;display:none;gap:8px;padding:10px;background:rgba(8,17,31,.95);border:1px solid var(--border);border-radius:16px;backdrop-filter:blur(12px)}.mobile-bar .btn{flex:1;min-height:48px}.mode-idle{color:#94a3b8}.mode-ready{color:#fbbf24}.mode-live{color:#4ade80}.mini{font-size:.85rem;color:var(--muted)}
     @media(max-width:860px){.module-grid{grid-template-columns:1fr}.runtime-strip{grid-template-columns:1fr}.mobile-bar{display:flex}.app-shell{padding-bottom:110px}}
   </style>
 </head>
-<!-- Historical release token: Build 264 modular runtime -->
-<body data-page="app-detailer" data-app-module="detailer" data-build="271">
+<!-- Build 383 mobile detailer field workflow; Build 264 lazy runtime architecture retained. -->
+<body data-page="app-detailer" data-app-module="detailer" data-build="383">
   <main class="app-shell">
     <header class="app-head">
       <a class="app-brand" href="/app/"><img data-logo alt="Rosie Dazzlers logo"/><span><strong>Rosie Dazzlers</strong><br><span class="mini">Detailer Mobile App</span></span></a>
@@ -22,7 +22,7 @@
     </header>
 
     <section class="panel stack" aria-labelledby="detailer-title">
-      <div><span class="badge">Build 271 communication runtime</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow stays lightweight. Live feed, photo/video, and customer-progress code loads only while an eligible job is open.</p></div>
+      <div><span class="badge">Build 383 field workflow</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow now carries arrival/readiness through before-service evidence, approved scope, product usage, completion evidence, after photos and customer/final-balance handoff.</p></div>
       <div class="runtime-strip">
         <div class="runtime-card"><span class="mini">Runtime mode</span><strong id="runtimeMode">Starting…</strong><span class="mini" id="runtimeReason">Checking assigned jobs once.</span></div>
         <div class="runtime-card"><span class="mini">Automatic monitoring</span><strong id="monitorState">OFF</strong><span class="mini">No job polling interval is created.</span></div>
@@ -45,15 +45,16 @@
           <div class="job-actions" id="workflowActions">
             <button class="btn ghost" data-job-action="accept">Accept</button><button class="btn ghost" data-job-action="decline">Decline</button><button class="btn ghost" data-job-action="dispatch">On my way</button><button class="btn ghost" data-job-action="arrive">Arrived</button><button class="btn primary" data-job-action="start">Start job</button><button class="btn ghost" data-job-action="pause">Pause</button><button class="btn ghost" data-job-action="resume">Resume</button><button class="btn primary" data-job-action="complete">Complete</button>
           </div>
+          <div class="mini">Build 383 fails closed: Start requires before-photo + checklist evidence; Complete requires the full field-evidence sequence. Server job transition rules remain authoritative.</div>
         </article>
       </aside>
 
       <section class="stack">
         <article class="panel stack" id="runtimeExplanation">
           <h2 style="margin:0">Job runtime</h2>
-          <div id="runtimeMessage" class="idle-panel"><strong>Idle by default.</strong><p class="mini">No live-job module is loaded until an assigned job enters Arrived, Detailing, or Paused state.</p></div>
+          <div id="runtimeMessage" class="idle-panel"><strong>Idle by default.</strong><p class="mini">No field/live-job module is loaded until an assigned job enters Arrived, Detailing, or Paused state.</p></div>
         </article>
-        <div id="liveJobHost" class="live-host" data-loaded="false"><div class="notice">Live-job tools are asleep.</div></div>
+        <div id="liveJobHost" class="live-host" data-loaded="false"><div class="notice">Field workflow tools are asleep.</div></div>
       </section>
     </section>
     <section class="section"><div data-module-home-cards></div></section>
@@ -69,6 +70,6 @@
   <script src="/assets/app-core/refresh-leader.js?v=20260829build271"></script>
   <script src="/assets/app-core/install-client.js?v=20260829build271"></script>
   <script src="/assets/app-core/module-navigation.js?v=20260829build271"></script>
-  <script src="/apps/detailer/detailer-app.js?v=20260829build271"></script>
+  <script src="/apps/detailer/detailer-app.js?v=20260911build383"></script>
 </body>
 </html>
