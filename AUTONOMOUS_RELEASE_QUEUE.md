@@ -4,27 +4,26 @@ This queue records current actionable work. Completed implementation history bel
 
 ## Accepted checkpoint
 
-**Build 379 — Production Observability & Self-Diagnostics** is the accepted synchronized source and Production deployment boundary before the current release begins. Its authenticated, bounded diagnostics authority remains read-only and the durable exact-SHA Production deployment/runtime authority remains the release proof.
+**Build 380 — Booking Recovery & Failure Handling** is the accepted synchronized source and Production deployment boundary before the current release begins. Its customer-safe recovery wrapper, same-tab draft recovery, stale-availability handling and durable exact-SHA Production authority remain retained release protections.
 
 ## Current release
 
-**Build 380 — Booking Recovery & Failure Handling** is the active bounded release.
+**Build 381 — Operations Daily Command Centre** is the active bounded release.
 
 Current scope:
 
-- restore interrupted in-progress booking details across refresh/back/payment-cancel returns within the same browser tab;
-- preserve explicit booking-link query choices over saved draft state and provide a customer-controlled discard/start-clean path;
-- route checkout through a narrow recovery wrapper while keeping canonical `/api/checkout` pricing, availability, acknowledgements, booking creation and payment rules authoritative;
-- recognize the same recent pending booking by service date, overlapping slot, customer email, package and vehicle size, and resume its already attached Stripe/PayPal payment session instead of creating a duplicate;
-- fail closed when another active booking owns the slot, refresh the existing availability path after 409 collisions, and preserve the rest of the customer draft;
-- retry one network interruption safely through the recovery endpoint so a lost response does not encourage duplicate submission;
-- preserve tab-scoped privacy, avoid durable local storage, background polling, direct booking-table mutation and incidental schema change.
+- present the current service day's appointments in one protected Operations work surface;
+- aggregate customer/vehicle context, existing staff assignment, booking/job completion state, site/geofence evidence and booking-finance balance evidence without creating a second ledger;
+- expose package code as the service-requirement anchor while failing closed when exact equipment/product evidence is not available from the booking summary;
+- show live travel/traffic conditions as Unknown when no canonical live-travel authority exists rather than fabricating readiness evidence;
+- route operational changes to the existing Bookings, Assignment, Job Site, Progress, Payments, Inventory and Today Needs Attention authorities;
+- keep the command centre operator-driven with no recurring polling, browser-side operations ledger, direct operational mutation or incidental schema change.
 
-The exact candidate SHA must pass the focused booking-recovery authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime acceptance passes.
+The exact candidate SHA must pass the focused Operations authority and retained source/feature gates before Development promotion. Development must pass retained runtime gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime acceptance passes.
 
 ## Next release
 
-**Build 381 — Operations Daily Command Centre** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
+**Build 382 — Customer Account & Retention UX Convergence** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Continuing rule
 
