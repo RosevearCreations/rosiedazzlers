@@ -1,35 +1,46 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records only current actionable work. Completed implementation history belongs in Git history and release summaries. The durable numbered forward sequence is recorded in `FORWARD_BUILD_ROADMAP_356_377.md`.
+This queue records current actionable work. Completed implementation history belongs in Git history and release summaries. The durable numbered sequences are `FORWARD_BUILD_ROADMAP_356_377.md` and the approved continuation `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Accepted checkpoint
 
-**Build 358 — Per-Vehicle Service Timeline** is implemented and Development GREEN at runtime SHA `1a84273f28f01b477d4697b2035c1562dfd59dd8`. Current Source Gate #490 and Cloudflare Development Acceptance #167 passed on that exact SHA, all retained same-SHA workflows completed without failure, and `main` was fast-forwarded non-force to the same runtime commit.
+**Build 375 — Payment Reconciliation & Month-End Closure** is the accepted synchronized source boundary at SHA `8d1d52e4d9d53e38544fe0a9ff1a4a336a1d58ab` before Build 376 begins. Build 375 preserved read-only/fail-closed month-end close authority, manual approval, existing Finance authorities and the exact-SHA Development-before-main release discipline.
 
-The repository still exposes no separate Production exact-SHA acceptance workflow or public build-identity endpoint, so that evidence limitation remains explicit. The accepted release required no database migration and created no duplicate service-history authority or write path.
+## Current — Build 376
 
-## Next — Build 359
+Scope: **Performance, Accessibility & Security Hardening**.
 
-Scope: **Customer Retention Dashboard**.
+The Build 376 bounded implementation focuses on shared response/security boundaries plus low-risk public performance/accessibility improvements:
 
-Give Operations a customer-level retention view using existing customer, saved-vehicle, booking, completed-service, maintenance-interest and fleet-interest authorities. This should be an evidence-backed operational read model, not a duplicate CRM ledger or automated outreach engine.
+- preserve public origin/Pages cache policy instead of forcing every editor-eligible public page to `no-cache`;
+- add an additive keyboard-focus, reduced-motion and forced-colors accessibility baseline to public content pages;
+- centralize conservative response headers (`nosniff`, referrer policy, limited permissions policy and cross-domain policy);
+- force authenticated/private/customer/staff and cookie-bearing responses to `Cache-Control: no-store`;
+- deny framing of private/authenticated surfaces;
+- retain existing booking/payment/provider behavior and do not introduce an unproven Content Security Policy;
+- add focused exact-SHA source/regression proof.
 
-### Acceptance checklist
+Exact `dev` SHA must pass Current Source Gate, the dedicated Build 376 authority and Cloudflare Development acceptance before `main` promotion.
 
-- Reuse canonical customer identity and existing customer-scoped booking/service authorities.
-- Show evidence-backed first service, most recent completed service, completed-service count/repeat activity, saved-vehicle count and open/upcoming booking context.
-- Surface maintenance interest and fleet interest only when existing authoritative records support them.
-- Keep customer and vehicle linkage deterministic; no fuzzy household/customer merging.
-- Preserve server-authoritative Admin/Operations access and prevent customer data from leaking to public or unauthorized staff routes.
-- Do not expose payment secrets, staff-private notes, internal credentials or unrelated customer records.
-- Define retention indicators from source facts; do not fabricate lifecycle labels or infer outreach consent.
-- Keep the dashboard read-focused and on-demand/event-driven. No permanent polling, scheduler or automatic communications.
-- No duplicate CRM/customer-history ledger unless a later explicit business requirement proves one is necessary.
-- Add focused regression proof for authorization, customer isolation, completed-service metrics, vehicle counts, open bookings, maintenance/fleet indicators and empty-state behavior.
-- Exact `dev` SHA must pass Current Source and retained focused gates.
-- Exact `dev` SHA must pass Cloudflare Development deployment/HTTP acceptance before Production promotion.
-- Promote `main` only by non-force fast-forward to the exact same Development-GREEN SHA.
+## Next — Build 377
+
+Scope: **Production Business Acceptance / Launch Readiness**.
+
+Prove the end-to-end business path from anonymous acquisition through booking, payment, customer account, vehicle, staff work, completion, proof, final finance, genuine review, rebook and maintenance/fleet paths, including rollback and exact-SHA Production evidence. Never infer missing Production runtime identity proof from source promotion alone.
+
+## Approved continuation — Builds 378–385
+
+After Build 377, continue with the approved autonomous roadmap in `FORWARD_BUILD_ROADMAP_378_385.md`:
+
+1. Build 378 — Release Authority & Documentation Convergence.
+2. Build 379 — Production Observability & Self-Diagnostics.
+3. Build 380 — Booking Recovery & Failure Handling.
+4. Build 381 — Operations Daily Command Centre.
+5. Build 382 — Customer Account & Retention UX Convergence.
+6. Build 383 — Mobile Detailer Field Workflow Hardening.
+7. Build 384 — Finance Cockpit & Month-End UX.
+8. Build 385 — Backup, Restore & Release Recovery Drill.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve exact tested SHAs through Development and authorized Production promotion; keep database migrations as a separate acceptance boundary. When Production exact-SHA runtime identity is not externally exposed, report that limitation rather than weakening the evidence standard.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve exact tested SHAs through Development and authorized Production promotion; keep database migrations as separate acceptance boundaries. Promote `main` by non-force fast-forward to the same Development-GREEN SHA. When Production exact-SHA runtime identity is not externally exposed, report that limitation rather than weakening the evidence standard.
