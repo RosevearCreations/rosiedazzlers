@@ -137,8 +137,12 @@ export async function onRequest(context) {
   headers.delete("content-length");
   headers.delete("etag");
 
-  // Build 376 performance boundary: deterministic public HTML transformations no longer
-  // force every editor-eligible page to no-cache. Preserve the origin/Pages cache policy.
+  // Build 376 compatibility boundary: editor-eligible transformed HTML remains storable,
+  // but must revalidate before reuse so the admin editor/bootstrap cannot be stranded on
+  // stale markup after a release. Static assets, APIs and non-editor routes keep their
+  // independent cache policy and the shared hardening layer still protects private data.
+  if (applyLegacyClarity || applyPageEditor) headers.set("cache-control", "no-cache");
+
   const rewritten = new Response(html, { status: response.status, statusText: response.statusText, headers });
   return hardenResponse(request, rewritten);
 }
