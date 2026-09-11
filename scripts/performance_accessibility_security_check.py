@@ -13,13 +13,18 @@ required_middleware = [
     'data-build376="accessibility-baseline"',
     'return hardenResponse(request, await context.next());',
     'return hardenResponse(request, rewritten);',
-    'Preserve the origin/Pages cache policy.',
+    'if (applyLegacyClarity || applyPageEditor) headers.set("cache-control", "no-cache")',
+    'Static assets, APIs and non-editor routes keep their',
 ]
 for token in required_middleware:
     assert token in MIDDLEWARE, f"missing middleware contract: {token}"
 
-assert 'if (applyLegacyClarity || applyPageEditor) headers.set("cache-control", "no-cache")' not in MIDDLEWARE, (
-    "legacy editor-wide no-cache policy must remain removed"
+# Build 376 must not trade editor correctness for anonymous HTML cache reuse.
+# `no-cache` remains storable but forces freshness validation for HTML that is
+# transformed to carry the admin editor/bootstrap. Unrelated routes and assets
+# retain their own Pages/origin caching policy.
+assert 'headers.set("cache-control", "no-store")' not in MIDDLEWARE.split('const rewritten = new Response', 1)[0], (
+    "public transformed HTML must revalidate, not become globally no-store"
 )
 
 required_headers = [
