@@ -1,0 +1,63 @@
+name: Build 376 — Performance, Accessibility & Security Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build376-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  hardening-authority:
+    name: Validate Build 376 hardening
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check functions/_middleware.js
+          node --check functions/_lib/response-hardening.js
+          node --check scripts/response_hardening_test.mjs
+
+      - name: Validate source authority
+        run: |
+          python -m py_compile scripts/performance_accessibility_security_check.py
+          python scripts/performance_accessibility_security_check.py
+
+      - name: Run response-hardening regression
+        run: node scripts/response_hardening_test.mjs
+
+      - name: Summary
+        run: |
+          echo "### Build 376 — Performance, Accessibility & Security Authority" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Exact source SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Public editor-wide no-cache policy: removed" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Keyboard focus / reduced-motion baseline: enforced" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Private/authenticated cache boundary: no-store" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Conservative security response headers: enforced" >> "$GITHUB_STEP_SUMMARY"
+          echo "- CSP/payment-provider behavior: unchanged" >> "$GITHUB_STEP_SUMMARY"
