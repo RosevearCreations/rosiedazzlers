@@ -118,6 +118,7 @@ jobs:
     timeout-minutes: 10
     env:
       CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       TARGET_SHA: ${{ github.sha }}
       CF_PROJECT_NAME: rosiedazzlers
       CF_PRODUCTION_BRANCH: main
