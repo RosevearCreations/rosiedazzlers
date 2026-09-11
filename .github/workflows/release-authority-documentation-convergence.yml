@@ -1,0 +1,64 @@
+name: Release Authority & Documentation Convergence
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-release-convergence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-convergence:
+    name: Validate living release authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate authority syntax
+        run: |
+          python -m py_compile scripts/release_authority_documentation_convergence_check.py
+          python -m py_compile scripts/production_business_acceptance_check.py
+          python -m py_compile scripts/release_hygiene_check.py
+          bash -n scripts/cloudflare_pages_production_acceptance.sh
+
+      - name: Validate release authority and documentation convergence
+        run: python scripts/release_authority_documentation_convergence_check.py
+
+      - name: Validate durable Production source authority
+        run: python scripts/production_business_acceptance_check.py
+
+      - name: Validate release hygiene
+        run: python scripts/release_hygiene_check.py
+
+      - name: Release convergence summary
+        run: |
+          {
+            echo "### Release authority & documentation convergence"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Accepted/current/next living release state: PASS"
+            echo "- Durable Production exact-SHA authority: PASS"
+            echo "- Stale embedded commit identities: NONE"
+            echo "- Release hygiene: PASS"
+            echo "- Mutation performed: none"
+          } >> "$GITHUB_STEP_SUMMARY"
