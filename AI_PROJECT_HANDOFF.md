@@ -5,11 +5,11 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 381 — Operations Daily Command Centre** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from the synchronized `dev`/`main` refs and exact-SHA Production workflow evidence rather than copying a stale SHA into this living file.
+- **Build 382 — Customer Account & Retention UX Convergence** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from the synchronized `dev`/`main` refs and exact-SHA Production workflow evidence rather than copying a stale SHA into this living file.
 - Production acceptance is fail-closed: the exact `main` SHA must match a successful Cloudflare `production` deployment with Functions metadata, then pass smoke against both the immutable deployment and `https://rosiedazzlers.ca`.
-- **Build 382 — Customer Account & Retention UX Convergence** is the active bounded release. It converges authenticated My Account retention UX over the existing customer, booking, saved-vehicle/service-history, quote/proposal, maintenance-interest, communication-preference, review/request and rebooking authorities without creating a second customer or retention ledger.
-- **Build 383 — Mobile Detailer Field Workflow Hardening** is the next approved release after current-release acceptance is complete.
-- The current release is schema-neutral. It does not authorize a database migration, duplicate customer/retention ledger, automatic maintenance enrollment, appointment creation, subscription or recurring billing, fabricated consent/review evidence, independent review eligibility decisions, or direct payment/provider mutation.
+- **Build 383 — Mobile Detailer Field Workflow Hardening** is the active bounded release. It hardens the existing Detailer Mobile workflow across arrival/readiness, keys/access, before-photo evidence, checklist execution, approved-scope documentation, product-use evidence, completion evidence, after photos and customer/final-balance handoff without creating duplicate field, inventory or payment authority.
+- **Build 384 — Finance Cockpit & Month-End UX** is the next approved release after current-release acceptance is complete.
+- The current release is schema-neutral. It does not authorize a database migration, duplicate field-readiness ledger, detailer-side add-on approval/pricing, independent inventory/accounting posting, fabricated photo/evidence state, payment/provider mutation or a detailer-side paid-state override.
 
 ## Accepted operating contract
 
@@ -34,7 +34,8 @@ This file is the living operational authority for restarting work. Git history a
 - `.github/workflows/production-business-acceptance-authority.yml` — durable Production business-path and exact-SHA authority.
 - `.github/workflows/booking-recovery-failure-handling-authority.yml` — retained booking-recovery source and Production exact-SHA authority.
 - `.github/workflows/operations-daily-command-centre-authority.yml` — retained Operations source and Production exact-SHA authority.
-- `.github/workflows/customer-account-retention-ux-authority.yml` — focused current customer-account/retention source and exact-SHA authority.
+- `.github/workflows/customer-account-retention-ux-authority.yml` — retained customer-account/retention source and exact-SHA authority.
+- `.github/workflows/mobile-detailer-field-workflow-authority.yml` — focused current mobile Detailer field-workflow source and exact-SHA authority.
 - `BOOKING_RECOVERY_FAILURE_HANDLING.md` — accepted customer-safe recovery and failure-state contract.
 - `OPERATIONS_DAILY_COMMAND_CENTRE.md` — accepted Operations aggregation and fail-closed evidence contract.
 - `scripts/cloudflare_pages_production_acceptance.sh` — read-only Cloudflare Production deployment identity and HTTP smoke helper.
