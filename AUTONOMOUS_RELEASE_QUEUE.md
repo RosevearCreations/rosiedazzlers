@@ -4,13 +4,13 @@ This queue records current actionable work. Completed implementation history bel
 
 ## Accepted checkpoint
 
-**Build 375 — Payment Reconciliation & Month-End Closure** is the accepted synchronized source boundary at SHA `8d1d52e4d9d53e38544fe0a9ff1a4a336a1d58ab` before Build 376 begins. Build 375 preserved read-only/fail-closed month-end close authority, manual approval, existing Finance authorities and the exact-SHA Development-before-main release discipline.
+**Build 375 — Payment Reconciliation & Month-End Closure** is the accepted synchronized source boundary at SHA `8d1d52e4d9d53e38544fe0a9ff1a4a336a1d58ab` before the current release begins. It preserved read-only/fail-closed month-end close authority, manual approval, existing Finance authorities and the exact-SHA Development-before-main release discipline.
 
-## Current — Build 376
+## Current release
 
-Scope: **Performance, Accessibility & Security Hardening**.
+**Build 376 — Performance, Accessibility & Security Hardening** is the active bounded release.
 
-The Build 376 bounded implementation focuses on shared response/security boundaries plus low-risk public performance/accessibility improvements:
+Current scope:
 
 - preserve public origin/Pages cache policy instead of forcing every editor-eligible public page to `no-cache`;
 - add an additive keyboard-focus, reduced-motion and forced-colors accessibility baseline to public content pages;
@@ -20,26 +20,13 @@ The Build 376 bounded implementation focuses on shared response/security boundar
 - retain existing booking/payment/provider behavior and do not introduce an unproven Content Security Policy;
 - add focused exact-SHA source/regression proof.
 
-Exact `dev` SHA must pass Current Source Gate, the dedicated Build 376 authority and Cloudflare Development acceptance before `main` promotion.
+Exact `dev` SHA must pass Current Source Gate, the focused hardening authority and Cloudflare Development acceptance before `main` promotion.
 
-## Next — Build 377
+## Next release
 
-Scope: **Production Business Acceptance / Launch Readiness**.
+**Build 377 — Production Business Acceptance / Launch Readiness** remains next after the current release. Its durable acceptance scope is in `FORWARD_BUILD_ROADMAP_356_377.md`.
 
-Prove the end-to-end business path from anonymous acquisition through booking, payment, customer account, vehicle, staff work, completion, proof, final finance, genuine review, rebook and maintenance/fleet paths, including rollback and exact-SHA Production evidence. Never infer missing Production runtime identity proof from source promotion alone.
-
-## Approved continuation — Builds 378–385
-
-After Build 377, continue with the approved autonomous roadmap in `FORWARD_BUILD_ROADMAP_378_385.md`:
-
-1. Build 378 — Release Authority & Documentation Convergence.
-2. Build 379 — Production Observability & Self-Diagnostics.
-3. Build 380 — Booking Recovery & Failure Handling.
-4. Build 381 — Operations Daily Command Centre.
-5. Build 382 — Customer Account & Retention UX Convergence.
-6. Build 383 — Mobile Detailer Field Workflow Hardening.
-7. Build 384 — Finance Cockpit & Month-End UX.
-8. Build 385 — Backup, Restore & Release Recovery Drill.
+The approved autonomous continuation after that release is preserved in `FORWARD_BUILD_ROADMAP_378_385.md`; that roadmap is the authority for the subsequent eight-release phase and should be followed sequentially unless a new operational blocker requires an explicit reprioritization.
 
 ## Continuing rule
 
