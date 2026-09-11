@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 382 — Customer Account & Retention UX Convergence**.
+Current source direction: **Build 383 — Mobile Detailer Field Workflow Hardening**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -42,7 +42,7 @@ python scripts/release_authority_documentation_convergence_check.py
 
 The Current Source Gate also executes these durable authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through its retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
 
-The current release is schema-neutral and converges authenticated My Account retention UX over the existing quote, maintenance-interest, communication-preference, review and booking authorities, together with the existing customer, saved-vehicle and completed-service history authorities. It exposes customer-safe quote/proposal state, maintenance-interest status, saved communication preferences, genuine review/request lifecycle state and a safe book/rebook handoff without creating a duplicate retention ledger, appointment, enrollment, subscription, recurring charge, consent record, review request or payment mutation.
+The current release is schema-neutral and hardens the existing Detailer Mobile field workflow using existing staff-authorized booking, note and media authorities. Before-service photo evidence plus a saved checklist are required before Start; approved-scope, product-use, completion-evidence and after-photo records are required before Complete. The Detailer App may document already-approved work and operational product usage but cannot independently approve or price add-ons, post inventory/accounting transactions, fabricate evidence, mark a final balance paid or mutate payment/provider state. Customer final-balance handling remains a handoff to the existing customer-facing authority.
 
 Production is not considered GREEN from source promotion alone. `.github/workflows/production-business-acceptance-authority.yml` independently requires the exact `main` SHA to match a successful Cloudflare Production deployment with Functions metadata, then smokes both the immutable deployment and `https://rosiedazzlers.ca`. Its acceptance helper is observation-only and does not deploy, retry, roll back, charge providers or mutate business data.
 
