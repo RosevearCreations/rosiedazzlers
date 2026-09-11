@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Operations Daily Command Centre | Rosie Dazzlers Admin</title>
+  <meta name="description" content="Daily Rosie Dazzlers operations command centre for today's appointments and existing operational authorities." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .ops-toolbar,.ops-actions,.ops-meta,.ops-kpis{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.ops-toolbar{justify-content:space-between}.ops-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-top:14px}.ops-kpi,.ops-cell{padding:12px;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:14px;background:rgba(255,255,255,.04)}.ops-kpi strong{display:block;font-size:1.4rem}.ops-list{display:grid;gap:14px}.ops-card{padding:16px;border:1px solid var(--border,rgba(255,255,255,.12));border-radius:18px;background:rgba(255,255,255,.04)}.ops-card h2{margin:0}.ops-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:12px}.ops-label{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted,#94a3b8);margin-bottom:5px}.ops-state{font-weight:700}.ops-state[data-state="good"]{color:#86efac}.ops-state[data-state="warn"]{color:#fde68a}.ops-state[data-state="unknown"]{color:#cbd5e1}.ops-actions{margin-top:14px}.ops-actions .btn{margin:0}.ops-note{margin-top:8px;color:var(--muted,#94a3b8);font-size:.9rem}.ops-empty{padding:22px;text-align:center}.ops-refreshing{opacity:.7}.ops-finance-error{color:#fecaca}.ops-scope{max-width:900px}
+  </style>
+</head>
+<body data-page="admin-operations" data-build381="operations-daily-command-centre">
+  <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Operations</strong></a><div id="navLinks" class="nav-links"></div></div></header>
+  <main class="container">
+    <section class="section">
+      <div class="hero">
+        <div class="ops-scope"><div class="badge">Build 381 · Operations</div><h1>Daily Command Centre</h1><p>One read/work surface for today’s appointments, readiness, site context, customer and vehicle context, balances, equipment/product evidence, staff assignment, completion and follow-up. Changes remain owned by the existing booking, assignment, job-site, progress, payment, inventory and attention authorities.</p></div>
+        <div class="panel"><div id="opsStatus" class="notice">Loading today’s operation…</div><button id="opsRefresh" class="btn primary" type="button" style="margin-top:10px">Refresh now</button></div>
+      </div>
+    </section>
+    <section class="section"><div id="opsKpis" class="ops-kpis"><div class="ops-kpi"><span>Appointments</span><strong>—</strong></div></div></section>
+    <section class="section"><div class="panel ops-toolbar"><div><strong id="opsDateLabel">Today</strong><div class="muted">Read-only aggregation. Missing evidence is shown as Unknown, never guessed.</div></div><div class="ops-actions"><a class="btn ghost small" href="/admin-booking.html">Bookings</a><a class="btn ghost small" href="/admin-today.html">Needs Attention</a><a class="btn ghost small" href="/admin-inventory.html">Inventory</a></div></div></section>
+    <section class="section"><div id="opsList" class="ops-list"><div class="panel ops-empty">Loading appointments…</div></div></section>
+  </main>
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/chrome.js"></script>
+  <script src="/assets/admin-operations.js?v=20260911build381"></script>
+</body>
+</html>
