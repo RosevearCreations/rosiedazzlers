@@ -32,7 +32,7 @@ This file is the living operational authority for restarting work. Git history a
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 - `.github/workflows/production-business-acceptance-authority.yml` — durable Production business-path and exact-SHA authority.
-- `.github/workflows/production-observability-self-diagnostics-authority.yml` — focused Build 379 source and Production exact-SHA observability authority.
+- `.github/workflows/production-observability-self-diagnostics-authority.yml` — focused observability source and Production exact-SHA authority.
 - `scripts/cloudflare_pages_production_acceptance.sh` — read-only Cloudflare Production deployment identity and HTTP smoke helper.
 - `scripts/release_authority_documentation_convergence_check.py` — living-document and release-authority convergence guard.
 
