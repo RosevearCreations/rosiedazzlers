@@ -121,12 +121,24 @@ if re.search(r"permissions:\s*\n\s*contents:\s*write", workflow):
 if any(token in workflow for token in ["wrangler pages deploy", "git push --force", "curl -X POST", "curl --request POST"]):
     fail("Build 380 workflow contains a prohibited mutation primitive")
 
-# Build 380 remains a retained authority after the living queue advances.
-for needle in ["Build 380", "Build 381", "Build 382", "Booking Recovery & Failure Handling"]:
+# This is a retained historical authority, so the living queue is expected to
+# advance beyond Build 380. Validate the queue's release discipline without
+# requiring a completed historical build to remain one of its three live slots.
+queue_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", queue)]
+if len(queue_builds) != 3:
+    fail(f"release queue must expose exactly accepted/current/next numbered states; found {queue_builds}")
+accepted, current, next_release = queue_builds
+if accepted < 380:
+    fail(f"release queue regressed before retained Build 380 authority: accepted={accepted}")
+if current != accepted + 1 or next_release != current + 1:
+    fail(f"release queue is not sequential: {queue_builds}")
+for needle in [
+    "retained source/feature gates",
+    "exact-SHA Production deployment/runtime authority",
+    "non-force fast-forward",
+]:
     if needle not in queue:
-        fail(f"release queue missing retained/converged release state: {needle}")
-if "**Build 380 — Booking Recovery & Failure Handling** is the accepted synchronized source and Production deployment boundary" not in queue:
-    fail("release queue does not retain Build 380 as the accepted prior boundary")
+        fail(f"release queue missing durable retained-release discipline: {needle}")
 
 if "PRODUCTION EXACT-SHA ACCEPTANCE: PASS" not in production_helper:
     fail("durable Production exact-SHA helper contract is missing")
