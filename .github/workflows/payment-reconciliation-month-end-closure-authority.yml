@@ -1,0 +1,54 @@
+name: Build 375 — Payment Reconciliation & Month-End Closure Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build375-month-end-close-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: Validate Build 375 month-end closure
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate payment reconciliation and month-end closure authority
+        run: python scripts/payment_reconciliation_month_end_closure_check.py
+      - name: Build 375 summary
+        run: |
+          {
+            echo "### Build 375 — Payment Reconciliation & Month-End Closure"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Deposits/final payments/refunds evidence convergence: PASS"
+            echo "- Provider payment/statement review evidence: PASS"
+            echo "- Cash bank reconciliation close gate: PASS"
+            echo "- HST review support: PASS"
+            echo "- Receivables/payables review support: PASS"
+            echo "- Fail-closed blocker reporting: PASS"
+            echo "- Automatic close/posting/provider mutation: BLOCKED BY CONTRACT"
+          } >> "$GITHUB_STEP_SUMMARY"
