@@ -7,10 +7,10 @@ This file is the living operational authority for restarting work. Git history a
 - Repository: `RosevearCreations/rosiedazzlers`.
 - **Build 383 — Mobile Detailer Field Workflow Hardening** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from the synchronized `dev`/`main` refs and exact-SHA Production workflow evidence rather than copying a stale SHA into this living file.
 - Production acceptance is fail-closed: the exact `main` SHA must match a successful Cloudflare `production` deployment with Functions metadata, then pass smoke against both the immutable deployment and `https://rosiedazzlers.ca`.
-- **Build 384 — Finance Cockpit & Month-End UX** is the active bounded release. It converges the existing Build 374–375 Finance authorities into a practical operator workflow from quote/deposit evidence through approved changes, final balance, refunds/tips, settlement reconciliation, HST support, month-end readiness and accountant handoff without creating a second ledger or payment authority.
+- **Build 384 — Finance Cockpit & Month-End UX** is the active bounded release. It converges the retained invoice/payment/reconciliation Finance authorities into a practical operator workflow from quote/deposit evidence through approved changes, final balance, refunds/tips, settlement reconciliation, HST support, month-end readiness and accountant handoff without creating a second ledger or payment authority.
 - **Build 385 — Backup, Restore & Release Recovery Drill** is the next approved release after current-release acceptance is complete.
 - The current release is schema-neutral. It does not authorize a database migration, automatic accounting posting, automatic month close, booking mutation, customer charge/refund, provider mutation, fabricated provider/accounting evidence or a paid-state override.
-- Finance cockpit runtime is lazy and operator-driven. Opening `/app/finance/` loads authentication/module state only; the retained Build 375 month-end closure snapshot loads only after an explicit month/year request.
+- Finance cockpit runtime is lazy and operator-driven. Opening `/app/finance/` loads authentication/module state only; the retained read-only month-end closure snapshot loads only after an explicit month/year request.
 - A computed `close_ready_candidate` is evidence/readiness only. It does not close an accounting period and does not remove the existing manual operator approval requirement.
 
 ## Accepted operating contract
@@ -34,10 +34,10 @@ This file is the living operational authority for restarting work. Git history a
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 - `.github/workflows/production-business-acceptance-authority.yml` — durable Production business-path and exact-SHA authority.
-- `.github/workflows/payment-reconciliation-month-end-closure-authority.yml` — retained Build 375 payment reconciliation/month-end close authority.
+- `.github/workflows/payment-reconciliation-month-end-closure-authority.yml` — retained payment reconciliation/month-end close authority.
 - `.github/workflows/finance-cockpit-month-end-ux-authority.yml` — focused current Finance cockpit source and exact-SHA Production authority.
-- `.github/workflows/mobile-detailer-field-workflow-authority.yml` — retained Build 383 mobile Detailer field-workflow authority.
-- `functions/api/admin/accounting_month_end_closure.js` and `functions/api/_lib/accounting-month-end-closure.js` — retained read-only closure evidence authority used by the Build 384 cockpit.
+- `.github/workflows/mobile-detailer-field-workflow-authority.yml` — retained mobile Detailer field-workflow authority.
+- `functions/api/admin/accounting_month_end_closure.js` and `functions/api/_lib/accounting-month-end-closure.js` — retained read-only closure evidence authority used by the current cockpit.
 - `scripts/cloudflare_pages_production_acceptance.sh` — read-only Cloudflare Production deployment identity and HTTP smoke helper.
 
 ## Restart point
