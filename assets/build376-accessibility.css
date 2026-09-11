@@ -1,0 +1,31 @@
+/* Build 376 — public accessibility baseline.
+   Additive only: improves keyboard focus and reduced-motion behavior without changing
+   the existing visual hierarchy, pricing content, or public SEO structure. */
+
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 3px solid currentColor;
+  outline-offset: 3px;
+}
+
+:where(.btn, button, input, select, textarea, summary) {
+  scroll-margin-block: 96px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :where(.btn, button, input, select, textarea, summary) {
+    forced-color-adjust: auto;
+  }
+}
