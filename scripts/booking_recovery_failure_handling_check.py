@@ -74,7 +74,6 @@ for needle in required_endpoint:
     if needle not in endpoint:
         fail(f"checkout recovery endpoint missing: {needle}")
 
-# The wrapper may POST to PayPal OAuth, but it must not directly mutate booking rows.
 if re.search(r"/rest/v1/bookings[^\n]+method\s*:\s*[\"'](?:POST|PATCH|DELETE|PUT)[\"']", endpoint, re.I):
     fail("checkout recovery wrapper directly mutates bookings")
 if any(token in endpoint for token in ["wrangler pages deploy", "git push --force"]):
@@ -122,11 +121,12 @@ if re.search(r"permissions:\s*\n\s*contents:\s*write", workflow):
 if any(token in workflow for token in ["wrangler pages deploy", "git push --force", "curl -X POST", "curl --request POST"]):
     fail("Build 380 workflow contains a prohibited mutation primitive")
 
-for needle in ["Build 379", "Build 380", "Build 381", "Booking Recovery & Failure Handling"]:
+# Build 380 remains a retained authority after the living queue advances.
+for needle in ["Build 380", "Build 381", "Build 382", "Booking Recovery & Failure Handling"]:
     if needle not in queue:
-        fail(f"release queue missing converged release state: {needle}")
-if "**Build 380 — Booking Recovery & Failure Handling** is the active bounded release." not in queue:
-    fail("release queue does not mark Build 380 current")
+        fail(f"release queue missing retained/converged release state: {needle}")
+if "**Build 380 — Booking Recovery & Failure Handling** is the accepted synchronized source and Production deployment boundary" not in queue:
+    fail("release queue does not retain Build 380 as the accepted prior boundary")
 
 if "PRODUCTION EXACT-SHA ACCEPTANCE: PASS" not in production_helper:
     fail("durable Production exact-SHA helper contract is missing")
@@ -141,4 +141,5 @@ print("- matching recent pending payment sessions are recoverable without duplic
 print("- stale 409 collisions fail closed and refresh the existing availability path")
 print("- tab-scoped draft recovery covers refresh/back/payment-cancel interruption")
 print("- no localStorage, recurring polling, direct booking mutation, or schema migration")
+print("- retained authority remains compatible with an advanced release queue")
 print("- durable exact-SHA Production authority retained")
