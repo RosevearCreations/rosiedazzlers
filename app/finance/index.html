@@ -1,1 +1,107 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><title>Finance App | Rosie Dazzlers</title><link rel="manifest" href="/manifest.webmanifest"><link rel="stylesheet" href="/assets/site.css?v=20260829build267"><link rel="stylesheet" href="/assets/app-core/module-shell.css?v=20260829build267"></head><body data-page="app-finance" data-app-module="finance" data-build="267"><main class="module-shell"><section class="panel module-hero"><div><span class="badge">Build 267 finance module</span><h1>Finance App</h1><p>Financial work is isolated from Detailer and Operations. Opening Finance performs authentication/module checks only; accounting/payment/payroll data stays asleep until a workflow is chosen.</p></div><div class="module-runtime"><div><span class="mini">Shell behavior</span><strong>LAZY</strong><span class="mini">No subsystem dataset is loaded by opening this page.</span></div><div><span class="mini">Automatic polling</span><strong>OFF</strong><span class="mini">Work begins only after an explicit workflow choice.</span></div><div><span class="mini">Server authority</span><strong>ON</strong><span class="mini">Module visibility never replaces API authorization.</span></div></div><div id="moduleRuntimeStatus" class="notice">Checking module access…</div><div class="module-controls"><button class="btn ghost" type="button" data-pwa-install hidden>Install Rosie app</button><button class="btn ghost" type="button" data-notification-enable>Enable device notifications</button><button class="btn ghost" type="button" data-notification-test>Test notification</button><a class="btn ghost" href="/app/">Back to apps</a></div><div class="mini" data-app-device-status></div></section><section class="section"><div data-module-home-cards></div></section></main><script src="/assets/admin-auth.js?v=20260829build267"></script><script src="/assets/admin-shell.js?v=20260829build267"></script><script src="/assets/app-core/module-resolver.js?v=20260829build267"></script><script src="/assets/app-core/install-client.js?v=20260829build267"></script><script src="/assets/app-core/module-navigation.js?v=20260829build267"></script><script src="/apps/shared/lazy-shell.js?v=20260829build267"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Finance Cockpit | Rosie Dazzlers</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/assets/site.css?v=20260911build384">
+  <link rel="stylesheet" href="/assets/app-core/module-shell.css?v=20260911build384">
+  <style>
+    .finance-period{display:flex;gap:10px;align-items:end;flex-wrap:wrap}.finance-period label{display:grid;gap:6px;min-width:150px}.finance-period select{width:100%}
+    .finance-workflow{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}.finance-stage{display:grid;gap:10px;padding:16px;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.035)}.finance-stage__num{display:inline-flex;width:34px;height:34px;border-radius:999px;align-items:center;justify-content:center;font-weight:800;background:rgba(255,255,255,.08)}.finance-stage h3{margin:0}.finance-stage p{margin:0}.finance-stage .btn{justify-self:start}
+    .finance-readiness-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}.finance-readiness{display:inline-flex;padding:7px 10px;border-radius:999px;font-size:.78rem;font-weight:800;letter-spacing:.04em}.finance-readiness.ok{background:rgba(34,197,94,.14);border:1px solid rgba(34,197,94,.35)}.finance-readiness.review{background:rgba(245,158,11,.14);border:1px solid rgba(245,158,11,.35)}
+    .finance-evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.finance-evidence-card{display:grid;gap:6px;padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.03)}.finance-evidence-card.ok{border-color:rgba(34,197,94,.3)}.finance-evidence-card.review{border-color:rgba(245,158,11,.3)}.finance-evidence-card.blocked{border-color:rgba(239,68,68,.3)}
+    .finance-blocker-list{margin:0;padding-left:20px;display:grid;gap:7px}.finance-empty{padding:12px;border-radius:12px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.24)}
+    .finance-contract{display:flex;gap:8px;flex-wrap:wrap}.finance-contract-chip{display:inline-flex;padding:6px 9px;border-radius:999px;border:1px solid rgba(255,255,255,.12);font-size:.78rem}.finance-contract-chip.ok{border-color:rgba(34,197,94,.3)}.finance-contract-chip.blocked{border-color:rgba(239,68,68,.3)}
+    .finance-boundary{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.finance-boundary>div{padding:13px;border-radius:14px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
+  </style>
+</head>
+<body data-page="app-finance" data-app-module="finance" data-build="384">
+  <main class="module-shell">
+    <section class="panel module-hero">
+      <div>
+        <span class="badge">Build 384 finance cockpit</span>
+        <h1>Finance Cockpit &amp; Month-End</h1>
+        <p>Follow the financial path from commercial terms and deposits through final balance, reconciliation, HST review, month-end readiness and accountant handoff. Existing Finance authorities remain the source of truth.</p>
+      </div>
+      <div class="module-runtime">
+        <div><span class="mini">Open behavior</span><strong>LAZY</strong><span class="mini">No accounting dataset loads until you request a readiness snapshot.</span></div>
+        <div><span class="mini">Automatic polling</span><strong>OFF</strong><span class="mini">Snapshots are explicit and operator-driven.</span></div>
+        <div><span class="mini">Mutation authority</span><strong>FAIL-CLOSED</strong><span class="mini">This cockpit cannot post, close, charge, refund or mutate a provider.</span></div>
+      </div>
+      <div id="moduleRuntimeStatus" class="notice">Checking Finance module access…</div>
+      <div id="financeCockpitStatus" class="notice" hidden></div>
+      <div class="module-controls">
+        <button class="btn ghost" type="button" data-pwa-install hidden>Install Rosie app</button>
+        <button class="btn ghost" type="button" data-notification-enable>Enable device notifications</button>
+        <a class="btn ghost" href="/app/">Back to apps</a>
+      </div>
+      <div class="mini" data-app-device-status></div>
+    </section>
+
+    <section class="panel stack">
+      <div>
+        <span class="badge">Operator sequence</span>
+        <h2 style="margin-bottom:6px">Financial workflow</h2>
+        <p class="mini" style="margin:0">Each step opens the existing authority that owns the evidence or controlled action. The cockpit does not duplicate those records.</p>
+      </div>
+      <div class="finance-workflow">
+        <article class="finance-stage"><span class="finance-stage__num">1</span><h3>Quote &amp; commercial terms</h3><p class="mini">Confirm the approved quote, current pricing and customer-approved scope before relying on downstream totals.</p><a class="btn ghost" href="/admin-quotes.html">Open Quotes</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">2</span><h3>Deposit evidence</h3><p class="mini">Review recorded deposit/payment evidence. Provider state remains server-authoritative.</p><a class="btn ghost" href="/admin-payments.html">Open Payments</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">3</span><h3>Approved changes &amp; final balance</h3><p class="mini">Reconcile approved changes, discounts and final balance against the retained booking finance record.</p><a class="btn ghost" href="/admin-accounting.html">Open Accounting</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">4</span><h3>Refunds &amp; tips</h3><p class="mini">Review genuine refund/tip evidence without inventing provider success or changing paid state here.</p><a class="btn ghost" href="/admin-payments.html">Review Payments</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">5</span><h3>Settlement reconciliation</h3><p class="mini">Compare provider evidence, cash/bank reconciliation and unresolved settlement exceptions.</p><a class="btn ghost" href="/admin-accounting.html">Open Reconciliation</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">6</span><h3>HST support</h3><p class="mini">Review tax-inclusive transaction support and remittance evidence. Tax filing remains an operator/accountant decision.</p><a class="btn ghost" href="/admin-tax-review.html">Open HST Review</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">7</span><h3>Month-end close</h3><p class="mini">Complete the retained checklist and resolve blockers. Readiness never auto-closes the period.</p><a class="btn ghost" href="/admin-close.html">Open Month-End Close</a></article>
+        <article class="finance-stage"><span class="finance-stage__num">8</span><h3>Accountant package</h3><p class="mini">Prepare ledger/report exports and year-end handoff only after the supporting evidence is reviewed.</p><a class="btn ghost" href="/admin-accounting.html">Open Exports</a></article>
+      </div>
+    </section>
+
+    <section class="panel stack">
+      <div class="finance-readiness-head">
+        <div>
+          <span class="badge">Build 375 evidence, Build 384 presentation</span>
+          <h2 style="margin-bottom:6px">Month-end readiness snapshot</h2>
+          <p class="mini" style="margin:0;max-width:850px">Load the existing read-only closure snapshot for a selected month. Missing or unavailable evidence fails closed as review required.</p>
+        </div>
+        <div class="finance-period">
+          <label>Month<select id="financeMonth"><option value="1">January</option><option value="2">February</option><option value="3">March</option><option value="4">April</option><option value="5">May</option><option value="6">June</option><option value="7">July</option><option value="8">August</option><option value="9">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option></select></label>
+          <label>Year<select id="financeYear"><option>2025</option><option>2026</option><option>2027</option><option>2028</option></select></label>
+          <button id="financeLoadReadiness" class="btn primary" type="button">Load month-end readiness</button>
+        </div>
+      </div>
+
+      <div id="financeReadinessPanel" class="stack" hidden>
+        <div class="finance-readiness-head">
+          <div><div id="financeReadinessState" class="finance-readiness review">REVIEW REQUIRED</div><h3 id="financeReadinessPeriod" style="margin:8px 0 2px">—</h3><div id="financeReadinessGenerated" class="mini">—</div></div>
+          <a class="btn ghost" href="/admin-close.html">Work the close checklist</a>
+        </div>
+        <div><h3>Blockers</h3><div id="financeBlockers"></div></div>
+        <div><h3>Evidence</h3><div id="financeEvidence" class="finance-evidence"></div></div>
+        <div><h3>Safety contract</h3><div id="financeContract" class="finance-contract"></div></div>
+      </div>
+    </section>
+
+    <section class="panel stack">
+      <div><span class="badge">Authority boundaries</span><h2 style="margin-bottom:6px">What this cockpit can and cannot do</h2></div>
+      <div class="finance-boundary">
+        <div><strong>Can observe</strong><p class="mini">Existing booking-finance events, provider-payment evidence, bank reconciliation, HST support, receivables, payables and checklist state through the retained read authority.</p></div>
+        <div><strong>Cannot post</strong><p class="mini">Journal entries, payables, remittances and other accounting postings stay in their existing explicit operator workflows.</p></div>
+        <div><strong>Cannot charge or refund</strong><p class="mini">Stripe, Square or any future provider mutation remains outside this read-only cockpit.</p></div>
+        <div><strong>Cannot auto-close</strong><p class="mini">“Close-ready candidate” means evidence has no computed blockers; it is not a closed accounting period and still requires operator approval.</p></div>
+      </div>
+    </section>
+
+    <section class="section"><div data-module-home-cards></div></section>
+  </main>
+
+  <script src="/assets/admin-auth.js?v=20260911build384"></script>
+  <script src="/assets/admin-shell.js?v=20260911build384"></script>
+  <script src="/assets/app-core/module-resolver.js?v=20260911build384"></script>
+  <script src="/assets/app-core/install-client.js?v=20260911build384"></script>
+  <script src="/assets/app-core/module-navigation.js?v=20260911build384"></script>
+  <script src="/apps/finance/finance-cockpit.js?v=20260911build384"></script>
+</body>
+</html>
