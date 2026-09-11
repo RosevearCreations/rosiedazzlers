@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 383 — Mobile Detailer Field Workflow Hardening**.
+Current source direction: **Build 384 — Finance Cockpit & Month-End UX**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -42,7 +42,9 @@ python scripts/release_authority_documentation_convergence_check.py
 
 The Current Source Gate also executes these durable authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through its retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
 
-The current release is schema-neutral and hardens the existing Detailer Mobile field workflow using existing staff-authorized booking, note and media authorities. Before-service photo evidence plus a saved checklist are required before Start; approved-scope, product-use, completion-evidence and after-photo records are required before Complete. The Detailer App may document already-approved work and operational product usage but cannot independently approve or price add-ons, post inventory/accounting transactions, fabricate evidence, mark a final balance paid or mutate payment/provider state. Customer final-balance handling remains a handoff to the existing customer-facing authority.
+The current release is schema-neutral and converges the existing Build 374–375 Finance authorities into `/app/finance/` as a practical operator workflow. It presents quote/commercial terms, deposit evidence, approved changes/final balance, refunds/tips, settlement reconciliation, HST support, month-end close and accountant handoff without creating a second ledger or payment authority. The Finance cockpit remains lazy and loads the retained Build 375 closure snapshot only after an explicit month/year request.
+
+Missing or unavailable Finance evidence fails closed as review required. A `close_ready_candidate` is a read-only readiness result, not an accounting close. The cockpit cannot automatically post accounting entries, close a month, mutate a booking, charge or refund a customer, fabricate evidence, mark a balance paid, or mutate Stripe/Square/provider state. Existing explicit Finance workflows remain the only mutation authorities and operator approval remains required.
 
 Production is not considered GREEN from source promotion alone. `.github/workflows/production-business-acceptance-authority.yml` independently requires the exact `main` SHA to match a successful Cloudflare Production deployment with Functions metadata, then smokes both the immutable deployment and `https://rosiedazzlers.ca`. Its acceptance helper is observation-only and does not deploy, retry, roll back, charge providers or mutate business data.
 
