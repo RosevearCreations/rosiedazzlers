@@ -111,12 +111,27 @@ if re.search(r"permissions:\s*\n\s*contents:\s*write", workflow):
 if any(token in workflow for token in ["wrangler pages deploy", "git push --force", "curl -X POST", "curl --request POST"]):
     fail("Build 381 workflow contains a prohibited release mutation primitive")
 
-if "**Build 381 — Operations Daily Command Centre** is the active bounded release." not in queue:
-    fail("release queue does not mark Build 381 current")
-if "**Build 382 — Customer Account & Retention UX Convergence** is next" not in queue:
-    fail("release queue does not identify Build 382 next")
-if "Build 381 — Operations Daily Command Centre" not in handoff or "Build 382 — Customer Account & Retention UX Convergence" not in handoff:
-    fail("project handoff is not converged to Build 381/382")
+# Build 381 is retained after the living release moves forward. Validate that
+# the queue and handoff remain sequential and synchronized without requiring
+# this completed historical build to stay marked as the active release.
+queue_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", queue)]
+handoff_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", handoff)]
+if len(queue_builds) != 3:
+    fail(f"release queue must expose exactly accepted/current/next numbered states; found {queue_builds}")
+accepted, current, next_release = queue_builds
+if accepted < 381:
+    fail(f"release queue regressed before retained Build 381 authority: accepted={accepted}")
+if current != accepted + 1 or next_release != current + 1:
+    fail(f"release queue is not sequential: {queue_builds}")
+if handoff_builds != queue_builds:
+    fail(f"project handoff sequence {handoff_builds} does not match release queue {queue_builds}")
+for needle in [
+    "retained exact-SHA Development source/runtime authorities",
+    "Source promotion alone is never Production proof.",
+    "Production exact-SHA authority",
+]:
+    if needle not in handoff:
+        fail(f"project handoff missing durable retained-release discipline: {needle}")
 
 if "PRODUCTION EXACT-SHA ACCEPTANCE: PASS" not in production_helper:
     fail("durable Production exact-SHA helper contract is missing")
@@ -130,4 +145,5 @@ print("- today appointments aggregate existing booking and finance authorities")
 print("- site/travel, equipment/product, assignment, completion and follow-up evidence fail closed when missing")
 print("- all operational changes remain delegated to canonical admin authorities")
 print("- no recurring polling, browser-side operations ledger, direct operational mutation, or schema migration")
+print("- retained authority remains compatible with an advanced release queue")
 print("- durable exact-SHA Production authority retained")
