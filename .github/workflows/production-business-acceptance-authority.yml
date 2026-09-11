@@ -1,0 +1,132 @@
+name: Build 377 — Production Business Acceptance / Launch Readiness
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build377-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build377-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  business-path-authority:
+    name: Validate Production business acceptance source contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate Build 377 authority syntax
+        run: |
+          python -m py_compile scripts/production_business_acceptance_check.py
+          bash -n scripts/cloudflare_pages_production_acceptance.sh
+
+      - name: Validate Production business acceptance source contract
+        run: python scripts/production_business_acceptance_check.py
+
+      - name: Validate acquisition and booking authorities
+        run: |
+          python scripts/seo_h1_check.py
+          python scripts/seo_metadata_check.py
+          python scripts/booking_funnel_device_check.py
+          python scripts/booking_wizard_responsive_ux_check.py
+          python scripts/build362_quote_booking_acceptance_check.py
+
+      - name: Validate payment and final-finance authorities
+        run: |
+          python scripts/payment_provider_readiness_check.py
+          python scripts/payment_acceptance_evidence_check.py
+          python scripts/payment_recovery_customer_handoff_check.py
+          python scripts/payment_reconciliation_check.py
+          python scripts/payment_reconciliation_month_end_closure_check.py
+          python scripts/final_balance_readiness_check.py
+
+      - name: Validate customer, staff, completion and proof authorities
+        run: |
+          node scripts/checkout_customer_vehicle_identity_test.mjs
+          python scripts/build369_mobile_job_readiness_check.py
+          python scripts/booking_completion_retention_check.py
+
+      - name: Validate genuine-review and rebook authorities
+        run: |
+          python scripts/build363_review_request_eligibility_check.py
+          python scripts/build364_review_request_dispatch_check.py
+          python scripts/build365_review_proof_local_seo_check.py
+          python scripts/booking_rebooking_funnel_check.py
+          node scripts/booking_rebooking_funnel_test.mjs
+          python scripts/maintenance_retention_check.py
+
+      - name: Validate maintenance and fleet authorities
+        run: |
+          python scripts/maintenance_plan_business_rulebook_check.py
+          python scripts/maintenance_plan_pilot_activation_check.py
+          node scripts/maintenance_plan_pilot_activation_test.mjs
+          python scripts/fleet_business_rulebook_check.py
+          node scripts/fleet_business_rulebook_test.mjs
+          python scripts/fleet_account_operations_check.py
+          python scripts/fleet_maintenance_planning_check.py
+
+      - name: Validate rollback and hardening authorities
+        run: |
+          python scripts/release_rollback_recovery_check.py
+          python scripts/performance_accessibility_security_check.py
+          python scripts/release_hygiene_check.py
+
+      - name: Source acceptance summary
+        run: |
+          {
+            echo "### Build 377 business-path authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Acquisition → booking: PASS"
+            echo "- Payment → final finance: PASS"
+            echo "- Customer/vehicle → staff work → completion/proof: PASS"
+            echo "- Genuine review → rebook/retention: PASS"
+            echo "- Maintenance/fleet: PASS"
+            echo "- Rollback/security/hygiene: PASS"
+            echo "- No real provider/customer/review/accounting evidence was fabricated."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: business-path-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Checkout exact Production source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
