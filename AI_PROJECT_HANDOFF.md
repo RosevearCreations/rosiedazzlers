@@ -5,11 +5,11 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 380 — Booking Recovery & Failure Handling** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from the synchronized `dev`/`main` refs and exact-SHA Production workflow evidence rather than copying a stale SHA into this living file.
+- **Build 381 — Operations Daily Command Centre** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from the synchronized `dev`/`main` refs and exact-SHA Production workflow evidence rather than copying a stale SHA into this living file.
 - Production acceptance is fail-closed: the exact `main` SHA must match a successful Cloudflare `production` deployment with Functions metadata, then pass smoke against both the immutable deployment and `https://rosiedazzlers.ca`.
-- **Build 381 — Operations Daily Command Centre** is the active bounded release. It consolidates today's booking, customer/vehicle, assignment, site/geofence, finance-balance, service-requirement, completion and follow-up evidence into one protected Operations read/work surface while preserving the existing authorities for every mutation.
-- **Build 382 — Customer Account & Retention UX Convergence** is the next approved release after Operations acceptance is complete.
-- The current Operations work is schema-neutral. It does not authorize a database migration, replacement operational ledger, direct booking/payment/assignment/inventory/progress mutation, fabricated travel/equipment/readiness evidence, or weakening of staff authorization and customer privacy boundaries.
+- **Build 382 — Customer Account & Retention UX Convergence** is the active bounded release. It converges authenticated My Account retention UX over the existing customer, booking, saved-vehicle/service-history, quote/proposal, maintenance-interest, communication-preference, review/request and rebooking authorities without creating a second customer or retention ledger.
+- **Build 383 — Mobile Detailer Field Workflow Hardening** is the next approved release after Build 382 acceptance is complete.
+- The current Build 382 work is schema-neutral. It does not authorize a database migration, duplicate customer/retention ledger, automatic maintenance enrollment, appointment creation, subscription or recurring billing, fabricated consent/review evidence, independent review eligibility decisions, or direct payment/provider mutation.
 
 ## Accepted operating contract
 
@@ -33,9 +33,10 @@ This file is the living operational authority for restarting work. Git history a
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 - `.github/workflows/production-business-acceptance-authority.yml` — durable Production business-path and exact-SHA authority.
 - `.github/workflows/booking-recovery-failure-handling-authority.yml` — retained booking-recovery source and Production exact-SHA authority.
-- `.github/workflows/operations-daily-command-centre-authority.yml` — focused Operations source and Production exact-SHA authority.
+- `.github/workflows/operations-daily-command-centre-authority.yml` — retained Operations source and Production exact-SHA authority.
+- `.github/workflows/customer-account-retention-ux-authority.yml` — focused Build 382 customer-account/retention source and exact-SHA authority.
 - `BOOKING_RECOVERY_FAILURE_HANDLING.md` — accepted customer-safe recovery and failure-state contract.
-- `OPERATIONS_DAILY_COMMAND_CENTRE.md` — current Operations aggregation and fail-closed evidence contract.
+- `OPERATIONS_DAILY_COMMAND_CENTRE.md` — accepted Operations aggregation and fail-closed evidence contract.
 - `scripts/cloudflare_pages_production_acceptance.sh` — read-only Cloudflare Production deployment identity and HTTP smoke helper.
 
 ## Restart point
