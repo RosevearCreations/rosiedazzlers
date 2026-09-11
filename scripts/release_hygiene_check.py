@@ -12,16 +12,19 @@ ACTIVE_WORKFLOWS = [
     WORKFLOW_DIR / "development-source-gate.yml",
     WORKFLOW_DIR / "cloudflare-development-acceptance.yml",
     WORKFLOW_DIR / "cloudflare-pages-recovery.yml",
+    WORKFLOW_DIR / "production-business-acceptance-authority.yml",
 ]
 ACTIVE_HELPERS = [
     ROOT / "scripts/cloudflare_pages_development.sh",
     ROOT / "scripts/development_http_smoke.sh",
     ROOT / "scripts/contextual_proof_http_smoke.sh",
+    ROOT / "scripts/cloudflare_pages_production_acceptance.sh",
 ]
 LIVING_DOCS = [
     ROOT / "AI_PROJECT_HANDOFF.md",
     ROOT / "AUTONOMOUS_RELEASE_QUEUE.md",
     ROOT / "BRANCH_WORKFLOW_NOTE.md",
+    ROOT / "README.md",
 ]
 
 
@@ -80,6 +83,13 @@ def main() -> int:
         numbered_mentions = re.findall(r"(?i)\bbuild\s+\d{3}\b", text)
         if len(numbered_mentions) > 3:
             errors.append(f"{path.name} contains release archaeology ({len(numbered_mentions)} numbered Build mentions)")
+        stale_shas = re.findall(r"(?i)\b[0-9a-f]{12,40}\b", text)
+        if stale_shas:
+            errors.append(f"{path.name} embeds commit-like identity instead of live Git/workflow authority")
+
+    readme = ROOT / "README.md"
+    if readme.exists() and len(readme.read_text(encoding="utf-8", errors="ignore")) > 18000:
+        errors.append("README.md exceeds the living-document size boundary")
 
     if errors:
         print("Release hygiene check: FAIL")
@@ -90,7 +100,7 @@ def main() -> int:
     print("Release hygiene check: PASS")
     print(" - active workflows and helpers are release-number independent")
     print(" - numbered workflow launchers are absent")
-    print(" - living authority documents are current-state focused")
+    print(" - living authority documents are current-state focused and do not pin stale commit SHAs")
     print(" - generated Python cache files are not tracked")
     return 0
 
