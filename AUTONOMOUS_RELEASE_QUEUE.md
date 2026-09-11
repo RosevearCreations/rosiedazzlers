@@ -21,13 +21,13 @@ Current scope:
 - retain the existing booking-scoped signed media-upload and media-post authorities for before/during/after evidence;
 - expose the customer final-balance page as a handoff only; the Detailer App cannot mark a balance paid or mutate Square/provider/payment state;
 - preserve bounded staff authorization, customer privacy, event-driven runtime behaviour and zero recurring live-job polling;
-- keep the release schema-neutral: no database migration is part of Build 383.
+- keep the current release schema-neutral: no database migration is part of this release.
 
 The exact candidate SHA must pass the focused mobile Detailer field-workflow authority and retained source/feature gates before Development promotion. Development must pass retained runtime/deployment gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime authority passes.
 
 ## Next release
 
-**Build 384 — Finance Cockpit & Month-End UX** is next after Build 383. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
+**Build 384 — Finance Cockpit & Month-End UX** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Continuing rule
 
