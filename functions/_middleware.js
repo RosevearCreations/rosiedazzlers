@@ -1,9 +1,12 @@
-// Build 343 - public HTML clarity + booking completion routing + page-wide live editor bootstrap.
+// Build 376 - public performance/accessibility and shared response-security hardening.
 // Static source and booking/payment APIs remain authoritative. This middleware only:
 // 1) preserves the existing Build 272 public wording clarifications,
 // 2) routes provider payment returns away from the customer job-signoff /complete page,
-// 3) gives already-confirmed gift-covered checkouts a browser confirmation URL, and
-// 4) loads the admin-only Build 343 editor on public content HTML pages.
+// 3) gives already-confirmed gift-covered checkouts a browser confirmation URL,
+// 4) loads the admin-only page editor plus the additive accessibility baseline on public content HTML, and
+// 5) applies conservative response headers/private-cache protection through one shared authority.
+import { hardenResponse } from "./_lib/response-hardening.js";
+
 const TARGETS = new Set([
   "/", "/index.html",
   "/book", "/book.html",
@@ -23,6 +26,8 @@ const EDITOR_EXCLUDED_PATHS = new Set([
   "/final-balance-payment", "/final-balance-payment.html",
   "/booking-confirmed", "/booking-confirmed.html"
 ]);
+
+const ACCESSIBILITY_STYLESHEET = '<link rel="stylesheet" href="/assets/build376-accessibility.css?v=376" data-build376="accessibility-baseline" />';
 
 const PACKAGE_GUIDE = `
 <div class="photo-estimate-guide" data-build272="package-scope-before-price" style="margin-top:12px">
@@ -49,10 +54,12 @@ export async function onRequest(context) {
   // wizard already follows checkout_url, so add a local confirmation target only after the
   // authoritative checkout endpoint has returned gift_only_confirm.
   if (request.method === "POST" && url.pathname === "/api/checkout") {
-    return handleCheckoutResponse(context, url);
+    return hardenResponse(request, await handleCheckoutResponse(context, url));
   }
 
-  if (request.method !== "GET") return context.next();
+  if (request.method !== "GET") {
+    return hardenResponse(request, await context.next());
+  }
 
   // /complete is the existing token-protected customer job sign-off page. Stripe and
   // PayPal historically returned there with provider parameters, which do not satisfy the
@@ -60,16 +67,18 @@ export async function onRequest(context) {
   // confirmation route and preserve every provider query parameter (session_id/token/etc.).
   if ((url.pathname === "/complete" || url.pathname === "/complete.html") && isPaymentProvider(url.searchParams.get("provider"))) {
     url.pathname = "/booking-confirmed";
-    return Response.redirect(url.toString(), 302);
+    return hardenResponse(request, Response.redirect(url.toString(), 302));
   }
 
   const applyLegacyClarity = TARGETS.has(url.pathname);
   const applyPageEditor = isEditorEligiblePath(url.pathname);
-  if (!applyLegacyClarity && !applyPageEditor) return context.next();
+  if (!applyLegacyClarity && !applyPageEditor) {
+    return hardenResponse(request, await context.next());
+  }
 
   const response = await context.next();
   const contentType = String(response.headers.get("content-type") || "").toLowerCase();
-  if (!contentType.includes("text/html")) return response;
+  if (!contentType.includes("text/html")) return hardenResponse(request, response);
 
   let html = await response.text();
 
@@ -113,6 +122,10 @@ export async function onRequest(context) {
     }
   }
 
+  if (applyPageEditor && !html.includes("/assets/build376-accessibility.css")) {
+    html = html.replace("</head>", `  ${ACCESSIBILITY_STYLESHEET}\n</head>`);
+  }
+
   if (applyPageEditor && !html.includes("/assets/universal-page-editor-bootstrap.js")) {
     html = html.replace(
       "</body>",
@@ -123,8 +136,11 @@ export async function onRequest(context) {
   const headers = new Headers(response.headers);
   headers.delete("content-length");
   headers.delete("etag");
-  if (applyLegacyClarity || applyPageEditor) headers.set("cache-control", "no-cache");
-  return new Response(html, { status: response.status, statusText: response.statusText, headers });
+
+  // Build 376 performance boundary: deterministic public HTML transformations no longer
+  // force every editor-eligible page to no-cache. Preserve the origin/Pages cache policy.
+  const rewritten = new Response(html, { status: response.status, statusText: response.statusText, headers });
+  return hardenResponse(request, rewritten);
 }
 
 function isEditorEligiblePath(pathname) {
