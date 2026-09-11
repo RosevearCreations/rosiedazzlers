@@ -106,6 +106,7 @@ jobs:
           python -m py_compile scripts/seo_h1_check.py
           python -m py_compile scripts/seo_metadata_check.py
           python -m py_compile scripts/release_hygiene_check.py
+          python -m py_compile scripts/release_authority_documentation_convergence_check.py
           python -m py_compile scripts/responsive_static_check.py
           python -m py_compile scripts/admin_ui_audit.py
           python -m py_compile scripts/maintenance_retention_check.py
@@ -142,6 +143,9 @@ jobs:
 
       - name: Validate release hygiene
         run: python scripts/release_hygiene_check.py
+
+      - name: Validate release authority and documentation convergence
+        run: python scripts/release_authority_documentation_convergence_check.py
 
       - name: Validate responsive source contract
         run: python scripts/responsive_static_check.py
@@ -234,6 +238,7 @@ jobs:
             echo "- Sitemap one-H1 authority: PASS"
             echo "- Public SEO metadata/canonical/robots/structured-data authority: PASS"
             echo "- Release hygiene authority: PASS"
+            echo "- Release authority/documentation convergence: PASS"
             echo "- Responsive source contract: PASS"
             echo "- Protected Admin UI/navigation/permission contract: PASS"
             echo "- I.T. System Gate source contract: PASS"
