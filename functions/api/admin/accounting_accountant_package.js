@@ -1,4 +1,4 @@
-import { requireStaffAccess, json, methodNotAllowed } from "../_lib/staff-auth.js";
+import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import {
   buildYearEndReport,
@@ -9,6 +9,15 @@ import { buildT2125WorkpaperFromYearEnd } from "../_lib/t2125-workpaper.js";
 import { loadTaxSupport, calculateHomeOfficeWorkpaper } from "../_lib/accounting-tax-support.js";
 import { enrichT2125WithTaxSupport } from "../_lib/t2125-tax-support.js";
 import { buildAccountantExportPackage } from "../_lib/accounting-accountant-export.js";
+
+const CLOSE_REVIEW_FIELDS = [
+  "remittance_reviewed",
+  "payables_reviewed",
+  "receivables_reviewed",
+  "statements_exported",
+  "inventory_costs_reviewed",
+  "profitability_reviewed"
+];
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -23,11 +32,12 @@ export async function onRequestGet({ request, env }) {
 
     const url = new URL(request.url);
     const year = cleanYear(url.searchParams.get("year"));
-    const [yearEnd, support, balanceSheet, inventoryCoverage] = await Promise.all([
+    const [yearEnd, support, balanceSheet, inventoryCoverage, closeChecklist] = await Promise.all([
       buildYearEndReport(env, { year }),
       loadTaxSupport(env, { year }),
       buildBalanceSheetReport(env, { month: 12, year }),
-      buildInventoryCostCompletenessReport(env)
+      buildInventoryCostCompletenessReport(env),
+      loadYearEndCloseChecklist(env, year)
     ]);
 
     if (support.home_office) {
@@ -45,9 +55,10 @@ export async function onRequestGet({ request, env }) {
     const unresolvedTax = Number(t2125?.summary?.unresolved_expense_cad || 0);
     const balanceDelta = Number(balanceSheet?.totals?.balance_delta_cad || 0);
     const inventoryMissing = Number(inventoryCoverage?.totals?.missing_cost_on_hand_items || 0);
+    const closeReview = buildYearEndCloseEvidence(year, closeChecklist);
 
     const readiness = {
-      status: unresolvedTax === 0 && Math.abs(balanceDelta) < 0.01 && inventoryMissing === 0 && supportReady === supportTotal
+      status: unresolvedTax === 0 && Math.abs(balanceDelta) < 0.01 && inventoryMissing === 0 && supportReady === supportTotal && closeReview.checklist_complete
         ? "accountant_ready_candidate"
         : "review_required",
       structured_support_ready: supportReady,
@@ -55,6 +66,7 @@ export async function onRequestGet({ request, env }) {
       unresolved_t2125_cad: unresolvedTax,
       balance_sheet_delta_cad: balanceDelta,
       inventory_items_missing_cost_on_hand: inventoryMissing,
+      year_end_close: closeReview,
       manual_review_required: true
     };
 
@@ -84,6 +96,32 @@ export async function onRequestGet({ request, env }) {
 
 export async function onRequestPost() {
   return withCors(methodNotAllowed());
+}
+
+async function loadYearEndCloseChecklist(env, year) {
+  const monthStart = `${year}-12-01`;
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/accounting_month_end_checklists?select=*&month_start=eq.${encodeURIComponent(monthStart)}&limit=1`, {
+    headers: serviceHeaders(env)
+  });
+  if (!res.ok) throw new Error(`Could not load year-end close checklist. ${await res.text()}`);
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows[0] || null : null;
+}
+
+function buildYearEndCloseEvidence(year, row) {
+  const checklist = { month_start: row?.month_start || `${year}-12-01` };
+  for (const field of CLOSE_REVIEW_FIELDS) checklist[field] = row?.[field] === true;
+  const missing = CLOSE_REVIEW_FIELDS.filter((field) => !checklist[field]);
+  return {
+    month_start: checklist.month_start,
+    checklist,
+    checklist_complete: missing.length === 0,
+    missing_reviews: missing,
+    payment_reconciliation_authority: `/api/admin/accounting_month_end_closure?month=12&year=${year}`,
+    payment_reconciliation_snapshot_included: false,
+    snapshot_exclusion_reason: "Avoids duplicating the year-end report's database reads; use the dedicated close authority for live payment/bank/provider evidence.",
+    manual_approval_required: true
+  };
 }
 
 function cleanYear(value) {
