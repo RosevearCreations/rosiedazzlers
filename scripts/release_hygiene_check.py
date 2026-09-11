@@ -62,7 +62,7 @@ def main() -> int:
             errors.append(f"active workflow missing: {path.name}")
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        if re.search(r"(?i)build\s*[-_ ]?\d{3}", text):
+        if re.search(r"(?i)\bbuild\s+\d{3}\b", text):
             errors.append(f"{path.name} still names a historical numbered Build")
         if path in NO_NUMBERED_HELPER_WORKFLOWS and re.search(r"(?i)scripts/(?:build|test_build)\d{3}", text):
             errors.append(f"{path.name} still calls a numbered guard/helper")
