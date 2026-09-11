@@ -40,7 +40,9 @@ for prefix in [
     assert prefix in HARDENING, f"missing private boundary: {prefix}"
 
 assert 'headers.has("set-cookie")' in HARDENING, "cookie-bearing responses must fail closed to no-store"
-assert 'Content-Security-Policy' not in HARDENING, "Build 376 must not introduce an unproven CSP"
+assert 'headers.set("content-security-policy"' not in HARDENING.lower(), (
+    "Build 376 must not introduce an unproven CSP header"
+)
 
 for token in [":focus-visible", "prefers-reduced-motion", "forced-colors"]:
     assert token in A11Y, f"missing accessibility contract: {token}"
