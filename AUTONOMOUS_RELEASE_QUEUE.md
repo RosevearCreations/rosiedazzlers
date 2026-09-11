@@ -4,30 +4,27 @@ This queue records current actionable work. Completed implementation history bel
 
 ## Accepted checkpoint
 
-**Build 375 — Payment Reconciliation & Month-End Closure** is the accepted synchronized source boundary at SHA `8d1d52e4d9d53e38544fe0a9ff1a4a336a1d58ab` before the current release begins. It preserved read-only/fail-closed month-end close authority, manual approval, existing Finance authorities and the exact-SHA Development-before-main release discipline.
+**Build 376 — Performance, Accessibility & Security Hardening** is the accepted synchronized source and Production deployment boundary before the current release begins. It preserved public cache performance, added accessibility and response-hardening baselines, kept private/cookie-bearing responses fail-closed, and retained the exact-SHA Development-before-main release discipline.
 
 ## Current release
 
-**Build 376 — Performance, Accessibility & Security Hardening** is the active bounded release.
+**Build 377 — Production Business Acceptance / Launch Readiness** is the active bounded release.
 
 Current scope:
 
-- preserve public origin/Pages cache policy instead of forcing every editor-eligible public page to `no-cache`;
-- add an additive keyboard-focus, reduced-motion and forced-colors accessibility baseline to public content pages;
-- centralize conservative response headers (`nosniff`, referrer policy, limited permissions policy and cross-domain policy);
-- force authenticated/private/customer/staff and cookie-bearing responses to `Cache-Control: no-store`;
-- deny framing of private/authenticated surfaces;
-- retain existing booking/payment/provider behavior and do not introduce an unproven Content Security Policy;
-- add focused exact-SHA source/regression proof.
+- converge the existing acquisition, booking, payment, customer/vehicle, staff-work, completion/proof, final-finance, genuine-review, rebook/retention, maintenance and fleet authorities into one launch-readiness matrix;
+- require rollback/recovery and performance/accessibility/security authorities as launch conditions;
+- add read-only Cloudflare Production acceptance that requires the exact `main` SHA, Production environment, successful deployment and Functions metadata;
+- smoke the immutable exact deployment and canonical Production runtime without deploying, retrying, deleting, rolling back or mutating business/provider data;
+- keep real customer, provider, consent, review and accounting evidence distinct from software acceptance evidence;
+- remain schema-neutral.
 
-Exact `dev` SHA must pass Current Source Gate, the focused hardening authority and Cloudflare Development acceptance before `main` promotion.
+The exact candidate SHA must pass the focused business-acceptance authority, Current Source Gate and feature preview before Development promotion. Development must pass its retained runtime gates on the same SHA before `main` may move. The `main` push is complete only when the exact Production deployment/runtime authority also passes.
 
 ## Next release
 
-**Build 377 — Production Business Acceptance / Launch Readiness** remains next after the current release. Its durable acceptance scope is in `FORWARD_BUILD_ROADMAP_356_377.md`.
-
-The approved autonomous continuation after that release is preserved in `FORWARD_BUILD_ROADMAP_378_385.md`; that roadmap is the authority for the subsequent eight-release phase and should be followed sequentially unless a new operational blocker requires an explicit reprioritization.
+**Build 378 — Release Authority & Documentation Convergence** is next after the current release. Its durable scope and the subsequent approved sequence are preserved in `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve exact tested SHAs through Development and authorized Production promotion; keep database migrations as separate acceptance boundaries. Promote `main` by non-force fast-forward to the same Development-GREEN SHA. When Production exact-SHA runtime identity is not externally exposed, report that limitation rather than weakening the evidence standard.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve exact tested SHAs through Development and authorized Production promotion; keep database migrations as separate acceptance boundaries. Promote `main` by non-force fast-forward to the same Development-GREEN SHA. Missing exact Production runtime/deployment identity is a blocker rather than permission to infer success.
