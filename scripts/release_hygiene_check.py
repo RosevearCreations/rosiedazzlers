@@ -14,6 +14,11 @@ ACTIVE_WORKFLOWS = [
     WORKFLOW_DIR / "cloudflare-pages-recovery.yml",
     WORKFLOW_DIR / "production-business-acceptance-authority.yml",
 ]
+NO_NUMBERED_HELPER_WORKFLOWS = [
+    WORKFLOW_DIR / "development-source-gate.yml",
+    WORKFLOW_DIR / "cloudflare-development-acceptance.yml",
+    WORKFLOW_DIR / "cloudflare-pages-recovery.yml",
+]
 ACTIVE_HELPERS = [
     ROOT / "scripts/cloudflare_pages_development.sh",
     ROOT / "scripts/development_http_smoke.sh",
@@ -59,7 +64,7 @@ def main() -> int:
         text = path.read_text(encoding="utf-8", errors="ignore")
         if re.search(r"(?i)build\s*[-_ ]?\d{3}", text):
             errors.append(f"{path.name} still names a historical numbered Build")
-        if re.search(r"(?i)scripts/(?:build|test_build)\d{3}", text):
+        if path in NO_NUMBERED_HELPER_WORKFLOWS and re.search(r"(?i)scripts/(?:build|test_build)\d{3}", text):
             errors.append(f"{path.name} still calls a numbered guard/helper")
 
     for path in ACTIVE_HELPERS:
@@ -99,6 +104,7 @@ def main() -> int:
 
     print("Release hygiene check: PASS")
     print(" - active workflows and helpers are release-number independent")
+    print(" - durable Production authority may call retained canonical acceptance guards without adopting their release identity")
     print(" - numbered workflow launchers are absent")
     print(" - living authority documents are current-state focused and do not pin stale commit SHAs")
     print(" - generated Python cache files are not tracked")
