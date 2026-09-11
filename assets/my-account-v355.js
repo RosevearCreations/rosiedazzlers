@@ -1,6 +1,7 @@
 // Build 355: customer-facing completed-service history convergence.
 // Build 358: add a customer-safe per-vehicle service timeline over the same
 // authenticated dashboard/service_history authority without creating a second ledger.
+// Build 382: attach the read-only retention summary after authenticated dashboard loads.
 // Preserve the accepted Build 296 My Account runtime and observe its existing
 // authenticated dashboard reads rather than issuing a second dashboard request.
 
@@ -230,7 +231,12 @@ function dashboardRequest(input) {
 async function captureDashboardResponse(response, input) {
   if (!dashboardRequest(input) || !response?.clone) return;
   const payload = await response.clone().json().catch(() => null);
-  if (payload?.ok) renderDashboardHistory(payload);
+  if (payload?.ok) {
+    renderDashboardHistory(payload);
+    import('/assets/my-account-v382.js')
+      .then((module) => module.loadCustomerRetentionView?.())
+      .catch(() => {});
+  }
 }
 
 if (typeof window !== 'undefined' && typeof document !== 'undefined' && typeof window.fetch === 'function') {
