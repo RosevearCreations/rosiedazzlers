@@ -5,7 +5,7 @@ on:
     branches:
       - dev
       - main
-      - 'build385-*'
+      - 'build-385-*'
   pull_request:
     branches:
       - dev
