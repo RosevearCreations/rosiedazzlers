@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 387 — Release Governance & Branch Protection Readiness**.
+Current source direction: **Build 388 — Service, Add-On & Commercial Accuracy Convergence**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -26,6 +26,19 @@ Use `DOC_INDEX.md` only to locate specialist references. The completed prior for
 - Cloudflare Pages Functions: `functions/api/`
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
+
+## Current commercial authority
+
+The accepted customer-facing package matrix is source-owned after editable catalog merge: Premium Wash $85/$105/$125, Basic Detail $229/$269/$309, Complete Detail $319/$369/$419, Interior Detail $195/$220/$245, and Exterior Detail $195/$220/$245 for small/mid/oversize classes respectively, before HST unless explicitly stated otherwise.
+
+Condition-sensitive add-ons do not receive invented one-price economics. Headlights, extraction/restoration, odor, pet hair, paint correction, coatings/protection and other variable-scope work use starting-price or inspection-led language with condition factors, duration expectations, inclusions/exclusions and explicit re-quote/escalation triggers. Expanded work requires customer authorization before scope is widened.
+
+Run the focused commercial authority with:
+
+```bash
+python scripts/service_commercial_accuracy_check.py
+node scripts/service_commercial_accuracy_test.mjs
+```
 
 ## Release authority
 
