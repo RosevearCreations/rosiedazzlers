@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 389 — Local SEO, Service Landing & Proof Convergence**.
+Current source direction: **Build 390 — Booking, Quote & Condition-Based Estimate Hardening**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -27,22 +27,25 @@ Use `DOC_INDEX.md` only to locate specialist references. The completed prior for
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Current public SEO and proof authority
+## Current booking, quote and estimate authority
 
-Established town and specialist-service pages remain the public landing inventory; the current release converges them instead of creating near-duplicate location/service pages. Each indexable target retains one meaningful H1, unique title/description/canonical metadata and useful structured data, with service-area claims constrained to the established Oxford and Norfolk County model.
+Current catalog pricing and package/add-on compatibility remain server-authoritative. Fixed catalog work can produce a quote; condition-sensitive work that materially changes labour, process or product requirements remains an inspection-led estimate until scope is reviewed and a revised quote is approved.
 
-The accepted customer-facing pricing matrix and condition-sensitive quote rules remain inherited from the commercial authority. Landing pages consume `/api/pricing_catalog_public`; they do not create a second pricing ledger. Customer-facing calls-to-action converge on the unified `/book` service/booking flow.
+Commercial states do not imply one another. Accepting a quote records customer approval only. A successful availability check means available-but-unheld. A requested or paid deposit is payment evidence, not final appointment evidence. A booking is confirmed only when the booking authority records the confirmed state under the retained provider/settlement rules.
 
-Landing-page proof fails closed. Before/after evidence is eligible only when the existing Gallery authority marks it explicitly published, public-use/privacy approved, non-sample and complete with vehicle, condition, problem, process and result context. Bundled sample gallery rows, visual placeholders, private media and generic fallback review art are not customer proof.
+The shared continuity semantics are in `functions/api/_lib/commercial-continuity.js` and are consumed by current quote pricing, quote acceptance and deposit-request paths. The existing `booking_confirmation.js` authority remains fail-closed: browser redirects do not create confirmed bookings.
 
 Run the focused authority with:
 
 ```bash
-python scripts/build389_local_seo_service_landing_proof_check.py
-node --experimental-default-type=module scripts/build389_local_seo_service_landing_proof_test.mjs
+node --check functions/api/_lib/commercial-continuity.js
+node --check functions/api/_lib/quote-booking-authority.js
+node --check functions/api/quote_proposal_respond.js
+node --check functions/api/quote_deposit_request.js
+node --experimental-default-type=module scripts/build390_booking_quote_estimate_hardening_test.mjs
 ```
 
-The retained commercial authority remains available with:
+The retained commercial pricing authority remains available with:
 
 ```bash
 python scripts/service_commercial_accuracy_check.py

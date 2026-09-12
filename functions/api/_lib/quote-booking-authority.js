@@ -1,7 +1,8 @@
-// Build 362 — shared current catalog and appointment authority for quote-to-booking conversion.
+// Build 390 — shared current catalog and appointment authority for quote-to-booking conversion.
 import { loadPricingCatalog } from "./pricing-catalog.js";
 import { serviceHeaders } from "./staff-session.js";
 import { evaluateSlotAvailability, normalizeAddonCodes } from "./quote-booking-terms.js";
+import { availabilityContinuity, fixedCatalogQuoteContinuity, inspectionEstimateContinuity } from "./commercial-continuity.js";
 
 export async function resolveCurrentQuotePrice(env, input = {}) {
   const pricing = await loadPricingCatalog(env);
@@ -28,7 +29,14 @@ export async function resolveCurrentQuotePrice(env, input = {}) {
     }
     const addonCad = addon.prices_cad?.[vehicleSize];
     if (addon.quote_required === true || !Number.isFinite(addonCad)) {
-      return fail("QUOTE_REQUIRES_MANUAL_REVIEW", `${addon.name || code} requires a condition-specific price and cannot be auto-carried into a booking.`);
+      const reason = `${addon.name || code} requires a condition-specific estimate and inspection/review before a bookable price can be confirmed.`;
+      return {
+        ...fail("QUOTE_REQUIRES_MANUAL_REVIEW", reason),
+        ...inspectionEstimateContinuity(reason),
+        package_code: pkg.code,
+        vehicle_size: vehicleSize,
+        addon_code: code
+      };
     }
     const cents = Math.round(addonCad * 100);
     addonsTotalCents += cents;
@@ -49,7 +57,8 @@ export async function resolveCurrentQuotePrice(env, input = {}) {
     total_cents: totalCents,
     deposit_cents: depositCents,
     hold_minutes: Number(pricing?.booking_rules?.hold_minutes || 30) || 30,
-    catalog_source: pricing?.source || "pricing_catalog"
+    catalog_source: pricing?.source || "pricing_catalog",
+    ...fixedCatalogQuoteContinuity()
   };
 }
 
@@ -83,7 +92,14 @@ export async function checkCurrentBookingAvailability(env, input = {}) {
     startSlot,
     durationSlots
   });
-  return evaluated.ok ? { ok: true, service_date: serviceDate, start_slot: startSlot, duration_slots: durationSlots } : evaluated;
+  if (!evaluated.ok) return { ...evaluated, ...availabilityContinuity(false) };
+  return {
+    ok: true,
+    service_date: serviceDate,
+    start_slot: startSlot,
+    duration_slots: durationSlots,
+    ...availabilityContinuity(true)
+  };
 }
 
 async function supabaseRows(env, path) {

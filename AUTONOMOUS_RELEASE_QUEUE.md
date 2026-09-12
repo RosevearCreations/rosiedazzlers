@@ -8,24 +8,24 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 389 — Local SEO, Service Landing & Proof Convergence** is the active bounded release.
+**Build 390 — Booking, Quote & Condition-Based Estimate Hardening** is the active bounded release.
 
 Current scope:
 
-- converge established town and specialist-service pages onto one shared public authority instead of generating duplicate near-identical pages;
-- preserve exactly one meaningful H1, unique title/description/canonical metadata and useful structured data on each indexable target page;
-- keep Oxford/Norfolk service-area wording truthful and constrained to the established local coverage model;
-- preserve the accepted current pricing/catalog authority from the prior commercial release rather than hard-coding a second pricing source;
-- remove retired `/pricing` and `/services` customer paths from rendered landing calls-to-action in favour of the unified `/book` service/booking anchors;
-- show landing-page before/after evidence only when it passes the existing published, public-use/privacy-approved, non-sample Gallery proof authority with complete vehicle/condition/problem/process/result context;
-- fail closed when genuine proof is unavailable: do not substitute bundled samples, visual placeholders, private media, incomplete evidence or generic fallback review art as customer proof;
-- remain schema-neutral and read-only with respect to customer/business data, database state, R2 objects, DNS, secrets, payments and providers.
+- preserve current catalog pricing and package/add-on compatibility as server-authoritative commercial inputs;
+- distinguish a fixed catalog quote from condition-sensitive inspection-led estimate work instead of presenting both as equally bookable prices;
+- keep quote acceptance separate from slot availability, slot holding, deposit/payment evidence and final booking confirmation;
+- mark a successful availability check as available-but-unheld rather than implying an appointment exists;
+- carry explicit inspection/revised-quote next steps for condition-sensitive add-ons that cannot be safely auto-priced;
+- expose deposit state and booking-confirmation evidence separately so paid or returned payment flows do not silently become confirmed appointments;
+- retain existing provider and booking confirmation authorities rather than weakening Stripe/PayPal settlement or server-side confirmation rules;
+- remain schema-neutral and avoid database migration, R2 mutation, DNS/secrets changes, customer charging/refunding, provider mutation or Production business-data mutation.
 
-The candidate must pass the focused Local SEO Service Landing Proof Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
+The candidate must pass the focused Booking Quote Estimate Hardening Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
 
 ## Next release
 
-**Build 390 — Booking, Quote & Condition-Based Estimate Hardening** is next only after current-release acceptance is complete. It will strengthen variable-condition booking/quote behaviour while preserving server-authoritative availability, compatibility, current pricing, deposits, approval and recovery rules.
+**Build 391 — Photo Studio & R2 Media Reliability** is next only after current-release acceptance is complete. It will converge assignment visibility, before/after sets, multi-placement, unassign/reset and delete-unassigned safeguards while bounding R2 synchronization and keeping private DAIP media isolated.
 
 ## Continuing rule
 
