@@ -150,7 +150,16 @@ retry_smoke() {
 }
 
 smoke_exact() {
-  retry_smoke "Exact Production deployment static" scripts/development_http_smoke.sh "$EXACT_URL" static
+  local attempt static_ready=false
+  for attempt in $(seq 1 5); do
+    note "Exact Production deployment static smoke (attempt ${attempt}/5)."
+    if SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_URL" "Exact Production deployment static attempt ${attempt}/5"; then
+      static_ready=true
+      break
+    fi
+    [[ "$attempt" -ge 5 ]] || sleep 3
+  done
+  [[ "$static_ready" == "true" ]] || fail "Exact Production deployment static smoke did not pass within 5 bounded attempts." 22
   retry_smoke "Exact Production deployment contextual" scripts/contextual_proof_http_smoke.sh "$EXACT_URL" static
   summary "- Immutable Production static/contextual smoke: PASS"
 }
