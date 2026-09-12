@@ -1,0 +1,80 @@
+name: Local SEO Service Landing Proof Authority
+
+on:
+  push:
+    branches: [main, dev, 'build*']
+    paths:
+      - 'assets/landing-page.js'
+      - 'assets/landing-page-build388.js'
+      - 'assets/build389-local-seo-proof.js'
+      - 'functions/api/local_proof_public.js'
+      - 'functions/api/_lib/gallery-publication.js'
+      - 'functions/api/admin/review_proof_local_seo_loop.js'
+      - 'data/local_seo_targets.json'
+      - 'data/landing_pages_content.json'
+      - 'data/before_after_gallery.json'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'sitemap.xml'
+      - '*-auto-detailing/index.html'
+      - 'ceramic-coating/index.html'
+      - 'pet-hair-removal/index.html'
+      - 'odor-removal/index.html'
+      - 'headlight-restoration/index.html'
+      - 'paint-correction/index.html'
+      - 'scripts/build389_local_seo_service_landing_proof_check.py'
+      - 'scripts/build389_local_seo_service_landing_proof_test.mjs'
+      - '.github/workflows/local-seo-service-landing-proof-authority.yml'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'README.md'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'assets/landing-page.js'
+      - 'assets/landing-page-build388.js'
+      - 'assets/build389-local-seo-proof.js'
+      - 'functions/api/local_proof_public.js'
+      - 'functions/api/_lib/gallery-publication.js'
+      - 'functions/api/admin/review_proof_local_seo_loop.js'
+      - 'data/local_seo_targets.json'
+      - 'data/landing_pages_content.json'
+      - 'data/before_after_gallery.json'
+      - 'data/rosie_services_pricing_and_packages.json'
+      - 'sitemap.xml'
+      - '*-auto-detailing/index.html'
+      - 'ceramic-coating/index.html'
+      - 'pet-hair-removal/index.html'
+      - 'odor-removal/index.html'
+      - 'headlight-restoration/index.html'
+      - 'paint-correction/index.html'
+      - 'scripts/build389_local_seo_service_landing_proof_check.py'
+      - 'scripts/build389_local_seo_service_landing_proof_test.mjs'
+      - '.github/workflows/local-seo-service-landing-proof-authority.yml'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'README.md'
+
+permissions:
+  contents: read
+
+jobs:
+  local-seo-service-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source authority
+        run: python scripts/build389_local_seo_service_landing_proof_check.py
+      - name: JavaScript syntax
+        run: |
+          node --check assets/landing-page.js
+          node --check assets/build389-local-seo-proof.js
+          node --check functions/api/local_proof_public.js
+      - name: Proof behavior
+        run: node --experimental-default-type=module scripts/build389_local_seo_service_landing_proof_test.mjs

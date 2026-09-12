@@ -8,22 +8,24 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 388 — Service, Add-On & Commercial Accuracy Convergence** is the active bounded release.
+**Build 389 — Local SEO, Service Landing & Proof Convergence** is the active bounded release.
 
 Current scope:
 
-- enforce the accepted customer-facing package matrix after editable catalog merge so stale catalog values cannot silently lower package pricing;
-- make condition-sensitive work such as headlights, extraction/restoration, odor, pet hair, paint correction and protection use realistic starting-price or inspection-led commercial language;
-- require every add-on to expose pricing basis, duration expectations, inclusions/exclusions, customer preparation, aftercare and quote/escalation triggers;
-- require revised estimate/customer authorization when inspection materially expands the accepted scope;
-- preserve the existing one-H1/public SEO contract and use current catalog authority rather than duplicating pricing logic across pages;
-- remain schema-neutral and avoid database, R2, DNS, secret, payment/provider and Production business-data mutation.
+- converge established town and specialist-service pages onto one shared public authority instead of generating duplicate near-identical pages;
+- preserve exactly one meaningful H1, unique title/description/canonical metadata and useful structured data on each indexable target page;
+- keep Oxford/Norfolk service-area wording truthful and constrained to the established local coverage model;
+- preserve the accepted current pricing/catalog authority from the prior commercial release rather than hard-coding a second pricing source;
+- remove retired `/pricing` and `/services` customer paths from rendered landing calls-to-action in favour of the unified `/book` service/booking anchors;
+- show landing-page before/after evidence only when it passes the existing published, public-use/privacy-approved, non-sample Gallery proof authority with complete vehicle/condition/problem/process/result context;
+- fail closed when genuine proof is unavailable: do not substitute bundled samples, visual placeholders, private media, incomplete evidence or generic fallback review art as customer proof;
+- remain schema-neutral and read-only with respect to customer/business data, database state, R2 objects, DNS, secrets, payments and providers.
 
-The candidate must pass the focused Service, Add-On & Commercial Accuracy Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
+The candidate must pass the focused Local SEO Service Landing Proof Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
 
 ## Next release
 
-**Build 389 — Local SEO, Service Landing & Proof Convergence** is next only after current-release acceptance is complete. It will deepen local/service landing coverage and proof while preserving truthful pricing/service authority and the one-H1 rule.
+**Build 390 — Booking, Quote & Condition-Based Estimate Hardening** is next only after current-release acceptance is complete. It will strengthen variable-condition booking/quote behaviour while preserving server-authoritative availability, compatibility, current pricing, deposits, approval and recovery rules.
 
 ## Continuing rule
 
