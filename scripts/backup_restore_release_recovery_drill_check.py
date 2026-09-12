@@ -71,7 +71,7 @@ require(runbook, [
 
 require(focused, [
     "name: Build 385 — Backup, Restore & Release Recovery Drill",
-    "- 'build385-*'",
+    "- 'build-385-*'",
     "permissions:\n  contents: read",
     "python3 scripts/backup_restore_release_recovery_drill_check.py",
     "python3 scripts/release_rollback_recovery_check.py",
