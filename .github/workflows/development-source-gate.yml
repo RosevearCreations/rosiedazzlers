@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   source-gate:
-    name: Validate current source
+    name: source checks
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:

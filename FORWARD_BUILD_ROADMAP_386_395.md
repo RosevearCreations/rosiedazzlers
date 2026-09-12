@@ -8,7 +8,7 @@
 Close the completed 378–385 phase, move the living handoff/queue/README/convergence guard onto this roadmap, re-baseline the Development/go-live blocker surface, retire temporary recovery-only workflow coupling from ordinary release pushes, and preserve recovery material as retained specialist authority. Keep the release schema-neutral and mutation-free.
 
 ### Build 387 — Release Governance & Branch Protection Readiness
-Harden the proven feature → `dev` → `main` release path around non-force promotion, branch/ruleset readiness, exact-SHA gate evidence, stale-check discrimination and operator recovery. Fail closed when protection or required status evidence cannot be observed; do not weaken gates merely to make a promotion pass.
+Harden the proven feature → `dev` → protected `main` release path around non-force Development promotion, the active `rd main protection` pull-request boundary, stage-specific exact-SHA gate evidence, stale-check discrimination and operator recovery. Fail closed when protection or required status evidence cannot be observed; do not weaken gates merely to make a promotion pass.
 
 ### Build 388 — Service, Add-On & Commercial Accuracy Convergence
 Revisit packages and every customer-facing add-on against the current business model. Expand variable-scope services such as headlights, extraction/restoration, odor, pet hair, paint correction and protection so pricing language, condition factors, inclusions/exclusions, duration expectations and quote/escalation rules are commercially realistic without inventing fixed economics where inspection is required.
@@ -32,16 +32,18 @@ Converge job readiness, consumable/product usage, inventory depletion, reorder e
 Drive the existing Finance cockpit through evidence-backed deposit/final balance/refund/fee/HST/reconciliation/month-end/export scenarios. Missing financial evidence remains review/unavailable; accounting posting and provider mutation stay behind explicit authorization.
 
 ### Build 395 — Production Business Acceptance & Growth Readiness
-Run a whole-platform acceptance pass across anonymous acquisition, service discovery, booking, customer account, field execution, proof/media, payment/finance, retention, maintenance/fleet, admin/I.T. diagnostics, performance/accessibility/security and recovery. Production is GREEN only with exact-SHA deployment/runtime proof plus retained business-path acceptance.
+Run a whole-platform acceptance pass across anonymous acquisition, service discovery, booking, customer account, field execution, proof/media, payment/finance, retention, maintenance/fleet, admin/I.T. diagnostics, performance/accessibility/security and recovery. Production is GREEN only with exact Production-SHA deployment/runtime proof plus retained business-path acceptance and protected-main release evidence.
 
 ## Continuing release rules
 
 - One bounded authority improvement per build.
-- Start from the latest exact synchronized accepted `dev`/`main` boundary.
+- Start from the latest accepted `dev` boundary and the latest accepted protected `main` Production boundary.
 - Feature candidates must pass focused authority, Current Source Gate and feature-preview acceptance before `dev` moves.
 - Exact Development SHA must be GREEN before Production promotion.
-- Promote the same tested SHA to `main` by non-force fast-forward; do not rebuild, cherry-pick or silently substitute a different release artifact.
-- Production is not GREEN from source promotion alone; exact-SHA Cloudflare deployment/runtime evidence remains mandatory.
+- Advance `dev` only by non-force fast-forward to the accepted candidate SHA.
+- Promote Development-GREEN source to `main` through the active `rd main protection` pull-request path; do not bypass protection to preserve an obsolete direct-push workflow.
+- Prefer a merge commit for protected-main promotion so the accepted Development SHA remains explicit in Production ancestry.
+- After merge, the resulting `main` head is the exact Production SHA and must receive its own Cloudflare deployment/runtime/business acceptance.
 - Database migrations remain explicit acceptance boundaries, never incidental runtime side effects.
 - Preserve customer/staff privacy, server-authoritative permissions and genuine provider/payment/consent/review/accounting/tax evidence.
 - Preserve one meaningful H1 per indexable public page and truthful local/service content.

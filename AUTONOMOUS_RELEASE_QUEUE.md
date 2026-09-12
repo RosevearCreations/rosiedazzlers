@@ -1,31 +1,31 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The active forward sequence is `FORWARD_BUILD_ROADMAP_386_395.md`; the prior 378–385 phase remains historical context only.
+This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The active forward sequence is `FORWARD_BUILD_ROADMAP_386_395.md`; prior phases remain historical context only.
 
 ## Accepted checkpoint
 
-**Build 385 — Backup, Restore & Release Recovery Drill** is the accepted synchronized source and Production deployment boundary before the current release begins. Its observation-only recovery evidence and exact-SHA release protections remain retained authorities, but it is no longer the active planning surface.
+The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve its exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding historical release identities in living prose.
 
 ## Current release
 
-**Build 386 — Post-Recovery Baseline & Forward Roadmap Renewal** is the active bounded release.
+**Build 387 — Release Governance & Branch Protection Readiness** is the active bounded release.
 
 Current scope:
 
-- close the completed 378–385 phase without rewriting its historical evidence;
-- resolve the accepted baseline from live synchronized Git refs and exact-SHA workflow evidence rather than embedding a commit identity in living prose;
-- move the living handoff, queue, README and release-convergence authority onto a new bounded 386–395 roadmap;
-- re-baseline the Development/go-live blocker document so it no longer points to obsolete legacy planning authority;
-- retire prior recovery-only workflow coupling from normal `dev`/`main` pushes while preserving the recovery runbook and retained rollback/recovery authorities;
-- establish a focused current-release source authority that fails closed if accepted/current/next release state, roadmap ownership or release rules drift;
-- keep the release documentation/authority focused with no database migration, Production business-data mutation, R2 write/delete, DNS mutation, secret rotation, customer charge/refund or provider mutation.
+- preserve exact-SHA candidate validation and non-force fast-forward promotion to `dev`;
+- use the active `rd main protection` pull-request boundary for Production source promotion;
+- distinguish the exact accepted Development SHA from the resulting exact protected-`main` Production SHA while retaining clear ancestry between them;
+- replace build-number-specific release assumptions with durable release-number-independent governance;
+- make stale/advisory checks distinguishable from current blocking release authority;
+- define operator recovery for non-fast-forward, protected-branch, missing-check, stale-check and unobservable-protection conditions;
+- preserve schema, Production business data, R2, DNS, secrets and payment/provider mutation boundaries.
 
-The exact candidate SHA must pass the focused current-release authority, Current Source Gate and feature-preview acceptance before Development promotion. Development must pass retained runtime/deployment gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after the exact-SHA Production deployment/runtime authority and retained Production business-path authority pass.
+The candidate must pass Release Governance Authority, Current Source Gate, feature-preview acceptance and retained source authorities before `dev` moves. Development must then pass exact-SHA deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
 
 ## Next release
 
-**Build 387 — Release Governance & Branch Protection Readiness** is next after the baseline renewal is accepted. It will harden branch/release governance around the proven feature → `dev` → `main` path, verify protection/readiness evidence fail-closed, and avoid introducing business-data or provider mutation merely to enforce release discipline.
+**Build 388 — Service, Add-On & Commercial Accuracy Convergence** is next only after current-release acceptance is complete. It will revisit package/add-on content and condition-based commercial language without inventing fixed economics where inspection is required.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested SHA through Development and authorized Production promotion; keep database migrations as separate acceptance boundaries. Promote `main` by non-force fast-forward to the same Development-GREEN SHA. Missing exact Production runtime/deployment identity is a blocker rather than permission to infer success.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through Development, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production identity to be independently accepted. Database migrations remain separate acceptance boundaries. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
