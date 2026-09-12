@@ -1,0 +1,77 @@
+name: Build 385 — Backup, Restore & Release Recovery Drill
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build385-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build385-backup-restore-release-recovery-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Build 385 backup restore release recovery drill
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact candidate SHA
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate focused Build 385 recovery authority
+        run: python3 scripts/backup_restore_release_recovery_drill_check.py
+      - name: Validate retained rollback and recovery authority
+        run: python3 scripts/release_rollback_recovery_check.py
+      - name: Syntax-check retained recovery helpers
+        run: |
+          bash -n scripts/cloudflare_development_rollback.sh
+          bash -n scripts/cloudflare_pages_development.sh
+          bash -n scripts/cloudflare_pages_production_acceptance.sh
+      - name: Record observation-only drill boundary
+        run: |
+          {
+            echo "### Build 385 recovery drill boundary"
+            echo "- Exact candidate SHA: \`${GITHUB_SHA}\`"
+            echo "- Git/source rollback evidence: PASS"
+            echo "- Cloudflare recovery authority: PASS"
+            echo "- Database/media/configuration/DNS/provider recovery boundaries: PASS"
+            echo "- Database migration: none"
+            echo "- Production/business-data/provider mutation: none"
+            echo "- Real rollback/restore remains explicitly operator-authorized outside this drill."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    needs: source-authority
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Check out exact Production SHA
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
