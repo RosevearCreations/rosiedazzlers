@@ -1,0 +1,64 @@
+name: Build 392 — Retention, Maintenance & Fleet Commercial Activation Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build392-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build392-commercial-activation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: retention-maintenance-fleet-commercial-activation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Build 392 source syntax
+        run: |
+          node --check functions/api/_lib/retention-maintenance-fleet-activation.js
+          node --check functions/api/admin/commercial_activation.js
+          node --check scripts/build392_retention_maintenance_fleet_activation_test.mjs
+          python -m py_compile scripts/build392_retention_maintenance_fleet_activation_check.py
+
+      - name: Run Build 392 executable contract
+        run: node scripts/build392_retention_maintenance_fleet_activation_test.mjs
+
+      - name: Validate Build 392 authority
+        run: python scripts/build392_retention_maintenance_fleet_activation_check.py
+
+      - name: Build 392 summary
+        run: |
+          {
+            echo '### Build 392 — Retention, Maintenance & Fleet Commercial Activation'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Existing maintenance interest and fleet lead authorities preserved: PASS'
+            echo '- Deterministic operator next-action overview: PASS'
+            echo '- Unapproved maintenance/fleet economics fail closed: PASS'
+            echo '- Automatic outreach/discounts/recurring billing/provider mutation: PROHIBITED'
+            echo '- Database migration introduced: NO'
+          } >> "$GITHUB_STEP_SUMMARY"
