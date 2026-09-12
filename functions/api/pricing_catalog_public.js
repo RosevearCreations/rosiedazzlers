@@ -1,9 +1,10 @@
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
+import { applyCommercialAccuracy } from "./_lib/commercial-accuracy.js";
 
 export async function onRequestGet(context) {
   const { env } = context;
   try {
-    const catalog = await loadPricingCatalog(env);
+    const catalog = applyCommercialAccuracy(await loadPricingCatalog(env));
     return withCors(json({
       ok: true,
       charts: Array.isArray(catalog.charts) ? catalog.charts : [],
@@ -13,6 +14,7 @@ export async function onRequestGet(context) {
       service_areas: Array.isArray(catalog.service_areas) ? catalog.service_areas : [],
       booking_rules: catalog.booking_rules && typeof catalog.booking_rules === "object" ? catalog.booking_rules : {},
       public_requirements: Array.isArray(catalog.public_requirements) ? catalog.public_requirements : [],
+      commercial_accuracy: catalog.commercial_accuracy && typeof catalog.commercial_accuracy === "object" ? catalog.commercial_accuracy : {},
       source: env?.SUPABASE_URL && env?.SUPABASE_SERVICE_ROLE_KEY ? "db_or_fallback" : "fallback"
     }));
   } catch (err) {
