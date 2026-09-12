@@ -11,6 +11,9 @@ on:
       - 'functions/api/pricing_catalog_public.js'
       - 'scripts/service_commercial_accuracy_check.py'
       - 'scripts/service_commercial_accuracy_test.mjs'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'README.md'
       - '.github/workflows/service-commercial-accuracy-authority.yml'
   pull_request:
     branches:
@@ -21,6 +24,9 @@ on:
       - 'functions/api/pricing_catalog_public.js'
       - 'scripts/service_commercial_accuracy_check.py'
       - 'scripts/service_commercial_accuracy_test.mjs'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'README.md'
       - '.github/workflows/service-commercial-accuracy-authority.yml'
   workflow_dispatch:
 
@@ -74,5 +80,6 @@ jobs:
             echo '- Condition-sensitive services use estimate/inspection escalation instead of invented fixed economics: PASS'
             echo '- Every add-on exposes pricing basis, duration, inclusions/exclusions, prep, aftercare and quote triggers: PASS'
             echo '- Customer-facing public pricing endpoint applies the commercial overlay: PASS'
+            echo '- Living handoff/queue/README are included in the focused release authority: PASS'
             echo '- Database, R2, payment/provider and Production business-data mutation: NONE'
           } >> "$GITHUB_STEP_SUMMARY"
