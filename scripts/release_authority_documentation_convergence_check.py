@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import re
-import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -12,6 +11,7 @@ HANDOFF = ROOT / "AI_PROJECT_HANDOFF.md"
 README = ROOT / "README.md"
 BRANCH_NOTE = ROOT / "BRANCH_WORKFLOW_NOTE.md"
 ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_386_395.md"
+GOVERNANCE = ROOT / "RELEASE_GOVERNANCE.md"
 PRODUCTION_WORKFLOW = ROOT / ".github/workflows/production-business-acceptance-authority.yml"
 PRODUCTION_CHECK = ROOT / "scripts/production_business_acceptance_check.py"
 PRODUCTION_HELPER = ROOT / "scripts/cloudflare_pages_production_acceptance.sh"
@@ -31,12 +31,20 @@ def require(text: str, needles: list[str], label: str) -> None:
             errors.append(f"{label} missing required release authority: {needle!r}")
 
 
-def section_build(text: str, heading: str) -> int | None:
+def section_body(text: str, heading: str) -> str:
     match = re.search(
-        rf"##\s+{re.escape(heading)}\s+.*?\*\*Build\s+(\d{{3}})\s+—",
+        rf"^##\s+{re.escape(heading)}\s*$\n(.*?)(?=^##\s+|\Z)",
         text,
-        flags=re.S,
+        flags=re.M | re.S,
     )
+    if not match:
+        errors.append(f"release queue cannot resolve section {heading!r}")
+        return ""
+    return match.group(1)
+
+
+def numbered_build(body: str, heading: str) -> int | None:
+    match = re.search(r"\*\*Build\s+(\d{3})\s+—", body)
     if not match:
         errors.append(f"release queue cannot resolve numbered state from {heading!r}")
         return None
@@ -48,25 +56,34 @@ handoff = read(HANDOFF, "project handoff")
 readme = read(README, "README")
 branch_note = read(BRANCH_NOTE, "branch workflow note")
 roadmap = read(ROADMAP, "forward roadmap")
+governance = read(GOVERNANCE, "release governance")
 production_workflow = read(PRODUCTION_WORKFLOW, "Production workflow")
 production_check = read(PRODUCTION_CHECK, "Production source authority")
 production_helper = read(PRODUCTION_HELPER, "Production exact-SHA helper")
 
-accepted = section_build(queue, "Accepted checkpoint")
-current = section_build(queue, "Current release")
-next_release = section_build(queue, "Next release")
+accepted_body = section_body(queue, "Accepted checkpoint")
+current_body = section_body(queue, "Current release")
+next_body = section_body(queue, "Next release")
+current = numbered_build(current_body, "Current release")
+next_release = numbered_build(next_body, "Next release")
 
-if None not in (accepted, current, next_release):
-    assert accepted is not None and current is not None and next_release is not None
-    if current != accepted + 1:
-        errors.append(f"current release {current} is not sequential after accepted checkpoint {accepted}")
+require(accepted_body, [
+    "accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release",
+    "live `dev`/`main` refs",
+], "accepted checkpoint")
+
+if None not in (current, next_release):
+    assert current is not None and next_release is not None
     if next_release != current + 1:
         errors.append(f"next release {next_release} is not sequential after current release {current}")
 
+    queue_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", queue)]
     handoff_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", handoff)]
-    expected = [accepted, current, next_release]
+    expected = [current, next_release]
+    if queue_builds != expected:
+        errors.append(f"queue current/next sequence {queue_builds} does not match {expected}")
     if handoff_builds != expected:
-        errors.append(f"handoff accepted/current/next sequence {handoff_builds} does not match queue {expected}")
+        errors.append(f"handoff current/next sequence {handoff_builds} does not match queue {expected}")
 
     if f"Current source direction: **Build {current} —" not in readme:
         errors.append(f"README does not identify current release {current}")
@@ -76,29 +93,39 @@ if None not in (accepted, current, next_release):
         errors.append(f"forward roadmap does not contain next release {next_release}")
 
 require(queue, [
-    "exact-SHA Production deployment/runtime authority",
     "non-force fast-forward",
-    "Missing exact Production runtime/deployment identity is a blocker",
+    "rd main protection",
+    "Production deployment/runtime/business acceptance",
+    "Missing required checks or exact Production runtime/deployment identity are blockers",
 ], "autonomous release queue")
 
 require(handoff, [
-    "Source promotion alone is never Production proof.",
-    "Production exact-SHA authority",
-    "Missing deployment identity, Functions metadata or runtime smoke is a blocker",
+    "protected `main`",
+    "Production deployment/runtime/business acceptance",
+    "Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker",
     "Database migrations remain separate explicit acceptance boundaries",
 ], "project handoff")
 
 require(branch_note, [
-    "authorized non-force fast-forward of `main`",
-    "durable Production exact-SHA authority",
+    "protected `main`",
+    "rd main protection",
+    "resulting `main` head as the exact Production source SHA",
     "Production deployment acceptance is observation-only",
 ], "branch workflow note")
 
 require(readme, [
     "scripts/release_authority_documentation_convergence_check.py",
     ".github/workflows/production-business-acceptance-authority.yml",
+    "rd main protection",
     "Production is not considered GREEN from source promotion alone.",
 ], "README")
+
+require(governance, [
+    "rd main protection",
+    "stage-specific",
+    "pull request required",
+    "source checks",
+], "release governance")
 
 require(production_workflow, [
     "name: Production Business Acceptance & Exact-SHA Authority",
@@ -130,8 +157,8 @@ require(production_helper, [
     "mutation performed: none",
 ], "Production exact-SHA helper")
 
-# Living documents intentionally avoid pinning commit identity in prose. Git refs
-# and exact-SHA workflow evidence are the current authority and cannot go stale.
+# Living documents intentionally avoid pinning commit identity in prose. Git refs,
+# protected-main PR evidence, and exact-SHA workflow evidence are the current authority.
 for path, text in [
     (QUEUE, queue),
     (HANDOFF, handoff),
@@ -141,7 +168,7 @@ for path, text in [
     if re.search(r"(?i)\b[0-9a-f]{12,40}\b", text):
         errors.append(f"{path.name} embeds commit-like identity instead of live Git/workflow evidence")
     if len(re.findall(r"(?i)\bbuild\s+\d{3}\b", text)) > 3:
-        errors.append(f"{path.name} contains more than accepted/current/next numbered release references")
+        errors.append(f"{path.name} contains too many numbered release references for a living document")
 
 if len(readme) > 18000:
     errors.append("README exceeds the living-document size boundary")
@@ -161,7 +188,8 @@ if errors:
     raise SystemExit(1)
 
 print("RELEASE AUTHORITY & DOCUMENTATION CONVERGENCE: PASS")
-print(" - accepted/current/next release state is sequential and shared by queue, handoff and README")
+print(" - accepted checkpoint is live-ref based; current/next release state is sequential")
 print(" - living documents point to Git/workflow evidence rather than stale commit identity")
+print(" - protected-main PR governance and stage-specific exact-SHA authority are converged")
 print(" - Production business acceptance is release-number independent")
 print(" - exact-SHA Cloudflare Production evidence remains read-only and fail-closed")
