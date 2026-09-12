@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 390 — Booking, Quote & Condition-Based Estimate Hardening**.
+Current source direction: **Build 391 — Photo Studio & R2 Media Reliability**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -27,22 +27,22 @@ Use `DOC_INDEX.md` only to locate specialist references. The completed prior for
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Current booking, quote and estimate authority
+## Current Photo Studio and R2 media authority
 
-Current catalog pricing and package/add-on compatibility remain server-authoritative. Fixed catalog work can produce a quote; condition-sensitive work that materially changes labour, process or product requirements remains an inspection-led estimate until scope is reviewed and a revised quote is approved.
+The existing managed photo library remains the single public image authority. Photo Studio listing and assignment accept only active image records whose R2 keys belong to the approved public prefix allow-list. Private DAIP, customer, job, intake and evidence media cannot be assigned into public website placements merely because a database row exists.
 
-Commercial states do not imply one another. Accepting a quote records customer approval only. A successful availability check means available-but-unheld. A requested or paid deposit is payment evidence, not final appointment evidence. A booking is confirmed only when the booking authority records the confirmed state under the retained provider/settlement rules.
+One approved public image may serve multiple independent targets. Before/After targets expose pair-group and side metadata while retaining the fail-closed rule that the same image cannot occupy both sides. Remove, reset and unassign operations deactivate the target without deleting the underlying asset.
 
-The shared continuity semantics are in `functions/api/_lib/commercial-continuity.js` and are consumed by current quote pricing, quote acceptance and deposit-request paths. The existing `booking_confirmation.js` authority remains fail-closed: browser redirects do not create confirmed bookings.
+Ordinary Photo Studio and public website-image reads are database-backed: they do not list, synchronize, delete or otherwise mutate R2. The explicit R2 sync path remains one approved prefix per request with cursor continuation and bounded list work. The explicit delete path remains guarded by active assignment and Gallery Before/After reference checks and fails safely when the public bucket binding is unavailable.
 
 Run the focused authority with:
 
 ```bash
-node --check functions/api/_lib/commercial-continuity.js
-node --check functions/api/_lib/quote-booking-authority.js
-node --check functions/api/quote_proposal_respond.js
-node --check functions/api/quote_deposit_request.js
-node --experimental-default-type=module scripts/build390_booking_quote_estimate_hardening_test.mjs
+node --check functions/api/_lib/photo-studio-safety.js
+node --check functions/api/_lib/public-website-images.js
+node --check functions/api/admin/photo_assignment_save.js
+node --check functions/api/admin/photo_library_list.js
+node --experimental-default-type=module scripts/build391_photo_studio_r2_reliability_test.mjs
 ```
 
 The retained commercial pricing authority remains available with:
