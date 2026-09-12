@@ -1,10 +1,10 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The active forward sequence is `FORWARD_BUILD_ROADMAP_386_395.md`; the prior 378–385 phase remains historical context only.
+This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The active forward sequence is `FORWARD_BUILD_ROADMAP_386_395.md`; prior phases remain historical context only.
 
 ## Accepted checkpoint
 
-**Build 386 — Post-Recovery Baseline & Forward Roadmap Renewal** is the accepted synchronized source and Production deployment/runtime boundary before the current release. Resolve its exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding it in living prose.
+The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve its exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding historical release identities in living prose.
 
 ## Current release
 
@@ -12,20 +12,20 @@ This queue records current actionable work. Completed implementation history bel
 
 Current scope:
 
-- preserve the feature → `dev` → `main` exact-SHA release path and non-force fast-forward promotion rule;
+- preserve exact-SHA candidate validation and non-force fast-forward promotion to `dev`;
+- use the active `rd main protection` pull-request boundary for Production source promotion;
+- distinguish the exact accepted Development SHA from the resulting exact protected-`main` Production SHA while retaining clear ancestry between them;
 - replace build-number-specific release assumptions with durable release-number-independent governance;
 - make stale/advisory checks distinguishable from current blocking release authority;
-- make GitHub branch/ruleset posture observable without pretending source documentation itself enforces hosted settings;
 - define operator recovery for non-fast-forward, protected-branch, missing-check, stale-check and unobservable-protection conditions;
-- keep GitHub-hosted platform protection fail-closed to AMBER when it is absent or cannot be observed;
 - preserve schema, Production business data, R2, DNS, secrets and payment/provider mutation boundaries.
 
-The candidate must pass Release Governance Authority, Current Source Gate, feature-preview acceptance and the retained source authorities before `dev` moves. Development must then pass exact-SHA deployment/runtime acceptance before `main` may move. Production promotion remains the same non-force fast-forward of the Development-GREEN SHA and is complete only after exact-SHA Production deployment/runtime/business acceptance.
+The candidate must pass Release Governance Authority, Current Source Gate, feature-preview acceptance and retained source authorities before `dev` moves. Development must then pass exact-SHA deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
 
 ## Next release
 
-**Build 388 — Service, Add-On & Commercial Accuracy Convergence** is next only after Build 387 acceptance is complete. It will revisit package/add-on content and condition-based commercial language without inventing fixed economics where inspection is required.
+**Build 388 — Service, Add-On & Commercial Accuracy Convergence** is next only after current-release acceptance is complete. It will revisit package/add-on content and condition-based commercial language without inventing fixed economics where inspection is required.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested SHA through Development and authorized Production promotion; keep database migrations as separate acceptance boundaries. Promote `main` by non-force fast-forward to the same Development-GREEN SHA. Missing exact Production runtime/deployment identity is a blocker rather than permission to infer success. GitHub-hosted branch/ruleset protection is a separately observable platform state and remains AMBER when absent or unproven.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through Development, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production identity to be independently accepted. Database migrations remain separate acceptance boundaries. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
