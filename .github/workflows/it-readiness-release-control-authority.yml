@@ -5,7 +5,7 @@ on:
     branches:
       - dev
       - main
-      - 'build353-*'
+      - 'build*'
   pull_request:
     branches:
       - dev
@@ -52,7 +52,7 @@ jobs:
       - name: Record I.T. readiness and release-control authority
         run: |
           {
-            echo "### Build 353 I.T. Readiness & Release Control Authority"
+            echo "### I.T. Readiness & Release Control Authority"
             echo "- SHA: \`${GITHUB_SHA}\`"
             echo "- Runtime branch and exact Cloudflare commit identity are surfaced when available: PASS"
             echo "- GREEN / AMBER / RED readiness plus categorized corrective guidance is explicit: PASS"
@@ -61,5 +61,6 @@ jobs:
             echo "- Secret values are not returned to the browser: PASS"
             echo "- Readiness endpoint cannot mutate schema, business data, R2, providers or deployments: PASS"
             echo "- No polling/background readiness loop is introduced: PASS"
+            echo "- Historical Build 353 readiness assertions remain regression-tested without limiting the workflow to Build 353 branches."
             echo "- No database migration or Production business-data mutation is introduced by this release."
           } >> "$GITHUB_STEP_SUMMARY"
