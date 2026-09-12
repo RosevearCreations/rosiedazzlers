@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 391 — Photo Studio & R2 Media Reliability**.
+Current source direction: **Build 393 — Operations, Inventory & Job-Cost Evidence**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -13,7 +13,7 @@ For a new chat, AI, or developer, read only:
 3. `FORWARD_BUILD_ROADMAP_386_395.md` — active forward sequence and continuing release rules.
 4. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and go-live evidence still requiring proof.
 
-Use `DOC_INDEX.md` only to locate specialist references. The completed prior forward-roadmap phase and `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` remain retained historical/specialist authorities, not the normal restart point.
+Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases and `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` remain retained historical/specialist authorities, not the normal restart point.
 
 ## Canonical source locations
 
@@ -27,22 +27,21 @@ Use `DOC_INDEX.md` only to locate specialist references. The completed prior for
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Current Photo Studio and R2 media authority
+## Current operations, inventory and job-cost authority
 
-The existing managed photo library remains the single public image authority. Photo Studio listing and assignment accept only active image records whose R2 keys belong to the approved public prefix allow-list. Private DAIP, customer, job, intake and evidence media cannot be assigned into public website placements merely because a database row exists.
+The existing inventory model remains authoritative. `catalog_inventory_movements` is the single movement ledger, `catalog_inventory_items` owns item/on-hand/reorder/recorded-cost evidence, and `catalog_purchase_orders` owns reorder evidence. The current release adds no second inventory ledger and no schema migration.
 
-One approved public image may serve multiple independent targets. Before/After targets expose pair-group and side metadata while retaining the fail-closed rule that the same image cannot occupy both sides. Remove, reset and unassign operations deactivate the target without deleting the underlying asset.
+`GET /api/admin/operations_job_cost_evidence?booking_id=<uuid>` is a staff-authorized read-only projection. It exposes booking-scoped usage/depletion, reversal-aware net quantities, recorded material cost evidence, low-stock/reorder evidence, substitution provenance when already recorded, and fail-closed `ready`, `review`, or `unavailable` status.
 
-Ordinary Photo Studio and public website-image reads are database-backed: they do not list, synchronize, delete or otherwise mutate R2. The explicit R2 sync path remains one approved prefix per request with cursor continuation and bounded list work. The explicit delete path remains guarded by active assignment and Gallery Before/After reference checks and fails safely when the public bucket binding is unavailable.
+Missing recorded cost is never estimated or converted to zero. Duplicate replay evidence is ignored; reversal/adjustment movement evidence nets against depletion. Low stock without active reorder evidence, missing inventory authority, or incomplete substitution provenance is surfaced for review rather than silently accepted.
 
 Run the focused authority with:
 
 ```bash
-node --check functions/api/_lib/photo-studio-safety.js
-node --check functions/api/_lib/public-website-images.js
-node --check functions/api/admin/photo_assignment_save.js
-node --check functions/api/admin/photo_library_list.js
-node --experimental-default-type=module scripts/build391_photo_studio_r2_reliability_test.mjs
+node --check functions/api/_lib/operations-job-cost-evidence.js
+node --check functions/api/admin/operations_job_cost_evidence.js
+node scripts/build393_operations_inventory_job_cost_evidence_test.mjs
+python scripts/build393_operations_inventory_job_cost_evidence_check.py
 ```
 
 The retained commercial pricing authority remains available with:
