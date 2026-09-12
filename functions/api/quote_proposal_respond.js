@@ -1,6 +1,7 @@
-// Build 362 — public quote/proposal acceptance with immutable structured commercial terms.
+// Build 390 — public quote/proposal acceptance with immutable structured commercial terms and explicit continuity state.
 import { json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "./_lib/staff-auth.js";
 import { hashStructuredQuoteTerms, validateStructuredQuoteTerms } from "./_lib/quote-booking-terms.js";
+import { acceptedQuoteContinuity } from "./_lib/commercial-continuity.js";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -33,7 +34,7 @@ export async function onRequestPost({ request, env }) {
         const acceptedCheck = validateStructuredQuoteTerms(existing.accepted_terms);
         const acceptedHash = acceptedCheck.ok ? await hashStructuredQuoteTerms(acceptedCheck.terms) : "";
         if (acceptedCheck.ok && acceptedHash === existing.accepted_terms_hash && existing.accepted_terms_hash === existing.structured_terms_hash) {
-          return withCors(json({ ok: true, code: "QUOTE_ALREADY_ACCEPTED", replay: true, action: "accepted", draft: publicDraft(existing), message: "This quote was already accepted." }));
+          return withCors(json({ ok: true, code: "QUOTE_ALREADY_ACCEPTED", replay: true, action: "accepted", draft: publicDraft(existing), commercial_continuity: acceptedQuoteContinuity(), message: "This quote was already accepted. Acceptance is not a booking confirmation." }));
         }
         return fail("QUOTE_ACCEPTED_TERMS_CONFLICT", "This quote already has a different accepted commercial snapshot. Ask Rosie Dazzlers to review it before booking.", 409);
       }
@@ -51,7 +52,7 @@ export async function onRequestPost({ request, env }) {
         updated_at: now
       };
       const updated = await patchDraft(env, draftId, patch);
-      return withCors(json({ ok: true, code: "QUOTE_ACCEPTED", replay: false, action: "accepted", draft: publicDraft(updated), message: "Thank you. Your quote has been accepted. Rosie Dazzlers will confirm the final appointment details." }));
+      return withCors(json({ ok: true, code: "QUOTE_ACCEPTED", replay: false, action: "accepted", draft: publicDraft(updated), commercial_continuity: acceptedQuoteContinuity(), message: "Thank you. Your quote has been accepted. Availability, deposit/payment and final appointment confirmation are verified separately." }));
     }
 
     if (existing.acceptance_status === "declined") {
