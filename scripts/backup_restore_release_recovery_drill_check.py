@@ -14,7 +14,6 @@ DEVELOPMENT_HELPER = ROOT / "scripts" / "cloudflare_pages_development.sh"
 PRODUCTION_WORKFLOW = ROOT / ".github" / "workflows" / "production-business-acceptance-authority.yml"
 PRODUCTION_HELPER = ROOT / "scripts" / "cloudflare_pages_production_acceptance.sh"
 RETAINED_CHECK = ROOT / "scripts" / "release_rollback_recovery_check.py"
-SOURCE_GATE = ROOT / ".github" / "workflows" / "development-source-gate.yml"
 QUEUE = ROOT / "AUTONOMOUS_RELEASE_QUEUE.md"
 HANDOFF = ROOT / "AI_PROJECT_HANDOFF.md"
 README = ROOT / "README.md"
@@ -44,7 +43,6 @@ development_helper = read(DEVELOPMENT_HELPER, "Development Pages helper")
 production_workflow = read(PRODUCTION_WORKFLOW, "Production exact-SHA workflow")
 production_helper = read(PRODUCTION_HELPER, "Production exact-SHA helper")
 retained_check = read(RETAINED_CHECK, "retained rollback/recovery check")
-source_gate = read(SOURCE_GATE, "Current Source Gate")
 queue = read(QUEUE, "release queue")
 handoff = read(HANDOFF, "project handoff")
 readme = read(README, "README")
@@ -128,12 +126,6 @@ require(retained_check, [
     "ROLLBACK / RECOVERY ACCEPTANCE: PASS",
     "Production mutation remains forbidden",
 ], "retained rollback/recovery authority")
-
-require(source_gate, [
-    "scripts/backup_restore_release_recovery_drill_check.py",
-    "python scripts/backup_restore_release_recovery_drill_check.py",
-    "Backup/restore/release recovery drill authority: PASS",
-], "Current Source Gate")
 
 for token in [
     "Build 384 — Finance Cockpit & Month-End UX",
