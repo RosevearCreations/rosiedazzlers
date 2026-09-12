@@ -34,6 +34,13 @@ def normalized_path(url: str) -> str:
     return urlparse(url).path.rstrip("/") or "/"
 
 
+def living_release_pair(text: str, label: str) -> tuple[int, int]:
+    current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", text)
+    next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", text)
+    assert current_match and next_match, f"{label}: unable to resolve living current/next release"
+    return int(current_match.group(1)), int(next_match.group(1))
+
+
 def main() -> None:
     local = json.loads(read("data/local_seo_targets.json"))
     assert local.get("primary_region") == "Oxford County and Norfolk County, Ontario"
@@ -93,12 +100,15 @@ def main() -> None:
 
     queue = read("AUTONOMOUS_RELEASE_QUEUE.md")
     handoff = read("AI_PROJECT_HANDOFF.md")
-    assert "Build 389 — Local SEO, Service Landing & Proof Convergence" in queue
-    assert "Build 390 — Booking, Quote & Condition-Based Estimate Hardening" in queue
-    assert "Build 389 — Local SEO, Service Landing & Proof Convergence" in handoff
-    assert "Build 390 — Booking, Quote & Condition-Based Estimate Hardening" in handoff
+    queue_pair = living_release_pair(queue, "release queue")
+    handoff_pair = living_release_pair(handoff, "project handoff")
+    assert queue_pair[0] >= 389, f"release queue regressed behind retained Build 389 authority: {queue_pair}"
+    assert queue_pair[1] == queue_pair[0] + 1, f"release queue is not sequential: {queue_pair}"
+    assert handoff_pair == queue_pair, f"project handoff {handoff_pair} does not match release queue {queue_pair}"
+    assert "protected `main`" in handoff and "Production deployment/runtime/business acceptance" in handoff
 
     print(f"Build 389 source authority: PASS ({len(target_slugs)} indexable town/service targets checked)")
+    print(f"- retained SEO/proof authority is compatible with living release {queue_pair[0]}/{queue_pair[1]}")
 
 
 if __name__ == "__main__":
