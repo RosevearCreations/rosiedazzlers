@@ -81,9 +81,9 @@ export function publicProofItems(gallery, criteria = resolveProofCriteria({})) {
 }
 
 export function resolveProofCriteria({ slug = "", town = "", service = "" } = {}) {
-  const pageSlug = slugify(slug);
-  const explicitTown = slugify(town);
-  const explicitService = slugify(service);
+  const pageSlug = cleanText(slug) ? slugify(slug) : "all";
+  const explicitTown = cleanText(town) ? slugify(town) : "";
+  const explicitService = cleanText(service) ? slugify(service) : "";
 
   if (explicitTown || explicitService) {
     return {
@@ -186,7 +186,7 @@ function emptyPayload(criteria, sourceStatus, warning) {
 function hasServiceConfiguration(env) {
   return Boolean(env?.SUPABASE_URL && (env?.SUPABASE_SERVICE_ROLE_KEY || env?.SUPABASE_SERVICE_KEY || env?.SUPABASE_SERVICE_ROLE || env?.SUPABASE_SECRET_KEY));
 }
-function slugify(value) { return cleanText(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "all"; }
+function slugify(value) { return cleanText(value).toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""); }
 function firstText(...values) { for (const value of values) { const text = cleanText(value); if (text) return text; } return ""; }
 function mediaKind(value) { const raw = cleanText(value).toLowerCase(); return raw === "video" || /\.(mp4|webm|mov)(\?|$)/i.test(raw) ? "video" : "image"; }
 function json(data, status = 200) { return new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } }); }
