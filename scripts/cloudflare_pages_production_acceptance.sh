@@ -135,9 +135,32 @@ wait_for_exact_success() {
   summary "- Immutable deployment URL: ${EXACT_URL}"
 }
 
+retry_smoke() {
+  local label="$1" command_name="$2" url="$3" scope="$4"
+  local attempt passed=false
+  for attempt in $(seq 1 5); do
+    note "${label} smoke (attempt ${attempt}/5)."
+    if SMOKE_RETRY_MODE=1 SMOKE_SCOPE="$scope" bash "$command_name" "$url" "${label} attempt ${attempt}/5"; then
+      passed=true
+      break
+    fi
+    [[ "$attempt" -ge 5 ]] || sleep 3
+  done
+  [[ "$passed" == "true" ]] || fail "${label} smoke did not pass within 5 bounded attempts." 22
+}
+
 smoke_exact() {
-  SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_URL" "Exact Production deployment"
-  SMOKE_SCOPE=static bash scripts/contextual_proof_http_smoke.sh "$EXACT_URL" "Exact Production deployment"
+  local attempt static_ready=false
+  for attempt in $(seq 1 5); do
+    note "Exact Production deployment static smoke (attempt ${attempt}/5)."
+    if SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$EXACT_URL" "Exact Production deployment static attempt ${attempt}/5"; then
+      static_ready=true
+      break
+    fi
+    [[ "$attempt" -ge 5 ]] || sleep 3
+  done
+  [[ "$static_ready" == "true" ]] || fail "Exact Production deployment static smoke did not pass within 5 bounded attempts." 22
+  retry_smoke "Exact Production deployment contextual" scripts/contextual_proof_http_smoke.sh "$EXACT_URL" static
   summary "- Immutable Production static/contextual smoke: PASS"
 }
 
@@ -152,7 +175,7 @@ smoke_production_alias() {
     [[ "$attempt" -ge 12 ]] || sleep 5
   done
   [[ "$alias_ready" == "true" ]] || fail "Production alias did not converge to an accepted runtime within 12 attempts." 21
-  SMOKE_SCOPE=full bash scripts/contextual_proof_http_smoke.sh "$CF_PRODUCTION_URL" "Production alias contextual proof"
+  retry_smoke "Production alias contextual proof" scripts/contextual_proof_http_smoke.sh "$CF_PRODUCTION_URL" full
   summary "### Production runtime smoke"
   summary "- Canonical Production URL: ${CF_PRODUCTION_URL}"
   summary "- Full public/protected-boundary runtime smoke: PASS"
