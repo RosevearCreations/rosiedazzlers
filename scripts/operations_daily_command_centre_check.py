@@ -140,9 +140,10 @@ if (handoff_current, handoff_next) != (queue_current, queue_next):
         f"release queue {[queue_current, queue_next]}"
     )
 for needle in [
-    "retained exact-SHA Development source/runtime authorities",
-    "Source promotion alone is never Production proof.",
-    "Production exact-SHA authority",
+    "`dev` advances only by non-force fast-forward",
+    "exact-SHA Development deployment/runtime acceptance",
+    "Production deployment/runtime/business acceptance must independently prove that exact SHA.",
+    "protected `main`",
 ]:
     if needle not in handoff:
         fail(f"project handoff missing durable retained-release discipline: {needle}")
@@ -160,4 +161,4 @@ print("- site/travel, equipment/product, assignment, completion and follow-up ev
 print("- all operational changes remain delegated to canonical admin authorities")
 print("- no recurring polling, browser-side operations ledger, direct operational mutation, or schema migration")
 print("- retained authority remains compatible with an advanced release queue")
-print("- durable exact-SHA Production authority retained")
+print("- durable exact-SHA Development/protected-main/Production authority retained")
