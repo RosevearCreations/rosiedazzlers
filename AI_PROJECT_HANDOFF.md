@@ -5,13 +5,11 @@ This file is the living operational authority for restarting work. Git history a
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 383 — Mobile Detailer Field Workflow Hardening** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from the synchronized `dev`/`main` refs and exact-SHA Production workflow evidence rather than copying a stale SHA into this living file.
-- Production acceptance is fail-closed: the exact `main` SHA must match a successful Cloudflare `production` deployment with Functions metadata, then pass smoke against both the immutable deployment and `https://rosiedazzlers.ca`.
-- **Build 384 — Finance Cockpit & Month-End UX** is the active bounded release. It converges the retained invoice/payment/reconciliation Finance authorities into a practical operator workflow from quote/deposit evidence through approved changes, final balance, refunds/tips, settlement reconciliation, HST support, month-end readiness and accountant handoff without creating a second ledger or payment authority.
-- **Build 385 — Backup, Restore & Release Recovery Drill** is the next approved release after current-release acceptance is complete.
-- The current release is schema-neutral. It does not authorize a database migration, automatic accounting posting, automatic month close, booking mutation, customer charge/refund, provider mutation, fabricated provider/accounting evidence or a paid-state override.
-- Finance cockpit runtime is lazy and operator-driven. Opening `/app/finance/` loads authentication/module state only; the retained read-only month-end closure snapshot loads only after an explicit month/year request.
-- A computed `close_ready_candidate` is evidence/readiness only. It does not close an accounting period and does not remove the existing manual operator approval requirement.
+- **Build 384 — Finance Cockpit & Month-End UX** is the accepted synchronized Production boundary before the current release. Resolve its exact identity from synchronized `dev`/`main` refs and exact-SHA workflow evidence rather than copying a stale SHA into this living file.
+- **Build 385 — Backup, Restore & Release Recovery Drill** is the active bounded release. It proves a fail-closed, observation-only recovery path across Git/source, Cloudflare Pages, Supabase/PostgreSQL, R2/media, configuration/secrets, DNS/domain and payment/provider dependencies without using Production business data as test material.
+- **Build 386 — Post-Recovery Baseline & Forward Roadmap Renewal** is the next approved release after current-release acceptance is complete.
+- The current release is schema-neutral. It does not authorize a database migration, database restore, R2 write/delete, DNS mutation, secret rotation, customer charge/refund, provider mutation or business-data mutation.
+- A real rollback, restore or recovery mutation requires explicit operator authorization outside the drill. Recovery remains `NOT VERIFIED` whenever required evidence is missing, stale, ambiguous or inaccessible.
 
 ## Accepted operating contract
 
@@ -22,24 +20,26 @@ This file is the living operational authority for restarting work. Git history a
 - Source promotion alone is never Production proof. The Production exact-SHA authority must independently observe the successful Cloudflare deployment and canonical runtime.
 - Missing deployment identity, Functions metadata or runtime smoke is a blocker, not permission to infer GREEN.
 - Database migrations remain separate explicit acceptance boundaries and are never incidental runtime side effects.
-- Payment, provider, consent, review, accounting, tax and customer evidence must remain genuine and server-authoritative; source/runtime checks never manufacture them.
+- Database backup/PITR capability, migration boundary, media preservation and configuration ownership must be observed as they actually exist; source checks must never fabricate recovery evidence.
+- Payment, provider, consent, review, accounting, tax and customer evidence must remain genuine and server-authoritative.
 - Public SEO remains constrained to one meaningful H1 per indexable page, current catalog/pricing authority and truthful local/service content.
 - Dormant modules remain event-driven; permanent polling requires a demonstrated operational need.
 
-## Durable release authorities
+## Durable release and recovery authorities
 
 - `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next release state.
-- `FORWARD_BUILD_ROADMAP_378_385.md` — approved forward sequence and continuing release rules.
-- `BRANCH_WORKFLOW_NOTE.md` — branch roles and promotion discipline.
+- `FORWARD_BUILD_ROADMAP_378_385.md` — approved forward sequence and continuation marker.
+- `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` — current recovery evidence matrix, drill sequence and authorization boundaries.
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
+- `.github/workflows/development-rollback-readiness.yml` — manual read-only prior-SHA Development rollback candidate proof.
+- `.github/workflows/cloudflare-pages-recovery.yml` — narrowly guarded Development-only Cloudflare repair path.
+- `.github/workflows/backup-restore-release-recovery-drill-authority.yml` — focused current recovery drill authority.
 - `.github/workflows/production-business-acceptance-authority.yml` — durable Production business-path and exact-SHA authority.
-- `.github/workflows/payment-reconciliation-month-end-closure-authority.yml` — retained payment reconciliation/month-end close authority.
-- `.github/workflows/finance-cockpit-month-end-ux-authority.yml` — focused current Finance cockpit source and exact-SHA Production authority.
-- `.github/workflows/mobile-detailer-field-workflow-authority.yml` — retained mobile Detailer field-workflow authority.
-- `functions/api/admin/accounting_month_end_closure.js` and `functions/api/_lib/accounting-month-end-closure.js` — retained read-only closure evidence authority used by the current cockpit.
+- `scripts/cloudflare_development_rollback.sh` — read-only Development rollback candidate verifier.
 - `scripts/cloudflare_pages_production_acceptance.sh` — read-only Cloudflare Production deployment identity and HTTP smoke helper.
+- `scripts/backup_restore_release_recovery_drill_check.py` — fail-closed current recovery source authority.
 
 ## Restart point
 
-Start from the latest exact synchronized `dev`/`main` checkpoint reported by GitHub, not a SHA copied into prose. Read this handoff and `AUTONOMOUS_RELEASE_QUEUE.md`, then continue the active bounded release. Preserve the exact-SHA feature → Development → non-force Production promotion discipline and require observed Production runtime proof before calling a release fully GREEN.
+Start from the latest exact synchronized `dev`/`main` checkpoint reported by GitHub, not a SHA copied into prose. Read this handoff, `AUTONOMOUS_RELEASE_QUEUE.md` and the recovery runbook, then continue the active bounded release. Preserve exact-SHA feature → Development → non-force Production promotion discipline and require observed Production runtime proof before calling a release fully GREEN.
