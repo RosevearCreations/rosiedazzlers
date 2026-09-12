@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The durable numbered sequences are `FORWARD_BUILD_ROADMAP_356_377.md` and `FORWARD_BUILD_ROADMAP_378_385.md`.
+This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The durable numbered sequences are `FORWARD_BUILD_ROADMAP_356_377.md` and the approved continuation `FORWARD_BUILD_ROADMAP_378_385.md`.
 
 ## Accepted checkpoint
 
@@ -23,7 +23,7 @@ Current scope:
 - require the recovered boundary to pass the normal cumulative and exact-SHA Development/Production acceptance authorities before GREEN is declared;
 - keep the release schema-neutral with no database migration or Production business-data mutation.
 
-The exact candidate SHA must pass the focused recovery-drill authority, Current Source Gate and feature-preview acceptance before Development promotion. Development must pass retained runtime/deployment gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after exact-SHA Production business/deployment/runtime authority passes.
+The exact candidate SHA must pass the focused recovery-drill authority, Current Source Gate and feature-preview acceptance before Development promotion. Development must pass retained runtime/deployment gates on the same SHA before `main` may move. Production promotion remains a non-force fast-forward of that exact Development-GREEN SHA and is complete only after the exact-SHA Production deployment/runtime authority and retained Production business-path authority pass.
 
 ## Next release
 
