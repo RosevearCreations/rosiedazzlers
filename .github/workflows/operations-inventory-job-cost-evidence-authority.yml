@@ -1,0 +1,64 @@
+name: Build 393 — Operations, Inventory & Job-Cost Evidence Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build393-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build393-operations-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: operations-inventory-job-cost-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Build 393 source syntax
+        run: |
+          node --check functions/api/_lib/operations-job-cost-evidence.js
+          node --check functions/api/admin/operations_job_cost_evidence.js
+          node --check scripts/build393_operations_inventory_job_cost_evidence_test.mjs
+          python -m py_compile scripts/build393_operations_inventory_job_cost_evidence_check.py
+
+      - name: Run Build 393 executable contract
+        run: node scripts/build393_operations_inventory_job_cost_evidence_test.mjs
+
+      - name: Validate Build 393 authority
+        run: python scripts/build393_operations_inventory_job_cost_evidence_check.py
+
+      - name: Build 393 summary
+        run: |
+          {
+            echo '### Build 393 — Operations, Inventory & Job-Cost Evidence'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Existing booking-scoped inventory movements remain canonical: PASS'
+            echo '- Replay/reversal-aware job usage and recorded material costs: PASS'
+            echo '- Low-stock/reorder and substitution evidence fail closed: PASS'
+            echo '- Second inventory ledger/schema/provider mutation: PROHIBITED'
+            echo '- Database migration introduced: NO'
+          } >> "$GITHUB_STEP_SUMMARY"
