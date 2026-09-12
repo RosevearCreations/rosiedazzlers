@@ -1,0 +1,109 @@
+name: Release Governance Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+    paths:
+      - 'RELEASE_GOVERNANCE.md'
+      - 'BRANCH_WORKFLOW_NOTE.md'
+      - 'FORWARD_BUILD_ROADMAP_386_395.md'
+      - '.github/workflows/development-source-gate.yml'
+      - '.github/workflows/production-business-acceptance-authority.yml'
+      - '.github/workflows/it-readiness-release-control-authority.yml'
+      - '.github/workflows/release-governance-authority.yml'
+      - 'scripts/release_governance_audit.py'
+  pull_request:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'RELEASE_GOVERNANCE.md'
+      - 'BRANCH_WORKFLOW_NOTE.md'
+      - 'FORWARD_BUILD_ROADMAP_386_395.md'
+      - '.github/workflows/development-source-gate.yml'
+      - '.github/workflows/production-business-acceptance-authority.yml'
+      - '.github/workflows/it-readiness-release-control-authority.yml'
+      - '.github/workflows/release-governance-authority.yml'
+      - 'scripts/release_governance_audit.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-release-governance-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release-governance-authority:
+    name: Validate release governance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate release governance source
+        run: |
+          python -m py_compile scripts/release_governance_audit.py
+          python scripts/release_governance_audit.py
+
+      - name: Observe GitHub branch and ruleset posture
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build387-evidence
+          : > build387-evidence/github-protection.txt
+
+          for branch in dev main; do
+            payload="$(curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GH_REPO}/branches/${branch}")"
+            protected="$(printf '%s' "$payload" | python -c 'import json,sys; print(str(json.load(sys.stdin).get("protected", False)).lower())')"
+            printf '%s protected=%s\n' "$branch" "$protected" | tee -a build387-evidence/github-protection.txt
+          done
+
+          ruleset_state="unknown"
+          ruleset_count="unknown"
+          if rulesets="$(curl -fsSL \
+              -H "Authorization: Bearer ${GH_TOKEN}" \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              "https://api.github.com/repos/${GH_REPO}/rulesets" 2>/dev/null)"; then
+            ruleset_count="$(printf '%s' "$rulesets" | python -c 'import json,sys; data=json.load(sys.stdin); print(len(data) if isinstance(data,list) else "unknown")')"
+            ruleset_state="observed"
+          fi
+          printf 'rulesets=%s count=%s\n' "$ruleset_state" "$ruleset_count" | tee -a build387-evidence/github-protection.txt
+
+          {
+            echo '### Release Governance Authority'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Exact-SHA / non-force source contract: PASS'
+            echo '- Stale-check discrimination and recovery paths: PASS'
+            echo '- GitHub-hosted branch/ruleset posture is observed separately below; absence or unreadability is not relabeled GREEN.'
+            echo '```text'
+            cat build387-evidence/github-protection.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload governance evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-governance-${{ github.sha }}
+          path: build387-evidence/github-protection.txt
+          if-no-files-found: error
