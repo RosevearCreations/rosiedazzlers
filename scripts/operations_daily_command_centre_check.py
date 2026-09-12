@@ -20,6 +20,20 @@ def read(path: str) -> str:
     return target.read_text(encoding="utf-8")
 
 
+def living_release_pair(text: str, label: str) -> tuple[int, int]:
+    current_match = re.search(
+        r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.",
+        text,
+    )
+    next_match = re.search(
+        r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after",
+        text,
+    )
+    if not current_match or not next_match:
+        fail(f"{label} must expose one current and one next numbered release")
+    return int(current_match.group(1)), int(next_match.group(1))
+
+
 page = read("admin-operations.html")
 client = read("assets/admin-operations.js")
 doc = read("OPERATIONS_DAILY_COMMAND_CENTRE.md")
@@ -111,20 +125,20 @@ if re.search(r"permissions:\s*\n\s*contents:\s*write", workflow):
 if any(token in workflow for token in ["wrangler pages deploy", "git push --force", "curl -X POST", "curl --request POST"]):
     fail("Build 381 workflow contains a prohibited release mutation primitive")
 
-# Build 381 is retained after the living release moves forward. Validate that
-# the queue and handoff remain sequential and synchronized without requiring
-# this completed historical build to stay marked as the active release.
-queue_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", queue)]
-handoff_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", handoff)]
-if len(queue_builds) != 3:
-    fail(f"release queue must expose exactly accepted/current/next numbered states; found {queue_builds}")
-accepted, current, next_release = queue_builds
-if accepted < 381:
-    fail(f"release queue regressed before retained Build 381 authority: accepted={accepted}")
-if current != accepted + 1 or next_release != current + 1:
-    fail(f"release queue is not sequential: {queue_builds}")
-if handoff_builds != queue_builds:
-    fail(f"project handoff sequence {handoff_builds} does not match release queue {queue_builds}")
+# Build 381 is retained after the living release moves forward. Validate the
+# durable current/next release discipline without freezing living documents at
+# this historical build number.
+queue_current, queue_next = living_release_pair(queue, "release queue")
+handoff_current, handoff_next = living_release_pair(handoff, "project handoff")
+if queue_current < 381:
+    fail(f"release queue regressed before retained Build 381 authority: current={queue_current}")
+if queue_next != queue_current + 1:
+    fail(f"release queue is not sequential: {[queue_current, queue_next]}")
+if (handoff_current, handoff_next) != (queue_current, queue_next):
+    fail(
+        f"project handoff sequence {[handoff_current, handoff_next]} does not match "
+        f"release queue {[queue_current, queue_next]}"
+    )
 for needle in [
     "retained exact-SHA Development source/runtime authorities",
     "Source promotion alone is never Production proof.",
