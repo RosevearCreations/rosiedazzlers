@@ -19,14 +19,14 @@ Current scope:
 - surface current low-stock thresholds and active `catalog_purchase_orders` reorder evidence without auto-creating a purchase order;
 - expose substitution evidence only when substitution provenance is already recorded; incomplete provenance fails closed;
 - return deterministic `ready`, `review`, or `unavailable` evidence states;
-- keep the Build 393 endpoint staff-authorized and read-only;
+- keep the current evidence endpoint staff-authorized and read-only;
 - remain schema-neutral and avoid database migration, Production business-data mutation, R2 mutation, accounting posting, customer charging/refunding, Stripe/PayPal/provider mutation or any second inventory authority.
 
-The candidate must pass the focused **Build 393 — Operations, Inventory & Job-Cost Evidence Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
+The candidate must pass the focused **Operations, Inventory & Job-Cost Evidence Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
 
 ## Next release
 
-**Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance** is next only after Build 393 is fully accepted on protected `main` and exact Production evidence is GREEN.
+**Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance** is next only after the current release is fully accepted on protected `main` and exact Production evidence is GREEN.
 
 ## Continuing rule
 
