@@ -19,7 +19,7 @@ Current scope:
 - preserve the existing one-H1/public SEO contract and use current catalog authority rather than duplicating pricing logic across pages;
 - remain schema-neutral and avoid database, R2, DNS, secret, payment/provider and Production business-data mutation.
 
-The candidate must pass the focused Service, Add-On & Commercial Accuracy Authority, Current Source Gate and feature-preview acceptance before `dev` moves. Development must then pass exact-SHA deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
+The candidate must pass the focused Service, Add-On & Commercial Accuracy Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
 
 ## Next release
 
@@ -27,4 +27,4 @@ The candidate must pass the focused Service, Add-On & Commercial Accuracy Author
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through Development, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production identity to be independently accepted. Database migrations remain separate acceptance boundaries. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through a non-force fast-forward to Development, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production identity to be independently accepted. Database migrations remain separate acceptance boundaries. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
