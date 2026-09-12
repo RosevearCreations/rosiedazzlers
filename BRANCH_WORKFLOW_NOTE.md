@@ -4,32 +4,35 @@ This is the current branch authority. Historical branch names and old release se
 
 ## Branch roles
 
-- `main` — accepted Production source until another authorized Production promotion is fully proven.
+- `main` — protected Production source. GitHub's active `rd main protection` ruleset governs changes to the default branch.
 - `dev` — accepted Development line and base for sequential new builds.
 - Active build branch — isolated implementation created from exact `dev` until its candidate SHA is source-green.
 
 ## Current promotion rule
 
-Promote the same exact commit SHA through the authorized Development path. Do not recreate changes separately and do not call a branch current merely because it has a newer timestamp.
+Development remains exact-SHA and non-force. Production promotion must pass through the protected-main pull-request path; do not bypass the ruleset to preserve an obsolete direct-push model.
 
 Sequence:
 
 1. Create the active feature branch from exact `dev`.
 2. Implement and commit the bounded release there.
 3. Require successful exact-SHA focused authority, Current Source Gate validation and feature-preview acceptance.
-4. Fast-forward `dev` to that exact SHA with `force=false`.
-5. Require Development source and deployment/runtime acceptance on the identical SHA.
+4. Fast-forward `dev` to that exact candidate SHA with `force=false`.
+5. Require Development source and deployment/runtime acceptance on that identical Development SHA.
 6. Mark the release GREEN for Development only after those checks succeed.
-7. Promote `main` only from that same Development-GREEN SHA by non-force fast-forward when Production promotion is authorized by the active release flow.
-8. Require the durable Production exact-SHA authority to observe a successful Production deployment/runtime/business path before calling Production GREEN.
-9. Start the next sequential build only from the latest accepted Development boundary.
+7. Open a pull request from the accepted Development line to protected `main`.
+8. Require the `rd main protection` ruleset and its required `source checks` context to pass. Prefer a merge commit so the accepted Development SHA remains directly visible in Production ancestry.
+9. After merge, treat the resulting `main` head as the exact Production source SHA and require Production deployment/runtime/business acceptance on that exact SHA.
+10. Start the next sequential build only from the latest accepted Development boundary after the prior release chain is resolved.
+
+A protected-main merge can create a new SHA. The Development candidate SHA and Production merge SHA are both exact identities for their respective stages; PR/ancestry evidence links them into one release chain.
 
 ## Protection and check posture
 
-- GitHub-hosted branch protection/rulesets are platform settings, not something prose or workflow source may claim to enforce by itself.
-- Intended `dev`/`main` posture blocks force pushes and branch deletion while preserving direct non-force fast-forward promotion.
-- Do not configure a required status check whose own trigger can only occur after the protected push; that creates an impossible release dependency.
-- A check is current blocking evidence only when it belongs to the candidate exact SHA, still triggers for the active ref, and is named by the current release contract.
+- `main` is protected by the active GitHub ruleset `rd main protection`.
+- That ruleset blocks deletion and non-fast-forward updates, requires a pull request, and requires `source checks`.
+- `dev` remains governed by the repository's non-force exact-SHA release policy even when GitHub-hosted protection is absent there.
+- A check is current blocking evidence only when it belongs to the applicable exact SHA or protected-main PR head, still triggers for the active ref, and is named by the current release contract.
 - Historical/build-specific checks remain useful regression evidence but must not silently become permanent release blockers.
 - If protection state is absent or unobservable, classify platform protection AMBER rather than inferring GREEN.
 - Recovery from stale branches, protected-branch rejection, missing checks and stale historical checks follows `RELEASE_GOVERNANCE.md`; never solve those conditions by force-pushing or bypassing evidence.
