@@ -1,0 +1,69 @@
+name: Photo Studio R2 Reliability Authority
+
+on:
+  push:
+    branches: [main, dev, 'build*']
+    paths:
+      - 'functions/api/_lib/photo-library.js'
+      - 'functions/api/_lib/photo-studio-safety.js'
+      - 'functions/api/_lib/public-website-images.js'
+      - 'functions/api/admin/photo_assignment_save.js'
+      - 'functions/api/admin/photo_library_list.js'
+      - 'functions/api/admin/photo_library_sync.js'
+      - 'functions/api/admin/photo_library_delete.js'
+      - 'functions/api/public_website_images.js'
+      - 'functions/api/public/website_images.js'
+      - 'scripts/build391_photo_studio_r2_reliability_test.mjs'
+      - '.github/workflows/photo-studio-r2-reliability-authority.yml'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'README.md'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'functions/api/_lib/photo-library.js'
+      - 'functions/api/_lib/photo-studio-safety.js'
+      - 'functions/api/_lib/public-website-images.js'
+      - 'functions/api/admin/photo_assignment_save.js'
+      - 'functions/api/admin/photo_library_list.js'
+      - 'functions/api/admin/photo_library_sync.js'
+      - 'functions/api/admin/photo_library_delete.js'
+      - 'functions/api/public_website_images.js'
+      - 'functions/api/public/website_images.js'
+      - 'scripts/build391_photo_studio_r2_reliability_test.mjs'
+      - '.github/workflows/photo-studio-r2-reliability-authority.yml'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'README.md'
+
+permissions:
+  contents: read
+
+jobs:
+  photo-studio-r2-reliability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax
+        run: |
+          node --check functions/api/_lib/photo-studio-safety.js
+          node --check functions/api/_lib/public-website-images.js
+          node --check functions/api/admin/photo_assignment_save.js
+          node --check functions/api/admin/photo_library_list.js
+          node --check functions/api/admin/photo_library_sync.js
+          node --check functions/api/admin/photo_library_delete.js
+          node --check functions/api/public_website_images.js
+          node --check functions/api/public/website_images.js
+      - name: Photo Studio and R2 reliability behavior
+        run: node --experimental-default-type=module scripts/build391_photo_studio_r2_reliability_test.mjs
+      - name: Bounded and fail-closed guards
+        run: |
+          grep -q 'maxListPagesPerPrefix:1' functions/api/_lib/photo-library.js
+          grep -q 'Build 260 sync requires one approved R2 prefix per request' functions/api/admin/photo_library_sync.js
+          grep -q 'private_media_isolated:true' functions/api/_lib/public-website-images.js
+          grep -q 'asset_deleted:false' functions/api/admin/photo_assignment_save.js
+          grep -q 'currently assigned and cannot be deleted' functions/api/admin/photo_library_delete.js

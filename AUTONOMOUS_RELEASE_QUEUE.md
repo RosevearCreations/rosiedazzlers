@@ -8,25 +8,26 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 390 — Booking, Quote & Condition-Based Estimate Hardening** is the active bounded release.
+**Build 391 — Photo Studio & R2 Media Reliability** is the active bounded release.
 
 Current scope:
 
-- preserve current catalog pricing and package/add-on compatibility as server-authoritative commercial inputs;
-- distinguish a fixed catalog quote from condition-sensitive inspection-led estimate work instead of presenting both as equally bookable prices;
-- keep quote acceptance separate from slot availability, slot holding, deposit/payment evidence and final booking confirmation;
-- mark a successful availability check as available-but-unheld rather than implying an appointment exists;
-- carry explicit inspection/revised-quote next steps for condition-sensitive add-ons that cannot be safely auto-priced;
-- expose deposit state and booking-confirmation evidence separately so paid or returned payment flows do not silently become confirmed appointments;
-- retain existing provider and booking confirmation authorities rather than weakening Stripe/PayPal settlement or server-side confirmation rules;
-- remain schema-neutral and avoid database migration, R2 mutation, DNS/secrets changes, customer charging/refunding, provider mutation or Production business-data mutation.
+- keep the existing managed photo library as the single public media authority rather than creating a parallel image store;
+- allow one approved public image to serve multiple placements while keeping each target assignment independently resettable;
+- model Before/After placement metadata explicitly and reject the same managed photo on both sides of a pair;
+- make remove/reset/unassign deactivate the placement without deleting the underlying R2 asset;
+- permit destructive Photo Studio deletion only through the explicit delete route after active assignments and Gallery Before/After references are proven absent;
+- restrict public Photo Studio listing, assignment and manifests to approved public R2 prefixes so private DAIP/customer/job evidence cannot enter public placements;
+- keep ordinary admin/public reads database-backed and mutation-free; R2 enumeration occurs only through explicit prefix-bounded sync with cursor continuation;
+- fail safely when the public R2 binding or media schema is unavailable rather than scanning, deleting or inventing fallback state;
+- remain schema-neutral and avoid database migration, Production R2 mutation, DNS/secrets changes, customer charging/refunding, provider mutation or Production business-data mutation during source release.
 
-The candidate must pass the focused Booking Quote Estimate Hardening Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head.
+The candidate must pass the focused Photo Studio R2 Reliability Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
 
 ## Next release
 
-**Build 391 — Photo Studio & R2 Media Reliability** is next only after current-release acceptance is complete. It will converge assignment visibility, before/after sets, multi-placement, unassign/reset and delete-unassigned safeguards while bounding R2 synchronization and keeping private DAIP media isolated.
+**Build 392 — Retention, Maintenance & Fleet Commercial Activation** is next only after current-release acceptance is complete. It will activate the already-established retention, maintenance and fleet authorities using approved business rules while keeping recurring billing, discounts, route economics, fleet pricing and automated outreach evidence-gated.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through a non-force fast-forward to Development, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production identity to be independently accepted. Database migrations remain separate acceptance boundaries. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through a non-force fast-forward to Development, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production identity to be independently accepted. Database migrations remain separate acceptance boundaries.
