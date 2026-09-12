@@ -1,5 +1,6 @@
-// Build 180 — public read-only quote deposit/payment request endpoint.
+// Build 390 — public read-only quote deposit/payment request endpoint with explicit continuity state.
 import { json, serviceHeaders, cleanText, isUuid, methodNotAllowed } from "./_lib/staff-auth.js";
+import { depositRequestContinuity } from "./_lib/commercial-continuity.js";
 
 const REQUEST_SELECT = [
   "id", "quote_proposal_draft_id", "booking_id", "status", "payment_status", "provider", "provider_status", "amount_cents", "currency", "customer_name", "customer_email", "public_payment_url", "checkout_url", "public_note", "requested_at", "paid_at", "booking_confirmed_at"
@@ -24,12 +25,18 @@ export async function onRequestGet({ request, env }) {
     }
 
     const quote = row.quote_proposal_draft_id ? await loadQuote(env, row.quote_proposal_draft_id).catch(() => null) : null;
+    const continuity = depositRequestContinuity(row, quote || {});
     return withCors(json({
       ok: true,
       payment_request: publicRequest(row),
       quote: quote ? publicQuote(quote) : null,
+      commercial_continuity: continuity,
       payment_returned: url.searchParams.get("payment") === "returned",
-      message: row.payment_status === "paid" ? "Deposit has been marked paid." : "Review the deposit request and use the provided payment option."
+      message: continuity.booking_confirmed
+        ? "Deposit and booking confirmation evidence are present."
+        : continuity.deposit_paid
+          ? "Deposit is marked paid; appointment confirmation is still verified separately."
+          : "Review the deposit request and use the provided payment option. Payment or a return redirect alone does not confirm the appointment."
     }));
   } catch (err) {
     return withCors(json({ ok: false, error: err?.message || "Could not load quote payment request." }, 500));
