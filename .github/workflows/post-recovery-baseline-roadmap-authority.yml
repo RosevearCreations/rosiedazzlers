@@ -1,0 +1,74 @@
+name: Build 386 — Post-Recovery Baseline & Forward Roadmap Renewal
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build-386-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build386-post-recovery-baseline-roadmap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Build 386 post-recovery baseline and roadmap renewal
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out exact candidate SHA
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate focused Build 386 baseline and roadmap authority
+        run: python3 scripts/post_recovery_baseline_roadmap_check.py
+      - name: Validate living release and documentation convergence
+        run: python3 scripts/release_authority_documentation_convergence_check.py
+      - name: Validate cumulative source authority
+        run: python3 scripts/release_check.py
+      - name: Record mutation-free baseline renewal boundary
+        run: |
+          {
+            echo "### Build 386 post-recovery baseline / roadmap renewal"
+            echo "- Exact candidate SHA: \`${GITHUB_SHA}\`"
+            echo "- Accepted/current/next authority: 385 / 386 / 387"
+            echo "- Active roadmap: FORWARD_BUILD_ROADMAP_386_395.md"
+            echo "- Historical recovery phase: retained, not active planning authority"
+            echo "- Database migration: none"
+            echo "- Production/business-data/provider/R2/DNS/secret mutation: none"
+            echo "- Production GREEN still requires independent exact-SHA runtime acceptance after main promotion."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    needs: source-authority
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Check out exact Production SHA
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
