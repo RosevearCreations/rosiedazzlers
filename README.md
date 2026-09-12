@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 384 — Finance Cockpit & Month-End UX**.
+Current source direction: **Build 385 — Backup, Restore & Release Recovery Drill**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -11,6 +11,7 @@ For a new chat, AI, or developer, read only:
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_378_385.md` — approved forward sequence and continuing release rules.
+4. `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` — current recovery evidence matrix, drill and authorization boundaries.
 
 Use `DOC_INDEX.md` only to locate specialist references and `STARTUP_GO_LIVE_BLOCKERS.md` for Development/go-live acceptance details.
 
@@ -40,11 +41,17 @@ Run the living release/documentation convergence guard with:
 python scripts/release_authority_documentation_convergence_check.py
 ```
 
-The Current Source Gate also executes these durable authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through its retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
+Run the focused recovery drill source authority with:
 
-The current release is schema-neutral and converges the existing Build 374–375 Finance authorities into `/app/finance/` as a practical operator workflow. It presents quote/commercial terms, deposit evidence, approved changes/final balance, refunds/tips, settlement reconciliation, HST support, month-end close and accountant handoff without creating a second ledger or payment authority. The Finance cockpit remains lazy and loads the retained Build 375 closure snapshot only after an explicit month/year request.
+```bash
+python scripts/backup_restore_release_recovery_drill_check.py
+```
 
-Missing or unavailable Finance evidence fails closed as review required. A `close_ready_candidate` is a read-only readiness result, not an accounting close. The cockpit cannot automatically post accounting entries, close a month, mutate a booking, charge or refund a customer, fabricate evidence, mark a balance paid, or mutate Stripe/Square/provider state. Existing explicit Finance workflows remain the only mutation authorities and operator approval remains required.
+The Current Source Gate executes the durable cross-release authorities automatically. Feature candidates must pass source and feature-preview acceptance before `dev` moves. Development must prove the identical SHA through retained source/runtime gates. When Production promotion is authorized, `main` is fast-forwarded without force to that same Development-GREEN SHA.
+
+The current recovery release is observation-only. It retains the existing Development rollback-candidate and narrowly guarded Cloudflare recovery mechanics, and adds an operator recovery matrix for Git/source, Cloudflare Pages, Supabase/PostgreSQL, R2/media, configuration/secrets, DNS/domain and provider dependencies. Missing recovery evidence fails closed as `NOT VERIFIED`.
+
+The drill cannot move Git refs, restore a database, migrate schema, write/delete R2 objects, mutate DNS, rotate secrets, charge/refund a customer or mutate provider/business state. Any real recovery mutation requires explicit operator authorization outside the drill, followed by normal exact-SHA re-acceptance.
 
 Production is not considered GREEN from source promotion alone. `.github/workflows/production-business-acceptance-authority.yml` independently requires the exact `main` SHA to match a successful Cloudflare Production deployment with Functions metadata, then smokes both the immutable deployment and `https://rosiedazzlers.ca`. Its acceptance helper is observation-only and does not deploy, retry, roll back, charge providers or mutate business data.
 
