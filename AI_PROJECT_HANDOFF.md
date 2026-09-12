@@ -31,9 +31,9 @@ This file is the living operational authority for restarting work. Git history a
 - `.github/workflows/development-source-gate.yml` — cumulative source authority.
 - `.github/workflows/cloudflare-development-acceptance.yml` — exact-SHA Development deployment/runtime acceptance.
 - `.github/workflows/production-business-acceptance-authority.yml` — durable Production business-path and exact-SHA authority.
-- `.github/workflows/post-recovery-baseline-roadmap-authority.yml` — focused current Build 386 authority.
+- `.github/workflows/post-recovery-baseline-roadmap-authority.yml` — focused current-release authority.
 - `scripts/release_authority_documentation_convergence_check.py` — living release/documentation convergence guard.
-- `scripts/post_recovery_baseline_roadmap_check.py` — focused Build 386 baseline/roadmap guard.
+- `scripts/post_recovery_baseline_roadmap_check.py` — focused current-release baseline/roadmap guard.
 
 ## Retained specialist authorities
 
