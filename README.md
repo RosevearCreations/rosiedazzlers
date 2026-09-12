@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 388 — Service, Add-On & Commercial Accuracy Convergence**.
+Current source direction: **Build 389 — Local SEO, Service Landing & Proof Convergence**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -27,13 +27,22 @@ Use `DOC_INDEX.md` only to locate specialist references. The completed prior for
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Current commercial authority
+## Current public SEO and proof authority
 
-The accepted customer-facing package matrix is source-owned after editable catalog merge: Premium Wash $85/$105/$125, Basic Detail $229/$269/$309, Complete Detail $319/$369/$419, Interior Detail $195/$220/$245, and Exterior Detail $195/$220/$245 for small/mid/oversize classes respectively, before HST unless explicitly stated otherwise.
+Established town and specialist-service pages remain the public landing inventory; the current release converges them instead of creating near-duplicate location/service pages. Each indexable target retains one meaningful H1, unique title/description/canonical metadata and useful structured data, with service-area claims constrained to the established Oxford and Norfolk County model.
 
-Condition-sensitive add-ons do not receive invented one-price economics. Headlights, extraction/restoration, odor, pet hair, paint correction, coatings/protection and other variable-scope work use starting-price or inspection-led language with condition factors, duration expectations, inclusions/exclusions and explicit re-quote/escalation triggers. Expanded work requires customer authorization before scope is widened.
+The accepted customer-facing pricing matrix and condition-sensitive quote rules remain inherited from the commercial authority. Landing pages consume `/api/pricing_catalog_public`; they do not create a second pricing ledger. Customer-facing calls-to-action converge on the unified `/book` service/booking flow.
 
-Run the focused commercial authority with:
+Landing-page proof fails closed. Before/after evidence is eligible only when the existing Gallery authority marks it explicitly published, public-use/privacy approved, non-sample and complete with vehicle, condition, problem, process and result context. Bundled sample gallery rows, visual placeholders, private media and generic fallback review art are not customer proof.
+
+Run the focused authority with:
+
+```bash
+python scripts/build389_local_seo_service_landing_proof_check.py
+node --experimental-default-type=module scripts/build389_local_seo_service_landing_proof_test.mjs
+```
+
+The retained commercial authority remains available with:
 
 ```bash
 python scripts/service_commercial_accuracy_check.py
