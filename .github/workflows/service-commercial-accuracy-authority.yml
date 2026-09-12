@@ -1,0 +1,78 @@
+name: Build 388 — Service, Add-On & Commercial Accuracy Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+    paths:
+      - 'functions/api/_lib/commercial-accuracy.js'
+      - 'functions/api/pricing_catalog_public.js'
+      - 'scripts/service_commercial_accuracy_check.py'
+      - 'scripts/service_commercial_accuracy_test.mjs'
+      - '.github/workflows/service-commercial-accuracy-authority.yml'
+  pull_request:
+    branches:
+      - dev
+      - main
+    paths:
+      - 'functions/api/_lib/commercial-accuracy.js'
+      - 'functions/api/pricing_catalog_public.js'
+      - 'scripts/service_commercial_accuracy_check.py'
+      - 'scripts/service_commercial_accuracy_test.mjs'
+      - '.github/workflows/service-commercial-accuracy-authority.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build388-commercial-accuracy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commercial-accuracy:
+    name: Validate Build 388 commercial accuracy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate source syntax
+        run: |
+          python -m py_compile scripts/service_commercial_accuracy_check.py
+          node --check functions/api/_lib/commercial-accuracy.js
+          node --check functions/api/pricing_catalog_public.js
+          node --check scripts/service_commercial_accuracy_test.mjs
+
+      - name: Validate commercial source authority
+        run: python scripts/service_commercial_accuracy_check.py
+
+      - name: Validate commercial behavior
+        run: node scripts/service_commercial_accuracy_test.mjs
+
+      - name: Record Build 388 authority
+        run: |
+          {
+            echo '### Build 388 — Service, Add-On & Commercial Accuracy'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Accepted package matrix is source-owned after editable catalog merge: PASS'
+            echo '- Condition-sensitive services use estimate/inspection escalation instead of invented fixed economics: PASS'
+            echo '- Every add-on exposes pricing basis, duration, inclusions/exclusions, prep, aftercare and quote triggers: PASS'
+            echo '- Customer-facing public pricing endpoint applies the commercial overlay: PASS'
+            echo '- Database, R2, payment/provider and Production business-data mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
