@@ -8,25 +8,25 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 391 — Photo Studio & R2 Media Reliability** is the active bounded release.
+**Build 393 — Operations, Inventory & Job-Cost Evidence** is the active bounded release.
 
 Current scope:
 
-- keep the existing managed photo library as the single public media authority rather than creating a parallel image store;
-- allow one approved public image to serve multiple placements while keeping each target assignment independently resettable;
-- model Before/After placement metadata explicitly and reject the same managed photo on both sides of a pair;
-- make remove/reset/unassign deactivate the placement without deleting the underlying R2 asset;
-- permit destructive Photo Studio deletion only through the explicit delete route after active assignments and Gallery Before/After references are proven absent;
-- restrict public Photo Studio listing, assignment and manifests to approved public R2 prefixes so private DAIP/customer/job evidence cannot enter public placements;
-- keep ordinary admin/public reads database-backed and mutation-free; R2 enumeration occurs only through explicit prefix-bounded sync with cursor continuation;
-- fail safely when the public R2 binding or media schema is unavailable rather than scanning, deleting or inventing fallback state;
-- remain schema-neutral and avoid database migration, Production R2 mutation, DNS/secrets changes, customer charging/refunding, provider mutation or Production business-data mutation during source release.
+- keep `catalog_inventory_movements` as the single canonical inventory-movement authority and do not create a parallel stock ledger;
+- project booking-scoped consumable/product usage and depletion from existing canonical movement evidence;
+- net reversal/adjustment evidence against depletion and deduplicate replay evidence without writing new stock state;
+- calculate per-job material cost only from recorded inventory `cost_cents`; missing recorded cost fails closed to `review` rather than being estimated or coerced to zero;
+- surface current low-stock thresholds and active `catalog_purchase_orders` reorder evidence without auto-creating a purchase order;
+- expose substitution evidence only when substitution provenance is already recorded; incomplete provenance fails closed;
+- return deterministic `ready`, `review`, or `unavailable` evidence states;
+- keep the Build 393 endpoint staff-authorized and read-only;
+- remain schema-neutral and avoid database migration, Production business-data mutation, R2 mutation, accounting posting, customer charging/refunding, Stripe/PayPal/provider mutation or any second inventory authority.
 
-The candidate must pass the focused Photo Studio R2 Reliability Authority, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
+The candidate must pass the focused **Build 393 — Operations, Inventory & Job-Cost Evidence Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
 
 ## Next release
 
-**Build 392 — Retention, Maintenance & Fleet Commercial Activation** is next only after current-release acceptance is complete. It will activate the already-established retention, maintenance and fleet authorities using approved business rules while keeping recurring billing, discounts, route economics, fleet pricing and automated outreach evidence-gated.
+**Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance** is next only after Build 393 is fully accepted on protected `main` and exact Production evidence is GREEN.
 
 ## Continuing rule
 

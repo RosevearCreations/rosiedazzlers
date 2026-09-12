@@ -28,6 +28,10 @@ Turn the already-established retention, maintenance and fleet authorities into p
 ### Build 393 — Operations, Inventory & Job-Cost Evidence
 Converge job readiness, consumable/product usage, inventory depletion, reorder evidence, approved substitutions and per-job cost capture without creating a second inventory ledger. Preserve idempotency, reversal, shortage and staff-authorization boundaries.
 
+Implementation authority for Build 393 is schema-neutral and read-only: `catalog_inventory_movements` remains the canonical movement ledger, `catalog_inventory_items` remains inventory/cost authority, and `catalog_purchase_orders` remains reorder authority. Booking-scoped evidence nets reversal/adjustment movements against depletion, ignores duplicate replay evidence, exposes reorder/substitution provenance when recorded, and calculates material costs only from recorded inventory costs. Missing movement evidence is `unavailable`; missing recorded cost, low stock without reorder evidence, or incomplete substitution provenance fails closed to `review`. Build 393 does not mutate inventory, purchase orders, accounting, payments, providers, R2 or Production business data.
+
+Acceptance requires the focused `Build 393 — Operations, Inventory & Job-Cost Evidence Authority` plus the normal exact-SHA feature, Development, protected-main and Production gates.
+
 ### Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance
 Drive the existing Finance cockpit through evidence-backed deposit/final balance/refund/fee/HST/reconciliation/month-end/export scenarios. Missing financial evidence remains review/unavailable; accounting posting and provider mutation stay behind explicit authorization.
 
