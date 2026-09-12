@@ -1,0 +1,55 @@
+name: Booking Quote Estimate Hardening Authority
+
+on:
+  push:
+    branches: [main, dev, 'build*']
+    paths:
+      - 'functions/api/_lib/commercial-continuity.js'
+      - 'functions/api/_lib/quote-booking-authority.js'
+      - 'functions/api/quote_proposal_respond.js'
+      - 'functions/api/quote_deposit_request.js'
+      - 'functions/api/booking_confirmation.js'
+      - 'scripts/build390_booking_quote_estimate_hardening_test.mjs'
+      - '.github/workflows/booking-quote-estimate-hardening-authority.yml'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+  pull_request:
+    branches: [main, dev]
+    paths:
+      - 'functions/api/_lib/commercial-continuity.js'
+      - 'functions/api/_lib/quote-booking-authority.js'
+      - 'functions/api/quote_proposal_respond.js'
+      - 'functions/api/quote_deposit_request.js'
+      - 'functions/api/booking_confirmation.js'
+      - 'scripts/build390_booking_quote_estimate_hardening_test.mjs'
+      - '.github/workflows/booking-quote-estimate-hardening-authority.yml'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+
+permissions:
+  contents: read
+
+jobs:
+  commercial-continuity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax
+        run: |
+          node --check functions/api/_lib/commercial-continuity.js
+          node --check functions/api/_lib/quote-booking-authority.js
+          node --check functions/api/quote_proposal_respond.js
+          node --check functions/api/quote_deposit_request.js
+          node --check functions/api/booking_confirmation.js
+      - name: Continuity behavior
+        run: node --experimental-default-type=module scripts/build390_booking_quote_estimate_hardening_test.mjs
+      - name: Fail-closed wording guard
+        run: |
+          grep -q 'commercial_kind: "estimate"' functions/api/_lib/commercial-continuity.js
+          grep -q 'booking_confirmed: false' functions/api/_lib/commercial-continuity.js
+          grep -q 'Acceptance is not a booking confirmation' functions/api/quote_proposal_respond.js
+          grep -q 'Payment or a return redirect alone does not confirm the appointment' functions/api/quote_deposit_request.js
