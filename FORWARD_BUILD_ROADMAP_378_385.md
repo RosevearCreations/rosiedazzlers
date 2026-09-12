@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Forward Build Roadmap 378–385
 
-**Planning boundary:** Builds 376–377 remain the official completion sequence of `FORWARD_BUILD_ROADMAP_356_377.md`. This document preserves the agreed autonomous phase that follows them so future work is not lost between chat/release handoffs.
+**Phase status:** Completed. Builds 378–385 form the closed recovery/readiness phase that followed `FORWARD_BUILD_ROADMAP_356_377.md`. Current planning has moved to `FORWARD_BUILD_ROADMAP_386_395.md`. This file remains historical authority and should not be used as the living restart point.
 
 ## Sequence
 
@@ -28,12 +28,11 @@ Present the retained financial authorities as a clear operator workflow from quo
 ### Build 385 — Backup, Restore & Release Recovery Drill
 Prove rollback and recovery readiness from a bad deployment or operational failure: application SHA rollback evidence, database-boundary verification, media preservation, configuration/DNS/provider recovery ownership and a documented operator recovery path. The drill is observation-only and does not mutate Production business data merely to demonstrate readiness.
 
-## Continuation
+## Phase closure
 
-### Build 386 — Post-Recovery Baseline & Forward Roadmap Renewal
-Close the 378–385 phase after exact-SHA Production acceptance, record the newly accepted synchronized baseline through live Git/workflow evidence rather than stale prose, retire temporary recovery-only references where appropriate, and establish the next bounded forward roadmap. Keep this release documentation/authority focused and avoid business-data mutation merely to advance planning.
+The phase closed only after the accepted Build 385 exact-SHA Development and Production authorities passed. Recovery documentation and rollback/recovery helpers remain retained specialist authorities, but current accepted/current/next release state belongs to the living handoff, queue and `FORWARD_BUILD_ROADMAP_386_395.md`.
 
-## Continuing release rules
+## Continuing release rules retained from this phase
 
 - One bounded authority improvement per build.
 - Start from the latest exact synchronized `dev`/`main` release boundary.
