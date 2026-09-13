@@ -15,11 +15,11 @@ Current scope:
 - preserve existing `booking_finance_*` events as the deposit, final-balance and refund authority;
 - preserve posted accounting journals/reports as the accounting and HST authority rather than creating a second ledger;
 - preserve saved cash reconciliation as the bank-reconciliation authority and require closed/zero-difference evidence for close readiness;
-- preserve the existing month-end checklist and Build 375 closure surface as the month-end authority;
+- preserve the existing month-end checklist and closure surface as the month-end authority;
 - identify provider fees only from explicit posted fee/processing/merchant/Stripe/PayPal accounting accounts; paid provider activity without explicit posted fee evidence fails closed to `review` instead of estimating fees;
 - expose deterministic `ready`, `review`, or `unavailable` acceptance for deposit, final balance, refund, provider fees, HST, reconciliation, month-end and accountant export;
 - preserve the existing CSV exports and accountant package as the export authorities, with manual accountant/operator review retained;
-- keep the Build 394 acceptance endpoint staff-authorized and read-only;
+- keep the finance-close acceptance endpoint staff-authorized and read-only;
 - remain schema-neutral and avoid database migration, accounting posting, period-close mutation, customer charging/refunding, Stripe/PayPal/provider mutation, Production business-data mutation or R2 mutation.
 
 The candidate must pass the focused **Finance Close, Reconciliation & Accountant Export Acceptance Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
