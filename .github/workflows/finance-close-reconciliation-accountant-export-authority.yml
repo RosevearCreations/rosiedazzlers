@@ -1,0 +1,65 @@
+name: Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build394-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build394-finance-close-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: finance-close-reconciliation-accountant-export
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Build 394 source syntax
+        run: |
+          node --check functions/api/_lib/accounting-finance-close-acceptance.js
+          node --check functions/api/admin/accounting_finance_close_acceptance.js
+          node --check scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
+          python -m py_compile scripts/build394_finance_close_reconciliation_accountant_export_check.py
+
+      - name: Run Build 394 executable contract
+        run: node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
+
+      - name: Validate Build 394 authority
+        run: python scripts/build394_finance_close_reconciliation_accountant_export_check.py
+
+      - name: Build 394 summary
+        run: |
+          {
+            echo '### Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Deposit/final-balance/refund booking evidence: PASS'
+            echo '- HST and bank/month-end reconciliation fail-closed acceptance: PASS'
+            echo '- Paid-provider fee evidence must be explicit in posted ledger: PASS'
+            echo '- Accountant export remains manual-approval/evidence gated: PASS'
+            echo '- Accounting posting/provider mutation: PROHIBITED'
+            echo '- Database migration introduced: NO'
+          } >> "$GITHUB_STEP_SUMMARY"

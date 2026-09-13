@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 393 — Operations, Inventory & Job-Cost Evidence**.
+Current source direction: **Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -27,21 +27,23 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Current operations, inventory and job-cost authority
+## Current finance close, reconciliation and accountant-export authority
 
-The existing inventory model remains authoritative. `catalog_inventory_movements` is the single movement ledger, `catalog_inventory_items` owns item/on-hand/reorder/recorded-cost evidence, and `catalog_purchase_orders` owns reorder evidence. The current release adds no second inventory ledger and no schema migration.
+The existing Finance cockpit remains authoritative. Booking-finance events own deposit, final-balance and refund evidence; posted accounting reports own ledger and HST evidence; saved cash reconciliation owns bank-reconciliation evidence; and the existing month-end checklist/closure surface owns month-end readiness. The current release adds no second accounting ledger and no schema migration.
 
-`GET /api/admin/operations_job_cost_evidence?booking_id=<uuid>` is a staff-authorized read-only projection. It exposes booking-scoped usage/depletion, reversal-aware net quantities, recorded material cost evidence, low-stock/reorder evidence, substitution provenance when already recorded, and fail-closed `ready`, `review`, or `unavailable` status.
+`GET /api/admin/accounting_finance_close_acceptance?month=<1-12>&year=<yyyy>` is a staff-authorized read-only acceptance projection. It exposes deterministic `ready`, `review`, or `unavailable` evidence for deposits, final balances, refunds, provider fees, HST, bank reconciliation, month-end close and accountant export readiness.
 
-Missing recorded cost is never estimated or converted to zero. Duplicate replay evidence is ignored; reversal/adjustment movement evidence nets against depletion. Low stock without active reorder evidence, missing inventory authority, or incomplete substitution provenance is surfaced for review rather than silently accepted.
+Provider fees are never estimated from payment totals. If paid provider activity exists but no explicit posted fee/processing/merchant/Stripe/PayPal accounting account evidence exists, Finance acceptance remains `review`. Missing HST, reconciliation or close evidence similarly fails closed rather than being treated as zero or success.
+
+The existing `/api/admin/accounting_export` CSV family and `/api/admin/accounting_accountant_package` remain the export authorities. Build 394 does not post journals, close periods, charge/refund customers, mutate Stripe/PayPal/providers, write accountant approval, migrate schema, mutate R2 or alter Production business data.
 
 Run the focused authority with:
 
 ```bash
-node --check functions/api/_lib/operations-job-cost-evidence.js
-node --check functions/api/admin/operations_job_cost_evidence.js
-node scripts/build393_operations_inventory_job_cost_evidence_test.mjs
-python scripts/build393_operations_inventory_job_cost_evidence_check.py
+node --check functions/api/_lib/accounting-finance-close-acceptance.js
+node --check functions/api/admin/accounting_finance_close_acceptance.js
+node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
+python scripts/build394_finance_close_reconciliation_accountant_export_check.py
 ```
 
 The retained commercial pricing authority remains available with:

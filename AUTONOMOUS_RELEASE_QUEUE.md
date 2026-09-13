@@ -8,25 +8,25 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 393 — Operations, Inventory & Job-Cost Evidence** is the active bounded release.
+**Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance** is the active bounded release.
 
 Current scope:
 
-- keep `catalog_inventory_movements` as the single canonical inventory-movement authority and do not create a parallel stock ledger;
-- project booking-scoped consumable/product usage and depletion from existing canonical movement evidence;
-- net reversal/adjustment evidence against depletion and deduplicate replay evidence without writing new stock state;
-- calculate per-job material cost only from recorded inventory `cost_cents`; missing recorded cost fails closed to `review` rather than being estimated or coerced to zero;
-- surface current low-stock thresholds and active `catalog_purchase_orders` reorder evidence without auto-creating a purchase order;
-- expose substitution evidence only when substitution provenance is already recorded; incomplete provenance fails closed;
-- return deterministic `ready`, `review`, or `unavailable` evidence states;
-- keep the current evidence endpoint staff-authorized and read-only;
-- remain schema-neutral and avoid database migration, Production business-data mutation, R2 mutation, accounting posting, customer charging/refunding, Stripe/PayPal/provider mutation or any second inventory authority.
+- preserve existing `booking_finance_*` events as the deposit, final-balance and refund authority;
+- preserve posted accounting journals/reports as the accounting and HST authority rather than creating a second ledger;
+- preserve saved cash reconciliation as the bank-reconciliation authority and require closed/zero-difference evidence for close readiness;
+- preserve the existing month-end checklist and closure surface as the month-end authority;
+- identify provider fees only from explicit posted fee/processing/merchant/Stripe/PayPal accounting accounts; paid provider activity without explicit posted fee evidence fails closed to `review` instead of estimating fees;
+- expose deterministic `ready`, `review`, or `unavailable` acceptance for deposit, final balance, refund, provider fees, HST, reconciliation, month-end and accountant export;
+- preserve the existing CSV exports and accountant package as the export authorities, with manual accountant/operator review retained;
+- keep the finance-close acceptance endpoint staff-authorized and read-only;
+- remain schema-neutral and avoid database migration, accounting posting, period-close mutation, customer charging/refunding, Stripe/PayPal/provider mutation, Production business-data mutation or R2 mutation.
 
-The candidate must pass the focused **Operations, Inventory & Job-Cost Evidence Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
+The candidate must pass the focused **Finance Close, Reconciliation & Accountant Export Acceptance Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by **non-force fast-forward** to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
 
 ## Next release
 
-**Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance** is next only after the current release is fully accepted on protected `main` and exact Production evidence is GREEN.
+**Build 395 — Production Business Acceptance & Growth Readiness** is next only after the current release is fully accepted on protected `main` and exact Production evidence is GREEN.
 
 ## Continuing rule
 

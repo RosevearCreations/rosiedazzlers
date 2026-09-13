@@ -35,6 +35,10 @@ Acceptance requires the focused `Build 393 — Operations, Inventory & Job-Cost 
 ### Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance
 Drive the existing Finance cockpit through evidence-backed deposit/final balance/refund/fee/HST/reconciliation/month-end/export scenarios. Missing financial evidence remains review/unavailable; accounting posting and provider mutation stay behind explicit authorization.
 
+Implementation authority for Build 394 is schema-neutral and read-only. Existing `booking_finance_*` events remain deposit/final-balance/refund authority; posted accounting reports remain ledger/HST authority; saved cash reconciliation and the existing month-end closure/checklist remain reconciliation/close authority; and existing CSV/accountant-package endpoints remain export authority. Paid provider activity requires explicit posted fee/processing/merchant/Stripe/PayPal account evidence; fees are never inferred from provider totals. Missing canonical sources return `unavailable`; incomplete HST, bank reconciliation, month-end or provider-fee evidence returns `review`. Build 394 does not post journals, close periods, charge/refund customers, mutate Stripe/PayPal/providers, create a second accounting ledger, migrate schema, mutate R2 or alter Production business data.
+
+Acceptance requires the focused `Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance Authority`, the executable finance acceptance contract, Current Source Gate and feature-preview acceptance, exact-SHA Development deployment/runtime proof, protected-main PR/source checks and exact resulting Production deployment/runtime/business acceptance.
+
 ### Build 395 — Production Business Acceptance & Growth Readiness
 Run a whole-platform acceptance pass across anonymous acquisition, service discovery, booking, customer account, field execution, proof/media, payment/finance, retention, maintenance/fleet, admin/I.T. diagnostics, performance/accessibility/security and recovery. Production is GREEN only with exact Production-SHA deployment/runtime proof plus retained business-path acceptance and protected-main release evidence.
 
