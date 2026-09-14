@@ -1,0 +1,62 @@
+name: Build 399 — Customer Communication, Self-Service & Booking Funnel
+
+on:
+  push:
+    branches: ['build399-*', dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build399-customer-communication-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  customer-communication-self-service:
+    name: customer-communication-self-service
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Validate Build 399 source authority
+        run: |
+          python -m py_compile scripts/build399_customer_communication_self_service_check.py
+          python scripts/build399_customer_communication_self_service_check.py
+      - name: Retain Build 398 privacy authority
+        run: python scripts/build398_customer_journey_acquisition_quality_check.py
+      - name: Retain responsive authority
+        run: python scripts/build397_responsive_ux_authority_check.py
+      - name: Validate living release convergence
+        run: python scripts/release_authority_documentation_convergence_check.py
+      - name: Build 399 summary
+        run: |
+          echo "### Build 399 — Customer Communication, Self-Service & Booking Funnel" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA: \`${GITHUB_SHA}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Permission-aware customer guidance and self-service: PASS" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Separate bounded anonymous/canonical funnel evidence: PASS" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Schema/provider/message/booking/business-data mutation: NONE" >> "$GITHUB_STEP_SUMMARY"
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: customer-communication-self-service
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Verify exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
