@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for Build 396 growth baseline and roadmap renewal."""
+"""Retained fail-closed source authority for the Build 396 growth baseline and 396–405 roadmap."""
 from __future__ import annotations
 
 import re
@@ -87,17 +87,18 @@ require(baseline, [
 
 queue_state = queue_pair(queue)
 handoff_state = handoff_pair(handoff)
-if queue_state != (396, 397):
-    errors.append(f"release queue living release state is {queue_state}, expected (396, 397)")
-if handoff_state != (396, 397):
-    errors.append(f"project handoff living release state is {handoff_state}, expected (396, 397)")
+if None not in queue_state:
+    current, next_release = queue_state
+    if current is not None and not (396 <= current <= 405):
+        errors.append(f"living current release {current} is outside retained 396–405 roadmap")
+    if current is not None and next_release != current + 1:
+        errors.append(f"living next release {next_release} is not sequential after {current}")
 if queue_state != handoff_state:
     errors.append(f"living queue/handoff state diverges: {queue_state} vs {handoff_state}")
 
 require(readme, [
-    "Current source direction: **Build 396 — Growth Baseline & Forward Roadmap Renewal**.",
     "FORWARD_BUILD_ROADMAP_396_405.md",
-    "Build 396 growth baseline",
+    "scripts/build396_growth_baseline_forward_roadmap_check.py",
 ], "README")
 
 require(workflow, [
@@ -137,8 +138,7 @@ if errors:
     sys.exit(1)
 
 print("BUILD 396 GROWTH BASELINE & FORWARD ROADMAP RENEWAL: PASS")
-print("- genuine acquisition/conversion/booking/retention/commercial evidence sources are retained")
-print("- raw identifiers are excluded from the aggregate-first growth reporting contract")
-print("- missing/incomplete evidence remains unavailable/insufficient/review rather than fabricated")
-print("- living release authority now advances through the 396–405 roadmap")
+print("- historical growth evidence/privacy baseline remains intact")
+print("- living current/next state is allowed to advance sequentially through the retained 396–405 roadmap")
+print("- raw identifiers remain excluded from aggregate-first growth reporting")
 print("- schema, provider, business-data and destructive R2 mutation authorized: NONE")

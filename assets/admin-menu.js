@@ -1,4 +1,4 @@
-// Build 274 — hierarchical internal navigation + legacy protected-page contextual-help bridge.
+// Build 398 — hierarchical internal navigation + acquisition quality bridge.
 // The old flat admin menu is retired. Each protected page belongs to one primary module,
 // and the module page exposes its workflows as clickable cards.
 (function attachAdminMenu(globalScope){
@@ -60,7 +60,8 @@
       if(!cards.length)return '';
       return `<div class="admin-module-menu__group"><div class="kicker">${esc(cat.name)}</div>${cards.map(card=>`<a class="admin-module-menu__item${card.page_key===currentPage?' active':''}" href="${esc(card.href)}" ${card.page_key===currentPage?'aria-current="page"':''}><strong>${esc(card.label)}</strong><span>${esc(card.description)}</span></a>`).join('')}</div>`;
     }).join('');
-    mount.innerHTML=`<nav class="admin-module-menu" aria-label="${esc(mod.name)} navigation"><div class="admin-module-menu__head"><span class="badge">Build 267 module</span><h2>${esc(mod.name)}</h2><p class="mini">Only workflows in this module are shown here.</p><div class="row"><a class="btn ghost small" href="/app/">All apps</a><a class="btn primary small" href="${esc(mod.href)}">Module home</a><a class="btn ghost small" href="/admin-account.html">Account</a></div></div>${categoryHtml}</nav>`;
+    const acquisitionHtml=moduleKey==='socials'?`<div class="admin-module-menu__group"><div class="kicker">Growth evidence</div><a class="admin-module-menu__item${location.pathname.includes('admin-acquisition-quality')?' active':''}" href="/admin-acquisition-quality.html" ${location.pathname.includes('admin-acquisition-quality')?'aria-current="page"':''}><strong>Acquisition Quality</strong><span>Observed source, campaign, referrer and device coverage with fail-closed evidence status.</span></a></div>`:'';
+    mount.innerHTML=`<nav class="admin-module-menu" aria-label="${esc(mod.name)} navigation"><div class="admin-module-menu__head"><span class="badge">Build 267 module</span><h2>${esc(mod.name)}</h2><p class="mini">Only workflows in this module are shown here.</p><div class="row"><a class="btn ghost small" href="/app/">All apps</a><a class="btn primary small" href="${esc(mod.href)}">Module home</a><a class="btn ghost small" href="/admin-account.html">Account</a></div></div>${categoryHtml}${acquisitionHtml}</nav>`;
   }
   function render(options={}){
     if(!globalScope.AdminAuth)throw new Error('AdminMenu requires /assets/admin-auth.js.');

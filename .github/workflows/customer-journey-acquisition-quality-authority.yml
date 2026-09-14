@@ -1,0 +1,80 @@
+name: Build 398 — Customer Journey, Booking QoL & Acquisition Quality
+
+on:
+  push:
+    branches:
+      - 'build398-*'
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build398-customer-journey-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  customer-journey-acquisition-quality:
+    name: customer-journey-acquisition-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Build 398 source authority
+        run: |
+          python -m py_compile scripts/build398_customer_journey_acquisition_quality_check.py
+          python scripts/build398_customer_journey_acquisition_quality_check.py
+
+      - name: Retain responsive authority
+        run: python scripts/build397_responsive_ux_authority_check.py
+
+      - name: Validate living release convergence
+        run: python scripts/release_authority_documentation_convergence_check.py
+
+      - name: Build 398 summary
+        run: |
+          {
+            echo "### Build 398 — Customer Journey, Booking QoL & Acquisition Quality"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Browser-only non-PII booking selection continuity: PASS"
+            echo "- Aggregate observed acquisition-quality evidence: PASS"
+            echo "- Responsive baseline retained: PASS"
+            echo "- Schema/provider/business-data/destructive R2 mutation: NONE"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: customer-journey-acquisition-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - name: Checkout exact Production source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh
