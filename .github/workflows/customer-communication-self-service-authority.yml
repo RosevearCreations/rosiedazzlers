@@ -29,6 +29,9 @@ jobs:
           python -m py_compile scripts/build399_customer_communication_self_service_check.py
           python scripts/build399_customer_communication_self_service_check.py
       - name: Retain Build 398 privacy authority
+        # Aggregation tests use synthetic rows only; no business-data mutation.
+        run: node scripts/build399_funnel_behavior_test.mjs
+      - name: Retain Build 398 source privacy authority
         run: python scripts/build398_customer_journey_acquisition_quality_check.py
       - name: Retain responsive authority
         run: python scripts/build397_responsive_ux_authority_check.py

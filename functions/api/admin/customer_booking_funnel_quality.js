@@ -11,7 +11,8 @@ const FUNNEL_EVENTS = [
 export async function onRequestGet({ request, env }) {
   const access = await requireStaffAccess({ request, env, capability: "view_analytics", allowLegacyAdminFallback: true });
   if (!access.ok) return access.response;
-  const days = Math.max(1, Math.min(90, Number(new URL(request.url).searchParams.get("days") || 30)));
+  const requestedDays = Number(new URL(request.url).searchParams.get("days") || 30);
+  const days = Number.isFinite(requestedDays) ? Math.max(1, Math.min(90, Math.floor(requestedDays))) : 30;
   const since = new Date(Date.now() - days * 86400000).toISOString();
   try {
     const headers = serviceHeaders(env);
@@ -19,15 +20,14 @@ export async function onRequestGet({ request, env }) {
     const bookingUrl = `${env.SUPABASE_URL}/rest/v1/bookings?select=status,created_at&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=${BOOKING_ROW_LIMIT}`;
     const [eventResponse, bookingResponse] = await Promise.all([fetch(eventUrl, { headers }), fetch(bookingUrl, { headers })]);
     if (!eventResponse.ok || !bookingResponse.ok) throw new Error("One or more funnel evidence layers are unavailable.");
-    const eventRows = await eventResponse.json().catch(() => []);
-    const bookingRows = await bookingResponse.json().catch(() => []);
-    const events = Array.isArray(eventRows) ? eventRows : [];
-    const bookings = Array.isArray(bookingRows) ? bookingRows : [];
+    const events = await eventResponse.json();
+    const bookings = await bookingResponse.json();
+    if (!Array.isArray(events) || !Array.isArray(bookings)) throw new Error("Invalid evidence response.");
     const eventCounts = Object.fromEntries(FUNNEL_EVENTS.map((name) => [name, 0]));
     for (const row of events) {
       if (Object.hasOwn(eventCounts, row?.event_type)) eventCounts[row.event_type] += 1;
-      if (row?.checkout_state === "started") eventCounts.checkout_started += 1;
-      if (row?.checkout_state === "completed") eventCounts.checkout_completed += 1;
+      if (row?.checkout_state === "started" && row?.event_type !== "checkout_started") eventCounts.checkout_started += 1;
+      if (row?.checkout_state === "completed" && row?.event_type !== "checkout_completed") eventCounts.checkout_completed += 1;
     }
     const canonical = { observed: bookings.length, confirmed: 0, completed: 0, cancelled: 0, other: 0 };
     for (const row of bookings) {
