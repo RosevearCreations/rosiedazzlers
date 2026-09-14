@@ -1,0 +1,29 @@
+name: Build 397 responsive UX authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build397-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  responsive-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact SHA
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Enforce Build 397 responsive contract
+        run: python scripts/build397_responsive_ux_authority_check.py
