@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 396 — Growth Baseline & Forward Roadmap Renewal**.
+Current source direction: **Build 398 — Customer Journey, Booking QoL & Acquisition Quality**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -11,7 +11,8 @@ For a new chat, AI, or developer, read only:
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
-4. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and go-live evidence still requiring proof.
+4. `BUILD398_CUSTOMER_JOURNEY_ACQUISITION.md` — current booking QoL, acquisition evidence and mutation boundary.
+5. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and go-live evidence still requiring proof.
 
 Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases and `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` remain retained historical/specialist authorities, not the normal restart point.
 
@@ -27,17 +28,26 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Build 396 growth baseline
+## Build 398 customer journey and acquisition quality
 
-The current release is schema-neutral and read-only. It establishes which existing first-party sources are authoritative for acquisition, conversion, booking, retention and commercial measurement, and moves the living release documents onto `FORWARD_BUILD_ROADMAP_396_405.md`.
+Build 398 is schema-neutral and source-only. It keeps the proven `/book` live-pricing and canonical booking-planner path, then adds a browser-only convenience draft containing only vehicle-size, package-code and add-on-code selections for up to 48 hours. The draft is explicitly resumable/clearable and does not contain contact, appointment, customer-profile or payment/card information.
 
-`docs/GROWTH_BASELINE_FORWARD_ROADMAP.md` is the current measurement/evidence contract. It is aggregate-first: anonymous session evidence stays separate from exact customer-profile history, unnecessary raw identifiers are excluded from growth outputs, and disabled telemetry, storage failure, row-limit/truncation or missing finance/job-cost evidence remains unavailable/insufficient/review rather than becoming a fabricated zero or KPI.
+`/admin-acquisition-quality.html` and `/api/admin/marketing_acquisition_quality` provide aggregate observed source/campaign/referrer-host/device evidence from existing `site_activity_events`. Missing attribution stays unavailable/insufficient/unattributed, the 2,000-row bound is disclosed, and no IP, User-Agent, visitor/session IDs, postal code, customer email/name or anonymous-to-customer identity join is exposed.
+
+Build 397’s shared responsive phone/tablet/desktop authority remains mandatory. Build 398 adds phone-first touch/layout handling on the booking convenience layer and responsive evidence cards/controls on the new Admin surface.
 
 Run the focused current authority with:
 
 ```bash
-python scripts/build396_growth_baseline_forward_roadmap_check.py
+python scripts/build398_customer_journey_acquisition_quality_check.py
+python scripts/build397_responsive_ux_authority_check.py
 python scripts/release_authority_documentation_convergence_check.py
+```
+
+The retained Build 396 growth baseline remains independently available with:
+
+```bash
+python scripts/build396_growth_baseline_forward_roadmap_check.py
 ```
 
 The retained commercial pricing authority remains independently available with:
