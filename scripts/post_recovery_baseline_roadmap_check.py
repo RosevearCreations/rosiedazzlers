@@ -44,7 +44,7 @@ def living_release_pair(text: str, label: str) -> tuple[int, int] | None:
 queue = read(QUEUE, "release queue")
 handoff = read(HANDOFF, "project handoff")
 readme = read(README, "README")
-roadmap = read(ROADMAP, "renewed forward roadmap")
+roadmap = read(ROADMAP, "retained 386–395 roadmap")
 historical = read(HISTORICAL_ROADMAP, "completed recovery roadmap")
 startup = read(STARTUP, "go-live acceptance authority")
 convergence = read(CONVERGENCE, "living release convergence guard")
@@ -66,7 +66,6 @@ if queue_pair and handoff_pair and queue_pair != handoff_pair:
     errors.append(f"project handoff sequence {handoff_pair} does not match release queue {queue_pair}")
 
 require(readme, [
-    "FORWARD_BUILD_ROADMAP_386_395.md",
     "scripts/release_authority_documentation_convergence_check.py",
     "Production is not considered GREEN from source promotion alone.",
 ], "README")
@@ -83,7 +82,8 @@ require(roadmap, [
     "### Build 393 — Operations, Inventory & Job-Cost Evidence",
     "### Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance",
     "### Build 395 — Production Business Acceptance & Growth Readiness",
-], "renewed roadmap")
+    "### Build 396 — Growth Baseline & Forward Roadmap Renewal",
+], "retained 386–395 roadmap")
 
 require(historical, [
     "**Phase status:** Completed.",
@@ -95,7 +95,7 @@ if "Build 268" in startup or "MASTER_VALUE_ROADMAP.md" in startup:
     errors.append("go-live acceptance authority still carries obsolete Build 268 planning references")
 
 require(convergence, [
-    'ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_386_395.md"',
+    'ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_396_405.md"',
     "next release {next_release} is not sequential after current release {current}",
     "accepted checkpoint is live-ref based; current/next release state is sequential",
 ], "living release convergence guard")
@@ -134,6 +134,7 @@ if errors:
 
 print("BUILD 386 POST-RECOVERY BASELINE / ROADMAP RENEWAL: PASS")
 print(f"- retained baseline authority is compatible with living release {queue_pair[0]}/{queue_pair[1]}")
-print("- completed recovery roadmap remains historical and the 386–395 roadmap remains authoritative")
+print("- completed recovery and 386–395 roadmaps remain retained historical authority")
+print("- living release convergence may advance to a later active roadmap without invalidating the retained boundary")
 print("- Build 385 recovery material remains retained but decoupled from ordinary dev/main pushes")
 print("- Build 386 introduces no database migration or Production/business/provider mutation")

@@ -10,7 +10,7 @@ QUEUE = ROOT / "AUTONOMOUS_RELEASE_QUEUE.md"
 HANDOFF = ROOT / "AI_PROJECT_HANDOFF.md"
 README = ROOT / "README.md"
 BRANCH_NOTE = ROOT / "BRANCH_WORKFLOW_NOTE.md"
-ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_386_395.md"
+ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_396_405.md"
 GOVERNANCE = ROOT / "RELEASE_GOVERNANCE.md"
 PRODUCTION_WORKFLOW = ROOT / ".github/workflows/production-business-acceptance-authority.yml"
 PRODUCTION_CHECK = ROOT / "scripts/production_business_acceptance_check.py"
@@ -157,8 +157,6 @@ require(production_helper, [
     "mutation performed: none",
 ], "Production exact-SHA helper")
 
-# Living documents intentionally avoid pinning commit identity in prose. Git refs,
-# protected-main PR evidence, and exact-SHA workflow evidence are the current authority.
 for path, text in [
     (QUEUE, queue),
     (HANDOFF, handoff),
@@ -173,7 +171,6 @@ for path, text in [
 if len(readme) > 18000:
     errors.append("README exceeds the living-document size boundary")
 
-# The durable Production path remains observation-only.
 for needle in [
     "git push", "git update-ref", "wrangler pages deploy", "--request POST", "-X POST",
     "--request DELETE", "-X DELETE", "--request PATCH", "-X PATCH", "/rollback", "/retry",

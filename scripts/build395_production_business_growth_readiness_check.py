@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed source authority for Build 395 whole-platform Production growth readiness."""
+"""Retained fail-closed source authority for Build 395 whole-platform Production growth readiness."""
 from __future__ import annotations
 
 import re
@@ -32,6 +32,23 @@ def require(text: str, needles: list[str], label: str) -> None:
             errors.append(f"{label} missing required Build 395 contract: {needle!r}")
 
 
+def queue_pair(text: str) -> tuple[int | None, int | None]:
+    current = re.search(r"## Current release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
+    next_release = re.search(r"## Next release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
+    if not current or not next_release:
+        errors.append("release queue cannot resolve living current/next release")
+        return None, None
+    return int(current.group(1)), int(next_release.group(1))
+
+
+def handoff_pair(text: str) -> tuple[int | None, int | None]:
+    builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", text)]
+    if len(builds) < 2:
+        errors.append("project handoff cannot resolve living current/next release")
+        return None, None
+    return builds[0], builds[1]
+
+
 workflow = read(WORKFLOW, "Build 395 workflow")
 production_workflow = read(PRODUCTION_WORKFLOW, "durable Production workflow")
 production_check = read(PRODUCTION_CHECK, "durable Production source check")
@@ -40,7 +57,7 @@ growth = read(GROWTH, "Build 395 growth-readiness contract")
 queue = read(QUEUE, "release queue")
 handoff = read(HANDOFF, "project handoff")
 readme = read(README, "README")
-roadmap = read(ROADMAP, "forward roadmap")
+roadmap = read(ROADMAP, "historical forward roadmap")
 
 required_files = [
     "scripts/service_commercial_accuracy_check.py",
@@ -124,22 +141,24 @@ require(growth, [
     "Production GREEN is fail-closed",
 ], "Build 395 growth-readiness contract")
 
-require(queue, [
-    "**Build 395 — Production Business Acceptance & Growth Readiness** is the active bounded release.",
-    "**Build 396 — Growth Baseline & Forward Roadmap Renewal** is next only after",
-], "release queue")
-require(handoff, [
-    "**Build 395 — Production Business Acceptance & Growth Readiness** is the active bounded release.",
-    "**Build 396 — Growth Baseline & Forward Roadmap Renewal** is next only after",
-], "project handoff")
+queue_state = queue_pair(queue)
+handoff_state = handoff_pair(handoff)
+if queue_state != handoff_state:
+    errors.append(f"retained Build 395 authority sees divergent living queue/handoff state: {queue_state} vs {handoff_state}")
+if queue_state[0] is not None and queue_state[1] is not None:
+    if queue_state[0] < 395:
+        errors.append(f"living release regressed behind retained Build 395 authority: {queue_state}")
+    if queue_state[1] != queue_state[0] + 1:
+        errors.append(f"living release is not sequential: {queue_state}")
+
 require(readme, [
-    "Current source direction: **Build 395 — Production Business Acceptance & Growth Readiness**.",
-    "Build 395 whole-platform acceptance",
+    "Current source direction: **Build ",
+    "Production is not considered GREEN from source promotion alone.",
 ], "README")
 require(roadmap, [
     "### Build 395 — Production Business Acceptance & Growth Readiness",
     "### Build 396 — Growth Baseline & Forward Roadmap Renewal",
-], "forward roadmap")
+], "historical forward roadmap")
 
 for text, label in [(workflow, "Build 395 workflow"), (production_workflow, "Production workflow")]:
     if re.search(r"(?m)^\s*(contents|deployments|actions):\s*write\s*$", text):
@@ -159,8 +178,8 @@ if errors:
     sys.exit(1)
 
 print("BUILD 395 PRODUCTION BUSINESS ACCEPTANCE & GROWTH READINESS: PASS")
-print("- whole-platform growth readiness authorities are present and composed into durable Production acceptance")
-print("- commercial/SEO/booking/media, retention, operations, finance and I.T./observability convergence is explicit")
+print(f"- retained Build 395 authority is compatible with living release {queue_state[0]}/{queue_state[1]}")
+print("- whole-platform growth readiness authorities remain present and composed into durable Production acceptance")
 print("- exact-SHA Development/protected-main/Production evidence remains required and fail-closed")
 print("- no schema, provider, business-data or destructive R2 mutation is authorized")
 print("- real customer/payment/review/accounting/deployment evidence is never fabricated")
