@@ -23,7 +23,7 @@ jobs:
   business-path-authority:
     name: Validate Production business acceptance source contract
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4
@@ -90,6 +90,29 @@ jobs:
           python scripts/fleet_account_operations_check.py
           python scripts/fleet_maintenance_planning_check.py
 
+      - name: Validate commercial, local SEO, condition-quote and media convergence authorities
+        run: |
+          python scripts/service_commercial_accuracy_check.py
+          node scripts/service_commercial_accuracy_test.mjs
+          python scripts/build389_local_seo_service_landing_proof_check.py
+          node scripts/build389_local_seo_service_landing_proof_test.mjs
+          node scripts/build390_booking_quote_estimate_hardening_test.mjs
+          node scripts/build391_photo_studio_r2_reliability_test.mjs
+
+      - name: Validate retention, operations and finance convergence authorities
+        run: |
+          python scripts/build392_retention_maintenance_fleet_activation_check.py
+          node scripts/build392_retention_maintenance_fleet_activation_test.mjs
+          python scripts/build393_operations_inventory_job_cost_evidence_check.py
+          node scripts/build393_operations_inventory_job_cost_evidence_test.mjs
+          python scripts/build394_finance_close_reconciliation_accountant_export_check.py
+          node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
+
+      - name: Validate admin I.T. diagnostics and observability authorities
+        run: |
+          python scripts/it_readiness_release_control_audit.py
+          python scripts/production_observability_self_diagnostics_check.py
+
       - name: Validate rollback and hardening authorities
         run: |
           python scripts/release_rollback_recovery_check.py
@@ -106,6 +129,9 @@ jobs:
             echo "- Customer/vehicle → staff work → completion/proof: PASS"
             echo "- Genuine review → rebook/retention: PASS"
             echo "- Maintenance/fleet: PASS"
+            echo "- Commercial/SEO/condition-quote/media convergence: PASS"
+            echo "- Retention/operations/finance convergence: PASS"
+            echo "- Admin I.T./observability: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"

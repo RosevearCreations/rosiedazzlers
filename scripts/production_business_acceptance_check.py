@@ -56,9 +56,30 @@ required_authorities = {
         "scripts/fleet_account_operations_check.py",
         "scripts/fleet_maintenance_planning_check.py",
     ],
+    "commercial_growth": [
+        "scripts/service_commercial_accuracy_check.py",
+        "scripts/service_commercial_accuracy_test.mjs",
+        "scripts/build389_local_seo_service_landing_proof_check.py",
+        "scripts/build389_local_seo_service_landing_proof_test.mjs",
+        "scripts/build390_booking_quote_estimate_hardening_test.mjs",
+        "scripts/build391_photo_studio_r2_reliability_test.mjs",
+        "scripts/build392_retention_maintenance_fleet_activation_check.py",
+        "scripts/build392_retention_maintenance_fleet_activation_test.mjs",
+    ],
+    "operations_finance": [
+        "scripts/build393_operations_inventory_job_cost_evidence_check.py",
+        "scripts/build393_operations_inventory_job_cost_evidence_test.mjs",
+        "scripts/build394_finance_close_reconciliation_accountant_export_check.py",
+        "scripts/build394_finance_close_reconciliation_accountant_export_test.mjs",
+    ],
+    "it_observability": [
+        "scripts/it_readiness_release_control_audit.py",
+        "scripts/production_observability_self_diagnostics_check.py",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
+        "scripts/release_hygiene_check.py",
     ],
 }
 
@@ -78,6 +99,11 @@ contract = require(CONTRACT, [
     "Genuine review",
     "Rebook + retention",
     "Maintenance + fleet",
+    "Commercial + local proof",
+    "Condition-aware quote + media",
+    "Operations + job cost",
+    "Admin/I.T. + observability",
+    "Growth readiness",
     "Recovery",
     "Cloudflare Production exact-SHA acceptance",
     "does not fabricate a real customer journey",
@@ -107,6 +133,9 @@ workflow = require(WORKFLOW, [
     "Validate customer, staff, completion and proof authorities",
     "Validate genuine-review and rebook authorities",
     "Validate maintenance and fleet authorities",
+    "Validate commercial, local SEO, condition-quote and media convergence authorities",
+    "Validate retention, operations and finance convergence authorities",
+    "Validate admin I.T. diagnostics and observability authorities",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
@@ -115,8 +144,6 @@ workflow = require(WORKFLOW, [
     "CLOUDFLARE_ACCOUNT_ID",
 ], "Production business acceptance workflow")
 
-# Production acceptance helper is strictly retrieval + HTTP smoke. Block known
-# Cloudflare/Git mutation primitives even if later edits accidentally add them.
 for needle in [
     "git push", "git update-ref", "git reset --hard", "wrangler pages deploy",
     "wrangler pages deployment", "--request POST", "-X POST", "--request DELETE",
@@ -125,14 +152,12 @@ for needle in [
     if needle in helper:
         errors.append(f"Production acceptance helper contains mutation primitive: {needle}")
 
-# Cloudflare API calls must remain GET-only discovery/project/deployment reads.
 for match in re.finditer(r'https://api\.cloudflare\.com/client/v4/[^"\s]+', helper):
     url = match.group(0)
     allowed = ["user/tokens/verify", "/accounts?", "/pages/projects/"]
     if not any(part in url for part in allowed):
         errors.append(f"Production helper contains unexpected Cloudflare endpoint: {url}")
 
-# The workflow must remain read-only and release-number independent.
 if re.search(r"\b(contents|deployments|actions):\s*write\b", workflow):
     errors.append("Production workflow grants write permissions")
 if re.search(r"(?i)\bbuild\s+\d{3}\b", workflow):
@@ -144,7 +169,6 @@ for needle in [
     if needle in workflow.lower():
         errors.append(f"Production workflow contains mutation/provider primitive: {needle}")
 
-# The detailed acceptance contract must explicitly separate software proof from real-world evidence.
 for phrase in [
     "real card charge", "real PayPal transaction", "real review", "real month-end close",
     "Missing Production identity", "non-force fast-forward",
@@ -161,6 +185,7 @@ if errors:
 print("PRODUCTION BUSINESS ACCEPTANCE: PASS")
 print("- acquisition through booking, payment, account/vehicle, staff work and completion authorities are present")
 print("- final finance, genuine review, rebook, maintenance and fleet authorities are present")
+print("- whole-platform growth readiness authorities are present across commercial/SEO/media, operations, finance and I.T./observability")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")
 print("- workflow is durable across sequential releases and does not carry a numbered-release dependency")

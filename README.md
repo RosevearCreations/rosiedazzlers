@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance**.
+Current source direction: **Build 395 — Production Business Acceptance & Growth Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -27,26 +27,21 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Current finance close, reconciliation and accountant-export authority
+## Build 395 whole-platform acceptance
 
-The existing Finance cockpit remains authoritative. Booking-finance events own deposit, final-balance and refund evidence; posted accounting reports own ledger and HST evidence; saved cash reconciliation owns bank-reconciliation evidence; and the existing month-end checklist/closure surface owns month-end readiness. The current release adds no second accounting ledger and no schema migration.
+The current release is a schema-neutral, observation-only convergence pass. It does not create a new ledger or new Production mutation path. Instead, the durable Production authority now explicitly composes current commercial/service accuracy, local SEO/proof, condition-aware booking, Photo Studio/R2 reliability, retention/maintenance/fleet, operations/inventory/job-cost, Finance close/reconciliation/export, I.T. readiness and Production observability with the retained acquisition, booking, payment, customer, staff, completion, review, rebook, hardening and recovery path.
 
-`GET /api/admin/accounting_finance_close_acceptance?month=<1-12>&year=<yyyy>` is a staff-authorized read-only acceptance projection. It exposes deterministic `ready`, `review`, or `unavailable` evidence for deposits, final balances, refunds, provider fees, HST, bank reconciliation, month-end close and accountant export readiness.
+`PRODUCTION_BUSINESS_ACCEPTANCE.md` remains the durable acceptance contract. `docs/PRODUCTION_BUSINESS_GROWTH_READINESS.md` records the current whole-platform matrix and evidence boundaries. Missing or contradictory evidence fails closed under the owning authority; source checks never synthesize customers, payments, reviews, accounting entries, inventory usage, media consent, search rankings, conversions, deployment evidence or revenue.
 
-Provider fees are never estimated from payment totals. If paid provider activity exists but no explicit posted fee/processing/merchant/Stripe/PayPal accounting account evidence exists, Finance acceptance remains `review`. Missing HST, reconciliation or close evidence similarly fails closed rather than being treated as zero or success.
-
-The existing `/api/admin/accounting_export` CSV family and `/api/admin/accounting_accountant_package` remain the export authorities. Build 394 does not post journals, close periods, charge/refund customers, mutate Stripe/PayPal/providers, write accountant approval, migrate schema, mutate R2 or alter Production business data.
-
-Run the focused authority with:
+Run the focused current authority with:
 
 ```bash
-node --check functions/api/_lib/accounting-finance-close-acceptance.js
-node --check functions/api/admin/accounting_finance_close_acceptance.js
-node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
-python scripts/build394_finance_close_reconciliation_accountant_export_check.py
+python scripts/build395_production_business_growth_readiness_check.py
+python scripts/production_business_acceptance_check.py
+python scripts/release_authority_documentation_convergence_check.py
 ```
 
-The retained commercial pricing authority remains available with:
+The retained commercial pricing authority remains independently available with:
 
 ```bash
 python scripts/service_commercial_accuracy_check.py
