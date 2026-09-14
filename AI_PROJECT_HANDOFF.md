@@ -6,17 +6,17 @@ This file is the living operational authority for restarting work. Git history a
 
 - Repository: `RosevearCreations/rosiedazzlers`.
 - The accepted synchronized Production checkpoint immediately precedes the current release. Resolve its exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than copying historical release identities into this living file.
-- **Build 398 — Customer Journey, Booking QoL & Acquisition Quality** is the active bounded release. It adds browser-only non-PII service-selection continuity to the public booking journey and a protected aggregate observed acquisition-quality surface while retaining Build 397 responsive acceptance and Build 396 privacy/evidence boundaries.
-- **Build 399 — Customer Communication, Self-Service & Booking Funnel** is next only after Build 398 is fully accepted on protected `main` with exact Production evidence GREEN.
-- Build 398 does not authorize a database migration, database restore, Production R2 write/delete, DNS mutation, secret rotation, accounting posting, period-close mutation, customer charge/refund, provider mutation, inventory mutation or Production business-data mutation as part of source promotion.
+- **Build 398 — Customer Journey, Booking QoL & Acquisition Quality** is the active bounded release. It adds browser-only non-PII service-selection continuity to the public booking journey and a protected aggregate observed acquisition-quality surface while retaining the prior responsive and privacy/evidence boundaries.
+- **Build 399 — Customer Communication, Self-Service & Booking Funnel** is next only after the current release is fully accepted on protected `main` with exact Production evidence GREEN.
+- The current release does not authorize a database migration, database restore, Production R2 write/delete, DNS mutation, secret rotation, accounting posting, period-close mutation, customer charge/refund, provider mutation, inventory mutation or Production business-data mutation as part of source promotion.
 - GitHub-hosted branch/ruleset enforcement is separate from source authority. `main` remains governed by the active `rd main protection` ruleset; any protection state that becomes absent or unobservable is AMBER rather than assumed GREEN.
 
 ## Current customer journey / evidence contract
 
-- `/book` retains the proven live-pricing and canonical booking-planner path. Build 398 adds a convenience layer; it does not create a parallel booking engine.
+- `/book` retains the proven live-pricing and canonical booking-planner path. The current convenience layer does not create a parallel booking engine.
 - Browser-local draft state is limited to vehicle-size, package-code and add-on-code selections for up to 48 hours. No name, email, phone, address, notes, appointment date/slot, customer/profile identifier or payment/card field belongs in that draft.
 - Resume behavior is explicit. An existing URL selection remains authoritative over a saved browser draft.
-- Existing first-party `site_activity_events` remains acquisition/session evidence. The Build 398 Acquisition Quality output is aggregate-first and reports observed source, campaign, normalized referrer-host and device evidence only.
+- Existing first-party `site_activity_events` remains acquisition/session evidence. Acquisition Quality output is aggregate-first and reports observed source, campaign, normalized referrer-host and device evidence only.
 - Missing attribution remains unavailable/insufficient/unattributed. Row-limit/truncation is disclosed. No source/campaign value is inferred from another layer.
 - Anonymous acquisition/session evidence remains separate from exact customer-profile booking history; no cross-layer, fuzzy/email identity join is authorized.
 - Raw IP addresses, User-Agent strings, visitor/session IDs, raw postal codes, customer names/emails and other unnecessary identifiers are not acquisition-quality output.
@@ -25,7 +25,7 @@ This file is the living operational authority for restarting work. Git history a
 
 ## Responsive / interaction contract
 
-- Build 397’s shared phone, tablet/small-laptop and desktop authority remains mandatory for every new/materially changed Build 398 surface.
+- The retained shared phone, tablet/small-laptop and desktop authority remains mandatory for every new/materially changed current-release surface.
 - The booking convenience layer uses 44–48px touch targets and stacks selection/actions on narrow viewports instead of shrinking desktop controls.
 - The Acquisition Quality surface reflows cards/controls for narrow screens and does not require material horizontal scrolling for primary content.
 - Explicit loading/success/warning/error states must remain truthful; browser-local state must not be described as server persistence.
@@ -48,9 +48,9 @@ This file is the living operational authority for restarting work. Git history a
 
 - `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next release state.
 - `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
-- `BUILD398_CUSTOMER_JOURNEY_ACQUISITION.md` — current Build 398 source/privacy/mutation contract.
-- `.github/workflows/customer-journey-acquisition-quality-authority.yml` — focused Build 398 source and exact-Production authority.
-- `scripts/build398_customer_journey_acquisition_quality_check.py` — focused executable Build 398 source-contract proof.
+- `BUILD398_CUSTOMER_JOURNEY_ACQUISITION.md` — current source/privacy/mutation contract.
+- `.github/workflows/customer-journey-acquisition-quality-authority.yml` — focused current source and exact-Production authority.
+- `scripts/build398_customer_journey_acquisition_quality_check.py` — focused executable current source-contract proof.
 - `docs/GROWTH_BASELINE_FORWARD_ROADMAP.md` — retained growth measurement/evidence baseline.
 - `.github/workflows/responsive-ux-authority.yml` and `scripts/build397_responsive_ux_authority_check.py` — retained shared responsive baseline authority.
 - `RELEASE_GOVERNANCE.md` — canonical Development exact-SHA, protected-main PR, Production exact-SHA, stale-check and recovery authority.
@@ -63,9 +63,9 @@ This file is the living operational authority for restarting work. Git history a
 
 ## Retained specialist authorities
 
-- `FORWARD_BUILD_ROADMAP_386_395.md` — completed prior sequence retained for historical bridge checks.
-- `.github/workflows/growth-baseline-forward-roadmap-authority.yml` and `scripts/build396_growth_baseline_forward_roadmap_check.py` — retained Build 396 baseline authority; historical checks must remain forward-compatible with the living 396–405 sequence.
-- `.github/workflows/production-business-growth-readiness-authority.yml` and `scripts/build395_production_business_growth_readiness_check.py` — retained prior whole-platform authority, forward-compatible with newer living releases.
+- Prior forward-roadmap files remain completed historical context only.
+- The retained growth-baseline workflow/checker remain historical source authorities and must stay forward-compatible with the living sequence.
+- The retained prior whole-platform growth-readiness authority remains forward-compatible with newer living releases.
 - `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` — retained recovery evidence matrix, drill sequence and authorization boundaries.
 - `.github/workflows/release-governance-authority.yml` and `scripts/release_governance_audit.py` — retained release-governance authority.
 - `.github/workflows/development-rollback-readiness.yml` — manual read-only prior-SHA Development rollback candidate proof.
