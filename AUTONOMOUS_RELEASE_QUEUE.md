@@ -8,22 +8,23 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 396 — Growth Baseline & Forward Roadmap Renewal** is the active bounded release.
+**Build 398 — Customer Journey, Booking QoL & Acquisition Quality** is the active bounded release.
 
 Current scope:
 
-- establish a privacy-respecting growth measurement baseline from genuine observed acquisition, conversion, booking, retention and commercial evidence;
-- preserve aggregate-first reporting and keep anonymous session evidence separate from exact customer-profile history;
-- treat disabled telemetry, storage failure, row-limit/truncation and missing finance/job-cost evidence as explicit unavailable/insufficient/review states rather than zero or inferred success;
-- renew the living roadmap, handoff, README and release-convergence authority onto the 396–405 sequence;
-- preserve retained whole-platform Production business acceptance, protected-main release governance, exact-SHA Cloudflare proof and all server-authoritative payment/finance/inventory/consent/review/media boundaries;
-- remain schema-neutral and read-only: no database migration, Production business-data mutation, provider/payment mutation, accounting posting, period-close mutation, inventory mutation, R2 write/delete, DNS/secret mutation or deployment mutation outside normal release promotion.
+- improve the public booking journey without replacing the proven live-pricing and canonical booking-planner engine;
+- preserve only vehicle-size, package-code and add-on-code selections in a browser-local draft for up to 48 hours, with explicit Resume service choices / Start fresh behavior and no contact, appointment or payment fields in that draft;
+- clarify what happens next, unavailable-slot handling and deposit progression while retaining truthful server-authoritative booking/checkout boundaries;
+- add a protected aggregate Acquisition Quality surface using existing `site_activity_events` source/campaign/referrer/device evidence;
+- keep missing attribution explicit as unavailable/insufficient/unattributed, disclose bounded row limits/truncation, and prohibit anonymous-to-customer identity joins or inferred attribution;
+- retain Build 397 responsive phone/tablet/desktop acceptance, accessible touch targets and viewport-safe controls;
+- remain schema-neutral and source-only: no database migration, Production business-data mutation, provider/payment mutation, accounting posting, period-close mutation, inventory mutation, R2 write/delete, DNS/secret mutation or deployment mutation outside normal release promotion.
 
-The candidate must pass the focused **Growth Baseline & Forward Roadmap Renewal Authority**, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by non-force fast-forward to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
+The candidate must pass the focused **Customer Journey, Booking QoL & Acquisition Quality Authority**, retained responsive/growth authorities, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then advances by non-force fast-forward to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance. Production promotion must proceed by pull request into protected `main`, satisfy `rd main protection` including `source checks`, and then receive exact-SHA Production deployment/runtime/business acceptance on the resulting `main` head. Missing required checks or exact Production runtime/deployment identity are blockers rather than permission to infer success.
 
 ## Next release
 
-**Build 397 — Growth Measurement Surface & Instrumentation Coverage** is next only after the current release is fully accepted on protected `main` and exact Production evidence is GREEN.
+**Build 399 — Customer Communication, Self-Service & Booking Funnel** is next only after Build 398 is fully accepted on protected `main` and exact Production evidence is GREEN.
 
 ## Continuing rule
 
