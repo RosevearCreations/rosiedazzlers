@@ -113,12 +113,12 @@ require(contract, [
 
 require(growth, [
     "Build 395 — Production Business Acceptance & Growth Readiness",
-    "anonymous acquisition",
-    "condition-aware booking",
-    "operations/inventory/job-cost",
-    "finance close/reconciliation/export",
+    "Anonymous acquisition",
+    "Condition-aware booking",
+    "Operations/inventory/job-cost",
+    "Payment/finance",
     "I.T. diagnostics and observability",
-    "performance, accessibility, security and recovery",
+    "Performance, accessibility, security and recovery",
     "exact Production SHA",
     "No real-world evidence is synthesized",
     "Production GREEN is fail-closed",

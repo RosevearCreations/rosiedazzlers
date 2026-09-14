@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -10,6 +11,14 @@ def read(path: str) -> str:
 def require(text: str, needle: str, label: str) -> None:
     if needle not in text:
         raise SystemExit(f"BUILD 394 FAIL: {label} missing {needle!r}")
+
+
+def living_release_pair(text: str) -> tuple[int, int]:
+    current = re.search(r"## Current release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
+    next_release = re.search(r"## Next release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
+    if not current or not next_release:
+        raise SystemExit("BUILD 394 FAIL: release queue cannot resolve living current/next release")
+    return int(current.group(1)), int(next_release.group(1))
 
 
 helper = read("functions/api/_lib/accounting-finance-close-acceptance.js")
@@ -63,12 +72,16 @@ for needle in [
 
 require(roadmap, "### Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance", "forward roadmap")
 require(roadmap, "Missing financial evidence remains review/unavailable", "forward roadmap")
-require(queue, "**Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance** is the active bounded release.", "release queue")
-require(queue, "**Build 395 — Production Business Acceptance & Growth Readiness**", "release queue")
+current, next_release = living_release_pair(queue)
+if current < 394:
+    raise SystemExit(f"BUILD 394 FAIL: living release regressed behind retained Build 394 authority: {current}/{next_release}")
+if next_release != current + 1:
+    raise SystemExit(f"BUILD 394 FAIL: living release is not sequential: {current}/{next_release}")
 require(workflow, "Build 394 — Finance Close, Reconciliation & Accountant Export Acceptance Authority", "workflow")
 require(workflow, "build394_finance_close_reconciliation_accountant_export_test.mjs", "workflow")
 
 print("BUILD 394 FINANCE CLOSE / RECONCILIATION / ACCOUNTANT EXPORT AUTHORITY: PASS")
+print(f"- retained Build 394 authority is compatible with living release {current}/{next_release}")
 print("- existing finance/accounting sources remain canonical")
 print("- deposit/final/refund/HST/reconciliation/month-end/export evidence is fail-closed")
 print("- paid provider activity without explicit posted fee evidence remains review")
