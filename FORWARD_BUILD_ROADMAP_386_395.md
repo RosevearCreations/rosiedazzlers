@@ -42,6 +42,13 @@ Acceptance requires the focused `Build 394 — Finance Close, Reconciliation & A
 ### Build 395 — Production Business Acceptance & Growth Readiness
 Run a whole-platform acceptance pass across anonymous acquisition, service discovery, booking, customer account, field execution, proof/media, payment/finance, retention, maintenance/fleet, admin/I.T. diagnostics, performance/accessibility/security and recovery. Production is GREEN only with exact Production-SHA deployment/runtime proof plus retained business-path acceptance and protected-main release evidence.
 
+Implementation authority for Build 395 is schema-neutral and observation-only. The durable Production source gate explicitly composes current commercial accuracy, local SEO/proof, condition-aware quote/booking, Photo Studio/R2 reliability, retention/maintenance/fleet, operations/inventory/job-cost, Finance close/reconciliation/export, I.T. readiness and Production observability with the retained acquisition, payment, customer, staff, completion, genuine-review, rebook, hardening and recovery authorities. Missing, contradictory or unobservable evidence remains a blocker/review/unavailable state according to the owning authority; no real customer, provider, review, accounting, inventory, media, SEO, conversion or revenue evidence is synthesized.
+
+Acceptance requires the focused `Build 395 — Production Business Acceptance & Growth Readiness` workflow, durable Production business acceptance source contract, Current Source Gate and feature-preview acceptance, exact-SHA Development deployment/runtime proof, protected-main PR/source checks and exact resulting Production deployment/runtime/business acceptance. The exact resulting protected-main SHA must be observed as a successful Cloudflare Production deployment with Functions enabled and pass immutable plus canonical runtime smoke.
+
+### Build 396 — Growth Baseline & Forward Roadmap Renewal
+After the whole-platform Production/growth-readiness gate is fully GREEN, establish a privacy-respecting growth baseline from genuine observed acquisition, conversion, booking, retention and commercial evidence; renew the next forward build sequence from that measured baseline; and keep missing analytics/business evidence explicit rather than fabricating growth conclusions. This is the next planned bounded release, not part of Build 395 implementation.
+
 ## Continuing release rules
 
 - One bounded authority improvement per build.
