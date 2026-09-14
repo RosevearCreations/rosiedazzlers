@@ -29,7 +29,7 @@ Build 397’s shared phone/tablet/desktop responsive authority remains mandatory
 
 ## Mutation boundary
 
-Build 398 is source-only and schema-neutral. It authorizes **no** database migration, Production business-data mutation, customer charge/refund, Stripe/PayPal/provider mutation, accounting posting, period-close mutation, inventory mutation, R2 write/delete, DNS mutation or secret rotation. Normal candidate → Development → protected-main → exact Production release promotion remains the only deployment mutation.
+Build 398 is source-only and schema-neutral: no database migration is authorized. It also authorizes no Production business-data mutation, customer charge/refund, Stripe/PayPal/provider mutation, accounting posting, period-close mutation, inventory mutation, R2 write/delete, DNS mutation or secret rotation. Normal candidate → Development → protected-main → exact Production release promotion remains the only deployment mutation.
 
 ## Release sequence
 
