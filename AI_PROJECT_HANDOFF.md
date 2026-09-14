@@ -6,7 +6,7 @@ This file is the living operational authority for restarting work. Git history a
 
 - Repository: `RosevearCreations/rosiedazzlers`.
 - The accepted synchronized Production checkpoint immediately precedes the current release. Resolve its exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than copying historical release identities into this living file.
-- **Build 396 — Growth Baseline & Forward Roadmap Renewal** is the active bounded release. It establishes the aggregate-first measurement/evidence boundary across acquisition, conversion, booking, retention and commercial outcomes and renews living release authority through the 396–405 sequence.
+- **Build 396 — Growth Baseline & Forward Roadmap Renewal** is the active bounded release. It establishes the aggregate-first measurement/evidence boundary across acquisition, conversion, booking, retention and commercial outcomes and renews living release authority through the active forward sequence.
 - **Build 397 — Growth Measurement Surface & Instrumentation Coverage** is next only after the current release is fully accepted on protected `main` with exact Production evidence GREEN.
 - The current release does not authorize a database migration, database restore, Production R2 write/delete, DNS mutation, secret rotation, accounting posting, period-close mutation, customer charge/refund, provider mutation, inventory mutation or Production business-data mutation as part of source promotion.
 - GitHub-hosted branch/ruleset enforcement is separate from source authority. `main` remains governed by the active `rd main protection` ruleset; any protection state that becomes absent or unobservable is AMBER rather than assumed GREEN.
@@ -40,7 +40,7 @@ This file is the living operational authority for restarting work. Git history a
 - `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
 - `docs/GROWTH_BASELINE_FORWARD_ROADMAP.md` — current growth measurement/evidence baseline.
 - `.github/workflows/growth-baseline-forward-roadmap-authority.yml` — focused current baseline/roadmap source and exact-Production authority.
-- `scripts/build396_growth_baseline_forward_roadmap_check.py` — focused executable Build 396 source-contract proof.
+- `scripts/build396_growth_baseline_forward_roadmap_check.py` — focused executable current source-contract proof.
 - `RELEASE_GOVERNANCE.md` — canonical Development exact-SHA, protected-main PR, Production exact-SHA, stale-check and recovery authority.
 - `PRODUCTION_BUSINESS_ACCEPTANCE.md` and `docs/PRODUCTION_BUSINESS_GROWTH_READINESS.md` — retained whole-platform Production acceptance/evidence boundaries.
 - `.github/workflows/development-source-gate.yml` — cumulative source authority; protected-main required context remains `source checks`.
@@ -51,7 +51,7 @@ This file is the living operational authority for restarting work. Git history a
 
 ## Retained specialist authorities
 
-- `FORWARD_BUILD_ROADMAP_386_395.md` — completed prior sequence retained for historical Build 395/396 bridge checks.
+- `FORWARD_BUILD_ROADMAP_386_395.md` — completed prior sequence retained for historical bridge checks.
 - `.github/workflows/production-business-growth-readiness-authority.yml` and `scripts/build395_production_business_growth_readiness_check.py` — retained prior whole-platform authority, forward-compatible with newer living releases.
 - `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` — retained recovery evidence matrix, drill sequence and authorization boundaries.
 - `.github/workflows/release-governance-authority.yml` and `scripts/release_governance_audit.py` — retained release-governance authority.
