@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 395 — Production Business Acceptance & Growth Readiness**.
+Current source direction: **Build 396 — Growth Baseline & Forward Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -10,7 +10,7 @@ For a new chat, AI, or developer, read only:
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_386_395.md` — active forward sequence and continuing release rules.
+3. `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
 4. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and go-live evidence still requiring proof.
 
 Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases and `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` remain retained historical/specialist authorities, not the normal restart point.
@@ -27,17 +27,16 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 
 Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Build 395 whole-platform acceptance
+## Build 396 growth baseline
 
-The current release is a schema-neutral, observation-only convergence pass. It does not create a new ledger or new Production mutation path. Instead, the durable Production authority now explicitly composes current commercial/service accuracy, local SEO/proof, condition-aware booking, Photo Studio/R2 reliability, retention/maintenance/fleet, operations/inventory/job-cost, Finance close/reconciliation/export, I.T. readiness and Production observability with the retained acquisition, booking, payment, customer, staff, completion, review, rebook, hardening and recovery path.
+The current release is schema-neutral and read-only. It establishes which existing first-party sources are authoritative for acquisition, conversion, booking, retention and commercial measurement, and moves the living release documents onto `FORWARD_BUILD_ROADMAP_396_405.md`.
 
-`PRODUCTION_BUSINESS_ACCEPTANCE.md` remains the durable acceptance contract. `docs/PRODUCTION_BUSINESS_GROWTH_READINESS.md` records the current whole-platform matrix and evidence boundaries. Missing or contradictory evidence fails closed under the owning authority; source checks never synthesize customers, payments, reviews, accounting entries, inventory usage, media consent, search rankings, conversions, deployment evidence or revenue.
+`docs/GROWTH_BASELINE_FORWARD_ROADMAP.md` is the current measurement/evidence contract. It is aggregate-first: anonymous session evidence stays separate from exact customer-profile history, unnecessary raw identifiers are excluded from growth outputs, and disabled telemetry, storage failure, row-limit/truncation or missing finance/job-cost evidence remains unavailable/insufficient/review rather than becoming a fabricated zero or KPI.
 
 Run the focused current authority with:
 
 ```bash
-python scripts/build395_production_business_growth_readiness_check.py
-python scripts/production_business_acceptance_check.py
+python scripts/build396_growth_baseline_forward_roadmap_check.py
 python scripts/release_authority_documentation_convergence_check.py
 ```
 
