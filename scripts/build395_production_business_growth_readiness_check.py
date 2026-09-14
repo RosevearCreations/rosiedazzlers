@@ -32,13 +32,21 @@ def require(text: str, needles: list[str], label: str) -> None:
             errors.append(f"{label} missing required Build 395 contract: {needle!r}")
 
 
-def living_release_pair(text: str, label: str) -> tuple[int | None, int | None]:
+def queue_pair(text: str) -> tuple[int | None, int | None]:
     current = re.search(r"## Current release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
     next_release = re.search(r"## Next release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
     if not current or not next_release:
-        errors.append(f"{label} cannot resolve living current/next release")
+        errors.append("release queue cannot resolve living current/next release")
         return None, None
     return int(current.group(1)), int(next_release.group(1))
+
+
+def handoff_pair(text: str) -> tuple[int | None, int | None]:
+    builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", text)]
+    if len(builds) < 2:
+        errors.append("project handoff cannot resolve living current/next release")
+        return None, None
+    return builds[0], builds[1]
 
 
 workflow = read(WORKFLOW, "Build 395 workflow")
@@ -133,15 +141,15 @@ require(growth, [
     "Production GREEN is fail-closed",
 ], "Build 395 growth-readiness contract")
 
-queue_pair = living_release_pair(queue, "release queue")
-handoff_pair = living_release_pair(handoff, "project handoff")
-if queue_pair != handoff_pair:
-    errors.append(f"retained Build 395 authority sees divergent living queue/handoff state: {queue_pair} vs {handoff_pair}")
-if queue_pair[0] is not None and queue_pair[1] is not None:
-    if queue_pair[0] < 395:
-        errors.append(f"living release regressed behind retained Build 395 authority: {queue_pair}")
-    if queue_pair[1] != queue_pair[0] + 1:
-        errors.append(f"living release is not sequential: {queue_pair}")
+queue_state = queue_pair(queue)
+handoff_state = handoff_pair(handoff)
+if queue_state != handoff_state:
+    errors.append(f"retained Build 395 authority sees divergent living queue/handoff state: {queue_state} vs {handoff_state}")
+if queue_state[0] is not None and queue_state[1] is not None:
+    if queue_state[0] < 395:
+        errors.append(f"living release regressed behind retained Build 395 authority: {queue_state}")
+    if queue_state[1] != queue_state[0] + 1:
+        errors.append(f"living release is not sequential: {queue_state}")
 
 require(readme, [
     "Current source direction: **Build ",
@@ -170,7 +178,7 @@ if errors:
     sys.exit(1)
 
 print("BUILD 395 PRODUCTION BUSINESS ACCEPTANCE & GROWTH READINESS: PASS")
-print(f"- retained Build 395 authority is compatible with living release {queue_pair[0]}/{queue_pair[1]}")
+print(f"- retained Build 395 authority is compatible with living release {queue_state[0]}/{queue_state[1]}")
 print("- whole-platform growth readiness authorities remain present and composed into durable Production acceptance")
 print("- exact-SHA Development/protected-main/Production evidence remains required and fail-closed")
 print("- no schema, provider, business-data or destructive R2 mutation is authorized")

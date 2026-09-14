@@ -33,13 +33,21 @@ def require(text: str, needles: list[str], label: str) -> None:
             errors.append(f"{label} missing required Build 396 authority: {needle!r}")
 
 
-def living_pair(text: str, label: str) -> tuple[int | None, int | None]:
+def queue_pair(text: str) -> tuple[int | None, int | None]:
     current = re.search(r"## Current release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
     next_release = re.search(r"## Next release.*?\*\*Build\s+(\d{3})\s+—", text, re.S)
     if not current or not next_release:
-        errors.append(f"{label} cannot resolve living current/next release")
+        errors.append("release queue cannot resolve living current/next release")
         return None, None
     return int(current.group(1)), int(next_release.group(1))
+
+
+def handoff_pair(text: str) -> tuple[int | None, int | None]:
+    builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", text)]
+    if len(builds) < 2:
+        errors.append("project handoff cannot resolve living current/next release")
+        return None, None
+    return builds[0], builds[1]
 
 
 roadmap = read(ROADMAP, "396–405 roadmap")
@@ -77,10 +85,14 @@ require(baseline, [
     "schema-neutral and read-only",
 ], "growth baseline contract")
 
-for text, label in [(queue, "release queue"), (handoff, "project handoff")]:
-    current, next_release = living_pair(text, label)
-    if (current, next_release) != (396, 397):
-        errors.append(f"{label} living release state is {current}/{next_release}, expected 396/397")
+queue_state = queue_pair(queue)
+handoff_state = handoff_pair(handoff)
+if queue_state != (396, 397):
+    errors.append(f"release queue living release state is {queue_state}, expected (396, 397)")
+if handoff_state != (396, 397):
+    errors.append(f"project handoff living release state is {handoff_state}, expected (396, 397)")
+if queue_state != handoff_state:
+    errors.append(f"living queue/handoff state diverges: {queue_state} vs {handoff_state}")
 
 require(readme, [
     "Current source direction: **Build 396 — Growth Baseline & Forward Roadmap Renewal**.",
