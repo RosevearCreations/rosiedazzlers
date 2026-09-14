@@ -26,15 +26,15 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 - Aggregate schema reference: `SUPABASE_SCHEMA.sql`
 - Cloudflare Pages Functions: `functions/api/`
 
-Build-numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
+Numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
 ## Build 398 customer journey and acquisition quality
 
-Build 398 is schema-neutral and source-only. It keeps the proven `/book` live-pricing and canonical booking-planner path, then adds a browser-only convenience draft containing only vehicle-size, package-code and add-on-code selections for up to 48 hours. The draft is explicitly resumable/clearable and does not contain contact, appointment, customer-profile or payment/card information.
+The current release is schema-neutral and source-only. It keeps the proven `/book` live-pricing and canonical booking-planner path, then adds a browser-only convenience draft containing only vehicle-size, package-code and add-on-code selections for up to 48 hours. The draft is explicitly resumable/clearable and does not contain contact, appointment, customer-profile or payment/card information.
 
 `/admin-acquisition-quality.html` and `/api/admin/marketing_acquisition_quality` provide aggregate observed source/campaign/referrer-host/device evidence from existing `site_activity_events`. Missing attribution stays unavailable/insufficient/unattributed, the 2,000-row bound is disclosed, and no IP, User-Agent, visitor/session IDs, postal code, customer email/name or anonymous-to-customer identity join is exposed.
 
-Build 397’s shared responsive phone/tablet/desktop authority remains mandatory. Build 398 adds phone-first touch/layout handling on the booking convenience layer and responsive evidence cards/controls on the new Admin surface.
+The retained shared responsive phone/tablet/desktop authority remains mandatory. The current release adds phone-first touch/layout handling on the booking convenience layer and responsive evidence cards/controls on the new Admin surface.
 
 Run the focused current authority with:
 
@@ -44,7 +44,7 @@ python scripts/build397_responsive_ux_authority_check.py
 python scripts/release_authority_documentation_convergence_check.py
 ```
 
-The retained Build 396 growth baseline remains independently available with:
+The retained growth baseline remains independently available with:
 
 ```bash
 python scripts/build396_growth_baseline_forward_roadmap_check.py
