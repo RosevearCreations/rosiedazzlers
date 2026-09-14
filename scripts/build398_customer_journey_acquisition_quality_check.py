@@ -84,14 +84,14 @@ for forbidden in ["session_id", "visitor_id", "ip_address", "user_agent", "posta
     if re.search(rf"select=[^\n\"']*\b{re.escape(forbidden)}\b", endpoint, re.I):
         errors.append(f"acquisition endpoint selects forbidden identifier {forbidden}")
 
-# The browser draft may mention excluded fields in privacy copy. Validate the actual
-# persisted object keys instead of matching value expressions such as Date.now().
+# The browser draft may mention excluded fields in privacy copy. Validate only the
+# actual persisted object keys; value expressions such as Date.now() are irrelevant.
 set_match = re.search(r"localStorage\.setItem\(STORAGE_KEY,\s*JSON\.stringify\((\{.*?\})\)\);", booking, re.S)
 if not set_match:
     errors.append("booking QoL does not have a recognizable bounded localStorage payload")
 else:
     payload = set_match.group(1)
-    keys = set(re.findall(r"(?:^|[,\{])\s*([A-Za-z_$][\w$]*)\s*(?::|[,\}])", payload))
+    keys = set(re.findall(r"(?:^|[,\{])\s*([A-Za-z_$][\w$]*)\s*(?=[:,\}])", payload))
     required_keys = {"size", "package", "addons", "saved_at"}
     if keys != required_keys:
         errors.append(f"booking draft keys are {sorted(keys)}, expected {sorted(required_keys)}")
