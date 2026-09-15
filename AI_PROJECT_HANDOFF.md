@@ -55,6 +55,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
 - `.github/workflows/customer-retention-rebooking-service-guidance-seo-growth-authority.yml`
 - `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
+- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `BOOKING_RECOVERY_FAILURE_HANDLING.md`
 - `.github/workflows/booking-recovery-failure-handling-authority.yml`
 - `scripts/booking_recovery_failure_handling_check.py`
