@@ -1,0 +1,54 @@
+name: Admin Operations Cockpit & Growth Experiment Authority
+
+on:
+  push:
+    branches:
+      - build402-admin-operations-cockpit-growth-experiments
+      - dev
+      - main
+    paths:
+      - 'admin-today.html'
+      - 'admin-today/index.html'
+      - 'admin-growth.html'
+      - 'data/growth_experiment_framework.json'
+      - 'BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md'
+      - 'README.md'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'FORWARD_BUILD_ROADMAP_396_405.md'
+      - 'scripts/build402_admin_operations_cockpit_growth_experiment_check.py'
+      - 'scripts/build401_job_handoff_commercial_evidence_check.py'
+      - '.github/workflows/admin-operations-cockpit-growth-experiment-authority.yml'
+  pull_request:
+    paths:
+      - 'admin-today.html'
+      - 'admin-today/index.html'
+      - 'admin-growth.html'
+      - 'data/growth_experiment_framework.json'
+      - 'BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md'
+      - 'README.md'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'FORWARD_BUILD_ROADMAP_396_405.md'
+      - 'scripts/build402_admin_operations_cockpit_growth_experiment_check.py'
+      - 'scripts/build401_job_handoff_commercial_evidence_check.py'
+      - '.github/workflows/admin-operations-cockpit-growth-experiment-authority.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  build402-authority:
+    name: build402 authority
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build 402 fail-closed authority
+        run: python scripts/build402_admin_operations_cockpit_growth_experiment_check.py
+      - name: Retained Build 401 authority
+        run: python scripts/build401_job_handoff_commercial_evidence_check.py
+      - name: Release authority convergence
+        run: python scripts/release_authority_documentation_convergence_check.py

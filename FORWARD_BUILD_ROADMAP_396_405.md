@@ -11,6 +11,8 @@ Every materially changed surface must remain useful on phone, tablet/small lapto
 ### Build 396 — Growth Baseline & Forward Roadmap Renewal
 Establish privacy-respecting aggregate acquisition, conversion, booking, retention and commercial measurement from genuine observed evidence. Missing evidence stays unavailable; remain schema-neutral/read-only.
 
+Retained Build 396 evidence discipline remains explicit: **Genuine observed evidence only**; missing data is `unavailable` or `insufficient`; **Anonymous acquisition/session evidence and exact customer-profile history remain separate layers**; and release acceptance requires the **exact Production SHA** rather than inferred deployment identity.
+
 ### Build 397 — Responsive UX & Growth Measurement Foundation
 Create bounded Admin growth measurement and whole-platform responsive QoL authority. Correct material overflow, clipping, touch-target, navigation and responsive-table defects without persistent customer scoring or permanent polling.
 

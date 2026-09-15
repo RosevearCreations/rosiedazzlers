@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build 401 fail-closed source authority for job handoff and commercial evidence."""
+"""Build 401 retained fail-closed source authority for job handoff and commercial evidence."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -53,18 +53,26 @@ require(doc,[
     'Missing ticket, fee, tax, cost, payment, balance or reconciliation evidence remains `unavailable`',
     'schema-neutral and source-only'
 ],"Build 401 contract")
-require(queue,['**Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence**','**Build 402 — Admin & Operations Cockpit QoL + Growth Experiment Framework**'],"release queue")
-require(handoff,['**Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence**','**Build 402 — Admin & Operations Cockpit QoL + Growth Experiment Framework**'],"project handoff")
-require(readme,['Current source direction: **Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence**.','BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md'],"README")
-require(roadmap,['professional, in-depth process breakdown','paint correction','odor remediation','water extraction','several hours'],"future add-on content roadmap")
+# Living docs may legitimately advance beyond Build 401. Retained authority now checks that
+# the durable Build 401 contract remains referenced without forcing Build 401 to remain current.
+require(handoff,['BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md'],"project handoff retained authority")
+require(readme,['BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md'],"README retained authority")
+require(roadmap,[
+    '### Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence',
+    '### Build 402 — Admin & Operations Cockpit QoL + Growth Experiment Framework',
+    'professional, in-depth process breakdown','paint correction','odor remediation','water extraction','several hours'
+],"forward roadmap")
+if 'Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence' in queue and '## Current release' in queue:
+    # This may appear only historically in specialized docs; the living queue should have advanced when later builds are current.
+    pass
 
 if errors:
     print('BUILD 401 JOB HANDOFF & COMMERCIAL EVIDENCE AUTHORITY: FAIL')
     for error in errors: print(' -',error)
     raise SystemExit(1)
 print('BUILD 401 JOB HANDOFF & COMMERCIAL EVIDENCE AUTHORITY: PASS')
-print(' - Operations receives one manual responsive field-to-office handoff workstream')
+print(' - Operations retains one manual responsive field-to-office handoff workstream')
 print(' - server-authoritative field evidence is composed, not replaced')
 print(' - unavailable commercial evidence stays unavailable instead of estimated')
 print(' - no inferred busy time, payout, debt, forecast or customer score is introduced')
-print(' - future add-on landing-page professional process/depth requirement is retained')
+print(' - retained authority no longer pins living release docs to Build 401')
