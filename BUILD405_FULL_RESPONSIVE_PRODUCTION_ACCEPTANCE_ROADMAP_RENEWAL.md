@@ -57,6 +57,10 @@ Build 405 is source/acceptance/roadmap work only. It authorizes **no schema migr
 
 Provider-sensitive evidence remains fail-closed. External approvals, Stripe/PayPal live outcomes, Search Console/Google Business Profile proof, backup/export proof, or other provider evidence cannot be inferred from source code or a successful deployment.
 
+## Release hygiene
+
+Any source write after an exact candidate has been accepted invalidates that candidate SHA for promotion. Temporary or accidental repository artifacts must be removed before acceptance, and the resulting exact SHA must be revalidated through the feature and Development gates before a Production pull request is opened.
+
 ## Roadmap renewal rule
 
 `FORWARD_BUILD_ROADMAP_405_415.md` is the next active forward authority. Its priorities come from retained go-live blockers and already-observed operational friction: provider/payment evidence, media/R2 recovery, inventory/job-cost evidence, maintenance/fleet commercial acceptance, communication/consent delivery evidence, observability/support diagnostics, responsive/accessibility workflow efficiency, local SEO measurement/proof and final launch consolidation.
