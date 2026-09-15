@@ -10,7 +10,7 @@ QUEUE = ROOT / "AUTONOMOUS_RELEASE_QUEUE.md"
 HANDOFF = ROOT / "AI_PROJECT_HANDOFF.md"
 README = ROOT / "README.md"
 BRANCH_NOTE = ROOT / "BRANCH_WORKFLOW_NOTE.md"
-ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_396_405.md"
+ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_405_415.md"
 GOVERNANCE = ROOT / "RELEASE_GOVERNANCE.md"
 PRODUCTION_WORKFLOW = ROOT / ".github/workflows/production-business-acceptance-authority.yml"
 PRODUCTION_CHECK = ROOT / "scripts/production_business_acceptance_check.py"
@@ -187,6 +187,7 @@ if errors:
 print("RELEASE AUTHORITY & DOCUMENTATION CONVERGENCE: PASS")
 print(" - accepted checkpoint is live-ref based; current/next release state is sequential")
 print(" - living documents point to Git/workflow evidence rather than stale commit identity")
+print(" - active roadmap contains the living current/next release boundary")
 print(" - protected-main PR governance and stage-specific exact-SHA authority are converged")
 print(" - Production business acceptance is release-number independent")
 print(" - exact-SHA Cloudflare Production evidence remains read-only and fail-closed")
