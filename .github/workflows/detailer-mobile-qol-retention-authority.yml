@@ -1,0 +1,29 @@
+name: Build 400 — Detailer Mobile QoL & Retention Evidence Authority
+
+on:
+  push:
+    branches:
+      - 'build400-*'
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  detailer-mobile-qol-retention:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Build 400 source contract
+        run: python scripts/build400_detailer_mobile_qol_retention_check.py

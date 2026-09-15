@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from pathlib import Path
 import re
 import sys
@@ -24,9 +23,12 @@ endpoint = require("functions/api/admin/customer_booking_funnel_quality.js", ['c
 require("admin-customer-booking-funnel.html", ['name="viewport"', "/api/admin/customer_booking_funnel_quality", "Anonymous interaction layer", "Canonical booking layer", "Unavailable — not zero"])
 require("assets/admin-menu.js", ["/admin-customer-booking-funnel.html", "Customer Booking Funnel"])
 require("BUILD399_CUSTOMER_COMMUNICATION_SELF_SERVICE.md", ["Build 399 — Customer Communication, Self-Service & Booking Funnel", "Build 400", "schema-neutral", "exact Production"])
-require("AUTONOMOUS_RELEASE_QUEUE.md", ["Build 399 — Customer Communication, Self-Service & Booking Funnel", "Build 400 — Detailer Mobile App QoL & Retention Evidence"])
-require("AI_PROJECT_HANDOFF.md", ["Build 399 — Customer Communication, Self-Service & Booking Funnel", "Build 400 — Detailer Mobile App QoL & Retention Evidence"])
-require("README.md", ["Current source direction: **Build 399 — Customer Communication, Self-Service & Booking Funnel**.", "BUILD399_CUSTOMER_COMMUNICATION_SELF_SERVICE.md"])
+
+# Build 399 is a retained historical feature authority. Living current/next release
+# identity belongs to the release-convergence guard and must be free to advance.
+require("AUTONOMOUS_RELEASE_QUEUE.md", ["## Current release", "## Next release", "Production deployment/runtime/business acceptance"])
+require("AI_PROJECT_HANDOFF.md", ["## Current release boundary", "protected `main`", "Production deployment/runtime/business acceptance"])
+require("README.md", ["Current source direction: **Build ", "scripts/release_authority_documentation_convergence_check.py"])
 
 for forbidden in ["session_id", "visitor_id", "ip_address", "user_agent", "postal_code", "customer_email", "customer_name"]:
     if re.search(rf"select=[^\n\"']*\b{re.escape(forbidden)}\b", endpoint, re.I):
@@ -39,6 +41,7 @@ if errors:
     sys.exit(1)
 
 print("BUILD 399 CUSTOMER COMMUNICATION & BOOKING FUNNEL: GREEN")
-print("- customer guidance is responsive, explicit, and non-mutating")
+print("- retained customer guidance remains responsive, explicit, and non-mutating")
 print("- anonymous telemetry and canonical bookings remain separate bounded evidence layers")
+print("- living release identity may advance independently through the convergence guard")
 print("- automatic messaging, identity joins, schema and business-data mutation: NONE")

@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 399 — Customer Communication, Self-Service & Booking Funnel**.
+Current source direction: **Build 400 — Detailer Mobile App QoL & Retention Evidence**.
 
 Rosie Dazzlers is one platform with a static-first public website and eight independently authorized/sleeping application modules: Customer, Detailer, Operations, Administration, I.T., Finance, DAIP, and Socials & Promotion.
 
@@ -11,7 +11,7 @@ For a new chat, AI, or developer, read only:
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
-4. `BUILD399_CUSTOMER_COMMUNICATION_SELF_SERVICE.md` — current customer communication, self-service, funnel evidence and mutation boundary.
+4. `BUILD400_DETAILER_MOBILE_QOL_RETENTION.md` — current Detailer mobile QoL, exact-ID retention evidence and mutation boundary.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and go-live evidence still requiring proof.
 
 Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases and `docs/BACKUP_RESTORE_RELEASE_RECOVERY.md` remain retained historical/specialist authorities, not the normal restart point.
@@ -28,36 +28,26 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 
 Numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Build 399 customer communication, self-service and booking funnel
+## Current Detailer mobile QoL and retention evidence
 
-`BUILD399_CUSTOMER_COMMUNICATION_SELF_SERVICE.md` defines the current permission-aware customer guidance, self-service navigation, separate funnel evidence layers, privacy, responsive and mutation boundaries. My Account now provides preparation, status, booking-change review, aftercare, review and rebooking paths without claiming a booking change or message delivery.
+`BUILD400_DETAILER_MOBILE_QOL_RETENTION.md` defines the current additive mobile interaction and retention-evidence boundary. `/app/detailer/` remains the canonical field runtime; the current release adds touch-friendly shortcuts to the existing evidence controls and a device-only timer that never becomes payroll, billing, accounting, completion or canonical job-state evidence.
 
-`/admin-customer-booking-funnel.html` reports bounded anonymous interaction and canonical booking-status evidence separately, with explicit denominator and row-limit disclosure.
+`/api/admin/detailer_retention_evidence` provides bounded aggregate repeat-service evidence using exact non-empty canonical `customer_id` values only. Missing IDs are excluded rather than guessed, no customer identifiers are returned, and fuzzy/email/name matching, persistent customer scoring and automatic outreach remain prohibited.
 
 Run the focused current authority with:
 
 ```bash
+python scripts/build400_detailer_mobile_qol_retention_check.py
 python scripts/build399_customer_communication_self_service_check.py
-python scripts/build398_customer_journey_acquisition_quality_check.py
 python scripts/build397_responsive_ux_authority_check.py
 python scripts/release_authority_documentation_convergence_check.py
 ```
 
-## Retained Build 398 customer journey and acquisition quality
+## Retained customer journey and growth authorities
 
-The current release is schema-neutral and source-only. It keeps the proven `/book` live-pricing and canonical booking-planner path, then adds a browser-only convenience draft containing only vehicle-size, package-code and add-on-code selections for up to 48 hours. The draft is explicitly resumable/clearable and does not contain contact, appointment, customer-profile or payment/card information.
+The prior customer communication/self-service feature authority remains retained. My Account preparation, status, booking-change review, aftercare, review and rebooking paths remain explicit and non-mutating. Anonymous interaction events and canonical booking-status evidence remain separate bounded layers.
 
-`/admin-acquisition-quality.html` and `/api/admin/marketing_acquisition_quality` provide aggregate observed source/campaign/referrer-host/device evidence from existing `site_activity_events`. Missing attribution stays unavailable/insufficient/unattributed, the 2,000-row bound is disclosed, and no IP, User-Agent, visitor/session IDs, postal code, customer email/name or anonymous-to-customer identity join is exposed.
-
-The retained shared responsive phone/tablet/desktop authority remains mandatory. The current release adds phone-first touch/layout handling on the booking convenience layer and responsive evidence cards/controls on the new Admin surface.
-
-Run the focused current authority with:
-
-```bash
-python scripts/build398_customer_journey_acquisition_quality_check.py
-python scripts/build397_responsive_ux_authority_check.py
-python scripts/release_authority_documentation_convergence_check.py
-```
+The retained shared responsive phone/tablet/desktop authority remains mandatory. Public/customer, Detailer, Operations and Admin surfaces must preserve readable layouts, usable touch targets and truthful loading/saving/error states.
 
 The retained growth baseline remains independently available with:
 
