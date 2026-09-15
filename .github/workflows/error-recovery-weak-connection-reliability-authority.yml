@@ -13,6 +13,7 @@ on:
       - 'AUTONOMOUS_RELEASE_QUEUE.md'
       - 'AI_PROJECT_HANDOFF.md'
       - 'README.md'
+      - 'FORWARD_BUILD_ROADMAP_396_405.md'
       - 'scripts/build404_error_recovery_weak_connection_reliability_check.py'
       - 'scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py'
       - '.github/workflows/error-recovery-weak-connection-reliability-authority.yml'
