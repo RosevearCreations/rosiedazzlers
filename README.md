@@ -41,7 +41,7 @@ python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
 
-Retained customer journey, growth, pricing, responsive and Detailer mobile authorities remain mandatory.
+Retained customer journey, growth, pricing, responsive and Detailer mobile authorities remain mandatory. Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
 ## Release authority
 
@@ -49,6 +49,6 @@ Feature candidates must pass focused source authority, Current Source Gate and e
 
 Production promotion is governed by active **`rd main protection`**. Accepted Development is proposed by PR to protected `main`; required `source checks` must pass and protection must not be bypassed. Prefer a merge commit so accepted Development ancestry remains explicit.
 
-After merge, the resulting `main` head is the exact Production SHA and must independently pass Cloudflare deployment/runtime/business acceptance. Production is never considered GREEN from source promotion alone. Database migrations and business/provider mutations remain separate explicit boundaries.
+After merge, the resulting `main` head is the exact Production SHA and must independently pass Cloudflare deployment/runtime/business acceptance. Production is not considered GREEN from source promotion alone. Database migrations and business/provider mutations remain separate explicit boundaries.
 
 Public SEO remains constrained to one meaningful H1 per indexable page, unique metadata/canonical/structured data and truthful local/service content.
