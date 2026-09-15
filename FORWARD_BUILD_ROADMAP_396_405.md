@@ -41,6 +41,11 @@ Each add-on page must explain that scope, products, equipment, labor and duratio
 ### Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening
 Harden customer/field/admin flows against duplicate submission, failed uploads, weak connectivity and opaque failures. Preserve drafts where appropriate, expose truthful save/upload state, bounded query/row-limit warnings and safe retry behavior without fabricating persistence.
 
+Build 404 release safety remains explicit:
+- **Retry/recovery cannot create duplicate business events.** Read-only retries may be bounded, but mutation retries must remain deliberate and server-authoritative.
+- **No local/offline artifact can masquerade as accepted server state.** Drafts, cached views and weak-connection recovery UI must clearly distinguish pending/local state from confirmed server acceptance.
+- **No sensitive/payment-secret persistence.** Local recovery helpers must deny payment secrets and sensitive fields rather than storing them for later replay.
+
 ### Build 405 — Full Responsive Production Acceptance & Roadmap Renewal
 Run end-to-end Production acceptance across visitor → public page → booking → self-service → scheduling → Detailer field work → evidence/scope/customer approval → completion → payment/accounting → aftercare/review/rebooking, including aggregate growth/commercial/SEO/reliability evidence. Require representative phone/tablet/desktop acceptance and exact protected-main Production runtime proof, then renew the next roadmap from observed evidence/friction.
 

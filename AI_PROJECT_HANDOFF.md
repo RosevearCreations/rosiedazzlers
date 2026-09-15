@@ -5,34 +5,33 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 403 — Customer Retention, Rebooking, Service Guidance & SEO Growth** is the active bounded release.
-- **Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening** is next only after protected `main` and exact Production evidence are GREEN.
+- **Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening** is the active bounded release.
+- **Build 405 — Production Hardening, Consolidation & Next-Roadmap Renewal** is next only after protected `main` and exact Production evidence are GREEN.
 - No database migration, Production business-data mutation, R2 destructive mutation, DNS/secret mutation, accounting/inventory posting, customer charge/refund, provider mutation, automatic outreach or customer mutation is authorized by this source release.
 - `main` remains governed by `rd main protection`; missing/unobservable protection is AMBER, never inferred GREEN.
 
-## Current retention / service guidance contract
+## Current recovery / weak-connection contract
 
-- Authenticated booking history for retention guidance is linked only through exact `customer_profile_id`; fuzzy identity and email-based booking matching are not accepted for this projection.
-- Rebooking guidance is available only when exact completed-service package code, vehicle size and service date evidence exists.
-- A prior completed service is an advisory starting point only. The existing booking flow must reconfirm current catalog, vehicle condition, availability, scope and price before a booking is created.
-- No persistent customer scoring, inferred outreach consent, automatic outreach, booking write or automatic service substitution is authorized.
-- Missing completed-service evidence remains `unavailable` or `insufficient` rather than guessed.
+- The retained Build 380 booking-recovery path remains tab-scoped and canonical checkout remains the server authority for availability, booking and payment outcomes.
+- Offline or weak-connection UI must say that local/in-progress state is not accepted business state until the server confirms it.
+- Bounded automatic retry is permitted only for safe read methods (`GET`/`HEAD`); business mutations are never queued or replayed automatically on reconnect.
+- Protected local draft convenience uses `sessionStorage`, has an expiry, and rejects password, payment, provider-token, secret, authorization and file fields.
+- Restored workflows require stale-condition review where availability, scope, pricing or other authoritative evidence may have changed.
+- Duplicate-submit protection may lock the initiating control but cannot manufacture a success state; the server response remains authoritative.
+- Upload convenience must expose progress, failure and explicit manual retry; upload failure is not represented as accepted server state.
+- Partial reads must be visibly labeled as partial and cannot be treated as complete evidence.
+- No local/offline artifact, cached response or convenience helper may masquerade as a successful booking, payment, accounting, inventory, provider or customer mutation.
 
-## Public service / SEO contract
+## Retained customer / service contract
 
-- Every current public add-on/specialty landing route receives a professional condition-aware process breakdown, assessment factors, timing limits and customer approval path through the shared landing authority.
-- Paint correction covers assessment, decontamination, test-spot/correction planning, correction/refinement and protection.
-- Odor remediation distinguishes source removal, cleaning/extraction, drying/reinspection and final neutralizing treatment.
-- Water extraction / flooded-floor restoration has a dedicated public page covering extraction, seat/trim/carpet access where required, trapped-moisture inspection, drying, cleaning, mold/rust-risk mitigation and deodorization.
-- Light cases may be comparatively simple; severe contamination, correction, saturation or embedded material may require several hours. Fixed repair time or guaranteed outcome is not promised before inspection.
-- Products, equipment, labour and duration depend on actual condition/severity; materially expanded work requires customer approval before proceeding.
+- Authenticated booking history for retention guidance remains linked only through exact `customer_profile_id`.
+- Prior completed service remains advisory only; current catalog, vehicle condition, availability, scope and price are reconfirmed by the authoritative booking flow.
 - Public SEO remains one meaningful H1 per indexable page with unique metadata/canonical/structured data, truthful Oxford/Norfolk claims and genuine proof only.
 
 ## Responsive / interaction contract
 
 - Shared phone/tablet/desktop acceptance remains mandatory for materially changed surfaces.
-- Account guidance and public service sections retain usable touch targets and responsive layouts.
-- Truthful loading/error/empty states remain visible.
+- Truthful loading/error/empty/retry states remain visible.
 - Dormant modules remain event-driven; permanent polling requires a separately authorized demonstrated need.
 
 ## Accepted operating contract
@@ -50,14 +49,16 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_396_405.md`
+- `BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md`
+- `.github/workflows/error-recovery-weak-connection-reliability-authority.yml`
+- `scripts/build404_error_recovery_weak_connection_reliability_check.py`
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
 - `.github/workflows/customer-retention-rebooking-service-guidance-seo-growth-authority.yml`
 - `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
-- `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
-- `.github/workflows/admin-operations-cockpit-growth-experiment-authority.yml`
-- `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
-- `.github/workflows/job-handoff-commercial-evidence-authority.yml`
+- `BOOKING_RECOVERY_FAILURE_HANDLING.md`
+- `.github/workflows/booking-recovery-failure-handling-authority.yml`
+- `scripts/booking_recovery_failure_handling_check.py`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`

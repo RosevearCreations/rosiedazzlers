@@ -1,0 +1,68 @@
+name: Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening
+
+on:
+  push:
+    branches:
+      - build404-error-recovery-weak-connection-reliability
+      - dev
+      - main
+    paths:
+      - 'assets/reliability-recovery-v404.js'
+      - 'assets/site-policies.js'
+      - 'BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md'
+      - 'AUTONOMOUS_RELEASE_QUEUE.md'
+      - 'AI_PROJECT_HANDOFF.md'
+      - 'README.md'
+      - 'FORWARD_BUILD_ROADMAP_396_405.md'
+      - 'scripts/build404_error_recovery_weak_connection_reliability_check.py'
+      - 'scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py'
+      - '.github/workflows/error-recovery-weak-connection-reliability-authority.yml'
+  pull_request:
+    branches: [dev, main]
+
+permissions:
+  contents: read
+
+jobs:
+  build404-authority:
+    name: build404 authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate JavaScript syntax
+        run: |
+          node --check assets/reliability-recovery-v404.js
+          node --check assets/site-policies.js
+      - name: Build 404 fail-closed authority
+        run: |
+          python -m py_compile scripts/build404_error_recovery_weak_connection_reliability_check.py
+          python scripts/build404_error_recovery_weak_connection_reliability_check.py
+      - name: Retained Build 403 authority
+        run: python scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py
+      - name: Retained Build 380 booking recovery authority
+        run: python scripts/booking_recovery_failure_handling_check.py
+      - name: Release authority convergence
+        run: python scripts/release_authority_documentation_convergence_check.py
+
+  production-exact-sha:
+    name: Verify exact Production deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build404-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact Cloudflare Production deployment and runtime
+        run: bash scripts/cloudflare_pages_production_acceptance.sh

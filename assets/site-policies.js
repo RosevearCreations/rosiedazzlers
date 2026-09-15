@@ -1,5 +1,5 @@
 // assets/site-policies.js
-// Build 398: public policy renderer plus booking-page enhancement hooks.
+// Build 404: public policy renderer plus booking and reliability enhancement hooks.
 (function attachRosieSitePolicies(globalScope) {
   const FALLBACK_POLICIES = {
     deposit: 'Deposits may be requested to hold a quote-led appointment. Final balance, add-ons, travel, and heavy-condition adjustments are confirmed before the appointment is finalized.',
@@ -53,13 +53,16 @@
   function currentPath() {
     return String(globalScope.location?.pathname || '').replace(/\.html$/i, '').replace(/\/+$/, '') || '/';
   }
+  function isBookingPage() { return currentPath() === '/book'; }
+  function isBookingPlannerPage() { return currentPath() === '/booking-planner'; }
 
-  function isBookingPage() {
-    return currentPath() === '/book';
-  }
-
-  function isBookingPlannerPage() {
-    return currentPath() === '/booking-planner';
+  async function wireReliabilityRecovery() {
+    try {
+      await import('/assets/reliability-recovery-v404.js?v=20260915build404');
+      globalScope.RDReliability404?.installConnectionUX?.();
+    } catch (error) {
+      console.warn('Build 404 reliability convenience layer unavailable; canonical server paths remain authoritative.', error);
+    }
   }
 
   async function wireBookingVehicleSelector() {
@@ -69,70 +72,53 @@
       module.wireBookingVehicleSelector?.(document);
     } catch {}
   }
-
   async function wireBookingSpecialtyCards() {
     if (!isBookingPage()) return;
     try {
       const module = await import('/assets/booking-specialty-cards.js?v=20260904build338');
       await module.wireBookingSpecialtyCards?.(document);
-    } catch (error) {
-      console.warn('Rich specialty-card enhancement unavailable; base booking controls remain usable.', error);
-    }
+    } catch (error) { console.warn('Rich specialty-card enhancement unavailable; base booking controls remain usable.', error); }
   }
-
   async function wireBookingServiceRecommendation() {
     if (!isBookingPage()) return;
     try {
       const module = await import('/assets/booking-service-recommendation.js?v=20260909build366');
       await module.wireBookingServiceRecommendation?.(document);
-    } catch (error) {
-      console.warn('Service recommendation enhancement unavailable; normal booking controls remain usable.', error);
-    }
+    } catch (error) { console.warn('Service recommendation enhancement unavailable; normal booking controls remain usable.', error); }
   }
-
   async function wireBookingAddonOptimization() {
     if (!isBookingPage() && !isBookingPlannerPage()) return;
     try {
       const module = await import('/assets/booking-addon-optimization.js?v=20260909build367');
       await module.wireBookingAddonOptimization?.(document);
-    } catch (error) {
-      console.warn('Add-on recommendation enhancement unavailable; normal add-on controls remain usable.', error);
-    }
+    } catch (error) { console.warn('Add-on recommendation enhancement unavailable; normal add-on controls remain usable.', error); }
   }
-
   async function wireBookingVehicleFormUX() {
     if (!isBookingPlannerPage()) return;
     try {
       const module = await import('/assets/booking-vehicle-form-ux.js?v=20260904build339');
       module.wireBookingVehicleFormUX?.(document);
-    } catch (error) {
-      console.warn('Vehicle-form visual enhancement unavailable; base booking controls remain usable.', error);
-    }
+    } catch (error) { console.warn('Vehicle-form visual enhancement unavailable; base booking controls remain usable.', error); }
   }
-
   async function wireBookingRecovery() {
     const path = currentPath();
     if (!['/book', '/booking-planner', '/complete', '/booking-confirmed'].includes(path)) return;
     try {
       const module = await import('/assets/booking-recovery.js?v=20260911build380');
       module.wireBookingRecovery?.(document);
-    } catch (error) {
-      console.warn('Booking recovery enhancement unavailable; canonical booking and checkout remain usable.', error);
-    }
+    } catch (error) { console.warn('Booking recovery enhancement unavailable; canonical booking and checkout remain usable.', error); }
   }
-
   async function wireBookingJourneyQol() {
     if (!isBookingPage()) return;
     try {
       const module = await import('/assets/build398-booking-journey-qol.js?v=20260914build398');
       module.wireBookingJourneyQol?.(document);
-    } catch (error) {
-      console.warn('Build 398 booking journey convenience layer unavailable; canonical booking remains usable.', error);
-    }
+    } catch (error) { console.warn('Build 398 booking journey convenience layer unavailable; canonical booking remains usable.', error); }
   }
 
   function escapeHtml(value) { return String(value || '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
   document.addEventListener('DOMContentLoaded', () => {
+    wireReliabilityRecovery();
     applyPolicies(document);
     wireBookingVehicleSelector();
     wireBookingSpecialtyCards();
