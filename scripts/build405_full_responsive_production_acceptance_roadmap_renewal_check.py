@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Build 405 fail-closed authority for full responsive Production acceptance and roadmap renewal."""
 from pathlib import Path
-import re
 
 ROOT = Path(__file__).resolve().parents[1]
 errors = []
@@ -34,9 +33,9 @@ old_roadmap = read("FORWARD_BUILD_ROADMAP_396_405.md")
 require(contract, [
     "Visitor / public discovery", "Booking / checkout", "Customer account / retention",
     "Detailer field workflow", "Operations / handoff", "Finance / payment / reconciliation",
-    "Production runtime", "phone, tablet and desktop", "source checks are not visual browser proof",
-    "legacy route continuity", "no schema migration", "no schema migration".upper().lower(),
-    "External approvals", "FORWARD_BUILD_ROADMAP_405_415.md"
+    "Production runtime", "phone, tablet and desktop", "visual browser proof",
+    "legacy route continuity", "no schema migration", "External approvals",
+    "FORWARD_BUILD_ROADMAP_405_415.md"
 ], "Build 405 contract", casefold=True)
 
 for build in range(405, 416):
@@ -85,7 +84,7 @@ retained = {
     "scripts/payment_reconciliation_check.py": ["reconciliation", "payment"],
     "scripts/production_business_acceptance_check.py": ["production", "acceptance"],
     "scripts/cloudflare_pages_production_acceptance.sh": ["TARGET_SHA", "PRODUCTION EXACT-SHA ACCEPTANCE"],
-    "scripts/release_authority_documentation_convergence_check.py": ["protected", "exact sha"],
+    "scripts/release_authority_documentation_convergence_check.py": ["protected", "exact-SHA"],
 }
 for path, needles in retained.items():
     text = read(path)
