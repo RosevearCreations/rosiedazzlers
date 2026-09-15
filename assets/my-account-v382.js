@@ -75,7 +75,7 @@ function renderRebooking(rebooking) {
 
   const packageCode = evidence.package_code || 'completed service';
   const date = evidence.service_date ? ` on ${esc(evidence.service_date)}` : '';
-  return `<div class="notice" style="margin-top:14px" data-build382-rebooking data-build403-service-guidance><strong>Start from a completed service.</strong> Your latest exact completed-service evidence records <strong>${esc(packageCode)}</strong>${date}. This is an advisory starting point only—current vehicle condition, current catalog, availability, scope and price are reconfirmed before anything is booked. No outreach, appointment or service substitution is created automatically. <a href="${esc(rebooking.booking_path || '/book')}">Review this service in booking</a>.</div>`;
+  return `<div class="notice" style="margin-top:14px" data-build382-rebooking data-build403-service-guidance><strong>Start from a completed service.</strong> Your latest exact completed-service evidence records <strong>${esc(packageCode)}</strong>${date}. This is an advisory starting point only—current vehicle condition, current catalog, availability, scope and price are reconfirmed before anything is booked. Current availability, service scope and pricing are always reconfirmed in the booking flow. No outreach, appointment or service substitution is created automatically. <a href="${esc(rebooking.booking_path || '/book')}">Review this service in booking</a>.</div>`;
 }
 
 function quoteStatus(row) {
