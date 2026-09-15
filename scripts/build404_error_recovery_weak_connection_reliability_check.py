@@ -24,7 +24,7 @@ contract=read('BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md')
 queue=read('AUTONOMOUS_RELEASE_QUEUE.md')
 handoff=read('AI_PROJECT_HANDOFF.md')
 roadmap=read('FORWARD_BUILD_ROADMAP_396_405.md')
-req(asset,["SAFE_READ_METHODS = new Set(['GET', 'HEAD'])",'navigator.onLine','sessionStorage','SENSITIVE_NAME','stale_review_required: true','withSubmitLock','createUploadState','Retry upload','labelPartialResults','nothing has been accepted yet','Mutations are never queued or replayed automatically'], 'Build 404 runtime')
+req(asset,["SAFE_READ_METHODS = new Set(['GET', 'HEAD'])",'navigator.onLine','sessionStorage','SENSITIVE_NAME','stale_review_required: true','withSubmitLock','createUploadState','Retry upload','labelPartialResults','Nothing has been accepted yet','Mutations are never queued or replayed automatically'], 'Build 404 runtime')
 if 'localStorage' in asset: errors.append('Build 404 protected drafts must not use localStorage')
 if 'setInterval(' in asset: errors.append('Build 404 must not add permanent polling')
 for m in ['POST','PATCH','PUT','DELETE']:
@@ -36,7 +36,7 @@ req(contract,['GET` and `HEAD','stale_review_required: true','No local/offline a
 q=pair(queue,'release queue'); h=pair(handoff,'handoff')
 if q!=(404,405): errors.append(f'release queue must be living 404/405, got {q}')
 if h!=(404,405): errors.append(f'handoff must be living 404/405, got {h}')
-req(roadmap,['### Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening','retry/recovery cannot create duplicate business events','no local/offline artifact can masquerade as accepted server state','no sensitive/payment-secret persistence'], 'roadmap')
+req(roadmap,['### Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening','Retry/recovery cannot create duplicate business events','No local/offline artifact can masquerade as accepted server state','No sensitive/payment-secret persistence'], 'roadmap')
 for p in ROOT.rglob('*.sql'):
     if re.search(r'(?:^|[^0-9])404(?:[^0-9]|$)',p.name): errors.append(f'Build 404 must remain schema-neutral: {p.relative_to(ROOT)}')
 if errors:
