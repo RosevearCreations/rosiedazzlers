@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-- Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 406 — Go-Live Evidence & Provider Readiness Convergence** is active.
-- **Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is next only after exact protected-main Production acceptance is GREEN.
-- Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
-- Current contract: `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
-- Retained capstone: `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md` from **Build 405 — Full Responsive Production Acceptance & Roadmap Renewal**.
-- This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
+**Build 406 — Go-Live Evidence & Provider Readiness Convergence** is the active bounded release.
+
+**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is next only after the current release is independently GREEN on protected `main`.
+
+Retained capstone authority comes from Build 405 through `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
+
+This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
 
 ## Current readiness contract
 
@@ -34,11 +34,12 @@ This is the living restart authority. Historical release evidence belongs in Git
 - `dev` is Development; protected `main` is Production source.
 - Feature candidates require focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves.
 - `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
-- Production is proposed by PR from accepted Development to protected `main`; protection is not bypassed.
+- Production is proposed by PR from accepted Development to protected `main`; `rd main protection` is not bypassed.
 - The resulting `main` SHA must independently pass Production deployment/runtime/business acceptance before GREEN.
-- Missing deployment identity, required checks, Functions metadata or runtime smoke is blocking.
+- Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
+- Database migrations remain separate explicit acceptance boundaries.
+- Provider/business mutations remain separately authorized and evidence-gated.
 - Any source write after acceptance invalidates that exact-SHA acceptance and requires revalidation.
-- Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
 
 ## Durable authorities
 
@@ -48,9 +49,6 @@ This is the living restart authority. Historical release evidence belongs in Git
 - `.github/workflows/go-live-evidence-provider-readiness-convergence-authority.yml`
 - `scripts/build406_go_live_evidence_provider_readiness_convergence_check.py`
 - `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
-- `BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md`
-- `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
-- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
