@@ -5,34 +5,27 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening** is the active bounded release.
-- **Build 405 — Production Hardening, Consolidation & Next-Roadmap Renewal** is next only after protected `main` and exact Production evidence are GREEN.
+- **Build 405 — Full Responsive Production Acceptance & Roadmap Renewal** is the active bounded release.
+- **Build 406 — Go-Live Evidence & Provider Readiness Convergence** is next only after protected `main` and exact Production evidence are GREEN.
+- Active forward authority: `FORWARD_BUILD_ROADMAP_405_415.md`.
 - No database migration, Production business-data mutation, R2 destructive mutation, DNS/secret mutation, accounting/inventory posting, customer charge/refund, provider mutation, automatic outreach or customer mutation is authorized by this source release.
 - `main` remains governed by `rd main protection`; missing/unobservable protection is AMBER, never inferred GREEN.
 
-## Current recovery / weak-connection contract
+## Current capstone acceptance contract
 
-- The retained Build 380 booking-recovery path remains tab-scoped and canonical checkout remains the server authority for availability, booking and payment outcomes.
-- Offline or weak-connection UI must say that local/in-progress state is not accepted business state until the server confirms it.
-- Bounded automatic retry is permitted only for safe read methods (`GET`/`HEAD`); business mutations are never queued or replayed automatically on reconnect.
-- Protected local draft convenience uses `sessionStorage`, has an expiry, and rejects password, payment, provider-token, secret, authorization and file fields.
-- Restored workflows require stale-condition review where availability, scope, pricing or other authoritative evidence may have changed.
-- Duplicate-submit protection may lock the initiating control but cannot manufacture a success state; the server response remains authoritative.
-- Upload convenience must expose progress, failure and explicit manual retry; upload failure is not represented as accepted server state.
-- Partial reads must be visibly labeled as partial and cannot be treated as complete evidence.
-- No local/offline artifact, cached response or convenience helper may masquerade as a successful booking, payment, accounting, inventory, provider or customer mutation.
+- The full critical path is visitor/public discovery → booking/checkout → Customer → Detailer → Operations/handoff → payment/accounting → exact Production runtime.
+- Representative phone/tablet/desktop support remains mandatory. Responsive source checks are not described as independent visual-browser proof; unavailable device-browser evidence stays unavailable.
+- Public specialty/add-on/service guidance remains subordinate to configured catalog and server-authoritative booking/commercial rules.
+- Retained payment/provider evidence remains fail-closed: pending or unavailable provider outcomes never become accepted payment evidence.
+- Legacy route continuity remains protected through retained route-copy, shared-shell and protected-route authorities.
+- The renewed roadmap is derived from `STARTUP_GO_LIVE_BLOCKERS.md` and retained operational/provider HOLDs, not speculative feature accumulation.
 
-## Retained customer / service contract
+## Retained recovery / customer / interaction contract
 
-- Authenticated booking history for retention guidance remains linked only through exact `customer_profile_id`.
-- Prior completed service remains advisory only; current catalog, vehicle condition, availability, scope and price are reconfirmed by the authoritative booking flow.
+- Canonical checkout remains the server authority for availability, booking and payment outcomes; business mutations are never queued or replayed automatically on reconnect.
+- Authenticated booking history remains linked only through exact `customer_profile_id`; prior service is advisory and current catalog, condition, availability, scope and price are reconfirmed.
 - Public SEO remains one meaningful H1 per indexable page with unique metadata/canonical/structured data, truthful Oxford/Norfolk claims and genuine proof only.
-
-## Responsive / interaction contract
-
-- Shared phone/tablet/desktop acceptance remains mandatory for materially changed surfaces.
-- Truthful loading/error/empty/retry states remain visible.
-- Dormant modules remain event-driven; permanent polling requires a separately authorized demonstrated need.
+- Truthful loading/error/empty/retry states remain visible and dormant modules remain event-driven.
 
 ## Accepted operating contract
 
@@ -48,17 +41,14 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Durable authorities
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
-- `FORWARD_BUILD_ROADMAP_396_405.md`
+- `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
+- `.github/workflows/full-responsive-production-acceptance-roadmap-renewal-authority.yml`
+- `scripts/build405_full_responsive_production_acceptance_roadmap_renewal_check.py`
 - `BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md`
-- `.github/workflows/error-recovery-weak-connection-reliability-authority.yml`
-- `scripts/build404_error_recovery_weak_connection_reliability_check.py`
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
-- `.github/workflows/customer-retention-rebooking-service-guidance-seo-growth-authority.yml`
-- `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `BOOKING_RECOVERY_FAILURE_HANDLING.md`
-- `.github/workflows/booking-recovery-failure-handling-authority.yml`
-- `scripts/booking_recovery_failure_handling_check.py`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
@@ -67,4 +57,4 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Restart point
 
-Start from the latest accepted GitHub checkpoint, then read this file, the release queue, forward roadmap, current contract, release governance and go-live blockers. Preserve exact feature → Development → protected-main PR → exact Production acceptance discipline and require observed Production runtime proof before calling a release GREEN.
+Start from the latest accepted GitHub checkpoint, then read this file, the release queue, renewed forward roadmap, current contract, release governance and go-live blockers. Preserve exact feature → Development → protected-main PR → exact Production acceptance discipline and require observed Production runtime proof before calling a release GREEN.
