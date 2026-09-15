@@ -1,4 +1,4 @@
-// Build 382 — Customer Account & Retention UX Convergence.
+// Build 403 — Customer Account, Retention, Rebooking & Service Guidance.
 // Presents read-only projections from existing authorities. No lifecycle state is created here.
 
 let loadPromise = null;
@@ -30,15 +30,16 @@ export function renderCustomerRetention(retention) {
     section.setAttribute('data-build382-customer-retention', '');
     anchor.parentNode?.insertBefore(section, anchor);
   }
+  section.setAttribute('data-build403-customer-retention-rebooking-service-guidance', '');
 
-  section.innerHTML = `<div class="panel"><div class="section-head"><div><div class="kicker">Build 382 · Customer account convergence</div><h2 style="margin:4px 0 6px">Quotes, care plan & next steps</h2><p class="muted" style="margin:0">These statuses come from your existing Rosie Dazzlers account records. Nothing on this screen creates an appointment, subscription, recurring charge, review eligibility decision, or new quote.</p></div><a class="btn ghost" href="/book">Book or rebook</a></div><div class="grid cards two-col-stretch" style="margin-top:14px">${renderQuotes(retention.quotes)}${renderMaintenance(retention.maintenance)}${renderCommunication(retention.communication)}${renderReview(retention.review)}</div>${renderRebooking(retention.rebooking)}</div>`;
+  section.innerHTML = `<div class="panel"><div class="section-head"><div><div class="kicker">Build 403 · Customer retention & service guidance</div><h2 style="margin:4px 0 6px">Quotes, care plan & next steps</h2><p class="muted" style="margin:0">These statuses come from your existing Rosie Dazzlers account records. Nothing on this screen creates an appointment, subscription, recurring charge, review eligibility decision, outreach, service substitution or new quote.</p></div><a class="btn ghost" href="/book">Book or rebook</a></div><div class="grid cards two-col-stretch" style="margin-top:14px">${renderQuotes(retention.quotes)}${renderMaintenance(retention.maintenance)}${renderCommunication(retention.communication)}${renderReview(retention.review)}</div>${renderRebooking(retention.rebooking)}</div>`;
 }
 
 function renderQuotes(quotes) {
   const items = Array.isArray(quotes?.items) ? quotes.items.slice(0, 3) : [];
   const content = items.length
     ? items.map((row) => `<div class="garage-field"><span>${esc(row.title || 'Detailing quote')}</span><strong>${esc(quoteStatus(row))}${row.terms_expires_at ? ` · ${esc(dateLabel(row.terms_expires_at))}` : ''}</strong></div>`).join('')
-    : '<p class="muted">No quote/proposal records are linked to this account email.</p>';
+    : '<p class="muted">No quote/proposal records are linked to this account.</p>';
   return `<article class="card" data-build382-quotes><div class="kicker">Quotes</div><h3>Quote & proposal status</h3>${content}<p class="muted">Quote responses and commercial terms remain governed by the existing quote/proposal authority.</p></article>`;
 }
 
@@ -46,7 +47,7 @@ function renderMaintenance(maintenance) {
   const latest = maintenance?.latest || null;
   const state = maintenance?.interest_recorded
     ? `<p><strong>Interest recorded</strong>${latest?.preferred_cycle ? ` · ${esc(latest.preferred_cycle)}` : ''}</p><p class="muted">Current record status: ${esc(humanize(latest?.status || 'new'))}</p>`
-    : '<p class="muted">No maintenance-interest request is currently linked to this account email.</p>';
+    : '<p class="muted">No maintenance-interest request is currently linked to this account.</p>';
   return `<article class="card" data-build382-maintenance><div class="kicker">Maintenance</div><h3>Maintenance-plan interest</h3>${state}<p class="muted">Interest is not enrollment. It does not create a fixed cadence, appointment, subscription or recurring billing.</p><p><a class="btn small ghost" href="/maintenance-plan">Review maintenance options</a></p></article>`;
 }
 
@@ -64,8 +65,17 @@ function renderReview(review) {
 
 function renderRebooking(rebooking) {
   const count = Number(rebooking?.completed_service_count || 0);
-  if (!rebooking?.available) return '<div class="notice" style="margin-top:14px" data-build382-rebooking>No completed service is available for rebooking context yet. You can still start a new booking at any time.</div>';
-  return `<div class="notice" style="margin-top:14px" data-build382-rebooking><strong>Ready to book again?</strong> Your account has ${count} completed service${count === 1 ? '' : 's'} for reference. Current availability, service scope and pricing are always reconfirmed in the booking flow. <a href="${esc(rebooking.booking_path || '/book')}">Open booking</a>.</div>`;
+  const evidence = rebooking?.latest_completed_service || {};
+  if (!rebooking?.available) {
+    const reason = rebooking?.state === 'insufficient'
+      ? 'Completed work exists, but exact package, vehicle-size and service-date evidence is incomplete, so Rosie Dazzlers will not guess a rebooking recommendation.'
+      : 'No exact completed service is available for rebooking guidance yet.';
+    return `<div class="notice" style="margin-top:14px" data-build382-rebooking data-build403-service-guidance><strong>Service guidance unavailable.</strong> ${esc(reason)} You can still <a href="/book">start a new booking</a>.</div>`;
+  }
+
+  const packageCode = evidence.package_code || 'completed service';
+  const date = evidence.service_date ? ` on ${esc(evidence.service_date)}` : '';
+  return `<div class="notice" style="margin-top:14px" data-build382-rebooking data-build403-service-guidance><strong>Start from a completed service.</strong> Your latest exact completed-service evidence records <strong>${esc(packageCode)}</strong>${date}. This is an advisory starting point only—current vehicle condition, current catalog, availability, scope and price are reconfirmed before anything is booked. No outreach, appointment or service substitution is created automatically. <a href="${esc(rebooking.booking_path || '/book')}">Review this service in booking</a>.</div>`;
 }
 
 function quoteStatus(row) {
