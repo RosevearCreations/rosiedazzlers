@@ -14,7 +14,8 @@ For a new chat, AI or developer, read:
 4. `BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md` — current recovery, weak-connection and reliability contract.
 5. `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md` — retained customer retention, service-guidance and public service-depth contract.
 6. `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md` — retained Operations cockpit and growth-experiment contract.
-7. `STARTUP_GO_LIVE_BLOCKERS.md` — current go-live evidence gaps.
+7. `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md` — retained field-to-office handoff and commercial-evidence contract.
+8. `STARTUP_GO_LIVE_BLOCKERS.md` — current go-live evidence gaps.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
