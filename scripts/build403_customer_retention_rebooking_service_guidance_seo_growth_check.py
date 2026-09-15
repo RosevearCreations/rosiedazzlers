@@ -94,7 +94,7 @@ require(depth,[
     'Products, equipment, labour and duration depend on actual condition and severity',
     'gets customer approval before expanding the job',
     'several hours',
-    'test spot',
+    'Test spot',
     'source-removal',
     'trapped-moisture inspection',
     '/water-extraction'
@@ -117,7 +117,7 @@ if water:
 
 require(contract,[
     'exact `customer_profile_id` only', 'Missing evidence is `unavailable` or `insufficient`',
-    'automatic service substitution', 'every current public add-on/specialty landing route',
+    'automatic service substitution', 'Every current public add-on/specialty landing route',
     'Paint correction', 'Odor remediation', 'Water extraction / flooded-floor restoration',
     'one meaningful H1', 'schema migration',
     'Production deployment/runtime/business acceptance must independently prove that exact SHA'
@@ -154,7 +154,7 @@ if errors:
     for error in errors: print(' -',error)
     sys.exit(1)
 print('BUILD 403 CUSTOMER RETENTION / REBOOKING / SERVICE GUIDANCE / SEO: PASS')
-print(f' - exact-profile completed-service guidance is fail-closed and advisory')
+print(' - exact-profile completed-service guidance is fail-closed and advisory')
 print(f' - {len(service_slugs)} established add-on/specialty landing routes receive condition-aware process depth')
 print(' - flooded-floor/water-extraction restoration has a dedicated SEO-safe public process page')
 print(' - no schema, payment/provider, consent/outreach, customer, accounting/inventory or destructive R2 mutation is authorized')
