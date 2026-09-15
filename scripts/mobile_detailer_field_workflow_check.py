@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,8 +31,15 @@ notes = read("functions/api/detailer/job_note_post.js")
 media = read("functions/api/admin/progress_media_post.js")
 roadmap = read("FORWARD_BUILD_ROADMAP_378_385.md")
 
+# Later Detailer releases may legitimately advance the shell's active build number.
+# Preserve the Build 383 safety contract without forcing newer shells to masquerade as 383.
+active_build_match = re.search(r'data-build="(\d+)"', shell)
+if not active_build_match:
+    errors.append("Detailer shell is missing a numeric data-build marker")
+elif int(active_build_match.group(1)) < 383:
+    errors.append("Detailer shell predates the retained Build 383 field workflow authority")
+
 require(shell, [
-    'data-build="383"',
     "Build 383 field workflow",
     "Start requires before-photo + checklist evidence",
     "Complete requires the full field-evidence sequence",
