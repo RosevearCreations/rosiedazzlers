@@ -94,11 +94,15 @@ require(historical, [
 if "Build 268" in startup or "MASTER_VALUE_ROADMAP.md" in startup:
     errors.append("go-live acceptance authority still carries obsolete Build 268 planning references")
 
+# Build 386 owns the convergence discipline, not one forever-hard-coded future roadmap filename.
 require(convergence, [
-    'ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_396_405.md"',
+    "ROADMAP = ROOT /",
     "next release {next_release} is not sequential after current release {current}",
     "accepted checkpoint is live-ref based; current/next release state is sequential",
+    "forward roadmap does not contain current release",
 ], "living release convergence guard")
+if not re.search(r'ROADMAP\s*=\s*ROOT\s*/\s*"FORWARD_BUILD_ROADMAP_\d{3}_\d{3}\.md"', convergence):
+    errors.append("living release convergence guard does not identify an active numbered forward roadmap")
 
 require(focused, [
     "name: Build 386 — Post-Recovery Baseline & Forward Roadmap Renewal",
@@ -135,6 +139,6 @@ if errors:
 print("BUILD 386 POST-RECOVERY BASELINE / ROADMAP RENEWAL: PASS")
 print(f"- retained baseline authority is compatible with living release {queue_pair[0]}/{queue_pair[1]}")
 print("- completed recovery and 386–395 roadmaps remain retained historical authority")
-print("- living release convergence may advance to a later active roadmap without invalidating the retained boundary")
+print("- living release convergence may advance to a later active numbered roadmap without invalidating the retained boundary")
 print("- Build 385 recovery material remains retained but decoupled from ordinary dev/main pushes")
 print("- Build 386 introduces no database migration or Production/business/provider mutation")
