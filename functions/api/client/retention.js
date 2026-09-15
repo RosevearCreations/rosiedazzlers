@@ -1,4 +1,5 @@
-// Build 382 — authenticated, read-only customer retention summary.
+// Build 403 — authenticated, read-only customer retention and rebooking guidance.
+// Booking history is linked only through the exact canonical customer_profile_id.
 import { getCurrentCustomerSession, touchCustomerSession, serviceHeaders } from '../_lib/customer-session.js';
 import { customerSafeProfile, customerSafeReviews } from './_lib/customer-safe-shape.js';
 import { loadCustomerRetention } from './_lib/customer-retention.js';
@@ -18,13 +19,13 @@ export async function onRequestGet({ request, env }) {
 
     await touchCustomerSession({ env, sessionId: current.session?.id || null, request });
     const headers = serviceHeaders(env);
-    const profileId = current.customer_profile.id;
+    const profileId = String(current.customer_profile.id || '').trim();
     const email = String(current.customer_profile.email || '').trim().toLowerCase();
 
     const [profileRes, reviewRes, bookingRes] = await Promise.all([
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?select=*&id=eq.${encodeURIComponent(profileId)}&limit=1`, { headers }).catch(() => null),
       fetch(`${env.SUPABASE_URL}/rest/v1/customer_reviews?select=*&customer_profile_id=eq.${encodeURIComponent(profileId)}&order=created_at.desc`, { headers }).catch(() => null),
-      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,completed_at,detailing_completed_at,service_date,created_at&customer_email=eq.${encodeURIComponent(email)}&order=created_at.desc`, { headers }).catch(() => null)
+      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,customer_profile_id,status,job_status,completed_at,detailing_completed_at,service_date,created_at,package_code,vehicle_size&customer_profile_id=eq.${encodeURIComponent(profileId)}&order=created_at.desc&limit=50`, { headers }).catch(() => null)
     ]);
 
     const profileRows = profileRes?.ok ? await profileRes.json().catch(() => []) : [];
