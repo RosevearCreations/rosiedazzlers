@@ -1,4 +1,4 @@
-// Build 267 — Operations / Supervisor modular runtime (Build 265 extraction retained).
+// Build 401 — Operations / Supervisor modular runtime. Build 267 lazy/event-driven architecture retained.
 // Hard rule: opening Operations loads no operational dataset. Every workstream is explicit/manual and no module creates a polling interval.
 (function bootOperationsApp(globalScope){
   'use strict';
@@ -11,7 +11,8 @@
     schedule:'/apps/operations/schedule-module.js?v=20260829build266',
     blocks:'/apps/operations/blocks-module.js?v=20260829build266',
     assignments:'/apps/operations/assignments-module.js?v=20260829build266',
-    live:'/apps/operations/live-module.js?v=20260829build266'
+    live:'/apps/operations/live-module.js?v=20260829build266',
+    handoff:'/apps/operations/handoff-module.js?v=20260914build401'
   };
   function status(message,type=''){const box=$('operationsStatus');box.hidden=!message;box.className=`notice ${type}`.trim();box.textContent=message||'';}
   function setMode(key){
@@ -36,7 +37,7 @@
     document.addEventListener('visibilitychange',()=>currentInstance?.setVisibility?.(!document.hidden));
   }
   async function boot(){
-    if(!loader||!resolver||!api)throw new Error('Build 267 app-core did not load.');
+    if(!loader||!resolver||!api)throw new Error('Operations app-core did not load.');
     bind();setMode(null);
     await globalScope.AdminShell.boot({pageKey:'app-operations',onReady:async({actor})=>{
       await resolver.loadRuntimeFlags();

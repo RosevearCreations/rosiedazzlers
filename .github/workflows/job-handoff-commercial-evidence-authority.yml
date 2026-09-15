@@ -1,0 +1,24 @@
+name: Build 401 — Job Handoff & Commercial Evidence Authority
+
+on:
+  push:
+    branches:
+      - 'build401-*'
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  job-handoff-commercial-evidence-authority:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify Build 401 job handoff and commercial evidence
+        run: python scripts/build401_job_handoff_commercial_evidence_check.py
