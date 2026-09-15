@@ -63,12 +63,14 @@ for forbidden in ["stripeSecret:", "paypalSecret:", "serviceKey:", "Authorizatio
 require(ui, classes + [
     'data-build406="go-live-evidence-provider-readiness-convergence"',
     "/api/admin/go_live_readiness", "Refresh Readiness", "unavailable is not automatically a failure",
-    "/api/admin/production_diagnostics", "Refresh Diagnostics", "manual", "provider outcome"
+    "/api/admin/production_diagnostics", "Refresh Diagnostics", "provider outcome"
 ], "Admin I.T. readiness cockpit", casefold=True)
 if "setInterval" in ui:
     errors.append("Admin I.T. readiness cockpit must not use recurring setInterval polling")
 if re.search(r"^[ \t]*loadReadiness\(\);", ui, re.M):
     errors.append("Build 406 readiness evidence must be operator-triggered, not automatically fetched on page load")
+if "readinessButton.addEventListener('click', loadReadiness)" not in ui:
+    errors.append("Build 406 readiness evidence must retain explicit operator-triggered refresh")
 
 require(retained_diagnostics, [
     "onRequestGet", "requireStaffAccess", "R2_MEDIA.list({ limit: 1 })",
@@ -94,11 +96,9 @@ for label, text in [("release queue", queue), ("project handoff", handoff), ("RE
     require(text, ["Build 406", "Build 407", "FORWARD_BUILD_ROADMAP_405_415.md",
                    "BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md"], label)
 
-# Retained Build 405 capstone must remain durable rather than being replaced.
 for label, text in [("project handoff", handoff), ("README", readme)]:
     require(text, ["BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md"], label)
 
-# Build 406 itself is deliberately schema-neutral.
 for p in ROOT.rglob("*"):
     if not p.is_file():
         continue
