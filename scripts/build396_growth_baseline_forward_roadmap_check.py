@@ -89,15 +89,16 @@ queue_state = queue_pair(queue)
 handoff_state = handoff_pair(handoff)
 if None not in queue_state:
     current, next_release = queue_state
-    if current is not None and not (396 <= current <= 405):
-        errors.append(f"living current release {current} is outside retained 396–405 roadmap")
+    # This retained historical authority must remain valid after the 396–405 phase closes.
+    # Living release state may advance beyond 405 as long as it remains sequential.
+    if current is not None and current < 396:
+        errors.append(f"living current release {current} predates retained 396–405 authority")
     if current is not None and next_release != current + 1:
         errors.append(f"living next release {next_release} is not sequential after {current}")
 if queue_state != handoff_state:
     errors.append(f"living queue/handoff state diverges: {queue_state} vs {handoff_state}")
 
 require(readme, [
-    "FORWARD_BUILD_ROADMAP_396_405.md",
     "scripts/build396_growth_baseline_forward_roadmap_check.py",
 ], "README")
 
@@ -114,7 +115,7 @@ require(workflow, [
 ], "Build 396 workflow")
 
 require(convergence, [
-    'ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_396_405.md"',
+    'ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_405_415.md"',
     "forward roadmap does not contain current release",
 ], "release convergence guard")
 require(analytics, ["site_activity_events", "analytics_storage_unavailable", "visitor_id", "session_id"], "analytics ingest")
@@ -138,7 +139,7 @@ if errors:
     sys.exit(1)
 
 print("BUILD 396 GROWTH BASELINE & FORWARD ROADMAP RENEWAL: PASS")
-print("- historical growth evidence/privacy baseline remains intact")
-print("- living current/next state is allowed to advance sequentially through the retained 396–405 roadmap")
+print("- historical growth evidence/privacy baseline and 396–405 roadmap remain intact")
+print("- living current/next state may advance beyond the completed historical roadmap while remaining sequential")
 print("- raw identifiers remain excluded from aggregate-first growth reporting")
 print("- schema, provider, business-data and destructive R2 mutation authorized: NONE")
