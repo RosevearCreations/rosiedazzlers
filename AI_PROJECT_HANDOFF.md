@@ -6,16 +6,16 @@ This file is the living operational authority for restarting work. Git history a
 
 - Repository: `RosevearCreations/rosiedazzlers`.
 - The accepted synchronized Production checkpoint immediately precedes the current release. Resolve its exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than copying historical release identities into this living file.
-- **Build 398 — Customer Journey, Booking QoL & Acquisition Quality** is the active bounded release. It adds browser-only non-PII service-selection continuity to the public booking journey and a protected aggregate observed acquisition-quality surface while retaining the prior responsive and privacy/evidence boundaries.
-- **Build 399 — Customer Communication, Self-Service & Booking Funnel** is next only after the current release is fully accepted on protected `main` with exact Production evidence GREEN.
+- **Build 399 — Customer Communication, Self-Service & Booking Funnel** is the active bounded release. It adds permission-aware customer guidance and self-service navigation plus separate bounded anonymous-interaction and canonical-booking evidence layers while retaining the prior responsive and privacy/evidence boundaries.
+- **Build 400 — Detailer Mobile App QoL & Retention Evidence** is next only after the current release is fully accepted on protected `main` with exact Production evidence GREEN.
 - The current release does not authorize a database migration, database restore, Production R2 write/delete, DNS mutation, secret rotation, accounting posting, period-close mutation, customer charge/refund, provider mutation, inventory mutation or Production business-data mutation as part of source promotion.
 - GitHub-hosted branch/ruleset enforcement is separate from source authority. `main` remains governed by the active `rd main protection` ruleset; any protection state that becomes absent or unobservable is AMBER rather than assumed GREEN.
 
-## Current customer journey / evidence contract
+## Current customer communication / funnel evidence contract
 
-- `/book` retains the proven live-pricing and canonical booking-planner path. The current convenience layer does not create a parallel booking engine.
-- Browser-local draft state is limited to vehicle-size, package-code and add-on-code selections for up to 48 hours. No name, email, phone, address, notes, appointment date/slot, customer/profile identifier or payment/card field belongs in that draft.
-- Resume behavior is explicit. An existing URL selection remains authoritative over a saved browser draft.
+- `/book` and provider-backed booking confirmation retain the proven live-pricing, canonical booking-planner and signed settlement paths. Build 399 does not create a parallel booking or communication engine.
+- My Account links to preparation, status, booking-change review, aftercare, review and rebooking paths. A link/request does not silently change or cancel a booking, promise a refund, dispatch a message or claim acceptance.
+- Anonymous interaction events and canonical booking-status totals remain separate bounded evidence layers and are not joined into a customer/person-level cohort.
 - Existing first-party `site_activity_events` remains acquisition/session evidence. Acquisition Quality output is aggregate-first and reports observed source, campaign, normalized referrer-host and device evidence only.
 - Missing attribution remains unavailable/insufficient/unattributed. Row-limit/truncation is disclosed. No source/campaign value is inferred from another layer.
 - Anonymous acquisition/session evidence remains separate from exact customer-profile booking history; no cross-layer, fuzzy/email identity join is authorized.
@@ -48,9 +48,10 @@ This file is the living operational authority for restarting work. Git history a
 
 - `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next release state.
 - `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
-- `BUILD398_CUSTOMER_JOURNEY_ACQUISITION.md` — current source/privacy/mutation contract.
-- `.github/workflows/customer-journey-acquisition-quality-authority.yml` — focused current source and exact-Production authority.
-- `scripts/build398_customer_journey_acquisition_quality_check.py` — focused executable current source-contract proof.
+- `BUILD399_CUSTOMER_COMMUNICATION_SELF_SERVICE.md` — current source/privacy/mutation contract.
+- `.github/workflows/customer-communication-self-service-authority.yml` — focused current source and exact-Production authority.
+- `scripts/build399_customer_communication_self_service_check.py` — focused executable current source-contract proof.
+- `.github/workflows/customer-journey-acquisition-quality-authority.yml` and `scripts/build398_customer_journey_acquisition_quality_check.py` — retained prior customer-journey/privacy authority.
 - `docs/GROWTH_BASELINE_FORWARD_ROADMAP.md` — retained growth measurement/evidence baseline.
 - `.github/workflows/responsive-ux-authority.yml` and `scripts/build397_responsive_ux_authority_check.py` — retained shared responsive baseline authority.
 - `RELEASE_GOVERNANCE.md` — canonical Development exact-SHA, protected-main PR, Production exact-SHA, stale-check and recovery authority.

@@ -66,18 +66,8 @@ require("BUILD398_CUSTOMER_JOURNEY_ACQUISITION.md", [
     "no database migration",
     "exact-SHA",
 ])
-require("AUTONOMOUS_RELEASE_QUEUE.md", [
-    "Build 398 — Customer Journey, Booking QoL & Acquisition Quality",
-    "Build 399 — Customer Communication, Self-Service & Booking Funnel",
-])
-require("AI_PROJECT_HANDOFF.md", [
-    "Build 398 — Customer Journey, Booking QoL & Acquisition Quality",
-    "Build 399 — Customer Communication, Self-Service & Booking Funnel",
-])
-require("README.md", [
-    "Current source direction: **Build 398 — Customer Journey, Booking QoL & Acquisition Quality**.",
-    "BUILD398_CUSTOMER_JOURNEY_ACQUISITION.md",
-])
+# Build 398 remains a retained feature/privacy authority after later releases.
+# Living queue/handoff/README assertions belong to the current-release checker.
 
 # The new aggregate endpoint must not select or expose raw identifiers.
 for forbidden in ["session_id", "visitor_id", "ip_address", "user_agent", "postal_code", "customer_email"]:
