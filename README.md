@@ -27,6 +27,15 @@ The readiness endpoint performs bounded read-only checks only. It does not write
 
 The retained capstone still governs visitor → booking/checkout → Customer → Detailer → Operations → payment/accounting → exact Production runtime. Reliability recovery remains read-safe and non-authoritative; canonical checkout/server state owns business outcomes. Public SEO remains one meaningful H1 per indexable page with unique metadata/canonical/structured data and truthful Oxford/Norfolk proof.
 
+Durable retained authorities include:
+
+- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
+- `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
+- `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
+- `scripts/build396_growth_baseline_forward_roadmap_check.py`
+- `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
+- `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
+
 Run focused/current authorities with:
 
 ```bash
@@ -45,7 +54,7 @@ Feature candidates must pass focused authority, Current Source Gate and exact fe
 
 Production promotion is governed by `rd main protection`. Accepted Development is proposed by pull request to protected `main`; required `source checks` must pass and protection must not be bypassed. Prefer a merge commit so the accepted Development SHA remains explicit in Production ancestry.
 
-After merge, the resulting `main` head is the exact Production SHA and Production deployment/runtime/business acceptance must independently prove it. Production is not considered GREEN from source promotion alone. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and business/provider mutations remain separate explicit boundaries.
+After merge, the resulting `main` head is the exact Production SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and business/provider mutations remain separate explicit boundaries.
 
 ## Next bounded release
 

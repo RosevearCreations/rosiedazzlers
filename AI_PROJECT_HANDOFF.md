@@ -28,6 +28,7 @@ This source release authorizes no schema migration, Production business-data mut
 - Authenticated booking history remains linked through exact `customer_profile_id`; current catalog, condition, availability, scope and price are reconfirmed.
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
 - Representative phone/tablet/desktop support remains mandatory; source checks are not independent visual-browser proof.
+- Durable field-to-office handoff authority remains `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
 
 ## Release mechanics
 
@@ -35,7 +36,7 @@ This source release authorizes no schema migration, Production business-data mut
 - Feature candidates require focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves.
 - `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 - Production is proposed by PR from accepted Development to protected `main`; `rd main protection` is not bypassed.
-- The resulting `main` SHA must independently pass Production deployment/runtime/business acceptance before GREEN.
+- Production deployment/runtime/business acceptance must independently prove that exact SHA.
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
 - Database migrations remain separate explicit acceptance boundaries.
 - Provider/business mutations remain separately authorized and evidence-gated.
@@ -49,6 +50,7 @@ This source release authorizes no schema migration, Production business-data mut
 - `.github/workflows/go-live-evidence-provider-readiness-convergence-authority.yml`
 - `scripts/build406_go_live_evidence_provider_readiness_convergence_check.py`
 - `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
+- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
