@@ -30,6 +30,7 @@ python scripts/build402_admin_operations_cockpit_growth_experiment_check.py
 python scripts/build401_job_handoff_commercial_evidence_check.py
 python scripts/build400_detailer_mobile_qol_retention_check.py
 python scripts/build397_responsive_ux_authority_check.py
+python scripts/build396_growth_baseline_forward_roadmap_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
