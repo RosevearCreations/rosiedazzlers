@@ -28,9 +28,9 @@ Use `DOC_INDEX.md` only to locate specialist references. Completed prior phases 
 
 Numbered duplicate registries, root migration copies, root API shims, retired Markdown snapshots, generated reports, and comment-only “no DDL” migrations are intentionally not part of the current tree. Git history is the release archive.
 
-## Build 400 Detailer mobile QoL and retention evidence
+## Current Detailer mobile QoL and retention evidence
 
-`BUILD400_DETAILER_MOBILE_QOL_RETENTION.md` defines the current additive mobile interaction and retention-evidence boundary. `/app/detailer/` remains the canonical field runtime; Build 400 adds touch-friendly shortcuts to the existing Build 383 evidence controls and a device-only timer that never becomes payroll, billing, accounting, completion or canonical job-state evidence.
+`BUILD400_DETAILER_MOBILE_QOL_RETENTION.md` defines the current additive mobile interaction and retention-evidence boundary. `/app/detailer/` remains the canonical field runtime; the current release adds touch-friendly shortcuts to the existing evidence controls and a device-only timer that never becomes payroll, billing, accounting, completion or canonical job-state evidence.
 
 `/api/admin/detailer_retention_evidence` provides bounded aggregate repeat-service evidence using exact non-empty canonical `customer_id` values only. Missing IDs are excluded rather than guessed, no customer identifiers are returned, and fuzzy/email/name matching, persistent customer scoring and automatic outreach remain prohibited.
 
@@ -45,7 +45,7 @@ python scripts/release_authority_documentation_convergence_check.py
 
 ## Retained customer journey and growth authorities
 
-Build 399 customer communication/self-service remains a retained feature authority. My Account preparation, status, booking-change review, aftercare, review and rebooking paths remain explicit and non-mutating. Anonymous interaction events and canonical booking-status evidence remain separate bounded layers.
+The prior customer communication/self-service feature authority remains retained. My Account preparation, status, booking-change review, aftercare, review and rebooking paths remain explicit and non-mutating. Anonymous interaction events and canonical booking-status evidence remain separate bounded layers.
 
 The retained shared responsive phone/tablet/desktop authority remains mandatory. Public/customer, Detailer, Operations and Admin surfaces must preserve readable layouts, usable touch targets and truthful loading/saving/error states.
 
