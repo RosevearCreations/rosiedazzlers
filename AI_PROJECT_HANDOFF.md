@@ -32,6 +32,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 - A feature candidate must pass its focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves.
 - `dev` advances only by non-force fast-forward to the exact accepted candidate SHA and must pass exact-SHA Development deployment/runtime acceptance.
 - Production is proposed by PR from accepted Development to protected `main`; do not bypass `rd main protection`. Prefer a merge commit so the accepted Development SHA remains explicit in Production ancestry.
+- Production deployment/runtime/business acceptance must independently prove that exact SHA.
 - The resulting `main` head is the exact Production source SHA and must independently pass **Production deployment/runtime/business acceptance**.
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
 - Database migrations remain separate explicit acceptance boundaries.
