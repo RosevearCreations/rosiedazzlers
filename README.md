@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence**.
+Current source direction: **Build 402 — Admin & Operations Cockpit QoL + Growth Experiment Framework**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -11,29 +11,22 @@ For a new chat, AI or developer, read:
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_396_405.md` — active forward sequence and continuing release rules.
-4. `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md` — current field-to-office handoff and commercial-evidence contract.
-5. `STARTUP_GO_LIVE_BLOCKERS.md` — current go-live evidence gaps.
+4. `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md` — current Operations cockpit and growth-experiment contract.
+5. `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md` — retained field-to-office handoff and commercial-evidence contract.
+6. `STARTUP_GO_LIVE_BLOCKERS.md` — current go-live evidence gaps.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Canonical source locations
+## Current cockpit and growth framework
 
-- Module registry: `data/app_modules.json`
-- Navigation: `data/internal_navigation.json`
-- Route ownership: `data/route_module_ownership.json`
-- Migrations: `sql/` only
-- Schema reference: `SUPABASE_SCHEMA.sql`
-- Pages Functions: `functions/api/`
+`admin-today.html` is the responsive owner/Operations cockpit. It composes the existing `/api/admin/today_needs_attention_report`, separates urgent/high exceptions from normal/low due work, keeps explicit owner-task controls and manual refresh, and offers fast drill-downs into existing authoritative workstreams.
 
-## Current handoff and commercial evidence
-
-Operations now includes an additive manual **Field → office handoff** workstream. It composes existing server-authoritative booking/field evidence into one responsive read-only view and does not create a second completion, payment, approval, accounting, inventory or customer-state path.
-
-`/api/admin/job_handoff_evidence` returns a bounded handoff snapshot plus commercial evidence only where compatible authoritative cents fields exist. Missing ticket, balance, job-cost, margin or add-on-ledger evidence stays unavailable. Detailer notes are never converted into sales, payouts, debt, forecasts or customer scores.
+`data/growth_experiment_framework.json` defines bounded evidence-only hypotheses for booking abandonment, reminder timing, rebooking, referrals and review-request timing. It creates no automatic outreach, pricing/booking/payment/consent mutation, customer scoring, accounting/inventory posting, provider mutation or schema authority.
 
 Run focused/current authorities with:
 
 ```bash
+python scripts/build402_admin_operations_cockpit_growth_experiment_check.py
 python scripts/build401_job_handoff_commercial_evidence_check.py
 python scripts/build400_detailer_mobile_qol_retention_check.py
 python scripts/build397_responsive_ux_authority_check.py
@@ -41,7 +34,7 @@ python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
 
-Retained customer journey, growth, pricing, responsive and Detailer mobile authorities remain mandatory. Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
+Retained customer journey, growth, pricing, responsive, Detailer mobile and field-handoff authorities remain mandatory. Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
 ## Release authority
 

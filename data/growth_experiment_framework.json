@@ -1,0 +1,56 @@
+{
+  "build": 402,
+  "framework": "growth-experiment-evidence-only",
+  "authority": "read-only planning definitions; no runtime mutation authority",
+  "experiments": [
+    {
+      "id": "booking_abandonment",
+      "label": "Booking abandonment",
+      "evidence": ["aggregate funnel step counts", "observed completion rate", "known failure states"],
+      "allowed_change": "copy or UX hypothesis only after separate implementation approval",
+      "forbidden": ["price change", "availability change", "automatic outreach", "identity joining"]
+    },
+    {
+      "id": "reminder_timing",
+      "label": "Reminder timing",
+      "evidence": ["permission-aware reminder candidates", "observed due timing", "aggregate response evidence"],
+      "allowed_change": "timing hypothesis only",
+      "forbidden": ["automatic send", "consent override", "booking creation", "billing"]
+    },
+    {
+      "id": "rebooking",
+      "label": "Rebooking",
+      "evidence": ["completed-service history", "exact canonical customer/vehicle linkage", "aggregate return timing"],
+      "allowed_change": "service-guidance hypothesis only",
+      "forbidden": ["customer score", "automatic booking", "automatic outreach", "invented service need"]
+    },
+    {
+      "id": "referral",
+      "label": "Referral",
+      "evidence": ["explicit recorded referral source", "aggregate conversion evidence"],
+      "allowed_change": "offer/message hypothesis only after separate approval",
+      "forbidden": ["silent discount", "price mutation", "fabricated attribution", "customer identity expansion"]
+    },
+    {
+      "id": "review_timing",
+      "label": "Review request timing",
+      "evidence": ["completed-service state", "permission/review eligibility evidence", "aggregate response timing"],
+      "allowed_change": "timing hypothesis only",
+      "forbidden": ["automatic request", "review gating", "incentivized review", "consent override"]
+    }
+  ],
+  "global_forbidden": [
+    "pricing mutation",
+    "booking mutation",
+    "deposit or payment mutation",
+    "availability mutation",
+    "consent mutation",
+    "automatic outreach",
+    "customer scoring",
+    "public claim mutation",
+    "accounting posting",
+    "inventory posting",
+    "provider mutation",
+    "schema change"
+  ]
+}

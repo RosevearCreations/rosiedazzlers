@@ -5,24 +5,25 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 
 - Repository: `RosevearCreations/rosiedazzlers`.
-- **Build 401 — Job Handoff, Detailer/Admin Interaction & Commercial Evidence** is the active bounded release.
-- **Build 402 — Admin & Operations Cockpit QoL + Growth Experiment Framework** is next only after protected `main` and exact Production evidence are GREEN.
+- **Build 402 — Admin & Operations Cockpit QoL + Growth Experiment Framework** is the active bounded release.
+- **Build 403 — Customer Retention, Rebooking, Service Guidance & SEO Growth** is next only after protected `main` and exact Production evidence are GREEN.
 - No database migration, Production business-data mutation, R2 destructive mutation, DNS/secret mutation, accounting/inventory posting, customer charge/refund, provider mutation or customer mutation is authorized by this source release.
 - `main` remains governed by `rd main protection`; missing/unobservable protection is AMBER, never inferred GREEN.
 
-## Current handoff contract
+## Current cockpit / growth contract
 
-- `/app/detailer/` remains the canonical field evidence-creation runtime and its server-authoritative start/complete gates remain unchanged.
-- Operations gains one additive **Field → office handoff** workstream. It performs a bounded manual read only; opening Operations still loads no dataset and no background polling is created.
-- Handoff facts compose existing bookings, field notes/evidence, media, signoff and recorded-time evidence. Free-form notes can communicate context but never create payment, pricing, approval, accounting, inventory or consent authority.
-- Ticket/balance/job-cost/margin evidence is shown only when compatible authoritative cents fields exist. Missing fee, tax, cost, payment, balance or reconciliation evidence stays unavailable rather than zero/estimated.
-- Add-on attachment is not derived from Detailer notes. Negative/no-result states remain visible.
-- Inferred busy time, payouts, hidden debt, forecasts, lifetime-value/customer scoring and automatic outreach remain prohibited.
+- `admin-today.html` remains a composition surface over `/api/admin/today_needs_attention_report` plus explicit owner-task actions.
+- Urgent/high exceptions are separated from normal/low due work, and refresh remains manual.
+- Cockpit drill-downs route into existing authoritative Bookings, Operations, Growth and Admin workstreams; navigation does not transfer mutation authority.
+- `data/growth_experiment_framework.json` defines evidence-only planning for booking abandonment, reminder timing, rebooking, referrals and review timing.
+- Growth experiments cannot silently mutate pricing, booking, availability, deposit/payment, consent, outreach, reviews, public claims, accounting, inventory, provider state, schema or customer identity.
+- Missing evidence remains unavailable/review-required rather than fabricated, scored or inferred.
 
 ## Responsive / interaction contract
 
 - Shared phone/tablet/desktop acceptance remains mandatory for materially changed surfaces.
-- Handoff retains large touch targets, responsive cards, truthful loading/error/empty states, manual refresh and explicit sleep/suspend behavior.
+- Cockpit cards and owner-task actions retain usable touch targets and responsive layouts.
+- Truthful loading/error/empty states remain visible.
 - Dormant modules remain event-driven; permanent polling requires a separately authorized demonstrated need.
 
 ## Accepted operating contract
@@ -40,9 +41,11 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_396_405.md`
+- `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
+- `.github/workflows/admin-operations-cockpit-growth-experiment-authority.yml`
+- `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `.github/workflows/job-handoff-commercial-evidence-authority.yml`
-- `scripts/build401_job_handoff_commercial_evidence_check.py`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
