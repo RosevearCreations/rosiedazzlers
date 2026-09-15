@@ -1,0 +1,103 @@
+name: Build 405 — Full Responsive Production Acceptance & Roadmap Renewal
+
+on:
+  push:
+    branches:
+      - build405-full-responsive-production-acceptance-roadmap-renewal
+      - dev
+      - main
+    paths:
+      - "BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md"
+      - "FORWARD_BUILD_ROADMAP_405_415.md"
+      - "FORWARD_BUILD_ROADMAP_396_405.md"
+      - "STARTUP_GO_LIVE_BLOCKERS.md"
+      - "AUTONOMOUS_RELEASE_QUEUE.md"
+      - "AI_PROJECT_HANDOFF.md"
+      - "README.md"
+      - "scripts/post_recovery_baseline_roadmap_check.py"
+      - "scripts/build405_full_responsive_production_acceptance_roadmap_renewal_check.py"
+      - "scripts/build396_growth_baseline_forward_roadmap_check.py"
+      - "scripts/build397_responsive_ux_authority_check.py"
+      - "scripts/build398_customer_journey_acquisition_quality_check.py"
+      - "scripts/build399_customer_communication_self_service_check.py"
+      - "scripts/build400_detailer_mobile_qol_retention_check.py"
+      - "scripts/build401_job_handoff_commercial_evidence_check.py"
+      - "scripts/build402_admin_operations_cockpit_growth_experiment_check.py"
+      - "scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py"
+      - "scripts/build404_error_recovery_weak_connection_reliability_check.py"
+      - "scripts/payment_acceptance_evidence_check.py"
+      - "scripts/payment_reconciliation_check.py"
+      - "scripts/production_business_acceptance_check.py"
+      - "scripts/performance_accessibility_security_check.py"
+      - "scripts/responsive_static_check.py"
+      - "scripts/release_authority_documentation_convergence_check.py"
+      - ".github/workflows/full-responsive-production-acceptance-roadmap-renewal-authority.yml"
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build405-authority:
+    name: build405 authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build 405 capstone authority
+        run: python scripts/build405_full_responsive_production_acceptance_roadmap_renewal_check.py
+      - name: Retained Build 386 post-recovery roadmap authority
+        run: python scripts/post_recovery_baseline_roadmap_check.py
+      - name: Responsive static authority
+        run: python scripts/responsive_static_check.py
+      - name: Retained Build 397 responsive UX authority
+        run: python scripts/build397_responsive_ux_authority_check.py
+      - name: Retained Build 398 customer journey authority
+        run: python scripts/build398_customer_journey_acquisition_quality_check.py
+      - name: Retained Build 399 communication/self-service authority
+        run: python scripts/build399_customer_communication_self_service_check.py
+      - name: Retained Build 400 Detailer mobile authority
+        run: python scripts/build400_detailer_mobile_qol_retention_check.py
+      - name: Retained Build 401 handoff/commercial evidence authority
+        run: python scripts/build401_job_handoff_commercial_evidence_check.py
+      - name: Retained Build 402 Admin/Operations authority
+        run: python scripts/build402_admin_operations_cockpit_growth_experiment_check.py
+      - name: Retained Build 403 retention/service/SEO authority
+        run: python scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py
+      - name: Retained Build 404 recovery/reliability authority
+        run: python scripts/build404_error_recovery_weak_connection_reliability_check.py
+      - name: Payment acceptance evidence authority
+        run: python scripts/payment_acceptance_evidence_check.py
+      - name: Payment reconciliation authority
+        run: python scripts/payment_reconciliation_check.py
+      - name: Production business source authority
+        run: python scripts/production_business_acceptance_check.py
+      - name: Performance/accessibility/security authority
+        run: python scripts/performance_accessibility_security_check.py
+      - name: Release authority convergence
+        run: python scripts/release_authority_documentation_convergence_check.py
+
+  verify-production:
+    name: Verify exact Production deployment
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build405-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_PRODUCTION_BRANCH: main
+      CF_PRODUCTION_URL: https://rosiedazzlers.ca
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify exact Cloudflare Production deployment and runtime
+        shell: bash
+        run: bash scripts/cloudflare_pages_production_acceptance.sh

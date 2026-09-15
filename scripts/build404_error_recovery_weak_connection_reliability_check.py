@@ -34,8 +34,12 @@ req(booking,['const DRAFT_KEY = "rd_booking_draft_v380"','sessionStorage','clien
 req(booking_check,['canonical checkout remains authoritative','no localStorage, recurring polling, direct booking mutation, or schema migration'], 'retained Build 380 checker')
 req(contract,['GET` and `HEAD','stale_review_required: true','No local/offline artifact can masquerade as accepted server state','No sensitive/payment-secret persistence','Production deployment/runtime/business acceptance must independently prove that exact SHA'], 'Build 404 contract')
 q=pair(queue,'release queue'); h=pair(handoff,'handoff')
-if q!=(404,405): errors.append(f'release queue must be living 404/405, got {q}')
-if h!=(404,405): errors.append(f'handoff must be living 404/405, got {h}')
+for label,state in [('release queue',q),('handoff',h)]:
+    if state is not None:
+        current,next_release=state
+        if current < 404: errors.append(f'{label} regressed before retained Build 404, got {state}')
+        if next_release != current + 1: errors.append(f'{label} current/next is not sequential, got {state}')
+if q != h: errors.append(f'living queue/handoff state diverges: {q} vs {h}')
 req(roadmap,['### Build 404 — Error Recovery, Weak-Connection UX & Reliability Hardening','Retry/recovery cannot create duplicate business events','No local/offline artifact can masquerade as accepted server state','No sensitive/payment-secret persistence'], 'roadmap')
 for p in ROOT.rglob('*.sql'):
     if re.search(r'(?:^|[^0-9])404(?:[^0-9]|$)',p.name): errors.append(f'Build 404 must remain schema-neutral: {p.relative_to(ROOT)}')
@@ -48,4 +52,5 @@ print(' - bounded retry is read-only; mutations never auto-replay')
 print(' - protected drafts are tab-scoped, expiring and sensitive-field denying')
 print(' - upload failures/manual retry and partial-result labeling are explicit')
 print(' - retained canonical booking recovery remains authoritative')
+print(' - retained authority remains valid as living releases advance sequentially beyond Build 404')
 print(' - no schema or Production business/provider/customer mutation is authorized')
