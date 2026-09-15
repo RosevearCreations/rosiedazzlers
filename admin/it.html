@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>I.T. Diagnostics | Rosie Dazzlers</title>
-  <meta name="description" content="Authenticated Rosie Dazzlers production observability and self-diagnostics." />
+  <title>I.T. Readiness & Diagnostics | Rosie Dazzlers</title>
+  <meta name="description" content="Authenticated Rosie Dazzlers go-live readiness evidence and production diagnostics." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .it-shell{max-width:1180px;margin:0 auto;padding:28px 18px 60px}.it-head{display:flex;gap:18px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.it-actions{display:flex;gap:8px;flex-wrap:wrap}.it-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}.it-kpi,.it-check{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:16px;padding:15px}.it-kpi strong{display:block;font-size:1.35rem;margin-top:4px}.it-checks{display:grid;gap:12px}.it-check-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.it-status{font-weight:800;text-transform:uppercase;font-size:.8rem;letter-spacing:.05em}.it-check[data-state="ok"]{border-color:rgba(74,222,128,.3)}.it-check[data-state="degraded"]{border-color:rgba(251,191,36,.35)}.it-check[data-state="failed"]{border-color:rgba(248,113,113,.4)}.it-meta{color:#94a3b8;font-size:.92rem}.it-remediation{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.42)}.it-evidence{margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;white-space:pre-wrap;word-break:break-word}.it-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}.it-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}
+    .it-shell{max-width:1180px;margin:0 auto;padding:28px 18px 60px}.it-head{display:flex;gap:18px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.it-actions{display:flex;gap:8px;flex-wrap:wrap}.it-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:18px 0}.it-kpi,.it-check{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:16px;padding:15px}.it-kpi strong{display:block;font-size:1.2rem;margin-top:4px;overflow-wrap:anywhere}.it-checks{display:grid;gap:12px}.it-check-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.it-status{font-weight:800;text-transform:uppercase;font-size:.76rem;letter-spacing:.05em}.it-check[data-state="ok"],.it-check[data-state="runtime_proven"]{border-color:rgba(74,222,128,.38)}.it-check[data-state="source_ready"]{border-color:rgba(96,165,250,.42)}.it-check[data-state="provider_dependent"]{border-color:rgba(251,191,36,.42)}.it-check[data-state="owner_action"]{border-color:rgba(192,132,252,.42)}.it-check[data-state="unavailable"],.it-check[data-state="degraded"]{border-color:rgba(148,163,184,.45)}.it-check[data-state="failed"]{border-color:rgba(248,113,113,.45)}.it-meta{color:#94a3b8;font-size:.92rem}.it-remediation{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.42)}.it-evidence{margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;white-space:pre-wrap;word-break:break-word}.it-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}.it-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}.it-grid{display:grid;grid-template-columns:1fr;gap:22px}.it-legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.it-pill{font-size:.78rem;font-weight:800;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:6px 9px}.it-section-title{margin-top:0}.it-divider{height:1px;background:rgba(255,255,255,.10);margin:10px 0 18px}
   </style>
 </head>
-<body data-build379="production-observability-self-diagnostics">
+<body data-build406="go-live-evidence-provider-readiness-convergence">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><strong>Rosie Dazzlers I.T.</strong></a>
@@ -20,31 +20,57 @@
   </header>
 
   <main class="it-shell">
-    <section class="panel">
-      <div class="it-head">
-        <div>
-          <div class="badge">Build 379</div>
-          <h1>Production observability &amp; self-diagnostics</h1>
-          <p class="kicker">One bounded, authenticated view of deployment identity, Supabase, R2/media, staff auth, critical API runtime and payment configuration.</p>
+    <div class="it-grid">
+      <section class="panel" aria-labelledby="readinessTitle">
+        <div class="it-head">
+          <div>
+            <div class="badge">Build 406</div>
+            <h1 id="readinessTitle">Go-live evidence &amp; provider readiness</h1>
+            <p class="kicker">One current, authenticated readiness surface that separates source readiness, runtime proof, external provider evidence, owner actions and genuinely unavailable evidence.</p>
+          </div>
+          <div class="it-actions">
+            <button id="refreshReadiness" class="btn primary" type="button">Refresh Readiness</button>
+          </div>
         </div>
-        <div class="it-actions">
-          <button id="refreshDiagnostics" class="btn primary" type="button">Refresh Diagnostics</button>
-          <a class="btn ghost" href="/api/health" target="_blank" rel="noopener">Open Public Health</a>
+        <p class="it-note"><strong>Truth boundary:</strong> unavailable is not automatically a failure. Configuration presence does not prove a provider outcome, and this page never creates payments, sends messages, writes business data, mutates R2 or replays work in the background.</p>
+        <div class="it-legend" aria-label="Readiness classifications">
+          <span class="it-pill">runtime_proven</span><span class="it-pill">source_ready</span><span class="it-pill">provider_dependent</span><span class="it-pill">owner_action</span><span class="it-pill">unavailable</span>
         </div>
-      </div>
-      <p class="it-note">Diagnostics are on-demand only. This page does not run a recurring timer, create payments, write business data, upload media or mutate provider state.</p>
-      <div id="diagnosticMessage" class="it-note" role="status">Run or refresh diagnostics to inspect the current deployed environment.</div>
-      <div id="diagnosticSummary" class="it-summary" hidden></div>
-      <div id="diagnosticChecks" class="it-checks" aria-live="polite"></div>
-    </section>
+        <div id="readinessMessage" class="it-note" role="status">Select Refresh Readiness to collect bounded, read-only evidence from the current deployed environment.</div>
+        <div id="readinessSummary" class="it-summary" hidden></div>
+        <div id="readinessItems" class="it-checks" aria-live="polite"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="diagnosticsTitle">
+        <div class="it-head">
+          <div>
+            <div class="badge">Retained Build 379</div>
+            <h2 id="diagnosticsTitle" class="it-section-title">Production observability &amp; self-diagnostics</h2>
+            <p class="kicker">Deeper bounded diagnostics for deployment identity, Supabase, R2/media, staff auth, critical API runtime and payment configuration.</p>
+          </div>
+          <div class="it-actions">
+            <button id="refreshDiagnostics" class="btn ghost" type="button">Refresh Diagnostics</button>
+            <a class="btn ghost" href="/api/health" target="_blank" rel="noopener">Open Public Health</a>
+          </div>
+        </div>
+        <p class="it-note">Diagnostics remain independent troubleshooting evidence. They do not replace exact-SHA Development/Production acceptance or external provider evidence.</p>
+        <div id="diagnosticMessage" class="it-note" role="status">Select Refresh Diagnostics to inspect the current deployed environment.</div>
+        <div id="diagnosticSummary" class="it-summary" hidden></div>
+        <div id="diagnosticChecks" class="it-checks" aria-live="polite"></div>
+      </section>
+    </div>
   </main>
 
   <script>
     (() => {
-      const button = document.getElementById('refreshDiagnostics');
-      const message = document.getElementById('diagnosticMessage');
-      const summary = document.getElementById('diagnosticSummary');
-      const checks = document.getElementById('diagnosticChecks');
+      const readinessButton = document.getElementById('refreshReadiness');
+      const readinessMessage = document.getElementById('readinessMessage');
+      const readinessSummary = document.getElementById('readinessSummary');
+      const readinessItems = document.getElementById('readinessItems');
+      const diagnosticsButton = document.getElementById('refreshDiagnostics');
+      const diagnosticMessage = document.getElementById('diagnosticMessage');
+      const diagnosticSummary = document.getElementById('diagnosticSummary');
+      const diagnosticChecks = document.getElementById('diagnosticChecks');
 
       function text(value) { return value == null ? '—' : String(value); }
       function card(label, value) {
@@ -54,7 +80,31 @@
         const strong = document.createElement('strong'); strong.textContent = text(value);
         node.append(small, strong); return node;
       }
-      function renderCheck(check) {
+      function evidenceBlock(value) {
+        const node = document.createElement('div');
+        node.className = 'it-evidence';
+        node.textContent = JSON.stringify(value, null, 2);
+        return node;
+      }
+      function renderReadinessItem(item) {
+        const node = document.createElement('article');
+        node.className = 'it-check'; node.dataset.state = item.classification || 'unavailable';
+        const head = document.createElement('div'); head.className = 'it-check-head';
+        const title = document.createElement('h2'); title.style.margin = '0'; title.textContent = text(item.name);
+        const state = document.createElement('span'); state.className = 'it-status'; state.textContent = text(item.classification);
+        head.append(title, state); node.append(head);
+        const detail = document.createElement('p'); detail.textContent = text(item.detail); node.append(detail);
+        const required = document.createElement('div'); required.className = 'it-meta'; required.textContent = `Required for runtime: ${item.required_for_runtime ? 'yes' : 'no'}`; node.append(required);
+        if (item.action) {
+          const fix = document.createElement('div'); fix.className = 'it-remediation';
+          const label = document.createElement('strong'); label.textContent = 'Next evidence/action';
+          const copy = document.createElement('div'); copy.textContent = item.action;
+          fix.append(label, copy); node.append(fix);
+        }
+        if (item.evidence && Object.keys(item.evidence).length) node.append(evidenceBlock(item.evidence));
+        return node;
+      }
+      function renderDiagnostic(check) {
         const node = document.createElement('article');
         node.className = 'it-check'; node.dataset.state = check.status || 'degraded';
         const head = document.createElement('div'); head.className = 'it-check-head';
@@ -69,16 +119,46 @@
           const copy = document.createElement('div'); copy.textContent = check.remediation;
           fix.append(label, copy); node.append(fix);
         }
-        if (check.evidence && Object.keys(check.evidence).length) {
-          const evidence = document.createElement('div'); evidence.className = 'it-evidence'; evidence.textContent = JSON.stringify(check.evidence, null, 2); node.append(evidence);
-        }
+        if (check.evidence && Object.keys(check.evidence).length) node.append(evidenceBlock(check.evidence));
         return node;
       }
 
+      async function loadReadiness() {
+        readinessButton.disabled = true; readinessButton.textContent = 'Checking…';
+        readinessMessage.className = 'it-note'; readinessMessage.textContent = 'Collecting bounded read-only readiness evidence…';
+        readinessSummary.hidden = true; readinessSummary.replaceChildren(); readinessItems.replaceChildren();
+        try {
+          const response = await fetch('/api/admin/go_live_readiness', { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
+          const data = await response.json().catch(() => null);
+          if (!response.ok || !data) {
+            if (response.status === 401 || response.status === 403) throw new Error('You must sign in with an authorized Admin or I.T. staff account before readiness evidence can run.');
+            throw new Error(data?.error || `Readiness returned HTTP ${response.status}.`);
+          }
+          const counts = data.counts || {};
+          readinessSummary.append(
+            card('Decision', data.decision),
+            card('Runtime proven', counts.runtime_proven || 0),
+            card('Source ready', counts.source_ready || 0),
+            card('Provider dependent', counts.provider_dependent || 0),
+            card('Owner action', counts.owner_action || 0),
+            card('Unavailable', counts.unavailable || 0)
+          );
+          readinessSummary.hidden = false;
+          for (const item of Array.isArray(data.items) ? data.items : []) readinessItems.append(renderReadinessItem(item));
+          readinessMessage.textContent = `Readiness evidence collected at ${text(data.generated_at)}. Decision: ${text(data.decision)}. Unavailable evidence is not automatically failure.`;
+          if (data.decision === 'runtime_evidence_incomplete') readinessMessage.classList.add('it-error');
+        } catch (error) {
+          readinessMessage.className = 'it-note it-error';
+          readinessMessage.textContent = error?.message || 'Readiness evidence could not be loaded.';
+        } finally {
+          readinessButton.disabled = false; readinessButton.textContent = 'Refresh Readiness';
+        }
+      }
+
       async function loadDiagnostics() {
-        button.disabled = true; button.textContent = 'Checking…';
-        message.className = 'it-note'; message.textContent = 'Running bounded read-only diagnostics…';
-        summary.hidden = true; summary.replaceChildren(); checks.replaceChildren();
+        diagnosticsButton.disabled = true; diagnosticsButton.textContent = 'Checking…';
+        diagnosticMessage.className = 'it-note'; diagnosticMessage.textContent = 'Running bounded read-only diagnostics…';
+        diagnosticSummary.hidden = true; diagnosticSummary.replaceChildren(); diagnosticChecks.replaceChildren();
         try {
           const response = await fetch('/api/admin/production_diagnostics', { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
           const data = await response.json().catch(() => null);
@@ -86,21 +166,21 @@
             if (response.status === 401 || response.status === 403) throw new Error('You must sign in with an authorized Admin or I.T. staff account before diagnostics can run.');
             throw new Error(data?.error || `Diagnostics returned HTTP ${response.status}.`);
           }
-          summary.append(card('Overall', data.overall), card('Build authority', data.build), card('Duration', `${data.duration_ms} ms`), card('Runtime role', data.actor?.role));
-          summary.hidden = false;
-          for (const check of Array.isArray(data.checks) ? data.checks : []) checks.append(renderCheck(check));
-          message.textContent = `Diagnostics completed at ${text(data.generated_at)}. Overall state: ${text(data.overall)}.`;
-          if (data.overall === 'failed') message.classList.add('it-error');
+          diagnosticSummary.append(card('Overall', data.overall), card('Build authority', data.build), card('Duration', `${data.duration_ms} ms`), card('Runtime role', data.actor?.role));
+          diagnosticSummary.hidden = false;
+          for (const check of Array.isArray(data.checks) ? data.checks : []) diagnosticChecks.append(renderDiagnostic(check));
+          diagnosticMessage.textContent = `Diagnostics completed at ${text(data.generated_at)}. Overall state: ${text(data.overall)}.`;
+          if (data.overall === 'failed') diagnosticMessage.classList.add('it-error');
         } catch (error) {
-          message.className = 'it-note it-error';
-          message.textContent = error?.message || 'Diagnostics could not be loaded.';
+          diagnosticMessage.className = 'it-note it-error';
+          diagnosticMessage.textContent = error?.message || 'Diagnostics could not be loaded.';
         } finally {
-          button.disabled = false; button.textContent = 'Refresh Diagnostics';
+          diagnosticsButton.disabled = false; diagnosticsButton.textContent = 'Refresh Diagnostics';
         }
       }
 
-      button.addEventListener('click', loadDiagnostics);
-      loadDiagnostics();
+      readinessButton.addEventListener('click', loadReadiness);
+      diagnosticsButton.addEventListener('click', loadDiagnostics);
     })();
   </script>
 </body>

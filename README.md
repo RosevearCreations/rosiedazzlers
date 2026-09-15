@@ -1,62 +1,61 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 405 — Full Responsive Production Acceptance & Roadmap Renewal**.
+Current source direction: **Build 406 — Go-Live Evidence & Provider Readiness Convergence**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Start here
 
-For a new chat, AI or developer, read:
-
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
-2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_405_415.md` — active evidence-driven forward sequence and continuing release rules.
-4. `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md` — current capstone Production-acceptance contract.
-5. `BUILD404_ERROR_RECOVERY_WEAK_CONNECTION_RELIABILITY.md` — retained recovery/weak-connection authority.
-6. `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md` — retained customer/service/SEO authority.
-7. `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md` — retained Operations cockpit authority.
-8. `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md` — retained field-to-office handoff/commercial evidence authority.
-9. `STARTUP_GO_LIVE_BLOCKERS.md` — retained evidence gaps that drive the renewed roadmap.
+2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
+3. `FORWARD_BUILD_ROADMAP_405_415.md` — active evidence-driven sequence.
+4. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — current readiness contract.
+5. `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md` — retained capstone authority from Build 405.
+6. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current capstone acceptance framework
+## Current readiness framework
 
-The current release composes the complete visitor → booking/checkout → Customer → Detailer → Operations → payment/accounting → Production-runtime path from existing retained authorities rather than creating duplicate business logic.
+`/admin/it.html` is the single current operator-facing readiness surface. It combines authenticated read-only `/api/admin/go_live_readiness` evidence with retained `/api/admin/production_diagnostics` troubleshooting.
 
-Representative phone/tablet/desktop support remains mandatory. Responsive static/source checks prove source constraints; they are not mislabeled as independent visual-browser proof. Exact Development and Production acceptance continue to prove deployed/runtime identity, and any separately observed device-browser evidence is additive rather than a substitute for server authority.
+Readiness is classified as `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, or `unavailable`. Unavailable evidence is not automatically failure. Configuration presence can establish source readiness but cannot prove provider transaction/delivery outcomes, Search Console/GBP proof, backup/export recovery proof, or independent phone/tablet/desktop visual acceptance.
 
-Public specialty/add-on/service guidance remains subordinate to configured catalog and canonical booking/commercial rules. Payment/provider evidence remains fail-closed. Legacy routes retain continuity through route-copy/shared-shell/protected-route authorities. The renewed roadmap comes from recorded go-live/provider/operational evidence gaps, not speculative feature accumulation.
+The readiness endpoint performs bounded read-only checks only. It does not write schema/business data, upload/delete R2 objects, create/refund payments, send messages, infer consent, automatically book work or run background replay.
 
-## Retained recovery, retention and service framework
+## Retained platform contract
 
-`/assets/reliability-recovery-v404.js` remains a non-authoritative reliability layer: honest offline/weak-network messaging, bounded retry for GET/HEAD reads only, expiring tab-scoped protected drafts, explicit duplicate-submit locking, upload progress/failure/manual retry states and partial-result labeling. It never queues or automatically replays business mutations.
+The retained capstone still governs visitor → booking/checkout → Customer → Detailer → Operations → payment/accounting → exact Production runtime. Reliability recovery remains read-safe and non-authoritative; canonical checkout/server state owns business outcomes. Public SEO remains one meaningful H1 per indexable page with unique metadata/canonical/structured data and truthful Oxford/Norfolk proof.
 
-`/api/client/retention` continues to resolve completed booking history through exact `customer_profile_id`; current catalog, vehicle condition, availability, scope and price remain server-authoritative. `/assets/build403-service-depth.js` retains condition-aware professional service guidance, including water-extraction/restoration depth.
+Durable retained authorities include:
+
+- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
+- `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
+- `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
+- `scripts/build396_growth_baseline_forward_roadmap_check.py`
+- `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
+- `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
 
 Run focused/current authorities with:
 
 ```bash
+python scripts/build406_go_live_evidence_provider_readiness_convergence_check.py
 python scripts/build405_full_responsive_production_acceptance_roadmap_renewal_check.py
 python scripts/build404_error_recovery_weak_connection_reliability_check.py
-python scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py
-python scripts/build402_admin_operations_cockpit_growth_experiment_check.py
-python scripts/build401_job_handoff_commercial_evidence_check.py
-python scripts/build400_detailer_mobile_qol_retention_check.py
-python scripts/build397_responsive_ux_authority_check.py
-python scripts/build396_growth_baseline_forward_roadmap_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
 
-Retained customer journey, communication, pricing, responsive, Detailer mobile, Operations, field-handoff, payment and Production-business authorities remain mandatory. Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
+Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
 ## Release authority
 
-Feature candidates must pass focused source authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. Development must prove the identical SHA; `dev` advances only by non-force fast-forward.
+Feature candidates must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. Development must prove the identical SHA; `dev` advances only by non-force fast-forward.
 
-Production promotion is governed by active **`rd main protection`**. Accepted Development is proposed by PR to protected `main`; required `source checks` must pass and protection must not be bypassed. Prefer a merge commit so the accepted Development SHA remains explicit.
+Production promotion is governed by `rd main protection`. Accepted Development is proposed by pull request to protected `main`; required `source checks` must pass and protection must not be bypassed. Prefer a merge commit so the accepted Development SHA remains explicit in Production ancestry.
 
-After merge, the resulting `main` head is the exact Production SHA and **Production deployment/runtime/business acceptance must independently prove that exact SHA**. Production is not considered GREEN from source promotion alone. Database migrations and business/provider mutations remain separate explicit boundaries.
+After merge, the resulting `main` head is the exact Production SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and business/provider mutations remain separate explicit boundaries.
 
-Public SEO remains constrained to one meaningful H1 per indexable page, unique metadata/canonical/structured data, truthful Oxford/Norfolk service content and genuine proof only.
+## Next bounded release
+
+Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance follows only after the current release is fully GREEN in Production; controlled provider evidence/mutation requires its own explicit authority.
