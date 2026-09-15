@@ -1,6 +1,6 @@
-// Build 382 — customer account and retention UX convergence.
-// This module is a read-only customer projection over existing authorities.
-// It does not create quote, maintenance, communication, review, booking, or payment state.
+// Build 403 — customer account, retention and explainable rebooking guidance.
+// This module is a read-only projection over existing authorities.
+// It does not create quote, maintenance, communication, review, booking, pricing or payment state.
 
 export async function loadCustomerRetention({ env, headers, email, profileId, profile, reviews, bookings } = {}) {
   const normalizedEmail = String(email || '').trim().toLowerCase();
@@ -22,9 +22,12 @@ export async function loadCustomerRetention({ env, headers, email, profileId, pr
   const safeMaintenance = (Array.isArray(maintenanceRows) ? maintenanceRows : []).map(customerSafeMaintenanceInterest);
   const safeReviewRequests = (Array.isArray(reviewRequestRows) ? reviewRequestRows : []).map(customerSafeReviewRequest);
   const safeReviews = Array.isArray(reviews) ? reviews : [];
-  const completedBookings = (Array.isArray(bookings) ? bookings : []).filter(bookingIsCompleted);
+  const completedBookings = (Array.isArray(bookings) ? bookings : [])
+    .filter((row) => bookingIsCompleted(row) && String(row?.customer_profile_id || '') === customerId)
+    .sort((a, b) => bookingEvidenceTime(b) - bookingEvidenceTime(a));
 
   return {
+    schema: 'rd.customer.retention.v2',
     quotes: {
       count: safeQuotes.length,
       latest: safeQuotes[0] || null,
@@ -41,10 +44,17 @@ export async function loadCustomerRetention({ env, headers, email, profileId, pr
     },
     communication: communicationProjection(profile),
     review: reviewProjection({ reviews: safeReviews, reviewRequests: safeReviewRequests, completedBookings }),
-    rebooking: {
-      available: completedBookings.length > 0,
-      completed_service_count: completedBookings.length,
-      booking_path: '/book'
+    rebooking: rebookingProjection(completedBookings),
+    authority: {
+      exact_customer_profile_id: true,
+      fuzzy_identity_merge: false,
+      inferred_outreach_consent: false,
+      inferred_review_eligibility: false,
+      inferred_vehicle_history: false,
+      persistent_customer_scoring: false,
+      automatic_booking_write: false,
+      automatic_customer_outreach: false,
+      automatic_service_substitution: false
     }
   };
 }
@@ -125,6 +135,57 @@ function reviewProjection({ reviews, reviewRequests, completedBookings }) {
   };
 }
 
+function rebookingProjection(completedBookings) {
+  const rows = Array.isArray(completedBookings) ? completedBookings : [];
+  const latest = rows[0] || null;
+  if (!latest) {
+    return {
+      available: false,
+      state: 'unavailable',
+      completed_service_count: 0,
+      booking_path: '/book',
+      explanation: 'No exact completed-service history is available for service guidance yet.'
+    };
+  }
+
+  const packageCode = String(latest.package_code || '').trim();
+  const vehicleSize = String(latest.vehicle_size || '').trim();
+  const serviceDate = dateOnly(latest.service_date || latest.detailing_completed_at || latest.completed_at || latest.created_at);
+  const exactEvidence = Boolean(packageCode && vehicleSize && serviceDate);
+  if (!exactEvidence) {
+    return {
+      available: false,
+      state: 'insufficient',
+      completed_service_count: rows.length,
+      booking_path: '/book',
+      latest_completed_service: {
+        package_code: packageCode || null,
+        vehicle_size: vehicleSize || null,
+        service_date: serviceDate || null
+      },
+      explanation: 'Completed work exists, but the exact package, vehicle-size and service-date evidence needed for a faithful rebooking starting point is incomplete.'
+    };
+  }
+
+  const params = new URLSearchParams({
+    rebook_package: packageCode,
+    rebook_vehicle_size: vehicleSize,
+    rebook_date: serviceDate
+  });
+  return {
+    available: true,
+    state: 'observed_completed_service',
+    completed_service_count: rows.length,
+    latest_completed_service: {
+      package_code: packageCode,
+      vehicle_size: vehicleSize,
+      service_date: serviceDate
+    },
+    booking_path: `/book?${params.toString()}`,
+    explanation: 'This is an advisory starting point from exact completed-service history. Current vehicle condition, current catalog, availability, scope and price are reconfirmed in the booking flow before anything is booked.'
+  };
+}
+
 function reviewStatusLabel(status) {
   const labels = {
     queued: 'Review request queued',
@@ -148,6 +209,18 @@ function bookingIsCompleted(row) {
     String(row.job_status || '').trim().toLowerCase() === 'completed' ||
     String(row.status || '').trim().toLowerCase() === 'completed'
   );
+}
+
+function bookingEvidenceTime(row) {
+  const value = row?.detailing_completed_at || row?.completed_at || row?.service_date || row?.created_at || '';
+  const timestamp = Date.parse(value);
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function dateOnly(value) {
+  const text = String(value || '').trim();
+  const match = text.match(/^(\d{4}-\d{2}-\d{2})/);
+  return match ? match[1] : '';
 }
 
 function normalizeStatus(value) {
