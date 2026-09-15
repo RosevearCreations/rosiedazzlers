@@ -14,6 +14,7 @@ on:
       - "AUTONOMOUS_RELEASE_QUEUE.md"
       - "AI_PROJECT_HANDOFF.md"
       - "README.md"
+      - "scripts/post_recovery_baseline_roadmap_check.py"
       - "scripts/build405_full_responsive_production_acceptance_roadmap_renewal_check.py"
       - "scripts/build396_growth_baseline_forward_roadmap_check.py"
       - "scripts/build397_responsive_ux_authority_check.py"
@@ -51,6 +52,8 @@ jobs:
           python-version: "3.12"
       - name: Build 405 capstone authority
         run: python scripts/build405_full_responsive_production_acceptance_roadmap_renewal_check.py
+      - name: Retained Build 386 post-recovery roadmap authority
+        run: python scripts/post_recovery_baseline_roadmap_check.py
       - name: Responsive static authority
         run: python scripts/responsive_static_check.py
       - name: Retained Build 397 responsive UX authority
