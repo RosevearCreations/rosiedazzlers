@@ -1,40 +1,32 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-This queue records current actionable work. Completed implementation history belongs in Git history and workflow evidence. The active forward sequence is `FORWARD_BUILD_ROADMAP_405_415.md`; prior roadmap phases remain retained historical authority only.
+This living queue records only the current bounded release path. Completed implementation history belongs in Git history and workflow evidence. Active forward authority: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 ## Accepted checkpoint
 
-**Build 405 — Full Responsive Production Acceptance & Roadmap Renewal** is the immediately preceding accepted Production checkpoint. Resolve its exact identity from live refs and exact-SHA workflow evidence rather than embedding historical release identities in living prose.
+**Build 405 — Full Responsive Production Acceptance & Roadmap Renewal** is the immediately preceding accepted checkpoint. Resolve exact identity from live refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
 ## Current release
 
-**Build 406 — Go-Live Evidence & Provider Readiness Convergence** is the active bounded release.
+**Build 406 — Go-Live Evidence & Provider Readiness Convergence** is active.
 
-Current scope:
+Scope:
 
-- converge retained `STARTUP_GO_LIVE_BLOCKERS.md` evidence into the single current `/admin/it.html` readiness surface;
-- classify readiness as `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, or `unavailable`;
-- preserve the rule that unavailable evidence is not automatically failure and provider success is never inferred from source/configuration presence;
-- add an authenticated, bounded, GET/HEAD-only `/api/admin/go_live_readiness` evidence endpoint;
-- retain Build 379 production diagnostics as deeper troubleshooting evidence rather than creating a duplicate runtime authority;
-- keep Stripe/PayPal transaction outcomes, email/SMS delivery evidence, Search Console/GBP proof, backup/export proof and independent phone/tablet/desktop visual evidence fail-closed until directly observed;
-- re-run retained Build 405 capstone and release-convergence authority;
-- require exact Development deployment/runtime acceptance before Production promotion and exact Production deployment/runtime/business acceptance after protected-main merge;
-- remain schema-neutral and read-only with no Production business-data, destructive R2, payment/provider, accounting/inventory, customer, automatic outreach, automatic booking or background-replay mutation.
+- converge `STARTUP_GO_LIVE_BLOCKERS.md` into the current `/admin/it.html` readiness surface;
+- classify evidence as `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, or `unavailable`;
+- preserve unavailable ≠ automatic failure and never infer provider success from configuration presence;
+- keep `/api/admin/go_live_readiness` authenticated, bounded, GET/HEAD-only and mutation-free;
+- retain `/api/admin/production_diagnostics` for deeper troubleshooting;
+- preserve exact feature → Development → protected-main PR → exact Production acceptance;
+- keep schema, destructive R2, payment/provider, accounting/inventory, customer, outreach and booking mutations outside this release.
 
-The candidate must pass the focused Build 406 authority, retained Build 405 authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` then advances only by non-force fast-forward to the exact accepted candidate SHA and must independently pass exact-SHA Development acceptance. Production promotion proceeds by pull request into protected `main`; the resulting `main` merge SHA must independently pass exact Production deployment/runtime/business acceptance and a final zero-failed/zero-queued/zero-running sweep before Production is called GREEN.
+Current contract: `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
+Retained capstone: `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`.
 
 ## Next release
 
-**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is next only after Build 406 is fully accepted on protected `main` and exact Production evidence is GREEN. Any controlled provider mutation/evidence gathering in Build 407 requires its own explicit acceptance authority; Build 406 does not perform provider transactions.
-
-## Durable release authorities
-
-- `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
-- `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
-- `FORWARD_BUILD_ROADMAP_405_415.md`
-- `STARTUP_GO_LIVE_BLOCKERS.md`
+**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** follows only after the current release is independently GREEN on protected `main`. Controlled provider evidence/mutation requires its own explicit authority.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Preserve the exact tested candidate through non-force Development promotion, respect protected-main pull-request requirements, and treat the resulting `main` head as the exact Production SHA to be independently accepted. Any source write after acceptance invalidates that exact-SHA acceptance and requires revalidation. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
+Never call a Rosie Dazzlers release GREEN from source changes alone. `dev` advances only by non-force fast-forward to an exact accepted candidate, and the resulting `main` SHA must independently pass Production deployment/runtime/business acceptance with zero failed, queued or running required workflows. Any post-acceptance source write requires revalidation.
