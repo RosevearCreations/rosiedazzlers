@@ -4,7 +4,7 @@ This living queue records only the current bounded release path. Completed imple
 
 ## Accepted checkpoint
 
-The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. It retains Build 406 readiness authority; resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
+The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. It retains the Build 405 full-responsive Production-acceptance capstone and Build 406 readiness authority; resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
 ## Current release
 
