@@ -57,12 +57,14 @@ require(roadmap, [
 # The current contract/roadmap, not historical prose, owns the explicit phone/tablet/desktop requirement.
 require(blockers, ["Stripe", "R2", "phone", "desktop"], "go-live blocker evidence", casefold=True)
 
-# Living release state must be Build 405 -> Build 406 and point to the renewed roadmap.
+# Build 405 is retained historical authority. Living current/next release numbers advance over time,
+# so this checker must verify the renewed roadmap remains referenced without pinning queue/handoff
+# to the historical 405 -> 406 transition.
 for label, text in [("release queue", queue), ("project handoff", handoff)]:
-    require(text, ["Build 405", "Build 406", "FORWARD_BUILD_ROADMAP_405_415.md"], label)
+    require(text, ["FORWARD_BUILD_ROADMAP_405_415.md"], label)
 require(readme, [
-    "Build 405", "FORWARD_BUILD_ROADMAP_405_415.md",
-    "BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md"
+    "BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md",
+    "FORWARD_BUILD_ROADMAP_405_415.md"
 ], "README")
 
 # Retained historical roadmap must still close at Build 405.
