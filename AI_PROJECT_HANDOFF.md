@@ -4,26 +4,30 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 406 — Go-Live Evidence & Provider Readiness Convergence** is the active bounded release.
+**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is the active bounded release.
 
-**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is next only after the current release is independently GREEN on protected `main`.
+**Build 408 — Media / R2 Operational Acceptance & Recovery Evidence** is next only after the current release is independently GREEN on protected `main`.
 
-Retained capstone authority comes from Build 405 through `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
+Retained readiness authority comes from Build 406 through `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`.
 
 This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
 
-## Current readiness contract
+## Current payment-provider contract
 
-- `/admin/it.html` is the single current operator readiness surface.
+- `/admin/it.html` remains the single current operator readiness surface.
 - `/api/admin/go_live_readiness` is authenticated, bounded and read-only.
-- Readiness classifications are `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
-- Unavailable is not automatically failure. Required missing evidence may remain a HOLD, but missing evidence is never converted into invented success/failure.
-- Configuration presence may establish source readiness; it does not prove Stripe/PayPal transaction outcomes, message delivery, Search Console/GBP proof, backup/export proof, or independent visual-browser acceptance.
-- Current runtime evidence may become `runtime_proven` only through bounded observation of the deployed environment.
-- Retained `/api/admin/production_diagnostics` remains deeper troubleshooting evidence and does not replace exact-SHA release acceptance.
+- Provider configuration is source evidence only; it never proves a transaction.
+- Provider GREEN requires persisted verified webhook evidence with a definitive non-pending `settled`, `replayed`, or `refund_recorded` state.
+- Provider-event identity must link to the internal payment-request identity.
+- The linked payment must reconcile exact paid amount, valid currency, paid-like status and paid timestamp.
+- The readiness endpoint performs no Stripe/PayPal provider contact and never creates, captures, refunds or replays payment activity.
+- Missing evidence remains `provider_dependent` or `unavailable`; it is never fabricated as success.
+- Source/Production release GREEN remains distinct from live-payment readiness GREEN.
 
 ## Retained operating contract
 
+- Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
+- Unavailable is not automatically failure. Required missing runtime evidence may remain a HOLD.
 - Canonical checkout remains server-authoritative for availability, booking and payment outcomes; business mutations are never queued/replayed automatically on reconnect.
 - Authenticated booking history remains linked through exact `customer_profile_id`; current catalog, condition, availability, scope and price are reconfirmed.
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
@@ -46,9 +50,10 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
+- `.github/workflows/payment-provider-live-outcome-reconciliation-authority.yml`
+- `scripts/build407_payment_provider_live_outcome_reconciliation_check.py`
 - `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
-- `.github/workflows/go-live-evidence-provider-readiness-convergence-authority.yml`
-- `scripts/build406_go_live_evidence_provider_readiness_convergence_check.py`
 - `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
