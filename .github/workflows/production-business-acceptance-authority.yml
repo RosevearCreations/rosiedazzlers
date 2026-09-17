@@ -43,6 +43,7 @@ jobs:
       - name: Validate Production authority syntax
         run: |
           python -m py_compile scripts/production_business_acceptance_check.py
+          python -m py_compile scripts/build408_media_r2_operational_acceptance_check.py
           bash -n scripts/cloudflare_pages_production_acceptance.sh
 
       - name: Validate Production business acceptance source contract
@@ -98,6 +99,7 @@ jobs:
           node scripts/build389_local_seo_service_landing_proof_test.mjs
           node scripts/build390_booking_quote_estimate_hardening_test.mjs
           node scripts/build391_photo_studio_r2_reliability_test.mjs
+          python scripts/build408_media_r2_operational_acceptance_check.py
 
       - name: Validate retention, operations and finance convergence authorities
         run: |
