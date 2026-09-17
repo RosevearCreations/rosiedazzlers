@@ -131,7 +131,7 @@ jobs:
             echo "- Customer/vehicle → staff work → completion/proof: PASS"
             echo "- Genuine review → rebook/retention: PASS"
             echo "- Maintenance/fleet: PASS"
-            echo "- Commercial/SEO/condition-quote/media convergence including Build 408: PASS"
+            echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Admin I.T./observability: PASS"
             echo "- Rollback/security/hygiene: PASS"
