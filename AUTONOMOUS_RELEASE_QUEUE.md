@@ -8,26 +8,28 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is the active bounded release.
+**Build 409 — Inventory & Job-Cost Operational Evidence** is the active bounded release.
 
 Scope:
 
-- bridge current Stripe/PayPal readiness to persisted verified provider outcomes without creating a transaction from readiness;
-- require definitive non-pending `settled`, `replayed`, or `refund_recorded` webhook evidence before provider readiness can become GREEN;
-- require stable provider-event → internal payment-request identity;
-- require exact paid amount and valid currency reconciliation against the linked Rosie Dazzlers payment request;
-- keep `/api/admin/go_live_readiness` authenticated, bounded, GET/HEAD-only and mutation-free;
-- preserve `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable` truth boundaries from `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`;
+- retain `catalog_inventory_movements`, `catalog_inventory_items` and `catalog_purchase_orders` as the only canonical inventory/reorder authorities;
+- accept only explicit negative `job_use` movements as job-consumption/material-cost evidence;
+- expose booking-linked waste/adjustment depletion without inferring that it was consumed on the customer job;
+- verify recorded previous/delta/new quantity continuity when available and fail closed when incomplete or inconsistent;
+- use recorded inventory cost only; never estimate missing material cost;
+- surface row-level approval and stable accounting-posting evidence only when already recorded; never infer either from movement type, actor, note or stock success;
+- keep low-stock/reorder evidence read-only and never create purchasing activity;
+- preserve Build 393 compatibility while adding the stricter Build 409 operational evidence contract;
 - preserve exact feature → Development → protected-main PR → exact Production acceptance;
-- keep schema, destructive R2, payment/provider mutation, accounting/inventory, customer, outreach and booking mutations outside source acceptance.
+- introduce no schema migration, inventory mutation, purchasing, accounting posting, payment/provider mutation or Production business-data mutation.
 
-Current contract: `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`.
+Current contract: `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 
-The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass Development deployment/runtime acceptance. Promotion proceeds through `rd main protection` and a pull request to protected `main`; Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
+The candidate must pass the focused Build 409 authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass Development deployment/runtime acceptance. Promotion proceeds by pull request to protected `main`; Production deployment/runtime/business acceptance is independent of source promotion.
 
 ## Next release
 
-**Build 408 — Media / R2 Operational Acceptance & Recovery Evidence** is next only after the current release is independently GREEN on protected `main`.
+**Build 410 — Maintenance / Fleet Commercial Acceptance** is next only after Build 409 is independently GREEN on protected `main`.
 
 ## Continuing rule
 
