@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 406 — Go-Live Evidence & Provider Readiness Convergence. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 409 — Inventory & Job-Cost Operational Evidence. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
@@ -68,7 +68,7 @@ Every current readiness item must be represented truthfully as one of:
 ## 7. Operations, inventory and finance
 
 - [ ] Field workflow captures readiness, before/after evidence, approved add-ons, product usage, completion evidence and final-balance handoff under staff authorization.
-- [ ] Inventory usage/post/reversal/idempotency/shortage evidence is accepted with harmless Development records before Production operational reliance.
+- [ ] Inventory usage/post/reversal/idempotency/shortage evidence is accepted with harmless Development records before Production operational reliance. Build 409 source authority counts only explicit `job_use` as job consumption and keeps ambiguous depletion, missing cost, approval and posting evidence fail-closed.
 - [ ] Per-job consumable/product cost evidence converges into existing inventory/finance authority without a duplicate ledger.
 - [ ] Finance can complete deposit/final-balance/refund/fee/HST/reconciliation/month-end/accountant-export scenarios with missing evidence held as review/unavailable.
 
