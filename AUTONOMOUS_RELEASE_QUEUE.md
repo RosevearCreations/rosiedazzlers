@@ -8,21 +8,21 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 410 — Maintenance / Fleet Commercial Acceptance** is the active bounded release.
+**Build 411 — Customer Communication, Consent & Delivery Evidence** is the active bounded release.
 
 Scope:
 
-- consume the actual configured maintenance and fleet rulebooks rather than inventing replacement economics;
-- keep unresolved maintenance and fleet decisions explicitly `owner_action`;
-- distinguish source release GREEN from explicit business approval;
-- preserve `/api/availability` and `/api/checkout` as capacity/collision authorities;
-- require accepted fleet quote status, timestamp and recorded positive amounts before treating a quote as explicit acceptance evidence;
-- keep draft/sent quotes non-committal;
-- prohibit inferred pricing, customer commitment and capacity reservation;
-- prohibit automatic outreach, enrolment, booking, discounts, invoice creation, recurring billing, renewal and provider mutation;
+- revalidate current explicit customer consent immediately before provider dispatch;
+- cancel stale queued customer communication when opt-in, channel or canonical recipient changed;
+- keep staff-owned push under staff ownership rather than customer consent;
+- require canonical customer ownership and explicit current consent before abandoned-checkout recovery is queued;
+- preserve authenticated customer ownership of communication preferences and unsubscribe paths;
+- distinguish provider-accepted/sent evidence from definitive provider delivery;
+- keep failed/cancelled/suppressed/retry states truthful;
+- prohibit inferred consent and automatic outreach enablement;
 - introduce no schema migration or Production business-data mutation.
 
-Current contract: `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
+Current contract: `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass Development deployment/runtime acceptance.
 
@@ -30,7 +30,7 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 411 — Customer Communication, Consent & Delivery Evidence** is next only after the current release is independently GREEN on protected `main`.
+**Build 412 — Production Observability, Alerting & Support Diagnostics** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 

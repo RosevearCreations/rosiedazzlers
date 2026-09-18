@@ -1,0 +1,62 @@
+name: Build 411 — Customer Communication, Consent & Delivery Evidence Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build411-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build411-customer-communication-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: customer-communication-consent-delivery
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check communication source syntax
+        run: |
+          node --check functions/api/_lib/customer-communication-consent.js
+          node --check functions/api/_lib/notification-hooks.js
+          node --check functions/api/notifications_process.js
+          node --check functions/api/admin/abandoned_recovery_enqueue.js
+          node --check functions/api/client/profile_update.js
+          node --check scripts/customer_communication_consent_delivery_test.mjs
+          python -m py_compile scripts/customer_communication_consent_delivery_check.py
+      - name: Run executable communication contract
+        run: node scripts/customer_communication_consent_delivery_test.mjs
+      - name: Validate communication authority
+        run: python scripts/customer_communication_consent_delivery_check.py
+      - name: Communication acceptance summary
+        run: |
+          {
+            echo '### Build 411 — Customer Communication, Consent & Delivery Evidence'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Dispatch-time current explicit consent: REQUIRED'
+            echo '- Stale channel/recipient queue entries: CANCELLED FAIL-CLOSED'
+            echo '- Abandoned-recovery inferred consent: PROHIBITED'
+            echo '- Provider accepted is final delivery: NO'
+            echo '- Automatic outreach enabled by this release: NO'
+            echo '- Database migration introduced: NO'
+          } >> "$GITHUB_STEP_SUMMARY"

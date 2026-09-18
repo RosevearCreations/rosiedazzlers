@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 410 — Maintenance / Fleet Commercial Acceptance. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 411 — Customer Communication, Consent & Delivery Evidence. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
@@ -47,7 +47,9 @@ Every current readiness item must be represented truthfully as one of:
 - [ ] Stripe Development deposit/final-balance checkout and webhook settlement evidence pass on current release authority; configuration presence alone remains `source_ready`, not a provider outcome.
 - [ ] Controlled refund/partial-refund evidence reconciles correctly before Production provider mutation is enabled.
 - [ ] PayPal remains evidence-gated unless explicitly retained and accepted in current business scope; configuration presence alone does not prove authorization/capture/webhook/refund success.
-- [ ] Email delivery distinguishes queued, delivered and failed evidence and remains `provider_dependent` until those outcomes are observed.
+- [ ] Email delivery distinguishes queued, provider-accepted, delivered, failed and cancelled evidence and remains `provider_dependent` until definitive provider delivery is observed.
+- [ ] Customer email/SMS/push revalidates current explicit profile consent immediately before provider dispatch; stale queued consent/channel/recipient evidence cancels fail-closed.
+- [ ] Abandoned-checkout recovery requires canonical customer ownership and current explicit consent; contact fields alone never imply outreach permission.
 - [ ] SMS/push remain consent, sender/configuration, cost and delivery-evidence gated.
 
 ## 5. Public services, pricing and booking

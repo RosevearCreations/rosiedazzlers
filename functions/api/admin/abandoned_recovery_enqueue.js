@@ -1,5 +1,7 @@
 import { requireStaffAccess, json, methodNotAllowed, serviceHeaders } from "../_lib/staff-auth.js";
 import { loadRecoverySettings } from "../_lib/app-settings.js";
+import { loadCustomerNotificationProfile } from "../_lib/notification-hooks.js";
+import { evaluateCustomerCommunicationConsent } from "../_lib/customer-communication-consent.js";
 
 export async function onRequestOptions(){return new Response("",{status:204,headers:corsHeaders()});}
 export async function onRequestPost(context){
@@ -10,7 +12,7 @@ export async function onRequestPost(context){
     if(!access.ok) return withCors(access.response);
 
     const customer_email=String(body.customer_email||"").trim().toLowerCase();
-    const recipient_phone=String(body.recipient_phone||"").trim();
+    const customer_profile_id=String(body.customer_profile_id||"").trim() || null;
     const session_id=String(body.session_id||"").trim() || null;
     const page_events=Number(body.page_events||0);
 
@@ -23,16 +25,41 @@ export async function onRequestPost(context){
     let channel = String(body.channel || rules.default_recovery_channel || 'email').trim().toLowerCase();
     if (!['email','sms'].includes(channel)) channel = 'email';
     if (providerRules?.[channel]?.enabled === false) return withCors(json({ error: `${channel.toUpperCase()} recovery is disabled by provider rules.` }, 403));
-    if (channel === 'email' && rules.require_email !== false && !customer_email) return withCors(json({error:"customer_email is required for email recovery."},400));
-    if (channel === 'sms' && !recipient_phone) return withCors(json({error:"recipient_phone is required for SMS recovery."},400));
+    if (!customer_profile_id && !customer_email) {
+      return withCors(json({error:"A canonical customer profile id or matching customer email is required for recovery outreach."},400));
+    }
     if (page_events && Number.isFinite(page_events) && page_events < Number(rules.minimum_page_events || 0)) return withCors(json({error:"Session does not meet recovery rules."},400));
+
+    const profile = await loadCustomerNotificationProfile({ env, customer_profile_id, customer_email });
+    const recipient_email = channel === 'email' ? String(profile?.email || '').trim().toLowerCase() : null;
+    const recipient_phone = channel === 'sms' ? String(profile?.sms_phone || profile?.phone || '').trim() : null;
+    const consent = evaluateCustomerCommunicationConsent({
+      profile,
+      event: {
+        event_type: "abandoned_checkout_recovery",
+        channel,
+        customer_profile_id: profile?.id || customer_profile_id,
+        recipient_email,
+        recipient_phone
+      },
+      pushActive: false
+    });
+    if (!consent.dispatch) {
+      return withCors(json({
+        error:"Current explicit customer communication consent is required before abandoned checkout recovery can be queued.",
+        reason:consent.reason,
+        consent_required:true
+      },409));
+    }
+
     const cooldownHours = Number(rules.cooldown_hours || 24);
 
     const payload=[{
       event_type:"abandoned_checkout_recovery",
       channel,
-      recipient_email:channel==='email'?customer_email:null,
-      recipient_phone:channel==='sms'?recipient_phone:null,
+      customer_profile_id: profile.id,
+      recipient_email,
+      recipient_phone,
       subject:templates.abandoned_checkout_subject || "Complete your Rosie Dazzlers booking",
       body_text:templates.abandoned_checkout_body_text || "We noticed you started a booking but did not complete checkout. Come back to finish your order when you're ready.",
       body_html:templates.abandoned_checkout_body_html || null,

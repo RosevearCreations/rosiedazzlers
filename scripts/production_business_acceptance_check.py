@@ -49,6 +49,10 @@ required_authorities = {
         "scripts/booking_rebooking_funnel_check.py",
         "scripts/maintenance_retention_check.py",
     ],
+    "communication_consent": [
+        "scripts/customer_communication_consent_delivery_check.py",
+        "scripts/customer_communication_consent_delivery_test.mjs",
+    ],
     "maintenance_fleet": [
         "scripts/maintenance_plan_business_rulebook_check.py",
         "scripts/maintenance_plan_pilot_activation_check.py",
@@ -132,6 +136,7 @@ workflow = require(WORKFLOW, [
     "Validate payment and final-finance authorities",
     "Validate customer, staff, completion and proof authorities",
     "Validate genuine-review and rebook authorities",
+    "Validate customer communication consent and delivery evidence authorities",
     "Validate maintenance and fleet authorities",
     "Validate commercial, local SEO, condition-quote and media convergence authorities",
     "Validate retention, operations and finance convergence authorities",

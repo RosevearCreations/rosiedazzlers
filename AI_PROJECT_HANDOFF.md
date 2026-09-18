@@ -4,35 +4,25 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 410 — Maintenance / Fleet Commercial Acceptance** is the active bounded release.
+**Build 411 — Customer Communication, Consent & Delivery Evidence** is the active bounded release.
 
-**Build 411 — Customer Communication, Consent & Delivery Evidence** is next only after the current release is independently GREEN on protected `main`.
+**Build 412 — Production Observability, Alerting & Support Diagnostics** is next only after the current release is independently GREEN on protected `main`.
 
-Retained go-live readiness authority comes from `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
+Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
 
-This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
+This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, fabricated consent, automatic outreach or automatic booking.
 
-## Current maintenance/fleet commercial contract
+## Current communication contract
 
-- Maintenance commercial authority remains `config/maintenance-plan-business-rulebook.json`; all seven decision domains currently remain explicit owner action.
-- Fleet commercial authority remains `config/fleet-business-rulebook.json`; all six decision domains currently remain explicit owner action.
-- Source release GREEN is distinct from explicit owner approval of business terms.
-- Capacity remains subordinate to `/api/availability` and final `/api/checkout` collision/revalidation.
-- Draft/sent fleet quotes are not customer commitments; accepted evidence needs accepted status, timestamp and positive recorded amounts.
-- No pricing, customer commitment, capacity reservation, outreach, booking, discount, invoice, recurring billing, renewal or provider result is inferred.
-- Current commercial acceptance is schema-neutral and read-only.
-
-## Current payment-provider contract
-
-- `/admin/it.html` remains the single current operator readiness surface.
-- `/api/admin/go_live_readiness` is authenticated, bounded and read-only.
-- Provider configuration is source evidence only; it never proves a transaction.
-- Provider GREEN requires persisted verified webhook evidence with a definitive non-pending `settled`, `replayed`, or `refund_recorded` state.
-- Provider-event identity must link to the internal payment-request identity.
-- The linked payment must reconcile exact paid amount, valid currency, paid-like status and paid timestamp.
-- The readiness endpoint performs no Stripe/PayPal provider contact and never creates, captures, refunds or replays payment activity.
-- Missing evidence remains `provider_dependent` or `unavailable`; it is never fabricated as success.
-- Source/Production release GREEN remains distinct from live-payment readiness GREEN.
+- Authenticated customer profiles own customer communication consent.
+- A queued message is not durable future permission to send.
+- Customer-directed dispatch revalidates current opt-in, current channel, canonical recipient and, for push, current owned subscription/event preference.
+- Stale or revoked consent cancels the queued event before provider contact.
+- Abandoned-checkout recovery requires canonical customer ownership and explicit current consent.
+- Provider-accepted/sent evidence is not definitive delivery; final delivery remains provider-dependent until separately observed.
+- Customer unsubscribe and preference changes remain owner-authenticated.
+- Staff-owned push remains governed by staff ownership/capability boundaries.
+- No inferred consent or automatic outreach is enabled by source acceptance.
 
 ## Retained operating contract
 
@@ -44,6 +34,7 @@ This source release authorizes no schema migration, Production business-data mut
 - Representative phone/tablet/desktop support remains mandatory; source checks are not independent visual-browser proof.
 - Durable field-to-office handoff authority remains `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
 - Inventory/job-cost evidence remains retained through `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
+- Maintenance/fleet commercial evidence remains retained through `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
 
 ## Release mechanics
 
@@ -61,6 +52,7 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`
 - `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`
 - `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`
 - `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`

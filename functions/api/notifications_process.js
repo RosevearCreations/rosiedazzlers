@@ -7,6 +7,7 @@ import {
   loadReviewRequestDispatchGate,
   reconcileReviewRequestSent
 } from "./_lib/review-request-dispatch.js";
+import { loadCustomerCommunicationDispatchGate } from "./_lib/customer-communication-consent.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -40,6 +41,24 @@ export async function onRequestPost(context) {
     const results = [];
 
     for (const item of rows) {
+      const consentGate = await loadCustomerCommunicationDispatchGate({ env, event: item });
+      if (consentGate.applies && !consentGate.decision.dispatch) {
+        const cancelledAt = new Date().toISOString();
+        await patchEvent(env, item.id, {
+          status: "cancelled",
+          last_error: null,
+          processed_at: cancelledAt,
+          next_attempt_at: null
+        });
+        results.push({
+          id: item.id,
+          ok: true,
+          status: "cancelled",
+          reason: `customer_consent_${consentGate.decision.reason}`
+        });
+        continue;
+      }
+
       const reviewGate = await loadReviewRequestDispatchGate({ env, event: item });
       if (reviewGate.applies && !reviewGate.decision.dispatch) {
         if (reviewGate.decision.reason === "not_due") {
