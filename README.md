@@ -46,8 +46,6 @@ Current contract: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`.
 
 ## Retained recovery / accountant-export operational-proof framework
 
-Build 418 remains the retained backup/restore/accountant-export operational-proof authority.
-
 The launch-readiness surface now separates **operational proof** from source capability. A backup route, recovery runbook or export endpoint is not treated as evidence that a current artifact exists. Backup proof requires a verified dated owner observation with artifact and retention-location evidence; the underlying evidence note is not returned to the browser.
 
 Recovery/rollback drill proof remains separately authorized and operator-observed. Source acceptance does not perform a Production restore, Development rollback, R2 mutation, DNS/secret change or Cloudflare recovery action.
