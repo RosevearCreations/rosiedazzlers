@@ -188,6 +188,9 @@ export function buildInventoryJobCostOperationalEvidence({
       rowReasons.push(quantity.reason);
     } else if (quantity.status === "unavailable") {
       quantityUnavailableRows += 1;
+      if (explicitJobUse) {
+        rowReasons.push("Explicit job_use quantity evidence is incomplete; quantity continuity is not inferred.");
+      }
     }
 
     if (ambiguousDepletion) {
