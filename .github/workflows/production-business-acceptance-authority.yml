@@ -47,6 +47,7 @@ jobs:
           python -m py_compile scripts/build409_inventory_job_cost_operational_evidence_check.py
           python -m py_compile scripts/build410_maintenance_fleet_commercial_acceptance_check.py
           python -m py_compile scripts/customer_communication_consent_delivery_check.py
+          python -m py_compile scripts/production_support_diagnostics_check.py
           bash -n scripts/cloudflare_pages_production_acceptance.sh
 
       - name: Validate Production business acceptance source contract
@@ -126,6 +127,8 @@ jobs:
         run: |
           python scripts/it_readiness_release_control_audit.py
           python scripts/production_observability_self_diagnostics_check.py
+          python scripts/production_support_diagnostics_check.py
+          node scripts/production_support_diagnostics_test.mjs
 
       - name: Validate rollback and hardening authorities
         run: |
@@ -148,7 +151,7 @@ jobs:
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Inventory/job-cost operational evidence: PASS"
-            echo "- Admin I.T./observability: PASS"
+            echo "- Admin I.T./observability/support diagnostics: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"

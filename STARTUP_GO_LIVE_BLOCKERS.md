@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 411 — Customer Communication, Consent & Delivery Evidence. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 412 — Production Observability, Alerting & Support Diagnostics. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
@@ -38,6 +38,9 @@ Every current readiness item must be represented truthfully as one of:
 
 - [ ] Representative Development use shows no CPU-limit, memory-limit or invocation/retry storm caused by ordinary navigation.
 - [ ] Runtime Diagnostics records safe route/status/wall-time/Ray/dependency evidence without storing secrets or generating its own traffic storm.
+- [ ] Production support diagnostics converges retained readiness/diagnostics into severity-ranked runtime blockers, warnings, provider HOLDs and owner actions without creating a competing health authority.
+- [ ] Support packet exposes only whitelisted release identity/counts/corrective actions and excludes secret values, customer records, message contents and provider credentials.
+- [ ] Alerting remains manual/on-screen with no permanent polling or automatic external alert delivery until separately authorized.
 - [ ] Build 406 readiness reports current Cloudflare runtime identity, Supabase and R2 as `runtime_proven` only when bounded read-only observation succeeds.
 - [ ] Supabase connectivity and required schema dependencies fail closed with actionable I.T. evidence rather than request-time schema mutation.
 - [ ] D1/legacy references are absent from Rosie Dazzlers runtime/deployment authority unless deliberately reintroduced by an approved build.

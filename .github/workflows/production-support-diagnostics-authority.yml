@@ -1,0 +1,66 @@
+name: Build 412 — Production Observability, Alerting & Support Diagnostics
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build412-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build412-support-diagnostics-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: production-support-diagnostics
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Build 412 source syntax
+        run: |
+          node --check functions/api/_lib/production-support-diagnostics.js
+          node --check functions/api/admin/support_diagnostics.js
+          node --check scripts/production_support_diagnostics_test.mjs
+          python -m py_compile scripts/production_support_diagnostics_check.py
+
+      - name: Run Build 412 executable contract
+        run: node scripts/production_support_diagnostics_test.mjs
+
+      - name: Validate Build 412 authority
+        run: python scripts/production_support_diagnostics_check.py
+
+      - name: Build 412 summary
+        run: |
+          {
+            echo '### Build 412 — Production Observability, Alerting & Support Diagnostics'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Retained readiness + diagnostics convergence: PASS'
+            echo '- Exact runtime identity in support-safe packet: PASS'
+            echo '- Runtime failures / provider HOLDs / owner actions remain distinct: PASS'
+            echo '- Automatic alert delivery: NO'
+            echo '- Permanent polling: NO'
+            echo '- Provider/business mutation: NO'
+            echo '- Database migration introduced: NO'
+          } >> "$GITHUB_STEP_SUMMARY"
