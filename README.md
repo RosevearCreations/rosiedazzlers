@@ -71,7 +71,7 @@ Durable retained authorities include:
 Run current/durable release authorities with:
 
 ```bash
-python scripts/build413_workflow_efficiency_accessibility_check.py
+python scripts/workflow_efficiency_accessibility_check.py
 python scripts/production_support_diagnostics_check.py
 node scripts/production_support_diagnostics_test.mjs
 python scripts/customer_communication_consent_delivery_check.py

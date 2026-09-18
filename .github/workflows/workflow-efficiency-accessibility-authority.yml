@@ -44,9 +44,13 @@ jobs:
         run: |
           node --check apps/detailer/detailer-app.js
           node --check assets/my-account-v296.js
+          python -m py_compile scripts/workflow_efficiency_accessibility_check.py
           python -m py_compile scripts/build413_workflow_efficiency_accessibility_check.py
 
-      - name: Validate Build 413 workflow efficiency and accessibility authority
+      - name: Validate durable workflow efficiency and accessibility authority
+        run: python scripts/workflow_efficiency_accessibility_check.py
+
+      - name: Validate Build 413 release contract
         run: python scripts/build413_workflow_efficiency_accessibility_check.py
 
       - name: Build 413 summary

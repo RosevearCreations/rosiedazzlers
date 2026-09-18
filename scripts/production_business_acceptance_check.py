@@ -83,7 +83,7 @@ required_authorities = {
         "scripts/production_support_diagnostics_test.mjs",
     ],
     "workflow_accessibility": [
-        "scripts/build413_workflow_efficiency_accessibility_check.py",
+        "scripts/workflow_efficiency_accessibility_check.py",
     ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",

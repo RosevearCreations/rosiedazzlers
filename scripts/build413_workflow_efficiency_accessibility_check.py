@@ -145,12 +145,12 @@ require(workflow, [
     "contents: read",
     "node --check apps/detailer/detailer-app.js",
     "node --check assets/my-account-v296.js",
-    "python scripts/build413_workflow_efficiency_accessibility_check.py",
+    "python scripts/workflow_efficiency_accessibility_check.py",
 ], "Focused Build 413 workflow")
 
 for gate, label in [(dev_gate, "Development source gate"), (prod_gate, "Production authority")]:
     require(gate, [
-        "python scripts/build413_workflow_efficiency_accessibility_check.py",
+        "python scripts/workflow_efficiency_accessibility_check.py",
     ], label)
 
 # Validate the edited JS files and the Admin page's inline operational script.
