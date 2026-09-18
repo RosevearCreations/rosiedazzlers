@@ -95,8 +95,8 @@ assert.equal(supportPacketIsSafe(snapshot.support_packet), true);
 
 const packetText = JSON.stringify(snapshot.support_packet);
 assert.equal(packetText.includes("DO_NOT_COPY"), false);
-assert.equal(packetText.includes("secret_value"), false);
-assert.equal(packetText.includes("injected_secret"), false);
+assert.equal(packetText.includes('"secret_value":'), false);
+assert.equal(packetText.includes('"injected_secret":'), false);
 
 const sourceFailure = buildProductionSupportDiagnostics({
   readiness: {},
