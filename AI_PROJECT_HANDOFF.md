@@ -4,7 +4,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Retained prior release: Build 417 — Payment, Refund & Delivery Provider Evidence Closure. Retained Build 416 controlled-soft-launch authority remains active. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
+Retained provider-evidence contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained controlled-soft-launch contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 **Build 418 — Backup, Restore & Accountant Export Operational Proof** is the active bounded release.
 
