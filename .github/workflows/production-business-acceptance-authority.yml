@@ -44,6 +44,7 @@ jobs:
         run: |
           python -m py_compile scripts/production_business_acceptance_check.py
           python -m py_compile scripts/build408_media_r2_operational_acceptance_check.py
+          python -m py_compile scripts/build409_inventory_job_cost_operational_evidence_check.py
           bash -n scripts/cloudflare_pages_production_acceptance.sh
 
       - name: Validate Production business acceptance source contract
@@ -107,6 +108,8 @@ jobs:
           node scripts/build392_retention_maintenance_fleet_activation_test.mjs
           python scripts/build393_operations_inventory_job_cost_evidence_check.py
           node scripts/build393_operations_inventory_job_cost_evidence_test.mjs
+          python scripts/build409_inventory_job_cost_operational_evidence_check.py
+          node scripts/build409_inventory_job_cost_operational_evidence_test.mjs
           python scripts/build394_finance_close_reconciliation_accountant_export_check.py
           node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
 
@@ -133,6 +136,7 @@ jobs:
             echo "- Maintenance/fleet: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
+            echo "- Inventory/job-cost operational evidence: PASS"
             echo "- Admin I.T./observability: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."

@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-current-source-${{ github.ref }}
+  group: rosiedazzlers-current-source-gate-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -80,6 +80,8 @@ jobs:
           node --check assets/landing-page.js
           node --check functions/api/_lib/gallery-publication.js
           node --check functions/api/before_after_gallery_public.js
+          node --check functions/api/_lib/inventory-job-cost-operational-evidence.js
+          node --check functions/api/admin/inventory_job_cost_operational_evidence.js
           node --check functions/api/membership_interest_create.js
           node --check functions/api/admin/membership_interest_list.js
           node --check assets/admin-final-balance-v317.js

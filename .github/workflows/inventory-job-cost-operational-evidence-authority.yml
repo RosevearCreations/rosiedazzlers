@@ -1,0 +1,65 @@
+name: Build 409 — Inventory & Job-Cost Operational Evidence Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build409-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build409-inventory-job-cost-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: inventory-job-cost-operational-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Build 409 source syntax
+        run: |
+          node --check functions/api/_lib/inventory-job-cost-operational-evidence.js
+          node --check functions/api/admin/inventory_job_cost_operational_evidence.js
+          node --check scripts/build409_inventory_job_cost_operational_evidence_test.mjs
+          python -m py_compile scripts/build409_inventory_job_cost_operational_evidence_check.py
+
+      - name: Run Build 409 executable contract
+        run: node scripts/build409_inventory_job_cost_operational_evidence_test.mjs
+
+      - name: Validate Build 409 authority
+        run: python scripts/build409_inventory_job_cost_operational_evidence_check.py
+
+      - name: Build 409 summary
+        run: |
+          {
+            echo '### Build 409 — Inventory & Job-Cost Operational Evidence'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Explicit canonical job_use only for job consumption/cost: PASS'
+            echo '- Waste/adjustment depletion excluded from inferred job cost: PASS'
+            echo '- Quantity continuity and recorded-cost fail-closed evidence: PASS'
+            echo '- Row-level approval/accounting-posting evidence is never inferred: PASS'
+            echo '- Read-only reorder evidence; automatic purchasing: PROHIBITED'
+            echo '- Second inventory ledger/schema/accounting/Production mutation: PROHIBITED'
+          } >> "$GITHUB_STEP_SUMMARY"

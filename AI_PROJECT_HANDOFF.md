@@ -4,13 +4,24 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance** is the active bounded release.
+**Build 409 — Inventory & Job-Cost Operational Evidence** is the active bounded release.
 
-**Build 408 — Media / R2 Operational Acceptance & Recovery Evidence** is next only after the current release is independently GREEN on protected `main`.
+**Build 410 — Maintenance / Fleet Commercial Acceptance** is next only after the current release is independently GREEN on protected `main`.
 
-Retained readiness authority comes from Build 406 through `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`.
+Retained go-live readiness authority comes from `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 
 This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
+
+## Current inventory/job-cost contract
+
+- `catalog_inventory_movements` remains the canonical movement authority; this release creates no second ledger.
+- Only explicit negative `job_use` rows may become job-consumption/material-cost evidence.
+- Booking-linked waste/adjustment depletion remains visible but cannot be inferred as customer-job consumption.
+- Quantity continuity uses recorded previous/delta/new values only and fails closed when incomplete or inconsistent.
+- Material cost uses recorded inventory `cost_cents` only; missing cost remains review/unavailable.
+- Row-level approval and accounting-posting evidence are surfaced only when stable evidence already exists; neither is inferred.
+- Low-stock/purchase-order evidence remains read-only and never creates a reorder automatically.
+- This release introduces no schema migration and performs no inventory, purchasing, accounting, provider or Production business-data mutation.
 
 ## Current payment-provider contract
 
@@ -50,6 +61,7 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`
 - `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
 - `.github/workflows/payment-provider-live-outcome-reconciliation-authority.yml`
 - `scripts/build407_payment_provider_live_outcome_reconciliation_check.py`

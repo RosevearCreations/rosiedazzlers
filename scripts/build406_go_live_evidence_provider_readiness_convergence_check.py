@@ -92,12 +92,23 @@ require(blockers, [
     "Production is not called GREEN from source promotion alone"
 ], "go-live blocker authority", casefold=True)
 
-for label, text in [("release queue", queue), ("project handoff", handoff), ("README", readme)]:
-    require(text, ["Build 406", "Build 407", "FORWARD_BUILD_ROADMAP_405_415.md",
-                   "BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md"], label)
-
-for label, text in [("project handoff", handoff), ("README", readme)]:
-    require(text, ["BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md"], label)
+# Living release documents advance beyond this retained authority. Validate durable
+# release mechanics/current roadmap linkage instead of requiring historical releases
+# to remain named as current/next state.
+require(queue, [
+    "FORWARD_BUILD_ROADMAP_405_415.md", "non-force fast-forward", "rd main protection",
+    "Production deployment/runtime/business acceptance"
+], "release queue")
+require(handoff, [
+    "FORWARD_BUILD_ROADMAP_405_415.md", "protected `main`",
+    "Production deployment/runtime/business acceptance",
+    "BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md"
+], "project handoff")
+require(readme, [
+    "FORWARD_BUILD_ROADMAP_405_415.md", "rd main protection",
+    "Production is not considered GREEN from source promotion alone.",
+    "BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md"
+], "README")
 
 for p in ROOT.rglob("*"):
     if not p.is_file():

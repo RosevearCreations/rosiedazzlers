@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 407 — Payment Provider Live-Outcome & Reconciliation Acceptance**.
+Current source direction: **Build 409 — Inventory & Job-Cost Operational Evidence**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,12 +9,16 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_405_415.md` — active evidence-driven sequence.
-4. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — current payment-provider acceptance contract.
-5. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained Build 406 readiness framework.
-6. `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md` — retained capstone authority.
-7. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
+4. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — current inventory/job-cost acceptance contract.
+6. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
+7. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
+8. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
+
+## Current inventory/job-cost framework
+
+`GET /api/admin/inventory_job_cost_operational_evidence?booking_id=<uuid>` is the current read-only operational evidence surface. Only explicit canonical `job_use` movements may become job-consumption/material-cost evidence. Waste/adjustment depletion remains visible but excluded from inferred job cost. Quantity continuity, recorded costs, row-level approval evidence and stable accounting-posting linkage fail closed as `review`/`unavailable` when missing. The endpoint creates no inventory movement, reorder, purchase order, accounting entry, payment or schema mutation.
 
 ## Current payment-provider framework
 
@@ -30,6 +34,7 @@ The retained capstone still governs visitor → booking/checkout → Customer �
 
 Durable retained authorities include:
 
+- `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
@@ -58,4 +63,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 408 — Media / R2 Operational Acceptance & Recovery Evidence follows only after the current release is fully GREEN in Production.
+Build 410 — Maintenance / Fleet Commercial Acceptance follows only after the current release is independently GREEN on protected `main`.
