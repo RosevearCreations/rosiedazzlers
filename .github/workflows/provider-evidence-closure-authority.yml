@@ -1,0 +1,54 @@
+name: Payment, Refund & Delivery Provider Evidence Closure
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build417-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-provider-evidence-closure-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: provider-evidence-closure
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate provider evidence closure authority
+        run: |
+          python scripts/provider_evidence_closure_check.py
+          node scripts/provider_evidence_closure_test.mjs
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Payment / refund / delivery provider evidence closure'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Provider configuration is never provider success: PASS'
+            echo '- Refund identity / amount / currency / timestamp boundary: PASS'
+            echo '- Provider accepted vs definitive delivery separation: PASS'
+            echo '- Schema migration: NONE'
+            echo '- Provider/payment/refund/message/business mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
