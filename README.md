@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 421 — Retention, Maintenance & Fleet Operational Pilot**.
+Current source direction: **Build 422 — Media, Photo Studio & Proof Operations**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -10,8 +10,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
 4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — current retention/maintenance/fleet operational-pilot contract.
-6. `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` — retained local-acquisition closure contract.
+5. `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md` — current media/Photo Studio/proof-operations contract.
+6. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — retained retention/maintenance/fleet operational-pilot contract.
+7. `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` — retained local-acquisition closure contract.
 7. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — retained Customer/staff Production workflow-evidence contract.
 6. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained backup/restore/accountant-export operational-proof contract.
 6. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained payment/refund/delivery provider-evidence contract.
@@ -29,7 +30,15 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current retention, maintenance & fleet operational-pilot framework
+## Current media, Photo Studio & proof-operations framework
+
+The Photo Studio now exposes a read-only operational-proof summary from the managed public library and active assignments without scanning R2 on page load. Recurring placements, multi-placement reuse, complete distinct-photo Before/After pairs and bounded sync observations remain separately classified; missing or stale evidence stays an operator action rather than invented success.
+
+The deletion control now reports the existing server dry-run eligibility result truthfully instead of treating a preflight as a completed deletion. Same-key upload retry and cursor continuation remain source-ready recovery mechanics, while a real recovery drill remains operator-observed evidence.
+
+Current contract: `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`.
+
+## Retained retention, maintenance & fleet operational-pilot framework
 
 The staff-only operational-pilot overview composes the retained maintenance-interest and fleet-assessment queues into aggregate readiness evidence without selecting participants, creating bookings, applying discounts, creating invoices or contacting providers. The current canonical maintenance and fleet rulebooks still require explicit business approval, so a GREEN source release truthfully coexists with an owner-action pilot HOLD.
 

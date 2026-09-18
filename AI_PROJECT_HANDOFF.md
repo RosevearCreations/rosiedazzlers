@@ -4,17 +4,27 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed Search Console, GBP & Local Acquisition Evidence Closure release is the retained completed predecessor.
+The completed Retention, Maintenance & Fleet Operational Pilot release is the retained completed predecessor.
 
-**Build 421 — Retention, Maintenance & Fleet Operational Pilot** is the active bounded release.
+**Build 422 — Media, Photo Studio & Proof Operations** is the active bounded release.
 
-**Build 422 — Media, Photo Studio & Proof Operations** is next only after the current release is independently GREEN on protected `main`.
+**Build 423 — Reliability, Performance & Cost Capacity** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`, `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`, `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
 
-## Retention, maintenance & fleet operational-pilot contract
+## Media, Photo Studio & proof-operations contract
+
+- `/api/admin/media_photo_studio_proof_operations` is a staff-only read-only operational evidence view.
+- Ordinary Photo Studio loads and proof-overview requests remain database-only; R2 listing happens only through the explicit bounded sync action.
+- Active assignments, multi-placement reuse and complete distinct-photo Before/After pairs remain separately observable.
+- Managed-library `last_seen_at` values are bounded sync evidence; missing or stale observations remain owner-action or unavailable.
+- Same-key upload retry and cursor continuation remain source-ready recovery mechanics; a real recovery drill is never inferred.
+- The Photo Studio deletion button now reports the retained server dry-run eligibility result instead of falsely reporting a destructive action.
+- No schema migration, automatic cleanup, full-bucket scan or permanent polling is introduced.
+
+## Retained retention, maintenance & fleet operational-pilot contract
 
 - `/api/admin/retention_maintenance_fleet_operational_pilot` is the staff-only read-only pilot overview.
 - Current maintenance and fleet rulebooks remain `awaiting_business_approval`; source release GREEN therefore remains compatible with an `owner_action` pilot HOLD.
@@ -69,6 +79,7 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`
 - `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
 - `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`
 - `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`
@@ -88,7 +99,9 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `.github/workflows/production-workflow-evidence-authority.yml`
 - `.github/workflows/local-acquisition-evidence-closure-authority.yml`
 - `.github/workflows/retention-maintenance-fleet-operational-pilot-authority.yml`
+- `.github/workflows/media-photo-studio-proof-operations-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/media_photo_studio_proof_operations_check.py`
 - `scripts/retention_maintenance_fleet_operational_pilot_check.py`
 - `scripts/local_acquisition_evidence_closure_check.py`
 - `scripts/production_workflow_evidence_check.py`

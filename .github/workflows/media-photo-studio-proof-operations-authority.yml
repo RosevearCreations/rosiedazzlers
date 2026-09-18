@@ -1,0 +1,35 @@
+name: Build 422 — Media, Photo Studio & Proof Operations Authority
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-media-photo-studio-proof-operations-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: media-photo-studio-proof-operations
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Media / Photo Studio / proof operations
+        run: |
+          python scripts/media_photo_studio_proof_operations_check.py
+          node scripts/media_photo_studio_proof_operations_test.mjs
