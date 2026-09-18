@@ -32,9 +32,7 @@ Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
 ## Current media, Photo Studio & proof-operations framework
 
-The Photo Studio now exposes a read-only operational-proof summary from the managed public library and active assignments without scanning R2 on page load. Recurring placements, multi-placement reuse, complete distinct-photo Before/After pairs and bounded sync observations remain separately classified; missing or stale evidence stays an operator action rather than invented success.
-
-The deletion control now reports the existing server dry-run eligibility result truthfully instead of treating a preflight as a completed deletion. Same-key upload retry and cursor continuation remain source-ready recovery mechanics, while a real recovery drill remains operator-observed evidence.
+Photo Studio reports read-only assignment, Before/After and bounded-sync evidence without scanning R2 on page load. Missing evidence remains an operator action; source recovery mechanics never become an invented recovery drill.
 
 Current contract: `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`.
 
