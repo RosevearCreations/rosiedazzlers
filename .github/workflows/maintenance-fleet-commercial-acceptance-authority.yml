@@ -1,0 +1,64 @@
+name: Build 410 — Maintenance / Fleet Commercial Acceptance Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build410-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build410-maintenance-fleet-commercial-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: maintenance-fleet-commercial-acceptance
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Build 410 source syntax
+        run: |
+          node --check functions/api/_lib/maintenance-fleet-commercial-acceptance.js
+          node --check scripts/build410_maintenance_fleet_commercial_acceptance_test.mjs
+          python -m py_compile scripts/build410_maintenance_fleet_commercial_acceptance_check.py
+
+      - name: Run Build 410 executable contract
+        run: node scripts/build410_maintenance_fleet_commercial_acceptance_test.mjs
+
+      - name: Validate Build 410 authority
+        run: python scripts/build410_maintenance_fleet_commercial_acceptance_check.py
+
+      - name: Build 410 summary
+        run: |
+          {
+            echo '### Build 410 — Maintenance / Fleet Commercial Acceptance'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Current configured rulebooks are source-safe and owner-action gated: PASS'
+            echo '- Source release GREEN remains distinct from explicit business approval: PASS'
+            echo '- Capacity remains subordinate to /api/availability + /api/checkout: PASS'
+            echo '- Draft/sent quotes are not customer commitments: PASS'
+            echo '- Automatic outreach/booking/discount/invoice/billing/provider mutation: PROHIBITED'
+            echo '- Database migration introduced: NO'
+          } >> "$GITHUB_STEP_SUMMARY"
