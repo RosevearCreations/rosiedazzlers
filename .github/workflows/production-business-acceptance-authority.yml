@@ -69,6 +69,10 @@ jobs:
           node --check scripts/local_acquisition_evidence_closure_test.mjs
           node --check functions/api/_lib/local-acquisition-evidence-closure.js
           node --check functions/api/admin/local_acquisition_evidence_closure.js
+          python -m py_compile scripts/retention_maintenance_fleet_operational_pilot_check.py
+          node --check scripts/retention_maintenance_fleet_operational_pilot_test.mjs
+          node --check functions/api/_lib/retention-maintenance-fleet-operational-pilot.js
+          node --check functions/api/admin/retention_maintenance_fleet_operational_pilot.js
           node --check functions/api/admin/local_search_measurement_report.js
           node --check functions/api/admin/local_search_provider_evidence_save.js
           node --check assets/local-search-measurement.js
@@ -129,6 +133,11 @@ jobs:
           python scripts/fleet_maintenance_planning_check.py
           python scripts/build410_maintenance_fleet_commercial_acceptance_check.py
           node scripts/build410_maintenance_fleet_commercial_acceptance_test.mjs
+
+      - name: Validate retention, maintenance & fleet operational pilot authority
+        run: |
+          python scripts/retention_maintenance_fleet_operational_pilot_check.py
+          node scripts/retention_maintenance_fleet_operational_pilot_test.mjs
 
       - name: Validate commercial, local SEO, condition-quote and media convergence authorities
         run: |
@@ -212,6 +221,7 @@ jobs:
             echo "- Customer communication/consent/delivery evidence: PASS"
             echo "- Maintenance/fleet: PASS"
             echo "- Maintenance/fleet commercial acceptance: PASS"
+            echo "- Retention / maintenance / fleet operational pilot: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Inventory/job-cost operational evidence: PASS"
