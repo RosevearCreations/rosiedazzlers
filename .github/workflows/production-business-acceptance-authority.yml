@@ -45,6 +45,7 @@ jobs:
           python -m py_compile scripts/production_business_acceptance_check.py
           python -m py_compile scripts/build408_media_r2_operational_acceptance_check.py
           python -m py_compile scripts/build409_inventory_job_cost_operational_evidence_check.py
+          python -m py_compile scripts/build410_maintenance_fleet_commercial_acceptance_check.py
           bash -n scripts/cloudflare_pages_production_acceptance.sh
 
       - name: Validate Production business acceptance source contract
@@ -91,6 +92,8 @@ jobs:
           node scripts/fleet_business_rulebook_test.mjs
           python scripts/fleet_account_operations_check.py
           python scripts/fleet_maintenance_planning_check.py
+          python scripts/build410_maintenance_fleet_commercial_acceptance_check.py
+          node scripts/build410_maintenance_fleet_commercial_acceptance_test.mjs
 
       - name: Validate commercial, local SEO, condition-quote and media convergence authorities
         run: |
@@ -134,6 +137,7 @@ jobs:
             echo "- Customer/vehicle → staff work → completion/proof: PASS"
             echo "- Genuine review → rebook/retention: PASS"
             echo "- Maintenance/fleet: PASS"
+            echo "- Maintenance/fleet commercial acceptance: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Inventory/job-cost operational evidence: PASS"

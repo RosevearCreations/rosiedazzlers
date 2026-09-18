@@ -4,24 +4,23 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 409 — Inventory & Job-Cost Operational Evidence** is the active bounded release.
+**Build 410 — Maintenance / Fleet Commercial Acceptance** is the active bounded release.
 
-**Build 410 — Maintenance / Fleet Commercial Acceptance** is next only after the current release is independently GREEN on protected `main`.
+**Build 411 — Customer Communication, Consent & Delivery Evidence** is next only after the current release is independently GREEN on protected `main`.
 
-Retained go-live readiness authority comes from `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
+Retained go-live readiness authority comes from `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
 
 This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
 
-## Current inventory/job-cost contract
+## Current maintenance/fleet commercial contract
 
-- `catalog_inventory_movements` remains the canonical movement authority; this release creates no second ledger.
-- Only explicit negative `job_use` rows may become job-consumption/material-cost evidence.
-- Booking-linked waste/adjustment depletion remains visible but cannot be inferred as customer-job consumption.
-- Quantity continuity uses recorded previous/delta/new values only and fails closed when incomplete or inconsistent.
-- Material cost uses recorded inventory `cost_cents` only; missing cost remains review/unavailable.
-- Row-level approval and accounting-posting evidence are surfaced only when stable evidence already exists; neither is inferred.
-- Low-stock/purchase-order evidence remains read-only and never creates a reorder automatically.
-- This release introduces no schema migration and performs no inventory, purchasing, accounting, provider or Production business-data mutation.
+- Maintenance commercial authority remains `config/maintenance-plan-business-rulebook.json`; all seven decision domains currently remain explicit owner action.
+- Fleet commercial authority remains `config/fleet-business-rulebook.json`; all six decision domains currently remain explicit owner action.
+- Source release GREEN is distinct from explicit owner approval of business terms.
+- Capacity remains subordinate to `/api/availability` and final `/api/checkout` collision/revalidation.
+- Draft/sent fleet quotes are not customer commitments; accepted evidence needs accepted status, timestamp and positive recorded amounts.
+- No pricing, customer commitment, capacity reservation, outreach, booking, discount, invoice, recurring billing, renewal or provider result is inferred.
+- Current commercial acceptance is schema-neutral and read-only.
 
 ## Current payment-provider contract
 
@@ -44,6 +43,7 @@ This source release authorizes no schema migration, Production business-data mut
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
 - Representative phone/tablet/desktop support remains mandatory; source checks are not independent visual-browser proof.
 - Durable field-to-office handoff authority remains `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
+- Inventory/job-cost evidence remains retained through `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 
 ## Release mechanics
 
@@ -61,10 +61,9 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`
 - `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`
 - `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
-- `.github/workflows/payment-provider-live-outcome-reconciliation-authority.yml`
-- `scripts/build407_payment_provider_live_outcome_reconciliation_check.py`
 - `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
 - `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`

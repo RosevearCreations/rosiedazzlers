@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 409 — Inventory & Job-Cost Operational Evidence. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 410 — Maintenance / Fleet Commercial Acceptance. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
@@ -75,8 +75,8 @@ Every current readiness item must be represented truthfully as one of:
 ## 8. Retention, maintenance and fleet
 
 - [ ] Customer retention/rebook flows use genuine service history and current catalog/pricing authority.
-- [ ] Maintenance enrollment follows approved cadence/price/inclusion/cancellation rules before recurring payment automation is enabled.
-- [ ] Fleet minimums, tiers, travel limits, volume pricing, PO/reference and invoice grouping use approved business rules rather than inferred economics.
+- [ ] Maintenance enrollment follows approved cadence/price/inclusion/cancellation rules before recurring payment automation is enabled. Current configured terms remain `owner_action`; source release GREEN is not business approval.
+- [ ] Fleet minimums, tiers, travel limits, volume pricing, PO/reference and invoice grouping use approved business rules rather than inferred economics. Draft/sent quotes are not customer commitments; explicit accepted evidence requires accepted status, timestamp and recorded positive amounts.
 - [ ] Optional marketing/review outreach remains consent/eligibility/provider-evidence gated.
 
 ## 9. Public/mobile/SEO acceptance
