@@ -44,7 +44,7 @@ Notification provider acceptance remains distinct from delivery. A sent/provider
 
 Source/Production GREEN can therefore coexist with a provider-evidence HOLD. This release does not create a charge, initiate a refund, send a notification, replay a webhook, contact a payment provider, post accounting entries or mutate Production business state.
 
-Retained prior release: Build 417 — Payment, Refund & Delivery Provider Evidence Closure. Retained controlled-pilot release: Build 416 — Controlled Soft Launch & Real-World Acceptance.
+Retained provider-evidence contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained controlled-pilot contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`.
 
 ## Retained controlled soft-launch framework
 
