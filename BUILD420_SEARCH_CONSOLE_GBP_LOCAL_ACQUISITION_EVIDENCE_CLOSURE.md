@@ -33,7 +33,7 @@ The view remains manual-refresh only and read-only.
 
 ## Safety boundary
 
-Build 420 introduces no schema migration, Google OAuth flow, provider API call, ranking manipulation, profile mutation, content auto-publishing, customer outreach, analytics write, Production business-data mutation, destructive storage action or permanent polling.
+Build 420 introduces no schema migration, no Google OAuth flow, no provider API call, no ranking manipulation, no profile mutation, no content auto-publishing, no customer outreach, no analytics write, no Production business-data mutation, no destructive storage action and no permanent polling.
 
 Saving provider evidence remains the existing separately initiated Build 414 staff action. Release acceptance does not create or alter provider evidence.
 
