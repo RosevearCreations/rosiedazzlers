@@ -4,7 +4,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance.
+Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 **Build 417 — Payment, Refund & Delivery Provider Evidence Closure** is the active bounded release.
 
