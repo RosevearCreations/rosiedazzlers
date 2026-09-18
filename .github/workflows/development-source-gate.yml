@@ -80,6 +80,9 @@ jobs:
           node --check assets/landing-page.js
           node --check functions/api/_lib/gallery-publication.js
           node --check functions/api/before_after_gallery_public.js
+          node --check functions/api/_lib/inventory-job-cost-operational-evidence.js
+          node --check functions/api/admin/inventory_job_cost_operational_evidence.js
+          node --check scripts/build409_inventory_job_cost_operational_evidence_test.mjs
           node --check functions/api/membership_interest_create.js
           node --check functions/api/admin/membership_interest_list.js
           node --check assets/admin-final-balance-v317.js
@@ -122,6 +125,7 @@ jobs:
           python -m py_compile scripts/payment_reconciliation_check.py
           python -m py_compile scripts/release_rollback_recovery_check.py
           python -m py_compile scripts/production_readiness_check.py
+          python -m py_compile scripts/build409_inventory_job_cost_operational_evidence_check.py
           python -m py_compile scripts/booking_funnel_device_check.py
           python -m py_compile scripts/booking_wizard_responsive_ux_check.py
           python -m py_compile scripts/booking_completion_retention_check.py
@@ -196,6 +200,11 @@ jobs:
       - name: Validate Production readiness contracts
         run: python scripts/production_readiness_check.py
 
+      - name: Validate Build 409 inventory/job-cost operational evidence
+        run: |
+          python scripts/build409_inventory_job_cost_operational_evidence_check.py
+          node scripts/build409_inventory_job_cost_operational_evidence_test.mjs
+
       - name: Validate booking funnel device contracts
         run: python scripts/booking_funnel_device_check.py
 
@@ -256,6 +265,7 @@ jobs:
             echo "- Payment reconciliation authority: PASS"
             echo "- Rollback/recovery acceptance authority: PASS"
             echo "- Production readiness authority: PASS"
+            echo "- Build 409 inventory/job-cost operational evidence authority: PASS"
             echo "- Booking funnel/device authority: PASS"
             echo "- Booking wizard responsive UX authority: PASS"
             echo "- Booking completion/retention authority: PASS"
