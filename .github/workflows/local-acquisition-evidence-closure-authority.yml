@@ -1,0 +1,59 @@
+name: Build 420 — Local Acquisition Evidence Closure
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build420-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-local-acquisition-evidence-closure-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: local-acquisition-evidence-closure
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate local acquisition evidence closure
+        run: |
+          python scripts/local_acquisition_evidence_closure_check.py
+          node scripts/local_acquisition_evidence_closure_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 420 — Local Acquisition Evidence Closure'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Search Console / GBP evidence remains dated and operator-observed: PASS'
+            echo '- First-party traffic / approved local proof remain separately sourced: PASS'
+            echo '- Missing/stale/unavailable evidence remains fail-closed: PASS'
+            echo '- Ranking/indexing/Maps success inferred from source/runtime: NO'
+            echo '- Google credential/provider mutation: NONE'
+            echo '- Schema migration / permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

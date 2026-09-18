@@ -167,6 +167,10 @@ jobs:
           node --check scripts/production_workflow_evidence_test.mjs
           node --check functions/api/_lib/production-workflow-evidence.js
           node --check functions/api/admin/production_workflow_evidence.js
+          python -m py_compile scripts/local_acquisition_evidence_closure_check.py
+          node --check scripts/local_acquisition_evidence_closure_test.mjs
+          node --check functions/api/_lib/local-acquisition-evidence-closure.js
+          node --check functions/api/admin/local_acquisition_evidence_closure.js
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/admin_protected_http_smoke.sh
@@ -298,6 +302,11 @@ jobs:
           python scripts/production_workflow_evidence_check.py
           node scripts/production_workflow_evidence_test.mjs
 
+      - name: Validate local acquisition evidence closure authority
+        run: |
+          python scripts/local_acquisition_evidence_closure_check.py
+          node scripts/local_acquisition_evidence_closure_test.mjs
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -351,6 +360,7 @@ jobs:
             echo "- Payment / refund / delivery provider evidence closure authority: PASS"
             echo "- Backup / restore / accountant-export operational proof authority: PASS"
             echo "- Customer / staff Production workflow evidence authority: PASS"
+            echo "- Local acquisition evidence closure authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."

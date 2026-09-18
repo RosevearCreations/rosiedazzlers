@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 419 — Customer & Staff Production Workflow Evidence**.
+Current source direction: **Build 420 — Search Console, GBP & Local Acquisition Evidence Closure**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -10,7 +10,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
 4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — current Customer/staff Production workflow-evidence contract.
+5. `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` — current local-acquisition closure contract.
+6. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — current Customer/staff Production workflow-evidence contract.
 6. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained backup/restore/accountant-export operational-proof contract.
 6. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained payment/refund/delivery provider-evidence contract.
 7. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled soft-launch / real-world acceptance contract.
@@ -27,7 +28,15 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current Production workflow evidence framework
+## Current local-acquisition evidence closure framework
+
+The Local SEO admin surface now adds the current closure view over the retained local-search measurement sources. Search Console, Google Business Profile, first-party acquisition traffic and approved local proof remain separately attributed; fresh dated provider snapshots count only as operator-observed evidence.
+
+Missing provider snapshots remain provider-dependent, stale snapshots remain owner-action and unavailable first-party/proof sources remain unavailable. Source/Production GREEN, markup, referrals and approved proof never become claims of Google indexing, ranking or Maps visibility.
+
+Current contract: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`.
+
+## Retained Production workflow evidence framework
 
 The launch-readiness surface now reports Customer, Detailer, Operations and Admin Production workflow observations separately from source/runtime success. A verified state requires a dated role-specific observation that records a real device or representative viewport/width; the Detailer state also requires aggregate eligible real-job evidence.
 
@@ -41,7 +50,7 @@ The launch-readiness surface now separates **operational proof** from source cap
 
 Recovery/rollback drill proof remains separately authorized and operator-observed. Source acceptance does not perform a Production restore, Development rollback, R2 mutation, DNS/secret change or Cloudflare recovery action.
 
-Accountant-export usability is derived from the retained read-only Finance close/accountant-export authority and its package/CSV manifest. That runtime usability does not prove a current accountant package or CSV has been generated and retained. Build 418 itself generates no export, posts no accounting entry and mutates no Production business data.
+Accountant-export usability is derived from the retained read-only Finance close/accountant-export authority and its package/CSV manifest. That runtime usability does not prove a current accountant package or CSV has been generated and retained. The retained recovery release itself generates no export, posts no accounting entry and mutates no Production business data.
 
 Source/Production GREEN can therefore coexist with recovery/export HOLDs until the real backup artifact, retention location, drill evidence and retained export artifact are observed.
 
@@ -159,4 +168,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 420 — Search Console, GBP & Local Acquisition Evidence Closure follows only after the current release is independently GREEN on protected `main`.
+Build 421 — Retention, Maintenance & Fleet Operational Pilot follows only after the current release is independently GREEN on protected `main`.

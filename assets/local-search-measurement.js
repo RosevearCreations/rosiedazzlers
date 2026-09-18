@@ -1,4 +1,4 @@
-// Build 414 — Admin local-search measurement UI.
+// Build 420 — Admin local-search measurement and acquisition closure UI.
 const $ = (s) => document.querySelector(s);
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
@@ -51,6 +51,20 @@ function renderProvider(selector, provider, evidence) {
     <p class="muted">${esc(evidence?.action || "")}</p>`;
 }
 
+function renderClosure(closure = {}) {
+  const host = $("#localAcquisitionClosureOut");
+  if (!host) return;
+  const counts = closure.counts || {};
+  const rows = Array.isArray(closure.items) ? closure.items : [];
+  const summary = `
+    <div class="summary-item"><strong>Overall closure</strong><span>${chip(closure.status, closure.status)}</span></div>
+    <div class="summary-item"><strong>Observed evidence</strong><span>${esc(counts.observed ?? 0)} / ${esc(counts.total ?? 0)}</span></div>
+    <div class="summary-item"><strong>Remaining HOLDs</strong><span>provider ${esc(counts.provider_dependent ?? 0)} · owner ${esc(counts.owner_action ?? 0)} · unavailable ${esc(counts.unavailable ?? 0)}</span></div>`;
+  const detail = rows.map((row) => `
+    <div class="summary-item"><div><strong>${esc(row.title || row.id)}</strong><div class="muted">${esc(row.action || "")}</div></div><span>${chip(row.state, row.classification)}</span></div>`).join("");
+  host.innerHTML = summary + detail;
+}
+
 function renderReport(data) {
   const first = data.first_party || {};
   const proof = data.local_proof || {};
@@ -83,7 +97,9 @@ async function loadReport() {
   try {
     const data = await api("/api/admin/local_search_measurement_report", {});
     renderReport(data);
-    setStatus("Local-search evidence refreshed.", "ok");
+    const closureData = await api("/api/admin/local_acquisition_evidence_closure", {});
+    renderClosure(closureData.closure || {});
+    setStatus("Local-search evidence and acquisition closure refreshed.", "ok");
   } catch (error) {
     setStatus(error?.message || "Could not load local-search evidence.", "bad");
   } finally {

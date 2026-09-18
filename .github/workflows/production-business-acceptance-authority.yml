@@ -65,6 +65,10 @@ jobs:
           node --check scripts/production_workflow_evidence_test.mjs
           node --check functions/api/_lib/production-workflow-evidence.js
           node --check functions/api/admin/production_workflow_evidence.js
+          python -m py_compile scripts/local_acquisition_evidence_closure_check.py
+          node --check scripts/local_acquisition_evidence_closure_test.mjs
+          node --check functions/api/_lib/local-acquisition-evidence-closure.js
+          node --check functions/api/admin/local_acquisition_evidence_closure.js
           node --check functions/api/admin/local_search_measurement_report.js
           node --check functions/api/admin/local_search_provider_evidence_save.js
           node --check assets/local-search-measurement.js
@@ -185,6 +189,11 @@ jobs:
           python scripts/production_workflow_evidence_check.py
           node scripts/production_workflow_evidence_test.mjs
 
+      - name: Validate local acquisition evidence closure authority
+        run: |
+          python scripts/local_acquisition_evidence_closure_check.py
+          node scripts/local_acquisition_evidence_closure_test.mjs
+
       - name: Validate rollback and hardening authorities
         run: |
           python scripts/release_rollback_recovery_check.py
@@ -214,6 +223,7 @@ jobs:
             echo "- Payment / refund / delivery provider evidence closure: PASS"
             echo "- Backup / restore / accountant-export operational proof: PASS"
             echo "- Customer / staff Production workflow evidence: PASS"
+            echo "- Local acquisition evidence closure: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"
