@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The completed Customer & Staff Production Workflow Evidence release is the retained completed predecessor. Build 418 remains the retained backup/restore/accountant-export operational-proof authority. Retained contracts: `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
+The completed Customer & Staff Production Workflow Evidence release is the retained completed predecessor. Build 418 remains the retained backup/restore/accountant-export operational-proof authority. Build 419 remains the retained Customer & Staff Production Workflow Evidence authority. Retained contracts: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 ## Current release
 
@@ -28,7 +28,7 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 421 — Retention, Maintenance & Fleet Operational Pilot** is next only after the current release is independently GREEN on protected `main`.
+**Retention, Maintenance & Fleet Operational Pilot** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
