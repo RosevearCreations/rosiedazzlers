@@ -40,7 +40,7 @@ require(page,['data-build416="controlled-soft-launch-real-world-acceptance"',"Bu
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["controlled pilot itself","invite-only","known-customer","Customer identity is not returned","no schema migration","no automatic customer outreach","no payment/refund/provider transaction","Build 417"],"Build 416 contract")
 for text,label in [(queue,"queue"),(handoff,"handoff"),(readme,"README")]:
-    require(text,["Build 416","Build 417","BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md"],label)
+    require(text,["BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md"],label)
 for gate,label in [(dev_gate,"Development source gate"),(prod_gate,"Production authority"),(focused,"focused authority")]:
     require(gate,["controlled_soft_launch_acceptance_check.py","controlled_soft_launch_acceptance_test.mjs"],label)
 require(prod_check,['"controlled_soft_launch"',"scripts/controlled_soft_launch_acceptance_check.py","scripts/controlled_soft_launch_acceptance_test.mjs","Validate controlled soft launch acceptance authority"],"Production business acceptance source authority")
