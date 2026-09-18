@@ -49,6 +49,10 @@ jobs:
           python -m py_compile scripts/customer_communication_consent_delivery_check.py
           python -m py_compile scripts/production_support_diagnostics_check.py
           python -m py_compile scripts/workflow_efficiency_accessibility_check.py
+          python -m py_compile scripts/local_search_measurement_authority_check.py
+          node --check functions/api/admin/local_search_measurement_report.js
+          node --check functions/api/admin/local_search_provider_evidence_save.js
+          node --check assets/local-search-measurement.js
           bash -n scripts/cloudflare_pages_production_acceptance.sh
 
       - name: Validate Production business acceptance source contract
@@ -134,6 +138,9 @@ jobs:
       - name: Validate workflow efficiency and accessibility authorities
         run: python scripts/workflow_efficiency_accessibility_check.py
 
+      - name: Validate local-search measurement authorities
+        run: python scripts/local_search_measurement_authority_check.py
+
       - name: Validate rollback and hardening authorities
         run: |
           python scripts/release_rollback_recovery_check.py
@@ -157,6 +164,7 @@ jobs:
             echo "- Inventory/job-cost operational evidence: PASS"
             echo "- Admin I.T./observability/support diagnostics: PASS"
             echo "- Admin / Detailer / Customer workflow efficiency & accessibility: PASS"
+            echo "- Local-search measurement / Search Console / GBP evidence: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"

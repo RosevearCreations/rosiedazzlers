@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit**.
+Current source direction: **Build 414 — Local SEO Measurement, Search Console & GBP Proof**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,18 +9,25 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_405_415.md` — active evidence-driven sequence.
-4. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md` — current Admin/Detailer/Customer workflow efficiency and accessibility contract.
-5. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — retained Production support diagnostics contract.
-6. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md` — retained communication/consent/delivery contract.
-7. `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md` — retained maintenance/fleet commercial acceptance contract.
-8. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — retained inventory/job-cost evidence contract.
-9. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
-10. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
-11. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
+4. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — current local-search measurement and provider-evidence contract.
+5. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md` — retained Admin/Detailer/Customer workflow efficiency and accessibility contract.
+6. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — retained Production support diagnostics contract.
+7. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md` — retained communication/consent/delivery contract.
+8. `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md` — retained maintenance/fleet commercial acceptance contract.
+9. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — retained inventory/job-cost evidence contract.
+10. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
+11. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
+12. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current workflow efficiency & accessibility framework
+## Current local-search measurement framework
+
+The Local SEO admin surface now separates four evidence sources: first-party Rosie traffic, genuine approved local proof, Search Console snapshots and Google Business Profile snapshots. Provider metrics are retained only when an authorized operator records a dated property/location snapshot; missing evidence stays provider-dependent and stale evidence stays owner-action.
+
+Google referrals, local proof, markup, canonical tags and structured data never become ranking, indexing or Maps/profile claims. No Google credentials or OAuth tokens are stored, no Google API is called automatically, and the screen remains manual-refresh only.
+
+## Retained workflow efficiency & accessibility framework
 
 This release hardens the high-frequency Admin Today, Detailer assigned-job and Customer My Account workflows without changing their business authorities. In-flight refresh/save actions are now explicit and duplicate-protected; important loading/error/empty/retry states are live-region aware; validation returns focus to the field that needs correction; and the retained phone/tablet/desktop, focus-visible, reduced-motion and forced-colors baselines remain authoritative.
 
@@ -71,6 +78,7 @@ Durable retained authorities include:
 Run current/durable release authorities with:
 
 ```bash
+python scripts/local_search_measurement_authority_check.py
 python scripts/workflow_efficiency_accessibility_check.py
 python scripts/production_support_diagnostics_check.py
 node scripts/production_support_diagnostics_test.mjs
@@ -93,4 +101,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 414 — Local SEO Measurement, Search Console & GBP Proof follows only after the current release is independently GREEN on protected `main`.
+Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal follows only after the current release is independently GREEN on protected `main`.

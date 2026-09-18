@@ -1,2 +1,137 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Local SEO Tasks | Rosie Dazzlers Admin</title><meta name="robots" content="noindex,nofollow"/><link rel="stylesheet" href="/assets/site.css"/><style>.status{margin:12px 0;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}.grid{display:grid;gap:14px}.card{padding:14px;border-radius:16px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.muted{color:#94a3b8}pre{white-space:pre-wrap;overflow:auto;max-height:320px}</style></head><body data-page="admin-seo-tasks" data-build185="search-console-local-seo-task-cards"><header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button><nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-payments.html">Payments</a><a href="/admin-media-health.html">Media Health</a></nav></div></header><main class="container"><div class="status" data-page-status hidden></div><section class="hero compact"><p class="eyebrow">Build 185</p><h1 style="margin:10px 0 6px">Search Console and local SEO task cards</h1><p class="kicker" style="margin:0;max-width:850px">Turn Search Console/local proof gaps into assignable town, service, gallery, and content tasks.</p></section><div class="grid"><div data-admin-menu-mount></div><section class="section"><div class="panel"><div class="toolbar"><button class="btn primary" id="loadSeo">Load tasks</button><button class="btn ghost" id="seedSeo">Create sample task</button></div><div id="seoOut" class="grid muted">Ready.</div></div></section></div></main><footer class="footer container" data-footer></footer><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script src="/assets/admin-menu.js"></script><script src="/assets/chrome.js"></script><script>
-(function(){const s=document.querySelector('[data-page-status]'),out=document.getElementById('seoOut');function set(m,t){s.hidden=!m;s.textContent=m||'';s.dataset.state=t||''}async function api(p,b){const r=await fetch(p,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(b||{})});const d=await r.json().catch(()=>null);if(!r.ok)throw new Error(d?.error||'Request failed');return d}async function load(){const d=await api('/api/admin/local_seo_task_cards_list',{});out.innerHTML=(d.tasks||[]).map(t=>'<div class="card"><strong>'+esc(t.title)+'</strong><p class="muted">'+esc(t.status||'needed')+' · '+esc(t.town||'all towns')+' · '+esc(t.service||'all services')+'</p></div>').join('')||'<div class="card">No SEO tasks yet.</div>';set('SEO tasks loaded.','success')}function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}document.getElementById('loadSeo').onclick=()=>load().catch(e=>set(e.message,'error'));document.getElementById('seedSeo').onclick=()=>api('/api/admin/local_seo_task_cards_save',{title:'Review Search Console queries and add one local proof block',task_type:'search_console_review',priority:70,status:'needed'}).then(load).catch(e=>set(e.message,'error'));window.AdminShell.boot({pageKey:'admin-seo-tasks',onReady:()=>{window.AdminMenu.render({currentPage:'admin-seo-tasks'});load().catch(e=>set(e.message,'error'))}})})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Local Search Measurement | Rosie Dazzlers Admin</title>
+<meta name="robots" content="noindex,nofollow"/>
+<meta name="description" content="Source-attributed local-search measurement and proof for Rosie Dazzlers."/>
+<link rel="stylesheet" href="/assets/site.css"/>
+<style>
+.local-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.metric-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}
+.metric{padding:12px;border:1px solid rgba(148,163,184,.25);border-radius:14px;display:grid;gap:5px}
+.metric strong{font-size:1.3rem}
+.summary-list{display:grid;gap:8px}
+.summary-item{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border:1px solid rgba(148,163,184,.2);border-radius:12px}
+.status-chip{display:inline-flex;align-items:center;min-height:34px;padding:4px 9px;border:1px solid rgba(148,163,184,.3);border-radius:999px;text-transform:capitalize}
+.section-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.provider-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.provider-form label{display:grid;gap:5px}
+.provider-form .wide{grid-column:1/-1}
+.provider-form input,.provider-form textarea{width:100%}
+.provider-form textarea{min-height:84px}
+.muted{color:var(--muted,#94a3b8)}
+.rule-list li,.recommendation-list li{margin:.45rem 0}
+@media(max-width:850px){.local-grid,.metric-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.local-grid,.metric-grid,.provider-form{grid-template-columns:1fr}.provider-form .wide{grid-column:auto}.summary-item{display:grid}}
+</style>
+</head>
+<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof">
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a>
+    <button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <nav id="navLinks" class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-analytics.html">Analytics</a><a href="/admin-growth.html">Value Additions</a></nav>
+  </div>
+</header>
+<main class="container">
+  <div data-admin-shell-status class="shell-status" hidden></div>
+  <div data-admin-shell-loading class="section"><div class="panel">Loading local-search measurement…</div></div>
+  <div data-admin-shell-ready hidden>
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Build 414 · Local search measurement</div>
+          <h1>Search Console, GBP & local proof</h1>
+          <p>Compare first-party traffic, approved Rosie proof, Search Console snapshots and Google Business Profile snapshots without turning markup, referrals or configuration into an invented ranking claim.</p>
+        </div>
+        <div class="panel">
+          <strong>Evidence rule</strong>
+          <p class="muted">Google provider evidence is dated and source-attributed. Missing or stale evidence remains provider-dependent or owner-action work.</p>
+          <button id="refreshLocalSearch" class="btn primary" type="button">Refresh evidence</button>
+        </div>
+      </div>
+      <div data-local-search-status class="notice" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
+    </section>
+
+    <section class="section local-grid" aria-label="Local search evidence">
+      <article id="firstPartyOut" class="panel" aria-live="polite"><h2>First-party signals</h2><p class="muted">Loading…</p></article>
+      <article id="localProofOut" class="panel" aria-live="polite"><h2>Approved local proof</h2><p class="muted">Loading…</p></article>
+      <article id="searchConsoleOut" class="panel" aria-live="polite"><h2>Google Search Console</h2><p class="muted">Loading…</p></article>
+      <article id="gbpOut" class="panel" aria-live="polite"><h2>Google Business Profile</h2><p class="muted">Loading…</p></article>
+    </section>
+
+    <section class="section local-grid">
+      <article class="panel">
+        <h2>Record Search Console evidence</h2>
+        <p class="muted">Copy a dated performance snapshot from the verified Rosie Dazzlers property. Do not paste credentials, tokens or customer data.</p>
+        <form class="provider-form" data-provider-evidence-form aria-busy="false">
+          <input type="hidden" name="provider" value="search_console"/>
+          <label class="wide">Property label<input name="label" required maxlength="160" placeholder="https://rosiedazzlers.ca/"/></label>
+          <label>Period start<input name="period_start" type="date" required/></label>
+          <label>Period end<input name="period_end" type="date" required/></label>
+          <label>Clicks<input name="clicks" type="number" min="0" step="1"/></label>
+          <label>Impressions<input name="impressions" type="number" min="0" step="1"/></label>
+          <label>CTR %<input name="ctr_percent" type="number" min="0" max="100" step="0.01"/></label>
+          <label>Average position<input name="average_position" type="number" min="0" step="0.01"/></label>
+          <label class="wide">Source note<textarea name="source_note" maxlength="300" placeholder="Example: Search Console Performance report, Web search, Canada"></textarea></label>
+          <div class="wide"><button class="btn primary" type="submit">Save observed snapshot</button></div>
+        </form>
+      </article>
+
+      <article class="panel">
+        <h2>Record Google Business Profile evidence</h2>
+        <p class="muted">Copy a dated performance snapshot for the Rosie Dazzlers business profile. Do not paste credentials, tokens or customer data.</p>
+        <form class="provider-form" data-provider-evidence-form aria-busy="false">
+          <input type="hidden" name="provider" value="google_business_profile"/>
+          <label class="wide">Location label<input name="label" required maxlength="160" placeholder="Rosie Dazzlers · Ontario"/></label>
+          <label>Period start<input name="period_start" type="date" required/></label>
+          <label>Period end<input name="period_end" type="date" required/></label>
+          <label>Profile views<input name="profile_views" type="number" min="0" step="1"/></label>
+          <label>Website clicks<input name="website_clicks" type="number" min="0" step="1"/></label>
+          <label>Calls<input name="calls" type="number" min="0" step="1"/></label>
+          <label>Direction requests<input name="direction_requests" type="number" min="0" step="1"/></label>
+          <label class="wide">Source note<textarea name="source_note" maxlength="300" placeholder="Example: Business Profile Performance, selected 30-day window"></textarea></label>
+          <div class="wide"><button class="btn primary" type="submit">Save observed snapshot</button></div>
+        </form>
+      </article>
+    </section>
+
+    <section class="section local-grid">
+      <article class="panel">
+        <h2>Current recommendations</h2>
+        <ul id="recommendationsOut" class="recommendation-list"><li>Loading recommendations…</li></ul>
+      </article>
+      <article class="panel">
+        <h2>Evidence boundaries</h2>
+        <ul id="evidenceRulesOut" class="rule-list"><li>Loading evidence rules…</li></ul>
+      </article>
+    </section>
+
+    <section class="section panel">
+      <div class="section-heading">
+        <div><h2 style="margin:0">Local SEO task cards</h2><p class="muted">Existing town/service/proof work remains separate from provider evidence.</p></div>
+        <a class="btn ghost" href="/admin-analytics.html">Open Analytics</a>
+      </div>
+      <div id="seoTasksOut" class="summary-list" aria-live="polite"><div class="summary-item muted">Loading task cards…</div></div>
+    </section>
+  </div>
+</main>
+<footer class="footer container" data-footer></footer>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script src="/assets/admin-menu.js"></script>
+<script src="/assets/chrome.js"></script>
+<script type="module">
+import { startLocalSearchMeasurement } from "/assets/local-search-measurement.js";
+window.AdminShell.boot({
+  pageKey: "admin-seo-tasks",
+  onReady: () => {
+    window.AdminMenu?.render?.({ currentPage: "admin-seo-tasks" });
+    startLocalSearchMeasurement();
+  }
+});
+</script>
+</body>
+</html>

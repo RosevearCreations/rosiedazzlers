@@ -8,20 +8,20 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is the active bounded release.
+**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is the active bounded release.
 
 Scope:
 
-- harden the high-frequency Admin Today, Detailer assigned-job and Customer My Account workflows;
-- make loading, busy, error, empty and manual-retry state explicit to keyboard and assistive-technology users;
-- suppress duplicate in-flight refresh/save/create actions without adding background polling;
-- improve validation focus and visible labels where current controls rely on placeholders;
-- retain the existing Build 376/397 responsive, focus-visible, reduced-motion and forced-colors authorities;
-- preserve Admin/Detailer/Customer role and capability boundaries;
-- classify independent authenticated visual browser proof as `unavailable` unless directly observed rather than inferred from source;
-- introduce no schema migration, provider mutation or Production business-data mutation.
+- combine bounded first-party Google referral/local-page traffic with current approved local proof;
+- record Search Console and Google Business Profile metrics only as explicit dated operator-observed snapshots;
+- keep provider evidence separate from markup, canonical, structured-data, first-party traffic and local proof;
+- classify missing provider evidence as provider-dependent and stale snapshots as owner-action;
+- retain current one-H1, metadata, canonical, structured-data and truthful Oxford/Norfolk proof authorities;
+- use the existing `app_management_settings` authority without a schema migration;
+- store no Google credentials, OAuth tokens or customer data;
+- introduce no automatic Google provider call, provider mutation or permanent polling.
 
-Current contract: `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`.
+Current contract: `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass Development deployment/runtime acceptance.
 
@@ -29,8 +29,8 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is next only after the current release is independently GREEN on protected `main`.
+**Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Source/Production release GREEN is distinct from provider, owner-action, unavailable visual-browser evidence and other unavailable evidence. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Source/Production release GREEN is distinct from Google provider evidence, owner-action evidence and unavailable evidence. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
