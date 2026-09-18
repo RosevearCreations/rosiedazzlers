@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 417 — Payment, Refund & Delivery Provider Evidence Closure**.
+Current source direction: **Build 418 — Backup, Restore & Accountant Export Operational Proof**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -10,9 +10,10 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
 4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — current payment/refund/delivery provider-evidence contract.
-6. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled soft-launch / real-world acceptance contract.
-7. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — retained launch-readiness consolidation contract.
+5. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — current backup/restore/accountant-export operational-proof contract.
+6. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained payment/refund/delivery provider-evidence contract.
+7. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled soft-launch / real-world acceptance contract.
+8. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — retained launch-readiness consolidation contract.
 6. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — retained local-search measurement and provider-evidence contract.
 7. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md` — retained Admin/Detailer/Customer workflow efficiency and accessibility contract.
 8. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — retained Production support diagnostics contract.
@@ -25,7 +26,17 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current provider-evidence closure framework
+## Current recovery / accountant-export operational-proof framework
+
+The launch-readiness surface now separates **operational proof** from source capability. A backup route, recovery runbook or export endpoint is not treated as evidence that a current artifact exists. Backup proof requires a verified dated owner observation with artifact and retention-location evidence; the underlying evidence note is not returned to the browser.
+
+Recovery/rollback drill proof remains separately authorized and operator-observed. Source acceptance does not perform a Production restore, Development rollback, R2 mutation, DNS/secret change or Cloudflare recovery action.
+
+Accountant-export usability is derived from the retained read-only Finance close/accountant-export authority and its package/CSV manifest. That runtime usability does not prove a current accountant package or CSV has been generated and retained. Build 418 itself generates no export, posts no accounting entry and mutates no Production business data.
+
+Source/Production GREEN can therefore coexist with recovery/export HOLDs until the real backup artifact, retention location, drill evidence and retained export artifact are observed.
+
+## Retained provider-evidence closure framework
 
 The launch-readiness surface now separates persisted provider evidence from source/runtime success. Stripe and PayPal count as observed only when the retained live-outcome authority finds a persisted verified provider event reconciled to an internal payment request. Refund evidence requires linked request/provider identities, a successful refund state, positive amount, valid currency and refunded timestamp.
 
@@ -33,7 +44,7 @@ Notification provider acceptance remains distinct from delivery. A sent/provider
 
 Source/Production GREEN can therefore coexist with a provider-evidence HOLD. This release does not create a charge, initiate a refund, send a notification, replay a webhook, contact a payment provider, post accounting entries or mutate Production business state.
 
-Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance.
+Retained prior release: Build 417 — Payment, Refund & Delivery Provider Evidence Closure. Retained controlled-pilot release: Build 416 — Controlled Soft Launch & Real-World Acceptance.
 
 ## Retained controlled soft-launch framework
 
