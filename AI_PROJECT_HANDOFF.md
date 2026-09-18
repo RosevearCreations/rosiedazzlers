@@ -35,7 +35,7 @@ This release authorizes no schema migration, Production business-data mutation, 
 
 - `dev` is Development; protected `main` is Production source.
 - Feature candidates require focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves.
-- `dev` advances only by non-force fast-forward to the exact accepted candidate.
+- `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 - Production is proposed by PR from accepted Development to protected `main`; `rd main protection` is not bypassed.
 - The resulting `main` SHA must independently pass exact Production deployment/runtime/business acceptance.
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
@@ -48,6 +48,7 @@ This release authorizes no schema migration, Production business-data mutation, 
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
 - `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`
+- `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
 - `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`

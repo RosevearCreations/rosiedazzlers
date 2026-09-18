@@ -52,6 +52,7 @@ jobs:
         run: python scripts/local_search_measurement_authority_check.py
 
       - name: Validate Build 414 release contract
+        if: startsWith(github.ref_name, 'build414-') || startsWith(github.head_ref, 'build414-')
         run: python scripts/build414_local_seo_measurement_search_console_gbp_proof_check.py
 
       - name: Build 414 summary
