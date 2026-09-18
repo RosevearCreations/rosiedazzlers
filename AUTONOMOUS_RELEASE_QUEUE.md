@@ -6,23 +6,23 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
+Retained prior release: Build 417 — Payment, Refund & Delivery Provider Evidence Closure. Retained Build 416 controlled-soft-launch authority remains active. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 ## Current release
 
-**Build 417 — Payment, Refund & Delivery Provider Evidence Closure** is the active bounded release.
+**Build 418 — Backup, Restore & Accountant Export Operational Proof** is the active bounded release.
 
 Scope:
 
-- compose persisted verified Stripe/PayPal provider outcomes without contacting a provider;
-- classify definitive refunds only when internal request identity, provider refund/event identity, amount, currency and refunded timestamp agree;
-- keep provider-accepted/sent notification evidence separate from definitive provider-verified delivery;
-- expose aggregate evidence counts only, never customer identity, recipients, message contents or provider secrets;
-- keep missing refund/delivery/provider evidence as provider-dependent or unavailable rather than fabricating success;
-- retain the controlled soft-launch decision separately from provider-evidence closure;
-- introduce no schema migration, charge/capture/refund initiation, notification send, webhook replay, accounting posting, customer mutation, destructive R2 mutation or permanent polling.
+- classify current backup-artifact evidence only from a verified dated owner observation;
+- require explicit retention/storage-location evidence rather than infer it from configured services or source paths;
+- retain recovery/rollback drill evidence as a separate operator-observed boundary; source acceptance never executes a restore;
+- consume the canonical Build 394 Finance close/accountant-export acceptance and manifest without generating an export;
+- keep export-route usability separate from proof that a current accountant package/CSV has actually been generated and retained;
+- expose proof states and aggregate export metadata only, never evidence-note contents, customer identity, accountant-package contents, credentials or secrets;
+- introduce no schema migration, restore, rollback, export generation, accounting posting, provider mutation, destructive R2 mutation or permanent polling.
 
-Current contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained prior release contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone authority: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`.
+Current contract: `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`. Retained provider-evidence contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained controlled-pilot contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone authority: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
@@ -30,8 +30,8 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 418 — Backup, Restore & Accountant Export Operational Proof** is next only after the current release is independently GREEN on protected `main`.
+**Build 419 — Customer & Staff Production Workflow Evidence** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers source release GREEN from source changes alone. Source/Production GREEN may coexist with provider-evidence HOLDs until already-authorized real provider outcomes are observed. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
+Never call a Rosie Dazzlers source release GREEN from source changes alone. Source/Production GREEN may coexist with recovery/export operational-proof HOLDs until real artifacts, retention location and separately authorized drill evidence are observed. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
