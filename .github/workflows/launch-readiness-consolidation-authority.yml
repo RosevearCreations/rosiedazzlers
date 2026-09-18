@@ -1,0 +1,67 @@
+name: Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build415-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-launch-readiness-consolidation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: launch-readiness-consolidation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check capstone syntax
+        run: |
+          node --check functions/api/_lib/launch-readiness-consolidation.js
+          node --check functions/api/admin/launch_readiness_consolidated.js
+          node --check assets/launch-readiness-consolidation.js
+          node --check scripts/launch_readiness_consolidation_test.mjs
+          python -m py_compile scripts/launch_readiness_consolidation_check.py
+
+      - name: Validate launch readiness consolidation
+        run: |
+          python scripts/launch_readiness_consolidation_check.py
+          node scripts/launch_readiness_consolidation_test.mjs
+
+      - name: Capstone summary
+        run: |
+          {
+            echo '### Build 415 — Launch Readiness Consolidation'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Read-only consolidated launch authority: PASS'
+            echo '- Backup/export/recovery truth boundary: PASS'
+            echo '- Provider/owner HOLD separation: PASS'
+            echo '- Next-roadmap renewal: PASS'
+            echo '- Schema migration: NONE'
+            echo '- Provider/business mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

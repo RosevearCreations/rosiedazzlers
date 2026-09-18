@@ -1,10 +1,10 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 414 — Local SEO Measurement, Search Console & GBP Proof. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
-This document is an acceptance/evidence inventory, not a claim that unchecked external/provider/runtime evidence has already passed. The current operator surface is `/admin/it.html`, backed by the authenticated read-only `/api/admin/go_live_readiness` endpoint plus retained production diagnostics.
+This document is an acceptance/evidence inventory, not a claim that unchecked external/provider/runtime evidence has already passed. `/admin-launch-readiness.html` is the current consolidated launch capstone, backed by authenticated read-only readiness/diagnostics plus retained launch evidence. `/admin/it.html` remains the deep diagnostics surface.
 
 ## Build 406 evidence classification
 
@@ -107,3 +107,6 @@ Every current readiness item must be represented truthfully as one of:
 - [ ] Any real rollback, database restore, R2 mutation, DNS change, secret rotation or provider action receives explicit operator authorization and normal exact-SHA re-acceptance afterward.
 - [ ] Controlled soft-launch/business-path acceptance is complete before unrestricted Production reliance.
 - [ ] Production is not called GREEN from source promotion alone.
+- [ ] Consolidated launch readiness keeps source/runtime, controlled-launch and unrestricted-launch decisions separate.
+- [ ] Source-ready export routes are not treated as proof that a current backup/export artifact exists.
+- [ ] Build 416 controlled soft-launch work begins only after this capstone is exact-Production GREEN.
