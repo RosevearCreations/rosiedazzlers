@@ -38,6 +38,7 @@ This release authorizes no schema migration, Production business-data mutation, 
 - `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 - Production is proposed by PR from accepted Development to protected `main`; `rd main protection` is not bypassed.
 - The resulting `main` SHA must independently pass exact Production deployment/runtime/business acceptance.
+- Production deployment/runtime/business acceptance must independently prove that exact SHA.
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
 - Database migrations remain separate explicit acceptance boundaries.
 - Any post-acceptance source write invalidates exact-SHA acceptance and requires revalidation.
