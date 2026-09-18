@@ -19,7 +19,7 @@ Scope:
 - keep provider-accepted/sent notification evidence separate from definitive provider-verified delivery;
 - expose aggregate evidence counts only, never customer identity, recipients, message contents or provider secrets;
 - keep missing refund/delivery/provider evidence as provider-dependent or unavailable rather than fabricating success;
-- retain the Build 416 controlled soft-launch decision separately from provider-evidence closure;
+- retain the controlled soft-launch decision separately from provider-evidence closure;
 - introduce no schema migration, charge/capture/refund initiation, notification send, webhook replay, accounting posting, customer mutation, destructive R2 mutation or permanent polling.
 
 Current contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained prior release contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone authority: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`.
