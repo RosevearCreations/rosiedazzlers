@@ -26,9 +26,11 @@ Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
 ## Current controlled soft-launch framework
 
-Build 416 extends `/admin-launch-readiness.html` with a separate, fail-closed controlled-pilot decision. The pilot is intended only for explicitly authorized internal or known-customer scenarios. Source/runtime GREEN does not prove participant authorization or a completed real customer journey.
+This release extends `/admin-launch-readiness.html` with a separate, fail-closed controlled-pilot decision. The pilot is intended only for explicitly authorized internal or known-customer scenarios. Source/runtime GREEN does not prove participant authorization or a completed real customer journey.
 
-The view composes existing audited launch evidence with aggregate job-handoff counts for booking, consent-safe communication, field/mobile work, completion, support monitoring and incident closeout. It never returns customer names, booking identifiers, addresses or message contents. Missing evidence remains a HOLD; this build does not create bookings, send outreach, contact payment providers, restore/export data or write Production business state automatically.
+The view composes existing audited launch evidence with aggregate job-handoff counts for booking, consent-safe communication, field/mobile work, completion, support monitoring and incident closeout. It never returns customer names, booking identifiers, addresses or message contents. Missing evidence remains a HOLD; this release does not create bookings, send outreach, contact payment providers, restore/export data or write Production business state automatically.
+
+Retained capstone release: **Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal**.
 
 ## Current launch-readiness consolidation framework
 
@@ -120,4 +122,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 417 — Payment, Refund & Delivery Provider Evidence Closure follows only after Build 416 is independently GREEN on protected `main`.
+Build 417 — Payment, Refund & Delivery Provider Evidence Closure follows only after the current release is independently GREEN on protected `main`.
