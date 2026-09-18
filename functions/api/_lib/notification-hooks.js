@@ -44,7 +44,7 @@ export async function loadCustomerNotificationProfile({ env, customer_email = nu
       Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
       "Content-Type": "application/json"
     };
-    let url = `${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,email,full_name,phone,notification_opt_in,notification_channel,detailer_chat_opt_in,notify_on_progress_post,notify_on_media_upload,notify_on_comment_reply`;
+    let url = `${env.SUPABASE_URL}/rest/v1/customer_profiles?select=id,email,full_name,phone,sms_phone,notification_opt_in,notification_channel,detailer_chat_opt_in,notify_on_progress_post,notify_on_media_upload,notify_on_comment_reply`;
     if (customer_profile_id) url += `&id=eq.${encodeURIComponent(customer_profile_id)}`;
     else if (customer_email) url += `&email=eq.${encodeURIComponent(customer_email)}`;
     else return null;

@@ -26,18 +26,22 @@ export async function onRequestPost(context){ const {request,env}=context; try{
    notes: cleanText(body.notes),
    client_private_notes: cleanText(body.client_private_notes),
    detailer_visible_notes: cleanText(body.detailer_visible_notes),
-   notification_opt_in: toBoolean(body.notification_opt_in),
-   notification_channel: normalizeNotificationChannel(body.notification_channel),
-   detailer_chat_opt_in: toBoolean(body.detailer_chat_opt_in),
-   notify_on_progress_post: toBoolean(body.notify_on_progress_post),
-   notify_on_media_upload: toBoolean(body.notify_on_media_upload),
-   notify_on_comment_reply: toBoolean(body.notify_on_comment_reply),
    has_water_hookup: toBoolean(body.has_water_hookup),
    has_power_hookup: toBoolean(body.has_power_hookup),
    live_updates_enabled: toBoolean(body.live_updates_enabled),
    billing_profile_enabled: toBoolean(body.billing_profile_enabled),
    updated_at: new Date().toISOString()
  };
+ if (Object.prototype.hasOwnProperty.call(body, "notification_opt_in")) patch.notification_opt_in = toBoolean(body.notification_opt_in);
+ if (Object.prototype.hasOwnProperty.call(body, "notification_channel")) {
+   const channel = normalizeNotificationChannel(body.notification_channel);
+   if (!channel) return withCors(json({error:"Invalid notification_channel."},400));
+   patch.notification_channel = channel;
+ }
+ if (Object.prototype.hasOwnProperty.call(body, "detailer_chat_opt_in")) patch.detailer_chat_opt_in = toBoolean(body.detailer_chat_opt_in);
+ if (Object.prototype.hasOwnProperty.call(body, "notify_on_progress_post")) patch.notify_on_progress_post = toBoolean(body.notify_on_progress_post);
+ if (Object.prototype.hasOwnProperty.call(body, "notify_on_media_upload")) patch.notify_on_media_upload = toBoolean(body.notify_on_media_upload);
+ if (Object.prototype.hasOwnProperty.call(body, "notify_on_comment_reply")) patch.notify_on_comment_reply = toBoolean(body.notify_on_comment_reply);
  const res=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_profiles?id=eq.${encodeURIComponent(current.customer_profile.id)}`,{method:"PATCH",headers:{...serviceHeaders(env),Prefer:"return=representation"},body:JSON.stringify(patch)});
  if(!res.ok) throw new Error(`Could not update profile. ${await res.text()}`);
  const rows=await res.json().catch(()=>[]); const customer=customerSafeProfile(Array.isArray(rows)?rows[0]||null:null); return withCors(json({ok:true,message:"Profile updated.",customer}));
