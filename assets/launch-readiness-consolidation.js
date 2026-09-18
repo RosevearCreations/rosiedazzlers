@@ -58,19 +58,26 @@ function renderRelease(data){
 
 function renderLaunch(data){
   const e=data.launch_evidence||{};
+  const pilot=data.controlled_soft_launch||{};
+  const stages=Array.isArray(pilot.stages)?pilot.stages:[];
   const outstanding=Array.isArray(e.required_outstanding)?e.required_outstanding:[];
   $("#launchOut").innerHTML=`
-    <h2>Controlled launch evidence</h2>
+    <h2>Controlled soft launch & real-world acceptance</h2>
     <div class="metric-grid">
-      ${metric("Controlled launch",data.controlled_launch_status||"unknown")}
-      ${metric("Verified",e.verified??0)}
-      ${metric("Pending",e.pending??0)}
-      ${metric("Failed",e.failed??0)}
+      ${metric("Pilot",pilot.status||"hold")}
+      ${metric("Observed jobs",pilot.observed_real_jobs??0)}
+      ${metric("Evidence-ready jobs",pilot.evidence_ready_jobs??0)}
+      ${metric("Open completion",pilot.completion_evidence_open??0)}
     </div>
-    <p><strong>Unrestricted launch:</strong> ${chip(data.unrestricted_launch_status||"hold")}</p>
+    <p><strong>Retained controlled-launch gate:</strong> ${chip(data.controlled_launch_status||"hold")} · <strong>Unrestricted launch:</strong> ${chip(data.unrestricted_launch_status||"hold")}</p>
+    <div class="stack">${stages.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p></div>${chip(x.status||"owner_action")}</article>`).join("")}</div>
+    ${pilot.status==="ready"
+      ? '<div class="notice ok">The bounded controlled-pilot evidence set is complete.</div>'
+      : `<div class="notice warn">Pilot remains invite-only and on HOLD until ${esc(pilot.outstanding?.length??0)} observed evidence item(s) are complete. Source checks never create a real customer journey.</div>`}
     ${outstanding.length
-      ? `<ul class="compact-list">${outstanding.map(x=>`<li>${esc(x.key.replaceAll("_"," "))}: ${chip(x.status||"pending")}</li>`).join("")}</ul>`
-      : '<div class="notice ok">Required owner-observed launch evidence is recorded.</div>'}
+      ? `<p class="mini">Retained launch evidence also has ${esc(outstanding.length)} owner-observed item(s) outstanding.</p>`
+      : '<p class="mini">Retained owner-observed launch evidence is recorded.</p>'}
+    <p class="muted">Participant authorization is never inferred, customer identity is not returned by this view, and no booking, message or provider action is performed automatically.</p>
     <p><a class="btn ghost" href="/admin-startup-guide.html#evidence">Record / review launch evidence</a></p>`;
 }
 

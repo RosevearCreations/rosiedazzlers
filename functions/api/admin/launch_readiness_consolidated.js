@@ -1,19 +1,21 @@
-// Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal
-// Authenticated, bounded, read-only composition. No restore/export/provider/business mutation.
+// Build 416 — Controlled Soft Launch & Real-World Acceptance
+// Authenticated, bounded, read-only composition. No booking/message/provider/customer mutation is performed here.
 
 import { onRequestGet as getGoLiveReadiness } from "./go_live_readiness.js";
 import { onRequestGet as getProductionDiagnostics } from "./production_diagnostics.js";
 import { buildProductionSupportDiagnostics } from "../_lib/production-support-diagnostics.js";
 import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
 import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-consolidation.js";
+import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
   const generatedAt = new Date().toISOString();
 
-  const [readinessResult, diagnosticsResult, launchEvidenceResult] = await Promise.all([
+  const [readinessResult, diagnosticsResult, launchEvidenceResult, jobHandoffResult] = await Promise.all([
     collect(() => getGoLiveReadiness({ request: request.clone(), env })),
     collect(() => getProductionDiagnostics({ request: request.clone(), env })),
-    collectLaunchEvidence(env)
+    collectLaunchEvidence(env),
+    collectJobHandoff(request, env)
   ]);
 
   for (const result of [readinessResult, diagnosticsResult]) {
@@ -38,19 +40,26 @@ export async function onRequestGet({ request, env }) {
     readiness: readinessResult.data || {},
     support,
     launch_evidence: launchEvidenceResult.items,
+    job_handoff: jobHandoffResult,
     generated_at: generatedAt
   });
 
   return json({
     ok: consolidation.source_runtime_status === "green",
-    build: 415,
-    authority: "launch_readiness_consolidation_next_roadmap_renewal",
+    build: 416,
+    authority: "controlled_soft_launch_real_world_acceptance",
+    retained_authority: "launch_readiness_consolidation_next_roadmap_renewal",
     source_status: {
       go_live_readiness: state(readinessResult),
       production_diagnostics: state(diagnosticsResult),
       launch_readiness_evidence: {
         available: launchEvidenceResult.ok,
         warning: launchEvidenceResult.warning || null
+      },
+      job_handoff_evidence: {
+        available: jobHandoffResult.available,
+        http_status: jobHandoffResult.http_status,
+        warning: jobHandoffResult.warning || null
       }
     },
     ...consolidation
@@ -92,6 +101,25 @@ async function collectLaunchEvidence(env) {
   }
 }
 
+async function collectJobHandoff(request, env) {
+  try {
+    const headers = new Headers(request.headers);
+    headers.set("Content-Type", "application/json");
+    const pilotRequest = new Request(request.url, { method: "POST", headers, body: JSON.stringify({ days: 45 }) });
+    const response = await getJobHandoffEvidence({ request: pilotRequest, env });
+    const data = await response.json().catch(() => null);
+    return {
+      available: response.ok && data?.ok === true,
+      http_status: response.status,
+      warning: response.ok ? null : (data?.error || "Job-handoff evidence is unavailable to this operator/session."),
+      summary: data?.summary || {},
+      window: data?.window || {}
+    };
+  } catch (error) {
+    return { available: false, http_status: 503, warning: error?.message || "Job-handoff evidence is unavailable.", summary: {}, window: {} };
+  }
+}
+
 function state(result) {
   return {
     available: result?.ok === true,
@@ -106,7 +134,7 @@ function json(value, status = 200) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
-      "X-Rosie-Launch-Readiness": "build-415-read-only"
+      "X-Rosie-Launch-Readiness": "build-416-read-only"
     }
   });
 }

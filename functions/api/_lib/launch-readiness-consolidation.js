@@ -20,6 +20,15 @@ const RECOVERY_EVIDENCE = Object.freeze([
   "incident_closeout"
 ]);
 
+const CONTROLLED_PILOT_EVIDENCE = Object.freeze([
+  { id: "invite_scope", key: "operations", title: "Invite-only scope & operator ownership", note_pattern: /invite|known customer|internal|soft launch|controlled/i },
+  { id: "booking", key: "booking_e2e", title: "Real booking path", note_pattern: /real|customer|internal|known|controlled|production|soft launch/i },
+  { id: "communication", key: "email_delivery", title: "Consent-safe communication outcome", note_pattern: /deliver|message|email|sms|provider|controlled|production/i },
+  { id: "mobile", key: "mobile", title: "Field / mobile workflow", note_pattern: /mobile|field|detailer|device|job|controlled/i },
+  { id: "legal", key: "legal", title: "Current customer-facing policy / consent review" },
+  { id: "incident_closeout", key: "incident_closeout", title: "Pilot incident closeout" }
+]);
+
 const EXPORT_CAPABILITIES = Object.freeze([
   {
     id: "accounting_export",
@@ -48,6 +57,7 @@ export function buildLaunchReadinessConsolidation({
   readiness = {},
   support = {},
   launch_evidence = [],
+  job_handoff = {},
   generated_at = new Date().toISOString()
 } = {}) {
   const evidenceRows = Array.isArray(launch_evidence) ? launch_evidence : [];
@@ -74,6 +84,12 @@ export function buildLaunchReadinessConsolidation({
   const recoveryEvidence = RECOVERY_EVIDENCE.map((key) => evidenceState(key, evidenceByKey.get(key)));
   const backupObserved = recoveryEvidence.find((row) => row.key === "backups")?.status === "verified";
   const rollbackObserved = recoveryEvidence.find((row) => row.key === "rollback_drill")?.status === "verified";
+
+  const controlledSoftLaunch = buildControlledSoftLaunch({
+    evidenceByKey,
+    supportCritical,
+    jobHandoff: job_handoff
+  });
 
   const verifiedCount = evidenceRows.filter((row) => String(row?.status || "") === "verified").length;
   const failedCount = evidenceRows.filter((row) => String(row?.status || "") === "failed").length;
@@ -104,6 +120,10 @@ export function buildLaunchReadinessConsolidation({
       export_route_presence_is_not_backup_proof: true,
       provider_success_inferred: false,
       visual_proof_inferred: false,
+      real_customer_journey_inferred: false,
+      invite_only_scope_inferred: false,
+      customer_identity_exposed: false,
+      automatic_outreach_performed: false,
       restore_performed: false,
       export_performed: false,
       provider_contact_performed: false,
@@ -137,6 +157,7 @@ export function buildLaunchReadinessConsolidation({
       rule: "A source route or repository file never proves that a current restorable backup/export exists."
     },
     exports: EXPORT_CAPABILITIES,
+    controlled_soft_launch: controlledSoftLaunch,
     external_holds: externalHolds,
     next_actions: buildActions({
       runtimeUnavailable,
@@ -144,7 +165,8 @@ export function buildLaunchReadinessConsolidation({
       requiredOutstanding,
       externalHolds,
       backupObserved,
-      rollbackObserved
+      rollbackObserved,
+      controlledSoftLaunch
     })
   };
 }
@@ -166,7 +188,8 @@ function buildActions({
   requiredOutstanding,
   externalHolds,
   backupObserved,
-  rollbackObserved
+  rollbackObserved,
+  controlledSoftLaunch
 }) {
   const actions = [];
   if (supportCritical > 0 || runtimeUnavailable.length) {
@@ -193,6 +216,12 @@ function buildActions({
       action: `Complete and record launch evidence for ${row.key.replaceAll("_", " ")}.`
     });
   }
+  if (controlledSoftLaunch?.status !== "ready") {
+    actions.push({
+      priority: "owner_action",
+      action: `Controlled soft launch remains on HOLD with ${controlledSoftLaunch?.outstanding?.length || 0} pilot evidence item(s) outstanding. Use only authorized internal/known-customer scenarios and record observed evidence without customer-identifying notes.`
+    });
+  }
   if (externalHolds.length) {
     actions.push({
       priority: "external_hold",
@@ -206,6 +235,76 @@ function buildActions({
     });
   }
   return actions;
+}
+
+function buildControlledSoftLaunch({ evidenceByKey, supportCritical, jobHandoff }) {
+  const handoffAvailable = jobHandoff?.available === true;
+  const summary = jobHandoff?.summary || {};
+  const jobsObserved = integer(summary?.jobs_observed);
+  const evidenceReadyJobs = integer(summary?.evidence_ready);
+  const completionOpen = integer(summary?.completion_evidence_open);
+  const stages = CONTROLLED_PILOT_EVIDENCE.map((definition) =>
+    pilotEvidenceState(definition, evidenceByKey.get(definition.key))
+  );
+  const mobileVerified = stages.find((row) => row.id === "mobile")?.status === "verified";
+  stages.push({
+    id: "field_observation",
+    title: "Observed field workflow",
+    status: !handoffAvailable ? "unavailable" : (mobileVerified && jobsObserved > 0 ? "verified" : "owner_action"),
+    classification: !handoffAvailable ? "unavailable" : (mobileVerified && jobsObserved > 0 ? "owner_action_observed" : "owner_action"),
+    detail: !handoffAvailable ? "The retained job-handoff evidence source is unavailable to this operator/session." : jobsObserved > 0 ? `${jobsObserved} eligible real job(s) are present in the bounded handoff window.` : "No eligible real job is present in the bounded handoff window; source checks do not create one."
+  });
+  stages.push({
+    id: "completion_observation",
+    title: "Observed completion / office handoff",
+    status: !handoffAvailable ? "unavailable" : (evidenceReadyJobs > 0 ? "verified" : "owner_action"),
+    classification: !handoffAvailable ? "unavailable" : (evidenceReadyJobs > 0 ? "owner_action_observed" : "owner_action"),
+    detail: !handoffAvailable ? "Completion evidence cannot be evaluated from the retained handoff source." : evidenceReadyJobs > 0 ? `${evidenceReadyJobs} job(s) contain the retained before/field/completion/after evidence set.` : "No real job currently satisfies the retained completion-evidence set."
+  });
+  const monitoring = evidenceState("monitoring", evidenceByKey.get("monitoring"));
+  stages.push({
+    id: "support_observation",
+    title: "Support / monitoring observation",
+    status: monitoring.status === "verified" && supportCritical === 0 ? "verified" : "owner_action",
+    classification: monitoring.status === "verified" && supportCritical === 0 ? "owner_action_observed" : "owner_action",
+    detail: supportCritical > 0 ? `${supportCritical} critical support alert(s) are still active.` : monitoring.status === "verified" ? "Monitoring evidence is recorded and no critical support alert is active." : "Monitoring evidence still requires an operator-observed record."
+  });
+  const outstanding = stages.filter((row) => row.status !== "verified");
+  return {
+    status: outstanding.length ? "hold" : "ready",
+    decision: outstanding.length ? "pilot_evidence_incomplete" : "controlled_pilot_evidence_complete",
+    scope: "invite_only_authorized_internal_or_known_customer",
+    source_available: handoffAvailable,
+    observed_window_days: integer(jobHandoff?.window?.days) || null,
+    observed_real_jobs: jobsObserved,
+    evidence_ready_jobs: evidenceReadyJobs,
+    completion_evidence_open: completionOpen,
+    customer_identity_exposed: false,
+    participant_authorization_inferred: false,
+    provider_success_inferred: false,
+    automatic_booking_created: false,
+    automatic_message_sent: false,
+    stages,
+    outstanding: outstanding.map((row) => ({ id: row.id, title: row.title, status: row.status }))
+  };
+}
+
+function pilotEvidenceState(definition, row) {
+  const status = clean(row?.status) || "pending";
+  const note = clean(row?.evidence_note);
+  const noteMatches = definition.note_pattern ? definition.note_pattern.test(note) : true;
+  const verified = status === "verified" && !!note && noteMatches;
+  return {
+    id: definition.id,
+    key: definition.key,
+    title: definition.title,
+    status: verified ? "verified" : "owner_action",
+    classification: verified ? "owner_action_observed" : "owner_action",
+    verified_at: verified ? (clean(row?.verified_at) || null) : null,
+    note_present: !!note,
+    note_matches_scope: noteMatches,
+    detail: verified ? "Observed evidence is recorded for this controlled-pilot stage." : definition.note_pattern && note && !noteMatches ? "Evidence exists, but its note does not establish the controlled real-world pilot scope." : "Observed controlled-pilot evidence is still required."
+  };
 }
 
 function pickReleaseIdentity(readiness, support) {
