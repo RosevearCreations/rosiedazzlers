@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 418 — Backup, Restore & Accountant Export Operational Proof**.
+Current source direction: **Build 419 — Customer & Staff Production Workflow Evidence**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -10,7 +10,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
 4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — current backup/restore/accountant-export operational-proof contract.
+5. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — current Customer/staff Production workflow-evidence contract.
+6. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained backup/restore/accountant-export operational-proof contract.
 6. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained payment/refund/delivery provider-evidence contract.
 7. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled soft-launch / real-world acceptance contract.
 8. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — retained launch-readiness consolidation contract.
@@ -26,7 +27,15 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current recovery / accountant-export operational-proof framework
+## Current Production workflow evidence framework
+
+The launch-readiness surface now reports Customer, Detailer, Operations and Admin Production workflow observations separately from source/runtime success. A verified state requires a dated role-specific observation that records a real device or representative viewport/width; the Detailer state also requires aggregate eligible real-job evidence.
+
+The payload returns classifications and aggregate counts only. It does not return customer identity or evidence-note contents, infer consent or cross-role access, create test customers/jobs, or change staff roles/capabilities. Source/Production GREEN can coexist with a workflow-evidence HOLD until those observations are recorded truthfully.
+
+Current contract: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`.
+
+## Retained recovery / accountant-export operational-proof framework
 
 The launch-readiness surface now separates **operational proof** from source capability. A backup route, recovery runbook or export endpoint is not treated as evidence that a current artifact exists. Backup proof requires a verified dated owner observation with artifact and retention-location evidence; the underlying evidence note is not returned to the browser.
 
@@ -121,6 +130,10 @@ python scripts/controlled_soft_launch_acceptance_check.py
 node scripts/controlled_soft_launch_acceptance_test.mjs
 python scripts/provider_evidence_closure_check.py
 node scripts/provider_evidence_closure_test.mjs
+python scripts/recovery_export_operational_proof_check.py
+node scripts/recovery_export_operational_proof_test.mjs
+python scripts/production_workflow_evidence_check.py
+node scripts/production_workflow_evidence_test.mjs
 python scripts/launch_readiness_consolidation_check.py
 node scripts/launch_readiness_consolidation_test.mjs
 python scripts/local_search_measurement_authority_check.py
@@ -146,4 +159,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 418 — Backup, Restore & Accountant Export Operational Proof follows only after the current release is independently GREEN on protected `main`.
+Build 420 — Search Console, GBP & Local Acquisition Evidence Closure follows only after the current release is independently GREEN on protected `main`.

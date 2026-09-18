@@ -1,0 +1,54 @@
+name: Customer & Staff Production Workflow Evidence
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build419-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-production-workflow-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: customer-staff-production-workflow-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate customer and staff Production workflow evidence
+        run: |
+          python scripts/production_workflow_evidence_check.py
+          node scripts/production_workflow_evidence_test.mjs
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Customer & staff Production workflow evidence'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Customer / Detailer / Operations / Admin evidence remains role-specific and fail-closed: PASS'
+            echo '- Real-device / representative-viewport language is required: PASS'
+            echo '- Customer identity and evidence-note contents are excluded: PASS'
+            echo '- Role/capability mutation: NONE'
+            echo '- Schema/business/provider mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
