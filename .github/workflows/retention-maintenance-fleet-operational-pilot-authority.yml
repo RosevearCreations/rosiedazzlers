@@ -1,0 +1,57 @@
+name: Build 421 — Retention, Maintenance & Fleet Operational Pilot Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-retention-maintenance-fleet-operational-pilot-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: retention-maintenance-fleet-operational-pilot
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate operational pilot authority
+        run: |
+          python scripts/retention_maintenance_fleet_operational_pilot_check.py
+          node scripts/retention_maintenance_fleet_operational_pilot_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 421 — Retention, Maintenance & Fleet Operational Pilot'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Current unapproved commercial terms remain owner_action: PASS'
+            echo '- Operator participant selection remains manual: PASS'
+            echo '- Availability / checkout capacity authority retained: PASS'
+            echo '- Automatic outreach / booking / discount / invoice / recurring billing: PROHIBITED'
+            echo '- Provider mutation / schema migration / permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
