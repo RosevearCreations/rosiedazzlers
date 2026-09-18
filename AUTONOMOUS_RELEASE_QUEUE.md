@@ -4,7 +4,7 @@ This living queue records only the current bounded release path. Historical impl
 
 ## Accepted checkpoint
 
-The synchronized Development/Production checkpoint immediately preceding the current release is the accepted boundary. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
+The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
 ## Current release
 
@@ -22,9 +22,9 @@ Scope:
 
 Current contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
-The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. Development must independently prove the identical SHA.
+The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and Development must independently prove the identical SHA.
 
-Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Exact Production deployment/runtime/business acceptance is independent of source promotion.
+Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
 
