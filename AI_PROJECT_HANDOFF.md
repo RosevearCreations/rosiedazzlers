@@ -31,7 +31,13 @@ This source release authorizes no schema migration, Production business-data mut
 - Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
 - Canonical checkout remains server-authoritative for availability, booking and payment outcomes.
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
-- Field-to-office, inventory/job-cost, maintenance/fleet, communication/consent and Production-diagnostics contracts remain retained through their durable source authorities.
+- Field-to-office handoff remains retained through `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
+- Payment provider live-outcome/reconciliation remains retained through `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`.
+- Inventory/job-cost evidence remains retained through `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
+- Maintenance/fleet commercial evidence remains retained through `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
+- Communication/consent evidence remains retained through `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
+- Production support diagnostics remain retained through `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`.
+- Workflow efficiency/accessibility remains retained through `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`.
 
 ## Release mechanics
 
@@ -52,6 +58,13 @@ This source release authorizes no schema migration, Production business-data mut
 - `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`
 - `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`
 - `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`
+- `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`
+- `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`
+- `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`
+- `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
+- `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
+- `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
+- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
