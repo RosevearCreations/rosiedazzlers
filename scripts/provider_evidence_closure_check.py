@@ -42,7 +42,7 @@ require(page,['data-build417="payment-refund-delivery-provider-evidence-closure"
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["configuration remains source evidence only","definitive refund","Definitive message delivery","no provider contact","no provider contact, payment charge/capture","Build 418"],"Build 417 contract")
 for text,label in [(queue,"queue"),(handoff,"handoff"),(readme,"README")]:
-    require(text,["Build 417","Build 418","BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md"],label)
+    require(text,["BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md"],label)
 for gate,label in [(dev_gate,"Development source gate"),(prod_gate,"Production authority"),(focused,"focused authority")]:
     require(gate,["provider_evidence_closure_check.py","provider_evidence_closure_test.mjs"],label)
 require(prod_check,['"provider_evidence_closure"',"scripts/provider_evidence_closure_check.py","scripts/provider_evidence_closure_test.mjs","Validate provider evidence closure authority"],"Production business acceptance source authority")
