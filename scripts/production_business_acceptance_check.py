@@ -112,6 +112,10 @@ required_authorities = {
         "scripts/local_acquisition_evidence_closure_check.py",
         "scripts/local_acquisition_evidence_closure_test.mjs",
     ],
+    "retention_maintenance_fleet_operational_pilot": [
+        "scripts/retention_maintenance_fleet_operational_pilot_check.py",
+        "scripts/retention_maintenance_fleet_operational_pilot_test.mjs",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
@@ -181,6 +185,7 @@ workflow = require(WORKFLOW, [
     "Validate recovery export operational proof authority",
     "Validate customer & staff Production workflow evidence authority",
     "Validate local acquisition evidence closure authority",
+    "Validate retention, maintenance & fleet operational pilot authority",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
@@ -236,6 +241,7 @@ print("- provider payment/refund/delivery evidence closure remains read-only, ag
 print("- backup/restore/accountant-export operational proof remains read-only and artifact-truthful")
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
+print("- retention/maintenance/fleet operational pilot remains manual, capacity-aware and owner-action gated")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")
 print("- workflow is durable across sequential releases and does not carry a numbered-release dependency")
