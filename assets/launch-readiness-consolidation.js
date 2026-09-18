@@ -22,7 +22,7 @@ async function load({manual=false}={}){
       data.source_runtime_status==="green"?"ok":"bad");
   }catch(error){
     status(error?.message||"Could not load launch readiness.","bad");
-    for(const id of ["releaseOut","launchOut","providerOut","recoveryOut","externalOut","actionsOut"]){
+    for(const id of ["releaseOut","launchOut","workflowOut","providerOut","recoveryOut","externalOut","actionsOut"]){
       const host=document.getElementById(id);
       if(host) host.innerHTML='<div class="notice bad">Evidence unavailable. Refresh manually after the authoritative source is restored.</div>';
     }
@@ -34,6 +34,7 @@ async function load({manual=false}={}){
 function render(data){
   renderRelease(data);
   renderLaunch(data);
+  renderWorkflowEvidence(data);
   renderProviderClosure(data);
   renderRecovery(data);
   renderExternal(data);
@@ -82,6 +83,29 @@ function renderLaunch(data){
     <p><a class="btn ghost" href="/admin-startup-guide.html#evidence">Record / review launch evidence</a></p>`;
 }
 
+
+
+function renderWorkflowEvidence(data){
+  const evidence=data.production_workflow_evidence||{};
+  const roles=Array.isArray(evidence.roles)?evidence.roles:[];
+  const outstanding=Array.isArray(evidence.outstanding)?evidence.outstanding:[];
+  const host=$("#workflowOut");
+  if(!host)return;
+  if(!data.production_workflow_evidence){
+    host.innerHTML='<h2>Customer & staff Production workflow evidence</h2><div class="notice bad">Workflow evidence source is unavailable. Missing real-device evidence remains a HOLD.</div>';
+    return;
+  }
+  host.innerHTML=`
+    <h2>Customer & staff Production workflow evidence</h2>
+    <div class="metric-grid">
+      ${metric("Workflow evidence",evidence.status||"hold")}
+      ${metric("Observed real jobs",evidence.observed_real_jobs??0)}
+      ${metric("Evidence-ready jobs",evidence.evidence_ready_jobs??0)}
+      ${metric("Outstanding",outstanding.length)}
+    </div>
+    <div class="stack">${roles.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
+    <p class="muted">Verified states come only from dated role-specific observations. Source checks do not invent device proof, cross-role access or consent; customer identity and evidence-note contents are not returned.</p>`;
+}
 
 function renderProviderClosure(data){
   const closure=data.provider_evidence_closure||{};

@@ -1,5 +1,5 @@
-// Build 418 — Backup, Restore & Accountant Export Operational Proof
-// Retains Build 417 provider-evidence closure and Build 416 controlled soft-launch acceptance.
+// Build 419 — Customer & Staff Production Workflow Evidence
+// Retains Build 418 recovery/export proof, Build 417 provider-evidence closure and Build 416 controlled soft-launch acceptance.
 // Read-only composition only: no restore, export generation, provider contact or business mutation.
 
 import { onRequestGet as getGoLiveReadiness } from "./go_live_readiness.js";
@@ -9,6 +9,7 @@ import { onRequestGet as getRecoveryExportOperationalProof } from "./recovery_ex
 import { buildProductionSupportDiagnostics } from "../_lib/production-support-diagnostics.js";
 import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
 import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-consolidation.js";
+import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evidence.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -58,15 +59,24 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const productionWorkflowEvidence = buildProductionWorkflowEvidence({
+    launch_evidence: launchEvidenceResult.items,
+    job_handoff: jobHandoffResult,
+    generated_at: generatedAt
+  });
+
   return json({
     ok: consolidation.source_runtime_status === "green",
-    build: 418,
-    authority: "backup_restore_accountant_export_operational_proof",
+    build: 419,
+    authority: "customer_staff_production_workflow_evidence",
+    retained_recovery_build: 418,
+    retained_recovery_authority: "backup_restore_accountant_export_operational_proof",
     retained_provider_build: 417,
     retained_provider_authority: "payment_refund_delivery_provider_evidence_closure",
     retained_build: 416,
     retained_authority: "controlled_soft_launch_real_world_acceptance",
     capstone_retained_authority: "launch_readiness_consolidation_next_roadmap_renewal",
+    production_workflow_evidence: productionWorkflowEvidence,
     provider_evidence_closure: providerClosureResult.data?.closure || null,
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     source_status: {
@@ -82,6 +92,10 @@ export async function onRequestGet({ request, env }) {
         available: jobHandoffResult.available,
         http_status: jobHandoffResult.http_status,
         warning: jobHandoffResult.warning || null
+      },
+      production_workflow_evidence: {
+        available: launchEvidenceResult.ok && jobHandoffResult.available,
+        classification: productionWorkflowEvidence.status
       }
     },
     ...consolidation
