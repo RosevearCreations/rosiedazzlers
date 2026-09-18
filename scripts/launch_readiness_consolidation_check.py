@@ -113,8 +113,7 @@ require(roadmap, [
 
 for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
     require(text, [
-        "Build 415",
-        "Build 416",
+        "BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md",
     ], label)
 
 for gate, label in [(dev_gate, "Development source gate"), (prod_gate, "Production authority")]:
