@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-Retained prior capstone: **Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal**.
+Retained prior capstone: Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal.
 
 ## Current release
 

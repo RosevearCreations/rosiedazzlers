@@ -4,7 +4,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Retained prior capstone: **Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal**.
+Retained prior capstone: Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal.
 
 **Build 416 — Controlled Soft Launch & Real-World Acceptance** is the active bounded release.
 
