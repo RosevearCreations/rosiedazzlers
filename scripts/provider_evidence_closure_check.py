@@ -34,13 +34,13 @@ prod_gate=read(".github/workflows/production-business-acceptance-authority.yml")
 focused=read(".github/workflows/provider-evidence-closure-authority.yml")
 prod_check=read("scripts/production_business_acceptance_check.py")
 
-require(helper,["buildProviderEvidenceClosure","stripe_provider_outcome","paypal_provider_outcome","provider_refund_id","provider_event_id","provider_delivery_verified","provider_accepted_is_definitive_delivery: false","customer_identity_exposed: false","notification_send_performed: false","webhook_replay_performed: false"],"Build 417 helper")
+require(helper,["buildProviderEvidenceClosure","${provider}_provider_outcome","provider_refund_id","provider_event_id","classifyNotificationDeliveryEvidence","provider_accepted_is_definitive_delivery: false","customer_identity_exposed: false","notification_send_performed: false","webhook_replay_performed: false"],"Build 417 helper")
 require(endpoint,["requireStaffAccess","it_diagnostics","quote_deposit_refund_records","notification_events","build: 417",'authority: "payment_refund_delivery_provider_evidence_closure"',"select=*","method: \"GET\""],"Build 417 endpoint")
 require(launch_endpoint,["getProviderEvidenceClosure","provider_evidence_closure","build: 417",'authority: "payment_refund_delivery_provider_evidence_closure"',"retained_build: 416"],"launch readiness composition")
 require(asset,["Payment, refund & delivery provider evidence","Definitive refunds","Definitive delivery","Provider accepted is not final delivery","provider_evidence_closure"],"Build 417 client")
 require(page,['data-build417="payment-refund-delivery-provider-evidence-closure"',"Build 417 · Provider evidence closure",'id="providerOut"',"Build 417 acceptance boundary","does not create a charge","does not initiate a refund","does not send a notification"],"Build 417 page")
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
-require(contract,["configuration remains source evidence only","definitive refund","definitive message delivery","no provider contact","no provider contact, payment charge/capture","Build 418"],"Build 417 contract")
+require(contract,["configuration remains source evidence only","definitive refund","Definitive message delivery","no provider contact","no provider contact, payment charge/capture","Build 418"],"Build 417 contract")
 for text,label in [(queue,"queue"),(handoff,"handoff"),(readme,"README")]:
     require(text,["Build 417","Build 418","BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md"],label)
 for gate,label in [(dev_gate,"Development source gate"),(prod_gate,"Production authority"),(focused,"focused authority")]:
