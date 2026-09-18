@@ -122,12 +122,19 @@ if current < 418:
 if current and nxt != current + 1:
     errors.append(f"living release sequence is not consecutive: {current}/{nxt}")
 
-for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
+for text, label in [(queue, "queue"), (handoff, "handoff")]:
     require(text, [
         "Build 418",
         "Build 419",
         "BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md"
     ], label)
+
+require(readme, [
+    "Build 418",
+    "Build 417",
+    "Build 416",
+    "BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md"
+], "README")
 
 for gate, label in [(dev_gate, "Development source gate"), (prod_gate, "Production authority"), (focused, "focused authority")]:
     require(gate, [
