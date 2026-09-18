@@ -20,7 +20,7 @@ This release authorizes no schema migration, Production restore, Development rol
 - Backup artifact proof requires a verified dated owner observation; source routes and runbooks are never artifact proof.
 - Retention/storage location must be explicitly observed and is never inferred from configured services.
 - Recovery/rollback drill evidence remains a separately authorized operator-observed boundary; source acceptance does not execute one.
-- Build 394 remains the canonical accountant-export readiness authority; Build 418 consumes only its read-only acceptance result and export manifest.
+- The retained Finance close/accountant-export authority remains canonical; this release consumes only its read-only acceptance result and export manifest.
 - Accountant-export runtime usability is distinct from proof that a current export artifact has been generated and retained.
 - Evidence-note contents, customer identity, accountant-package contents, credentials and secret values are excluded from the proof payload.
 - Missing proof remains owner-action or unavailable; source/runtime GREEN does not convert it into success.
