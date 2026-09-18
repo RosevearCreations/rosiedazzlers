@@ -8,21 +8,21 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 409 — Inventory & Job-Cost Operational Evidence** is the active bounded release.
+**Build 410 — Maintenance / Fleet Commercial Acceptance** is the active bounded release.
 
 Scope:
 
-- retain `catalog_inventory_movements`, `catalog_inventory_items` and `catalog_purchase_orders` as the only canonical inventory/reorder authorities;
-- accept only explicit negative `job_use` movements as job-consumption/material-cost evidence;
-- expose booking-linked waste/adjustment depletion without inferring customer-job consumption;
-- verify recorded previous/delta/new quantity continuity when available and fail closed when incomplete or inconsistent;
-- use recorded inventory cost only; never estimate missing material cost;
-- surface row-level approval and stable accounting-posting evidence only when already recorded; never infer either from movement type, actor, note or stock success;
-- keep low-stock/reorder evidence read-only and never create purchasing activity;
-- preserve retained inventory/job-cost compatibility while adding the stricter current operational evidence contract;
-- introduce no schema migration, inventory mutation, purchasing, accounting posting, payment/provider mutation or Production business-data mutation.
+- consume the actual configured maintenance and fleet rulebooks rather than inventing replacement economics;
+- keep unresolved maintenance and fleet decisions explicitly `owner_action`;
+- distinguish source release GREEN from explicit business approval;
+- preserve `/api/availability` and `/api/checkout` as capacity/collision authorities;
+- require accepted fleet quote status, timestamp and recorded positive amounts before treating a quote as explicit acceptance evidence;
+- keep draft/sent quotes non-committal;
+- prohibit inferred pricing, customer commitment and capacity reservation;
+- prohibit automatic outreach, enrolment, booking, discounts, invoice creation, recurring billing, renewal and provider mutation;
+- introduce no schema migration or Production business-data mutation.
 
-Current contract: `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
+Current contract: `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass Development deployment/runtime acceptance.
 
@@ -30,7 +30,7 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 410 — Maintenance / Fleet Commercial Acceptance** is next only after the current release is independently GREEN on protected `main`.
+**Build 411 — Customer Communication, Consent & Delivery Evidence** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
