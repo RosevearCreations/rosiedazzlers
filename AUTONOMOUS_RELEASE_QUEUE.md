@@ -20,7 +20,7 @@ Scope:
 - renew the next evidence-driven roadmap in `FORWARD_BUILD_ROADMAP_416_425.md`;
 - introduce no schema migration, Production business-data mutation, provider transaction, restore, export generation or permanent polling.
 
-Current contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. The completed prior-cycle authority remains `FORWARD_BUILD_ROADMAP_405_415.md`; the renewed next cycle is `FORWARD_BUILD_ROADMAP_416_425.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and Development must independently prove the identical SHA.
 

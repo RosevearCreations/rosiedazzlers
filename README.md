@@ -9,8 +9,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
-4. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — current launch-readiness consolidation contract.
-5. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — retained local-search measurement and provider-evidence contract.
+4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
+5. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — current launch-readiness consolidation contract.
+6. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — retained local-search measurement and provider-evidence contract.
 6. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md — retained Admin/Detailer/Customer workflow efficiency and accessibility contract.
 7. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md — retained Production support diagnostics contract.
 8. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md — retained communication/consent/delivery contract.
@@ -18,7 +19,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 10. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md — retained inventory/job-cost evidence contract.
 11. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md — retained payment-provider acceptance contract.
 12. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md — retained go-live readiness framework.
-13. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
+14. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
