@@ -53,10 +53,21 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`
 - `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`
 - `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`
+- `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
+- `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
+- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
+- `STARTUP_GO_LIVE_BLOCKERS.md`
 - `.github/workflows/development-source-gate.yml`
+- `.github/workflows/cloudflare-development-acceptance.yml`
+- `.github/workflows/recovery-export-operational-proof-authority.yml`
+- `.github/workflows/provider-evidence-closure-authority.yml`
+- `.github/workflows/controlled-soft-launch-acceptance-authority.yml`
 - `.github/workflows/production-workflow-evidence-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
 - `scripts/production_workflow_evidence_check.py`
+- `scripts/recovery_export_operational_proof_check.py`
+- `scripts/provider_evidence_closure_check.py`
+- `scripts/controlled_soft_launch_acceptance_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 
