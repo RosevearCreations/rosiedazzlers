@@ -22,7 +22,7 @@ Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
 ## Current workflow efficiency & accessibility framework
 
-Build 413 hardens the high-frequency Admin Today, Detailer assigned-job and Customer My Account workflows without changing their business authorities. In-flight refresh/save actions are now explicit and duplicate-protected; important loading/error/empty/retry states are live-region aware; validation returns focus to the field that needs correction; and the retained phone/tablet/desktop, focus-visible, reduced-motion and forced-colors baselines remain authoritative.
+This release hardens the high-frequency Admin Today, Detailer assigned-job and Customer My Account workflows without changing their business authorities. In-flight refresh/save actions are now explicit and duplicate-protected; important loading/error/empty/retry states are live-region aware; validation returns focus to the field that needs correction; and the retained phone/tablet/desktop, focus-visible, reduced-motion and forced-colors baselines remain authoritative.
 
 Source checks remain source checks. Exact-SHA Cloudflare acceptance proves the deployed runtime, while independent authenticated visual browser proof stays `unavailable` unless it is directly observed. The release does not invent a visual pass from CSS or markup alone.
 

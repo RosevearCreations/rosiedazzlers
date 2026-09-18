@@ -18,7 +18,7 @@ This source release authorizes no schema migration, Production business-data mut
 - In-flight refresh/save/create actions expose busy state and reject duplicate user actions until the request settles.
 - Blocking errors are announced accessibly; validation returns focus to the field requiring correction.
 - Admin owner-task fields use visible labels rather than placeholder-only naming.
-- Retained Build 376/397 accessibility/responsive baselines remain authoritative.
+- Retained accessibility/responsive baselines remain authoritative.
 - Detailer access still flows through the canonical `detailer` module resolver; Admin Today retains `admin-today`; My Account retains authenticated client endpoints.
 - Source-proven responsive/accessibility contracts are not mislabeled as independent authenticated visual browser proof.
 - Independent authenticated phone/tablet/desktop visual proof remains `unavailable` unless directly observed.
@@ -26,7 +26,7 @@ This source release authorizes no schema migration, Production business-data mut
 
 ## Retained operating contract
 
-- Production support diagnostics from Build 412 remain read-only, manual-refresh and support-safe.
+- Retained Production support diagnostics remain read-only, manual-refresh and support-safe.
 - Customer communication remains current-consent gated at dispatch time; stale queued consent/channel/recipient evidence fails closed.
 - Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
 - Canonical checkout remains server-authoritative for availability, booking and payment outcomes.

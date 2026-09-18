@@ -6,7 +6,7 @@ Build 413 audits and hardens three high-frequency Rosie Dazzlers workflows witho
 - Detailer: assigned-job mobile workspace;
 - Customer: My Account profile/vehicle/gift/review workflow.
 
-The release is schema-neutral. There is no schema migration, provider mutation, payment mutation, destructive R2 action or new background polling.
+The release is schema-neutral. There is no schema migration, provider mutation, payment mutation, destructive R2 action or new background polling. There is no permanent polling.
 
 ## Evidence classes
 
