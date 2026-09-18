@@ -4,17 +4,27 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed Customer & Staff Production Workflow Evidence release is the retained completed predecessor.
+The completed Search Console, GBP & Local Acquisition Evidence Closure release is the retained completed predecessor.
 
-**Build 420 — Search Console, GBP & Local Acquisition Evidence Closure** is the active bounded release.
+**Build 421 — Retention, Maintenance & Fleet Operational Pilot** is the active bounded release.
 
-**Build 421 — Retention, Maintenance & Fleet Operational Pilot** is next only after the current release is independently GREEN on protected `main`.
+**Build 422 — Media, Photo Studio & Proof Operations** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`, `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
 
-## Local acquisition evidence closure contract
+## Retention, maintenance & fleet operational-pilot contract
+
+- `/api/admin/retention_maintenance_fleet_operational_pilot` is the staff-only read-only pilot overview.
+- Current maintenance and fleet rulebooks remain `awaiting_business_approval`; source release GREEN therefore remains compatible with an `owner_action` pilot HOLD.
+- Queue activity never infers participant selection, enrolment, quote acceptance, customer commitment or fleet commitment.
+- Participant selection remains manual after explicit owner approval of the canonical business terms.
+- `/api/availability` remains the availability authority and `/api/checkout` remains final collision/revalidation authority for every real booking.
+- Pricing, cadence, discounts, invoicing, outreach, recurring billing, renewal and provider mutation remain separately authorized.
+- The endpoint returns aggregate queue evidence only and exposes no customer identity.
+
+## Retained local acquisition evidence closure contract
 
 - `/admin-seo-tasks.html` remains the manual-refresh operator surface for local-search measurement and closure.
 - Search Console and Google Business Profile evidence remains dated operator-observed provider evidence from the retained local-search measurement authority.
@@ -59,6 +69,7 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
 - `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`
 - `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`
 - `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`
@@ -76,7 +87,9 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `.github/workflows/controlled-soft-launch-acceptance-authority.yml`
 - `.github/workflows/production-workflow-evidence-authority.yml`
 - `.github/workflows/local-acquisition-evidence-closure-authority.yml`
+- `.github/workflows/retention-maintenance-fleet-operational-pilot-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/retention_maintenance_fleet_operational_pilot_check.py`
 - `scripts/local_acquisition_evidence_closure_check.py`
 - `scripts/production_workflow_evidence_check.py`
 - `scripts/recovery_export_operational_proof_check.py`
