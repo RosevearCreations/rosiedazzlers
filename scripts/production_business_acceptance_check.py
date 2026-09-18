@@ -85,6 +85,9 @@ required_authorities = {
     "workflow_accessibility": [
         "scripts/workflow_efficiency_accessibility_check.py",
     ],
+    "local_search_measurement": [
+        "scripts/local_search_measurement_authority_check.py",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
@@ -147,6 +150,7 @@ workflow = require(WORKFLOW, [
     "Validate retention, operations and finance convergence authorities",
     "Validate admin I.T. diagnostics and observability authorities",
     "Validate workflow efficiency and accessibility authorities",
+    "Validate local-search measurement authorities",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",

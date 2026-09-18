@@ -1,0 +1,68 @@
+name: Build 414 — Local SEO Measurement, Search Console & GBP Proof
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build414-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-local-search-measurement-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: local-search-measurement-authority
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check local-search source syntax
+        run: |
+          node --check functions/api/admin/local_search_measurement_report.js
+          node --check functions/api/admin/local_search_provider_evidence_save.js
+          node --check assets/local-search-measurement.js
+          python -m py_compile scripts/local_search_measurement_authority_check.py
+          python -m py_compile scripts/build414_local_seo_measurement_search_console_gbp_proof_check.py
+
+      - name: Validate durable local-search measurement authority
+        run: python scripts/local_search_measurement_authority_check.py
+
+      - name: Validate Build 414 release contract
+        run: python scripts/build414_local_seo_measurement_search_console_gbp_proof_check.py
+
+      - name: Build 414 summary
+        run: |
+          {
+            echo '### Build 414 — Local SEO Measurement, Search Console & GBP Proof'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- First-party/local-proof/provider evidence separation: PASS'
+            echo '- Search Console / GBP snapshot attribution: PASS'
+            echo '- Missing/stale provider evidence fail-closed: PASS'
+            echo '- Google credentials / automatic provider mutation: ABSENT'
+            echo '- Schema migration: NONE'
+            echo '- Permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

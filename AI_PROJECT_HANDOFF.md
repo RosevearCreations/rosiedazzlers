@@ -4,38 +4,40 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is the active bounded release.
+**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is the active bounded release.
 
-**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is next only after the current release is independently GREEN on protected `main`.
+**Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
-Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`.
+Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`.
 
-This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, automatic alert delivery or background polling.
+This source release authorizes no schema migration, Production business-data mutation during acceptance, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, automatic provider call, Google credential storage or background polling.
 
-## Current workflow efficiency / accessibility contract
+## Current local-search measurement contract
 
-- Admin Today, Detailer assigned-job and Customer My Account are the bounded high-frequency audit surfaces.
-- In-flight refresh/save/create actions expose busy state and reject duplicate user actions until the request settles.
-- Blocking errors are announced accessibly; validation returns focus to the field requiring correction.
-- Admin owner-task fields use visible labels rather than placeholder-only naming.
-- Retained accessibility/responsive baselines remain authoritative.
-- Detailer access still flows through the canonical `detailer` module resolver; Admin Today retains `admin-today`; My Account retains authenticated client endpoints.
-- Source-proven responsive/accessibility contracts are not mislabeled as independent authenticated visual browser proof.
-- Independent authenticated phone/tablet/desktop visual proof remains `unavailable` unless directly observed.
-- No permanent polling or new business-state authority is introduced.
+- `/admin-seo-tasks.html` is the operator-facing local-search evidence surface.
+- First-party Google referral/local-page analytics and approved local proof are reported separately from Search Console and Google Business Profile.
+- Search Console and GBP metrics are retained only as dated operator-observed snapshots with property/location labels and measurement windows.
+- Missing provider evidence remains `provider_dependent`; stale/manual provider snapshots remain `owner_action`.
+- Markup, canonical tags, structured data, Google referrals and approved proof never imply provider ranking, indexing or Maps/profile success.
+- Provider snapshot storage uses the existing `app_management_settings` authority and requires an explicit authorized staff action.
+- No Google credentials, OAuth tokens, customer records or automatic Google API calls are introduced.
+- The UI remains manual refresh only; no permanent polling is introduced.
 
 ## Retained operating contract
 
-- Retained Production support diagnostics remain read-only, manual-refresh and support-safe.
-- Customer communication remains current-consent gated at dispatch time; stale queued consent/channel/recipient evidence fails closed.
+- Workflow efficiency/accessibility authority remains active across Admin, Detailer and Customer high-frequency paths.
+- Production support diagnostics remain read-only, manual-refresh and support-safe.
+- Customer communication remains current-consent gated at dispatch time.
 - Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
 - Canonical checkout remains server-authoritative for availability, booking and payment outcomes.
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
-- Durable field-to-office handoff authority remains `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
+- Field-to-office handoff remains retained through `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
+- Payment provider live-outcome/reconciliation remains retained through `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`.
 - Inventory/job-cost evidence remains retained through `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 - Maintenance/fleet commercial evidence remains retained through `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
 - Communication/consent evidence remains retained through `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
 - Production support diagnostics remain retained through `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`.
+- Workflow efficiency/accessibility remains retained through `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`.
 
 ## Release mechanics
 
@@ -53,6 +55,7 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`
 - `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`
 - `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`
 - `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`
@@ -66,6 +69,7 @@ This source release authorizes no schema migration, Production business-data mut
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/local_search_measurement_authority_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 

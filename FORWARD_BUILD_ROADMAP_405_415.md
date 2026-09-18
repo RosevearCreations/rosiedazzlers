@@ -2,7 +2,7 @@
 
 This roadmap succeeds the completed Build 396–405 planning cycle. It is evidence-driven: priorities are drawn from `STARTUP_GO_LIVE_BLOCKERS.md`, retained acceptance authorities, provider-dependent HOLD boundaries and observed operational friction. It does not authorize hidden Production mutation, fabricated provider evidence or speculative feature accumulation.
 
-**Current execution:** Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit. Build 412 is the retained Production boundary until Build 413 completes exact Production acceptance.
+**Current execution:** Build 414 — Local SEO Measurement, Search Console & GBP Proof. Build 413 is the retained Production boundary until Build 414 completes exact Production acceptance.
 
 ## Continuing release rules
 

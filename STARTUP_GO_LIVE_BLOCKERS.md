@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 414 — Local SEO Measurement, Search Console & GBP Proof. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
@@ -95,7 +95,10 @@ Every current readiness item must be represented truthfully as one of:
 - [ ] Customer My Account profile/vehicle/gift/review mutations expose busy state, block duplicate submits and surface network failures through accessible status/alert evidence.
 - [ ] One meaningful public H1, unique metadata/canonical/structured data, sitemap and robots authority pass.
 - [ ] Local/service proof uses genuine approved reviews/media and truthful Oxford/Norfolk coverage.
-- [ ] Search Console and Google Business Profile evidence is reviewed before changing verified local-search claims; this remains `owner_action` unless directly observed.
+- [ ] Search Console and Google Business Profile evidence is reviewed before changing verified local-search claims; missing evidence remains `provider_dependent` and dated manually observed snapshots remain `owner_action`.
+- [ ] First-party Google referrals/local-page views, approved local proof, Search Console and GBP remain separately labeled evidence sources.
+- [ ] No ranking, indexing, Maps/profile visibility or provider success is inferred from markup, canonical tags, structured data, referrals or approved proof alone.
+- [ ] Provider snapshots contain only bounded metrics/property-location labels/date windows and never Google credentials, OAuth tokens or customer data.
 
 ## 10. Recovery and launch boundary
 

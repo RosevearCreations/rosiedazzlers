@@ -92,6 +92,9 @@ jobs:
           node --check functions/api/_lib/production-support-diagnostics.js
           node --check functions/api/admin/support_diagnostics.js
           node --check scripts/production_support_diagnostics_test.mjs
+          node --check functions/api/admin/local_search_measurement_report.js
+          node --check functions/api/admin/local_search_provider_evidence_save.js
+          node --check assets/local-search-measurement.js
           node --check functions/api/admin/inventory_job_cost_operational_evidence.js
           node --check functions/api/membership_interest_create.js
           node --check functions/api/admin/membership_interest_list.js
@@ -144,6 +147,7 @@ jobs:
           python -m py_compile scripts/customer_communication_consent_delivery_check.py
           python -m py_compile scripts/production_support_diagnostics_check.py
           python -m py_compile scripts/workflow_efficiency_accessibility_check.py
+          python -m py_compile scripts/local_search_measurement_authority_check.py
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/admin_protected_http_smoke.sh
@@ -247,6 +251,9 @@ jobs:
       - name: Validate workflow efficiency and accessibility authority
         run: python scripts/workflow_efficiency_accessibility_check.py
 
+      - name: Validate local-search measurement authority
+        run: python scripts/local_search_measurement_authority_check.py
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -294,6 +301,7 @@ jobs:
             echo "- Customer communication consent/delivery authority: PASS"
             echo "- Production support diagnostics authority: PASS"
             echo "- Admin / Detailer / Customer workflow efficiency & accessibility authority: PASS"
+            echo "- Local-search measurement / Search Console / GBP evidence authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
