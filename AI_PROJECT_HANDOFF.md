@@ -8,9 +8,9 @@ The completed Customer & Staff Production Workflow Evidence release is the retai
 
 **Build 420 — Search Console, GBP & Local Acquisition Evidence Closure** is the active bounded release.
 
-**Build 421 — Retention, Maintenance & Fleet Operational Pilot** is next only after the current release is independently GREEN on protected `main`.
+**Retention, Maintenance & Fleet Operational Pilot** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`. Build 418 remains the retained backup/restore/accountant-export operational-proof authority. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`. Build 418 remains the retained backup/restore/accountant-export operational-proof authority. Build 419 remains the retained Customer & Staff Production Workflow Evidence authority. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
 
