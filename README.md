@@ -30,7 +30,7 @@ Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
 ## Current local-acquisition evidence closure framework
 
-The Local SEO admin surface now adds a Build 420 closure view over the retained Build 414 measurement sources. Search Console, Google Business Profile, first-party acquisition traffic and approved local proof remain separately attributed; fresh dated provider snapshots count only as operator-observed evidence.
+The Local SEO admin surface now adds the current closure view over the retained local-search measurement sources. Search Console, Google Business Profile, first-party acquisition traffic and approved local proof remain separately attributed; fresh dated provider snapshots count only as operator-observed evidence.
 
 Missing provider snapshots remain provider-dependent, stale snapshots remain owner-action and unavailable first-party/proof sources remain unavailable. Source/Production GREEN, markup, referrals and approved proof never become claims of Google indexing, ranking or Maps visibility.
 
@@ -50,7 +50,7 @@ The launch-readiness surface now separates **operational proof** from source cap
 
 Recovery/rollback drill proof remains separately authorized and operator-observed. Source acceptance does not perform a Production restore, Development rollback, R2 mutation, DNS/secret change or Cloudflare recovery action.
 
-Accountant-export usability is derived from the retained read-only Finance close/accountant-export authority and its package/CSV manifest. That runtime usability does not prove a current accountant package or CSV has been generated and retained. Build 418 itself generates no export, posts no accounting entry and mutates no Production business data.
+Accountant-export usability is derived from the retained read-only Finance close/accountant-export authority and its package/CSV manifest. That runtime usability does not prove a current accountant package or CSV has been generated and retained. The retained recovery release itself generates no export, posts no accounting entry and mutates no Production business data.
 
 Source/Production GREEN can therefore coexist with recovery/export HOLDs until the real backup artifact, retention location, drill evidence and retained export artifact are observed.
 
@@ -168,4 +168,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 420 — Search Console, GBP & Local Acquisition Evidence Closure follows only after the current release is independently GREEN on protected `main`.
+Build 421 — Retention, Maintenance & Fleet Operational Pilot follows only after the current release is independently GREEN on protected `main`.
