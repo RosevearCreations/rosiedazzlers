@@ -4,17 +4,26 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Build 418 — Backup, Restore & Accountant Export Operational Proof is the retained completed predecessor.
+Build 419 — Customer & Staff Production Workflow Evidence is the retained completed predecessor.
 
-**Build 419 — Customer & Staff Production Workflow Evidence** is the active bounded release.
+**Build 420 — Search Console, GBP & Local Acquisition Evidence Closure** is the active bounded release.
 
-**Build 420 — Search Console, GBP & Local Acquisition Evidence Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 421 — Retention, Maintenance & Fleet Operational Pilot** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
 
-## Production workflow evidence contract
+## Local acquisition evidence closure contract
+
+- `/admin-seo-tasks.html` remains the manual-refresh operator surface for local-search measurement and closure.
+- Search Console and Google Business Profile evidence remains dated operator-observed provider evidence from the retained Build 414 authority.
+- First-party acquisition and approved local proof remain separate evidence sources and never imply provider outcomes.
+- Missing provider evidence remains provider-dependent; stale provider evidence remains owner-action; unavailable analytics/proof remains unavailable.
+- Ranking, indexing and Maps visibility are never inferred from source/runtime success, markup or referrals.
+- No Google credentials, OAuth flow, provider mutation, analytics write or permanent polling is introduced.
+
+## Retained Production workflow evidence contract
 
 - `/admin-launch-readiness.html` remains the read-only operator surface.
 - Customer, Detailer, Operations and Admin states come from existing verified launch-evidence rows; source files do not manufacture observed workflow proof.
@@ -50,6 +59,7 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`
 - `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`
 - `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`
 - `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`
@@ -65,7 +75,9 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `.github/workflows/provider-evidence-closure-authority.yml`
 - `.github/workflows/controlled-soft-launch-acceptance-authority.yml`
 - `.github/workflows/production-workflow-evidence-authority.yml`
+- `.github/workflows/local-acquisition-evidence-closure-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/local_acquisition_evidence_closure_check.py`
 - `scripts/production_workflow_evidence_check.py`
 - `scripts/recovery_export_operational_proof_check.py`
 - `scripts/provider_evidence_closure_check.py`
