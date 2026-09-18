@@ -4,26 +4,26 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
+Retained provider-evidence contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained controlled-soft-launch contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
-**Build 417 — Payment, Refund & Delivery Provider Evidence Closure** is the active bounded release.
+**Build 418 — Backup, Restore & Accountant Export Operational Proof** is the active bounded release.
 
-**Build 418 — Backup, Restore & Accountant Export Operational Proof** is next only after the current release is independently GREEN on protected `main`.
+**Build 419 — Customer & Staff Production Workflow Evidence** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained prior release contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained provider-evidence contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained controlled-pilot contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
-This release authorizes no schema migration, provider contact, payment charge/capture, refund initiation, notification send, webhook replay, accounting posting, customer mutation, destructive R2 mutation, restore/export generation, automatic outreach or permanent polling.
+This release authorizes no schema migration, Production restore, Development rollback, export generation, accounting posting, provider contact/mutation, customer mutation, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
 
-## Provider-evidence closure contract
+## Recovery / export operational-proof contract
 
-- `/admin-launch-readiness.html` remains the read-only operator surface and retains the controlled soft-launch view.
-- Stripe/PayPal success comes only from persisted verified reconciled provider outcomes.
-- Refund evidence requires internal request identity, provider refund/event identity, successful state, positive amount, valid currency and refunded timestamp.
-- Provider-accepted/sent notification evidence is never relabeled as definitive delivery.
-- Definitive delivery requires explicit provider-verification evidence and a delivery timestamp.
-- Customer identity, recipients, message contents and provider secrets are excluded from the closure payload.
-- Missing provider evidence remains provider-dependent or unavailable; source/runtime GREEN does not convert it into success.
-- The surface manually refreshes and performs no provider/payment/refund/message/business mutation.
+- `/admin-launch-readiness.html` remains the read-only operator surface and retains the controlled-pilot and provider-evidence views.
+- Backup artifact proof requires a verified dated owner observation; source routes and runbooks are never artifact proof.
+- Retention/storage location must be explicitly observed and is never inferred from configured services.
+- Recovery/rollback drill evidence remains a separately authorized operator-observed boundary; source acceptance does not execute one.
+- The retained Finance close/accountant-export authority remains canonical; this release consumes only its read-only acceptance result and export manifest.
+- Accountant-export runtime usability is distinct from proof that a current export artifact has been generated and retained.
+- Evidence-note contents, customer identity, accountant-package contents, credentials and secret values are excluded from the proof payload.
+- Missing proof remains owner-action or unavailable; source/runtime GREEN does not convert it into success.
 
 ## Retained operating contract
 
@@ -50,6 +50,7 @@ This release authorizes no schema migration, provider contact, payment charge/ca
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
+- `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`
 - `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`
 - `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`
 - `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`
@@ -59,9 +60,11 @@ This release authorizes no schema migration, provider contact, payment charge/ca
 - `STARTUP_GO_LIVE_BLOCKERS.md`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/cloudflare-development-acceptance.yml`
+- `.github/workflows/recovery-export-operational-proof-authority.yml`
 - `.github/workflows/provider-evidence-closure-authority.yml`
 - `.github/workflows/controlled-soft-launch-acceptance-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/recovery_export_operational_proof_check.py`
 - `scripts/provider_evidence_closure_check.py`
 - `scripts/controlled_soft_launch_acceptance_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`

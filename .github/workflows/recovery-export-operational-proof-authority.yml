@@ -1,0 +1,60 @@
+name: Backup, Restore & Accountant Export Operational Proof
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build418-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-recovery-export-operational-proof-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: recovery-export-operational-proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate recovery export operational proof authority
+        run: |
+          python scripts/recovery_export_operational_proof_check.py
+          node scripts/recovery_export_operational_proof_test.mjs
+      - name: Validate retained recovery and Finance authorities
+        run: |
+          python scripts/backup_restore_release_recovery_drill_check.py
+          python scripts/build394_finance_close_reconciliation_accountant_export_check.py
+          node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Backup / restore / accountant-export operational proof'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Current backup artifact remains owner-observed evidence: PASS'
+            echo '- Retention location is never inferred: PASS'
+            echo '- Accountant-export usability remains canonical Finance evidence: PASS'
+            echo '- Recovery drill/restore remains separately authorized: PASS'
+            echo '- Database migration: NONE'
+            echo '- Restore/export generation/business/provider mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
