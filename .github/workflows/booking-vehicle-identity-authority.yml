@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-booking-vehicle-identity-${{ github.ref }}
+  group: rosiedazzlers-booking-vehicle-identity-authority-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
