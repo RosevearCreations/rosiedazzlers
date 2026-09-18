@@ -17,7 +17,7 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 ## Local acquisition evidence closure contract
 
 - `/admin-seo-tasks.html` remains the manual-refresh operator surface for local-search measurement and closure.
-- Search Console and Google Business Profile evidence remains dated operator-observed provider evidence from the retained Build 414 authority.
+- Search Console and Google Business Profile evidence remains dated operator-observed provider evidence from the retained local-search measurement authority.
 - First-party acquisition and approved local proof remain separate evidence sources and never imply provider outcomes.
 - Missing provider evidence remains provider-dependent; stale provider evidence remains owner-action; unavailable analytics/proof remains unavailable.
 - Ranking, indexing and Maps visibility are never inferred from source/runtime success, markup or referrals.
