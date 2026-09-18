@@ -57,6 +57,10 @@ jobs:
           node --check scripts/provider_evidence_closure_test.mjs
           node --check functions/api/_lib/provider-evidence-closure.js
           node --check functions/api/admin/provider_evidence_closure.js
+          python -m py_compile scripts/recovery_export_operational_proof_check.py
+          node --check scripts/recovery_export_operational_proof_test.mjs
+          node --check functions/api/_lib/recovery-export-operational-proof.js
+          node --check functions/api/admin/recovery_export_operational_proof.js
           node --check functions/api/admin/local_search_measurement_report.js
           node --check functions/api/admin/local_search_provider_evidence_save.js
           node --check assets/local-search-measurement.js
@@ -167,6 +171,11 @@ jobs:
           python scripts/provider_evidence_closure_check.py
           node scripts/provider_evidence_closure_test.mjs
 
+      - name: Validate recovery export operational proof authority
+        run: |
+          python scripts/recovery_export_operational_proof_check.py
+          node scripts/recovery_export_operational_proof_test.mjs
+
       - name: Validate rollback and hardening authorities
         run: |
           python scripts/release_rollback_recovery_check.py
@@ -194,6 +203,7 @@ jobs:
             echo "- Launch readiness consolidation / roadmap renewal: PASS"
             echo "- Controlled soft launch / real-world acceptance: PASS"
             echo "- Payment / refund / delivery provider evidence closure: PASS"
+            echo "- Backup / restore / accountant-export operational proof: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"
