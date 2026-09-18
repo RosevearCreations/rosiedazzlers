@@ -4,36 +4,38 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 412 — Production Observability, Alerting & Support Diagnostics** is the active bounded release.
+**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is the active bounded release.
 
-**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is next only after the current release is independently GREEN on protected `main`.
+**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is next only after the current release is independently GREEN on protected `main`.
 
-Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`.
+Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`.
 
 This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, automatic alert delivery or background polling.
 
-## Current Production support diagnostics contract
+## Current workflow efficiency / accessibility contract
 
-- The I.T. support snapshot composes retained go-live readiness and Production diagnostics rather than creating a competing health authority.
-- Exact runtime SHA, branch and host are displayed only when already observed by retained runtime evidence.
-- Required runtime failures are `critical`; degraded/optional evidence is `warning`; provider evidence remains `hold`; explicit operator evidence remains `action`.
-- Every alert carries corrective mechanics, but the diagnostic workflow never performs the corrective mutation.
-- The copyable support packet is whitelisted and excludes arbitrary evidence, secret values, customer records, message contents and provider credentials.
-- Refresh is manual and bounded. No permanent polling or automatic email/SMS/push/third-party alert delivery is introduced.
-- GitHub/Cloudflare exact-SHA release acceptance remains authoritative for Production GREEN.
+- Admin Today, Detailer assigned-job and Customer My Account are the bounded high-frequency audit surfaces.
+- In-flight refresh/save/create actions expose busy state and reject duplicate user actions until the request settles.
+- Blocking errors are announced accessibly; validation returns focus to the field requiring correction.
+- Admin owner-task fields use visible labels rather than placeholder-only naming.
+- Retained Build 376/397 accessibility/responsive baselines remain authoritative.
+- Detailer access still flows through the canonical `detailer` module resolver; Admin Today retains `admin-today`; My Account retains authenticated client endpoints.
+- Source-proven responsive/accessibility contracts are not mislabeled as independent authenticated visual browser proof.
+- Independent authenticated phone/tablet/desktop visual proof remains `unavailable` unless directly observed.
+- No permanent polling or new business-state authority is introduced.
 
 ## Retained operating contract
 
-- Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
-- Unavailable is not automatically failure. Required missing runtime evidence may remain a HOLD.
-- Canonical checkout remains server-authoritative for availability, booking and payment outcomes; business mutations are never queued/replayed automatically on reconnect.
+- Production support diagnostics from Build 412 remain read-only, manual-refresh and support-safe.
 - Customer communication remains current-consent gated at dispatch time; stale queued consent/channel/recipient evidence fails closed.
+- Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
+- Canonical checkout remains server-authoritative for availability, booking and payment outcomes.
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
-- Representative phone/tablet/desktop support remains mandatory; source checks are not independent visual-browser proof.
 - Durable field-to-office handoff authority remains `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
 - Inventory/job-cost evidence remains retained through `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 - Maintenance/fleet commercial evidence remains retained through `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
 - Communication/consent evidence remains retained through `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
+- Production support diagnostics remain retained through `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`.
 
 ## Release mechanics
 
@@ -51,6 +53,7 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`
 - `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`
 - `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`
 - `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`

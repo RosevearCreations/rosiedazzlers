@@ -8,20 +8,20 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 ## Current release
 
-**Build 412 — Production Observability, Alerting & Support Diagnostics** is the active bounded release.
+**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is the active bounded release.
 
 Scope:
 
-- converge retained go-live readiness and Production self-diagnostics into one support-safe operator workflow;
-- expose exact runtime SHA/branch/host only when directly observed;
-- separate runtime blockers/warnings from provider HOLDs and owner actions;
-- attach corrective mechanics without executing those corrections;
-- generate a deliberately whitelisted support packet that excludes secrets, customer records, message contents and provider credentials;
-- keep alerting manual/on-screen with no automatic external delivery;
-- keep refresh bounded and manual with no permanent polling;
+- harden the high-frequency Admin Today, Detailer assigned-job and Customer My Account workflows;
+- make loading, busy, error, empty and manual-retry state explicit to keyboard and assistive-technology users;
+- suppress duplicate in-flight refresh/save/create actions without adding background polling;
+- improve validation focus and visible labels where current controls rely on placeholders;
+- retain the existing Build 376/397 responsive, focus-visible, reduced-motion and forced-colors authorities;
+- preserve Admin/Detailer/Customer role and capability boundaries;
+- classify independent authenticated visual browser proof as `unavailable` unless directly observed rather than inferred from source;
 - introduce no schema migration, provider mutation or Production business-data mutation.
 
-Current contract: `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`.
+Current contract: `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass Development deployment/runtime acceptance.
 
@@ -29,8 +29,8 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is next only after the current release is independently GREEN on protected `main`.
+**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
-Never call a Rosie Dazzlers release GREEN from source changes alone. Source/Production release GREEN is distinct from provider, owner-action and unavailable evidence. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
+Never call a Rosie Dazzlers release GREEN from source changes alone. Source/Production release GREEN is distinct from provider, owner-action, unavailable visual-browser evidence and other unavailable evidence. Any post-acceptance source write requires exact-SHA revalidation. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
