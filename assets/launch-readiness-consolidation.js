@@ -22,7 +22,7 @@ async function load({manual=false}={}){
       data.source_runtime_status==="green"?"ok":"bad");
   }catch(error){
     status(error?.message||"Could not load launch readiness.","bad");
-    for(const id of ["releaseOut","launchOut","recoveryOut","externalOut","actionsOut"]){
+    for(const id of ["releaseOut","launchOut","providerOut","recoveryOut","externalOut","actionsOut"]){
       const host=document.getElementById(id);
       if(host) host.innerHTML='<div class="notice bad">Evidence unavailable. Refresh manually after the authoritative source is restored.</div>';
     }
@@ -34,6 +34,7 @@ async function load({manual=false}={}){
 function render(data){
   renderRelease(data);
   renderLaunch(data);
+  renderProviderClosure(data);
   renderRecovery(data);
   renderExternal(data);
   renderActions(data);
@@ -79,6 +80,31 @@ function renderLaunch(data){
       : '<p class="mini">Retained owner-observed launch evidence is recorded.</p>'}
     <p class="muted">Participant authorization is never inferred, customer identity is not returned by this view, and no booking, message or provider action is performed automatically.</p>
     <p><a class="btn ghost" href="/admin-startup-guide.html#evidence">Record / review launch evidence</a></p>`;
+}
+
+
+function renderProviderClosure(data){
+  const closure=data.provider_evidence_closure||{};
+  const payments=closure.payments||{}, refunds=closure.refunds||{}, delivery=closure.delivery||{};
+  const rows=Array.isArray(closure.required)?closure.required:[];
+  const host=$("#providerOut");
+  if(!host)return;
+  if(!data.provider_evidence_closure){
+    host.innerHTML='<h2>Payment, refund & delivery provider evidence</h2><div class="notice bad">Provider evidence source is unavailable. Missing evidence remains a HOLD.</div>';
+    return;
+  }
+  host.innerHTML=`
+    <h2>Payment, refund & delivery provider evidence</h2>
+    <div class="metric-grid">
+      ${metric("Closure",closure.status||"hold")}
+      ${metric("Definitive refunds",refunds.definitive_refunds??0)}
+      ${metric("Definitive delivery",delivery.definitive_deliveries??0)}
+      ${metric("Provider accepted",delivery.provider_accepted??0)}
+    </div>
+    <p><strong>Stripe:</strong> ${chip(payments.stripe?.observed?"verified":payments.stripe?.classification||"provider_dependent")} · <strong>PayPal:</strong> ${chip(payments.paypal?.observed?"verified":payments.paypal?.classification||"provider_dependent")}</p>
+    <div class="stack">${rows.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p></div>${chip(x.status||x.classification||"provider_dependent")}</article>`).join("")}</div>
+    <p class="mini"><strong>Notification evidence:</strong> ${esc(delivery.failed??0)} failed · ${esc(delivery.cancelled_or_suppressed??0)} cancelled/suppressed · ${esc(delivery.queued_or_pending??0)} queued/pending.</p>
+    <p class="muted">Provider accepted is not final delivery. This view summarizes persisted evidence only; it does not create a charge, initiate a refund, send a notification or replay a webhook.</p>`;
 }
 
 function renderRecovery(data){
