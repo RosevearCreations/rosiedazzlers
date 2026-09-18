@@ -29,6 +29,7 @@ fleet = load_json("config/fleet-business-rulebook.json")
 helper = read("functions/api/_lib/maintenance-fleet-commercial-acceptance.js")
 capacity = read("functions/api/_lib/capacity-calendar-intelligence.js")
 quote_handoff = read("functions/api/_lib/fleet-quote-handoff.js")
+quote_handoff_endpoint = read("functions/api/admin/fleet_quote_handoff.js")
 activation = read("functions/api/_lib/retention-maintenance-fleet-activation.js")
 commercial_endpoint = read("functions/api/admin/commercial_activation.js")
 test = read("scripts/build410_maintenance_fleet_commercial_acceptance_test.mjs")
@@ -118,12 +119,20 @@ for token in (
     "quoted_amount_cents: 0",
     "accepted_amount_cents: 0",
     "accepted_at: null",
+):
+    if token not in quote_handoff:
+        errors.append(f"fleet quote draft boundary missing {token}")
+
+for token in (
+    "changes_lead_status: false",
+    "creates_customer_profile: false",
     "creates_booking: false",
+    "creates_appointment: false",
     "charges_customer: false",
     "creates_recurring_commitment: false",
 ):
-    if token not in quote_handoff and token not in commercial_endpoint:
-        errors.append(f"fleet quote/activation boundary missing {token}")
+    if token not in quote_handoff_endpoint:
+        errors.append(f"fleet quote handoff endpoint missing {token}")
 
 for token in (
     '"automatic_enrollment"',
