@@ -131,9 +131,9 @@ for text, label in [(queue, "queue"), (handoff, "handoff")]:
 
 require(readme, [
     "Build 418",
-    "Build 417",
-    "Build 416",
-    "BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md"
+    "BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md",
+    "BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md",
+    "BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md"
 ], "README")
 
 for gate, label in [(dev_gate, "Development source gate"), (prod_gate, "Production authority"), (focused, "focused authority")]:
