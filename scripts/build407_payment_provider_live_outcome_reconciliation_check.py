@@ -93,11 +93,23 @@ require(roadmap, [
     "definitive non-pending provider outcomes", "idempotent order/payment identity", "reconciliation evidence"
 ], "active roadmap", casefold=True)
 
-for label, text in [("release queue", queue), ("project handoff", handoff), ("README", readme)]:
-    require(text, [
-        "Build 407", "Build 408", "BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md",
-        "FORWARD_BUILD_ROADMAP_405_415.md"
-    ], label)
+# Living release documents may advance beyond this retained provider authority.
+# Require durable release mechanics and retained-contract linkage, not historical
+# current/next release labels.
+require(queue, [
+    "FORWARD_BUILD_ROADMAP_405_415.md", "non-force fast-forward", "rd main protection",
+    "Production deployment/runtime/business acceptance"
+], "release queue")
+require(handoff, [
+    "FORWARD_BUILD_ROADMAP_405_415.md", "protected `main`",
+    "Production deployment/runtime/business acceptance",
+    "BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md"
+], "project handoff")
+require(readme, [
+    "FORWARD_BUILD_ROADMAP_405_415.md", "rd main protection",
+    "Production is not considered GREEN from source promotion alone.",
+    "BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md"
+], "README")
 
 for p in ROOT.rglob("*"):
     if not p.is_file():
