@@ -29,21 +29,21 @@
         <div class="runtime-card"><span class="mini">Signed in</span><strong data-actor-name>Staff</strong><span class="mini" data-actor-role></span></div>
       </div>
       <div class="job-actions"><button class="btn ghost" type="button" data-pwa-install hidden>Install Rosie app</button><button class="btn ghost" type="button" data-notification-enable>Enable notifications</button><button class="btn ghost" type="button" data-notification-test>Test notification</button></div><div class="mini" data-app-device-status></div>
-      <div id="appStatus" class="notice" hidden></div>
+      <div id="appStatus" class="notice" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
     </section>
 
     <section class="module-grid section">
       <aside class="stack">
         <article class="panel stack">
           <div class="job-actions"><button class="btn primary" id="refreshJobs" type="button">Refresh assigned jobs</button><span class="badge" id="jobCount">0 jobs</span></div>
-          <div id="jobsList"><div class="notice">Loading the bounded workspace once…</div></div>
+          <div id="jobsList" role="region" aria-label="Assigned jobs" aria-live="polite" aria-busy="true"><div class="notice">Loading the bounded workspace once…</div></div>
         </article>
         <article class="panel stack">
           <h2 style="margin:0">Selected job</h2>
-          <div id="jobSummary" class="mini">Choose an assigned job.</div>
+          <div id="jobSummary" class="mini" role="status" aria-live="polite" aria-atomic="true">Choose an assigned job.</div>
           <label>Workflow note / reason<input id="workflowReason" maxlength="500" placeholder="Required for decline/pause; optional otherwise"/></label>
           <div class="job-actions" id="workflowActions">
-            <button class="btn ghost" data-job-action="accept">Accept</button><button class="btn ghost" data-job-action="decline">Decline</button><button class="btn ghost" data-job-action="dispatch">On my way</button><button class="btn ghost" data-job-action="arrive">Arrived</button><button class="btn primary" data-job-action="start">Start job</button><button class="btn ghost" data-job-action="pause">Pause</button><button class="btn ghost" data-job-action="resume">Resume</button><button class="btn primary" data-job-action="complete">Complete</button>
+            <button class="btn ghost" type="button" data-job-action="accept">Accept</button><button class="btn ghost" type="button" data-job-action="decline">Decline</button><button class="btn ghost" type="button" data-job-action="dispatch">On my way</button><button class="btn ghost" type="button" data-job-action="arrive">Arrived</button><button class="btn primary" type="button" data-job-action="start">Start job</button><button class="btn ghost" type="button" data-job-action="pause">Pause</button><button class="btn ghost" type="button" data-job-action="resume">Resume</button><button class="btn primary" type="button" data-job-action="complete">Complete</button>
           </div>
           <div class="mini">Build 383 evidence gates remain authoritative: Start requires before-photo + checklist evidence; Complete requires the full field-evidence sequence. Server job transition rules remain authoritative.</div>
         </article>
@@ -52,7 +52,7 @@
       <section class="stack">
         <article class="panel stack" id="runtimeExplanation">
           <h2 style="margin:0">Job runtime</h2>
-          <div id="runtimeMessage" class="idle-panel"><strong>Idle by default.</strong><p class="mini">No field/live-job module is loaded until an assigned job enters Arrived, Detailing, or Paused state.</p></div>
+          <div id="runtimeMessage" class="idle-panel" role="status" aria-live="polite" aria-atomic="true"><strong>Idle by default.</strong><p class="mini">No field/live-job module is loaded until an assigned job enters Arrived, Detailing, or Paused state.</p></div>
         </article>
         <div id="liveJobHost" class="live-host" data-loaded="false"><div class="notice">Field workflow tools are asleep.</div></div>
       </section>

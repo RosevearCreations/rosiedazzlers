@@ -17,10 +17,28 @@
   let actor=null,jobs=[],selected=null,liveModule=null,currentPolicy=null,deepLinkHandled=false;
   let readiness={jobId:null,state:'idle',intake:null,error:''};
   let readinessRequest=0;
+  let workspaceLoading=false;
   let fieldGate={jobId:null,loaded:false,canStart:false,canComplete:false};
 
   function status(message,type=''){
-    const box=$('appStatus');box.hidden=!message;box.className=`notice ${type}`.trim();box.textContent=message||'';
+    const box=$('appStatus');
+    box.hidden=!message;
+    box.className=`notice ${type}`.trim();
+    box.setAttribute('role',type==='bad'?'alert':'status');
+    box.setAttribute('aria-live',type==='bad'?'assertive':'polite');
+    box.textContent=message||'';
+    if(type==='bad'&&message)box.focus({preventScroll:true});
+  }
+  function setWorkspaceBusy(busy){
+    workspaceLoading=busy===true;
+    const list=$('jobsList');
+    if(list)list.setAttribute('aria-busy',workspaceLoading?'true':'false');
+    for(const id of ['refreshJobs','mobileRefreshJobs']){
+      const button=$(id);
+      if(!button)continue;
+      button.disabled=workspaceLoading;
+      button.setAttribute('aria-busy',workspaceLoading?'true':'false');
+    }
   }
   function modeLabel(mode){return mode==='live'?'LIVE JOB':mode==='ready'?'READY / STANDBY':'IDLE';}
   function jobStage(job){return policy.stage(job)||'pending';}
@@ -127,6 +145,8 @@
     return match;
   }
   async function loadWorkspace({manual=false}={}){
+    if(workspaceLoading)return;
+    setWorkspaceBusy(true);
     if(manual)status('Refreshing assigned jobs…');
     try{
       const out=await api.requestJson('/api/detailer/jobs?scope=workspace');
@@ -138,7 +158,12 @@
       renderJobs();renderSelected();void loadSelectedReadiness();
       if(out.workspace?.bounded===true&&manual)status(`Assigned jobs refreshed. ${jobs.length} bounded workspace job(s) loaded.`,'ok');
       else if(manual)status('Assigned jobs refreshed.','ok');
-    }catch(error){status(error.message||'Could not load assigned jobs.','bad');$('jobsList').innerHTML='<div class="notice bad">Assigned jobs could not be loaded. No automatic retry was started.</div>';}
+    }catch(error){
+      status(error.message||'Could not load assigned jobs.','bad');
+      $('jobsList').innerHTML='<div class="notice bad">Assigned jobs could not be loaded. No automatic retry was started. Use Refresh assigned jobs to retry manually.</div>';
+    }finally{
+      setWorkspaceBusy(false);
+    }
   }
   async function runAction(action){
     if(!selected)return;

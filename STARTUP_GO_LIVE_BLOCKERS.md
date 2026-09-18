@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Current Development / Go-Live Acceptance
 
-**Current planning boundary:** Build 412 — Production Observability, Alerting & Support Diagnostics. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+**Current planning boundary:** Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
 
 **Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
 
@@ -33,6 +33,8 @@ Every current readiness item must be represented truthfully as one of:
 - [ ] Detailer with no eligible open job does not wake live-job feeds/media/message loops.
 - [ ] Operations, Finance, Admin, I.T., DAIP and Socials do not load business datasets merely from opening their shells.
 - [ ] Customer progress refresh runs only for eligible active/visible work and stops for inactive/completed work.
+- [ ] Build 413 high-frequency Admin, Detailer and Customer workflows expose source-proven busy/live-region/error-focus contracts without widening role/capability access.
+- [ ] Independent authenticated phone/tablet/desktop visual browser proof remains `unavailable` until directly observed; source responsive checks are never relabeled as visual proof.
 
 ## 3. Cloudflare/Supabase reliability
 
@@ -88,6 +90,9 @@ Every current readiness item must be represented truthfully as one of:
 
 - [ ] Booking, Services, Pricing, service landing pages, town pages and Customer app are checked at representative phone, tablet and desktop widths.
 - [ ] Keyboard/focus/labels/contrast/reduced-motion remain accepted.
+- [ ] Admin Today owner-task inputs have visible labels, duplicate refresh/create actions are blocked, and queue loading/error/retry state is announced.
+- [ ] Detailer assigned-job refresh exposes bounded busy state across desktop/mobile controls and keeps manual retry/no-polling semantics.
+- [ ] Customer My Account profile/vehicle/gift/review mutations expose busy state, block duplicate submits and surface network failures through accessible status/alert evidence.
 - [ ] One meaningful public H1, unique metadata/canonical/structured data, sitemap and robots authority pass.
 - [ ] Local/service proof uses genuine approved reviews/media and truthful Oxford/Norfolk coverage.
 - [ ] Search Console and Google Business Profile evidence is reviewed before changing verified local-search claims; this remains `owner_action` unless directly observed.

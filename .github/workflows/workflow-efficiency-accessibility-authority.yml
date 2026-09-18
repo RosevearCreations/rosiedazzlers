@@ -1,0 +1,68 @@
+name: Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build413-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build413-workflow-efficiency-accessibility-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: workflow-efficiency-accessibility
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check edited workflow JavaScript
+        run: |
+          node --check apps/detailer/detailer-app.js
+          node --check assets/my-account-v296.js
+          python -m py_compile scripts/workflow_efficiency_accessibility_check.py
+          python -m py_compile scripts/build413_workflow_efficiency_accessibility_check.py
+
+      - name: Validate durable workflow efficiency and accessibility authority
+        run: python scripts/workflow_efficiency_accessibility_check.py
+
+      - name: Validate Build 413 release contract
+        run: python scripts/build413_workflow_efficiency_accessibility_check.py
+
+      - name: Build 413 summary
+        run: |
+          {
+            echo '### Build 413 — Workflow Efficiency & Accessibility Audit'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Admin / Detailer / Customer high-frequency source contracts: PASS'
+            echo '- Busy/live region/duplicate-action/error-focus authority: PASS'
+            echo '- Retained responsive/keyboard/focus source baseline: PASS'
+            echo '- Role/capability boundaries: RETAINED'
+            echo '- Permanent polling introduced: NO'
+            echo '- Database migration introduced: NO'
+            echo '- Independent authenticated visual browser proof: UNAVAILABLE unless separately observed'
+          } >> "$GITHUB_STEP_SUMMARY"

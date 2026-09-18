@@ -82,6 +82,9 @@ required_authorities = {
         "scripts/production_support_diagnostics_check.py",
         "scripts/production_support_diagnostics_test.mjs",
     ],
+    "workflow_accessibility": [
+        "scripts/workflow_efficiency_accessibility_check.py",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
@@ -143,6 +146,7 @@ workflow = require(WORKFLOW, [
     "Validate commercial, local SEO, condition-quote and media convergence authorities",
     "Validate retention, operations and finance convergence authorities",
     "Validate admin I.T. diagnostics and observability authorities",
+    "Validate workflow efficiency and accessibility authorities",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
