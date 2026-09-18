@@ -2,7 +2,7 @@
 
 This roadmap succeeds the completed Build 396–405 planning cycle. It is evidence-driven: priorities are drawn from `STARTUP_GO_LIVE_BLOCKERS.md`, retained acceptance authorities, provider-dependent HOLD boundaries and observed operational friction. It does not authorize hidden Production mutation, fabricated provider evidence or speculative feature accumulation.
 
-**Current execution:** Build 414 — Local SEO Measurement, Search Console & GBP Proof. Build 413 is the retained Production boundary until Build 414 completes exact Production acceptance.
+**Current execution:** Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal. Build 414 is the retained Production boundary until Build 415 completes exact Production acceptance.
 
 ## Continuing release rules
 
@@ -58,6 +58,12 @@ Connect current one-H1/local-service SEO authority to measurable Search Console 
 ### Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal
 
 Re-run full Production business/runtime/responsive acceptance, reconcile remaining provider/owner-action HOLDs, verify backup/export and recovery evidence where available, close stale release documentation and renew the next roadmap from observed Production/client/operator evidence only.
+
+## Next cycle
+
+### Build 416 — Controlled Soft Launch & Real-World Acceptance
+
+After exact Production acceptance of this capstone, continue with `FORWARD_BUILD_ROADMAP_416_425.md`. The next cycle begins with controlled soft-launch and real-world acceptance; unresolved provider/owner evidence remains explicit HOLD work rather than fabricated success.
 
 ## Evidence source
 

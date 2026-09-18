@@ -50,9 +50,14 @@ jobs:
           python -m py_compile scripts/production_support_diagnostics_check.py
           python -m py_compile scripts/workflow_efficiency_accessibility_check.py
           python -m py_compile scripts/local_search_measurement_authority_check.py
+          python -m py_compile scripts/launch_readiness_consolidation_check.py
           node --check functions/api/admin/local_search_measurement_report.js
           node --check functions/api/admin/local_search_provider_evidence_save.js
           node --check assets/local-search-measurement.js
+          node --check functions/api/_lib/launch-readiness-consolidation.js
+          node --check functions/api/admin/launch_readiness_consolidated.js
+          node --check assets/launch-readiness-consolidation.js
+          node --check scripts/launch_readiness_consolidation_test.mjs
           bash -n scripts/cloudflare_pages_production_acceptance.sh
 
       - name: Validate Production business acceptance source contract
@@ -141,6 +146,11 @@ jobs:
       - name: Validate local-search measurement authorities
         run: python scripts/local_search_measurement_authority_check.py
 
+      - name: Validate launch readiness consolidation authorities
+        run: |
+          python scripts/launch_readiness_consolidation_check.py
+          node scripts/launch_readiness_consolidation_test.mjs
+
       - name: Validate rollback and hardening authorities
         run: |
           python scripts/release_rollback_recovery_check.py
@@ -165,6 +175,7 @@ jobs:
             echo "- Admin I.T./observability/support diagnostics: PASS"
             echo "- Admin / Detailer / Customer workflow efficiency & accessibility: PASS"
             echo "- Local-search measurement / Search Console / GBP evidence: PASS"
+            echo "- Launch readiness consolidation / roadmap renewal: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"
