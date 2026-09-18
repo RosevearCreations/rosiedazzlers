@@ -22,7 +22,7 @@ Scope:
 - preserve source/runtime GREEN separately from controlled-pilot evidence and unrestricted-launch readiness;
 - introduce no schema migration, automatic booking, outreach, provider transaction, customer mutation, restore/export generation or permanent polling.
 
-Current contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone authority: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`.
+Current contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Retained capstone authority: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained completed-cycle authority: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 

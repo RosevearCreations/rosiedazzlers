@@ -10,7 +10,7 @@ Retained prior capstone: Build 415 — Launch Readiness Consolidation & Next-Roa
 
 **Build 417 — Payment, Refund & Delivery Provider Evidence Closure** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained capstone contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained capstone contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 This release authorizes no schema migration, automatic Production booking/customer mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, restore, export generation, automatic outreach or permanent polling.
 
@@ -41,6 +41,7 @@ This release authorizes no schema migration, automatic Production booking/custom
 - `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 - Production is proposed by PR from accepted Development to protected `main`; `rd main protection` is not bypassed.
 - The resulting `main` SHA must independently pass exact Production deployment/runtime/business acceptance.
+- Production deployment/runtime/business acceptance must independently prove that exact SHA.
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
 - Any post-acceptance source write invalidates exact-SHA acceptance and requires revalidation.
 
