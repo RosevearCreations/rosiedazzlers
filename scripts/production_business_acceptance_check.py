@@ -92,6 +92,10 @@ required_authorities = {
         "scripts/launch_readiness_consolidation_check.py",
         "scripts/launch_readiness_consolidation_test.mjs",
     ],
+    "controlled_soft_launch": [
+        "scripts/controlled_soft_launch_acceptance_check.py",
+        "scripts/controlled_soft_launch_acceptance_test.mjs",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
@@ -156,6 +160,7 @@ workflow = require(WORKFLOW, [
     "Validate workflow efficiency and accessibility authorities",
     "Validate local-search measurement authorities",
     "Validate launch readiness consolidation authorities",
+    "Validate controlled soft launch acceptance authority",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
@@ -206,6 +211,7 @@ print("PRODUCTION BUSINESS ACCEPTANCE: PASS")
 print("- acquisition through booking, payment, account/vehicle, staff work and completion authorities are present")
 print("- final finance, genuine review, rebook, maintenance and fleet authorities are present")
 print("- whole-platform growth readiness authorities are present across commercial/SEO/media, operations, finance and I.T./observability")
+print("- controlled soft-launch real-world evidence authority remains fail-closed and identity-safe")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")
 print("- workflow is durable across sequential releases and does not carry a numbered-release dependency")

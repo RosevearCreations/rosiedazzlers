@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal**.
+Current source direction: **Build 416 — Controlled Soft Launch & Real-World Acceptance**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -10,7 +10,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
 4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — current launch-readiness consolidation contract.
+5. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — current controlled soft-launch / real-world acceptance contract.
+6. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — retained launch-readiness consolidation contract.
 6. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — retained local-search measurement and provider-evidence contract.
 7. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md` — retained Admin/Detailer/Customer workflow efficiency and accessibility contract.
 8. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — retained Production support diagnostics contract.
@@ -22,6 +23,14 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 14. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
+
+## Current controlled soft-launch framework
+
+This release extends `/admin-launch-readiness.html` with a separate, fail-closed controlled-pilot decision. The pilot is intended only for explicitly authorized internal or known-customer scenarios. Source/runtime GREEN does not prove participant authorization or a completed real customer journey.
+
+The view composes existing audited launch evidence with aggregate job-handoff counts for booking, consent-safe communication, field/mobile work, completion, support monitoring and incident closeout. It never returns customer names, booking identifiers, addresses or message contents. Missing evidence remains a HOLD; this release does not create bookings, send outreach, contact payment providers, restore/export data or write Production business state automatically.
+
+Retained capstone release: **Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal**.
 
 ## Current launch-readiness consolidation framework
 
@@ -86,6 +95,8 @@ Durable retained authorities include:
 Run current/durable release authorities with:
 
 ```bash
+python scripts/controlled_soft_launch_acceptance_check.py
+node scripts/controlled_soft_launch_acceptance_test.mjs
 python scripts/launch_readiness_consolidation_check.py
 node scripts/launch_readiness_consolidation_test.mjs
 python scripts/local_search_measurement_authority_check.py
@@ -111,4 +122,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 416 — Controlled Soft Launch & Real-World Acceptance follows only after the current release is independently GREEN on protected `main`.
+Build 417 — Payment, Refund & Delivery Provider Evidence Closure follows only after the current release is independently GREEN on protected `main`.
