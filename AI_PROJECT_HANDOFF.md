@@ -8,20 +8,20 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 **Build 410 — Maintenance / Fleet Commercial Acceptance** is next only after the current release is independently GREEN on protected `main`.
 
-Retained readiness authority comes from Build 406 through `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
+Retained go-live readiness authority comes from `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 
 This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, customer mutation, automatic outreach or automatic booking.
 
 ## Current inventory/job-cost contract
 
-- `catalog_inventory_movements` remains the canonical movement authority; Build 409 creates no second ledger.
+- `catalog_inventory_movements` remains the canonical movement authority; this release creates no second ledger.
 - Only explicit negative `job_use` rows may become job-consumption/material-cost evidence.
 - Booking-linked waste/adjustment depletion remains visible but cannot be inferred as customer-job consumption.
 - Quantity continuity uses recorded previous/delta/new values only and fails closed when incomplete or inconsistent.
 - Material cost uses recorded inventory `cost_cents` only; missing cost remains review/unavailable.
 - Row-level approval and accounting-posting evidence are surfaced only when stable evidence already exists; neither is inferred.
 - Low-stock/purchase-order evidence remains read-only and never creates a reorder automatically.
-- Build 409 introduces no schema migration and performs no inventory, purchasing, accounting, provider or Production business-data mutation.
+- This release introduces no schema migration and performs no inventory, purchasing, accounting, provider or Production business-data mutation.
 
 ## Current payment-provider contract
 
