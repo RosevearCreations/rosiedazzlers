@@ -8,10 +8,10 @@
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
   <style>
-    .it-shell{max-width:1180px;margin:0 auto;padding:28px 18px 60px}.it-head{display:flex;gap:18px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.it-actions{display:flex;gap:8px;flex-wrap:wrap}.it-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:18px 0}.it-kpi,.it-check{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:16px;padding:15px}.it-kpi strong{display:block;font-size:1.2rem;margin-top:4px;overflow-wrap:anywhere}.it-checks{display:grid;gap:12px}.it-check-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.it-status{font-weight:800;text-transform:uppercase;font-size:.76rem;letter-spacing:.05em}.it-check[data-state="ok"],.it-check[data-state="runtime_proven"]{border-color:rgba(74,222,128,.38)}.it-check[data-state="source_ready"]{border-color:rgba(96,165,250,.42)}.it-check[data-state="provider_dependent"]{border-color:rgba(251,191,36,.42)}.it-check[data-state="owner_action"]{border-color:rgba(192,132,252,.42)}.it-check[data-state="unavailable"],.it-check[data-state="degraded"]{border-color:rgba(148,163,184,.45)}.it-check[data-state="failed"]{border-color:rgba(248,113,113,.45)}.it-meta{color:#94a3b8;font-size:.92rem}.it-remediation{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.42)}.it-evidence{margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;white-space:pre-wrap;word-break:break-word}.it-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}.it-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}.it-grid{display:grid;grid-template-columns:1fr;gap:22px}.it-legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.it-pill{font-size:.78rem;font-weight:800;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:6px 9px}.it-section-title{margin-top:0}.it-divider{height:1px;background:rgba(255,255,255,.10);margin:10px 0 18px}
+    .it-shell{max-width:1180px;margin:0 auto;padding:28px 18px 60px}.it-head{display:flex;gap:18px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}.it-actions{display:flex;gap:8px;flex-wrap:wrap}.it-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin:18px 0}.it-kpi,.it-check{border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);border-radius:16px;padding:15px}.it-kpi strong{display:block;font-size:1.2rem;margin-top:4px;overflow-wrap:anywhere}.it-checks{display:grid;gap:12px}.it-check-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.it-status{font-weight:800;text-transform:uppercase;font-size:.76rem;letter-spacing:.05em}.it-check[data-state="ok"],.it-check[data-state="runtime_proven"]{border-color:rgba(74,222,128,.38)}.it-check[data-state="source_ready"]{border-color:rgba(96,165,250,.42)}.it-check[data-state="provider_dependent"]{border-color:rgba(251,191,36,.42)}.it-check[data-state="owner_action"]{border-color:rgba(192,132,252,.42)}.it-check[data-state="unavailable"],.it-check[data-state="degraded"],.it-check[data-state="warning"]{border-color:rgba(148,163,184,.45)}.it-check[data-state="failed"],.it-check[data-state="critical"]{border-color:rgba(248,113,113,.45)}.it-check[data-state="hold"]{border-color:rgba(251,191,36,.42)}.it-check[data-state="action"]{border-color:rgba(192,132,252,.42)}.it-meta{color:#94a3b8;font-size:.92rem}.it-remediation{margin-top:10px;padding:10px 12px;border-radius:12px;background:rgba(15,23,42,.42)}.it-evidence{margin-top:10px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.82rem;white-space:pre-wrap;word-break:break-word}.it-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}.it-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}.it-grid{display:grid;grid-template-columns:1fr;gap:22px}.it-legend{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.it-pill{font-size:.78rem;font-weight:800;border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:6px 9px}.it-section-title{margin-top:0}.it-divider{height:1px;background:rgba(255,255,255,.10);margin:10px 0 18px}
   </style>
 </head>
-<body data-build406="go-live-evidence-provider-readiness-convergence">
+<body data-build406="go-live-evidence-provider-readiness-convergence" data-build412="production-observability-alerting-support-diagnostics">
   <header class="nav">
     <div class="nav-inner">
       <a class="brand" href="/admin.html"><strong>Rosie Dazzlers I.T.</strong></a>
@@ -21,11 +21,35 @@
 
   <main class="it-shell">
     <div class="it-grid">
+      <section class="panel" aria-labelledby="supportTitle">
+        <div class="it-head">
+          <div>
+            <div class="badge">Build 412</div>
+            <h1 id="supportTitle">Production support diagnostics</h1>
+            <p class="kicker">One support-safe view of exact runtime identity, bounded failures, provider HOLDs, owner actions and corrective mechanics.</p>
+          </div>
+          <div class="it-actions">
+            <button id="refreshSupport" class="btn primary" type="button">Refresh Support Snapshot</button>
+            <button id="copySupportPacket" class="btn ghost" type="button" disabled>Copy Support Packet</button>
+          </div>
+        </div>
+        <p class="it-note"><strong>Support boundary:</strong> this panel composes the retained readiness and Production diagnostics authorities. No automatic alert delivery, no permanent polling, no provider test transaction and no business-state mutation are performed.</p>
+        <div id="supportMessage" class="it-note" role="status">Select Refresh Support Snapshot to collect a bounded, read-only support view.</div>
+        <div id="supportSummary" class="it-summary" hidden></div>
+        <div id="supportAlerts" class="it-checks" aria-live="polite"></div>
+        <div id="supportPacketWrap" hidden>
+          <div class="it-divider"></div>
+          <h2 class="it-section-title">Support packet</h2>
+          <p class="it-meta">Whitelisted troubleshooting evidence only. Secret values, customer records, message contents and provider credentials are excluded.</p>
+          <div id="supportPacket" class="it-evidence"></div>
+        </div>
+      </section>
+
       <section class="panel" aria-labelledby="readinessTitle">
         <div class="it-head">
           <div>
             <div class="badge">Build 406</div>
-            <h1 id="readinessTitle">Go-live evidence &amp; provider readiness</h1>
+            <h2 id="readinessTitle" class="it-section-title">Go-live evidence &amp; provider readiness</h2>
             <p class="kicker">One current, authenticated readiness surface that separates source readiness, runtime proof, external provider evidence, owner actions and genuinely unavailable evidence.</p>
           </div>
           <div class="it-actions">
@@ -63,6 +87,14 @@
 
   <script>
     (() => {
+      const supportButton = document.getElementById('refreshSupport');
+      const copySupportButton = document.getElementById('copySupportPacket');
+      const supportMessage = document.getElementById('supportMessage');
+      const supportSummary = document.getElementById('supportSummary');
+      const supportAlerts = document.getElementById('supportAlerts');
+      const supportPacketWrap = document.getElementById('supportPacketWrap');
+      const supportPacket = document.getElementById('supportPacket');
+      let lastSupportPacket = null;
       const readinessButton = document.getElementById('refreshReadiness');
       const readinessMessage = document.getElementById('readinessMessage');
       const readinessSummary = document.getElementById('readinessSummary');
@@ -123,6 +155,81 @@
         return node;
       }
 
+      function renderSupportAlert(alert) {
+        const node = document.createElement('article');
+        node.className = 'it-check'; node.dataset.state = alert.severity || 'warning';
+        const head = document.createElement('div'); head.className = 'it-check-head';
+        const title = document.createElement('h2'); title.style.margin = '0'; title.textContent = text(alert.label);
+        const state = document.createElement('span'); state.className = 'it-status'; state.textContent = text(alert.severity);
+        head.append(title, state); node.append(head);
+        const meta = document.createElement('div'); meta.className = 'it-meta';
+        meta.textContent = `Source: ${text(alert.source)} · family: ${text(alert.family)} · state: ${text(alert.state)}`;
+        node.append(meta);
+        if (alert.corrective_action) {
+          const fix = document.createElement('div'); fix.className = 'it-remediation';
+          const label = document.createElement('strong'); label.textContent = 'Corrective action';
+          const copy = document.createElement('div'); copy.textContent = alert.corrective_action;
+          fix.append(label, copy); node.append(fix);
+        }
+        return node;
+      }
+
+      async function loadSupportDiagnostics() {
+        supportButton.disabled = true; supportButton.textContent = 'Checking…';
+        copySupportButton.disabled = true; lastSupportPacket = null;
+        supportMessage.className = 'it-note'; supportMessage.textContent = 'Collecting support-safe, bounded read-only diagnostics…';
+        supportSummary.hidden = true; supportSummary.replaceChildren(); supportAlerts.replaceChildren();
+        supportPacketWrap.hidden = true; supportPacket.textContent = '';
+        try {
+          const response = await fetch('/api/admin/support_diagnostics', { credentials: 'same-origin', cache: 'no-store', headers: { Accept: 'application/json' } });
+          const data = await response.json().catch(() => null);
+          if ((response.status === 401 || response.status === 403)) throw new Error('You must sign in with an authorized Admin or I.T. staff account before support diagnostics can run.');
+          if (!data) throw new Error(`Support diagnostics returned HTTP ${response.status} without JSON evidence.`);
+          const counts = data.alert_counts || {};
+          const release = data.release_identity || {};
+          supportSummary.append(
+            card('Overall', data.overall),
+            card('Critical', counts.critical || 0),
+            card('Warnings', counts.warning || 0),
+            card('Provider HOLDs', counts.hold || 0),
+            card('Owner actions', counts.action || 0),
+            card('Runtime SHA', release.commit_sha || 'unavailable')
+          );
+          supportSummary.hidden = false;
+          for (const alert of Array.isArray(data.alerts) ? data.alerts : []) supportAlerts.append(renderSupportAlert(alert));
+          if (!supportAlerts.children.length) {
+            const clear = document.createElement('article'); clear.className = 'it-check'; clear.dataset.state = 'ok';
+            const strong = document.createElement('strong'); strong.textContent = 'No support alerts in the current bounded snapshot.';
+            clear.append(strong); supportAlerts.append(clear);
+          }
+          lastSupportPacket = data.support_packet || null;
+          if (lastSupportPacket) {
+            supportPacket.textContent = JSON.stringify(lastSupportPacket, null, 2);
+            supportPacketWrap.hidden = false;
+            copySupportButton.disabled = false;
+          }
+          supportMessage.textContent = `Support snapshot collected at ${text(data.generated_at)}. Overall state: ${text(data.overall)}. No automatic alert delivery was performed.`;
+          if (data.overall === 'critical') supportMessage.classList.add('it-error');
+        } catch (error) {
+          supportMessage.className = 'it-note it-error';
+          supportMessage.textContent = error?.message || 'Support diagnostics could not be loaded.';
+        } finally {
+          supportButton.disabled = false; supportButton.textContent = 'Refresh Support Snapshot';
+        }
+      }
+
+      async function copySupportPacketToClipboard() {
+        if (!lastSupportPacket) return;
+        try {
+          await navigator.clipboard.writeText(JSON.stringify(lastSupportPacket, null, 2));
+          supportMessage.className = 'it-note';
+          supportMessage.textContent = 'Support packet copied. It contains whitelisted troubleshooting evidence only.';
+        } catch (error) {
+          supportMessage.className = 'it-note it-error';
+          supportMessage.textContent = 'The browser could not copy the Support packet. The packet remains visible below for manual copying.';
+        }
+      }
+
       async function loadReadiness() {
         readinessButton.disabled = true; readinessButton.textContent = 'Checking…';
         readinessMessage.className = 'it-note'; readinessMessage.textContent = 'Collecting bounded read-only readiness evidence…';
@@ -179,6 +286,8 @@
         }
       }
 
+      supportButton.addEventListener('click', loadSupportDiagnostics);
+      copySupportButton.addEventListener('click', copySupportPacketToClipboard);
       readinessButton.addEventListener('click', loadReadiness);
       diagnosticsButton.addEventListener('click', loadDiagnostics);
     })();

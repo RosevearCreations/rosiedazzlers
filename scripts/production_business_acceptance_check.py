@@ -79,6 +79,8 @@ required_authorities = {
     "it_observability": [
         "scripts/it_readiness_release_control_audit.py",
         "scripts/production_observability_self_diagnostics_check.py",
+        "scripts/production_support_diagnostics_check.py",
+        "scripts/production_support_diagnostics_test.mjs",
     ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",

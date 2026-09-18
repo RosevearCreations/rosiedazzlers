@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 411 — Customer Communication, Consent & Delivery Evidence**.
+Current source direction: **Build 412 — Production Observability, Alerting & Support Diagnostics**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,14 +9,21 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_405_415.md` — active evidence-driven sequence.
-4. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md` — current communication/consent/delivery contract.
-5. `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md` — retained maintenance/fleet commercial acceptance contract.
-6. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — retained inventory/job-cost evidence contract.
-7. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
-8. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
-9. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
+4. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — current Production support diagnostics contract.
+5. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md` — retained communication/consent/delivery contract.
+6. `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md` — retained maintenance/fleet commercial acceptance contract.
+7. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — retained inventory/job-cost evidence contract.
+8. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
+9. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
+10. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
+
+## Current Production support diagnostics framework
+
+`/admin/it.html` now adds a read-only Production support diagnostics view above the retained readiness and deep-diagnostics panels. It composes those proven authorities rather than replacing them, ranks runtime blockers/warnings separately from provider HOLDs and owner actions, and exposes exact runtime SHA/branch/host only when already observed.
+
+The operator may manually copy a whitelisted support packet containing release identity, classification counts and corrective actions. Arbitrary evidence objects, secret values, customer records, message contents and provider credentials are excluded. There is no automatic alert delivery, provider test transaction, business mutation or permanent polling.
 
 ## Current customer-communication framework
 
@@ -57,6 +64,8 @@ Durable retained authorities include:
 Run current/durable release authorities with:
 
 ```bash
+python scripts/production_support_diagnostics_check.py
+node scripts/production_support_diagnostics_test.mjs
 python scripts/customer_communication_consent_delivery_check.py
 node scripts/customer_communication_consent_delivery_test.mjs
 python scripts/build410_maintenance_fleet_commercial_acceptance_check.py
@@ -76,4 +85,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 412 — Production Observability, Alerting & Support Diagnostics follows only after the current release is independently GREEN on protected `main`.
+Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit follows only after the current release is independently GREEN on protected `main`.

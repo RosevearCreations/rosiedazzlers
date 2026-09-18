@@ -4,37 +4,36 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 411 — Customer Communication, Consent & Delivery Evidence** is the active bounded release.
+**Build 412 — Production Observability, Alerting & Support Diagnostics** is the active bounded release.
 
-**Build 412 — Production Observability, Alerting & Support Diagnostics** is next only after the current release is independently GREEN on protected `main`.
+**Build 413 — Admin / Detailer / Customer Workflow Efficiency & Accessibility Audit** is next only after the current release is independently GREEN on protected `main`.
 
-Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
+Active roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`. Current contract: `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`.
 
-This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, fabricated consent, automatic outreach or automatic booking.
+This source release authorizes no schema migration, Production business-data mutation, destructive R2 mutation, DNS/secret mutation, payment/provider transaction, accounting/inventory posting, automatic alert delivery or background polling.
 
-## Current communication contract
+## Current Production support diagnostics contract
 
-- Authenticated customer profiles own customer communication consent.
-- A queued message is not durable future permission to send.
-- Customer-directed dispatch revalidates current opt-in, current channel, canonical recipient and, for push, current owned subscription/event preference.
-- Stale or revoked consent cancels the queued event before provider contact.
-- Abandoned-checkout recovery requires canonical customer ownership and explicit current consent.
-- Provider-accepted/sent evidence is not definitive delivery; final delivery remains provider-dependent until separately observed.
-- Customer unsubscribe and preference changes remain owner-authenticated.
-- Staff-owned push remains governed by staff ownership/capability boundaries.
-- No inferred consent or automatic outreach is enabled by source acceptance.
+- The I.T. support snapshot composes retained go-live readiness and Production diagnostics rather than creating a competing health authority.
+- Exact runtime SHA, branch and host are displayed only when already observed by retained runtime evidence.
+- Required runtime failures are `critical`; degraded/optional evidence is `warning`; provider evidence remains `hold`; explicit operator evidence remains `action`.
+- Every alert carries corrective mechanics, but the diagnostic workflow never performs the corrective mutation.
+- The copyable support packet is whitelisted and excludes arbitrary evidence, secret values, customer records, message contents and provider credentials.
+- Refresh is manual and bounded. No permanent polling or automatic email/SMS/push/third-party alert delivery is introduced.
+- GitHub/Cloudflare exact-SHA release acceptance remains authoritative for Production GREEN.
 
 ## Retained operating contract
 
 - Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, and `unavailable`.
 - Unavailable is not automatically failure. Required missing runtime evidence may remain a HOLD.
 - Canonical checkout remains server-authoritative for availability, booking and payment outcomes; business mutations are never queued/replayed automatically on reconnect.
-- Authenticated booking history remains linked through exact `customer_profile_id`; current catalog, condition, availability, scope and price are reconfirmed.
+- Customer communication remains current-consent gated at dispatch time; stale queued consent/channel/recipient evidence fails closed.
 - Public SEO remains one meaningful H1 per indexable page with truthful Oxford/Norfolk proof.
 - Representative phone/tablet/desktop support remains mandatory; source checks are not independent visual-browser proof.
 - Durable field-to-office handoff authority remains `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`.
 - Inventory/job-cost evidence remains retained through `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`.
 - Maintenance/fleet commercial evidence remains retained through `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`.
+- Communication/consent evidence remains retained through `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`.
 
 ## Release mechanics
 
@@ -52,6 +51,7 @@ This source release authorizes no schema migration, Production business-data mut
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md`
 - `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md`
 - `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md`
 - `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md`
