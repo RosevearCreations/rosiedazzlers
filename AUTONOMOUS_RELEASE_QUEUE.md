@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance.
+Retained prior release: Build 416 — Controlled Soft Launch & Real-World Acceptance. Retained completed-cycle roadmap: `FORWARD_BUILD_ROADMAP_405_415.md`.
 
 ## Current release
 
