@@ -10,9 +10,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_405_415.md` — active evidence-driven sequence.
 4. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — current inventory/job-cost acceptance contract.
-5. `BUILD408_MEDIA_R2_OPERATIONAL_ACCEPTANCE_RECOVERY_EVIDENCE.md` — retained Media/R2 acceptance boundary when present in release history.
 6. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
-7. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained Build 406 readiness framework.
+7. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
 8. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
@@ -63,4 +62,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 410 — Maintenance / Fleet Commercial Acceptance follows only after Build 409 is independently GREEN on protected `main`.
+Build 410 — Maintenance / Fleet Commercial Acceptance follows only after the current release is independently GREEN on protected `main`.
