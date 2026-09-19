@@ -9,6 +9,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — active evidence-driven sequence.
+4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle roadmap.
 4. `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md` — current contract.
 5. `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md` — retained media/proof contract.
 6. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — retained commercial-pilot contract.
