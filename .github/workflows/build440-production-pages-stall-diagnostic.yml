@@ -66,6 +66,23 @@ jobs:
           echo "Exact deployment stages:"
           jq -r '.result.stages[]? | [.name, .status, (.started_on // ""), (.ended_on // "")] | @tsv' "$TMP_DIR/exact.json" || true
 
+          echo "Recent Production deployments:"
+          jq -r '
+            [.result[]? | select((.environment // "") == "production")][0:8][]
+            | [
+                .id,
+                (.latest_stage.name // "unknown"),
+                (.latest_stage.status // "unknown"),
+                (.deployment_trigger.metadata.commit_hash // "unknown"),
+                (.created_on // "unknown"),
+                ((.aliases // []) | join(",")),
+                (.url // "")
+              ] | @tsv
+          ' "$TMP_DIR/deployments.json" || true
+
+          echo "Project domains:"
+          jq -r '.result.domains[]? // empty' "$TMP_DIR/project.json" || true
+
           echo "Active/queued deployment window:"
           jq -r '
             .result[]?
