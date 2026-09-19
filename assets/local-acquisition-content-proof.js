@@ -60,7 +60,8 @@ function renderCandidates(data, sourceAudits = new Map()) {
           audit.description_present ? "description yes" : "description missing",
           audit.word_count + " words",
           audit.thin_copy_review ? "thin-copy review" : "copy depth ok",
-          audit.duplicate_copy_review ? "duplicate-copy review" : "no exact duplicate signal"
+          audit.duplicate_copy_review ? "duplicate-copy review" : "no exact duplicate signal",
+          audit.service_mismatch_review ? "service-copy review" : "service topic present"
         ].join(" · ")
       : "Deployed source review pending";
     return '<div class="summary-item"><div><strong>' + esc(item.label) + '</strong><div class="muted">' + esc(item.path) +
@@ -79,7 +80,7 @@ async function auditDeployedSources(candidates) {
     try {
       const response = await fetch(item.path, { method: "GET", credentials: "same-origin", cache: "no-store" });
       if (!response.ok) {
-        raw.push([item.path, { source_state: "unavailable", h1_count: null, canonical_present: false, description_present: false, word_count: 0, thin_copy_review: false, duplicate_copy_review: false, signature: "" }]);
+        raw.push([item.path, { source_state: "unavailable", h1_count: null, canonical_present: false, description_present: false, word_count: 0, thin_copy_review: false, duplicate_copy_review: false, service_mismatch_review: false, signature: "" }]);
         continue;
       }
       const html = await response.text();
@@ -87,6 +88,9 @@ async function auditDeployedSources(candidates) {
       const main = doc.querySelector("main") || doc.body;
       const text = String(main?.innerText || main?.textContent || "").replace(/\s+/g, " ").trim();
       const paragraphs = Array.from(main?.querySelectorAll("p") || []).map((p) => String(p.textContent || "").replace(/\s+/g, " ").trim()).filter((p) => p.length >= 80);
+      const normalizedText = normalizeSignature(text);
+      const topicTokens = normalizeSignature(item.label).split(" ").filter((token) => token.length >= 3);
+      const serviceTopicPresent = item.kind !== "service" || topicTokens.every((token) => normalizedText.includes(token));
       raw.push([item.path, {
         source_state: "observed_same_origin",
         h1_count: doc.querySelectorAll("h1").length,
@@ -95,10 +99,11 @@ async function auditDeployedSources(candidates) {
         word_count: text ? text.split(/\s+/).length : 0,
         thin_copy_review: text ? text.split(/\s+/).length < 180 : true,
         duplicate_copy_review: false,
+        service_mismatch_review: item.kind === "service" && !serviceTopicPresent,
         signature: normalizeSignature(paragraphs.slice(0, 3).join(" "))
       }]);
     } catch {
-      raw.push([item.path, { source_state: "unavailable", h1_count: null, canonical_present: false, description_present: false, word_count: 0, thin_copy_review: false, duplicate_copy_review: false, signature: "" }]);
+      raw.push([item.path, { source_state: "unavailable", h1_count: null, canonical_present: false, description_present: false, word_count: 0, thin_copy_review: false, duplicate_copy_review: false, service_mismatch_review: false, signature: "" }]);
     }
   }
 
