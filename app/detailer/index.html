@@ -14,7 +14,7 @@
   </style>
 </head>
 <!-- Build 400 mobile QoL layer over the Build 383 field workflow; Build 264 lazy runtime architecture retained. -->
-<body data-page="app-detailer" data-app-module="detailer" data-build="400">
+<body data-page="app-detailer" data-app-module="detailer" data-build="400" data-build432="detailer-staff-workflow-refinement">
   <main class="app-shell">
     <header class="app-head">
       <a class="app-brand" href="/app/"><img data-logo alt="Rosie Dazzlers logo"/><span><strong>Rosie Dazzlers</strong><br><span class="mini">Detailer Mobile App</span></span></a>
@@ -22,7 +22,7 @@
     </header>
 
     <section class="panel stack" aria-labelledby="detailer-title">
-      <div><span class="badge">Build 400 mobile QoL</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow carries arrival/readiness through before-service evidence, approved scope, product usage, completion evidence, after photos and customer/final-balance handoff. Build 400 adds faster touch shortcuts and a device-only timer without changing canonical job or payroll state.</p></div>
+      <div><span class="badge">Build 432 staff workflow refinement</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Assigned-job workflow carries arrival/readiness through before-service evidence, approved scope, product usage, completion evidence, after photos and customer/final-balance handoff. Build 400 adds faster touch shortcuts and a device-only timer without changing canonical job or payroll state. Build 432 adds manual next-step and resume shortcuts that delegate to the same authorized controls.</p></div>
       <div class="runtime-strip">
         <div class="runtime-card"><span class="mini">Runtime mode</span><strong id="runtimeMode">Starting…</strong><span class="mini" id="runtimeReason">Checking assigned jobs once.</span></div>
         <div class="runtime-card"><span class="mini">Automatic monitoring</span><strong id="monitorState">OFF</strong><span class="mini">No job polling interval is created.</span></div>
@@ -41,6 +41,7 @@
         <article class="panel stack">
           <h2 style="margin:0">Selected job</h2>
           <div id="jobSummary" class="mini" role="status" aria-live="polite" aria-atomic="true">Choose an assigned job.</div>
+          <div class="runtime-card" data-b432-assist><span class="mini">Field focus</span><strong id="workflowNextLabel">Choose an assigned job to see the next available action.</strong><div class="job-actions" style="margin-top:8px"><button class="btn primary" id="workflowNextAction" type="button" disabled>Next action</button><button class="btn ghost" id="workflowResumeJob" type="button" disabled>No previous assigned job in this tab</button></div><span class="mini" id="workflowConnection">Checking browser connection state…</span></div>
           <label>Workflow note / reason<input id="workflowReason" maxlength="500" placeholder="Required for decline/pause; optional otherwise"/></label>
           <div class="job-actions" id="workflowActions">
             <button class="btn ghost" type="button" data-job-action="accept">Accept</button><button class="btn ghost" type="button" data-job-action="decline">Decline</button><button class="btn ghost" type="button" data-job-action="dispatch">On my way</button><button class="btn ghost" type="button" data-job-action="arrive">Arrived</button><button class="btn primary" type="button" data-job-action="start">Start job</button><button class="btn ghost" type="button" data-job-action="pause">Pause</button><button class="btn ghost" type="button" data-job-action="resume">Resume</button><button class="btn primary" type="button" data-job-action="complete">Complete</button>
@@ -59,7 +60,7 @@
     </section>
     <section class="section"><div data-module-home-cards></div></section>
   </main>
-  <div class="mobile-bar"><button class="btn primary" id="mobileRefreshJobs" type="button">Refresh jobs</button><a class="btn ghost" href="/app/">Apps</a></div>
+  <div class="mobile-bar"><button class="btn primary" id="mobileRefreshJobs" type="button">Refresh jobs</button><button class="btn primary" id="mobileNextAction" type="button" disabled>Next action</button><a class="btn ghost" href="/app/">Apps</a></div>
 
   <script src="/assets/admin-auth.js?v=20260829build271"></script>
   <script src="/assets/admin-shell.js?v=20260829build271"></script>
@@ -72,5 +73,6 @@
   <script src="/assets/app-core/module-navigation.js?v=20260829build271"></script>
   <script src="/apps/detailer/detailer-app.js?v=20260911build383"></script>
   <script src="/assets/build400-detailer-mobile-qol.js?v=20260914build400"></script>
+  <script src="/assets/build432-staff-workflow-refinement.js?v=20260919build432"></script>
 </body>
 </html>

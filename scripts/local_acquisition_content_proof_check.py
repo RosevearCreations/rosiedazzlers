@@ -73,18 +73,23 @@ require(contract, [
     "No search rank", "one meaningful H1", "no fabricated reviews", "No automatic publishing",
     "no DNS change", "no customer outreach", "no ad-spend mutation"
 ], "Build 431 contract")
+# Living release documents legitimately advance beyond this retained Build 431 authority.
+# Retain the contract and focused authority references without pinning current/next release prose.
 require(queue, [
-    "**Build 431 — Local Acquisition & Content Proof** is the active bounded release.",
-    "**Build 432 — Detailer Mobile & Staff Workflow Refinement** is next only after"
-], "release queue")
+    "BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md"
+], "release queue retained authority")
 require(handoff, [
-    "**Build 431 — Local Acquisition & Content Proof** is the active bounded release.",
-    "**Build 432 — Detailer Mobile & Staff Workflow Refinement** is next only after"
-], "project handoff")
+    "BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md"
+], "project handoff retained authority")
 require(readme, [
-    "Current source direction: **Build 431 — Local Acquisition & Content Proof**.",
+    "BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md",
     "local_acquisition_content_proof_check.py", "local_acquisition_content_proof_test.mjs"
-], "README")
+], "README retained authority")
+current_match = re.search(r"Current source direction: \*\*Build (\d{3}) —", readme)
+if not current_match:
+    errors.append("README current source direction could not be resolved")
+elif int(current_match.group(1)) < 431:
+    errors.append("README current release predates retained Build 431 authority")
 
 for gate, label in [(focused, "focused authority"), (dev, "Development gate"), (prod, "Production gate")]:
     require(gate, ["local_acquisition_content_proof_check.py", "local_acquisition_content_proof_test.mjs"], label)

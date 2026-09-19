@@ -6,14 +6,22 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized Production predecessor remains documented by `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`. Earlier retention/rebooking continuity remains documented by `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Earlier service-economics continuity remains documented by `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
+The synchronized predecessor contract is retained in `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`. Earlier continuity remains in the active roadmap and Git history.
+
 
 ## Retained contract index
 
-These completed authorities remain continuity inputs for current acceptance:
+These completed filename authorities remain cumulative acceptance inputs:
 
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
+- `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`
+- `BUILD429_RETENTION_REBOOKING_LEARNING.md`
+- `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`
 - `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`
+- `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`
+- `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`
 - `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
@@ -38,25 +46,25 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 431 — Local Acquisition & Content Proof** is the active bounded release.
+**Build 432 — Detailer Mobile & Staff Workflow Refinement** is the active bounded release.
 
 Scope:
-- combine bounded first-party local/service page traffic with genuine approved public proof;
-- retain Search Console and Google Business Profile evidence only as dated, attributed provider snapshots;
-- prioritize local/service pages needing operator review without inferring ranking, indexing or Maps outcomes;
-- inspect deployed same-origin pages for H1, canonical, description, copy-depth, duplicate-copy and service-topic review signals;
-- preserve one meaningful H1, truthful service-area claims and canonical/metadata integrity;
-- introduce no automatic publishing, fabricated review/location content, provider mutation, customer outreach, DNS, ad-spend, schema or permanent-polling mutation.
+- reduce high-frequency staff friction without widening role ceilings;
+- add a manual next-action shortcut that delegates to canonical Detailer controls;
+- add tab-scoped Detailer assigned-job and Operations workstream resume convenience;
+- add tab-scoped Admin Today filter memory/reset;
+- keep connection state advisory and preserve explicit manual recovery;
+- introduce no new API, schema, automatic job completion, silent posting, outreach, provider transaction, destructive storage mutation or permanent polling.
 
-Current contract: `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass its focused Local Acquisition & Content Proof authority, retained SEO/local-acquisition/media authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused staff-workflow authority, retained mobile/detailer/handoff/accessibility authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
 
-**Build 432 — Detailer Mobile & Staff Workflow Refinement** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`.
+**Build 433 — Support Automation & Exception Handling** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`.
 
 ## Continuing rule
 
