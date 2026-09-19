@@ -7,6 +7,7 @@
   <meta name="description" content="Staff-only read-only retention and rebooking learning evidence for Rosie Dazzlers." />
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <script src="/assets/admin-auth.js"></script>
   <style>
     .learning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
     .learning-stat{font-size:1.7rem;font-weight:800}
@@ -19,7 +20,7 @@
     .learning-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}
   </style>
 </head>
-<body data-build429="retention-rebooking-learning">
+<body data-page="admin-retention-learning" data-build429="retention-rebooking-learning">
   <main class="container shell">
     <section class="section">
       <div class="hero">
@@ -70,8 +71,7 @@
     </section>
   </main>
 
-  <script type="module">
-    import { getAdminSession, adminFetch } from "/assets/client-auth.js";
+  <script>
 
     const button = document.getElementById("refreshLearning");
     const message = document.getElementById("learningMessage");
@@ -107,9 +107,9 @@
       maintenanceEvidence.replaceChildren(); communicationEvidence.replaceChildren(); operatorReview.replaceChildren();
 
       try{
-        const session=await getAdminSession().catch(()=>null);
-        if(!session) throw new Error("Sign in with an authorized Admin or staff account first.");
-        const response=await adminFetch("/api/admin/retention_rebooking_learning",{method:"GET",cache:"no-store"});
+        const auth=await window.AdminAuth.requireAuth({ pageKey:"admin-retention-learning" });
+        if(!auth?.ok) throw new Error("Sign in with an authorized Operations or Admin account first.");
+        const response=await window.AdminAuth.fetchWithAuth("/api/admin/retention_rebooking_learning",{method:"GET",cache:"no-store"});
         const data=await response.json().catch(()=>null);
         if(!response.ok || !data?.ok) throw new Error(data?.error || `Learning evidence returned HTTP ${response.status}.`);
 
