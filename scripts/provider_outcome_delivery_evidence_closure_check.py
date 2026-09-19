@@ -30,7 +30,7 @@ for forbidden in ["onRequestPost","onRequestPut","onRequestPatch","onRequestDele
     if forbidden in endpoint: errors.append(f"Build 436 endpoint contains forbidden token {forbidden!r}")
 require(launch,["buildProviderOutcomeDeliveryEvidence","provider_outcome_delivery_evidence: providerOutcomeDeliveryEvidence",'current_provider_evidence_authority: "provider_outcome_delivery_evidence_closure"'],"launch readiness composition")
 require(asset,["Dated evidence","closure candidate","Latest dated evidence"],"launch readiness client")
-require(page,['data-build436="provider-outcome-delivery-evidence-closure"',"Loading dated provider evidence","Provider evidence refresh & retained acceptance boundary"],"launch readiness page")
+require(page,['data-build436="provider-outcome-delivery-evidence-closure"',"Loading dated provider evidence","Build 419 acceptance boundary","Current provider evidence refresh:"],"launch readiness page")
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["# Build 436 — Provider Outcome & Delivery Evidence Closure","/api/admin/provider_outcome_delivery_evidence","closure_candidate","STARTUP_GO_LIVE_BLOCKERS.md","Build 437 — Backup & Recovery Evidence Closure"],"Build 436 contract")
 require(blockers,["Provider outcomes & communications","provider_outcome_delivery_evidence","closure candidate"],"canonical HOLD backlog")
