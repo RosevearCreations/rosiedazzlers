@@ -11,6 +11,7 @@ import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
 import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-consolidation.js";
 import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evidence.js";
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
+import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -71,6 +72,12 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const backupRecoveryEvidenceClosure = buildBackupRecoveryEvidenceClosure({
+    proof: recoveryExportResult.data?.proof || null,
+    source_available: recoveryExportResult.ok && Boolean(recoveryExportResult.data?.proof),
+    generated_at: generatedAt
+  });
+
   return json({
     ok: consolidation.source_runtime_status === "green",
     build: 419,
@@ -87,6 +94,8 @@ export async function onRequestGet({ request, env }) {
     provider_outcome_delivery_evidence: providerOutcomeDeliveryEvidence,
     current_provider_evidence_authority: "provider_outcome_delivery_evidence_closure",
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
+    backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
+    current_recovery_evidence_authority: "backup_recovery_evidence_closure",
     source_status: {
       go_live_readiness: state(readinessResult),
       production_diagnostics: state(diagnosticsResult),
