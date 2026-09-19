@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Security, Privacy & Recovery | Rosie Dazzlers</title>
+  <meta name="description" content="Authenticated Rosie Dazzlers security, privacy and recovery evidence." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .shell{max-width:1120px;margin:0 auto;padding:28px 18px 60px}.head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0}.card{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:15px;background:rgba(255,255,255,.05)}.card strong{display:block;font-size:1.15rem;margin-top:4px}.note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}.muted{color:#94a3b8}
+  </style>
+</head>
+<body data-build424="security-privacy-recovery-drill">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin/it.html"><strong>Rosie Dazzlers I.T.</strong></a><nav class="nav-links"><a href="/admin/it.html">I.T. Diagnostics</a><a href="/admin-security.html">Security</a><a href="/admin.html">Admin Dashboard</a></nav></div></header>
+<main class="shell">
+  <section class="panel">
+    <div class="head">
+      <div>
+        <div class="badge">Build 424</div>
+        <h1>Security, privacy &amp; recovery drill</h1>
+        <p class="kicker">A bounded read-only snapshot of security posture, session configuration, consent safeguards and retained recovery authority.</p>
+      </div>
+      <button id="refreshSecurityRecovery" class="btn primary" type="button">Refresh Security Snapshot</button>
+    </div>
+    <p class="note"><strong>Truth boundary:</strong> this page does not expose secret values, rotate credentials, mutate consent, restore Production, change DNS/R2, or claim that source checks equal a real recovery event.</p>
+    <div id="snapshotMessage" class="note" role="status">Select Refresh Security Snapshot to collect current evidence.</div>
+    <div id="summary" class="grid" hidden></div>
+  </section>
+</main>
+<script>
+(() => {
+  const button=document.getElementById('refreshSecurityRecovery');
+  const message=document.getElementById('snapshotMessage');
+  const summary=document.getElementById('summary');
+  const text=v=>v==null?'—':String(v);
+  const card=(label,value)=>{const n=document.createElement('div');n.className='card';const s=document.createElement('span');s.className='muted';s.textContent=label;const b=document.createElement('strong');b.textContent=text(value);n.append(s,b);return n;};
+  async function load(){
+    button.disabled=true;button.textContent='Checking…';summary.hidden=true;summary.replaceChildren();message.textContent='Collecting bounded security, session, consent and recovery evidence…';
+    try{
+      const response=await fetch('/api/admin/security_privacy_recovery_drill',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+      const data=await response.json().catch(()=>null);
+      if(!response.ok||!data) throw new Error(data?.error||`Security snapshot returned HTTP ${response.status}.`);
+      summary.append(
+        card('Overall',data.overall),
+        card('Security posture',data.security?.state),
+        card('RLS disabled',data.security?.rls_disabled),
+        card('Browser grants',data.security?.browser_grants),
+        card('Session policy',data.sessions?.state),
+        card('Staff secret configured',data.sessions?.staff_secret_configured?'yes':'no'),
+        card('Customer secret configured',data.sessions?.customer_secret_configured?'yes':'no'),
+        card('Legacy admin fallback',data.sessions?.legacy_admin_fallback_enabled?'enabled':'disabled'),
+        card('Privacy / consent',data.privacy?.state),
+        card('Recovery authority',data.recovery?.state),
+        card('Real recovery drill observed',data.recovery?.observed_drill?'yes':'no')
+      );
+      summary.hidden=false;
+      message.textContent=`Snapshot completed at ${text(data.generated_at)}. A real recovery drill remains separate evidence unless explicitly observed.`;
+    }catch(error){message.textContent=error?.message||'Security snapshot could not be loaded.';}
+    finally{button.disabled=false;button.textContent='Refresh Security Snapshot';}
+  }
+  button.addEventListener('click',load);
+})();
+</script>
+</body>
+</html>

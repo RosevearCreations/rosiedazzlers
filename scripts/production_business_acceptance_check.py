@@ -124,6 +124,10 @@ required_authorities = {
         "scripts/reliability_performance_cost_capacity_check.py",
         "scripts/reliability_performance_cost_capacity_test.mjs",
     ],
+    "security_privacy_recovery_drill": [
+        "scripts/security_privacy_recovery_drill_check.py",
+        "scripts/security_privacy_recovery_drill_test.mjs",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
@@ -196,6 +200,7 @@ workflow = require(WORKFLOW, [
     "Validate retention, maintenance & fleet operational pilot authority",
     "Validate media, Photo Studio & proof operations authority",
     "Validate reliability, performance & cost capacity authority",
+    "Validate security, privacy & recovery drill authority",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
