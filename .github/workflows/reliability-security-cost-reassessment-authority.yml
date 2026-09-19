@@ -42,6 +42,7 @@ jobs:
           node --check functions/api/admin/reliability_security_cost_reassessment.js
           node --check assets/build434-reliability-reassessment.js
           node --check scripts/reliability_security_cost_reassessment_test.mjs
+          node scripts/reliability_security_cost_reassessment_test.mjs
       - name: Validate Build 434 source authority
         run: python scripts/reliability_security_cost_reassessment_check.py
       - name: Re-run retained reliability, security, recovery and release authorities
