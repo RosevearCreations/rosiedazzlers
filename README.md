@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 430 — Fleet & Commercial Operations Learning**.
+Current source direction: **Build 431 — Local Acquisition & Content Proof**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,7 +9,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
-4. `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md` — current planned contract.
+4. `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md` — current planned contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
 6. `BUILD429_RETENTION_REBOOKING_LEARNING.md` — retained retention/rebooking predecessor contract.
 7. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — retained service-economics/job-profitability continuity contract.
@@ -48,13 +48,13 @@ These completed authorities remain continuity inputs for current acceptance:
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
-## Current Fleet & Commercial Operations Learning framework
+## Current Local Acquisition & Content Proof framework
 
-`BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md` defines the current bounded autonomous release. The staff-only `/admin-fleet-commercial-learning.html` surface and `/api/admin/fleet_commercial_operations_learning` endpoint aggregate fleet inquiry demand, source rulebook state, fleet account/request/service-history evidence and capacity boundaries without exposing customer identities.
+`BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md` defines the current bounded autonomous release. The staff-only `/admin-seo-tasks.html` surface now combines first-party page traffic, genuine approved public proof, dated Search Console/GBP evidence and existing local SEO task evidence into a prioritized content-review workbench.
 
-Inquiry, quote and converted-lead counts remain operational evidence only, not signed commercial business. Unresolved fleet minimums, tiers, travel, volume pricing, invoicing and cancellation decisions remain `owner_action`; unsupported live capacity remains `unavailable` rather than assumed.
+The new `/api/admin/local_acquisition_content_proof` endpoint is read-only and schema-neutral. It excludes sample/private proof, reports unavailable/truncated evidence explicitly, and never converts source/runtime success into a Google ranking, indexing or Maps claim. The deployed-page client checks H1/canonical/description/copy depth and duplicate/service-copy review heuristics without publishing changes.
 
-The retention/rebooking predecessor remains retained through `BUILD429_RETENTION_REBOOKING_LEARNING.md`. The prepared follow-on contracts are `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+The fleet/commercial predecessor remains retained through `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`. Prepared follow-on contracts remain `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
@@ -88,6 +88,8 @@ python scripts/retention_rebooking_learning_check.py
 node scripts/retention_rebooking_learning_test.mjs
 python scripts/fleet_commercial_operations_learning_check.py
 node scripts/fleet_commercial_operations_learning_test.mjs
+python scripts/local_acquisition_content_proof_check.py
+node scripts/local_acquisition_content_proof_test.mjs
 python scripts/build428_service_economics_job_profitability_check.py
 node scripts/build428_service_economics_job_profitability_test.mjs
 python scripts/build427_booking_conversion_quote_clarity_check.py
@@ -116,4 +118,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-**Build 431 — Local Acquisition & Content Proof** is next only after the current release is independently GREEN on protected `main`.
+**Build 432 — Detailer Mobile & Staff Workflow Refinement** is next only after the current release is independently GREEN on protected `main`.
