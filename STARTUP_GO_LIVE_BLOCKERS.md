@@ -1,112 +1,41 @@
-# Rosie Dazzlers — Current Development / Go-Live Acceptance
+# Rosie Dazzlers — Current Production HOLD Inventory
 
-**Current planning boundary:** Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal. Resolve exact accepted source/deployment identity from synchronized Git refs and exact-SHA workflow evidence rather than pinning a historical commit here.
+This is the single current evidence/HOLD backlog for Rosie Dazzlers. Exact accepted source and deployment identity comes from live `dev`/`main` refs plus exact-SHA workflow evidence; this file does not pin a commit.
 
-**Planning authorities:** `AI_PROJECT_HANDOFF.md`, `AUTONOMOUS_RELEASE_QUEUE.md`, `FORWARD_BUILD_ROADMAP_405_415.md`, and `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
+A HOLD remains open until dated, attributable evidence from the named authority supports closure. Source/runtime GREEN never closes a provider or owner HOLD by itself.
 
-This document is an acceptance/evidence inventory, not a claim that unchecked external/provider/runtime evidence has already passed. `/admin-launch-readiness.html` is the current consolidated launch capstone, backed by authenticated read-only readiness/diagnostics plus retained launch evidence. `/admin/it.html` remains the deep diagnostics surface.
+## Evidence classes
 
-## Build 406 evidence classification
-
-Every current readiness item must be represented truthfully as one of:
-
-- `source_ready` — source/configuration authority exists; runtime/provider outcome is not implied.
-- `runtime_proven` — the current deployed runtime was observed through a bounded read-only check.
 - `provider_dependent` — definitive evidence must come from an external provider outcome.
-- `owner_action` — evidence requires explicit operator review or controlled action.
-- `unavailable` — evidence cannot currently be observed from the readiness surface.
+- `owner_action` — an explicit operator/business observation, approval or controlled action is required.
+- `unavailable` — required evidence cannot currently be established from the authorized evidence source.
 
-**Unavailable is not failure.** It can remain a launch HOLD when required evidence is missing, but missing evidence is never converted into fabricated success or fabricated failure. Stripe/PayPal/email delivery, Search Console/GBP and other provider outcomes remain provider/owner evidence until independently observed.
+## Canonical HOLD backlog
 
-## 1. Release governance and deployment identity
+| Area | Classification | Current HOLD | Closure evidence |
+| --- | --- | --- | --- |
+| Provider outcomes & communications | `provider_dependent` | Definitive payment/refund/message-delivery outcomes remain external to source/runtime acceptance wherever provider evidence is not currently recorded. | Dated provider outcome reconciled to the current internal record without exposing credentials or customer message contents. |
+| Local-search provider evidence | `provider_dependent` | Search Console / Google Business Profile success is never inferred from markup, referrals, canonical tags or local proof. | Dated provider-observed snapshot for the correct property/location and measurement window. |
+| Recovery / backup evidence | `owner_action` | Repository routes and recovery source authority do not prove a current restorable backup/export or a successfully observed recovery drill. | Operator-observed artifact/retention evidence and bounded drill evidence recorded without performing an unnecessary Production restore. |
+| Independent device / visual evidence | `owner_action` | Source responsive/accessibility checks do not replace direct authenticated phone/tablet/desktop visual observation. | Dated operator-observed representative device/browser evidence for the current release. |
+| Maintenance / fleet business approval | `owner_action` | Commercial cadence, pricing, discount, travel, invoice and related business terms remain owner-approved rather than inferred from source. | Explicit dated owner approval of the current terms before automation or customer reliance expands. |
+| Evidence source unavailable | `unavailable` | Any required evidence source that cannot be reached or established must remain unavailable rather than being guessed. | The authorized evidence source becomes available and produces attributable evidence. |
 
-- [ ] Feature candidate passes focused authority, Current Source Gate and exact feature-preview acceptance on one exact SHA.
-- [ ] `dev` passes exact-SHA Development deployment/runtime acceptance before Production promotion.
-- [ ] Production is proposed through protected-main pull request from the exact Development-accepted SHA; protection is never bypassed.
-- [ ] Exact Production Cloudflare deployment identity, Functions metadata and canonical runtime smoke pass independently after source promotion.
-- [ ] Branch/ruleset protection readiness is observed and documented fail-closed; missing protection evidence is not silently treated as GREEN.
+## Not separate HOLD inventories
 
-## 2. Role/module and idle-load acceptance
+Completed source/runtime authorities remain in their retained contracts and workflow history. They are not duplicated here as historical checklists.
 
-- [ ] Administrator can reach every authorized internal module and cannot be narrowed below full internal access.
-- [ ] Focused staff roles deny direct URL/API access outside their module/action ceilings.
-- [ ] Detailer with no eligible open job does not wake live-job feeds/media/message loops.
-- [ ] Operations, Finance, Admin, I.T., DAIP and Socials do not load business datasets merely from opening their shells.
-- [ ] Customer progress refresh runs only for eligible active/visible work and stops for inactive/completed work.
-- [ ] Build 413 high-frequency Admin, Detailer and Customer workflows expose source-proven busy/live-region/error-focus contracts without widening role/capability access.
-- [ ] Independent authenticated phone/tablet/desktop visual browser proof remains `unavailable` until directly observed; source responsive checks are never relabeled as visual proof.
+The current living release authorities are:
 
-## 3. Cloudflare/Supabase reliability
+- `AI_PROJECT_HANDOFF.md`
+- `AUTONOMOUS_RELEASE_QUEUE.md`
+- `FORWARD_BUILD_ROADMAP_426_435.md`
+- `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`
 
-- [ ] Representative Development use shows no CPU-limit, memory-limit or invocation/retry storm caused by ordinary navigation.
-- [ ] Runtime Diagnostics records safe route/status/wall-time/Ray/dependency evidence without storing secrets or generating its own traffic storm.
-- [ ] Production support diagnostics converges retained readiness/diagnostics into severity-ranked runtime blockers, warnings, provider HOLDs and owner actions without creating a competing health authority.
-- [ ] Support packet exposes only whitelisted release identity/counts/corrective actions and excludes secret values, customer records, message contents and provider credentials.
-- [ ] Alerting remains manual/on-screen with no permanent polling or automatic external alert delivery until separately authorized.
-- [ ] Build 406 readiness reports current Cloudflare runtime identity, Supabase and R2 as `runtime_proven` only when bounded read-only observation succeeds.
-- [ ] Supabase connectivity and required schema dependencies fail closed with actionable I.T. evidence rather than request-time schema mutation.
-- [ ] D1/legacy references are absent from Rosie Dazzlers runtime/deployment authority unless deliberately reintroduced by an approved build.
+Operator surfaces remain read-only/manual-refresh unless a separately authorized business action explicitly says otherwise. Existing I.T., launch-readiness, recovery/security, reliability/capacity, SEO/provider-evidence and other staff surfaces may provide evidence for rows above, but they do not create competing HOLD lists.
 
-## 4. Payments and customer communication
+## Closure rule
 
-- [ ] Stripe Development deposit/final-balance checkout and webhook settlement evidence pass on current release authority; configuration presence alone remains `source_ready`, not a provider outcome.
-- [ ] Controlled refund/partial-refund evidence reconciles correctly before Production provider mutation is enabled.
-- [ ] PayPal remains evidence-gated unless explicitly retained and accepted in current business scope; configuration presence alone does not prove authorization/capture/webhook/refund success.
-- [ ] Email delivery distinguishes queued, provider-accepted, delivered, failed and cancelled evidence and remains `provider_dependent` until definitive provider delivery is observed.
-- [ ] Customer email/SMS/push revalidates current explicit profile consent immediately before provider dispatch; stale queued consent/channel/recipient evidence cancels fail-closed.
-- [ ] Abandoned-checkout recovery requires canonical customer ownership and current explicit consent; contact fields alone never imply outreach permission.
-- [ ] SMS/push remain consent, sender/configuration, cost and delivery-evidence gated.
+A row is removed or narrowed only when dated, attributable evidence exists and the relevant source/runtime/provider/owner boundary remains explicit. Missing evidence is never converted into success, and closure of one row does not silently close another.
 
-## 5. Public services, pricing and booking
-
-- [ ] Principal packages and all add-ons show current inclusions, exclusions, condition factors and realistic price/range language.
-- [ ] Variable-scope work such as headlight restoration, extraction/restoration, odor, pet hair, paint correction and protection explains inspection/escalation rules rather than implying one fixed effort level.
-- [ ] Booking/quote flows revalidate current package, vehicle size, add-on compatibility, availability, price and deposit immediately before commitment.
-- [ ] Refresh/back/retry, stale availability and 409 collision paths recover without duplicate booking/payment creation.
-
-## 6. Media, R2 and proof
-
-- [ ] Normal Photo Studio/public reads do not enumerate R2.
-- [ ] Explicit approved R2 sync remains bounded and cannot create subrequest storms.
-- [ ] Photo assignment shows placement ownership, supports before/after sets and multiple placements, and safely permits unassign/reset/delete-unassigned operations.
-- [ ] Principal service and landing-page images do not silently fall back to stale/default media when approved media exists.
-- [ ] Private DAIP originals/keys/signed URLs never appear in public manifests or public Photo Studio responses.
-
-## 7. Operations, inventory and finance
-
-- [ ] Field workflow captures readiness, before/after evidence, approved add-ons, product usage, completion evidence and final-balance handoff under staff authorization.
-- [ ] Inventory usage/post/reversal/idempotency/shortage evidence is accepted with harmless Development records before Production operational reliance. Build 409 source authority counts only explicit `job_use` as job consumption and keeps ambiguous depletion, missing cost, approval and posting evidence fail-closed.
-- [ ] Per-job consumable/product cost evidence converges into existing inventory/finance authority without a duplicate ledger.
-- [ ] Finance can complete deposit/final-balance/refund/fee/HST/reconciliation/month-end/accountant-export scenarios with missing evidence held as review/unavailable.
-
-## 8. Retention, maintenance and fleet
-
-- [ ] Customer retention/rebook flows use genuine service history and current catalog/pricing authority.
-- [ ] Maintenance enrollment follows approved cadence/price/inclusion/cancellation rules before recurring payment automation is enabled. Current configured terms remain `owner_action`; source release GREEN is not business approval.
-- [ ] Fleet minimums, tiers, travel limits, volume pricing, PO/reference and invoice grouping use approved business rules rather than inferred economics. Draft/sent quotes are not customer commitments; explicit accepted evidence requires accepted status, timestamp and recorded positive amounts.
-- [ ] Optional marketing/review outreach remains consent/eligibility/provider-evidence gated.
-
-## 9. Public/mobile/SEO acceptance
-
-- [ ] Booking, Services, Pricing, service landing pages, town pages and Customer app are checked at representative phone, tablet and desktop widths.
-- [ ] Keyboard/focus/labels/contrast/reduced-motion remain accepted.
-- [ ] Admin Today owner-task inputs have visible labels, duplicate refresh/create actions are blocked, and queue loading/error/retry state is announced.
-- [ ] Detailer assigned-job refresh exposes bounded busy state across desktop/mobile controls and keeps manual retry/no-polling semantics.
-- [ ] Customer My Account profile/vehicle/gift/review mutations expose busy state, block duplicate submits and surface network failures through accessible status/alert evidence.
-- [ ] One meaningful public H1, unique metadata/canonical/structured data, sitemap and robots authority pass.
-- [ ] Local/service proof uses genuine approved reviews/media and truthful Oxford/Norfolk coverage.
-- [ ] Search Console and Google Business Profile evidence is reviewed before changing verified local-search claims; missing evidence remains `provider_dependent` and dated manually observed snapshots remain `owner_action`.
-- [ ] First-party Google referrals/local-page views, approved local proof, Search Console and GBP remain separately labeled evidence sources.
-- [ ] No ranking, indexing, Maps/profile visibility or provider success is inferred from markup, canonical tags, structured data, referrals or approved proof alone.
-- [ ] Provider snapshots contain only bounded metrics/property-location labels/date windows and never Google credentials, OAuth tokens or customer data.
-
-## 10. Recovery and launch boundary
-
-- [ ] Retained recovery drill evidence remains readable and observation-only.
-- [ ] Backup/export recovery proof is explicitly observed; repository source alone does not prove a current restorable backup/export.
-- [ ] Any real rollback, database restore, R2 mutation, DNS change, secret rotation or provider action receives explicit operator authorization and normal exact-SHA re-acceptance afterward.
-- [ ] Controlled soft-launch/business-path acceptance is complete before unrestricted Production reliance.
-- [ ] Production is not called GREEN from source promotion alone.
-- [ ] Consolidated launch readiness keeps source/runtime, controlled-launch and unrestricted-launch decisions separate.
-- [ ] Source-ready export routes are not treated as proof that a current backup/export artifact exists.
-- [ ] Build 416 controlled soft-launch work begins only after this capstone is exact-Production GREEN.
+This backlog authorizes no schema migration, customer/booking mutation, staff-role change, consent mutation, payment/refund/provider transaction, accounting/inventory posting, secret rotation, DNS change, Production restore, destructive R2 mutation, automatic outreach or permanent polling.
