@@ -6,11 +6,11 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 The synchronized Production predecessor is retained through `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`.
 
-**Build 432 — Detailer Mobile & Staff Workflow Refinement** is the active bounded release.
+**Build 433 — Support Automation & Exception Handling** is the active bounded release.
 
-**Build 433 — Support Automation & Exception Handling** is next only after the current release is independently GREEN on protected `main`.
+**Build 434 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider mutation, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling. The retained payment reconciliation authority may perform bounded read-only provider lookup under its existing environment policy.
 
@@ -66,7 +66,7 @@ Cumulative acceptance continues to retain these filename authorities:
 ## Current support exception contract
 
 - The protected I.T. queue loads evidence only after explicit manual refresh.
-- Build 412 Production support diagnostics remain the runtime/readiness alert authority; Build 433 classifies and routes those alerts rather than duplicating them.
+- Retained Production support diagnostics remain the runtime/readiness alert authority; the current release classifies and routes those alerts rather than duplicating them.
 - Bounded payment reconciliation contributes only non-clear exceptions and provider/local blockers; the aggregator strips customer names/email and raw record identifiers.
 - Every exception exposes source, severity, family/state, freshness, dependency and a safe next action.
 - Provider-dependent evidence stays a HOLD; owner/operator work stays an explicit action.
@@ -90,12 +90,15 @@ Cumulative acceptance continues to retain these filename authorities:
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_426_435.md`
-- `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
-- `.github/workflows/detailer-staff-workflow-refinement-authority.yml`
+- `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `.github/workflows/support-automation-exception-handling-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
-- `scripts/support_automation_exception_handling_check.py`\n- `scripts/production_support_diagnostics_check.py`\n- `scripts/payment_reconciliation_check.py`\n- `scripts/detailer_staff_workflow_refinement_check.py`
+- `scripts/support_automation_exception_handling_check.py`
+- `scripts/production_support_diagnostics_check.py`
+- `scripts/payment_reconciliation_check.py`
+- `scripts/detailer_staff_workflow_refinement_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 

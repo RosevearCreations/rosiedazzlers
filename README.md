@@ -21,7 +21,8 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 These retained filename authorities remain part of cumulative acceptance without competing with the living current/next release state:
 
 - `FORWARD_BUILD_ROADMAP_405_415.md`
-- `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`\n- `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
+- `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
+- `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
 - `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`
 - `BUILD429_RETENTION_REBOOKING_LEARNING.md`
 - `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`
@@ -58,13 +59,13 @@ These retained filename authorities remain part of cumulative acceptance without
 
 ## Current support exception framework
 
-Build 433 adds a protected, manual-refresh support queue without creating a new mutation or business-state authority.
+This release adds a protected, manual-refresh support queue without creating a new mutation or business-state authority.
 
 - The queue composes retained Production support diagnostics and bounded payment reconciliation evidence.
 - Exceptions are prioritized by severity and show source, freshness, dependency and a safe next action.
 - Provider-dependent evidence remains a HOLD; owner decisions remain explicit actions.
 - The aggregator strips customer names/email, message contents, secret values and raw payment-record identifiers.
-- Media, inventory, booking and incident workflows are linked only as owning evidence surfaces; Build 433 does not mutate them.
+- Media, inventory, booking and incident workflows are linked only as owning evidence surfaces; the queue does not mutate them.
 - Existing I.T. role ceilings and server action permissions remain authoritative.
 - There is no permanent polling, automatic outreach, payment/refund, booking, accounting/inventory, provider, restore or destructive R2 action.
 
@@ -79,11 +80,10 @@ Backup/restore and rollback mechanics remain observation-only unless separately 
 Focused and retained authorities include:
 
 ```bash
-python scripts/detailer_staff_workflow_refinement_check.py
-python scripts/mobile_detailer_field_workflow_check.py
-python scripts/build400_detailer_mobile_qol_retention_check.py
-python scripts/build401_job_handoff_commercial_evidence_check.py
-python scripts/workflow_efficiency_accessibility_check.py
+python scripts/support_automation_exception_handling_check.py
+python scripts/production_support_diagnostics_check.py
+python scripts/payment_reconciliation_check.py
+python scripts/it_readiness_release_control_audit.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
@@ -100,4 +100,4 @@ After merge, the resulting `main` head is the exact Production source SHA. Produ
 
 ## Next bounded release
 
-**Build 434 — Reliability, Security & Cost Reassessment** is next only after Build 433 is independently GREEN on protected `main`.
+**Build 434 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
