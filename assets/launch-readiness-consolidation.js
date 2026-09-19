@@ -87,7 +87,10 @@ function renderLaunch(data){
 
 function renderWorkflowEvidence(data){
   const evidence=data.production_workflow_evidence||{};
+  const acceptance=data.authenticated_device_visual_acceptance||{};
   const roles=Array.isArray(evidence.roles)?evidence.roles:[];
+  const acceptedRoles=Array.isArray(acceptance.roles)?acceptance.roles:[];
+  const devices=Array.isArray(acceptance.devices)?acceptance.devices:[];
   const outstanding=Array.isArray(evidence.outstanding)?evidence.outstanding:[];
   const host=$("#workflowOut");
   if(!host)return;
@@ -99,12 +102,19 @@ function renderWorkflowEvidence(data){
     <h2>Customer & staff Production workflow evidence</h2>
     <div class="metric-grid">
       ${metric("Workflow evidence",evidence.status||"hold")}
+      ${metric("Authenticated visual acceptance",acceptance.status||"hold")}
+      ${metric("Dated roles",`${acceptance.dated_role_count??0}/${acceptance.required_role_count??4}`)}
+      ${metric("Representative devices",`${acceptance.dated_device_count??0}/${acceptance.required_device_count??3}`)}
       ${metric("Observed real jobs",evidence.observed_real_jobs??0)}
-      ${metric("Evidence-ready jobs",evidence.evidence_ready_jobs??0)}
       ${metric("Outstanding",outstanding.length)}
     </div>
-    <div class="stack">${roles.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
-    <p class="muted">Verified states come only from dated role-specific observations. Source checks do not invent device proof, cross-role access or consent; customer identity and evidence-note contents are not returned.</p>`;
+    <div class="stack">${roles.map(x=>{
+      const visual=acceptedRoles.find(row=>row.id===x.id)||{};
+      return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p><p class="mini">Authenticated visual fields: auth ${visual.authentication_evidence_present?"yes":"no"} · browser ${visual.browser_evidence_present?"yes":"no"} · route ${visual.route_evidence_present?"yes":"no"} · viewport ${visual.viewport_evidence_present?"yes":"no"} · outcome ${visual.outcome_evidence_present?"yes":"no"}</p><p class="mini">Device: ${esc((visual.device_classes||[]).join(", ")||"not recorded")} · browser: ${esc((visual.browser_classes||[]).join(", ")||"not recorded")} · safe route: ${esc((visual.routes||[]).join(", ")||"not recorded")}</p></div>${chip(visual.status||x.status||x.classification||"owner_action")}</article>`;
+    }).join("")}</div>
+    <div class="stack">${devices.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">Observed roles: ${esc((x.roles||[]).join(", ")||"none")} · latest dated observation: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
+    <p class="mini"><strong>Canonical HOLD:</strong> ${esc(acceptance.canonical_hold?.detail||"Representative authenticated phone/tablet/desktop evidence remains owner-observed.")}</p>
+    <p class="muted">Verified states come only from dated role-specific observations. Source responsive checks do not invent real-device proof; customer identity, protected content and evidence-note contents are not returned. No automated screenshot polling is used.</p>`;
 }
 
 function renderProviderClosure(data){
