@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The completed Production Learning & Roadmap Renewal release is the retained predecessor. Its contract remains `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Build 427 — Booking Conversion & Quote Clarity is the synchronized Production predecessor. Its contract remains `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 
 ## Retained contract index
@@ -38,24 +38,24 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 427 — Booking Conversion & Quote Clarity** is the active bounded release.
+**Build 428 — Service Economics & Job Profitability** is the active bounded release.
 
 Scope:
-- clarify fixed catalogue price, condition-aware estimate and booking-confirmation boundaries on the public booking path;
-- keep quote-required work excluded from the fixed subtotal until review;
-- count existing non-PII booking selection/start events in the bounded anonymous funnel evidence layer;
-- keep canonical booking statuses separate from anonymous interaction counts;
-- preserve server-authoritative availability/pricing and introduce no schema, booking, customer, provider, payment, accounting, inventory, secret, DNS, restore or destructive-storage mutation.
+- improve read-only service/job profitability evidence using recorded revenue, consumables and durable cost evidence;
+- expose incomplete attribution as review/partial/unavailable rather than inventing margin;
+- support operator review before any pricing decision;
+- preserve existing inventory, finance, payment and job-cost authorities;
+- introduce no automatic price, discount, purchasing, accounting, inventory, payment/provider or customer/booking mutation.
 
-Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The candidate must pass focused authority, retained quote/booking authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass its focused service-economics authority, retained inventory/job-cost and finance authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
 
-**Build 428 — Service Economics & Job Profitability** is next only after the current release is independently GREEN on protected `main`.
+**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD429_RETENTION_REBOOKING_LEARNING.md`.
 
 ## Continuing rule
 

@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed Production Learning & Roadmap Renewal release is the retained predecessor.
+Build 427 — Booking Conversion & Quote Clarity is the synchronized Production predecessor.
 
-**Build 427 — Booking Conversion & Quote Clarity** is the active bounded release.
+**Build 428 — Service Economics & Job Profitability** is the active bounded release.
 
-**Build 428 — Service Economics & Job Profitability** is next only after the current release is independently GREEN on protected `main`.
+**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -42,14 +42,14 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 
-## Booking conversion & quote-clarity contract
+## Planned Service Economics & Job Profitability contract
 
-- Fixed catalogue pricing, condition-aware estimates and booking confirmation remain distinct.
-- Quote-required work stays outside the fixed subtotal until reviewed.
-- An estimate or accepted quote never reserves a slot; the existing booking planner remains availability authority.
-- Anonymous selection/start telemetry remains aggregate, bounded and separate from canonical booking statuses.
-- No session/customer identity join or person-level conversion claim is authorized.
-- This release is schema-neutral and authorizes no booking, provider, payment, accounting or inventory mutation.
+- Use recorded service/job revenue, consumables and durable cost evidence only.
+- Missing material cost, quantity, refund or job-close evidence stays review/partial/unavailable.
+- Operator review may identify pricing questions but cannot automatically change catalogue prices, discounts or commercial terms.
+- Inventory quantity, accounting posting, purchasing and payment/provider mutations remain outside this build.
+- The current release must retain its focused implementation authority before any feature candidate can move to `dev`.
+- The prepared future contracts continue through the current roadmap-renewal endpoint without claiming those releases are implemented.
 
 ## Retained HOLD inventory & authority-cleanup contract
 
@@ -88,6 +88,14 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_426_435.md`
+- `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`
+- `BUILD429_RETENTION_REBOOKING_LEARNING.md`
+- `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`
+- `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
+- `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
+- `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
+- `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`
 - `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
@@ -96,8 +104,11 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 - `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `.github/workflows/development-source-gate.yml`
+- `.github/workflows/service-economics-job-profitability-authority.yml`
 - `.github/workflows/security-privacy-recovery-drill-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/build428_service_economics_job_profitability_check.py`
+- `scripts/build428_service_economics_job_profitability_test.mjs`
 - `scripts/build427_booking_conversion_quote_clarity_check.py`
 - `scripts/hold_inventory_authority_cleanup_check.py`
 - `scripts/production_learning_roadmap_renewal_check.py`
@@ -110,4 +121,4 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 ## Restart point
 
-Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, current contract, active roadmap and go-live blockers. Preserve feature → Development → protected-main PR → exact Production acceptance discipline.
+Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, the active roadmap and go-live blockers. Begin current implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.

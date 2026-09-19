@@ -20,6 +20,9 @@
       function money(n) {
         return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD" }).format(Number(n || 0));
       }
+      function moneyOrDash(n) {
+        return n === null || n === undefined || n === "" ? "—" : money(n);
+      }
       function esc(v) {
         return String(v == null ? "" : v).replace(/[&<>"']/g, function (m) {
           return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
@@ -231,26 +234,57 @@
         var summary = qs('#profitabilitySummary');
         var rowsWrap = qs('#profitabilityRows');
         if (!report) {
-          summary.innerHTML = '<div class="mini">No profitability report loaded.</div>';
+          summary.innerHTML = '<div class="mini">No service-economics report loaded.</div>';
           rowsWrap.innerHTML = '';
           return;
         }
+        var totals = report.totals || {};
         qs('#profitabilityPeriod').textContent = (report.period_start || '') + ' to ' + (report.period_end_exclusive || '');
         qs('#profitabilityMethodNote').textContent = report.method_note || '';
         summary.innerHTML = [
-          ['Recognized revenue', money(report.totals && report.totals.recognized_revenue_cad || 0)],
-          ['Collected revenue', money(report.totals && report.totals.collected_revenue_cad || 0)],
-          ['Direct COGS', money(report.totals && report.totals.direct_cogs_cad || 0)],
-          ['Estimated direct labor', money(report.totals && report.totals.estimated_direct_labor_cad || 0)],
-          ['Contribution after labor', money(report.totals && report.totals.estimated_contribution_after_labor_cad || 0)],
-          ['Allocated overhead pool', money(report.totals && report.totals.overhead_pool_cad || 0)],
-          ['Estimated net', money(report.totals && report.totals.estimated_net_after_overhead_cad || 0)]
+          ['Evidence ready', String(totals.ready_booking_count || 0) + ' / ' + String(totals.booking_count || 0)],
+          ['Needs review', String(totals.review_booking_count || 0)],
+          ['Unavailable', String(totals.unavailable_booking_count || 0)],
+          ['Recognized revenue', money(totals.recognized_revenue_cad || 0)],
+          ['Collected revenue', money(totals.collected_revenue_cad || 0)],
+          ['Recorded materials', money(totals.recorded_material_cost_cad || 0)],
+          ['Posted direct COGS', money(totals.direct_cogs_cad || 0)],
+          ['COGS variance jobs', String(totals.cogs_variance_booking_count || 0)],
+          ['Complete direct-labour estimate', money(totals.estimated_direct_labor_cad || 0)],
+          ['Pricing-review contribution', money(totals.pricing_review_contribution_cad || 0)],
+          ['Allocated overhead pool', money(totals.overhead_pool_cad || 0)]
         ].map(function (row) {
           return '<div class="table-lite__row"><span>' + esc(row[0]) + '</span><span>' + esc(row[1]) + '</span></div>';
         }).join('');
-        rowsWrap.innerHTML = (report.rows || []).slice(0, 40).map(function (row) {
-          return '<div class="table-lite__row"><span>' + esc(row.customer_name || 'Customer') + '<div class="mini">' + esc(row.service_date || '') + (row.package_code ? ' · ' + esc(row.package_code) : '') + (row.booking_id ? ' · ' + esc(row.booking_id) : '') + '</div></span><span>' + esc(money(row.estimated_contribution_after_labor_cad || row.estimated_net_after_overhead_cad || 0)) + '<div class="mini">Revenue ' + esc(money(row.recognized_revenue_cad || 0)) + ' · COGS ' + esc(money(row.direct_cogs_cad || 0)) + ' · Labor ' + esc(money(row.estimated_direct_labor_cad || 0)) + ' · Overhead ' + esc(money(row.allocated_overhead_cad || 0)) + ' · Net ' + esc(money(row.estimated_net_after_overhead_cad || 0)) + '</div></span></div>';
-        }).join('') || '<div class="mini">No booking profitability rows found for this month.</div>';
+
+        rowsWrap.innerHTML = (report.rows || []).slice(0, 60).map(function (row) {
+          var reasons = Array.isArray(row.evidence_reasons) ? row.evidence_reasons : [];
+          var status = String(row.evidence_status || 'unavailable');
+          var evidence = [
+            'Revenue ' + moneyOrDash(row.recognized_revenue_cad),
+            'Collected ' + moneyOrDash(row.collected_revenue_cad),
+            'Balance ' + moneyOrDash(row.balance_due_cad),
+            'Refund ' + moneyOrDash(row.refund_cad),
+            'Recorded materials ' + moneyOrDash(row.recorded_material_cost_cad),
+            'Posted COGS ' + moneyOrDash(row.direct_cogs_cad),
+            'COGS variance ' + moneyOrDash(row.cogs_variance_cad),
+            'Labour ' + moneyOrDash(row.estimated_direct_labor_cad) + ' / ' + String(row.logged_minutes || 0) + ' min'
+          ].join(' · ');
+          var result = [
+            'Pricing-review contribution ' + moneyOrDash(row.pricing_review_contribution_cad),
+            'Overhead allocation ' + moneyOrDash(row.allocated_overhead_cad),
+            'Accounting net after overhead ' + moneyOrDash(row.estimated_net_after_overhead_cad)
+          ].join(' · ');
+          return '<div class="table-lite__row"><span><span class="tag">' + esc(status) + '</span> ' +
+            esc(row.customer_name || 'Customer') +
+            '<div class="mini">' + esc(row.service_date || '') +
+            (row.package_code ? ' · ' + esc(row.package_code) : '') +
+            (row.booking_id ? ' · ' + esc(row.booking_id) : '') + '</div>' +
+            '<div class="mini">' + esc(evidence) + '</div>' +
+            (reasons.length ? '<div class="mini">' + esc(reasons.join(' • ')) + '</div>' : '') +
+            '</span><span>' + esc(moneyOrDash(row.pricing_review_contribution_cad)) +
+            '<div class="mini">' + esc(result) + '</div></span></div>';
+        }).join('') || '<div class="mini">No booking economics rows found for this month.</div>';
       }
 
 function renderYearEnd(report) {

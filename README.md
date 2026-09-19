@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 427 — Booking Conversion & Quote Clarity**.
+Current source direction: **Build 428 — Service Economics & Job Profitability**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,9 +9,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
-4. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — current contract.
+4. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — current planned contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
-6. `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
+6. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — Build 427 — Booking Conversion & Quote Clarity retained predecessor contract.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
@@ -46,13 +46,13 @@ These completed authorities remain continuity inputs for current acceptance:
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
-## Current booking conversion & quote-clarity framework
+## Current planned service-economics framework
 
-`BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` defines the current public estimate/quote clarity and bounded first-party funnel-evidence boundary. Fixed catalogue prices, condition-aware estimates and booking confirmation stay distinct; the existing planner remains authoritative for availability and final validation.
+`BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` defines the current bounded autonomous release. It uses recorded service/job revenue, consumables, durable unit costs, job-duration evidence and payment/final-balance state to improve operator profitability review without inventing missing costs or automatically changing prices.
 
-This release performs no schema migration, customer/booking mutation, price or availability override, provider transaction, staff-role change, accounting/inventory posting, secret/DNS change, Production restore, destructive R2 mutation or permanent polling.
+The current release extends the existing Finance cockpit with fail-closed evidence status and keeps missing cost, quantity, refund, cash, labour-rate or job-close evidence review/unavailable rather than converting gaps into zero-cost margin.
 
-Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+The prepared follow-on contracts are `BUILD429_RETENTION_REBOOKING_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
@@ -79,9 +79,11 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 
 ## Durable validation
 
-Run current/durable release authorities with:
+The focused implementation checker now participates in the current release authority. Retained durable release authorities include:
 
 ```bash
+python scripts/build428_service_economics_job_profitability_check.py
+node scripts/build428_service_economics_job_profitability_test.mjs
 python scripts/build427_booking_conversion_quote_clarity_check.py
 python scripts/hold_inventory_authority_cleanup_check.py
 python scripts/production_learning_roadmap_renewal_check.py
@@ -108,4 +110,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-The next bounded release is Build 428 — Service Economics & Job Profitability, and it follows only after Build 427 is independently GREEN on protected `main`.
+**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`.
