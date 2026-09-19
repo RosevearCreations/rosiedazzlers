@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-Build 427 — Booking Conversion & Quote Clarity is the completed synchronized Production predecessor. Its contract remains `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
+The completed booking-conversion release is the synchronized Production predecessor. Its contract remains `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 
 ## Retained contract index
@@ -38,7 +38,7 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 428 — Service Economics & Job Profitability** is the active bounded autonomous release.
+**Build 428 — Service Economics & Job Profitability** is the active bounded release.
 
 Scope:
 - improve read-only service/job profitability evidence using recorded revenue, consumables and durable cost evidence;
@@ -55,7 +55,7 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 429 — Retention & Rebooking Learning** follows only after Build 428 is independently GREEN on protected `main`. Its planning contract is `BUILD429_RETENTION_REBOOKING_LEARNING.md`.
+**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD429_RETENTION_REBOOKING_LEARNING.md`.
 
 ## Continuing rule
 
