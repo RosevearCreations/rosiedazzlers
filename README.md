@@ -77,6 +77,9 @@ python scripts/recovery_export_operational_proof_check.py
 python scripts/backup_restore_release_recovery_drill_check.py
 python scripts/release_rollback_recovery_check.py
 python scripts/security_privacy_recovery_drill_check.py
+python scripts/reliability_security_cost_reassessment_check.py
+python scripts/production_learning_roadmap_renewal_check.py
+python scripts/provider_outcome_delivery_evidence_closure_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```

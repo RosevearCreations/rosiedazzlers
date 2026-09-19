@@ -34,9 +34,9 @@ require(page,['data-build436="provider-outcome-delivery-evidence-closure"',"Load
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["# Build 436 — Provider Outcome & Delivery Evidence Closure","/api/admin/provider_outcome_delivery_evidence","closure_candidate","STARTUP_GO_LIVE_BLOCKERS.md","Build 437 — Backup & Recovery Evidence Closure"],"Build 436 contract")
 require(blockers,["Provider outcomes & communications","provider_outcome_delivery_evidence","closure candidate"],"canonical HOLD backlog")
-require(queue,["**Build 436 — Provider Outcome & Delivery Evidence Closure** is the active bounded release.","**Build 437 — Backup & Recovery Evidence Closure**"],"release queue")
-require(handoff,["**Build 436 — Provider Outcome & Delivery Evidence Closure** is the active bounded release.","**Build 437 — Backup & Recovery Evidence Closure**"],"project handoff")
-require(readme,["Current source direction: **Build 436 — Provider Outcome & Delivery Evidence Closure**","scripts/provider_outcome_delivery_evidence_closure_check.py","**Build 437 — Backup & Recovery Evidence Closure**"],"README")
+require(queue,["BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md","FORWARD_BUILD_ROADMAP_436_445.md"],"release queue retained Build 436 authority")
+require(handoff,["BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md",".github/workflows/provider-outcome-delivery-evidence-closure-authority.yml","scripts/provider_outcome_delivery_evidence_closure_check.py"],"project handoff retained Build 436 authority")
+require(readme,["BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md","scripts/provider_outcome_delivery_evidence_closure_check.py"],"README retained Build 436 authority")
 for p in ["functions/api/_lib/provider-outcome-delivery-evidence.js","functions/api/admin/provider_outcome_delivery_evidence.js","functions/api/admin/launch_readiness_consolidated.js","assets/launch-readiness-consolidation.js","scripts/provider_outcome_delivery_evidence_closure_test.mjs"]:
     r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
     if r.returncode: errors.append(f"{p} syntax failed: {r.stderr.strip() or r.stdout.strip()}")

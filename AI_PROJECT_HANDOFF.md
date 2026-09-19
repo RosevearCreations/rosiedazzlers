@@ -99,6 +99,9 @@ This release authorizes no schema migration, secret rotation, Production restore
 - `scripts/backup_restore_release_recovery_drill_check.py`
 - `scripts/release_rollback_recovery_check.py`
 - `scripts/security_privacy_recovery_drill_check.py`
+- `scripts/reliability_security_cost_reassessment_check.py`
+- `scripts/production_learning_roadmap_renewal_check.py`
+- `scripts/provider_outcome_delivery_evidence_closure_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 

@@ -153,6 +153,8 @@ function renderRecovery(data){
     <p class="mini"><strong>Latest dated recovery evidence:</strong> ${esc(closure.latest_observed_at?new Date(closure.latest_observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(closure.canonical_hold?.detail||"Backup artifact, retention location and recovery-drill evidence remain owner-observed requirements.")}</p>
     <div class="stack">${closureRequired.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Observed: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not dated")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
+    <p class="mini"><strong>Retention location:</strong> ${chip(backup.retention_location_observed?"verified":"owner action")} · <strong>Retained accountant-export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")}</p>
+    <p class="mini"><strong>Source route presence is not artifact proof.</strong> This read-only view does not generate an export or perform a Production restore.</p>
     <p class="mini"><strong>Retained export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")} · <strong>Operational proof rows:</strong> ${esc(required.length)}</p>
     <p class="muted">A closure candidate never edits the HOLD backlog automatically and never performs a Production restore. Source routes and GREEN checks remain supporting evidence only.</p>`;
 }
