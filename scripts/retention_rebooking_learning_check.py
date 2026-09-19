@@ -14,7 +14,7 @@ def read(path):
 
 helper = read("functions/api/_lib/retention-rebooking-learning.js")
 endpoint = read("functions/api/admin/retention_rebooking_learning.js")
-page = read("admin/retention-learning.html")
+page = read("admin-retention-learning.html")
 test = read("scripts/retention_rebooking_learning_test.mjs")
 workflow = read(".github/workflows/retention-rebooking-learning-authority.yml")
 contract = read("BUILD429_RETENTION_REBOOKING_LEARNING.md").lower()
@@ -96,10 +96,16 @@ for token in (
 ):
     if token not in workflow:
         errors.append(f"Build 429 focused workflow missing {token}")
-    if token not in development:
-        errors.append(f"Development source gate missing Build 429 authority {token}")
     if token not in production:
         errors.append(f"Production source gate missing Build 429 authority {token}")
+
+for token in (
+    "scripts/customer_communication_consent_delivery_check.py",
+    "scripts/retention_maintenance_fleet_operational_pilot_check.py",
+    "scripts/booking_rebooking_funnel_check.py",
+):
+    if token not in development:
+        errors.append(f"durable Development source gate lost retained Build 429 dependency {token}")
 
 if "RETENTION & REBOOKING LEARNING TEST: PASS" not in test:
     errors.append("Build 429 executable contract test is missing PASS authority")
