@@ -2,150 +2,52 @@
 
 Current source direction: **Build 423 — Reliability, Performance & Cost Capacity**.
 
-Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
+Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Start here
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
-4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md` — current reliability/performance/cost-capacity contract.
-6. `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md` — retained media/Photo Studio/proof-operations contract.
-7. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — retained retention/maintenance/fleet operational-pilot contract.
-7. `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` — retained local-acquisition closure contract.
-7. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — retained Customer/staff Production workflow-evidence contract.
-6. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained backup/restore/accountant-export operational-proof contract.
-6. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained payment/refund/delivery provider-evidence contract.
-7. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled soft-launch / real-world acceptance contract.
-8. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — retained launch-readiness consolidation contract.
-6. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — retained local-search measurement and provider-evidence contract.
-7. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md` — retained Admin/Detailer/Customer workflow efficiency and accessibility contract.
-8. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — retained Production support diagnostics contract.
-9. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md` — retained communication/consent/delivery contract.
-10. `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md` — retained maintenance/fleet commercial acceptance contract.
-11. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — retained inventory/job-cost evidence contract.
-12. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
-13. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live readiness framework.
-14. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
+3. `FORWARD_BUILD_ROADMAP_416_425.md` — active evidence-driven sequence.
+4. `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md` — current contract.
+5. `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md` — retained media/proof contract.
+6. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — retained commercial-pilot contract.
+7. `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` — retained local-acquisition evidence contract.
+8. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — retained workflow-evidence contract.
+9. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained recovery/export proof contract.
+10. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained provider-evidence contract.
+11. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled-launch contract.
+12. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
-Git history is the release archive. `DOC_INDEX.md` is for specialist references.
+Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
 ## Current reliability, performance & cost-capacity framework
 
-The I.T. capacity surface combines bounded Production diagnostics with count-only first-party traffic evidence. It can flag observed pressure and recommend operator review of dependency calls, safe caching and analytics batching, but it does not infer Cloudflare billing/CPU usage or change runtime policy automatically.
+The staff-only I.T. capacity surface combines bounded Production diagnostics with count-only first-party traffic evidence for the most recent 24 hours and 7 days. It can flag observed pressure and recommend review of dependency calls, safe caching and analytics batching.
+
+The view does not infer Cloudflare billing, CPU consumption, provider quotas or guaranteed future capacity. It does not mutate cache policy, retry rules, routing, providers, business data or database schema. Permanent polling and automatic scaling remain prohibited.
 
 Current contract: `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`.
 
-## Retained media, Photo Studio & proof-operations framework
+## Retained operating boundaries
 
-Photo Studio reports read-only assignment, Before/After and bounded-sync evidence without scanning R2 on page load. Missing evidence remains an operator action; source recovery mechanics never become an invented recovery drill.
+Media and Photo Studio proof operations remain read-only during acceptance. Ordinary Photo Studio loads stay database-first; bounded R2 listing occurs only through the explicit sync authority. Recovery mechanics never become invented recovery-drill evidence.
 
-Current contract: `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`.
+Retention, maintenance and fleet operations remain owner-action gated until canonical commercial terms are explicitly approved. Queue activity does not infer enrolment, quote acceptance, customer commitment, live capacity or a reserved slot. `/api/availability` and `/api/checkout` remain authoritative.
 
-## Retained retention, maintenance & fleet operational-pilot framework
+Local acquisition evidence keeps Search Console, Google Business Profile, first-party traffic and approved local proof separately attributed. Missing provider evidence remains provider-dependent; stale evidence remains owner-action; unavailable evidence remains unavailable. Source/runtime GREEN never becomes a ranking, indexing or Maps claim.
 
-The staff-only operational-pilot overview composes the retained maintenance-interest and fleet-assessment queues into aggregate readiness evidence without selecting participants, creating bookings, applying discounts, creating invoices or contacting providers. The current canonical maintenance and fleet rulebooks still require explicit business approval, so a GREEN source release truthfully coexists with an owner-action pilot HOLD.
+Customer and staff Production workflow evidence remains role-bounded and aggregate. Missing observed workflow proof remains owner-action or unavailable; source/runtime GREEN does not manufacture user evidence.
 
-Every real booking remains subordinate to `/api/availability` and final `/api/checkout` collision revalidation. Queue activity, quoted work and source-safe configuration never infer customer commitment, fleet commitment, live capacity or a reserved slot.
+Backup, restore and accountant-export evidence remains artifact-truthful. Route/source capability is not proof that a current backup, recovery drill or export artifact exists.
 
-Current contract: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`.
+Payment/refund/message-delivery evidence remains provider-dependent until independently observed and reconciled. Configuration presence never becomes a real payment, refund or delivery outcome.
 
-## Retained local-acquisition evidence closure framework
+## Durable platform contract
 
-The Local SEO admin surface now adds the current closure view over the retained local-search measurement sources. Search Console, Google Business Profile, first-party acquisition traffic and approved local proof remain separately attributed; fresh dated provider snapshots count only as operator-observed evidence.
+The retained platform contract governs visitor → booking/checkout → Customer → Detailer → Operations → payment/accounting → exact Production runtime.
 
-Missing provider snapshots remain provider-dependent, stale snapshots remain owner-action and unavailable first-party/proof sources remain unavailable. Source/Production GREEN, markup, referrals and approved proof never become claims of Google indexing, ranking or Maps visibility.
-
-Current contract: `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`.
-
-## Retained Production workflow evidence framework
-
-The launch-readiness surface now reports Customer, Detailer, Operations and Admin Production workflow observations separately from source/runtime success. A verified state requires a dated role-specific observation that records a real device or representative viewport/width; the Detailer state also requires aggregate eligible real-job evidence.
-
-The payload returns classifications and aggregate counts only. It does not return customer identity or evidence-note contents, infer consent or cross-role access, create test customers/jobs, or change staff roles/capabilities. Source/Production GREEN can coexist with a workflow-evidence HOLD until those observations are recorded truthfully.
-
-Current contract: `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`.
-
-## Retained recovery / accountant-export operational-proof framework
-
-The launch-readiness surface now separates **operational proof** from source capability. A backup route, recovery runbook or export endpoint is not treated as evidence that a current artifact exists. Backup proof requires a verified dated owner observation with artifact and retention-location evidence; the underlying evidence note is not returned to the browser.
-
-Recovery/rollback drill proof remains separately authorized and operator-observed. Source acceptance does not perform a Production restore, Development rollback, R2 mutation, DNS/secret change or Cloudflare recovery action.
-
-Accountant-export usability is derived from the retained read-only Finance close/accountant-export authority and its package/CSV manifest. That runtime usability does not prove a current accountant package or CSV has been generated and retained. The retained recovery release itself generates no export, posts no accounting entry and mutates no Production business data.
-
-Source/Production GREEN can therefore coexist with recovery/export HOLDs until the real backup artifact, retention location, drill evidence and retained export artifact are observed.
-
-## Retained provider-evidence closure framework
-
-The launch-readiness surface now separates persisted provider evidence from source/runtime success. Stripe and PayPal count as observed only when the retained live-outcome authority finds a persisted verified provider event reconciled to an internal payment request. Refund evidence requires linked request/provider identities, a successful refund state, positive amount, valid currency and refunded timestamp.
-
-Notification provider acceptance remains distinct from delivery. A sent/provider-accepted record is still provider-dependent; definitive delivery requires an explicit delivered state, provider-verification evidence and delivery timestamp. The closure payload exposes aggregate counts only and excludes customer identity, recipients, message contents and provider secrets.
-
-Source/Production GREEN can therefore coexist with a provider-evidence HOLD. This release does not create a charge, initiate a refund, send a notification, replay a webhook, contact a payment provider, post accounting entries or mutate Production business state.
-
-Retained provider-evidence contract: `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`. Retained controlled-pilot contract: `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`.
-
-## Retained controlled soft-launch framework
-
-This release extends `/admin-launch-readiness.html` with a separate, fail-closed controlled-pilot decision. The pilot is intended only for explicitly authorized internal or known-customer scenarios. Source/runtime GREEN does not prove participant authorization or a completed real customer journey.
-
-The view composes existing audited launch evidence with aggregate job-handoff counts for booking, consent-safe communication, field/mobile work, completion, support monitoring and incident closeout. It never returns customer names, booking identifiers, addresses or message contents. Missing evidence remains a HOLD; this release does not create bookings, send outreach, contact payment providers, restore/export data or write Production business state automatically.
-
-Retained capstone contract: `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
-
-## Current launch-readiness consolidation framework
-
-`/admin-launch-readiness.html` is the read-only capstone for exact runtime/support evidence, retained owner-observed launch checks, backup/recovery proof, source-ready export capabilities and provider/owner HOLDs. It reports source/runtime, controlled-launch and unrestricted-launch status separately so source/runtime GREEN cannot be mistaken for unrestricted business readiness.
-
-The capstone performs no restore, export generation, provider transaction, Google call, schema migration or Production business-data mutation. Backup/export route presence is source evidence only; a current restorable artifact remains owner-observed evidence.
-
-## Current local-search measurement framework
-
-The Local SEO admin surface now separates four evidence sources: first-party Rosie traffic, genuine approved local proof, Search Console snapshots and Google Business Profile snapshots. Provider metrics are retained only when an authorized operator records a dated property/location snapshot; missing evidence stays provider-dependent and stale evidence stays owner-action.
-
-Google referrals, local proof, markup, canonical tags and structured data never become ranking, indexing or Maps/profile claims. No Google credentials or OAuth tokens are stored, no Google API is called automatically, and the screen remains manual-refresh only.
-
-## Retained workflow efficiency & accessibility framework
-
-This release hardens the high-frequency Admin Today, Detailer assigned-job and Customer My Account workflows without changing their business authorities. In-flight refresh/save actions are now explicit and duplicate-protected; important loading/error/empty/retry states are live-region aware; validation returns focus to the field that needs correction; and the retained phone/tablet/desktop, focus-visible, reduced-motion and forced-colors baselines remain authoritative.
-
-Source checks remain source checks. Exact-SHA Cloudflare acceptance proves the deployed runtime, while independent authenticated visual browser proof stays `unavailable` unless it is directly observed. The release does not invent a visual pass from CSS or markup alone.
-
-## Current Production support diagnostics framework
-
-`/admin/it.html` now adds a read-only Production support diagnostics view above the retained readiness and deep-diagnostics panels. It composes those proven authorities rather than replacing them, ranks runtime blockers/warnings separately from provider HOLDs and owner actions, and exposes exact runtime SHA/branch/host only when already observed.
-
-The operator may manually copy a whitelisted support packet containing release identity, classification counts and corrective actions. Arbitrary evidence objects, secret values, customer records, message contents and provider credentials are excluded. There is no automatic alert delivery, provider test transaction, business mutation or permanent polling.
-
-## Current customer-communication framework
-
-Customer-directed email/SMS/push is fail-closed against the customer’s current authenticated profile. Queue creation is not permanent consent: current opt-in, channel, canonical recipient and push ownership/preferences are revalidated before provider dispatch. Stale queued outreach is cancelled before provider contact.
-
-Abandoned-checkout recovery requires canonical customer ownership and current explicit consent; an email or phone value alone never establishes permission. Provider-accepted/sent evidence is not definitive delivery and remains provider-dependent until a separate delivery outcome is observed.
-
-Acceptance does not send a real message, enable automatic outreach, mutate a provider, introduce a schema migration or write Production business data.
-
-## Current maintenance/fleet commercial framework
-
-The current acceptance model is intentionally fail-closed. `config/maintenance-plan-business-rulebook.json` and `config/fleet-business-rulebook.json` remain the canonical business-term authorities. Both currently require explicit owner approval and therefore remain `owner_action`; source release GREEN must not be mistaken for approval of pricing, cadence, inclusions, fleet minimums, tiers, travel, volume pricing, invoicing or cancellation terms.
-
-Capacity remains server-authoritative through `/api/availability` with final collision/revalidation at `/api/checkout`. Draft or sent fleet quotes are not customer commitments. Explicit accepted-quote evidence requires an accepted status, acceptance timestamp and recorded positive quoted/accepted amounts. Automatic outreach, enrolment, booking, discounts, invoice creation, recurring billing, renewal and provider mutation remain separately authorized.
-
-## Current payment-provider framework
-
-`/admin/it.html` remains the single operator-facing readiness surface. It renders authenticated read-only `/api/admin/go_live_readiness` evidence together with retained `/api/admin/production_diagnostics` troubleshooting.
-
-Provider configuration can establish `source_ready`, but live-payment readiness becomes `runtime_proven` only from persisted verified provider evidence. The current endpoint requires a definitive `settled`, `replayed`, or `refund_recorded` webhook, stable provider-event → internal payment-request identity, and exact paid-amount/currency reconciliation. It does not contact Stripe/PayPal, create/capture/refund a payment, replay a webhook, write business data, mutate R2 or run background work.
-
-Readiness classifications remain `source_ready`, `runtime_proven`, `provider_dependent`, `owner_action`, or `unavailable`. Unavailable evidence is not automatically failure. Source/Production release GREEN remains distinct from provider live-payment readiness GREEN.
-
-## Retained platform contract
-
-The retained capstone still governs visitor → booking/checkout → Customer → Detailer → Operations → payment/accounting → exact Production runtime. Reliability recovery remains read-safe and non-authoritative; canonical checkout/server state owns business outcomes. Public SEO remains one meaningful H1 per indexable page with unique metadata/canonical/structured data and truthful Oxford/Norfolk proof.
-
-Durable retained authorities include:
+Important durable authorities include:
 
 - `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
@@ -154,10 +56,30 @@ Durable retained authorities include:
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
+- `scripts/release_authority_documentation_convergence_check.py`
+- `.github/workflows/production-business-acceptance-authority.yml`
+
+Public SEO remains one meaningful H1 per indexable page with unique metadata/canonical/structured data and truthful Oxford/Norfolk proof. Reliability recovery remains read-safe and non-authoritative; canonical server paths own accepted business state.
+
+## Current operator surfaces
+
+- `/admin/it.html` — Production support/readiness diagnostics.
+- `/admin/reliability-capacity.html` — bounded reliability/performance/capacity snapshot.
+- `/admin-launch-readiness.html` — consolidated launch-readiness evidence.
+- `/admin-seo-tasks.html` — local-search/provider evidence.
+- Photo Studio — managed public media assignments, Before/After proof and bounded sync operations.
+
+All current diagnostic/capacity surfaces are manual-refresh. No permanent polling, automatic provider test transactions or automatic business-state mutation is introduced by these views.
+
+## Durable validation
 
 Run current/durable release authorities with:
 
 ```bash
+python scripts/reliability_performance_cost_capacity_check.py
+node scripts/reliability_performance_cost_capacity_test.mjs
+python scripts/media_photo_studio_proof_operations_check.py
+node scripts/media_photo_studio_proof_operations_test.mjs
 python scripts/controlled_soft_launch_acceptance_check.py
 node scripts/controlled_soft_launch_acceptance_test.mjs
 python scripts/provider_evidence_closure_check.py
@@ -191,4 +113,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 421 — Retention, Maintenance & Fleet Operational Pilot follows only after the current release is independently GREEN on protected `main`.
+**Build 424 — Security, Privacy & Recovery Drill** follows only after the current release is independently GREEN on protected `main`.
