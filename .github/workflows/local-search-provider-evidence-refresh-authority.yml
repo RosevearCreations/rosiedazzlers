@@ -1,0 +1,66 @@
+name: Build 440 — Local Search Provider Evidence Refresh Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-local-search-provider-refresh-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: local-search-provider-evidence-refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/local_search_provider_evidence_refresh_check.py
+          node --check functions/api/_lib/local-search-provider-evidence-refresh.js
+          node --check functions/api/admin/local_search_provider_evidence_refresh.js
+          node --check assets/build440-local-search-provider-evidence-refresh.js
+          node --check scripts/local_search_provider_evidence_refresh_test.mjs
+      - name: Validate Build 440 source authority
+        run: python scripts/local_search_provider_evidence_refresh_check.py
+      - name: Re-run retained local-search authorities
+        run: |
+          python scripts/build414_local_seo_measurement_search_console_gbp_proof_check.py
+          python scripts/local_acquisition_evidence_closure_check.py
+          node scripts/local_acquisition_evidence_closure_test.mjs
+          python scripts/local_acquisition_content_proof_check.py
+          node scripts/local_acquisition_content_proof_test.mjs
+      - name: Authority summary
+        run: |
+          {
+            echo '### Build 440 Local Search Provider Evidence Refresh'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Explicit provider property/location/window identity: PASS'
+            echo '- Fresh/stale/missing provider evidence classification: PASS'
+            echo '- First-party traffic and approved proof reconciliation: PASS'
+            echo '- Ranking/indexing/Maps inference: NONE'
+            echo '- Google/provider write, publishing, outreach, DNS/ad-spend mutation, polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
