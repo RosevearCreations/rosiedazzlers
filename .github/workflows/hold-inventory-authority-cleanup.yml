@@ -1,0 +1,53 @@
+name: Build 426 — HOLD Inventory & Authority Cleanup
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build426-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-hold-inventory-authority-cleanup-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: hold-inventory-authority-cleanup
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check authority syntax
+        run: python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
+
+      - name: Validate HOLD inventory and authority cleanup
+        run: python scripts/hold_inventory_authority_cleanup_check.py
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 426 — HOLD Inventory & Authority Cleanup'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Canonical Production HOLD backlog: PASS'
+            echo '- Provider/owner/unavailable truth boundary: PASS'
+            echo '- Stale authority cleanup: PASS'
+            echo '- Schema/provider/business mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
