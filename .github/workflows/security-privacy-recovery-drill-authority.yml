@@ -1,0 +1,60 @@
+name: Build 424 — Security, Privacy & Recovery Drill Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-security-privacy-recovery-drill-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: security-privacy-recovery-drill
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate security, privacy and recovery drill
+        run: |
+          python scripts/security_privacy_recovery_drill_check.py
+          node scripts/security_privacy_recovery_drill_test.mjs
+          python scripts/backup_restore_release_recovery_drill_check.py
+          python scripts/release_rollback_recovery_check.py
+          python scripts/performance_accessibility_security_check.py
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 424 — Security, Privacy & Recovery Drill'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Role/API + secure session boundaries: PASS'
+            echo '- Current explicit consent / no inferred consent: PASS'
+            echo '- Recovery mechanics remain fail-closed and observation-only: PASS'
+            echo '- Real Production restore / secret rotation inferred: NO'
+            echo '- Schema / customer / consent / provider / destructive storage mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
