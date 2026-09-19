@@ -13,6 +13,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
 6. `BUILD429_RETENTION_REBOOKING_LEARNING.md` — retained retention/rebooking predecessor contract.
 7. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — retained service-economics/job-profitability continuity contract.
+8. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — retained booking-conversion/quote-clarity continuity contract.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
