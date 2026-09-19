@@ -69,9 +69,7 @@ require(admin, [
 
 for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
     require(text, [
-        "Build 427 — Booking Conversion & Quote Clarity",
         "BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md",
-        "Build 428",
     ], label)
 
 require(focused_gate, [
