@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The completed Security, Privacy & Recovery Drill is the retained predecessor. Its contract remains `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`.
+The completed Production Learning & Roadmap Renewal release is the retained predecessor. Its contract remains `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 
 ## Retained contract index
@@ -38,16 +38,16 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 425 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 426 — HOLD Inventory & Authority Cleanup** is the active bounded release.
 
 Scope:
-- reconcile retained Production evidence across Builds 416–424;
-- close stale release authorities only where current dated evidence supports closure;
-- keep unresolved owner/provider/unavailable evidence as truthful HOLDs;
-- renew the next bounded evidence-driven sequence in `FORWARD_BUILD_ROADMAP_426_435.md`;
-- introduce no schema migration, customer/booking/staff-role/provider/accounting/inventory/destructive-storage mutation or permanent polling.
+- make `STARTUP_GO_LIVE_BLOCKERS.md` the single current Production HOLD/evidence backlog;
+- remove stale launch-era blocker wording and duplicate historical checklists;
+- preserve provider-dependent, owner-action and unavailable evidence as truthful HOLDs;
+- keep completed source/runtime authorities by reference instead of maintaining competing blocker lists;
+- introduce no schema, customer/booking/staff-role/provider/accounting/inventory/secret/DNS/restore/destructive-storage mutation or permanent polling.
 
-Current contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+Current contract: `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
@@ -55,7 +55,7 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 426 — HOLD Inventory & Authority Cleanup** is next only after the current release is independently GREEN on protected `main`.
+**Build 427 — Booking Conversion & Quote Clarity** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
