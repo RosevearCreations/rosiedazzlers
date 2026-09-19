@@ -1,0 +1,60 @@
+name: Build 429 — Retention & Rebooking Learning Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build429*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-retention-rebooking-learning-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: retention-rebooking-learning
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate retention & rebooking learning authority
+        run: |
+          python scripts/retention_rebooking_learning_check.py
+          node scripts/retention_rebooking_learning_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 429 — Retention & Rebooking Learning'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Exact-profile repeat-booking evidence only: PASS'
+            echo '- Counts remain correlation, not causal proof: PASS'
+            echo '- Current explicit-consent authority retained: PASS'
+            echo '- Provider acceptance remains distinct from delivery: PASS'
+            echo '- Customer identities exposed: NONE'
+            echo '- Automatic outreach / booking / enrollment / discount / provider mutation: PROHIBITED'
+            echo '- Schema migration / permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

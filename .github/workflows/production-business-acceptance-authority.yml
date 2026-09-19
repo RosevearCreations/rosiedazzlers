@@ -244,6 +244,11 @@ jobs:
           node scripts/build428_service_economics_job_profitability_test.mjs
           python scripts/build428_service_economics_job_profitability_check.py
 
+      - name: Validate retention & rebooking learning authority
+        run: |
+          python scripts/retention_rebooking_learning_check.py
+          node scripts/retention_rebooking_learning_test.mjs
+
       - name: Validate HOLD inventory & authority cleanup
         run: python scripts/hold_inventory_authority_cleanup_check.py
 
@@ -269,6 +274,7 @@ jobs:
             echo "- Maintenance/fleet: PASS"
             echo "- Maintenance/fleet commercial acceptance: PASS"
             echo "- Retention / maintenance / fleet operational pilot: PASS"
+            echo "- Retention / rebooking learning: PASS"
             echo "- Media / Photo Studio / proof operations: PASS"
             echo "- Reliability / performance / cost capacity: PASS"
             echo "- Security / privacy / recovery drill: PASS"
