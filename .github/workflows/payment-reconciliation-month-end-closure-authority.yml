@@ -16,7 +16,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-build375-month-end-close-${{ github.ref }}
+  group: rosiedazzlers-build375-month-end-close-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:

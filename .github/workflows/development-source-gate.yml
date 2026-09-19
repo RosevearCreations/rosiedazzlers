@@ -183,6 +183,7 @@ jobs:
           node --check scripts/reliability_performance_cost_capacity_test.mjs
           node --check functions/api/_lib/reliability-performance-cost-capacity.js
           node --check functions/api/admin/reliability_performance_cost_capacity.js
+          python -m py_compile scripts/production_learning_roadmap_renewal_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
           node --check functions/api/_lib/security-privacy-recovery-drill.js
@@ -343,6 +344,9 @@ jobs:
           python scripts/security_privacy_recovery_drill_check.py
           node scripts/security_privacy_recovery_drill_test.mjs
 
+      - name: Validate Production learning & roadmap renewal authority
+        run: python scripts/production_learning_roadmap_renewal_check.py
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -401,6 +405,7 @@ jobs:
             echo "- Media / Photo Studio / proof operations authority: PASS"
             echo "- Reliability / performance / cost capacity authority: PASS"
             echo "- Security / privacy / recovery drill authority: PASS"
+            echo "- Production learning / roadmap renewal authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."

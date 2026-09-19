@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The completed reliability, performance and cost-capacity release is the retained predecessor. Its contract remains `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`.
+The completed Security, Privacy & Recovery Drill is the retained predecessor. Its contract remains `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`.
 
 
 ## Retained contract index
@@ -38,17 +38,16 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 424 — Security, Privacy & Recovery Drill** is the active bounded release.
+**Build 425 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- revalidate protected role/API boundaries and aggregate security-posture evidence;
-- verify opaque staff/customer session-cookie and rotation source contracts while reporting dedicated secret configuration only as present/absent;
-- revalidate current explicit customer consent, recipient/channel matching and provider-delivery evidence boundaries;
-- re-run retained observation-only recovery/rollback source authorities without performing a Production restore;
-- expose a staff-only manual read-only I.T. snapshot that never returns secret values or customer records;
-- introduce no schema migration, secret rotation, customer/consent/staff-role/provider mutation, destructive storage action or permanent polling.
+- reconcile retained Production evidence across Builds 416–424;
+- close stale release authorities only where current dated evidence supports closure;
+- keep unresolved owner/provider/unavailable evidence as truthful HOLDs;
+- renew the next bounded evidence-driven sequence in `FORWARD_BUILD_ROADMAP_426_435.md`;
+- introduce no schema migration, customer/booking/staff-role/provider/accounting/inventory/destructive-storage mutation or permanent polling.
 
-Current contract: `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`.
+Current contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
@@ -56,7 +55,7 @@ Production promotion proceeds through `rd main protection` and a pull request to
 
 ## Next release
 
-**Build 425 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 426 — HOLD Inventory & Authority Cleanup** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 

@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-cloudflare-feature-${{ github.ref }}
+  group: rosiedazzlers-cloudflare-feature-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: true
 
 env:

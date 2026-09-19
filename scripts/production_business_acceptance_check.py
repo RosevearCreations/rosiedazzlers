@@ -128,6 +128,9 @@ required_authorities = {
         "scripts/security_privacy_recovery_drill_check.py",
         "scripts/security_privacy_recovery_drill_test.mjs",
     ],
+    "production_learning_roadmap_renewal": [
+        "scripts/production_learning_roadmap_renewal_check.py",
+    ],
     "recovery_security": [
         "scripts/release_rollback_recovery_check.py",
         "scripts/performance_accessibility_security_check.py",
@@ -201,6 +204,7 @@ workflow = require(WORKFLOW, [
     "Validate media, Photo Studio & proof operations authority",
     "Validate reliability, performance & cost capacity authority",
     "Validate security, privacy & recovery drill authority",
+    "Validate Production learning & roadmap renewal authority",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
     "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
@@ -259,6 +263,7 @@ print("- local acquisition evidence closure remains source-attributed, read-only
 print("- retention/maintenance/fleet operational pilot remains manual, capacity-aware and owner-action gated")
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
 print("- reliability/performance/cost capacity remains bounded, first-party and non-mutating")
+print("- production learning/roadmap renewal keeps stale authority closure evidence-based and unresolved HOLDs explicit")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")
 print("- workflow is durable across sequential releases and does not carry a numbered-release dependency")

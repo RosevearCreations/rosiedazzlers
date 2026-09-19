@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed reliability, performance and cost-capacity release is the retained predecessor.
+The completed Security, Privacy & Recovery Drill is the retained predecessor.
 
-**Build 424 — Security, Privacy & Recovery Drill** is the active bounded release.
+**Build 425 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 425 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 426 — HOLD Inventory & Authority Cleanup** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained predecessor contract: `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`.
+Current contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Retained predecessor contract: `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -42,17 +42,14 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 
-## Security, privacy & recovery contract
+## Production learning & renewal contract
 
-- `/api/admin/security_privacy_recovery_drill` is staff-only, manual-refresh and read-only.
-- Security posture is reduced to aggregate risk/RLS/browser-grant counts; table rows, customer records and secret values are excluded.
-- Staff/customer opaque session tokens remain hash-backed, bounded and rotating; the snapshot reports dedicated session-secret configuration only as present/absent.
-- Legacy admin fallback remains visible as an operator compatibility risk rather than being silently accepted.
-- Customer communication remains current-explicit-consent gated. Changed channels/recipients and opt-out states fail closed; consent is never inferred.
-- Provider acceptance remains distinct from definitive delivery.
-- Retained recovery and rollback authorities remain observation-only and fail-closed.
-- Source/runtime success does not prove a real Production restore, secret rotation, DNS/R2 recovery or provider recovery.
-- Any separately authorized real recovery requires exact Production SHA re-acceptance.
+- Reconcile the completed 416–424 cycle from retained dated evidence.
+- Keep `owner_action`, `provider_dependent` and `unavailable` evidence explicit.
+- Close stale authority wording only where current evidence supports closure.
+- Source/runtime GREEN never fabricates external, customer, operator or provider success.
+- The renewed next sequence is `FORWARD_BUILD_ROADMAP_426_435.md`.
+- Build 425 is read-only release governance: no schema, customer/booking, provider, accounting, inventory, secret, DNS, restore or destructive R2 mutation.
 
 ## Retained reliability contract
 
@@ -81,12 +78,15 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 ## Durable authorities
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
+- `FORWARD_BUILD_ROADMAP_426_435.md`
+- `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/security-privacy-recovery-drill-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `scripts/security_privacy_recovery_drill_check.py`
 - `scripts/backup_restore_release_recovery_drill_check.py`
 - `scripts/release_rollback_recovery_check.py`

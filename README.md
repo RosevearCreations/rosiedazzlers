@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 424 — Security, Privacy & Recovery Drill**.
+Current source direction: **Build 425 — Production Learning & Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,9 +8,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_416_425.md` — active evidence-driven sequence.
-4. `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md` — current contract.
-5. `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md` — retained predecessor contract.
+3. `FORWARD_BUILD_ROADMAP_426_435.md` — renewed evidence-driven sequence.
+4. `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current contract.
+5. `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
@@ -46,15 +46,13 @@ These completed authorities remain continuity inputs for current acceptance:
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
-## Current security, privacy & recovery framework
+## Current Production learning & roadmap-renewal framework
 
-The staff-only I.T. security/recovery surface composes safe aggregate security-posture evidence, session-policy configuration presence, current consent safeguards and retained recovery authority.
+The current release reconciles the completed 416–424 Production-learning cycle from retained evidence. It may close stale release wording only when dated evidence supports closure, and it keeps owner/provider/unavailable items as explicit HOLDs.
 
-It never returns secret values or customer records. It does not rotate credentials, change staff roles, mutate customer consent, restore Production, change DNS/R2, contact providers or treat source checks as proof of a real recovery event.
+It performs no schema migration, customer/booking mutation, provider transaction, staff-role change, accounting/inventory posting, secret/DNS change, Production restore, destructive R2 mutation or permanent polling.
 
-A separately authorized real recovery remains operator-observed evidence and must be followed by exact Production SHA re-acceptance.
-
-Current contract: `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`.
+Current contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
@@ -84,6 +82,7 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 Run current/durable release authorities with:
 
 ```bash
+python scripts/production_learning_roadmap_renewal_check.py
 python scripts/security_privacy_recovery_drill_check.py
 node scripts/security_privacy_recovery_drill_test.mjs
 python scripts/backup_restore_release_recovery_drill_check.py
@@ -107,4 +106,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 425 — Production Learning & Roadmap Renewal follows only after the current release is independently GREEN on protected `main`.
+The next bounded release is HOLD Inventory & Authority Cleanup, and it follows only after the current release is independently GREEN on protected `main`.
