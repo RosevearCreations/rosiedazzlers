@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 437 — Backup & Recovery Evidence Closure**.
+Current source direction: **Build 438 — Authenticated Device & Visual Acceptance**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,13 +8,15 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md` — current bounded contract.
-5. `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md` — retained predecessor contract.
+4. `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md` — current bounded contract.
+5. `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
 ## Retained cumulative authority pointers
+
+- `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
 - `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -60,17 +62,22 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current backup & recovery evidence framework
-This release is a read-only recovery-evidence refresh.
-- Existing backup/restore/accountant-export operational proof remains the owning source.
-- Backup artifact, retention location and bounded recovery drill must each be observed and dated before the report becomes a closure candidate.
-- Source routes and source/runtime GREEN do not prove that a real artifact or drill exists.
-- Missing evidence remains an owner-action HOLD; unavailable sources remain unavailable.
-- The canonical HOLD inventory is not mutated automatically.
-- No Production restore/rollback, DNS change, secret rotation, destructive R2 operation, schema/business-data mutation or permanent polling is authorized.
+## Current authenticated device & visual framework
+This release is a read-only evidence classification layer.
+- Retained Customer, Detailer, Operations and Admin workflow evidence remains authoritative.
+- Each accepted role observation requires dated authentication, device, browser, safe route, viewport/width and outcome evidence.
+- Representative phone, tablet and desktop coverage is required before the device/visual HOLD becomes a closure candidate.
+- Detailer still requires the retained bounded real-job evidence.
+- Source responsive/accessibility checks remain supporting evidence only.
+- Raw evidence notes, customer identity and protected content are never returned.
+- No screenshot capture, automated screenshot polling, customer/booking mutation, role change, provider transaction or destructive storage action is authorized.
 
 ## Durable validation
 ```bash
+python scripts/authenticated_device_visual_acceptance_check.py
+node scripts/authenticated_device_visual_acceptance_test.mjs
+python scripts/production_workflow_evidence_check.py
+node scripts/production_workflow_evidence_test.mjs
 python scripts/backup_recovery_evidence_closure_check.py
 node scripts/backup_recovery_evidence_closure_test.mjs
 python scripts/recovery_export_operational_proof_check.py
@@ -94,4 +101,4 @@ Production promotion is governed by `rd main protection`. Accepted Development i
 After merge, the resulting `main` head is the exact Production source SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 438 — Authenticated Device & Visual Acceptance** begins only after the current release is independently GREEN on protected `main`.
+**Build 439 — Maintenance & Fleet Owner Approval Convergence** begins only after the current release is independently GREEN on protected `main`.

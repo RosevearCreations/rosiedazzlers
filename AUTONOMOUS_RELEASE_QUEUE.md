@@ -5,11 +5,13 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`.
+The synchronized predecessor contract is retained in `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`.
 
 ## Retained cumulative authority pointers
 
 These completed filename authorities remain cumulative acceptance inputs:
+
+- `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
 - `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -51,24 +53,25 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 437 — Backup & Recovery Evidence Closure** is the active bounded release.
+**Build 438 — Authenticated Device & Visual Acceptance** is the active bounded release.
 
 Scope:
-- refresh retained backup/export artifact, retention-location and bounded recovery-drill evidence without performing a restore;
-- require dated retained evidence before the recovery/backup HOLD can become a closure candidate;
-- preserve source-route/source-GREEN versus observed recovery evidence separation;
-- expose dated evidence and HOLD decision on the existing Launch Readiness surface;
-- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory and never edit it automatically at runtime;
-- introduce no schema, Production restore/rollback, DNS, secret, destructive-R2, provider, customer, accounting/inventory, outreach or polling mutation.
+- classify representative authenticated Customer, Detailer, Operations and Admin observations without exposing protected note contents;
+- require dated authentication, device, browser, safe route, viewport and outcome evidence for each retained role observation;
+- require representative phone, tablet and desktop coverage before the visual-evidence HOLD can become a closure candidate;
+- preserve Build 419 real-job and role-specific workflow authority;
+- expose safe evidence summaries on the existing Launch Readiness surface;
+- keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical and never edit the HOLD automatically at runtime;
+- introduce no customer/booking, staff-role, provider, schema/business-data, destructive-storage, screenshot-capture or polling mutation.
 
-Current contract: `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused backup/recovery closure authority, retained recovery/export/security authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused authenticated-device authority, retained workflow/accessibility authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 438 — Authenticated Device & Visual Acceptance** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`.
+**Build 439 — Maintenance & Fleet Owner Approval Convergence** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.

@@ -15,7 +15,7 @@ A HOLD remains open until dated, attributable evidence from the named authority 
 | Provider outcomes & communications | `provider_dependent` | Definitive Stripe/PayPal payment/refund and message-delivery outcomes remain external to source/runtime acceptance wherever dated provider evidence is not currently recorded. The read-only `/api/admin/provider_outcome_delivery_evidence` refresh reports whether all four required evidence classes form a closure candidate; it never closes this row automatically. | Dated provider outcome reconciled to the current internal record without exposing credentials or customer message contents, followed by an explicit operator-reviewed HOLD update. |
 | Local-search provider evidence | `provider_dependent` | Search Console / Google Business Profile success is never inferred from markup, referrals, canonical tags or local proof. | Dated provider-observed snapshot for the correct property/location and measurement window. |
 | Recovery / backup evidence | `owner_action` | Repository routes and recovery source authority do not prove a current restorable backup/export or a successfully observed recovery drill. The read-only `/api/admin/backup_recovery_evidence_closure` refresh reports whether backup artifact, retention location and bounded drill evidence form a dated closure candidate; it never closes this row automatically. | Operator-observed artifact/retention evidence and bounded drill evidence recorded without performing an unnecessary Production restore, followed by an explicit operator-reviewed HOLD update. |
-| Independent device / visual evidence | `owner_action` | Source responsive/accessibility checks do not replace direct authenticated phone/tablet/desktop visual observation. | Dated operator-observed representative device/browser evidence for the current release. |
+| Independent device / visual evidence | `owner_action` | Source responsive/accessibility checks do not replace direct authenticated phone/tablet/desktop visual observation. The read-only `/api/admin/authenticated_device_visual_acceptance` report classifies dated Customer/Detailer/Operations/Admin observations plus representative phone/tablet/desktop coverage; it never closes this row automatically. | Dated authenticated operator observation with role, device, browser, safe route, viewport and outcome evidence for the current release, followed by an explicit operator-reviewed HOLD update. |
 | Maintenance / fleet business approval | `owner_action` | Commercial cadence, pricing, discount, travel, invoice and related business terms remain owner-approved rather than inferred from source. | Explicit dated owner approval of the current terms before automation or customer reliance expands. |
 | Evidence source unavailable | `unavailable` | Any required evidence source that cannot be reached or established must remain unavailable rather than being guessed. | The authorized evidence source becomes available and produces attributable evidence. |
 
@@ -26,6 +26,7 @@ The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_436_445.md`
+- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 - `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
 - `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
