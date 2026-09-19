@@ -109,6 +109,7 @@ function renderWorkflowEvidence(data){
 
 function renderProviderClosure(data){
   const closure=data.provider_evidence_closure||{};
+  const refresh=data.provider_outcome_delivery_evidence||{};
   const payments=closure.payments||{}, refunds=closure.refunds||{}, delivery=closure.delivery||{};
   const rows=Array.isArray(closure.required)?closure.required:[];
   const host=$("#providerOut");
@@ -120,7 +121,8 @@ function renderProviderClosure(data){
   host.innerHTML=`
     <h2>Payment, refund & delivery provider evidence</h2>
     <div class="metric-grid">
-      ${metric("Closure",closure.status||"hold")}
+      ${metric("HOLD decision",refresh.status||closure.status||"hold")}
+      ${metric("Dated evidence",`${refresh.dated_evidence_count??0}/${refresh.required_evidence_count??4}`)}
       ${metric("Definitive refunds",refunds.definitive_refunds??0)}
       ${metric("Definitive delivery",delivery.definitive_deliveries??0)}
       ${metric("Provider accepted",delivery.provider_accepted??0)}
@@ -128,7 +130,9 @@ function renderProviderClosure(data){
     <p><strong>Stripe:</strong> ${chip(payments.stripe?.observed?"verified":payments.stripe?.classification||"provider_dependent")} · <strong>PayPal:</strong> ${chip(payments.paypal?.observed?"verified":payments.paypal?.classification||"provider_dependent")}</p>
     <div class="stack">${rows.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p></div>${chip(x.status||x.classification||"provider_dependent")}</article>`).join("")}</div>
     <p class="mini"><strong>Notification evidence:</strong> ${esc(delivery.failed??0)} failed · ${esc(delivery.cancelled_or_suppressed??0)} cancelled/suppressed · ${esc(delivery.queued_or_pending??0)} queued/pending.</p>
-    <p class="muted">Provider accepted is not final delivery. This view summarizes persisted evidence only; it does not create a charge, initiate a refund, send a notification or replay a webhook.</p>`;
+    <p class="mini"><strong>Latest dated evidence:</strong> ${esc(refresh.latest_observed_at?new Date(refresh.latest_observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p>
+    <p class="mini"><strong>Canonical HOLD:</strong> ${esc(refresh.canonical_hold?.detail||"Provider outcomes & communications remains open until dated attributable evidence exists.")}</p>
+    <p class="muted">A closure candidate never edits the HOLD backlog automatically. Provider accepted is not final delivery. This view summarizes persisted evidence only; it does not create a charge, initiate a refund, send a notification or replay a webhook.</p>`;
 }
 
 function renderRecovery(data){

@@ -48,24 +48,24 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 435 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 436 — Provider Outcome & Delivery Evidence Closure** is the active bounded release.
 
 Scope:
-- reconcile the completed cycle into retained/closed/owner/provider/unavailable evidence classes;
-- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD backlog;
-- close no provider/owner evidence from source/runtime GREEN alone;
-- create `FORWARD_BUILD_ROADMAP_436_445.md` and bounded future contracts from supported priorities;
-- retain feature → exact Development → protected-main PR → exact Production acceptance;
-- introduce no schema, customer/booking, payment/refund/provider, accounting/inventory, secret, DNS, restore, destructive-storage, outreach or polling mutation.
+- refresh retained Stripe/PayPal, definitive refund and definitive delivery evidence without creating provider activity;
+- require attributable timestamps before provider evidence can become a closure candidate;
+- preserve provider-accepted/sent versus definitive-delivery separation;
+- expose dated evidence and HOLD decision on the existing Launch Readiness surface;
+- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory and never edit it automatically at runtime;
+- introduce no schema, payment/refund/provider, customer, accounting/inventory, secret, DNS, restore, destructive-storage, outreach or polling mutation.
 
-Current contract: `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Production-learning authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused provider-outcome/delivery authority, retained provider/payment/communication authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 436 — Provider Outcome & Delivery Evidence Closure** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`.
+**Build 437 — Backup & Recovery Evidence Closure** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.

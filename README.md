@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 435 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 436 — Provider Outcome & Delivery Evidence Closure**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,8 +8,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
-5. `PRODUCTION_LEARNING_426_434.md` — completed-cycle reconciliation.
+4. `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md` — current bounded contract.
+5. `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
@@ -57,19 +57,22 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current learning framework
-This release is read-only release governance.
-- The completed cycle is classified without turning source/runtime success into provider or owner evidence.
-- The canonical HOLD inventory remains singular and keeps unsupported provider/owner/unavailable evidence open.
-- The next roadmap begins with unresolved provider outcome, recovery, real-device, commercial-approval and local-search evidence.
-- Future work remains bounded by explicit contracts through the next renewal checkpoint.
-- No schema, customer/booking, payment/refund/provider, accounting/inventory, secret, DNS, Production restore, destructive R2, outreach or polling mutation is authorized.
+## Current provider evidence framework
+This release is a read-only provider-evidence refresh.
+- Existing reconciled payment, refund and notification evidence remains the owning source.
+- Stripe, PayPal, definitive refund and definitive delivery must each be attributable and dated before the report becomes a closure candidate.
+- Provider accepted/sent is not definitive delivery.
+- Missing or undated evidence remains a HOLD; unavailable sources remain unavailable.
+- The canonical HOLD inventory is not mutated automatically.
+- No charge, refund, message send, webhook replay, provider configuration change, customer mutation or permanent polling is authorized.
 
 ## Durable validation
 ```bash
+python scripts/provider_outcome_delivery_evidence_closure_check.py
+python scripts/provider_evidence_closure_check.py
+python scripts/build407_payment_provider_live_outcome_reconciliation_check.py
+python scripts/customer_communication_consent_delivery_check.py
 python scripts/production_learning_roadmap_renewal_check.py
-python scripts/reliability_security_cost_reassessment_check.py
-python scripts/hold_inventory_authority_cleanup_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```

@@ -1,0 +1,58 @@
+name: Provider Outcome & Delivery Evidence Closure Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-provider-outcome-delivery-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: provider-outcome-delivery-evidence-closure
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/provider_outcome_delivery_evidence_closure_check.py
+          node --check functions/api/_lib/provider-outcome-delivery-evidence.js
+          node --check functions/api/admin/provider_outcome_delivery_evidence.js
+          node --check scripts/provider_outcome_delivery_evidence_closure_test.mjs
+      - name: Validate provider outcome & delivery evidence closure
+        run: python scripts/provider_outcome_delivery_evidence_closure_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo '### Provider outcome & delivery evidence closure'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Dated Stripe/PayPal/refund/delivery classification: PASS'
+            echo '- Provider accepted vs definitive delivery boundary: PASS'
+            echo '- Canonical HOLD auto-mutation: NONE'
+            echo '- Provider/payment/refund/message/customer mutation: NONE'
+            echo '- Permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

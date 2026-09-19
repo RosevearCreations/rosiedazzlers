@@ -310,6 +310,11 @@ jobs:
           python scripts/provider_evidence_closure_check.py
           node scripts/provider_evidence_closure_test.mjs
 
+      - name: Validate current provider outcome & delivery evidence closure authority
+        run: |
+          python scripts/provider_outcome_delivery_evidence_closure_check.py
+          node scripts/provider_outcome_delivery_evidence_closure_test.mjs
+
       - name: Validate recovery export operational proof authority
         run: |
           python scripts/recovery_export_operational_proof_check.py
@@ -407,6 +412,7 @@ jobs:
             echo "- Launch-readiness consolidation / roadmap-renewal authority: PASS"
             echo "- Controlled soft launch / real-world acceptance authority: PASS"
             echo "- Payment / refund / delivery provider evidence closure authority: PASS"
+            echo "- Current dated provider outcome / delivery evidence closure authority: PASS"
             echo "- Backup / restore / accountant-export operational proof authority: PASS"
             echo "- Customer / staff Production workflow evidence authority: PASS"
             echo "- Local acquisition evidence closure authority: PASS"

@@ -3,15 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
+The synchronized Production predecessor is retained through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
-**Build 435 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 436 — Provider Outcome & Delivery Evidence Closure** is the active bounded release.
 
-**Build 436 — Provider Outcome & Delivery Evidence Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 437 — Backup & Recovery Evidence Closure** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider mutation, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
+This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider/payment/refund/message mutation, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
+
+## Current provider evidence contract
+- Retained provider evidence is read only from the existing persisted payment/refund/delivery authorities.
+- Stripe, PayPal, definitive refund and definitive delivery evidence must each have an attributable timestamp before the runtime report becomes a closure candidate.
+- Provider-accepted/sent evidence is never relabelled as definitive delivery.
+- Missing evidence remains `provider_dependent`; unreachable authorized evidence remains `unavailable`.
+- A closure candidate never edits the canonical HOLD backlog automatically; explicit operator review is still required.
+- Customer identities, recipients, message contents, raw provider/payment identifiers and credentials are excluded from the dated closure report.
 
 ## Retained cumulative authority pointers
 
@@ -77,9 +85,11 @@ This release authorizes no schema migration, secret rotation, Production restore
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
 - `PRODUCTION_LEARNING_426_434.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
+- `.github/workflows/provider-outcome-delivery-evidence-closure-authority.yml`
 - `.github/workflows/production-learning-roadmap-renewal-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/provider_outcome_delivery_evidence_closure_check.py`
 - `scripts/production_learning_roadmap_renewal_check.py`
 - `scripts/reliability_security_cost_reassessment_check.py`
 - `scripts/reliability_security_cost_reassessment_test.mjs`
