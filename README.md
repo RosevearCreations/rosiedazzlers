@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 438 — Authenticated Device & Visual Acceptance**.
+Current source direction: **Build 439 — Maintenance & Fleet Owner Approval Convergence**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,13 +8,13 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md` — current bounded contract.
-5. `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md` — retained predecessor contract.
+4. `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md` — current bounded contract.
+5. `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
-## Retained cumulative authority pointers
+## Retained cumulative authority pointers\n\n- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 - `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 
@@ -62,15 +62,14 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current authenticated device & visual framework
-This release is a read-only evidence classification layer.
-- Retained Customer, Detailer, Operations and Admin workflow evidence remains authoritative.
-- Each accepted role observation requires dated authentication, device, browser, safe route, viewport/width and outcome evidence.
-- Representative phone, tablet and desktop coverage is required before the device/visual HOLD becomes a closure candidate.
-- Detailer still requires the retained bounded real-job evidence.
-- Source responsive/accessibility checks remain supporting evidence only.
-- Raw evidence notes, customer identity and protected content are never returned.
-- No screenshot capture, automated screenshot polling, customer/booking mutation, role change, provider transaction or destructive storage action is authorized.
+## Current maintenance & fleet owner-decision framework
+This release is an admin-only, read-only convergence layer.
+- The canonical maintenance and fleet rulebooks remain the only commercial-term source authority.
+- Every unresolved term is presented as an explicit owner decision beside current aggregate operational evidence.
+- Interest/inquiry volume, requested vehicles, service-area observations and completed-work evidence never approve pricing, discounts, travel, invoicing/credit or cadence.
+- Live capacity is never inferred; `/api/availability` and `/api/checkout` remain authoritative.
+- The workbench has no approval/write action; real business approval requires a separately reviewed source change.
+- No discount, quote acceptance, booking, invoice, recurring billing, outreach, provider/accounting mutation or permanent polling is introduced.
 
 ## Durable validation
 ```bash
@@ -101,4 +100,4 @@ Production promotion is governed by `rd main protection`. Accepted Development i
 After merge, the resulting `main` head is the exact Production source SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 439 — Maintenance & Fleet Owner Approval Convergence** begins only after the current release is independently GREEN on protected `main`.
+**Build 440 — Local Search Provider Evidence Refresh** begins only after the current release is independently GREEN on protected `main`.

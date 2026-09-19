@@ -53,25 +53,25 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 438 — Authenticated Device & Visual Acceptance** is the active bounded release.
+**Build 439 — Maintenance & Fleet Owner Approval Convergence** is the active bounded release.
 
 Scope:
-- classify representative authenticated Customer, Detailer, Operations and Admin observations without exposing protected note contents;
-- require dated authentication, device, browser, safe route, viewport and outcome evidence for each retained role observation;
-- require representative phone, tablet and desktop coverage before the visual-evidence HOLD can become a closure candidate;
-- preserve Build 419 real-job and role-specific workflow authority;
-- expose safe evidence summaries on the existing Launch Readiness surface;
-- keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical and never edit the HOLD automatically at runtime;
-- introduce no customer/booking, staff-role, provider, schema/business-data, destructive-storage, screenshot-capture or polling mutation.
+- present all unresolved maintenance/fleet commercial domains as explicit owner decisions;
+- compose current aggregate maintenance-interest and fleet demand/work evidence beside each decision;
+- preserve canonical rulebooks as the only commercial-term source authority;
+- keep cadence, price, discount, travel, invoicing/credit and capacity terms `owner_action` until explicitly approved;
+- keep live capacity subordinate to `/api/availability` and `/api/checkout`;
+- expose an admin-only read-only workbench with no runtime approval mutation;
+- introduce no automatic discount, quote acceptance, booking, invoice, recurring billing, outreach, provider/accounting mutation, rulebook write or permanent polling.
 
-Current contract: `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused authenticated-device authority, retained workflow/accessibility authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused owner-approval convergence authority, retained maintenance/fleet rulebook/commercial/pilot/learning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 439 — Maintenance & Fleet Owner Approval Convergence** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`.
+**Build 440 — Local Search Provider Evidence Refresh** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.
