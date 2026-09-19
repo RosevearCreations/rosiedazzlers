@@ -1,0 +1,91 @@
+name: Build 440 Production Pages Stall Diagnostic
+
+on:
+  push:
+    branches:
+      - diag-build440-production-pages-stall
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-production-pages:
+    name: Inspect exact Production Pages deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CF_PROJECT_NAME: rosiedazzlers
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: 54b1428ad3caa9012d851be3234521d4893492ea
+      TARGET_DEPLOYMENT_ID: 1c3c6db1-38fc-437c-be39-35404e6336db
+    steps:
+      - name: Inspect exact Production deployment read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+
+          cf_get() {
+            curl --fail-with-body --silent --show-error               --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"               --header "Content-Type: application/json" "$1"
+          }
+
+          ACCOUNT_ID="${CONFIGURED_ACCOUNT_ID}"
+          [[ -n "$ACCOUNT_ID" ]] || { echo "::error::CLOUDFLARE_ACCOUNT_ID missing"; exit 2; }
+
+          cf_get "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}" > "$TMP_DIR/project.json"
+          cf_get "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/deployments.json"
+          cf_get "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${TARGET_DEPLOYMENT_ID}" > "$TMP_DIR/exact.json"
+
+          echo "Project controls:"
+          jq -r '.result | [
+            "production_branch=" + (.production_branch // .source.config.production_branch // "unknown"),
+            "deployments_enabled=" + ((.source.config.deployments_enabled // false)|tostring),
+            "production_deployments_enabled=" + ((.source.config.production_deployments_enabled // false)|tostring),
+            "uses_functions=" + ((.uses_functions // false)|tostring)
+          ] | .[]' "$TMP_DIR/project.json"
+
+          echo "Exact deployment:"
+          jq -r --arg sha "$TARGET_SHA" '
+            .result as $d |
+            [
+              "id=" + ($d.id // ""),
+              "environment=" + ($d.environment // ""),
+              "branch=" + ($d.deployment_trigger.metadata.branch // ""),
+              "sha=" + ($d.deployment_trigger.metadata.commit_hash // ""),
+              "latest_stage=" + ($d.latest_stage.name // "") + "/" + ($d.latest_stage.status // ""),
+              "created_on=" + ($d.created_on // ""),
+              "modified_on=" + ($d.modified_on // ""),
+              "url=" + ($d.url // "")
+            ] | .[]
+          ' "$TMP_DIR/exact.json"
+
+          echo "Exact deployment stages:"
+          jq -r '.result.stages[]? | [.name, .status, (.started_on // ""), (.ended_on // "")] | @tsv' "$TMP_DIR/exact.json" || true
+
+          echo "Active/queued deployment window:"
+          jq -r '
+            .result[]?
+            | select((.latest_stage.status // "") == "active" or (.latest_stage.status // "") == "queued")
+            | [
+                .id,
+                (.environment // "unknown"),
+                (.deployment_trigger.metadata.branch // "unknown"),
+                (.latest_stage.name // "unknown"),
+                (.latest_stage.status // "unknown"),
+                (.deployment_trigger.metadata.commit_hash // "unknown"),
+                (.created_on // "unknown"),
+                (.modified_on // "unknown")
+              ] | @tsv
+          ' "$TMP_DIR/deployments.json" || true
+
+          http_code="$(curl --silent --show-error --output "$TMP_DIR/logs.json" --write-out '%{http_code}'             --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"             "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${TARGET_DEPLOYMENT_ID}/history/logs" || true)"
+          echo "History logs HTTP=${http_code}"
+          if [[ "$http_code" == "200" ]]; then
+            jq -r '.result.data[]?.line // empty' "$TMP_DIR/logs.json"               | tail -n 160               | sed -E 's/([A-Za-z0-9_]*(TOKEN|SECRET|PASSWORD|AUTHORIZATION|API[_-]?KEY)[A-Za-z0-9_]*)[=:][^[:space:]]+/\1=[REDACTED]/Ig'               | tail -n 120
+          fi
+
+          echo "Diagnostic is read-only; mutation performed: none."
