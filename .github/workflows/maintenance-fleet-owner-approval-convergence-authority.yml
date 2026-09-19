@@ -1,0 +1,58 @@
+name: Maintenance & Fleet Owner Approval Convergence Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-maintenance-fleet-owner-approval-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: maintenance-fleet-owner-approval-convergence
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/maintenance_fleet_owner_approval_convergence_check.py
+          node --check functions/api/_lib/maintenance-fleet-owner-approval.js
+          node --check functions/api/admin/maintenance_fleet_owner_approval.js
+          node --check assets/build439-maintenance-fleet-owner-approval.js
+          node --check scripts/maintenance_fleet_owner_approval_convergence_test.mjs
+      - name: Validate owner approval convergence
+        run: python scripts/maintenance_fleet_owner_approval_convergence_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo '### Maintenance & Fleet Owner Approval Convergence'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Canonical rulebooks remain explicit owner authority: PASS'
+            echo '- Admin-only, read-only convergence workbench: PASS'
+            echo '- Current operational evidence shown without inferred commercial terms: PASS'
+            echo '- Discount/quote/booking/invoice/recurring/provider/accounting/capacity mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

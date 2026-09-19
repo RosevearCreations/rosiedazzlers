@@ -32,9 +32,9 @@ if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["# Build 438 — Authenticated Device & Visual Acceptance","/api/admin/authenticated_device_visual_acceptance","phone, tablet and desktop","browser evidence","safe internal route","viewport/width","closure_candidate","Build 439 — Maintenance & Fleet Owner Approval Convergence"],"Build 438 contract")
 require(b419,["Customer workflow evidence","Detailer workflow evidence","Operations workflow evidence","Admin workflow evidence","real device or representative viewport/width"],"retained Build 419 contract")
 require(blockers,["Independent device / visual evidence","authenticated_device_visual_acceptance","phone/tablet/desktop","closure candidate"],"canonical HOLD backlog")
-require(queue,["**Build 438 — Authenticated Device & Visual Acceptance** is the active bounded release.","**Build 439 — Maintenance & Fleet Owner Approval Convergence**"],"release queue")
-require(handoff,["**Build 438 — Authenticated Device & Visual Acceptance** is the active bounded release.","**Build 439 — Maintenance & Fleet Owner Approval Convergence**",".github/workflows/authenticated-device-visual-acceptance-authority.yml","scripts/authenticated_device_visual_acceptance_check.py"],"project handoff")
-require(readme,["Current source direction: **Build 438 — Authenticated Device & Visual Acceptance**","scripts/authenticated_device_visual_acceptance_check.py","**Build 439 — Maintenance & Fleet Owner Approval Convergence**"],"README")
+require(queue,["BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md"],"release queue retained authority")
+require(handoff,["BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md",".github/workflows/authenticated-device-visual-acceptance-authority.yml","scripts/authenticated_device_visual_acceptance_check.py"],"project handoff retained authority")
+require(readme,["BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md","scripts/authenticated_device_visual_acceptance_check.py"],"README retained authority")
 
 if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("Launch Readiness must retain exactly one H1")
 for p in ["functions/api/_lib/authenticated-device-visual-acceptance.js","functions/api/admin/authenticated_device_visual_acceptance.js","functions/api/admin/launch_readiness_consolidated.js","assets/launch-readiness-consolidation.js","scripts/authenticated_device_visual_acceptance_test.mjs"]:
