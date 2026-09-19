@@ -40,7 +40,7 @@ require(roadmap,[
     "Build 435 — Production Learning & Roadmap Renewal"
 ],"renewed roadmap")
 for text,label in [(queue,"queue"),(handoff,"handoff"),(readme,"README")]:
-    require(text,["Build 425","Build 426","FORWARD_BUILD_ROADMAP_426_435.md"],label)
+    require(text,["Build 425","FORWARD_BUILD_ROADMAP_426_435.md"],label)\n    if label != "README": require(text,["Build 426"],label)\n    else: require(text,["HOLD Inventory & Authority Cleanup"],label)
 for text,label in [(dev,"Development source gate"),(prod,"Production authority")]:
     require(text,["python scripts/production_learning_roadmap_renewal_check.py"],label)
 require(prodcheck,[
