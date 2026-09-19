@@ -63,9 +63,9 @@ for stale in [
 for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
     require(text, ["STARTUP_GO_LIVE_BLOCKERS.md"], label)
 
-require(queue, ["Build 426", "Build 427", "BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md"], "queue")
-require(handoff, ["Build 426", "Build 427", "BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md"], "handoff")
-require(readme, ["Build 426", "BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md"], "README")
+require(queue, ["STARTUP_GO_LIVE_BLOCKERS.md"], "queue")
+require(handoff, ["STARTUP_GO_LIVE_BLOCKERS.md"], "handoff")
+require(readme, ["STARTUP_GO_LIVE_BLOCKERS.md"], "README")
 
 for gate, label in [(dev_gate, "Development source gate"), (prod_gate, "Production authority")]:
     require(gate, ["python scripts/hold_inventory_authority_cleanup_check.py"], label)
