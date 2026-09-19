@@ -77,6 +77,10 @@ jobs:
           node --check scripts/media_photo_studio_proof_operations_test.mjs
           node --check functions/api/_lib/media-photo-studio-proof-operations.js
           node --check functions/api/admin/media_photo_studio_proof_operations.js
+          python -m py_compile scripts/reliability_performance_cost_capacity_check.py
+          node --check scripts/reliability_performance_cost_capacity_test.mjs
+          node --check functions/api/_lib/reliability-performance-cost-capacity.js
+          node --check functions/api/admin/reliability_performance_cost_capacity.js
           node --check functions/api/admin/local_search_measurement_report.js
           node --check functions/api/admin/local_search_provider_evidence_save.js
           node --check assets/local-search-measurement.js
@@ -147,6 +151,11 @@ jobs:
         run: |
           python scripts/media_photo_studio_proof_operations_check.py
           node scripts/media_photo_studio_proof_operations_test.mjs
+
+      - name: Validate reliability, performance & cost capacity authority
+        run: |
+          python scripts/reliability_performance_cost_capacity_check.py
+          node scripts/reliability_performance_cost_capacity_test.mjs
 
       - name: Validate commercial, local SEO, condition-quote and media convergence authorities
         run: |
@@ -232,6 +241,7 @@ jobs:
             echo "- Maintenance/fleet commercial acceptance: PASS"
             echo "- Retention / maintenance / fleet operational pilot: PASS"
             echo "- Media / Photo Studio / proof operations: PASS"
+            echo "- Reliability / performance / cost capacity: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Inventory/job-cost operational evidence: PASS"
