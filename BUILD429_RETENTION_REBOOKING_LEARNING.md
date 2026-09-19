@@ -63,6 +63,8 @@ Build 429 reuses the retained customer communication consent and delivery author
 
 There is no automatic email, no automatic SMS and no automatic push.
 
+There is no booking creation and no maintenance-plan enrollment from this learning surface.
+
 ## Evidence classifications
 
 The learning surface fails closed:
