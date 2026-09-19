@@ -3,26 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`.
+The synchronized Production predecessor is retained through `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`.
 
-**Build 437 — Backup & Recovery Evidence Closure** is the active bounded release.
+**Build 438 — Authenticated Device & Visual Acceptance** is the active bounded release.
 
-**Build 438 — Authenticated Device & Visual Acceptance** is next only after the current release is independently GREEN on protected `main`.
+**Build 439 — Maintenance & Fleet Owner Approval Convergence** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-This release authorizes no schema migration, secret rotation, Production restore/rollback, DNS mutation, customer/booking mutation, staff role/capability change, consent mutation, provider/payment/refund/message mutation, accounting/inventory posting, destructive R2 mutation, automatic outreach or permanent polling.
+This release authorizes no schema migration, customer/booking mutation, staff role/capability change, provider/payment/refund/message transaction, accounting/inventory posting, destructive storage action, screenshot capture, automatic outreach or permanent polling.
 
-## Current backup & recovery evidence contract
-- Retained recovery evidence is read only from the existing backup/restore/accountant-export operational-proof authority.
-- Backup artifact, retention-location and bounded recovery-drill evidence must each be observed and dated before the runtime report becomes a closure candidate.
-- Repository routes, runbooks and source/runtime GREEN remain supporting evidence only.
-- Missing evidence remains `owner_action`; unreachable authorized evidence remains `unavailable`.
-- A closure candidate never edits the canonical HOLD backlog automatically; explicit operator review is still required.
-- No evidence-note contents, customer identities, credentials or secret values are returned by the dated closure report.
-- No Production restore, rollback, DNS change, secret rotation or destructive R2 operation is performed merely to obtain evidence.
+## Current authenticated device & visual contract
+- Build 419 remains the owning Customer/Detailer/Operations/Admin workflow authority.
+- Each role requires a dated authenticated observation with explicit device, browser, safe route, viewport/width and outcome evidence.
+- The combined accepted observations must include representative phone, tablet and desktop coverage.
+- Detailer acceptance still depends on the retained bounded real-job evidence requirement.
+- Raw evidence-note contents, customer identities and protected content are not returned by the acceptance report.
+- Source responsive/accessibility checks are supporting evidence only and never fabricate real-device proof.
+- A closure candidate never edits the canonical HOLD backlog automatically; explicit operator review remains required.
+- No automated screenshot capture or screenshot polling is introduced.
 
 ## Retained cumulative authority pointers
+
+- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
+- `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 
 - `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
@@ -85,15 +89,18 @@ This release authorizes no schema migration, secret rotation, Production restore
 ## Durable authorities
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_436_445.md`
+- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 - `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
 - `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_426_434.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
+- `.github/workflows/authenticated-device-visual-acceptance-authority.yml`
 - `.github/workflows/backup-recovery-evidence-closure-authority.yml`
 - `.github/workflows/provider-outcome-delivery-evidence-closure-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/authenticated_device_visual_acceptance_check.py`
 - `scripts/backup_recovery_evidence_closure_check.py`
 - `scripts/recovery_export_operational_proof_check.py`
 - `scripts/backup_restore_release_recovery_drill_check.py`

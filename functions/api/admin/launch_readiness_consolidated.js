@@ -12,6 +12,7 @@ import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-cons
 import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evidence.js";
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
+import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -78,6 +79,13 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const authenticatedDeviceVisualAcceptance = buildAuthenticatedDeviceVisualAcceptance({
+    launch_evidence: launchEvidenceResult.items,
+    workflow_evidence: productionWorkflowEvidence,
+    source_available: launchEvidenceResult.ok && Boolean(productionWorkflowEvidence),
+    generated_at: generatedAt
+  });
+
   return json({
     ok: consolidation.source_runtime_status === "green",
     build: 419,
@@ -96,6 +104,8 @@ export async function onRequestGet({ request, env }) {
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
+    authenticated_device_visual_acceptance: authenticatedDeviceVisualAcceptance,
+    current_device_visual_authority: "authenticated_device_visual_acceptance",
     source_status: {
       go_live_readiness: state(readinessResult),
       production_diagnostics: state(diagnosticsResult),
@@ -113,6 +123,10 @@ export async function onRequestGet({ request, env }) {
       production_workflow_evidence: {
         available: launchEvidenceResult.ok && jobHandoffResult.available,
         classification: productionWorkflowEvidence.status
+      },
+      authenticated_device_visual_acceptance: {
+        available: launchEvidenceResult.ok,
+        classification: authenticatedDeviceVisualAcceptance.status
       }
     },
     ...consolidation

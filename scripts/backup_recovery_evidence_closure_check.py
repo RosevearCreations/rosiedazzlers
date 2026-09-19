@@ -21,9 +21,9 @@ require(page,['data-build437="backup-recovery-evidence-closure"',"Backup, export
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["# Build 437 — Backup & Recovery Evidence Closure","/api/admin/backup_recovery_evidence_closure","closure_candidate","STARTUP_GO_LIVE_BLOCKERS.md","Build 438 — Authenticated Device & Visual Acceptance"],"Build 437 contract")
 require(blockers,["Recovery / backup evidence","backup_recovery_evidence_closure","closure candidate"],"canonical HOLD backlog")
-require(queue,["**Build 437 — Backup & Recovery Evidence Closure** is the active bounded release.","**Build 438 — Authenticated Device & Visual Acceptance**"],"release queue")
-require(handoff,["**Build 437 — Backup & Recovery Evidence Closure** is the active bounded release.","**Build 438 — Authenticated Device & Visual Acceptance**",".github/workflows/backup-recovery-evidence-closure-authority.yml"],"project handoff")
-require(readme,["Current source direction: **Build 437 — Backup & Recovery Evidence Closure**","scripts/backup_recovery_evidence_closure_check.py","**Build 438 — Authenticated Device & Visual Acceptance**"],"README")
+require(queue,["BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md","FORWARD_BUILD_ROADMAP_436_445.md"],"release queue retained Build 437 authority")
+require(handoff,["BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md",".github/workflows/backup-recovery-evidence-closure-authority.yml","scripts/backup_recovery_evidence_closure_check.py"],"project handoff retained Build 437 authority")
+require(readme,["BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md","scripts/backup_recovery_evidence_closure_check.py"],"README retained Build 437 authority")
 for p in ["functions/api/_lib/backup-recovery-evidence-closure.js","functions/api/admin/backup_recovery_evidence_closure.js","functions/api/admin/launch_readiness_consolidated.js","assets/launch-readiness-consolidation.js","scripts/backup_recovery_evidence_closure_test.mjs"]:
  r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
  if r.returncode: errors.append(f"{p} syntax failed: {r.stderr.strip() or r.stdout.strip()}")
