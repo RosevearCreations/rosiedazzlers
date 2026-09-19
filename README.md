@@ -48,7 +48,7 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current Production learning & roadmap-renewal framework
 
-Build 425 reconciles the completed 416–424 Production-learning cycle from retained evidence. It may close stale release wording only when dated evidence supports closure, and it keeps owner/provider/unavailable items as explicit HOLDs.
+The current release reconciles the completed 416–424 Production-learning cycle from retained evidence. It may close stale release wording only when dated evidence supports closure, and it keeps owner/provider/unavailable items as explicit HOLDs.
 
 It performs no schema migration, customer/booking mutation, provider transaction, staff-role change, accounting/inventory posting, secret/DNS change, Production restore, destructive R2 mutation or permanent polling.
 
@@ -106,4 +106,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-Build 426 — HOLD Inventory & Authority Cleanup follows only after Build 425 is independently GREEN on protected `main`.
+The next bounded release is HOLD Inventory & Authority Cleanup, and it follows only after the current release is independently GREEN on protected `main`.
