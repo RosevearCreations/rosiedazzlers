@@ -1,5 +1,5 @@
 // Build 438 — Authenticated Device & Visual Acceptance.
-// Authenticated, read-only composition. No screenshot capture or business mutation.
+// Authenticated, read-only composition. No visual-capture action or business mutation.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
 import { onRequestGet as getProductionWorkflowEvidence } from "./production_workflow_evidence.js";

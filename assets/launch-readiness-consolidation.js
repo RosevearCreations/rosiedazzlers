@@ -114,7 +114,7 @@ function renderWorkflowEvidence(data){
     }).join("")}</div>
     <div class="stack">${devices.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">Observed roles: ${esc((x.roles||[]).join(", ")||"none")} · latest dated observation: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(acceptance.canonical_hold?.detail||"Representative authenticated phone/tablet/desktop evidence remains owner-observed.")}</p>
-    <p class="muted">Verified states come only from dated role-specific observations. Source responsive checks do not invent real-device proof; customer identity, protected content and evidence-note contents are not returned. No automated screenshot polling is used.</p>`;
+    <p class="muted">Verified states come only from dated role-specific observations. Source responsive checks do not invent real-device proof; customer identity and evidence-note contents are not returned; protected content is not returned either. No automated screenshot polling is used.</p>`;
 }
 
 function renderProviderClosure(data){
