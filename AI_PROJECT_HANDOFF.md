@@ -48,6 +48,7 @@ This release authorizes no schema migration, secret rotation, Production restore
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
+- `.github/workflows/reliability-security-cost-reassessment-authority.yml`
 
 ## Current learning contract
 - `PRODUCTION_LEARNING_426_434.md` is the cycle reconciliation.
@@ -78,6 +79,8 @@ This release authorizes no schema migration, secret rotation, Production restore
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
 - `scripts/production_learning_roadmap_renewal_check.py`
+- `scripts/reliability_security_cost_reassessment_check.py`
+- `scripts/reliability_security_cost_reassessment_test.mjs`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 

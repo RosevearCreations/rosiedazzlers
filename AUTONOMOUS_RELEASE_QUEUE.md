@@ -10,6 +10,7 @@ The synchronized predecessor contract is retained in `BUILD434_RELIABILITY_SECUR
 ## Retained cumulative authority pointers
 
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
+- `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
