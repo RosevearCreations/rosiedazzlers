@@ -1,0 +1,60 @@
+name: Build 430 — Fleet & Commercial Operations Learning Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build430*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-fleet-commercial-operations-learning-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: fleet-commercial-operations-learning
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate fleet & commercial operations learning authority
+        run: |
+          python scripts/fleet_commercial_operations_learning_check.py
+          node scripts/fleet_commercial_operations_learning_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 430 — Fleet & Commercial Operations Learning'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Inquiry demand remains distinct from signed business: PASS'
+            echo '- Unresolved commercial terms remain owner_action: PASS'
+            echo '- Completed-work evidence is aggregate and non-contractual: PASS'
+            echo '- Live capacity remains subordinate to /api/availability and /api/checkout: PASS'
+            echo '- Customer identities exposed: NONE'
+            echo '- Automatic discount / invoice / booking / outreach / provider / accounting mutation: PROHIBITED'
+            echo '- Schema migration / permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

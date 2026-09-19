@@ -175,6 +175,12 @@
               "label": "Retention & Rebooking Learning",
               "description": "Read-only repeat-booking, maintenance-interest and consent-safe communication evidence.",
               "page_key": "admin-retention-learning"
+            },
+            {
+              "href": "/admin-fleet-commercial-learning.html",
+              "label": "Fleet & Commercial Learning",
+              "description": "Read-only fleet demand, rulebook, operational work and capacity-boundary evidence.",
+              "page_key": "admin-fleet-commercial-learning"
             }
           ]
         },
@@ -1010,6 +1016,13 @@
       "href": "/admin-retention-learning.html",
       "label": "Retention & Rebooking Learning",
       "description": "Read-only repeat-booking, maintenance-interest and consent-safe communication evidence.",
+      "related_modules": []
+    },
+    "admin-fleet-commercial-learning": {
+      "primary_module": "operations",
+      "href": "/admin-fleet-commercial-learning.html",
+      "label": "Fleet & Commercial Learning",
+      "description": "Read-only fleet demand, rulebook, operational work and capacity-boundary evidence.",
       "related_modules": []
     }
   }
