@@ -4,11 +4,11 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Build 427 — Booking Conversion & Quote Clarity is the completed synchronized Production predecessor.
+The completed booking-conversion release is the synchronized Production predecessor.
 
-**Build 428 — Service Economics & Job Profitability** is the active bounded autonomous release.
+**Build 428 — Service Economics & Job Profitability** is the active bounded release.
 
-**Build 429 — Retention & Rebooking Learning** follows only after Build 428 is independently GREEN on protected `main`.
+**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`.
 
 Current contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
@@ -48,8 +48,8 @@ These completed authorities remain continuity inputs for current acceptance:
 - Missing material cost, quantity, refund or job-close evidence stays review/partial/unavailable.
 - Operator review may identify pricing questions but cannot automatically change catalogue prices, discounts or commercial terms.
 - Inventory quantity, accounting posting, purchasing and payment/provider mutations remain outside this build.
-- Build 428 must add its own focused implementation authority before any feature candidate can move to `dev`.
-- The prepared future contracts continue through Build 435 without claiming those builds are implemented.
+- The current release must retain its focused implementation authority before any feature candidate can move to `dev`.
+- The prepared future contracts continue through the current roadmap-renewal endpoint without claiming those releases are implemented.
 
 ## Retained HOLD inventory & authority-cleanup contract
 
@@ -121,4 +121,4 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 ## Restart point
 
-Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, the active roadmap and go-live blockers. Begin Build 428 implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.
+Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, the active roadmap and go-live blockers. Begin current implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.
