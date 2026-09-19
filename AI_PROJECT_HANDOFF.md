@@ -3,25 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized Production predecessor is retained through `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`.
 
-**Build 436 — Provider Outcome & Delivery Evidence Closure** is the active bounded release.
+**Build 437 — Backup & Recovery Evidence Closure** is the active bounded release.
 
-**Build 437 — Backup & Recovery Evidence Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 438 — Authenticated Device & Visual Acceptance** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider/payment/refund/message mutation, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
+This release authorizes no schema migration, secret rotation, Production restore/rollback, DNS mutation, customer/booking mutation, staff role/capability change, consent mutation, provider/payment/refund/message mutation, accounting/inventory posting, destructive R2 mutation, automatic outreach or permanent polling.
 
-## Current provider evidence contract
-- Retained provider evidence is read only from the existing persisted payment/refund/delivery authorities.
-- Stripe, PayPal, definitive refund and definitive delivery evidence must each have an attributable timestamp before the runtime report becomes a closure candidate.
-- Provider-accepted/sent evidence is never relabelled as definitive delivery.
-- Missing evidence remains `provider_dependent`; unreachable authorized evidence remains `unavailable`.
+## Current backup & recovery evidence contract
+- Retained recovery evidence is read only from the existing backup/restore/accountant-export operational-proof authority.
+- Backup artifact, retention-location and bounded recovery-drill evidence must each be observed and dated before the runtime report becomes a closure candidate.
+- Repository routes, runbooks and source/runtime GREEN remain supporting evidence only.
+- Missing evidence remains `owner_action`; unreachable authorized evidence remains `unavailable`.
 - A closure candidate never edits the canonical HOLD backlog automatically; explicit operator review is still required.
-- Customer identities, recipients, message contents, raw provider/payment identifiers and credentials are excluded from the dated closure report.
+- No evidence-note contents, customer identities, credentials or secret values are returned by the dated closure report.
+- No Production restore, rollback, DNS change, secret rotation or destructive R2 operation is performed merely to obtain evidence.
 
 ## Retained cumulative authority pointers
+
+- `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
+- `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
 
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
@@ -81,18 +85,20 @@ This release authorizes no schema migration, secret rotation, Production restore
 ## Durable authorities
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_436_445.md`
-- `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 - `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
+- `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_426_434.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
+- `.github/workflows/backup-recovery-evidence-closure-authority.yml`
 - `.github/workflows/provider-outcome-delivery-evidence-closure-authority.yml`
-- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
-- `scripts/provider_outcome_delivery_evidence_closure_check.py`
-- `scripts/production_learning_roadmap_renewal_check.py`
-- `scripts/reliability_security_cost_reassessment_check.py`
-- `scripts/reliability_security_cost_reassessment_test.mjs`
+- `scripts/backup_recovery_evidence_closure_check.py`
+- `scripts/recovery_export_operational_proof_check.py`
+- `scripts/backup_restore_release_recovery_drill_check.py`
+- `scripts/release_rollback_recovery_check.py`
+- `scripts/security_privacy_recovery_drill_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 

@@ -137,26 +137,24 @@ function renderProviderClosure(data){
 
 function renderRecovery(data){
   const recovery=data.recovery||{}, exports=Array.isArray(data.exports)?data.exports:[];
-  const proof=data.recovery_export_operational_proof||{};
+  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{};
   const backup=proof.backup||{}, drill=proof.recovery_drill||{}, accountant=proof.accountant_export||{}, artifact=proof.export_artifact||{};
-  const required=Array.isArray(proof.required)?proof.required:[];
+  const required=Array.isArray(proof.required)?proof.required:[], closureRequired=Array.isArray(closure.required)?closure.required:[];
   $("#recoveryOut").innerHTML=`
     <h2>Backup, restore & accountant export operational proof</h2>
     <div class="metric-grid">
-      ${metric("Operational proof",proof.status||"hold")}
+      ${metric("HOLD decision",closure.status||proof.status||"hold")}
+      ${metric("Dated recovery evidence",`${closure.dated_evidence_count??0}/${closure.required_evidence_count??3}`)}
       ${metric("Backup artifact",backup.artifact_observed?"observed":"owner action")}
       ${metric("Restore drill",drill.observed?"observed":"owner action")}
       ${metric("Accountant export",accountant.usable?"usable":accountant.status||"hold")}
     </div>
     <p><strong>Backup evidence observed:</strong> ${chip(recovery.backup_evidence_observed?"verified":"owner action")} · <strong>Rollback drill observed:</strong> ${chip(recovery.rollback_drill_observed?"verified":"owner action")}</p>
-    <p class="mini"><strong>Retention location:</strong> ${chip(backup.retention_location_observed?"verified":"owner action")} · <strong>Retained accountant-export artifact:</strong> ${chip(artifact.observed?"verified":"owner action")}</p>
-    <div class="stack">${required.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
-    <h3>Accountant-export runtime usability</h3>
-    <p class="mini"><strong>CSV families:</strong> ${esc(accountant.csv_export_count??0)} · <strong>Package route:</strong> ${accountant.package_route_present?"present":"unavailable"} · <strong>Manual approval:</strong> ${accountant.manual_approval_required===false?"not reported":"required"}</p>
-    <h3>Source-ready export capabilities</h3>
-    <ul class="compact-list">${exports.map(x=>`<li><strong>${esc(x.label)}</strong> — ${esc(x.classification)}<br><span class="muted">${esc(x.detail)}</span></li>`).join("")}</ul>
-    <p class="muted">Source route presence is not artifact proof. Build 418 does not generate an export or perform a Production restore; a recovery drill remains separately authorized.</p>
-    <p class="muted">${esc(recovery.rule||"")}</p>`;
+    <p class="mini"><strong>Latest dated recovery evidence:</strong> ${esc(closure.latest_observed_at?new Date(closure.latest_observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p>
+    <p class="mini"><strong>Canonical HOLD:</strong> ${esc(closure.canonical_hold?.detail||"Backup artifact, retention location and recovery-drill evidence remain owner-observed requirements.")}</p>
+    <div class="stack">${closureRequired.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Observed: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not dated")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
+    <p class="mini"><strong>Retained export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")} · <strong>Operational proof rows:</strong> ${esc(required.length)}</p>
+    <p class="muted">A closure candidate never edits the HOLD backlog automatically and never performs a Production restore. Source routes and GREEN checks remain supporting evidence only.</p>`;
 }
 
 function renderExternal(data){
