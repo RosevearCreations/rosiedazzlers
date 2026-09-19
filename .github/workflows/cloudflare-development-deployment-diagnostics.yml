@@ -72,6 +72,22 @@ jobs:
             "- exact SHA: `\($d.deployment_trigger.metadata.commit_hash // "unknown")`"
           ' "$TMP_DIR/detail.json" >> "$GITHUB_STEP_SUMMARY"
 
+          echo "Active Development preview queue:"
+          jq -r --arg branch "$CF_DEV_BRANCH" '
+            [.result[]? | select((.deployment_trigger.metadata.branch // "") == $branch)]
+            | .[]
+            | select((.latest_stage.status // "") == "active")
+            | [
+                .id,
+                (.latest_stage.name // "unknown"),
+                (.latest_stage.status // "unknown"),
+                (.deployment_trigger.metadata.commit_hash // "unknown"),
+                (.created_on // "unknown"),
+                (.modified_on // "unknown")
+              ]
+            | @tsv
+          ' "$TMP_DIR/deployments.json" || true
+
           echo "Deployment stage summary:"
           jq -r '.result.stages[]? | [.name, .status, (.started_on // ""), (.ended_on // "")] | @tsv' "$TMP_DIR/detail.json" || true
 
