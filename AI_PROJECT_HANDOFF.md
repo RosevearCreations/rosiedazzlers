@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-**Build 427 — Booking Conversion & Quote Clarity** is the completed synchronized Production predecessor.
+Build 427 — Booking Conversion & Quote Clarity is the completed synchronized Production predecessor.
 
-**Build 428 — Service Economics & Job Profitability** is the current planned autonomous release; its implementation has not started on this planning branch.
+**Build 428 — Service Economics & Job Profitability** is the active bounded autonomous release.
 
 **Build 429 — Retention & Rebooking Learning** follows only after Build 428 is independently GREEN on protected `main`.
 
-Current planned contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
+Current contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -104,8 +104,11 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 - `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `.github/workflows/development-source-gate.yml`
+- `.github/workflows/service-economics-job-profitability-authority.yml`
 - `.github/workflows/security-privacy-recovery-drill-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/build428_service_economics_job_profitability_check.py`
+- `scripts/build428_service_economics_job_profitability_test.mjs`
 - `scripts/build427_booking_conversion_quote_clarity_check.py`
 - `scripts/hold_inventory_authority_cleanup_check.py`
 - `scripts/production_learning_roadmap_renewal_check.py`

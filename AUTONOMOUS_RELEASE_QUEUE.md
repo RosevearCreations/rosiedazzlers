@@ -38,7 +38,7 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 428 — Service Economics & Job Profitability** is the next bounded autonomous release to implement. Its planning contract is prepared; implementation has not started.
+**Build 428 — Service Economics & Job Profitability** is the active bounded autonomous release.
 
 Scope:
 - improve read-only service/job profitability evidence using recorded revenue, consumables and durable cost evidence;
@@ -49,7 +49,7 @@ Scope:
 
 Current contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-Implementation must add its focused authority and pass feature verification before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass its focused service-economics authority, retained inventory/job-cost and finance authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 

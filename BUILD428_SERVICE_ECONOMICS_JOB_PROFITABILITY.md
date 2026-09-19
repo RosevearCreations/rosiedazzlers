@@ -45,3 +45,17 @@ The exact candidate must pass:
 6. independent exact resulting `main` Cloudflare Production deployment/runtime/business acceptance.
 
 Source/runtime GREEN never converts incomplete cost evidence into a profitability claim.
+
+## Implemented evidence contract
+
+Build 428 extends the existing Finance cockpit rather than creating a parallel ledger. The monthly service-economics report now keeps these layers distinct:
+
+- recorded recognized revenue and recorded collected/balance/refund context;
+- explicit canonical `job_use` material cost from the retained inventory authority;
+- booking-linked posted Cost of Goods Sold as a separate accounting layer;
+- explicit COGS-vs-job-use cost reconciliation;
+- logged job minutes multiplied only by a positive recorded staff hourly rate;
+- pricing-review contribution only when required material and labour evidence is complete;
+- overhead allocation retained as an estimate rather than presented as observed job cost.
+
+A job is not `ready` merely because a numeric margin can be calculated. Missing cost, row-level approval/posting evidence, staff rate, cash/refund/balance evidence or COGS reconciliation remains `review` or `unavailable`.

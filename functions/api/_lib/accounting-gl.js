@@ -1,4 +1,5 @@
 import { serviceHeaders } from "./staff-auth.js";
+import { buildServiceEconomicsJobProfitability } from "./service-economics-job-profitability.js";
 
 export function roundMoney(value) {
   const num = Number(value || 0);
@@ -557,111 +558,50 @@ export async function buildOperationalProfitabilityReport(env, { month, year }) 
     await loadAccountingRecords(env, { startDate: start, endDateExclusive: nextMonth, limit: 1000 })
   ).filter((row) => String(row.order_status || "open").toLowerCase() !== "cancelled");
 
-  const monthlyReport = await buildMonthlyReport(env, { month, year });
-  const cogsRows = await loadPostedLineRows(env, { month, year, accountCode: "cost_of_goods_sold" });
-  const cogsByBooking = new Map();
-  let totalDirectCogs = 0;
+  const [monthlyReport, cogsRows] = await Promise.all([
+    buildMonthlyReport(env, { month, year }),
+    loadPostedLineRows(env, { month, year, accountCode: "cost_of_goods_sold" })
+  ]);
 
+  const postedCogs = [];
+  let totalDirectCogs = 0;
   for (const row of cogsRows) {
     const entry = row.entry || {};
-    const refId = String(entry.reference_id || "").trim();
+    const bookingId = String(entry.reference_id || "").trim();
     const amount = Math.max(0, roundMoney(signedAmountForRow(row).signed_amount_cad));
     totalDirectCogs = roundMoney(totalDirectCogs + amount);
-    if (!refId) continue;
-    cogsByBooking.set(refId, roundMoney((cogsByBooking.get(refId) || 0) + amount));
+    if (bookingId && amount > 0) postedCogs.push({ booking_id: bookingId, amount_cad: amount });
   }
 
-  const bookingIds = records.map((row) => String(row.booking_id || "").trim()).filter(Boolean);
-  const timeEntries = bookingIds.length ? await loadTimeEntriesForBookings(env, bookingIds) : [];
+  const bookingIds = Array.from(new Set(
+    records.map((row) => String(row.booking_id || "").trim()).filter(Boolean)
+  ));
+  const [timeEntries, inventoryMovements, inventoryItems] = await Promise.all([
+    loadTimeEntriesForBookings(env, bookingIds),
+    loadInventoryMovementsForBookings(env, bookingIds),
+    loadInventoryItemsForEconomics(env)
+  ]);
   const staffRates = await loadStaffRates(
     env,
     Array.from(new Set(timeEntries.map((row) => String(row.staff_user_id || "").trim()).filter(Boolean)))
   );
-  const laborByBooking = new Map();
-  let totalEstimatedDirectLabor = 0;
-
-  for (const entry of timeEntries) {
-    const bookingId = String(entry.booking_id || "").trim();
-    if (!bookingId) continue;
-
-    const minutes = Math.max(0, Number(entry.minutes || 0));
-    if (!minutes) continue;
-
-    const staffRateCents = Number(staffRates.get(String(entry.staff_user_id || "").trim()) || 0);
-    const laborCad = staffRateCents > 0 ? roundMoney((minutes / 60) * (staffRateCents / 100)) : 0;
-    if (laborCad <= 0) continue;
-
-    laborByBooking.set(bookingId, roundMoney((laborByBooking.get(bookingId) || 0) + laborCad));
-    totalEstimatedDirectLabor = roundMoney(totalEstimatedDirectLabor + laborCad);
-  }
-
   const overheadPool = roundMoney(
     Math.max(0, Number(monthlyReport.totals?.expense || 0) - totalDirectCogs)
   );
-  const totalRecognizedRevenue = roundMoney(
-    records.reduce((sum, row) => sum + recognizedRevenueForRecord(row), 0)
-  );
 
-  const rows = records.map((row) => {
-    const bookingId = String(row.booking_id || "").trim();
-    const recognizedRevenue = recognizedRevenueForRecord(row);
-    const collectedRevenue = roundMoney(row.collected_total_cad || 0);
-    const directCogs = roundMoney(cogsByBooking.get(bookingId) || 0);
-    const estimatedDirectLabor = roundMoney(laborByBooking.get(bookingId) || 0);
-    const revenueShare = totalRecognizedRevenue > 0 ? recognizedRevenue / totalRecognizedRevenue : 0;
-    const allocatedOverhead = roundMoney(overheadPool * revenueShare);
-    const estimatedGrossProfit = roundMoney(recognizedRevenue - directCogs);
-    const estimatedContributionAfterLabor = roundMoney(estimatedGrossProfit - estimatedDirectLabor);
-    const estimatedNetAfterOverhead = roundMoney(estimatedGrossProfit - allocatedOverhead);
-
-    return {
-      booking_id: bookingId || null,
-      service_date: row.service_date || null,
-      customer_name: row.customer_name || null,
-      customer_email: row.customer_email || null,
-      package_code: row.package_code || null,
-      order_status: row.order_status || null,
-      accounting_stage: row.accounting_stage || null,
-      recognized_revenue_cad: recognizedRevenue,
-      collected_revenue_cad: collectedRevenue,
-      balance_due_cad: roundMoney(row.balance_due_cad || 0),
-      direct_cogs_cad: directCogs,
-      estimated_direct_labor_cad: estimatedDirectLabor,
-      estimated_contribution_after_labor_cad: estimatedContributionAfterLabor,
-      allocated_overhead_cad: allocatedOverhead,
-      estimated_gross_profit_cad: estimatedGrossProfit,
-      estimated_net_after_overhead_cad: estimatedNetAfterOverhead
-    };
-  }).sort((a, b) =>
-    Number(b.estimated_contribution_after_labor_cad || 0) -
-    Number(a.estimated_contribution_after_labor_cad || 0)
-  );
-
-  return {
+  return buildServiceEconomicsJobProfitability({
     month,
     year,
     period_start: start,
     period_end_exclusive: nextMonth,
-    method_note:
-      "Estimated overhead is allocated across the selected month's booking revenue share after subtracting direct inventory COGS already posted to Cost of Goods Sold. Estimated direct labor is shown separately using logged job minutes × staff hourly_rate_cents when available, because payroll may already sit inside posted expenses.",
-    totals: {
-      booking_count: rows.length,
-      recognized_revenue_cad: totalRecognizedRevenue,
-      collected_revenue_cad: roundMoney(
-        rows.reduce((sum, row) => sum + Number(row.collected_revenue_cad || 0), 0)
-      ),
-      direct_cogs_cad: totalDirectCogs,
-      estimated_direct_labor_cad: totalEstimatedDirectLabor,
-      estimated_contribution_after_labor_cad: roundMoney(
-        rows.reduce((sum, row) => sum + Number(row.estimated_contribution_after_labor_cad || 0), 0)
-      ),
-      overhead_pool_cad: overheadPool,
-      estimated_net_after_overhead_cad: roundMoney(
-        rows.reduce((sum, row) => sum + Number(row.estimated_net_after_overhead_cad || 0), 0)
-      )
-    },
-    rows
-  };
+    records,
+    posted_cogs: postedCogs,
+    time_entries: timeEntries,
+    staff_rates: Array.from(staffRates.entries()).map(([id, hourly_rate_cents]) => ({ id, hourly_rate_cents })),
+    inventory_movements: inventoryMovements,
+    inventory_items: inventoryItems,
+    overhead_pool_cad: overheadPool
+  });
 }
 
 export async function buildGeneralLedgerExport(env, { month, year }) {
@@ -1033,6 +973,32 @@ async function loadPostedLineRows(env, {
   const res = await fetch(url, { headers });
   if (!res.ok) throw new Error(`Could not load accounting rows. ${await res.text()}`);
   return await res.json().catch(() => []);
+}
+
+async function loadInventoryMovementsForBookings(env, bookingIds = []) {
+  const ids = Array.from(new Set(bookingIds.map((value) => String(value || "").trim()).filter(Boolean)));
+  if (!ids.length) return [];
+
+  const headers = serviceHeaders(env);
+  const rows = [];
+  for (let offset = 0; offset < ids.length; offset += 40) {
+    const chunk = ids.slice(offset, offset + 40);
+    const url = `${env.SUPABASE_URL}/rest/v1/catalog_inventory_movements?select=*&booking_id=in.(${encodeIdList(chunk)})&order=created_at.asc&limit=5000`;
+    const res = await fetch(url, { headers });
+    if (!res.ok) return [];
+    const found = await res.json().catch(() => []);
+    if (Array.isArray(found)) rows.push(...found);
+  }
+  return rows;
+}
+
+async function loadInventoryItemsForEconomics(env) {
+  const headers = serviceHeaders(env);
+  const url = `${env.SUPABASE_URL}/rest/v1/catalog_inventory_items?select=id,item_key,name,qty_on_hand,unit_label,cost_cents,item_type,reuse_policy,reorder_point,reorder_qty,preferred_vendor&limit=2000`;
+  const res = await fetch(url, { headers });
+  if (!res.ok) return [];
+  const rows = await res.json().catch(() => []);
+  return Array.isArray(rows) ? rows : [];
 }
 
 async function loadTimeEntriesForBookings(env, bookingIds = []) {

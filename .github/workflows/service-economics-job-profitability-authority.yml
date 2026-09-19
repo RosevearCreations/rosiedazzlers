@@ -1,0 +1,73 @@
+name: Build 428 — Service Economics & Job Profitability
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build428-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build428-service-economics-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  service-economics-job-profitability:
+    name: service-economics-job-profitability
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check focused authority syntax
+        run: |
+          python -m py_compile scripts/build428_service_economics_job_profitability_check.py
+          node --check functions/api/_lib/service-economics-job-profitability.js
+          node --check functions/api/_lib/accounting-gl.js
+          node --check assets/admin-accounting-v301.js
+          node --check scripts/build428_service_economics_job_profitability_test.mjs
+
+      - name: Validate service economics & job profitability
+        run: |
+          node scripts/build428_service_economics_job_profitability_test.mjs
+          python scripts/build428_service_economics_job_profitability_check.py
+
+      - name: Retain inventory / finance authorities
+        run: |
+          python scripts/build409_inventory_job_cost_operational_evidence_check.py
+          node scripts/build409_inventory_job_cost_operational_evidence_test.mjs
+          python scripts/build394_finance_close_reconciliation_accountant_export_check.py
+          node scripts/build394_finance_close_reconciliation_accountant_export_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 428 — Service Economics & Job Profitability'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Recorded job-use material-cost evidence: PASS'
+            echo '- Posted COGS reconciliation evidence: PASS'
+            echo '- Logged-time/staff-rate fail-closed labour evidence: PASS'
+            echo '- Cash/refund/balance context: PASS'
+            echo '- Automatic pricing / accounting / inventory / provider mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

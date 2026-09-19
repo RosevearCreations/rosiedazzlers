@@ -82,6 +82,9 @@ jobs:
           node --check functions/api/_lib/reliability-performance-cost-capacity.js
           node --check functions/api/admin/reliability_performance_cost_capacity.js
           python -m py_compile scripts/build427_booking_conversion_quote_clarity_check.py
+          python -m py_compile scripts/build428_service_economics_job_profitability_check.py
+          node --check scripts/build428_service_economics_job_profitability_test.mjs
+          node --check functions/api/_lib/service-economics-job-profitability.js
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
@@ -236,6 +239,11 @@ jobs:
       - name: Validate booking conversion & quote clarity authority
         run: python scripts/build427_booking_conversion_quote_clarity_check.py
 
+      - name: Validate service economics & job profitability authority
+        run: |
+          node scripts/build428_service_economics_job_profitability_test.mjs
+          python scripts/build428_service_economics_job_profitability_check.py
+
       - name: Validate HOLD inventory & authority cleanup
         run: python scripts/hold_inventory_authority_cleanup_check.py
 
@@ -266,6 +274,7 @@ jobs:
             echo "- Security / privacy / recovery drill: PASS"
             echo "- Production learning / roadmap renewal: PASS"
             echo "- Booking conversion / quote clarity: PASS"
+            echo "- Service economics / job profitability evidence: PASS"
             echo "- Canonical Production HOLD inventory / authority cleanup: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"

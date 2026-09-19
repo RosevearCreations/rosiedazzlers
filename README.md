@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 428 — Service Economics & Job Profitability** (planning contract prepared; implementation not started).
+Current source direction: **Build 428 — Service Economics & Job Profitability**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -48,9 +48,9 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current planned service-economics framework
 
-`BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` defines the next bounded autonomous release. It uses recorded service/job revenue, consumables, durable unit costs, job-duration evidence and payment/final-balance state to improve operator profitability review without inventing missing costs or automatically changing prices.
+`BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` defines the current bounded autonomous release. It uses recorded service/job revenue, consumables, durable unit costs, job-duration evidence and payment/final-balance state to improve operator profitability review without inventing missing costs or automatically changing prices.
 
-Build 428 is planning-only on this branch until its focused implementation authority and feature candidate exist. Missing cost, quantity, refund or job-close evidence must remain review/partial/unavailable.
+Build 428 extends the existing Finance cockpit with fail-closed evidence status and keeps missing cost, quantity, refund, cash, labour-rate or job-close evidence review/unavailable rather than converting gaps into zero-cost margin.
 
 The prepared follow-on contracts are `BUILD429_RETENTION_REBOOKING_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
@@ -82,6 +82,8 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 Build 428's focused implementation checker has not been created yet; that belongs to the Build 428 implementation itself. Retained durable release authorities currently include:
 
 ```bash
+python scripts/build428_service_economics_job_profitability_check.py
+node scripts/build428_service_economics_job_profitability_test.mjs
 python scripts/build427_booking_conversion_quote_clarity_check.py
 python scripts/hold_inventory_authority_cleanup_check.py
 python scripts/production_learning_roadmap_renewal_check.py
