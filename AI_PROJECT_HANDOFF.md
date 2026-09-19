@@ -4,69 +4,36 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed Media, Photo Studio & Proof Operations release is the retained completed predecessor.
+The completed reliability, performance and cost-capacity release is the retained predecessor.
 
-**Build 423 — Reliability, Performance & Cost Capacity** is the active bounded release.
+**Build 424 — Security, Privacy & Recovery Drill** is the active bounded release.
 
-**Build 424 — Security, Privacy & Recovery Drill** is next only after the current release is independently GREEN on protected `main`.
+**Build 425 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`, `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained predecessor contract: `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`.
 
-This release authorizes no schema migration, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
+This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
-## Reliability, performance & cost-capacity contract
+## Security, privacy & recovery contract
 
-- `/api/admin/reliability_performance_cost_capacity` is staff-only, manual-refresh and read-only.
-- It composes retained Production diagnostics with count-only first-party traffic observations for the latest 24 hours and 7 days.
-- The resulting pressure classification is an operational heuristic, not a Cloudflare billing, CPU, quota or future-capacity measurement.
-- The operator page may recommend reducing dependency calls, reviewing safe cache opportunities or analytics batching, but performs no automatic tuning.
-- Permanent polling, automatic retry expansion, automatic scaling, provider/business mutation and schema changes remain prohibited.
-- Missing traffic evidence remains partial/unavailable rather than fabricated.
+- `/api/admin/security_privacy_recovery_drill` is staff-only, manual-refresh and read-only.
+- Security posture is reduced to aggregate risk/RLS/browser-grant counts; table rows, customer records and secret values are excluded.
+- Staff/customer opaque session tokens remain hash-backed, bounded and rotating; the snapshot reports dedicated session-secret configuration only as present/absent.
+- Legacy admin fallback remains visible as an operator compatibility risk rather than being silently accepted.
+- Customer communication remains current-explicit-consent gated. Changed channels/recipients and opt-out states fail closed; consent is never inferred.
+- Provider acceptance remains distinct from definitive delivery.
+- Retained recovery and rollback authorities remain observation-only and fail-closed.
+- Source/runtime success does not prove a real Production restore, secret rotation, DNS/R2 recovery or provider recovery.
+- Any separately authorized real recovery requires exact Production SHA re-acceptance.
 
-## Retained media, Photo Studio & proof-operations contract
+## Retained reliability contract
 
-- `/api/admin/media_photo_studio_proof_operations` is a staff-only read-only operational evidence view.
-- Ordinary Photo Studio loads and proof-overview requests remain database-only; R2 listing happens only through the explicit bounded sync action.
-- Active assignments, multi-placement reuse and complete distinct-photo Before/After pairs remain separately observable.
-- Managed-library `last_seen_at` values are bounded sync evidence; missing or stale observations remain owner-action or unavailable.
-- Same-key upload retry and cursor continuation remain source-ready recovery mechanics; a real recovery drill is never inferred.
-- The Photo Studio deletion button now reports the retained server dry-run eligibility result instead of falsely reporting a destructive action.
-- No schema migration, automatic cleanup, full-bucket scan or permanent polling is introduced.
-
-## Retained retention, maintenance & fleet operational-pilot contract
-
-- `/api/admin/retention_maintenance_fleet_operational_pilot` is the staff-only read-only pilot overview.
-- Current maintenance and fleet rulebooks remain `awaiting_business_approval`; source release GREEN therefore remains compatible with an `owner_action` pilot HOLD.
-- Queue activity never infers participant selection, enrolment, quote acceptance, customer commitment or fleet commitment.
-- Participant selection remains manual after explicit owner approval of the canonical business terms.
-- `/api/availability` remains the availability authority and `/api/checkout` remains final collision/revalidation authority for every real booking.
-- Pricing, cadence, discounts, invoicing, outreach, recurring billing, renewal and provider mutation remain separately authorized.
-- The endpoint returns aggregate queue evidence only and exposes no customer identity.
-
-## Retained local acquisition evidence closure contract
-
-- `/admin-seo-tasks.html` remains the manual-refresh operator surface for local-search measurement and closure.
-- Search Console and Google Business Profile evidence remains dated operator-observed provider evidence from the retained local-search measurement authority.
-- First-party acquisition and approved local proof remain separate evidence sources and never imply provider outcomes.
-- Missing provider evidence remains provider-dependent; stale provider evidence remains owner-action; unavailable analytics/proof remains unavailable.
-- Ranking, indexing and Maps visibility are never inferred from source/runtime success, markup or referrals.
-- No Google credentials, OAuth flow, provider mutation, analytics write or permanent polling is introduced.
-
-## Retained Production workflow evidence contract
-
-- `/admin-launch-readiness.html` remains the read-only operator surface.
-- Customer, Detailer, Operations and Admin states come from existing verified launch-evidence rows; source files do not manufacture observed workflow proof.
-- Verified workflow evidence requires a dated role-specific note that records a real device or representative viewport/width.
-- Detailer workflow proof additionally requires aggregate eligible real-job evidence from the retained job-handoff source.
-- Evidence-note contents, customer identity, booking identifiers, addresses, credentials and secrets are excluded from the payload.
-- Role ceilings, consent and cross-role access remain governed by their canonical authorities and are never inferred from workflow observations.
-- Missing evidence remains owner-action or unavailable; source/runtime GREEN does not convert it into success.
+The retained reliability/capacity view stays staff-only, manual-refresh and read-only. Its first-party traffic and diagnostics evidence does not infer Cloudflare billing, CPU usage, provider quotas or future capacity, and it performs no automatic retry, cache, scaling or provider mutation.
 
 ## Retained operating contract
 
 - Protected `main` PR and exact Cloudflare Production acceptance remain mandatory.
 - Production support diagnostics remain read-only and manual-refresh.
-- Customer communication remains current-consent gated at dispatch time.
 - Public SEO remains one meaningful H1 per indexable page with truthful local proof.
 - Role/capability boundaries remain fail-closed.
 - Database migrations remain separate explicit acceptance boundaries.
@@ -87,39 +54,15 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
-- `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
-- `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`
-- `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
-- `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`
-- `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`
-- `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`
-- `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`
-- `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`
-- `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`
-- `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md`
-- `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`
-- `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
-- `STARTUP_GO_LIVE_BLOCKERS.md`
 - `.github/workflows/development-source-gate.yml`
-- `.github/workflows/cloudflare-development-acceptance.yml`
-- `.github/workflows/recovery-export-operational-proof-authority.yml`
-- `.github/workflows/provider-evidence-closure-authority.yml`
-- `.github/workflows/controlled-soft-launch-acceptance-authority.yml`
-- `.github/workflows/production-workflow-evidence-authority.yml`
-- `.github/workflows/local-acquisition-evidence-closure-authority.yml`
-- `.github/workflows/retention-maintenance-fleet-operational-pilot-authority.yml`
-- `.github/workflows/media-photo-studio-proof-operations-authority.yml`
-- `.github/workflows/reliability-performance-cost-capacity-authority.yml`
+- `.github/workflows/security-privacy-recovery-drill-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
-- `scripts/reliability_performance_cost_capacity_check.py`
-- `scripts/media_photo_studio_proof_operations_check.py`
-- `scripts/retention_maintenance_fleet_operational_pilot_check.py`
-- `scripts/local_acquisition_evidence_closure_check.py`
-- `scripts/production_workflow_evidence_check.py`
-- `scripts/recovery_export_operational_proof_check.py`
-- `scripts/provider_evidence_closure_check.py`
-- `scripts/controlled_soft_launch_acceptance_check.py`
+- `scripts/security_privacy_recovery_drill_check.py`
+- `scripts/backup_restore_release_recovery_drill_check.py`
+- `scripts/release_rollback_recovery_check.py`
+- `scripts/performance_accessibility_security_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 
