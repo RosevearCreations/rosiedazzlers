@@ -11,7 +11,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
 4. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — current planned contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
-6. `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
+6. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — Build 427 — Booking Conversion & Quote Clarity retained predecessor contract.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
