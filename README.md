@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 422 — Media, Photo Studio & Proof Operations**.
+Current source direction: **Build 423 — Reliability, Performance & Cost Capacity**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized/sleeping Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -10,8 +10,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_416_425.md` — renewed evidence-driven sequence after the current capstone.
 4. `FORWARD_BUILD_ROADMAP_405_415.md` — retained completed-cycle authority.
-5. `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md` — current media/Photo Studio/proof-operations contract.
-6. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — retained retention/maintenance/fleet operational-pilot contract.
+5. `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md` — current reliability/performance/cost-capacity contract.
+6. `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md` — retained media/Photo Studio/proof-operations contract.
+7. `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md` — retained retention/maintenance/fleet operational-pilot contract.
 7. `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` — retained local-acquisition closure contract.
 7. `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md` — retained Customer/staff Production workflow-evidence contract.
 6. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained backup/restore/accountant-export operational-proof contract.
@@ -30,7 +31,13 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 
 Git history is the release archive. `DOC_INDEX.md` is for specialist references.
 
-## Current media, Photo Studio & proof-operations framework
+## Current reliability, performance & cost-capacity framework
+
+The I.T. capacity surface combines bounded Production diagnostics with count-only first-party traffic evidence. It can flag observed pressure and recommend operator review of dependency calls, safe caching and analytics batching, but it does not infer Cloudflare billing/CPU usage or change runtime policy automatically.
+
+Current contract: `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`.
+
+## Retained media, Photo Studio & proof-operations framework
 
 Photo Studio reports read-only assignment, Before/After and bounded-sync evidence without scanning R2 on page load. Missing evidence remains an operator action; source recovery mechanics never become an invented recovery drill.
 
