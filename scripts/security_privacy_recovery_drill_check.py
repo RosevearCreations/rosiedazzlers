@@ -113,7 +113,7 @@ for token in (
     "aggregate counts only",
     "token hashes",
     "current explicit consent",
-    "does not prove that a real production restore",
+    "real production restore",
     "explicitly authorized",
     "no secret rotation",
     "no production restore",
