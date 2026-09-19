@@ -10,6 +10,7 @@ import { buildProductionSupportDiagnostics } from "../_lib/production-support-di
 import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
 import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-consolidation.js";
 import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evidence.js";
+import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -65,6 +66,11 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const providerOutcomeDeliveryEvidence = buildProviderOutcomeDeliveryEvidence({
+    closure: providerClosureResult.data?.closure || {},
+    generated_at: generatedAt
+  });
+
   return json({
     ok: consolidation.source_runtime_status === "green",
     build: 419,
@@ -78,6 +84,8 @@ export async function onRequestGet({ request, env }) {
     capstone_retained_authority: "launch_readiness_consolidation_next_roadmap_renewal",
     production_workflow_evidence: productionWorkflowEvidence,
     provider_evidence_closure: providerClosureResult.data?.closure || null,
+    provider_outcome_delivery_evidence: providerOutcomeDeliveryEvidence,
+    current_provider_evidence_authority: "provider_outcome_delivery_evidence_closure",
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     source_status: {
       go_live_readiness: state(readinessResult),
