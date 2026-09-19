@@ -4,17 +4,26 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed Retention, Maintenance & Fleet Operational Pilot release is the retained completed predecessor.
+The completed Media, Photo Studio & Proof Operations release is the retained completed predecessor.
 
-**Build 422 — Media, Photo Studio & Proof Operations** is the active bounded release.
+**Build 423 — Reliability, Performance & Cost Capacity** is the active bounded release.
 
-**Build 423 — Reliability, Performance & Cost Capacity** is next only after the current release is independently GREEN on protected `main`.
+**Build 424 — Security, Privacy & Recovery Drill** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`, `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_416_425.md`. Retained contracts: `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`, `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`, `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md`, `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md`, `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md`, `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS/secret mutation, automatic outreach or permanent polling.
 
-## Media, Photo Studio & proof-operations contract
+## Reliability, performance & cost-capacity contract
+
+- `/api/admin/reliability_performance_cost_capacity` is staff-only, manual-refresh and read-only.
+- It composes retained Production diagnostics with count-only first-party traffic observations for the latest 24 hours and 7 days.
+- The resulting pressure classification is an operational heuristic, not a Cloudflare billing, CPU, quota or future-capacity measurement.
+- The operator page may recommend reducing dependency calls, reviewing safe cache opportunities or analytics batching, but performs no automatic tuning.
+- Permanent polling, automatic retry expansion, automatic scaling, provider/business mutation and schema changes remain prohibited.
+- Missing traffic evidence remains partial/unavailable rather than fabricated.
+
+## Retained media, Photo Studio & proof-operations contract
 
 - `/api/admin/media_photo_studio_proof_operations` is a staff-only read-only operational evidence view.
 - Ordinary Photo Studio loads and proof-overview requests remain database-only; R2 listing happens only through the explicit bounded sync action.
@@ -79,6 +88,7 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`
 - `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
 - `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md`
@@ -100,7 +110,9 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `.github/workflows/local-acquisition-evidence-closure-authority.yml`
 - `.github/workflows/retention-maintenance-fleet-operational-pilot-authority.yml`
 - `.github/workflows/media-photo-studio-proof-operations-authority.yml`
+- `.github/workflows/reliability-performance-cost-capacity-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/reliability_performance_cost_capacity_check.py`
 - `scripts/media_photo_studio_proof_operations_check.py`
 - `scripts/retention_maintenance_fleet_operational_pilot_check.py`
 - `scripts/local_acquisition_evidence_closure_check.py`

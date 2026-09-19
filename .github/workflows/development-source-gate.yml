@@ -179,6 +179,10 @@ jobs:
           node --check scripts/media_photo_studio_proof_operations_test.mjs
           node --check functions/api/_lib/media-photo-studio-proof-operations.js
           node --check functions/api/admin/media_photo_studio_proof_operations.js
+          python -m py_compile scripts/reliability_performance_cost_capacity_check.py
+          node --check scripts/reliability_performance_cost_capacity_test.mjs
+          node --check functions/api/_lib/reliability-performance-cost-capacity.js
+          node --check functions/api/admin/reliability_performance_cost_capacity.js
           python -m py_compile scripts/sync_route_copies.py
           bash -n scripts/development_http_smoke.sh
           bash -n scripts/admin_protected_http_smoke.sh
@@ -325,6 +329,11 @@ jobs:
           python scripts/media_photo_studio_proof_operations_check.py
           node scripts/media_photo_studio_proof_operations_test.mjs
 
+      - name: Validate reliability, performance & cost capacity authority
+        run: |
+          python scripts/reliability_performance_cost_capacity_check.py
+          node scripts/reliability_performance_cost_capacity_test.mjs
+
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
 
@@ -381,6 +390,7 @@ jobs:
             echo "- Local acquisition evidence closure authority: PASS"
             echo "- Retention / maintenance / fleet operational pilot authority: PASS"
             echo "- Media / Photo Studio / proof operations authority: PASS"
+            echo "- Reliability / performance / cost capacity authority: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."
