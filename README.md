@@ -73,6 +73,8 @@ This release is an admin-only, read-only convergence layer.
 
 ## Durable validation
 ```bash
+python scripts/maintenance_fleet_owner_approval_convergence_check.py
+node scripts/maintenance_fleet_owner_approval_convergence_test.mjs
 python scripts/authenticated_device_visual_acceptance_check.py
 node scripts/authenticated_device_visual_acceptance_test.mjs
 python scripts/production_workflow_evidence_check.py

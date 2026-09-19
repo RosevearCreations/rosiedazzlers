@@ -52,6 +52,8 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `.github/workflows/reliability-security-cost-reassessment-authority.yml`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
+- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
+
 ## Current release
 **Build 439 — Maintenance & Fleet Owner Approval Convergence** is the active bounded release.
 
