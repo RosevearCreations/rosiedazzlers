@@ -53,7 +53,7 @@ require(endpoint, [
 
 require(asset, [
     "/api/admin/local_acquisition_content_proof", "DOMParser", 'doc.querySelectorAll("h1").length',
-    'link[rel="canonical"]', 'meta[name="description"]', "thin_copy_review", "duplicate_copy_review",
+    'link[rel="canonical"]', 'meta[name="description"]', "thin_copy_review", "duplicate_copy_review", "service_mismatch_review",
     "Source-copy flags are review heuristics, not ranking signals."
 ], "Build 431 admin client")
 
