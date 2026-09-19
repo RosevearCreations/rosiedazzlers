@@ -38,24 +38,24 @@ These completed authorities remain continuity inputs for current acceptance:
 
 ## Current release
 
-**Build 426 — HOLD Inventory & Authority Cleanup** is the active bounded release.
+**Build 427 — Booking Conversion & Quote Clarity** is the active bounded release.
 
 Scope:
-- make `STARTUP_GO_LIVE_BLOCKERS.md` the single current Production HOLD/evidence backlog;
-- remove stale launch-era blocker wording and duplicate historical checklists;
-- preserve provider-dependent, owner-action and unavailable evidence as truthful HOLDs;
-- keep completed source/runtime authorities by reference instead of maintaining competing blocker lists;
-- introduce no schema, customer/booking/staff-role/provider/accounting/inventory/secret/DNS/restore/destructive-storage mutation or permanent polling.
+- clarify fixed catalogue price, condition-aware estimate and booking-confirmation boundaries on the public booking path;
+- keep quote-required work excluded from the fixed subtotal until review;
+- count existing non-PII booking selection/start events in the bounded anonymous funnel evidence layer;
+- keep canonical booking statuses separate from anonymous interaction counts;
+- preserve server-authoritative availability/pricing and introduce no schema, booking, customer, provider, payment, accounting, inventory, secret, DNS, restore or destructive-storage mutation.
 
-Current contract: `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The candidate must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The candidate must pass focused authority, retained quote/booking authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
 
-**Build 427 — Booking Conversion & Quote Clarity** is next only after the current release is independently GREEN on protected `main`.
+**Build 428 — Service Economics & Job Profitability** is next only after the current release is independently GREEN on protected `main`.
 
 ## Continuing rule
 
