@@ -13,6 +13,7 @@ on:
       - "AUTONOMOUS_RELEASE_QUEUE.md"
       - "AI_PROJECT_HANDOFF.md"
       - "README.md"
+      - "STARTUP_GO_LIVE_BLOCKERS.md"
       - "admin/it.html"
       - "functions/api/admin/go_live_readiness.js"
       - "functions/api/stripe/webhook.js"
