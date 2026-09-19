@@ -41,6 +41,8 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
+- `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
+- `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
 ## Current security, privacy & recovery framework
 
