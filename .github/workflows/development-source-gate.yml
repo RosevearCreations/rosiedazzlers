@@ -345,6 +345,11 @@ jobs:
           python scripts/security_privacy_recovery_drill_check.py
           node scripts/security_privacy_recovery_drill_test.mjs
 
+      - name: Validate local acquisition & content proof authority
+        run: |
+          python scripts/local_acquisition_content_proof_check.py
+          node scripts/local_acquisition_content_proof_test.mjs
+
       - name: Validate HOLD inventory & authority cleanup
         run: python scripts/hold_inventory_authority_cleanup_check.py
 

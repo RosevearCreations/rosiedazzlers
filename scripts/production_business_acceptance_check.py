@@ -146,6 +146,10 @@ required_authorities = {
         "scripts/fleet_commercial_operations_learning_check.py",
         "scripts/fleet_commercial_operations_learning_test.mjs",
     ],
+    "local_acquisition_content_proof": [
+        "scripts/local_acquisition_content_proof_check.py",
+        "scripts/local_acquisition_content_proof_test.mjs",
+    ],
     "hold_inventory_authority_cleanup": [
         "scripts/hold_inventory_authority_cleanup_check.py",
     ],
@@ -227,6 +231,7 @@ workflow = require(WORKFLOW, [
     "Validate service economics & job profitability authority",
     "Validate retention & rebooking learning authority",
     "Validate fleet & commercial operations learning authority",
+    "Validate local acquisition & content proof authority",
     "Validate HOLD inventory & authority cleanup",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
@@ -283,6 +288,7 @@ print("- provider payment/refund/delivery evidence closure remains read-only, ag
 print("- backup/restore/accountant-export operational proof remains read-only and artifact-truthful")
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
+print("- local acquisition/content proof remains bounded, heuristic, read-only and non-publishing")
 print("- retention/maintenance/fleet operational pilot remains manual, capacity-aware and owner-action gated")
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
 print("- reliability/performance/cost capacity remains bounded, first-party and non-mutating")

@@ -1,0 +1,65 @@
+name: Build 431 — Local Acquisition & Content Proof Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build431-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-local-acquisition-content-proof-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: local-acquisition-content-proof
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Build 431 focused authority
+        run: |
+          python scripts/local_acquisition_content_proof_check.py
+          node scripts/local_acquisition_content_proof_test.mjs
+      - name: Retain SEO, local-acquisition and media authorities
+        run: |
+          python scripts/seo_h1_check.py
+          python scripts/seo_metadata_check.py
+          python scripts/local_search_measurement_authority_check.py
+          python scripts/local_acquisition_evidence_closure_check.py
+          node scripts/local_acquisition_evidence_closure_test.mjs
+          python scripts/media_photo_studio_proof_operations_check.py
+          node scripts/media_photo_studio_proof_operations_test.mjs
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 431 — Local Acquisition & Content Proof'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- First-party page traffic remains bounded and source-attributed: PASS'
+            echo '- Genuine approved public proof excludes samples/private media: PASS'
+            echo '- Search Console / GBP evidence remains dated and attributed: PASS'
+            echo '- Source-copy checks are operator review heuristics, not ranking claims: PASS'
+            echo '- One-H1 / metadata retained authorities: PASS'
+            echo '- Auto-publishing / provider / outreach / DNS / ad-spend / schema mutation: NONE'
+            echo '- Permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
