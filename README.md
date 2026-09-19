@@ -17,7 +17,16 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 9. `BUILD418_BACKUP_RESTORE_ACCOUNTANT_EXPORT_OPERATIONAL_PROOF.md` — retained recovery/export proof contract.
 10. `BUILD417_PAYMENT_REFUND_DELIVERY_PROVIDER_EVIDENCE_CLOSURE.md` — retained provider-evidence contract.
 11. `BUILD416_CONTROLLED_SOFT_LAUNCH_REAL_WORLD_ACCEPTANCE.md` — retained controlled-launch contract.
-12. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
+12. `BUILD415_LAUNCH_READINESS_CONSOLIDATION_ROADMAP_RENEWAL.md` — retained launch-readiness consolidation contract.
+13. `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md` — retained local-search measurement contract.
+14. `BUILD413_WORKFLOW_EFFICIENCY_ACCESSIBILITY_AUDIT.md` — retained workflow/accessibility contract.
+15. `BUILD412_PRODUCTION_OBSERVABILITY_ALERTING_SUPPORT_DIAGNOSTICS.md` — retained support-diagnostics contract.
+16. `BUILD411_CUSTOMER_COMMUNICATION_CONSENT_DELIVERY_EVIDENCE.md` — retained communication/consent contract.
+17. `BUILD410_MAINTENANCE_FLEET_COMMERCIAL_ACCEPTANCE.md` — retained maintenance/fleet commercial contract.
+18. `BUILD409_INVENTORY_JOB_COST_OPERATIONAL_EVIDENCE.md` — retained inventory/job-cost evidence contract.
+19. `BUILD407_PAYMENT_PROVIDER_LIVE_OUTCOME_RECONCILIATION_ACCEPTANCE.md` — retained payment-provider acceptance contract.
+20. `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md` — retained go-live evidence contract.
+21. `STARTUP_GO_LIVE_BLOCKERS.md` — current evidence/HOLD inventory.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
