@@ -4,7 +4,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed booking-conversion release is the synchronized Production predecessor.
+Build 427 — Booking Conversion & Quote Clarity is the synchronized Production predecessor.
 
 **Build 428 — Service Economics & Job Profitability** is the active bounded release.
 
