@@ -50,7 +50,7 @@ These completed authorities remain continuity inputs for current acceptance:
 
 `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` defines the current bounded autonomous release. It uses recorded service/job revenue, consumables, durable unit costs, job-duration evidence and payment/final-balance state to improve operator profitability review without inventing missing costs or automatically changing prices.
 
-Build 428 extends the existing Finance cockpit with fail-closed evidence status and keeps missing cost, quantity, refund, cash, labour-rate or job-close evidence review/unavailable rather than converting gaps into zero-cost margin.
+The current release extends the existing Finance cockpit with fail-closed evidence status and keeps missing cost, quantity, refund, cash, labour-rate or job-close evidence review/unavailable rather than converting gaps into zero-cost margin.
 
 The prepared follow-on contracts are `BUILD429_RETENTION_REBOOKING_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
@@ -79,7 +79,7 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 
 ## Durable validation
 
-Build 428's focused implementation checker has not been created yet; that belongs to the Build 428 implementation itself. Retained durable release authorities currently include:
+The focused implementation checker now participates in the current release authority. Retained durable release authorities include:
 
 ```bash
 python scripts/build428_service_economics_job_profitability_check.py
@@ -110,4 +110,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-The next follow-on release after Build 428 is Build 429 — Retention & Rebooking Learning, and it proceeds only after Build 428 is independently GREEN on protected `main`.
+**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`.
