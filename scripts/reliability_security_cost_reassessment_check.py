@@ -116,19 +116,17 @@ require(contract,[
     "Build 435 — Production Learning & Roadmap Renewal"
 ],"Build 434 contract")
 require(readme,[
-    "Current source direction: **Build 434 — Reliability, Security & Cost Reassessment**",
-    "scripts/reliability_security_cost_reassessment_check.py",
-    "**Build 435 — Production Learning & Roadmap Renewal**"
-],"README")
+    "BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
+    "scripts/reliability_security_cost_reassessment_check.py"
+],"README retained Build 434 authority")
 require(queue,[
-    "**Build 434 — Reliability, Security & Cost Reassessment** is the active bounded release.",
-    "**Build 435 — Production Learning & Roadmap Renewal**"
-],"release queue")
+    "BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md"
+],"release queue retained Build 434 authority")
 require(handoff,[
-    "**Build 434 — Reliability, Security & Cost Reassessment** is the active bounded release.",
+    "BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
     ".github/workflows/reliability-security-cost-reassessment-authority.yml",
     "scripts/reliability_security_cost_reassessment_check.py"
-],"handoff")
+],"handoff retained Build 434 authority")
 require(workflow,[
     "Build 434 — Reliability, Security & Cost Reassessment Authority",
     "python scripts/reliability_security_cost_reassessment_check.py",

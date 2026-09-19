@@ -3,16 +3,15 @@
 This living queue records only the current bounded release path. Historical implementation belongs in Git/workflow evidence.
 
 ## Accepted checkpoint
-
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`. Earlier continuity remains in the active roadmap and Git history.
+The synchronized predecessor contract is retained in `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
 
-
-## Retained contract index
+## Retained cumulative authority pointers
 
 These completed filename authorities remain cumulative acceptance inputs:
 
+- `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
 - `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
@@ -45,28 +44,31 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD403_CUSTOMER_RETENTION_REBOOKING_SERVICE_GUIDANCE_SEO_GROWTH.md`
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
+- `.github/workflows/reliability-security-cost-reassessment-authority.yml`
+- `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-
-**Build 434 — Reliability, Security & Cost Reassessment** is the active bounded release.
+**Build 435 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- add one protected, manual-refresh I.T. reassessment that composes retained reliability, current first-party traffic, security/privacy/session, recovery and go-live evidence;
-- separate GREEN retained controls, operational pressure, stale evidence, owner action, provider dependency and unavailable evidence;
-- keep Cloudflare billing/CPU, future capacity, attack likelihood and recovery success explicitly uninferred;
-- preserve existing role ceilings and server-side `it.runtime.view` authority;
-- introduce no automatic scaling, retry expansion, cache-policy change, secret rotation, Production restore, DNS/R2/provider/schema mutation or permanent polling.
+- reconcile the completed cycle into retained/closed/owner/provider/unavailable evidence classes;
+- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD backlog;
+- close no provider/owner evidence from source/runtime GREEN alone;
+- create `FORWARD_BUILD_ROADMAP_436_445.md` and bounded future contracts from supported priorities;
+- retain feature → exact Development → protected-main PR → exact Production acceptance;
+- introduce no schema, customer/booking, payment/refund/provider, accounting/inventory, secret, DNS, restore, destructive-storage, outreach or polling mutation.
 
-Current contract: `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused reassessment authority, retained reliability/security/recovery/diagnostic/I.T. authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Production-learning authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
+**Build 436 — Provider Outcome & Delivery Evidence Closure** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`.
 
-**Build 435 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+## Future queue
+The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.
 
 ## Continuing rule
-
-Never call a Rosie Dazzlers source release GREEN from source changes alone. Missing provider, owner or observed recovery evidence remains a truthful HOLD rather than inferred success. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
+Never call a Rosie Dazzlers source release GREEN from source changes alone. Missing provider, owner or observed recovery/device evidence remains a truthful HOLD rather than inferred success. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
