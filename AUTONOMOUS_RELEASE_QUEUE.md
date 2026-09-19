@@ -7,6 +7,12 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contract is retained in `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
 
+## Retained cumulative authority pointers
+
+- `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
+- `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `.github/workflows/support-automation-exception-handling-authority.yml`
+
 ## Current release
 **Build 435 — Production Learning & Roadmap Renewal** is the active bounded release.
 
