@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 426 — HOLD Inventory & Authority Cleanup**.
+Current source direction: **Build 427 — Booking Conversion & Quote Clarity**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,7 +9,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
-4. `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md` — current contract.
+4. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — current contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
 6. `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
 
@@ -46,13 +46,13 @@ These completed authorities remain continuity inputs for current acceptance:
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
-## Current HOLD inventory & authority-cleanup framework
+## Current booking conversion & quote-clarity framework
 
-`STARTUP_GO_LIVE_BLOCKERS.md` is the single current Production HOLD/evidence backlog. It keeps provider-dependent, owner-action and unavailable evidence separate from exact source/runtime acceptance, while completed authorities remain in retained contracts and workflow history.
+`BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` defines the current public estimate/quote clarity and bounded first-party funnel-evidence boundary. Fixed catalogue prices, condition-aware estimates and booking confirmation stay distinct; the existing planner remains authoritative for availability and final validation.
 
-This release performs no schema migration, customer/booking mutation, provider transaction, staff-role change, accounting/inventory posting, secret/DNS change, Production restore, destructive R2 mutation or permanent polling.
+This release performs no schema migration, customer/booking mutation, price or availability override, provider transaction, staff-role change, accounting/inventory posting, secret/DNS change, Production restore, destructive R2 mutation or permanent polling.
 
-Current contract: `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
@@ -82,6 +82,7 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 Run current/durable release authorities with:
 
 ```bash
+python scripts/build427_booking_conversion_quote_clarity_check.py
 python scripts/hold_inventory_authority_cleanup_check.py
 python scripts/production_learning_roadmap_renewal_check.py
 python scripts/security_privacy_recovery_drill_check.py
@@ -107,4 +108,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-The next bounded release is Booking Conversion & Quote Clarity, and it follows only after the current release is independently GREEN on protected `main`.
+The next bounded release is Build 428 — Service Economics & Job Profitability, and it follows only after Build 427 is independently GREEN on protected `main`.
