@@ -13,6 +13,7 @@ The synchronized Production predecessor remains documented by `BUILD430_FLEET_CO
 These completed authorities remain continuity inputs for current acceptance:
 
 - `FORWARD_BUILD_ROADMAP_405_415.md`
+- `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`
 - `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
