@@ -11,8 +11,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
 4. `BUILD429_RETENTION_REBOOKING_LEARNING.md` — current planned contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
-6. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — Build 428 — Service Economics & Job Profitability retained predecessor contract.
-7. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — Build 427 — Booking Conversion & Quote Clarity retained continuity contract.
+6. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — retained service-economics/job-profitability predecessor contract.
+7. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — retained booking-conversion/quote-clarity continuity contract.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
@@ -53,7 +53,7 @@ These completed authorities remain continuity inputs for current acceptance:
 
 Observed counts, elapsed time and package transitions remain correlation only. Missing identity-safe linkage, current consent or provider delivery proof remains `partial`, `provider_dependent` or `unavailable`; no gap is converted into inferred outreach eligibility.
 
-Build 428 — Service Economics & Job Profitability remains retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. The prepared follow-on contracts are `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+The service-economics/job-profitability predecessor remains retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. The prepared follow-on contracts are `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
