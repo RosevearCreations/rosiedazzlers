@@ -88,4 +88,4 @@ Production promotion is governed by `rd main protection`. Accepted Development i
 After merge, the resulting `main` head is the exact Production source SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 436 — Provider Outcome & Delivery Evidence Closure** begins only after the current release is independently GREEN on protected `main`.
+**Build 437 — Backup & Recovery Evidence Closure** begins only after the current release is independently GREEN on protected `main`.
