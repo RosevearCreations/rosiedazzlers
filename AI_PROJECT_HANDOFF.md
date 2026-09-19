@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The synchronized Production predecessor is retained through `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`.
+The synchronized Production predecessor is retained through `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`.
 
-**Build 433 — Support Automation & Exception Handling** is the active bounded release.
+**Build 434 — Reliability, Security & Cost Reassessment** is the active bounded release.
 
-**Build 434 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
+**Build 435 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider mutation, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling. The retained payment reconciliation authority may perform bounded read-only provider lookup under its existing environment policy.
 
@@ -63,16 +63,15 @@ Cumulative acceptance continues to retain these filename authorities:
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 
-## Current support exception contract
+## Current reassessment contract
 
-- The protected I.T. queue loads evidence only after explicit manual refresh.
-- Retained Production support diagnostics remain the runtime/readiness alert authority; the current release classifies and routes those alerts rather than duplicating them.
-- Bounded payment reconciliation contributes only non-clear exceptions and provider/local blockers; the aggregator strips customer names/email and raw record identifiers.
-- Every exception exposes source, severity, family/state, freshness, dependency and a safe next action.
-- Provider-dependent evidence stays a HOLD; owner/operator work stays an explicit action.
-- Existing media, inventory, booking and incident pages are navigation destinations only and retain their own mutation boundaries.
-- No permanent polling, automatic correction, outreach, payment/refund, booking/customer change, accounting/inventory posting, provider mutation, secret rotation, Production restore, destructive R2 action or release-protection bypass is introduced.
-- The page remains inside the existing I.T. module ceiling and the API independently enforces `it.runtime.view`.
+- The protected I.T. reassessment runs only after explicit manual refresh.
+- Current Production diagnostics and first-party traffic counts feed bounded reliability pressure evidence without becoming Cloudflare billing or capacity claims.
+- Aggregate security, session/cookie, consent/privacy and recovery-source controls are rechecked without exposing secrets or customer records.
+- GREEN retained controls, operational pressure, stale evidence, owner action, provider dependency and unavailable evidence remain distinct.
+- Provider-owned billing/CPU metrics, future capacity, attack likelihood and real recovery success are never inferred.
+- Existing role ceilings remain unchanged; the API independently enforces `it.runtime.view`.
+- No automatic scaling, retry expansion, cache-policy mutation, secret rotation, Production restore, DNS/R2/provider/schema mutation or permanent polling is introduced.
 
 ## Retained operating contract
 
@@ -92,9 +91,12 @@ Cumulative acceptance continues to retain these filename authorities:
 - `FORWARD_BUILD_ROADMAP_426_435.md`
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `.github/workflows/reliability-security-cost-reassessment-authority.yml`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/reliability_security_cost_reassessment_check.py`
+- `scripts/reliability_security_cost_reassessment_test.mjs`
 - `scripts/support_automation_exception_handling_check.py`
 - `scripts/production_support_diagnostics_check.py`
 - `scripts/payment_reconciliation_check.py`

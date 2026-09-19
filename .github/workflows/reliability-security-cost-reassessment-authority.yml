@@ -1,0 +1,65 @@
+name: Build 434 — Reliability, Security & Cost Reassessment Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build434-reassessment-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Reliability/Security/Cost reassessment
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/reliability_security_cost_reassessment_check.py
+          node --check functions/api/_lib/reliability-security-cost-reassessment.js
+          node --check functions/api/admin/reliability_security_cost_reassessment.js
+          node --check assets/build434-reliability-reassessment.js
+          node --check scripts/reliability_security_cost_reassessment_test.mjs
+          node scripts/reliability_security_cost_reassessment_test.mjs
+      - name: Validate Build 434 source authority
+        run: python scripts/reliability_security_cost_reassessment_check.py
+      - name: Re-run retained reliability, security, recovery and release authorities
+        run: |
+          python scripts/reliability_performance_cost_capacity_check.py
+          python scripts/security_privacy_recovery_drill_check.py
+          python scripts/production_observability_self_diagnostics_check.py
+          python scripts/it_readiness_release_control_audit.py
+          python scripts/release_authority_documentation_convergence_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo "### Build 434 reliability/security/cost reassessment"
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo "- Current reliability + first-party traffic evidence: PASS"
+            echo "- Security/privacy/session/recovery boundaries: PASS"
+            echo "- GREEN / pressure / stale / owner / provider / unavailable separation: PASS"
+            echo "- Cloudflare billing/CPU/future capacity and recovery success are not inferred."
+            echo "- No scaling/retry/cache/secret/restore/DNS/R2/provider/schema mutation or permanent polling introduced."
+          } >> "$GITHUB_STEP_SUMMARY"

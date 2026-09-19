@@ -99,19 +99,15 @@ require(contract, [
     "Build 434 — Reliability, Security & Cost Reassessment"
 ], "Build 433 contract")
 require(readme, [
-    "Current source direction: **Build 433 — Support Automation & Exception Handling**",
-    "scripts/support_automation_exception_handling_check.py",
-    "**Build 434 — Reliability, Security & Cost Reassessment**"
-], "README")
+    "BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md"
+], "README retained Build 433 authority")
 require(queue, [
-    "**Build 433 — Support Automation & Exception Handling** is the active bounded release.",
-    "**Build 434 — Reliability, Security & Cost Reassessment**"
-], "release queue")
+    "BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md"
+], "release queue retained Build 433 authority")
 require(handoff, [
-    "**Build 433 — Support Automation & Exception Handling** is the active bounded release.",
-    ".github/workflows/support-automation-exception-handling-authority.yml",
-    "scripts/support_automation_exception_handling_check.py"
-], "handoff")
+    "BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md",
+    ".github/workflows/support-automation-exception-handling-authority.yml"
+], "handoff retained Build 433 authority")
 
 if endpoint.count("new Request(") > 1:
     errors.append("Build 433 endpoint should create at most one bounded derived request")
