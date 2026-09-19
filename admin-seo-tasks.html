@@ -27,7 +27,7 @@
 @media(max-width:620px){.local-grid,.metric-grid,.provider-form{grid-template-columns:1fr}.provider-form .wide{grid-column:auto}.summary-item{display:grid}}
 </style>
 </head>
-<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof" data-build420="search-console-gbp-local-acquisition-evidence-closure" data-build431="local-acquisition-content-proof">
+<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof" data-build420="search-console-gbp-local-acquisition-evidence-closure" data-build431="local-acquisition-content-proof" data-build440="local-search-provider-evidence-refresh">
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a>
@@ -78,6 +78,32 @@
       </div>
       <h3 style="margin-top:16px">Prioritized content candidates</h3>
       <div id="localContentProofCandidates" class="summary-list" aria-live="polite"><div class="summary-item muted">Loading content candidates…</div></div>
+    </section>
+
+    <section class="section panel" aria-labelledby="providerRefreshHeading440">
+      <div class="section-heading">
+        <div>
+          <div class="badge">Build 440 · Local Search Provider Evidence Refresh</div>
+          <h2 id="providerRefreshHeading440" style="margin:.35rem 0">Is our Google provider evidence current enough to use?</h2>
+          <p class="muted">Manually reconcile dated Search Console / Google Business Profile snapshots with first-party Google-referral/page traffic and genuine approved local proof. This panel does not contact Google or infer ranking, indexing or Maps outcomes.</p>
+        </div>
+        <button id="refreshProviderEvidence440" class="btn primary" type="button">Refresh provider evidence</button>
+      </div>
+      <div id="providerRefreshStatus440" class="notice soft" role="status" aria-live="polite">Provider refresh has not been run.</div>
+      <div class="local-grid" style="margin-top:12px">
+        <article class="panel">
+          <h3>Refresh summary</h3>
+          <div id="providerRefreshSummary440" class="summary-list"><div class="summary-item muted">Run the manual provider refresh.</div></div>
+        </article>
+        <article class="panel">
+          <h3>Evidence boundary</h3>
+          <p class="muted">Missing evidence stays provider-dependent. Stale evidence stays owner-action. Fresh evidence remains an operator-observed snapshot, not a live Google API assertion or future-performance guarantee.</p>
+        </article>
+      </div>
+      <h3 style="margin-top:16px">Provider identity, window &amp; freshness</h3>
+      <div id="providerRefreshRows440" class="summary-list"><div class="summary-item muted">No provider refresh evidence loaded.</div></div>
+      <h3 style="margin-top:16px">First-party &amp; approved-proof reconciliation</h3>
+      <div id="providerReconciliation440" class="summary-list"><div class="summary-item muted">No reconciliation evidence loaded.</div></div>
     </section>
 
     <section class="section panel" aria-labelledby="localAcquisitionClosureHeading">
@@ -163,12 +189,14 @@
 <script type="module">
 import { startLocalSearchMeasurement } from "/assets/local-search-measurement.js";
 import { startLocalAcquisitionContentProof } from "/assets/local-acquisition-content-proof.js";
+import { startLocalSearchProviderEvidenceRefresh } from "/assets/build440-local-search-provider-evidence-refresh.js";
 window.AdminShell.boot({
   pageKey: "admin-seo-tasks",
   onReady: () => {
     window.AdminMenu?.render?.({ currentPage: "admin-seo-tasks" });
     startLocalSearchMeasurement();
     startLocalAcquisitionContentProof();
+    startLocalSearchProviderEvidenceRefresh();
   }
 });
 </script>

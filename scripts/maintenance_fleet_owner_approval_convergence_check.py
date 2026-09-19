@@ -34,9 +34,9 @@ if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("Build 439 page must co
 require(auth,['case "admin-maintenance-fleet-owner-approval"'],"admin role ceiling")
 require(nav,['"/admin-maintenance-fleet-owner-approval.html"','"page_key":"admin-maintenance-fleet-owner-approval"','"label":"Owner Commercial Decisions"'],"module navigation")
 require(contract,["# Build 439 — Maintenance & Fleet Owner Approval Convergence","/api/admin/maintenance_fleet_owner_approval","admin.settings.manage","canonical rulebooks","owner_action","Build 440 — Local Search Provider Evidence Refresh"],"Build 439 contract")
-require(queue,["**Build 439 — Maintenance & Fleet Owner Approval Convergence** is the active bounded release.","**Build 440 — Local Search Provider Evidence Refresh**"],"release queue")
-require(handoff,["**Build 439 — Maintenance & Fleet Owner Approval Convergence** is the active bounded release.","**Build 440 — Local Search Provider Evidence Refresh**",".github/workflows/maintenance-fleet-owner-approval-convergence-authority.yml","scripts/maintenance_fleet_owner_approval_convergence_check.py"],"project handoff")
-require(readme,["Current source direction: **Build 439 — Maintenance & Fleet Owner Approval Convergence**","scripts/maintenance_fleet_owner_approval_convergence_check.py","**Build 440 — Local Search Provider Evidence Refresh**"],"README")
+require(queue,["BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md"],"release queue retained authority")
+require(handoff,["BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md",".github/workflows/maintenance-fleet-owner-approval-convergence-authority.yml","scripts/maintenance_fleet_owner_approval_convergence_check.py"],"project handoff retained authority")
+require(readme,["BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md","scripts/maintenance_fleet_owner_approval_convergence_check.py"],"README retained authority")
 
 for name,book in [("maintenance",maintenance),("fleet",fleet)]:
  if book.get("status")!="awaiting_business_approval": errors.append(f"{name} rulebook unexpectedly not awaiting business approval")

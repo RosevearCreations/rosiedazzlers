@@ -46,22 +46,19 @@ require(doc, [
 ], "Build 414 contract")
 
 require(queue, [
-    "**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is the active bounded release.",
-    "**Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal** is next only after",
-], "release queue")
-require(handoff, [
-    "**Build 414 — Local SEO Measurement, Search Console & GBP Proof** is the active bounded release.",
-    "**Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal** is next only after",
     "BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md",
-], "project handoff")
+], "release queue retained authority")
+require(handoff, [
+    "BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md",
+], "project handoff retained authority")
 require(readme, [
-    "Current source direction: **Build 414 — Local SEO Measurement, Search Console & GBP Proof**.",
+    "BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md",
     "scripts/local_search_measurement_authority_check.py",
-], "README")
+], "README retained authority")
 require(roadmap, [
-    "**Current execution:** Build 414 — Local SEO Measurement, Search Console & GBP Proof.",
+    "### Build 414 — Local SEO Measurement, Search Console & GBP Proof",
     "### Build 415 — Launch Readiness Consolidation & Next-Roadmap Renewal",
-], "roadmap")
+], "retained roadmap")
 require(workflow, [
     "Build 414 — Local SEO Measurement, Search Console & GBP Proof",
     "python scripts/local_search_measurement_authority_check.py",
@@ -80,6 +77,6 @@ if errors:
     sys.exit(1)
 
 print("BUILD 414 LOCAL SEO MEASUREMENT CONTRACT: PASS")
-print(" - current/next living release boundary is 414/415")
+print(" - retained Build 414/415 roadmap and authority pointers remain durable")
 print(" - provider evidence remains source-attributed and fail-closed")
 print(" - durable local-search measurement authority is wired into Development and Production")

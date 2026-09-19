@@ -3,25 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`.
+The synchronized Production predecessor is retained through `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`.
 
-**Build 439 — Maintenance & Fleet Owner Approval Convergence** is the active bounded release.
+**Build 440 — Local Search Provider Evidence Refresh** is the active bounded release.
 
-**Build 440 — Local Search Provider Evidence Refresh** is next only after the current release is independently GREEN on protected `main`.
+**Build 441 — Booking, Quote & Retention Production Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, provider/payment/refund/message transaction, accounting/inventory posting, destructive storage action, screenshot capture, automatic outreach or permanent polling.
 
-## Current maintenance & fleet owner-decision contract
-- The canonical maintenance and fleet rulebooks remain the only source authority for commercial terms.
-- Every unresolved domain remains `owner_action` until explicit owner terms are chosen and reviewed in source.
-- Current maintenance-interest and fleet demand/work evidence is context only and never becomes pricing, discount, travel, invoice/credit or cadence approval.
-- Capacity remains unavailable from aggregate commercial evidence and must use the current availability/collision authorities.
-- The new workbench belongs to Business Administration and its API independently requires `admin.settings.manage`.
-- No runtime approval/write action, automatic discount, quote acceptance, booking, invoice, recurring billing, outreach, provider/accounting mutation or permanent polling is introduced.
+## Current local-search provider evidence contract
+- Search Console and Google Business Profile snapshots remain explicit operator-observed provider evidence.
+- Property/location label, measurement start/end and observation timestamp are required before a snapshot can be treated as observed.
+- Missing evidence remains `provider_dependent`; stale evidence remains `owner_action`; unavailable first-party/proof evidence remains unavailable.
+- First-party Google-referral/local-service-page traffic and genuine approved local proof are descriptive comparison evidence only.
+- No ranking, indexing, Maps visibility or future provider outcome is inferred from source/runtime state, traffic, markup or proof.
+- The Build 440 panel is manual-refresh and read-only; existing provider snapshot save forms remain separately initiated staff actions.
+- No Google API/OAuth call, provider write, fabricated review/location, third-party publishing, outreach, ad-spend/DNS mutation or permanent polling is introduced.
 
-## Retained cumulative authority pointers\n\n- `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`
+## Retained cumulative authority pointers
+
+- `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
+
+- `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`
 
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 - `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
@@ -93,12 +98,16 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_426_434.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
-- `.github/workflows/maintenance-fleet-owner-approval-convergence-authority.yml`\n- `.github/workflows/authenticated-device-visual-acceptance-authority.yml`
+- `.github/workflows/local-search-provider-evidence-refresh-authority.yml`
+- `.github/workflows/maintenance-fleet-owner-approval-convergence-authority.yml`
+- `.github/workflows/authenticated-device-visual-acceptance-authority.yml`
 - `.github/workflows/backup-recovery-evidence-closure-authority.yml`
 - `.github/workflows/provider-outcome-delivery-evidence-closure-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
-- `scripts/maintenance_fleet_owner_approval_convergence_check.py`\n- `scripts/authenticated_device_visual_acceptance_check.py`
+- `scripts/local_search_provider_evidence_refresh_check.py`
+- `scripts/maintenance_fleet_owner_approval_convergence_check.py`
+- `scripts/authenticated_device_visual_acceptance_check.py`
 - `scripts/backup_recovery_evidence_closure_check.py`
 - `scripts/recovery_export_operational_proof_check.py`
 - `scripts/backup_restore_release_recovery_drill_check.py`
