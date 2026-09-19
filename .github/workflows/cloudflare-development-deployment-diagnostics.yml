@@ -1,0 +1,97 @@
+name: Cloudflare Development Deployment Diagnostics
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-cloudflare-development-diagnostics
+  cancel-in-progress: true
+
+jobs:
+  diagnose-development-preview:
+    name: Diagnose exact Development preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    env:
+      CF_PROJECT_NAME: rosiedazzlers
+      CF_DEV_BRANCH: dev
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: ${{ github.sha }}
+    steps:
+      - name: Resolve exact Development deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+
+          cf_curl() {
+            curl --fail-with-body --silent --show-error \
+              --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              --header "Content-Type: application/json" "$@"
+          }
+
+          ACCOUNT_ID="${CONFIGURED_ACCOUNT_ID}"
+          [[ -n "$ACCOUNT_ID" ]] || { echo "::error::CLOUDFLARE_ACCOUNT_ID is unavailable."; exit 2; }
+
+          exact_id=""
+          for attempt in $(seq 1 18); do
+            cf_curl "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/deployments.json"
+            exact_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_DEV_BRANCH" '
+              [.result[]? | select(
+                (.deployment_trigger.metadata.branch // "") == $branch and
+                (.deployment_trigger.metadata.commit_hash // "") == $sha
+              )][0].id // empty
+            ' "$TMP_DIR/deployments.json")"
+            [[ -n "$exact_id" ]] && break
+            echo "Exact Development deployment is not visible yet (attempt ${attempt}/18)."
+            [[ "$attempt" -eq 18 ]] || sleep 10
+          done
+          [[ -n "$exact_id" ]] || { echo "::error::No exact Development deployment found for ${TARGET_SHA}."; exit 3; }
+
+          cf_curl "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${exact_id}" > "$TMP_DIR/detail.json"
+
+          echo "### Cloudflare exact Development diagnostic" >> "$GITHUB_STEP_SUMMARY"
+          jq -r '
+            .result as $d |
+            "- Deployment: `\($d.id)`\n" +
+            "- URL: \($d.url // "unknown")\n" +
+            "- Environment: `\($d.environment // "unknown")`\n" +
+            "- uses_functions: `\($d.uses_functions // "unknown")`\n" +
+            "- latest stage: `\($d.latest_stage.name // "unknown") / \($d.latest_stage.status // "unknown")`\n" +
+            "- created: `\($d.created_on // "unknown")`\n" +
+            "- modified: `\($d.modified_on // "unknown")`\n" +
+            "- exact SHA: `\($d.deployment_trigger.metadata.commit_hash // "unknown")`"
+          ' "$TMP_DIR/detail.json" >> "$GITHUB_STEP_SUMMARY"
+
+          echo "Deployment stage summary:"
+          jq -r '.result.stages[]? | [.name, .status, (.started_on // ""), (.ended_on // "")] | @tsv' "$TMP_DIR/detail.json" || true
+
+          http_code="$(curl --silent --show-error --output "$TMP_DIR/logs.json" --write-out '%{http_code}' \
+            --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+            "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${exact_id}/history/logs" || true)"
+          echo "Deployment history logs HTTP=${http_code}"
+          [[ "$http_code" == "200" ]] || exit 0
+
+          jq -r '.result.data[]?.line // empty' "$TMP_DIR/logs.json" \
+            | tail -n 160 \
+            | sed -E 's/([A-Za-z0-9_]*(TOKEN|SECRET|PASSWORD|AUTHORIZATION|API[_-]?KEY)[A-Za-z0-9_]*)[=:][^[:space:]]+/\1=[REDACTED]/Ig' \
+            | grep -Ei 'error|fail|exception|timeout|limit|build|deploy|worker|function|npm|node|wrangler|hang|stuck|clone|install' \
+            | tail -n 80 \
+            | tee "$TMP_DIR/diagnostic-lines.txt" || true
+
+          {
+            echo ""
+            echo "#### Sanitized diagnostic lines"
+            echo '~~~text'
+            cat "$TMP_DIR/diagnostic-lines.txt" 2>/dev/null || true
+            echo '~~~'
+          } >> "$GITHUB_STEP_SUMMARY"
