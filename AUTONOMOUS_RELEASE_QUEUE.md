@@ -5,11 +5,15 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`.
+The synchronized predecessor contract is retained in `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`.
 
 ## Retained cumulative authority pointers
 
 These completed filename authorities remain cumulative acceptance inputs:
+
+- `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
+- `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`
+- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 - `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
 
