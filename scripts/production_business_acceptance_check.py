@@ -131,6 +131,9 @@ required_authorities = {
     "production_learning_roadmap_renewal": [
         "scripts/production_learning_roadmap_renewal_check.py",
     ],
+    "booking_conversion_quote_clarity": [
+        "scripts/build427_booking_conversion_quote_clarity_check.py",
+    ],
     "hold_inventory_authority_cleanup": [
         "scripts/hold_inventory_authority_cleanup_check.py",
     ],
@@ -208,6 +211,7 @@ workflow = require(WORKFLOW, [
     "Validate reliability, performance & cost capacity authority",
     "Validate security, privacy & recovery drill authority",
     "Validate Production learning & roadmap renewal authority",
+    "Validate booking conversion & quote clarity authority",
     "Validate HOLD inventory & authority cleanup",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
@@ -268,6 +272,7 @@ print("- retention/maintenance/fleet operational pilot remains manual, capacity-
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
 print("- reliability/performance/cost capacity remains bounded, first-party and non-mutating")
 print("- production learning/roadmap renewal keeps stale authority closure evidence-based and unresolved HOLDs explicit")
+print("- booking conversion / quote clarity retains server-authoritative pricing/availability and anonymous evidence boundaries")
 print("- canonical Production HOLD inventory remains fail-closed across provider, owner and unavailable evidence")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")

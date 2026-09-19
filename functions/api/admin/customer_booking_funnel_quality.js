@@ -5,7 +5,8 @@ const BOOKING_ROW_LIMIT = 1000;
 const FUNNEL_EVENTS = [
   "booking_step_view", "checkout_started", "checkout_completed",
   "booking_confirmation_view", "booking_rebook_prompt_view", "booking_rebook_start",
-  "customer_self_service_path_selected"
+  "customer_self_service_path_selected", "booking_quote_clarity_view",
+  "unified_vehicle_size_pick", "unified_service_pick", "unified_addon_toggle", "unified_booking_start"
 ];
 
 export async function onRequestGet({ request, env }) {

@@ -6,11 +6,11 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 The completed Production Learning & Roadmap Renewal release is the retained predecessor.
 
-**Build 426 — HOLD Inventory & Authority Cleanup** is the active bounded release.
+**Build 427 — Booking Conversion & Quote Clarity** is the active bounded release.
 
-**Build 427 — Booking Conversion & Quote Clarity** is next only after the current release is independently GREEN on protected `main`.
+**Build 428 — Service Economics & Job Profitability** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -42,7 +42,16 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 
-## HOLD inventory & authority-cleanup contract
+## Booking conversion & quote-clarity contract
+
+- Fixed catalogue pricing, condition-aware estimates and booking confirmation remain distinct.
+- Quote-required work stays outside the fixed subtotal until reviewed.
+- An estimate or accepted quote never reserves a slot; the existing booking planner remains availability authority.
+- Anonymous selection/start telemetry remains aggregate, bounded and separate from canonical booking statuses.
+- No session/customer identity join or person-level conversion claim is authorized.
+- This release is schema-neutral and authorizes no booking, provider, payment, accounting or inventory mutation.
+
+## Retained HOLD inventory & authority-cleanup contract
 
 - `STARTUP_GO_LIVE_BLOCKERS.md` is the single current HOLD/evidence backlog.
 - Provider-dependent, owner-action and unavailable evidence remain distinct and fail-closed.
@@ -79,6 +88,7 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_426_435.md`
+- `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`
 - `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`
 - `STARTUP_GO_LIVE_BLOCKERS.md`
 - `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -88,6 +98,7 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/security-privacy-recovery-drill-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/build427_booking_conversion_quote_clarity_check.py`
 - `scripts/hold_inventory_authority_cleanup_check.py`
 - `scripts/production_learning_roadmap_renewal_check.py`
 - `scripts/security_privacy_recovery_drill_check.py`
