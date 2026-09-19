@@ -183,6 +183,7 @@ jobs:
           node --check scripts/reliability_performance_cost_capacity_test.mjs
           node --check functions/api/_lib/reliability-performance-cost-capacity.js
           node --check functions/api/admin/reliability_performance_cost_capacity.js
+          python -m py_compile scripts/build427_booking_conversion_quote_clarity_check.py
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
@@ -344,6 +345,9 @@ jobs:
         run: |
           python scripts/security_privacy_recovery_drill_check.py
           node scripts/security_privacy_recovery_drill_test.mjs
+
+      - name: Validate booking conversion & quote clarity authority
+        run: python scripts/build427_booking_conversion_quote_clarity_check.py
 
       - name: Validate HOLD inventory & authority cleanup
         run: python scripts/hold_inventory_authority_cleanup_check.py
