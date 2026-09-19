@@ -6,7 +6,7 @@ Use observed staff workflow evidence to remove high-frequency friction across De
 
 ## Implemented refinement
 
-This release is schema-neutral and introduces no new API. The implementation is a DOM-only convenience layer in `assets/build432-staff-workflow-refinement.js`.
+This release is schema-neutral and introduces no new API. The implementation is a DOM-only convenience layer in `assets/build432-staff-workflow-refinement.js`. All remembered convenience state is session-only and limited to the current browser tab.
 
 ### Detailer Mobile
 
