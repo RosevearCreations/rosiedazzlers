@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 427 — Booking Conversion & Quote Clarity**.
+Current source direction: **Build 428 — Service Economics & Job Profitability** (planning contract prepared; implementation not started).
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,7 +9,7 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
-4. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — current contract.
+4. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — current planned contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
 6. `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
 
@@ -46,13 +46,13 @@ These completed authorities remain continuity inputs for current acceptance:
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
-## Current booking conversion & quote-clarity framework
+## Current planned service-economics framework
 
-`BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` defines the current public estimate/quote clarity and bounded first-party funnel-evidence boundary. Fixed catalogue prices, condition-aware estimates and booking confirmation stay distinct; the existing planner remains authoritative for availability and final validation.
+`BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` defines the next bounded autonomous release. It uses recorded service/job revenue, consumables, durable unit costs, job-duration evidence and payment/final-balance state to improve operator profitability review without inventing missing costs or automatically changing prices.
 
-This release performs no schema migration, customer/booking mutation, price or availability override, provider transaction, staff-role change, accounting/inventory posting, secret/DNS change, Production restore, destructive R2 mutation or permanent polling.
+Build 428 is planning-only on this branch until its focused implementation authority and feature candidate exist. Missing cost, quantity, refund or job-close evidence must remain review/partial/unavailable.
 
-Current contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+The prepared follow-on contracts are `BUILD429_RETENTION_REBOOKING_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
@@ -79,7 +79,7 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 
 ## Durable validation
 
-Run current/durable release authorities with:
+Build 428's focused implementation checker has not been created yet; that belongs to the Build 428 implementation itself. Retained durable release authorities currently include:
 
 ```bash
 python scripts/build427_booking_conversion_quote_clarity_check.py
@@ -108,4 +108,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-The next bounded release is Build 428 — Service Economics & Job Profitability, and it follows only after Build 427 is independently GREEN on protected `main`.
+The next follow-on release after Build 428 is Build 429 — Retention & Rebooking Learning, and it proceeds only after Build 428 is independently GREEN on protected `main`.
