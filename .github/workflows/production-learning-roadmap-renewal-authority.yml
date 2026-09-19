@@ -1,0 +1,53 @@
+name: Build 425 — Production Learning & Roadmap Renewal
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build425-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-production-learning-roadmap-renewal-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: production-learning-roadmap-renewal
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check authority syntax
+        run: python -m py_compile scripts/production_learning_roadmap_renewal_check.py
+
+      - name: Validate Production learning and roadmap renewal
+        run: python scripts/production_learning_roadmap_renewal_check.py
+
+      - name: Build 425 summary
+        run: |
+          {
+            echo '### Build 425 — Production Learning & Roadmap Renewal'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Completed-cycle evidence reconciliation: PASS'
+            echo '- Owner/provider HOLD truth boundary: PASS'
+            echo '- Roadmap 426–435 renewal: PASS'
+            echo '- Schema/provider/business mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
