@@ -49,6 +49,8 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
+- `scripts/local_acquisition_content_proof_check.py`
+- `scripts/local_acquisition_content_proof_test.mjs`
 
 ## Current learning framework
 This release is read-only release governance.
