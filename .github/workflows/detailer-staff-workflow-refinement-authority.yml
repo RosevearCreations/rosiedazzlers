@@ -1,0 +1,67 @@
+name: Build 432 — Detailer Mobile & Staff Workflow Refinement Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build432-staff-workflow-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate Detailer/staff refinement source contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/detailer_staff_workflow_refinement_check.py
+          node --check assets/build432-staff-workflow-refinement.js
+
+      - name: Validate Build 432 source authority
+        run: python scripts/detailer_staff_workflow_refinement_check.py
+
+      - name: Re-run retained field and staff authorities
+        run: |
+          python scripts/mobile_detailer_field_workflow_check.py
+          python scripts/build400_detailer_mobile_qol_retention_check.py
+          python scripts/build401_job_handoff_commercial_evidence_check.py
+          python scripts/workflow_efficiency_accessibility_check.py
+
+      - name: Authority summary
+        run: |
+          {
+            echo "### Build 432 staff workflow authority"
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo "- Detailer manual next-step shortcut: PASS"
+            echo "- Detailer session-only resume shortcut: PASS"
+            echo "- Operations session-only workstream resume: PASS"
+            echo "- Admin Today session-only filter memory/reset: PASS"
+            echo "- Retained role/field/accessibility authorities: PASS"
+            echo "- No API/schema/polling/automatic business mutation introduced."
+          } >> "$GITHUB_STEP_SUMMARY"
