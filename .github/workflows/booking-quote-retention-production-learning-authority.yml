@@ -1,0 +1,68 @@
+name: Build 441 — Booking, Quote & Retention Production Learning Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build441*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build441-production-learning-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: booking-quote-retention-production-learning
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate Build 441 focused authority
+        run: |
+          python scripts/booking_quote_retention_production_learning_check.py
+          node scripts/booking_quote_retention_production_learning_test.mjs
+
+      - name: Re-run retained owning authorities
+        run: |
+          python scripts/booking_rebooking_funnel_check.py
+          node scripts/booking_rebooking_funnel_test.mjs
+          python scripts/build427_booking_conversion_quote_clarity_check.py
+          python scripts/retention_rebooking_learning_check.py
+          node scripts/retention_rebooking_learning_test.mjs
+          python scripts/build398_customer_journey_acquisition_quality_check.py
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 441 — Booking, Quote & Retention Production Learning'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Bounded first-party booking funnel evidence: PASS'
+            echo '- Sanitized aggregate quote evidence: PASS'
+            echo '- Exact-profile repeat-booking evidence: PASS'
+            echo '- Correlation-only / no causal claim: PASS'
+            echo '- Customer identity returned by learning endpoint: NONE'
+            echo '- Automatic outreach / segmentation / discount / pricing / booking / enrollment / payment / provider mutation: PROHIBITED'
+          } >> "$GITHUB_STEP_SUMMARY"

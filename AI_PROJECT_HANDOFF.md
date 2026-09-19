@@ -3,26 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`.
+The synchronized Production predecessor is retained through `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`.
 
-**Build 440 — Local Search Provider Evidence Refresh** is the active bounded release.
+**Build 441 — Booking, Quote & Retention Production Learning** is the active bounded release.
 
-**Build 441 — Booking, Quote & Retention Production Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 442 — Staff Workflow & Support Exception Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, provider/payment/refund/message transaction, accounting/inventory posting, destructive storage action, screenshot capture, automatic outreach or permanent polling.
 
-## Current local-search provider evidence contract
-- Search Console and Google Business Profile snapshots remain explicit operator-observed provider evidence.
-- Property/location label, measurement start/end and observation timestamp are required before a snapshot can be treated as observed.
-- Missing evidence remains `provider_dependent`; stale evidence remains `owner_action`; unavailable first-party/proof evidence remains unavailable.
-- First-party Google-referral/local-service-page traffic and genuine approved local proof are descriptive comparison evidence only.
-- No ranking, indexing, Maps visibility or future provider outcome is inferred from source/runtime state, traffic, markup or proof.
-- The Build 440 panel is manual-refresh and read-only; existing provider snapshot save forms remain separately initiated staff actions.
-- No Google API/OAuth call, provider write, fabricated review/location, third-party publishing, outreach, ad-spend/DNS mutation or permanent polling is introduced.
+## Current booking, quote & retention learning contract
+- Manual refresh composes retained booking/rebooking funnel, quote-pipeline and retention/rebooking evidence.
+- Anonymous session telemetry is never joined to customer identity.
+- Quote evidence is returned only as aggregate status/value counts; customer names, emails and raw record identifiers stay out of the learning response.
+- Exact-profile repeat-booking evidence remains correlation rather than causal proof.
+- Supported review priorities describe observed evidence only and never auto-segment, contact, discount, reprice, book, enroll, charge or mutate a provider.
+- Missing identity, consent, price/cost or delivery evidence remains partial, provider-dependent or unavailable.
+- Existing booking, quote, retention, consent, availability, checkout and provider authorities remain canonical.
 
 ## Retained cumulative authority pointers
+
+- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
+- `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 
@@ -77,6 +80,12 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - Backup/recovery, authenticated device observation and maintenance/fleet business terms remain explicit owner evidence.
 - Unreachable authorized evidence remains unavailable rather than guessed.
 - `FORWARD_BUILD_ROADMAP_436_445.md` is derived from those unresolved evidence gaps and retained Production learning.
+
+## Durable current-release authorities
+- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
+- `.github/workflows/booking-quote-retention-production-learning-authority.yml`
+- `scripts/booking_quote_retention_production_learning_check.py`
+- `scripts/booking_quote_retention_production_learning_test.mjs`
 
 ## Retained operating contract
 - `dev` is Development; protected `main` is Production source.

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Booking, Quote & Retention Production Learning | Rosie Dazzlers</title>
+  <meta name="description" content="Read-only first-party booking, quote and retention production learning for Rosie Dazzlers staff." />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .learning-shell{display:grid;gap:16px;padding-bottom:72px}.learning-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}.learning-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:end}.learning-actions label{display:grid;gap:5px}.learning-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.learning-stat,.learning-priority,.learning-source{border:1px solid var(--border,rgba(148,163,184,.22));border-radius:14px;background:rgba(255,255,255,.035)}.learning-stat{padding:12px;display:grid;gap:3px}.learning-stat strong{font-size:1.5rem}.learning-list{display:grid;gap:11px}.learning-priority{padding:14px;border-left-width:5px}.learning-priority.state-observed{border-left-color:#22c55e}.learning-priority.state-partial{border-left-color:#f59e0b}.learning-priority.state-provider_dependent{border-left-color:#a78bfa}.learning-priority.state-unavailable,.learning-priority.state-restricted{border-left-color:#ef4444}.learning-priority-head{display:flex;gap:10px;justify-content:space-between;align-items:center}.pill{display:inline-flex;padding:3px 8px;border:1px solid rgba(148,163,184,.3);border-radius:999px;font-size:.78rem;font-weight:750}.learning-source{display:grid;grid-template-columns:minmax(220px,.6fr) auto 1fr;gap:10px;align-items:center;padding:10px 12px}.learning-boundary ul{margin:.5rem 0 0 1.2rem}.learning-empty{padding:14px;border:1px dashed rgba(148,163,184,.35);border-radius:12px}.learning-links{display:flex;gap:9px;flex-wrap:wrap}@media(max-width:900px){.learning-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.learning-hero{grid-template-columns:1fr}.learning-source{grid-template-columns:1fr}.learning-actions .btn,.learning-actions label,.learning-actions select{width:100%}}@media(max-width:520px){.learning-summary{grid-template-columns:1fr}.learning-priority-head{align-items:flex-start;flex-direction:column}.learning-links .btn{width:100%}}
+  </style>
+</head>
+<body data-page="admin-booking-quote-retention-learning" data-build441="booking-quote-retention-production-learning">
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/app/operations/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Operations</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+  <main class="container learning-shell">
+    <section class="panel learning-hero">
+      <div><span class="badge">Build 441 · read-only Production learning</span><h1>Booking, Quote &amp; Retention Production Learning</h1><p class="kicker">Current first-party booking, quote and repeat-booking evidence for bounded operator learning. Counts describe observed correlation; they do not prove why a customer converted, declined or returned.</p></div>
+      <div class="learning-actions"><label><span class="mini">Booking funnel window</span><select id="learningDays"><option value="30">30 days</option><option value="90" selected>90 days</option><option value="180">180 days</option><option value="365">365 days</option></select></label><button class="btn primary" id="refreshLearning" type="button">Refresh learning snapshot</button><a class="btn ghost" href="/app/operations/">Operations home</a></div>
+    </section>
+    <div id="learningStatus" class="notice soft" role="status" aria-live="polite">Select Refresh learning snapshot to load current bounded evidence.</div>
+    <section class="panel learning-boundary"><strong>Evidence and mutation boundary</strong><ul class="mini"><li>Anonymous booking sessions are not joined to customer identity.</li><li>Quote evidence is aggregated; customer names, emails and record identifiers are not returned by this learning endpoint.</li><li>Repeat booking uses exact persisted profile linkage only and remains correlation, not causal proof.</li><li>Missing identity, consent, price/cost or provider-delivery evidence remains partial, provider-dependent or unavailable.</li><li>No automatic outreach, segmentation, discount, pricing change, booking creation, maintenance enrollment, payment or provider mutation is authorized.</li></ul></section>
+    <section class="panel"><h2>Current evidence snapshot</h2><div id="summaryGrid" class="learning-summary"><div class="learning-empty">No snapshot loaded.</div></div></section>
+    <section class="panel"><h2>Supported learning priorities</h2><p class="mini">These are bounded review prompts from observed evidence, not automated decisions or causal conclusions.</p><div id="priorityList" class="learning-list"><div class="learning-empty">Refresh manually to load supported learning priorities.</div></div></section>
+    <section class="panel"><h2>Evidence source status</h2><div id="sourceList" class="learning-list"><div class="learning-empty">No source status loaded.</div></div></section>
+    <section class="panel"><h2>Owning workflows</h2><div class="learning-links"><a class="btn ghost" href="/admin-booking-rebooking-funnel.html">Booking &amp; Rebooking Funnel</a><a class="btn ghost" href="/admin-quotes.html">Quotes</a><a class="btn ghost" href="/admin-retention-learning.html">Retention &amp; Rebooking Learning</a><a class="btn ghost" href="/admin-booking.html">Booking Workbench</a></div><p class="mini">Any business action remains inside its existing owning workflow and explicit permissions.</p></section>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/build441-booking-quote-retention-learning.js"></script>
+</body>
+</html>

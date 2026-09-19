@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 440 — Local Search Provider Evidence Refresh**.
+Current source direction: **Build 441 — Booking, Quote & Retention Production Learning**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,13 +8,15 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md` — current bounded contract.
-5. `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md` — retained predecessor contract.
+4. `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` — current bounded contract.
+5. `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
 ## Retained cumulative authority pointers
+
+- `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 
 - `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
@@ -65,45 +67,26 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current local-search provider evidence framework
-This release adds a manual, read-only reconciliation layer to the existing Local Search Measurement surface.
-- Search Console and Google Business Profile property/location labels, measurement windows and observation timestamps remain explicit.
-- Missing snapshots remain provider-dependent; stale snapshots remain owner-action; fresh snapshots remain dated operator-observed evidence.
-- First-party Google-referral/local-service-page traffic and approved public local proof are shown side by side without causal or ranking inference.
-- The endpoint reuses the retained local-search measurement authority and creates no second provider-evidence store.
-- Existing provider snapshot forms remain separate explicit staff actions; release acceptance never submits them.
-- No Google API/OAuth call, provider write, fabricated review/location, third-party publishing, outreach, ad-spend/DNS mutation or permanent polling is introduced.
+## Current booking, quote & retention learning framework
+This release adds a manual, read-only Operations learning surface without creating a new customer, quote or booking authority.
+- Anonymous booking/rebooking funnel evidence remains separate from persisted customer identity.
+- Quote pipeline rows are reduced server-side to aggregate status/value counts; customer names, emails and raw quote identifiers are not returned.
+- Repeat-booking evidence uses exact persisted profile linkage only and remains correlation, not causal proof.
+- The surface identifies bounded review priorities for observed funnel drop-off, quote status, repeat booking, maintenance interest and provider-dependent delivery evidence.
+- Missing identity, consent, price/cost or provider-delivery evidence remains partial, provider-dependent or unavailable.
+- No automatic outreach, segmentation, discount, pricing change, booking creation, maintenance enrollment, payment/provider mutation, schema change or permanent polling is introduced.
 
 ## Durable validation
 ```bash
-python scripts/local_search_provider_evidence_refresh_check.py
-node scripts/local_search_provider_evidence_refresh_test.mjs
-python scripts/build414_local_seo_measurement_search_console_gbp_proof_check.py
-python scripts/local_search_measurement_authority_check.py
-python scripts/local_acquisition_evidence_closure_check.py
-node scripts/local_acquisition_evidence_closure_test.mjs
-python scripts/local_acquisition_content_proof_check.py
-node scripts/local_acquisition_content_proof_test.mjs
-python scripts/maintenance_fleet_owner_approval_convergence_check.py
-node scripts/maintenance_fleet_owner_approval_convergence_test.mjs
-python scripts/authenticated_device_visual_acceptance_check.py
-node scripts/authenticated_device_visual_acceptance_test.mjs
-python scripts/production_workflow_evidence_check.py
-node scripts/production_workflow_evidence_test.mjs
-python scripts/backup_recovery_evidence_closure_check.py
-node scripts/backup_recovery_evidence_closure_test.mjs
-python scripts/recovery_export_operational_proof_check.py
-python scripts/backup_restore_release_recovery_drill_check.py
-python scripts/release_rollback_recovery_check.py
-python scripts/security_privacy_recovery_drill_check.py
-python scripts/reliability_security_cost_reassessment_check.py
-python scripts/production_learning_roadmap_renewal_check.py
-python scripts/provider_outcome_delivery_evidence_closure_check.py
+python scripts/booking_quote_retention_production_learning_check.py
+node scripts/booking_quote_retention_production_learning_test.mjs
+python scripts/booking_rebooking_funnel_check.py
+python scripts/build427_booking_conversion_quote_clarity_check.py
+python scripts/retention_rebooking_learning_check.py
+python scripts/build398_customer_journey_acquisition_quality_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
-
-Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
 ## Release authority
 Feature candidates must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and then independently proves that exact SHA in Development.
