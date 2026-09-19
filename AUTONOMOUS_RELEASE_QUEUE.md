@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`. Earlier continuity remains in the active roadmap and Git history.
+The synchronized predecessor contract is retained in `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`. Earlier continuity remains in the active roadmap and Git history.
 
 
 ## Retained contract index
@@ -14,7 +14,7 @@ The synchronized predecessor contract is retained in `BUILD431_LOCAL_ACQUISITION
 These completed filename authorities remain cumulative acceptance inputs:
 
 - `FORWARD_BUILD_ROADMAP_405_415.md`
-- `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
+- `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`\n- `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
 - `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`
 - `BUILD429_RETENTION_REBOOKING_LEARNING.md`
 - `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`
@@ -46,25 +46,26 @@ These completed filename authorities remain cumulative acceptance inputs:
 
 ## Current release
 
-**Build 432 — Detailer Mobile & Staff Workflow Refinement** is the active bounded release.
+**Build 433 — Support Automation & Exception Handling** is the active bounded release.
 
 Scope:
-- reduce high-frequency staff friction without widening role ceilings;
-- add a manual next-action shortcut that delegates to canonical Detailer controls;
-- add tab-scoped Detailer assigned-job and Operations workstream resume convenience;
-- add tab-scoped Admin Today filter memory/reset;
-- keep connection state advisory and preserve explicit manual recovery;
-- introduce no new API, schema, automatic job completion, silent posting, outreach, provider transaction, destructive storage mutation or permanent polling.
+- add a protected staff-only, manual-refresh exception queue in the I.T. module;
+- compose retained Production support diagnostics and bounded read-only payment reconciliation evidence;
+- prioritize exceptions by severity while preserving provider-dependent and owner-action boundaries;
+- surface source, evidence freshness, dependency and bounded safe next action;
+- link to existing runtime, system, payment, media, inventory, booking and incident evidence surfaces without mutating them;
+- exclude customer records, message contents, secret values and raw payment-record identifiers from the aggregator;
+- introduce no schema, permanent polling, automatic outreach, payment/refund, booking/customer, accounting/inventory, provider-configuration, restore, destructive-storage or release-protection mutation.
 
-Current contract: `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused staff-workflow authority, retained mobile/detailer/handoff/accessibility authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused support-exception authority, retained Production diagnostics/support/payment/I.T. authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
 
-**Build 433 — Support Automation & Exception Handling** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`.
+**Build 434 — Reliability, Security & Cost Reassessment** is next only after Build 433 is independently GREEN on protected `main`. Its planning contract is `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
 
 ## Continuing rule
 

@@ -4,7 +4,7 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The synchronized Production predecessor is retained through `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`.
+The synchronized Production predecessor is retained through `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`.
 
 **Build 432 — Detailer Mobile & Staff Workflow Refinement** is the active bounded release.
 
@@ -12,7 +12,7 @@ The synchronized Production predecessor is retained through `BUILD431_LOCAL_ACQU
 
 Current contract: `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation outside existing explicit controls, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
+This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider mutation, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling. The retained payment reconciliation authority may perform bounded read-only provider lookup under its existing environment policy.
 
 
 ## Retained authority index
@@ -63,15 +63,16 @@ Cumulative acceptance continues to retain these filename authorities:
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 
-## Current staff workflow contract
+## Current support exception contract
 
-- Detailer next-step convenience delegates only to an already enabled canonical job action.
-- Resume convenience is session-only, manual and limited to an assigned job still present in the current authorized workspace.
-- Operations remembers only the last workstream key in the current tab and requires a manual resume click.
-- Admin Today remembers only urgency/ownership/timing filter values in the current tab.
-- Browser connection state is advisory; no failed mutation is automatically queued or replayed.
-- Existing role ceilings, field-evidence gates, completion rules, explicit confirmations and server authority remain unchanged.
-- No new API or duplicate business-state ledger is introduced.
+- The protected I.T. queue loads evidence only after explicit manual refresh.
+- Build 412 Production support diagnostics remain the runtime/readiness alert authority; Build 433 classifies and routes those alerts rather than duplicating them.
+- Bounded payment reconciliation contributes only non-clear exceptions and provider/local blockers; the aggregator strips customer names/email and raw record identifiers.
+- Every exception exposes source, severity, family/state, freshness, dependency and a safe next action.
+- Provider-dependent evidence stays a HOLD; owner/operator work stays an explicit action.
+- Existing media, inventory, booking and incident pages are navigation destinations only and retain their own mutation boundaries.
+- No permanent polling, automatic correction, outreach, payment/refund, booking/customer change, accounting/inventory posting, provider mutation, secret rotation, Production restore, destructive R2 action or release-protection bypass is introduced.
+- The page remains inside the existing I.T. module ceiling and the API independently enforces `it.runtime.view`.
 
 ## Retained operating contract
 
@@ -94,7 +95,7 @@ Cumulative acceptance continues to retain these filename authorities:
 - `.github/workflows/detailer-staff-workflow-refinement-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
-- `scripts/detailer_staff_workflow_refinement_check.py`
+- `scripts/support_automation_exception_handling_check.py`\n- `scripts/production_support_diagnostics_check.py`\n- `scripts/payment_reconciliation_check.py`\n- `scripts/detailer_staff_workflow_refinement_check.py`
 - `scripts/release_authority_documentation_convergence_check.py`
 - `RELEASE_GOVERNANCE.md`
 
