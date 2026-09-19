@@ -26,6 +26,7 @@ queue = read("AUTONOMOUS_RELEASE_QUEUE.md")
 handoff = read("AI_PROJECT_HANDOFF.md")
 readme = read("README.md")
 dev_gate = read(".github/workflows/development-source-gate.yml")
+focused_gate = read(".github/workflows/booking-conversion-quote-clarity-authority.yml")
 prod_gate = read(".github/workflows/production-business-acceptance-authority.yml")
 prod_check = read("scripts/production_business_acceptance_check.py")
 
@@ -73,10 +74,18 @@ for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
         "Build 428",
     ], label)
 
-require(dev_gate, [
+require(focused_gate, [
+    "Build 427 — Booking Conversion & Quote Clarity",
     "python -m py_compile scripts/build427_booking_conversion_quote_clarity_check.py",
     "python scripts/build427_booking_conversion_quote_clarity_check.py",
-], "Development source gate")
+], "focused Build 427 authority")
+
+for numbered_call in [
+    "python -m py_compile scripts/build427_booking_conversion_quote_clarity_check.py",
+    "python scripts/build427_booking_conversion_quote_clarity_check.py",
+]:
+    if numbered_call in dev_gate:
+        errors.append(f"durable Development source gate must not call numbered Build 427 helper: {numbered_call}")
 
 require(prod_gate, [
     "Validate booking conversion & quote clarity authority",
