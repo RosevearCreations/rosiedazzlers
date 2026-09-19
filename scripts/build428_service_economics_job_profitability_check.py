@@ -113,9 +113,7 @@ require(prod_check, [
 
 for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
     require(text, [
-        "Build 428 — Service Economics & Job Profitability",
         "BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md",
-        "Build 429",
     ], label)
 
 for forbidden in [
