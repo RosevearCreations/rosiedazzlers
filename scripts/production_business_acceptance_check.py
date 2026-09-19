@@ -138,6 +138,10 @@ required_authorities = {
         "scripts/build428_service_economics_job_profitability_check.py",
         "scripts/build428_service_economics_job_profitability_test.mjs",
     ],
+    "retention_rebooking_learning": [
+        "scripts/retention_rebooking_learning_check.py",
+        "scripts/retention_rebooking_learning_test.mjs",
+    ],
     "hold_inventory_authority_cleanup": [
         "scripts/hold_inventory_authority_cleanup_check.py",
     ],
@@ -217,6 +221,7 @@ workflow = require(WORKFLOW, [
     "Validate Production learning & roadmap renewal authority",
     "Validate booking conversion & quote clarity authority",
     "Validate service economics & job profitability authority",
+    "Validate retention & rebooking learning authority",
     "Validate HOLD inventory & authority cleanup",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
@@ -279,6 +284,7 @@ print("- reliability/performance/cost capacity remains bounded, first-party and 
 print("- production learning/roadmap renewal keeps stale authority closure evidence-based and unresolved HOLDs explicit")
 print("- booking conversion / quote clarity retains server-authoritative pricing/availability and anonymous evidence boundaries")
 print("- service economics / job profitability keeps missing cost, labour and cash evidence fail-closed and read-only")
+print("- retention / rebooking learning remains exact-profile, aggregate, consent-safe and read-only")
 print("- canonical Production HOLD inventory remains fail-closed across provider, owner and unavailable evidence")
 print("- rollback and hardening authorities remain part of launch readiness")
 print("- Production exact-SHA evidence is Cloudflare read-only and fail-closed")
