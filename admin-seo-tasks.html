@@ -27,7 +27,7 @@
 @media(max-width:620px){.local-grid,.metric-grid,.provider-form{grid-template-columns:1fr}.provider-form .wide{grid-column:auto}.summary-item{display:grid}}
 </style>
 </head>
-<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof" data-build420="search-console-gbp-local-acquisition-evidence-closure">
+<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof" data-build420="search-console-gbp-local-acquisition-evidence-closure" data-build431="local-acquisition-content-proof">
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a>
@@ -53,6 +53,31 @@
         </div>
       </div>
       <div data-local-search-status class="notice" role="status" aria-live="polite" aria-atomic="true" tabindex="-1" hidden></div>
+    </section>
+
+
+    <section class="section panel" aria-labelledby="localContentProofHeading">
+      <div class="section-heading">
+        <div>
+          <div class="badge">Build 431 · Local Acquisition & Content Proof</div>
+          <h2 id="localContentProofHeading" style="margin:.35rem 0">What local/service content should we improve next?</h2>
+          <p class="muted">Combines bounded first-party page traffic, genuine approved public proof, dated provider evidence and existing SEO tasks. Deployed-page H1/canonical/description/copy checks are review heuristics only; they do not prove rankings or indexing.</p>
+        </div>
+        <button id="refreshContentProof" class="btn primary" type="button">Refresh content proof</button>
+      </div>
+      <div data-local-content-proof-status class="notice" role="status" aria-live="polite" hidden></div>
+      <div class="local-grid" style="margin-top:12px">
+        <article class="panel">
+          <h3>Evidence summary</h3>
+          <div id="localContentProofSummary" class="summary-list" aria-live="polite"><div class="summary-item muted">Loading Build 431 evidence…</div></div>
+        </article>
+        <article class="panel">
+          <h3>Truth boundary</h3>
+          <p class="muted">No automatic publishing, fabricated reviews/locations, provider mutation, customer outreach, DNS change, ad-spend mutation, schema migration or permanent polling is authorized.</p>
+        </article>
+      </div>
+      <h3 style="margin-top:16px">Prioritized content candidates</h3>
+      <div id="localContentProofCandidates" class="summary-list" aria-live="polite"><div class="summary-item muted">Loading content candidates…</div></div>
     </section>
 
     <section class="section panel" aria-labelledby="localAcquisitionClosureHeading">
@@ -137,11 +162,13 @@
 <script src="/assets/chrome.js"></script>
 <script type="module">
 import { startLocalSearchMeasurement } from "/assets/local-search-measurement.js";
+import { startLocalAcquisitionContentProof } from "/assets/local-acquisition-content-proof.js";
 window.AdminShell.boot({
   pageKey: "admin-seo-tasks",
   onReady: () => {
     window.AdminMenu?.render?.({ currentPage: "admin-seo-tasks" });
     startLocalSearchMeasurement();
+    startLocalAcquisitionContentProof();
   }
 });
 </script>
