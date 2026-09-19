@@ -14,7 +14,7 @@ A HOLD remains open until dated, attributable evidence from the named authority 
 
 | Area | Classification | Current HOLD | Closure evidence |
 | --- | --- | --- | --- |
-| Provider outcomes & communications | `provider_dependent` | Definitive payment/refund/message-delivery outcomes remain external to source/runtime acceptance wherever provider evidence is not currently recorded. | Dated provider outcome reconciled to the current internal record without exposing credentials or customer message contents. |
+| Provider outcomes & communications | `provider_dependent` | Definitive Stripe/PayPal payment/refund and message-delivery outcomes remain external to source/runtime acceptance wherever provider evidence is not currently recorded. | Dated provider outcome reconciled to the current internal record without exposing credentials or customer message contents. |
 | Local-search provider evidence | `provider_dependent` | Search Console / Google Business Profile success is never inferred from markup, referrals, canonical tags or local proof. | Dated provider-observed snapshot for the correct property/location and measurement window. |
 | Recovery / backup evidence | `owner_action` | Repository routes and recovery source authority do not prove a current restorable backup/export or a successfully observed recovery drill. | Operator-observed artifact/retention evidence and bounded drill evidence recorded without performing an unnecessary Production restore. |
 | Independent device / visual evidence | `owner_action` | Source responsive/accessibility checks do not replace direct authenticated phone/tablet/desktop visual observation. | Dated operator-observed representative device/browser evidence for the current release. |
