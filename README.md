@@ -72,6 +72,7 @@ python scripts/provider_outcome_delivery_evidence_closure_check.py
 python scripts/provider_evidence_closure_check.py
 python scripts/build407_payment_provider_live_outcome_reconciliation_check.py
 python scripts/customer_communication_consent_delivery_check.py
+python scripts/reliability_security_cost_reassessment_check.py
 python scripts/production_learning_roadmap_renewal_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
