@@ -81,6 +81,7 @@ jobs:
           node --check scripts/reliability_performance_cost_capacity_test.mjs
           node --check functions/api/_lib/reliability-performance-cost-capacity.js
           node --check functions/api/admin/reliability_performance_cost_capacity.js
+          python -m py_compile scripts/production_learning_roadmap_renewal_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
           node --check functions/api/_lib/security-privacy-recovery-drill.js
@@ -230,6 +231,9 @@ jobs:
           python scripts/local_acquisition_evidence_closure_check.py
           node scripts/local_acquisition_evidence_closure_test.mjs
 
+      - name: Validate Production learning & roadmap renewal authority
+        run: python scripts/production_learning_roadmap_renewal_check.py
+
       - name: Validate rollback and hardening authorities
         run: |
           python scripts/release_rollback_recovery_check.py
@@ -252,6 +256,7 @@ jobs:
             echo "- Media / Photo Studio / proof operations: PASS"
             echo "- Reliability / performance / cost capacity: PASS"
             echo "- Security / privacy / recovery drill: PASS"
+            echo "- Production learning / roadmap renewal: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Inventory/job-cost operational evidence: PASS"
