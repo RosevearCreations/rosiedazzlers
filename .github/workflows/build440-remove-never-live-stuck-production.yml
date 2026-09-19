@@ -1,0 +1,97 @@
+name: Build 440 Remove Never-Live Stuck Production Deployment
+
+on:
+  push:
+    branches:
+      - diag-build440-production-pages-stall
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  remove-never-live-stuck-production:
+    if: "${{ github.event_name == 'push' && github.event.head_commit.message == 'recovery: remove never-live stuck Build 440 Production deployment' }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CF_PROJECT_NAME: rosiedazzlers
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: 54b1428ad3caa9012d851be3234521d4893492ea
+      STUCK_ID: 1c3c6db1-38fc-437c-be39-35404e6336db
+      RETRY_ID: adb28376-3702-4aeb-aeba-590feeb26e83
+      LIVE_ID: 0945f45b-2410-4270-820b-cee7427adcfe
+      LIVE_SHA: b3b425afe04f2f74920f8aab49024b68ebc42300
+    steps:
+      - name: Prove alias safety and remove only never-live stuck deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          API="https://api.cloudflare.com/client/v4/accounts/${CONFIGURED_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments"
+
+          get() {
+            curl --fail-with-body --silent --show-error               --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"               --header "Content-Type: application/json" "$1"
+          }
+
+          get "${API}/${STUCK_ID}" > "$TMP_DIR/stuck.json"
+          get "${API}/${RETRY_ID}" > "$TMP_DIR/retry.json"
+          get "${API}/${LIVE_ID}" > "$TMP_DIR/live.json"
+
+          jq -e --arg sha "$TARGET_SHA" --arg id "$STUCK_ID" '
+            .success == true and
+            .result.id == $id and
+            .result.environment == "production" and
+            .result.deployment_trigger.metadata.branch == "main" and
+            .result.deployment_trigger.metadata.commit_hash == $sha and
+            .result.latest_stage.name == "deploy" and
+            .result.latest_stage.status == "active" and
+            ((.result.aliases // []) | length) == 0 and
+            ([.result.stages[]? | select(.name == "build" and .status == "success")] | length) == 1
+          ' "$TMP_DIR/stuck.json" >/dev/null || { echo "::error::stuck deployment safety proof failed"; exit 2; }
+
+          jq -e --arg sha "$TARGET_SHA" --arg id "$RETRY_ID" '
+            .success == true and
+            .result.id == $id and
+            .result.environment == "production" and
+            .result.deployment_trigger.metadata.branch == "main" and
+            .result.deployment_trigger.metadata.commit_hash == $sha and
+            .result.latest_stage.name == "queued" and
+            .result.latest_stage.status == "active" and
+            ((.result.aliases // []) | length) == 0
+          ' "$TMP_DIR/retry.json" >/dev/null || { echo "::error::retry deployment safety proof failed"; exit 3; }
+
+          jq -e --arg sha "$LIVE_SHA" --arg id "$LIVE_ID" '
+            .success == true and
+            .result.id == $id and
+            .result.environment == "production" and
+            .result.deployment_trigger.metadata.branch == "main" and
+            .result.deployment_trigger.metadata.commit_hash == $sha and
+            .result.latest_stage.status == "success" and
+            ((.result.aliases // []) | index("https://rosiedazzlers.ca")) != null and
+            ((.result.aliases // []) | index("https://www.rosiedazzlers.ca")) != null
+          ' "$TMP_DIR/live.json" >/dev/null || { echo "::error::current live alias safety proof failed"; exit 4; }
+
+          started="$(jq -r '.result.latest_stage.started_on // empty' "$TMP_DIR/stuck.json")"
+          started_epoch="$(date -d "$started" +%s)"
+          now_epoch="$(date -u +%s)"
+          age="$((now_epoch - started_epoch))"
+          echo "stuck_deploy_age_seconds=${age}"
+          [[ "$age" -ge 900 ]] || { echo "::error::stuck deployment has not exceeded the 900-second safety threshold"; exit 5; }
+
+          echo "Safety proof PASS: live aliases remain on ${LIVE_ID}; stuck ${STUCK_ID} is never-live and alias-free."
+          http="$(curl --silent --show-error --output "$TMP_DIR/delete.json" --write-out '%{http_code}'             --request DELETE             --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"             --header "Content-Type: application/json"             "${API}/${STUCK_ID}?force=true")"
+          echo "delete_http=${http}"
+          cat "$TMP_DIR/delete.json" || true
+          [[ "$http" == "200" || "$http" == "204" ]] || exit 6
+
+          sleep 2
+          get "${API}?per_page=25" > "$TMP_DIR/list.json"
+          jq -e --arg id "$STUCK_ID" '[.result[]? | select(.id == $id)] | length == 0' "$TMP_DIR/list.json" >/dev/null             || { echo "::error::stuck deployment still present after delete"; exit 7; }
+          jq -e --arg id "$RETRY_ID" '[.result[]? | select(.id == $id)] | length == 1' "$TMP_DIR/list.json" >/dev/null             || { echo "::error::retry deployment disappeared unexpectedly"; exit 8; }
+          jq -e --arg id "$LIVE_ID" '[.result[]? | select(.id == $id)] | length == 1' "$TMP_DIR/list.json" >/dev/null             || { echo "::error::live deployment disappeared unexpectedly"; exit 9; }
+
+          echo "Removed only alias-free stuck deployment; live deployment and queued retry remain."
