@@ -1,0 +1,81 @@
+name: Build 440 Exact Production Deployment Retry
+
+on:
+  push:
+    branches:
+      - diag-build440-production-pages-stall
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  retry-exact-stuck-production:
+    if: "${{ github.event_name == 'push' && github.event.head_commit.message == 'recovery: retry exact stuck Build 440 Production deployment' }}"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CF_PROJECT_NAME: rosiedazzlers
+      CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+      CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      TARGET_SHA: 54b1428ad3caa9012d851be3234521d4893492ea
+      TARGET_DEPLOYMENT_ID: 1c3c6db1-38fc-437c-be39-35404e6336db
+    steps:
+      - name: Verify exact stalled Production deployment and retry once
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+          API="https://api.cloudflare.com/client/v4/accounts/${CONFIGURED_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments"
+
+          curl --fail-with-body --silent --show-error             --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"             --header "Content-Type: application/json"             "${API}/${TARGET_DEPLOYMENT_ID}" > "$TMP_DIR/exact.json"
+
+          jq -e --arg sha "$TARGET_SHA" --arg id "$TARGET_DEPLOYMENT_ID" '
+            .success == true and
+            .result.id == $id and
+            .result.environment == "production" and
+            .result.deployment_trigger.metadata.branch == "main" and
+            .result.deployment_trigger.metadata.commit_hash == $sha and
+            .result.latest_stage.name == "deploy" and
+            .result.latest_stage.status == "active" and
+            ([.result.stages[]? | select(.name == "build" and .status == "success")] | length) == 1
+          ' "$TMP_DIR/exact.json" >/dev/null || {
+            echo "::error::Exact Production retry preconditions are not satisfied; no mutation performed."
+            jq -r '.result | {id,environment,branch:.deployment_trigger.metadata.branch,sha:.deployment_trigger.metadata.commit_hash,latest_stage,stages}' "$TMP_DIR/exact.json"
+            exit 2
+          }
+
+          started="$(jq -r '.result.latest_stage.started_on // empty' "$TMP_DIR/exact.json")"
+          python - "$started" <<'PY'
+import sys
+from datetime import datetime, timezone
+value=sys.argv[1]
+if not value:
+    raise SystemExit("deploy stage start time missing")
+dt=datetime.fromisoformat(value.replace("Z","+00:00"))
+age=(datetime.now(timezone.utc)-dt).total_seconds()
+print(f"deploy_stage_age_seconds={int(age)}")
+if age < 600:
+    raise SystemExit("deploy stage has not been active for the required 600 seconds")
+PY
+
+          echo "Retrying exact stuck Production deployment once; delete=false rollback=false."
+          http="$(curl --silent --show-error --output "$TMP_DIR/retry.json" --write-out '%{http_code}'             --request POST             --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}"             --header "Content-Type: application/json"             --data '{}'             "${API}/${TARGET_DEPLOYMENT_ID}/retry")"
+          echo "retry_http=${http}"
+          cat "$TMP_DIR/retry.json" | jq -r '{
+            success,
+            errors,
+            id:(.result.id // null),
+            environment:(.result.environment // null),
+            branch:(.result.deployment_trigger.metadata.branch // null),
+            sha:(.result.deployment_trigger.metadata.commit_hash // null),
+            latest_stage:(.result.latest_stage // null),
+            url:(.result.url // null)
+          }'
+          jq -e '.success == true' "$TMP_DIR/retry.json" >/dev/null || exit 3
+          new_id="$(jq -r '.result.id // empty' "$TMP_DIR/retry.json")"
+          [[ -n "$new_id" ]] || { echo "::error::Retry returned no deployment id."; exit 4; }
+          echo "retry_deployment_id=${new_id}"
+          echo "Retry mutation was limited to the exact stalled Production deployment; no delete or rollback was performed."
