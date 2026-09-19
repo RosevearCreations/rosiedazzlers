@@ -254,6 +254,11 @@ jobs:
           python scripts/fleet_commercial_operations_learning_check.py
           node scripts/fleet_commercial_operations_learning_test.mjs
 
+      - name: Validate local acquisition & content proof authority
+        run: |
+          python scripts/local_acquisition_content_proof_check.py
+          node scripts/local_acquisition_content_proof_test.mjs
+
       - name: Validate HOLD inventory & authority cleanup
         run: python scripts/hold_inventory_authority_cleanup_check.py
 
@@ -300,6 +305,7 @@ jobs:
             echo "- Backup / restore / accountant-export operational proof: PASS"
             echo "- Customer / staff Production workflow evidence: PASS"
             echo "- Local acquisition evidence closure: PASS"
+            echo "- Local acquisition / content proof: PASS"
             echo "- Rollback/security/hygiene: PASS"
             echo "- No real provider/customer/review/accounting evidence was fabricated."
           } >> "$GITHUB_STEP_SUMMARY"
