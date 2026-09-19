@@ -87,10 +87,16 @@ require(roadmap, [
 ], "active roadmap", casefold=True)
 
 require(blockers, [
-    "Build 406", "/admin/it.html", "source_ready", "runtime_proven", "provider_dependent",
-    "owner_action", "unavailable", "Stripe", "R2", "phone", "tablet", "desktop",
-    "Production is not called GREEN from source promotion alone"
-], "go-live blocker authority", casefold=True)
+    "# Rosie Dazzlers — Current Production HOLD Inventory",
+    "provider_dependent", "owner_action", "unavailable",
+    "Provider outcomes & communications",
+    "Local-search provider evidence",
+    "Recovery / backup evidence",
+    "Independent device / visual evidence",
+    "Maintenance / fleet business approval",
+    "Source/runtime GREEN never closes a provider or owner HOLD by itself.",
+    "dated, attributable evidence"
+], "canonical Production HOLD authority", casefold=True)
 
 # Living release documents advance beyond this retained authority. Validate durable
 # release mechanics/current roadmap linkage instead of requiring historical releases

@@ -81,6 +81,7 @@ jobs:
           node --check scripts/reliability_performance_cost_capacity_test.mjs
           node --check functions/api/_lib/reliability-performance-cost-capacity.js
           node --check functions/api/admin/reliability_performance_cost_capacity.js
+          python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
@@ -231,6 +232,9 @@ jobs:
           python scripts/local_acquisition_evidence_closure_check.py
           node scripts/local_acquisition_evidence_closure_test.mjs
 
+      - name: Validate HOLD inventory & authority cleanup
+        run: python scripts/hold_inventory_authority_cleanup_check.py
+
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
 
@@ -257,6 +261,7 @@ jobs:
             echo "- Reliability / performance / cost capacity: PASS"
             echo "- Security / privacy / recovery drill: PASS"
             echo "- Production learning / roadmap renewal: PASS"
+            echo "- Canonical Production HOLD inventory / authority cleanup: PASS"
             echo "- Commercial/SEO/condition-quote/media convergence: PASS"
             echo "- Retention/operations/finance convergence: PASS"
             echo "- Inventory/job-cost operational evidence: PASS"

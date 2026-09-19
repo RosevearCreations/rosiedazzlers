@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The completed Security, Privacy & Recovery Drill is the retained predecessor.
+The completed Production Learning & Roadmap Renewal release is the retained predecessor.
 
-**Build 425 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 426 — HOLD Inventory & Authority Cleanup** is the active bounded release.
 
-**Build 426 — HOLD Inventory & Authority Cleanup** is next only after the current release is independently GREEN on protected `main`.
+**Build 427 — Booking Conversion & Quote Clarity** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Retained predecessor contract: `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`.
+Current contract: `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -42,14 +42,14 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 
-## Production learning & renewal contract
+## HOLD inventory & authority-cleanup contract
 
-- Reconcile the completed 416–424 cycle from retained dated evidence.
-- Keep `owner_action`, `provider_dependent` and `unavailable` evidence explicit.
-- Close stale authority wording only where current evidence supports closure.
-- Source/runtime GREEN never fabricates external, customer, operator or provider success.
-- The renewed next sequence is `FORWARD_BUILD_ROADMAP_426_435.md`.
-- Build 425 is read-only release governance: no schema, customer/booking, provider, accounting, inventory, secret, DNS, restore or destructive R2 mutation.
+- `STARTUP_GO_LIVE_BLOCKERS.md` is the single current HOLD/evidence backlog.
+- Provider-dependent, owner-action and unavailable evidence remain distinct and fail-closed.
+- Completed source/runtime authorities stay in retained contracts/workflow evidence instead of being duplicated as blocker checklists.
+- Stale launch-era wording may be removed only without erasing unresolved external or owner dependencies.
+- Source/runtime GREEN never fabricates closure of provider or owner evidence.
+- This release is read-only governance cleanup and authorizes no schema, customer/booking, provider, accounting, inventory, secret, DNS, restore or destructive R2 mutation.
 
 ## Retained reliability contract
 
@@ -79,6 +79,8 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `FORWARD_BUILD_ROADMAP_426_435.md`
+- `BUILD426_HOLD_INVENTORY_AUTHORITY_CLEANUP.md`
+- `STARTUP_GO_LIVE_BLOCKERS.md`
 - `BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `FORWARD_BUILD_ROADMAP_416_425.md`
 - `BUILD424_SECURITY_PRIVACY_RECOVERY_DRILL.md`
@@ -86,6 +88,7 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/security-privacy-recovery-drill-authority.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
+- `scripts/hold_inventory_authority_cleanup_check.py`
 - `scripts/production_learning_roadmap_renewal_check.py`
 - `scripts/security_privacy_recovery_drill_check.py`
 - `scripts/backup_restore_release_recovery_drill_check.py`

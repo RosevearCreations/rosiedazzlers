@@ -46,6 +46,7 @@ Unavailable is not failure. Required unavailable runtime evidence still blocks r
 ## Retained authority
 
 - Build 406 readiness framework remains retained through `BUILD406_GO_LIVE_EVIDENCE_PROVIDER_READINESS_CONVERGENCE.md`.
+- The retained Build 406 readiness guard validates the canonical current Production HOLD inventory in `STARTUP_GO_LIVE_BLOCKERS.md` rather than requiring stale launch-era blocker wording.
 - Build 405 capstone remains retained through `BUILD405_FULL_RESPONSIVE_PRODUCTION_ACCEPTANCE_ROADMAP_RENEWAL.md`.
 - `FORWARD_BUILD_ROADMAP_405_415.md` remains the active sequence.
 - Build 408 — Media / R2 Operational Acceptance & Recovery Evidence is next only after Build 407 is independently GREEN on protected `main`.

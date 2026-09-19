@@ -183,6 +183,7 @@ jobs:
           node --check scripts/reliability_performance_cost_capacity_test.mjs
           node --check functions/api/_lib/reliability-performance-cost-capacity.js
           node --check functions/api/admin/reliability_performance_cost_capacity.js
+          python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
@@ -344,6 +345,9 @@ jobs:
           python scripts/security_privacy_recovery_drill_check.py
           node scripts/security_privacy_recovery_drill_test.mjs
 
+      - name: Validate HOLD inventory & authority cleanup
+        run: python scripts/hold_inventory_authority_cleanup_check.py
+
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
 
@@ -406,6 +410,7 @@ jobs:
             echo "- Reliability / performance / cost capacity authority: PASS"
             echo "- Security / privacy / recovery drill authority: PASS"
             echo "- Production learning / roadmap renewal authority: PASS"
+            echo "- Canonical Production HOLD inventory / authority cleanup: PASS"
             echo "- Route-copy parity: PASS"
             echo "- Source whitespace/conflict-marker check: PASS"
             echo "- Cloudflare runtime acceptance remains a separate exact-SHA gate."

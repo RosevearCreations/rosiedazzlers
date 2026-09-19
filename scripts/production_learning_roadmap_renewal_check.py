@@ -20,9 +20,6 @@ def require(text, needles, label):
 
 contract=read("BUILD425_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
 roadmap=read("FORWARD_BUILD_ROADMAP_426_435.md")
-queue=read("AUTONOMOUS_RELEASE_QUEUE.md")
-handoff=read("AI_PROJECT_HANDOFF.md")
-readme=read("README.md")
 dev=read(".github/workflows/development-source-gate.yml")
 prod=read(".github/workflows/production-business-acceptance-authority.yml")
 prodcheck=read("scripts/production_business_acceptance_check.py")
@@ -39,12 +36,6 @@ require(roadmap,[
     "Build 434 — Reliability, Security & Cost Reassessment",
     "Build 435 — Production Learning & Roadmap Renewal"
 ],"renewed roadmap")
-for text,label in [(queue,"queue"),(handoff,"handoff"),(readme,"README")]:
-    require(text,["Build 425","FORWARD_BUILD_ROADMAP_426_435.md"],label)
-    if label != "README":
-        require(text,["Build 426"],label)
-    else:
-        require(text,["HOLD Inventory & Authority Cleanup"],label)
 for text,label in [(dev,"Development source gate"),(prod,"Production authority")]:
     require(text,["python scripts/production_learning_roadmap_renewal_check.py"],label)
 require(prodcheck,[
