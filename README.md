@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 428 — Service Economics & Job Profitability**.
+Current source direction: **Build 429 — Retention & Rebooking Learning**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -9,9 +9,10 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_426_435.md` — active evidence-driven sequence.
-4. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — current planned contract.
+4. `BUILD429_RETENTION_REBOOKING_LEARNING.md` — current planned contract.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — single current Production HOLD/evidence backlog.
-6. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — Build 427 — Booking Conversion & Quote Clarity retained predecessor contract.
+6. `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` — Build 428 — Service Economics & Job Profitability retained predecessor contract.
+7. `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md` — Build 427 — Booking Conversion & Quote Clarity retained continuity contract.
 
 Git history is the release archive. `DOC_INDEX.md` contains specialist references.
 
@@ -46,13 +47,13 @@ These completed authorities remain continuity inputs for current acceptance:
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
 
-## Current planned service-economics framework
+## Current Retention & Rebooking Learning framework
 
-`BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` defines the current bounded autonomous release. It uses recorded service/job revenue, consumables, durable unit costs, job-duration evidence and payment/final-balance state to improve operator profitability review without inventing missing costs or automatically changing prices.
+`BUILD429_RETENTION_REBOOKING_LEARNING.md` defines the current bounded autonomous release. The staff-only `/admin-retention-learning.html` surface and `/api/admin/retention_rebooking_learning` endpoint aggregate exact-profile repeat-booking evidence, maintenance interest, and communication/consent delivery evidence without exposing customer identities.
 
-The current release extends the existing Finance cockpit with fail-closed evidence status and keeps missing cost, quantity, refund, cash, labour-rate or job-close evidence review/unavailable rather than converting gaps into zero-cost margin.
+Observed counts, elapsed time and package transitions remain correlation only. Missing identity-safe linkage, current consent or provider delivery proof remains `partial`, `provider_dependent` or `unavailable`; no gap is converted into inferred outreach eligibility.
 
-The prepared follow-on contracts are `BUILD429_RETENTION_REBOOKING_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
+Build 428 — Service Economics & Job Profitability remains retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. The prepared follow-on contracts are `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md` through `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`.
 
 ## Retained operating boundaries
 
@@ -82,6 +83,8 @@ All diagnostic surfaces are manual-refresh. No permanent polling, automatic prov
 The focused implementation checker now participates in the current release authority. Retained durable release authorities include:
 
 ```bash
+python scripts/retention_rebooking_learning_check.py
+node scripts/retention_rebooking_learning_test.mjs
 python scripts/build428_service_economics_job_profitability_check.py
 node scripts/build428_service_economics_job_profitability_test.mjs
 python scripts/build427_booking_conversion_quote_clarity_check.py
@@ -110,4 +113,4 @@ After merge, the resulting `main` head is the exact Production SHA. Production d
 
 ## Next bounded release
 
-**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 430 — Fleet & Commercial Operations Learning** is next only after the current release is independently GREEN on protected `main`.
