@@ -1,0 +1,60 @@
+name: Build 427 — Booking Conversion & Quote Clarity
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build427-*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build427-booking-conversion-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  booking-conversion-quote-clarity:
+    name: booking-conversion-quote-clarity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Check focused authority syntax
+        run: python -m py_compile scripts/build427_booking_conversion_quote_clarity_check.py
+
+      - name: Validate booking conversion & quote clarity
+        run: python scripts/build427_booking_conversion_quote_clarity_check.py
+
+      - name: Retain quote/booking authority
+        run: |
+          python scripts/build362_quote_booking_acceptance_check.py
+          node scripts/build390_booking_quote_estimate_hardening_test.mjs
+          python scripts/build399_customer_communication_self_service_check.py
+          node scripts/build399_funnel_behavior_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 427 — Booking Conversion & Quote Clarity'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Fixed-price / condition-estimate clarity: PASS'
+            echo '- Server-authoritative availability boundary: PASS'
+            echo '- Bounded anonymous funnel evidence: PASS'
+            echo '- Schema/provider/booking/payment mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
