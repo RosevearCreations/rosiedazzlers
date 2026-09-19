@@ -36,3 +36,16 @@ No automatic fleet discount, quote acceptance, invoice creation, booking creatio
 The exact candidate must pass focused Fleet & Commercial Learning authority, retained fleet rulebook/account operations/maintenance authorities, Current Source Gate, exact Development deployment/runtime acceptance, protected-main PR checks and exact Production deployment/runtime/business acceptance.
 
 Build 430 must not convert inquiry volume into a claim of signed commercial business.
+
+
+## Implemented source authority
+
+The staff-only `/admin-fleet-commercial-learning.html` workbench reads `/api/admin/fleet_commercial_operations_learning`. The endpoint uses bounded reads from the existing fleet inquiry, account, vehicle, request-group, request-job and service-history sources and returns aggregate evidence only.
+
+The current canonical fleet rulebook remains `awaiting_business_approval`; all required commercial domains therefore remain `owner_action`. This source release does not approve those terms.
+
+Live scheduling capacity is intentionally not derived from inquiry or completed-work counts. `/api/availability` and `/api/checkout` remain authoritative for real capacity and collision revalidation.
+
+## Next bounded release
+
+Build 431 — Local Acquisition & Content Proof begins only after Build 430 is independently GREEN on protected `main`.
