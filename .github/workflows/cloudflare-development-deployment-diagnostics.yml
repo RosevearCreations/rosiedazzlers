@@ -134,26 +134,3 @@ jobs:
             cat "$TMP_DIR/diagnostic-lines.txt" 2>/dev/null || true
             echo '~~~'
           } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Checkout exact Development ref for canonical recovery
-        if: "${{ github.event_name == 'push' && github.event.head_commit.message == 'Build 432: recover exact Development preview through canonical helper' }}"
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Python for canonical recovery
-        if: "${{ github.event_name == 'push' && github.event.head_commit.message == 'Build 432: recover exact Development preview through canonical helper' }}"
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Recover exact Development preview through canonical helper
-        if: "${{ github.event_name == 'push' && github.event.head_commit.message == 'Build 432: recover exact Development preview through canonical helper' }}"
-        shell: bash
-        env:
-          RECOVERY_ACTION: repair
-          RECOVERY_CONFIRM_SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          bash -n scripts/cloudflare_pages_development.sh
-          bash scripts/cloudflare_pages_development.sh recover
