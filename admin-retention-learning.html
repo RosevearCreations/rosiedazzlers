@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Retention & Rebooking Learning | Rosie Dazzlers</title>
+  <meta name="description" content="Staff-only read-only retention and rebooking learning evidence for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <script src="/assets/admin-auth.js"></script>
+  <style>
+    .learning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .learning-stat{font-size:1.7rem;font-weight:800}
+    .learning-list{display:grid;gap:10px}
+    .learning-list article{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;background:rgba(255,255,255,.03)}
+    .learning-table{display:grid;gap:8px}
+    .learning-row{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(255,255,255,.08);padding:8px 0}
+    .learning-row span:last-child{text-align:right;font-weight:700}
+    .learning-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}
+    .learning-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}
+  </style>
+</head>
+<body data-page="admin-retention-learning" data-build429="retention-rebooking-learning">
+  <main class="container shell">
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Build 429</div>
+          <h1>Retention &amp; Rebooking Learning</h1>
+          <p>Read-only, aggregate first-party evidence about repeat bookings, maintenance interest and customer communication outcomes.</p>
+        </div>
+        <div class="row wrap" style="gap:10px">
+          <a class="btn ghost" href="/admin.html">Admin Dashboard</a>
+          <button id="refreshLearning" class="btn primary" type="button">Refresh learning snapshot</button>
+        </div>
+      </div>
+
+      <p class="learning-note"><strong>Evidence boundary:</strong> manual refresh only. No customer identities are displayed. Counts show correlation, not causation. Booking history or maintenance interest never creates marketing consent, outreach eligibility, enrollment, discounts or bookings.</p>
+      <div id="learningMessage" class="notice">Select Refresh learning snapshot to load bounded current evidence.</div>
+
+      <section id="summary" class="learning-grid" hidden></section>
+
+      <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:16px">
+        <article class="panel">
+          <div class="kicker">Repeat booking</div>
+          <h2>Observed repeat behaviour</h2>
+          <div id="repeatEvidence" class="learning-table"></div>
+          <div id="transitions" class="learning-list" style="margin-top:12px"></div>
+        </article>
+
+        <article class="panel">
+          <div class="kicker">Maintenance interest</div>
+          <h2>Aggregate interest evidence</h2>
+          <div id="maintenanceEvidence" class="learning-table"></div>
+          <p class="mini">Current maintenance-interest source does not authorize exact-profile linkage. Follow-up eligibility and enrollment are never inferred.</p>
+        </article>
+
+        <article class="panel">
+          <div class="kicker">Communication</div>
+          <h2>Consent &amp; delivery evidence</h2>
+          <div id="communicationEvidence" class="learning-table"></div>
+          <p class="mini">Any real customer contact remains governed by the existing dispatch-time explicit-consent authority. Provider acceptance is not final delivery.</p>
+        </article>
+
+        <article class="panel">
+          <div class="kicker">Owner review</div>
+          <h2>Practical learning notes</h2>
+          <div id="operatorReview" class="learning-list"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+
+    const button = document.getElementById("refreshLearning");
+    const message = document.getElementById("learningMessage");
+    const summary = document.getElementById("summary");
+    const repeatEvidence = document.getElementById("repeatEvidence");
+    const transitions = document.getElementById("transitions");
+    const maintenanceEvidence = document.getElementById("maintenanceEvidence");
+    const communicationEvidence = document.getElementById("communicationEvidence");
+    const operatorReview = document.getElementById("operatorReview");
+
+    function text(value){ return value == null ? "—" : String(value); }
+    function row(label,value){
+      const node=document.createElement("div"); node.className="learning-row";
+      const a=document.createElement("span"); a.textContent=label;
+      const b=document.createElement("span"); b.textContent=text(value);
+      node.append(a,b); return node;
+    }
+    function stat(label,value){
+      const node=document.createElement("article"); node.className="panel";
+      const a=document.createElement("div"); a.className="kicker"; a.textContent=label;
+      const b=document.createElement("div"); b.className="learning-stat"; b.textContent=text(value);
+      node.append(a,b); return node;
+    }
+    function note(copy){
+      const node=document.createElement("article"); node.textContent=copy; return node;
+    }
+
+    async function refresh(){
+      button.disabled=true; button.textContent="Checking…";
+      message.className="notice"; message.textContent="Collecting bounded, read-only retention evidence…";
+      summary.hidden=true; summary.replaceChildren();
+      repeatEvidence.replaceChildren(); transitions.replaceChildren();
+      maintenanceEvidence.replaceChildren(); communicationEvidence.replaceChildren(); operatorReview.replaceChildren();
+
+      try{
+        const auth=await window.AdminAuth.requireAuth({ pageKey:"admin-retention-learning" });
+        if(!auth?.ok) throw new Error("Sign in with an authorized Operations or Admin account first.");
+        const response=await window.AdminAuth.fetchWithAuth("/api/admin/retention_rebooking_learning",{method:"GET",cache:"no-store"});
+        const data=await response.json().catch(()=>null);
+        if(!response.ok || !data?.ok) throw new Error(data?.error || `Learning evidence returned HTTP ${response.status}.`);
+
+        const learning=data.learning || {};
+        const repeat=learning.repeat_booking || {};
+        const maintenance=learning.maintenance_interest || {};
+        const communication=learning.communication || {};
+
+        summary.append(
+          stat("Evidence status",learning.evidence_status),
+          stat("Repeat customers",repeat.repeat_customers || 0),
+          stat("Completed → later booking",repeat.completed_jobs_with_later_booking || 0),
+          stat("Maintenance interest",maintenance.total || 0),
+          stat("Current explicit opt-in profiles",communication.current_explicit_opt_in_profiles || 0),
+          stat("Provider-dependent events",communication.provider_dependent_events || 0)
+        );
+        summary.hidden=false;
+
+        repeatEvidence.append(
+          row("Exact-profile booking rows",repeat.exact_profile_rows || 0),
+          row("Rows missing profile identity",repeat.rows_missing_exact_profile_id || 0),
+          row("Completed jobs",repeat.completed_jobs || 0),
+          row("Median days to later booking",repeat.elapsed_days?.median),
+          row("Average days to later booking",repeat.elapsed_days?.average)
+        );
+        for(const item of Array.isArray(repeat.package_transitions)?repeat.package_transitions:[]){
+          transitions.append(note(`${item.transition}: ${item.count}`));
+        }
+        if(!transitions.children.length) transitions.append(note("No complete package-transition evidence is currently available."));
+
+        maintenanceEvidence.append(
+          row("Evidence state",maintenance.status),
+          row("Interest records",maintenance.total || 0),
+          row("Vehicles requested",maintenance.vehicles_requested || 0),
+          row("Exact-profile linkage",maintenance.exact_profile_linkage),
+          row("Follow-up eligibility inferred","no")
+        );
+
+        communicationEvidence.append(
+          row("Evidence state",communication.status),
+          row("Profiles observed",communication.profile_count || 0),
+          row("Current explicit opt-in",communication.current_explicit_opt_in_profiles || 0),
+          row("Not currently opted in",communication.current_not_opted_in_profiles || 0),
+          row("Events observed",communication.event_count || 0),
+          row("Provider-dependent events",communication.provider_dependent_events || 0),
+          row("Definitive delivered events",communication.definitive_delivered_events || 0)
+        );
+
+        for(const item of Array.isArray(learning.operator_review)?learning.operator_review:[]) operatorReview.append(note(item));
+        message.textContent=`Learning snapshot loaded. State: ${text(learning.evidence_status)}. No customer or provider mutation was performed.`;
+      }catch(error){
+        message.className="notice learning-error";
+        message.textContent=error?.message || "Retention learning evidence could not be loaded.";
+      }finally{
+        button.disabled=false; button.textContent="Refresh learning snapshot";
+      }
+    }
+
+    button.addEventListener("click",refresh);
+  </script>
+</body>
+</html>
