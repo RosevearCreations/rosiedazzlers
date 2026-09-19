@@ -111,3 +111,102 @@ jobs:
             cat "$TMP_DIR/diagnostic-lines.txt" 2>/dev/null || true
             echo '~~~'
           } >> "$GITHUB_STEP_SUMMARY"
+
+
+      - name: Recover stale queued Development previews
+        if: github.event_name == 'push' && github.event.head_commit.message == 'Build 432: recover stuck Development preview queue'
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "::add-mask::${CLOUDFLARE_API_TOKEN}"
+          [[ "${GITHUB_REF_NAME}" == "dev" ]] || { echo "::error::Cleanup is restricted to dev."; exit 20; }
+          TMP_DIR="$(mktemp -d)"
+          trap 'rm -rf "$TMP_DIR"' EXIT
+
+          cf_curl() {
+            curl --fail-with-body --silent --show-error \
+              --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              --header "Content-Type: application/json" "$@"
+          }
+
+          ACCOUNT_ID="${CONFIGURED_ACCOUNT_ID}"
+          [[ -n "$ACCOUNT_ID" ]] || { echo "::error::Cloudflare account id unavailable."; exit 21; }
+
+          current_id=""
+          for attempt in $(seq 1 18); do
+            cf_curl "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/deployments.json"
+            current_id="$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_DEV_BRANCH" '
+              [.result[]? | select(
+                (.deployment_trigger.metadata.branch // "") == $branch and
+                (.deployment_trigger.metadata.commit_hash // "") == $sha
+              )][0].id // empty
+            ' "$TMP_DIR/deployments.json")"
+            [[ -n "$current_id" ]] && break
+            echo "Current exact preview not visible yet (attempt ${attempt}/18)."
+            [[ "$attempt" -eq 18 ]] || sleep 5
+          done
+          [[ -n "$current_id" ]] || { echo "::error::Current exact preview not found; refusing cleanup."; exit 22; }
+
+          echo "Current exact preview protected: ${current_id}"
+          mapfile -t stale_ids < <(jq -r --arg branch "$CF_DEV_BRANCH" --arg current "$current_id" '
+            .result[]?
+            | select((.deployment_trigger.metadata.branch // "") == $branch)
+            | select(.id != $current)
+            | select((.latest_stage.name // "") == "queued")
+            | select((.latest_stage.status // "") == "active")
+            | .id
+          ' "$TMP_DIR/deployments.json")
+
+          deleted=0
+          for deployment_id in "${stale_ids[@]:-}"; do
+            [[ -n "$deployment_id" ]] || continue
+            cf_curl "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${deployment_id}" > "$TMP_DIR/detail.json"
+
+            environment="$(jq -r '.result.environment // empty' "$TMP_DIR/detail.json")"
+            branch="$(jq -r '.result.deployment_trigger.metadata.branch // empty' "$TMP_DIR/detail.json")"
+            sha="$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' "$TMP_DIR/detail.json")"
+            stage_name="$(jq -r '.result.latest_stage.name // empty' "$TMP_DIR/detail.json")"
+            stage_status="$(jq -r '.result.latest_stage.status // empty' "$TMP_DIR/detail.json")"
+            build_status="$(jq -r '[.result.stages[]? | select(.name=="build")][0].status // "idle"' "$TMP_DIR/detail.json")"
+            deploy_status="$(jq -r '[.result.stages[]? | select(.name=="deploy")][0].status // "idle"' "$TMP_DIR/detail.json")"
+
+            [[ "$environment" == "preview" ]] || { echo "Skipping ${deployment_id}: environment=${environment}"; continue; }
+            [[ "$branch" == "dev" ]] || { echo "Skipping ${deployment_id}: branch=${branch}"; continue; }
+            [[ "$sha" != "$TARGET_SHA" ]] || { echo "::error::Refusing to delete current exact SHA."; exit 23; }
+            [[ "$stage_name" == "queued" && "$stage_status" == "active" ]] || { echo "Skipping ${deployment_id}: stage=${stage_name}/${stage_status}"; continue; }
+            [[ "$build_status" == "idle" && "$deploy_status" == "idle" ]] || { echo "Skipping ${deployment_id}: build/deploy already started."; continue; }
+
+            code="$(curl --silent --show-error --output "$TMP_DIR/delete.json" --write-out '%{http_code}' --request DELETE \
+              --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+              "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${deployment_id}?force=true" || true)"
+            case "$code" in
+              200|202|204)
+                echo "Deleted stale queued Development preview ${deployment_id} (${sha})."
+                deleted=$((deleted+1))
+                ;;
+              *)
+                echo "::error::Cloudflare refused stale preview deletion ${deployment_id}: HTTP ${code}."
+                exit 24
+                ;;
+            esac
+          done
+
+          {
+            echo ""
+            echo "### Stale Development preview cleanup"
+            echo "- Current exact SHA protected: \`${TARGET_SHA}\`"
+            echo "- Current exact deployment protected: \`${current_id}\`"
+            echo "- Older queued previews deleted: \`${deleted}\`"
+            echo "- Production deployments: untouched"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for attempt in $(seq 1 18); do
+            cf_curl "https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${current_id}" > "$TMP_DIR/current.json"
+            stage="$(jq -r '.result.latest_stage.name // "unknown"' "$TMP_DIR/current.json")"
+            status="$(jq -r '.result.latest_stage.status // "unknown"' "$TMP_DIR/current.json")"
+            echo "Current exact preview after cleanup: ${stage}/${status} (attempt ${attempt}/18)"
+            if [[ "$stage" != "queued" || "$status" != "active" ]]; then
+              break
+            fi
+            [[ "$attempt" -eq 18 ]] || sleep 5
+          done
