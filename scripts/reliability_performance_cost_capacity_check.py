@@ -19,6 +19,7 @@ analytics = read("functions/api/analytics/ingest.js")
 test = read("scripts/reliability_performance_cost_capacity_test.mjs")
 policy = read("BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md").lower()
 workflow = read(".github/workflows/reliability-performance-cost-capacity-authority.yml")
+page = read("admin/reliability-capacity.html")
 
 for token in (
     "build: 423",
@@ -77,6 +78,15 @@ for token in (
 ):
     if token not in policy:
         errors.append(f"Build 423 policy missing {token}")
+
+for token in (
+    "Reliability, performance &amp; cost capacity",
+    "/api/admin/reliability_performance_cost_capacity",
+    "Refresh Capacity Snapshot",
+    "Cloudflare billing/CPU metrics are not inferred",
+):
+    if token not in page:
+        errors.append(f"Build 423 operator page missing {token}")
 
 for token in (
     "Build 423 — Reliability, Performance & Cost Capacity Authority",
