@@ -20,6 +20,7 @@ Git history is the release archive. `DOC_INDEX.md` contains specialist reference
 
 These completed authorities remain continuity inputs for current acceptance:
 
+- `FORWARD_BUILD_ROADMAP_405_415.md`
 - `BUILD423_RELIABILITY_PERFORMANCE_COST_CAPACITY.md`
 - `BUILD422_MEDIA_PHOTO_STUDIO_PROOF_OPERATIONS.md`
 - `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`
