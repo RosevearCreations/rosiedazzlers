@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fleet & Commercial Operations Learning | Rosie Dazzlers</title>
+  <meta name="description" content="Staff-only read-only fleet and commercial operations learning evidence for Rosie Dazzlers." />
+  <meta name="robots" content="noindex,nofollow" />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <script src="/assets/admin-auth.js"></script>
+  <style>
+    .learning-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}
+    .learning-stat{font-size:1.7rem;font-weight:800}
+    .learning-list{display:grid;gap:10px}
+    .learning-list article{border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px;background:rgba(255,255,255,.03)}
+    .learning-table{display:grid;gap:8px}
+    .learning-row{display:flex;justify-content:space-between;gap:14px;border-bottom:1px solid rgba(255,255,255,.08);padding:8px 0}
+    .learning-row span:last-child{text-align:right;font-weight:700}
+    .learning-note{border-left:4px solid #60a5fa;padding:10px 14px;background:rgba(59,130,246,.08);border-radius:8px}
+    .learning-error{border-left-color:#f87171;background:rgba(239,68,68,.10)}
+  </style>
+</head>
+<body data-page="admin-fleet-commercial-learning" data-build430="fleet-commercial-operations-learning">
+  <main class="container shell">
+    <section class="section">
+      <div class="hero">
+        <div>
+          <div class="badge">Build 430</div>
+          <h1>Fleet &amp; Commercial Operations Learning</h1>
+          <p>Read-only aggregate evidence for fleet inquiry demand, commercial rules, operational work and owner decisions.</p>
+        </div>
+        <div class="row wrap" style="gap:10px">
+          <a class="btn ghost" href="/admin.html">Admin Dashboard</a>
+          <button id="refreshLearning" class="btn primary" type="button">Refresh learning snapshot</button>
+        </div>
+      </div>
+
+      <p class="learning-note"><strong>Evidence boundary:</strong> manual refresh only. No customer identities are displayed. Inquiry volume is not signed business. Unresolved commercial rules remain <code>owner_action</code>, and this layer never invents live capacity, discounts, invoices, bookings, outreach or payment terms. Capacity stays authoritative at <code>/api/availability</code> and <code>/api/checkout</code>.</p>
+      <div id="learningMessage" class="notice">Select Refresh learning snapshot to load bounded fleet/commercial evidence.</div>
+
+      <section id="summary" class="learning-grid" hidden></section>
+
+      <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:16px">
+        <article class="panel">
+          <div class="kicker">Inquiry demand</div>
+          <h2>Observed fleet demand</h2>
+          <div id="demandEvidence" class="learning-table"></div>
+          <p class="mini">Inquiry, quote and converted-lead counts are operational evidence only. They do not claim a signed recurring commercial agreement.</p>
+        </article>
+
+        <article class="panel">
+          <div class="kicker">Commercial rules</div>
+          <h2>Approved vs unresolved decisions</h2>
+          <div id="ruleEvidence" class="learning-table"></div>
+          <div id="unresolvedRules" class="learning-list" style="margin-top:12px"></div>
+        </article>
+
+        <article class="panel">
+          <div class="kicker">Operations</div>
+          <h2>Fleet work evidence</h2>
+          <div id="operationsEvidence" class="learning-table"></div>
+          <div id="serviceMix" class="learning-list" style="margin-top:12px"></div>
+        </article>
+
+        <article class="panel">
+          <div class="kicker">Capacity & owner review</div>
+          <h2>What still needs evidence or decisions</h2>
+          <div id="capacityEvidence" class="learning-table"></div>
+          <div id="ownerReview" class="learning-list" style="margin-top:12px"></div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const button=document.getElementById("refreshLearning");
+    const message=document.getElementById("learningMessage");
+    const summary=document.getElementById("summary");
+    const demandEvidence=document.getElementById("demandEvidence");
+    const ruleEvidence=document.getElementById("ruleEvidence");
+    const unresolvedRules=document.getElementById("unresolvedRules");
+    const operationsEvidence=document.getElementById("operationsEvidence");
+    const serviceMix=document.getElementById("serviceMix");
+    const capacityEvidence=document.getElementById("capacityEvidence");
+    const ownerReview=document.getElementById("ownerReview");
+
+    function text(value){return value==null?"—":String(value);}
+    function row(label,value){
+      const node=document.createElement("div");node.className="learning-row";
+      const a=document.createElement("span");a.textContent=label;
+      const b=document.createElement("span");b.textContent=text(value);
+      node.append(a,b);return node;
+    }
+    function stat(label,value){
+      const node=document.createElement("article");node.className="panel";
+      const a=document.createElement("div");a.className="kicker";a.textContent=label;
+      const b=document.createElement("div");b.className="learning-stat";b.textContent=text(value);
+      node.append(a,b);return node;
+    }
+    function note(copy){const node=document.createElement("article");node.textContent=copy;return node;}
+
+    async function refresh(){
+      button.disabled=true;button.textContent="Checking…";
+      message.className="notice";message.textContent="Collecting bounded, read-only fleet/commercial evidence…";
+      summary.hidden=true;summary.replaceChildren();
+      demandEvidence.replaceChildren();ruleEvidence.replaceChildren();unresolvedRules.replaceChildren();
+      operationsEvidence.replaceChildren();serviceMix.replaceChildren();capacityEvidence.replaceChildren();ownerReview.replaceChildren();
+      try{
+        const auth=await window.AdminAuth.requireAuth({pageKey:"admin-fleet-commercial-learning"});
+        if(!auth?.ok) throw new Error("Sign in with an authorized Operations or Admin account first.");
+        const response=await window.AdminAuth.fetchWithAuth("/api/admin/fleet_commercial_operations_learning",{method:"GET",cache:"no-store"});
+        const data=await response.json().catch(()=>null);
+        if(!response.ok||!data?.ok) throw new Error(data?.error||`Fleet learning evidence returned HTTP ${response.status}.`);
+
+        const learning=data.learning||{};
+        const demand=learning.inquiry_demand||{};
+        const rules=learning.commercial_rules||{};
+        const operations=learning.operations||{};
+        const capacity=learning.capacity||{};
+
+        summary.append(
+          stat("Evidence status",learning.evidence_status),
+          stat("Fleet inquiries",demand.inquiry_count||0),
+          stat("Vehicles requested",demand.vehicles_requested||0),
+          stat("Fleet accounts",operations.fleet_account_count||0),
+          stat("Completed-work evidence",operations.completed_work_evidence_count||0),
+          stat("Owner-action rule domains",rules.unresolved_domain_count||0)
+        );
+        summary.hidden=false;
+
+        demandEvidence.append(
+          row("Evidence state",demand.status),
+          row("New inquiries",demand.status_counts?.new||0),
+          row("Quoted inquiries",demand.quoted_inquiry_count||0),
+          row("Converted lead records",demand.converted_inquiry_count||0),
+          row("Signed business inferred","no")
+        );
+
+        ruleEvidence.append(
+          row("Rulebook state",rules.status),
+          row("Approved domains",rules.approved_domain_count||0),
+          row("Unresolved domains",rules.unresolved_domain_count||0),
+          row("Commercial terms complete",rules.commercial_terms_complete===true?"yes":"no"),
+          row("Automatic discount allowed",rules.operational_authority?.automatic_discount_application_allowed===true?"yes":"no"),
+          row("Invoice creation allowed",rules.operational_authority?.invoice_creation_allowed===true?"yes":"no")
+        );
+        for(const domain of Array.isArray(rules.unresolved_domains)?rules.unresolved_domains:[]) unresolvedRules.append(note(domain));
+        if(!unresolvedRules.children.length) unresolvedRules.append(note("No unresolved source rulebook domains are currently recorded."));
+
+        operationsEvidence.append(
+          row("Evidence state",operations.status),
+          row("Active fleet vehicles",operations.active_vehicle_count||0),
+          row("Request groups",operations.request_group_count||0),
+          row("Request jobs",operations.request_job_count||0),
+          row("Jobs linked to booking",operations.jobs_linked_to_booking||0),
+          row("Completed request jobs",operations.completed_request_jobs||0),
+          row("Service-history rows",operations.service_history_count||0)
+        );
+        for(const item of Array.isArray(operations.service_mix)?operations.service_mix:[]) serviceMix.append(note(`${item.service}: ${item.count}`));
+        if(!serviceMix.children.length) serviceMix.append(note("No service-mix evidence is currently available."));
+
+        capacityEvidence.append(
+          row("Live capacity state",capacity.status),
+          row("Availability authority",capacity.availability_authority),
+          row("Collision authority",capacity.collision_revalidation_authority),
+          row("Current capacity inferred","no"),
+          row("Slot reserved","no")
+        );
+        for(const item of Array.isArray(learning.owner_review)?learning.owner_review:[]) ownerReview.append(note(item));
+
+        message.textContent=`Fleet/commercial learning snapshot loaded. State: ${text(learning.evidence_status)}. No customer, booking, accounting or provider mutation was performed.`;
+      }catch(error){
+        message.className="notice learning-error";
+        message.textContent=error?.message||"Fleet/commercial learning evidence could not be loaded.";
+      }finally{
+        button.disabled=false;button.textContent="Refresh learning snapshot";
+      }
+    }
+
+    button.addEventListener("click",refresh);
+  </script>
+</body>
+</html>
