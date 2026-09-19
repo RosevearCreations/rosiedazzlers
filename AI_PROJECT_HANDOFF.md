@@ -47,6 +47,7 @@ This release authorizes no schema migration, secret rotation, Production restore
 - `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `FORWARD_BUILD_ROADMAP_405_415.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 - `.github/workflows/reliability-security-cost-reassessment-authority.yml`
 

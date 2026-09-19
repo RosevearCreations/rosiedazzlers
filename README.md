@@ -48,6 +48,10 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `FORWARD_BUILD_ROADMAP_405_415.md`
+- `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
+- `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
+- `scripts/build396_growth_baseline_forward_roadmap_check.py`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
