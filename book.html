@@ -111,7 +111,7 @@
     <section id="booking" class="booking-layout" aria-labelledby="bookingHeading">
       <div class="panel" style="padding:0;overflow:hidden">
         <div style="padding:16px 16px 0">
-          <div class="section-heading"><div><h2 id="bookingHeading">3. Check availability and finish booking</h2><p class="muted">Your size, package and add-ons are preloaded into the proven booking planner. Confirm the vehicle, date, service area, requirements and deposit.</p></div><span class="tag ok">Live availability</span></div>
+          <div class="section-heading"><div><h2 id="bookingHeading">3. Check availability and finish booking</h2><p class="muted">Your size, package and add-ons are preloaded into the proven booking planner. Confirm the vehicle, date, service area, requirements and deposit. An estimate or accepted quote does not reserve a time slot; displayed availability is verified by the planner.</p></div><span class="tag ok">Live availability</span></div>
           <div id="plannerRestartNote" class="notice compact mini" style="display:none;margin-top:10px"></div>
         </div>
         <div class="planner-shell" style="margin-top:14px"><iframe id="bookingPlannerFrame" class="planner-frame" title="Rosie Dazzlers booking planner" loading="lazy"></iframe></div>
@@ -121,8 +121,9 @@
         <div class="selection-line"><span>Vehicle size</span><strong id="summarySize">Choose size</strong></div>
         <div class="selection-line"><span>Service</span><strong id="summaryPackage">Choose service</strong></div>
         <div class="selection-line"><span>Add-ons</span><strong id="summaryAddons">None</strong></div>
-        <div class="selection-line"><span>Estimated subtotal</span><strong id="summarySubtotal">Package required</strong></div>
+        <div class="selection-line"><span>Current estimate</span><strong id="summarySubtotal">Package required</strong></div>
         <div class="selection-line"><span>Deposit</span><strong id="summaryDeposit">—</strong></div>
+        <div class="mini muted" data-build427-estimate-note>Fixed catalogue items are revalidated in the booking planner. Quote-required items are excluded from this fixed subtotal until reviewed.</div>
         <div class="hr" style="margin:3px 0"></div>
         <div class="mini muted" id="plannerProgress">Planner: ready to start</div>
         <button class="btn primary" id="applyToPlannerBtn" type="button">Apply choices & start booking</button>
@@ -264,7 +265,7 @@
 
     qs("#vehicleSize").addEventListener("change",()=>{ state.size=qs("#vehicleSize").value; renderPackages(); renderAddons(); renderSummary(); syncUrl(); maybeRefreshPlanner(); analytics("unified_vehicle_size_pick",{vehicle_size:state.size||null}); });
     qs("#clearAddonsBtn").addEventListener("click",()=>{ state.addons.clear(); renderAddons(); renderSummary(); syncUrl(); maybeRefreshPlanner(); });
-    qs("#applyToPlannerBtn").addEventListener("click",()=>{ loadPlanner(true); qs("#booking").scrollIntoView({behavior:"smooth",block:"start"}); });
+    qs("#applyToPlannerBtn").addEventListener("click",()=>{ const t=totals(); analytics("unified_booking_start",{vehicle_size:state.size||null,package_code:state.packageCode||null,quote_required:!!t.quoteOnly}); loadPlanner(true); qs("#booking").scrollIntoView({behavior:"smooth",block:"start"}); });
     qs("#sizeChartBtn").addEventListener("click",()=>{ const url=chartUrl(state.catalog||{},"Vehicle Size Chart"); if(url) qs("#sizeChartImg").src=url; qs("#sizeModal").style.display="flex"; });
     qs("#closeSizeModal").addEventListener("click",()=>qs("#sizeModal").style.display="none");
     qs("#sizeModal").addEventListener("click",(e)=>{if(e.target===qs("#sizeModal"))qs("#sizeModal").style.display="none";});
@@ -289,6 +290,7 @@
         [...state.addons].forEach((code)=>{ const addon=(state.catalog?.addons||[]).find((row)=>row.code===code); if(!addon || !addonAllowed(addon)) state.addons.delete(code); });
         qs("#vehicleSize").value=state.size;
         renderPackages(); renderAddons(); renderSummary(); syncUrl();
+        analytics("booking_quote_clarity_view",{vehicle_size:state.size||null,package_code:state.packageCode||null});
         const sizeChart=chartUrl(state.catalog||{},"Vehicle Size Chart"); if(sizeChart) qs("#sizeChartImg").src=sizeChart;
         loadPlanner(true);
       }catch(error){ qs("#catalogError").style.display="block"; qs("#catalogError").textContent=`Pricing and service catalogue could not load: ${error?.message||error}. The booking planner below remains available.`; loadPlanner(true); }
