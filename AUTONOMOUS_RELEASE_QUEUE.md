@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized Production predecessor remains documented by `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Earlier service-economics continuity remains documented by `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
+The synchronized Production predecessor remains documented by `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Earlier service-economics continuity remains documented by `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Earlier booking-conversion continuity remains documented by `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 ## Retained contract index
 
