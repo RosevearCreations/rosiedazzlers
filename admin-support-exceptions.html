@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Support Exceptions | Rosie Dazzlers I.T.</title>
+  <meta name="description" content="Protected read-only Rosie Dazzlers support exception queue with evidence freshness, dependency and safe next actions." />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .support-shell{display:grid;gap:16px;padding-bottom:72px}.support-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}.support-actions{display:flex;gap:9px;flex-wrap:wrap}.support-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.support-stat,.support-source,.support-exception,.support-surface{border:1px solid var(--border,rgba(148,163,184,.22));border-radius:14px;background:rgba(255,255,255,.035)}.support-stat{padding:12px}.support-stat strong{display:block;font-size:1.55rem;margin-top:3px}.support-source{display:grid;grid-template-columns:minmax(170px,.5fr) auto minmax(0,1fr);gap:10px;align-items:center;padding:10px 12px}.support-controls{display:grid;grid-template-columns:minmax(180px,240px) minmax(180px,240px) 1fr;gap:10px;align-items:end}.support-controls label{display:grid;gap:5px}.support-queue{display:grid;gap:12px}.support-exception{padding:14px;border-left-width:5px}.support-exception.severity-critical{border-left-color:#ef4444}.support-exception.severity-warning{border-left-color:#f59e0b}.support-exception.severity-hold{border-left-color:#a78bfa}.support-exception.severity-action{border-left-color:#38bdf8}.support-exception.severity-info{border-left-color:#94a3b8}.support-exception h3{margin:.55rem 0 .35rem}.support-exception-head,.support-exception-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}.support-pill{display:inline-flex;align-items:center;padding:3px 8px;border:1px solid rgba(148,163,184,.3);border-radius:999px;font-size:.78rem;font-weight:750;margin-right:5px}.support-pill.available{border-color:rgba(34,197,94,.45)}.support-pill.unavailable{border-color:rgba(239,68,68,.5)}.support-pill.restricted{border-color:rgba(245,158,11,.45)}.support-surfaces{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px}.support-surface{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px}.support-surface p{margin:.25rem 0 0}.support-empty{padding:14px;border:1px dashed rgba(148,163,184,.35);border-radius:12px}.support-boundary ul{margin:.5rem 0 0 1.2rem}.support-boundary li{margin:.25rem 0}@media(max-width:900px){.support-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.support-hero,.support-controls{grid-template-columns:1fr}.support-source{grid-template-columns:1fr}.support-actions .btn{width:100%}}@media(max-width:520px){.support-summary{grid-template-columns:1fr}.support-exception-foot,.support-surface{align-items:stretch;flex-direction:column}.support-exception-foot .btn,.support-surface .btn{width:100%}}
+  </style>
+</head>
+<body data-page="admin-support-exceptions" data-build433="support-automation-exception-handling">
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/app/it/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers I.T.</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+  <main class="container support-shell">
+    <section class="panel support-hero">
+      <div><span class="badge">Build 433 · read-only support queue</span><h1>Support Automation &amp; Exception Handling</h1><p class="kicker">Prioritized staff-only exceptions from retained diagnostic and reconciliation evidence, with source, freshness, dependency and a bounded safe next action.</p></div>
+      <div class="support-actions"><button class="btn primary" id="refreshSupportExceptions" type="button">Refresh support exceptions</button><a class="btn ghost" href="/app/it/">I.T. home</a></div>
+    </section>
+    <div id="supportExceptionStatus" class="notice soft" role="status" aria-live="polite">Support exceptions are not loaded yet.</div>
+    <section class="panel support-boundary"><strong>Fail-closed automation boundary</strong><ul class="mini"><li>Refresh is manual; no polling or background monitor runs from this page.</li><li>The queue may classify, summarize and link evidence. It does not refund, pay, book, post, restore, rotate secrets, delete storage objects or bypass release protection.</li><li>Provider/owner evidence remains a HOLD or explicit action until its owning authority records dated evidence.</li><li>The aggregator excludes customer records, message contents and secret values.</li></ul></section>
+    <section class="panel"><h2>Exception summary</h2><div id="exceptionSummary" class="support-summary"><div class="support-empty">No snapshot loaded.</div></div></section>
+    <section class="panel"><h2>Evidence source status</h2><div id="sourceStatus" class="stack"><div class="support-empty">No source status loaded.</div></div></section>
+    <section class="panel">
+      <div class="support-controls">
+        <label><span class="mini">Severity</span><select id="severityFilter"><option value="all">All severities</option><option value="critical">Critical</option><option value="warning">Warning</option><option value="hold">Provider HOLD</option><option value="action">Owner action</option><option value="info">Info</option></select></label>
+        <label><span class="mini">Dependency</span><select id="dependencyFilter"><option value="all">All dependencies</option><option value="provider_dependent">Provider dependent</option><option value="owner_action">Owner action</option><option value="internal_support">Internal support</option></select></label>
+        <p class="mini">Filtering is browser-only. It does not alter the source evidence or acknowledge an exception.</p>
+      </div>
+      <h2>Prioritized exception queue</h2>
+      <div id="exceptionQueue" class="support-queue"><div class="support-empty">Refresh manually to load the current exception queue.</div></div>
+    </section>
+    <section class="panel"><h2>Linked evidence surfaces</h2><p class="mini">These are navigation targets, not automatic corrective actions. Mutating workflows retain their own explicit authorization and confirmation.</p><div id="evidenceSurfaces" class="support-surfaces"><div class="support-empty">Evidence links appear after a successful refresh.</div></div></section>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/build433-support-exceptions.js"></script>
+</body>
+</html>
