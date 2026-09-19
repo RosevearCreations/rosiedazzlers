@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Build 428 — Service Economics & Job Profitability is the synchronized Production predecessor.
+The synchronized Production predecessor is retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
 
 **Build 429 — Retention & Rebooking Learning** is the active bounded release.
 
 **Build 430 — Fleet & Commercial Operations Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Retained continuity also includes Build 427 — Booking Conversion & Quote Clarity (`BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`).
+Current contract: `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Earlier booking-conversion continuity remains `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -51,7 +51,7 @@ These completed authorities remain continuity inputs for current acceptance:
 - Provider acceptance is not definitive delivery without provider delivery evidence.
 - The operator surface is read-only and exposes no customer identities.
 - No automatic outreach, segmentation, booking, maintenance enrollment, discount, payment/provider, accounting, inventory or schema mutation is authorized.
-- Build 428 — Service Economics & Job Profitability remains retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
+- Service-economics/job-profitability predecessor authority remains retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
 
 ## Retained HOLD inventory & authority-cleanup contract
 
