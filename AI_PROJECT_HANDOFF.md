@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-The synchronized Production predecessor is retained through `BUILD429_RETENTION_REBOOKING_LEARNING.md`.
+The synchronized Production predecessor is retained through `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`.
 
-**Build 430 — Fleet & Commercial Operations Learning** is the active bounded release.
+**Build 431 — Local Acquisition & Content Proof** is the active bounded release.
 
-**Build 431 — Local Acquisition & Content Proof** is next only after the current release is independently GREEN on protected `main`.
+**Build 432 — Detailer Mobile & Staff Workflow Refinement** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Earlier service-economics continuity remains `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
+Current contract: `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`.
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -41,15 +41,16 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 
-## Current Fleet & Commercial Operations Learning contract
+## Current Local Acquisition & Content Proof contract
 
-- Fleet/commercial inquiries are aggregate demand evidence and never become a claim of signed commercial business.
-- Approved and unresolved fleet rulebook domains remain separate; unresolved domains stay `owner_action`.
-- Fleet accounts, vehicles, request groups, request jobs and service history are aggregated without exposing customer identity.
-- Completed-work evidence does not itself prove a recurring commercial contract.
-- Current live capacity is not inferred from inquiry or work volume; `/api/availability` and `/api/checkout` remain authoritative.
-- No automatic fleet discount, quote acceptance, invoice, booking, service-area expansion, credit term, customer outreach, payment/provider, accounting, role or schema mutation is authorized.
-- Retention/rebooking predecessor authority remains retained through `BUILD429_RETENTION_REBOOKING_LEARNING.md`.
+- First-party page traffic remains bounded observed evidence and never becomes a ranking/indexing assertion.
+- Genuine local proof requires published, public-approved, non-sample before/after evidence.
+- Search Console and Google Business Profile evidence remains dated and attributed; missing/stale provider evidence fails closed.
+- Content candidates may be prioritized from observed traffic, proof gaps and existing SEO tasks.
+- Same-origin deployed-page checks for H1/canonical/description/copy depth/duplicate/service copy are operator-review heuristics only.
+- One meaningful H1, truthful service-area claims and canonical/metadata integrity remain mandatory.
+- No automatic publishing, fabricated review/location content, provider mutation, customer outreach, DNS, ad-spend, schema or permanent-polling mutation is authorized.
+- Fleet/commercial predecessor authority remains retained through `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`.
 
 ## Retained HOLD inventory & authority-cleanup contract
 
@@ -121,4 +122,4 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 ## Restart point
 
-Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD430_FLEET_COMMERCIAL_OPERATIONS_LEARNING.md`, the active roadmap and go-live blockers. Begin current implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.
+Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`, the active roadmap and go-live blockers. Begin current implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.
