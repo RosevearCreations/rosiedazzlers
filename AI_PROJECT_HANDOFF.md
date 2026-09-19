@@ -4,13 +4,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 
 ## Current release boundary
 
-Build 427 — Booking Conversion & Quote Clarity is the synchronized Production predecessor.
+Build 428 — Service Economics & Job Profitability is the synchronized Production predecessor.
 
-**Build 428 — Service Economics & Job Profitability** is the active bounded release.
+**Build 429 — Retention & Rebooking Learning** is the active bounded release.
 
-**Build 429 — Retention & Rebooking Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 430 — Fleet & Commercial Operations Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
+Current contract: `BUILD429_RETENTION_REBOOKING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_426_435.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`. Retained predecessor contract: `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Retained continuity also includes Build 427 — Booking Conversion & Quote Clarity (`BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`).
 
 This release authorizes no schema migration, secret rotation, Production restore, customer/booking mutation, staff role/capability change, consent mutation, provider contact, accounting/inventory posting, destructive R2 mutation, DNS mutation, automatic outreach or permanent polling.
 
@@ -42,14 +42,16 @@ These completed authorities remain continuity inputs for current acceptance:
 - `BUILD402_ADMIN_OPERATIONS_COCKPIT_GROWTH_EXPERIMENTS.md`
 - `BUILD401_JOB_HANDOFF_COMMERCIAL_EVIDENCE.md`
 
-## Planned Service Economics & Job Profitability contract
+## Current Retention & Rebooking Learning contract
 
-- Use recorded service/job revenue, consumables and durable cost evidence only.
-- Missing material cost, quantity, refund or job-close evidence stays review/partial/unavailable.
-- Operator review may identify pricing questions but cannot automatically change catalogue prices, discounts or commercial terms.
-- Inventory quantity, accounting posting, purchasing and payment/provider mutations remain outside this build.
-- The current release must retain its focused implementation authority before any feature candidate can move to `dev`.
-- The prepared future contracts continue through the current roadmap-renewal endpoint without claiming those releases are implemented.
+- Completed-job → later booking evidence uses exact canonical customer-profile linkage only.
+- Repeat counts, elapsed time and package transitions are observational correlation, not causal proof.
+- Maintenance-interest evidence remains aggregate when exact identity linkage is unavailable.
+- Current explicit customer communication consent remains authoritative at dispatch time.
+- Provider acceptance is not definitive delivery without provider delivery evidence.
+- The operator surface is read-only and exposes no customer identities.
+- No automatic outreach, segmentation, booking, maintenance enrollment, discount, payment/provider, accounting, inventory or schema mutation is authorized.
+- Build 428 — Service Economics & Job Profitability remains retained through `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`.
 
 ## Retained HOLD inventory & authority-cleanup contract
 
@@ -121,4 +123,4 @@ The retained reliability/capacity view stays staff-only, manual-refresh and read
 
 ## Restart point
 
-Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, the active roadmap and go-live blockers. Begin current implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.
+Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, `BUILD429_RETENTION_REBOOKING_LEARNING.md`, the active roadmap and go-live blockers. Begin current implementation only from that verified Production boundary and preserve feature → Development → protected-main PR → exact Production acceptance discipline.
