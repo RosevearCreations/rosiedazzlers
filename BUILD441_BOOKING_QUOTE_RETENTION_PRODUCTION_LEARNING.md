@@ -36,7 +36,9 @@ Recorded evidence remains correlation rather than causal proof.
 The Build 441 response excludes customer names, customer email addresses and raw quote identifiers.
 
 ## Mutation boundary
-No automatic:
+No automatic outreach, segmentation, discount, pricing change, booking creation, maintenance enrollment, payment or provider mutation is authorized.
+
+Specifically, no automatic:
 
 - outreach;
 - segmentation;

@@ -81,12 +81,39 @@ This release adds a manual, read-only Operations learning surface without creati
 python scripts/booking_quote_retention_production_learning_check.py
 node scripts/booking_quote_retention_production_learning_test.mjs
 python scripts/booking_rebooking_funnel_check.py
+node scripts/booking_rebooking_funnel_test.mjs
 python scripts/build427_booking_conversion_quote_clarity_check.py
 python scripts/retention_rebooking_learning_check.py
+node scripts/retention_rebooking_learning_test.mjs
 python scripts/build398_customer_journey_acquisition_quality_check.py
+python scripts/local_search_provider_evidence_refresh_check.py
+node scripts/local_search_provider_evidence_refresh_test.mjs
+python scripts/build414_local_seo_measurement_search_console_gbp_proof_check.py
+python scripts/local_search_measurement_authority_check.py
+python scripts/local_acquisition_evidence_closure_check.py
+node scripts/local_acquisition_evidence_closure_test.mjs
+python scripts/local_acquisition_content_proof_check.py
+node scripts/local_acquisition_content_proof_test.mjs
+python scripts/maintenance_fleet_owner_approval_convergence_check.py
+node scripts/maintenance_fleet_owner_approval_convergence_test.mjs
+python scripts/authenticated_device_visual_acceptance_check.py
+node scripts/authenticated_device_visual_acceptance_test.mjs
+python scripts/production_workflow_evidence_check.py
+node scripts/production_workflow_evidence_test.mjs
+python scripts/backup_recovery_evidence_closure_check.py
+node scripts/backup_recovery_evidence_closure_test.mjs
+python scripts/recovery_export_operational_proof_check.py
+python scripts/backup_restore_release_recovery_drill_check.py
+python scripts/release_rollback_recovery_check.py
+python scripts/security_privacy_recovery_drill_check.py
+python scripts/reliability_security_cost_reassessment_check.py
+python scripts/production_learning_roadmap_renewal_check.py
+python scripts/provider_outcome_delivery_evidence_closure_check.py
 python scripts/release_authority_documentation_convergence_check.py
 python scripts/release_check.py
 ```
+
+Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
 ## Release authority
 Feature candidates must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and then independently proves that exact SHA in Development.
@@ -96,4 +123,4 @@ Production promotion is governed by `rd main protection`. Accepted Development i
 After merge, the resulting `main` head is the exact Production source SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 441 — Booking, Quote & Retention Production Learning** begins only after the current release is independently GREEN on protected `main`.
+**Build 442 — Staff Workflow & Support Exception Learning** begins only after the current release is independently GREEN on protected `main`.
