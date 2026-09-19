@@ -26,7 +26,7 @@ require(endpoint,['requireActionAccess(access.actor,"admin.settings.manage")',"g
 for token in ["onRequestPost","onRequestPatch","onRequestDelete","setInterval("]:
  if token in endpoint: errors.append(f"Build 439 endpoint contains forbidden token {token!r}")
 require(client,['fetch("/api/admin/maintenance_fleet_owner_approval"','method:"GET"',"No term was approved or changed.","admin-maintenance-fleet-owner-approval"],"Build 439 client")
-for token in ["method:"POST"","method:"PATCH"","method:"DELETE"","localStorage","sessionStorage","setInterval("]:
+for token in ['method:"POST"','method:"PATCH"','method:"DELETE"',"localStorage","sessionStorage","setInterval("]:
  if token in client: errors.append(f"Build 439 client contains forbidden token {token!r}")
 require(page,['data-build439="maintenance-fleet-owner-approval-convergence"',"Maintenance &amp; Fleet Owner Decisions","Decision boundary","maintenance-plan-business-rulebook.json","fleet-business-rulebook.json","build439-maintenance-fleet-owner-approval.js"],"Build 439 page")
 if page!=copy: errors.append("Build 439 route copy drift")
