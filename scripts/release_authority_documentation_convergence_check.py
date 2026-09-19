@@ -12,6 +12,7 @@ README = ROOT / "README.md"
 BRANCH_NOTE = ROOT / "BRANCH_WORKFLOW_NOTE.md"
 # Retained Build 396 compatibility token: ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_405_415.md"
 ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_416_425.md"
+NEXT_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_426_435.md"
 GOVERNANCE = ROOT / "RELEASE_GOVERNANCE.md"
 PRODUCTION_WORKFLOW = ROOT / ".github/workflows/production-business-acceptance-authority.yml"
 PRODUCTION_CHECK = ROOT / "scripts/production_business_acceptance_check.py"
@@ -57,6 +58,8 @@ handoff = read(HANDOFF, "project handoff")
 readme = read(README, "README")
 branch_note = read(BRANCH_NOTE, "branch workflow note")
 roadmap = read(ROADMAP, "forward roadmap")
+next_roadmap = read(NEXT_ROADMAP, "renewed forward roadmap") if NEXT_ROADMAP.exists() else ""
+roadmap_sequence = roadmap + "\n" + next_roadmap
 governance = read(GOVERNANCE, "release governance")
 production_workflow = read(PRODUCTION_WORKFLOW, "Production workflow")
 production_check = read(PRODUCTION_CHECK, "Production source authority")
@@ -88,9 +91,9 @@ if None not in (current, next_release):
 
     if f"Current source direction: **Build {current} —" not in readme:
         errors.append(f"README does not identify current release {current}")
-    if f"### Build {current} —" not in roadmap:
+    if f"### Build {current} —" not in roadmap_sequence:
         errors.append(f"forward roadmap does not contain current release {current}")
-    if f"### Build {next_release} —" not in roadmap:
+    if f"### Build {next_release} —" not in roadmap_sequence:
         errors.append(f"forward roadmap does not contain next release {next_release}")
 
 require(queue, [
