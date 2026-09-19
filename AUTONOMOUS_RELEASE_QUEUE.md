@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The completed booking-conversion release is the synchronized Production predecessor. Its contract remains `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
+Build 427 — Booking Conversion & Quote Clarity is the synchronized Production predecessor. Its contract remains `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`.
 
 
 ## Retained contract index
