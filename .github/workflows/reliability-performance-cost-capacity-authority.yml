@@ -1,0 +1,57 @@
+name: Build 423 — Reliability, Performance & Cost Capacity Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-reliability-performance-cost-capacity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: reliability-performance-cost-capacity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate reliability, performance & cost capacity
+        run: |
+          python scripts/reliability_performance_cost_capacity_check.py
+          node scripts/reliability_performance_cost_capacity_test.mjs
+
+      - name: Acceptance summary
+        run: |
+          {
+            echo '### Build 423 — Reliability, Performance & Cost Capacity'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Production diagnostics remain bounded/read-only: PASS'
+            echo '- First-party 24h / 7d traffic counts only: PASS'
+            echo '- Cloudflare billing / CPU / future capacity inferred: NO'
+            echo '- Permanent polling / automatic retry expansion / automatic scaling: NONE'
+            echo '- Schema / provider / business mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
