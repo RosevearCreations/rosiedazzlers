@@ -45,6 +45,8 @@ These retained filename authorities remain part of cumulative acceptance without
 - `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
 - `scripts/build402_admin_operations_cockpit_growth_experiment_check.py`
 - `scripts/build396_growth_baseline_forward_roadmap_check.py`
+- `scripts/local_acquisition_content_proof_check.py`
+- `scripts/local_acquisition_content_proof_test.mjs`
 
 ## Current staff workflow framework
 
