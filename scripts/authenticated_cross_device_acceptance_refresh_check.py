@@ -25,9 +25,9 @@ require(endpoint,["current_build:448",'refresh_authority:"authenticated_cross_de
 require(asset,["Observation freshness","Stale roles","Current refresh"],"Launch Readiness")
 require(contract,["# Build 448 — Authenticated Cross-Device Acceptance Refresh","30-day freshness window","Build 449 — Fleet & Maintenance Commercial Decision Closure"],"contract")
 require(blockers,["Independent device / visual evidence","current release"],"HOLD backlog")
-require(queue,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.","**Build 453 — Service Economics, Capacity & Pricing Review** is next"],"queue")
-require(handoff,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release."],"handoff")
-require(readme,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","Current source direction: **Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**."],"README")
+require(queue,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md","FORWARD_BUILD_ROADMAP_446_455.md"],"queue")
+require(handoff,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md"],"handoff")
+require(readme,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md"],"README")
 
 for p in ["functions/api/_lib/authenticated-device-visual-acceptance.js","functions/api/admin/authenticated_device_visual_acceptance.js","assets/launch-readiness-consolidation.js","scripts/authenticated_cross_device_acceptance_refresh_test.mjs"]:
  r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
