@@ -5,7 +5,7 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`.
+The synchronized predecessor contracts are retained through `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`.
 
 ## Retained cumulative authority pointers
 
@@ -72,24 +72,24 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.
+**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.
 
 Scope:
-- reuse the existing maintenance/fleet owner-decision workbench and canonical rulebooks rather than creating a parallel approval system;
-- expose exact canonical decision paths and required closure fields for eligibility, cadence, price, inclusions/exclusions, cancellation, capacity policy, fleet minimums, service tiers, travel, volume pricing/discount and invoicing;
-- keep unresolved commercial terms as explicit `owner_action`;
-- report only an `owner_review_candidate` when all canonical decision domains are source-approved;
-- keep commercial capacity policy separate from live availability and checkout revalidation; and
-- introduce no automatic approval, rulebook runtime write, discount, booking, invoice, recurring billing, provider, schema, customer, storage, outreach or permanent-polling mutation.
+- reuse retained Search Console / Google Business Profile provider evidence and local-search measurement authorities rather than creating a replacement;
+- reconcile first-party landing/referral evidence with anonymous same-session booking-funnel progression;
+- keep provider metrics separate from anonymous sessions and prohibit provider-metric-to-booking joins;
+- prohibit anonymous-session-to-customer or persisted-booking joins;
+- treat provider-window overlap and same-session conversion as observed correlation only, never ranking/indexing/Maps or causal Google evidence; and
+- introduce no schema, analytics-write, provider, publishing, outreach, DNS, ad-spend, booking/customer, storage or permanent-polling mutation.
 
-Current contract: `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Fleet & Maintenance Commercial Decision Closure authority, retained maintenance/fleet owner-decision and commercial authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Local Search Measurement & Conversion Attribution authority, retained local-search/acquisition and booking-funnel authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 450 — Local Search Measurement & Conversion Attribution** is next only after the current release is independently GREEN on protected `main`.
+**Build 451 — Booking Funnel, Quote & Pricing Learning** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_446_455.md`; it has not run out.
