@@ -5,11 +5,13 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
+The synchronized predecessor contract is retained in `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 ## Retained cumulative authority pointers
 
 These completed filename authorities remain cumulative acceptance inputs:
+
+- `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 
 - `FORWARD_BUILD_ROADMAP_436_445.md`
 - `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
@@ -65,24 +67,23 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 445 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 446 — Provider Evidence Reconciliation Refresh** is the active bounded release.
 
 Scope:
-- reconcile the completed 436–444 evidence cycle without fabricating provider/owner closure;
-- record the cycle classification in `PRODUCTION_LEARNING_436_444.md`;
-- retain `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD backlog;
-- renew the next bounded sequence in `FORWARD_BUILD_ROADMAP_446_455.md`;
-- prefer enrichment of existing provider, recovery, device, fleet, local-search, booking, staff, economics and resilience authorities over overlapping replacement surfaces; and
-- introduce no schema, customer/booking, staff-role, payment/refund/provider, accounting/inventory, secret, DNS, restore, destructive R2, outreach or polling mutation.
+- refresh dated Stripe, PayPal, refund and message-delivery evidence through retained read-only authorities;
+- expose evidence source, age, freshness and missing/unavailable source gaps without contacting providers;
+- retain stale, missing, undated or unavailable evidence as truthful provider-dependent HOLD evidence;
+- preserve explicit operator review before any canonical HOLD narrowing; and
+- introduce no charge, refund, message, provider/customer mutation, secret change, webhook replay, outreach or permanent polling.
 
-Current contract: `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Production Learning & Roadmap Renewal authority, retained owning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Provider Evidence Reconciliation Refresh authority, retained provider/reconciliation authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 446 — Provider Evidence Reconciliation Refresh** is next only after the current release is independently GREEN on protected `main`.
+**Build 447 — Recovery Artifact & Drill Evidence Review** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_446_455.md`; it has not run out.

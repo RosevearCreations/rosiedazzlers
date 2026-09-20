@@ -58,6 +58,10 @@ jobs:
           node --check functions/api/_lib/provider-evidence-closure.js
           node --check functions/api/admin/provider_evidence_closure.js
           python -m py_compile scripts/provider_outcome_delivery_evidence_closure_check.py
+          python -m py_compile scripts/provider_evidence_reconciliation_refresh_check.py
+          node --check scripts/provider_evidence_reconciliation_refresh_test.mjs
+          node --check functions/api/_lib/provider-evidence-reconciliation-refresh.js
+          node --check functions/api/admin/provider_evidence_reconciliation_refresh.js
           node --check scripts/provider_outcome_delivery_evidence_closure_test.mjs
           node --check functions/api/_lib/provider-outcome-delivery-evidence.js
           node --check functions/api/admin/provider_outcome_delivery_evidence.js
@@ -230,6 +234,11 @@ jobs:
         run: |
           python scripts/provider_outcome_delivery_evidence_closure_check.py
           node scripts/provider_outcome_delivery_evidence_closure_test.mjs
+
+      - name: Validate provider evidence reconciliation refresh authority
+        run: |
+          python scripts/provider_evidence_reconciliation_refresh_check.py
+          node scripts/provider_evidence_reconciliation_refresh_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |

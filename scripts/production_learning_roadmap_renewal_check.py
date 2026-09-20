@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Current Production Learning & Roadmap Renewal authority."""
+"""Retained Production Learning & Roadmap Renewal authority."""
 from pathlib import Path
 import sys
 
@@ -94,10 +94,9 @@ require(blockers,[
 require(queue,[
     "BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "FORWARD_BUILD_ROADMAP_446_455.md","STARTUP_GO_LIVE_BLOCKERS.md",
-    "**Build 445 — Production Learning & Roadmap Renewal** is the active bounded release.",
-    "**Build 446 — Provider Evidence Reconciliation Refresh** is next",
-    "rd main protection","Production deployment/runtime/business acceptance"
-],"release queue")
+    "rd main protection","Production deployment/runtime/business acceptance",
+    "Missing required checks or exact Production runtime/deployment identity are blockers"
+],"release queue retained renewal authority")
 
 require(handoff,[
     "BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",

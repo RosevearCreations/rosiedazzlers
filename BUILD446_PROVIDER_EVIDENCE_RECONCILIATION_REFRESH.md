@@ -1,7 +1,7 @@
 # Build 446 — Provider Evidence Reconciliation Refresh
 
 ## Purpose
-Refresh dated provider payment/refund/message-delivery evidence through existing read-only authorities and make source age, reconciliation and missing-evidence gaps explicit.
+Refresh dated provider payment/refund/message-delivery evidence through existing read-only authorities and make evidence age, source, freshness, reconciliation and missing-evidence gaps explicit.
 
 ## Boundary
 No charge, refund, message, provider contact or provider mutation is authorized merely to obtain evidence. Missing provider evidence remains `provider_dependent`.

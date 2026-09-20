@@ -11,6 +11,7 @@ import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
 import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-consolidation.js";
 import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evidence.js";
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
+import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
@@ -73,6 +74,12 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const providerEvidenceReconciliationRefresh = buildProviderEvidenceReconciliationRefresh({
+    closure: providerClosureResult.data?.closure || {},
+    outcome: providerOutcomeDeliveryEvidence,
+    generated_at: generatedAt
+  });
+
   const backupRecoveryEvidenceClosure = buildBackupRecoveryEvidenceClosure({
     proof: recoveryExportResult.data?.proof || null,
     source_available: recoveryExportResult.ok && Boolean(recoveryExportResult.data?.proof),
@@ -101,6 +108,8 @@ export async function onRequestGet({ request, env }) {
     provider_evidence_closure: providerClosureResult.data?.closure || null,
     provider_outcome_delivery_evidence: providerOutcomeDeliveryEvidence,
     current_provider_evidence_authority: "provider_outcome_delivery_evidence_closure",
+    provider_evidence_reconciliation_refresh: providerEvidenceReconciliationRefresh,
+    current_provider_reconciliation_authority: "provider_evidence_reconciliation_refresh",
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
@@ -123,6 +132,10 @@ export async function onRequestGet({ request, env }) {
       production_workflow_evidence: {
         available: launchEvidenceResult.ok && jobHandoffResult.available,
         classification: productionWorkflowEvidence.status
+      },
+      provider_evidence_reconciliation_refresh: {
+        available: providerClosureResult.ok,
+        classification: providerEvidenceReconciliationRefresh.status
       },
       authenticated_device_visual_acceptance: {
         available: launchEvidenceResult.ok,
