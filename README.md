@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 443 — Service Economics & Commercial Capacity Review**.
+Current source direction: **Build 444 — Reliability, Security & Cost Reassessment**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,8 +8,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md` — current bounded contract.
-5. `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md` — retained predecessor contract.
+4. `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md` — current bounded contract.
+5. `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
@@ -60,6 +60,9 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `BUILD431_LOCAL_ACQUISITION_CONTENT_PROOF.md`
 - `BUILD432_DETAILER_STAFF_WORKFLOW_REFINEMENT.md`
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
+- `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
+- `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
 - `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
@@ -69,18 +72,21 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current service economics & commercial capacity review framework
-This release manually composes retained profitability completeness with fleet/commercial demand and capacity-boundary evidence.
-- Missing recorded cost/time/cash/refund/COGS evidence blocks margin conclusions.
-- Fleet demand does not prove signed business or live capacity.
-- Live capacity remains authoritative through availability/checkout.
-- Customer identities and raw booking identifiers are excluded.
-- No price/discount, fleet approval, quote, invoice, booking, accounting/inventory, provider or polling mutation is introduced.
+## Current reliability, security & cost reassessment framework
+This release re-runs the current Production reliability/security/recovery evidence cycle while reusing the proven retained read-only I.T. reassessment surface.
+- First-party traffic and diagnostic duration are operational-pressure evidence only.
+- Cloudflare billing/CPU consumption, future capacity and provider quota state are not inferred.
+- Source/security checks do not establish attack likelihood.
+- Source recovery readiness does not prove real restore, secret rotation, DNS recovery, R2 recovery or provider recovery success.
+- Existing `it.runtime.view` and manual-refresh-only boundaries remain unchanged.
+- No scaling/retry/cache/secret/restore/DNS/R2/provider/schema/customer/business mutation, outreach or permanent polling is introduced.
 
 ## Durable validation
 Retained and current authorities include:
 
 ```bash
+python scripts/current_reliability_security_cost_reassessment_check.py
+python scripts/reliability_security_cost_reassessment_check.py
 python scripts/service_economics_commercial_capacity_review_check.py
 node scripts/service_economics_commercial_capacity_review_test.mjs
 python scripts/build428_service_economics_job_profitability_check.py
@@ -109,4 +115,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
+**Build 445 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.

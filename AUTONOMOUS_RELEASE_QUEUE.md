@@ -5,12 +5,13 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`.
+The synchronized predecessor contract is retained in `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`.
 
 ## Retained cumulative authority pointers
 
 These completed filename authorities remain cumulative acceptance inputs:
 
+- `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
 - `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`
 - `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
@@ -63,22 +64,24 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 443 — Service Economics & Commercial Capacity Review** is the active bounded release.
+**Build 444 — Reliability, Security & Cost Reassessment** is the active bounded release.
 
 Scope:
-- aggregate selected-month profitability completeness with fleet/commercial demand and owner-rule evidence;
-- withhold margin conclusions when recorded evidence is incomplete;
-- preserve demand as demand evidence only and live availability/checkout as capacity authority;
-- expose no customer identity or raw booking identifiers;
-- introduce no price/discount, fleet approval, quote, invoice, booking, accounting/inventory, provider or polling mutation.
+- re-run retained Production reliability, privacy/session, security, recovery and cost-awareness authorities after Builds 436–443;
+- reuse the existing protected I.T. manual-refresh reassessment surface rather than duplicate runtime code;
+- keep first-party traffic and diagnostic duration as operational-pressure evidence only;
+- keep Cloudflare billing/CPU, future capacity, attack likelihood and real recovery success uninferred without owning evidence;
+- preserve provider/owner/observed gaps as truthful HOLD or unavailable states; and
+- introduce no scaling, retry, cache, secret, restore, DNS/R2, provider, schema, customer/business, outreach or polling mutation.
 
-Current contract: `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`.
+Current contract: `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+The exact candidate must pass focused Build 444 reassessment authority, retained reliability/security/recovery authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+
+Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
-
-Production promotion preserves non-force fast-forward to exact accepted `dev`, `rd main protection`, and independent Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
-Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+**Build 445 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.

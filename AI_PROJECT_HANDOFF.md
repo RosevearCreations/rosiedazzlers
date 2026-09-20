@@ -3,20 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`.
+The synchronized Production predecessor is retained through `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`.
 
-**Build 443 — Service Economics & Commercial Capacity Review** is the active bounded release.
+**Build 444 — Reliability, Security & Cost Reassessment** is the active bounded release.
 
-**Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
+**Build 445 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current service economics & commercial capacity review contract
-- Manual refresh composes retained accounting profitability and fleet/commercial learning evidence.
-- Missing material, labour, cash/refund or COGS evidence blocks margin conclusions.
-- Demand never proves signed business or live capacity.
-- Customer identities/raw booking identifiers are excluded.
-- No price/discount, fleet approval, quote, invoice, booking, accounting/inventory, provider or polling mutation is introduced.
+## Current reliability, security & cost reassessment contract
+- Reuses the retained Build 434 protected I.T. manual-refresh reassessment surface.
+- Re-runs current reliability/performance, security/privacy/session, backup/recovery, observability and I.T. release-control authorities after Builds 436–443.
+- First-party traffic and diagnostics remain operational-pressure evidence only.
+- Cloudflare billing/CPU, future capacity, attack likelihood and real recovery success remain uninferred without owning evidence.
+- Missing provider/owner/observed evidence remains HOLD or unavailable.
+- No scaling/retry/cache/secret/restore/DNS/R2/provider/schema/customer/business mutation, outreach or permanent polling is introduced.
+
+## Durable current-release authorities
+- `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
+- `.github/workflows/current-reliability-security-cost-reassessment-authority.yml`
+- `scripts/current_reliability_security_cost_reassessment_check.py`
+- `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
+- `.github/workflows/service-economics-commercial-capacity-review-authority.yml`
+- `scripts/service_economics_commercial_capacity_review_check.py`
 
 ## Retained cumulative authority pointers
 
