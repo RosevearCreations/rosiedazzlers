@@ -181,6 +181,7 @@ jobs:
           node --check functions/api/admin/staff_support_mobile_efficiency_learning.js
           node --check assets/build452-staff-support-mobile-efficiency-learning.js
           python -m py_compile scripts/service_economics_capacity_pricing_review_check.py
+          python -m py_compile scripts/reliability_security_cost_resilience_reassessment_check.py
           node --check scripts/service_economics_capacity_pricing_review_test.mjs
           node --check functions/api/_lib/service-economics-commercial-capacity-review.js
           node --check functions/api/admin/service_economics_commercial_capacity_review.js
