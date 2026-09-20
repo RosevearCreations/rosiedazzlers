@@ -79,7 +79,7 @@ These completed filename authorities remain cumulative acceptance inputs:
 **Build 451 — Booking Funnel, Quote & Pricing Learning** is the active bounded release.
 
 Scope:
-- enrich retained Build 427 / Build 441 booking and quote learning authorities rather than creating a replacement;
+- enrich retained booking-conversion and booking/quote/retention learning authorities rather than creating a replacement;
 - identify the largest booking-stage and price-adjacent stage drops without inferring price causation;
 - summarize sent/accepted/declined/unresolved quotes across broad quoted-value bands;
 - compare aggregate accepted values with quoted values without inferring discounting, scope change, completed work or realized margin;
@@ -88,7 +88,7 @@ Scope:
 
 Current contract: `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Booking Funnel, Quote & Pricing Learning authority, retained Build 427 / Build 441 / Booking & Rebooking Funnel authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Booking Funnel, Quote & Pricing Learning authority, retained booking-conversion, booking/quote/retention and Booking & Rebooking Funnel authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
