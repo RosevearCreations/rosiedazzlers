@@ -89,8 +89,8 @@ require(readme,[
     "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md",
     "booking_funnel_quote_pricing_learning_check.py",
-    "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**"
-],"README")
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md"
+],"README retained authority")
 for gate,label in ((dev,"Development gate"),(prod,"Production gate")):
     require(gate,["booking_funnel_quote_pricing_learning_check.py","booking_funnel_quote_pricing_learning_test.mjs"],label)
 
