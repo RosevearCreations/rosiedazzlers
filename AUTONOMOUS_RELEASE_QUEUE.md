@@ -9,6 +9,7 @@ The synchronized predecessor contracts are retained through `BUILD448_AUTHENTICA
 
 ## Retained cumulative authority pointers
 
+- `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`
 - `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`
 
 These completed filename authorities remain cumulative acceptance inputs:
