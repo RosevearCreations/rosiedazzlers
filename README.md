@@ -1,15 +1,15 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 444 — Reliability, Security & Cost Reassessment**.
+Current source direction: **Build 445 — Production Learning & Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md` — current bounded contract.
-5. `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md` — retained predecessor contract.
+3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
+4. `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
+5. `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
@@ -72,14 +72,13 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current reliability, security & cost reassessment framework
-This release re-runs the current Production reliability/security/recovery evidence cycle while reusing the proven retained read-only I.T. reassessment surface.
-- First-party traffic and diagnostic duration are operational-pressure evidence only.
-- Cloudflare billing/CPU consumption, future capacity and provider quota state are not inferred.
-- Source/security checks do not establish attack likelihood.
-- Source recovery readiness does not prove real restore, secret rotation, DNS recovery, R2 recovery or provider recovery success.
-- Existing `it.runtime.view` and manual-refresh-only boundaries remain unchanged.
-- No scaling/retry/cache/secret/restore/DNS/R2/provider/schema/customer/business mutation, outreach or permanent polling is introduced.
+## Current Production learning & roadmap renewal framework
+This release reconciles the completed 436–444 evidence cycle without treating source/runtime GREEN as external-evidence closure.
+- `PRODUCTION_LEARNING_436_444.md` records retained, closed, owner-action, provider-dependent and unavailable classifications.
+- `STARTUP_GO_LIVE_BLOCKERS.md` remains the single canonical HOLD backlog.
+- `FORWARD_BUILD_ROADMAP_446_455.md` creates the next bounded sequence and deliberately enriches existing capabilities rather than duplicating them.
+- Provider payment/refund/delivery, local-search outcomes, recovery evidence, authenticated real-device observations and fleet/maintenance owner decisions remain separately evidenced.
+- No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is introduced.
 
 ## Durable validation
 Retained and current authorities include:
@@ -115,4 +114,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 445 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 446 — Provider Evidence Reconciliation Refresh** is next only after the current release is independently GREEN on protected `main`.
