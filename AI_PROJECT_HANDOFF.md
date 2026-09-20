@@ -3,24 +3,28 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`.
+The synchronized Production predecessor is retained through `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`.
 
-**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.
+**Build 451 — Booking Funnel, Quote & Pricing Learning** is the active bounded release.
 
-**Build 451 — Booking Funnel, Quote & Pricing Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current local-search measurement & conversion-attribution contract
-- Reuse retained Build 414/440 local-search measurement/provider evidence rather than create a second provider or analytics authority.
-- Same-session attribution uses bounded anonymous `site_activity_events` only.
-- Search Console / GBP metrics are never joined to an individual session or booking.
-- Anonymous sessions are never joined to customer identity or persisted booking outcomes.
-- Google referral → landing → booking-funnel progression is observed first-party correlation only, not causal attribution.
-- Provider evidence remains dated/freshness-classified and may remain `provider_dependent` or `owner_action`.
-- No schema, analytics-write, provider, publishing, outreach, DNS, ad-spend, customer/booking, storage or permanent-polling mutation is authorized.
+## Current booking funnel, quote & pricing learning contract
+- Reuse retained Build 427 Booking Conversion & Quote Clarity, Build 441 Booking/Quote/Retention Production Learning and Booking & Rebooking Funnel authorities.
+- Booking-stage drops remain anonymous aggregate evidence; price-adjacent does not mean price-caused.
+- Quote evidence is aggregated into broad quoted-value cohorts, with at least three sent rows required for a review cohort.
+- Accepted-vs-quoted aggregate value differences do not infer discounting, scope change, completed work or realized margin.
+- No customer/quote/session identity is returned by the Build 451 learning endpoint.
+- Pricing, discounts, outreach, quote acceptance and booking creation remain owner-controlled and non-automatic.
+- No schema, customer/profile, pricing/catalogue, provider/payment, accounting/inventory, destructive-storage or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`
+- `.github/workflows/booking-funnel-quote-pricing-learning-authority.yml`
+- `scripts/booking_funnel_quote_pricing_learning_check.py`
+- `scripts/booking_funnel_quote_pricing_learning_test.mjs`
 - `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
 - `.github/workflows/local-search-measurement-conversion-attribution-authority.yml`
 - `scripts/local_search_measurement_conversion_attribution_check.py`
