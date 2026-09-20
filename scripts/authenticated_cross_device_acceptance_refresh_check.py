@@ -25,9 +25,9 @@ require(endpoint,["current_build:448",'refresh_authority:"authenticated_cross_de
 require(asset,["Observation freshness","Stale roles","Current refresh"],"Launch Readiness")
 require(contract,["# Build 448 — Authenticated Cross-Device Acceptance Refresh","30-day freshness window","Build 449 — Fleet & Maintenance Commercial Decision Closure"],"contract")
 require(blockers,["Independent device / visual evidence","current release"],"HOLD backlog")
-require(queue,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.","**Build 450 — Local Search Measurement & Conversion Attribution** is next"],"queue")
-require(handoff,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release."],"handoff")
-require(readme,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","Current source direction: **Build 449 — Fleet & Maintenance Commercial Decision Closure**."],"README")
+require(queue,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.","**Build 451 — Booking Funnel, Quote & Pricing Learning** is next"],"queue")
+require(handoff,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release."],"handoff")
+require(readme,["BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md","authenticated_cross_device_acceptance_refresh_check.py","Current source direction: **Build 450 — Local Search Measurement & Conversion Attribution**."],"README")
 
 for p in ["functions/api/_lib/authenticated-device-visual-acceptance.js","functions/api/admin/authenticated_device_visual_acceptance.js","assets/launch-readiness-consolidation.js","scripts/authenticated_cross_device_acceptance_refresh_test.mjs"]:
  r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
