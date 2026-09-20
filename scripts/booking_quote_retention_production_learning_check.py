@@ -92,19 +92,17 @@ require(contract, [
     "Build 442 — Staff Workflow & Support Exception Learning"
 ], "Build 441 contract")
 require(readme, [
-    "Current source direction: **Build 441 — Booking, Quote & Retention Production Learning**",
-    "scripts/booking_quote_retention_production_learning_check.py",
-    "**Build 442 — Staff Workflow & Support Exception Learning**"
-], "README")
+    "BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md",
+    "scripts/booking_quote_retention_production_learning_check.py"
+], "README retained Build 441 authority")
 require(queue, [
-    "**Build 441 — Booking, Quote & Retention Production Learning** is the active bounded release.",
-    "**Build 442 — Staff Workflow & Support Exception Learning**"
-], "release queue")
+    "BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md"
+], "release queue retained Build 441 authority")
 require(handoff, [
-    "**Build 441 — Booking, Quote & Retention Production Learning** is the active bounded release.",
+    "BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md",
     ".github/workflows/booking-quote-retention-production-learning-authority.yml",
     "scripts/booking_quote_retention_production_learning_check.py"
-], "handoff")
+], "handoff retained Build 441 authority")
 require(auth, ['case "admin-booking-quote-retention-learning"'], "operations route ceiling")
 require(nav, [
     '"/admin-booking-quote-retention-learning.html"',
