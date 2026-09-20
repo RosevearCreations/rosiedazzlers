@@ -60,17 +60,17 @@ require(contract,[
 ],"Build 449 contract")
 require(blockers,["Maintenance / fleet business approval","Build 449","owner_review_candidate"],"canonical HOLD backlog")
 require(queue,[
- "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+ "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
- "**Build 453 — Service Economics, Capacity & Pricing Review** is next"
+ "FORWARD_BUILD_ROADMAP_446_455.md"
 ],"release queue")
 require(handoff,[
- "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+ "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
  "fleet_maintenance_commercial_decision_closure_check.py"
 ],"project handoff")
 require(readme,[
- "Current source direction: **Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**.",
+ "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
  "fleet_maintenance_commercial_decision_closure_check.py"
 ],"README")
