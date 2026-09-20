@@ -3,25 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized Production predecessor is retained through `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`.
 
-**Build 446 — Provider Evidence Reconciliation Refresh** is the active bounded release.
+**Build 447 — Recovery Artifact & Drill Evidence Review** is the active bounded release.
 
-**Build 447 — Recovery Artifact & Drill Evidence Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 448 — Authenticated Cross-Device Acceptance Refresh** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current provider-evidence reconciliation contract
-- The current release enriches the retained provider evidence authorities rather than replacing them.
-- Evidence age, source availability, freshness and reconciliation gaps are explicit for Stripe, PayPal, refunds and message delivery.
-- Missing, undated, stale or unavailable provider evidence remains provider-owned and does not become success.
+## Current recovery artifact & drill evidence review contract
+- The current release enriches retained backup/recovery evidence authorities rather than replacing them.
+- Backup artifact, retention-location and bounded recovery-drill evidence age/freshness are explicit.
+- Missing, undated, stale or unavailable recovery evidence remains owner-action evidence and does not become success.
 - Backup/recovery, authenticated device observation and maintenance/fleet business terms remain explicit owner evidence.
 - Unreachable authorized evidence remains unavailable rather than guessed.
 - `FORWARD_BUILD_ROADMAP_446_455.md` remains the active bounded roadmap.
-- Provider refresh is manual/read-only; no provider contact is performed merely to obtain evidence.
+- Recovery review is manual/read-only; no real restore, rollback, DNS recovery, secret rotation or destructive R2 action is performed merely to obtain evidence.
 - No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`
+- `.github/workflows/recovery-artifact-drill-evidence-review-authority.yml`
+- `scripts/recovery_artifact_drill_evidence_review_check.py`
+- `scripts/recovery_artifact_drill_evidence_review_test.mjs`
 - `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`
 - `.github/workflows/provider-evidence-reconciliation-refresh-authority.yml`
 - `scripts/provider_evidence_reconciliation_refresh_check.py`

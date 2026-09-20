@@ -1,7 +1,7 @@
 # Build 447 — Recovery Artifact & Drill Evidence Review
 
 ## Purpose
-Reconcile current backup/export artifact age, retention location and bounded recovery-drill evidence without performing unnecessary destructive recovery.
+Reconcile current backup/export artifact evidence age, freshness, retention location and bounded recovery-drill evidence without performing unnecessary destructive recovery.
 
 ## Boundary
 No Production restore, secret rotation, DNS mutation, destructive R2 action or provider recovery is authorized. Source readiness never proves real recovery success.

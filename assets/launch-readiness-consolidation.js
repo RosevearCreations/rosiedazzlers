@@ -150,7 +150,7 @@ function renderProviderClosure(data){
 
 function renderRecovery(data){
   const recovery=data.recovery||{}, exports=Array.isArray(data.exports)?data.exports:[];
-  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{};
+  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{}, review=data.recovery_artifact_drill_evidence_review||{};
   const backup=proof.backup||{}, drill=proof.recovery_drill||{}, accountant=proof.accountant_export||{}, artifact=proof.export_artifact||{};
   const required=Array.isArray(proof.required)?proof.required:[], closureRequired=Array.isArray(closure.required)?closure.required:[];
   $("#recoveryOut").innerHTML=`
@@ -161,8 +161,11 @@ function renderRecovery(data){
       ${metric("Backup artifact",backup.artifact_observed?"observed":"owner action")}
       ${metric("Restore drill",drill.observed?"observed":"owner action")}
       ${metric("Accountant export",accountant.usable?"usable":accountant.status||"hold")}
+      ${metric("Stale recovery evidence",review.stale_count??0)}
+      ${metric("Missing recovery evidence",review.missing_count??0)}
     </div>
     <p><strong>Backup evidence observed:</strong> ${chip(recovery.backup_evidence_observed?"verified":"owner action")} · <strong>Rollback drill observed:</strong> ${chip(recovery.rollback_drill_observed?"verified":"owner action")}</p>
+    <p class="mini"><strong>Build 447 recovery review:</strong> ${chip(review.status||"owner_action")} · backup ${esc(review.backup_artifact?.age_days==null?"not dated":`${review.backup_artifact.age_days} d`)} · retention ${esc(review.retention_location?.age_days==null?"not dated":`${review.retention_location.age_days} d`)} · drill ${esc(review.recovery_drill?.age_days==null?"not dated":`${review.recovery_drill.age_days} d`)}</p>
     <p class="mini"><strong>Latest dated recovery evidence:</strong> ${esc(closure.latest_observed_at?new Date(closure.latest_observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(closure.canonical_hold?.detail||"Backup artifact, retention location and recovery-drill evidence remain owner-observed requirements.")}</p>
     <div class="stack">${closureRequired.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Observed: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not dated")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>

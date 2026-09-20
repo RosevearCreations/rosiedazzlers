@@ -1,0 +1,31 @@
+name: Build 447 — Recovery Artifact & Drill Evidence Review Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-build447-recovery-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: recovery-artifact-drill-evidence-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate source
+        run: |
+          python -m py_compile scripts/recovery_artifact_drill_evidence_review_check.py
+          node --check functions/api/_lib/recovery-artifact-drill-evidence-review.js
+          node --check functions/api/admin/recovery_artifact_drill_evidence_review.js
+          node --check scripts/recovery_artifact_drill_evidence_review_test.mjs
+          python scripts/recovery_artifact_drill_evidence_review_check.py

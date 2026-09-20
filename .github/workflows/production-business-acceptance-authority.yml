@@ -65,6 +65,10 @@ jobs:
           node --check scripts/provider_outcome_delivery_evidence_closure_test.mjs
           node --check functions/api/_lib/provider-outcome-delivery-evidence.js
           node --check functions/api/admin/provider_outcome_delivery_evidence.js
+          python -m py_compile scripts/recovery_artifact_drill_evidence_review_check.py
+          node --check scripts/recovery_artifact_drill_evidence_review_test.mjs
+          node --check functions/api/_lib/recovery-artifact-drill-evidence-review.js
+          node --check functions/api/admin/recovery_artifact_drill_evidence_review.js
           python -m py_compile scripts/recovery_export_operational_proof_check.py
           node --check scripts/recovery_export_operational_proof_test.mjs
           node --check functions/api/_lib/recovery-export-operational-proof.js
@@ -239,6 +243,11 @@ jobs:
         run: |
           python scripts/provider_evidence_reconciliation_refresh_check.py
           node scripts/provider_evidence_reconciliation_refresh_test.mjs
+
+      - name: Validate recovery artifact & drill evidence review authority
+        run: |
+          python scripts/recovery_artifact_drill_evidence_review_check.py
+          node scripts/recovery_artifact_drill_evidence_review_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |

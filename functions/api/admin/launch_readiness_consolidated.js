@@ -13,6 +13,7 @@ import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evi
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
 import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
+import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
@@ -86,6 +87,11 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const recoveryArtifactDrillEvidenceReview = buildRecoveryArtifactDrillEvidenceReview({
+    closure: backupRecoveryEvidenceClosure,
+    generated_at: generatedAt
+  });
+
   const authenticatedDeviceVisualAcceptance = buildAuthenticatedDeviceVisualAcceptance({
     launch_evidence: launchEvidenceResult.items,
     workflow_evidence: productionWorkflowEvidence,
@@ -113,6 +119,8 @@ export async function onRequestGet({ request, env }) {
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
+    recovery_artifact_drill_evidence_review: recoveryArtifactDrillEvidenceReview,
+    current_recovery_review_authority: "recovery_artifact_drill_evidence_review",
     authenticated_device_visual_acceptance: authenticatedDeviceVisualAcceptance,
     current_device_visual_authority: "authenticated_device_visual_acceptance",
     source_status: {
@@ -136,6 +144,10 @@ export async function onRequestGet({ request, env }) {
       provider_evidence_reconciliation_refresh: {
         available: providerClosureResult.ok,
         classification: providerEvidenceReconciliationRefresh.status
+      },
+      recovery_artifact_drill_evidence_review: {
+        available: recoveryExportResult.ok,
+        classification: recoveryArtifactDrillEvidenceReview.status
       },
       authenticated_device_visual_acceptance: {
         available: launchEvidenceResult.ok,
