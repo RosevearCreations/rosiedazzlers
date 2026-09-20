@@ -185,6 +185,7 @@ jobs:
           node --check functions/api/admin/reliability_performance_cost_capacity.js
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
+          python -m py_compile scripts/build444_reliability_security_cost_reassessment_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
           node --check functions/api/_lib/security-privacy-recovery-drill.js
@@ -360,6 +361,9 @@ jobs:
 
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
+
+      - name: Validate Build 444 reliability, security & cost reassessment
+        run: python scripts/build444_reliability_security_cost_reassessment_check.py
 
       - name: Check route-copy parity
         run: python scripts/sync_route_copies.py --check
