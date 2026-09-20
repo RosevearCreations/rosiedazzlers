@@ -94,6 +94,7 @@ python scripts/provider_outcome_delivery_evidence_closure_check.py
 python scripts/authenticated_device_visual_acceptance_check.py
 python scripts/reliability_security_cost_reassessment_check.py
 python scripts/staff_workflow_support_exception_learning_check.py
+python scripts/booking_quote_retention_production_learning_check.py
 python scripts/release_authority_documentation_convergence_check.py
 ```
 
