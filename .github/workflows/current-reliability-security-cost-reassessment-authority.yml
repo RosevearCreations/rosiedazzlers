@@ -1,0 +1,61 @@
+name: Current Reliability, Security & Cost Reassessment Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-current-reassessment-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: current-reliability-security-cost-reassessment
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Validate current reassessment authority syntax
+        run: |
+          python -m py_compile scripts/current_reliability_security_cost_reassessment_check.py
+          python -m py_compile scripts/reliability_security_cost_reassessment_check.py
+          node --check functions/api/_lib/reliability-security-cost-reassessment.js
+          node --check functions/api/admin/reliability_security_cost_reassessment.js
+          node --check assets/build434-reliability-reassessment.js
+      - name: Validate current-cycle reassessment
+        run: python scripts/current_reliability_security_cost_reassessment_check.py
+      - name: Re-run retained Build 434 reassessment authority
+        run: python scripts/reliability_security_cost_reassessment_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo "### Current reliability/security/cost reassessment"
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo "- Builds 436–443 retained evidence reassessment: PASS"
+            echo "- Reliability/security/privacy/session/recovery boundaries: PASS"
+            echo "- Cloudflare billing/CPU/future capacity, attack likelihood and real recovery success remain uninferred."
+            echo "- Existing manual-refresh I.T. surface reused; role ceiling unchanged."
+            echo "- No scaling/retry/cache/secret/restore/DNS/R2/provider/schema/customer/business mutation or permanent polling."
+          } >> "$GITHUB_STEP_SUMMARY"
