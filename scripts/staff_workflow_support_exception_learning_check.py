@@ -88,7 +88,7 @@ for forbidden in ("setInterval(", "localStorage", "sessionStorage", 'method: "PO
     if forbidden in client:
         errors.append(f"Build 442 client must not contain {forbidden!r}")
 
-for forbidden in ("customer_name", "customer_email", "booking_id:", "raw_exception_id"):
+for forbidden in ("customer_name", "customer_email", "booking_id:", "exception_id:"):
     if forbidden in helper:
         errors.append(f"Build 442 helper must not expose {forbidden!r}")
 
