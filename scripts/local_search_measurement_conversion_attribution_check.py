@@ -94,7 +94,7 @@ require(contract,[
  "Google Business Profile",
  "landing-page",
  "booking-funnel",
- "no causal",
+ "not causal",
  "Build 451 — Booking Funnel, Quote & Pricing Learning"
 ],"Build 450 contract")
 require(blockers,["Local-search provider evidence","Build 450","same-session"],"canonical HOLD backlog")
