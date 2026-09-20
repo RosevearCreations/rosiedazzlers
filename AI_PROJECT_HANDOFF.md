@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`.
+The synchronized Production predecessor is retained through `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`.
 
-**Build 447 — Recovery Artifact & Drill Evidence Review** is the active bounded release.
+**Build 448 — Authenticated Cross-Device Acceptance Refresh** is the active bounded release.
 
-**Build 448 — Authenticated Cross-Device Acceptance Refresh** is next only after the current release is independently GREEN on protected `main`.
+**Build 449 — Fleet & Maintenance Commercial Decision Closure** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current recovery artifact & drill evidence review contract
+## Current authenticated cross-device refresh contract
+- Reuse the existing Build 438 authenticated-device classifier rather than creating a replacement.
+- Customer, Detailer, Operations and Admin observations must retain auth/device/browser/route/viewport/outcome evidence.
+- Current-release acceptance requires observations no older than the bounded 30-day freshness window.
+- Stale evidence remains visible but cannot satisfy current-release closure.
+- Representative phone/tablet/desktop coverage remains required.
+- Responsive/accessibility source checks remain supporting-only and do not become real-device proof.
+- Canonical HOLD narrowing still requires explicit operator review.
+- No screenshot capture/polling, schema/customer/provider/accounting/inventory/storage/outreach/permanent-polling mutation is authorized.
+
 - The current release enriches retained backup/recovery evidence authorities rather than replacing them.
 - Backup artifact, retention-location and bounded recovery-drill evidence age/freshness are explicit.
 - Missing, undated, stale or unavailable recovery evidence remains owner-action evidence and does not become success.
@@ -22,6 +31,10 @@ Current contract: `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`. Active 
 - No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`
+- `.github/workflows/authenticated-cross-device-acceptance-refresh-authority.yml`
+- `scripts/authenticated_cross_device_acceptance_refresh_check.py`
+- `scripts/authenticated_cross_device_acceptance_refresh_test.mjs`
 - `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`
 - `.github/workflows/recovery-artifact-drill-evidence-review-authority.yml`
 - `scripts/recovery_artifact_drill_evidence_review_check.py`
