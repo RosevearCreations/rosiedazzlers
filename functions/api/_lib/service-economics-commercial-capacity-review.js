@@ -36,3 +36,82 @@ export function buildServiceEconomicsCommercialCapacityReview({economics={},flee
   };
 }
 function candidate(area,state,finding,bounded_operator_review,dependency){return{area,state,finding,bounded_operator_review,dependency,automatic_action_authorized:false};}
+
+
+// Build 453 — additive service economics, capacity & pricing review over retained Build 443/451 authorities.
+export function buildServiceEconomicsCapacityPricingReview({economics={},fleet={},pricing={},source_status={},generated_at=null}={}){
+  const base=buildServiceEconomicsCommercialCapacityReview({economics,fleet,source_status,generated_at});
+  const pricingAvailable=sourceAvailable(source_status?.pricing_learning);
+  const quotes=pricing?.quotes||{}, bands=Array.isArray(quotes?.value_bands)?quotes.value_bands:[];
+  const sufficientBands=bands.filter(row=>row?.review_cohort_sufficient===true).map(row=>({
+    key:clean(row?.key)||"unclassified",label:clean(row?.label)||clean(row?.key)||"Unclassified",
+    sent_quotes:Math.max(0,n(row?.sent_quotes)),accepted_quotes:Math.max(0,n(row?.accepted_quotes)),
+    declined_quotes:Math.max(0,n(row?.declined_quotes)),unresolved_quotes:Math.max(0,n(row?.unresolved_quotes)),
+    accepted_of_sent_pct:Number.isFinite(Number(row?.accepted_of_sent_pct))?Number(row.accepted_of_sent_pct):null,
+    declined_of_sent_pct:Number.isFinite(Number(row?.declined_of_sent_pct))?Number(row.declined_of_sent_pct):null,
+    review_cohort_sufficient:true
+  }));
+  const pricingEvidenceStatus=clean(pricing?.evidence_status)||(pricingAvailable?"partial":"unavailable");
+  const pricingComplete=pricingAvailable&&pricingEvidenceStatus==="observed"&&quotes?.possibly_truncated!==true&&sufficientBands.length>0;
+  const servicePackageCohorts=servicePackageEconomics(economics?.rows||[]);
+  const candidates=[...(base.review_candidates||[])];
+
+  if(!pricingAvailable)candidates.push(candidate("pricing_learning_source","unavailable","Aggregate booking/quote pricing-learning evidence is unavailable.","Restore the retained read-only booking/quote learning authority before combining pricing context with economics evidence.","internal_evidence"));
+  else if(pricingEvidenceStatus!=="observed"||quotes?.possibly_truncated===true)candidates.push(candidate("pricing_learning_completeness","review","Pricing-learning evidence is partial or may be truncated.","Use the retained quote/funnel review as bounded context only; do not infer price sensitivity or change prices from incomplete evidence.","observed_evidence"));
+  else if(!sufficientBands.length)candidates.push(candidate("pricing_sample","review","No quote-value band has the retained minimum review cohort.","Keep observing existing quote evidence; do not infer a price-band conversion pattern from very small samples.","observed_evidence"));
+  else if(base.economics?.contribution_reliable_for_review)candidates.push(candidate("pricing_review_context","observed","Recorded economics are complete enough for review and at least one aggregate quote-value cohort is sufficiently observed.","Review economics and quote cohorts side by side only. They are not causally joined, and no price or discount change is authorized.","owner_action"));
+  else candidates.push(candidate("pricing_review_blocked","review","Quote/pricing context exists, but recorded economics are not complete enough for a margin-backed pricing review.","Resolve missing material, labour, cash/refund and COGS evidence before relying on contribution figures.","observed_evidence"));
+
+  if(Math.max(0,n(economics?.totals?.booking_count))>0)candidates.push(candidate("add_on_cost_attribution","unavailable","Retained profitability evidence does not allocate recorded material, labour or COGS to individual add-ons.","Treat add-on economics as unavailable until an owning evidence source records defensible add-on-level attribution; do not divide booking-level costs by assumption.","internal_evidence"));
+
+  const allSourcesReady=sourceAvailable(source_status?.service_economics)&&sourceAvailable(source_status?.fleet_commercial)&&pricingAvailable;
+  const evidenceStatus=!allSourcesReady?"partial":(base.evidence_status==="observed"&&pricingComplete?"observed":"review");
+  return {
+    build:453,authority:"service_economics_capacity_pricing_review",mode:"service_economics_capacity_pricing_review",
+    retained_authorities:[428,443,451],generated_at:generated_at||new Date().toISOString(),evidence_status:evidenceStatus,
+    economics:{...base.economics,service_package_cohorts:servicePackageCohorts,add_on_cost_attribution_status:"unavailable",add_on_margin_inferred:false},
+    pricing_review:{
+      evidence_status:pricingEvidenceStatus,
+      quote_rows_observed:Math.max(0,n(quotes?.rows_observed)),
+      sent_quotes:Math.max(0,n(quotes?.sent_quotes)),
+      accepted_quotes:Math.max(0,n(quotes?.accepted_quotes)),
+      declined_quotes:Math.max(0,n(quotes?.declined_quotes)),
+      sufficient_value_band_count:sufficientBands.length,
+      sufficient_value_bands:sufficientBands,
+      booking_price_adjacent_stage:pricing?.booking?.largest_price_adjacent_stage_drop||null,
+      review_ready:base.economics?.contribution_reliable_for_review===true&&pricingComplete,
+      causal_price_sensitivity_claimed:false,
+      service_margin_to_quote_band_join:false,
+      pricing_change_authorized:false
+    },
+    commercial:base.commercial,capacity:base.capacity,review_candidates:candidates,source_status,
+    truth_boundary:{
+      missing_material_labor_cash_refund_cogs_blocks_margin:true,
+      quote_decline_proves_price_sensitivity:false,
+      stage_drop_proves_price_friction:false,
+      demand_proves_capacity:false,
+      demand_proves_signed_business:false,
+      add_on_margin_without_attribution_allowed:false
+    },
+    boundaries:{...base.boundaries,read_only:true,aggregate_only:true,pricing_learning_causal_join_allowed:false,add_on_cost_inference_allowed:false,automatic_price_change_allowed:false,automatic_discount_allowed:false}
+  };
+}
+
+function servicePackageEconomics(rows){
+  const map=new Map();
+  for(const row of Array.isArray(rows)?rows:[]){
+    const key=clean(row?.package_code)||"unclassified";
+    const current=map.get(key)||{package_code:key,booking_count:0,ready_booking_count:0,recognized_revenue_cad:0,pricing_review_contribution_cad:0,contribution_rows:0};
+    current.booking_count+=1;
+    if(clean(row?.evidence_status)==="ready")current.ready_booking_count+=1;
+    const revenue=Number(row?.recognized_revenue_cad); if(Number.isFinite(revenue))current.recognized_revenue_cad+=revenue;
+    const contribution=Number(row?.pricing_review_contribution_cad); if(Number.isFinite(contribution)){current.pricing_review_contribution_cad+=contribution;current.contribution_rows+=1;}
+    map.set(key,current);
+  }
+  return [...map.values()].map(row=>({
+    package_code:row.package_code,booking_count:row.booking_count,ready_booking_count:row.ready_booking_count,
+    recognized_revenue_cad:Math.round(row.recognized_revenue_cad*100)/100,
+    pricing_review_contribution_cad:row.booking_count>0&&row.ready_booking_count===row.booking_count&&row.contribution_rows===row.booking_count?Math.round(row.pricing_review_contribution_cad*100)/100:null,
+    contribution_reliable_for_review:row.booking_count>0&&row.ready_booking_count===row.booking_count&&row.contribution_rows===row.booking_count
+  })).sort((a,b)=>b.booking_count-a.booking_count||String(a.package_code).localeCompare(String(b.package_code))).slice(0,12);
+}
