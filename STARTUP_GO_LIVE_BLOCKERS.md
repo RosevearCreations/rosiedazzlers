@@ -20,6 +20,8 @@ A HOLD remains open until dated, attributable evidence from the named authority 
 | Evidence source unavailable | `unavailable` | Any required evidence source that cannot be reached or established must remain unavailable rather than being guessed. | The authorized evidence source becomes available and produces attributable evidence. |
 Build 447 adds read-only `recovery_artifact_drill_evidence_review` age/freshness classification for the backup artifact, retention location and bounded recovery-drill evidence. Evidence age never authorizes a restore; stale, missing or unavailable evidence remains owner action.
 
+Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted pricing-review evidence only. A pricing-review signal does not authorize a price/discount change and Build 451 does not close any HOLD in this backlog.
+
 ## Current cycle reconciliation
 `PRODUCTION_LEARNING_436_444.md` confirms that this governance checkpoint does not close any row above merely because source/runtime acceptance is GREEN.
 
