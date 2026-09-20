@@ -62,25 +62,19 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.
+**Build 443 — Service Economics & Commercial Capacity Review** is the active bounded release.
 
 Scope:
-- add a manual, read-only Administration learning surface over retained Today Needs Attention and Support Exception evidence;
-- aggregate staff tasks by source/title and support exceptions by source/family/state without returning customer/job/raw-exception identifiers;
-- require at least two current items before calling a pattern repeated;
-- treat repetition as a bounded operator-review signal, never root-cause proof;
-- preserve the intersection of booking-management and I.T. runtime-view authority rather than widen role ceilings;
-- preserve missing/restricted/provider/owner evidence truthfully;
-- introduce no role escalation, automatic completion/correction, silent posting, outreach, provider transaction, schema/storage mutation or permanent polling.
+- aggregate selected-month profitability completeness with fleet/commercial demand and owner-rule evidence;
+- withhold margin conclusions when recorded evidence is incomplete;
+- preserve demand as demand evidence only and live availability/checkout as capacity authority;
+- expose no customer identity or raw booking identifiers;
+- introduce no price/discount, fleet approval, quote, invoice, booking, accounting/inventory, provider or polling mutation.
 
-Current contract: `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
-
-The exact candidate must pass focused staff/support learning authority, retained staff workflow/support/workflow-evidence authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
-
-Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
+Current contract: `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`.
 
 ## Next release
-**Build 443 — Service Economics & Commercial Capacity Review** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`.
+**Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.

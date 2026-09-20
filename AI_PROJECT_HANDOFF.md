@@ -3,7 +3,7 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`.
+The synchronized Production predecessor is retained through `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`.
 
 **Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.
 
@@ -13,15 +13,12 @@ Current contract: `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Activ
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, provider/payment/refund/message transaction, accounting/inventory posting, destructive storage action, screenshot capture, automatic outreach or permanent polling.
 
-## Current staff workflow & support exception learning contract
-- Manual refresh composes retained Today Needs Attention and Support Exception evidence.
-- Staff tasks are reduced to aggregate source/title patterns and support exceptions to aggregate source/family/state patterns.
-- Customer names/emails, booking identifiers and raw exception identifiers are excluded from the learning response.
-- At least two current items are required before a pattern is classified as repeated.
-- Repetition does not prove root cause, common ownership or that one correction resolves every occurrence.
-- Missing or restricted evidence remains partial, unavailable, provider-dependent or owner-action evidence.
-- The endpoint requires both booking-management and I.T. runtime-view authority; existing role ceilings are not widened.
-- No automatic correction/completion, silent posting, outreach, provider transaction, schema/storage mutation or permanent polling is introduced.
+## Current service economics & commercial capacity review contract
+- Manual refresh composes retained accounting profitability and fleet/commercial learning evidence.
+- Missing material, labour, cash/refund or COGS evidence blocks margin conclusions.
+- Demand never proves signed business or live capacity.
+- Customer identities/raw booking identifiers are excluded.
+- No price/discount, fleet approval, quote, invoice, booking, accounting/inventory, provider or polling mutation is introduced.
 
 ## Retained cumulative authority pointers
 
@@ -134,3 +131,8 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 
 ## Restart point
 Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, current contract, active roadmap and go-live blockers. Preserve feature → exact Development → protected-main PR → exact Production acceptance discipline.
+
+
+## Durable current-release authorities
+- `.github/workflows/service-economics-commercial-capacity-review-authority.yml`
+- `scripts/service_economics_commercial_capacity_review_check.py`
