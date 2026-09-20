@@ -69,6 +69,8 @@ jobs:
           node --check scripts/recovery_artifact_drill_evidence_review_test.mjs
           python -m py_compile scripts/authenticated_cross_device_acceptance_refresh_check.py
           node --check scripts/authenticated_cross_device_acceptance_refresh_test.mjs
+          python -m py_compile scripts/fleet_maintenance_commercial_decision_closure_check.py
+          node --check scripts/fleet_maintenance_commercial_decision_closure_test.mjs
           node --check functions/api/_lib/recovery-artifact-drill-evidence-review.js
           node --check functions/api/admin/recovery_artifact_drill_evidence_review.js
           python -m py_compile scripts/recovery_export_operational_proof_check.py
@@ -255,6 +257,11 @@ jobs:
         run: |
           python scripts/authenticated_cross_device_acceptance_refresh_check.py
           node scripts/authenticated_cross_device_acceptance_refresh_test.mjs
+
+      - name: Validate fleet & maintenance commercial decision closure authority
+        run: |
+          python scripts/fleet_maintenance_commercial_decision_closure_check.py
+          node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |
