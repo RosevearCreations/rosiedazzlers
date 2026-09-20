@@ -15,6 +15,7 @@ import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evi
 import { buildProviderEvidenceClosureAvailabilityReview } from "../_lib/provider-evidence-closure-availability-review.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
 import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
+import { buildRecoveryEvidenceClosureDrillReadiness } from "../_lib/recovery-evidence-closure-drill-readiness.js";
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
@@ -99,6 +100,13 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const recoveryEvidenceClosureDrillReadiness = buildRecoveryEvidenceClosureDrillReadiness({
+    closure: backupRecoveryEvidenceClosure,
+    review: recoveryArtifactDrillEvidenceReview,
+    source_available: recoveryExportResult.ok && Boolean(recoveryExportResult.data?.proof),
+    generated_at: generatedAt
+  });
+
   const authenticatedDeviceVisualAcceptance = buildAuthenticatedDeviceVisualAcceptance({
     launch_evidence: launchEvidenceResult.items,
     workflow_evidence: productionWorkflowEvidence,
@@ -130,6 +138,8 @@ export async function onRequestGet({ request, env }) {
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
     recovery_artifact_drill_evidence_review: recoveryArtifactDrillEvidenceReview,
     current_recovery_review_authority: "recovery_artifact_drill_evidence_review",
+    recovery_evidence_closure_drill_readiness: recoveryEvidenceClosureDrillReadiness,
+    current_recovery_closure_readiness_authority: "recovery_evidence_closure_drill_readiness",
     authenticated_device_visual_acceptance: authenticatedDeviceVisualAcceptance,
     current_device_visual_authority: "authenticated_device_visual_acceptance",
     source_status: {
@@ -161,6 +171,10 @@ export async function onRequestGet({ request, env }) {
       recovery_artifact_drill_evidence_review: {
         available: recoveryExportResult.ok,
         classification: recoveryArtifactDrillEvidenceReview.status
+      },
+      recovery_evidence_closure_drill_readiness: {
+        available: recoveryExportResult.ok,
+        classification: recoveryEvidenceClosureDrillReadiness.status
       },
       authenticated_device_visual_acceptance: {
         available: launchEvidenceResult.ok,
