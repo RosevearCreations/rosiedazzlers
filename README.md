@@ -10,7 +10,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
 4. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — current bounded contract.
 5. `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
-6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+6. `PRODUCTION_LEARNING_436_444.md` — retained prior-cycle reconciliation.
+7. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
