@@ -76,21 +76,21 @@ require(contract,[
 ],"Build 451 contract")
 require(blockers,["Build 451","pricing-review","does not close any HOLD"],"canonical HOLD backlog")
 require(queue,[
-    "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md",
-    "**Build 453 — Service Economics, Capacity & Pricing Review** is next"
+    "FORWARD_BUILD_ROADMAP_446_455.md"
 ],"release queue")
 require(handoff,[
-    "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md",
     "booking_funnel_quote_pricing_learning_check.py"
 ],"handoff")
 require(readme,[
-    "Current source direction: **Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**.",
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md",
     "booking_funnel_quote_pricing_learning_check.py",
-    "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**"
-],"README")
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md"
+],"README retained authority")
 for gate,label in ((dev,"Development gate"),(prod,"Production gate")):
     require(gate,["booking_funnel_quote_pricing_learning_check.py","booking_funnel_quote_pricing_learning_test.mjs"],label)
 

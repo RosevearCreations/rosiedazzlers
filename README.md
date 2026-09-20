@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**.
+Current source direction: **Build 453 — Service Economics, Capacity & Pricing Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,8 +8,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
-4. `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` — current bounded contract.
-5. `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` — retained predecessor contract.
+4. `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md` — current bounded contract.
+5. `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` — retained predecessor contract.
+6. `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` — retained pricing-learning contract.
 6. `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md` — retained commercial-decision contract.
 6. `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md` — retained device-refresh contract.
 6. `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` — retained recovery contract.
@@ -79,18 +80,21 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current Staff Workflow, Support & Mobile Efficiency Learning framework
-This release enriches retained staff/support learning with the canonical bounded Detailer workspace rather than creating a replacement.
-- Repeated staff-task and support-exception patterns remain review prompts, not root-cause proof.
-- Current Detailer workflow-stage cohorts require at least two rows before they are surfaced for review.
-- Stage concentration does not establish delay, mobile friction, staff fault or inefficiency.
-- Pending detailer responses do not establish refusal or missed notification.
-- No customer/staff identity, raw booking/exception identifiers, automatic job/task/exception action, background telemetry or permanent polling is introduced.
+## Current Service Economics, Capacity & Pricing Review framework
+This release enriches the retained economics/capacity review with aggregate pricing-learning context instead of creating a replacement ledger or pricing system.
+- Missing recorded material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
+- Service/package cohorts are computed only from recorded job-economics evidence.
+- Add-on margin remains unavailable because retained evidence does not defensibly allocate material/labour/COGS to individual add-ons.
+- Quote-value and booking-stage patterns are review context only; they do not prove price sensitivity, discount need or price causation.
+- Demand does not prove live capacity; existing availability and checkout collision revalidation remain authoritative.
+- No automatic price/discount, quote, booking, accounting/inventory, provider or polling action is introduced.
 
 ## Durable validation
 Retained and current authorities include:
 
 ```bash
+python scripts/service_economics_capacity_pricing_review_check.py
+node scripts/service_economics_capacity_pricing_review_test.mjs
 python scripts/current_reliability_security_cost_reassessment_check.py
 python scripts/reliability_security_cost_reassessment_check.py
 python scripts/service_economics_commercial_capacity_review_check.py
@@ -135,4 +139,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 453 — Service Economics, Capacity & Pricing Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is next only after the current release is independently GREEN on protected `main`.

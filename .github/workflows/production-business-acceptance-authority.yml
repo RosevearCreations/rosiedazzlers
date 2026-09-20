@@ -86,6 +86,11 @@ jobs:
           node --check functions/api/_lib/staff-support-mobile-efficiency-learning.js
           node --check functions/api/admin/staff_support_mobile_efficiency_learning.js
           node --check assets/build452-staff-support-mobile-efficiency-learning.js
+          python -m py_compile scripts/service_economics_capacity_pricing_review_check.py
+          node --check scripts/service_economics_capacity_pricing_review_test.mjs
+          node --check functions/api/_lib/service-economics-commercial-capacity-review.js
+          node --check functions/api/admin/service_economics_commercial_capacity_review.js
+          node --check assets/build453-service-economics-capacity-pricing-review.js
           node --check functions/api/_lib/recovery-artifact-drill-evidence-review.js
           node --check functions/api/admin/recovery_artifact_drill_evidence_review.js
           python -m py_compile scripts/recovery_export_operational_proof_check.py
@@ -292,6 +297,11 @@ jobs:
         run: |
           python scripts/staff_support_mobile_efficiency_learning_check.py
           node scripts/staff_support_mobile_efficiency_learning_test.mjs
+
+      - name: Validate service economics, capacity & pricing review authority
+        run: |
+          python scripts/service_economics_capacity_pricing_review_check.py
+          node scripts/service_economics_capacity_pricing_review_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |
