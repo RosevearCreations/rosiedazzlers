@@ -302,6 +302,7 @@ jobs:
       - name: Validate service economics, capacity & pricing review authority
         run: |
           python scripts/service_economics_capacity_pricing_review_check.py
+          python scripts/reliability_security_cost_resilience_reassessment_check.py
           node scripts/service_economics_capacity_pricing_review_test.mjs
 
       - name: Validate recovery export operational proof authority
