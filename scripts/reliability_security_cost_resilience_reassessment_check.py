@@ -59,20 +59,20 @@ require(roadmap, [
 ], "active roadmap")
 require(queue, [
     "BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md",
-    "**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is the active bounded release.",
-    "**Build 455 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.",
-], "release queue")
+    "FORWARD_BUILD_ROADMAP_446_455.md",
+    "Production deployment/runtime/business acceptance",
+], "release queue retained Build 454 authority")
 require(readme, [
-    "Current source direction: **Build 454 — Reliability, Security, Cost & Resilience Reassessment**.",
     "BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md",
     "python scripts/reliability_security_cost_resilience_reassessment_check.py",
-], "README")
+    "Production is not considered GREEN from source promotion alone.",
+], "README retained Build 454 authority")
 require(handoff, [
-    "**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is the active bounded release.",
     "BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md",
     "provider-owned billing/CPU",
     "real Production recovery",
-], "project handoff")
+    "Production deployment/runtime acceptance",
+], "project handoff retained Build 454 authority")
 require(blockers, ["Provider", "Recovery", "Build 454"], "canonical HOLD backlog")
 require(retained444, ["# Build 444 — Reliability, Security & Cost Reassessment", "Cloudflare billing/CPU", "recovery"], "retained Build 444 contract")
 require(retained434, ["# Build 434 — Reliability, Security & Cost Reassessment", "Cloudflare billing", "recovery"], "retained Build 434 contract")

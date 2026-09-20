@@ -1,37 +1,42 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 454 — Reliability, Security, Cost & Resilience Reassessment**.
+Current source direction: **Build 455 — Production Learning & Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current reassessment authority
-This release reuses the existing protected I.T. reliability reassessment surface and re-runs bounded reliability, privacy/session, security, recovery, observability and cost-awareness evidence. Provider-owned billing/CPU and real Production recovery remain external unless independently evidenced.
+## Current renewal authority
+This release reconciles the completed evidence cycle, keeps unresolved provider/owner/device/recovery HOLDs fail-closed, and renews bounded work without creating replacement operational surfaces.
 
 Focused source authority:
 
-`python scripts/reliability_security_cost_resilience_reassessment_check.py`
+`python scripts/production_learning_roadmap_renewal_check.py`
 
 Production is not considered GREEN from source promotion alone.
-
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
-4. `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md` — current bounded contract.
-5. `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md` — retained predecessor contract.
-6. `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` — retained staff/mobile contract.
-6. `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` — retained pricing-learning contract.
-6. `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md` — retained commercial-decision contract.
-6. `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md` — retained device-refresh contract.
-6. `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` — retained recovery contract.
-6. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — retained provider refresh contract.
-6. `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained prior renewal contract.
-6. `PRODUCTION_LEARNING_436_444.md` — retained prior-cycle reconciliation.
-7. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
-
+3. `FORWARD_BUILD_ROADMAP_456_465.md` — renewed evidence-driven sequence.
+4. `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
+5. `PRODUCTION_LEARNING_446_454.md` — current completed-cycle reconciliation.
+6. `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md` — retained predecessor contract.
+7. `FORWARD_BUILD_ROADMAP_446_455.md` — retained completed roadmap.
+8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
 ## Retained cumulative authority pointers
+
+- `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`
+- `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`
+- `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`
+- `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`
+- `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
+- `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`
+- `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`
+- `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`
+- `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`
+- `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_436_444.md`
+- `FORWARD_BUILD_ROADMAP_446_455.md`
 
 - `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
 - `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
@@ -90,7 +95,7 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current Service Economics, Capacity & Pricing Review framework
+## Retained Service Economics, Capacity & Pricing Review framework
 This release enriches the retained economics/capacity review with aggregate pricing-learning context instead of creating a replacement ledger or pricing system.
 - Missing recorded material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
 - Service/package cohorts are computed only from recorded job-economics evidence.
@@ -103,6 +108,7 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/reliability_security_cost_resilience_reassessment_check.py
 python scripts/service_economics_capacity_pricing_review_check.py
 node scripts/service_economics_capacity_pricing_review_test.mjs
 python scripts/current_reliability_security_cost_reassessment_check.py
@@ -149,4 +155,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is next only after the current release is independently GREEN on protected `main`.
+**Build 456 — Provider Evidence Closure & Availability Review** is next only after the current release is independently GREEN on protected `main`.
