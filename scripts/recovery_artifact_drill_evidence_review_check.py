@@ -16,9 +16,9 @@ require(helper,["recovery_artifact_drill_evidence_review","backup_artifact","ret
 require(endpoint,["build:447","recovery_artifact_drill_evidence_review","GET, HEAD, OPTIONS","getBackupRecoveryEvidenceClosure"],"Build 447 endpoint")
 for f in ["onRequestPost","onRequestPut","onRequestPatch","onRequestDelete","SUPABASE_SERVICE_ROLE_KEY","STAFF_SESSION_SECRET"]:
  if f in endpoint: errors.append(f"forbidden endpoint token {f!r}")
-require(queue,["**Build 447 — Recovery Artifact & Drill Evidence Review** is the active bounded release.","**Build 448 — Authenticated Cross-Device Acceptance Refresh** is next"],"release queue")
+require(queue,["BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md","**Build 448 — Authenticated Cross-Device Acceptance Refresh** is the active bounded release.","**Build 449 — Fleet & Maintenance Commercial Decision Closure** is next"],"release queue")
 require(handoff,["BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md","recovery-artifact-drill-evidence-review-authority.yml","recovery_artifact_drill_evidence_review_check.py"],"handoff")
-require(readme,["Current source direction: **Build 447 — Recovery Artifact & Drill Evidence Review**.","recovery_artifact_drill_evidence_review_check.py","Build 448 — Authenticated Cross-Device Acceptance Refresh"],"README")
+require(readme,["BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md","recovery_artifact_drill_evidence_review_check.py","Current source direction: **Build 448 — Authenticated Cross-Device Acceptance Refresh**."],"README")
 require(blockers,["Recovery / backup evidence","recovery_artifact_drill_evidence_review","evidence age"],"HOLD backlog")
 for p in ["functions/api/_lib/recovery-artifact-drill-evidence-review.js","functions/api/admin/recovery_artifact_drill_evidence_review.js","scripts/recovery_artifact_drill_evidence_review_test.mjs"]:
  r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
