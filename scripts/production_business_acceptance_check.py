@@ -128,8 +128,8 @@ required_authorities = {
         "scripts/security_privacy_recovery_drill_check.py",
         "scripts/security_privacy_recovery_drill_test.mjs",
     ],
-    "build444_reliability_security_cost_reassessment": [
-        "scripts/build444_reliability_security_cost_reassessment_check.py",
+    "current_reliability_security_cost_reassessment": [
+        "scripts/current_reliability_security_cost_reassessment_check.py",
     ],
     "production_learning_roadmap_renewal": [
         "scripts/production_learning_roadmap_renewal_check.py",
@@ -231,7 +231,7 @@ workflow = require(WORKFLOW, [
     "Validate security, privacy & recovery drill authority",
     "Validate Production learning & roadmap renewal authority",
     "Validate current-cycle reliability, security & cost reassessment",
-    "python scripts/build444_reliability_security_cost_reassessment_check.py",
+    "python scripts/current_reliability_security_cost_reassessment_check.py",
     "Validate booking conversion & quote clarity authority",
     "Validate service economics & job profitability authority",
     "Validate retention & rebooking learning authority",
