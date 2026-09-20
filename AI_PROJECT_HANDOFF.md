@@ -21,6 +21,10 @@ Current contract: `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`. A
 - No rulebook runtime write, automatic approval, schema/customer/provider/accounting/inventory/storage/outreach/permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`
+- `.github/workflows/fleet-maintenance-commercial-decision-closure-authority.yml`
+- `scripts/fleet_maintenance_commercial_decision_closure_check.py`
+- `scripts/fleet_maintenance_commercial_decision_closure_test.mjs`
 - `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`
 - `.github/workflows/authenticated-cross-device-acceptance-refresh-authority.yml`
 - `scripts/authenticated_cross_device_acceptance_refresh_check.py`
