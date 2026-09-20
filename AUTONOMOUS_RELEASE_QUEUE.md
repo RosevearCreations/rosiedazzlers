@@ -9,6 +9,8 @@ The synchronized predecessor contracts are retained through `BUILD447_RECOVERY_A
 
 ## Retained cumulative authority pointers
 
+- `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`
+
 These completed filename authorities remain cumulative acceptance inputs:
 
 - `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
