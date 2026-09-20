@@ -27,7 +27,8 @@ export async function onRequestGet({request,env}){
   return json({
     ok:true,
     build:438,
-    current_build:458,
+    current_build:448,
+    closure_build:458,
     closure_authority:"authenticated_device_acceptance_closure",
     refresh_authority:"authenticated_cross_device_acceptance_refresh",
     authority:"authenticated_device_visual_acceptance",
