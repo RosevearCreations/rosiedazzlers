@@ -315,6 +315,8 @@ jobs:
         run: |
           python scripts/provider_outcome_delivery_evidence_closure_check.py
           node scripts/provider_outcome_delivery_evidence_closure_test.mjs
+          python scripts/provider_evidence_reconciliation_refresh_check.py
+          node scripts/provider_evidence_reconciliation_refresh_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |
