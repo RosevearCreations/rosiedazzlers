@@ -29,9 +29,9 @@ for f in ("setInterval(","localStorage","sessionStorage",'method:"POST"','method
  if f in client: errors.append(f"client contains forbidden {f}")
 require(test,["BUILD 443 SERVICE ECONOMICS COMMERCIAL CAPACITY REVIEW TEST: PASS"],"test")
 require(contract,["# Build 443 — Service Economics & Commercial Capacity Review","No automatic price/discount change","Build 444 — Reliability, Security & Cost Reassessment"],"contract")
-require(readme,["Current source direction: **Build 443 — Service Economics & Commercial Capacity Review**","scripts/service_economics_commercial_capacity_review_check.py","**Build 444 — Reliability, Security & Cost Reassessment**"],"README")
-require(queue,["**Build 443 — Service Economics & Commercial Capacity Review** is the active bounded release.","**Build 444 — Reliability, Security & Cost Reassessment**"],"queue")
-require(handoff,["**Build 443 — Service Economics & Commercial Capacity Review** is the active bounded release.",".github/workflows/service-economics-commercial-capacity-review-authority.yml","scripts/service_economics_commercial_capacity_review_check.py"],"handoff")
+require(readme,["BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md","scripts/service_economics_commercial_capacity_review_check.py","Production is not considered GREEN from source promotion alone."],"README retained authority")
+require(queue,["BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md","FORWARD_BUILD_ROADMAP_436_445.md","Production deployment/runtime/business acceptance"],"queue retained authority")
+require(handoff,["BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md",".github/workflows/service-economics-commercial-capacity-review-authority.yml","scripts/service_economics_commercial_capacity_review_check.py"],"handoff retained authority")
 require(auth,['case "admin-service-economics-commercial-capacity-review"'],"auth")
 require(nav,['"/admin-service-economics-commercial-capacity-review.html"','"page_key":"admin-service-economics-commercial-capacity-review"','"label":"Economics & Capacity Review"'],"nav")
 for cmd in (["node","--check","functions/api/_lib/service-economics-commercial-capacity-review.js"],["node","--check","functions/api/admin/service_economics_commercial_capacity_review.js"],["node","--check","assets/build443-service-economics-commercial-capacity-review.js"],["node","scripts/service_economics_commercial_capacity_review_test.mjs"]):
