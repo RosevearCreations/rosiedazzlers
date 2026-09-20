@@ -63,23 +63,19 @@ require(blockers,[
     "Provider outcomes & communications","Build 456","closure-candidate","source availability"
 ],"canonical HOLD backlog")
 require(queue,[
-    "**Build 456 — Provider Evidence Closure & Availability Review** is the active bounded release.",
-    "Build 457 — Recovery Evidence Closure & Drill Readiness",
     "BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md",
+    "FORWARD_BUILD_ROADMAP_456_465.md",
     "Production deployment/runtime/business acceptance"
-],"release queue")
+],"release queue retained Build 456 authority")
 require(handoff,[
-    "**Build 456 — Provider Evidence Closure & Availability Review** is the active bounded release.",
     "BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md",
     "provider-evidence-closure-availability-review-authority.yml",
     "provider_evidence_closure_availability_review_check.py"
-],"project handoff")
+],"project handoff retained Build 456 authority")
 require(readme,[
-    "Current source direction: **Build 456 — Provider Evidence Closure & Availability Review**.",
     "BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md",
-    "provider_evidence_closure_availability_review_check.py",
-    "Build 457 — Recovery Evidence Closure & Drill Readiness"
-],"README")
+    "provider_evidence_closure_availability_review_check.py"
+],"README retained Build 456 authority")
 for text,label in [(dev,"Development source gate"),(prod,"Production business acceptance")]:
     require(text,[
         "provider_evidence_closure_availability_review_check.py",
