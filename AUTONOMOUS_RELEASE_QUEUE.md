@@ -5,10 +5,11 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`.
+The synchronized predecessor contracts are retained through `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`.
 
 ## Retained cumulative authority pointers
 
+- `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`
 - `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
 - `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`
 - `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`
@@ -76,24 +77,23 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 451 — Booking Funnel, Quote & Pricing Learning** is the active bounded release.
+**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.
 
 Scope:
-- enrich retained booking-conversion and booking/quote/retention learning authorities rather than creating a replacement;
-- identify the largest booking-stage and price-adjacent stage drops without inferring price causation;
-- summarize sent/accepted/declined/unresolved quotes across broad quoted-value bands;
-- compare aggregate accepted values with quoted values without inferring discounting, scope change, completed work or realized margin;
-- require at least three sent rows before a quote-value band is treated as a bounded review cohort; and
-- introduce no schema, customer/profile, pricing/catalogue, discount, outreach, quote acceptance, booking, payment/provider, accounting/inventory, storage or permanent-polling mutation.
+- enrich retained staff/support learning with the existing bounded Detailer workspace rather than creating a replacement workflow;
+- summarize repeated staff-task, support-exception, current Detailer workflow-stage and pending-response cohorts;
+- treat repeated stages and pending responses only as bounded operator-review prompts, never proof of delay, staff fault, missed notification or mobile friction;
+- return aggregate evidence only, without customer/staff identity, booking IDs or raw exception IDs; and
+- introduce no role escalation, automatic job/task/exception action, outreach, provider transaction, accounting/inventory mutation, schema/storage mutation, background telemetry or permanent polling.
 
-Current contract: `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Booking Funnel, Quote & Pricing Learning authority, retained booking-conversion, booking/quote/retention and Booking & Rebooking Funnel authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Staff Workflow, Support & Mobile Efficiency Learning authority, retained staff/support/mobile authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 453 — Service Economics, Capacity & Pricing Review** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_446_455.md`; it has not run out.

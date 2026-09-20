@@ -37,3 +37,5 @@ The current living release authorities are:
 A row is removed or narrowed only when dated, attributable evidence exists and the relevant source/runtime/provider/owner boundary remains explicit. Missing evidence is never converted into success, and closure of one row does not silently close another.
 
 This backlog authorizes no schema migration, customer/booking mutation, staff-role change, consent mutation, payment/refund/provider transaction, accounting/inventory posting, secret rotation, DNS change, Production restore, destructive R2 mutation, automatic outreach or permanent polling.
+
+Build 452 adds aggregate staff/mobile efficiency-review evidence only. Repeated staff/support/Detailer cohorts do not prove root cause, delay, staff fault or mobile friction, and Build 452 does not close any HOLD in this backlog.

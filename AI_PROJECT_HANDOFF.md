@@ -3,24 +3,32 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`.
+The synchronized Production predecessor is retained through `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`.
 
-**Build 451 — Booking Funnel, Quote & Pricing Learning** is the active bounded release.
+**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.
 
-**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 453 — Service Economics, Capacity & Pricing Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current booking funnel, quote & pricing learning contract
-- Reuse retained `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`, `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` and Booking & Rebooking Funnel authorities.
-- Booking-stage drops remain anonymous aggregate evidence; price-adjacent does not mean price-caused.
-- Quote evidence is aggregated into broad quoted-value cohorts, with at least three sent rows required for a review cohort.
-- Accepted-vs-quoted aggregate value differences do not infer discounting, scope change, completed work or realized margin.
-- No customer/quote/session identity is returned by the current learning endpoint.
-- Pricing, discounts, outreach, quote acceptance and booking creation remain owner-controlled and non-automatic.
-- No schema, customer/profile, pricing/catalogue, provider/payment, accounting/inventory, destructive-storage or permanent-polling mutation is authorized.
+## Current staff workflow, support & mobile efficiency learning contract
+- Reuse retained staff/support learning, support-exception, Detailer field-workflow and mobile QoL authorities.
+- The Detailer source is the existing bounded `scope=workspace` view; no duplicate field application or state ledger is created.
+- Repeated task/exception/stage cohorts identify operator-review locations only and do not prove root cause, delay, staff fault or mobile friction.
+- Pending detailer-response cohorts do not prove refusal, missed notification or notification failure.
+- Customer/staff identity, booking IDs and raw exception IDs are excluded from the learning response.
+- Existing role ceilings and canonical job/booking/field-evidence gates remain authoritative.
+- No automatic job/task/exception action, role change, outreach, provider/payment, accounting/inventory, schema/storage, background telemetry or permanent polling is authorized.
 
 ## Durable current-release authorities
+- `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`
+- `.github/workflows/staff-support-mobile-efficiency-learning-authority.yml`
+- `scripts/staff_support_mobile_efficiency_learning_check.py`
+- `scripts/staff_support_mobile_efficiency_learning_test.mjs`
+- `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`
+- `.github/workflows/booking-funnel-quote-pricing-learning-authority.yml`
+- `scripts/booking_funnel_quote_pricing_learning_check.py`
+- `scripts/booking_funnel_quote_pricing_learning_test.mjs`
 - `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`
 - `.github/workflows/booking-funnel-quote-pricing-learning-authority.yml`
 - `scripts/booking_funnel_quote_pricing_learning_check.py`
