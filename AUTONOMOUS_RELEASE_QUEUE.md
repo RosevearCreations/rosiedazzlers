@@ -81,8 +81,8 @@ These completed filename authorities remain cumulative acceptance inputs:
 **Build 453 — Service Economics, Capacity & Pricing Review** is the active bounded release.
 
 Scope:
-- enrich the retained Build 443 service-economics/commercial-capacity review rather than creating a parallel economics or pricing system;
-- reconcile recorded Build 428 profitability completeness with aggregate Build 451 booking/quote pricing context and retained fleet/commercial evidence;
+- enrich the retained `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md` authority rather than creating a parallel economics or pricing system;
+- reconcile recorded `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md` evidence with aggregate `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` context and retained fleet/commercial evidence;
 - summarize service/package economics only from recorded job evidence and leave add-on margin unavailable when defensible add-on cost attribution does not exist;
 - treat quote-value bands and booking-stage drops as bounded review context only, never proof of price sensitivity, discount need or price causation;
 - preserve live availability/checkout collision revalidation as the capacity authority and never infer live capacity from demand; and
