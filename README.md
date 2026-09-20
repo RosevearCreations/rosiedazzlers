@@ -4,8 +4,8 @@ Current source direction: **Build 454 — Reliability, Security, Cost & Resilien
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Build 454 current authority
-Build 454 reuses the existing protected I.T. reliability reassessment surface and re-runs bounded reliability, privacy/session, security, recovery, observability and cost-awareness evidence. Provider-owned billing/CPU and real Production recovery remain external unless independently evidenced.
+## Current reassessment authority
+This release reuses the existing protected I.T. reliability reassessment surface and re-runs bounded reliability, privacy/session, security, recovery, observability and cost-awareness evidence. Provider-owned billing/CPU and real Production recovery remain external unless independently evidenced.
 
 Focused source authority:
 
