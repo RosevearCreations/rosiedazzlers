@@ -58,7 +58,7 @@ require(contract,[
  "owner_review_candidate",
  "Build 450 — Local Search Measurement & Conversion Attribution"
 ],"Build 449 contract")
-require(blockers,["Maintenance / fleet business approval","Build 449","owner-review candidate"],"canonical HOLD backlog")
+require(blockers,["Maintenance / fleet business approval","Build 449","owner_review_candidate"],"canonical HOLD backlog")
 require(queue,[
  "**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
