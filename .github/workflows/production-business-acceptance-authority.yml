@@ -91,7 +91,7 @@ jobs:
           node --check functions/api/_lib/service-economics-job-profitability.js
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
-          python -m py_compile scripts/build444_reliability_security_cost_reassessment_check.py
+          python -m py_compile scripts/current_reliability_security_cost_reassessment_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
           node --check functions/api/_lib/security-privacy-recovery-drill.js
@@ -276,7 +276,7 @@ jobs:
         run: python scripts/production_learning_roadmap_renewal_check.py
 
       - name: Validate current-cycle reliability, security & cost reassessment
-        run: python scripts/build444_reliability_security_cost_reassessment_check.py
+        run: python scripts/current_reliability_security_cost_reassessment_check.py
 
       - name: Validate rollback and hardening authorities
         run: |
