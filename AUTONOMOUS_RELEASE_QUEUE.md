@@ -76,6 +76,9 @@ Current contract: `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`. Ac
 ## Next release
 **Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
 
+Production promotion preserves non-force fast-forward to exact accepted `dev`, `rd main protection`, and independent Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
+Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.
 

@@ -78,12 +78,34 @@ This release manually composes retained profitability completeness with fleet/co
 - No price/discount, fleet approval, quote, invoice, booking, accounting/inventory, provider or polling mutation is introduced.
 
 ## Durable validation
+Retained and current authorities include:
+
 ```bash
 python scripts/service_economics_commercial_capacity_review_check.py
 node scripts/service_economics_commercial_capacity_review_test.mjs
 python scripts/build428_service_economics_job_profitability_check.py
 python scripts/fleet_commercial_operations_learning_check.py
+python scripts/maintenance_fleet_owner_approval_convergence_check.py
+python scripts/production_learning_roadmap_renewal_check.py
+python scripts/local_search_provider_evidence_refresh_check.py
+python scripts/local_search_measurement_authority_check.py
+python scripts/backup_recovery_evidence_closure_check.py
+python scripts/provider_outcome_delivery_evidence_closure_check.py
+python scripts/authenticated_device_visual_acceptance_check.py
+python scripts/reliability_security_cost_reassessment_check.py
+python scripts/staff_workflow_support_exception_learning_check.py
 python scripts/release_authority_documentation_convergence_check.py
 ```
 
+Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
+
+
+## Release authority
+Feature candidates must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate.
+Production promotion is governed by `rd main protection` and a pull request to protected `main`.
+After merge, Production deployment/runtime/business acceptance must independently prove the exact resulting `main` SHA.
+Production is not considered GREEN from source promotion alone.
+
+## Next bounded release
+**Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.

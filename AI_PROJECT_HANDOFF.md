@@ -5,13 +5,11 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`.
 
-**Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.
+**Build 443 — Service Economics & Commercial Capacity Review** is the active bounded release.
 
-**Build 443 — Service Economics & Commercial Capacity Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 444 — Reliability, Security & Cost Reassessment** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
-
-This release authorizes no schema migration, customer/booking mutation, staff role/capability change, provider/payment/refund/message transaction, accounting/inventory posting, destructive storage action, screenshot capture, automatic outreach or permanent polling.
+Current contract: `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 ## Current service economics & commercial capacity review contract
 - Manual refresh composes retained accounting profitability and fleet/commercial learning evidence.
