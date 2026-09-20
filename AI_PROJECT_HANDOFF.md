@@ -33,6 +33,7 @@ Current contract: `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`. Active
 
 ## Retained numbered-contract pointers
 These filename authorities remain cumulative inputs; historical narrative stays in Git/workflow evidence.
+- `FORWARD_BUILD_ROADMAP_405_415.md`
 - `FORWARD_BUILD_ROADMAP_436_445.md`
 - `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
@@ -90,6 +91,7 @@ Historical numbered contracts are retained in Git and the document index. The li
 - `.github/workflows/local-search-provider-evidence-refresh-authority.yml`
 - `.github/workflows/maintenance-fleet-owner-approval-convergence-authority.yml`
 - `.github/workflows/reliability-security-cost-reassessment-authority.yml`
+- `.github/workflows/support-automation-exception-handling-authority.yml`
 - `.github/workflows/development-source-gate.yml`
 - `.github/workflows/production-business-acceptance-authority.yml`
 - `scripts/provider_outcome_delivery_evidence_closure_check.py`
