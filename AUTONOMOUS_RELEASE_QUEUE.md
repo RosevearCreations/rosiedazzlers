@@ -9,6 +9,8 @@ The synchronized predecessor contracts are retained through `BUILD449_FLEET_MAIN
 
 ## Retained cumulative authority pointers
 
+- `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`
+
 - `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`
 - `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`
 
