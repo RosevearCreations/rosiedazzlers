@@ -3,24 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`.
+The synchronized Production predecessor is retained through `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`.
 
-**Build 441 — Booking, Quote & Retention Production Learning** is the active bounded release.
+**Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.
 
-**Build 442 — Staff Workflow & Support Exception Learning** is next only after the current release is independently GREEN on protected `main`.
+**Build 443 — Service Economics & Commercial Capacity Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 This release authorizes no schema migration, customer/booking mutation, staff role/capability change, provider/payment/refund/message transaction, accounting/inventory posting, destructive storage action, screenshot capture, automatic outreach or permanent polling.
 
-## Current booking, quote & retention learning contract
-- Manual refresh composes retained booking/rebooking funnel, quote-pipeline and retention/rebooking evidence.
-- Anonymous session telemetry is never joined to customer identity.
-- Quote evidence is returned only as aggregate status/value counts; customer names, emails and raw record identifiers stay out of the learning response.
-- Exact-profile repeat-booking evidence remains correlation rather than causal proof.
-- Supported review priorities describe observed evidence only and never auto-segment, contact, discount, reprice, book, enroll, charge or mutate a provider.
-- Missing identity, consent, price/cost or delivery evidence remains partial, provider-dependent or unavailable.
-- Existing booking, quote, retention, consent, availability, checkout and provider authorities remain canonical.
+## Current staff workflow & support exception learning contract
+- Manual refresh composes retained Today Needs Attention and Support Exception evidence.
+- Staff tasks are reduced to aggregate source/title patterns and support exceptions to aggregate source/family/state patterns.
+- Customer names/emails, booking identifiers and raw exception identifiers are excluded from the learning response.
+- At least two current items are required before a pattern is classified as repeated.
+- Repetition does not prove root cause, common ownership or that one correction resolves every occurrence.
+- Missing or restricted evidence remains partial, unavailable, provider-dependent or owner-action evidence.
+- The endpoint requires both booking-management and I.T. runtime-view authority; existing role ceilings are not widened.
+- No automatic correction/completion, silent posting, outreach, provider transaction, schema/storage mutation or permanent polling is introduced.
 
 ## Retained cumulative authority pointers
 
@@ -82,10 +83,13 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `FORWARD_BUILD_ROADMAP_436_445.md` is derived from those unresolved evidence gaps and retained Production learning.
 
 ## Durable current-release authorities
-- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 - `.github/workflows/booking-quote-retention-production-learning-authority.yml`
+- `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`
+- `.github/workflows/staff-workflow-support-exception-learning-authority.yml`
+- `scripts/staff_workflow_support_exception_learning_check.py`
+- `scripts/staff_workflow_support_exception_learning_test.mjs`
+- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 - `scripts/booking_quote_retention_production_learning_check.py`
-- `scripts/booking_quote_retention_production_learning_test.mjs`
 
 ## Retained operating contract
 - `dev` is Development; protected `main` is Production source.

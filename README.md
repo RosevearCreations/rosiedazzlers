@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 441 — Booking, Quote & Retention Production Learning**.
+Current source direction: **Build 442 — Staff Workflow & Support Exception Learning**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,13 +8,15 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
-4. `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` — current bounded contract.
-5. `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md` — retained predecessor contract.
+4. `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md` — current bounded contract.
+5. `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
 ## Retained cumulative authority pointers
+
+- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 
@@ -67,17 +69,20 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current booking, quote & retention learning framework
-This release adds a manual, read-only Operations learning surface without creating a new customer, quote or booking authority.
-- Anonymous booking/rebooking funnel evidence remains separate from persisted customer identity.
-- Quote pipeline rows are reduced server-side to aggregate status/value counts; customer names, emails and raw quote identifiers are not returned.
-- Repeat-booking evidence uses exact persisted profile linkage only and remains correlation, not causal proof.
-- The surface identifies bounded review priorities for observed funnel drop-off, quote status, repeat booking, maintenance interest and provider-dependent delivery evidence.
-- Missing identity, consent, price/cost or provider-delivery evidence remains partial, provider-dependent or unavailable.
-- No automatic outreach, segmentation, discount, pricing change, booking creation, maintenance enrollment, payment/provider mutation, schema change or permanent polling is introduced.
+## Current staff workflow & support exception learning framework
+This release adds a manual, read-only Administration learning surface over retained Today Needs Attention and Support Exception evidence.
+- Staff tasks are grouped only by retained source type and normalized task title; customer/job details are not returned.
+- Support exceptions are grouped only by source, family and state; raw exception identifiers are not returned.
+- A learning candidate requires at least two current items with the same pattern.
+- Repetition is a review signal only and never proves a shared root cause or authorizes a bulk correction.
+- The cross-module endpoint retains both booking-management and I.T. runtime-view authority rather than widening either role ceiling.
+- Missing or restricted evidence remains partial, unavailable, provider-dependent or owner-action evidence.
+- No role escalation, automatic completion/correction, silent posting, outreach, provider transaction, schema/storage mutation or permanent polling is introduced.
 
 ## Durable validation
 ```bash
+python scripts/staff_workflow_support_exception_learning_check.py
+node scripts/staff_workflow_support_exception_learning_test.mjs
 python scripts/booking_quote_retention_production_learning_check.py
 node scripts/booking_quote_retention_production_learning_test.mjs
 python scripts/booking_rebooking_funnel_check.py
@@ -123,4 +128,4 @@ Production promotion is governed by `rd main protection`. Accepted Development i
 After merge, the resulting `main` head is the exact Production source SHA. Production deployment/runtime/business acceptance must independently prove that exact SHA. Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 442 — Staff Workflow & Support Exception Learning** begins only after the current release is independently GREEN on protected `main`.
+**Build 443 — Service Economics & Commercial Capacity Review** begins only after the current release is independently GREEN on protected `main`.

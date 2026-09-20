@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow,noarchive" />
+  <title>Staff Workflow & Support Exception Learning | Rosie Dazzlers</title>
+  <meta name="description" content="Read-only aggregate staff workflow and support exception learning for Rosie Dazzlers administration." />
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .learning-shell{display:grid;gap:16px;padding-bottom:72px}.learning-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:start}.learning-actions{display:flex;gap:9px;flex-wrap:wrap}.learning-summary{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.learning-stat,.learning-candidate,.learning-source{border:1px solid var(--border,rgba(148,163,184,.22));border-radius:14px;background:rgba(255,255,255,.035)}.learning-stat{padding:12px;display:grid;gap:3px}.learning-stat strong{font-size:1.5rem}.learning-list{display:grid;gap:11px}.learning-candidate{padding:14px;border-left-width:5px}.learning-candidate.priority-urgent{border-left-color:#ef4444}.learning-candidate.priority-high{border-left-color:#f59e0b}.learning-candidate.priority-normal{border-left-color:#38bdf8}.learning-candidate.priority-low{border-left-color:#94a3b8}.learning-candidate-head{display:flex;gap:10px;justify-content:space-between;align-items:center}.pill{display:inline-flex;padding:3px 8px;border:1px solid rgba(148,163,184,.3);border-radius:999px;font-size:.78rem;font-weight:750}.learning-source{display:grid;grid-template-columns:minmax(220px,.6fr) auto 1fr;gap:10px;align-items:center;padding:10px 12px}.learning-boundary ul{margin:.5rem 0 0 1.2rem}.learning-empty{padding:14px;border:1px dashed rgba(148,163,184,.35);border-radius:12px}.learning-links{display:flex;gap:9px;flex-wrap:wrap}@media(max-width:900px){.learning-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.learning-hero{grid-template-columns:1fr}.learning-source{grid-template-columns:1fr}.learning-actions .btn{width:100%}}@media(max-width:520px){.learning-summary{grid-template-columns:1fr}.learning-candidate-head{align-items:flex-start;flex-direction:column}.learning-links .btn{width:100%}}
+  </style>
+</head>
+<body data-page="admin-staff-workflow-support-learning" data-build442="staff-workflow-support-exception-learning">
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+  <main class="container learning-shell">
+    <section class="panel learning-hero">
+      <div><span class="badge">Build 442 · read-only Production learning</span><h1>Staff Workflow &amp; Support Exception Learning</h1><p class="kicker">Current staff needs-attention patterns and read-only support exceptions, reduced to aggregate learning candidates. Repetition identifies review opportunities; it does not prove a shared root cause.</p></div>
+      <div class="learning-actions"><button class="btn primary" id="refreshLearning" type="button">Refresh learning snapshot</button><a class="btn ghost" href="/app/admin/">Administration home</a></div>
+    </section>
+    <div id="learningStatus" class="notice soft" role="status" aria-live="polite">Select Refresh learning snapshot to load current bounded evidence.</div>
+    <section class="panel learning-boundary"><strong>Evidence and mutation boundary</strong><ul class="mini"><li>Only aggregate task/exception patterns are returned; customer names, emails, booking IDs and raw exception IDs are excluded.</li><li>Two or more current items with the same pattern is a learning candidate, not root-cause proof.</li><li>Role ceilings and canonical job, booking and business-state APIs remain authoritative.</li><li>Missing or restricted evidence remains partial, unavailable or provider-dependent.</li><li>No role escalation, automatic completion, automatic exception correction, silent posting, outreach, provider transaction or permanent polling is authorized.</li></ul></section>
+    <section class="panel"><h2>Current bounded snapshot</h2><div id="summaryGrid" class="learning-summary"><div class="learning-empty">No snapshot loaded.</div></div></section>
+    <section class="panel"><h2>Repeated-pattern learning candidates</h2><p class="mini">These prompts identify repeated current evidence for operator review. They do not authorize process changes or claim causation.</p><div id="candidateList" class="learning-list"><div class="learning-empty">Refresh manually to load learning candidates.</div></div></section>
+    <section class="panel"><h2>Evidence source status</h2><div id="sourceList" class="learning-list"><div class="learning-empty">No source status loaded.</div></div></section>
+    <section class="panel"><h2>Owning workflows</h2><div class="learning-links"><a class="btn ghost" href="/admin-today.html">Today Needs Attention</a><a class="btn ghost" href="/admin-support-exceptions.html">Support Exceptions</a><a class="btn ghost" href="/app/detailer/">Detailer Mobile</a><a class="btn ghost" href="/app/operations/">Operations</a><a class="btn ghost" href="/admin-staff.html">Staff &amp; Access</a></div><p class="mini">Any consequential correction remains inside its existing owning workflow and explicit permissions.</p></section>
+  </main>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/build442-staff-workflow-support-learning.js"></script>
+</body>
+</html>

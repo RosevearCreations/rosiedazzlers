@@ -1,0 +1,72 @@
+name: Build 442 — Staff Workflow & Support Exception Learning Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-build442-staff-support-learning-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source-authority:
+    name: Validate staff workflow and support exception learning
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/staff_workflow_support_exception_learning_check.py
+          node --check functions/api/_lib/staff-workflow-support-exception-learning.js
+          node --check functions/api/admin/staff_workflow_support_exception_learning.js
+          node --check assets/build442-staff-workflow-support-learning.js
+
+      - name: Validate Build 442 source authority
+        run: |
+          python scripts/staff_workflow_support_exception_learning_check.py
+          node scripts/staff_workflow_support_exception_learning_test.mjs
+
+      - name: Re-run retained owning authorities
+        run: |
+          python scripts/detailer_staff_workflow_refinement_check.py
+          python scripts/support_automation_exception_handling_check.py
+          python scripts/workflow_efficiency_accessibility_check.py
+          python scripts/production_workflow_evidence_check.py
+          python scripts/booking_quote_retention_production_learning_check.py
+          python scripts/release_authority_documentation_convergence_check.py
+
+      - name: Authority summary
+        run: |
+          {
+            echo "### Build 442 staff workflow/support exception learning authority"
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo "- Aggregate Today Needs Attention task patterns: PASS"
+            echo "- Aggregate Support Exception patterns: PASS"
+            echo "- Repetition is not treated as root-cause proof: PASS"
+            echo "- Role ceilings and canonical owning workflows remain authoritative: PASS"
+            echo "- No automatic correction/completion/posting/outreach/provider transaction/polling introduced."
+          } >> "$GITHUB_STEP_SUMMARY"

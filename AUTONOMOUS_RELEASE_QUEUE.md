@@ -5,11 +5,13 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`.
+The synchronized predecessor contract is retained in `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`.
 
 ## Retained cumulative authority pointers
 
 These completed filename authorities remain cumulative acceptance inputs:
+
+- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 - `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md`
@@ -60,24 +62,25 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 441 — Booking, Quote & Retention Production Learning** is the active bounded release.
+**Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.
 
 Scope:
-- add a manual, read-only Operations learning surface over retained booking/rebooking funnel, quote-pipeline and retention evidence;
-- keep anonymous booking sessions separate from customer identity and reduce quote rows to aggregate status/value counts;
-- use exact-profile repeat-booking evidence only where retained authority permits it;
-- identify bounded operator review priorities without causal claims;
-- preserve missing identity, consent, price/cost and provider-delivery evidence as partial, provider-dependent or unavailable;
-- introduce no automatic outreach, segmentation, discount, pricing change, booking creation, maintenance enrollment, payment/provider mutation, schema/storage mutation or permanent polling.
+- add a manual, read-only Administration learning surface over retained Today Needs Attention and Support Exception evidence;
+- aggregate staff tasks by source/title and support exceptions by source/family/state without returning customer/job/raw-exception identifiers;
+- require at least two current items before calling a pattern repeated;
+- treat repetition as a bounded operator-review signal, never root-cause proof;
+- preserve the intersection of booking-management and I.T. runtime-view authority rather than widen role ceilings;
+- preserve missing/restricted/provider/owner evidence truthfully;
+- introduce no role escalation, automatic completion/correction, silent posting, outreach, provider transaction, schema/storage mutation or permanent polling.
 
-Current contract: `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused learning authority, retained booking/quote/retention authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused staff/support learning authority, retained staff workflow/support/workflow-evidence authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`. Production deployment/runtime/business acceptance is independent of source promotion. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 442 — Staff Workflow & Support Exception Learning** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`.
+**Build 443 — Service Economics & Commercial Capacity Review** is next only after the current release is independently GREEN on protected `main`. Its planning contract is `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_436_445.md`; it has not run out.
