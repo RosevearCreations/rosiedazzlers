@@ -21,7 +21,7 @@ readme=read("README.md")
 blockers=read("STARTUP_GO_LIVE_BLOCKERS.md")
 
 require(helper,["authenticated_device_acceptance_closure","operator_review_ready","current_role_ids","current_device_ids","stale_role_ids","stale_device_ids","missing_role_ids","missing_device_ids","unavailable_role_ids","unavailable_device_ids","operator_review_required:true","canonical_hold_mutated:false","source_responsive_checks_are_supporting_only:true"],"Build 458 classifier")
-require(endpoint,["current_build:458",'closure_authority:"authenticated_device_acceptance_closure"',"GET, HEAD, OPTIONS"],"Build 458 endpoint")
+require(endpoint,["current_build:448","closure_build:458",'closure_authority:"authenticated_device_acceptance_closure"',"GET, HEAD, OPTIONS"],"Build 458 endpoint")
 require(asset,["Closure review","Stale coverage","Missing coverage","Acceptance closure:","Current surfaces:","Current devices:"],"Launch Readiness")
 require(contract,["# Build 458 — Authenticated Device Acceptance Closure","operator_review_ready","phone","tablet","desktop","Build 459 — Fleet & Maintenance Commercial Activation Readiness"],"Build 458 contract")
 require(blockers,["Independent device / visual evidence","current release"],"canonical HOLD backlog")
