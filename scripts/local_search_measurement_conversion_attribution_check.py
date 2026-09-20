@@ -99,17 +99,17 @@ require(contract,[
 ],"Build 450 contract")
 require(blockers,["Local-search provider evidence","Build 450","same-session"],"canonical HOLD backlog")
 require(queue,[
- "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+ "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
  "BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md",
- "**Build 453 — Service Economics, Capacity & Pricing Review** is next"
+ "FORWARD_BUILD_ROADMAP_446_455.md"
 ],"release queue")
 require(handoff,[
- "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+ "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
  "BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md",
  "local_search_measurement_conversion_attribution_check.py"
 ],"project handoff")
 require(readme,[
- "Current source direction: **Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**.",
+ "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
  "BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md",
  "local_search_measurement_conversion_attribution_check.py"
 ],"README")
