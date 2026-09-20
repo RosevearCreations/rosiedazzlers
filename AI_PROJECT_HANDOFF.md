@@ -81,7 +81,9 @@ These filename authorities remain cumulative inputs; historical narrative stays 
 - `.github/workflows/service-economics-commercial-capacity-review-authority.yml`
 - `scripts/service_economics_commercial_capacity_review_check.py`
 - `.github/workflows/staff-workflow-support-exception-learning-authority.yml`
+- `.github/workflows/booking-quote-retention-production-learning-authority.yml`
 - `scripts/staff_workflow_support_exception_learning_check.py`
+- `scripts/booking_quote_retention_production_learning_check.py`
 
 ## Retained owning authorities
 Historical numbered contracts are retained in Git and the document index. The living handoff keeps only the authority families needed to restart the current release safely:
