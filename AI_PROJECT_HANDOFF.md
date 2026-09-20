@@ -3,20 +3,20 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`.
+The synchronized Production predecessor is retained through `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
-**Build 455 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 456 — Provider Evidence Closure & Availability Review** is the active bounded release.
 
-**Build 456 — Provider Evidence Closure & Availability Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 457 — Recovery Evidence Closure & Drill Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Production learning & roadmap renewal contract
-- Reconcile `PRODUCTION_LEARNING_446_454.md` without upgrading missing provider, owner, real-device or recovery evidence.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no row closes from source/runtime GREEN alone.
-- Renew future bounded work through `FORWARD_BUILD_ROADMAP_456_465.md`.
-- Preserve all retained provider, recovery, device, commercial, local-search, booking/pricing, staff/mobile, economics and I.T. authority families.
-- No schema/storage mutation, customer/booking mutation, role widening, provider transaction, accounting/inventory posting, secret rotation, DNS/R2 mutation, Production restore, automatic outreach or permanent polling.
+## Current Provider Evidence Closure & Availability Review contract
+- Reuse the retained Build 436/446 provider evidence authorities and the existing Launch Readiness provider panel; do not create a replacement dashboard, ledger or provider evidence route.
+- Keep Stripe, PayPal, refund and message-delivery source availability, dated freshness and closure-candidate state explicit and separately classified.
+- A current closure candidate becomes `operator_review_ready`; aging or stale evidence requires review/revalidation; missing or unavailable evidence remains a truthful HOLD.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no provider HOLD closes automatically.
+- No charge, refund, message send, webhook replay, provider/customer mutation, schema/storage mutation, accounting/inventory posting, secret rotation, DNS/R2 mutation, Production restore, automatic outreach or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 ## Retained reliability, security, cost & resilience reassessment contract
 - Reuse the existing protected `/admin-reliability-reassessment.html` I.T. surface and its read-only endpoint; do not create a parallel reliability dashboard.
@@ -37,6 +37,11 @@ Current contract: `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active road
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`
+- `.github/workflows/provider-evidence-closure-availability-review-authority.yml`
+- `scripts/provider_evidence_closure_availability_review_check.py`
+- `scripts/provider_evidence_closure_availability_review_test.mjs`
+- `functions/api/_lib/provider-evidence-closure-availability-review.js`
 - `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_446_454.md`
 - `FORWARD_BUILD_ROADMAP_456_465.md`

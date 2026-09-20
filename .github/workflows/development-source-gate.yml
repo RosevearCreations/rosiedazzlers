@@ -346,6 +346,9 @@ jobs:
           node scripts/provider_outcome_delivery_evidence_closure_test.mjs
           python scripts/provider_evidence_reconciliation_refresh_check.py
           node scripts/provider_evidence_reconciliation_refresh_test.mjs
+          python scripts/provider_evidence_closure_availability_review_check.py
+          node scripts/provider_evidence_closure_availability_review_test.mjs
+          node --check functions/api/_lib/provider-evidence-closure-availability-review.js
 
       - name: Validate recovery artifact & drill evidence review authority
         run: |

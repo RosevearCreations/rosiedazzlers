@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Current Production Learning & Roadmap Renewal authority for Build 455."""
+"""Retained Production Learning & Roadmap Renewal authority for Build 455."""
 from pathlib import Path
 import re
 import sys
@@ -39,7 +39,7 @@ for title in roadmap_titles:
     require(roadmap,[title],"renewed roadmap")
 
 require(blockers,["Provider outcomes & communications","Local-search provider evidence","Recovery / backup evidence","Independent device / visual evidence","Maintenance / fleet business approval","Evidence source unavailable","PRODUCTION_LEARNING_446_454.md","FORWARD_BUILD_ROADMAP_456_465.md","BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md"],"canonical HOLD backlog")
-require(queue,["BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","FORWARD_BUILD_ROADMAP_456_465.md","STARTUP_GO_LIVE_BLOCKERS.md","**Build 455 — Production Learning & Roadmap Renewal** is the active bounded release.","**Build 456 — Provider Evidence Closure & Availability Review** is next only after the current release is independently GREEN on protected `main`.","rd main protection","Production deployment/runtime/business acceptance","Missing required checks or exact Production runtime/deployment identity are blockers"],"release queue")
+require(queue,["BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","FORWARD_BUILD_ROADMAP_456_465.md","STARTUP_GO_LIVE_BLOCKERS.md","rd main protection","Production deployment/runtime/business acceptance","Missing required checks or exact Production runtime/deployment identity are blockers"],"release queue retained Build 455 authority")
 require(handoff,["BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_446_454.md","FORWARD_BUILD_ROADMAP_456_465.md","STARTUP_GO_LIVE_BLOCKERS.md","Production deployment/runtime/business acceptance must independently prove that exact SHA."],"project handoff")
 require(readme,["BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_446_454.md","FORWARD_BUILD_ROADMAP_456_465.md","python scripts/production_learning_roadmap_renewal_check.py","Production is not considered GREEN from source promotion alone."],"README")
 for text,label in [(dev,"Development source gate"),(prod,"Production authority")]:
