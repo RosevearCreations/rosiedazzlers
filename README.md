@@ -1,28 +1,27 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 455 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 456 — Provider Evidence Closure & Availability Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current renewal authority
-This release reconciles the completed evidence cycle, keeps unresolved provider/owner/device/recovery HOLDs fail-closed, and renews bounded work without creating replacement operational surfaces.
+## Current provider evidence review authority
+This release enriches the retained provider evidence flow with explicit source availability, freshness and closure-candidate review while keeping operator-reviewed HOLD closure fail-closed.
 
 Focused source authority:
 
-`python scripts/production_learning_roadmap_renewal_check.py`
+`python scripts/provider_evidence_closure_availability_review_check.py`
 
 Production is not considered GREEN from source promotion alone.
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_456_465.md` — renewed evidence-driven sequence.
-4. `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
-5. `PRODUCTION_LEARNING_446_454.md` — current completed-cycle reconciliation.
-6. `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md` — retained predecessor contract.
-7. `FORWARD_BUILD_ROADMAP_446_455.md` — retained completed roadmap.
+3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
+4. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — current bounded contract.
+5. `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
+6. `PRODUCTION_LEARNING_446_454.md` — retained completed-cycle reconciliation.
+7. `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md` — retained resilience contract.
 8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
-
 ## Retained cumulative authority pointers
 
 - `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`
@@ -134,6 +133,8 @@ python scripts/recovery_artifact_drill_evidence_review_check.py
 node scripts/recovery_artifact_drill_evidence_review_test.mjs
 python scripts/provider_evidence_reconciliation_refresh_check.py
 node scripts/provider_evidence_reconciliation_refresh_test.mjs
+python scripts/provider_evidence_closure_availability_review_check.py
+node scripts/provider_evidence_closure_availability_review_test.mjs
 python scripts/provider_outcome_delivery_evidence_closure_check.py
 python scripts/authenticated_device_visual_acceptance_check.py
 python scripts/authenticated_cross_device_acceptance_refresh_check.py
@@ -155,4 +156,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 456 — Provider Evidence Closure & Availability Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 457 — Recovery Evidence Closure & Drill Readiness** is next only after the current release is independently GREEN on protected `main`.
