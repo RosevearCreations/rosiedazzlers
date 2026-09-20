@@ -12,6 +12,7 @@ import { buildLaunchReadinessConsolidation } from "../_lib/launch-readiness-cons
 import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evidence.js";
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
 import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
+import { buildProviderEvidenceClosureAvailabilityReview } from "../_lib/provider-evidence-closure-availability-review.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
 import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
@@ -81,6 +82,12 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const providerEvidenceClosureAvailabilityReview = buildProviderEvidenceClosureAvailabilityReview({
+    reconciliation: providerEvidenceReconciliationRefresh,
+    outcome: providerOutcomeDeliveryEvidence,
+    generated_at: generatedAt
+  });
+
   const backupRecoveryEvidenceClosure = buildBackupRecoveryEvidenceClosure({
     proof: recoveryExportResult.data?.proof || null,
     source_available: recoveryExportResult.ok && Boolean(recoveryExportResult.data?.proof),
@@ -116,6 +123,8 @@ export async function onRequestGet({ request, env }) {
     current_provider_evidence_authority: "provider_outcome_delivery_evidence_closure",
     provider_evidence_reconciliation_refresh: providerEvidenceReconciliationRefresh,
     current_provider_reconciliation_authority: "provider_evidence_reconciliation_refresh",
+    provider_evidence_closure_availability_review: providerEvidenceClosureAvailabilityReview,
+    current_provider_availability_review_authority: "provider_evidence_closure_availability_review",
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
@@ -144,6 +153,10 @@ export async function onRequestGet({ request, env }) {
       provider_evidence_reconciliation_refresh: {
         available: providerClosureResult.ok,
         classification: providerEvidenceReconciliationRefresh.status
+      },
+      provider_evidence_closure_availability_review: {
+        available: providerClosureResult.ok,
+        classification: providerEvidenceClosureAvailabilityReview.status
       },
       recovery_artifact_drill_evidence_review: {
         available: recoveryExportResult.ok,
