@@ -62,6 +62,7 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `BUILD433_SUPPORT_AUTOMATION_EXCEPTION_HANDLING.md`
 - `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
+- `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`
 - `BUILD434_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 - `FORWARD_BUILD_ROADMAP_405_415.md`
 - `scripts/build403_customer_retention_rebooking_service_guidance_seo_growth_check.py`
@@ -84,7 +85,7 @@ This release re-runs the current Production reliability/security/recovery eviden
 Retained and current authorities include:
 
 ```bash
-python scripts/build444_reliability_security_cost_reassessment_check.py
+python scripts/current_reliability_security_cost_reassessment_check.py
 python scripts/reliability_security_cost_reassessment_check.py
 python scripts/service_economics_commercial_capacity_review_check.py
 node scripts/service_economics_commercial_capacity_review_test.mjs
