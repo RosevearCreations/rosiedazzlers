@@ -3,24 +3,28 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`.
+The synchronized Production predecessor is retained through `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`.
 
-**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.
+**Build 453 — Service Economics, Capacity & Pricing Review** is the active bounded release.
 
-**Build 453 — Service Economics, Capacity & Pricing Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current staff workflow, support & mobile efficiency learning contract
-- Reuse retained staff/support learning, support-exception, Detailer field-workflow and mobile QoL authorities.
-- The Detailer source is the existing bounded `scope=workspace` view; no duplicate field application or state ledger is created.
-- Repeated task/exception/stage cohorts identify operator-review locations only and do not prove root cause, delay, staff fault or mobile friction.
-- Pending detailer-response cohorts do not prove refusal, missed notification or notification failure.
-- Customer/staff identity, booking IDs and raw exception IDs are excluded from the learning response.
-- Existing role ceilings and canonical job/booking/field-evidence gates remain authoritative.
-- No automatic job/task/exception action, role change, outreach, provider/payment, accounting/inventory, schema/storage, background telemetry or permanent polling is authorized.
+## Current service economics, capacity & pricing review contract
+- Reuse retained Build 428 job-economics evidence, Build 443 economics/capacity review, Build 451 aggregate booking/quote learning, and fleet/commercial authorities.
+- Missing material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
+- Service/package cohorts are aggregate recorded evidence only; current sources do not support defensible add-on-level cost attribution, so add-on margin remains unavailable.
+- Quote-value bands and booking-stage drops do not prove price sensitivity, discount need, customer motive or price causation.
+- Economics evidence is not causally joined to quote-value cohorts.
+- Commercial demand does not prove signed business or live capacity; availability and checkout collision revalidation remain authoritative.
+- No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`
+- `.github/workflows/service-economics-capacity-pricing-review-authority.yml`
+- `scripts/service_economics_capacity_pricing_review_check.py`
+- `scripts/service_economics_capacity_pricing_review_test.mjs`
 - `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`
 - `.github/workflows/staff-support-mobile-efficiency-learning-authority.yml`
 - `scripts/staff_support_mobile_efficiency_learning_check.py`
