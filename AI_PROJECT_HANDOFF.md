@@ -12,11 +12,11 @@ The synchronized Production predecessor is retained through `BUILD450_LOCAL_SEAR
 Current contract: `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 ## Current booking funnel, quote & pricing learning contract
-- Reuse retained Build 427 Booking Conversion & Quote Clarity, Build 441 Booking/Quote/Retention Production Learning and Booking & Rebooking Funnel authorities.
+- Reuse retained `BUILD427_BOOKING_CONVERSION_QUOTE_CLARITY.md`, `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` and Booking & Rebooking Funnel authorities.
 - Booking-stage drops remain anonymous aggregate evidence; price-adjacent does not mean price-caused.
 - Quote evidence is aggregated into broad quoted-value cohorts, with at least three sent rows required for a review cohort.
 - Accepted-vs-quoted aggregate value differences do not infer discounting, scope change, completed work or realized margin.
-- No customer/quote/session identity is returned by the Build 451 learning endpoint.
+- No customer/quote/session identity is returned by the current learning endpoint.
 - Pricing, discounts, outreach, quote acceptance and booking creation remain owner-controlled and non-automatic.
 - No schema, customer/profile, pricing/catalogue, provider/payment, accounting/inventory, destructive-storage or permanent-polling mutation is authorized.
 
