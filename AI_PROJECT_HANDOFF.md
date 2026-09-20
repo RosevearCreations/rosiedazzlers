@@ -3,25 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
+The synchronized Production predecessor is retained through `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
-**Build 445 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 446 — Provider Evidence Reconciliation Refresh** is the active bounded release.
 
-**Build 446 — Provider Evidence Reconciliation Refresh** is next only after the current release is independently GREEN on protected `main`.
+**Build 447 — Recovery Artifact & Drill Evidence Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Production learning & roadmap renewal contract
-- `PRODUCTION_LEARNING_436_444.md` reconciles the completed evidence cycle.
-- Source/runtime acceptance closes only source implementation concerns, never missing provider/owner evidence.
-- Provider payment/refund/delivery and local-search outcomes remain provider-owned where evidence is absent.
+## Current Provider Evidence Reconciliation Refresh contract
+- Build 446 enriches the retained Build 417/436 provider evidence authorities rather than replacing them.
+- Evidence age, source availability, freshness and reconciliation gaps are explicit for Stripe, PayPal, refunds and message delivery.
+- Missing, undated, stale or unavailable provider evidence remains provider-owned and does not become success.
 - Backup/recovery, authenticated device observation and maintenance/fleet business terms remain explicit owner evidence.
 - Unreachable authorized evidence remains unavailable rather than guessed.
-- `FORWARD_BUILD_ROADMAP_446_455.md` is derived from those unresolved gaps and retained Production learning.
-- The next cycle enriches existing capabilities rather than creating overlapping replacements.
+- `FORWARD_BUILD_ROADMAP_446_455.md` remains the active bounded roadmap.
+- Provider refresh is manual/read-only; no provider contact is performed merely to obtain evidence.
 - No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`
+- `.github/workflows/provider-evidence-reconciliation-refresh-authority.yml`
+- `scripts/provider_evidence_reconciliation_refresh_check.py`
+- `scripts/provider_evidence_reconciliation_refresh_test.mjs`
 - `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_436_444.md`
 - `FORWARD_BUILD_ROADMAP_446_455.md`
