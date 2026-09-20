@@ -12,7 +12,7 @@ The synchronized Production predecessor is retained through `BUILD452_STAFF_SUPP
 Current contract: `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 ## Current service economics, capacity & pricing review contract
-- Reuse retained Build 428 job-economics evidence, Build 443 economics/capacity review, Build 451 aggregate booking/quote learning, and fleet/commercial authorities.
+- Reuse retained `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`, and fleet/commercial authorities.
 - Missing material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
 - Service/package cohorts are aggregate recorded evidence only; current sources do not support defensible add-on-level cost attribution, so add-on margin remains unavailable.
 - Quote-value bands and booking-stage drops do not prove price sensitivity, discount need, customer motive or price causation.
