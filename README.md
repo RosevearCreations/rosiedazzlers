@@ -1,15 +1,25 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 453 — Service Economics, Capacity & Pricing Review**.
+Current source direction: **Build 454 — Reliability, Security, Cost & Resilience Reassessment**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
+
+## Build 454 current authority
+Build 454 reuses the existing protected I.T. reliability reassessment surface and re-runs bounded reliability, privacy/session, security, recovery, observability and cost-awareness evidence. Provider-owned billing/CPU and real Production recovery remain external unless independently evidenced.
+
+Focused source authority:
+
+`python scripts/reliability_security_cost_resilience_reassessment_check.py`
+
+Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
-4. `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md` — current bounded contract.
-5. `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` — retained predecessor contract.
+4. `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md` — current bounded contract.
+5. `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md` — retained predecessor contract.
+6. `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` — retained staff/mobile contract.
 6. `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` — retained pricing-learning contract.
 6. `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md` — retained commercial-decision contract.
 6. `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md` — retained device-refresh contract.
