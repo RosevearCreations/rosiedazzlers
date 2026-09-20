@@ -5,7 +5,7 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contract is retained in `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized predecessor contract is retained in `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`.
 
 ## Retained cumulative authority pointers
 
@@ -67,23 +67,23 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 446 — Provider Evidence Reconciliation Refresh** is the active bounded release.
+**Build 447 — Recovery Artifact & Drill Evidence Review** is the active bounded release.
 
 Scope:
-- refresh dated Stripe, PayPal, refund and message-delivery evidence through retained read-only authorities;
-- expose evidence source, age, freshness and missing/unavailable source gaps without contacting providers;
-- retain stale, missing, undated or unavailable evidence as truthful provider-dependent HOLD evidence;
+- reconcile dated backup artifact, retention-location and bounded recovery-drill evidence through existing read-only authorities;
+- expose evidence age and freshness without performing a real restore, rollback or destructive storage action;
+- retain stale, missing, undated or unavailable recovery evidence as truthful owner-action HOLD evidence;
 - preserve explicit operator review before any canonical HOLD narrowing; and
-- introduce no charge, refund, message, provider/customer mutation, secret change, webhook replay, outreach or permanent polling.
+- introduce no Production restore, secret rotation, DNS mutation, destructive R2 action, provider recovery, schema/business mutation or permanent polling.
 
-Current contract: `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Provider Evidence Reconciliation Refresh authority, retained provider/reconciliation authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Recovery Artifact & Drill Evidence Review authority, retained backup/recovery authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 447 — Recovery Artifact & Drill Evidence Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 448 — Authenticated Cross-Device Acceptance Refresh** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_446_455.md`; it has not run out.
