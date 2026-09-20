@@ -110,10 +110,9 @@ require(handoff, [
 ], "handoff")
 require(readme, [
     "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
-    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "staff_support_mobile_efficiency_learning_check.py",
-    "**Build 453 — Service Economics, Capacity & Pricing Review**"
-], "README")
+    "Production is not considered GREEN from source promotion alone."
+], "README retained Build 452 authority")
 for gate, label in ((dev, "Development gate"), (prod, "Production gate")):
     require(gate, ["staff_support_mobile_efficiency_learning_check.py", "staff_support_mobile_efficiency_learning_test.mjs"], label)
 
