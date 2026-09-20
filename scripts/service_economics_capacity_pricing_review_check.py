@@ -94,21 +94,20 @@ require(contract,[
 ],"Build 453 contract")
 require(blockers,["Build 453","add-on","does not close any HOLD"],"canonical HOLD backlog")
 require(queue,[
-    "**Build 453 — Service Economics, Capacity & Pricing Review** is the active bounded release.",
     "BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md",
-    "**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is next"
-],"release queue")
+    "FORWARD_BUILD_ROADMAP_446_455.md",
+    "Production deployment/runtime/business acceptance"
+],"release queue retained Build 453 authority")
 require(handoff,[
-    "**Build 453 — Service Economics, Capacity & Pricing Review** is the active bounded release.",
     "BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md",
-    "service_economics_capacity_pricing_review_check.py"
-],"handoff")
+    "FORWARD_BUILD_ROADMAP_446_455.md",
+    "Production deployment/runtime/business acceptance"
+],"handoff retained Build 453 authority")
 require(readme,[
-    "Current source direction: **Build 453 — Service Economics, Capacity & Pricing Review**.",
     "BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md",
     "service_economics_capacity_pricing_review_check.py",
-    "**Build 454 — Reliability, Security, Cost & Resilience Reassessment**"
-],"README")
+    "Production is not considered GREEN from source promotion alone."
+],"README retained Build 453 authority")
 for gate,label in ((dev,"Development gate"),(prod,"Production gate")):
     require(gate,["service_economics_capacity_pricing_review_check.py","service_economics_capacity_pricing_review_test.mjs"],label)
 

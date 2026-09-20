@@ -3,13 +3,22 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`.
+The synchronized Production predecessor is retained through `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`.
 
-**Build 453 — Service Economics, Capacity & Pricing Review** is the active bounded release.
+**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is the active bounded release.
 
-**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is next only after the current release is independently GREEN on protected `main`.
+**Build 455 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+
+## Current reliability, security, cost & resilience reassessment contract
+- Reuse the existing protected `/admin-reliability-reassessment.html` I.T. surface and its read-only endpoint; do not create a parallel reliability dashboard.
+- Re-run retained reliability/performance, privacy/session, security, recovery, observability/support-diagnostics and I.T. release-control authorities against the current cycle.
+- First-party traffic and bounded diagnostic duration are operational evidence only; provider-owned billing/CPU, quota state, dollar cost and future capacity remain external unless independently evidenced.
+- Backup/recovery source readiness and recovery-artifact/drill evidence are resilience inputs only; source/runtime GREEN does not prove real Production recovery.
+- Real Production recovery, secret rotation, DNS/R2/provider recovery and other destructive actions remain separately authorized and independently observed.
+- No automatic scaling, retry expansion, cache-policy mutation, secret rotation, restore, DNS/R2/provider mutation, schema/storage mutation, customer/business/accounting/inventory mutation, outreach or permanent polling.
+- Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Current service economics, capacity & pricing review contract
 - Reuse retained `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`, and fleet/commercial authorities.
