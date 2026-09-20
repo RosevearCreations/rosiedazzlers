@@ -354,6 +354,9 @@ jobs:
         run: |
           python scripts/recovery_artifact_drill_evidence_review_check.py
           node scripts/recovery_artifact_drill_evidence_review_test.mjs
+          python scripts/recovery_evidence_closure_drill_readiness_check.py
+          node scripts/recovery_evidence_closure_drill_readiness_test.mjs
+          node --check functions/api/_lib/recovery-evidence-closure-drill-readiness.js
 
       - name: Validate authenticated cross-device acceptance refresh authority
         run: |
