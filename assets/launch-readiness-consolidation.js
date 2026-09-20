@@ -157,7 +157,7 @@ function renderProviderClosure(data){
 
 function renderRecovery(data){
   const recovery=data.recovery||{}, exports=Array.isArray(data.exports)?data.exports:[];
-  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{}, review=data.recovery_artifact_drill_evidence_review||{};
+  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{}, review=data.recovery_artifact_drill_evidence_review||{}, readiness=data.recovery_evidence_closure_drill_readiness||{};
   const backup=proof.backup||{}, drill=proof.recovery_drill||{}, accountant=proof.accountant_export||{}, artifact=proof.export_artifact||{};
   const required=Array.isArray(proof.required)?proof.required:[], closureRequired=Array.isArray(closure.required)?closure.required:[];
   $("#recoveryOut").innerHTML=`
@@ -170,16 +170,20 @@ function renderRecovery(data){
       ${metric("Accountant export",accountant.usable?"usable":accountant.status||"hold")}
       ${metric("Stale recovery evidence",review.stale_count??0)}
       ${metric("Missing recovery evidence",review.missing_count??0)}
+      ${metric("Recovery sources",(readiness.source_availability?.available_count??0)+"/"+(readiness.source_availability?.required_count??3))}
+      ${metric("Closure readiness",readiness.closure_readiness?.status||"not_ready_owner_action")}
+      ${metric("Drill readiness",readiness.drill_readiness?.status||"owner_action")}
     </div>
     <p><strong>Backup evidence observed:</strong> ${chip(recovery.backup_evidence_observed?"verified":"owner action")} · <strong>Rollback drill observed:</strong> ${chip(recovery.rollback_drill_observed?"verified":"owner action")}</p>
     <p class="mini"><strong>Build 447 recovery review:</strong> ${chip(review.status||"owner_action")} · backup ${esc(review.backup_artifact?.age_days==null?"not dated":`${review.backup_artifact.age_days} d`)} · retention ${esc(review.retention_location?.age_days==null?"not dated":`${review.retention_location.age_days} d`)} · drill ${esc(review.recovery_drill?.age_days==null?"not dated":`${review.recovery_drill.age_days} d`)}</p>
     <p class="mini"><strong>Latest dated recovery evidence:</strong> ${esc(closure.latest_observed_at?new Date(closure.latest_observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(closure.canonical_hold?.detail||"Backup artifact, retention location and recovery-drill evidence remain owner-observed requirements.")}</p>
+    <p class="mini"><strong>Build 457 closure/readiness:</strong> ${chip(readiness.status||"not_ready_owner_action")} · ${esc(readiness.closure_readiness?.detail||"Required recovery evidence is not yet operator-review ready.")}</p>
     <div class="stack">${closureRequired.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Observed: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not dated")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
     <p class="mini"><strong>Retention location:</strong> ${chip(backup.retention_location_observed?"verified":"owner action")} · <strong>Retained accountant-export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")}</p>
     <p class="mini"><strong>Source route presence is not artifact proof.</strong> This read-only view does not generate an export or perform a Production restore.</p>
     <p class="mini"><strong>Retained export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")} · <strong>Operational proof rows:</strong> ${esc(required.length)}</p>
-    <p class="muted">A closure candidate never edits the HOLD backlog automatically and never performs a Production restore. Source routes and GREEN checks remain supporting evidence only.</p>`;
+    <p class="muted">A closure candidate or bounded-drill-ready state never edits the HOLD backlog automatically and never authorizes a Production restore. Real Production restore, secret rotation, DNS/R2/provider recovery remain separately authorized. Source routes and GREEN checks remain supporting evidence only.</p>`;
 }
 
 function renderExternal(data){
