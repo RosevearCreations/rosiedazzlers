@@ -16,3 +16,7 @@ Missing provider/owner/observed evidence remains a truthful HOLD or unavailable 
 
 ## Next bounded release
 Build 444 — Reliability, Security & Cost Reassessment begins only after this release is independently GREEN on protected `main`.
+
+
+## Implemented source authority
+The protected Administration review manually composes retained accounting operational-profitability evidence with retained fleet/commercial learning evidence. The response is aggregate-only and excludes customer identity/raw booking identifiers. Contribution is withheld whenever selected-month evidence is incomplete. Fleet demand never becomes signed-business or live-capacity proof; availability and checkout collision revalidation remain authoritative. No mutation is performed.

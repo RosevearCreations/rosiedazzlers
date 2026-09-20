@@ -1,0 +1,37 @@
+name: Build 443 — Service Economics & Commercial Capacity Review Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-build443-economics-capacity-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-authority:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: |
+          python -m py_compile scripts/service_economics_commercial_capacity_review_check.py
+          node --check functions/api/_lib/service-economics-commercial-capacity-review.js
+          node --check functions/api/admin/service_economics_commercial_capacity_review.js
+          node --check assets/build443-service-economics-commercial-capacity-review.js
+      - run: |
+          python scripts/service_economics_commercial_capacity_review_check.py
+          node scripts/service_economics_commercial_capacity_review_test.mjs
+      - run: |
+          python scripts/build428_service_economics_job_profitability_check.py
+          python scripts/fleet_commercial_operations_learning_check.py
+          python scripts/maintenance_fleet_owner_approval_convergence_check.py
+          python scripts/release_authority_documentation_convergence_check.py

@@ -102,19 +102,15 @@ require(contract, [
     "Build 443 — Service Economics & Commercial Capacity Review"
 ], "Build 442 contract")
 require(readme, [
-    "Current source direction: **Build 442 — Staff Workflow & Support Exception Learning**",
-    "scripts/staff_workflow_support_exception_learning_check.py",
-    "**Build 443 — Service Economics & Commercial Capacity Review**"
-], "README")
-require(queue, [
-    "**Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.",
-    "**Build 443 — Service Economics & Commercial Capacity Review**"
-], "release queue")
-require(handoff, [
-    "**Build 442 — Staff Workflow & Support Exception Learning** is the active bounded release.",
-    ".github/workflows/staff-workflow-support-exception-learning-authority.yml",
+    "BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md",
     "scripts/staff_workflow_support_exception_learning_check.py"
-], "handoff")
+], "README retained authority")
+require(queue, [
+    "BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md"
+], "release queue retained authority")
+require(handoff, [
+    "BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md"
+], "handoff retained authority")
 require(auth, ['case "admin-staff-workflow-support-learning"'], "admin route ceiling")
 require(nav, [
     '"/admin-staff-workflow-support-learning.html"',
