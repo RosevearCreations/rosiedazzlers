@@ -90,20 +90,18 @@ require(contract, [
 ], "Build 440 contract")
 
 require(queue, [
-    "**Build 440 — Local Search Provider Evidence Refresh** is the active bounded release.",
-    "**Build 441 — Booking, Quote & Retention Production Learning**"
-], "release queue")
+    "BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md",
+], "release queue retained authority")
 require(handoff, [
-    "**Build 440 — Local Search Provider Evidence Refresh** is the active bounded release.",
-    "**Build 441 — Booking, Quote & Retention Production Learning**",
+    "BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md",
     ".github/workflows/local-search-provider-evidence-refresh-authority.yml",
     "scripts/local_search_provider_evidence_refresh_check.py"
-], "project handoff")
+], "project handoff retained authority")
 require(readme, [
-    "Current source direction: **Build 440 — Local Search Provider Evidence Refresh**",
+    "BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md",
     "scripts/local_search_provider_evidence_refresh_check.py",
-    "**Build 441 — Booking, Quote & Retention Production Learning**"
-], "README")
+    "scripts/local_search_measurement_authority_check.py"
+], "README retained authority")
 
 require(retained439, [
     "BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md",
