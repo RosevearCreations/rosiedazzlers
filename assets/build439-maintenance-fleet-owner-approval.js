@@ -1,4 +1,4 @@
-// Build 439 — manual read-only owner-decision convergence UI.
+// Build 439/449 — manual read-only owner-decision convergence + closure UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -15,8 +15,8 @@ async function refresh(){
  finally{if(button)button.disabled=false;}
 }
 function renderSummary(data){
- const s=data.summary||{},mount=$("ownerApprovalSummary"); if(!mount)return;
- const rows=[["Owner actions",s.owner_action_count||0],["Source-approved",s.source_approved_count||0],["Maintenance interest",s.maintenance_interest_total||0],["Interested",s.maintenance_interested||0],["Fleet inquiries",s.fleet_inquiry_total||0],["Vehicles requested",s.fleet_vehicles_requested||0]];
+ const s=data.summary||{},closure=data.decision_closure||{},mount=$("ownerApprovalSummary"); if(!mount)return;
+ const rows=[["Closure state",closure.status||s.closure_status||"owner_action"],["Owner actions",s.owner_action_count||0],["Source-approved",s.source_approved_count||0],["Decision count",closure.decision_count??s.decision_count??0],["Maintenance interest",s.maintenance_interest_total||0],["Fleet inquiries",s.fleet_inquiry_total||0]];
  mount.innerHTML=rows.map(([l,v])=>`<div class="oa-stat"><span class="mini">${esc(l)}</span><strong>${esc(v)}</strong></div>`).join("");
 }
 function renderGroup(id,items){
@@ -26,13 +26,16 @@ function renderGroup(id,items){
    <div class="oa-head"><h3>${esc(item.label)}</h3><span class="oa-pill">${esc(item.status)}</span></div>
    <p><strong>Owner decision:</strong> ${esc(item.question)}</p>
    <p class="mini">Canonical source: <code>${esc(item.source_authority)}</code> · source state: ${esc(item.source_status)}</p>
+   <p class="mini"><strong>Owner decision path:</strong> <code>${esc(item.owner_decision_path||"not available")}</code></p>
+   <p class="mini"><strong>Required closure fields:</strong> ${esc((item.required_fields||[]).join(", ")||"none reported")}</p>
+   ${item.blocking_reason?`<p class="oa-boundary">${esc(item.blocking_reason)}</p>`:""}
    <div class="oa-evidence">${Object.entries(item.evidence||{}).map(([k,v])=>`<div><span class="mini">${esc(k.replaceAll("_"," "))}</span><strong>${esc(typeof v==="object"?JSON.stringify(v):v)}</strong></div>`).join("")}</div>
-   <p class="oa-boundary">This screen cannot approve or write this term.</p>
+   <p class="oa-boundary">This screen cannot approve or write this term. Closure requires an explicit owner decision in canonical source.</p>
  </article>`).join("");
 }
 function renderCapacity(c){
  const mount=$("capacityDecision"); if(!mount)return;
- mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Commercial capacity commitment</h3><span class="oa-pill">${esc(c.status||"unavailable")}</span></div><p><strong>Owner decision:</strong> ${esc(c.question||"Capacity commitments require explicit review.")}</p><p class="mini">${esc(c.explanation||"Live capacity is not inferred.")}</p><p class="mini">Availability: <code>${esc(c.availability_authority||"/api/availability")}</code> · collision revalidation: <code>${esc(c.collision_revalidation_authority||"/api/checkout")}</code></p><p class="oa-boundary">No guaranteed slot or capacity reservation is created here.</p></div>`;
+ mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Commercial capacity commitment</h3><span class="oa-pill">${esc(c.status||"unavailable")}</span></div><p><strong>Owner decision:</strong> ${esc(c.question||"Capacity commitments require explicit review.")}</p><p class="mini">${esc(c.explanation||"Live capacity is not inferred.")}</p><p class="mini"><strong>Commercial policy source:</strong> <code>${esc(c.commercial_policy_source||"config/maintenance-plan-business-rulebook.json#decisions.priority")}</code></p><p class="mini"><strong>Required closure fields:</strong> ${esc((c.required_fields||[]).join(", ")||"priority/capacity policy")}</p><p class="mini">Availability: <code>${esc(c.availability_authority||"/api/availability")}</code> · collision revalidation: <code>${esc(c.collision_revalidation_authority||"/api/checkout")}</code></p><p class="oa-boundary">No guaranteed slot or capacity reservation is created here. Commercial capacity policy and live slot availability remain separate.</p></div>`;
 }
 function renderSources(s){
  const mount=$("ownerApprovalSources"); if(!mount)return;
