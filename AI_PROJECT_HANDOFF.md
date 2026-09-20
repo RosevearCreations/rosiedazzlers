@@ -3,15 +3,22 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`.
 
-**Build 454 — Reliability, Security, Cost & Resilience Reassessment** is the active bounded release.
+**Build 455 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 455 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 456 — Provider Evidence Closure & Availability Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current reliability, security, cost & resilience reassessment contract
+## Current Production learning & roadmap renewal contract
+- Reconcile `PRODUCTION_LEARNING_446_454.md` without upgrading missing provider, owner, real-device or recovery evidence.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no row closes from source/runtime GREEN alone.
+- Renew future bounded work through `FORWARD_BUILD_ROADMAP_456_465.md`.
+- Preserve all retained provider, recovery, device, commercial, local-search, booking/pricing, staff/mobile, economics and I.T. authority families.
+- No schema/storage mutation, customer/booking mutation, role widening, provider transaction, accounting/inventory posting, secret rotation, DNS/R2 mutation, Production restore, automatic outreach or permanent polling.
+- Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
+## Retained reliability, security, cost & resilience reassessment contract
 - Reuse the existing protected `/admin-reliability-reassessment.html` I.T. surface and its read-only endpoint; do not create a parallel reliability dashboard.
 - Re-run retained reliability/performance, privacy/session, security, recovery, observability/support-diagnostics and I.T. release-control authorities against the current cycle.
 - First-party traffic and bounded diagnostic duration are operational evidence only; provider-owned billing/CPU, quota state, dollar cost and future capacity remain external unless independently evidenced.
@@ -20,7 +27,7 @@ Current contract: `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md
 - No automatic scaling, retry expansion, cache-policy mutation, secret rotation, restore, DNS/R2/provider mutation, schema/storage mutation, customer/business/accounting/inventory mutation, outreach or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
-## Current service economics, capacity & pricing review contract
+## Retained service economics, capacity & pricing review contract
 - Reuse retained `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`, and fleet/commercial authorities.
 - Missing material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
 - Service/package cohorts are aggregate recorded evidence only; current sources do not support defensible add-on-level cost attribution, so add-on margin remains unavailable.
@@ -30,6 +37,14 @@ Current contract: `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_446_454.md`
+- `FORWARD_BUILD_ROADMAP_456_465.md`
+- `BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md`
+- `.github/workflows/reliability-security-cost-resilience-reassessment-authority.yml`
+- `scripts/reliability_security_cost_resilience_reassessment_check.py`
+- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md`
 - `.github/workflows/service-economics-capacity-pricing-review-authority.yml`
 - `scripts/service_economics_capacity_pricing_review_check.py`
