@@ -105,7 +105,7 @@ Production business acceptance remains governed by `.github/workflows/production
 ## Release authority
 Feature candidates must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate.
 Production promotion is governed by `rd main protection` and a pull request to protected `main`.
-After merge, Production deployment/runtime/business acceptance must independently prove the exact resulting `main` SHA.
+After merge, Production deployment/runtime/business acceptance must independently prove that exact SHA: the resulting protected `main` commit.
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
