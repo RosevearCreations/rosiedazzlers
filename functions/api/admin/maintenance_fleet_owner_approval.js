@@ -1,4 +1,4 @@
-// Build 439 — admin-only, GET-only maintenance/fleet owner approval convergence.
+// Build 439/449 — admin-only, GET-only maintenance/fleet owner approval + decision closure.
 import { requireStaffAccess } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { buildMaintenanceFleetOwnerApprovalConvergence } from "../_lib/maintenance-fleet-owner-approval.js";
@@ -26,6 +26,8 @@ export async function onRequestGet({request,env}) {
   return json({
     ok:activation.restricted!==true&&fleet.restricted!==true,
     authority:"maintenance_fleet_owner_approval_convergence",
+    current_build:449,
+    refresh_authority:"fleet_maintenance_commercial_decision_closure",
     generated_at:generatedAt,
     source_status:{
       commercial_activation:sourceState(activation),
@@ -56,5 +58,5 @@ function sourceState(value){
   return {available:value?.available===true,restricted:value?.restricted===true,http_status:Number(value?.status)||null,error_class:value?.error_class||null};
 }
 function json(value,status=200){
-  return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Owner-Approval":"build-439-read-only"}});
+  return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Owner-Approval":"build-439-449-read-only"}});
 }

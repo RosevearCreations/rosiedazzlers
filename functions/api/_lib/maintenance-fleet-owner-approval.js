@@ -1,4 +1,4 @@
-// Build 439 — pure read-only owner-decision convergence model.
+// Build 439/449 — read-only owner-decision convergence + commercial decision closure packet.
 const MAINTENANCE_DECISIONS = Object.freeze([
   ["eligibility","Eligibility","Which customer/vehicle types qualify, and is prior Rosie service or a minimum condition required?"],
   ["cadence","Cadence","Which service intervals are allowed, can seasonality change them, and what reschedule policy applies?"],
@@ -17,6 +17,25 @@ const FLEET_DECISIONS = Object.freeze([
   ["invoicing","Invoicing / credit terms","What billing model, payment terms, deposit policy and statement cycle are approved?"],
   ["cancellation","Fleet cancellation","What notice, late-cancel, missed-visit and reschedule rules are approved?"]
 ]);
+
+const MAINTENANCE_REQUIRED_FIELDS = Object.freeze({
+  eligibility:["eligible_customer_types","eligible_vehicle_types","required_prior_service","minimum_vehicle_condition"],
+  cadence:["allowed_intervals","seasonal_adjustment_allowed","reschedule_policy"],
+  price:["pricing_model","amount_cents or discount_percent","price_lock_policy"],
+  inclusions:["service_codes","included_add_on_codes","condition_limits"],
+  exclusions:["excluded_service_codes","excluded_add_on_codes","condition_exclusions"],
+  cancellation:["notice_hours","late_cancel_fee_cents","missed_visit_policy","pause_policy","termination_policy"],
+  priority:["priority_booking_allowed","guaranteed_slot_allowed","capacity_reservation_policy"]
+});
+
+const FLEET_REQUIRED_FIELDS = Object.freeze({
+  fleet_minimums:["minimum_vehicles","minimum_service_frequency","minimum_account_spend_cents"],
+  service_tiers:["tiers"],
+  travel_limits:["included_radius_km","maximum_radius_km","travel_fee_model","travel_fee_cents"],
+  volume_pricing:["pricing_model","bands","discount_percent"],
+  invoicing:["billing_model","payment_terms_days","deposit_policy","statement_cycle"],
+  cancellation:["notice_hours","late_cancel_fee_cents","missed_visit_policy","reschedule_policy"]
+});
 
 export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
   const activation=objectOrEmpty(input.commercial_activation);
@@ -47,9 +66,13 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
   const all=[...maintenanceDecisions,...fleetDecisions];
   const ownerAction=all.filter(x=>x.status==="owner_action").length;
   const sourceApproved=all.filter(x=>x.status==="source_approved").length;
+  const closureCandidate=all.length>0&&sourceApproved===all.length;
 
   return {
     build:439,
+    current_build:449,
+    retained_authority:"maintenance_fleet_owner_approval_convergence",
+    authority:"fleet_maintenance_commercial_decision_closure",
     mode:"maintenance_fleet_owner_approval_convergence",
     generated_at:clean(input.generated_at)||new Date().toISOString(),
     status: ownerAction ? "owner_action" : sourceApproved===all.length ? "source_approved" : "unavailable",
@@ -61,7 +84,24 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
       maintenance_interested:maintenanceMetrics.interested,
       fleet_inquiry_total:fleetMetrics.inquiry_total,
       fleet_vehicles_requested:fleetMetrics.vehicles_requested,
-      fleet_completed_work_evidence:fleetMetrics.completed_work_evidence
+      fleet_completed_work_evidence:fleetMetrics.completed_work_evidence,
+      closure_candidate:closureCandidate,
+      closure_status:closureCandidate?"owner_review_candidate":"owner_action"
+    },
+    decision_closure:{
+      status:closureCandidate?"owner_review_candidate":"owner_action",
+      closure_candidate:closureCandidate,
+      decision_count:all.length,
+      source_approved_count:sourceApproved,
+      owner_action_count:ownerAction,
+      canonical_sources:[
+        "config/maintenance-plan-business-rulebook.json",
+        "config/fleet-business-rulebook.json"
+      ],
+      explicit_owner_approval_required:true,
+      owner_review_required:true,
+      automatic_approval_performed:false,
+      approval_timestamp_inferred:false
     },
     maintenance:{
       source_status:maintenanceStatus,
@@ -80,7 +120,11 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
       availability_authority:clean(capacity.availability_authority)||"/api/availability",
       collision_revalidation_authority:clean(capacity.collision_revalidation_authority)||"/api/checkout",
       question:"What commercial capacity commitments, if any, are permitted? Never promise guaranteed capacity from aggregate demand evidence.",
-      explanation:clean(capacity.explanation)||"Live capacity must be revalidated through the booking authorities."
+      explanation:clean(capacity.explanation)||"Live capacity must be revalidated through the booking authorities.",
+      commercial_policy_source:"config/maintenance-plan-business-rulebook.json#decisions.priority",
+      required_fields:[...(MAINTENANCE_REQUIRED_FIELDS.priority||[])],
+      closure_status:maintenanceStatus==="rules_ready"?"source_approved":"owner_action",
+      live_capacity_is_separate_from_commercial_policy:true
     },
     owner_next_step:ownerAction
       ? "Review each unresolved decision, choose the real business terms, then make a separately reviewed source change to the canonical rulebook. This screen does not approve terms."
@@ -88,7 +132,10 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
     boundaries:{
       read_only:true,
       owner_decision_mutation_available:false,
+      commercial_decision_write_performed:false,
       rulebook_write_performed:false,
+      automatic_approval_performed:false,
+      approval_timestamp_inferred:false,
       automatic_discount_allowed:false,
       quote_acceptance_allowed:false,
       booking_creation_allowed:false,
@@ -105,12 +152,22 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
 }
 
 function decision({id,group,label,question,source_status,source_authority,evidence}) {
+  const approved=source_status==="rules_ready";
+  const requiredFields=group==="maintenance"
+    ? (MAINTENANCE_REQUIRED_FIELDS[id]||[])
+    : (FLEET_REQUIRED_FIELDS[id]||[]);
   return {
     id,group,label,question,source_authority,source_status,
-    status:source_status==="rules_ready" ? "source_approved" : "owner_action",
-    explicit_owner_decision_required:source_status!=="rules_ready",
+    status:approved ? "source_approved" : "owner_action",
+    closure_status:approved ? "source_approved" : "owner_action",
+    closed_by_source:approved,
+    explicit_owner_decision_required:!approved,
+    owner_decision_path:`${source_authority}#decisions.${id}`,
+    required_fields:[...requiredFields],
+    blocking_reason:approved?null:"Canonical source does not yet report this commercial decision set as fully approved.",
     evidence,
-    approval_action_available:false
+    approval_action_available:false,
+    automatic_approval_performed:false
   };
 }
 
