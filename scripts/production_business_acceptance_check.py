@@ -128,6 +128,9 @@ required_authorities = {
         "scripts/security_privacy_recovery_drill_check.py",
         "scripts/security_privacy_recovery_drill_test.mjs",
     ],
+    "build444_reliability_security_cost_reassessment": [
+        "scripts/build444_reliability_security_cost_reassessment_check.py",
+    ],
     "production_learning_roadmap_renewal": [
         "scripts/production_learning_roadmap_renewal_check.py",
     ],
@@ -227,6 +230,8 @@ workflow = require(WORKFLOW, [
     "Validate reliability, performance & cost capacity authority",
     "Validate security, privacy & recovery drill authority",
     "Validate Production learning & roadmap renewal authority",
+    "Validate current-cycle reliability, security & cost reassessment",
+    "python scripts/build444_reliability_security_cost_reassessment_check.py",
     "Validate booking conversion & quote clarity authority",
     "Validate service economics & job profitability authority",
     "Validate retention & rebooking learning authority",
@@ -293,6 +298,7 @@ print("- retention/maintenance/fleet operational pilot remains manual, capacity-
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
 print("- reliability/performance/cost capacity remains bounded, first-party and non-mutating")
 print("- production learning/roadmap renewal keeps stale authority closure evidence-based and unresolved HOLDs explicit")
+print("- Build 444 reliability/security/cost reassessment reuses retained read-only authority and keeps provider/recovery evidence fail-closed")
 print("- booking conversion / quote clarity retains server-authoritative pricing/availability and anonymous evidence boundaries")
 print("- service economics / job profitability keeps missing cost, labour and cash evidence fail-closed and read-only")
 print("- retention / rebooking learning remains exact-profile, aggregate, consent-safe and read-only")
