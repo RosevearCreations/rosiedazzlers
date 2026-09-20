@@ -60,17 +60,17 @@ require(contract,[
 ],"Build 449 contract")
 require(blockers,["Maintenance / fleet business approval","Build 449","owner_review_candidate"],"canonical HOLD backlog")
 require(queue,[
- "**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.",
+ "**Build 451 — Booking Funnel, Quote & Pricing Learning** is the active bounded release.",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
- "**Build 451 — Booking Funnel, Quote & Pricing Learning** is next"
+ "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is next"
 ],"release queue")
 require(handoff,[
- "**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.",
+ "**Build 451 — Booking Funnel, Quote & Pricing Learning** is the active bounded release.",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
  "fleet_maintenance_commercial_decision_closure_check.py"
 ],"project handoff")
 require(readme,[
- "Current source direction: **Build 450 — Local Search Measurement & Conversion Attribution**.",
+ "Current source direction: **Build 451 — Booking Funnel, Quote & Pricing Learning**.",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
  "fleet_maintenance_commercial_decision_closure_check.py"
 ],"README")

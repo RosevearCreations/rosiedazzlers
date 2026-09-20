@@ -1,0 +1,58 @@
+// Build 451 — read-only booking funnel, quote and pricing learning.
+export const BUILD451_QUOTE_VALUE_BANDS = Object.freeze([
+  { key:"under_250", label:"Under $250", min_cents:0, max_cents:24999 },
+  { key:"250_399", label:"$250–$399", min_cents:25000, max_cents:39999 },
+  { key:"400_599", label:"$400–$599", min_cents:40000, max_cents:59999 },
+  { key:"600_plus", label:"$600+", min_cents:60000, max_cents:null }
+]);
+export function buildBookingFunnelQuotePricingLearning({funnel={},quote_rows=[],source_status={},generated_at=null}={}){
+  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes);
+  const values=Object.values(source_status||{}), total=values.length, available=values.filter(x=>x?.available===true).length, restricted=values.filter(x=>x?.restricted===true).length;
+  const evidence_status=total&&available===total?(booking.evidence_possibly_truncated||quotes.possibly_truncated?"partial":"observed"):available?"partial":restricted?"restricted":"unavailable";
+  return {
+    build:451, authority:"booking_funnel_quote_pricing_learning", generated_at:generated_at||new Date().toISOString(),
+    evidence_status, booking, quotes, learning_signals, source_status,
+    truth_boundary:{stage_drop_proves_price_friction:false,quote_decline_proves_price_sensitivity:false,accepted_value_delta_proves_discounting:false,accepted_quote_is_completed_work:false,unresolved_quote_proves_customer_rejection:false,causal_pricing_claimed:false},
+    boundaries:{read_only_learning:true,manual_refresh_only:true,first_party_aggregate_only:true,anonymous_session_to_customer_join:false,customer_identity_exposed:false,raw_quote_identifier_exposed:false,automatic_price_change_allowed:false,automatic_discount_allowed:false,automatic_outreach_allowed:false,automatic_quote_acceptance_allowed:false,automatic_booking_creation_allowed:false,payment_or_provider_mutation_allowed:false,schema_mutation_allowed:false,permanent_polling_allowed:false}
+  };
+}
+function summarizeBooking(funnel){
+  const data=obj(funnel), booking=obj(data.booking_funnel), coverage=obj(data.coverage);
+  const stages=Array.isArray(booking.stages)?booking.stages.map(r=>({key:clean(r?.key),label:clean(r?.label||r?.key),drop_from_previous:nullableWhole(r?.drop_from_previous),drop_from_previous_pct:num(r?.drop_from_previous_pct)})):[];
+  const drops=stages.filter(r=>Number(r.drop_from_previous||0)>0);
+  const largest=drops.slice().sort((a,b)=>Number(b.drop_from_previous)-Number(a.drop_from_previous))[0]||null;
+  const adjacentKeys=new Set(["step_2","step_3","step_5","checkout_started"]);
+  const adjacent=drops.filter(r=>adjacentKeys.has(r.key)).sort((a,b)=>Number(b.drop_from_previous)-Number(a.drop_from_previous))[0]||null;
+  return {state:whole(booking.funnel_start_sessions)>0?(coverage.analytics_possibly_truncated?"partial":"observed"):"unavailable",window_days:num(data?.window?.days),funnel_start_sessions:whole(booking.funnel_start_sessions),checkout_started_sessions:whole(booking.checkout_started_sessions),checkout_completed_sessions:whole(booking.checkout_completed_sessions),start_to_checkout_completion_pct:num(booking.start_to_checkout_completion_pct),checkout_completion_pct:num(booking.checkout_completion_pct),abandoned_after_checkout_start:whole(booking.abandoned_after_checkout_start),largest_observed_stage_drop:drop(largest),largest_price_adjacent_stage_drop:drop(adjacent),evidence_possibly_truncated:coverage.analytics_possibly_truncated===true,identity_join:false,price_cause_inferred:false};
+}
+function summarizeQuotes(rows){
+  const safe=Array.isArray(rows)?rows.filter(r=>r&&typeof r==="object"):[];
+  const bands=BUILD451_QUOTE_VALUE_BANDS.map(b=>({...b,rows_observed:0,sent_quotes:0,accepted_quotes:0,declined_quotes:0,unresolved_quotes:0,quoted_value_cents_aggregate:0}));
+  let sent=0,accepted=0,declined=0,quotedValue=0,acceptedValue=0,comparable=0,compQuoted=0,compAccepted=0,below=0,equal=0,above=0;
+  for(const row of safe){
+    const quoted=nonneg(row.quoted_amount_cents), acceptedAmount=nonneg(row.accepted_amount_cents);
+    const isAccepted=Boolean(row.accepted_at)||norm(row.status)==="accepted", isDeclined=Boolean(row.declined_at)||norm(row.status)==="declined";
+    const isSent=Boolean(row.sent_at)||isAccepted||isDeclined||norm(row.status)==="sent", isUnresolved=!isAccepted&&!isDeclined;
+    sent+=isSent?1:0; accepted+=isAccepted?1:0; declined+=isDeclined?1:0; quotedValue+=quoted; acceptedValue+=acceptedAmount;
+    const band=bands.find(b=>quoted>=b.min_cents&&(b.max_cents==null||quoted<=b.max_cents));
+    if(band){band.rows_observed++;band.sent_quotes+=isSent?1:0;band.accepted_quotes+=isAccepted?1:0;band.declined_quotes+=isDeclined?1:0;band.unresolved_quotes+=isUnresolved?1:0;band.quoted_value_cents_aggregate+=quoted;}
+    if(isAccepted&&quoted>0&&acceptedAmount>0){comparable++;compQuoted+=quoted;compAccepted+=acceptedAmount;if(acceptedAmount<quoted)below++;else if(acceptedAmount>quoted)above++;else equal++;}
+  }
+  for(const band of bands){band.accepted_of_sent_pct=pct(band.accepted_quotes,band.sent_quotes);band.declined_of_sent_pct=pct(band.declined_quotes,band.sent_quotes);band.review_cohort_sufficient=band.sent_quotes>=3;}
+  const delta=compAccepted-compQuoted;
+  return {state:safe.length?(safe.length>=250?"partial":"observed"):"unavailable",rows_observed:safe.length,row_limit:250,possibly_truncated:safe.length>=250,sent_quotes:sent,accepted_quotes:accepted,declined_quotes:declined,unresolved_quotes:Math.max(safe.length-accepted-declined,0),accepted_of_sent_pct:pct(accepted,sent),declined_of_sent_pct:pct(declined,sent),quoted_value_cents_aggregate:quotedValue,accepted_value_cents_aggregate:acceptedValue,value_bands:bands,accepted_value_delta:{comparable_accepted_quotes:comparable,accepted_below_quoted_count:below,accepted_equal_quoted_count:equal,accepted_above_quoted_count:above,quoted_value_cents_comparable:compQuoted,accepted_value_cents_comparable:compAccepted,net_delta_cents:delta,net_delta_pct:compQuoted>0?round1(delta/compQuoted*100):null,reason_known:false},customer_identity_exposed:false,raw_quote_identifier_exposed:false,price_sensitivity_inferred:false,pricing_change_authorized:false};
+}
+function deriveSignals(booking,quotes){
+  const out=[], a=booking.largest_price_adjacent_stage_drop;
+  out.push(signal("booking_price_adjacent_stage",booking.state,a?"Largest observed price-adjacent booking-stage drop: "+a.stage+" ("+a.sessions_lost+" session(s)).":booking.state==="unavailable"?"Booking-funnel evidence is unavailable.":"No positive price-adjacent booking-stage drop is established.",a?"Review the owning package/add-on/deposit step for clarity and usability. The stage location does not prove price caused the drop.":"Keep observing the existing booking funnel; do not invent a pricing-friction conclusion."));
+  if(quotes.state==="unavailable"){out.push(signal("quote_pipeline","unavailable","Quote-pipeline evidence is unavailable.","Restore retained quote evidence before drawing a conversion or pricing-learning conclusion."));return out;}
+  out.push(signal("quote_resolution",quotes.state,quotes.accepted_quotes+" accepted, "+quotes.declined_quotes+" declined and "+quotes.unresolved_quotes+" unresolved quote row(s) are observed.","Review unresolved and declined quotes in the owning workflow. Status counts do not establish the customer's reason or authorize outreach."));
+  const review=quotes.value_bands.filter(r=>r.review_cohort_sufficient).sort((a,b)=>Number(b.declined_of_sent_pct||0)-Number(a.declined_of_sent_pct||0));
+  out.push(review.length?signal("quote_value_band",quotes.state,review[0].label+" has the highest observed declined-of-sent percentage among quote bands with at least 3 sent rows: "+fmt(review[0].declined_of_sent_pct)+".","Treat this as a cohort review prompt only. Quote value, service mix, condition, timing and customer intent are not causally separated."):signal("quote_value_band","partial","No quote-value band has at least 3 sent rows in the bounded snapshot.","Do not infer a price-band conversion pattern from very small cohorts."));
+  const d=quotes.accepted_value_delta;
+  out.push(d.comparable_accepted_quotes>0?signal("accepted_value_delta",quotes.state,d.comparable_accepted_quotes+" accepted quote row(s) have comparable quoted and accepted values; "+d.accepted_below_quoted_count+" finished below quoted, "+d.accepted_equal_quoted_count+" matched, and "+d.accepted_above_quoted_count+" finished above quoted.","Review aggregate accepted-value deltas only. The source does not establish whether any difference was a discount, scope change, correction or other cause."):signal("accepted_value_delta","unavailable","No accepted quote row has both a positive quoted and accepted value in the bounded snapshot.","Do not infer discounting, scope change or accepted-work pricing from missing comparable values."));
+  return out;
+}
+function signal(area,evidence_state,finding,bounded_owner_review){return{area,evidence_state:evidence_state||"unavailable",finding,bounded_owner_review,causal_price_sensitivity_claimed:false,pricing_change_authorized:false,automatic_action_authorized:false};}
+function drop(r){return r?{key:r.key,stage:r.label,sessions_lost:whole(r.drop_from_previous),drop_pct:num(r.drop_from_previous_pct)}:null;}
+function obj(v){return v&&typeof v==="object"&&!Array.isArray(v)?v:{}} function clean(v){return String(v??"").trim()} function norm(v){return clean(v).toLowerCase()} function whole(v){const n=Number(v);return Number.isFinite(n)&&n>0?Math.floor(n):0} function nullableWhole(v){const n=Number(v);return Number.isFinite(n)?Math.max(0,Math.floor(n)):null} function nonneg(v){const n=Number(v);return Number.isFinite(n)&&n>0?Math.round(n):0} function num(v){const n=Number(v);return Number.isFinite(n)?n:null} function pct(a,b){return b>0?round1(a/b*100):null} function round1(v){return Math.round(Number(v)*10)/10} function fmt(v){return v==null?"unavailable":Number(v).toFixed(1)+"%"}
