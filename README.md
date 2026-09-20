@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 449 — Fleet & Maintenance Commercial Decision Closure**.
+Current source direction: **Build 450 — Local Search Measurement & Conversion Attribution**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,8 +8,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
-4. `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md` — current bounded contract.
-5. `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md` — retained predecessor contract.
+4. `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md` — current bounded contract.
+5. `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md` — retained predecessor contract.
+6. `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md` — retained device-refresh contract.
 6. `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` — retained recovery contract.
 6. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — retained provider refresh contract.
 6. `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained prior renewal contract.
@@ -76,14 +77,14 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current Fleet & Maintenance Commercial Decision Closure framework
-This release enriches the retained owner-decision workbench and canonical maintenance/fleet rulebooks rather than creating a replacement.
-- Every retained commercial domain exposes its canonical decision path and required closure fields.
-- Current unresolved terms remain explicit `owner_action`; no economics or capacity promise is inferred from demand.
-- A fully source-approved decision set becomes only an `owner_review_candidate`.
-- Commercial capacity policy remains separate from live availability and final checkout collision revalidation.
-- The canonical Maintenance / fleet business approval HOLD is never edited automatically.
-- No automatic approval, rulebook runtime write, discount, booking, invoice, recurring billing, provider, schema, customer, storage or outreach mutation is introduced.
+## Current Local Search Measurement & Conversion Attribution framework
+This release enriches the retained local-search measurement/provider-evidence stack rather than creating a replacement.
+- Search Console and Google Business Profile remain dated, source-attributed provider evidence.
+- First-party landing/referral and booking-funnel evidence may be reconciled only within the same anonymous analytics session.
+- Provider metrics are never joined to individual sessions or persisted bookings.
+- Anonymous sessions are never joined to customer identity.
+- Same-session conversion percentages are observed correlation, not Google-caused conversion evidence.
+- No schema, analytics-write, provider, publishing, outreach, DNS, ad-spend, customer/booking, storage or permanent-polling mutation is introduced.
 
 ## Durable validation
 Retained and current authorities include:
@@ -100,6 +101,8 @@ python scripts/fleet_maintenance_commercial_decision_closure_check.py
 node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
 python scripts/production_learning_roadmap_renewal_check.py
 python scripts/local_search_provider_evidence_refresh_check.py
+python scripts/local_search_measurement_conversion_attribution_check.py
+node scripts/local_search_measurement_conversion_attribution_test.mjs
 python scripts/local_search_measurement_authority_check.py
 python scripts/backup_recovery_evidence_closure_check.py
 python scripts/recovery_artifact_drill_evidence_review_check.py
@@ -127,4 +130,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 450 — Local Search Measurement & Conversion Attribution** is next only after the current release is independently GREEN on protected `main`.
+**Build 451 — Booking Funnel, Quote & Pricing Learning** is next only after the current release is independently GREEN on protected `main`.

@@ -27,7 +27,7 @@
 @media(max-width:620px){.local-grid,.metric-grid,.provider-form{grid-template-columns:1fr}.provider-form .wide{grid-column:auto}.summary-item{display:grid}}
 </style>
 </head>
-<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof" data-build420="search-console-gbp-local-acquisition-evidence-closure" data-build431="local-acquisition-content-proof" data-build440="local-search-provider-evidence-refresh">
+<body data-page="admin-seo-tasks" data-build414="local-search-measurement-search-console-gbp-proof" data-build420="search-console-gbp-local-acquisition-evidence-closure" data-build431="local-acquisition-content-proof" data-build440="local-search-provider-evidence-refresh" data-build450="local-search-measurement-conversion-attribution">
 <header class="nav">
   <div class="nav-inner">
     <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a>
@@ -78,6 +78,34 @@
       </div>
       <h3 style="margin-top:16px">Prioritized content candidates</h3>
       <div id="localContentProofCandidates" class="summary-list" aria-live="polite"><div class="summary-item muted">Loading content candidates…</div></div>
+    </section>
+
+    <section class="section panel" aria-labelledby="localConversionHeading450">
+      <div class="section-heading">
+        <div>
+          <div class="badge">Build 450 · Local Search Measurement &amp; Conversion Attribution</div>
+          <h2 id="localConversionHeading450" style="margin:.35rem 0">What local-search traffic is reaching the booking funnel?</h2>
+          <p class="muted">Reconciles dated Search Console / Google Business Profile evidence with first-party landing-page, referral and anonymous same-session booking-funnel evidence. Provider metrics are not joined to sessions and no Google-caused booking claim is made.</p>
+        </div>
+        <button id="refreshLocalConversion450" class="btn primary" type="button">Refresh conversion attribution</button>
+      </div>
+      <div id="localConversionStatus450" class="notice soft" role="status" aria-live="polite">Conversion attribution has not been refreshed.</div>
+      <div class="local-grid" style="margin-top:12px">
+        <article class="panel">
+          <h3>Measurement &amp; attribution summary</h3>
+          <div id="localConversionSummary450" class="summary-list"><div class="summary-item muted">Run the bounded attribution refresh.</div></div>
+        </article>
+        <article class="panel">
+          <h3>Truth boundary</h3>
+          <p class="muted">Same-session analytics can describe an observed path from landing/referral evidence into booking events. It does not join Search Console clicks or GBP actions to sessions, does not join anonymous sessions to customer identity or persisted bookings, and does not prove ranking, indexing, Maps visibility or causation.</p>
+        </article>
+      </div>
+      <h3 style="margin-top:16px">Anonymous same-session conversion cohorts</h3>
+      <div id="localConversionCohorts450" class="summary-list"><div class="summary-item muted">No cohort evidence loaded.</div></div>
+      <h3 style="margin-top:16px">Local/service landing-page attribution</h3>
+      <div id="localConversionLanding450" class="summary-list"><div class="summary-item muted">No landing-page attribution loaded.</div></div>
+      <h3 style="margin-top:16px">Provider evidence alignment</h3>
+      <div id="localConversionProvider450" class="summary-list"><div class="summary-item muted">No provider evidence loaded.</div></div>
     </section>
 
     <section class="section panel" aria-labelledby="providerRefreshHeading440">
@@ -190,6 +218,7 @@
 import { startLocalSearchMeasurement } from "/assets/local-search-measurement.js";
 import { startLocalAcquisitionContentProof } from "/assets/local-acquisition-content-proof.js";
 import { startLocalSearchProviderEvidenceRefresh } from "/assets/build440-local-search-provider-evidence-refresh.js";
+import { startLocalSearchMeasurementConversionAttribution } from "/assets/build450-local-search-measurement-conversion-attribution.js";
 window.AdminShell.boot({
   pageKey: "admin-seo-tasks",
   onReady: () => {
@@ -197,6 +226,7 @@ window.AdminShell.boot({
     startLocalSearchMeasurement();
     startLocalAcquisitionContentProof();
     startLocalSearchProviderEvidenceRefresh();
+    startLocalSearchMeasurementConversionAttribution();
   }
 });
 </script>
