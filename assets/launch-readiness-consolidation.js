@@ -103,6 +103,9 @@ function renderWorkflowEvidence(data){
     <div class="metric-grid">
       ${metric("Workflow evidence",evidence.status||"hold")}
       ${metric("Authenticated visual acceptance",acceptance.status||"hold")}
+      ${metric("Current refresh",acceptance.closure_candidate?"current":"hold")}
+      ${metric("Observation freshness",`${acceptance.freshness_days??30} days`)}
+      ${metric("Stale roles",acceptance.stale_role_count??0)}
       ${metric("Dated roles",`${acceptance.dated_role_count??0}/${acceptance.required_role_count??4}`)}
       ${metric("Representative devices",`${acceptance.dated_device_count??0}/${acceptance.required_device_count??3}`)}
       ${metric("Observed real jobs",evidence.observed_real_jobs??0)}
@@ -110,7 +113,7 @@ function renderWorkflowEvidence(data){
     </div>
     <div class="stack">${roles.map(x=>{
       const visual=acceptedRoles.find(row=>row.id===x.id)||{};
-      return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p><p class="mini">Authenticated visual fields: auth ${visual.authentication_evidence_present?"yes":"no"} · browser ${visual.browser_evidence_present?"yes":"no"} · route ${visual.route_evidence_present?"yes":"no"} · viewport ${visual.viewport_evidence_present?"yes":"no"} · outcome ${visual.outcome_evidence_present?"yes":"no"}</p><p class="mini">Device: ${esc((visual.device_classes||[]).join(", ")||"not recorded")} · browser: ${esc((visual.browser_classes||[]).join(", ")||"not recorded")} · safe route: ${esc((visual.routes||[]).join(", ")||"not recorded")}</p></div>${chip(visual.status||x.status||x.classification||"owner_action")}</article>`;
+      return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p><p class="mini">Authenticated visual fields: auth ${visual.authentication_evidence_present?"yes":"no"} · browser ${visual.browser_evidence_present?"yes":"no"} · route ${visual.route_evidence_present?"yes":"no"} · viewport ${visual.viewport_evidence_present?"yes":"no"} · outcome ${visual.outcome_evidence_present?"yes":"no"}</p><p class="mini">Device: ${esc((visual.device_classes||[]).join(", ")||"not recorded")} · browser: ${esc((visual.browser_classes||[]).join(", ")||"not recorded")} · safe route: ${esc((visual.routes||[]).join(", ")||"not recorded")}</p><p class="mini">Current refresh: ${visual.current?"yes":"no"} · age: ${visual.age_days==null?"not dated":`${visual.age_days} d`} · stale: ${visual.stale?"yes":"no"}</p></div>${chip(visual.status||x.status||x.classification||"owner_action")}</article>`;
     }).join("")}</div>
     <div class="stack">${devices.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">Observed roles: ${esc((x.roles||[]).join(", ")||"none")} · latest dated observation: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(acceptance.canonical_hold?.detail||"Representative authenticated phone/tablet/desktop evidence remains owner-observed.")}</p>

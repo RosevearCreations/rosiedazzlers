@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 447 — Recovery Artifact & Drill Evidence Review**.
+Current source direction: **Build 448 — Authenticated Cross-Device Acceptance Refresh**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,8 +8,9 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
-4. `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` — current bounded contract.
-5. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — retained predecessor contract.
+4. `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md` — current bounded contract.
+5. `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` — retained predecessor contract.
+6. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — retained provider refresh contract.
 6. `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained prior renewal contract.
 6. `PRODUCTION_LEARNING_436_444.md` — retained prior-cycle reconciliation.
 7. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
@@ -74,13 +75,15 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current Recovery Artifact & Drill Evidence Review framework
-This release enriches the existing read-only recovery evidence path with explicit backup artifact, retention-location and recovery-drill age/freshness.
-- Recovery evidence remains sourced from retained backup/recovery operational-proof authorities.
-- `STARTUP_GO_LIVE_BLOCKERS.md` remains the single canonical HOLD backlog.
-- Evidence older than the freshness window is labeled aging/stale; missing or unavailable recovery evidence remains explicit owner action rather than inferred success.
-- The canonical Recovery / backup evidence HOLD is never edited automatically; operator review remains required.
-- No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is introduced.
+## Current Authenticated Cross-Device Acceptance Refresh framework
+This release enriches the existing Build 438 authenticated-device path rather than creating a replacement.
+- Customer/Detailer/Operations/Admin observations remain role-bounded and authenticated.
+- Current acceptance requires evidence inside the bounded 30-day freshness window.
+- Stale observations remain historical evidence and block current-release closure.
+- Representative phone/tablet/desktop coverage remains required.
+- Responsive/accessibility source checks remain supporting-only.
+- The canonical Independent device / visual evidence HOLD is never edited automatically.
+- No screenshot capture/polling or schema/customer/provider/storage/outreach mutation is introduced.
 
 ## Durable validation
 Retained and current authorities include:
@@ -103,6 +106,8 @@ python scripts/provider_evidence_reconciliation_refresh_check.py
 node scripts/provider_evidence_reconciliation_refresh_test.mjs
 python scripts/provider_outcome_delivery_evidence_closure_check.py
 python scripts/authenticated_device_visual_acceptance_check.py
+python scripts/authenticated_cross_device_acceptance_refresh_check.py
+node scripts/authenticated_cross_device_acceptance_refresh_test.mjs
 python scripts/reliability_security_cost_reassessment_check.py
 python scripts/staff_workflow_support_exception_learning_check.py
 python scripts/booking_quote_retention_production_learning_check.py
@@ -120,4 +125,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 448 — Authenticated Cross-Device Acceptance Refresh** is next only after the current release is independently GREEN on protected `main`.
+**Build 449 — Fleet & Maintenance Commercial Decision Closure** is next only after the current release is independently GREEN on protected `main`.

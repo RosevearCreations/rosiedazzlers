@@ -1,5 +1,6 @@
-// Build 438 — Authenticated Device & Visual Acceptance.
+// Build 438/448 — Authenticated Device & Visual Acceptance + Cross-Device Refresh.
 // Pure classification over retained launch observations + Build 419 safe workflow evidence.
+// Build 448 adds bounded freshness so old observations cannot silently satisfy the current-release refresh.
 // Raw evidence-note contents are inspected server-side only and are never returned.
 
 const ROLE_DEFINITIONS = Object.freeze([
@@ -29,9 +30,11 @@ export function buildAuthenticatedDeviceVisualAcceptance({
   launch_evidence = [],
   workflow_evidence = null,
   source_available = true,
-  generated_at = new Date().toISOString()
+  generated_at = new Date().toISOString(),
+  freshness_days = 30
 } = {}) {
   const generatedAt=clean(generated_at)||new Date().toISOString();
+  const freshnessDays=Math.max(1,Math.min(90,Number(freshness_days)||30));
   const rows=Array.isArray(launch_evidence)?launch_evidence:[];
   const byKey=new Map(rows.map(row=>[clean(row?.evidence_key),row]));
   const workflowRoles=new Map((Array.isArray(workflow_evidence?.roles)?workflow_evidence.roles:[]).map(row=>[clean(row?.id),row]));
@@ -42,7 +45,8 @@ export function buildAuthenticatedDeviceVisualAcceptance({
     row:byKey.get(definition.key)||null,
     workflowRole:workflowRoles.get(definition.id)||null,
     sourceAvailable:available,
-    generatedAt
+    generatedAt,
+    freshnessDays
   }));
 
   const devices=Object.keys(DEVICE_PATTERNS).map(deviceClass=>{
@@ -61,6 +65,7 @@ export function buildAuthenticatedDeviceVisualAcceptance({
   });
 
   const roleOutstanding=roles.filter(role=>role.status!=="observed_dated");
+  const staleRoles=roles.filter(role=>role.stale===true);
   const deviceOutstanding=devices.filter(device=>device.status!=="observed_dated");
   const closureCandidate=available&&roleOutstanding.length===0&&deviceOutstanding.length===0;
   const timestamps=roles.map(role=>role.observed_at).filter(Boolean).sort();
@@ -72,7 +77,10 @@ export function buildAuthenticatedDeviceVisualAcceptance({
     decision:closureCandidate?"operator_review_may_narrow_device_visual_hold":"authenticated_device_visual_evidence_incomplete",
     closure_candidate:closureCandidate,
     required_role_count:roles.length,
+    freshness_days:freshnessDays,
+    freshness_basis:"verified_at_vs_generated_at",
     dated_role_count:roles.filter(role=>role.status==="observed_dated").length,
+    stale_role_count:staleRoles.length,
     required_device_count:devices.length,
     dated_device_count:devices.filter(device=>device.status==="observed_dated").length,
     latest_observed_at:timestamps.length?timestamps[timestamps.length-1]:null,
@@ -87,12 +95,13 @@ export function buildAuthenticatedDeviceVisualAcceptance({
       backlog_mutated:false,
       detail:closureCandidate
         ?"Authenticated Customer/Detailer/Operations/Admin evidence is dated and representative phone/tablet/desktop coverage is present. An operator may review whether the canonical HOLD can be narrowed."
-        :"Authenticated Customer/staff role evidence and representative phone/tablet/desktop coverage are not all currently observed and dated."
+        :"Authenticated Customer/staff role evidence and representative phone/tablet/desktop coverage are not all current within the bounded refresh window."
     },
     truth_boundary:{
       retained_workflow_authority:"customer_staff_production_workflow_evidence",
       source_responsive_checks_are_supporting_only:true,
       source_green_is_not_real_device_proof:true,
+      stale_observation_is_not_current_release_proof:true,
       evidence_note_exposed:false,
       customer_identity_exposed:false,
       protected_content_copied:false,
@@ -108,7 +117,7 @@ export function buildAuthenticatedDeviceVisualAcceptance({
   };
 }
 
-function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt}) {
+function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt,freshnessDays}) {
   if(!sourceAvailable){
     return emptyRole(definition,"unavailable","unavailable","Authorized launch/workflow evidence is unavailable.");
   }
@@ -127,7 +136,11 @@ function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt})
   const viewportWidths=viewportWidthsFrom(note);
   const viewport=VIEWPORT_PATTERN.test(note)||viewportWidths.length>0;
   const outcome=OUTCOME_PATTERN.test(note);
-  const complete=clean(row?.status)==="verified"&&Boolean(verifiedAt)&&retainedVerified&&roleLanguage&&authentication&&browserClasses.length>0&&deviceClasses.length>0&&routes.length>0&&viewport&&outcome;
+  const evidenceComplete=clean(row?.status)==="verified"&&Boolean(verifiedAt)&&retainedVerified&&roleLanguage&&authentication&&browserClasses.length>0&&deviceClasses.length>0&&routes.length>0&&viewport&&outcome;
+  const observedAge=verifiedAt?ageDays(verifiedAt,generatedAt):null;
+  const fresh=evidenceComplete&&observedAge!==null&&observedAge<=freshnessDays;
+  const stale=evidenceComplete&&!fresh;
+  const complete=evidenceComplete&&fresh;
 
   const missing=[];
   if(!retainedVerified) missing.push("retained workflow verification");
@@ -139,6 +152,7 @@ function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt})
   if(!viewport) missing.push("viewport/width");
   if(!outcome) missing.push("outcome");
   if(!verifiedAt) missing.push("dated verification");
+  if(stale) missing.push(`fresh observation <= ${freshnessDays} days`);
 
   return {
     id:definition.id,
@@ -146,9 +160,12 @@ function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt})
     title:definition.title,
     status:complete?"observed_dated":"owner_action",
     classification:complete?"owner_action_observed":"owner_action",
-    observed:complete,
-    observed_at:complete?verifiedAt:null,
-    age_days:complete?ageDays(verifiedAt,generatedAt):null,
+    observed:evidenceComplete,
+    current:complete,
+    fresh,
+    stale,
+    observed_at:evidenceComplete?verifiedAt:null,
+    age_days:evidenceComplete?observedAge:null,
     device_classes:deviceClasses,
     browser_classes:browserClasses,
     routes,
@@ -163,13 +180,15 @@ function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt})
     evidence_note_exposed:false,
     missing_evidence:complete?[]:missing,
     detail:complete
-      ?"A dated authenticated role observation records device, browser, route, viewport and outcome evidence."
-      :"Record a verified dated authenticated observation with role, device, browser, route, viewport and outcome evidence."
+      ?`A current authenticated role observation records device, browser, route, viewport and outcome evidence within the ${freshnessDays}-day refresh window.`
+      :stale
+        ?`The authenticated role observation is stale (${observedAge} days old); renew it within the ${freshnessDays}-day refresh window.`
+        :"Record a verified dated authenticated observation with role, device, browser, route, viewport and outcome evidence."
   };
 }
 
 function emptyRole(definition,status,classification,detail){
-  return {id:definition.id,key:definition.key,title:definition.title,status,classification,observed:false,observed_at:null,age_days:null,device_classes:[],browser_classes:[],routes:[],viewport_widths:[],authentication_evidence_present:false,browser_evidence_present:false,route_evidence_present:false,viewport_evidence_present:false,outcome_evidence_present:false,retained_workflow_verified:false,evidence_note_present:false,evidence_note_exposed:false,missing_evidence:["authorized evidence source"],detail};
+  return {id:definition.id,key:definition.key,title:definition.title,status,classification,observed:false,current:false,fresh:false,stale:false,observed_at:null,age_days:null,device_classes:[],browser_classes:[],routes:[],viewport_widths:[],authentication_evidence_present:false,browser_evidence_present:false,route_evidence_present:false,viewport_evidence_present:false,outcome_evidence_present:false,retained_workflow_verified:false,evidence_note_present:false,evidence_note_exposed:false,missing_evidence:["authorized evidence source"],detail};
 }
 function safeRoutes(note){
   const values=[];
