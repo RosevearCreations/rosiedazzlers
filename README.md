@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 446 — Provider Evidence Reconciliation Refresh**.
+Current source direction: **Build 447 — Recovery Artifact & Drill Evidence Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
@@ -8,8 +8,8 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_446_455.md` — renewed evidence-driven sequence.
-4. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — current bounded contract.
-5. `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor contract.
+4. `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` — current bounded contract.
+5. `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` — retained predecessor contract.
 6. `PRODUCTION_LEARNING_436_444.md` — retained prior-cycle reconciliation.
 7. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
@@ -73,12 +73,12 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_check.py`
 - `scripts/local_acquisition_content_proof_test.mjs`
 
-## Current Provider Evidence Reconciliation Refresh framework
-This release enriches the existing read-only provider evidence path with explicit evidence source, age, freshness and reconciliation gaps.
-- Stripe, PayPal, refund and message-delivery evidence remains sourced from retained provider reconciliation authorities.
+## Current Recovery Artifact & Drill Evidence Review framework
+This release enriches the existing read-only recovery evidence path with explicit backup artifact, retention-location and recovery-drill age/freshness.
+- Recovery evidence remains sourced from retained backup/recovery operational-proof authorities.
 - `STARTUP_GO_LIVE_BLOCKERS.md` remains the single canonical HOLD backlog.
-- Evidence older than the freshness window is labeled aging/stale; missing or unavailable sources remain explicit gaps rather than inferred success.
-- The canonical Provider outcomes & communications HOLD is never edited automatically; operator review remains required.
+- Evidence older than the freshness window is labeled aging/stale; missing or unavailable recovery evidence remains explicit owner action rather than inferred success.
+- The canonical Recovery / backup evidence HOLD is never edited automatically; operator review remains required.
 - No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is introduced.
 
 ## Durable validation
@@ -96,6 +96,8 @@ python scripts/production_learning_roadmap_renewal_check.py
 python scripts/local_search_provider_evidence_refresh_check.py
 python scripts/local_search_measurement_authority_check.py
 python scripts/backup_recovery_evidence_closure_check.py
+python scripts/recovery_artifact_drill_evidence_review_check.py
+node scripts/recovery_artifact_drill_evidence_review_test.mjs
 python scripts/provider_evidence_reconciliation_refresh_check.py
 node scripts/provider_evidence_reconciliation_refresh_test.mjs
 python scripts/provider_outcome_delivery_evidence_closure_check.py
@@ -117,4 +119,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 447 — Recovery Artifact & Drill Evidence Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 448 — Authenticated Cross-Device Acceptance Refresh** is next only after the current release is independently GREEN on protected `main`.
