@@ -71,6 +71,11 @@ jobs:
           node --check scripts/authenticated_cross_device_acceptance_refresh_test.mjs
           python -m py_compile scripts/fleet_maintenance_commercial_decision_closure_check.py
           node --check scripts/fleet_maintenance_commercial_decision_closure_test.mjs
+          python -m py_compile scripts/local_search_measurement_conversion_attribution_check.py
+          node --check scripts/local_search_measurement_conversion_attribution_test.mjs
+          node --check functions/api/_lib/local-search-measurement-conversion-attribution.js
+          node --check functions/api/admin/local_search_measurement_conversion_attribution.js
+          node --check assets/build450-local-search-measurement-conversion-attribution.js
           node --check functions/api/_lib/recovery-artifact-drill-evidence-review.js
           node --check functions/api/admin/recovery_artifact_drill_evidence_review.js
           python -m py_compile scripts/recovery_export_operational_proof_check.py
@@ -262,6 +267,11 @@ jobs:
         run: |
           python scripts/fleet_maintenance_commercial_decision_closure_check.py
           node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
+
+      - name: Validate local search measurement & conversion attribution authority
+        run: |
+          python scripts/local_search_measurement_conversion_attribution_check.py
+          node scripts/local_search_measurement_conversion_attribution_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |
