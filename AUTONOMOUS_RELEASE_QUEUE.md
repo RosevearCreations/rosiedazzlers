@@ -72,7 +72,7 @@ These completed filename authorities remain cumulative acceptance inputs:
 **Build 448 — Authenticated Cross-Device Acceptance Refresh** is the active bounded release.
 
 Scope:
-- renew dated authenticated Customer, Detailer, Operations and Admin observations through the existing Build 438 classifier;
+- renew dated authenticated Customer, Detailer, Operations and Admin observations through the existing authenticated-device classifier;
 - require current phone/tablet/desktop coverage inside a bounded 30-day freshness window;
 - retain stale observations as historical evidence while blocking them from current-release closure;
 - keep responsive/accessibility source checks supporting-only rather than treating them as real-device proof;
@@ -81,7 +81,7 @@ Scope:
 
 Current contract: `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Authenticated Cross-Device Acceptance Refresh authority, retained Build 438/419 authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Authenticated Cross-Device Acceptance Refresh authority, retained authenticated-device/workflow authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
