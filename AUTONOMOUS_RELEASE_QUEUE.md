@@ -11,6 +11,7 @@ The synchronized predecessor contract is retained in `BUILD441_BOOKING_QUOTE_RET
 
 These completed filename authorities remain cumulative acceptance inputs:
 
+- `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`
 - `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
