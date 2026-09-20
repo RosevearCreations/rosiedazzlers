@@ -3,32 +3,35 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`.
 
-**Build 444 — Reliability, Security & Cost Reassessment** is the active bounded release.
+**Build 445 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 445 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 446 — Provider Evidence Reconciliation Refresh** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_436_445.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current reliability, security & cost reassessment contract
-- Reuses the retained Build 434 protected I.T. manual-refresh reassessment surface.
-- Re-runs current reliability/performance, security/privacy/session, backup/recovery, observability and I.T. release-control authorities after Builds 436–443.
-- First-party traffic and diagnostics remain operational-pressure evidence only.
-- Cloudflare billing/CPU, future capacity, attack likelihood and real recovery success remain uninferred without owning evidence.
-- Missing provider/owner/observed evidence remains HOLD or unavailable.
-- No scaling/retry/cache/secret/restore/DNS/R2/provider/schema/customer/business mutation, outreach or permanent polling is introduced.
+## Current Production learning & roadmap renewal contract
+- `PRODUCTION_LEARNING_436_444.md` reconciles the completed evidence cycle.
+- Source/runtime acceptance closes only source implementation concerns, never missing provider/owner evidence.
+- Provider payment/refund/delivery and local-search outcomes remain provider-owned where evidence is absent.
+- Backup/recovery, authenticated device observation and maintenance/fleet business terms remain explicit owner evidence.
+- Unreachable authorized evidence remains unavailable rather than guessed.
+- `FORWARD_BUILD_ROADMAP_446_455.md` is derived from those unresolved gaps and retained Production learning.
+- The next cycle enriches existing capabilities rather than creating overlapping replacements.
+- No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_436_444.md`
+- `FORWARD_BUILD_ROADMAP_446_455.md`
+- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
-- `.github/workflows/current-reliability-security-cost-reassessment-authority.yml`
-- `scripts/current_reliability_security_cost_reassessment_check.py`
-- `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
-- `.github/workflows/service-economics-commercial-capacity-review-authority.yml`
-- `scripts/service_economics_commercial_capacity_review_check.py`
 
 ## Retained cumulative authority pointers
 
+- `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
 - `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 

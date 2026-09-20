@@ -20,16 +20,15 @@ A HOLD remains open until dated, attributable evidence from the named authority 
 | Evidence source unavailable | `unavailable` | Any required evidence source that cannot be reached or established must remain unavailable rather than being guessed. | The authorized evidence source becomes available and produces attributable evidence. |
 
 ## Current cycle reconciliation
-`PRODUCTION_LEARNING_426_434.md` confirms that this governance checkpoint does not close any row above merely because source/runtime acceptance is GREEN.
+`PRODUCTION_LEARNING_436_444.md` confirms that this governance checkpoint does not close any row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
-- `FORWARD_BUILD_ROADMAP_436_445.md`
-- `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
-- `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`
-- `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`
-- `BUILD435_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_436_444.md`
+- `FORWARD_BUILD_ROADMAP_446_455.md`
+- `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 
 ## Closure rule
 A row is removed or narrowed only when dated, attributable evidence exists and the relevant source/runtime/provider/owner boundary remains explicit. Missing evidence is never converted into success, and closure of one row does not silently close another.

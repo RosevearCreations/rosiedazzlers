@@ -44,7 +44,7 @@ jobs:
             echo "- SHA: `${GITHUB_SHA}`"
             echo '- Completed-cycle evidence reconciliation: PASS'
             echo '- Owner/provider HOLD truth boundary: PASS'
-            echo '- Roadmap 436–445 renewal: PASS'
+            echo '- Roadmap 446–455 renewal: PASS'
             echo '- Future bounded contracts: PASS'
             echo '- Schema/provider/business mutation: NONE'
           } >> "$GITHUB_STEP_SUMMARY"
