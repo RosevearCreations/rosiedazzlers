@@ -5,7 +5,7 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`.
 
 ## Retained cumulative authority pointers
 
@@ -71,24 +71,24 @@ These completed filename authorities remain cumulative acceptance inputs:
 - `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`
 
 ## Current release
-**Build 448 — Authenticated Cross-Device Acceptance Refresh** is the active bounded release.
+**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.
 
 Scope:
-- renew dated authenticated Customer, Detailer, Operations and Admin observations through the existing authenticated-device classifier;
-- require current phone/tablet/desktop coverage inside a bounded 30-day freshness window;
-- retain stale observations as historical evidence while blocking them from current-release closure;
-- keep responsive/accessibility source checks supporting-only rather than treating them as real-device proof;
-- preserve explicit operator review before the canonical Independent device / visual evidence HOLD can be narrowed; and
-- introduce no screenshot capture/polling, customer/booking, role, provider, schema, storage, outreach or permanent-polling mutation.
+- reuse the existing maintenance/fleet owner-decision workbench and canonical rulebooks rather than creating a parallel approval system;
+- expose exact canonical decision paths and required closure fields for eligibility, cadence, price, inclusions/exclusions, cancellation, capacity policy, fleet minimums, service tiers, travel, volume pricing/discount and invoicing;
+- keep unresolved commercial terms as explicit `owner_action`;
+- report only an `owner_review_candidate` when all canonical decision domains are source-approved;
+- keep commercial capacity policy separate from live availability and checkout revalidation; and
+- introduce no automatic approval, rulebook runtime write, discount, booking, invoice, recurring billing, provider, schema, customer, storage, outreach or permanent-polling mutation.
 
-Current contract: `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Authenticated Cross-Device Acceptance Refresh authority, retained authenticated-device/workflow authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Fleet & Maintenance Commercial Decision Closure authority, retained maintenance/fleet owner-decision and commercial authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 449 — Fleet & Maintenance Commercial Decision Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 450 — Local Search Measurement & Conversion Attribution** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_446_455.md`; it has not run out.
