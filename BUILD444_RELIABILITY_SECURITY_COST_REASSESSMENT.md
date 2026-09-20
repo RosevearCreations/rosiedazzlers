@@ -34,7 +34,7 @@ No automatic scaling, retry expansion, cache-policy mutation, secret rotation, P
 
 ## Acceptance
 The exact candidate must pass:
-1. `scripts/build444_reliability_security_cost_reassessment_check.py`;
+1. `scripts/current_reliability_security_cost_reassessment_check.py`;
 2. retained Build 434 reassessment authority;
 3. retained reliability/performance/cost-capacity, security/privacy/recovery, backup/recovery, observability and I.T. readiness authorities;
 4. Current Source Gate;
