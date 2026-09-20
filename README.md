@@ -108,6 +108,7 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/reliability_security_cost_resilience_reassessment_check.py
 python scripts/service_economics_capacity_pricing_review_check.py
 node scripts/service_economics_capacity_pricing_review_test.mjs
 python scripts/current_reliability_security_cost_reassessment_check.py
