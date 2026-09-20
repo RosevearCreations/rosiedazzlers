@@ -72,7 +72,7 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_test.mjs`
 
 ## Current reliability, security & cost reassessment framework
-Build 444 re-runs the current Production reliability/security/recovery evidence cycle while reusing the proven Build 434 read-only I.T. reassessment surface.
+This release re-runs the current Production reliability/security/recovery evidence cycle while reusing the proven retained read-only I.T. reassessment surface.
 - First-party traffic and diagnostic duration are operational-pressure evidence only.
 - Cloudflare billing/CPU consumption, future capacity and provider quota state are not inferred.
 - Source/security checks do not establish attack likelihood.
