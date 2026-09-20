@@ -11,6 +11,8 @@ The synchronized predecessor contract is retained in `BUILD446_PROVIDER_EVIDENCE
 
 These completed filename authorities remain cumulative acceptance inputs:
 
+- `BUILD445_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+
 - `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
 
 - `FORWARD_BUILD_ROADMAP_436_445.md`
