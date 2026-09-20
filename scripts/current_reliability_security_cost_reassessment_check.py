@@ -60,20 +60,20 @@ require(roadmap, [
     "Build 445 — Production Learning & Roadmap Renewal",
 ], "active roadmap")
 require(queue, [
-    "**Build 444 — Reliability, Security & Cost Reassessment** is the active bounded release.",
-    "**Build 445 — Production Learning & Roadmap Renewal** is next",
     "BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
-], "release queue")
+    "FORWARD_BUILD_ROADMAP_436_445.md",
+    "Production deployment/runtime/business acceptance",
+], "release queue retained Build 444 authority")
 require(readme, [
-    "Current source direction: **Build 444 — Reliability, Security & Cost Reassessment**.",
-    "## Current reliability, security & cost reassessment framework",
+    "BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
     "python scripts/current_reliability_security_cost_reassessment_check.py",
-], "README current authority")
+    "Production is not considered GREEN from source promotion alone.",
+], "README retained Build 444 authority")
 require(handoff, [
     "BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
-    ".github/workflows/current-reliability-security-cost-reassessment-authority.yml",
-    "scripts/current_reliability_security_cost_reassessment_check.py",
-], "project handoff")
+    "FORWARD_BUILD_ROADMAP_436_445.md",
+    "Production deployment/runtime/business acceptance",
+], "project handoff retained Build 444 authority")
 require(blockers, [
     "Provider",
     "Recovery",
