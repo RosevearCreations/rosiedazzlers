@@ -99,17 +99,17 @@ require(contract, [
 ], "Build 452 contract")
 require(blockers, ["Build 452", "staff/mobile efficiency-review", "does not close any HOLD"], "canonical HOLD backlog")
 require(queue, [
-    "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
     "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
-    "**Build 453 — Service Economics, Capacity & Pricing Review** is next"
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
+    "FORWARD_BUILD_ROADMAP_446_455.md"
 ], "release queue")
 require(handoff, [
-    "**Build 452 — Staff Workflow, Support & Mobile Efficiency Learning** is the active bounded release.",
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "staff_support_mobile_efficiency_learning_check.py"
 ], "handoff")
 require(readme, [
-    "Current source direction: **Build 452 — Staff Workflow, Support & Mobile Efficiency Learning**.",
+    "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md",
     "staff_support_mobile_efficiency_learning_check.py",
     "**Build 453 — Service Economics, Capacity & Pricing Review**"
