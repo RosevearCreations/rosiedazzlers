@@ -78,7 +78,7 @@ Current contract: `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active r
 
 The exact candidate must pass focused Build 444 reassessment authority, retained reliability/security/recovery authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected `main` and independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
+Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
 **Build 445 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
