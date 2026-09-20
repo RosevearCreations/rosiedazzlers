@@ -65,7 +65,7 @@ require(queue,[
  "**Build 451 — Booking Funnel, Quote & Pricing Learning** is next"
 ],"release queue")
 require(handoff,[
- "**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.",
+ "**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.",
  "BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md",
  "fleet_maintenance_commercial_decision_closure_check.py"
 ],"project handoff")
