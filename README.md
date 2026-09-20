@@ -9,12 +9,14 @@ Rosie Dazzlers is one platform with a static-first public website and independen
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_436_445.md` — renewed evidence-driven sequence.
 4. `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md` — current bounded contract.
-5. `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md` — retained predecessor contract.
+5. `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` — retained predecessor contract.
 6. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 
 ## Retained cumulative authority pointers
+
+- `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
 

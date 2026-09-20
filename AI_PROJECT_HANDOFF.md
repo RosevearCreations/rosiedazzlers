@@ -83,6 +83,7 @@ This release authorizes no schema migration, customer/booking mutation, staff ro
 - `FORWARD_BUILD_ROADMAP_436_445.md` is derived from those unresolved evidence gaps and retained Production learning.
 
 ## Durable current-release authorities
+- `.github/workflows/booking-quote-retention-production-learning-authority.yml`
 - `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`
 - `.github/workflows/staff-workflow-support-exception-learning-authority.yml`
 - `scripts/staff_workflow_support_exception_learning_check.py`
