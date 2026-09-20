@@ -21,8 +21,8 @@ Current contract: `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`. Active r
 
 ## Durable current-release authorities
 - `BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md`
-- `.github/workflows/build444-reliability-security-cost-reassessment-authority.yml`
-- `scripts/build444_reliability_security_cost_reassessment_check.py`
+- `.github/workflows/current-reliability-security-cost-reassessment-authority.yml`
+- `scripts/current_reliability_security_cost_reassessment_check.py`
 - `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`
 - `.github/workflows/service-economics-commercial-capacity-review-authority.yml`
 - `scripts/service_economics_commercial_capacity_review_check.py`
