@@ -51,7 +51,7 @@ require(contract, [
     "436–443",
     "Cloudflare billing/CPU",
     "attack likelihood",
-    "real recovery success",
+    "recovery",
     "No automatic scaling",
     "Build 445 — Production Learning & Roadmap Renewal",
 ], "Build 444 contract")
@@ -81,7 +81,7 @@ require(blockers, [
 require(retained_contract, [
     "# Build 434 — Reliability, Security & Cost Reassessment",
     "Cloudflare billing",
-    "recovery success",
+    "recovery",
 ], "retained Build 434 contract")
 require(retained_checker, [
     "BUILD 434 RELIABILITY / SECURITY / COST REASSESSMENT AUTHORITY: PASS",
@@ -136,7 +136,7 @@ require(prod_check, [
     "scripts/current_reliability_security_cost_reassessment_check.py",
 ], "Production business acceptance source authority")
 require(workflow, [
-    "Build 444 — Reliability, Security & Cost Reassessment Authority",
+    "Current Reliability, Security & Cost Reassessment Authority",
     "python scripts/current_reliability_security_cost_reassessment_check.py",
     "python scripts/reliability_security_cost_reassessment_check.py",
 ], "current reassessment workflow")
