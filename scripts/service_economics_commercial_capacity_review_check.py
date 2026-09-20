@@ -23,7 +23,7 @@ require(helper,["build:443",'mode:"service_economics_commercial_capacity_review"
 for f in ("customer_name","customer_email","booking_id:"):
  if f in helper: errors.append(f"helper exposes forbidden {f}")
 require(endpoint,['capability:"manage_staff"',"getAccountingStatement","getFleetLearning","onRequestPost","onRequestPut","onRequestPatch","onRequestDelete"],"endpoint")
-require(page,['data-build443="service-economics-commercial-capacity-review"',"Service Economics &amp; Commercial Capacity Review","Missing cost/time evidence blocks margin conclusions",'id="refreshReview"'],"page")
+require(page,['data-build443="service-economics-commercial-capacity-review"','data-page="admin-service-economics-commercial-capacity-review"','id="refreshReview"'],"page retained authority")
 require(client,["/api/admin/service_economics_commercial_capacity_review",'method:"GET"',"No pricing, booking, accounting or provider action was performed."],"client")
 for f in ("setInterval(","localStorage","sessionStorage",'method:"POST"','method:"PUT"','method:"PATCH"','method:"DELETE"'):
  if f in client: errors.append(f"client contains forbidden {f}")
