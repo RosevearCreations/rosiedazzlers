@@ -1,0 +1,60 @@
+name: Authenticated Cross-Device Acceptance Refresh Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-authenticated-cross-device-refresh-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: authenticated-cross-device-acceptance-refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/authenticated_cross_device_acceptance_refresh_check.py
+          node --check functions/api/_lib/authenticated-device-visual-acceptance.js
+          node --check functions/api/admin/authenticated_device_visual_acceptance.js
+          node --check assets/launch-readiness-consolidation.js
+          node --check scripts/authenticated_cross_device_acceptance_refresh_test.mjs
+      - name: Validate current cross-device refresh
+        run: python scripts/authenticated_cross_device_acceptance_refresh_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo '### Authenticated Cross-Device Acceptance Refresh'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Existing Build 438 classifier reused: PASS'
+            echo '- 30-day freshness / stale-evidence rule: PASS'
+            echo '- Customer/Detailer/Operations/Admin current observation rule: PASS'
+            echo '- Representative phone/tablet/desktop rule: PASS'
+            echo '- Source responsive/accessibility checks remain supporting-only'
+            echo '- Screenshot capture/polling or business/provider/storage mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
