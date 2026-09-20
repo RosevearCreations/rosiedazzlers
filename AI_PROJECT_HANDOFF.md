@@ -3,32 +3,22 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`.
 
-**Build 448 — Authenticated Cross-Device Acceptance Refresh** is the active bounded release.
+**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.
 
-**Build 449 — Fleet & Maintenance Commercial Decision Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 450 — Local Search Measurement & Conversion Attribution** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current authenticated cross-device refresh contract
-- Reuse the existing Build 438 authenticated-device classifier rather than creating a replacement.
-- Customer, Detailer, Operations and Admin observations must retain auth/device/browser/route/viewport/outcome evidence.
-- Current-release acceptance requires observations no older than the bounded 30-day freshness window.
-- Stale evidence remains visible but cannot satisfy current-release closure.
-- Representative phone/tablet/desktop coverage remains required.
-- Responsive/accessibility source checks remain supporting-only and do not become real-device proof.
-- Canonical HOLD narrowing still requires explicit operator review.
-- No screenshot capture/polling, schema/customer/provider/accounting/inventory/storage/outreach/permanent-polling mutation is authorized.
-
-- The current release enriches retained backup/recovery evidence authorities rather than replacing them.
-- Backup artifact, retention-location and bounded recovery-drill evidence age/freshness are explicit.
-- Missing, undated, stale or unavailable recovery evidence remains owner-action evidence and does not become success.
-- Backup/recovery, authenticated device observation and maintenance/fleet business terms remain explicit owner evidence.
-- Unreachable authorized evidence remains unavailable rather than guessed.
-- `FORWARD_BUILD_ROADMAP_446_455.md` remains the active bounded roadmap.
-- Recovery review is manual/read-only; no real restore, rollback, DNS recovery, secret rotation or destructive R2 action is performed merely to obtain evidence.
-- No schema/customer/provider/accounting/inventory/secret/DNS/restore/destructive-storage/outreach/polling mutation is authorized.
+## Current commercial decision closure contract
+- Reuse the existing maintenance/fleet owner-decision convergence authority and canonical rulebooks.
+- Expose exact canonical decision paths and required closure fields for all thirteen retained commercial decision domains.
+- Current unresolved commercial terms remain `owner_action`; no price, cadence, eligibility, discount, travel, invoicing or capacity term is invented.
+- All source-approved domains may become only an `owner_review_candidate`; activation remains separate.
+- Commercial capacity policy remains distinct from live `/api/availability` and final `/api/checkout` revalidation.
+- The canonical Maintenance / fleet business approval HOLD is never edited automatically.
+- No rulebook runtime write, automatic approval, schema/customer/provider/accounting/inventory/storage/outreach/permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
 - `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`
