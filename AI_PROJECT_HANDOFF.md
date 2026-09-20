@@ -3,24 +3,28 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`.
+The synchronized Production predecessor is retained through `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`.
 
-**Build 449 — Fleet & Maintenance Commercial Decision Closure** is the active bounded release.
+**Build 450 — Local Search Measurement & Conversion Attribution** is the active bounded release.
 
-**Build 450 — Local Search Measurement & Conversion Attribution** is next only after the current release is independently GREEN on protected `main`.
+**Build 451 — Booking Funnel, Quote & Pricing Learning** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_446_455.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current commercial decision closure contract
-- Reuse the existing maintenance/fleet owner-decision convergence authority and canonical rulebooks.
-- Expose exact canonical decision paths and required closure fields for all thirteen retained commercial decision domains.
-- Current unresolved commercial terms remain `owner_action`; no price, cadence, eligibility, discount, travel, invoicing or capacity term is invented.
-- All source-approved domains may become only an `owner_review_candidate`; activation remains separate.
-- Commercial capacity policy remains distinct from live `/api/availability` and final `/api/checkout` revalidation.
-- The canonical Maintenance / fleet business approval HOLD is never edited automatically.
-- No rulebook runtime write, automatic approval, schema/customer/provider/accounting/inventory/storage/outreach/permanent-polling mutation is authorized.
+## Current local-search measurement & conversion-attribution contract
+- Reuse retained Build 414/440 local-search measurement/provider evidence rather than create a second provider or analytics authority.
+- Same-session attribution uses bounded anonymous `site_activity_events` only.
+- Search Console / GBP metrics are never joined to an individual session or booking.
+- Anonymous sessions are never joined to customer identity or persisted booking outcomes.
+- Google referral → landing → booking-funnel progression is observed first-party correlation only, not causal attribution.
+- Provider evidence remains dated/freshness-classified and may remain `provider_dependent` or `owner_action`.
+- No schema, analytics-write, provider, publishing, outreach, DNS, ad-spend, customer/booking, storage or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
+- `.github/workflows/local-search-measurement-conversion-attribution-authority.yml`
+- `scripts/local_search_measurement_conversion_attribution_check.py`
+- `scripts/local_search_measurement_conversion_attribution_test.mjs`
 - `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`
 - `.github/workflows/fleet-maintenance-commercial-decision-closure-authority.yml`
 - `scripts/fleet_maintenance_commercial_decision_closure_check.py`
