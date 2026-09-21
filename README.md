@@ -1,31 +1,31 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 458 — Authenticated Device Acceptance Closure**.
+Current source direction: **Build 459 — Fleet & Maintenance Commercial Activation Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current authenticated device acceptance closure authority
-This release converges the retained authenticated Customer/staff phone/tablet/desktop observations into explicit current, stale, missing and unavailable closure coverage without creating a second device-acceptance system.
+## Current fleet & maintenance commercial activation readiness authority
+This release enriches the retained maintenance/fleet owner-decision workbench with a bounded activation-readiness classification rather than creating a replacement commercial system.
 
 Focused source authority:
 
-`python scripts/authenticated_device_acceptance_closure_check.py`
+`python scripts/fleet_maintenance_commercial_activation_readiness_check.py`
 
-Complete current coverage is only `operator_review_ready`; source/runtime GREEN never fabricates real-device evidence or closes the canonical HOLD automatically.
+Readiness covers owner-approved eligibility, cadence, price, capacity, travel, discount and invoicing terms, requires the retained full commercial decision closure, and stops at `operator_review_ready`. Commercial activation remains separately authorized.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
-4. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — current bounded contract.
-5. `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md` — retained predecessor contract.
-6. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
-7. `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
-8. `PRODUCTION_LEARNING_446_454.md` — retained completed-cycle reconciliation.
-9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+4. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — current bounded contract.
+5. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained predecessor contract.
+6. `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md` — retained recovery contract.
+7. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
+8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`
 - `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
 - `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`
 
@@ -124,6 +124,8 @@ python scripts/fleet_commercial_operations_learning_check.py
 python scripts/maintenance_fleet_owner_approval_convergence_check.py
 python scripts/fleet_maintenance_commercial_decision_closure_check.py
 node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
+python scripts/fleet_maintenance_commercial_activation_readiness_check.py
+node scripts/fleet_maintenance_commercial_activation_readiness_test.mjs
 python scripts/production_learning_roadmap_renewal_check.py
 python scripts/local_search_provider_evidence_refresh_check.py
 python scripts/local_search_measurement_conversion_attribution_check.py
@@ -165,4 +167,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 460 — Local Search Provider & Attribution Evidence Quality** is next only after the current release is independently GREEN on protected `main`.

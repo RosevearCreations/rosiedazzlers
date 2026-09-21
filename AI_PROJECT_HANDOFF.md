@@ -5,20 +5,22 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`.
 
-**Build 458 — Authenticated Device Acceptance Closure** is the active bounded release.
+**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is the active bounded release.
 
-**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 460 — Local Search Provider & Attribution Evidence Quality** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Authenticated Device Acceptance Closure contract
-- Reuse the retained Build 438/448 authenticated device/visual classifier and the existing Launch Readiness panel; do not create a replacement endpoint, browser farm, screenshot service or device dashboard.
-- Require current authenticated Customer, Detailer, Operations and Admin observations plus representative phone, tablet and desktop coverage.
-- Retain the bounded 30-day freshness rule and expose current, stale, missing and unavailable role/device coverage explicitly.
-- A complete package becomes `operator_review_ready` only; source responsive/accessibility checks remain supporting evidence and never substitute for real authenticated observations.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no device/visual HOLD closes automatically.
-- No screenshot capture/polling, customer/booking mutation, staff role widening, provider/payment/refund/message transaction, schema/storage mutation, automatic outreach or permanent polling.
+## Current Fleet & Maintenance Commercial Activation Readiness contract
+- Reuse the existing maintenance/fleet owner-decision endpoint and workbench; do not create a parallel approval dashboard, rulebook or activation engine.
+- Reconcile maintenance eligibility, cadence, price and capacity/priority policy plus fleet travel limits, volume pricing/discount and invoicing/credit terms into a bounded read-only readiness view.
+- Require the retained full commercial decision closure to be source-approved before readiness may become `operator_review_ready`.
+- `operator_review_ready` remains review-only: plan/fleet activation, discounts, bookings, invoices, recurring billing, outreach and provider changes remain separately authorized.
+- Commercial capacity policy never proves live slot availability; `/api/availability` and `/api/checkout` remain authoritative.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; source/runtime GREEN never closes the maintenance/fleet business approval HOLD automatically.
+- No rulebook write, automatic approval, commercial activation, customer/accounting/inventory/provider mutation, schema/storage mutation, capacity reservation, outreach or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
+
 ## Retained reliability, security, cost & resilience reassessment contract
 - Reuse the existing protected `/admin-reliability-reassessment.html` I.T. surface and its read-only endpoint; do not create a parallel reliability dashboard.
 - Re-run retained reliability/performance, privacy/session, security, recovery, observability/support-diagnostics and I.T. release-control authorities against the current cycle.
@@ -38,6 +40,10 @@ Current contract: `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`. Active 
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`
+- `.github/workflows/fleet-maintenance-commercial-activation-readiness-authority.yml`
+- `scripts/fleet_maintenance_commercial_activation_readiness_check.py`
+- `scripts/fleet_maintenance_commercial_activation_readiness_test.mjs`
 - `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
 - `.github/workflows/authenticated-device-acceptance-closure-authority.yml`
 - `scripts/authenticated_device_acceptance_closure_check.py`

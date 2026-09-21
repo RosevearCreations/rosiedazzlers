@@ -8,6 +8,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 The synchronized predecessor contracts are retained through `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`
 - `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
 - `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`
 - `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`
@@ -76,23 +77,23 @@ The synchronized predecessor contracts are retained through `BUILD457_RECOVERY_E
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 458 — Authenticated Device Acceptance Closure** is the active bounded release.
+**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is the active bounded release.
 
 Scope:
-- converge dated authenticated Customer, Detailer, Operations and Admin observations through the retained authenticated cross-device and device/visual read-only authorities;
-- make current, stale, missing and unavailable phone/tablet/desktop coverage explicit on the existing Launch Readiness surface;
-- retain the bounded 30-day freshness rule and keep source responsive/accessibility checks as supporting evidence only;
-- classify a complete package as `operator_review_ready` only, with explicit operator review required before any canonical HOLD narrowing; and
-- introduce no screenshot capture/polling, browser-farm service, customer/booking mutation, staff role widening, provider transaction, schema/storage mutation, automatic outreach or permanent polling.
+- reconcile owner-approved maintenance eligibility, cadence, price and capacity/priority policy plus fleet travel, volume pricing/discount and invoicing/credit terms through the retained owner-decision workbench;
+- require the retained full commercial decision closure to be source-approved before reporting `operator_review_ready`;
+- keep live availability and checkout collision/revalidation separate from commercial capacity policy;
+- keep activation separately authorized even when readiness becomes reviewable; and
+- introduce no rulebook write, automatic approval, plan/fleet activation, discount, booking, invoice, recurring billing, outreach, provider/accounting/customer mutation, capacity reservation, schema/storage mutation or permanent polling.
 
-Current contract: `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Authenticated Device Acceptance Closure authority, retained authenticated cross-device, device/visual and workflow authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Fleet & Maintenance Commercial Activation Readiness authority, retained commercial decision closure/owner-approval and maintenance/fleet authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 460 — Local Search Provider & Attribution Evidence Quality** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_456_465.md`; it has not run out.
 
