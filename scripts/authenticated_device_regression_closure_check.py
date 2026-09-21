@@ -35,7 +35,7 @@ require(helper,[
 ],"Build 468 classifier")
 require(endpoint,["regression_build:468",'regression_authority:"authenticated_device_regression_closure"',"GET, HEAD, OPTIONS"],"Build 468 endpoint")
 require(asset,["Regression review","Current regressions","Historical-only","Regression devices","Regression browsers","Historical acceptance does not override a current regression"],"Launch Readiness")
-require(launch,["authenticated_device_visual_acceptance","current_device_visual_authority"],"Launch Readiness composition")
+require(launch,["authenticated_device_visual_acceptance","current_device_visual_authority","current_device_regression_authority","authenticated_device_regression_closure"],"Launch Readiness composition")
 require(contract,["# Build 468 — Authenticated Device Regression Closure","current_regression_observed","historical acceptance","Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness"],"Build 468 contract")
 require(blockers,["Independent device / visual evidence","Build 468","current regression","historical acceptance"],"canonical HOLD backlog")
 require(queue,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md","Build 468 — Authenticated Device Regression Closure","Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness"],"release queue")
