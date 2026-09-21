@@ -1,24 +1,25 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 465 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 466 — Provider Outcome Review & HOLD Decision Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Production learning & roadmap renewal authority
-The current release reconciles Builds 456–464 from retained owning evidence, preserves unresolved HOLDs truthfully, and renews the bounded queue through Builds 466–475 without creating replacement systems.
+## Current Provider outcome review & HOLD decision readiness authority
+The current release converges retained Stripe, PayPal, refund, definitive-delivery, freshness and source-availability evidence into a read-only operator HOLD-decision package.
 
 Focused source authority:
 
-`python scripts/production_learning_roadmap_renewal_check.py`
+`python scripts/provider_outcome_review_hold_decision_readiness_check.py`
 
-Provider/owner/device/recovery evidence is never upgraded from source/runtime GREEN alone. The renewed roadmap remains read-only governance and authorizes no automatic business, provider, pricing, recovery or storage mutation.
+The default without explicit operator action is always `retain_hold`. Evidence-backed narrowing review becomes eligible only when all four required provider evidence classes are source-available, dated and current. No provider activity or canonical-HOLD mutation is performed automatically.
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
-5. `PRODUCTION_LEARNING_456_464.md` — current cycle reconciliation.
-6. `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md` — retained predecessor contract.
+4. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — current bounded contract.
+5. `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained cycle-renewal contract.
+6. `PRODUCTION_LEARNING_456_464.md` — retained cycle reconciliation.
+7. `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md` — retained predecessor contract.
 6. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained local-search evidence contract.
 7. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
 8. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
@@ -27,6 +28,7 @@ Provider/owner/device/recovery evidence is never upgraded from source/runtime GR
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`
 - `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_456_464.md`
 - `FORWARD_BUILD_ROADMAP_466_475.md`
@@ -143,6 +145,8 @@ python scripts/fleet_maintenance_commercial_decision_closure_check.py
 node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
 python scripts/fleet_maintenance_commercial_activation_readiness_check.py
 node scripts/fleet_maintenance_commercial_activation_readiness_test.mjs
+python scripts/provider_outcome_review_hold_decision_readiness_check.py
+node scripts/provider_outcome_review_hold_decision_readiness_test.mjs
 python scripts/production_learning_roadmap_renewal_check.py
 python scripts/local_search_provider_evidence_refresh_check.py
 python scripts/local_search_measurement_conversion_attribution_check.py
@@ -190,4 +194,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
