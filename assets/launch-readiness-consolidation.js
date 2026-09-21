@@ -131,6 +131,7 @@ function renderProviderClosure(data){
   const refresh=data.provider_outcome_delivery_evidence||{};
   const reconciliation=data.provider_evidence_reconciliation_refresh||{};
   const availabilityReview=data.provider_evidence_closure_availability_review||{};
+  const decisionReadiness=data.provider_outcome_review_hold_decision_readiness||{};
   const payments=closure.payments||{}, refunds=closure.refunds||{}, delivery=closure.delivery||{};
   const rows=Array.isArray(closure.required)?closure.required:[];
   const host=$("#providerOut");
@@ -151,6 +152,8 @@ function renderProviderClosure(data){
       ${metric("Source gaps",reconciliation.source_gap_count??0)}
       ${metric("Sources available",(availabilityReview.source_availability?.available_count??0)+"/"+(availabilityReview.source_availability?.required_count??4))}
       ${metric("Closure review",availabilityReview.closure_candidate_review?.status||"not_candidate_missing_evidence")}
+      ${metric("Decision readiness",decisionReadiness.status||"retain_hold_missing_evidence")}
+      ${metric("Narrowing review",decisionReadiness.decision_package?.narrowing_review_eligible?"eligible":"not eligible")}
     </div>
     <p><strong>Stripe:</strong> ${chip(payments.stripe?.observed?"verified":payments.stripe?.classification||"provider_dependent")} · <strong>PayPal:</strong> ${chip(payments.paypal?.observed?"verified":payments.paypal?.classification||"provider_dependent")}</p>
     <div class="stack">${rows.map(x=>{const age=(reconciliation.rows||[]).find(r=>r.id===x.id)||{};return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Source: ${esc(age.source||"retained provider evidence")} · Evidence age: ${esc(age.age_days==null?"not dated":`${age.age_days} days`)} · Freshness: ${esc(age.freshness||"unknown")}</p></div>${chip(x.status||x.classification||"provider_dependent")}</article>`;}).join("")}</div>
@@ -158,6 +161,8 @@ function renderProviderClosure(data){
     <p class="mini"><strong>Latest dated evidence:</strong> ${esc(refresh.latest_observed_at?new Date(refresh.latest_observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(refresh.canonical_hold?.detail||"Provider outcomes & communications remains open until dated attributable evidence exists.")}</p>
     <p class="mini"><strong>Closure candidate:</strong> ${esc(availabilityReview.closure_candidate_review?.retained_closure_candidate?"yes — operator review still required":"no")} · ${esc(availabilityReview.closure_candidate_review?.detail||"Required provider evidence is not yet review-ready.")}</p>
+    <p class="mini"><strong>Operator HOLD decision:</strong> ${esc(decisionReadiness.decision_package?.detail||"Retain the HOLD until the decision package has complete current provider evidence.")}</p>
+    <p class="mini"><strong>Default without operator action:</strong> retain HOLD · <strong>Eligible decisions:</strong> ${esc((decisionReadiness.decision_package?.permitted_operator_actions||["retain_hold"]).join(", "))}</p>
     <p class="muted">A closure candidate never edits the HOLD backlog automatically. Provider accepted is not final delivery. This view summarizes persisted evidence only; it does not create a charge, initiate a refund, send a notification or replay a webhook.</p>`;
 }
 
