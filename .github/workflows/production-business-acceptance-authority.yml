@@ -102,6 +102,9 @@ jobs:
           node --check assets/build452-staff-support-mobile-efficiency-learning.js
           python -m py_compile scripts/service_economics_capacity_pricing_review_check.py
           python -m py_compile scripts/reliability_security_cost_resilience_reassessment_check.py
+          python -m py_compile scripts/reliability_cost_resilience_operational_guardrails_check.py
+          node --check scripts/reliability_cost_resilience_operational_guardrails_test.mjs
+          node --check functions/api/_lib/reliability-cost-resilience-operational-guardrails.js
           node --check scripts/service_economics_capacity_pricing_review_test.mjs
           node --check functions/api/_lib/service-economics-commercial-capacity-review.js
           node --check functions/api/admin/service_economics_commercial_capacity_review.js
@@ -352,6 +355,11 @@ jobs:
         run: |
           python scripts/service_economics_completeness_addon_cost_readiness_check.py
           node scripts/service_economics_completeness_addon_cost_readiness_test.mjs
+
+      - name: Validate reliability, cost & resilience operational guardrails authority
+        run: |
+          python scripts/reliability_cost_resilience_operational_guardrails_check.py
+          node scripts/reliability_cost_resilience_operational_guardrails_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |

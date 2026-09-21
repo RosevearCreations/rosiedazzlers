@@ -131,6 +131,10 @@ required_authorities = {
     "current_reliability_security_cost_reassessment": [
         "scripts/current_reliability_security_cost_reassessment_check.py",
     ],
+    "reliability_cost_resilience_operational_guardrails": [
+        "scripts/reliability_cost_resilience_operational_guardrails_check.py",
+        "scripts/reliability_cost_resilience_operational_guardrails_test.mjs",
+    ],
     "production_learning_roadmap_renewal": [
         "scripts/production_learning_roadmap_renewal_check.py",
     ],
@@ -232,6 +236,9 @@ workflow = require(WORKFLOW, [
     "Validate Production learning & roadmap renewal authority",
     "Validate current-cycle reliability, security & cost reassessment",
     "python scripts/current_reliability_security_cost_reassessment_check.py",
+    "Validate reliability, cost & resilience operational guardrails authority",
+    "python scripts/reliability_cost_resilience_operational_guardrails_check.py",
+    "node scripts/reliability_cost_resilience_operational_guardrails_test.mjs",
     "Validate booking conversion & quote clarity authority",
     "Validate service economics & job profitability authority",
     "Validate retention & rebooking learning authority",

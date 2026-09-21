@@ -57,3 +57,5 @@ Build 462 adds ordered, aggregate remediation priorities over retained staff/sup
 
 
 Build 463 adds aggregate service-economics completeness and add-on allocation readiness only. Missing recorded material, labour, cash/refund or COGS evidence still blocks bounded margin review; add-on allocation remains unavailable without explicit recorded add-on revenue and cost linkages, and Build 463 does not close any HOLD in this backlog.
+
+Build 464 adds explicit operational guardrails and evidence-age review over the retained read-only I.T. reassessment only. Provider-owned Cloudflare billing/CPU/quota/cost, scaling need and real Production recovery remain external unless independently evidenced; stale evidence requires revalidation, and Build 464 does not close Provider, Recovery, device or other canonical HOLDs from source/runtime GREEN.

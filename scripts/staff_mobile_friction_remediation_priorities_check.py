@@ -103,9 +103,9 @@ require(blockers, [
 ], "canonical HOLD backlog")
 require(queue, [
     "BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md",
-    "Build 462 — Staff & Mobile Friction Remediation Priorities",
-    "Build 463 — Service Economics Completeness & Add-On Cost Readiness"
-], "release queue")
+    "FORWARD_BUILD_ROADMAP_456_465.md",
+    "Production deployment/runtime/business acceptance"
+], "retained release queue authority")
 require(handoff, [
     "BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md",
     "staff_mobile_friction_remediation_priorities_check.py"

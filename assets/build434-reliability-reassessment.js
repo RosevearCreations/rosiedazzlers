@@ -1,4 +1,4 @@
-// Build 434 — manual read-only reassessment view.
+// Build 464 — retained manual read-only reassessment view with operational guardrails.
 (function attachReliabilitySecurityCostReassessment(globalScope){
   "use strict";
   const BUCKETS = [
@@ -40,6 +40,8 @@
     renderSummary(payload);
     renderMetrics(payload.metrics||{});
     renderSources(payload.source_status||{});
+    renderGuardrails(payload.operational_guardrails||{});
+    renderEvidenceAge(payload.evidence_age_review||{});
     for(const [key,label] of BUCKETS) renderBucket(key,label,payload.buckets?.[key]||[]);
   }
 
@@ -76,6 +78,28 @@
     }).join("")||'<div class="rr-empty">No source state loaded.</div>';
   }
 
+  function renderGuardrails(guardrails){
+    const mount=$("reassessmentGuardrails"); if(!mount)return;
+    const rows=Object.entries(guardrails);
+    mount.innerHTML=rows.map(function(entry){
+      const key=entry[0], row=entry[1]||{};
+      return '<article class="rr-item"><div class="rr-item-head"><strong>'+esc(key.replaceAll("_"," "))+':</strong><span class="rr-pill">'+esc(row.status||"guarded")+'</span></div><p>'+esc(row.conclusion||"Read-only operational guardrail retained.")+'</p></article>';
+    }).join("")||'<div class="rr-empty">No operational guardrails loaded.</div>';
+  }
+
+  function renderEvidenceAge(age){
+    const mount=$("reassessmentEvidenceAge"); if(!mount)return;
+    const rows=[
+      ["Status",value(age.status)],
+      ["Current",value(age.current_count)],
+      ["Aging",value(age.aging_count)],
+      ["Stale",value(age.stale_count)],
+      ["Undated",value(age.undated_count)],
+      ["Oldest evidence",age.oldest_evidence_age_days===null||age.oldest_evidence_age_days===undefined?"unavailable":age.oldest_evidence_age_days+" days"]
+    ];
+    mount.innerHTML=rows.map(function(row){return '<div class="rr-metric"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong></div>';}).join("");
+    const detail=$("reassessmentEvidenceAgeDetail"); if(detail) detail.textContent=age.detail||"No evidence-age detail loaded.";
+  }
   function renderBucket(key,label,rows){
     const mount=$(bucketId(key)); if(!mount)return;
     const count=$(bucketCountId(key)); if(count) count.textContent=String(rows.length);
@@ -92,6 +116,9 @@
     $("reassessmentSummary").innerHTML='<div class="rr-empty">No current snapshot loaded.</div>';
     $("reassessmentMetrics").innerHTML='<div class="rr-empty">No current metrics loaded.</div>';
     $("reassessmentSources").innerHTML='<div class="rr-empty">No current source state loaded.</div>';
+    if($("reassessmentGuardrails")) $("reassessmentGuardrails").innerHTML='<div class="rr-empty">No operational guardrails loaded.</div>';
+    if($("reassessmentEvidenceAge")) $("reassessmentEvidenceAge").innerHTML='<div class="rr-empty">No evidence-age review loaded.</div>';
+    if($("reassessmentEvidenceAgeDetail")) $("reassessmentEvidenceAgeDetail").textContent="No evidence-age detail loaded.";
     for(const [key] of BUCKETS){
       const mount=$(bucketId(key)); if(mount) mount.innerHTML='<div class="rr-empty">No current snapshot loaded.</div>';
       const count=$(bucketCountId(key)); if(count) count.textContent="0";
