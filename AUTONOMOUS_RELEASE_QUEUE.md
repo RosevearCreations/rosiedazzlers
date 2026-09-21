@@ -84,7 +84,7 @@ The synchronized predecessor contracts are retained through `BUILD462_STAFF_MOBI
 **Build 463 — Service Economics Completeness & Add-On Cost Readiness** is the active bounded release.
 
 Scope:
-- enrich the retained Service Economics / Job Profitability and Build 453 review workbench rather than creating a parallel ledger, costing engine or pricing system;
+- enrich the retained Service Economics / Job Profitability review workbench rather than creating a parallel ledger, costing engine or pricing system;
 - expose aggregate completeness for recorded revenue, explicit job-use material cost, logged labour with recorded rates, cash/refund/balance evidence and posted COGS reconciliation;
 - keep service/package margin review blocked whenever any required retained economics layer is incomplete for the bounded observed job sample;
 - make add-on cost readiness explicit and require an owning recorded add-on revenue/material/labour/cash-refund/COGS linkage before add-on margin can become review-ready; equal, price-weighted, percentage and booking-cost split inference remains prohibited; and
@@ -92,7 +92,7 @@ Scope:
 
 Current contract: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Service Economics Completeness & Add-On Cost Readiness authority, retained Build 453/443/428 economics and Build 451 pricing-learning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Service Economics Completeness & Add-On Cost Readiness authority, retained economics, commercial-capacity, job-profitability and pricing-learning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
