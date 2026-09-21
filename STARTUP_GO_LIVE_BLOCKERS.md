@@ -53,4 +53,4 @@ Build 453 adds aggregate service-economics, service/package cohort, quote/pricin
 
 Build 454 reassesses bounded reliability, privacy/session, security, recovery, observability and cost-awareness evidence only. Provider-owned Cloudflare billing/CPU/quota and real Production recovery remain external unless independently evidenced; source/runtime GREEN does not close Provider or Recovery HOLDs, and Build 454 does not close any HOLD in this backlog.
 
-Build 462 adds ordered, aggregate remediation-review priorities over retained staff/support/mobile evidence only. The review order does not prove root cause, staff fault, delay, device friction or business impact; automatic remediation, exception resolution and role widening remain locked, and Build 462 does not close any HOLD in this backlog.
+Build 462 adds ordered, aggregate remediation priorities over retained staff/support/mobile evidence only. The review order does not prove root cause, staff fault, delay, device friction or business impact; automatic remediation, exception resolution and role widening remain locked, and Build 462 does not close any HOLD in this backlog.
