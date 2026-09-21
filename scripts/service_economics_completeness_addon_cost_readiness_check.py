@@ -105,9 +105,9 @@ require(blockers, [
 ], "canonical HOLD backlog")
 require(queue, [
     "BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md",
-    "**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is the active bounded release.",
-    "**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is next"
-], "release queue")
+    "FORWARD_BUILD_ROADMAP_456_465.md",
+    "Production deployment/runtime/business acceptance"
+], "retained release queue authority")
 require(handoff, [
     "BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md",
     "service_economics_completeness_addon_cost_readiness_check.py",
