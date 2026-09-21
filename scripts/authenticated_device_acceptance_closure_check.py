@@ -25,9 +25,9 @@ require(endpoint,["current_build:448","closure_build:458",'closure_authority:"au
 require(asset,["Closure review","Stale coverage","Missing coverage","Acceptance closure:","Current surfaces:","Current devices:"],"Launch Readiness")
 require(contract,["# Build 458 — Authenticated Device Acceptance Closure","operator_review_ready","phone","tablet","desktop","Build 459 — Fleet & Maintenance Commercial Activation Readiness"],"Build 458 contract")
 require(blockers,["Independent device / visual evidence","current release"],"canonical HOLD backlog")
-require(queue,["**Build 458 — Authenticated Device Acceptance Closure**","BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md","Build 459 — Fleet & Maintenance Commercial Activation Readiness"],"release queue")
-require(handoff,["**Build 458 — Authenticated Device Acceptance Closure**","BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md","authenticated_device_acceptance_closure_check.py"],"project handoff")
-require(readme,["Build 458 — Authenticated Device Acceptance Closure","BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md","authenticated_device_acceptance_closure_check.py"],"README")
+require(queue,["BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md","BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md"],"release queue retained authority pointers")
+require(handoff,["BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md","authenticated_device_acceptance_closure_check.py"],"project handoff retained authority pointers")
+require(readme,["BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md","authenticated_device_acceptance_closure_check.py"],"README retained authority pointers")
 
 for p in ["functions/api/_lib/authenticated-device-visual-acceptance.js","functions/api/admin/authenticated_device_visual_acceptance.js","assets/launch-readiness-consolidation.js","scripts/authenticated_device_acceptance_closure_test.mjs"]:
  r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
