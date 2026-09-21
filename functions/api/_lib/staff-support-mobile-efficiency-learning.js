@@ -1,4 +1,4 @@
-// Build 452 — read-only staff workflow, support and mobile efficiency learning.
+// Build 462 — read-only remediation-priority enrichment over retained Build 452 staff/mobile learning.
 import { buildStaffWorkflowSupportExceptionLearning } from "./staff-workflow-support-exception-learning.js";
 
 const REVIEW_COHORT_MIN = 2;
@@ -44,15 +44,20 @@ export function buildStaffSupportMobileEfficiencyLearning({
     ...mobile.review_candidates
   ].sort(compareCandidates).slice(0, 15);
 
+  const remediation_priorities = buildRemediationPriorities(learning_candidates, evidence_status);
+
   return {
     build: 452,
     authority: "staff_support_mobile_efficiency_learning",
+    release_enrichment_build: 462,
+    release_authority: "staff_mobile_friction_remediation_priorities",
     generated_at: generated_at || new Date().toISOString(),
     evidence_status,
     staff_workflow: retained.staff_workflow,
     support_exceptions: retained.support_exceptions,
     mobile_field_workflow: mobile,
     learning_candidates,
+    remediation_priorities,
     source_status: safeSourceStatus(source_status),
     truth_boundary: {
       repeated_pattern_proves_root_cause: false,
@@ -60,6 +65,9 @@ export function buildStaffSupportMobileEfficiencyLearning({
       stage_count_proves_delay: false,
       pending_response_proves_refusal: false,
       current_snapshot_proves_frequency_over_time: false,
+      remediation_priority_proves_root_cause: false,
+      remediation_priority_proves_staff_fault: false,
+      remediation_priority_proves_business_impact: false,
       efficiency_improvement_claimed: false
     },
     boundaries: {
@@ -75,7 +83,9 @@ export function buildStaffSupportMobileEfficiencyLearning({
       automatic_job_action_allowed: false,
       automatic_task_completion_allowed: false,
       automatic_exception_resolution_allowed: false,
+      automatic_remediation_allowed: false,
       role_ceiling_change_allowed: false,
+      blame_inference_allowed: false,
       customer_or_provider_outreach_allowed: false,
       provider_transaction_allowed: false,
       accounting_or_inventory_mutation_allowed: false,
@@ -170,6 +180,44 @@ function summarizeDetailerWorkspace(detailer, sourceAvailable) {
     response_counts: responseCounts,
     review_candidates: reviewCandidates
   };
+}
+
+function buildRemediationPriorities(candidates, evidenceStatus) {
+  const rows = Array.isArray(candidates) ? candidates : [];
+  return rows.slice(0, 10).map((row, index) => ({
+    rank: index + 1,
+    review_priority: ["urgent", "high", "normal", "low"].includes(row?.priority) ? row.priority : "normal",
+    area: token(row?.area) || "workflow_review",
+    pattern: token(row?.pattern) || "bounded_repeat",
+    occurrence_count: positiveWhole(row?.occurrence_count),
+    evidence_state: token(row?.evidence_state) || "unavailable",
+    priority_basis: "Current retained urgency/severity plus repeated bounded occurrence count; this is a review-order signal, not proof of impact, root cause or staff performance.",
+    remediation_candidate: remediationSuggestion(row?.area),
+    manual_verification: "Open the existing owning workflow, reproduce the path with an allowed role on a representative device/browser, verify the underlying evidence, then decide whether a separately authorized change is warranted.",
+    uncertainty: evidenceStatus === "observed" ? "bounded_current_snapshot_only" : "incomplete_or_bounded_source_snapshot",
+    root_cause_proven: false,
+    workflow_friction_proven: false,
+    staff_fault_inferred: false,
+    business_impact_proven: false,
+    role_change_authorized: false,
+    automatic_exception_resolution_authorized: false,
+    automatic_remediation_authorized: false
+  }));
+}
+
+function remediationSuggestion(area) {
+  switch (String(area || "")) {
+    case "staff_task_pattern":
+      return "Review the canonical staff flow for unnecessary repeated navigation, duplicated evidence entry, or unclear handoff guidance.";
+    case "support_exception_pattern":
+      return "Review the owning support diagnostic path for repeated operator steps or unclear next-action guidance; do not auto-resolve the exception.";
+    case "mobile_stage_cohort":
+      return "Review the canonical Detailer mobile stage for tap count, navigation clarity, field-evidence prompts and handoff visibility on representative devices.";
+    case "detailer_response_cohort":
+      return "Review assignment visibility and accept/decline clarity in the canonical Detailer mobile flow without changing response authority.";
+    default:
+      return "Review the existing owning workflow for bounded operator-friction improvements without widening permissions or mutating business state automatically.";
+  }
 }
 
 function safeSourceStatus(sourceStatus) {
