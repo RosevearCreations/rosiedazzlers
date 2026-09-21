@@ -79,6 +79,8 @@ jobs:
           node --check scripts/authenticated_cross_device_acceptance_refresh_test.mjs
           python -m py_compile scripts/fleet_maintenance_commercial_decision_closure_check.py
           node --check scripts/fleet_maintenance_commercial_decision_closure_test.mjs
+          python -m py_compile scripts/fleet_maintenance_commercial_activation_readiness_check.py
+          node --check scripts/fleet_maintenance_commercial_activation_readiness_test.mjs
           python -m py_compile scripts/local_search_measurement_conversion_attribution_check.py
           node --check scripts/local_search_measurement_conversion_attribution_test.mjs
           node --check functions/api/_lib/local-search-measurement-conversion-attribution.js
@@ -300,6 +302,11 @@ jobs:
         run: |
           python scripts/fleet_maintenance_commercial_decision_closure_check.py
           node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
+
+      - name: Validate fleet & maintenance commercial activation readiness authority
+        run: |
+          python scripts/fleet_maintenance_commercial_activation_readiness_check.py
+          node scripts/fleet_maintenance_commercial_activation_readiness_test.mjs
 
       - name: Validate local search measurement & conversion attribution authority
         run: |

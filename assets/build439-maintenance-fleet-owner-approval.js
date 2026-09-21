@@ -1,4 +1,4 @@
-// Build 439/449 — manual read-only owner-decision convergence + closure UI.
+// Build 439/449/459 — manual read-only owner-decision convergence, closure + activation-readiness UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -9,14 +9,14 @@ async function refresh(){
   const response=await fetch("/api/admin/maintenance_fleet_owner_approval",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
   const data=await response.json().catch(()=>null);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
 }
 function renderSummary(data){
  const s=data.summary||{},closure=data.decision_closure||{},mount=$("ownerApprovalSummary"); if(!mount)return;
- const rows=[["Closure state",closure.status||s.closure_status||"owner_action"],["Owner actions",s.owner_action_count||0],["Source-approved",s.source_approved_count||0],["Decision count",closure.decision_count??s.decision_count??0],["Maintenance interest",s.maintenance_interest_total||0],["Fleet inquiries",s.fleet_inquiry_total||0]];
+ const a=data.activation_readiness||{}; const rows=[["Closure state",closure.status||s.closure_status||"owner_action"],["Activation readiness",a.status||"owner_action"],["Activation terms ready",`${a.source_approved_term_count||0}/${a.required_term_count||7}`],["Owner actions",s.owner_action_count||0],["Maintenance interest",s.maintenance_interest_total||0],["Fleet inquiries",s.fleet_inquiry_total||0]];
  mount.innerHTML=rows.map(([l,v])=>`<div class="oa-stat"><span class="mini">${esc(l)}</span><strong>${esc(v)}</strong></div>`).join("");
 }
 function renderGroup(id,items){
@@ -32,6 +32,13 @@ function renderGroup(id,items){
    <div class="oa-evidence">${Object.entries(item.evidence||{}).map(([k,v])=>`<div><span class="mini">${esc(k.replaceAll("_"," "))}</span><strong>${esc(typeof v==="object"?JSON.stringify(v):v)}</strong></div>`).join("")}</div>
    <p class="oa-boundary">This screen cannot approve or write this term. Closure requires an explicit owner decision in canonical source.</p>
  </article>`).join("");
+}
+function renderActivation(a){
+ const mount=$("activationReadiness"); if(!mount)return;
+ const terms=Array.isArray(a.terms)?a.terms:[];
+ const banner=`<div class="oa-card"><div class="oa-head"><h3>Activation-readiness decision</h3><span class="oa-pill">${esc(a.status||"owner_action")}</span></div><p><strong>Ready terms:</strong> ${esc(a.source_approved_term_count||0)} / ${esc(a.required_term_count||7)}</p><p class="mini">${esc(a.next_step||"Owner-approved commercial terms are required before activation review.")}</p><p class="oa-boundary">Readiness is review-only. No maintenance plan, fleet account, discount, invoice, booking, recurring billing, outreach, provider action or capacity reservation is activated here.</p></div>`;
+ const cards=terms.map(t=>`<article class="oa-card"><div class="oa-head"><h3>${esc(t.label||t.id)}</h3><span class="oa-pill">${esc(t.status||"owner_action")}</span></div><p class="mini"><strong>Owner decision path:</strong> <code>${esc(t.owner_decision_path||"not available")}</code></p><p class="mini"><strong>Required fields:</strong> ${esc((t.required_fields||[]).join(", ")||"none reported")}</p><p class="oa-boundary">${t.owner_approved?"Canonical source reports this term approved; activation still requires separate operator authorization.":"Owner approval remains unresolved in canonical source."}</p></article>`).join("");
+ mount.innerHTML=banner+(cards?`<div class="oa-grid" style="margin-top:12px">${cards}</div>`:"");
 }
 function renderCapacity(c){
  const mount=$("capacityDecision"); if(!mount)return;
