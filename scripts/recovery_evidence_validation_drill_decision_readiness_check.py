@@ -70,9 +70,8 @@ require(blockers,[
     "Recovery / backup evidence","Build 467","drill decision","retain_hold"
 ],"canonical HOLD backlog")
 require(queue,[
-    "BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md",
-    "**Build 468 — Authenticated Device Regression Closure** is the active bounded release."
-],"release queue retained/current authority")
+    "BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md"
+],"release queue retained Build 467 authority")
 require(handoff,[
     "BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md",
     "recovery-evidence-validation-drill-decision-readiness-authority.yml",
