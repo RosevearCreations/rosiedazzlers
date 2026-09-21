@@ -12,7 +12,7 @@ The synchronized Production predecessor is retained through `BUILD462_STAFF_MOBI
 Current contract: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 ## Current Service Economics Completeness & Add-On Cost Readiness contract
-- Reuse `/admin-service-economics-commercial-capacity-review.html`, `/api/admin/service_economics_commercial_capacity_review` and retained Build 428/443/451/453 evidence; do not create a parallel ledger, costing store or pricing system.
+- Reuse `/admin-service-economics-commercial-capacity-review.html`, `/api/admin/service_economics_commercial_capacity_review` and the retained job-profitability, commercial-capacity, booking/quote-pricing and service-economics review authorities; do not create a parallel ledger, costing store or pricing system.
 - Report aggregate completeness for recorded revenue, explicit job-use material cost, logged labour with positive recorded rates, collected cash/balance/refund evidence and booking-linked posted COGS reconciliation.
 - A service/package margin review remains blocked until every required retained economics layer is ready across the bounded observed completed-job sample.
 - Add-on margin remains unavailable unless an owning source explicitly records add-on revenue plus linked material, labour, cash/refund and posted COGS; equal split, price-weighted split, percentage split and booking-cost division remain prohibited.
@@ -21,7 +21,7 @@ Current contract: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
-- Reuse the retained Build 440/450 local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
+- Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
 - Make provider property/location/window identity completeness, freshness, dated provider↔first-party window overlap, first-party availability and bounded/truncated anonymous same-session evidence explicit.
 - Evidence quality describes comparability only. Search Console/GBP provider outcomes remain source-attributed and distinct from anonymous first-party funnel observations.
 - Do not join provider metrics to sessions/customers/bookings, divide provider metrics by funnel rates, calculate provider-to-funnel correlation scores or claim marketing causation.
