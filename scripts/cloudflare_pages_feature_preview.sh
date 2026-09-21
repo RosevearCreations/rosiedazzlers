@@ -2,8 +2,10 @@
 set -euo pipefail
 
 # Durable Cloudflare Pages feature-branch preview acceptance helper.
-# Read-only: verifies the exact GitHub SHA/branch reached a successful preview
-# deployment with Functions enabled, then smokes the immutable deployment URL.
+# Verifies the exact GitHub SHA/branch reached a successful preview deployment
+# with Functions enabled, then smokes the immutable deployment URL.
+# It may remove only non-terminal preview deployments created by the same numbered
+# release staging branch (b<build>stage) or older SHAs of the same feature branch.
 
 CF_PROJECT_NAME="${CF_PROJECT_NAME:-rosiedazzlers}"
 CF_FEATURE_BRANCH="${CF_FEATURE_BRANCH:-${GITHUB_REF_NAME:-}}"
@@ -69,6 +71,109 @@ summary "### Cloudflare feature-preview authority"
 summary "- Project: \`${CF_PROJECT_NAME}\`"
 summary "- Feature branch: \`${CF_FEATURE_BRANCH}\`"
 summary "- Production branch: \`${production_branch}\`"
+
+cleanup_same_build_preview_queue() {
+  local build_number staging_branch deployment_id branch sha environment status delete_code
+  build_number="$(printf '%s' "$CF_FEATURE_BRANCH" | sed -nE 's/^build([0-9]+).*/\\1/p')"
+  [[ -n "$build_number" ]] || return 0
+  staging_branch="b${build_number}stage"
+
+  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/cleanup-deployments.json"
+  jq -e '.success == true' "$TMP_DIR/cleanup-deployments.json" >/dev/null || fail "Cloudflare deployment listing failed during feature preview queue cleanup." 24
+
+  while IFS=
+for attempt in $(seq 1 30); do
+  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/deployments.json"
+  jq -e '.success == true' "$TMP_DIR/deployments.json" >/dev/null || fail "Cloudflare deployment listing failed." 13
+  exact_id=$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
+    [.result[]? | select(
+      (.deployment_trigger.metadata.branch // "") == $branch and
+      (.deployment_trigger.metadata.commit_hash // "") == $sha
+    )][0].id // empty
+  ' "$TMP_DIR/deployments.json")
+  exact_status=$(jq -r --arg id "$exact_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' "$TMP_DIR/deployments.json" | head -n1)
+  if [[ -n "$exact_id" ]]; then
+    note "Exact feature deployment ${exact_id}: ${exact_status:-unknown} (attempt ${attempt}/30)."
+    case "$exact_status" in
+      success) break ;;
+      failure|failed|canceled|cancelled) fail "Exact feature deployment reached terminal status ${exact_status}." 14 ;;
+    esac
+  else
+    note "Exact feature SHA is not visible in Cloudflare Pages yet (attempt ${attempt}/30)."
+  fi
+  [[ "$attempt" -ge 30 ]] || sleep 10
+done
+[[ -n "$exact_id" ]] || fail "Cloudflare does not show exact feature commit ${TARGET_SHA} on ${CF_FEATURE_BRANCH}." 15
+[[ "$exact_status" == "success" ]] || fail "Exact feature deployment did not become successful; last status ${exact_status:-unknown}." 16
+
+cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${exact_id}" > "$TMP_DIR/exact.json"
+jq -e '.success == true' "$TMP_DIR/exact.json" >/dev/null || fail "Cloudflare exact feature deployment lookup failed." 17
+exact_sha=$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' "$TMP_DIR/exact.json")
+exact_branch=$(jq -r '.result.deployment_trigger.metadata.branch // empty' "$TMP_DIR/exact.json")
+exact_url=$(jq -r '.result.url // empty' "$TMP_DIR/exact.json")
+exact_environment=$(jq -r '.result.environment // empty' "$TMP_DIR/exact.json")
+exact_uses_functions=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' "$TMP_DIR/exact.json")
+exact_detail_status=$(jq -r '.result.latest_stage.status // "unknown"' "$TMP_DIR/exact.json")
+
+[[ "$exact_sha" == "$TARGET_SHA" ]] || fail "Feature deployment SHA mismatch: ${exact_sha:-missing}." 18
+[[ "$exact_branch" == "$CF_FEATURE_BRANCH" ]] || fail "Feature deployment branch mismatch: ${exact_branch:-missing}." 19
+[[ "$exact_environment" == "preview" ]] || fail "Feature deployment is not a preview environment (${exact_environment:-missing})." 20
+[[ "$exact_detail_status" == "success" ]] || fail "Feature deployment detail is not successful (${exact_detail_status})." 21
+[[ "$exact_uses_functions" == "true" ]] || fail "Feature deployment does not report uses_functions=true (${exact_uses_functions})." 22
+[[ -n "$exact_url" ]] || fail "Successful feature deployment has no immutable URL." 23
+
+SMOKE_SCOPE=static bash scripts/development_http_smoke.sh "$exact_url" "Exact feature preview"
+SMOKE_SCOPE=static bash scripts/contextual_proof_http_smoke.sh "$exact_url" "Exact feature preview"
+
+summary "### Exact feature preview"
+summary "- GitHub SHA: \`${TARGET_SHA}\`"
+summary "- Cloudflare deployment: \`${exact_id}\`"
+summary "- Deployment status: \`${exact_detail_status}\`"
+summary "- Environment: \`${exact_environment}\`"
+summary "- Functions: \`${exact_uses_functions}\`"
+summary "- Immutable URL: ${exact_url}"
+summary "- Static application/service/location/sitemap/contextual-proof smoke: PASS"
+note "Cloudflare exact feature preview acceptance: PASS"
+\\t' read -r deployment_id branch sha environment status; do
+    [[ -n "$deployment_id" ]] || continue
+    [[ "$environment" == "preview" ]] || continue
+    [[ "$status" == "active" ]] || continue
+    [[ "$branch" != "$production_branch" && "$branch" != "main" && "$branch" != "dev" ]] || continue
+    [[ "$sha" != "$TARGET_SHA" ]] || continue
+    if [[ "$branch" != "$staging_branch" && "$branch" != "$CF_FEATURE_BRANCH" ]]; then
+      continue
+    fi
+
+    cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${deployment_id}" > "$TMP_DIR/cleanup-detail.json"
+    [[ "$(jq -r '.result.environment // empty' "$TMP_DIR/cleanup-detail.json")" == "preview" ]] || continue
+    [[ "$(jq -r '.result.latest_stage.status // empty' "$TMP_DIR/cleanup-detail.json")" == "active" ]] || continue
+    [[ "$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' "$TMP_DIR/cleanup-detail.json")" != "$TARGET_SHA" ]] || continue
+
+    delete_code="$(curl --silent --show-error --output "$TMP_DIR/cleanup-delete.json" --write-out '%{http_code}' --request DELETE \
+      --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+      "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${deployment_id}?force=true" || true)"
+    case "$delete_code" in
+      200|202|204)
+        note "Removed same-build non-terminal preview ${deployment_id} (${branch} ${sha}) to clear feature deployment queue."
+        ;;
+      *)
+        note "Same-build preview cleanup skipped ${deployment_id}: Cloudflare returned HTTP ${delete_code}."
+        ;;
+    esac
+  done < <(jq -r '
+    .result[]?
+    | [
+        (.id // ""),
+        (.deployment_trigger.metadata.branch // ""),
+        (.deployment_trigger.metadata.commit_hash // ""),
+        (.environment // ""),
+        (.latest_stage.status // "")
+      ]
+    | @tsv
+  ' "$TMP_DIR/cleanup-deployments.json")
+}
+
+cleanup_same_build_preview_queue
 
 exact_id=""
 exact_status=""
