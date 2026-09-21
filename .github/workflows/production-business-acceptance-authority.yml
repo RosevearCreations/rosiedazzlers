@@ -64,6 +64,9 @@ jobs:
           python -m py_compile scripts/provider_evidence_closure_availability_review_check.py
           node --check scripts/provider_evidence_closure_availability_review_test.mjs
           node --check functions/api/_lib/provider-evidence-closure-availability-review.js
+          python -m py_compile scripts/provider_outcome_review_hold_decision_readiness_check.py
+          node --check scripts/provider_outcome_review_hold_decision_readiness_test.mjs
+          node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
           node --check functions/api/admin/provider_evidence_reconciliation_refresh.js
           node --check scripts/provider_outcome_delivery_evidence_closure_test.mjs
           node --check functions/api/_lib/provider-outcome-delivery-evidence.js
@@ -287,6 +290,11 @@ jobs:
           node scripts/provider_evidence_reconciliation_refresh_test.mjs
           python scripts/provider_evidence_closure_availability_review_check.py
           node scripts/provider_evidence_closure_availability_review_test.mjs
+
+      - name: Validate provider outcome review & HOLD decision readiness authority
+        run: |
+          python scripts/provider_outcome_review_hold_decision_readiness_check.py
+          node scripts/provider_outcome_review_hold_decision_readiness_test.mjs
 
       - name: Validate recovery artifact & drill evidence review authority
         run: |

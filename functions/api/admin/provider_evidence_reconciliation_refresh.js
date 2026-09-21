@@ -4,6 +4,7 @@ import { onRequestGet as getProviderEvidenceClosure } from "./provider_evidence_
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
 import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
 import { buildProviderEvidenceClosureAvailabilityReview } from "../_lib/provider-evidence-closure-availability-review.js";
+import { buildProviderOutcomeReviewHoldDecisionReadiness } from "../_lib/provider-outcome-review-hold-decision-readiness.js";
 
 export async function onRequestGet({ request, env }) {
   const response = await getProviderEvidenceClosure({ request: request.clone(), env });
@@ -19,10 +20,19 @@ export async function onRequestGet({ request, env }) {
   const closureAvailabilityReview = buildProviderEvidenceClosureAvailabilityReview({
     reconciliation: refresh, outcome, generated_at: generatedAt
   });
+  const holdDecisionReadiness = buildProviderOutcomeReviewHoldDecisionReadiness({
+    outcome,
+    reconciliation: refresh,
+    availability_review: closureAvailabilityReview,
+    generated_at: generatedAt
+  });
   return json({ ok:true, build:446, authority:"provider_evidence_reconciliation_refresh", generated_at:generatedAt,
     retained_authority: payload.authority || "payment_refund_delivery_provider_evidence_closure",
     current_review_authority: "provider_evidence_closure_availability_review",
-    refresh, closure_availability_review: closureAvailabilityReview });
+    current_hold_decision_build: 466,
+    current_hold_decision_authority: "provider_outcome_review_hold_decision_readiness",
+    refresh, closure_availability_review: closureAvailabilityReview,
+    hold_decision_readiness: holdDecisionReadiness });
 }
 export async function onRequestHead(context) {
   const response = await onRequestGet(context);
