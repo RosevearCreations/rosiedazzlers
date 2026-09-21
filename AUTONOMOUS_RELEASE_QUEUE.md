@@ -5,9 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
+The synchronized predecessor contracts are retained through `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_456_464.md`
+- `FORWARD_BUILD_ROADMAP_466_475.md`
 - `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`
 - `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`
 - `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
@@ -82,26 +85,25 @@ The synchronized predecessor contracts are retained through `BUILD463_SERVICE_EC
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is the active bounded release.
+**Build 465 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- reuse the protected Reliability, Security & Cost Reassessment page and endpoint rather than creating a parallel I.T., observability, provider-billing or recovery system;
-- add explicit evidence-age review with current <=7 days, aging 8–30 days, stale >30 days and undated states;
-- keep Cloudflare billing, CPU, quota and dollar cost external until supplied by provider-owned evidence; first-party traffic and diagnostic duration are not provider-cost proxies;
-- treat operational pressure as an operator-review signal only, never proof that scaling is required or future capacity is established;
-- keep real Production restore, secret rotation, DNS/R2/provider recovery external to source/runtime GREEN; and
-- introduce no automatic scaling, retry/cache, recovery, provider, schema/storage, business/accounting/inventory, outreach mutation or permanent polling.
+- reconcile the 456–464 cycle using dated attributable evidence from retained owning authorities;
+- classify continuing concerns as retained, closed, owner_action, provider_dependent or unavailable, and close only evidence-backed concerns;
+- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; source/runtime GREEN never closes provider, owner, device, commercial or recovery evidence gaps;
+- publish `PRODUCTION_LEARNING_456_464.md` and renew the future queue through `FORWARD_BUILD_ROADMAP_466_475.md`; and
+- introduce no schema, provider, customer/booking, pricing/discount, staff-role, accounting/inventory, recovery, destructive-storage, outreach or permanent-polling mutation.
 
-Current contract: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current reconciliation: `PRODUCTION_LEARNING_456_464.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Reliability, Cost & Resilience Operational Guardrails authority, retained reliability/security/recovery/observability/I.T. authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current Production Learning & Roadmap Renewal authority, retained owning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 465 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
-The future queue continues through `FORWARD_BUILD_ROADMAP_456_465.md`; it has not run out.
+The future queue continues through `FORWARD_BUILD_ROADMAP_466_475.md`; it has not run out.
 
 ## Continuing rule
 Never call a Rosie Dazzlers source release GREEN from source changes alone. Missing provider, owner, observed recovery or real-device evidence remains a truthful HOLD rather than inferred success. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.
