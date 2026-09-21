@@ -1,4 +1,4 @@
-// Build 450 — manual read-only local-search measurement & conversion attribution UI.
+// Build 450/460 — manual read-only local-search measurement, conversion attribution & evidence-quality UI.
 const byId450 = (id) => document.getElementById(id);
 const esc450 = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -33,8 +33,10 @@ async function refresh450() {
     renderCohorts450(data);
     renderLandingPages450(data);
     renderProvider450(data);
+    renderEvidenceQuality460(data);
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
-    setStatus450("Read-only attribution refreshed " + stamp + ". State: " + String(data.status || "unavailable").replaceAll("_", " ") + ". No provider or analytics write was performed.", data.status === "observed" ? "ok" : "warn");
+    const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
+    setStatus450("Read-only attribution refreshed " + stamp + ". Attribution: " + String(data.status || "unavailable").replaceAll("_", " ") + " · evidence quality: " + qualityState + ". No provider or analytics write was performed.", data.status === "observed" && qualityState === "comparable observed" ? "ok" : "warn");
   } catch (error) {
     setStatus450(error?.message || "Could not refresh local-search conversion attribution.", "bad");
   } finally {
@@ -93,6 +95,27 @@ function renderLandingPages450(data) {
     + ' · checkout completed ' + esc450(item.checkout_completed_sessions ?? 0) + '</div></div>'
     + '<span>' + esc450(item.sessions ?? 0) + ' landing sessions</span></div>'
   ).join("") || '<div class="summary-item muted">No target landing-page sessions were observed in the bounded window.</div>';
+}
+
+
+function renderEvidenceQuality460(data) {
+  const host = byId450("localEvidenceQuality460");
+  if (!host) return;
+  const quality = data?.evidence_quality || {};
+  const rows = Array.isArray(quality.providers) ? quality.providers : [];
+  const summary = '<div class="summary-item"><div><strong>Evidence-quality state</strong>'
+    + '<div class="muted">Comparability describes freshness, availability and dated window alignment only; it is not a performance or causation score.</div></div>'
+    + '<span>' + esc450(quality.status || "unavailable") + '</span></div>';
+  const providerRows = rows.map((item) =>
+    '<div class="summary-item"><div><strong>' + esc450(item.provider_label || item.provider) + '</strong>'
+    + '<div class="muted">identity ' + esc450(item.provider_identity_complete ? "complete" : "incomplete")
+    + ' · freshness ' + esc450(item.provider_freshness_state || "unknown")
+    + ' · window ' + esc450(item.provider_window_overlap || "unknown")
+    + ' · same-session ' + esc450(item.same_session_attribution_available ? (item.same_session_rows_truncated_possible ? "bounded partial" : "available") : "unavailable")
+    + '</div><div class="muted">' + esc450(item.interpretation || "") + '</div></div>'
+    + '<span>' + esc450(item.comparison_state || "unavailable") + '</span></div>'
+  ).join("");
+  host.innerHTML = summary + (providerRows || '<div class="summary-item muted">No provider evidence-quality rows are available.</div>');
 }
 
 function renderProvider450(data) {
