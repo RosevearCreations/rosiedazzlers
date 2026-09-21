@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`.
+The synchronized Production predecessor is retained through `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`.
 
-**Build 460 — Local Search Provider & Attribution Evidence Quality** is the active bounded release.
+**Build 461 — Booking & Quote Experiment Readiness** is the active bounded release.
 
-**Build 461 — Booking & Quote Experiment Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 462 — Staff & Mobile Friction Remediation Priorities** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Local Search Provider & Attribution Evidence Quality contract
+## Current Booking & Quote Experiment Readiness contract
+- Reuse the retained booking/quote learning endpoint and `/admin-booking-quote-retention-learning.html`; do not create a parallel experiment, analytics or pricing system.
+- Convert supported booking-stage, broad quote-band and comparable accepted-value signals into owner-review hypotheses with explicit primary metrics, bounded comparison windows, minimum evidence and confounder notes.
+- Readiness means ready for owner review only. Activation, test thresholds, winner selection and any later business decision remain manual and separately authorized.
+- Keep anonymous booking evidence aggregate-only and quote evidence identity-free; no customer/session/quote identity join is introduced.
+- A booking-stage drop does not prove price causation; a quote decline does not prove price sensitivity; an accepted quote is not completed work and accepted-vs-quoted differences do not establish discounting or scope-change cause.
+- No automatic price/discount, booking-rule, outreach, quote/booking, experiment, provider, schema/storage mutation or permanent polling.
+- Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
+
+## Retained Local Search Provider & Attribution Evidence Quality contract
 - Reuse the retained Build 440/450 local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
 - Make provider property/location/window identity completeness, freshness, dated provider↔first-party window overlap, first-party availability and bounded/truncated anonymous same-session evidence explicit.
 - Evidence quality describes comparability only. Search Console/GBP provider outcomes remain source-attributed and distinct from anonymous first-party funnel observations.
@@ -40,6 +49,10 @@ Current contract: `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.m
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
+- `.github/workflows/booking-quote-experiment-readiness-authority.yml`
+- `scripts/booking_quote_experiment_readiness_check.py`
+- `scripts/booking_quote_experiment_readiness_test.mjs`
 - `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`
 - `.github/workflows/local-search-provider-attribution-evidence-quality-authority.yml`
 - `scripts/local_search_provider_attribution_evidence_quality_check.py`
