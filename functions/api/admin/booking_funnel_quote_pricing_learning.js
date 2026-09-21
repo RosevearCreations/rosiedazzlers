@@ -1,4 +1,4 @@
-// Build 451 — read-only Booking Funnel, Quote & Pricing Learning endpoint.
+// Build 451 retained endpoint enriched by Build 461 — Booking & Quote Experiment Readiness. Read-only, manual refresh.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getBookingRebookingFunnel } from "./booking_rebooking_funnel.js";
 import { onRequestGet as getQuotePipeline } from "./quote_pipeline_list.js";
