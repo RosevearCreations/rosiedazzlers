@@ -1,10 +1,11 @@
-// Build 434 — bounded read-only reliability/security/cost reassessment.
+// Build 464 — retained bounded reassessment enriched with operational guardrails.
 import { requireStaffAccess } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { onRequestGet as getReliabilityCapacity } from "./reliability_performance_cost_capacity.js";
 import { onRequestGet as getSecurityRecovery } from "./security_privacy_recovery_drill.js";
 import { onRequestGet as getGoLiveReadiness } from "./go_live_readiness.js";
 import { buildReliabilitySecurityCostReassessment } from "../_lib/reliability-security-cost-reassessment.js";
+import { buildReliabilityCostResilienceOperationalGuardrails } from "../_lib/reliability-cost-resilience-operational-guardrails.js";
 
 const SOURCE_TIMEOUT_MS = 10000;
 
@@ -21,7 +22,7 @@ export async function onRequestGet({ request, env }) {
     collect("go_live_readiness", () => getGoLiveReadiness({ request: request.clone(), env }))
   ]);
 
-  const report = buildReliabilitySecurityCostReassessment({
+  const reassessment = buildReliabilitySecurityCostReassessment({
     reliability: reliability.data || {},
     security: security.data || {},
     readiness: readiness.data || {},
@@ -32,6 +33,7 @@ export async function onRequestGet({ request, env }) {
     },
     generated_at: generatedAt
   });
+  const report = buildReliabilityCostResilienceOperationalGuardrails({ reassessment, generated_at: generatedAt });
 
   return json({
     ok: report.counts.operational_pressure === 0,
@@ -106,7 +108,7 @@ function json(value, status = 200) {
     headers: {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
-      "X-Rosie-Reassessment": "build-434-read-only"
+      "X-Rosie-Reassessment": "build-464-read-only"
     }
   });
 }
