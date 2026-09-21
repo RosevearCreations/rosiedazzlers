@@ -1,7 +1,8 @@
 // Build 438/448/458/468 — Authenticated Device & Visual Acceptance + Cross-Device Refresh + Closure + Regression Closure.
 // Pure classification over retained launch observations + Build 419 safe workflow evidence.
 // Build 448 adds bounded freshness so old observations cannot silently satisfy the current-release refresh.
-// Build 458 converges current/stale/missing authenticated role and device coverage for explicit operator review.\n// Build 468 separates current passing/current regression observations from historical acceptance.
+// Build 458 converges current/stale/missing authenticated role and device coverage for explicit operator review.
+// Build 468 separates current passing/current regression observations from historical acceptance.
 // Raw evidence-note contents are inspected server-side only and are never returned.
 
 const ROLE_DEFINITIONS = Object.freeze([
@@ -25,7 +26,7 @@ const BROWSER_PATTERNS = Object.freeze({
 const AUTH_PATTERN = /\b(authenticated|signed[ -]?in|logged[ -]?in|login session|staff session|customer account session|account session)\b/i;
 const VIEWPORT_PATTERN = /\b(viewport|screen width|width\s*[:=]?\s*\d{3,4}\s*px|\d{3,4}\s*px)\b/i;
 const OUTCOME_PATTERN = /\b(pass|passed|success|successful|working|works|usable|rendered|verified|complete|completed|no errors?|no blocking errors?)\b/i;
-const NEGATIVE_OUTCOME_PATTERN = /\\b(fail(?:ed|ing)?|broken|blocked|blocking error|unusable|regression|not working|does not work|error(?:ed)?|crash(?:ed|ing)?|overflow(?:ing)?)\\b/i;
+const NEGATIVE_OUTCOME_PATTERN = /\b(fail(?:ed|ing)?|broken|blocked|blocking error|unusable|regression|not working|does not work|error(?:ed)?|crash(?:ed|ing)?|overflow(?:ing)?)\b/i;
 const ROUTE_TOKEN_PATTERN = /\/(?:app|admin|book|account|detailer)(?:[a-z0-9._/-]*)/ig;
 
 export function buildAuthenticatedDeviceVisualAcceptance({
@@ -174,7 +175,8 @@ export function buildAuthenticatedDeviceVisualAcceptance({
     required_device_count:devices.length,
     dated_device_count:devices.filter(device=>device.status==="observed_dated").length,
     latest_observed_at:timestamps.length?timestamps[timestamps.length-1]:null,
-    acceptance_closure:acceptanceClosure,\n    regression_closure:regressionClosure,
+    acceptance_closure:acceptanceClosure,
+    regression_closure:regressionClosure,
     roles,
     devices,
     outstanding_roles:roleOutstanding.map(({id,title,status,classification})=>({id,title,status,classification})),
@@ -192,7 +194,9 @@ export function buildAuthenticatedDeviceVisualAcceptance({
       retained_workflow_authority:"customer_staff_production_workflow_evidence",
       source_responsive_checks_are_supporting_only:true,
       source_green_is_not_real_device_proof:true,
-      stale_observation_is_not_current_release_proof:true,\n      historical_acceptance_is_not_current_regression_proof:true,\n      current_regression_is_not_overridden_by_historical_acceptance:true,
+      stale_observation_is_not_current_release_proof:true,
+      historical_acceptance_is_not_current_regression_proof:true,
+      current_regression_is_not_overridden_by_historical_acceptance:true,
       evidence_note_exposed:false,
       customer_identity_exposed:false,
       protected_content_copied:false,
@@ -298,7 +302,9 @@ function classifyRole({definition,row,workflowRole,sourceAvailable,generatedAt,f
   };
 }
 
-function emptyRole(definition,status,classification,detail){\n  return {id:definition.id,key:definition.key,title:definition.title,status,classification,observed:false,current:false,current_observation:false,current_pass:false,current_regression:false,historical_acceptance:false,historical_regression:false,fresh:false,stale:false,observed_at:null,age_days:null,device_classes:[],browser_classes:[],routes:[],viewport_widths:[],authentication_evidence_present:false,browser_evidence_present:false,route_evidence_present:false,viewport_evidence_present:false,outcome_evidence_present:false,outcome_successful:false,outcome_regression_present:false,retained_workflow_verified:false,evidence_note_present:false,evidence_note_exposed:false,missing_evidence:["authorized evidence source"],detail};\n}
+function emptyRole(definition,status,classification,detail){
+  return {id:definition.id,key:definition.key,title:definition.title,status,classification,observed:false,current:false,current_observation:false,current_pass:false,current_regression:false,historical_acceptance:false,historical_regression:false,fresh:false,stale:false,observed_at:null,age_days:null,device_classes:[],browser_classes:[],routes:[],viewport_widths:[],authentication_evidence_present:false,browser_evidence_present:false,route_evidence_present:false,viewport_evidence_present:false,outcome_evidence_present:false,outcome_successful:false,outcome_regression_present:false,retained_workflow_verified:false,evidence_note_present:false,evidence_note_exposed:false,missing_evidence:["authorized evidence source"],detail};
+}
 function safeRoutes(note){
   const values=[];
   for(const match of String(note||"").matchAll(ROUTE_TOKEN_PATTERN)){
@@ -315,6 +321,7 @@ function viewportWidthsFrom(note){
   }
   return values.slice(0,4);
 }
-function unique(values){return [...new Set((Array.isArray(values)?values:[]).filter(Boolean))]}\nfunction safeIso(value){const text=clean(value);if(!text)return null;const ms=Date.parse(text);return Number.isFinite(ms)?new Date(ms).toISOString():null}
+function unique(values){return [...new Set((Array.isArray(values)?values:[]).filter(Boolean))]}
+function safeIso(value){const text=clean(value);if(!text)return null;const ms=Date.parse(text);return Number.isFinite(ms)?new Date(ms).toISOString():null}
 function ageDays(value,now){const a=Date.parse(String(value||"")),b=Date.parse(String(now||""));return Number.isFinite(a)&&Number.isFinite(b)?Math.max(0,Math.floor((b-a)/86400000)):null}
 function clean(value,max=2000){return String(value??"").trim().slice(0,max)}
