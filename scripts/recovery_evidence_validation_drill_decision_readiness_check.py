@@ -70,18 +70,18 @@ require(blockers,[
     "Recovery / backup evidence","Build 467","drill decision","retain_hold"
 ],"canonical HOLD backlog")
 require(queue,[
-    "**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is the active bounded release.",
-    "**Build 468 — Authenticated Device Regression Closure**"
-],"release queue")
+    "BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md",
+    "**Build 468 — Authenticated Device Regression Closure** is the active bounded release."
+],"release queue retained/current authority")
 require(handoff,[
     "BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md",
     "recovery-evidence-validation-drill-decision-readiness-authority.yml",
     "recovery_evidence_validation_drill_decision_readiness_check.py"
 ],"project handoff")
 require(readme,[
-    "Build 467 — Recovery Evidence Validation & Drill Decision Readiness",
+    "BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md",
     "recovery_evidence_validation_drill_decision_readiness_check.py"
-],"README")
+],"README retained authority")
 for text,label in [(dev,"Development source gate"),(prod,"Production business acceptance")]:
     require(text,[
         "recovery_evidence_validation_drill_decision_readiness_check.py",
