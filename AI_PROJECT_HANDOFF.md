@@ -3,21 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`.
+The synchronized Production predecessor is retained through `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
-**Build 465 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is the active bounded release.
 
-**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current reconciliation: `PRODUCTION_LEARNING_456_464.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`. Retained provider contracts: `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`, `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` and `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Production Learning & Roadmap Renewal contract
-- Reconcile Builds 456–464 from retained owning evidence without fabricating closure from source/runtime GREEN.
-- Classify continuing concerns as retained, closed, owner_action, provider_dependent or unavailable; only dated attributable owning evidence can support closure.
-- Keep provider outcomes, local-search provider evidence, recovery evidence, authenticated real-device evidence, maintenance/fleet approval and unavailable sources truthful in the canonical HOLD backlog until their own evidence supports narrowing.
-- Renew the future queue through `FORWARD_BUILD_ROADMAP_466_475.md`, deepening existing evidence and controlled-decision workflows rather than creating replacement systems.
-- No schema, provider, customer/booking, pricing/discount, staff-role, accounting/inventory, restore/DNS/R2, outreach or permanent-polling mutation is authorized.
+## Current Provider Outcome Review & HOLD Decision Readiness contract
+- Reuse the retained provider outcome, reconciliation and availability evidence plus the existing Launch Readiness provider panel; do not create a parallel payment ledger, provider store or readiness dashboard.
+- Keep Stripe, PayPal, linked refund and definitive delivery evidence independently attributable, source-available, dated and freshness-classified.
+- `operator_hold_decision_ready` requires all four required evidence classes to be source-available, dated and current and to satisfy the retained closure candidate; it never edits the HOLD.
+- Aging or stale evidence requires review/revalidation before narrowing; missing, undated or unavailable evidence defaults to explicit retain-HOLD states.
+- The decision package always requires an operator, defaults to `retain_hold`, exposes blocker IDs, and permits evidence-backed narrowing review only when current evidence is complete.
+- No payment/refund/message send, webhook replay, provider configuration, secret, customer/business/accounting/inventory, schema/storage, canonical-HOLD, outreach or permanent-polling mutation is authorized.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
+
 ## Retained Local Search Provider & Attribution Evidence Quality contract
 - Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
 - Make provider property/location/window identity completeness, freshness, dated provider↔first-party window overlap, first-party availability and bounded/truncated anonymous same-session evidence explicit.
@@ -47,6 +49,11 @@ Current contract: `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current rec
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`
+- `.github/workflows/provider-outcome-review-hold-decision-readiness-authority.yml`
+- `scripts/provider_outcome_review_hold_decision_readiness_check.py`
+- `scripts/provider_outcome_review_hold_decision_readiness_test.mjs`
+- `functions/api/_lib/provider-outcome-review-hold-decision-readiness.js`
 - `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_456_464.md`
 - `FORWARD_BUILD_ROADMAP_466_475.md`
