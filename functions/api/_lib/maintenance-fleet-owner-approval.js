@@ -1,4 +1,4 @@
-// Build 439/449 — read-only owner-decision convergence + commercial decision closure packet.
+// Build 439/449/459/469 — read-only owner-decision convergence, commercial readiness + controlled-pilot decision packet.
 const MAINTENANCE_DECISIONS = Object.freeze([
   ["eligibility","Eligibility","Which customer/vehicle types qualify, and is prior Rosie service or a minimum condition required?"],
   ["cadence","Cadence","Which service intervals are allowed, can seasonality change them, and what reschedule policy applies?"],
@@ -78,12 +78,23 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
   ];
   const activationApproved=activationTerms.filter(x=>x.status==="source_approved").length;
   const activationReady=closureCandidate&&activationApproved===activationTerms.length;
+  const controlledPilotSafeguards=[
+    pilotSafeguard("explicit_owner_pilot_authorization","Explicit owner pilot authorization","required"),
+    pilotSafeguard("manual_participant_selection","Manual participant/account selection","required"),
+    pilotSafeguard("maintenance_eligibility","Maintenance eligibility from canonical source",activationTermState(activationTerms,"maintenance_eligibility")),
+    pilotSafeguard("current_live_availability","Current live availability revalidation","required"),
+    pilotSafeguard("checkout_collision_revalidation","Checkout collision revalidation","required"),
+    pilotSafeguard("commercial_terms","Owner-approved commercial terms",activationReady?"source_approved":"owner_action")
+  ];
+  const controlledPilotReady=activationReady;
 
   return {
     build:439,
     current_build:449,
     activation_readiness_build:459,
     activation_authority:"fleet_maintenance_commercial_activation_readiness",
+    controlled_pilot_readiness_build:469,
+    controlled_pilot_authority:"maintenance_fleet_controlled_pilot_activation_readiness",
     retained_authority:"maintenance_fleet_owner_approval_convergence",
     authority:"fleet_maintenance_commercial_decision_closure",
     mode:"maintenance_fleet_owner_approval_convergence",
@@ -138,6 +149,54 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
         ? "Canonical commercial source is complete enough for bounded operator activation review. No activation has been authorized or performed."
         : "Resolve the remaining owner commercial decisions in canonical source before activation readiness can be reviewed."
     },
+    controlled_pilot_readiness:{
+      build:469,
+      authority:"maintenance_fleet_controlled_pilot_activation_readiness",
+      retained_activation_authority:"fleet_maintenance_commercial_activation_readiness",
+      retained_operational_pilot_authority:"retention_maintenance_fleet_operational_pilot",
+      status:controlledPilotReady?"operator_review_ready":"owner_action",
+      decision_package_ready:controlledPilotReady,
+      commercial_terms_ready:activationReady,
+      eligibility_source_approved:activationTermState(activationTerms,"maintenance_eligibility")==="source_approved",
+      owner_pilot_authorization_required:true,
+      owner_pilot_authorization_recorded:false,
+      pilot_activation_allowed:false,
+      automatic_activation_performed:false,
+      customer_facing_automation_allowed:false,
+      participant_selection_is_manual:true,
+      customer_commitment_inferred:false,
+      fleet_commitment_inferred:false,
+      candidate_identity_exposed:false,
+      live_capacity_inferred:false,
+      capacity_reservation_performed:false,
+      current_date_slot_must_be_revalidated:true,
+      availability_authority:clean(capacity.availability_authority)||"/api/availability",
+      collision_revalidation_authority:clean(capacity.collision_revalidation_authority)||"/api/checkout",
+      participant_limit_inferred:false,
+      pilot_duration_inferred:false,
+      service_area_expansion_allowed:false,
+      guaranteed_capacity_allowed:false,
+      price_override_allowed:false,
+      discount_override_allowed:false,
+      invoice_term_override_allowed:false,
+      recurring_billing_allowed:false,
+      source_approved_term_count:activationApproved,
+      required_term_count:activationTerms.length,
+      source_approved_term_ids:activationTerms.filter(x=>x.status==="source_approved").map(x=>x.id),
+      owner_action_term_ids:activationTerms.filter(x=>x.status!=="source_approved").map(x=>x.id),
+      safeguards:controlledPilotSafeguards,
+      bounds:{
+        participant_limit:null,
+        duration_days:null,
+        participant_limit_requires_explicit_owner_value:true,
+        duration_requires_explicit_owner_value:true,
+        each_real_booking_requires_current_availability:true,
+        each_real_booking_requires_checkout_revalidation:true
+      },
+      next_step:controlledPilotReady
+        ? "Commercial terms and safeguards are complete enough for a bounded owner pilot decision. Explicit owner pilot authorization and explicit pilot bounds are still required; no customer-facing activation has occurred."
+        : "Resolve the remaining canonical commercial decisions before a controlled-pilot activation decision can be reviewed."
+    },
     maintenance:{
       source_status:maintenanceStatus,
       decisions:maintenanceDecisions,
@@ -181,11 +240,20 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
       accounting_mutation_allowed:false,
       capacity_inferred:false,
       permanent_polling:false,
-      customer_identity_exposed:false
+      customer_identity_exposed:false,
+      controlled_pilot_activation_allowed:false,
+      automatic_pilot_participant_selection_allowed:false,
+      customer_facing_automation_allowed:false
     }
   };
 }
 
+function pilotSafeguard(id,label,status) {
+  return {id,label,status,required:true,automatic_satisfaction_inferred:false};
+}
+function activationTermState(terms,id) {
+  return (Array.isArray(terms)?terms:[]).find(x=>x?.id===id)?.status||"owner_action";
+}
 function activationTerm(decisions,decisionId,id,label) {
   const row=(Array.isArray(decisions)?decisions:[]).find(x=>x?.id===decisionId)||{};
   const approved=row.status==="source_approved";
