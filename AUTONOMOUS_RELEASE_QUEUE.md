@@ -92,8 +92,8 @@ The synchronized predecessor contracts are retained through `BUILD468_AUTHENTICA
 **Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness** is the active bounded release.
 
 Scope:
-- reuse the retained Build 439/449/459 owner-decision and commercial activation-readiness workbench rather than creating a replacement rulebook, approval system or pilot engine;
-- translate retained owner-approved maintenance/fleet commercial terms, maintenance eligibility, manual participant selection and the retained Build 421 operational-pilot safety boundary into one controlled-pilot decision package;
+- reuse the retained owner-decision and commercial activation-readiness authorities rather than creating a replacement rulebook, approval system or pilot engine;
+- translate retained owner-approved maintenance/fleet commercial terms, maintenance eligibility, manual participant selection and the retained operational-pilot safety authority into one controlled-pilot decision package;
 - require explicit owner pilot authorization plus explicit participant-count and duration bounds; missing pilot bounds remain unresolved and are never inferred;
 - keep `/api/availability` authoritative for current live capacity and `/api/checkout` authoritative for final booking collision/revalidation on every real pilot booking;
 - preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no source/runtime state closes the Maintenance / fleet business approval HOLD automatically; and
