@@ -163,6 +163,7 @@ export async function onRequestGet({ request, env }) {
     current_recovery_validation_decision_authority: "recovery_evidence_validation_drill_decision_readiness",
     authenticated_device_visual_acceptance: authenticatedDeviceVisualAcceptance,
     current_device_visual_authority: "authenticated_device_visual_acceptance",
+    current_device_regression_authority: "authenticated_device_regression_closure",
     source_status: {
       go_live_readiness: state(readinessResult),
       production_diagnostics: state(diagnosticsResult),
@@ -208,6 +209,10 @@ export async function onRequestGet({ request, env }) {
       authenticated_device_visual_acceptance: {
         available: launchEvidenceResult.ok,
         classification: authenticatedDeviceVisualAcceptance.status
+      },
+      authenticated_device_regression_closure: {
+        available: launchEvidenceResult.ok,
+        classification: authenticatedDeviceVisualAcceptance.regression_closure?.status || "refresh_required"
       }
     },
     ...consolidation

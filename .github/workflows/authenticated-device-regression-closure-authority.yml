@@ -1,0 +1,52 @@
+name: Build 468 — Authenticated Device Regression Closure Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-authenticated-device-regression-closure-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: authenticated-device-regression-closure
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/authenticated_device_regression_closure_check.py
+          node --check functions/api/_lib/authenticated-device-visual-acceptance.js
+          node --check functions/api/admin/authenticated_device_visual_acceptance.js
+          node --check functions/api/admin/launch_readiness_consolidated.js
+          node --check assets/launch-readiness-consolidation.js
+          node --check scripts/authenticated_device_regression_closure_test.mjs
+      - name: Validate authenticated device regression closure
+        run: |
+          python scripts/authenticated_device_regression_closure_check.py
+          node scripts/authenticated_device_regression_closure_test.mjs
+      - name: Authority summary
+        run: |
+          {
+            echo '### Build 468 — Authenticated Device Regression Closure'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Retained Build 438/448/458 authority reused: PASS'
+            echo '- Current pass vs current regression evidence: EXPLICIT'
+            echo '- Historical-only acceptance vs current evidence: EXPLICIT'
+            echo '- Customer/Detailer/Operations/Admin current role coverage: EXPLICIT'
+            echo '- Current device/browser observations: EXPLICIT'
+            echo '- Responsive source checks remain supporting-only'
+            echo '- Screenshot capture/polling or business/provider/storage mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

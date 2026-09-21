@@ -89,6 +89,7 @@ function renderWorkflowEvidence(data){
   const evidence=data.production_workflow_evidence||{};
   const acceptance=data.authenticated_device_visual_acceptance||{};
   const deviceClosure=acceptance.acceptance_closure||{};
+  const regressionClosure=acceptance.regression_closure||{};
   const roles=Array.isArray(evidence.roles)?evidence.roles:[];
   const acceptedRoles=Array.isArray(acceptance.roles)?acceptance.roles:[];
   const devices=Array.isArray(acceptance.devices)?acceptance.devices:[];
@@ -106,6 +107,11 @@ function renderWorkflowEvidence(data){
       ${metric("Authenticated visual acceptance",acceptance.status||"hold")}
       ${metric("Current refresh",acceptance.closure_candidate?"current":"hold")}
       ${metric("Closure review",deviceClosure.status||"owner_action")}
+      ${metric("Regression review",regressionClosure.status||"refresh_required")}
+      ${metric("Current regressions",(regressionClosure.current_regression_role_ids||[]).length)}
+      ${metric("Historical-only",(regressionClosure.historical_only_role_ids||[]).length)}
+      ${metric("Regression devices",esc((regressionClosure.current_regression_device_ids||[]).join(", ")||"none"))}
+      ${metric("Regression browsers",esc((regressionClosure.current_regression_browser_ids||[]).join(", ")||"none"))}
       ${metric("Observation freshness",`${acceptance.freshness_days??30} days`)}
       ${metric("Stale coverage",`${(deviceClosure.stale_role_ids||[]).length} role / ${(deviceClosure.stale_device_ids||[]).length} device`)}
       ${metric("Missing coverage",`${(deviceClosure.missing_role_ids||[]).length} role / ${(deviceClosure.missing_device_ids||[]).length} device`)}
@@ -117,10 +123,15 @@ function renderWorkflowEvidence(data){
     </div>
     <div class="stack">${roles.map(x=>{
       const visual=acceptedRoles.find(row=>row.id===x.id)||{};
-      return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p><p class="mini">Authenticated visual fields: auth ${visual.authentication_evidence_present?"yes":"no"} · browser ${visual.browser_evidence_present?"yes":"no"} · route ${visual.route_evidence_present?"yes":"no"} · viewport ${visual.viewport_evidence_present?"yes":"no"} · outcome ${visual.outcome_evidence_present?"yes":"no"}</p><p class="mini">Device: ${esc((visual.device_classes||[]).join(", ")||"not recorded")} · browser: ${esc((visual.browser_classes||[]).join(", ")||"not recorded")} · safe route: ${esc((visual.routes||[]).join(", ")||"not recorded")}</p><p class="mini">Current refresh: ${visual.current?"yes":"no"} · age: ${visual.age_days==null?"not dated":`${visual.age_days} d`} · stale: ${visual.stale?"yes":"no"}</p></div>${chip(visual.status||x.status||x.classification||"owner_action")}</article>`;
+      return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Role language: ${x.role_language_present?"yes":"no"} · real-device / representative-viewport language: ${x.device_or_viewport_language_present?"yes":"no"}</p><p class="mini">Authenticated visual fields: auth ${visual.authentication_evidence_present?"yes":"no"} · browser ${visual.browser_evidence_present?"yes":"no"} · route ${visual.route_evidence_present?"yes":"no"} · viewport ${visual.viewport_evidence_present?"yes":"no"} · outcome ${visual.outcome_evidence_present?"yes":"no"}</p><p class="mini">Device: ${esc((visual.device_classes||[]).join(", ")||"not recorded")} · browser: ${esc((visual.browser_classes||[]).join(", ")||"not recorded")} · safe route: ${esc((visual.routes||[]).join(", ")||"not recorded")}</p><p class="mini">Current refresh: ${visual.current?"yes":"no"} · current observation: ${visual.current_observation?"yes":"no"} · age: ${visual.age_days==null?"not dated":`${visual.age_days} d`} · stale: ${visual.stale?"yes":"no"}</p><p class="mini">Current regression: ${visual.current_regression?"yes":"no"} · historical acceptance: ${visual.historical_acceptance?"yes":"no"} · retained workflow acceptance: ${visual.retained_workflow_verified?"yes":"no"}</p></div>${chip(visual.status||x.status||x.classification||"owner_action")}</article>`;
     }).join("")}</div>
     <div class="stack">${devices.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">Observed roles: ${esc((x.roles||[]).join(", ")||"none")} · latest dated observation: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
     <p class="mini"><strong>Acceptance closure:</strong> ${esc(deviceClosure.detail||"Authenticated role/device coverage remains subject to explicit operator review.")}</p>
+    <p class="mini"><strong>Regression closure:</strong> ${esc(regressionClosure.detail||"Current regression review requires dated authenticated role/device/browser evidence.")}</p>
+    <p class="mini"><strong>Current regression roles:</strong> ${esc((regressionClosure.current_regression_role_ids||[]).join(", ")||"none")} · <strong>Historical-only roles:</strong> ${esc((regressionClosure.historical_only_role_ids||[]).join(", ")||"none")}</p>
+    <p class="mini"><strong>Current browsers:</strong> ${esc((regressionClosure.current_browser_ids||[]).join(", ")||"none")} · <strong>Regression browsers:</strong> ${esc((regressionClosure.current_regression_browser_ids||[]).join(", ")||"none")}</p>
+    <p class="mini"><strong>Current devices:</strong> ${esc((regressionClosure.current_device_ids||[]).join(", ")||"none")} · <strong>Regression devices:</strong> ${esc((regressionClosure.current_regression_device_ids||[]).join(", ")||"none")}</p>
+    <p class="mini"><strong>Truth boundary:</strong> Historical acceptance does not override a current regression. Responsive source checks remain supporting evidence only.</p>
     <p class="mini"><strong>Current surfaces:</strong> ${esc((deviceClosure.current_role_ids||[]).join(", ")||"none")} · <strong>Current devices:</strong> ${esc((deviceClosure.current_device_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(acceptance.canonical_hold?.detail||"Representative authenticated phone/tablet/desktop evidence remains owner-observed.")}</p>
     <p class="muted">Verified states come only from dated role-specific observations. Source responsive checks do not invent real-device proof; customer identity and evidence-note contents are not returned; protected content is not returned either. No automated screenshot polling is used.</p>`;
