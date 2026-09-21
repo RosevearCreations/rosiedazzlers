@@ -27,7 +27,7 @@ require(endpoint,["activation_readiness_build:459",'activation_authority:"fleet_
 require(client,["Activation-readiness decision","Ready terms:","Readiness is review-only.","activationReadiness"],"Build 459 workbench client")
 require(page,['data-build459="fleet-maintenance-commercial-activation-readiness"',"Build 459 · commercial activation readiness","Commercial activation readiness","operator_review_ready"],"Build 459 workbench page")
 if page!=copy: errors.append("Build 459 workbench route copy drift")
-if len(re.findall(r"<h1\\b",page,re.I))!=1: errors.append("Build 459 workbench must contain exactly one H1")
+if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("Build 459 workbench must contain exactly one H1")
 require(contract,["# Build 459 — Fleet & Maintenance Commercial Activation Readiness","config/maintenance-plan-business-rulebook.json","config/fleet-business-rulebook.json","operator_review_ready","Activation boundary","/api/availability","/api/checkout"],"Build 459 contract")
 
 if maintenance.get("status")!="awaiting_business_approval": errors.append("Build 459 must not approve maintenance rulebook")
