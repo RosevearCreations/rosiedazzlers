@@ -1,0 +1,53 @@
+name: Reliability, Cost & Resilience Operational Guardrails Authority
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-reliability-cost-resilience-operational-guardrails-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: reliability-cost-resilience-operational-guardrails
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/reliability_cost_resilience_operational_guardrails_check.py
+          node --check scripts/reliability_cost_resilience_operational_guardrails_test.mjs
+          node --check functions/api/_lib/reliability-cost-resilience-operational-guardrails.js
+          node --check functions/api/admin/reliability_security_cost_reassessment.js
+          node --check assets/build434-reliability-reassessment.js
+      - name: Validate Build 464 source authority
+        run: |
+          python scripts/reliability_cost_resilience_operational_guardrails_check.py
+          node scripts/reliability_cost_resilience_operational_guardrails_test.mjs
+      - name: Authority summary
+        run: |
+          echo "### Reliability, Cost & Resilience Operational Guardrails" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Evidence age: current <=7d, aging 8-30d, stale >30d" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Provider billing/CPU/quota/cost, scaling need and real recovery: not inferred" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Automatic scaling/retry/cache/recovery/provider/schema/business mutation or polling: NONE" >> "$GITHUB_STEP_SUMMARY"
