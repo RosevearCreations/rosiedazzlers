@@ -75,7 +75,7 @@ require(handoff, [
 ], "project handoff Build 464 authority")
 require(blockers, ["Provider", "Recovery", "Build 464"], "canonical HOLD backlog")
 require(retained454, ["# Build 454 — Reliability, Security, Cost & Resilience Reassessment", "Cloudflare billing", "real Production restore"], "retained Build 454")
-require(retained457, ["# Build 457 — Recovery Evidence Closure & Drill Readiness", "real Production"], "retained Build 457")
+require(retained457, ["# Build 457 — Recovery Evidence Closure & Drill Readiness", "real Production restore"], "retained Build 457")
 require(helper, [
     'release_authority: "reliability_cost_resilience_operational_guardrails"',
     "release_enrichment_build: 464",
