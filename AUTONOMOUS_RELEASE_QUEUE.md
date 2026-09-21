@@ -79,7 +79,7 @@ The synchronized predecessor contracts are retained through `BUILD457_RECOVERY_E
 **Build 458 — Authenticated Device Acceptance Closure** is the active bounded release.
 
 Scope:
-- converge dated authenticated Customer, Detailer, Operations and Admin observations through the retained Build 438/448 read-only device/visual authority;
+- converge dated authenticated Customer, Detailer, Operations and Admin observations through the retained authenticated cross-device and device/visual read-only authorities;
 - make current, stale, missing and unavailable phone/tablet/desktop coverage explicit on the existing Launch Readiness surface;
 - retain the bounded 30-day freshness rule and keep source responsive/accessibility checks as supporting evidence only;
 - classify a complete package as `operator_review_ready` only, with explicit operator review required before any canonical HOLD narrowing; and
@@ -87,7 +87,7 @@ Scope:
 
 Current contract: `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Authenticated Device Acceptance Closure authority, retained Build 448/438/419 authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Authenticated Device Acceptance Closure authority, retained authenticated cross-device, device/visual and workflow authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
