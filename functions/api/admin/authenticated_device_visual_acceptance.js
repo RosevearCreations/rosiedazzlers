@@ -1,4 +1,4 @@
-// Build 438/448/458 — Authenticated Device & Visual Acceptance / current cross-device closure.
+// Build 438/448/458/468 — Authenticated Device & Visual Acceptance / current cross-device + regression closure.
 // Authenticated, read-only composition. No visual-capture action or business mutation.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { listLaunchEvidence } from "../_lib/launch-readiness-evidence.js";
@@ -28,8 +28,8 @@ export async function onRequestGet({request,env}){
     ok:true,
     build:438,
     current_build:448,
-    closure_build:458,
-    closure_authority:"authenticated_device_acceptance_closure",
+    closure_build:458,\n    regression_build:468,
+    closure_authority:"authenticated_device_acceptance_closure",\n    regression_authority:"authenticated_device_regression_closure",
     refresh_authority:"authenticated_cross_device_acceptance_refresh",
     authority:"authenticated_device_visual_acceptance",
     generated_at:generatedAt,
