@@ -19,10 +19,10 @@ function normalizedStatus(value) {
       ? "review"
       : "unavailable";
 }
-function summarizeLayer(rows, key, label) {
+function summarizeLayer(rows, sourceKey, key, label) {
   const list = Array.isArray(rows) ? rows : [];
   const counts = { ready: 0, review: 0, unavailable: 0 };
-  for (const row of list) counts[normalizedStatus(row?.[key])] += 1;
+  for (const row of list) counts[normalizedStatus(row?.[sourceKey])] += 1;
   const total = list.length;
   const completePct = total > 0 ? Math.round((counts.ready / total) * 1000) / 10 : null;
   const status = total === 0
@@ -98,11 +98,11 @@ export function buildServiceEconomicsCompletenessAddOnCostReadiness({
   const rows = Array.isArray(economics?.rows) ? economics.rows : [];
   const bookingCount = rows.length;
   const layers = {
-    recorded_revenue: summarizeLayer(rows, "revenue_evidence_status", "Recorded revenue"),
-    material: summarizeLayer(rows, "material_evidence_status", "Material / job-use cost"),
-    labor: summarizeLayer(rows, "labor_evidence_status", "Logged labour + recorded rate"),
-    cash_refund: summarizeLayer(rows, "cash_evidence_status", "Collected cash / balance / refund"),
-    cogs_reconciliation: summarizeLayer(rows, "cogs_reconciliation_status", "Posted COGS reconciliation")
+    recorded_revenue: summarizeLayer(rows, "revenue_evidence_status", "recorded_revenue", "Recorded revenue"),
+    material: summarizeLayer(rows, "material_evidence_status", "material", "Material / job-use cost"),
+    labor: summarizeLayer(rows, "labor_evidence_status", "labor", "Logged labour + recorded rate"),
+    cash_refund: summarizeLayer(rows, "cash_evidence_status", "cash_refund", "Collected cash / balance / refund"),
+    cogs_reconciliation: summarizeLayer(rows, "cogs_reconciliation_status", "cogs_reconciliation", "Posted COGS reconciliation")
   };
   const requiredForMargin = [layers.recorded_revenue, layers.material, layers.labor, layers.cash_refund, layers.cogs_reconciliation];
   const allRequiredReady = bookingCount > 0 && requiredForMargin.every((row) => row.all_observed_jobs_ready === true);
