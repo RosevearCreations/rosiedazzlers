@@ -86,6 +86,8 @@ jobs:
           node --check functions/api/_lib/local-search-measurement-conversion-attribution.js
           node --check functions/api/admin/local_search_measurement_conversion_attribution.js
           node --check assets/build450-local-search-measurement-conversion-attribution.js
+          python -m py_compile scripts/local_search_provider_attribution_evidence_quality_check.py
+          node --check scripts/local_search_provider_attribution_evidence_quality_test.mjs
           python -m py_compile scripts/booking_funnel_quote_pricing_learning_check.py
           node --check scripts/booking_funnel_quote_pricing_learning_test.mjs
           node --check functions/api/_lib/booking-funnel-quote-pricing-learning.js
@@ -313,6 +315,11 @@ jobs:
           python scripts/local_search_measurement_conversion_attribution_check.py
           node scripts/local_search_measurement_conversion_attribution_test.mjs
 
+      - name: Validate local search provider & attribution evidence quality authority
+        run: |
+          python scripts/local_search_provider_attribution_evidence_quality_check.py
+          node scripts/local_search_provider_attribution_evidence_quality_test.mjs
+
       - name: Validate booking funnel, quote & pricing learning authority
         run: |
           python scripts/booking_funnel_quote_pricing_learning_check.py
@@ -410,6 +417,7 @@ jobs:
             echo "- Admin I.T./observability/support diagnostics: PASS"
             echo "- Admin / Detailer / Customer workflow efficiency & accessibility: PASS"
             echo "- Local-search measurement / Search Console / GBP evidence: PASS"
+            echo "- Local-search provider / attribution evidence quality: PASS"
             echo "- Launch readiness consolidation / roadmap renewal: PASS"
             echo "- Controlled soft launch / real-world acceptance: PASS"
             echo "- Payment / refund / delivery provider evidence closure: PASS"

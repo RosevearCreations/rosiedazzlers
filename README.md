@@ -1,30 +1,31 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 459 — Fleet & Maintenance Commercial Activation Readiness**.
+Current source direction: **Build 460 — Local Search Provider & Attribution Evidence Quality**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current fleet & maintenance commercial activation readiness authority
-This release enriches the retained maintenance/fleet owner-decision workbench with a bounded activation-readiness classification rather than creating a replacement commercial system.
+## Current local-search provider & attribution evidence-quality authority
+This release enriches the retained local-search provider/conversion workbench with explicit evidence-comparability state rather than creating a replacement analytics or provider system.
 
 Focused source authority:
 
-`python scripts/fleet_maintenance_commercial_activation_readiness_check.py`
+`python scripts/local_search_provider_attribution_evidence_quality_check.py`
 
-Readiness covers owner-approved eligibility, cadence, price, capacity, travel, discount and invoicing terms, requires the retained full commercial decision closure, and stops at `operator_review_ready`. Commercial activation remains separately authorized.
+Provider identity/freshness, dated window alignment, first-party availability and bounded/truncated same-session coverage are explicit. Comparability remains descriptive only: provider metrics are not joined to sessions, divided by funnel rates or converted into correlation/causation scores.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
-4. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — current bounded contract.
-5. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained predecessor contract.
-6. `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md` — retained recovery contract.
+4. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — current bounded contract.
+5. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained predecessor contract.
+6. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
 7. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
 8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`
 - `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`
 - `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
 - `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`
@@ -132,6 +133,8 @@ python scripts/production_learning_roadmap_renewal_check.py
 python scripts/local_search_provider_evidence_refresh_check.py
 python scripts/local_search_measurement_conversion_attribution_check.py
 node scripts/local_search_measurement_conversion_attribution_test.mjs
+python scripts/local_search_provider_attribution_evidence_quality_check.py
+node scripts/local_search_provider_attribution_evidence_quality_test.mjs
 python scripts/booking_funnel_quote_pricing_learning_check.py
 node scripts/booking_funnel_quote_pricing_learning_test.mjs
 python scripts/staff_support_mobile_efficiency_learning_check.py
@@ -169,4 +172,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 460 — Local Search Provider & Attribution Evidence Quality** is next only after the current release is independently GREEN on protected `main`.
+**Build 461 — Booking & Quote Experiment Readiness** is next only after the current release is independently GREEN on protected `main`.
