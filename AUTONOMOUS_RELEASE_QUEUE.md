@@ -6,7 +6,6 @@ This living queue records only the current bounded release path. Historical impl
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
 The synchronized predecessor contracts are retained through `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
-Retained predecessor title: Build 463 — Service Economics Completeness & Add-On Cost Readiness.
 Earlier retained predecessor title: Build 462 — Staff & Mobile Friction Remediation Priorities.
 
 ## Retained cumulative authority pointers
