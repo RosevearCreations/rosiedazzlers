@@ -54,5 +54,7 @@ The exact candidate must pass:
 
 Missing or small-sample evidence remains `needs_more_evidence` or `unavailable`; source/runtime GREEN never fabricates experiment success.
 
+Retained Build 451 and Build 441 authority markers remain durable compatibility requirements of the shared workbench; Build 461 enriches them rather than replacing them.
+
 ## Next bounded release
 Build 462 — Staff & Mobile Friction Remediation Priorities begins only after Build 461 is independently GREEN on protected `main`.
