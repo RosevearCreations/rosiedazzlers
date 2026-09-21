@@ -79,20 +79,16 @@ require(blockers,[
 ],"canonical HOLD backlog")
 require(queue,[
     "BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md",
-    "**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is the active bounded release.",
-    "**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is next only after the current release",
     "Production deployment/runtime/business acceptance"
-],"release queue Build 466 authority")
+],"retained release queue Build 466 authority")
 require(handoff,[
     "BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md",
-    "**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is the active bounded release.",
     "provider_outcome_review_hold_decision_readiness_check.py"
-],"project handoff")
+],"retained project handoff")
 require(readme,[
-    "Current source direction: **Build 466 — Provider Outcome Review & HOLD Decision Readiness**.",
     "BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md",
     "provider_outcome_review_hold_decision_readiness_check.py"
-],"README")
+],"retained README")
 require(roadmap,[
     "Build 466 — Provider Outcome Review & HOLD Decision Readiness",
     "Build 467 — Recovery Evidence Validation & Drill Decision Readiness"

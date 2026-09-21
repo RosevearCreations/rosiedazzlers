@@ -3,21 +3,21 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized Production predecessor is retained through `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`.
 
-**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is the active bounded release.
+**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is the active bounded release.
 
-**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 468 — Authenticated Device Regression Closure** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`. Retained provider contracts: `BUILD436_PROVIDER_OUTCOME_DELIVERY_EVIDENCE_CLOSURE.md`, `BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md` and `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`. Retained recovery contracts: `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`, `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` and `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Provider Outcome Review & HOLD Decision Readiness contract
-- Reuse the retained provider outcome, reconciliation and availability evidence plus the existing Launch Readiness provider panel; do not create a parallel payment ledger, provider store or readiness dashboard.
-- Keep Stripe, PayPal, linked refund and definitive delivery evidence independently attributable, source-available, dated and freshness-classified.
-- `operator_hold_decision_ready` requires all four required evidence classes to be source-available, dated and current and to satisfy the retained closure candidate; it never edits the HOLD.
-- Aging or stale evidence requires review/revalidation before narrowing; missing, undated or unavailable evidence defaults to explicit retain-HOLD states.
-- The decision package always requires an operator, defaults to `retain_hold`, exposes blocker IDs, and permits evidence-backed narrowing review only when current evidence is complete.
-- No payment/refund/message send, webhook replay, provider configuration, secret, customer/business/accounting/inventory, schema/storage, canonical-HOLD, outreach or permanent-polling mutation is authorized.
+## Current Recovery Evidence Validation & Drill Decision Readiness contract
+- Reuse the retained backup closure, artifact/drill review and closure/readiness evidence plus the existing Launch Readiness recovery panel; do not create a parallel backup service, restore engine or recovery dashboard.
+- Keep backup artifact, retention/location and bounded recovery-drill evidence independently attributable, source-available, dated and freshness-classified.
+- `operator_recovery_decision_ready` requires all three required evidence classes to be source-available, dated and current and to satisfy the retained closure/readiness candidate; it never edits the HOLD.
+- Aging evidence requires review. Stale or missing drill evidence may become a bounded non-Production drill review candidate, but no drill executes automatically.
+- The decision package always requires an operator and defaults to `retain_hold`; a real Production restore is never authorized merely to manufacture proof.
+- No restore/rollback/drill execution, secret rotation, DNS/R2/provider recovery, schema/storage, customer/business/accounting/inventory, export generation, canonical-HOLD, outreach or permanent-polling mutation is authorized.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
@@ -49,6 +49,11 @@ Current contract: `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`.
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`
+- `.github/workflows/recovery-evidence-validation-drill-decision-readiness-authority.yml`
+- `scripts/recovery_evidence_validation_drill_decision_readiness_check.py`
+- `scripts/recovery_evidence_validation_drill_decision_readiness_test.mjs`
+- `functions/api/_lib/recovery-evidence-validation-drill-decision-readiness.js`
 - `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`
 - `.github/workflows/provider-outcome-review-hold-decision-readiness-authority.yml`
 - `scripts/provider_outcome_review_hold_decision_readiness_check.py`
