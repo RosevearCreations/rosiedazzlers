@@ -1,0 +1,61 @@
+name: Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-maintenance-fleet-controlled-pilot-readiness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: maintenance-fleet-controlled-pilot-activation-readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
+          node --check functions/api/_lib/maintenance-fleet-owner-approval.js
+          node --check functions/api/admin/maintenance_fleet_owner_approval.js
+          node --check assets/build439-maintenance-fleet-owner-approval.js
+          node --check scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
+      - name: Validate controlled pilot activation readiness
+        run: |
+          python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
+          node scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
+      - name: Authority summary
+        run: |
+          {
+            echo '### Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Existing owner-decision and activation-readiness system reused: PASS'
+            echo '- Current unapproved commercial terms remain owner_action: PASS'
+            echo '- Explicit owner pilot authorization and bounds remain required: PASS'
+            echo '- Live availability and checkout collision revalidation remain authoritative: PASS'
+            echo '- Automatic participant selection/customer activation/booking/discount/invoice/billing/provider/capacity mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
