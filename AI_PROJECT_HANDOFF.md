@@ -12,7 +12,7 @@ The synchronized Production predecessor is retained through `BUILD468_AUTHENTICA
 Current contract: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Retained commercial/pilot contracts: `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`, `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`, `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md` and `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 ## Current Maintenance & Fleet Controlled Pilot Activation Readiness contract
-- Reuse the retained owner-decision workbench and Build 459 commercial activation-readiness layer; do not create a replacement rulebook, approval system, booking flow or pilot engine.
+- Reuse the retained owner-decision workbench and commercial activation-readiness layer; do not create a replacement rulebook, approval system, booking flow or pilot engine.
 - Current canonical maintenance/fleet rulebooks remain `awaiting_business_approval`, so the controlled-pilot package truthfully remains `owner_action`.
 - A future `operator_review_ready` state still requires explicit owner pilot authorization and explicit participant-count/duration bounds before any real pilot may begin.
 - Participant/account selection remains manual; customer or fleet commitment is never inferred from queue activity.
