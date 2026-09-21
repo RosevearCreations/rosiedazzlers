@@ -22,7 +22,9 @@ Build 447 adds read-only `recovery_artifact_drill_evidence_review` age/freshness
 
 Build 457 adds a read-only recovery closure/readiness package. `operator_review_ready` or `bounded_drill_ready` means only that retained dated evidence is ready for explicit operator review; neither state authorizes or proves a new Production restore, rollback, secret rotation, DNS/R2/provider recovery.
 
-Build 467 adds read-only recovery evidence validation and drill decision readiness. `operator_recovery_decision_ready` allows only evidence-backed operator review; stale or missing drill evidence may become a bounded non-Production drill candidate for review. The default remains `retain_hold`, and no drill or Production restore executes automatically.\n\nBuild 468 adds authenticated device regression closure to the retained device authority. Current regression evidence is separated from historical acceptance; historical acceptance cannot override a current regression. Missing/stale coverage remains refresh-required, responsive source checks remain supporting-only, and no endpoint mutates this HOLD automatically.
+Build 467 adds read-only recovery evidence validation and drill decision readiness. `operator_recovery_decision_ready` allows only evidence-backed operator review; stale or missing drill evidence may become a bounded non-Production drill candidate for review. The default remains `retain_hold`, and no drill or Production restore executes automatically.
+
+Build 468 adds authenticated device regression closure to the retained device authority. Current regression evidence is separated from historical acceptance; historical acceptance cannot override a current regression. Missing/stale coverage remains refresh-required, responsive source checks remain supporting-only, and no endpoint mutates this HOLD automatically.
 
 Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted pricing-review evidence only. A pricing-review signal does not authorize a price/discount change and Build 451 does not close any HOLD in this backlog.
 
