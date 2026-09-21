@@ -64,6 +64,7 @@ The exact candidate must pass:
 10. independent exact resulting `main` Production deployment/runtime/business acceptance.
 
 Source promotion alone is never Production GREEN.
+The accepted candidate identity is always the exact live feature-branch SHA proven by the focused authority, Current Source Gate and Cloudflare preview evidence.
 
 ## Next bounded release
 **Build 463 — Service Economics Completeness & Add-On Cost Readiness** begins only after Build 462 is independently GREEN on protected `main`.
