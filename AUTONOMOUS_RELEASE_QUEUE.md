@@ -5,9 +5,10 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`.
+The synchronized predecessor contracts are retained through `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`
 - `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`
 - `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`
 - `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -87,24 +88,24 @@ The synchronized predecessor contracts are retained through `BUILD466_PROVIDER_O
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is the active bounded release.
+**Build 468 — Authenticated Device Regression Closure** is the active bounded release.
 
 Scope:
-- reuse the retained backup closure, artifact/drill review and closure/readiness authorities plus the existing Launch Readiness recovery panel;
-- revalidate backup artifact, retention/location and bounded-drill evidence with explicit source availability, dating and freshness;
-- expose operator decision states for current, aging, stale, missing and unavailable evidence without inferring recovery success from source/runtime GREEN;
-- permit stale or missing drill evidence to become only a bounded non-Production drill review candidate; no drill executes automatically;
-- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory and default to `retain_hold` without explicit operator action; and
-- introduce no restore/rollback/drill execution, secret/DNS/R2/provider, schema/storage, customer/business/accounting/inventory, export-generation, backlog, outreach or permanent-polling mutation.
+- reuse the retained Build 438/448/458 authenticated-device classifier, read-only endpoint and Launch Readiness surface rather than creating a replacement device system;
+- refresh current authenticated Customer, Detailer, Operations and Admin device/browser observations within the retained 30-day window;
+- distinguish current passing evidence, current regression evidence and historical/stale acceptance so historical acceptance never overrides a newer current regression;
+- keep representative phone/tablet/desktop current coverage explicit and keep responsive/accessibility source checks supporting-only;
+- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no runtime state closes that HOLD automatically; and
+- introduce no screenshot capture/polling, customer/booking, role/capability, provider/payment/refund/message, accounting/inventory, schema/storage, destructive-storage, outreach or permanent-polling mutation.
 
-Current contract: `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`. Retained recovery authorities: `BUILD437_BACKUP_RECOVERY_EVIDENCE_CLOSURE.md`, `BUILD447_RECOVERY_ARTIFACT_DRILL_EVIDENCE_REVIEW.md` and `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Retained device authorities: `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`, `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`, `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` and `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the current Recovery Evidence Validation & Drill Decision Readiness authority, retained recovery authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current Authenticated Device Regression Closure authority, retained device/workflow authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 468 — Authenticated Device Regression Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_466_475.md`; it has not run out.
 
