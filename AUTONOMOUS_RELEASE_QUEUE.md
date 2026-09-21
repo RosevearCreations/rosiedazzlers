@@ -82,7 +82,7 @@ The synchronized predecessor contracts are retained through `BUILD460_LOCAL_SEAR
 **Build 461 — Booking & Quote Experiment Readiness** is the active bounded release.
 
 Scope:
-- enrich the retained Build 451 booking/quote learning workbench with explicit owner-review hypotheses and bounded measurement plans rather than creating a second analytics or experiment system;
+- enrich the retained booking/quote learning workbench with explicit owner-review hypotheses and bounded measurement plans rather than creating a second analytics or experiment system;
 - translate supported price-adjacent booking-stage, retained quote-band and comparable accepted-value signals into clarity-focused review plans with explicit evidence thresholds and confounders;
 - keep readiness distinct from experiment success: owner review, activation, thresholds and any later business decision remain manual;
 - preserve aggregate-only evidence and state explicitly that booking drops do not prove price causation, quote declines do not prove price sensitivity, and accepted quotes do not prove completed work, discounting or scope-change cause; and
@@ -90,7 +90,7 @@ Scope:
 
 Current contract: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Booking & Quote Experiment Readiness authority, retained Build 451 / Build 441 booking-quote authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Booking & Quote Experiment Readiness authority, retained booking/quote learning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
