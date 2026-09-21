@@ -1,22 +1,24 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness**.
+Current source direction: **Build 470 — Local Search Provider Window & Attribution Closure**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Maintenance & Fleet Controlled Pilot Activation Readiness authority
-The current release extends the retained maintenance/fleet owner-decision workbench with a read-only controlled-pilot decision package.
+## Current Local Search Provider Window & Attribution Closure authority
+The current release enriches the retained Build 440/450/460 local-search workbench with a read-only provider-window closure packet.
 
 Focused source authority:
 
-`python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py`
+`python scripts/local_search_provider_window_attribution_closure_check.py`
 
-Current rulebooks still require explicit business approval, so the pilot package truthfully remains `owner_action`. A future review-ready package still cannot activate customers: explicit owner pilot authorization and explicit participant/duration bounds remain required, while `/api/availability` and `/api/checkout` remain authoritative for every real booking.
+A `closure_ready` state requires explicit provider property/location identity, current dated provider windows, an available first-party observation window, provider↔first-party date overlap and complete bounded anonymous same-session funnel evidence. It closes only the descriptive comparison window; it never proves ranking, Maps visibility, provider performance or Google-caused conversion.
+
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md` — current bounded contract.
+4. `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md` — current bounded contract.
+5. `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md` — retained predecessor contract.
 5. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — retained predecessor contract.
 5. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — retained predecessor contract.
 5. `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained cycle-renewal contract.
@@ -30,6 +32,7 @@ Current rulebooks still require explicit business approval, so the pilot package
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
 - `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`
 
@@ -134,6 +137,8 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/local_search_provider_window_attribution_closure_check.py
+node scripts/local_search_provider_window_attribution_closure_test.mjs
 python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
 node scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
 python scripts/recovery_evidence_validation_drill_decision_readiness_check.py
@@ -205,4 +210,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 470 — Local Search Provider Window & Attribution Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 471 — Booking & Quote Controlled Experiment Framework** is next only after the current release is independently GREEN on protected `main`.

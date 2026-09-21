@@ -1,4 +1,4 @@
-// Build 450/460 — authenticated GET-only Local Search Measurement & Conversion Attribution + evidence quality.
+// Build 450/460/470 — authenticated GET-only Local Search Measurement & Conversion Attribution + evidence quality/window closure.
 // Reuses the retained Build 440 provider refresh and bounded anonymous site analytics.
 
 import { onRequestGet as getProviderRefresh } from "./local_search_provider_evidence_refresh.js";
@@ -19,8 +19,10 @@ export async function onRequestGet({ request, env }) {
         ok: false,
         build: 450,
         evidence_quality_build: 460,
+        provider_window_attribution_closure_build: 470,
         authority: "local_search_measurement_conversion_attribution",
         evidence_quality_authority: "local_search_provider_attribution_evidence_quality",
+        provider_window_attribution_closure_authority: "local_search_provider_window_attribution_closure",
         error: providerRefresh?.error || "The retained local-search provider evidence authority is unavailable."
       }, refreshResponse.status || 503);
     }
@@ -119,7 +121,8 @@ function json(value, status = 200) {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
       "X-Rosie-Local-Search-Attribution": "build-450-read-only",
-      "X-Rosie-Local-Search-Evidence-Quality": "build-460-read-only"
+      "X-Rosie-Local-Search-Evidence-Quality": "build-460-read-only",
+      "X-Rosie-Local-Search-Window-Closure": "build-470-read-only"
     }
   });
 }

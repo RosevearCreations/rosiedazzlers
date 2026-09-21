@@ -3,23 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`.
+The synchronized Production predecessor is retained through `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`.
 
-**Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness** is the active bounded release.
+**Build 470 — Local Search Provider Window & Attribution Closure** is the active bounded release.
 
-**Build 470 — Local Search Provider Window & Attribution Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 471 — Booking & Quote Controlled Experiment Framework** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Retained commercial/pilot contracts: `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`, `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`, `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md` and `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`. Retained local-search contracts: `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`, `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`, `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` and `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Maintenance & Fleet Controlled Pilot Activation Readiness contract
-- Reuse the retained owner-decision workbench and commercial activation-readiness layer; do not create a replacement rulebook, approval system, booking flow or pilot engine.
-- Current canonical maintenance/fleet rulebooks remain `awaiting_business_approval`, so the controlled-pilot package truthfully remains `owner_action`.
-- A future `operator_review_ready` state still requires explicit owner pilot authorization and explicit participant-count/duration bounds before any real pilot may begin.
-- Participant/account selection remains manual; customer or fleet commitment is never inferred from queue activity.
-- `/api/availability` remains current live-capacity authority and `/api/checkout` remains final booking collision/revalidation authority for every real pilot booking.
-- Missing pilot limits or duration remain unresolved/null rather than inferred.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never closes the Maintenance / fleet business approval HOLD automatically.
-- No automatic participant selection, enrollment, outreach, booking, discount, invoice, recurring billing, provider, accounting/inventory, customer/profile, schema/storage, service-area, capacity-reservation or permanent-polling mutation is authorized.
+## Current Local Search Provider Window & Attribution Closure contract
+- Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system, endpoint or tracking identity.
+- Require explicit Search Console property / Google Business Profile location identity plus provider period start/end and observed-at evidence before closure.
+- Require current provider snapshots, an explicit available first-party observation window, provider↔first-party date overlap and complete bounded anonymous same-session funnel evidence.
+- Missing/stale provider evidence and unavailable/truncated/misaligned first-party evidence remain explicit non-closure states rather than inferred success.
+- A `closure_ready` state closes only the descriptive comparison window. It does not prove ranking, indexing, Maps visibility, provider performance or Google-caused conversion.
+- Provider metrics remain source-attributed and are never joined to sessions, customers or persisted bookings or divided by funnel conversion rates.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never fabricates provider evidence or Google outcomes.
+- No schema/provider/analytics/publishing/outreach/DNS/ad-spend/customer/booking/accounting/inventory/storage mutation or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
@@ -51,6 +51,11 @@ Current contract: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READIN
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
+- `.github/workflows/local-search-provider-window-attribution-closure-authority.yml`
+- `scripts/local_search_provider_window_attribution_closure_check.py`
+- `scripts/local_search_provider_window_attribution_closure_test.mjs`
+- `functions/api/_lib/local-search-measurement-conversion-attribution.js`
 - `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
 - `.github/workflows/maintenance-fleet-controlled-pilot-activation-readiness-authority.yml`
 - `scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py`

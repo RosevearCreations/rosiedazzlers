@@ -1,4 +1,4 @@
-// Build 450/460 — pure Local Search Measurement & Conversion Attribution + evidence-quality helper.
+// Build 450/460/470 — pure Local Search Measurement & Conversion Attribution + evidence-quality/window-closure helper.
 // Reconciles retained provider evidence with privacy-safe first-party same-session funnel evidence.
 // It never joins anonymous sessions to customer identity and never infers Google ranking/indexing outcomes.
 
@@ -37,6 +37,7 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     provider_label: clean(row.provider_label) || clean(row.provider) || "Provider",
     classification: clean(row.classification) || "provider_dependent",
     evidence_state: clean(row.evidence_state) || "unavailable",
+    property_location_label: row?.identity?.label || null,
     observed_at: row?.identity?.observed_at || null,
     period_start: row?.identity?.period_start || null,
     period_end: row?.identity?.period_end || null,
@@ -61,6 +62,13 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     first_party_window: firstPartyWindow,
     attribution
   });
+  const providerWindowAttributionClosure = buildLocalSearchProviderWindowAttributionClosure({
+    provider_rows: providerRows,
+    first_party_available: firstPartyAvailable,
+    first_party_window: firstPartyWindow,
+    attribution,
+    evidence_quality: evidenceQuality
+  });
 
   let status = "observed";
   if (!attribution.available) status = "unavailable";
@@ -82,8 +90,10 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
   return {
     build: 450,
     evidence_quality_build: 460,
+    provider_window_attribution_closure_build: 470,
     authority: "local_search_measurement_conversion_attribution",
     evidence_quality_authority: "local_search_provider_attribution_evidence_quality",
+    provider_window_attribution_closure_authority: "local_search_provider_window_attribution_closure",
     retained_provider_authority: "local_search_provider_evidence_refresh",
     generated_at: generatedAt,
     status,
@@ -99,6 +109,7 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     first_party_window: firstPartyWindow,
     conversion_attribution: attribution,
     evidence_quality: evidenceQuality,
+    provider_window_attribution_closure: providerWindowAttributionClosure,
     reconciliation: {
       interpretation: "Dated Search Console / Google Business Profile snapshots, first-party landing/referral rollups and anonymous same-session booking funnel evidence are reconciled side by side. Provider metrics are not joined to individual sessions and no causal Google outcome is inferred.",
       provider_window_overlap_is_correlation_only: true,
@@ -119,6 +130,9 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
       persisted_booking_attributed_to_anonymous_session: false,
       provider_metric_correlation_score_calculated: false,
       provider_outcome_to_funnel_causation_claimed: false,
+      provider_window_closure_is_performance_claim: false,
+      provider_window_closure_is_ranking_claim: false,
+      provider_window_closure_is_causal_conversion_claim: false,
       cross_source_identity_join_performed: false,
       customer_identity_exposed: false
     },
@@ -234,6 +248,138 @@ export function buildProviderAttributionEvidenceQuality({
       same_session_is_observed_path_only: true
     },
     interpretation: "Evidence quality describes whether dated provider snapshots and anonymous first-party funnel observations are sufficiently current and window-aligned to review side by side. It does not turn provider outcomes into session identity, a causal conversion claim or a marketing-performance score."
+  };
+}
+
+
+export function buildLocalSearchProviderWindowAttributionClosure({
+  provider_rows = [],
+  first_party_available = false,
+  first_party_window = {},
+  attribution = {},
+  evidence_quality = {}
+} = {}) {
+  const qualityRows = safeArray(evidence_quality?.providers);
+  const qualityByProvider = new Map(qualityRows.map((row) => [clean(row?.provider), row]));
+  const firstPartyWindowComplete = Boolean(first_party_window?.start && first_party_window?.end);
+  const attributionAvailable = attribution?.available === true;
+  const truncated = attribution?.rows_truncated_possible === true;
+
+  const providers = safeArray(provider_rows).map((row) => {
+    const provider = clean(row?.provider) || "unknown";
+    const identityKind = provider === "search_console" ? "property" : provider === "google_business_profile" ? "location" : "source";
+    const label = clean(row?.property_location_label) || null;
+    const providerWindowComplete = Boolean(row?.period_start && row?.period_end && row?.observed_at);
+    const identityComplete = row?.identity_explicit === true && Boolean(label) && providerWindowComplete;
+    const providerClass = clean(row?.classification) || "provider_dependent";
+    const overlap = row?.first_party_window_overlap;
+    const quality = qualityByProvider.get(provider) || {};
+
+    let closureState = "closure_ready";
+    if (providerClass === "provider_dependent" || !identityComplete) closureState = "provider_dependent";
+    else if (providerClass === "owner_action") closureState = "owner_action";
+    else if (first_party_available !== true || !attributionAvailable) closureState = "unavailable";
+    else if (truncated) closureState = "bounded_partial";
+    else if (!firstPartyWindowComplete || overlap == null) closureState = "window_unknown";
+    else if (overlap === false) closureState = "window_mismatch";
+
+    const safeNextAction = closureState === "closure_ready"
+      ? "Retain this dated provider window beside the bounded first-party referral/funnel window for descriptive review only; refresh when either observation window changes."
+      : closureState === "provider_dependent"
+        ? "Record explicit provider property/location identity plus dated measurement-window evidence before attempting closure."
+        : closureState === "owner_action"
+          ? "Refresh the stale provider snapshot before treating this provider window as current."
+          : closureState === "unavailable"
+            ? "Restore the bounded first-party referral/funnel evidence source before cross-source window closure."
+            : closureState === "bounded_partial"
+              ? "Resolve or explicitly accept the bounded analytics truncation before treating same-session observations as complete for this window."
+              : closureState === "window_mismatch"
+                ? "Refresh or select provider evidence whose dated measurement window overlaps the retained first-party observation window."
+                : "Establish explicit provider and first-party dates before comparing the windows.";
+
+    return {
+      provider,
+      provider_label: clean(row?.provider_label) || provider,
+      identity_kind: identityKind,
+      property_location_label: label,
+      identity_complete: identityComplete,
+      provider_classification: providerClass,
+      provider_evidence_state: clean(row?.evidence_state) || "unavailable",
+      provider_period_start: row?.period_start || null,
+      provider_period_end: row?.period_end || null,
+      provider_observed_at: row?.observed_at || null,
+      first_party_period_start: first_party_window?.start || null,
+      first_party_period_end: first_party_window?.end || null,
+      first_party_window_overlap: overlap === true ? "overlap" : overlap === false ? "nonoverlap" : "unknown",
+      evidence_quality_state: clean(quality?.comparison_state) || "unavailable",
+      closure_state: closureState,
+      safe_next_action: safeNextAction,
+      provider_metric_to_session_join_performed: false,
+      provider_metric_to_funnel_rate_comparison_performed: false,
+      provider_outcome_causation_claimed: false
+    };
+  });
+
+  const counts = {
+    total_providers: providers.length,
+    closure_ready: providers.filter((row) => row.closure_state === "closure_ready").length,
+    provider_dependent: providers.filter((row) => row.closure_state === "provider_dependent").length,
+    owner_action: providers.filter((row) => row.closure_state === "owner_action").length,
+    unavailable: providers.filter((row) => row.closure_state === "unavailable").length,
+    bounded_partial: providers.filter((row) => row.closure_state === "bounded_partial").length,
+    window_mismatch: providers.filter((row) => row.closure_state === "window_mismatch").length,
+    window_unknown: providers.filter((row) => row.closure_state === "window_unknown").length
+  };
+
+  let status = "closure_ready";
+  if (counts.provider_dependent > 0) status = "provider_dependent";
+  else if (counts.owner_action > 0) status = "owner_action";
+  else if (counts.unavailable > 0) status = "unavailable";
+  else if (counts.bounded_partial > 0) status = "bounded_partial";
+  else if (counts.window_mismatch > 0) status = "window_mismatch";
+  else if (counts.window_unknown > 0) status = "window_unknown";
+
+  const googleCohort = attribution?.cohorts?.google_referral || {};
+  const localGoogleCohort = attribution?.cohorts?.google_referral_local_target_landing || {};
+
+  return {
+    build: 470,
+    authority: "local_search_provider_window_attribution_closure",
+    status,
+    counts,
+    providers,
+    first_party_window: {
+      start: first_party_window?.start || null,
+      end: first_party_window?.end || null,
+      available: first_party_available === true,
+      same_session_attribution_available: attributionAvailable,
+      same_session_rows_truncated_possible: truncated
+    },
+    bounded_first_party_observations: {
+      google_referral_sessions: finiteWholeOrNull(googleCohort?.sessions),
+      google_referral_booking_start_sessions: finiteWholeOrNull(googleCohort?.booking_start_sessions),
+      google_referral_checkout_completed_sessions: finiteWholeOrNull(googleCohort?.checkout_completed_sessions),
+      google_local_landing_sessions: finiteWholeOrNull(localGoogleCohort?.sessions),
+      google_local_landing_booking_start_sessions: finiteWholeOrNull(localGoogleCohort?.booking_start_sessions),
+      google_local_landing_checkout_completed_sessions: finiteWholeOrNull(localGoogleCohort?.checkout_completed_sessions)
+    },
+    closure_rules: {
+      explicit_provider_property_or_location_required: true,
+      explicit_provider_measurement_window_required: true,
+      current_provider_snapshot_required: true,
+      explicit_first_party_window_required: true,
+      provider_first_party_window_overlap_required: true,
+      complete_bounded_same_session_evidence_required: true,
+      provider_metrics_remain_source_attributed: true,
+      provider_metric_to_session_join_performed: false,
+      provider_metric_to_funnel_rate_comparison_performed: false,
+      provider_outcome_to_funnel_causation_claimed: false,
+      provider_ranking_or_visibility_outcome_inferred: false,
+      closure_ready_is_descriptive_evidence_only: true
+    },
+    interpretation: status === "closure_ready"
+      ? "Search Console property / Google Business Profile location evidence is current, explicitly dated and window-aligned with available bounded first-party referral/funnel observations. This closes the comparison window only; it does not prove rankings, Maps visibility or that Google caused any booking."
+      : "The provider-window comparison remains explicitly open until provider identity, freshness, dated-window alignment and bounded first-party referral/funnel evidence satisfy the retained closure rules. Missing evidence is not inferred."
   };
 }
 
