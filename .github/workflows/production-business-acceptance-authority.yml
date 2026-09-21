@@ -337,6 +337,11 @@ jobs:
           python scripts/staff_support_mobile_efficiency_learning_check.py
           node scripts/staff_support_mobile_efficiency_learning_test.mjs
 
+      - name: Validate staff & mobile friction remediation priorities authority
+        run: |
+          python scripts/staff_mobile_friction_remediation_priorities_check.py
+          node scripts/staff_mobile_friction_remediation_priorities_test.mjs
+
       - name: Validate service economics, capacity & pricing review authority
         run: |
           python scripts/service_economics_capacity_pricing_review_check.py

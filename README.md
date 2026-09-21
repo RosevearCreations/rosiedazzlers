@@ -1,31 +1,34 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 461 — Booking & Quote Experiment Readiness**.
+Current source direction: **Build 462 — Staff & Mobile Friction Remediation Priorities**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current booking & quote experiment-readiness authority
-The protected Operations booking/quote learning workbench now turns supported aggregate evidence into bounded owner-review hypotheses and measurement plans while preserving the retained learning authority.
+## Current staff & mobile remediation-priority authority
+The protected Administration staff/support learning workbench now turns retained repeated staff, support and bounded Detailer mobile evidence into a manual remediation-review order without creating a second workflow or exception system.
 
 Focused source authority:
 
-`python scripts/booking_quote_experiment_readiness_check.py`
-`node scripts/booking_quote_experiment_readiness_test.mjs`
+`python scripts/staff_mobile_friction_remediation_priorities_check.py`
+`node scripts/staff_mobile_friction_remediation_priorities_test.mjs`
 
-Readiness is not experiment success. Activation, thresholds, winner selection and any later pricing, discount, booking-rule or outreach decision remain manual and separately authorized.
+Priority is review order only. Root cause, staff fault, delay, mobile friction and business impact remain unproven unless separately observed; role widening and automatic remediation/exception resolution remain locked.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
-4. `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md` — current bounded contract.
-5. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained predecessor contract.
-6. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
-7. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
-8. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
-9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+4. `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md` — current bounded contract.
+5. `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md` — retained predecessor contract.
+6. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained local-search evidence contract.
+7. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
+8. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
+9. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
+10. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
 
 - `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
 - `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`
@@ -142,6 +145,8 @@ python scripts/booking_funnel_quote_pricing_learning_check.py
 node scripts/booking_funnel_quote_pricing_learning_test.mjs
 python scripts/booking_quote_experiment_readiness_check.py
 node scripts/booking_quote_experiment_readiness_test.mjs
+python scripts/staff_mobile_friction_remediation_priorities_check.py
+node scripts/staff_mobile_friction_remediation_priorities_test.mjs
 python scripts/staff_support_mobile_efficiency_learning_check.py
 node scripts/staff_support_mobile_efficiency_learning_test.mjs
 python scripts/local_search_measurement_authority_check.py
@@ -177,4 +182,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 462 — Staff & Mobile Friction Remediation Priorities** is next only after the current release is independently GREEN on protected `main`.
+**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is next only after the current release is independently GREEN on protected `main`.

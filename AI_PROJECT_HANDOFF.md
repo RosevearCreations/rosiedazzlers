@@ -3,21 +3,20 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`.
+The synchronized Production predecessor is retained through `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`.
 
-**Build 461 — Booking & Quote Experiment Readiness** is the active bounded release.
+**Build 462 — Staff & Mobile Friction Remediation Priorities** is the active bounded release.
 
-**Build 462 — Staff & Mobile Friction Remediation Priorities** is next only after the current release is independently GREEN on protected `main`.
+**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Booking & Quote Experiment Readiness contract
-- Reuse the retained booking/quote learning endpoint and `/admin-booking-quote-retention-learning.html`; do not create a parallel experiment, analytics or pricing system.
-- Convert supported booking-stage, broad quote-band and comparable accepted-value signals into owner-review hypotheses with explicit primary metrics, bounded comparison windows, minimum evidence and confounder notes.
-- Readiness means ready for owner review only. Activation, test thresholds, winner selection and any later business decision remain manual and separately authorized.
-- Keep anonymous booking evidence aggregate-only and quote evidence identity-free; no customer/session/quote identity join is introduced.
-- A booking-stage drop does not prove price causation; a quote decline does not prove price sensitivity; an accepted quote is not completed work and accepted-vs-quoted differences do not establish discounting or scope-change cause.
-- No automatic price/discount, booking-rule, outreach, quote/booking, experiment, provider, schema/storage mutation or permanent polling.
+## Current Staff & Mobile Friction Remediation Priorities contract
+- Reuse `/admin-staff-workflow-support-learning.html` and `/api/admin/staff_support_mobile_efficiency_learning`; do not create a parallel staff/mobile/support/exception system.
+- Order repeated bounded candidates from retained urgency/severity plus occurrence count only; priority is a manual review sequence, not proof of root cause, delay, staff performance, staff fault, mobile friction or business impact.
+- Attach an explicit remediation candidate, uncertainty state and manual verification plan using the existing owning workflow, allowed role and representative device/browser.
+- Existing Admin, Senior Detailer and Detailer role ceilings plus Detailer Start/Complete evidence gates remain authoritative.
+- No automatic remediation, exception resolution, role widening, job/task action, blame inference, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
@@ -49,6 +48,10 @@ Current contract: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`. Active roadm
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
+- `.github/workflows/staff-mobile-friction-remediation-priorities-authority.yml`
+- `scripts/staff_mobile_friction_remediation_priorities_check.py`
+- `scripts/staff_mobile_friction_remediation_priorities_test.mjs`
 - `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
 - `.github/workflows/booking-quote-experiment-readiness-authority.yml`
 - `scripts/booking_quote_experiment_readiness_check.py`

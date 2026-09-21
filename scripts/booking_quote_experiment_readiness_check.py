@@ -35,8 +35,7 @@ required={
         "Build 461 · Booking &amp; Quote Experiment Readiness",
     ],
     "AUTONOMOUS_RELEASE_QUEUE.md":[
-        "**Build 461 — Booking & Quote Experiment Readiness** is the active bounded release.",
-        "**Build 462 — Staff & Mobile Friction Remediation Priorities** is next",
+        "BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md",
     ],
 }
 
