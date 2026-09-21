@@ -69,8 +69,7 @@ require(readme, [
 ], "README Build 464 authority")
 require(handoff, [
     "BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md",
-    "provider-owned billing/CPU/quota",
-    "real Production recovery",
+    "FORWARD_BUILD_ROADMAP_456_465.md",
     "Production deployment/runtime acceptance",
 ], "project handoff Build 464 authority")
 require(blockers, ["Provider", "Recovery", "Build 464"], "canonical HOLD backlog")

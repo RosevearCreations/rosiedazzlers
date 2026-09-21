@@ -1,24 +1,24 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 464 — Reliability, Cost & Resilience Operational Guardrails**.
+Current source direction: **Build 465 — Production Learning & Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current reliability, cost & resilience guardrail authority
-The protected I.T. reassessment now exposes explicit evidence-age review and operational guardrails over retained reliability/security/cost evidence without creating a second monitoring, billing, capacity or recovery system.
+## Current Production learning & roadmap renewal authority
+The current release reconciles Builds 456–464 from retained owning evidence, preserves unresolved HOLDs truthfully, and renews the bounded queue through Builds 466–475 without creating replacement systems.
 
 Focused source authority:
 
-`python scripts/reliability_cost_resilience_operational_guardrails_check.py`
-`node scripts/reliability_cost_resilience_operational_guardrails_test.mjs`
+`python scripts/production_learning_roadmap_renewal_check.py`
 
-Evidence older than 30 days requires revalidation before it is treated as current. Cloudflare billing/CPU/quota/cost, scaling need and real Production recovery remain unavailable unless independently evidenced, and no automatic runtime or provider mutation follows.
+Provider/owner/device/recovery evidence is never upgraded from source/runtime GREEN alone. The renewed roadmap remains read-only governance and authorizes no automatic business, provider, pricing, recovery or storage mutation.
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
-4. `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md` — current bounded contract.
-5. `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md` — retained predecessor contract.
+3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
+4. `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
+5. `PRODUCTION_LEARNING_456_464.md` — current cycle reconciliation.
+6. `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md` — retained predecessor contract.
 6. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained local-search evidence contract.
 7. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
 8. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
@@ -27,6 +27,9 @@ Evidence older than 30 days requires revalidation before it is treated as curren
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_456_464.md`
+- `FORWARD_BUILD_ROADMAP_466_475.md`
 - `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`
 - `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`
 - `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
@@ -187,4 +190,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is next only after the current release is independently GREEN on protected `main`.

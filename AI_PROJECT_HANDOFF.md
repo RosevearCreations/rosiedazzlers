@@ -3,21 +3,20 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
+The synchronized Production predecessor is retained through `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`.
 
-**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is the active bounded release.
+**Build 465 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 465 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 466 — Provider Outcome Review & HOLD Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current reconciliation: `PRODUCTION_LEARNING_456_464.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Reliability, Cost & Resilience Operational Guardrails contract
-- Reuse `/admin-reliability-reassessment.html`, `/api/admin/reliability_security_cost_reassessment` and retained reliability/security/cost authorities; do not create a parallel I.T., billing, capacity or recovery system.
-- Classify attributable retained evidence as current <=7 days, aging 8–30 days, stale >30 days or undated; stale evidence requires revalidation before being treated as current.
-- Keep provider-owned billing/CPU/quota and dollar cost external unless an authorized provider source supplies them; first-party traffic and diagnostic duration remain operational evidence only.
-- Operational pressure may trigger bounded operator review but never establishes scaling need or future capacity.
-- Recovery readiness, artifact evidence and drill metadata remain resilience inputs only; source/runtime GREEN never proves real Production recovery, secret rotation, DNS/R2 recovery or provider recovery.
-- No automatic scaling, retry expansion, cache-policy mutation, secret rotation, restore, DNS/R2/provider mutation, schema/storage, business/accounting/inventory mutation, outreach or permanent polling.
+## Current Production Learning & Roadmap Renewal contract
+- Reconcile Builds 456–464 from retained owning evidence without fabricating closure from source/runtime GREEN.
+- Classify continuing concerns as retained, closed, owner_action, provider_dependent or unavailable; only dated attributable owning evidence can support closure.
+- Keep provider outcomes, local-search provider evidence, recovery evidence, authenticated real-device evidence, maintenance/fleet approval and unavailable sources truthful in the canonical HOLD backlog until their own evidence supports narrowing.
+- Renew the future queue through `FORWARD_BUILD_ROADMAP_466_475.md`, deepening existing evidence and controlled-decision workflows rather than creating replacement systems.
+- No schema, provider, customer/booking, pricing/discount, staff-role, accounting/inventory, restore/DNS/R2, outreach or permanent-polling mutation is authorized.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 ## Retained Local Search Provider & Attribution Evidence Quality contract
 - Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
@@ -48,6 +47,11 @@ Current contract: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.m
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_456_464.md`
+- `FORWARD_BUILD_ROADMAP_466_475.md`
+- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`
 - `.github/workflows/reliability-cost-resilience-operational-guardrails-authority.yml`
 - `scripts/reliability_cost_resilience_operational_guardrails_check.py`
