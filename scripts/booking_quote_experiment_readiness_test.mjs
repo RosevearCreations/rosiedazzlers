@@ -33,7 +33,7 @@ const byKey=Object.fromEntries(result.experiment_readiness.hypotheses.map(r=>[r.
 assert.equal(byKey.booking_stage_clarity.readiness,"owner_review_ready");
 assert.match(byKey.booking_stage_clarity.measurement_plan.allowed_change,/no price, discount, availability or booking-rule change/i);
 assert.equal(byKey.quote_band_clarity.readiness,"owner_review_ready");
-assert.match(byKey.quote_band_clarity.evidence_basis,/$250–$399/);
+assert.match(byKey.quote_band_clarity.evidence_basis,/\$250–\$399/);
 assert.equal(byKey.accepted_work_scope_clarity.readiness,"owner_review_ready");
 assert.match(byKey.accepted_work_scope_clarity.evidence_basis,/accepted quote row/);
 
