@@ -6,12 +6,12 @@ export const BUILD451_QUOTE_VALUE_BANDS = Object.freeze([
   { key:"600_plus", label:"$600+", min_cents:60000, max_cents:null }
 ]);
 export function buildBookingFunnelQuotePricingLearning({funnel={},quote_rows=[],source_status={},generated_at=null}={}){
-  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes);
+  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes), experiment_readiness=buildExperimentReadiness(booking,quotes);
   const values=Object.values(source_status||{}), total=values.length, available=values.filter(x=>x?.available===true).length, restricted=values.filter(x=>x?.restricted===true).length;
   const evidence_status=total&&available===total?(booking.evidence_possibly_truncated||quotes.possibly_truncated?"partial":"observed"):available?"partial":restricted?"restricted":"unavailable";
   return {
     build:451, authority:"booking_funnel_quote_pricing_learning", generated_at:generated_at||new Date().toISOString(),
-    evidence_status, booking, quotes, learning_signals, source_status,
+    evidence_status, booking, quotes, learning_signals, experiment_readiness, source_status, release_enrichment_build:461,
     truth_boundary:{stage_drop_proves_price_friction:false,quote_decline_proves_price_sensitivity:false,accepted_value_delta_proves_discounting:false,accepted_quote_is_completed_work:false,unresolved_quote_proves_customer_rejection:false,causal_pricing_claimed:false},
     boundaries:{read_only_learning:true,manual_refresh_only:true,first_party_aggregate_only:true,anonymous_session_to_customer_join:false,customer_identity_exposed:false,raw_quote_identifier_exposed:false,automatic_price_change_allowed:false,automatic_discount_allowed:false,automatic_outreach_allowed:false,automatic_quote_acceptance_allowed:false,automatic_booking_creation_allowed:false,payment_or_provider_mutation_allowed:false,schema_mutation_allowed:false,permanent_polling_allowed:false}
   };
@@ -52,6 +52,94 @@ function deriveSignals(booking,quotes){
   const d=quotes.accepted_value_delta;
   out.push(d.comparable_accepted_quotes>0?signal("accepted_value_delta",quotes.state,d.comparable_accepted_quotes+" accepted quote row(s) have comparable quoted and accepted values; "+d.accepted_below_quoted_count+" finished below quoted, "+d.accepted_equal_quoted_count+" matched, and "+d.accepted_above_quoted_count+" finished above quoted.","Review aggregate accepted-value deltas only. The source does not establish whether any difference was a discount, scope change, correction or other cause."):signal("accepted_value_delta","unavailable","No accepted quote row has both a positive quoted and accepted value in the bounded snapshot.","Do not infer discounting, scope change or accepted-work pricing from missing comparable values."));
   return out;
+}
+function buildExperimentReadiness(booking,quotes){
+  const plans=[bookingStagePlan(booking),quoteBandPlan(quotes),acceptedWorkPlan(quotes)];
+  const ready=plans.filter(r=>r.readiness==="owner_review_ready").length, supported=plans.filter(r=>r.readiness!=="unavailable").length;
+  return {
+    build:461,
+    authority:"booking_quote_experiment_readiness",
+    state:ready===plans.length?"owner_review_ready":supported?"partial":"needs_evidence",
+    owner_review_ready_count:ready,
+    hypothesis_count:plans.length,
+    hypotheses:plans,
+    boundaries:{
+      existing_workbench_only:true,
+      owner_decision_required:true,
+      manual_activation_only:true,
+      automatic_experiment_activation_allowed:false,
+      automatic_winner_selection_allowed:false,
+      pricing_mutation_allowed:false,
+      discount_mutation_allowed:false,
+      booking_rule_mutation_allowed:false,
+      outreach_allowed:false,
+      customer_identity_join_allowed:false,
+      provider_mutation_allowed:false,
+      schema_mutation_allowed:false,
+      permanent_polling_allowed:false
+    }
+  };
+}
+function bookingStagePlan(booking){
+  const drop=booking?.largest_price_adjacent_stage_drop, starts=whole(booking?.funnel_start_sessions), has=Boolean(drop)&&booking?.state!=="unavailable";
+  const ready=has&&starts>=10;
+  const stage=drop?.stage||"price-adjacent booking stage";
+  return experimentPlan({
+    key:"booking_stage_clarity",
+    area:"booking_stage",
+    readiness:has?(ready?"owner_review_ready":"needs_more_evidence"):"unavailable",
+    hypothesis:has?("Clarifying the "+stage+" step may reduce the observed transition loss without changing price or booking rules."):"A booking-stage clarity hypothesis is not supported until a positive price-adjacent stage drop is observed.",
+    evidence_basis:has?(stage+" shows "+whole(drop.sessions_lost)+" observed lost session(s) in the retained anonymous funnel; price causation is not established."):"No positive price-adjacent booking-stage drop is established in the retained bounded snapshot.",
+    primary_metric:"Existing anonymous stage continuation / drop counts for the same transition.",
+    minimum_evidence:"Use like-for-like bounded windows with at least 10 booking starts in each comparison window before owner review.",
+    allowed_change:"Owner-approved copy, explanation or layout clarity only; no price, discount, availability or booking-rule change."
+  });
+}
+function quoteBandPlan(quotes){
+  const rows=Array.isArray(quotes?.value_bands)?quotes.value_bands.filter(r=>r?.review_cohort_sufficient):[];
+  const band=rows.slice().sort((a,b)=>Number(b?.declined_of_sent_pct||0)-Number(a?.declined_of_sent_pct||0))[0]||null;
+  const has=Boolean(band);
+  return experimentPlan({
+    key:"quote_band_clarity",
+    area:"quote_band",
+    readiness:has?"owner_review_ready":"needs_more_evidence",
+    hypothesis:has?("Clarifying quote presentation for the "+band.label+" cohort may improve resolution without changing the quoted price."):"A quote-band clarity hypothesis needs a retained band with at least three sent quotes.",
+    evidence_basis:has?(band.label+" has "+whole(band.sent_quotes)+" sent, "+whole(band.accepted_quotes)+" accepted, "+whole(band.declined_quotes)+" declined and "+whole(band.unresolved_quotes)+" unresolved row(s); customer motive and price sensitivity are not established."):"No quote-value band meets the retained minimum review-cohort threshold.",
+    primary_metric:"Accepted / declined / unresolved mix within the same retained broad quote-value band.",
+    minimum_evidence:"Retain at least three sent quotes per reviewed band and compare like-for-like bounded windows; treat small samples as directional only.",
+    allowed_change:"Owner-approved quote wording or presentation clarity only; no price, discount, automatic follow-up or outreach."
+  });
+}
+function acceptedWorkPlan(quotes){
+  const d=quotes?.accepted_value_delta||{}, n=whole(d.comparable_accepted_quotes), has=n>0, ready=n>=3;
+  return experimentPlan({
+    key:"accepted_work_scope_clarity",
+    area:"accepted_work",
+    readiness:has?(ready?"owner_review_ready":"needs_more_evidence"):"unavailable",
+    hypothesis:has?"Making quoted-versus-accepted scope/value clearer at acceptance may reduce future aggregate value mismatches; current differences do not establish why they occurred.":"An accepted-work clarity hypothesis is unavailable until accepted quote rows have positive quoted and accepted values.",
+    evidence_basis:has?(n+" accepted quote row(s) are comparable: "+whole(d.accepted_below_quoted_count)+" below quoted, "+whole(d.accepted_equal_quoted_count)+" equal and "+whole(d.accepted_above_quoted_count)+" above; accepted quote is not proof of completed work."):"No accepted quote row has both positive quoted and accepted values in the bounded snapshot.",
+    primary_metric:"Counts of accepted rows below / equal to / above quoted value, using the retained aggregate source only.",
+    minimum_evidence:"Use at least three comparable accepted rows before owner review; do not infer discounting, scope change, correction or completed work.",
+    allowed_change:"Owner-approved scope/value explanation clarity only; no automatic price, discount, quote acceptance, booking or completion mutation."
+  });
+}
+function experimentPlan({key,area,readiness,hypothesis,evidence_basis,primary_metric,minimum_evidence,allowed_change}){
+  return {
+    key,area,readiness,hypothesis,evidence_basis,
+    measurement_plan:{
+      mode:"bounded_owner_review",
+      primary_metric,
+      baseline:"Use the existing retained aggregate source and a matching bounded comparison window.",
+      minimum_evidence,
+      allowed_change,
+      decision_rule:"Owner defines the test change and review threshold before activation; this release does not select a winner or apply a business change.",
+      confounders:"Record material service-mix, condition, seasonality, traffic-source or capacity differences where known; do not convert correlation into causation."
+    },
+    owner_decision_required:true,
+    automatic_activation_allowed:false,
+    automatic_winner_selection_allowed:false,
+    business_mutation_allowed:false
+  };
 }
 function signal(area,evidence_state,finding,bounded_owner_review){return{area,evidence_state:evidence_state||"unavailable",finding,bounded_owner_review,causal_price_sensitivity_claimed:false,pricing_change_authorized:false,automatic_action_authorized:false};}
 function drop(r){return r?{key:r.key,stage:r.label,sessions_lost:whole(r.drop_from_previous),drop_pct:num(r.drop_from_previous_pct)}:null;}
