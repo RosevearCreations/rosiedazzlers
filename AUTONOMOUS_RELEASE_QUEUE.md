@@ -7,6 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
 Retained predecessor title: Build 463 — Service Economics Completeness & Add-On Cost Readiness.
+Earlier retained predecessor title: Build 462 — Staff & Mobile Friction Remediation Priorities.
 
 ## Retained cumulative authority pointers
 - `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`
