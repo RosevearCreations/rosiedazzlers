@@ -1,4 +1,4 @@
-// Build 450/460 — manual read-only local-search measurement, conversion attribution & evidence-quality UI.
+// Build 450/460/470 — manual read-only local-search measurement, conversion attribution, evidence-quality & window-closure UI.
 const byId450 = (id) => document.getElementById(id);
 const esc450 = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -34,9 +34,11 @@ async function refresh450() {
     renderLandingPages450(data);
     renderProvider450(data);
     renderEvidenceQuality460(data);
+    renderProviderWindowClosure470(data);
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
-    setStatus450("Read-only attribution refreshed " + stamp + ". Attribution: " + String(data.status || "unavailable").replaceAll("_", " ") + " · evidence quality: " + qualityState + ". No provider or analytics write was performed.", data.status === "observed" && qualityState === "comparable observed" ? "ok" : "warn");
+    const closureState = String(data?.provider_window_attribution_closure?.status || "unavailable").replaceAll("_", " ");
+    setStatus450("Read-only attribution refreshed " + stamp + ". Attribution: " + String(data.status || "unavailable").replaceAll("_", " ") + " · evidence quality: " + qualityState + " · provider-window closure: " + closureState + ". No provider or analytics write was performed.", data.status === "observed" && qualityState === "comparable observed" && closureState === "closure ready" ? "ok" : "warn");
   } catch (error) {
     setStatus450(error?.message || "Could not refresh local-search conversion attribution.", "bad");
   } finally {
@@ -116,6 +118,32 @@ function renderEvidenceQuality460(data) {
     + '<span>' + esc450(item.comparison_state || "unavailable") + '</span></div>'
   ).join("");
   host.innerHTML = summary + (providerRows || '<div class="summary-item muted">No provider evidence-quality rows are available.</div>');
+}
+
+
+function renderProviderWindowClosure470(data) {
+  const host = byId450("localProviderWindowClosure470");
+  if (!host) return;
+  const closure = data?.provider_window_attribution_closure || {};
+  const rows = Array.isArray(closure.providers) ? closure.providers : [];
+  const first = closure.first_party_window || {};
+  const obs = closure.bounded_first_party_observations || {};
+  const summary = '<div class="summary-item"><div><strong>Build 470 closure state</strong>'
+    + '<div class="muted">Closure-ready means descriptive window alignment only; provider identity, provider window, first-party window and bounded same-session availability must all be explicit.</div></div>'
+    + '<span>' + esc450(closure.status || "unavailable") + '</span></div>'
+    + '<div class="summary-item"><div><strong>First-party observation window</strong>'
+    + '<div class="muted">' + esc450(first.start || "—") + ' → ' + esc450(first.end || "—")
+    + ' · same-session ' + esc450(first.same_session_attribution_available ? (first.same_session_rows_truncated_possible ? "bounded partial" : "available") : "unavailable")
+    + '</div></div><span>' + esc450(obs.google_referral_sessions ?? 0) + ' Google-referral sessions</span></div>';
+  const providerRows = rows.map((item) =>
+    '<div class="summary-item"><div><strong>' + esc450(item.provider_label || item.provider) + '</strong>'
+    + '<div class="muted">' + esc450(item.identity_kind || "source") + ': ' + esc450(item.property_location_label || "not recorded")
+    + ' · provider window ' + esc450(item.provider_period_start || "—") + ' → ' + esc450(item.provider_period_end || "—")
+    + ' · first-party overlap ' + esc450(item.first_party_window_overlap || "unknown") + '</div>'
+    + '<div class="muted">' + esc450(item.safe_next_action || "") + '</div></div>'
+    + '<span>' + esc450(item.closure_state || "unavailable") + '</span></div>'
+  ).join("");
+  host.innerHTML = summary + (providerRows || '<div class="summary-item muted">No provider-window closure rows are available.</div>');
 }
 
 function renderProvider450(data) {
