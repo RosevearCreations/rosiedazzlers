@@ -1,4 +1,4 @@
-// Build 452 — manual, aggregate-only staff/support/mobile efficiency learning UI.
+// Build 462 — manual remediation-priority enrichment over retained Build 452 staff/support/mobile learning UI.
 (function attachBuild452Learning(globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -21,6 +21,7 @@
       if (!response.ok || !data) throw new Error(data?.error || "Efficiency learning evidence could not be loaded.");
       renderSummary(data);
       renderMobile(data.mobile_field_workflow || {});
+      renderRemediation(data.remediation_priorities || []);
       renderCandidates(data.learning_candidates || []);
       renderSources(data.source_status || {});
       setStatus(
@@ -30,6 +31,7 @@
     } catch (error) {
       $("summaryGrid").innerHTML = '<div class="learning-empty">No bounded learning snapshot is available.</div>';
       $("mobileGrid").innerHTML = '<div class="learning-empty">No Detailer workspace cohort evidence is available.</div>';
+      $("remediationPriorityList").innerHTML = '<div class="learning-empty">No bounded remediation priority is available.</div>';
       $("candidateList").innerHTML = '<div class="learning-empty">No supported review candidate is available.</div>';
       $("sourceList").innerHTML = '<div class="learning-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Efficiency learning evidence could not be loaded.", "bad");
@@ -74,6 +76,25 @@
 
   function stat(name, value) {
     return '<article class="learning-stat"><span class="mini">' + esc(name) + '</span><strong>' + esc(value) + '</strong><span class="mini">aggregate only</span></article>';
+  }
+
+  function renderRemediation(rows) {
+    const mount = $("remediationPriorityList");
+    if (!rows.length) {
+      mount.innerHTML = '<div class="learning-empty">No repeated bounded evidence supports a remediation priority. This does not prove the workflow is friction-free.</div>';
+      return;
+    }
+    mount.innerHTML = rows.map((row) =>
+      '<article class="learning-candidate priority-' + esc(row.review_priority || "normal") + '">' +
+        '<div class="learning-candidate-head"><strong>#' + esc(row.rank ?? "—") + ' · ' + esc(label(row.area)) + '</strong><span class="pill">' + esc(row.review_priority || "normal") + '</span></div>' +
+        '<p>' + esc(row.remediation_candidate || "") + '</p>' +
+        '<p class="mini"><strong>Evidence:</strong> ' + esc(row.occurrence_count ?? 0) + ' bounded occurrence(s) · ' + esc(row.evidence_state || "unavailable") + '</p>' +
+        '<p class="mini"><strong>Priority basis:</strong> ' + esc(row.priority_basis || "") + '</p>' +
+        '<p class="mini"><strong>Manual verification:</strong> ' + esc(row.manual_verification || "") + '</p>' +
+        '<p class="mini"><strong>Uncertainty:</strong> ' + esc(label(row.uncertainty || "bounded_current_snapshot_only")) + '</p>' +
+        '<p class="mini">Root cause proven: NO · Staff fault inferred: NO · Role change authorized: NO · Automatic remediation/exception resolution: NO</p>' +
+      '</article>'
+    ).join("");
   }
 
   function renderCandidates(rows) {
