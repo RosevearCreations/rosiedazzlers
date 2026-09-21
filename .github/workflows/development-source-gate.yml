@@ -422,6 +422,11 @@ jobs:
           python scripts/reliability_security_cost_resilience_reassessment_check.py
           node scripts/service_economics_capacity_pricing_review_test.mjs
 
+      - name: Validate service economics completeness & add-on cost readiness authority
+        run: |
+          python scripts/service_economics_completeness_addon_cost_readiness_check.py
+          node scripts/service_economics_completeness_addon_cost_readiness_test.mjs
+
       - name: Validate recovery export operational proof authority
         run: |
           python scripts/recovery_export_operational_proof_check.py
