@@ -1,22 +1,23 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 466 — Provider Outcome Review & HOLD Decision Readiness**.
+Current source direction: **Build 467 — Recovery Evidence Validation & Drill Decision Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Provider outcome review & HOLD decision readiness authority
-The current release converges retained Stripe, PayPal, refund, definitive-delivery, freshness and source-availability evidence into a read-only operator HOLD-decision package.
+## Current Recovery Evidence Validation & Drill Decision Readiness authority
+The current release revalidates retained backup artifact, retention/location and bounded-drill evidence into a read-only, freshness-aware operator decision package.
 
 Focused source authority:
 
-`python scripts/provider_outcome_review_hold_decision_readiness_check.py`
+`python scripts/recovery_evidence_validation_drill_decision_readiness_check.py`
 
-The default without explicit operator action is always `retain_hold`. Evidence-backed narrowing review becomes eligible only when all four required provider evidence classes are source-available, dated and current. No provider activity or canonical-HOLD mutation is performed automatically.
+The default without explicit operator action is always `retain_hold`. Stale or missing drill evidence may become a bounded non-Production drill review candidate, but no drill or Production restore is executed automatically.
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — current bounded contract.
+4. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — current bounded contract.
+5. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — retained predecessor contract.
 5. `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained cycle-renewal contract.
 6. `PRODUCTION_LEARNING_456_464.md` — retained cycle reconciliation.
 7. `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md` — retained predecessor contract.
@@ -27,6 +28,8 @@ The default without explicit operator action is always `retain_hold`. Evidence-b
 10. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`
 
 - `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`
 - `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -127,6 +130,8 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/recovery_evidence_validation_drill_decision_readiness_check.py
+node scripts/recovery_evidence_validation_drill_decision_readiness_test.mjs
 python scripts/reliability_cost_resilience_operational_guardrails_check.py
 node scripts/reliability_cost_resilience_operational_guardrails_test.mjs
 python scripts/service_economics_completeness_addon_cost_readiness_check.py
@@ -194,4 +199,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 468 — Authenticated Device Regression Closure** is next only after the current release is independently GREEN on protected `main`.
