@@ -1,25 +1,25 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 462 — Staff & Mobile Friction Remediation Priorities**.
+Current source direction: **Build 463 — Service Economics Completeness & Add-On Cost Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current staff & mobile remediation-priority authority
-The protected Administration staff/support learning workbench now turns retained repeated staff, support and bounded Detailer mobile evidence into a manual remediation-review order without creating a second workflow or exception system.
+## Current service economics completeness authority
+The protected Administration economics workbench now exposes bounded completeness for recorded revenue, material, labour, cash/refund and COGS evidence and keeps add-on allocation unavailable unless explicit recorded add-on linkages exist.
 
 Focused source authority:
 
-`python scripts/staff_mobile_friction_remediation_priorities_check.py`
-`node scripts/staff_mobile_friction_remediation_priorities_test.mjs`
+`python scripts/service_economics_completeness_addon_cost_readiness_check.py`
+`node scripts/service_economics_completeness_addon_cost_readiness_test.mjs`
 
-Priority is review order only. Root cause, staff fault, delay, mobile friction and business impact remain unproven unless separately observed; role widening and automatic remediation/exception resolution remain locked.
+Service/package margin review fails closed when required evidence is incomplete. Add-on costs are never divided by equal, price-weighted, percentage or booking-level assumptions, and no price or discount changes automatically.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
-4. `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md` — current bounded contract.
-5. `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md` — retained predecessor contract.
+4. `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md` — current bounded contract.
+5. `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md` — retained predecessor contract.
 6. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained local-search evidence contract.
 7. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
 8. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
@@ -28,6 +28,7 @@ Priority is review order only. Root cause, staff fault, delay, mobile friction a
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`
 - `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
 
 - `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
@@ -121,6 +122,8 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/service_economics_completeness_addon_cost_readiness_check.py
+node scripts/service_economics_completeness_addon_cost_readiness_test.mjs
 python scripts/reliability_security_cost_resilience_reassessment_check.py
 python scripts/service_economics_capacity_pricing_review_check.py
 node scripts/service_economics_capacity_pricing_review_test.mjs
