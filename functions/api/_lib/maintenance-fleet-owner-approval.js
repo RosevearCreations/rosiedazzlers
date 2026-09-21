@@ -67,10 +67,23 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
   const ownerAction=all.filter(x=>x.status==="owner_action").length;
   const sourceApproved=all.filter(x=>x.status==="source_approved").length;
   const closureCandidate=all.length>0&&sourceApproved===all.length;
+  const activationTerms=[
+    activationTerm(maintenanceDecisions,"eligibility","maintenance_eligibility","Maintenance eligibility"),
+    activationTerm(maintenanceDecisions,"cadence","maintenance_cadence","Maintenance cadence"),
+    activationTerm(maintenanceDecisions,"price","maintenance_price","Maintenance price"),
+    activationTerm(maintenanceDecisions,"priority","maintenance_capacity","Maintenance capacity policy"),
+    activationTerm(fleetDecisions,"travel_limits","fleet_travel","Fleet travel limits"),
+    activationTerm(fleetDecisions,"volume_pricing","fleet_discount","Fleet volume pricing / discount"),
+    activationTerm(fleetDecisions,"invoicing","fleet_invoicing","Fleet invoicing / credit terms")
+  ];
+  const activationApproved=activationTerms.filter(x=>x.status==="source_approved").length;
+  const activationReady=closureCandidate&&activationApproved===activationTerms.length;
 
   return {
     build:439,
     current_build:449,
+    activation_readiness_build:459,
+    activation_authority:"fleet_maintenance_commercial_activation_readiness",
     retained_authority:"maintenance_fleet_owner_approval_convergence",
     authority:"fleet_maintenance_commercial_decision_closure",
     mode:"maintenance_fleet_owner_approval_convergence",
@@ -102,6 +115,28 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
       owner_review_required:true,
       automatic_approval_performed:false,
       approval_timestamp_inferred:false
+    },
+    activation_readiness:{
+      build:459,
+      authority:"fleet_maintenance_commercial_activation_readiness",
+      status:activationReady?"operator_review_ready":"owner_action",
+      readiness_candidate:activationReady,
+      source_approved_term_count:activationApproved,
+      required_term_count:activationTerms.length,
+      owner_action_term_count:activationTerms.length-activationApproved,
+      all_commercial_domains_source_approved:closureCandidate,
+      owner_review_required:true,
+      activation_authorization_separate:true,
+      activation_allowed:false,
+      automatic_activation_performed:false,
+      live_capacity_inferred:false,
+      capacity_reservation_performed:false,
+      terms:activationTerms,
+      source_approved_term_ids:activationTerms.filter(x=>x.status==="source_approved").map(x=>x.id),
+      owner_action_term_ids:activationTerms.filter(x=>x.status!=="source_approved").map(x=>x.id),
+      next_step:activationReady
+        ? "Canonical commercial source is complete enough for bounded operator activation review. No activation has been authorized or performed."
+        : "Resolve the remaining owner commercial decisions in canonical source before activation readiness can be reviewed."
     },
     maintenance:{
       source_status:maintenanceStatus,
@@ -151,6 +186,22 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
   };
 }
 
+function activationTerm(decisions,decisionId,id,label) {
+  const row=(Array.isArray(decisions)?decisions:[]).find(x=>x?.id===decisionId)||{};
+  const approved=row.status==="source_approved";
+  return {
+    id,label,group:row.group||"unavailable",decision_id:decisionId,
+    status:approved?"source_approved":"owner_action",
+    owner_approved:approved,
+    source_authority:row.source_authority||null,
+    source_status:row.source_status||"unavailable",
+    owner_decision_path:row.owner_decision_path||null,
+    required_fields:Array.isArray(row.required_fields)?[...row.required_fields]:[],
+    evidence:objectOrEmpty(row.evidence),
+    activation_allowed:false,
+    automatic_activation_performed:false
+  };
+}
 function decision({id,group,label,question,source_status,source_authority,evidence}) {
   const approved=source_status==="rules_ready";
   const requiredFields=group==="maintenance"

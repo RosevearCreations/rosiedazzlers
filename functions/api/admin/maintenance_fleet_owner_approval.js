@@ -1,4 +1,4 @@
-// Build 439/449 — admin-only, GET-only maintenance/fleet owner approval + decision closure.
+// Build 439/449/459 — admin-only, GET-only owner approval, decision closure + activation readiness.
 import { requireStaffAccess } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { buildMaintenanceFleetOwnerApprovalConvergence } from "../_lib/maintenance-fleet-owner-approval.js";
@@ -27,7 +27,9 @@ export async function onRequestGet({request,env}) {
     ok:activation.restricted!==true&&fleet.restricted!==true,
     authority:"maintenance_fleet_owner_approval_convergence",
     current_build:449,
+    activation_readiness_build:459,
     refresh_authority:"fleet_maintenance_commercial_decision_closure",
+    activation_authority:"fleet_maintenance_commercial_activation_readiness",
     generated_at:generatedAt,
     source_status:{
       commercial_activation:sourceState(activation),
