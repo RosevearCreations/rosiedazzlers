@@ -1,30 +1,33 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 460 — Local Search Provider & Attribution Evidence Quality**.
+Current source direction: **Build 461 — Booking & Quote Experiment Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current local-search provider & attribution evidence-quality authority
-This release enriches the retained local-search provider/conversion workbench with explicit evidence-comparability state rather than creating a replacement analytics or provider system.
+## Current booking & quote experiment-readiness authority
+The protected Operations booking/quote learning workbench now turns supported aggregate evidence into bounded owner-review hypotheses and measurement plans while preserving the retained learning authority.
 
 Focused source authority:
 
-`python scripts/local_search_provider_attribution_evidence_quality_check.py`
+`python scripts/booking_quote_experiment_readiness_check.py`
+`node scripts/booking_quote_experiment_readiness_test.mjs`
 
-Provider identity/freshness, dated window alignment, first-party availability and bounded/truncated same-session coverage are explicit. Comparability remains descriptive only: provider metrics are not joined to sessions, divided by funnel rates or converted into correlation/causation scores.
+Readiness is not experiment success. Activation, thresholds, winner selection and any later pricing, discount, booking-rule or outreach decision remain manual and separately authorized.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_456_465.md` — active evidence-driven sequence.
-4. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — current bounded contract.
-5. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained predecessor contract.
-6. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
-7. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
-8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+4. `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md` — current bounded contract.
+5. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained predecessor contract.
+6. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
+7. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
+8. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
+9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
 - `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`
 - `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`
 - `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
@@ -137,6 +140,8 @@ python scripts/local_search_provider_attribution_evidence_quality_check.py
 node scripts/local_search_provider_attribution_evidence_quality_test.mjs
 python scripts/booking_funnel_quote_pricing_learning_check.py
 node scripts/booking_funnel_quote_pricing_learning_test.mjs
+python scripts/booking_quote_experiment_readiness_check.py
+node scripts/booking_quote_experiment_readiness_test.mjs
 python scripts/staff_support_mobile_efficiency_learning_check.py
 node scripts/staff_support_mobile_efficiency_learning_test.mjs
 python scripts/local_search_measurement_authority_check.py
@@ -172,4 +177,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 461 — Booking & Quote Experiment Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 462 — Staff & Mobile Friction Remediation Priorities** is next only after the current release is independently GREEN on protected `main`.
