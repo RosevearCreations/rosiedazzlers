@@ -19,7 +19,7 @@ export async function onRequestGet({request,env}){
  return json({ok:response.ok&&Boolean(payload?.evidence),build:447,authority:"recovery_artifact_drill_evidence_review",generated_at:generatedAt,
   retained_authority:payload?.authority||"backup_recovery_evidence_closure",
   current_readiness_authority:"recovery_evidence_closure_drill_readiness",
-  current_validation_build:467,
+  current_validation_build: 467,
   current_validation_authority:"recovery_evidence_validation_drill_decision_readiness",
   review,closure_readiness:closureReadiness,
   validation_drill_decision_readiness:validationDrillDecisionReadiness},response.ok&&payload?.evidence?200:503);
