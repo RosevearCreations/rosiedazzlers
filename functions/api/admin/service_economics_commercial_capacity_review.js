@@ -1,10 +1,13 @@
-// Build 453 — bounded read-only Service Economics, Capacity & Pricing Review endpoint.
+// Build 463 — bounded read-only Service Economics Completeness & Add-On Cost Readiness endpoint.
+// Retained Build 453 builder authority: buildServiceEconomicsCapacityPricingReview.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildServiceEconomicsCapacityPricingReview } from "../_lib/service-economics-commercial-capacity-review.js";
+import { buildServiceEconomicsCompletenessAddOnCostReadiness } from "../_lib/service-economics-completeness-addon-cost-readiness.js";
+
 const SOURCE_TIMEOUT_MS=12000;
+
 export async function onRequestGet({request,env}){
   const access=await requireStaffAccess({request,env,body:{},capability:"manage_staff",allowLegacyAdminFallback:false});
   if(!access.ok)return access.response;
@@ -15,9 +18,24 @@ export async function onRequestGet({request,env}){
     collect("fleet_commercial",()=>getFleetLearning({request:request.clone(),env})),
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
-  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Service Economics, Capacity & Pricing Review requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildServiceEconomicsCapacityPricingReview({economics:economicsSource.data?.operational_profitability||{},fleet:fleetSource.data?.learning||{},pricing:pricingSource.data||{},source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource),generated_at:new Date().toISOString()});
-  return json({ok:review.evidence_status!=="unavailable",authority:"service_economics_capacity_pricing_review",month,year,pricing_window_days:days,...review});
+  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Service Economics Completeness & Add-On Cost Readiness requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
+  const review=buildServiceEconomicsCompletenessAddOnCostReadiness({
+    economics:economicsSource.data?.operational_profitability||{},
+    fleet:fleetSource.data?.learning||{},
+    pricing:pricingSource.data||{},
+    source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource),
+    generated_at:new Date().toISOString()
+  });
+  return json({
+    ok:review.evidence_status!=="unavailable",
+    month,
+    year,
+    pricing_window_days:days,
+    ...review,
+    authority:"service_economics_completeness_addon_cost_readiness",
+    release_authority:"service_economics_completeness_addon_cost_readiness",
+    retained_authority:"service_economics_capacity_pricing_review"
+  });
 }
 export async function onRequestPost(){return readOnly();}
 export async function onRequestPut(){return readOnly();}
@@ -28,4 +46,4 @@ async function collect(name,runner){let timer;try{const response=await Promise.r
 function sourceStatusMap(economics,fleet,pricing){return{service_economics:sourceState(economics),fleet_commercial:sourceState(fleet),pricing_learning:sourceState(pricing)};}
 function sourceState(row){return{available:row?.available===true,restricted:row?.restricted===true,http_status:Number(row?.status)||null,error_class:row?.error_class||null};}
 function requestWithQuery(request,values){const url=new URL(request.url);for(const [key,value] of Object.entries(values))url.searchParams.set(key,value);return new Request(url.toString(),request);}
-function readOnly(){return json({ok:false,error:"Service Economics, Capacity & Pricing Review is read-only. Use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}
+function readOnly(){return json({ok:false,error:"Service Economics Completeness & Add-On Cost Readiness is read-only. Use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}
