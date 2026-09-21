@@ -38,9 +38,9 @@ require(asset,["Regression review","Current regressions","Historical-only","Regr
 require(launch,["authenticated_device_visual_acceptance","current_device_visual_authority","current_device_regression_authority","authenticated_device_regression_closure"],"Launch Readiness composition")
 require(contract,["# Build 468 — Authenticated Device Regression Closure","current_regression_observed","historical acceptance","Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness"],"Build 468 contract")
 require(blockers,["Independent device / visual evidence","Build 468","current regression","historical acceptance"],"canonical HOLD backlog")
-require(queue,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md","Build 468 — Authenticated Device Regression Closure","Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness"],"release queue")
-require(handoff,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md","authenticated_device_regression_closure_check.py"],"project handoff")
-require(readme,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md","authenticated_device_regression_closure_check.py"],"README")
+require(queue,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md"],"release queue retained Build 468 pointer")
+require(handoff,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md"],"project handoff retained Build 468 pointer")
+require(readme,["BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md"],"README retained Build 468 pointer")
 require(workflow,["Build 468 — Authenticated Device Regression Closure Authority","authenticated-device-regression-closure","authenticated_device_regression_closure_check.py"],"focused workflow")
 for text,label in [(dev,"Development source gate"),(prod,"Production business acceptance")]:
  require(text,["authenticated_device_regression_closure_check.py","authenticated_device_regression_closure_test.mjs"],label)

@@ -46,9 +46,9 @@ for token in ['method:"POST"','method:"PATCH"','method:"DELETE"',"setInterval("]
  if token in client: errors.append(f"Build 449 client contains forbidden mutation/polling token {token!r}")
 require(page,[
  'data-build449="fleet-maintenance-commercial-decision-closure"',
- "Build 449 · commercial decision closure","Commercial decision closure status",
+ "Commercial decision closure status",
  "Source GREEN may coexist with owner_action"
-],"Build 449 workbench page")
+],"Build 449 retained workbench surface")
 if page!=copy: errors.append("Build 449 workbench route copy drift")
 if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("Build 449 workbench must contain exactly one H1")
 require(contract,[

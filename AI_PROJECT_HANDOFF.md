@@ -3,22 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`.
+The synchronized Production predecessor is retained through `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`.
 
-**Build 468 — Authenticated Device Regression Closure** is the active bounded release.
+**Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness** is the active bounded release.
 
-**Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 470 — Local Search Provider Window & Attribution Closure** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Retained device contracts: `BUILD438_AUTHENTICATED_DEVICE_VISUAL_ACCEPTANCE.md`, `BUILD448_AUTHENTICATED_CROSS_DEVICE_ACCEPTANCE_REFRESH.md`, `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` and `BUILD419_CUSTOMER_STAFF_PRODUCTION_WORKFLOW_EVIDENCE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Retained commercial/pilot contracts: `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`, `BUILD449_FLEET_MAINTENANCE_COMMERCIAL_DECISION_CLOSURE.md`, `BUILD439_MAINTENANCE_FLEET_OWNER_APPROVAL_CONVERGENCE.md` and `BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Authenticated Device Regression Closure contract
-- Reuse the retained authenticated-device classifier, read-only endpoint and Launch Readiness surface; do not create a replacement endpoint, screenshot service, browser farm or parallel dashboard.
-- Refresh dated authenticated Customer, Detailer, Operations and Admin device/browser observations within the retained 30-day window.
-- Separate current passing evidence, current regression evidence and historical/stale acceptance. Historical acceptance never overrides a newer current regression.
-- Keep representative current phone/tablet/desktop coverage explicit; missing or stale required coverage remains refresh-required.
-- Responsive/accessibility source checks remain supporting evidence only and cannot prove absence of a real-device regression.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; every closure state remains operator-reviewed and never mutates the HOLD automatically.
-- No screenshot capture/polling, customer/booking, staff-role/capability, provider/payment/refund/message, accounting/inventory, schema/storage, destructive-storage, outreach or permanent-polling mutation is authorized.
+## Current Maintenance & Fleet Controlled Pilot Activation Readiness contract
+- Reuse the retained owner-decision workbench and commercial activation-readiness layer; do not create a replacement rulebook, approval system, booking flow or pilot engine.
+- Current canonical maintenance/fleet rulebooks remain `awaiting_business_approval`, so the controlled-pilot package truthfully remains `owner_action`.
+- A future `operator_review_ready` state still requires explicit owner pilot authorization and explicit participant-count/duration bounds before any real pilot may begin.
+- Participant/account selection remains manual; customer or fleet commitment is never inferred from queue activity.
+- `/api/availability` remains current live-capacity authority and `/api/checkout` remains final booking collision/revalidation authority for every real pilot booking.
+- Missing pilot limits or duration remain unresolved/null rather than inferred.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never closes the Maintenance / fleet business approval HOLD automatically.
+- No automatic participant selection, enrollment, outreach, booking, discount, invoice, recurring billing, provider, accounting/inventory, customer/profile, schema/storage, service-area, capacity-reservation or permanent-polling mutation is authorized.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
@@ -50,6 +51,11 @@ Current contract: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Retaine
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
+- `.github/workflows/maintenance-fleet-controlled-pilot-activation-readiness-authority.yml`
+- `scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py`
+- `scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs`
+- `functions/api/_lib/maintenance-fleet-owner-approval.js`
 - `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`
 - `.github/workflows/authenticated-device-regression-closure-authority.yml`
 - `scripts/authenticated_device_regression_closure_check.py`
