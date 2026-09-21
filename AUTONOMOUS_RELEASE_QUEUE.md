@@ -5,10 +5,11 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`.
-Retained predecessor title: Build 462 — Staff & Mobile Friction Remediation Priorities.
+The synchronized predecessor contracts are retained through `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
+Retained predecessor title: Build 463 — Service Economics Completeness & Add-On Cost Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`
 - `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`
 - `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
 - `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
@@ -82,23 +83,24 @@ Retained predecessor title: Build 462 — Staff & Mobile Friction Remediation Pr
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is the active bounded release.
+**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is the active bounded release.
 
 Scope:
-- enrich the retained Service Economics / Job Profitability review workbench rather than creating a parallel ledger, costing engine or pricing system;
-- expose aggregate completeness for recorded revenue, explicit job-use material cost, logged labour with recorded rates, cash/refund/balance evidence and posted COGS reconciliation;
-- keep service/package margin review blocked whenever any required retained economics layer is incomplete for the bounded observed job sample;
-- make add-on cost readiness explicit and require an owning recorded add-on revenue/material/labour/cash-refund/COGS linkage before add-on margin can become review-ready; equal, price-weighted, percentage and booking-cost split inference remains prohibited; and
-- introduce no automatic price/discount, add-on allocation, quote/booking, accounting/inventory, provider, schema/storage mutation or permanent polling.
+- reuse the protected Reliability, Security & Cost Reassessment page and endpoint rather than creating a parallel I.T., observability, provider-billing or recovery system;
+- add explicit evidence-age review with current <=7 days, aging 8–30 days, stale >30 days and undated states;
+- keep Cloudflare billing, CPU, quota and dollar cost external until supplied by provider-owned evidence; first-party traffic and diagnostic duration are not provider-cost proxies;
+- treat operational pressure as an operator-review signal only, never proof that scaling is required or future capacity is established;
+- keep real Production restore, secret rotation, DNS/R2/provider recovery external to source/runtime GREEN; and
+- introduce no automatic scaling, retry/cache, recovery, provider, schema/storage, business/accounting/inventory, outreach mutation or permanent polling.
 
-Current contract: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Service Economics Completeness & Add-On Cost Readiness authority, retained economics, commercial-capacity, job-profitability and pricing-learning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Reliability, Cost & Resilience Operational Guardrails authority, retained reliability/security/recovery/observability/I.T. authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is next only after the current release is independently GREEN on protected `main`.
+**Build 465 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_456_465.md`; it has not run out.
 
