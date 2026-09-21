@@ -3,24 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`.
+The synchronized Production predecessor is retained through `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`.
 
-**Build 462 — Staff & Mobile Friction Remediation Priorities** is the active bounded release.
+**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is the active bounded release.
 
-**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Staff & Mobile Friction Remediation Priorities contract
-- Reuse `/admin-staff-workflow-support-learning.html` and `/api/admin/staff_support_mobile_efficiency_learning`; do not create a parallel staff/mobile/support/exception system.
-- Order repeated bounded candidates from retained urgency/severity plus occurrence count only; priority is a manual review sequence, not proof of root cause, delay, staff performance, staff fault, mobile friction or business impact.
-- Attach an explicit remediation candidate, uncertainty state and manual verification plan using the existing owning workflow, allowed role and representative device/browser.
-- Existing Admin, Senior Detailer and Detailer role ceilings plus Detailer Start/Complete evidence gates remain authoritative.
-- No automatic remediation, exception resolution, role widening, job/task action, blame inference, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
+## Current Service Economics Completeness & Add-On Cost Readiness contract
+- Reuse `/admin-service-economics-commercial-capacity-review.html`, `/api/admin/service_economics_commercial_capacity_review` and the retained job-profitability, commercial-capacity, booking/quote-pricing and service-economics review authorities; do not create a parallel ledger, costing store or pricing system.
+- Report aggregate completeness for recorded revenue, explicit job-use material cost, logged labour with positive recorded rates, collected cash/balance/refund evidence and booking-linked posted COGS reconciliation.
+- A service/package margin review remains blocked until every required retained economics layer is ready across the bounded observed completed-job sample.
+- Add-on margin remains unavailable unless an owning source explicitly records add-on revenue plus linked material, labour, cash/refund and posted COGS; equal split, price-weighted split, percentage split and booking-cost division remain prohibited.
+- Complete economics evidence improves owner-review context only; quote bands and booking-stage patterns still do not prove price sensitivity, discount need or price causation.
+- No automatic price/discount, add-on allocation, quote/booking, accounting/inventory, provider, schema/storage mutation or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
-- Reuse the retained Build 440/450 local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
+- Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
 - Make provider property/location/window identity completeness, freshness, dated provider↔first-party window overlap, first-party availability and bounded/truncated anonymous same-session evidence explicit.
 - Evidence quality describes comparability only. Search Console/GBP provider outcomes remain source-attributed and distinct from anonymous first-party funnel observations.
 - Do not join provider metrics to sessions/customers/bookings, divide provider metrics by funnel rates, calculate provider-to-funnel correlation scores or claim marketing causation.
@@ -48,6 +49,10 @@ Current contract: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`. Ac
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`
+- `.github/workflows/service-economics-completeness-addon-cost-readiness-authority.yml`
+- `scripts/service_economics_completeness_addon_cost_readiness_check.py`
+- `scripts/service_economics_completeness_addon_cost_readiness_test.mjs`
 - `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
 - `.github/workflows/staff-mobile-friction-remediation-priorities-authority.yml`
 - `scripts/staff_mobile_friction_remediation_priorities_check.py`

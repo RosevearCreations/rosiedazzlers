@@ -1,0 +1,53 @@
+name: Service Economics Completeness Add-On Cost Readiness Authority
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-service-economics-completeness-addon-cost-readiness-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: service-economics-completeness-addon-cost-readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/service_economics_completeness_addon_cost_readiness_check.py
+          node --check functions/api/_lib/service-economics-completeness-addon-cost-readiness.js
+          node --check functions/api/admin/service_economics_commercial_capacity_review.js
+          node --check assets/build463-service-economics-completeness-addon-cost-readiness.js
+          node --check scripts/service_economics_completeness_addon_cost_readiness_test.mjs
+      - name: Validate Build 463 source authority
+        run: |
+          python scripts/service_economics_completeness_addon_cost_readiness_check.py
+          node scripts/service_economics_completeness_addon_cost_readiness_test.mjs
+      - name: Authority summary
+        run: |
+          echo "### Service Economics Completeness & Add-On Cost Readiness" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Margin review requires complete recorded revenue/material/labour/cash-refund/COGS evidence" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Add-on allocation requires explicit recorded add-on linkage; inferred split methods: NONE" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Automatic pricing, discount, booking, accounting/inventory, provider, schema or polling mutation: NONE" >> "$GITHUB_STEP_SUMMARY"

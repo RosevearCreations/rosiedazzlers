@@ -5,9 +5,11 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`.
+The synchronized predecessor contracts are retained through `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`.
+Retained predecessor title: Build 462 — Staff & Mobile Friction Remediation Priorities.
 
 ## Retained cumulative authority pointers
+- `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`
 - `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`
 - `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`
 - `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`
@@ -80,23 +82,23 @@ The synchronized predecessor contracts are retained through `BUILD461_BOOKING_QU
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 462 — Staff & Mobile Friction Remediation Priorities** is the active bounded release.
+**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is the active bounded release.
 
 Scope:
-- enrich the retained staff/support/mobile learning workbench with a deterministic manual remediation-review order rather than creating a parallel staff, mobile, support or exception system;
-- derive review priority only from retained urgency/severity plus repeated bounded occurrence count, with explicit evidence state and uncertainty;
-- attach a bounded remediation candidate and manual role/device/browser verification plan to each repeated pattern;
-- preserve explicit false boundaries for root-cause proof, staff-fault inference, business-impact proof, role widening, automatic exception resolution and automatic remediation; and
-- introduce no customer/staff identity exposure, automatic job/task action, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
+- enrich the retained Service Economics / Job Profitability review workbench rather than creating a parallel ledger, costing engine or pricing system;
+- expose aggregate completeness for recorded revenue, explicit job-use material cost, logged labour with recorded rates, cash/refund/balance evidence and posted COGS reconciliation;
+- keep service/package margin review blocked whenever any required retained economics layer is incomplete for the bounded observed job sample;
+- make add-on cost readiness explicit and require an owning recorded add-on revenue/material/labour/cash-refund/COGS linkage before add-on margin can become review-ready; equal, price-weighted, percentage and booking-cost split inference remains prohibited; and
+- introduce no automatic price/discount, add-on allocation, quote/booking, accounting/inventory, provider, schema/storage mutation or permanent polling.
 
-Current contract: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Staff & Mobile Friction Remediation Priorities authority, retained staff/mobile/support authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Service Economics Completeness & Add-On Cost Readiness authority, retained economics, commercial-capacity, job-profitability and pricing-learning authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 463 — Service Economics Completeness & Add-On Cost Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 464 — Reliability, Cost & Resilience Operational Guardrails** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_456_465.md`; it has not run out.
 
