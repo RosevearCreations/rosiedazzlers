@@ -73,6 +73,8 @@ jobs:
           python -m py_compile scripts/recovery_evidence_closure_drill_readiness_check.py
           node --check scripts/recovery_evidence_closure_drill_readiness_test.mjs
           node --check functions/api/_lib/recovery-evidence-closure-drill-readiness.js
+          python -m py_compile scripts/authenticated_device_acceptance_closure_check.py
+          node --check scripts/authenticated_device_acceptance_closure_test.mjs
           python -m py_compile scripts/authenticated_cross_device_acceptance_refresh_check.py
           node --check scripts/authenticated_cross_device_acceptance_refresh_test.mjs
           python -m py_compile scripts/fleet_maintenance_commercial_decision_closure_check.py
@@ -288,6 +290,11 @@ jobs:
         run: |
           python scripts/authenticated_cross_device_acceptance_refresh_check.py
           node scripts/authenticated_cross_device_acceptance_refresh_test.mjs
+
+      - name: Validate authenticated device acceptance closure authority
+        run: |
+          python scripts/authenticated_device_acceptance_closure_check.py
+          node scripts/authenticated_device_acceptance_closure_test.mjs
 
       - name: Validate fleet & maintenance commercial decision closure authority
         run: |

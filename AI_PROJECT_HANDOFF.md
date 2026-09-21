@@ -3,21 +3,21 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`.
 
-**Build 457 — Recovery Evidence Closure & Drill Readiness** is the active bounded release.
+**Build 458 — Authenticated Device Acceptance Closure** is the active bounded release.
 
-**Build 458 — Authenticated Device Acceptance Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Recovery Evidence Closure & Drill Readiness contract
-- Reuse the retained Build 437/447 recovery evidence authorities and the existing Launch Readiness recovery panel; do not create a replacement dashboard, backup service or restore engine.
-- Keep backup artifact, retention-location and bounded recovery-drill source availability, dated freshness and closure/readiness state explicit and separately classified.
-- A complete current package becomes `operator_review_ready`; aging or stale evidence requires review/revalidation; missing evidence remains `owner_action`; unavailable source evidence remains `unavailable`.
-- A bounded-drill-ready state is evidence for operator review only and never authorizes or proves a new Production restore.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no recovery HOLD closes automatically.
-- No Production restore, rollback, secret rotation, DNS/R2/provider recovery, schema/storage mutation, customer/business/accounting/inventory mutation, export generation, automatic outreach or permanent polling.
+## Current Authenticated Device Acceptance Closure contract
+- Reuse the retained Build 438/448 authenticated device/visual classifier and the existing Launch Readiness panel; do not create a replacement endpoint, browser farm, screenshot service or device dashboard.
+- Require current authenticated Customer, Detailer, Operations and Admin observations plus representative phone, tablet and desktop coverage.
+- Retain the bounded 30-day freshness rule and expose current, stale, missing and unavailable role/device coverage explicitly.
+- A complete package becomes `operator_review_ready` only; source responsive/accessibility checks remain supporting evidence and never substitute for real authenticated observations.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; no device/visual HOLD closes automatically.
+- No screenshot capture/polling, customer/booking mutation, staff role widening, provider/payment/refund/message transaction, schema/storage mutation, automatic outreach or permanent polling.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 ## Retained reliability, security, cost & resilience reassessment contract
 - Reuse the existing protected `/admin-reliability-reassessment.html` I.T. surface and its read-only endpoint; do not create a parallel reliability dashboard.
@@ -38,6 +38,10 @@ Current contract: `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`. Activ
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
+- `.github/workflows/authenticated-device-acceptance-closure-authority.yml`
+- `scripts/authenticated_device_acceptance_closure_check.py`
+- `scripts/authenticated_device_acceptance_closure_test.mjs`
 - `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`
 - `.github/workflows/recovery-evidence-closure-drill-readiness-authority.yml`
 - `scripts/recovery_evidence_closure_drill_readiness_check.py`

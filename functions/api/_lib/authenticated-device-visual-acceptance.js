@@ -1,6 +1,7 @@
-// Build 438/448 — Authenticated Device & Visual Acceptance + Cross-Device Refresh.
+// Build 438/448/458 — Authenticated Device & Visual Acceptance + Cross-Device Refresh + Closure.
 // Pure classification over retained launch observations + Build 419 safe workflow evidence.
 // Build 448 adds bounded freshness so old observations cannot silently satisfy the current-release refresh.
+// Build 458 converges current/stale/missing authenticated role and device coverage for explicit operator review.
 // Raw evidence-note contents are inspected server-side only and are never returned.
 
 const ROLE_DEFINITIONS = Object.freeze([
@@ -69,6 +70,44 @@ export function buildAuthenticatedDeviceVisualAcceptance({
   const deviceOutstanding=devices.filter(device=>device.status!=="observed_dated");
   const closureCandidate=available&&roleOutstanding.length===0&&deviceOutstanding.length===0;
   const timestamps=roles.map(role=>role.observed_at).filter(Boolean).sort();
+  const currentRoleIds=roles.filter(role=>role.current===true).map(role=>role.id);
+  const staleRoleIds=roles.filter(role=>role.stale===true).map(role=>role.id);
+  const missingRoleIds=roles.filter(role=>role.observed!==true&&role.status!=="unavailable").map(role=>role.id);
+  const unavailableRoleIds=roles.filter(role=>role.status==="unavailable").map(role=>role.id);
+  const currentDeviceIds=devices.filter(device=>device.status==="observed_dated").map(device=>device.id);
+  const staleDeviceIds=devices
+    .filter(device=>device.status!=="observed_dated")
+    .filter(device=>staleRoles.some(role=>role.device_classes.includes(device.id)))
+    .map(device=>device.id);
+  const missingDeviceIds=devices
+    .filter(device=>device.status!=="observed_dated"&&!staleDeviceIds.includes(device.id)&&device.status!=="unavailable")
+    .map(device=>device.id);
+  const unavailableDeviceIds=devices.filter(device=>device.status==="unavailable").map(device=>device.id);
+  const acceptanceClosure={
+    authority:"authenticated_device_acceptance_closure",
+    status:closureCandidate?"operator_review_ready":available?"owner_action":"unavailable",
+    closure_candidate:closureCandidate,
+    required_surfaces:ROLE_DEFINITIONS.map(role=>role.id),
+    required_devices:Object.keys(DEVICE_PATTERNS),
+    current_role_count:currentRoleIds.length,
+    current_device_count:currentDeviceIds.length,
+    current_role_ids:currentRoleIds,
+    current_device_ids:currentDeviceIds,
+    stale_role_ids:staleRoleIds,
+    stale_device_ids:staleDeviceIds,
+    missing_role_ids:missingRoleIds,
+    missing_device_ids:missingDeviceIds,
+    unavailable_role_ids:unavailableRoleIds,
+    unavailable_device_ids:unavailableDeviceIds,
+    operator_review_required:true,
+    canonical_hold_mutated:false,
+    source_responsive_checks_are_supporting_only:true,
+    detail:closureCandidate
+      ?"All required authenticated Customer/staff surfaces and representative phone/tablet/desktop coverage are current. Operator review is required before narrowing the canonical HOLD."
+      :available
+        ?"Authenticated device acceptance is not closure-ready; stale or missing role/device coverage remains explicit for owner action."
+        :"Authenticated device acceptance sources are unavailable; closure cannot be inferred from source checks."
+  };
 
   return {
     authority:"authenticated_device_visual_acceptance",
@@ -84,6 +123,7 @@ export function buildAuthenticatedDeviceVisualAcceptance({
     required_device_count:devices.length,
     dated_device_count:devices.filter(device=>device.status==="observed_dated").length,
     latest_observed_at:timestamps.length?timestamps[timestamps.length-1]:null,
+    acceptance_closure:acceptanceClosure,
     roles,
     devices,
     outstanding_roles:roleOutstanding.map(({id,title,status,classification})=>({id,title,status,classification})),

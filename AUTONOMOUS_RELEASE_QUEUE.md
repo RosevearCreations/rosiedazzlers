@@ -5,9 +5,11 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
+- `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`
 - `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`
 - `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_446_454.md`
@@ -74,23 +76,23 @@ The synchronized predecessor contracts are retained through `BUILD456_PROVIDER_E
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 457 — Recovery Evidence Closure & Drill Readiness** is the active bounded release.
+**Build 458 — Authenticated Device Acceptance Closure** is the active bounded release.
 
 Scope:
-- converge current backup artifact, retention-location and bounded recovery-drill evidence through the retained Build 437/447 read-only recovery authorities;
-- enrich the existing Launch Readiness recovery panel and retained `/api/admin/recovery_artifact_drill_evidence_review` endpoint rather than create a replacement recovery dashboard, backup service or restore engine;
-- distinguish `operator_review_ready`, aging/stale revalidation, missing owner-action evidence and unavailable-source states, with bounded drill readiness kept separate from real Production restore authorization;
-- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory and require explicit operator review before any narrowing; and
-- introduce no Production restore, rollback, secret rotation, DNS/R2/provider recovery, schema/storage mutation, customer/business/accounting/inventory mutation, export generation, automatic outreach or permanent polling.
+- converge dated authenticated Customer, Detailer, Operations and Admin observations through the retained authenticated cross-device and device/visual read-only authorities;
+- make current, stale, missing and unavailable phone/tablet/desktop coverage explicit on the existing Launch Readiness surface;
+- retain the bounded 30-day freshness rule and keep source responsive/accessibility checks as supporting evidence only;
+- classify a complete package as `operator_review_ready` only, with explicit operator review required before any canonical HOLD narrowing; and
+- introduce no screenshot capture/polling, browser-farm service, customer/booking mutation, staff role widening, provider transaction, schema/storage mutation, automatic outreach or permanent polling.
 
-Current contract: `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_456_465.md`. Canonical unresolved evidence remains in `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass focused Recovery Evidence Closure & Drill Readiness authority, retained recovery/export authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass focused Authenticated Device Acceptance Closure authority, retained authenticated cross-device, device/visual and workflow authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 458 — Authenticated Device Acceptance Closure** is next only after the current release is independently GREEN on protected `main`.
+**Build 459 — Fleet & Maintenance Commercial Activation Readiness** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_456_465.md`; it has not run out.
 

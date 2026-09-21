@@ -64,23 +64,18 @@ require(blockers,[
     "Recovery / backup evidence","Build 457","closure/readiness","operator_review_ready"
 ],"canonical HOLD backlog")
 require(queue,[
-    "**Build 457 — Recovery Evidence Closure & Drill Readiness** is the active bounded release.",
-    "Build 458 — Authenticated Device Acceptance Closure",
     "BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md",
     "Production deployment/runtime/business acceptance"
-],"release queue")
+],"release queue retained authority")
 require(handoff,[
-    "**Build 457 — Recovery Evidence Closure & Drill Readiness** is the active bounded release.",
     "BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md",
     "recovery-evidence-closure-drill-readiness-authority.yml",
     "recovery_evidence_closure_drill_readiness_check.py"
-],"project handoff")
+],"project handoff retained authority")
 require(readme,[
-    "Current source direction: **Build 457 — Recovery Evidence Closure & Drill Readiness**.",
     "BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md",
-    "recovery_evidence_closure_drill_readiness_check.py",
-    "Build 458 — Authenticated Device Acceptance Closure"
-],"README")
+    "recovery_evidence_closure_drill_readiness_check.py"
+],"README retained authority")
 for text,label in [(dev,"Development source gate"),(prod,"Production business acceptance")]:
     require(text,[
         "recovery_evidence_closure_drill_readiness_check.py",
