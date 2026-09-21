@@ -13,6 +13,7 @@ import { buildProductionWorkflowEvidence } from "../_lib/production-workflow-evi
 import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-delivery-evidence.js";
 import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
 import { buildProviderEvidenceClosureAvailabilityReview } from "../_lib/provider-evidence-closure-availability-review.js";
+import { buildProviderOutcomeReviewHoldDecisionReadiness } from "../_lib/provider-outcome-review-hold-decision-readiness.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
 import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
 import { buildRecoveryEvidenceClosureDrillReadiness } from "../_lib/recovery-evidence-closure-drill-readiness.js";
@@ -89,6 +90,13 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const providerOutcomeReviewHoldDecisionReadiness = buildProviderOutcomeReviewHoldDecisionReadiness({
+    outcome: providerOutcomeDeliveryEvidence,
+    reconciliation: providerEvidenceReconciliationRefresh,
+    availability_review: providerEvidenceClosureAvailabilityReview,
+    generated_at: generatedAt
+  });
+
   const backupRecoveryEvidenceClosure = buildBackupRecoveryEvidenceClosure({
     proof: recoveryExportResult.data?.proof || null,
     source_available: recoveryExportResult.ok && Boolean(recoveryExportResult.data?.proof),
@@ -133,6 +141,8 @@ export async function onRequestGet({ request, env }) {
     current_provider_reconciliation_authority: "provider_evidence_reconciliation_refresh",
     provider_evidence_closure_availability_review: providerEvidenceClosureAvailabilityReview,
     current_provider_availability_review_authority: "provider_evidence_closure_availability_review",
+    provider_outcome_review_hold_decision_readiness: providerOutcomeReviewHoldDecisionReadiness,
+    current_provider_hold_decision_authority: "provider_outcome_review_hold_decision_readiness",
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
@@ -167,6 +177,10 @@ export async function onRequestGet({ request, env }) {
       provider_evidence_closure_availability_review: {
         available: providerClosureResult.ok,
         classification: providerEvidenceClosureAvailabilityReview.status
+      },
+      provider_outcome_review_hold_decision_readiness: {
+        available: providerClosureResult.ok,
+        classification: providerOutcomeReviewHoldDecisionReadiness.status
       },
       recovery_artifact_drill_evidence_review: {
         available: recoveryExportResult.ok,
