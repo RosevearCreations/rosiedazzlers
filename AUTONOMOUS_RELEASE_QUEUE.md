@@ -90,7 +90,7 @@ The synchronized predecessor contracts are retained through `BUILD466_PROVIDER_O
 **Build 467 — Recovery Evidence Validation & Drill Decision Readiness** is the active bounded release.
 
 Scope:
-- reuse retained Build 437 backup closure, Build 447 artifact/drill review and Build 457 closure/readiness authorities plus the existing Launch Readiness recovery panel;
+- reuse the retained backup closure, artifact/drill review and closure/readiness authorities plus the existing Launch Readiness recovery panel;
 - revalidate backup artifact, retention/location and bounded-drill evidence with explicit source availability, dating and freshness;
 - expose operator decision states for current, aging, stale, missing and unavailable evidence without inferring recovery success from source/runtime GREEN;
 - permit stale or missing drill evidence to become only a bounded non-Production drill review candidate; no drill executes automatically;
