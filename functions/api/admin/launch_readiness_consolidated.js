@@ -14,6 +14,7 @@ import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-d
 import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
 import { buildProviderEvidenceClosureAvailabilityReview } from "../_lib/provider-evidence-closure-availability-review.js";
 import { buildProviderOutcomeReviewHoldDecisionReadiness } from "../_lib/provider-outcome-review-hold-decision-readiness.js";
+import { buildProviderHoldDecisionTraceabilityClosureReview } from "../_lib/provider-hold-decision-traceability-closure-review.js";
 import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evidence-closure.js";
 import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
 import { buildRecoveryEvidenceClosureDrillReadiness } from "../_lib/recovery-evidence-closure-drill-readiness.js";
@@ -98,6 +99,14 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const providerHoldDecisionTraceabilityClosureReview = buildProviderHoldDecisionTraceabilityClosureReview({
+    decision_readiness: providerOutcomeReviewHoldDecisionReadiness,
+    availability_review: providerEvidenceClosureAvailabilityReview,
+    reconciliation: providerEvidenceReconciliationRefresh,
+    operator_review: null,
+    generated_at: generatedAt
+  });
+
   const backupRecoveryEvidenceClosure = buildBackupRecoveryEvidenceClosure({
     proof: recoveryExportResult.data?.proof || null,
     source_available: recoveryExportResult.ok && Boolean(recoveryExportResult.data?.proof),
@@ -152,6 +161,8 @@ export async function onRequestGet({ request, env }) {
     current_provider_availability_review_authority: "provider_evidence_closure_availability_review",
     provider_outcome_review_hold_decision_readiness: providerOutcomeReviewHoldDecisionReadiness,
     current_provider_hold_decision_authority: "provider_outcome_review_hold_decision_readiness",
+    provider_hold_decision_traceability_closure_review: providerHoldDecisionTraceabilityClosureReview,
+    current_provider_hold_traceability_authority: "provider_hold_decision_traceability_closure_review",
     recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
     backup_recovery_evidence_closure: backupRecoveryEvidenceClosure,
     current_recovery_evidence_authority: "backup_recovery_evidence_closure",
