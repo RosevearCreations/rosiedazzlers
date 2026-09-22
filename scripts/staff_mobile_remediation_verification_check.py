@@ -102,7 +102,7 @@ require(roadmap, [
     "### Build 472 — Staff & Mobile Remediation Verification",
     "Do not infer root cause, staff fault, device friction or business impact"
 ], "renewed roadmap")
-require(blockers, ["STARTUP_GO_LIVE_BLOCKERS"], "canonical HOLD backlog")
+require(blockers, ["# Rosie Dazzlers — Current Production HOLD Inventory", "A HOLD remains open until dated, attributable evidence", "Build 462 adds ordered, aggregate remediation priorities"], "canonical HOLD backlog")
 require(queue, [
     "**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.",
     "**Build 473 — Service Economics Allocation & Margin Review Readiness** is next",
