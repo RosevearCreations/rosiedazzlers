@@ -84,10 +84,10 @@ require(blockers,[
 ],"canonical HOLD backlog")
 require(queue,[
     "BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md",
-    "Build 477 — Recovery Drill Evidence Refresh & Closure Review",
+    "FORWARD_BUILD_ROADMAP_476_485.md",
     "Production deployment/runtime/business acceptance",
     "it has not run out"
-],"current release queue")
+],"current release queue retained authority")
 require(handoff,[
     "BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md",
     "provider-hold-decision-traceability-closure-review-authority.yml",
