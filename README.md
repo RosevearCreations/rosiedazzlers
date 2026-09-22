@@ -1,23 +1,24 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 471 — Booking & Quote Controlled Experiment Framework**.
+Current source direction: **Build 472 — Staff & Mobile Remediation Verification**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Booking & Quote Controlled Experiment Framework authority
-The current release enriches the retained 441/451/461 booking/quote learning workbench with fail-closed controlled-experiment definitions.
+## Current Staff & Mobile Remediation Verification authority
+The current release enriches the retained Build 452/462 staff/mobile workbench with fail-closed verification of attributable outcome evidence.
 
 Focused source authority:
 
-`python scripts/booking_quote_controlled_experiment_framework_check.py`
+`python scripts/staff_mobile_remediation_verification_check.py`
 
-A supported retained hypothesis may become `owner_approval_required`, but approval, activation, duration, allocation, success threshold, target direction, winner rule and results remain unrecorded/null until a separate explicit owner decision. This release does not change prices, discounts, booking rules, availability or outreach.
+Current bounded patterns may be reported from retained sources, but remediation outcome remains unverified unless recorded remediation execution and comparable like-for-like before/after evidence exist. Priority, timing, presence or absence of a pattern does not prove root cause, staff fault, device friction, business impact or causation.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md` — current bounded contract.
+4. `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md` — current bounded contract.
+5. `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md` — retained predecessor contract.
 5. `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md` — retained predecessor contract.
 5. `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md` — retained predecessor contract.
 5. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — retained predecessor contract.
@@ -33,6 +34,7 @@ A supported retained hypothesis may become `owner_approval_required`, but approv
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
 - `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
 - `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
@@ -139,6 +141,8 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/staff_mobile_remediation_verification_check.py
+node scripts/staff_mobile_remediation_verification_test.mjs
 python scripts/booking_quote_controlled_experiment_framework_check.py
 node scripts/booking_quote_controlled_experiment_framework_test.mjs
 python scripts/local_search_provider_window_attribution_closure_check.py
@@ -214,4 +218,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 472 — Staff & Mobile Remediation Verification** is next only after the current release is independently GREEN on protected `main`.
+**Build 473 — Service Economics Allocation & Margin Review Readiness** is next only after the current release is independently GREEN on protected `main`.
