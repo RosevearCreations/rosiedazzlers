@@ -3,24 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized Production predecessor is retained through `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`.
 
-**Build 476 — Provider HOLD Decision Traceability & Closure Review** is the active bounded release.
+**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is the active bounded release.
 
-**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`. Retained provider decision authority: `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`. Retained recovery decision authority: `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Provider HOLD Decision Traceability & Closure Review contract
-- Reuse the retained provider outcome, reconciliation, source-availability and HOLD-decision authorities; do not create a replacement provider evidence or decision store.
-- Require source availability, parseable/current evidence timestamps and the retained decision package before any closure review can advance.
-- Generate a deterministic evidence trace key so an explicit operator review can be matched to the exact provider evidence snapshot.
-- Treat an absent, invalid or trace-mismatched operator review as `retain_hold_operator_review_required`.
-- A matching narrowing review may become a manual HOLD-update candidate only; it never edits `STARTUP_GO_LIVE_BLOCKERS.md` automatically.
-- No provider/payment/refund/message, schema/storage, customer/business/accounting/inventory, operator-review persistence, HOLD mutation, outreach or permanent polling.
-- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+## Current Recovery Drill Evidence Refresh & Closure Review contract
+- Reuse retained Build 437/447/457/467 recovery authorities; do not create a replacement backup service, restore engine, drill executor, evidence ledger or readiness dashboard.
+- Convert stale/missing retained evidence into an explicit evidence-refresh plan, and stale/missing recovery-drill evidence into a bounded non-Production drill-plan review candidate.
+- Bind explicit owner review to the current evidence snapshot through a deterministic `evidence_trace_key`.
+- Require plan prerequisites and post-observation evidence fields before any separately authorized refresh/drill could later count as evidence.
+- A plan-ready state never executes a refresh or drill and never authorizes a Production restore.
+- Current closure-eligible evidence still requires a matching explicit owner review before it can become a manual canonical-HOLD update candidate.
+- No Production restore/rollback/drill/refresh, schema/storage/customer/business/accounting/inventory mutation, review persistence, HOLD mutation, outreach or permanent polling.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required. Production deployment/runtime/business acceptance must independently prove that exact SHA.
 
 ## Durable current-release authorities
+- `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
+- `.github/workflows/recovery-drill-evidence-refresh-closure-review-authority.yml`
+- `scripts/recovery_drill_evidence_refresh_closure_review_check.py`
+- `scripts/recovery_drill_evidence_refresh_closure_review_test.mjs`
+- `functions/api/_lib/recovery-drill-evidence-refresh-closure-review.js`
 - `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
 - `.github/workflows/provider-hold-decision-traceability-closure-review-authority.yml`
 - `scripts/provider_hold_decision_traceability_closure_review_check.py`
