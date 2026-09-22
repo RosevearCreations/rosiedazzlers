@@ -96,7 +96,7 @@ Retained predecessor: Build 471 — Booking & Quote Controlled Experiment Framew
 **Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.
 
 Scope:
-- reuse the retained Build 452/462 staff, support and Detailer mobile evidence authorities rather than creating a replacement staff, telemetry, support or remediation system;
+- reuse the retained staff, support and Detailer mobile evidence authorities rather than creating a replacement staff, telemetry, support or remediation system;
 - verify each retained remediation-priority candidate against current attributable bounded evidence from the existing owning sources;
 - distinguish current pattern evidence from recorded remediation execution, comparable before/after evidence and an actually verified outcome;
 - keep remediation outcome fail-closed when execution evidence or like-for-like comparison evidence is absent;
