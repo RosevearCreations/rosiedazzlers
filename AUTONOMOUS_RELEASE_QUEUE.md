@@ -6,7 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
 The synchronized predecessor contracts are retained through `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`.
-Retained predecessor: Build 474 — Reliability, Cost & Resilience Trend Review.
+Retained predecessor contract: `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`.
 
 ## Retained cumulative authority pointers
 - `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -101,7 +101,7 @@ Retained predecessor: Build 474 — Reliability, Cost & Resilience Trend Review.
 **Build 475 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- reconcile the Build 466–474 Production evidence cycle without converting source/runtime GREEN into provider, owner, device, recovery, commercial, remediation or economics success;
+- reconcile the 466–474 Production evidence cycle without converting source/runtime GREEN into provider, owner, device, recovery, commercial, remediation or economics success;
 - classify continuing concerns as `retained`, `closed`, `owner_action`, `provider_dependent` or `unavailable` only from dated attributable owning evidence;
 - retain `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory;
 - publish `PRODUCTION_LEARNING_466_474.md` as the cycle reconciliation and `FORWARD_BUILD_ROADMAP_476_485.md` as the next bounded evidence-driven sequence;
@@ -110,7 +110,7 @@ Scope:
 
 Current contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Cycle reconciliation: `PRODUCTION_LEARNING_466_474.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the current Production Learning & Roadmap Renewal authority, retained Build 466–474 authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current Production Learning & Roadmap Renewal authority, retained 466–474 authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
