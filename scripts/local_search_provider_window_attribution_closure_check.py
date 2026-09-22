@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build 470 Local Search Provider Window & Attribution Closure source authority."""
+"""Build 470 Local Search Provider Window & Attribution Closure source authority.
+Retained Build 470 validation is release-state independent: living current/next release labels may advance.
+"""
 from pathlib import Path
 import re,subprocess,sys
 
