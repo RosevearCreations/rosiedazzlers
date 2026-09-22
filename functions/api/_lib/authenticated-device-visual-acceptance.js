@@ -1,8 +1,9 @@
-// Build 438/448/458/468 — Authenticated Device & Visual Acceptance + Cross-Device Refresh + Closure + Regression Closure.
+// Build 438/448/458/468/478 — Authenticated Device & Visual Acceptance + Refresh + Regression Triage.
 // Pure classification over retained launch observations + Build 419 safe workflow evidence.
 // Build 448 adds bounded freshness so old observations cannot silently satisfy the current-release refresh.
 // Build 458 converges current/stale/missing authenticated role and device coverage for explicit operator review.
 // Build 468 separates current passing/current regression observations from historical acceptance.
+// Build 478 refreshes the observation review and prepares bounded remediation triage only where current negative evidence exists.
 // Raw evidence-note contents are inspected server-side only and are never returned.
 
 const ROLE_DEFINITIONS = Object.freeze([
@@ -161,6 +162,62 @@ export function buildAuthenticatedDeviceVisualAcceptance({
           :"No current regression observation is recorded, but historical/stale/missing evidence cannot prove absence of regression; refresh required role/device observations."
   };
 
+  const refreshRequiredDeviceIds=requiredDeviceIds.filter(id=>!regressionCurrentDeviceIds.includes(id));
+  const newlyObservedRegressionRoleIds=currentRegressionRoles.map(role=>role.id);
+  const regressionTriageItems=currentRegressionRoles.map(role=>({
+    role_id:role.id,
+    observation_status:"current_authenticated_negative_observation",
+    observed_at:role.observed_at,
+    age_days:role.age_days,
+    device_classes:role.device_classes,
+    browser_classes:role.browser_classes,
+    routes:role.routes,
+    viewport_widths:role.viewport_widths,
+    remediation_state:"triage_required",
+    remediation_execution_authorized:false,
+    re_observation_required:true
+  }));
+  const observationRefreshRegressionTriage={
+    authority:"authenticated_device_observation_refresh_regression_triage",
+    build:478,
+    status:!available
+      ?"unavailable"
+      :currentRegressionRoles.length
+        ?"regression_triage_required"
+        :currentCoverageComplete
+          ?"current_observation_review_ready"
+          :"observation_refresh_required",
+    current_observation_coverage_complete:currentCoverageComplete,
+    current_pass_role_ids:currentPassRoles.map(role=>role.id),
+    newly_observed_regression_role_ids:newlyObservedRegressionRoleIds,
+    newly_observed_means_current_negative_observation_not_first_occurrence:true,
+    historical_acceptance_role_ids:retainedHistoricalAcceptanceRoleIds,
+    historical_only_role_ids:historicalOnlyRoleIds,
+    refresh_required_role_ids:refreshRequiredRoleIds,
+    refresh_required_device_ids:refreshRequiredDeviceIds,
+    observed_device_ids:regressionCurrentDeviceIds,
+    observed_browser_ids:currentBrowserIds,
+    regression_device_ids:currentRegressionDeviceIds,
+    regression_browser_ids:currentRegressionBrowserIds,
+    regression_triage_items:regressionTriageItems,
+    regression_triage_count:regressionTriageItems.length,
+    bounded_remediation_triage_ready:regressionTriageItems.length>0,
+    operator_review_required:true,
+    direct_authenticated_observation_required:true,
+    source_checks_can_prove_absence_of_regression:false,
+    historical_acceptance_can_override_current_regression:false,
+    automated_browser_farm_created:false,
+    automated_remediation_performed:false,
+    canonical_hold_mutated:false,
+    detail:!available
+      ?"Authorized authenticated device observation evidence is unavailable; observation refresh and regression triage cannot be inferred."
+      :currentRegressionRoles.length
+        ?`Current authenticated negative observation evidence exists for ${currentRegressionRoles.length} role(s). Bounded remediation triage is prepared for operator review; remediation execution and re-observation remain separately authorized.`
+        :currentCoverageComplete
+          ?"Current authenticated role/device observations are complete and no current negative observation is recorded. This is operator-reviewed observation evidence, not proof inferred from source checks."
+          :"Current authenticated observation coverage is incomplete. Refresh the identified role/device observations before drawing a no-regression conclusion."
+  };
+
   return {
     authority:"authenticated_device_visual_acceptance",
     generated_at:generatedAt,
@@ -177,6 +234,7 @@ export function buildAuthenticatedDeviceVisualAcceptance({
     latest_observed_at:timestamps.length?timestamps[timestamps.length-1]:null,
     acceptance_closure:acceptanceClosure,
     regression_closure:regressionClosure,
+    observation_refresh_regression_triage:observationRefreshRegressionTriage,
     roles,
     devices,
     outstanding_roles:roleOutstanding.map(({id,title,status,classification})=>({id,title,status,classification})),
@@ -197,6 +255,9 @@ export function buildAuthenticatedDeviceVisualAcceptance({
       stale_observation_is_not_current_release_proof:true,
       historical_acceptance_is_not_current_regression_proof:true,
       current_regression_is_not_overridden_by_historical_acceptance:true,
+      source_checks_can_prove_absence_of_regression:false,
+      automated_browser_farm_created:false,
+      automated_remediation_performed:false,
       evidence_note_exposed:false,
       customer_identity_exposed:false,
       protected_content_copied:false,

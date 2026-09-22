@@ -7,9 +7,9 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
-Retained predecessor release: Build 476 — Provider HOLD Decision Traceability & Closure Review.
 
 ## Retained cumulative authority pointers
+- `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
 - `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
 - `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -101,25 +101,25 @@ Retained predecessor release: Build 476 — Provider HOLD Decision Traceability 
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is the active bounded release.
+**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is the active bounded release.
 
 Scope:
-- turn stale or missing retained recovery evidence into an explicit owner-reviewed evidence-refresh plan or bounded non-Production drill plan;
-- bind owner review to the exact retained recovery evidence snapshot with a deterministic evidence trace key;
-- record bounded drill prerequisites, including the non-Production target, backup/retention references, responsible operator, runbook and abort criteria;
-- define the post-observation evidence required before refreshed recovery evidence can support a later closure review;
-- require explicit owner review before a refresh/drill plan becomes ready for separately authorized execution or before current evidence can become a manual HOLD-update candidate;
+- refresh direct authenticated Customer, Detailer, Operations and Admin role/device/browser observations under the retained 30-day evidence window;
+- distinguish current dated negative observations from retained or stale historical acceptance;
+- keep stale, missing and unavailable role/device coverage explicit rather than inferring no regression from source checks;
+- prepare bounded remediation triage items only when current authenticated negative evidence exists;
+- require explicit re-observation after any separately authorized remediation before regression closure can be reconsidered;
 - preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; and
-- perform no Production restore, rollback, drill execution, evidence-refresh execution, schema/storage/business mutation, review persistence, canonical-HOLD mutation, outreach or permanent polling.
+- perform no browser-farm execution, screenshot capture/polling, automatic remediation, schema/storage/business mutation, canonical-HOLD mutation, outreach or permanent polling.
 
-Current contract: `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`. Retained recovery decision authority: `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`. Retained device authority: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the current recovery drill evidence refresh & closure review authority, retained recovery authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current authenticated device observation refresh & regression triage authority, retained authenticated-device authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is next only after the current release is independently GREEN on protected `main`.
+**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_476_485.md`; it has not run out.

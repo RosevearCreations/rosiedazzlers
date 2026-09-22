@@ -3,25 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`.
 
-**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is the active bounded release.
+**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is the active bounded release.
 
-**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is next only after the current release is independently GREEN on protected `main`.
+**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`. Retained recovery decision authority: `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`. Retained device regression authority: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Recovery Drill Evidence Refresh & Closure Review contract
-- Reuse retained Build 437/447/457/467 recovery authorities; do not create a replacement backup service, restore engine, drill executor, evidence ledger or readiness dashboard.
-- Convert stale/missing retained evidence into an explicit evidence-refresh plan, and stale/missing recovery-drill evidence into a bounded non-Production drill-plan review candidate.
-- Bind explicit owner review to the current evidence snapshot through a deterministic `evidence_trace_key`.
-- Require plan prerequisites and post-observation evidence fields before any separately authorized refresh/drill could later count as evidence.
-- A plan-ready state never executes a refresh or drill and never authorizes a Production restore.
-- Current closure-eligible evidence still requires a matching explicit owner review before it can become a manual canonical-HOLD update candidate.
-- No Production restore/rollback/drill/refresh, schema/storage/customer/business/accounting/inventory mutation, review persistence, HOLD mutation, outreach or permanent polling.
+## Current Authenticated Device Observation Refresh & Regression Triage contract
+- Reuse retained Build 438/448/458/468 authenticated-device authorities and the existing `/api/admin/authenticated_device_visual_acceptance` surface.
+- Refresh direct authenticated Customer, Detailer, Operations and Admin role/device/browser observations under the retained 30-day freshness rule.
+- Separate current dated negative observations from retained or stale historical acceptance; historical acceptance never overrides a current regression.
+- Keep incomplete role/device coverage explicit as `observation_refresh_required`; source checks cannot prove absence of real-device regression.
+- Prepare bounded operator-review triage items only where current authenticated negative evidence exists.
+- Require re-observation after any separately authorized remediation; triage does not prove root cause, staff fault, impact or effectiveness.
+- No browser farm, screenshot capture/polling, automatic remediation, schema/storage/customer/business/accounting/inventory mutation, HOLD mutation, outreach or permanent polling.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required. Production deployment/runtime/business acceptance must independently prove that exact SHA.
 
 ## Durable current-release authorities
+- `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
+- `.github/workflows/authenticated-device-observation-refresh-regression-triage-authority.yml`
+- `scripts/authenticated_device_observation_refresh_regression_triage_check.py`
+- `scripts/authenticated_device_observation_refresh_regression_triage_test.mjs`
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
 - `.github/workflows/recovery-drill-evidence-refresh-closure-review-authority.yml`
 - `scripts/recovery_drill_evidence_refresh_closure_review_check.py`

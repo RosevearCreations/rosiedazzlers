@@ -89,6 +89,8 @@ jobs:
           node --check scripts/authenticated_device_acceptance_closure_test.mjs
           python -m py_compile scripts/authenticated_device_regression_closure_check.py
           node --check scripts/authenticated_device_regression_closure_test.mjs
+          python -m py_compile scripts/authenticated_device_observation_refresh_regression_triage_check.py
+          node --check scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
           python -m py_compile scripts/authenticated_cross_device_acceptance_refresh_check.py
           node --check scripts/authenticated_cross_device_acceptance_refresh_test.mjs
           python -m py_compile scripts/fleet_maintenance_commercial_decision_closure_check.py
@@ -351,6 +353,11 @@ jobs:
         run: |
           python scripts/authenticated_device_regression_closure_check.py
           node scripts/authenticated_device_regression_closure_test.mjs
+
+      - name: Validate authenticated device observation refresh & regression triage authority
+        run: |
+          python scripts/authenticated_device_observation_refresh_regression_triage_check.py
+          node scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
 
       - name: Validate fleet & maintenance commercial decision closure authority
         run: |

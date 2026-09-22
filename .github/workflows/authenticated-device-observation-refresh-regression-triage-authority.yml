@@ -1,0 +1,55 @@
+name: Build 478 — Authenticated Device Observation Refresh & Regression Triage Authority
+
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-auth-device-observation-triage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: authenticated-device-observation-refresh-regression-triage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/authenticated_device_observation_refresh_regression_triage_check.py
+          node --check functions/api/_lib/authenticated-device-visual-acceptance.js
+          node --check functions/api/admin/authenticated_device_visual_acceptance.js
+          node --check functions/api/admin/launch_readiness_consolidated.js
+          node --check assets/launch-readiness-consolidation.js
+          node --check scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
+      - name: Validate authenticated device observation refresh and regression triage
+        run: |
+          python scripts/authenticated_device_observation_refresh_regression_triage_check.py
+          node scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
+      - name: Authority summary
+        run: |
+          {
+            echo '### Build 478 — Authenticated Device Observation Refresh & Regression Triage'
+            echo "- SHA: \`${GITHUB_SHA}\`"
+            echo '- Retained Build 438/448/458/468 authority reused: PASS'
+            echo '- Direct current authenticated observation coverage: EXPLICIT'
+            echo '- Current negative observations vs historical acceptance: EXPLICIT'
+            echo '- Bounded remediation triage only for negative evidence: EXPLICIT'
+            echo '- Source checks do not prove absence of regression'
+            echo '- Browser farm / screenshot polling / automatic remediation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

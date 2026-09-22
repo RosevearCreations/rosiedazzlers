@@ -1,23 +1,23 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 477 — Recovery Drill Evidence Refresh & Closure Review**.
+Current source direction: **Build 478 — Authenticated Device Observation Refresh & Regression Triage**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Recovery Drill Evidence Refresh & Closure Review authority
-The current release adds read-only owner-review traceability, explicit evidence-refresh or bounded non-Production drill planning, plan prerequisites and required post-observation evidence over the retained recovery evidence package. It does not execute a refresh/drill or authorize a Production restore.
+## Current Authenticated Device Observation Refresh & Regression Triage authority
+The current release reuses the retained authenticated-device evidence system, refreshes direct role/device/browser observation review and prepares bounded remediation triage only when current authenticated negative evidence exists. Historical acceptance cannot override a current regression, incomplete observation coverage remains refresh-required, and source checks cannot prove absence of a real-device regression.
 
 Focused source authority:
 
-`python scripts/recovery_drill_evidence_refresh_closure_review_check.py`
+`python scripts/authenticated_device_observation_refresh_regression_triage_check.py`
 
 The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md` — current bounded contract.
-4. `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md` — retained predecessor contract.
+3. `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md` — current bounded contract.
+4. `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
 7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
@@ -26,6 +26,7 @@ The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
 
 - `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
@@ -144,6 +145,10 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 \`\`\`bash
+python scripts/authenticated_device_observation_refresh_regression_triage_check.py
+node scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
+python scripts/recovery_drill_evidence_refresh_closure_review_check.py
+node scripts/recovery_drill_evidence_refresh_closure_review_test.mjs
 python scripts/reliability_cost_resilience_trend_review_check.py
 node scripts/reliability_cost_resilience_trend_review_test.mjs
 python scripts/service_economics_allocation_margin_review_readiness_check.py
@@ -227,4 +232,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.

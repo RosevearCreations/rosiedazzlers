@@ -90,6 +90,7 @@ function renderWorkflowEvidence(data){
   const acceptance=data.authenticated_device_visual_acceptance||{};
   const deviceClosure=acceptance.acceptance_closure||{};
   const regressionClosure=acceptance.regression_closure||{};
+  const observationTriage=acceptance.observation_refresh_regression_triage||{};
   const roles=Array.isArray(evidence.roles)?evidence.roles:[];
   const acceptedRoles=Array.isArray(acceptance.roles)?acceptance.roles:[];
   const devices=Array.isArray(acceptance.devices)?acceptance.devices:[];
@@ -108,6 +109,10 @@ function renderWorkflowEvidence(data){
       ${metric("Current refresh",acceptance.closure_candidate?"current":"hold")}
       ${metric("Closure review",deviceClosure.status||"owner_action")}
       ${metric("Regression review",regressionClosure.status||"refresh_required")}
+      ${metric("Observation triage",observationTriage.status||"observation_refresh_required")}
+      ${metric("Triage regressions",observationTriage.regression_triage_count??0)}
+      ${metric("Refresh roles",(observationTriage.refresh_required_role_ids||[]).length)}
+      ${metric("Refresh devices",(observationTriage.refresh_required_device_ids||[]).length)}
       ${metric("Current regressions",(regressionClosure.current_regression_role_ids||[]).length)}
       ${metric("Historical-only",(regressionClosure.historical_only_role_ids||[]).length)}
       ${metric("Regression devices",esc((regressionClosure.current_regression_device_ids||[]).join(", ")||"none"))}
@@ -128,10 +133,12 @@ function renderWorkflowEvidence(data){
     <div class="stack">${devices.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">Observed roles: ${esc((x.roles||[]).join(", ")||"none")} · latest dated observation: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not observed")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
     <p class="mini"><strong>Acceptance closure:</strong> ${esc(deviceClosure.detail||"Authenticated role/device coverage remains subject to explicit operator review.")}</p>
     <p class="mini"><strong>Regression closure:</strong> ${esc(regressionClosure.detail||"Current regression review requires dated authenticated role/device/browser evidence.")}</p>
+    <p class="mini"><strong>Observation refresh & regression triage:</strong> ${esc(observationTriage.detail||"Current authenticated observations remain subject to explicit operator review.")}</p>
+    <p class="mini"><strong>Triage roles:</strong> ${esc((observationTriage.newly_observed_regression_role_ids||[]).join(", ")||"none")} · <strong>Refresh roles:</strong> ${esc((observationTriage.refresh_required_role_ids||[]).join(", ")||"none")} · <strong>Refresh devices:</strong> ${esc((observationTriage.refresh_required_device_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Current regression roles:</strong> ${esc((regressionClosure.current_regression_role_ids||[]).join(", ")||"none")} · <strong>Historical-only roles:</strong> ${esc((regressionClosure.historical_only_role_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Current browsers:</strong> ${esc((regressionClosure.current_browser_ids||[]).join(", ")||"none")} · <strong>Regression browsers:</strong> ${esc((regressionClosure.current_regression_browser_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Current devices:</strong> ${esc((regressionClosure.current_device_ids||[]).join(", ")||"none")} · <strong>Regression devices:</strong> ${esc((regressionClosure.current_regression_device_ids||[]).join(", ")||"none")}</p>
-    <p class="mini"><strong>Truth boundary:</strong> Historical acceptance does not override a current regression. Responsive source checks remain supporting evidence only.</p>
+    <p class="mini"><strong>Truth boundary:</strong> Historical acceptance does not override a current regression. No browser farm or source-check inference can prove the absence of a real-device regression.</p>
     <p class="mini"><strong>Current surfaces:</strong> ${esc((deviceClosure.current_role_ids||[]).join(", ")||"none")} · <strong>Current devices:</strong> ${esc((deviceClosure.current_device_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(acceptance.canonical_hold?.detail||"Representative authenticated phone/tablet/desktop evidence remains owner-observed.")}</p>
     <p class="muted">Verified states come only from dated role-specific observations. Source responsive checks do not invent real-device proof; customer identity and evidence-note contents are not returned; protected content is not returned either. No automated screenshot polling is used.</p>`;
