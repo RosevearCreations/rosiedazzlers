@@ -28,6 +28,9 @@ The next cycle prioritizes:
 - reliability/resilience evidence continuity while provider billing/CPU/quota/cost and real recovery remain externally owned; and
 - another evidence-driven Production learning renewal after Builds 476–484.
 
+## Retained-validator compatibility
+Historical feature authorities continue to validate their own durable contract, executable tests and mutation/evidence boundaries after the living queue advances. They must not require an older release to remain labelled as the current README, queue or handoff state.
+
 ## Mutation boundary
 This release remains read-only release governance. It authorizes no schema migration, customer/booking mutation, staff-role change, pricing/discount change, payment/refund/provider transaction, accounting/inventory posting, maintenance/fleet activation, experiment activation, secret rotation, DNS change, Production restore, destructive R2 mutation, automatic outreach or permanent polling.
 
