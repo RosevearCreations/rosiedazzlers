@@ -1,4 +1,4 @@
-// Build 451 — read-only booking funnel, quote and pricing learning.
+// Build 451/461/471 — read-only booking funnel, quote/pricing learning, readiness and controlled-experiment framework.
 export const BUILD451_QUOTE_VALUE_BANDS = Object.freeze([
   { key:"under_250", label:"Under $250", min_cents:0, max_cents:24999 },
   { key:"250_399", label:"$250–$399", min_cents:25000, max_cents:39999 },
@@ -6,13 +6,13 @@ export const BUILD451_QUOTE_VALUE_BANDS = Object.freeze([
   { key:"600_plus", label:"$600+", min_cents:60000, max_cents:null }
 ]);
 export function buildBookingFunnelQuotePricingLearning({funnel={},quote_rows=[],source_status={},generated_at=null}={}){
-  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes), experiment_readiness=buildExperimentReadiness(booking,quotes);
+  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes), experiment_readiness=buildExperimentReadiness(booking,quotes), controlled_experiment_framework=buildBookingQuoteControlledExperimentFramework(experiment_readiness);
   const values=Object.values(source_status||{}), total=values.length, available=values.filter(x=>x?.available===true).length, restricted=values.filter(x=>x?.restricted===true).length;
   const evidence_status=total&&available===total?(booking.evidence_possibly_truncated||quotes.possibly_truncated?"partial":"observed"):available?"partial":restricted?"restricted":"unavailable";
   return {
     build:451, authority:"booking_funnel_quote_pricing_learning", generated_at:generated_at||new Date().toISOString(),
-    evidence_status, booking, quotes, learning_signals, experiment_readiness, source_status, release_enrichment_build:461,
-    truth_boundary:{stage_drop_proves_price_friction:false,quote_decline_proves_price_sensitivity:false,accepted_value_delta_proves_discounting:false,accepted_quote_is_completed_work:false,unresolved_quote_proves_customer_rejection:false,causal_pricing_claimed:false},
+    evidence_status, booking, quotes, learning_signals, experiment_readiness, controlled_experiment_framework, source_status, release_enrichment_build:461, controlled_experiment_framework_build:471, controlled_experiment_framework_authority:"booking_quote_controlled_experiment_framework",
+    truth_boundary:{stage_drop_proves_price_friction:false,quote_decline_proves_price_sensitivity:false,accepted_value_delta_proves_discounting:false,accepted_quote_is_completed_work:false,unresolved_quote_proves_customer_rejection:false,causal_pricing_claimed:false,experiment_result_claimed:false,experiment_winner_claimed:false,owner_approval_inferred:false},
     boundaries:{read_only_learning:true,manual_refresh_only:true,first_party_aggregate_only:true,anonymous_session_to_customer_join:false,customer_identity_exposed:false,raw_quote_identifier_exposed:false,automatic_price_change_allowed:false,automatic_discount_allowed:false,automatic_outreach_allowed:false,automatic_quote_acceptance_allowed:false,automatic_booking_creation_allowed:false,payment_or_provider_mutation_allowed:false,schema_mutation_allowed:false,permanent_polling_allowed:false}
   };
 }
@@ -80,6 +80,110 @@ function buildExperimentReadiness(booking,quotes){
     }
   };
 }
+export function buildBookingQuoteControlledExperimentFramework(experimentReadiness={}){
+  const readiness=obj(experimentReadiness), hypotheses=Array.isArray(readiness.hypotheses)?readiness.hypotheses:[];
+  const definitions=hypotheses.map(plan=>{
+    const sourceReadiness=clean(plan?.readiness)||"unavailable";
+    const frameworkState=sourceReadiness==="owner_review_ready"?"owner_approval_required":sourceReadiness==="unavailable"?"unavailable":"needs_more_evidence";
+    const measurement=obj(plan?.measurement_plan);
+    return {
+      key:clean(plan?.key)||"unknown",
+      area:clean(plan?.area)||"unknown",
+      framework_state:frameworkState,
+      evidence_eligibility:{
+        source_readiness:sourceReadiness,
+        eligible_for_owner_approval:sourceReadiness==="owner_review_ready",
+        minimum_evidence:clean(measurement.minimum_evidence)||null,
+        evidence_basis:clean(plan?.evidence_basis)||null,
+        hypothesis:clean(plan?.hypothesis)||null
+      },
+      success_measure:{
+        primary_metric:clean(measurement.primary_metric)||null,
+        baseline_rule:clean(measurement.baseline)||null,
+        success_threshold:null,
+        target_direction:null,
+        winner_rule:null,
+        threshold_owner_defined:true,
+        winner_rule_owner_defined:true
+      },
+      experiment_bounds:{
+        allowed_change:clean(measurement.allowed_change)||null,
+        duration_days:null,
+        allocation_rule:null,
+        comparison_window_rule:"Use like-for-like bounded windows from the retained aggregate source only.",
+        duration_owner_defined:true,
+        allocation_owner_defined:true
+      },
+      stop_conditions:[
+        "retained_evidence_unavailable_restricted_or_materially_truncated",
+        "minimum_evidence_no_longer_met",
+        "like_for_like_window_breaks",
+        "price_discount_booking_rule_or_outreach_change_required",
+        "owner_withdraws_approval",
+        "material_confounder_breaks_comparability"
+      ],
+      owner_approval:{
+        required:true,
+        status:"not_recorded",
+        approved:false,
+        approved_by:null,
+        approved_at:null
+      },
+      activation:{
+        mode:"manual_only",
+        authorized:false,
+        started:false,
+        duration_days:null,
+        allocation_rule:null
+      },
+      results:{status:"not_started",winner:null,success:null},
+      automatic_activation_allowed:false,
+      automatic_winner_selection_allowed:false,
+      business_mutation_allowed:false
+    };
+  });
+  const approvalRequired=definitions.filter(r=>r.framework_state==="owner_approval_required").length;
+  const needsEvidence=definitions.filter(r=>r.framework_state==="needs_more_evidence").length;
+  const unavailable=definitions.filter(r=>r.framework_state==="unavailable").length;
+  return {
+    build:471,
+    authority:"booking_quote_controlled_experiment_framework",
+    state:approvalRequired?"owner_approval_required":needsEvidence?"needs_evidence":"unavailable",
+    definition_count:definitions.length,
+    owner_approval_required_count:approvalRequired,
+    needs_more_evidence_count:needsEvidence,
+    unavailable_count:unavailable,
+    definitions,
+    truth_boundary:{
+      experiment_result_claimed:false,
+      experiment_winner_claimed:false,
+      price_causation_claimed:false,
+      customer_motive_inferred:false,
+      discount_need_inferred:false,
+      owner_approval_inferred:false
+    },
+    boundaries:{
+      existing_workbench_only:true,
+      owner_approval_required:true,
+      manual_activation_only:true,
+      automatic_experiment_activation_allowed:false,
+      automatic_winner_selection_allowed:false,
+      pricing_mutation_allowed:false,
+      discount_mutation_allowed:false,
+      booking_rule_mutation_allowed:false,
+      availability_mutation_allowed:false,
+      outreach_allowed:false,
+      quote_acceptance_allowed:false,
+      booking_creation_allowed:false,
+      customer_identity_join_allowed:false,
+      provider_mutation_allowed:false,
+      schema_mutation_allowed:false,
+      storage_mutation_allowed:false,
+      permanent_polling_allowed:false
+    }
+  };
+}
+
 function bookingStagePlan(booking){
   const drop=booking?.largest_price_adjacent_stage_drop, starts=whole(booking?.funnel_start_sessions), has=Boolean(drop)&&booking?.state!=="unavailable";
   const ready=has&&starts>=10;
