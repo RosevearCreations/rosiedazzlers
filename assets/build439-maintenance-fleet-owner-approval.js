@@ -1,4 +1,4 @@
-// Build 439/449/459/469 — manual read-only owner-decision, activation-readiness + controlled-pilot decision UI.
+// Build 439/449/459/469/479 — manual read-only owner-decision, controlled-pilot readiness + explicit pilot decision UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -9,14 +9,14 @@ async function refresh(){
   const response=await fetch("/api/admin/maintenance_fleet_owner_approval",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
   const data=await response.json().catch(()=>null);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
 }
 function renderSummary(data){
  const s=data.summary||{},closure=data.decision_closure||{},mount=$("ownerApprovalSummary"); if(!mount)return;
- const a=data.activation_readiness||{},p=data.controlled_pilot_readiness||{}; const rows=[["Closure state",closure.status||s.closure_status||"owner_action"],["Activation readiness",a.status||"owner_action"],["Controlled pilot",p.status||"owner_action"],["Activation terms ready",`${a.source_approved_term_count||0}/${a.required_term_count||7}`],["Owner actions",s.owner_action_count||0],["Fleet inquiries",s.fleet_inquiry_total||0]];
+ const a=data.activation_readiness||{},p=data.controlled_pilot_readiness||{},d=data.pilot_decision_record||{}; const rows=[["Closure state",closure.status||s.closure_status||"owner_action"],["Activation readiness",a.status||"owner_action"],["Controlled pilot",p.status||"owner_action"],["Pilot decision",d.status||"owner_action"],["Owner actions",s.owner_action_count||0],["Fleet inquiries",s.fleet_inquiry_total||0]];
  mount.innerHTML=rows.map(([l,v])=>`<div class="oa-stat"><span class="mini">${esc(l)}</span><strong>${esc(v)}</strong></div>`).join("");
 }
 function renderGroup(id,items){
@@ -46,6 +46,18 @@ function renderControlledPilot(p){
  const bounds=p.bounds||{};
  const cards=safeguards.map(row=>`<article class="oa-card"><div class="oa-head"><h3>${esc(row.label||row.id)}</h3><span class="oa-pill">${esc(row.status||"required")}</span></div><p class="mini">Required for controlled-pilot decision: yes</p><p class="oa-boundary">This safeguard is evidence only. It does not authorize customer-facing activation.</p></article>`).join("");
  mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Controlled-pilot activation decision</h3><span class="oa-pill">${esc(p.status||"owner_action")}</span></div><p><strong>Decision package ready:</strong> ${esc(p.decision_package_ready===true?"yes":"no")}</p><p class="mini">${esc(p.next_step||"Owner-approved commercial terms and explicit pilot authorization are required.")}</p><p class="mini"><strong>Availability:</strong> <code>${esc(p.availability_authority||"/api/availability")}</code> · <strong>collision revalidation:</strong> <code>${esc(p.collision_revalidation_authority||"/api/checkout")}</code></p><p class="mini"><strong>Pilot participant limit:</strong> ${bounds.participant_limit==null?"not inferred":esc(bounds.participant_limit)} · <strong>duration:</strong> ${bounds.duration_days==null?"not inferred":esc(bounds.duration_days+" days")}</p><p class="oa-boundary">Explicit owner pilot authorization and explicit pilot bounds remain required. Participant selection stays manual; every real booking must revalidate current availability and checkout collision safety. No enrollment, outreach, booking, discount, invoice, recurring billing, provider action, service-area expansion or capacity reservation is performed here.</p></div>${cards?`<div class="oa-grid" style="margin-top:12px">${cards}</div>`:""}`;
+}
+function renderPilotDecision(d){
+ const mount=$("pilotDecisionRecord"); if(!mount)return;
+ const b=d.owner_bounds||{},sel=d.participant_selection||{},safe=d.booking_safeguards||{};
+ mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Owner pilot decision record</h3><span class="oa-pill">${esc(d.status||"owner_action")}</span></div>
+ <p><strong>Decision:</strong> ${esc(d.decision||"not_recorded")} · <strong>recorded:</strong> ${esc(d.owner_decision_recorded===true?"yes":"no")}</p>
+ <p class="mini"><strong>Rulebooks:</strong> maintenance ${esc(d.maintenance_rulebook_status||"unavailable")} · fleet ${esc(d.fleet_rulebook_status||"unavailable")}</p>
+ <p class="mini"><strong>Owner bounds:</strong> participant limit ${b.participant_limit==null?"not recorded":esc(b.participant_limit)} · duration ${b.duration_days==null?"not recorded":esc(b.duration_days+" days")}</p>
+ <p class="mini"><strong>Participant selection:</strong> ${esc(sel.mode||"manual")} · automatic selection ${sel.automatic_selection_allowed===true?"allowed":"not allowed"} · eligibility must be source-approved.</p>
+ <p class="mini"><strong>Booking safeguards:</strong> <code>${esc(safe.availability_authority||"/api/availability")}</code> then <code>${esc(safe.collision_revalidation_authority||"/api/checkout")}</code>.</p>
+ <p class="mini">${esc(d.next_step||"Explicit owner approval and pilot bounds remain required.")}</p>
+ <p class="oa-boundary">This is a decision record, not pilot execution. It cannot auto-enroll customers, activate a fleet account or recurring commitment, send outreach, override price/discount/invoice terms, or reserve capacity.</p></div>`;
 }
 function renderCapacity(c){
  const mount=$("capacityDecision"); if(!mount)return;
