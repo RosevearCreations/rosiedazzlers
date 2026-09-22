@@ -1,29 +1,32 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 476 — Provider HOLD Decision Traceability & Closure Review**.
+Current source direction: **Build 477 — Recovery Drill Evidence Refresh & Closure Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Provider HOLD Decision Traceability & Closure Review authority
-The current release adds read-only evidence-date continuity, deterministic evidence trace keys and explicit operator-review prerequisites over the retained provider HOLD decision package. Missing or unmatched operator review remains a truthful HOLD.
+## Current Recovery Drill Evidence Refresh & Closure Review authority
+The current release adds read-only owner-review traceability, explicit evidence-refresh or bounded non-Production drill planning, plan prerequisites and required post-observation evidence over the retained recovery evidence package. It does not execute a refresh/drill or authorize a Production restore.
 
 Focused source authority:
 
-`python scripts/provider_hold_decision_traceability_closure_review_check.py`
+`python scripts/recovery_drill_evidence_refresh_closure_review_check.py`
 
-The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`.
+The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md` — current bounded contract.
-4. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
-5. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
-6. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
-7. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — retained provider decision authority.
-8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+3. `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md` — current bounded contract.
+4. `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md` — retained predecessor contract.
+5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
+6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
+7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
+8. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — retained recovery decision authority.
+9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
 
 - `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
 
