@@ -9,6 +9,7 @@ The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION
 Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
 - `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
 - `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
@@ -101,25 +102,25 @@ Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is the active bounded release.
+**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is the active bounded release.
 
 Scope:
-- refresh direct authenticated Customer, Detailer, Operations and Admin role/device/browser observations under the retained 30-day evidence window;
-- distinguish current dated negative observations from retained or stale historical acceptance;
-- keep stale, missing and unavailable role/device coverage explicit rather than inferring no regression from source checks;
-- prepare bounded remediation triage items only when current authenticated negative evidence exists;
-- require explicit re-observation after any separately authorized remediation before regression closure can be reconsidered;
+- converge canonical maintenance/fleet rulebook approval status with explicit owner pilot decision state;
+- keep participant and duration bounds explicit and unresolved when the owner has not supplied them;
+- retain manual-only participant/account selection and source-approved eligibility requirements;
+- retain current availability revalidation through `/api/availability` and final collision/revalidation through `/api/checkout`;
+- represent explicit owner hold/approval decisions without converting either state into automatic pilot execution;
 - preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; and
-- perform no browser-farm execution, screenshot capture/polling, automatic remediation, schema/storage/business mutation, canonical-HOLD mutation, outreach or permanent polling.
+- perform no auto-enrollment, recurring commitment activation, capacity reservation, booking/provider/accounting mutation, rulebook runtime write, outreach or permanent polling.
 
-Current contract: `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`. Retained device authority: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`. Retained pilot-readiness authority: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the current authenticated device observation refresh & regression triage authority, retained authenticated-device authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current owner approval & pilot decision authority, retained maintenance/fleet owner-decision and operational-pilot authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.
+**Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review** is next only after the current release is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_476_485.md`; it has not run out.
