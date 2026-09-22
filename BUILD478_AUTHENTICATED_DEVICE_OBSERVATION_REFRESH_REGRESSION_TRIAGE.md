@@ -61,7 +61,7 @@ Build 478 performs no screenshot capture/polling, automated browser-farm executi
 ## Acceptance
 The exact candidate must pass focused Authenticated Device Observation Refresh & Regression Triage authority, retained Build 468/458/448/438/419 authorities, responsive/accessibility supporting authorities, Current Source Gate, exact feature-preview acceptance, exact Development deployment/runtime acceptance, protected-main PR checks and independent exact resulting-`main` Production deployment/runtime/business acceptance.
 
-A source/runtime GREEN result is not real-device proof. Missing, stale, historical-only, unavailable or current negative evidence remains explicit for operator review.
+A source/runtime GREEN result is not real-device proof. Missing, stale, historical-only, unavailable or current negative evidence remains explicit for operator review. The living release queue remains current-state focused; retained historical authority is referenced by durable contract filenames and roadmap evidence.
 
 ## Next bounded release
 **Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** begins only after Build 478 is independently GREEN on protected `main`.
