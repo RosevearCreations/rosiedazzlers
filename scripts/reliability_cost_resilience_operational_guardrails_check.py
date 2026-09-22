@@ -68,7 +68,7 @@ require(readme, [
 ], "README Build 464 authority")
 require(handoff, [
     "BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md",
-    "Production deployment/runtime acceptance",
+    "Production deployment/runtime/business acceptance",
 ], "project handoff Build 464 authority")
 require(blockers, ["Provider", "Recovery", "Build 464"], "canonical HOLD backlog")
 require(retained454, ["# Build 454 — Reliability, Security, Cost & Resilience Reassessment", "Cloudflare billing", "real Production restore"], "retained Build 454")
