@@ -46,6 +46,9 @@ No charge, refund, notification send, webhook replay, provider configuration cha
 
 The traceability package exposes provider evidence classification, timestamps, freshness, trace key and review metadata only. It does not expose customer names, recipients, message contents, payment-request IDs, provider event IDs or credentials.
 
+## Release-stage boundary
+Historical provider authorities continue to validate their own durable evidence and mutation boundaries after the living queue advances. Build 476 adds traceability on top of those authorities; it does not redefine their recorded provider outcomes or source-availability classifications.
+
 ## Acceptance
 The exact candidate must pass `scripts/provider_hold_decision_traceability_closure_review_check.py`, retained Build 436/446/456/466 provider authorities, Current Source Gate, exact feature-preview acceptance, exact-SHA Development deployment/runtime acceptance, protected-main PR checks and independent exact resulting-`main` Cloudflare Production deployment/runtime/business acceptance.
 
