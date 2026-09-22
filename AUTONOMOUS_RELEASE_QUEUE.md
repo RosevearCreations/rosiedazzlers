@@ -106,7 +106,7 @@ Scope:
 - never infer equal split, price-weighted split, percentage allocation or booking-total allocation; and
 - introduce no automatic price/discount, booking, accounting, inventory, provider, schema/storage or polling mutation.
 
-Current contract: `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`. Retained completeness authority: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
+Current contract: `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`. Retained completeness authority: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 The exact candidate must pass the current allocation/margin-readiness authority, retained service-economics authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
