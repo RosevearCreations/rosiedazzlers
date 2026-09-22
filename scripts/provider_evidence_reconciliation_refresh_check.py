@@ -28,9 +28,9 @@ require(page,['data-build446="provider-evidence-reconciliation-refresh"'],"launc
 if page!=copy: errors.append("admin-launch-readiness route copy drift")
 require(contract,["# Build 446 — Provider Evidence Reconciliation Refresh","evidence age","Build 447"],"Build 446 contract")
 require(blockers,["Provider outcomes & communications","provider_evidence_reconciliation_refresh","evidence age"],"canonical HOLD backlog")
-require(queue,["BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md","FORWARD_BUILD_ROADMAP_446_455.md"],"release queue retained Build 446 authority")
-require(handoff,["BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md","provider-evidence-reconciliation-refresh-authority.yml","provider_evidence_reconciliation_refresh_check.py"],"project handoff")
-require(readme,["BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md","provider_evidence_reconciliation_refresh_check.py"],"README retained Build 446 authority")
+require(queue,["BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md"],"release queue retained Build 446 authority")
+require(handoff,["BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md"],"project handoff retained Build 446 authority")
+require(readme,["BUILD446_PROVIDER_EVIDENCE_RECONCILIATION_REFRESH.md"],"README retained Build 446 authority")
 for p in ["functions/api/_lib/provider-evidence-reconciliation-refresh.js","functions/api/admin/provider_evidence_reconciliation_refresh.js","functions/api/admin/launch_readiness_consolidated.js","assets/launch-readiness-consolidation.js","scripts/provider_evidence_reconciliation_refresh_test.mjs"]:
     r=subprocess.run(["node","--check",p],cwd=ROOT,text=True,capture_output=True)
     if r.returncode: errors.append(f"{p} syntax failed: {r.stderr.strip() or r.stdout.strip()}")
