@@ -104,21 +104,20 @@ require(roadmap, [
 ], "renewed roadmap")
 require(blockers, ["# Rosie Dazzlers — Current Production HOLD Inventory", "A HOLD remains open until dated, attributable evidence", "Build 462 adds ordered, aggregate remediation priorities"], "canonical HOLD backlog")
 require(queue, [
-    "**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.",
-    "**Build 473 — Service Economics Allocation & Margin Review Readiness** is next",
-    "BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md"
-], "release queue")
-require(handoff, [
-    "**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.",
     "BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md",
-    "staff_mobile_remediation_verification_check.py"
-], "handoff")
+    "FORWARD_BUILD_ROADMAP_466_475.md",
+    "Production deployment/runtime/business acceptance"
+], "release queue retained Build 472 authority")
+require(handoff, [
+    "BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md",
+    "staff_mobile_remediation_verification_check.py",
+    "FORWARD_BUILD_ROADMAP_466_475.md"
+], "handoff retained Build 472 authority")
 require(readme, [
-    "Current source direction: **Build 472 — Staff & Mobile Remediation Verification**.",
     "BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md",
     "staff_mobile_remediation_verification_check.py",
     "Production is not considered GREEN from source promotion alone."
-], "README")
+], "README retained Build 472 authority")
 for gate, label in ((dev, "Development gate"), (prod, "Production gate")):
     require(gate, [
         "staff_mobile_remediation_verification_check.py",
