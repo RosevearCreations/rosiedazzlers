@@ -1,4 +1,4 @@
-// Build 462 — read-only remediation-priority enrichment over retained Build 452 staff/mobile learning.
+// Build 472 — read-only remediation verification over retained Build 462 staff/mobile priorities.
 import { buildStaffWorkflowSupportExceptionLearning } from "./staff-workflow-support-exception-learning.js";
 
 const REVIEW_COHORT_MIN = 2;
@@ -45,12 +45,15 @@ export function buildStaffSupportMobileEfficiencyLearning({
   ].sort(compareCandidates).slice(0, 15);
 
   const remediation_priorities = buildRemediationPriorities(learning_candidates, evidence_status);
+  const remediation_verification = buildRemediationVerification(remediation_priorities, evidence_status);
 
   return {
     build: 452,
     authority: "staff_support_mobile_efficiency_learning",
     release_enrichment_build: 462,
     release_authority: "staff_mobile_friction_remediation_priorities",
+    verification_enrichment_build: 472,
+    verification_authority: "staff_mobile_remediation_verification",
     generated_at: generated_at || new Date().toISOString(),
     evidence_status,
     staff_workflow: retained.staff_workflow,
@@ -58,6 +61,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     mobile_field_workflow: mobile,
     learning_candidates,
     remediation_priorities,
+    remediation_verification_summary: remediation_verification.summary,
+    remediation_verification: remediation_verification.rows,
     source_status: safeSourceStatus(source_status),
     truth_boundary: {
       repeated_pattern_proves_root_cause: false,
@@ -68,6 +73,9 @@ export function buildStaffSupportMobileEfficiencyLearning({
       remediation_priority_proves_root_cause: false,
       remediation_priority_proves_staff_fault: false,
       remediation_priority_proves_business_impact: false,
+      current_pattern_proves_remediation_effect: false,
+      remediation_verification_proves_device_friction: false,
+      remediation_verification_proves_business_impact: false,
       efficiency_improvement_claimed: false
     },
     boundaries: {
@@ -84,6 +92,7 @@ export function buildStaffSupportMobileEfficiencyLearning({
       automatic_task_completion_allowed: false,
       automatic_exception_resolution_allowed: false,
       automatic_remediation_allowed: false,
+      automatic_verification_closure_allowed: false,
       role_ceiling_change_allowed: false,
       blame_inference_allowed: false,
       customer_or_provider_outreach_allowed: false,
@@ -203,6 +212,54 @@ function buildRemediationPriorities(candidates, evidenceStatus) {
     automatic_exception_resolution_authorized: false,
     automatic_remediation_authorized: false
   }));
+}
+
+function buildRemediationVerification(priorities, evidenceStatus) {
+  const rows = Array.isArray(priorities) ? priorities : [];
+  const currentEvidenceComplete = evidenceStatus === "observed";
+  const currentPatternEvidenceCount = currentEvidenceComplete
+    ? rows.filter((row) => positiveWhole(row?.occurrence_count) > 0).length
+    : 0;
+
+  const verificationRows = rows.map((row) => ({
+    rank: row.rank,
+    review_priority: row.review_priority,
+    area: row.area,
+    pattern: row.pattern,
+    current_occurrence_count: positiveWhole(row.occurrence_count),
+    evidence_state: row.evidence_state,
+    verification_status: currentEvidenceComplete
+      ? "current_pattern_observed_no_outcome_attribution"
+      : "evidence_incomplete",
+    current_pattern_evidence_present: currentEvidenceComplete && positiveWhole(row.occurrence_count) > 0,
+    remediation_execution_evidence_present: false,
+    before_after_comparable_evidence_present: false,
+    remediation_outcome_verified: false,
+    root_cause_proven: false,
+    staff_fault_inferred: false,
+    device_friction_proven: false,
+    business_impact_proven: false,
+    conclusion: currentEvidenceComplete
+      ? "Current attributable pattern evidence is present, but this bounded source contains no recorded remediation execution or like-for-like before/after evidence; remediation outcome is not verified."
+      : "Current source evidence is incomplete, so remediation outcome verification must remain open.",
+    manual_verification: "Confirm any separately authorized remediation change, reproduce the owning workflow with an allowed role on a representative device/browser, and compare attributable like-for-like evidence before claiming an outcome."
+  }));
+
+  return {
+    summary: {
+      state: currentEvidenceComplete
+        ? (rows.length ? "current_pattern_evidence_present_outcome_unverified" : "no_current_priority_pattern_outcome_unverified")
+        : "evidence_incomplete",
+      priorities_reviewed: rows.length,
+      current_pattern_evidence_count: currentPatternEvidenceCount,
+      remediation_execution_evidence_count: 0,
+      comparable_before_after_evidence_count: 0,
+      remediation_outcome_verified_count: 0,
+      attribution_complete: false,
+      operator_review_required: true
+    },
+    rows: verificationRows
+  };
 }
 
 function remediationSuggestion(area) {

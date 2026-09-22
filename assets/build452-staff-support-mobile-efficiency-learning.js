@@ -1,4 +1,4 @@
-// Build 462 — manual remediation-priority enrichment over retained Build 452 staff/support/mobile learning UI.
+// Build 472 — manual remediation verification over retained Build 462 staff/mobile priorities.
 (function attachBuild452Learning(globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -21,16 +21,18 @@
       if (!response.ok || !data) throw new Error(data?.error || "Efficiency learning evidence could not be loaded.");
       renderSummary(data);
       renderMobile(data.mobile_field_workflow || {});
+      renderVerification(data.remediation_verification_summary || {}, data.remediation_verification || []);
       renderRemediation(data.remediation_priorities || []);
       renderCandidates(data.learning_candidates || []);
       renderSources(data.source_status || {});
       setStatus(
-        "Snapshot refreshed. Evidence status: " + String(data.evidence_status || "unknown").toUpperCase() + ". Role ceilings, job state and exception resolution remain unchanged.",
+        "Snapshot refreshed. Evidence status: " + String(data.evidence_status || "unknown").toUpperCase() + ". Verification remains fail-closed unless attributable remediation and comparable before/after evidence exist.",
         data.evidence_status === "observed" ? "ok" : "warn"
       );
     } catch (error) {
       $("summaryGrid").innerHTML = '<div class="learning-empty">No bounded learning snapshot is available.</div>';
       $("mobileGrid").innerHTML = '<div class="learning-empty">No Detailer workspace cohort evidence is available.</div>';
+      $("remediationVerificationList").innerHTML = '<div class="learning-empty">No remediation verification evidence is available.</div>';
       $("remediationPriorityList").innerHTML = '<div class="learning-empty">No bounded remediation priority is available.</div>';
       $("candidateList").innerHTML = '<div class="learning-empty">No supported review candidate is available.</div>';
       $("sourceList").innerHTML = '<div class="learning-empty">Evidence source status unavailable.</div>';
@@ -49,7 +51,8 @@
       ["Support exceptions", support.exceptions_observed ?? 0, String(support.repeated_exception_patterns ?? 0) + " repeated pattern(s)"],
       ["Detailer jobs observed", mobile.jobs_observed ?? 0, mobile.possibly_truncated ? "Bounded row limit reached" : "Bounded workspace"],
       ["Pending detailer responses", mobile.response_counts?.pending ?? 0, "Not proof of refusal or missed notification"],
-      ["Review candidates", (data.learning_candidates || []).length, "Root cause / delay proven: NO"]
+      ["Review candidates", (data.learning_candidates || []).length, "Root cause / delay proven: NO"],
+      ["Verified remediation outcomes", data.remediation_verification_summary?.remediation_outcome_verified_count ?? 0, "No outcome inferred from priority or timing"]
     ];
     $("summaryGrid").innerHTML = cards.map((row) =>
       '<article class="learning-stat"><span class="mini">' + esc(row[0]) + '</span><strong>' + esc(row[1]) + '</strong><span class="mini">' + esc(row[2]) + '</span></article>'
@@ -76,6 +79,30 @@
 
   function stat(name, value) {
     return '<article class="learning-stat"><span class="mini">' + esc(name) + '</span><strong>' + esc(value) + '</strong><span class="mini">aggregate only</span></article>';
+  }
+
+  function renderVerification(summary, rows) {
+    const mount = $("remediationVerificationList");
+    if (!mount) return;
+    const state = String(summary?.state || "unavailable");
+    const head =
+      '<div class="learning-source"><strong>Verification state</strong><span class="pill">' + esc(label(state)) + '</span><span class="mini">' +
+      esc(summary?.current_pattern_evidence_count ?? 0) + ' current pattern(s) · ' +
+      esc(summary?.remediation_outcome_verified_count ?? 0) + ' verified remediation outcome(s)</span></div>';
+    if (!rows.length) {
+      mount.innerHTML = head + '<div class="learning-empty">No current remediation-priority row is available. This does not prove a remediation worked or that the workflow is friction-free.</div>';
+      return;
+    }
+    mount.innerHTML = head + rows.map((row) =>
+      '<article class="learning-candidate priority-' + esc(row.review_priority || "normal") + '">' +
+        '<div class="learning-candidate-head"><strong>#' + esc(row.rank ?? "—") + ' · ' + esc(label(row.area)) + '</strong><span class="pill">' + esc(label(row.verification_status || "unavailable")) + '</span></div>' +
+        '<p>' + esc(row.conclusion || "") + '</p>' +
+        '<p class="mini"><strong>Current bounded occurrences:</strong> ' + esc(row.current_occurrence_count ?? 0) + ' · <strong>Current pattern evidence:</strong> ' + (row.current_pattern_evidence_present ? "YES" : "NO") + '</p>' +
+        '<p class="mini"><strong>Recorded remediation execution:</strong> NO · <strong>Comparable before/after evidence:</strong> NO · <strong>Outcome verified:</strong> NO</p>' +
+        '<p class="mini"><strong>Manual verification:</strong> ' + esc(row.manual_verification || "") + '</p>' +
+        '<p class="mini">Root cause proven: NO · Staff fault inferred: NO · Device friction proven: NO · Business impact proven: NO</p>' +
+      '</article>'
+    ).join("");
   }
 
   function renderRemediation(rows) {
@@ -137,7 +164,7 @@
       pageKey: "admin-staff-workflow-support-learning",
       onReady: async () => {
         $("refreshEfficiencyLearning452")?.addEventListener("click", refresh);
-        setStatus("Select Refresh efficiency snapshot to load current bounded evidence. No background monitoring is running.", "soft");
+        setStatus("Select Refresh verification snapshot to load current bounded evidence. No background monitoring is running.", "soft");
       }
     });
   }, { once: true });
