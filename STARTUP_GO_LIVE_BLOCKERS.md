@@ -28,6 +28,8 @@ Build 477 adds read-only recovery drill evidence refresh and closure review. Sta
 
 Build 468 adds authenticated device regression closure to the retained device authority. Current regression evidence is separated from historical acceptance; historical acceptance cannot override a current regression. Missing/stale coverage remains refresh-required, responsive source checks remain supporting-only, and no endpoint mutates this HOLD automatically.
 
+Build 478 adds authenticated device observation refresh and regression triage to that retained authority. Current dated negative observations produce bounded operator-review triage items, while incomplete role/device coverage remains observation-refresh-required. Triage does not prove root cause, staff fault or remediation effectiveness, no browser farm or source check can prove absence of regression, and this HOLD is never narrowed automatically.
+
 Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted pricing-review evidence only. A pricing-review signal does not authorize a price/discount change and Build 451 does not close any HOLD in this backlog.
 
 ## Current cycle reconciliation
