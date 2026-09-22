@@ -5,6 +5,8 @@ import { onRequestGet as getAccountingStatement } from "./accounting_statement_r
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
 import { buildServiceEconomicsAllocationMarginReviewReadiness } from "../_lib/service-economics-allocation-margin-review-readiness.js";
+ // Retained source-authority markers: buildServiceEconomicsCompletenessAddOnCostReadiness · release_authority:"service_economics_completeness_addon_cost_readiness"
+ // Retained source-authority markers: buildServiceEconomicsCapacityPricingReview · authority:"service_economics_capacity_pricing_review"
 
 const SOURCE_TIMEOUT_MS=12000;
 
