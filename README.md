@@ -147,6 +147,8 @@ Retained and current authorities include:
 \`\`\`bash
 python scripts/authenticated_device_observation_refresh_regression_triage_check.py
 node scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
+python scripts/recovery_drill_evidence_refresh_closure_review_check.py
+node scripts/recovery_drill_evidence_refresh_closure_review_test.mjs
 python scripts/reliability_cost_resilience_trend_review_check.py
 node scripts/reliability_cost_resilience_trend_review_test.mjs
 python scripts/service_economics_allocation_margin_review_readiness_check.py
