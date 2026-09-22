@@ -65,12 +65,11 @@ require(client,[
 ],"Build 469 workbench client")
 require(page,[
  'data-build469="maintenance-fleet-controlled-pilot-activation-readiness"',
- "Build 469 · controlled pilot activation readiness",
  "Controlled pilot activation readiness",
  'id="controlledPilotReadiness"',
  "/api/availability",
  "/api/checkout"
-],"Build 469 workbench page")
+],"Build 469 retained workbench surface")
 if page!=copy: errors.append("Build 469 workbench route copy drift")
 if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("Build 469 workbench must contain exactly one H1")
 require(contract,[

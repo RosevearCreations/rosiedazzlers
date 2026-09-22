@@ -1,4 +1,4 @@
-// Build 439/449/459/469 — read-only owner-decision convergence, commercial readiness + controlled-pilot decision packet.
+// Build 439/449/459/469/479 — read-only owner-decision convergence, commercial readiness + explicit controlled-pilot decision record.
 const MAINTENANCE_DECISIONS = Object.freeze([
   ["eligibility","Eligibility","Which customer/vehicle types qualify, and is prior Rosie service or a minimum condition required?"],
   ["cadence","Cadence","Which service intervals are allowed, can seasonality change them, and what reschedule policy applies?"],
@@ -87,6 +87,14 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
     pilotSafeguard("commercial_terms","Owner-approved commercial terms",activationReady?"source_approved":"owner_action")
   ];
   const controlledPilotReady=activationReady;
+  const pilotDecisionInput=objectOrEmpty(input.pilot_decision);
+  const explicitPilotDecision=clean(pilotDecisionInput.decision).toLowerCase();
+  const ownerPilotDecisionRecorded=["approve","hold"].includes(explicitPilotDecision);
+  const ownerPilotAuthorizationRecorded=explicitPilotDecision==="approve";
+  const participantLimit=positiveWholeOrNull(pilotDecisionInput.participant_limit);
+  const durationDays=positiveWholeOrNull(pilotDecisionInput.duration_days);
+  const pilotBoundsComplete=participantLimit!==null&&durationDays!==null;
+  const pilotDecisionRecordReady=controlledPilotReady&&ownerPilotAuthorizationRecorded&&pilotBoundsComplete;
 
   return {
     build:439,
@@ -95,6 +103,8 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
     activation_authority:"fleet_maintenance_commercial_activation_readiness",
     controlled_pilot_readiness_build:469,
     controlled_pilot_authority:"maintenance_fleet_controlled_pilot_activation_readiness",
+    pilot_decision_build:479,
+    pilot_decision_authority:"maintenance_fleet_owner_approval_pilot_decision",
     retained_authority:"maintenance_fleet_owner_approval_convergence",
     authority:"fleet_maintenance_commercial_decision_closure",
     mode:"maintenance_fleet_owner_approval_convergence",
@@ -197,6 +207,57 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
         ? "Commercial terms and safeguards are complete enough for a bounded owner pilot decision. Explicit owner pilot authorization and explicit pilot bounds are still required; no customer-facing activation has occurred."
         : "Resolve the remaining canonical commercial decisions before a controlled-pilot activation decision can be reviewed."
     },
+    pilot_decision_record:{
+      build:479,
+      authority:"maintenance_fleet_owner_approval_pilot_decision",
+      retained_readiness_authority:"maintenance_fleet_controlled_pilot_activation_readiness",
+      status:pilotDecisionRecordReady?"pilot_decision_recorded":"owner_action",
+      decision:ownerPilotDecisionRecorded?explicitPilotDecision:"not_recorded",
+      owner_decision_recorded:ownerPilotDecisionRecorded,
+      owner_pilot_authorization_recorded:ownerPilotAuthorizationRecorded,
+      decision_record_ready:pilotDecisionRecordReady,
+      commercial_rulebooks_approved:controlledPilotReady,
+      maintenance_rulebook_status:maintenanceStatus,
+      fleet_rulebook_status:fleetStatus,
+      owner_bounds:{
+        participant_limit:participantLimit,
+        duration_days:durationDays,
+        complete:pilotBoundsComplete,
+        participant_limit_inferred:false,
+        duration_inferred:false
+      },
+      participant_selection:{
+        mode:"manual",
+        automatic_selection_allowed:false,
+        eligibility_must_be_source_approved:true,
+        participant_identity_exposed:false,
+        customer_auto_enrollment_allowed:false,
+        fleet_auto_activation_allowed:false
+      },
+      booking_safeguards:{
+        current_live_availability_required:true,
+        availability_authority:clean(capacity.availability_authority)||"/api/availability",
+        checkout_collision_revalidation_required:true,
+        collision_revalidation_authority:clean(capacity.collision_revalidation_authority)||"/api/checkout",
+        live_capacity_inferred:false,
+        capacity_reservation_allowed:false
+      },
+      pilot_activation_allowed:false,
+      recurring_commitment_activation_allowed:false,
+      recurring_billing_allowed:false,
+      customer_outreach_allowed:false,
+      service_area_expansion_allowed:false,
+      price_or_discount_override_allowed:false,
+      invoice_term_override_allowed:false,
+      canonical_hold_mutated:false,
+      next_step:pilotDecisionRecordReady
+        ? "Owner pilot decision and explicit bounds are recorded for bounded operator review. Participant selection remains manual and every real booking still requires current availability plus checkout collision revalidation; pilot activation remains separately authorized."
+        : !controlledPilotReady
+          ? "Resolve canonical maintenance/fleet business approvals before an owner pilot decision can be recorded as ready."
+          : !ownerPilotAuthorizationRecorded
+            ? "Record an explicit owner pilot decision. Approval is not inferred from source/runtime GREEN."
+            : "Record explicit positive participant and duration bounds before the pilot decision record can become review-ready."
+    },
     maintenance:{
       source_status:maintenanceStatus,
       decisions:maintenanceDecisions,
@@ -243,7 +304,11 @@ export function buildMaintenanceFleetOwnerApprovalConvergence(input={}) {
       customer_identity_exposed:false,
       controlled_pilot_activation_allowed:false,
       automatic_pilot_participant_selection_allowed:false,
-      customer_facing_automation_allowed:false
+      customer_facing_automation_allowed:false,
+      pilot_decision_record_write_available:false,
+      automatic_owner_pilot_decision_allowed:false,
+      recurring_commitment_activation_allowed:false,
+      capacity_reservation_allowed:false
     }
   };
 }
@@ -327,5 +392,6 @@ function safeCountMap(value){
   return out;
 }
 function whole(value){const n=Number(value);return Number.isFinite(n)&&n>=0?Math.floor(n):0;}
+function positiveWholeOrNull(value){const n=Number(value);return Number.isFinite(n)&&n>0?Math.floor(n):null;}
 function objectOrEmpty(value){return value&&typeof value==="object"&&!Array.isArray(value)?value:{};}
 function clean(value){return String(value??"").trim();}

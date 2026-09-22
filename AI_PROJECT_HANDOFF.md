@@ -3,25 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`.
 
-**Build 478 — Authenticated Device Observation Refresh & Regression Triage** is the active bounded release.
+**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is the active bounded release.
 
-**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.
+**Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`. Retained device regression authority: `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`. Retained pilot-readiness authority: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Authenticated Device Observation Refresh & Regression Triage contract
-- Reuse retained Build 438/448/458/468 authenticated-device authorities and the existing `/api/admin/authenticated_device_visual_acceptance` surface.
-- Refresh direct authenticated Customer, Detailer, Operations and Admin role/device/browser observations under the retained 30-day freshness rule.
-- Separate current dated negative observations from retained or stale historical acceptance; historical acceptance never overrides a current regression.
-- Keep incomplete role/device coverage explicit as `observation_refresh_required`; source checks cannot prove absence of real-device regression.
-- Prepare bounded operator-review triage items only where current authenticated negative evidence exists.
-- Require re-observation after any separately authorized remediation; triage does not prove root cause, staff fault, impact or effectiveness.
-- No browser farm, screenshot capture/polling, automatic remediation, schema/storage/customer/business/accounting/inventory mutation, HOLD mutation, outreach or permanent polling.
+## Current Maintenance & Fleet Owner Approval & Pilot Decision contract
+- Reuse retained Build 439/449/459/469 maintenance/fleet owner-decision authorities and the existing `/api/admin/maintenance_fleet_owner_approval` surface.
+- Keep `config/maintenance-plan-business-rulebook.json` and `config/fleet-business-rulebook.json` as the canonical commercial sources; unresolved approvals remain `owner_action`.
+- Expose one read-only `pilot_decision_record` containing owner decision state, explicit participant/duration bounds, manual participant-selection rules and retained booking safeguards.
+- Never infer owner approval or pilot bounds from source/runtime GREEN, demand, availability or historical evidence.
+- Keep participant/account selection manual and eligibility subordinate to canonical source.
+- Require `/api/availability` revalidation and final `/api/checkout` collision revalidation for every real booking.
+- No auto-enrollment, recurring commitment activation, fleet activation, booking creation, capacity reservation, price/discount/invoice override, provider/accounting mutation, HOLD mutation, outreach or permanent polling.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required. Production deployment/runtime/business acceptance must independently prove that exact SHA.
 
 ## Durable current-release authorities
+- `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
+- `.github/workflows/maintenance-fleet-owner-approval-pilot-decision-authority.yml`
+- `scripts/maintenance_fleet_owner_approval_pilot_decision_check.py`
+- `scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs`
+- `functions/api/_lib/maintenance-fleet-owner-approval.js`
 - `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
 - `.github/workflows/authenticated-device-observation-refresh-regression-triage-authority.yml`
 - `scripts/authenticated_device_observation_refresh_regression_triage_check.py`

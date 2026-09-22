@@ -175,6 +175,8 @@ jobs:
           node --check scripts/fleet_maintenance_commercial_activation_readiness_test.mjs
           python -m py_compile scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
           node --check scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
+          python -m py_compile scripts/maintenance_fleet_owner_approval_pilot_decision_check.py
+          node --check scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs
           python -m py_compile scripts/local_search_measurement_conversion_attribution_check.py
           node --check scripts/local_search_measurement_conversion_attribution_test.mjs
           node --check functions/api/_lib/local-search-measurement-conversion-attribution.js
@@ -451,6 +453,11 @@ jobs:
         run: |
           python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
           node scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
+
+      - name: Validate maintenance & fleet owner approval & pilot decision authority
+        run: |
+          python scripts/maintenance_fleet_owner_approval_pilot_decision_check.py
+          node scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs
 
       - name: Validate local search measurement & conversion attribution authority
         run: |

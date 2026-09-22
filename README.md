@@ -1,23 +1,27 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 478 — Authenticated Device Observation Refresh & Regression Triage**.
+Current source direction: **Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Authenticated Device Observation Refresh & Regression Triage authority
-The current release reuses the retained authenticated-device evidence system, refreshes direct role/device/browser observation review and prepares bounded remediation triage only when current authenticated negative evidence exists. Historical acceptance cannot override a current regression, incomplete observation coverage remains refresh-required, and source checks cannot prove absence of a real-device regression.
+## Current Maintenance & Fleet Owner Approval & Pilot Decision authority
+The current release reuses the retained maintenance/fleet owner-decision system and exposes one read-only pilot decision record. Canonical rulebook approval, explicit owner decision, participant/duration bounds, manual participant selection, and current availability/checkout safeguards remain separate and explicit. Missing owner approval or bounds remain `owner_action`; source/runtime GREEN never activates a pilot.
 
 Focused source authority:
 
-`python scripts/authenticated_device_observation_refresh_regression_triage_check.py`
+`python scripts/maintenance_fleet_owner_approval_pilot_decision_check.py`
+
+Behavioral proof:
+
+`node scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs`
 
 The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md` — current bounded contract.
-4. `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md` — retained predecessor contract.
+3. `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md` — current bounded contract.
+4. `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
 7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
@@ -26,6 +30,7 @@ The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
 - `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
 
@@ -161,6 +166,8 @@ python scripts/local_search_provider_window_attribution_closure_check.py
 node scripts/local_search_provider_window_attribution_closure_test.mjs
 python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
 node scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
+python scripts/maintenance_fleet_owner_approval_pilot_decision_check.py
+node scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs
 python scripts/recovery_evidence_validation_drill_decision_readiness_check.py
 node scripts/recovery_evidence_validation_drill_decision_readiness_test.mjs
 python scripts/reliability_cost_resilience_operational_guardrails_check.py
