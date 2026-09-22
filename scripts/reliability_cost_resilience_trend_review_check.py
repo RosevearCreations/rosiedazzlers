@@ -71,20 +71,18 @@ require(doc,[
     "Build 475 — Production Learning & Roadmap Renewal"
 ],"Build 474 contract")
 require(queue,[
-    "**Build 474 — Reliability, Cost & Resilience Trend Review** is the active bounded release.",
-    "**Build 475 — Production Learning & Roadmap Renewal** is next",
-    "it has not run out"
-],"Build 474 queue")
+    "BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md",
+    "Production deployment/runtime/business acceptance",
+],"retained Build 474 queue authority")
 require(handoff,[
-    "**Build 474 — Reliability, Cost & Resilience Trend Review** is the active bounded release.",
-    "provider-owned billing/CPU",
-    "real Production recovery"
-],"Build 474 handoff")
-require(readme,[
-    "Current source direction: **Build 474 — Reliability, Cost & Resilience Trend Review**.",
+    "BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md",
     "reliability_cost_resilience_trend_review_check.py",
-    "Production is not considered GREEN from source promotion alone."
-],"Build 474 README")
+],"retained Build 474 handoff authority")
+require(readme,[
+    "BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md",
+    "reliability_cost_resilience_trend_review_check.py",
+    "Production is not considered GREEN from source promotion alone.",
+],"retained Build 474 README authority")
 require(blockers,["Provider","Recovery"],"canonical HOLD backlog")
 for text,label in [(source_gate,"Development Source Gate"),(prod_gate,"Production Business Acceptance")]:
     require(text,[
