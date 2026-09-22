@@ -186,6 +186,8 @@ jobs:
           node --check scripts/booking_funnel_quote_pricing_learning_test.mjs
           python -m py_compile scripts/booking_quote_experiment_readiness_check.py
           node --check scripts/booking_quote_experiment_readiness_test.mjs
+          python -m py_compile scripts/booking_quote_controlled_experiment_framework_check.py
+          node --check scripts/booking_quote_controlled_experiment_framework_test.mjs
           node --check functions/api/_lib/booking-funnel-quote-pricing-learning.js
           node --check functions/api/admin/booking_funnel_quote_pricing_learning.js
           node --check assets/build451-booking-funnel-quote-pricing-learning.js
@@ -447,6 +449,11 @@ jobs:
         run: |
           python scripts/booking_quote_experiment_readiness_check.py
           node scripts/booking_quote_experiment_readiness_test.mjs
+
+      - name: Validate booking & quote controlled experiment framework authority
+        run: |
+          python scripts/booking_quote_controlled_experiment_framework_check.py
+          node scripts/booking_quote_controlled_experiment_framework_test.mjs
 
       - name: Validate staff workflow, support & mobile efficiency learning authority
         run: |
