@@ -3,23 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`.
+The synchronized Production predecessor is retained through `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`.
 
-**Build 470 — Local Search Provider Window & Attribution Closure** is the active bounded release.
+**Build 471 — Booking & Quote Controlled Experiment Framework** is the active bounded release.
 
-**Build 471 — Booking & Quote Controlled Experiment Framework** is next only after the current release is independently GREEN on protected `main`.
+**Build 472 — Staff & Mobile Remediation Verification** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`. Retained local-search contracts: `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`, `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`, `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` and `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Retained booking/quote contracts: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` and `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Local Search Provider Window & Attribution Closure contract
-- Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system, endpoint or tracking identity.
-- Require explicit Search Console property / Google Business Profile location identity plus provider period start/end and observed-at evidence before closure.
-- Require current provider snapshots, an explicit available first-party observation window, provider↔first-party date overlap and complete bounded anonymous same-session funnel evidence.
-- Missing/stale provider evidence and unavailable/truncated/misaligned first-party evidence remain explicit non-closure states rather than inferred success.
-- A `closure_ready` state closes only the descriptive comparison window. It does not prove ranking, indexing, Maps visibility, provider performance or Google-caused conversion.
-- Provider metrics remain source-attributed and are never joined to sessions, customers or persisted bookings or divided by funnel conversion rates.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never fabricates provider evidence or Google outcomes.
-- No schema/provider/analytics/publishing/outreach/DNS/ad-spend/customer/booking/accounting/inventory/storage mutation or permanent polling.
+## Current Booking & Quote Controlled Experiment Framework contract
+- Reuse the retained booking/quote learning endpoint and `/admin-booking-quote-retention-learning.html` workbench; do not create a parallel analytics, pricing or experiment system.
+- Translate Build 461 hypotheses into definitions with evidence eligibility, retained primary measure/baseline, explicit stop conditions and null owner-defined success/activation fields.
+- `owner_approval_required` means ready for owner decision only; owner approval remains `not_recorded`, activation unauthorized and results `not_started`.
+- Success threshold, target direction, winner rule, duration and allocation remain null until a separate explicit owner decision.
+- Missing/small-sample evidence remains `needs_more_evidence` or `unavailable`.
+- Booking-stage drops, quote-band outcomes and accepted-value deltas remain descriptive only; do not infer price sensitivity, customer motive, discount need, completed work or causation.
+- No customer/session/quote identity join and no automatic price/discount, booking-rule, availability, catalogue, outreach, quote acceptance, booking creation, experiment activation/winner selection, provider, schema/storage mutation or permanent polling.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never fabricates owner approval or experiment results.
 - Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
 
 ## Retained Local Search Provider & Attribution Evidence Quality contract
@@ -51,6 +51,11 @@ Current contract: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
 
 ## Durable current-release authorities
+- `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
+- `.github/workflows/booking-quote-controlled-experiment-framework-authority.yml`
+- `scripts/booking_quote_controlled_experiment_framework_check.py`
+- `scripts/booking_quote_controlled_experiment_framework_test.mjs`
+- `functions/api/_lib/booking-funnel-quote-pricing-learning.js`
 - `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - `.github/workflows/local-search-provider-window-attribution-closure-authority.yml`
 - `scripts/local_search_provider_window_attribution_closure_check.py`

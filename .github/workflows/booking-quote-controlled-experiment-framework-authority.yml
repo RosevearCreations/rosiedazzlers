@@ -1,0 +1,60 @@
+name: Build 471 — Booking & Quote Controlled Experiment Framework Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-booking-quote-controlled-experiment-framework-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: booking-quote-controlled-experiment-framework
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/booking_quote_controlled_experiment_framework_check.py
+          node --check scripts/booking_quote_controlled_experiment_framework_test.mjs
+          node --check functions/api/_lib/booking-funnel-quote-pricing-learning.js
+          node --check functions/api/admin/booking_funnel_quote_pricing_learning.js
+          node --check assets/build451-booking-funnel-quote-pricing-learning.js
+      - name: Validate controlled experiment framework
+        run: python scripts/booking_quote_controlled_experiment_framework_check.py
+      - name: Authority summary
+        run: |
+          {
+            echo '### Build 471 — Booking & Quote Controlled Experiment Framework'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Existing Build 441/451/461 workbench reused: PASS'
+            echo '- Evidence eligibility and bounded measurement definition: EXPLICIT'
+            echo '- Owner approval / duration / allocation / threshold / winner: FAIL-CLOSED'
+            echo '- Stop conditions: EXPLICIT'
+            echo '- Automatic price/discount/booking-rule/outreach/experiment activation: NONE'
+            echo '- Schema/provider/customer identity mutation or polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

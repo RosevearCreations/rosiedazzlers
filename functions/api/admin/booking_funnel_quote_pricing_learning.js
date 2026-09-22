@@ -1,4 +1,4 @@
-// Build 451 retained endpoint enriched by Build 461 — Booking & Quote Experiment Readiness. Read-only, manual refresh.
+// Build 451/461/471 retained GET-only endpoint enriched by experiment readiness and controlled experiment framework. Read-only, manual refresh.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getBookingRebookingFunnel } from "./booking_rebooking_funnel.js";
 import { onRequestGet as getQuotePipeline } from "./quote_pipeline_list.js";
