@@ -45,7 +45,7 @@ if page!=copy: errors.append("admin-seo-tasks route copies must remain byte-iden
 if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("admin-seo-tasks must retain exactly one H1")
 require(contract,["# Build 470 — Local Search Provider Window & Attribution Closure","closure_ready","property/location identity","bounded anonymous same-session","does not prove provider performance or causation","Build 471 — Booking & Quote Controlled Experiment Framework"],"Build 470 contract")
 require(blockers,["Local-search provider evidence"],"canonical HOLD backlog")
-require(queue,["BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md","Build 471 — Booking & Quote Controlled Experiment Framework"],"release queue")
+require(queue,["BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md","BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md"],"release queue retained Build 470 authority")
 require(handoff,["BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md","local_search_provider_window_attribution_closure_check.py"],"project handoff")
 require(readme,["BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md","local_search_provider_window_attribution_closure_check.py"],"README")
 require(retained460,["BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md","local_search_measurement_conversion_attribution_test.mjs"],"retained Build 460 authority")
