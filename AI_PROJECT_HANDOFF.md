@@ -3,25 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`.
+The synchronized Production predecessor is retained through `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
-**Build 475 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 476 — Provider HOLD Decision Traceability & Closure Review** is the active bounded release.
 
-**Build 476 — Provider HOLD Decision Traceability & Closure Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Cycle reconciliation: `PRODUCTION_LEARNING_466_474.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`. Retained provider decision authority: `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Production Learning & Roadmap Renewal contract
-- Reconcile Builds 466–474 using only dated attributable owning evidence; source/runtime GREEN never manufactures provider, owner, device, recovery, remediation or allocation success.
-- Preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory and close/narrow nothing without explicit evidence-backed operator action.
-- Publish `PRODUCTION_LEARNING_466_474.md` as the cycle reconciliation and `FORWARD_BUILD_ROADMAP_476_485.md` as the renewed bounded sequence.
-- Keep provider/local-search outcomes provider-dependent where owning provider evidence is absent.
-- Keep recovery/device/fleet/experiment decisions owner-action where explicit observation or approval is still required.
-- Keep staff/mobile, service-economics and reliability conclusions fail-closed to attributable remediation/allocation/history evidence.
-- No schema/provider/customer/booking/pricing/staff/accounting/inventory/experiment/fleet/recovery/storage/outreach mutation or permanent polling.
+## Current Provider HOLD Decision Traceability & Closure Review contract
+- Reuse the retained provider outcome, reconciliation, source-availability and HOLD-decision authorities; do not create a replacement provider evidence or decision store.
+- Require source availability, parseable/current evidence timestamps and the retained decision package before any closure review can advance.
+- Generate a deterministic evidence trace key so an explicit operator review can be matched to the exact provider evidence snapshot.
+- Treat an absent, invalid or trace-mismatched operator review as `retain_hold_operator_review_required`.
+- A matching narrowing review may become a manual HOLD-update candidate only; it never edits `STARTUP_GO_LIVE_BLOCKERS.md` automatically.
+- No provider/payment/refund/message, schema/storage, customer/business/accounting/inventory, operator-review persistence, HOLD mutation, outreach or permanent polling.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
+- `.github/workflows/provider-hold-decision-traceability-closure-review-authority.yml`
+- `scripts/provider_hold_decision_traceability_closure_review_check.py`
+- `scripts/provider_hold_decision_traceability_closure_review_test.mjs`
+- `functions/api/_lib/provider-hold-decision-traceability-closure-review.js`
 - `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_466_474.md`
 - `FORWARD_BUILD_ROADMAP_476_485.md`

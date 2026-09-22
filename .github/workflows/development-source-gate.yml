@@ -238,6 +238,9 @@ jobs:
           python -m py_compile scripts/provider_outcome_review_hold_decision_readiness_check.py
           node --check scripts/provider_outcome_review_hold_decision_readiness_test.mjs
           node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
+          python -m py_compile scripts/provider_hold_decision_traceability_closure_review_check.py
+          node --check scripts/provider_hold_decision_traceability_closure_review_test.mjs
+          node --check functions/api/_lib/provider-hold-decision-traceability-closure-review.js
           python -m py_compile scripts/recovery_evidence_validation_drill_decision_readiness_check.py
           node --check scripts/recovery_evidence_validation_drill_decision_readiness_test.mjs
           node --check functions/api/_lib/recovery-evidence-validation-drill-decision-readiness.js
@@ -382,6 +385,12 @@ jobs:
           python scripts/provider_outcome_review_hold_decision_readiness_check.py
           node scripts/provider_outcome_review_hold_decision_readiness_test.mjs
           node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
+
+      - name: Validate provider HOLD decision traceability & closure review authority
+        run: |
+          python scripts/provider_hold_decision_traceability_closure_review_check.py
+          node scripts/provider_hold_decision_traceability_closure_review_test.mjs
+          node --check functions/api/_lib/provider-hold-decision-traceability-closure-review.js
 
       - name: Validate recovery artifact & drill evidence review authority
         run: |

@@ -1,0 +1,39 @@
+name: Build 476 — Provider HOLD Decision Traceability & Closure Review Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-provider-hold-decision-traceability-closure-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: provider-hold-decision-traceability-closure-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/provider_hold_decision_traceability_closure_review_check.py
+          node --check functions/api/_lib/provider-hold-decision-traceability-closure-review.js
+          node --check functions/api/admin/provider_evidence_reconciliation_refresh.js
+          node --check functions/api/admin/launch_readiness_consolidated.js
+          node --check assets/launch-readiness-consolidation.js
+          node --check scripts/provider_hold_decision_traceability_closure_review_test.mjs
+      - name: Validate provider HOLD decision traceability & closure review
+        run: |
+          python scripts/provider_hold_decision_traceability_closure_review_check.py
+          node scripts/provider_hold_decision_traceability_closure_review_test.mjs

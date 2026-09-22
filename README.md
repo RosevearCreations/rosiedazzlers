@@ -1,29 +1,31 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 475 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 476 — Provider HOLD Decision Traceability & Closure Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Production Learning & Roadmap Renewal authority
-The current release reconciles Builds 466–474 and renews the next bounded roadmap without converting source/runtime GREEN into provider, owner, real-device, recovery, remediation, allocation or provider-cost success.
+## Current Provider HOLD Decision Traceability & Closure Review authority
+The current release adds read-only evidence-date continuity, deterministic evidence trace keys and explicit operator-review prerequisites over the retained provider HOLD decision package. Missing or unmatched operator review remains a truthful HOLD.
 
 Focused source authority:
 
-`python scripts/production_learning_roadmap_renewal_check.py`
+`python scripts/provider_hold_decision_traceability_closure_review_check.py`
 
-Cycle reconciliation is `PRODUCTION_LEARNING_466_474.md`; the renewed sequence is `FORWARD_BUILD_ROADMAP_476_485.md`. Missing owning evidence remains a truthful HOLD.
+The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
-4. `PRODUCTION_LEARNING_466_474.md` — current cycle reconciliation.
-5. `FORWARD_BUILD_ROADMAP_476_485.md` — renewed evidence-driven sequence.
-6. `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md` — retained predecessor contract.
-7. `FORWARD_BUILD_ROADMAP_466_475.md` — retained prior roadmap.
+3. `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md` — current bounded contract.
+4. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
+5. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
+6. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
+7. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — retained provider decision authority.
 8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
 
 - `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_466_474.md`
@@ -171,6 +173,8 @@ python scripts/fleet_maintenance_commercial_decision_closure_check.py
 node scripts/fleet_maintenance_commercial_decision_closure_test.mjs
 python scripts/fleet_maintenance_commercial_activation_readiness_check.py
 node scripts/fleet_maintenance_commercial_activation_readiness_test.mjs
+python scripts/provider_hold_decision_traceability_closure_review_check.py
+node scripts/provider_hold_decision_traceability_closure_review_test.mjs
 python scripts/provider_outcome_review_hold_decision_readiness_check.py
 node scripts/provider_outcome_review_hold_decision_readiness_test.mjs
 python scripts/production_learning_roadmap_renewal_check.py
@@ -220,4 +224,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 475 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 477 — Recovery Drill Evidence Refresh & Closure Review** is next only after the current release is independently GREEN on protected `main`.

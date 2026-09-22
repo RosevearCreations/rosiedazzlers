@@ -143,6 +143,7 @@ function renderProviderClosure(data){
   const reconciliation=data.provider_evidence_reconciliation_refresh||{};
   const availabilityReview=data.provider_evidence_closure_availability_review||{};
   const decisionReadiness=data.provider_outcome_review_hold_decision_readiness||{};
+  const traceability=data.provider_hold_decision_traceability_closure_review||{};
   const payments=closure.payments||{}, refunds=closure.refunds||{}, delivery=closure.delivery||{};
   const rows=Array.isArray(closure.required)?closure.required:[];
   const host=$("#providerOut");
@@ -165,6 +166,9 @@ function renderProviderClosure(data){
       ${metric("Closure review",availabilityReview.closure_candidate_review?.status||"not_candidate_missing_evidence")}
       ${metric("Decision readiness",decisionReadiness.status||"retain_hold_missing_evidence")}
       ${metric("Narrowing review",decisionReadiness.decision_package?.narrowing_review_eligible?"eligible":"not eligible")}
+      ${metric("Date continuity",traceability.evidence_date_continuity?.status||"incomplete_missing_or_invalid_date")}
+      ${metric("Operator review trace",traceability.operator_review_traceability?.status||"operator_review_not_recorded")}
+      ${metric("Closure review",traceability.closure_review?.status||"retain_hold_provider_package_not_ready")}
     </div>
     <p><strong>Stripe:</strong> ${chip(payments.stripe?.observed?"verified":payments.stripe?.classification||"provider_dependent")} · <strong>PayPal:</strong> ${chip(payments.paypal?.observed?"verified":payments.paypal?.classification||"provider_dependent")}</p>
     <div class="stack">${rows.map(x=>{const age=(reconciliation.rows||[]).find(r=>r.id===x.id)||{};return `<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Source: ${esc(age.source||"retained provider evidence")} · Evidence age: ${esc(age.age_days==null?"not dated":`${age.age_days} days`)} · Freshness: ${esc(age.freshness||"unknown")}</p></div>${chip(x.status||x.classification||"provider_dependent")}</article>`;}).join("")}</div>
@@ -174,6 +178,10 @@ function renderProviderClosure(data){
     <p class="mini"><strong>Closure candidate:</strong> ${esc(availabilityReview.closure_candidate_review?.retained_closure_candidate?"yes — operator review still required":"no")} · ${esc(availabilityReview.closure_candidate_review?.detail||"Required provider evidence is not yet review-ready.")}</p>
     <p class="mini"><strong>Operator HOLD decision:</strong> ${esc(decisionReadiness.decision_package?.detail||"Retain the HOLD until the decision package has complete current provider evidence.")}</p>
     <p class="mini"><strong>Default without operator action:</strong> retain HOLD · <strong>Eligible decisions:</strong> ${esc((decisionReadiness.decision_package?.permitted_operator_actions||["retain_hold"]).join(", "))}</p>
+    <p class="mini"><strong>Evidence trace key:</strong> <code>${esc(traceability.evidence_date_continuity?.evidence_trace_key||"unavailable")}</code></p>
+    <p class="mini"><strong>Evidence dates:</strong> ${esc(traceability.evidence_date_continuity?.oldest_evidence_at||"not dated")} → ${esc(traceability.evidence_date_continuity?.latest_evidence_at||"not dated")} · <strong>Valid dated:</strong> ${esc(traceability.evidence_date_continuity?.valid_dated_count??0)}/${esc(traceability.evidence_date_continuity?.required_count??4)}</p>
+    <p class="mini"><strong>Build 476 closure review:</strong> ${chip(traceability.closure_review?.status||"retain_hold_provider_package_not_ready")} · ${esc(traceability.closure_review?.detail||"Provider HOLD remains retained until evidence continuity and explicit operator review are traceable.")}</p>
+    <p class="mini"><strong>Operator review record:</strong> ${traceability.operator_review_traceability?.review_valid?"valid matching record":"not recorded / not valid"} · <strong>Manual HOLD update candidate:</strong> ${traceability.closure_review?.manual_hold_update_candidate?"yes":"no"}</p>
     <p class="muted">A closure candidate never edits the HOLD backlog automatically. Provider accepted is not final delivery. This view summarizes persisted evidence only; it does not create a charge, initiate a refund, send a notification or replay a webhook.</p>`;
 }
 
