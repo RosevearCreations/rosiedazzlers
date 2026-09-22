@@ -5,9 +5,10 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`.
+The synchronized predecessor contracts are retained through `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
 - `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
 - `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
@@ -91,25 +92,25 @@ The synchronized predecessor contracts are retained through `BUILD470_LOCAL_SEAR
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 471 — Booking & Quote Controlled Experiment Framework** is the active bounded release.
+**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.
 
 Scope:
-- reuse the retained Build 441/451/461 booking, quote, pricing-learning and experiment-readiness authorities rather than creating a replacement analytics, pricing or experiment system;
-- translate supported retained hypotheses into explicit controlled-experiment definitions with evidence eligibility, existing aggregate measures, owner-defined success-threshold placeholders and explicit stop conditions;
-- keep owner approval, duration, allocation, target direction, winner rule and results fail-closed until a separate explicit owner decision exists;
-- treat `owner_approval_required` as a review state only, never activation authorization or evidence that an experiment has started;
-- preserve the existing privacy/truth boundary: no customer/session/quote identity join and no inference of price sensitivity, customer motive, discount need, completed work or causation;
-- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; source/runtime GREEN cannot fabricate experiment results or owner approval; and
-- introduce no automatic price/discount, booking-rule, availability, catalogue, outreach, quote acceptance, booking creation, experiment activation/winner selection, provider, schema/storage or permanent-polling mutation.
+- reuse the retained Build 452/462 staff, support and Detailer mobile evidence authorities rather than creating a replacement staff, telemetry, support or remediation system;
+- verify each retained remediation-priority candidate against current attributable bounded evidence from the existing owning sources;
+- distinguish current pattern evidence from recorded remediation execution, comparable before/after evidence and an actually verified outcome;
+- keep remediation outcome fail-closed when execution evidence or like-for-like comparison evidence is absent;
+- never infer root cause, staff fault, device/browser friction, duration/latency, missed notification, business impact or causation from priority, timing, absence or presence of a current pattern;
+- preserve existing role ceilings, owning workflow authority, aggregate/privacy boundaries and the canonical `STARTUP_GO_LIVE_BLOCKERS.md` HOLD inventory; and
+- introduce no automatic remediation/closure, exception resolution, role change, job/task action, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
 
-Current contract: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Retained booking/quote authorities: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`, `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` and retained booking/rebooking funnel ownership.
+Current contract: `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`. Retained staff/mobile authorities: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`, `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`, `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md` and retained Detailer mobile workflow authorities.
 
-The exact candidate must pass the current Booking & Quote Controlled Experiment Framework authority, retained booking/quote authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current Staff & Mobile Remediation Verification authority, retained staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 472 — Staff & Mobile Remediation Verification** is next only after the current release is independently GREEN on protected `main`.
+**Build 473 — Service Economics Allocation & Margin Review Readiness** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_466_475.md`; it has not run out.
 
