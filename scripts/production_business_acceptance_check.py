@@ -104,6 +104,10 @@ required_authorities = {
         "scripts/provider_hold_decision_traceability_closure_review_check.py",
         "scripts/provider_hold_decision_traceability_closure_review_test.mjs",
     ],
+    "recovery_drill_evidence_refresh_closure_review": [
+        "scripts/recovery_drill_evidence_refresh_closure_review_check.py",
+        "scripts/recovery_drill_evidence_refresh_closure_review_test.mjs",
+    ],
     "recovery_export_operational_proof": [
         "scripts/recovery_export_operational_proof_check.py",
         "scripts/recovery_export_operational_proof_test.mjs",
@@ -233,6 +237,9 @@ workflow = require(WORKFLOW, [
     "Validate provider HOLD decision traceability & closure review authority",
     "python scripts/provider_hold_decision_traceability_closure_review_check.py",
     "node scripts/provider_hold_decision_traceability_closure_review_test.mjs",
+    "Validate recovery drill evidence refresh & closure review authority",
+    "python scripts/recovery_drill_evidence_refresh_closure_review_check.py",
+    "node scripts/recovery_drill_evidence_refresh_closure_review_test.mjs",
     "Validate recovery export operational proof authority",
     "Validate customer & staff Production workflow evidence authority",
     "Validate local acquisition evidence closure authority",
@@ -305,6 +312,7 @@ print("- whole-platform growth readiness authorities are present across commerci
 print("- controlled soft-launch real-world evidence authority remains fail-closed and identity-safe")
 print("- provider payment/refund/delivery evidence closure remains read-only, aggregate and fail-closed")
 print("- provider HOLD decision traceability requires current dated evidence plus a matching explicit operator review before any manual closure update candidate")
+print("- recovery refresh/drill closure review requires explicit owner traceability, recorded prerequisites and post-observation evidence without executing a Production restore")
 print("- backup/restore/accountant-export operational proof remains read-only and artifact-truthful")
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
