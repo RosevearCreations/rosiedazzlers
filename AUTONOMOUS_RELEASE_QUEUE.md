@@ -6,6 +6,7 @@ This living queue records only the current bounded release path. Historical impl
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
 The synchronized predecessor contracts are retained through `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`.
+Retained predecessor: Build 471 — Booking & Quote Controlled Experiment Framework.
 
 ## Retained cumulative authority pointers
 - `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
