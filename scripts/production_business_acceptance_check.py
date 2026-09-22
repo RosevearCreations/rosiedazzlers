@@ -100,6 +100,10 @@ required_authorities = {
         "scripts/provider_evidence_closure_check.py",
         "scripts/provider_evidence_closure_test.mjs",
     ],
+    "provider_hold_decision_traceability_closure_review": [
+        "scripts/provider_hold_decision_traceability_closure_review_check.py",
+        "scripts/provider_hold_decision_traceability_closure_review_test.mjs",
+    ],
     "recovery_export_operational_proof": [
         "scripts/recovery_export_operational_proof_check.py",
         "scripts/recovery_export_operational_proof_test.mjs",
@@ -226,6 +230,9 @@ workflow = require(WORKFLOW, [
     "Validate launch readiness consolidation authorities",
     "Validate controlled soft launch acceptance authority",
     "Validate provider evidence closure authority",
+    "Validate provider HOLD decision traceability & closure review authority",
+    "python scripts/provider_hold_decision_traceability_closure_review_check.py",
+    "node scripts/provider_hold_decision_traceability_closure_review_test.mjs",
     "Validate recovery export operational proof authority",
     "Validate customer & staff Production workflow evidence authority",
     "Validate local acquisition evidence closure authority",
@@ -297,6 +304,7 @@ print("- final finance, genuine review, rebook, maintenance and fleet authoritie
 print("- whole-platform growth readiness authorities are present across commercial/SEO/media, operations, finance and I.T./observability")
 print("- controlled soft-launch real-world evidence authority remains fail-closed and identity-safe")
 print("- provider payment/refund/delivery evidence closure remains read-only, aggregate and fail-closed")
+print("- provider HOLD decision traceability requires current dated evidence plus a matching explicit operator review before any manual closure update candidate")
 print("- backup/restore/accountant-export operational proof remains read-only and artifact-truthful")
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
