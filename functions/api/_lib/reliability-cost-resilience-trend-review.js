@@ -86,14 +86,23 @@ export function buildReliabilityCostResilienceTrendReview({
 }
 
 function buildFirstPartyTrafficTrend(reliability, base) {
-  const traffic = reliability?.traffic || {};
-  const current24 = finiteNonNegative(traffic?.events_24h) ?? finiteNonNegative(base?.metrics?.traffic_events_24h);
-  const week = finiteNonNegative(traffic?.events_7d) ?? finiteNonNegative(base?.metrics?.traffic_events_7d);
-  const priorAverageFromSource = finiteNonNegative(traffic?.prior_six_day_average);
+  const explicitTraffic = reliability?.traffic && typeof reliability.traffic === "object" && Object.keys(reliability.traffic).length > 0
+    ? reliability.traffic
+    : null;
+  const traffic = explicitTraffic || {};
+  const current24 = explicitTraffic
+    ? finiteNonNegative(traffic?.events_24h)
+    : finiteNonNegative(base?.metrics?.traffic_events_24h);
+  const week = explicitTraffic
+    ? finiteNonNegative(traffic?.events_7d)
+    : finiteNonNegative(base?.metrics?.traffic_events_7d);
+  const priorAverageFromSource = explicitTraffic ? finiteNonNegative(traffic?.prior_six_day_average) : null;
   const priorAverage = priorAverageFromSource ?? (
     current24 != null && week != null ? round2(Math.max(0, week - current24) / 6) : null
   );
-  const sourceRatio = finiteNonNegative(traffic?.recent_to_prior_ratio) ?? finiteNonNegative(base?.metrics?.traffic_recent_to_prior_ratio);
+  const sourceRatio = explicitTraffic
+    ? finiteNonNegative(traffic?.recent_to_prior_ratio)
+    : finiteNonNegative(base?.metrics?.traffic_recent_to_prior_ratio);
   const ratio = sourceRatio ?? (
     current24 != null && priorAverage != null && priorAverage > 0
       ? round2(current24 / priorAverage)
