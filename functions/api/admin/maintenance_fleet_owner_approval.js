@@ -1,4 +1,4 @@
-// Build 439/449/459/469 — admin-only, GET-only owner approval, activation readiness + controlled-pilot decision readiness.
+// Build 439/449/459/469/479 — admin-only, GET-only owner approval, activation readiness + explicit pilot decision record.
 import { requireStaffAccess } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { buildMaintenanceFleetOwnerApprovalConvergence } from "../_lib/maintenance-fleet-owner-approval.js";
@@ -29,9 +29,11 @@ export async function onRequestGet({request,env}) {
     current_build:449,
     activation_readiness_build:459,
     controlled_pilot_readiness_build:469,
+    pilot_decision_build:479,
     refresh_authority:"fleet_maintenance_commercial_decision_closure",
     activation_authority:"fleet_maintenance_commercial_activation_readiness",
     controlled_pilot_authority:"maintenance_fleet_controlled_pilot_activation_readiness",
+    pilot_decision_authority:"maintenance_fleet_owner_approval_pilot_decision",
     generated_at:generatedAt,
     source_status:{
       commercial_activation:sourceState(activation),
@@ -62,5 +64,5 @@ function sourceState(value){
   return {available:value?.available===true,restricted:value?.restricted===true,http_status:Number(value?.status)||null,error_class:value?.error_class||null};
 }
 function json(value,status=200){
-  return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Owner-Approval":"build-439-449-459-469-read-only"}});
+  return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Owner-Approval":"build-439-449-459-469-479-read-only"}});
 }

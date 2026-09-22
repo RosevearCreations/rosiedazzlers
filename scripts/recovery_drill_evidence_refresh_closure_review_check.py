@@ -87,7 +87,8 @@ require(blockers,[
 ],"canonical HOLD backlog")
 require(queue,[
     "BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md",
-    "Build 478 — Authenticated Device Observation Refresh & Regression Triage",
+    "BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md",
+    "FORWARD_BUILD_ROADMAP_476_485.md",
     "Production deployment/runtime/business acceptance",
     "it has not run out"
 ],"current release queue")
