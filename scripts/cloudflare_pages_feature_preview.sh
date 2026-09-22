@@ -5,7 +5,8 @@ set -euo pipefail
 # Verifies the exact GitHub SHA/branch reached a successful preview deployment
 # with Functions enabled, then smokes the immutable deployment URL.
 # It may remove only non-terminal previews from the same numbered release staging
-# branch or older SHAs of the same feature branch; main/dev are always excluded.
+# branch or older SHAs of the same feature branch, plus one failed exact-SHA feature
+# preview for a bounded recreate attempt; main/dev are always excluded.
 
 CF_PROJECT_NAME="${CF_PROJECT_NAME:-rosiedazzlers}"
 CF_FEATURE_BRANCH="${CF_FEATURE_BRANCH:-${GITHUB_REF_NAME:-}}"
@@ -114,18 +115,24 @@ cleanup_same_build_preview_queue() {
 cleanup_same_build_preview_queue
 
 recover_exact_feature_preview() {
-  local original_id="$1" delete_code create_code recreated_id recreated_sha recreated_branch recreated_env attempt
+  local original_id="$1" original_status="$2" delete_code create_code recreated_id recreated_sha recreated_branch recreated_env attempt recovered_status
   cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${original_id}" > "$TMP_DIR/recover-exact.json"
   [[ "$(jq -r '.result.environment // empty' "$TMP_DIR/recover-exact.json")" == "preview" ]] || fail "Refusing recovery of a non-preview feature deployment." 25
   [[ "$(jq -r '.result.deployment_trigger.metadata.branch // empty' "$TMP_DIR/recover-exact.json")" == "$CF_FEATURE_BRANCH" ]] || fail "Feature recovery branch identity mismatch." 26
   [[ "$(jq -r '.result.deployment_trigger.metadata.commit_hash // empty' "$TMP_DIR/recover-exact.json")" == "$TARGET_SHA" ]] || fail "Feature recovery SHA identity mismatch." 27
-  [[ "$(jq -r '.result.latest_stage.status // empty' "$TMP_DIR/recover-exact.json")" == "active" ]] || fail "Feature recovery requires an active non-terminal exact preview." 28
+  recovered_status=$(jq -r '.result.latest_stage.status // empty' "$TMP_DIR/recover-exact.json")
+  [[ "$recovered_status" == "$original_status" ]] || fail "Feature recovery status changed before bounded retry." 28
+  case "$recovered_status" in
+    active|failure|failed) ;;
+    *) fail "Feature recovery requires an active or failed exact preview." 28 ;;
+  esac
 
+  note "Bounded exact feature preview recovery: original deployment ${original_id} status=${recovered_status}."
   delete_code=$(curl --silent --show-error --output "$TMP_DIR/recover-delete.json" --write-out '%{http_code}' --request DELETE \
     --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
     "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${original_id}?force=true" || true)
   case "$delete_code" in
-    200|202|204) note "Removed stuck exact feature preview ${original_id} after strict preview/SHA/branch verification." ;;
+    200|202|204) note "Removed exact feature preview ${original_id} after strict preview/SHA/branch/status verification." ;;
     *) fail "Cloudflare refused stuck exact feature preview removal: HTTP ${delete_code}." 29 ;;
   esac
 
@@ -180,7 +187,12 @@ for attempt in $(seq 1 12); do
     note "Exact feature deployment ${exact_id}: ${exact_status:-unknown} (attempt ${attempt}/12)."
     case "$exact_status" in
       success) break ;;
-      failure|failed|canceled|cancelled) fail "Exact feature deployment reached terminal status ${exact_status}." 14 ;;
+      failure|failed)
+        note "Exact feature deployment reached ${exact_status}; attempting one bounded exact-SHA preview recreate."
+        recover_exact_feature_preview "$exact_id" "$exact_status"
+        break
+        ;;
+      canceled|cancelled) fail "Exact feature deployment reached terminal status ${exact_status}." 14 ;;
     esac
   else
     note "Exact feature SHA is not visible in Cloudflare Pages yet (attempt ${attempt}/12)."
@@ -191,7 +203,7 @@ done
 if [[ "$exact_status" != "success" ]]; then
   [[ "$exact_status" == "active" ]] || fail "Exact feature deployment did not become successful; last status ${exact_status:-unknown}." 16
   note "Exact feature preview remained active through the bounded observation window; starting exact non-Production recovery."
-  recover_exact_feature_preview "$exact_id"
+  recover_exact_feature_preview "$exact_id" "$exact_status"
 fi
 
 cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${exact_id}" > "$TMP_DIR/exact.json"
