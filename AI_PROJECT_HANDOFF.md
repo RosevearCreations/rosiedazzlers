@@ -21,6 +21,7 @@ Current contract: `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`. Retained 
 - No automatic remediation/closure, exception resolution, role change, job/task action, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
 - Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never manufactures remediation execution, device, provider or business-impact evidence.
 - Exact Development and Production deployment/runtime acceptance remain required.
+- Retained Build 454 reliability boundary remains cumulative: provider-owned billing/CPU evidence and real Production recovery remain external evidence and are never inferred from source/runtime GREEN.
 
 ## Durable current-release authorities
 - `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
