@@ -5,6 +5,7 @@ import { buildProviderOutcomeDeliveryEvidence } from "../_lib/provider-outcome-d
 import { buildProviderEvidenceReconciliationRefresh } from "../_lib/provider-evidence-reconciliation-refresh.js";
 import { buildProviderEvidenceClosureAvailabilityReview } from "../_lib/provider-evidence-closure-availability-review.js";
 import { buildProviderOutcomeReviewHoldDecisionReadiness } from "../_lib/provider-outcome-review-hold-decision-readiness.js";
+import { buildProviderHoldDecisionTraceabilityClosureReview } from "../_lib/provider-hold-decision-traceability-closure-review.js";
 
 export async function onRequestGet({ request, env }) {
   const response = await getProviderEvidenceClosure({ request: request.clone(), env });
@@ -26,13 +27,23 @@ export async function onRequestGet({ request, env }) {
     availability_review: closureAvailabilityReview,
     generated_at: generatedAt
   });
+  const holdDecisionTraceabilityClosureReview = buildProviderHoldDecisionTraceabilityClosureReview({
+    decision_readiness: holdDecisionReadiness,
+    availability_review: closureAvailabilityReview,
+    reconciliation: refresh,
+    operator_review: null,
+    generated_at: generatedAt
+  });
   return json({ ok:true, build:446, authority:"provider_evidence_reconciliation_refresh", generated_at:generatedAt,
     retained_authority: payload.authority || "payment_refund_delivery_provider_evidence_closure",
     current_review_authority: "provider_evidence_closure_availability_review",
     current_hold_decision_build: 466,
     current_hold_decision_authority: "provider_outcome_review_hold_decision_readiness",
+    current_hold_traceability_build: 476,
+    current_hold_traceability_authority: "provider_hold_decision_traceability_closure_review",
     refresh, closure_availability_review: closureAvailabilityReview,
-    hold_decision_readiness: holdDecisionReadiness });
+    hold_decision_readiness: holdDecisionReadiness,
+    hold_decision_traceability_closure_review: holdDecisionTraceabilityClosureReview });
 }
 export async function onRequestHead(context) {
   const response = await onRequestGet(context);
