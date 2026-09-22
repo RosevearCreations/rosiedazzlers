@@ -1,7 +1,7 @@
 import { onRequestGet as getBackupRecoveryEvidenceClosure } from "./backup_recovery_evidence_closure.js";
 import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
 import { buildRecoveryEvidenceClosureDrillReadiness } from "../_lib/recovery-evidence-closure-drill-readiness.js";
-import { buildRecoveryEvidenceValidationDrillDecisionReadiness } from "../_lib/recovery-evidence-validation-drill-decision-readiness.js";
+import { buildRecoveryEvidenceValidationDrillDecisionReadiness } from "../_lib/recovery-evidence-validation-drill-decision-readiness.js";\nimport { buildRecoveryDrillEvidenceRefreshClosureReview } from "../_lib/recovery-drill-evidence-refresh-closure-review.js";
 export async function onRequestGet({request,env}){
  const response=await getBackupRecoveryEvidenceClosure({request:request.clone(),env});
  const payload=await response.json().catch(()=>null);
@@ -16,14 +16,21 @@ export async function onRequestGet({request,env}){
   closure,review,readiness:closureReadiness,
   source_available:response.ok&&Boolean(payload?.evidence),generated_at:generatedAt
  });
+ const refreshClosureReview=buildRecoveryDrillEvidenceRefreshClosureReview({
+  validation:validationDrillDecisionReadiness,closure,review,readiness:closureReadiness,
+  owner_review:null,generated_at:generatedAt
+ });
  return json({ok:response.ok&&Boolean(payload?.evidence),build:447,authority:"recovery_artifact_drill_evidence_review",generated_at:generatedAt,
   retained_authority:payload?.authority||"backup_recovery_evidence_closure",
   current_readiness_authority:"recovery_evidence_closure_drill_readiness",
   current_validation_build: 467,
   current_validation_authority:"recovery_evidence_validation_drill_decision_readiness",
+  current_refresh_closure_build: 477,
+  current_refresh_closure_authority:"recovery_drill_evidence_refresh_closure_review",
   review,closure_readiness:closureReadiness,
-  validation_drill_decision_readiness:validationDrillDecisionReadiness},response.ok&&payload?.evidence?200:503);
+  validation_drill_decision_readiness:validationDrillDecisionReadiness,
+  refresh_closure_review:refreshClosureReview},response.ok&&payload?.evidence?200:503);
 }
 export async function onRequestHead(context){const response=await onRequestGet(context);return new Response(null,{status:response.status,headers:response.headers})}
 export async function onRequestOptions(){return new Response(null,{status:204,headers:{"Cache-Control":"no-store",Allow:"GET, HEAD, OPTIONS"}})}
-function json(value,status=200){return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Recovery-Evidence":"build-467-read-only"}})}
+function json(value,status=200){return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Recovery-Evidence":"build-477-read-only"}})}
