@@ -24,8 +24,8 @@ require(endpoint,["buildServiceEconomicsAllocationMarginReviewReadiness",'author
 require(asset,["Booking-total split, equal split, price-weighted split","No background monitoring is running."],"Build 473 client")
 require(page,['data-build473="service-economics-allocation-margin-review-readiness"',"Build 473 · Service Economics Allocation &amp; Margin Review Readiness",'id="allocationGrid"',"/assets/build473-service-economics-allocation-margin-review-readiness.js","Estimated overhead is not used"],"Build 473 page")
 require(doc,["# Build 473 — Service Economics Allocation & Margin Review Readiness","Aggregate booleans, a booking total, package price, add-on count or percentage assumption do not prove add-on allocation.","Source promotion alone is never Production GREEN.","Build 474 — Reliability, Cost & Resilience Trend Review"],"Build 473 contract")
-require(queue,["BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md","FORWARD_BUILD_ROADMAP_466_475.md","it has not run out"],"retained Build 473 queue authority")
-require(handoff,["BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md","provider-owned billing/CPU","real Production recovery"],"retained Build 473 handoff authority")
+require(queue,["BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md","Production deployment/runtime/business acceptance"],"retained Build 473 queue authority")
+require(handoff,["BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md","service_economics_allocation_margin_review_readiness_check.py"],"retained Build 473 handoff authority")
 for text,label in [(source_gate,"Development Source Gate"),(production_gate,"Production Business Acceptance")]:
     require(text,["python scripts/service_economics_allocation_margin_review_readiness_check.py","node scripts/service_economics_allocation_margin_review_readiness_test.mjs"],label)
 require(workflow,["Service Economics Allocation Margin Review Readiness Authority","python scripts/service_economics_allocation_margin_review_readiness_check.py","node scripts/service_economics_allocation_margin_review_readiness_test.mjs"],"Build 473 workflow")
