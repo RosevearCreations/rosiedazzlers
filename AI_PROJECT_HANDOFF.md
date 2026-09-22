@@ -12,7 +12,7 @@ The synchronized Production predecessor is retained through `BUILD471_BOOKING_QU
 Current contract: `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`. Retained staff/mobile contracts: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`, `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` and `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 ## Current Staff & Mobile Remediation Verification contract
-- Reuse the retained Build 452/462 endpoint and `/admin-staff-workflow-support-learning.html`; do not create a parallel staff, telemetry, support or remediation system.
+- Reuse the retained staff/mobile endpoint and `/admin-staff-workflow-support-learning.html`; do not create a parallel staff, telemetry, support or remediation system.
 - Current pattern evidence and remediation outcome evidence are separate. A current pattern can remain observable while remediation outcome is still unverified.
 - No remediation outcome is claimed without recorded evidence that a separately authorized remediation occurred and comparable like-for-like before/after evidence exists.
 - A missing current priority pattern does not prove a remediation succeeded; a present pattern does not prove it failed.
