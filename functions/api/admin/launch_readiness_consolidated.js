@@ -19,6 +19,7 @@ import { buildBackupRecoveryEvidenceClosure } from "../_lib/backup-recovery-evid
 import { buildRecoveryArtifactDrillEvidenceReview } from "../_lib/recovery-artifact-drill-evidence-review.js";
 import { buildRecoveryEvidenceClosureDrillReadiness } from "../_lib/recovery-evidence-closure-drill-readiness.js";
 import { buildRecoveryEvidenceValidationDrillDecisionReadiness } from "../_lib/recovery-evidence-validation-drill-decision-readiness.js";
+import { buildRecoveryDrillEvidenceRefreshClosureReview } from "../_lib/recovery-drill-evidence-refresh-closure-review.js";
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
@@ -133,6 +134,15 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const recoveryDrillEvidenceRefreshClosureReview = buildRecoveryDrillEvidenceRefreshClosureReview({
+    validation: recoveryEvidenceValidationDrillDecisionReadiness,
+    closure: backupRecoveryEvidenceClosure,
+    review: recoveryArtifactDrillEvidenceReview,
+    readiness: recoveryEvidenceClosureDrillReadiness,
+    owner_review: null,
+    generated_at: generatedAt
+  });
+
   const authenticatedDeviceVisualAcceptance = buildAuthenticatedDeviceVisualAcceptance({
     launch_evidence: launchEvidenceResult.items,
     workflow_evidence: productionWorkflowEvidence,
@@ -172,6 +182,8 @@ export async function onRequestGet({ request, env }) {
     current_recovery_closure_readiness_authority: "recovery_evidence_closure_drill_readiness",
     recovery_evidence_validation_drill_decision_readiness: recoveryEvidenceValidationDrillDecisionReadiness,
     current_recovery_validation_decision_authority: "recovery_evidence_validation_drill_decision_readiness",
+    recovery_drill_evidence_refresh_closure_review: recoveryDrillEvidenceRefreshClosureReview,
+    current_recovery_refresh_closure_authority: "recovery_drill_evidence_refresh_closure_review",
     authenticated_device_visual_acceptance: authenticatedDeviceVisualAcceptance,
     current_device_visual_authority: "authenticated_device_visual_acceptance",
     current_device_regression_authority: "authenticated_device_regression_closure",
@@ -216,6 +228,10 @@ export async function onRequestGet({ request, env }) {
       recovery_evidence_validation_drill_decision_readiness: {
         available: recoveryExportResult.ok,
         classification: recoveryEvidenceValidationDrillDecisionReadiness.status
+      },
+      recovery_drill_evidence_refresh_closure_review: {
+        available: recoveryExportResult.ok,
+        classification: recoveryDrillEvidenceRefreshClosureReview.status
       },
       authenticated_device_visual_acceptance: {
         available: launchEvidenceResult.ok,

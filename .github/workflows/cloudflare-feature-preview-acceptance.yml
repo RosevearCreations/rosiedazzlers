@@ -56,6 +56,10 @@ jobs:
         shell: bash
         run: bash scripts/cloudflare_pages_feature_preview.sh
 
+      - name: Classify failed feature preview safely
+        if: failure()
+        run: python scripts/cloudflare_pages_feature_failure_diagnostic.py
+
       - name: Record feature-preview boundary
         shell: bash
         run: |
