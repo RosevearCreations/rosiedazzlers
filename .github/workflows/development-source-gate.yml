@@ -480,6 +480,11 @@ jobs:
           python scripts/service_economics_completeness_addon_cost_readiness_check.py
           node scripts/service_economics_completeness_addon_cost_readiness_test.mjs
 
+      - name: Validate service economics allocation & margin review readiness authority
+        run: |
+          python scripts/service_economics_allocation_margin_review_readiness_check.py
+          node scripts/service_economics_allocation_margin_review_readiness_test.mjs
+
       - name: Validate reliability, cost & resilience operational guardrails authority
         run: |
           python scripts/reliability_cost_resilience_operational_guardrails_check.py

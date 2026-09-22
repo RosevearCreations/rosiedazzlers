@@ -3,27 +3,32 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`.
+The synchronized Production predecessor is retained through `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`.
 
-**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.
+**Build 473 — Service Economics Allocation & Margin Review Readiness** is the active bounded release.
 
-**Build 473 — Service Economics Allocation & Margin Review Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 474 — Reliability, Cost & Resilience Trend Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`. Retained staff/mobile contracts: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`, `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` and `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`. Retained economics contracts include `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`, `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md` and `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Staff & Mobile Remediation Verification contract
-- Reuse the retained staff/mobile endpoint and `/admin-staff-workflow-support-learning.html`; do not create a parallel staff, telemetry, support or remediation system.
-- Current pattern evidence and remediation outcome evidence are separate. A current pattern can remain observable while remediation outcome is still unverified.
-- No remediation outcome is claimed without recorded evidence that a separately authorized remediation occurred and comparable like-for-like before/after evidence exists.
-- A missing current priority pattern does not prove a remediation succeeded; a present pattern does not prove it failed.
-- Do not infer root cause, staff fault/performance, device/browser friction, duration/latency, missed notification, business impact or causation.
-- Existing Admin/Senior Detailer/Detailer role ceilings, owning workflows and aggregate/privacy boundaries remain authoritative.
-- No automatic remediation/closure, exception resolution, role change, job/task action, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never manufactures remediation execution, device, provider or business-impact evidence.
+## Current Service Economics Allocation & Margin Review Readiness contract
+- Reuse the retained Service Economics endpoint and protected Admin review surface; do not create a parallel ledger, pricing system, job-cost engine or allocation store.
+- A service/package cohort is margin-review ready only when its recorded booking-to-package linkage and every required revenue, material, labour, cash/refund and COGS component are complete for every included row.
+- A fully linked cohort may be reviewed while a different incomplete cohort remains blocked; this does not support a universal margin conclusion.
+- Add-on margin requires explicit per-add-on allocation rows from an owning evidence source. Aggregate flags, booking totals, package price, add-on count and assumed percentages do not establish allocation.
+- Equal split, price-weighted split, percentage allocation and booking-total reallocation are not allowed.
+- Estimated overhead remains an estimate and does not establish direct service/package or add-on margin readiness.
+- No automatic price/discount, booking, accounting, inventory, provider, schema/storage or background-polling mutation is authorized.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never manufactures missing economics linkage.
 - Exact Development and Production deployment/runtime acceptance remain required.
-- Retained Build 454 reliability boundary remains cumulative: provider-owned billing/CPU evidence and real Production recovery remain external evidence and are never inferred from source/runtime GREEN.
+- Retained reliability boundaries remain cumulative: provider-owned billing/CPU evidence and real Production recovery remain external evidence and are never inferred from source/runtime GREEN.
 
 ## Durable current-release authorities
+- `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`
+- `.github/workflows/service-economics-allocation-margin-review-readiness-authority.yml`
+- `scripts/service_economics_allocation_margin_review_readiness_check.py`
+- `scripts/service_economics_allocation_margin_review_readiness_test.mjs`
+- `functions/api/_lib/service-economics-allocation-margin-review-readiness.js`
 - `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
 - `.github/workflows/staff-mobile-remediation-verification-authority.yml`
 - `scripts/staff_mobile_remediation_verification_check.py`

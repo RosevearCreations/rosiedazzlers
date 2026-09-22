@@ -5,10 +5,11 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`.
-Retained predecessor: Build 471 — Booking & Quote Controlled Experiment Framework.
+The synchronized predecessor contracts are retained through `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`.
+Retained predecessor: Build 472 — Staff & Mobile Remediation Verification.
 
 ## Retained cumulative authority pointers
+- `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`
 - `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
 - `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
 - `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
@@ -93,25 +94,26 @@ Retained predecessor: Build 471 — Booking & Quote Controlled Experiment Framew
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.
+**Build 473 — Service Economics Allocation & Margin Review Readiness** is the active bounded release.
 
 Scope:
-- reuse the retained staff, support and Detailer mobile evidence authorities rather than creating a replacement staff, telemetry, support or remediation system;
-- verify each retained remediation-priority candidate against current attributable bounded evidence from the existing owning sources;
-- distinguish current pattern evidence from recorded remediation execution, comparable before/after evidence and an actually verified outcome;
-- keep remediation outcome fail-closed when execution evidence or like-for-like comparison evidence is absent;
-- never infer root cause, staff fault, device/browser friction, duration/latency, missed notification, business impact or causation from priority, timing, absence or presence of a current pattern;
-- preserve existing role ceilings, owning workflow authority, aggregate/privacy boundaries and the canonical `STARTUP_GO_LIVE_BLOCKERS.md` HOLD inventory; and
-- introduce no automatic remediation/closure, exception resolution, role change, job/task action, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
+- reuse the retained Service Economics endpoint and protected Admin review surface rather than creating a parallel ledger, job-cost, pricing or allocation system;
+- expose service/package allocation readiness only where the recorded package code and every required revenue, material, labour, cash/refund and COGS component are linked for the bounded cohort;
+- expose add-on allocation readiness only from explicit per-add-on allocation rows recorded by an owning source;
+- allow a fully linked service/package cohort to become review-ready even while another cohort remains blocked, without converting partial evidence into a universal margin conclusion;
+- keep add-on margin unavailable when only aggregate flags, booking totals, package price, add-on count or assumed percentages exist;
+- keep estimated overhead outside direct margin-readiness decisions;
+- never infer equal split, price-weighted split, percentage allocation or booking-total allocation; and
+- introduce no automatic price/discount, booking, accounting, inventory, provider, schema/storage or polling mutation.
 
-Current contract: `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`. Retained staff/mobile authorities: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`, `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md`, `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md` and retained Detailer mobile workflow authorities.
+Current contract: `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`. Retained completeness authority: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`.
 
-The exact candidate must pass the current Staff & Mobile Remediation Verification authority, retained staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current allocation/margin-readiness authority, retained service-economics authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 473 — Service Economics Allocation & Margin Review Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 474 — Reliability, Cost & Resilience Trend Review** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_466_475.md`; it has not run out.
 
