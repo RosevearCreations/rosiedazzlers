@@ -111,10 +111,8 @@ require(prod_check, [
     "Validate service economics & job profitability authority",
 ], "Production business source authority")
 
-for text, label in [(queue, "queue"), (handoff, "handoff"), (readme, "README")]:
-    require(text, [
-        "BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md",
-    ], label)
+# Historical Build 428 remains authoritative through its contract, focused workflow,
+# executable tests and durable Production acceptance. Living release documents may advance.
 
 for forbidden in [
     "postJournalEntry(", "method: \"POST\"", "method: 'POST'",

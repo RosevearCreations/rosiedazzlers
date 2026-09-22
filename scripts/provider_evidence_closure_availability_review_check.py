@@ -64,17 +64,15 @@ require(blockers,[
 ],"canonical HOLD backlog")
 require(queue,[
     "BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md",
-    "FORWARD_BUILD_ROADMAP_456_465.md",
     "Production deployment/runtime/business acceptance"
 ],"release queue retained Build 456 authority")
 require(handoff,[
     "BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md",
-    "provider-evidence-closure-availability-review-authority.yml",
     "provider_evidence_closure_availability_review_check.py"
 ],"project handoff retained Build 456 authority")
 require(readme,[
     "BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md",
-    "provider_evidence_closure_availability_review_check.py"
+    "Production is not considered GREEN from source promotion alone."
 ],"README retained Build 456 authority")
 for text,label in [(dev,"Development source gate"),(prod,"Production business acceptance")]:
     require(text,[

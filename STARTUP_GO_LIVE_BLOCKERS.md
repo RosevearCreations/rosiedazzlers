@@ -29,19 +29,20 @@ Build 468 adds authenticated device regression closure to the retained device au
 Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted pricing-review evidence only. A pricing-review signal does not authorize a price/discount change and Build 451 does not close any HOLD in this backlog.
 
 ## Current cycle reconciliation
-`PRODUCTION_LEARNING_456_464.md` confirms that the 456–464 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
+`PRODUCTION_LEARNING_466_474.md` confirms that the 466–474 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
-- `PRODUCTION_LEARNING_456_464.md`
-- `FORWARD_BUILD_ROADMAP_466_475.md`
-- `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
-- `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`
+- `PRODUCTION_LEARNING_466_474.md`
+- `FORWARD_BUILD_ROADMAP_476_485.md`
+- `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
 
-Build 465 renews the roadmap from observed 456–464 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval and unavailable-evidence HOLD until dated attributable closure evidence exists.
+Build 475 renews the roadmap from observed 466–474 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval and unavailable-evidence HOLD until dated attributable closure evidence exists.
 
-Build 466 converges retained provider outcome, delivery, freshness and source-availability evidence into a read-only operator HOLD-decision package. `operator_hold_decision_ready` means only that an operator may review whether dated current provider evidence supports narrowing; the default remains `retain_hold`, and no endpoint mutates this backlog automatically.
+Build 466 retains provider outcome decisions as explicit operator review rather than automatic HOLD mutation. `operator_hold_decision_ready` means only that dated current provider evidence is ready for explicit operator review; it never narrows this backlog automatically. Build 467 retains recovery evidence as owner-observed and never manufactures proof through an unnecessary Production restore. Build 468 keeps current authenticated regression evidence separate from historical success. Build 469 records maintenance/fleet pilot readiness as `owner_action` while canonical rulebooks remain `awaiting_business_approval`. Build 470 preserves provider-window descriptive review without causal attribution. Builds 471–474 preserve owner approval, remediation attribution, explicit economics allocation and comparable-history boundaries.
+
 ## Closure rule
 A row is removed or narrowed only when dated, attributable evidence exists and the relevant source/runtime/provider/owner boundary remains explicit. Missing evidence is never converted into success, and closure of one row does not silently close another.
 

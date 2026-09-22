@@ -42,8 +42,8 @@ jobs:
           {
             echo '### Production Learning & Roadmap Renewal'
             echo "- SHA: `${GITHUB_SHA}`"
-            echo '- Completed-cycle 456–464 evidence reconciliation: PASS'
+            echo '- Completed-cycle 466–474 evidence reconciliation: PASS'
             echo '- Owner/provider HOLD truth boundary: PASS'
-            echo '- Roadmap 466–475 renewal: PASS'
+            echo '- Roadmap 476–485 renewal: PASS'
             echo '- Schema/provider/business mutation: NONE'
           } >> "$GITHUB_STEP_SUMMARY"

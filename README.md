@@ -1,40 +1,33 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 474 — Reliability, Cost & Resilience Trend Review**.
+Current source direction: **Build 475 — Production Learning & Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Reliability, Cost & Resilience Trend Review authority
-The current release enriches the retained I.T. reliability/cost/resilience workbench with bounded comparable-window review rather than creating a replacement observability or provider-cost system.
+## Current Production Learning & Roadmap Renewal authority
+The current release reconciles Builds 466–474 and renews the next bounded roadmap without converting source/runtime GREEN into provider, owner, real-device, recovery, remediation, allocation or provider-cost success.
 
 Focused source authority:
 
-`python scripts/reliability_cost_resilience_trend_review_check.py`
+`python scripts/production_learning_roadmap_renewal_check.py`
 
-Only attributable first-party windows that already exist in the owning source are compared. Provider billing/CPU/quota/cost, scaling need, future capacity and real Production recovery remain unavailable without their owning evidence.
+Cycle reconciliation is `PRODUCTION_LEARNING_466_474.md`; the renewed sequence is `FORWARD_BUILD_ROADMAP_476_485.md`. Missing owning evidence remains a truthful HOLD.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md` — current bounded contract.
-5. `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md` — retained predecessor contract.
-5. `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md` — retained predecessor contract.
-5. `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md` — retained predecessor contract.
-5. `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md` — retained predecessor contract.
-5. `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md` — retained predecessor contract.
-5. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — retained predecessor contract.
-5. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — retained predecessor contract.
-5. `BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained cycle-renewal contract.
-6. `PRODUCTION_LEARNING_456_464.md` — retained cycle reconciliation.
-7. `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md` — retained predecessor contract.
-6. `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md` — retained local-search evidence contract.
-7. `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md` — retained commercial-readiness contract.
-8. `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md` — retained device-evidence contract.
-9. `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md` — retained provider-evidence contract.
-10. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+3. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
+4. `PRODUCTION_LEARNING_466_474.md` — current cycle reconciliation.
+5. `FORWARD_BUILD_ROADMAP_476_485.md` — renewed evidence-driven sequence.
+6. `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md` — retained predecessor contract.
+7. `FORWARD_BUILD_ROADMAP_466_475.md` — retained prior roadmap.
+8. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_466_474.md`
+- `FORWARD_BUILD_ROADMAP_476_485.md`
 
 - `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
 - `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`
@@ -59,6 +52,7 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `BUILD459_FLEET_MAINTENANCE_COMMERCIAL_ACTIVATION_READINESS.md`
 - `BUILD458_AUTHENTICATED_DEVICE_ACCEPTANCE_CLOSURE.md`
 - `BUILD457_RECOVERY_EVIDENCE_CLOSURE_DRILL_READINESS.md`
+- `BUILD456_PROVIDER_EVIDENCE_CLOSURE_AVAILABILITY_REVIEW.md`
 - `BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_446_454.md`
 
