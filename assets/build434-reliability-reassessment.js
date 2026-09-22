@@ -117,6 +117,7 @@
   }
 
 
+  function renderBucket(key,label,rows){
     const mount=$(bucketId(key)); if(!mount)return;
     const count=$(bucketCountId(key)); if(count) count.textContent=String(rows.length);
     if(!rows.length){mount.innerHTML=`<div class="rr-empty">No ${esc(label.toLowerCase())} in the current bounded snapshot.</div>`;return;}
