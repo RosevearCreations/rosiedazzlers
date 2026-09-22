@@ -3,54 +3,31 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`.
+The synchronized Production predecessor is retained through `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`.
 
-**Build 471 — Booking & Quote Controlled Experiment Framework** is the active bounded release.
+**Build 472 — Staff & Mobile Remediation Verification** is the active bounded release.
 
-**Build 472 — Staff & Mobile Remediation Verification** is next only after the current release is independently GREEN on protected `main`.
+**Build 473 — Service Economics Allocation & Margin Review Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Retained booking/quote contracts: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md` and `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`. Retained staff/mobile contracts: `BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md`, `BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md` and `BUILD442_STAFF_WORKFLOW_SUPPORT_EXCEPTION_LEARNING.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Booking & Quote Controlled Experiment Framework contract
-- Reuse the retained booking/quote learning endpoint and `/admin-booking-quote-retention-learning.html` workbench; do not create a parallel analytics, pricing or experiment system.
-- Translate Build 461 hypotheses into definitions with evidence eligibility, retained primary measure/baseline, explicit stop conditions and null owner-defined success/activation fields.
-- `owner_approval_required` means ready for owner decision only; owner approval remains `not_recorded`, activation unauthorized and results `not_started`.
-- Success threshold, target direction, winner rule, duration and allocation remain null until a separate explicit owner decision.
-- Missing/small-sample evidence remains `needs_more_evidence` or `unavailable`.
-- Booking-stage drops, quote-band outcomes and accepted-value deltas remain descriptive only; do not infer price sensitivity, customer motive, discount need, completed work or causation.
-- No customer/session/quote identity join and no automatic price/discount, booking-rule, availability, catalogue, outreach, quote acceptance, booking creation, experiment activation/winner selection, provider, schema/storage mutation or permanent polling.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never fabricates owner approval or experiment results.
-- Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
-
-## Retained Local Search Provider & Attribution Evidence Quality contract
-- Reuse the retained local-search provider/conversion endpoint and `/admin-seo-tasks.html` surface; do not create a parallel provider store, analytics system or tracking identity.
-- Make provider property/location/window identity completeness, freshness, dated provider↔first-party window overlap, first-party availability and bounded/truncated anonymous same-session evidence explicit.
-- Evidence quality describes comparability only. Search Console/GBP provider outcomes remain source-attributed and distinct from anonymous first-party funnel observations.
-- Do not join provider metrics to sessions/customers/bookings, divide provider metrics by funnel rates, calculate provider-to-funnel correlation scores or claim marketing causation.
-- Missing provider evidence remains `provider_dependent`; stale provider evidence remains `owner_action`; unavailable/truncated/misaligned first-party evidence stays explicit rather than guessed.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; source/runtime GREEN never fabricates provider evidence or Google outcomes.
-- No schema/provider/analytics/publishing/outreach/DNS/ad-spend/customer/storage mutation or permanent polling.
-- Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
-
-## Retained reliability, security, cost & resilience reassessment contract
-- Reuse the existing protected `/admin-reliability-reassessment.html` I.T. surface and its read-only endpoint; do not create a parallel reliability dashboard.
-- Re-run retained reliability/performance, privacy/session, security, recovery, observability/support-diagnostics and I.T. release-control authorities against the current cycle.
-- First-party traffic and bounded diagnostic duration are operational evidence only; provider-owned billing/CPU, quota state, dollar cost and future capacity remain external unless independently evidenced.
-- Backup/recovery source readiness and recovery-artifact/drill evidence are resilience inputs only; source/runtime GREEN does not prove real Production recovery.
-- Real Production recovery, secret rotation, DNS/R2/provider recovery and other destructive actions remain separately authorized and independently observed.
-- No automatic scaling, retry expansion, cache-policy mutation, secret rotation, restore, DNS/R2/provider mutation, schema/storage mutation, customer/business/accounting/inventory mutation, outreach or permanent polling.
-- Exact Development and Production deployment/runtime acceptance remain mandatory before GREEN.
-
-## Retained service economics, capacity & pricing review contract
-- Reuse retained `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`, `BUILD443_SERVICE_ECONOMICS_COMMERCIAL_CAPACITY_REVIEW.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`, and fleet/commercial authorities.
-- Missing material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
-- Service/package cohorts are aggregate recorded evidence only; current sources do not support defensible add-on-level cost attribution, so add-on margin remains unavailable.
-- Quote-value bands and booking-stage drops do not prove price sensitivity, discount need, customer motive or price causation.
-- Economics evidence is not causally joined to quote-value cohorts.
-- Commercial demand does not prove signed business or live capacity; availability and checkout collision revalidation remain authoritative.
-- No automatic price/discount, quote, booking, accounting/inventory, provider, schema/storage, outreach or permanent-polling mutation is authorized.
+## Current Staff & Mobile Remediation Verification contract
+- Reuse the retained Build 452/462 endpoint and `/admin-staff-workflow-support-learning.html`; do not create a parallel staff, telemetry, support or remediation system.
+- Current pattern evidence and remediation outcome evidence are separate. A current pattern can remain observable while remediation outcome is still unverified.
+- No remediation outcome is claimed without recorded evidence that a separately authorized remediation occurred and comparable like-for-like before/after evidence exists.
+- A missing current priority pattern does not prove a remediation succeeded; a present pattern does not prove it failed.
+- Do not infer root cause, staff fault/performance, device/browser friction, duration/latency, missed notification, business impact or causation.
+- Existing Admin/Senior Detailer/Detailer role ceilings, owning workflows and aggregate/privacy boundaries remain authoritative.
+- No automatic remediation/closure, exception resolution, role change, job/task action, provider/accounting/inventory/schema/storage mutation, background telemetry or permanent polling.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never manufactures remediation execution, device, provider or business-impact evidence.
+- Exact Development and Production deployment/runtime acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
+- `.github/workflows/staff-mobile-remediation-verification-authority.yml`
+- `scripts/staff_mobile_remediation_verification_check.py`
+- `scripts/staff_mobile_remediation_verification_test.mjs`
+- `functions/api/_lib/staff-support-mobile-efficiency-learning.js`
 - `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
 - `.github/workflows/booking-quote-controlled-experiment-framework-authority.yml`
 - `scripts/booking_quote_controlled_experiment_framework_check.py`
