@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Current Production Learning & Roadmap Renewal authority for Build 465."""
+"""Current Production Learning & Roadmap Renewal authority for Build 475."""
 from pathlib import Path
 import re
 import sys
@@ -19,12 +19,12 @@ def require(text,needles,label):
         if needle not in text:
             errors.append(f"{label} missing {needle!r}")
 
-contract=read("BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
-learning=read("PRODUCTION_LEARNING_456_464.md")
-roadmap=read("FORWARD_BUILD_ROADMAP_466_475.md")
-prior=read("BUILD455_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
-prior_learning=read("PRODUCTION_LEARNING_446_454.md")
-prior_roadmap=read("FORWARD_BUILD_ROADMAP_456_465.md")
+contract=read("BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
+learning=read("PRODUCTION_LEARNING_466_474.md")
+roadmap=read("FORWARD_BUILD_ROADMAP_476_485.md")
+prior=read("BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
+prior_learning=read("PRODUCTION_LEARNING_456_464.md")
+prior_roadmap=read("FORWARD_BUILD_ROADMAP_466_475.md")
 blockers=read("STARTUP_GO_LIVE_BLOCKERS.md")
 queue=read("AUTONOMOUS_RELEASE_QUEUE.md")
 handoff=read("AI_PROJECT_HANDOFF.md")
@@ -35,57 +35,57 @@ prodcheck=read("scripts/production_business_acceptance_check.py")
 workflow=read(".github/workflows/production-learning-roadmap-renewal-authority.yml")
 
 require(contract,[
-    "# Build 465 — Production Learning & Roadmap Renewal",
+    "# Build 475 — Production Learning & Roadmap Renewal",
     "retained", "closed", "owner_action", "provider_dependent", "unavailable",
-    "PRODUCTION_LEARNING_456_464.md", "FORWARD_BUILD_ROADMAP_466_475.md",
+    "PRODUCTION_LEARNING_466_474.md", "FORWARD_BUILD_ROADMAP_476_485.md",
     "Missing evidence remains a blocker or truthful HOLD, never fabricated success.",
-    "Build 466 — Provider Outcome Review & HOLD Decision Readiness"
+    "Build 476 — Provider HOLD Decision Traceability & Closure Review"
 ],"current renewal contract")
 require(prior,[
-    "# Build 455 — Production Learning & Roadmap Renewal",
-    "PRODUCTION_LEARNING_446_454.md",
-    "FORWARD_BUILD_ROADMAP_456_465.md"
+    "# Build 465 — Production Learning & Roadmap Renewal",
+    "PRODUCTION_LEARNING_456_464.md",
+    "FORWARD_BUILD_ROADMAP_466_475.md"
 ],"retained prior renewal contract")
 require(prior_learning,[
-    "Production Learning Reconciliation 446–454",
-    "FORWARD_BUILD_ROADMAP_456_465.md"
+    "Production Learning Reconciliation 456–464",
+    "FORWARD_BUILD_ROADMAP_466_475.md"
 ],"retained prior reconciliation")
 require(prior_roadmap,[
-    "Build 456 — Provider Evidence Closure & Availability Review",
-    "Build 465 — Production Learning & Roadmap Renewal"
+    "Build 466 — Provider Outcome Review & HOLD Decision Readiness",
+    "Build 475 — Production Learning & Roadmap Renewal"
 ],"retained prior roadmap")
 
 require(learning,[
-    "Provider Evidence Closure & Availability Review",
+    "Provider Outcome Review & HOLD Decision Readiness",
     "provider_dependent",
-    "Recovery Evidence Closure & Drill Readiness",
+    "Recovery Evidence Validation & Drill Decision Readiness",
     "owner_action",
-    "Authenticated Device Acceptance Closure",
-    "Fleet & Maintenance Commercial Activation Readiness",
-    "Local Search Provider & Attribution Evidence Quality",
-    "Booking & Quote Experiment Readiness",
+    "Authenticated Device Regression Closure",
+    "Maintenance & Fleet Controlled Pilot Activation Readiness",
+    "Local Search Provider Window & Attribution Closure",
+    "Booking & Quote Controlled Experiment Framework",
+    "Staff & Mobile Remediation Verification",
     "retained",
-    "Staff & Mobile Friction Remediation Priorities",
-    "Service Economics Completeness & Add-On Cost Readiness",
-    "Reliability, Cost & Resilience Operational Guardrails",
+    "Service Economics Allocation & Margin Review Readiness",
+    "Reliability, Cost & Resilience Trend Review",
+    "awaiting_business_approval",
     "payment/refund/message-delivery provider outcomes",
     "backup / recovery artifact and bounded drill evidence",
     "authenticated real-device / visual regression evidence",
-    "maintenance / fleet commercial approval and controlled-pilot decision",
-    "FORWARD_BUILD_ROADMAP_466_475.md"
+    "FORWARD_BUILD_ROADMAP_476_485.md"
 ],"cycle reconciliation")
 
 roadmap_titles=[
-    "Build 466 — Provider Outcome Review & HOLD Decision Readiness",
-    "Build 467 — Recovery Evidence Validation & Drill Decision Readiness",
-    "Build 468 — Authenticated Device Regression Closure",
-    "Build 469 — Maintenance & Fleet Controlled Pilot Activation Readiness",
-    "Build 470 — Local Search Provider Window & Attribution Closure",
-    "Build 471 — Booking & Quote Controlled Experiment Framework",
-    "Build 472 — Staff & Mobile Remediation Verification",
-    "Build 473 — Service Economics Allocation & Margin Review Readiness",
-    "Build 474 — Reliability, Cost & Resilience Trend Review",
-    "Build 475 — Production Learning & Roadmap Renewal",
+    "Build 476 — Provider HOLD Decision Traceability & Closure Review",
+    "Build 477 — Recovery Drill Evidence Refresh & Closure Review",
+    "Build 478 — Authenticated Device Observation Refresh & Regression Triage",
+    "Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision",
+    "Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review",
+    "Build 481 — Booking & Quote Experiment Approval & Measurement Lock",
+    "Build 482 — Staff & Mobile Remediation Execution Evidence Readiness",
+    "Build 483 — Service & Add-On Allocation Evidence Closure",
+    "Build 484 — Reliability, Cost & Recovery Evidence Continuity",
+    "Build 485 — Production Learning & Roadmap Renewal",
 ]
 for title in roadmap_titles:
     require(roadmap,[title],"renewed roadmap")
@@ -97,30 +97,31 @@ require(blockers,[
     "Independent device / visual evidence",
     "Maintenance / fleet business approval",
     "Evidence source unavailable",
-    "PRODUCTION_LEARNING_456_464.md",
-    "FORWARD_BUILD_ROADMAP_466_475.md",
-    "BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md"
+    "PRODUCTION_LEARNING_466_474.md",
+    "FORWARD_BUILD_ROADMAP_476_485.md",
+    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md"
 ],"canonical HOLD backlog")
 require(queue,[
-    "BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
-    "PRODUCTION_LEARNING_456_464.md",
-    "FORWARD_BUILD_ROADMAP_466_475.md",
+    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
+    "PRODUCTION_LEARNING_466_474.md",
+    "FORWARD_BUILD_ROADMAP_476_485.md",
+    "Build 476 — Provider HOLD Decision Traceability & Closure Review",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "rd main protection",
     "Production deployment/runtime/business acceptance",
     "Missing required checks or exact Production runtime/deployment identity are blockers"
-],"release queue Build 465 authority")
+],"release queue Build 475 authority")
 require(handoff,[
-    "BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
-    "PRODUCTION_LEARNING_456_464.md",
-    "FORWARD_BUILD_ROADMAP_466_475.md",
+    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
+    "PRODUCTION_LEARNING_466_474.md",
+    "FORWARD_BUILD_ROADMAP_476_485.md",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
-    "PRODUCTION_LEARNING_456_464.md",
-    "FORWARD_BUILD_ROADMAP_466_475.md",
+    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
+    "PRODUCTION_LEARNING_466_474.md",
+    "FORWARD_BUILD_ROADMAP_476_485.md",
     "python scripts/production_learning_roadmap_renewal_check.py",
     "Production is not considered GREEN from source promotion alone."
 ],"README")
@@ -133,12 +134,14 @@ require(prodcheck,[
 ],"Production business acceptance source authority")
 require(workflow,[
     "name: Production Learning & Roadmap Renewal Authority",
+    "Completed-cycle 466–474 evidence reconciliation: PASS",
+    "Roadmap 476–485 renewal: PASS",
     "python scripts/production_learning_roadmap_renewal_check.py"
 ],"renewal workflow")
 
-migrations=[p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|[^0-9])465(?:[^0-9]|$)",p.name)]
+migrations=[p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|[^0-9])475(?:[^0-9]|$)",p.name)]
 if migrations:
-    errors.append("Build 465 must not introduce a schema migration: "+", ".join(str(p.relative_to(ROOT)) for p in migrations))
+    errors.append("Build 475 must not introduce a schema migration: "+", ".join(str(p.relative_to(ROOT)) for p in migrations))
 
 if errors:
     print("PRODUCTION LEARNING & ROADMAP RENEWAL AUTHORITY: FAIL")
@@ -147,8 +150,8 @@ if errors:
     sys.exit(1)
 
 print("PRODUCTION LEARNING & ROADMAP RENEWAL AUTHORITY: PASS")
-print(" - 456–464 concerns are reconciled without fabricating provider/owner/device/recovery evidence")
+print(" - 466–474 concerns are reconciled without fabricating provider/owner/device/recovery evidence")
 print(" - canonical HOLD inventory remains current and singular")
-print(" - renewed roadmap 466–475 is present and evidence-driven")
-print(" - next cycle deepens retained evidence and controlled-decision workflows without replacement systems")
-print(" - no schema, provider, customer, pricing, accounting, inventory, recovery or destructive-storage mutation is authorized")
+print(" - renewed roadmap 476–485 is present and evidence-driven")
+print(" - next cycle advances retained decision/evidence workflows without replacement systems")
+print(" - no schema, provider, customer, pricing, staff, accounting, inventory, experiment, fleet, recovery or destructive-storage mutation is authorized")
