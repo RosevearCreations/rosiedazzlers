@@ -5,10 +5,11 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`.
-Retained predecessor: Build 472 — Staff & Mobile Remediation Verification.
+The synchronized predecessor contracts are retained through `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`.
+Retained predecessor: Build 473 — Service Economics Allocation & Margin Review Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
 - `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`
 - `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
 - `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
@@ -94,26 +95,24 @@ Retained predecessor: Build 472 — Staff & Mobile Remediation Verification.
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 473 — Service Economics Allocation & Margin Review Readiness** is the active bounded release.
+**Build 474 — Reliability, Cost & Resilience Trend Review** is the active bounded release.
 
 Scope:
-- reuse the retained Service Economics endpoint and protected Admin review surface rather than creating a parallel ledger, job-cost, pricing or allocation system;
-- expose service/package allocation readiness only where the recorded package code and every required revenue, material, labour, cash/refund and COGS component are linked for the bounded cohort;
-- expose add-on allocation readiness only from explicit per-add-on allocation rows recorded by an owning source;
-- allow a fully linked service/package cohort to become review-ready even while another cohort remains blocked, without converting partial evidence into a universal margin conclusion;
-- keep add-on margin unavailable when only aggregate flags, booking totals, package price, add-on count or assumed percentages exist;
-- keep estimated overhead outside direct margin-readiness decisions;
-- never infer equal split, price-weighted split, percentage allocation or booking-total allocation; and
-- introduce no automatic price/discount, booking, accounting, inventory, provider, schema/storage or polling mutation.
+- reuse the retained protected I.T. reassessment endpoint/page and operational guardrails rather than creating a second observability, billing, capacity or recovery system;
+- compare first-party activity only where the owning source already contains comparable windows: most recent 24 hours versus the preceding six-day daily average;
+- keep diagnostics, evidence-age distribution and recovery/readiness as single-snapshot evidence unless a separately retained comparable historical series exists;
+- keep Cloudflare billing/CPU/quota/dollar-cost trend external without provider-owned comparable evidence;
+- never infer scaling need, future capacity, root cause or real Production recovery from first-party activity, source/runtime GREEN or drill metadata; and
+- introduce no automatic scaling/retry/cache/secret/restore/DNS/R2/provider/schema/business/accounting/inventory/outreach mutation, trend-history store or permanent polling.
 
-Current contract: `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`. Retained completeness authority: `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`. Retained guardrail authority: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the current allocation/margin-readiness authority, retained service-economics authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current trend-review authority, retained reliability/resilience authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 474 — Reliability, Cost & Resilience Trend Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 475 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_466_475.md`; it has not run out.
 

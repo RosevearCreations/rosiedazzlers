@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build 471 Booking & Quote Controlled Experiment Framework source authority."""
+"""Build 471 Booking & Quote Controlled Experiment Framework source authority.
+Retained Build 471 validation follows durable contract markers rather than living current/next labels.
+"""
 from pathlib import Path
 import re,subprocess,sys
 
@@ -88,7 +90,7 @@ require(contract,[
  "Stop conditions",
  "Build 472 — Staff & Mobile Remediation Verification"
 ],"Build 471 contract")
-require(queue,["BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md","Build 472 — Staff & Mobile Remediation Verification"],"release queue")
+require(queue,["BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md","BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md"],"release queue retained Build 471 authority")
 require(handoff,["BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md","booking_quote_controlled_experiment_framework_check.py"],"project handoff")
 require(readme,["BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md","booking_quote_controlled_experiment_framework_check.py"],"README")
 require(retained461,["BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md","booking_quote_experiment_readiness_test.mjs"],"retained Build 461 authority")

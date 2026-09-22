@@ -1,4 +1,4 @@
-// Build 464 — retained manual read-only reassessment view with operational guardrails.
+// Build 474 — retained manual read-only reassessment view with bounded trend review.
 (function attachReliabilitySecurityCostReassessment(globalScope){
   "use strict";
   const BUCKETS = [
@@ -42,6 +42,7 @@
     renderSources(payload.source_status||{});
     renderGuardrails(payload.operational_guardrails||{});
     renderEvidenceAge(payload.evidence_age_review||{});
+    renderTrendReview(payload.trend_review||{});
     for(const [key,label] of BUCKETS) renderBucket(key,label,payload.buckets?.[key]||[]);
   }
 
@@ -100,6 +101,22 @@
     mount.innerHTML=rows.map(function(row){return '<div class="rr-metric"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong></div>';}).join("");
     const detail=$("reassessmentEvidenceAgeDetail"); if(detail) detail.textContent=age.detail||"No evidence-age detail loaded.";
   }
+  function renderTrendReview(review){
+    const mount=$("reassessmentTrends"); if(!mount)return;
+    const rows=Array.isArray(review?.signals)?review.signals:[];
+    if(!rows.length){mount.innerHTML='<div class="rr-empty">No bounded trend evidence loaded.</div>';return;}
+    mount.innerHTML=rows.map(function(row){
+      const direction=row.direction||row.status||"unavailable";
+      const comparison=row.comparable_window_evidence===true
+        ? "Comparable first-party windows: YES"
+        : "Comparable history: NO";
+      return '<article class="rr-item"><div class="rr-item-head"><strong>'+esc(String(row.id||"trend signal").replaceAll("_"," "))+':</strong><span class="rr-pill">'+esc(direction)+'</span></div><p>'+esc(row.conclusion||"No defensible trend conclusion.")+'</p><p class="mini">'+esc(comparison)+' · automatic action authorized: NO</p></article>';
+    }).join("");
+    const detail=$("reassessmentTrendDetail");
+    if(detail) detail.textContent="Comparable signals: "+String(review?.comparable_signal_count??0)+" / "+String(review?.signal_count??rows.length)+". A bounded window comparison is descriptive only; it is not a provider-cost, scaling, recovery or capacity forecast.";
+  }
+
+
   function renderBucket(key,label,rows){
     const mount=$(bucketId(key)); if(!mount)return;
     const count=$(bucketCountId(key)); if(count) count.textContent=String(rows.length);
@@ -119,6 +136,8 @@
     if($("reassessmentGuardrails")) $("reassessmentGuardrails").innerHTML='<div class="rr-empty">No operational guardrails loaded.</div>';
     if($("reassessmentEvidenceAge")) $("reassessmentEvidenceAge").innerHTML='<div class="rr-empty">No evidence-age review loaded.</div>';
     if($("reassessmentEvidenceAgeDetail")) $("reassessmentEvidenceAgeDetail").textContent="No evidence-age detail loaded.";
+    if($("reassessmentTrends")) $("reassessmentTrends").innerHTML='<div class="rr-empty">No bounded trend evidence loaded.</div>';
+    if($("reassessmentTrendDetail")) $("reassessmentTrendDetail").textContent="No bounded trend detail loaded.";
     for(const [key] of BUCKETS){
       const mount=$(bucketId(key)); if(mount) mount.innerHTML='<div class="rr-empty">No current snapshot loaded.</div>';
       const count=$(bucketCountId(key)); if(count) count.textContent="0";
