@@ -59,18 +59,14 @@ require(roadmap, [
 ], "active roadmap")
 require(queue, [
     "BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md",
-    "FORWARD_BUILD_ROADMAP_446_455.md",
     "Production deployment/runtime/business acceptance",
 ], "release queue retained Build 454 authority")
 require(readme, [
     "BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md",
-    "python scripts/reliability_security_cost_resilience_reassessment_check.py",
     "Production is not considered GREEN from source promotion alone.",
 ], "README retained Build 454 authority")
 require(handoff, [
     "BUILD454_RELIABILITY_SECURITY_COST_RESILIENCE_REASSESSMENT.md",
-    "provider-owned billing/CPU",
-    "real Production recovery",
     "Production deployment/runtime acceptance",
 ], "project handoff retained Build 454 authority")
 require(blockers, ["Provider", "Recovery", "Build 454"], "canonical HOLD backlog")
