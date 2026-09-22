@@ -3,25 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`.
+The synchronized Production predecessor is retained through `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`.
 
-**Build 474 — Reliability, Cost & Resilience Trend Review** is the active bounded release.
+**Build 475 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 475 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 476 — Provider HOLD Decision Traceability & Closure Review** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`. Retained guardrail contract: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Cycle reconciliation: `PRODUCTION_LEARNING_466_474.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Reliability, Cost & Resilience Trend Review contract
-- Reuse the retained I.T. reassessment endpoint/page and Build 464 operational guardrails; do not create a parallel observability, billing, capacity or recovery system.
-- The only current comparable first-party window is most-recent-24h activity versus the preceding six-day daily average.
-- Descriptive traffic direction does not prove scaling need, provider cost, root cause, future capacity or a forecast.
-- Diagnostics, evidence-age distribution and recovery/readiness are current snapshots; without retained comparable history their trend state remains unavailable.
-- Cloudflare provider-owned billing/CPU/quota/cost evidence and real Production recovery remain external evidence and are never inferred from source/runtime GREEN.
-- No automatic scaling/retry/cache/secret/restore/DNS/R2/provider/schema/business/accounting/inventory/outreach mutation, trend-history store or permanent polling.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; missing provider/recovery evidence remains a truthful HOLD.
-- Exact Development and Production deployment/runtime acceptance remain required.
+## Current Production Learning & Roadmap Renewal contract
+- Reconcile Builds 466–474 using only dated attributable owning evidence; source/runtime GREEN never manufactures provider, owner, device, recovery, remediation or allocation success.
+- Preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory and close/narrow nothing without explicit evidence-backed operator action.
+- Publish `PRODUCTION_LEARNING_466_474.md` as the cycle reconciliation and `FORWARD_BUILD_ROADMAP_476_485.md` as the renewed bounded sequence.
+- Keep provider/local-search outcomes provider-dependent where owning provider evidence is absent.
+- Keep recovery/device/fleet/experiment decisions owner-action where explicit observation or approval is still required.
+- Keep staff/mobile, service-economics and reliability conclusions fail-closed to attributable remediation/allocation/history evidence.
+- No schema/provider/customer/booking/pricing/staff/accounting/inventory/experiment/fleet/recovery/storage/outreach mutation or permanent polling.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_466_474.md`
+- `FORWARD_BUILD_ROADMAP_476_485.md`
+- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
 - `.github/workflows/reliability-cost-resilience-trend-review-authority.yml`
 - `scripts/reliability_cost_resilience_trend_review_check.py`
