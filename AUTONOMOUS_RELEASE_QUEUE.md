@@ -7,6 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Retained predecessor release: Build 476 — Provider HOLD Decision Traceability & Closure Review.
 
 ## Retained cumulative authority pointers
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
