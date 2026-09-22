@@ -5,13 +5,13 @@ Current source direction: **Build 471 — Booking & Quote Controlled Experiment 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Current Booking & Quote Controlled Experiment Framework authority
-The current release enriches the retained Build 441/451/461 booking/quote learning workbench with fail-closed controlled-experiment definitions.
+The current release enriches the retained 441/451/461 booking/quote learning workbench with fail-closed controlled-experiment definitions.
 
 Focused source authority:
 
 `python scripts/booking_quote_controlled_experiment_framework_check.py`
 
-A supported retained hypothesis may become `owner_approval_required`, but approval, activation, duration, allocation, success threshold, target direction, winner rule and results remain unrecorded/null until a separate explicit owner decision. Build 471 does not change prices, discounts, booking rules, availability or outreach.
+A supported retained hypothesis may become `owner_approval_required`, but approval, activation, duration, allocation, success threshold, target direction, winner rule and results remain unrecorded/null until a separate explicit owner decision. This release does not change prices, discounts, booking rules, availability or outreach.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
