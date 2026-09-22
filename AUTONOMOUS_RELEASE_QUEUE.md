@@ -5,9 +5,10 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`.
+The synchronized predecessor contracts are retained through `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
 - `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
 - `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`
@@ -90,25 +91,25 @@ The synchronized predecessor contracts are retained through `BUILD469_MAINTENANC
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 470 — Local Search Provider Window & Attribution Closure** is the active bounded release.
+**Build 471 — Booking & Quote Controlled Experiment Framework** is the active bounded release.
 
 Scope:
-- reuse the retained Build 440/450/460 provider, conversion-attribution and evidence-quality authorities rather than creating a replacement provider store, analytics system, endpoint or tracking identity;
-- require explicit Search Console property / Google Business Profile location identity plus dated provider measurement windows before provider evidence can close;
-- reconcile those provider windows with the retained first-party referral/landing window and bounded anonymous same-session booking-funnel observations;
-- treat missing/stale provider evidence, unavailable/truncated first-party evidence and non-overlapping/unknown windows as explicit non-closure states rather than inferred success;
-- keep provider metrics source-attributed and distinct from first-party sessions; no provider metric→session/customer/booking join, provider-to-funnel performance score, ranking/Maps inference or causal conversion claim is permitted;
-- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; source/runtime GREEN cannot fabricate provider evidence; and
-- introduce no schema, provider, analytics, publishing, outreach, DNS, ad-spend, customer, booking, accounting, inventory or storage mutation and no permanent polling.
+- reuse the retained Build 441/451/461 booking, quote, pricing-learning and experiment-readiness authorities rather than creating a replacement analytics, pricing or experiment system;
+- translate supported retained hypotheses into explicit controlled-experiment definitions with evidence eligibility, existing aggregate measures, owner-defined success-threshold placeholders and explicit stop conditions;
+- keep owner approval, duration, allocation, target direction, winner rule and results fail-closed until a separate explicit owner decision exists;
+- treat `owner_approval_required` as a review state only, never activation authorization or evidence that an experiment has started;
+- preserve the existing privacy/truth boundary: no customer/session/quote identity join and no inference of price sensitivity, customer motive, discount need, completed work or causation;
+- keep `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; source/runtime GREEN cannot fabricate experiment results or owner approval; and
+- introduce no automatic price/discount, booking-rule, availability, catalogue, outreach, quote acceptance, booking creation, experiment activation/winner selection, provider, schema/storage or permanent-polling mutation.
 
-Current contract: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`. Retained local-search authorities: `BUILD460_LOCAL_SEARCH_PROVIDER_ATTRIBUTION_EVIDENCE_QUALITY.md`, `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`, `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`, `BUILD420_SEARCH_CONSOLE_GBP_LOCAL_ACQUISITION_EVIDENCE_CLOSURE.md` and `BUILD414_LOCAL_SEO_MEASUREMENT_SEARCH_CONSOLE_GBP_PROOF.md`.
+Current contract: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Retained booking/quote authorities: `BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md`, `BUILD451_BOOKING_FUNNEL_QUOTE_PRICING_LEARNING.md`, `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md` and retained booking/rebooking funnel ownership.
 
-The exact candidate must pass the current Local Search Provider Window & Attribution Closure authority, retained local-search authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current Booking & Quote Controlled Experiment Framework authority, retained booking/quote authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 471 — Booking & Quote Controlled Experiment Framework** is next only after the current release is independently GREEN on protected `main`.
+**Build 472 — Staff & Mobile Remediation Verification** is next only after the current release is independently GREEN on protected `main`.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_466_475.md`; it has not run out.
 
