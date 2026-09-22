@@ -1,23 +1,24 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 470 — Local Search Provider Window & Attribution Closure**.
+Current source direction: **Build 471 — Booking & Quote Controlled Experiment Framework**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Local Search Provider Window & Attribution Closure authority
-The current release enriches the retained Build 440/450/460 local-search workbench with a read-only provider-window closure packet.
+## Current Booking & Quote Controlled Experiment Framework authority
+The current release enriches the retained Build 441/451/461 booking/quote learning workbench with fail-closed controlled-experiment definitions.
 
 Focused source authority:
 
-`python scripts/local_search_provider_window_attribution_closure_check.py`
+`python scripts/booking_quote_controlled_experiment_framework_check.py`
 
-A `closure_ready` state requires explicit provider property/location identity, current dated provider windows, an available first-party observation window, provider↔first-party date overlap and complete bounded anonymous same-session funnel evidence. It closes only the descriptive comparison window; it never proves ranking, Maps visibility, provider performance or Google-caused conversion.
+A supported retained hypothesis may become `owner_approval_required`, but approval, activation, duration, allocation, success threshold, target direction, winner rule and results remain unrecorded/null until a separate explicit owner decision. Build 471 does not change prices, discounts, booking rules, availability or outreach.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md` — current bounded contract.
+4. `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md` — current bounded contract.
+5. `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md` — retained predecessor contract.
 5. `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md` — retained predecessor contract.
 5. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — retained predecessor contract.
 5. `BUILD466_PROVIDER_OUTCOME_REVIEW_HOLD_DECISION_READINESS.md` — retained predecessor contract.
@@ -32,6 +33,7 @@ A `closure_ready` state requires explicit provider property/location identity, c
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
 - `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`
 - `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`
 - `BUILD468_AUTHENTICATED_DEVICE_REGRESSION_CLOSURE.md`
@@ -137,6 +139,8 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 ```bash
+python scripts/booking_quote_controlled_experiment_framework_check.py
+node scripts/booking_quote_controlled_experiment_framework_test.mjs
 python scripts/local_search_provider_window_attribution_closure_check.py
 node scripts/local_search_provider_window_attribution_closure_test.mjs
 python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
@@ -210,4 +214,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 471 — Booking & Quote Controlled Experiment Framework** is next only after the current release is independently GREEN on protected `main`.
+**Build 472 — Staff & Mobile Remediation Verification** is next only after the current release is independently GREEN on protected `main`.
