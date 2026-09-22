@@ -50,9 +50,10 @@ export function buildStaffSupportMobileEfficiencyLearning({
   return {
     build: 452,
     authority: "staff_support_mobile_efficiency_learning",
-    release_enrichment_build: 472,
-    release_authority: "staff_mobile_remediation_verification",
-    retained_remediation_priority_build: 462,
+    release_enrichment_build: 462,
+    release_authority: "staff_mobile_friction_remediation_priorities",
+    verification_enrichment_build: 472,
+    verification_authority: "staff_mobile_remediation_verification",
     generated_at: generated_at || new Date().toISOString(),
     evidence_status,
     staff_workflow: retained.staff_workflow,
