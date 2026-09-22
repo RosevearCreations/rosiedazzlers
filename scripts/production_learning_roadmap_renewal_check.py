@@ -105,12 +105,12 @@ require(queue,[
     "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_466_474.md",
     "FORWARD_BUILD_ROADMAP_476_485.md",
-    "Build 476 — Provider HOLD Decision Traceability & Closure Review",
+    "BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "rd main protection",
     "Production deployment/runtime/business acceptance",
     "Missing required checks or exact Production runtime/deployment identity are blockers"
-],"release queue Build 475 authority")
+],"release queue Build 475 retained authority")
 require(handoff,[
     "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_466_474.md",
