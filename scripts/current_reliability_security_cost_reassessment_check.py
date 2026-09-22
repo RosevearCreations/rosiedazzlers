@@ -61,7 +61,6 @@ require(roadmap, [
 ], "active roadmap")
 require(queue, [
     "BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
-    "FORWARD_BUILD_ROADMAP_436_445.md",
     "Production deployment/runtime/business acceptance",
 ], "release queue retained Build 444 authority")
 require(readme, [
@@ -71,7 +70,6 @@ require(readme, [
 ], "README retained Build 444 authority")
 require(handoff, [
     "BUILD444_RELIABILITY_SECURITY_COST_REASSESSMENT.md",
-    "FORWARD_BUILD_ROADMAP_436_445.md",
     "Production deployment/runtime/business acceptance",
 ], "project handoff retained Build 444 authority")
 require(blockers, [
