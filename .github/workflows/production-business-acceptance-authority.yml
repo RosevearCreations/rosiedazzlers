@@ -82,6 +82,9 @@ jobs:
           python -m py_compile scripts/recovery_evidence_validation_drill_decision_readiness_check.py
           node --check scripts/recovery_evidence_validation_drill_decision_readiness_test.mjs
           node --check functions/api/_lib/recovery-evidence-validation-drill-decision-readiness.js
+          python -m py_compile scripts/recovery_drill_evidence_refresh_closure_review_check.py
+          node --check scripts/recovery_drill_evidence_refresh_closure_review_test.mjs
+          node --check functions/api/_lib/recovery-drill-evidence-refresh-closure-review.js
           python -m py_compile scripts/authenticated_device_acceptance_closure_check.py
           node --check scripts/authenticated_device_acceptance_closure_test.mjs
           python -m py_compile scripts/authenticated_device_regression_closure_check.py
@@ -328,6 +331,11 @@ jobs:
         run: |
           python scripts/recovery_evidence_validation_drill_decision_readiness_check.py
           node scripts/recovery_evidence_validation_drill_decision_readiness_test.mjs
+
+      - name: Validate recovery drill evidence refresh & closure review authority
+        run: |
+          python scripts/recovery_drill_evidence_refresh_closure_review_check.py
+          node scripts/recovery_drill_evidence_refresh_closure_review_test.mjs
 
       - name: Validate authenticated cross-device acceptance refresh authority
         run: |
