@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Build 471 Booking & Quote Controlled Experiment Framework source authority."""
+"""Build 471 Booking & Quote Controlled Experiment Framework source authority.
+Retained Build 471 validation follows durable contract markers rather than living current/next labels.
+"""
 from pathlib import Path
 import re,subprocess,sys
 
