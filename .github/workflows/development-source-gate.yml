@@ -490,6 +490,11 @@ jobs:
           python scripts/reliability_cost_resilience_operational_guardrails_check.py
           node scripts/reliability_cost_resilience_operational_guardrails_test.mjs
 
+      - name: Validate reliability, cost & resilience trend review authority
+        run: |
+          python scripts/reliability_cost_resilience_trend_review_check.py
+          node scripts/reliability_cost_resilience_trend_review_test.mjs
+
       - name: Validate recovery export operational proof authority
         run: |
           python scripts/recovery_export_operational_proof_check.py

@@ -1,23 +1,24 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 473 — Service Economics Allocation & Margin Review Readiness**.
+Current source direction: **Build 474 — Reliability, Cost & Resilience Trend Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Service Economics Allocation & Margin Review Readiness authority
-The current release enriches the retained Service Economics workbench with explicit allocation-linkage readiness rather than creating a replacement ledger or pricing system.
+## Current Reliability, Cost & Resilience Trend Review authority
+The current release enriches the retained I.T. reliability/cost/resilience workbench with bounded comparable-window review rather than creating a replacement observability or provider-cost system.
 
 Focused source authority:
 
-`python scripts/service_economics_allocation_margin_review_readiness_check.py`
+`python scripts/reliability_cost_resilience_trend_review_check.py`
 
-Service/package cohorts are review-ready only from recorded booking-to-package linkage with complete revenue/material/labour/cash-refund/COGS evidence. Add-on margin requires explicit per-add-on allocation rows; aggregate flags or booking totals never authorize inferred splits.
+Only attributable first-party windows that already exist in the owning source are compared. Provider billing/CPU/quota/cost, scaling need, future capacity and real Production recovery remain unavailable without their owning evidence.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
 3. `FORWARD_BUILD_ROADMAP_466_475.md` — renewed evidence-driven sequence.
-4. `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md` — current bounded contract.
+4. `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md` — current bounded contract.
+5. `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md` — retained predecessor contract.
 5. `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md` — retained predecessor contract.
 5. `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md` — retained predecessor contract.
 5. `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md` — retained predecessor contract.
@@ -35,6 +36,7 @@ Service/package cohorts are review-ready only from recorded booking-to-package l
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
 - `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`
 - `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`
 - `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`
@@ -142,7 +144,9 @@ This release enriches the retained economics/capacity review with aggregate pric
 ## Durable validation
 Retained and current authorities include:
 
-```bash
+\`\`\`bash
+python scripts/reliability_cost_resilience_trend_review_check.py
+node scripts/reliability_cost_resilience_trend_review_test.mjs
 python scripts/service_economics_allocation_margin_review_readiness_check.py
 node scripts/service_economics_allocation_margin_review_readiness_test.mjs
 python scripts/staff_mobile_remediation_verification_check.py
@@ -222,4 +226,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 474 — Reliability, Cost & Resilience Trend Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 475 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.

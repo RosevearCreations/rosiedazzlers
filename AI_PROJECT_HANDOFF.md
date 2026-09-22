@@ -3,27 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md`.
+The synchronized Production predecessor is retained through `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`.
 
-**Build 473 — Service Economics Allocation & Margin Review Readiness** is the active bounded release.
+**Build 474 — Reliability, Cost & Resilience Trend Review** is the active bounded release.
 
-**Build 474 — Reliability, Cost & Resilience Trend Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 475 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`. Retained economics contracts include `BUILD463_SERVICE_ECONOMICS_COMPLETENESS_ADDON_COST_READINESS.md`, `BUILD453_SERVICE_ECONOMICS_CAPACITY_PRICING_REVIEW.md` and `BUILD428_SERVICE_ECONOMICS_JOB_PROFITABILITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`. Retained guardrail contract: `BUILD464_RELIABILITY_COST_RESILIENCE_OPERATIONAL_GUARDRAILS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_466_475.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Service Economics Allocation & Margin Review Readiness contract
-- Reuse the retained Service Economics endpoint and protected Admin review surface; do not create a parallel ledger, pricing system, job-cost engine or allocation store.
-- A service/package cohort is margin-review ready only when its recorded booking-to-package linkage and every required revenue, material, labour, cash/refund and COGS component are complete for every included row.
-- A fully linked cohort may be reviewed while a different incomplete cohort remains blocked; this does not support a universal margin conclusion.
-- Add-on margin requires explicit per-add-on allocation rows from an owning evidence source. Aggregate flags, booking totals, package price, add-on count and assumed percentages do not establish allocation.
-- Equal split, price-weighted split, percentage allocation and booking-total reallocation are not allowed.
-- Estimated overhead remains an estimate and does not establish direct service/package or add-on margin readiness.
-- No automatic price/discount, booking, accounting, inventory, provider, schema/storage or background-polling mutation is authorized.
-- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; source/runtime GREEN never manufactures missing economics linkage.
+## Current Reliability, Cost & Resilience Trend Review contract
+- Reuse the retained I.T. reassessment endpoint/page and Build 464 operational guardrails; do not create a parallel observability, billing, capacity or recovery system.
+- The only current comparable first-party window is most-recent-24h activity versus the preceding six-day daily average.
+- Descriptive traffic direction does not prove scaling need, provider cost, root cause, future capacity or a forecast.
+- Diagnostics, evidence-age distribution and recovery/readiness are current snapshots; without retained comparable history their trend state remains unavailable.
+- Cloudflare provider-owned billing/CPU/quota/cost evidence and real Production recovery remain external evidence and are never inferred from source/runtime GREEN.
+- No automatic scaling/retry/cache/secret/restore/DNS/R2/provider/schema/business/accounting/inventory/outreach mutation, trend-history store or permanent polling.
+- Keep `STARTUP_GO_LIVE_BLOCKERS.md` canonical; missing provider/recovery evidence remains a truthful HOLD.
 - Exact Development and Production deployment/runtime acceptance remain required.
-- Retained reliability boundaries remain cumulative: provider-owned billing/CPU evidence and real Production recovery remain external evidence and are never inferred from source/runtime GREEN.
 
 ## Durable current-release authorities
+- `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
+- `.github/workflows/reliability-cost-resilience-trend-review-authority.yml`
+- `scripts/reliability_cost_resilience_trend_review_check.py`
+- `scripts/reliability_cost_resilience_trend_review_test.mjs`
+- `functions/api/_lib/reliability-cost-resilience-trend-review.js`
 - `BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md`
 - `.github/workflows/service-economics-allocation-margin-review-readiness-authority.yml`
 - `scripts/service_economics_allocation_margin_review_readiness_check.py`
