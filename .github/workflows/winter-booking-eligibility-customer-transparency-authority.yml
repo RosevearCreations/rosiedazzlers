@@ -1,0 +1,35 @@
+name: Winter Booking Eligibility Customer Transparency Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-winter-booking-eligibility-customer-transparency-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: winter-booking-eligibility-customer-transparency
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/winter_booking_eligibility_customer_transparency_check.py
+          node --check functions/api/_lib/winter-booking-eligibility-customer-transparency.js
+          node --check functions/api/admin/service_economics_commercial_capacity_review.js
+          node --check assets/build473-service-economics-allocation-margin-review-readiness.js
+          node --check scripts/winter_booking_eligibility_customer_transparency_test.mjs
+      - name: Validate Build 487 source authority
+        run: |
+          python scripts/winter_booking_eligibility_customer_transparency_check.py
+          node scripts/winter_booking_eligibility_customer_transparency_test.mjs
