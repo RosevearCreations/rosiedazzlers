@@ -1,19 +1,19 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.
+Current source direction: **Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Winter Booking Eligibility & Customer Transparency authority
-This release converts the retained cold-weather capability matrix into read-only booking/quote eligibility guidance and draft customer limitation wording. Weather-ineligible sessions stay separate from ordinary conversion interpretation; a cold-weather restriction is not a conversion failure.
+## Current Controlled-Environment Alternatives & Weather-Safe Routing authority
+This release reuses the retained cold-weather capability and winter-eligibility workbench to prepare weather-safe routing without changing bookings. A controlled-environment or indoor-capable option appears only from explicit source evidence; temperature-limited outdoor work without one stays in manual safe-reschedule review.
 
-Prepared customer wording requires owner review and is not published automatically. Exact working-temperature limits remain source-owned. Broad winter availability remains on HOLD.
+Not every service can move indoors. Current site/weather suitability is not inferred, exact working-temperature limits remain source-owned, and prepared customer guidance is draft owner-review copy only.
 
-Focused source authority: `python scripts/winter_booking_eligibility_customer_transparency_check.py`
+Focused source authority: `python scripts/controlled_environment_weather_safe_routing_check.py`
 
-Behavioral proof: `node scripts/winter_booking_eligibility_customer_transparency_test.mjs`
+Behavioral proof: `node scripts/controlled_environment_weather_safe_routing_test.mjs`
 
-Current contract: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`. Retained capability contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`. Retained eligibility contract: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
 Retained cold-weather capability: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_test.mjs`.
@@ -28,8 +28,9 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` — current bounded contract.
-4. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — retained capability contract.
+3. `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` — current bounded contract.
+4. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` — retained eligibility contract.
+5. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — retained capability contract.
 4. `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 5. `PRODUCTION_LEARNING_476_484.md` — retained cycle reconciliation.
 6. `FORWARD_BUILD_ROADMAP_486_495.md` — active evidence-driven sequence.
@@ -44,6 +45,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`
 
 - `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
 
@@ -271,4 +274,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next only after the current release is independently GREEN on protected `main`.
+**Build 489 — Provider & Local Search Evidence Continuity** is next only after the current release is independently GREEN on protected `main`.
