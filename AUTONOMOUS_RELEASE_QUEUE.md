@@ -9,6 +9,7 @@ The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION
 Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
 - `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
 - `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
 - `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
@@ -103,25 +104,25 @@ Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review** is the active bounded release.
+**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is the active bounded release.
 
 Scope:
-- retain bounded prior Search Console / Google Business Profile snapshots only through the existing explicit staff save path;
-- compare successive provider snapshots only when property/location identity matches and dated provider windows are distinct and equal length;
-- expose raw previous/current metric deltas for descriptive review only;
-- keep bounded anonymous first-party referral/funnel context separate from provider populations and causal claims;
-- preserve Southern Ontario seasonal truth: search/funnel movement never proves a weather effect, winter service availability or a service temperature threshold;
-- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the single canonical HOLD inventory; and
-- perform no Google API contact, automatic provider write, analytics/customer identity join, publishing, outreach, DNS/ad-spend mutation, schema migration or permanent polling.
+- reuse retained Builds 441/451/461/471 booking/quote learning and controlled-experiment definitions;
+- persist explicit owner approval only through the dedicated Build 481 governance save endpoint and the existing app settings store;
+- require success threshold, target direction, winner rule, duration, allocation and all retained stop conditions before measurement can lock;
+- make a recorded measurement lock immutable through the Build 481 endpoint and keep experiment execution separately unauthorized;
+- require Southern Ontario seasonal/weather eligibility and exclude weather-ineligible sessions from the conversion denominator without inventing service temperature limits;
+- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; and
+- perform no automatic experiment activation, winner selection, price/discount/booking-rule/availability mutation, outreach, customer identity join, provider mutation, schema migration or permanent polling.
 
-Current contract: `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`. Retained local-search closure authority: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD inventory: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Retained framework authority: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`.
 
-The exact candidate must pass the current snapshot continuity authority, retained local-search measurement/provider/attribution authorities, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and must independently pass exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the Build 481 approval/measurement-lock authority, retained booking/quote authorities, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers.
+Production promotion proceeds through protected `main` and independent exact Production deployment/runtime/business acceptance. Missing owner approval or an incomplete measurement contract remains truthful `owner_approval_required`; source/runtime GREEN does not fabricate a lock.
 
 ## Next release
-**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is next only after the current release is independently GREEN on protected `main`.
+**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is next only after Build 481 is independently GREEN on protected `main`.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_476_485.md`; it has not run out.
