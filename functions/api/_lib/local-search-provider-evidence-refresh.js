@@ -1,4 +1,4 @@
-// Build 440 — pure local-search provider evidence refresh/reconciliation helper.
+// Build 440/480 — pure local-search provider evidence refresh/reconciliation helper with bounded continuity history.
 // Provider snapshots remain operator-observed evidence. No ranking/indexing/Maps result is inferred.
 
 const PROVIDER_KEYS = Object.freeze(["search_console", "google_business_profile"]);
@@ -21,6 +21,10 @@ export function buildLocalSearchProviderEvidenceRefresh({ measurement = {}, gene
     firstParty,
     generatedAt
   ));
+  const history = Object.fromEntries(PROVIDER_KEYS.map((key) => [
+    key,
+    summarizeProviderHistory(key, measurement?.provider_history?.[key])
+  ]));
 
   const counts = {
     total_providers: providers.length,
@@ -48,6 +52,7 @@ export function buildLocalSearchProviderEvidenceRefresh({ measurement = {}, gene
     status,
     counts,
     providers,
+    history,
     reconciliation: {
       first_party: firstParty,
       local_proof: localProof,
@@ -135,6 +140,33 @@ function summarizeProvider(key, raw, firstParty, generatedAt) {
     safe_next_action: safeNextAction,
     interpretation: "This is operator-observed provider evidence only. It is not a live Google API assertion and does not prove ranking, indexing, Maps visibility or future performance."
   };
+}
+
+function summarizeProviderHistory(key, raw) {
+  const rows = Array.isArray(raw) ? raw : [];
+  return rows.map((item) => {
+    const source = objectOrEmpty(item);
+    const label = clean(source.label).slice(0,160) || null;
+    const periodStart = dateOnly(source.period_start);
+    const periodEnd = dateOnly(source.period_end);
+    const observedAt = validIso(source.observed_at);
+    const metrics = {};
+    for (const metric of METRIC_KEYS[key]) {
+      const value = Number(source?.metrics?.[metric]);
+      if (Number.isFinite(value) && value >= 0) metrics[metric] = value;
+    }
+    if (!label || !periodStart || !periodEnd || !observedAt || !Object.keys(metrics).length) return null;
+    return {
+      provider:key,
+      provider_label:PROVIDER_LABELS[key],
+      label,
+      period_start:periodStart,
+      period_end:periodEnd,
+      observed_at:observedAt,
+      recorded_at:validIso(source.recorded_at) || null,
+      metrics
+    };
+  }).filter(Boolean).sort((a,b)=>Date.parse(a.observed_at)-Date.parse(b.observed_at));
 }
 
 function summarizeFirstParty(raw) {

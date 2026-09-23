@@ -1,27 +1,29 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision**.
+Current source direction: **Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Maintenance & Fleet Owner Approval & Pilot Decision authority
-The current release reuses the retained maintenance/fleet owner-decision system and exposes one read-only pilot decision record. Canonical rulebook approval, explicit owner decision, participant/duration bounds, manual participant selection, and current availability/checkout safeguards remain separate and explicit. Missing owner approval or bounds remain `owner_action`; source/runtime GREEN never activates a pilot.
+## Current Local Search Provider Snapshot Continuity & Descriptive Review authority
+The current release reuses the retained local-search measurement/provider/attribution workbench, preserves a bounded prior snapshot history through the existing explicit staff save action, and compares successive provider snapshots only when property/location identity matches and dated windows are equal length. Raw metric deltas are descriptive only.
+
+Southern Ontario seasonal truth is explicit: search or booking-funnel movement does not prove a weather effect, winter service availability or a service temperature threshold. Exact cold-weather capability must come from service/product/equipment/site evidence rather than analytics.
 
 Focused source authority:
 
-`python scripts/maintenance_fleet_owner_approval_pilot_decision_check.py`
+`python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py`
 
 Behavioral proof:
 
-`node scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs`
+`node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs`
 
-The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
+The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the active roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md` — current bounded contract.
-4. `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md` — retained predecessor contract.
+3. `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md` — current bounded contract.
+4. `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
 7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
@@ -30,6 +32,7 @@ The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the retained
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
 - `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
 - `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
 - `BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md`
@@ -164,6 +167,8 @@ python scripts/booking_quote_controlled_experiment_framework_check.py
 node scripts/booking_quote_controlled_experiment_framework_test.mjs
 python scripts/local_search_provider_window_attribution_closure_check.py
 node scripts/local_search_provider_window_attribution_closure_test.mjs
+python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py
+node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
 python scripts/maintenance_fleet_controlled_pilot_activation_readiness_check.py
 node scripts/maintenance_fleet_controlled_pilot_activation_readiness_test.mjs
 python scripts/maintenance_fleet_owner_approval_pilot_decision_check.py

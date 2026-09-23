@@ -1,4 +1,4 @@
-// Build 450/460/470 — manual read-only local-search measurement, conversion attribution, evidence-quality & window-closure UI.
+// Build 450/460/470/480 — manual read-only local-search measurement, conversion attribution, evidence-quality, window-closure & snapshot-continuity UI.
 const byId450 = (id) => document.getElementById(id);
 const esc450 = (value) => String(value ?? "").replace(/[&<>"']/g, (c) => ({
   "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
@@ -35,10 +35,12 @@ async function refresh450() {
     renderProvider450(data);
     renderEvidenceQuality460(data);
     renderProviderWindowClosure470(data);
+    renderProviderSnapshotContinuity480(data);
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
     const closureState = String(data?.provider_window_attribution_closure?.status || "unavailable").replaceAll("_", " ");
-    setStatus450("Read-only attribution refreshed " + stamp + ". Attribution: " + String(data.status || "unavailable").replaceAll("_", " ") + " · evidence quality: " + qualityState + " · provider-window closure: " + closureState + ". No provider or analytics write was performed.", data.status === "observed" && qualityState === "comparable observed" && closureState === "closure ready" ? "ok" : "warn");
+    const continuityState = String(data?.provider_snapshot_continuity?.status || "continuity_incomplete").replaceAll("_", " ");
+    setStatus450("Read-only attribution refreshed " + stamp + ". Attribution: " + String(data.status || "unavailable").replaceAll("_", " ") + " · evidence quality: " + qualityState + " · provider-window closure: " + closureState + " · snapshot continuity: " + continuityState + ". No provider or analytics write was performed.", data.status === "observed" && qualityState === "comparable observed" && closureState === "closure ready" && continuityState === "descriptive review ready" ? "ok" : "warn");
   } catch (error) {
     setStatus450(error?.message || "Could not refresh local-search conversion attribution.", "bad");
   } finally {
@@ -144,6 +146,36 @@ function renderProviderWindowClosure470(data) {
     + '<span>' + esc450(item.closure_state || "unavailable") + '</span></div>'
   ).join("");
   host.innerHTML = summary + (providerRows || '<div class="summary-item muted">No provider-window closure rows are available.</div>');
+}
+
+function renderProviderSnapshotContinuity480(data) {
+  const host = byId450("localProviderSnapshotContinuity480");
+  if (!host) return;
+  const continuity = data?.provider_snapshot_continuity || {};
+  const rows = Array.isArray(continuity.providers) ? continuity.providers : [];
+  const seasonal = continuity.southern_ontario_seasonal_truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 480 continuity state</strong>'
+    + '<div class="muted">Successive snapshots are comparable only when the same provider property/location identity and equal-length dated windows are present. Metric changes remain descriptive only.</div></div>'
+    + '<span>' + esc450(continuity.status || "continuity_incomplete") + '</span></div>';
+  const providerRows = rows.map((item) => {
+    const current = item.current_snapshot || {};
+    const previous = item.previous_snapshot || {};
+    const deltas = item.metric_deltas || {};
+    const deltaText = Object.entries(deltas).map(([key,row]) =>
+      key.replaceAll("_"," ") + ": " + String(row.previous) + " → " + String(row.current)
+      + " (Δ " + String(row.delta) + (row.percent_change == null ? "" : ", " + String(row.percent_change) + "%") + ")"
+    ).join(" · ");
+    return '<div class="summary-item"><div><strong>' + esc450(item.provider_label || item.provider) + '</strong>'
+      + '<div class="muted">previous ' + esc450(previous.period_start || "—") + ' → ' + esc450(previous.period_end || "—")
+      + ' · current ' + esc450(current.period_start || "—") + ' → ' + esc450(current.period_end || "—")
+      + ' · identity match ' + esc450(item.identity_match ? "yes" : "no") + '</div>'
+      + '<div class="muted">' + esc450(deltaText || item.interpretation || "No comparable metric delta available.") + '</div></div>'
+      + '<span>' + esc450(item.continuity_state || "continuity_incomplete") + '</span></div>';
+  }).join("");
+  const seasonalBoundary = '<div class="summary-item"><div><strong>Southern Ontario seasonal truth boundary</strong>'
+    + '<div class="muted">' + esc450(seasonal.requirement || "Search/funnel changes do not prove weather effects or winter service availability. Exact temperature limits require explicit service/product/equipment constraints.") + '</div></div>'
+    + '<span>no inference</span></div>';
+  host.innerHTML = summary + (providerRows || '<div class="summary-item muted">No provider continuity rows are available.</div>') + seasonalBoundary;
 }
 
 function renderProvider450(data) {
