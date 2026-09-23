@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
-Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized predecessor contracts are retained through `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`.
+Retained predecessor contract: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`.
 Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
 - `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
 - `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
 - `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
@@ -107,24 +108,25 @@ Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release.
+**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is the active bounded release.
 
 Scope:
-- reuse the retained Builds 453/463/473 Service Economics endpoint and protected workbench;
-- close service/package or add-on allocation gaps only from explicit recorded revenue, material, labour, cash/refund and posted COGS linkage;
-- never infer allocation from booking totals, equal splits, percentages, price weighting or estimated overhead;
-- carry Southern Ontario seasonal operability separately only from explicit service/product/equipment/site evidence, distinguishing cold-snap-capable work, temperature-limited outdoor work and controlled-environment requirements without inventing thresholds;
+- reuse the retained reliability reassessment endpoint/workbench and reliability trend authority rather than creating a parallel telemetry or cost system;
+- keep first-party technical activity, provider-owned billing/CPU/quota/cost evidence, attributable recovery observations and Southern Ontario field-operability evidence as separate classes;
+- require comparable provider-owned evidence before describing provider cost/quota continuity;
+- require comparable attributable observations before describing recovery continuity, with source/runtime GREEN never treated as a recovery outcome and non-Production drills never treated as Production restore proof;
+- keep cold-snap-capable, temperature-limited outdoor and controlled-environment service evidence separate from application reliability, without inventing working-temperature thresholds;
 - preserve STARTUP_GO_LIVE_BLOCKERS.md as the canonical HOLD inventory; and
-- perform no automatic pricing, discount, booking, accounting/inventory, provider, schema/storage, public-claim or polling mutation.
+- perform no automatic scaling, retry/cache, restore, booking/availability, public winter claim, provider, schema/storage, business or polling mutation.
 
-Current contract: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retained allocation authority: BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md.
+Current contract: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Retained trend authority: BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md.
 
-The exact candidate must pass the focused closure authority, retained Service Economics authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused continuity authority, retained reliability/recovery authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing allocation or seasonal-operability evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing provider-owned cost/quota evidence, comparable recovery evidence or field-operability evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
 
 ## Next release
-**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 485 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_476_485.md`; it has not run out.
