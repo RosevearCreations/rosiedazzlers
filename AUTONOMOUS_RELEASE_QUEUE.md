@@ -10,6 +10,7 @@ Retained predecessor contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENC
 Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`
 - `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`
 - `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
 - `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -113,25 +114,25 @@ Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.
+**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release.
 
 Scope:
-- reuse the retained cold-weather capability matrix and protected Service Economics workbench;
-- prepare booking/quote eligibility states from attributable capability evidence without changing booking availability;
-- prepare customer limitation wording as draft owner-review copy only;
-- keep weather-ineligible sessions separate from ordinary conversion interpretation and never count a cold-weather restriction as a conversion failure;
-- leave adjusted conversion metrics unavailable unless attributable session-level weather eligibility evidence and like-for-like numerator/denominator evidence exist;
-- preserve broad winter availability on HOLD and keep exact temperature limits source-owned; and
-- perform no automatic booking/availability, quote eligibility, public claim, customer message, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation.
+- reuse the retained cold-weather capability matrix, winter booking/customer-transparency authority and protected Service Economics workbench;
+- expose a controlled-environment or indoor-capable option only when explicit service/product/equipment/site/process evidence supports that specific alternative;
+- keep temperature-limited outdoor work without an evidenced alternative in manual weather-safe reschedule review until source-owned conditions are met;
+- keep controlled-environment-required work in site/owner confirmation when no specific suitable site or indoor workflow is evidenced;
+- state clearly that not every service can move indoors and never infer current site suitability or capability from weather alone;
+- preserve STARTUP_GO_LIVE_BLOCKERS.md as the canonical HOLD inventory; and
+- perform no automatic routing, rescheduling, booking/availability, quote, customer-message, public winter claim, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation.
 
-Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
+Current contract: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Retained eligibility authority: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
 
-The exact candidate must pass the focused winter-eligibility authority, retained capability/service authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused weather-safe routing authority, retained seasonal/eligibility authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing session-level weather evidence remains unavailable; source/runtime GREEN does not fabricate conversion adjustment or winter eligibility.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing controlled-environment/site evidence remains unavailable; source/runtime GREEN does not fabricate indoor capability or a route.
 
 ## Next release
-**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next only after the current release is independently GREEN on protected main.
+**Build 489 — Provider & Local Search Evidence Continuity** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_486_495.md`; it has not run out.
