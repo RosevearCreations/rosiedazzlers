@@ -1,10 +1,11 @@
-// Build 414 — explicit operator save for dated Search Console / GBP evidence snapshots.
+// Build 414/480 — explicit operator save for dated Search Console / GBP evidence snapshots with bounded continuity history.
 // This stores bounded measurement evidence in the existing app_management_settings authority.
 // It never stores Google credentials/tokens and never contacts or mutates a Google provider.
 import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
 
 const SETTING_KEY = "local_search_provider_evidence";
 const PROVIDERS = new Set(["search_console", "google_business_profile"]);
+const HISTORY_LIMIT = 12;
 const METRICS = {
   search_console: ["clicks", "impressions", "ctr_percent", "average_position"],
   google_business_profile: ["profile_views", "website_clicks", "calls", "direction_requests"]
@@ -36,11 +37,25 @@ export async function onRequestPost({ request, env }) {
     );
     const rows = existingRes.ok ? await existingRes.json().catch(() => []) : [];
     const existing = Array.isArray(rows) && rows[0]?.value && typeof rows[0].value === "object" ? rows[0].value : {};
+    const now = new Date().toISOString();
+    const previousCurrent = normalizeStoredSnapshot(existing?.[provider], provider);
+    const priorHistory = Array.isArray(existing?.history?.[provider])
+      ? existing.history[provider].map((item) => normalizeStoredSnapshot(item, provider)).filter(Boolean)
+      : [];
+    const history = dedupeHistory([
+      ...priorHistory,
+      ...(previousCurrent ? [previousCurrent] : [])
+    ]).slice(-HISTORY_LIMIT);
+
     const value = {
       ...existing,
+      history: {
+        ...(existing?.history && typeof existing.history === "object" ? existing.history : {}),
+        [provider]: history
+      },
       [provider]: {
         ...snapshot.value,
-        recorded_at: new Date().toISOString()
+        recorded_at: now
       }
     };
 
@@ -61,7 +76,8 @@ export async function onRequestPost({ request, env }) {
       provider,
       evidence_state: "observed_snapshot",
       snapshot: value[provider],
-      rule: "Saved evidence is a dated operator-observed provider snapshot. It does not create a live Google API assertion or ranking guarantee."
+      continuity_history_count: history.length,
+      rule: "Saved evidence is a dated operator-observed provider snapshot. The prior valid snapshot is retained only for bounded descriptive continuity review; this does not create a live Google API assertion or ranking guarantee."
     });
   } catch (err) {
     return json({ ok: false, error: safeError(err) }, 500);
@@ -107,6 +123,26 @@ function validateSnapshot(raw, provider) {
   };
 }
 
+function normalizeStoredSnapshot(raw, provider) {
+  if (!raw || typeof raw !== "object") return null;
+  const checked = validateSnapshot(raw, provider);
+  if (!checked.ok) return null;
+  return {
+    ...checked.value,
+    recorded_at: clean(raw.recorded_at) || clean(raw.observed_at) || null
+  };
+}
+function dedupeHistory(rows) {
+  const seen = new Set();
+  const out = [];
+  for (const row of rows) {
+    const key = [row.label,row.period_start,row.period_end,row.observed_at,JSON.stringify(row.metrics||{})].join("|");
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(row);
+  }
+  return out.sort((a,b)=>Date.parse(a.observed_at)-Date.parse(b.observed_at));
+}
 function dateOnly(value) {
   const text = clean(value);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(text)) return "";
