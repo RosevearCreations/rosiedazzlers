@@ -14,7 +14,8 @@ BRANCH_NOTE = ROOT / "BRANCH_WORKFLOW_NOTE.md"
 ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_446_455.md"
 NEXT_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_456_465.md"
 FUTURE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_466_475.md"
-LATEST_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_476_485.md"\nNEXT_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_486_495.md"
+LATEST_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_476_485.md"
+NEXT_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_486_495.md"
 GOVERNANCE = ROOT / "RELEASE_GOVERNANCE.md"
 PRODUCTION_WORKFLOW = ROOT / ".github/workflows/production-business-acceptance-authority.yml"
 PRODUCTION_CHECK = ROOT / "scripts/production_business_acceptance_check.py"
@@ -62,7 +63,8 @@ branch_note = read(BRANCH_NOTE, "branch workflow note")
 roadmap = read(ROADMAP, "forward roadmap")
 next_roadmap = read(NEXT_ROADMAP, "renewed forward roadmap") if NEXT_ROADMAP.exists() else ""
 future_roadmap = read(FUTURE_ROADMAP, "future renewed roadmap") if FUTURE_ROADMAP.exists() else ""
-latest_roadmap = read(LATEST_ROADMAP, "latest renewed roadmap") if LATEST_ROADMAP.exists() else ""\nnext_cycle_roadmap = read(NEXT_CYCLE_ROADMAP, "next-cycle renewed roadmap") if NEXT_CYCLE_ROADMAP.exists() else ""
+latest_roadmap = read(LATEST_ROADMAP, "latest renewed roadmap") if LATEST_ROADMAP.exists() else ""
+next_cycle_roadmap = read(NEXT_CYCLE_ROADMAP, "next-cycle renewed roadmap") if NEXT_CYCLE_ROADMAP.exists() else ""
 roadmap_sequence = roadmap + "\n" + next_roadmap + "\n" + future_roadmap + "\n" + latest_roadmap + "\n" + next_cycle_roadmap
 governance = read(GOVERNANCE, "release governance")
 production_workflow = read(PRODUCTION_WORKFLOW, "Production workflow")
