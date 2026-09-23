@@ -6,7 +6,7 @@ This roadmap is renewed from `PRODUCTION_LEARNING_476_484.md`. It preserves the 
 Create one read-only capability matrix for packages and add-ons using explicit service/product/equipment/site/process evidence. Classify only `cold-snap-capable`, `temperature-limited-outdoor` and `controlled-environment-required`. Carry exact working-temperature limits only when the owning evidence source records them. No invented thresholds, blanket winter claim or automatic booking mutation.
 
 ### Build 487 — Winter Booking Eligibility & Customer Transparency
-Use the retained capability matrix to prepare evidence-backed booking/quote eligibility states and customer-facing limitation text. Weather-ineligible sessions must remain distinct from ordinary conversion failures. No automatic service shutdown, price change or broad public winter claim is authorized without explicit owner-approved rules and current evidence.
+Use the retained capability matrix to prepare evidence-backed booking/quote eligibility states and customer-facing limitation text. Weather-ineligible sessions must remain distinct from ordinary conversion failures; weather-ineligible sessions are excluded from ordinary conversion interpretation. No automatic service shutdown, price change or broad public winter claim is authorized without explicit owner-approved rules and current evidence.
 
 ### Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing
 Where evidence supports it, expose controlled-environment alternatives, indoor-capable workflows or safe rescheduling guidance for temperature-constrained outdoor services. Keep customer choice, location/site constraints and exact product/equipment requirements explicit; do not imply that every service can be moved indoors.
