@@ -21,41 +21,11 @@ Retained predecessor proof remains scripts/reliability_cost_resilience_trend_rev
 
 The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
 
-## Retained Service & Add-On Allocation Evidence Closure authority
-This release reuses the retained Service Economics workbench to close only allocation gaps backed by explicit recorded revenue, material, labour, cash/refund and posted COGS linkage. Booking totals, equal/percentage splits, price weighting and overhead estimates never manufacture allocation.
+## Retained release pointers
+Retained allocation closure: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` · `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/service_addon_allocation_evidence_closure_test.mjs`.
 
-Southern Ontario seasonal operability is carried separately only from explicit service/product/equipment/site evidence. Cold-snap-capable work, temperature-limited outdoor work and controlled-environment requirements can be classified without inventing a temperature threshold or turning margin evidence into a winter-service claim.
-
-Focused source authority:
-
-python scripts/service_addon_allocation_evidence_closure_check.py
-
-Behavioral proof:
-
-node scripts/service_addon_allocation_evidence_closure_test.mjs
-
-Retained predecessor proof remains scripts/service_economics_allocation_margin_review_readiness_check.py and scripts/service_economics_allocation_margin_review_readiness_test.mjs.
-
-The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
-
-## Retained Staff & Mobile Remediation Execution Evidence Readiness authority
-The current release reuses the retained staff/mobile evidence workbench and adds a read-only readiness layer for any separately authorized remediation execution and later before/after observation.
-
-A current repeated pattern is not execution proof. Build 482 defines the minimum attributable execution record and materially like-for-like comparison requirements before remediation effectiveness can be claimed. Root cause, staff fault, device/browser friction and business impact remain unproven unless separately evidenced.
-
-Southern Ontario weather/site restrictions remain a separate operational classification. Cold-weather limits are not staff/mobile friction, and exact service temperature thresholds are never inferred without explicit service, product, equipment or site evidence.
-
-Focused source authority:
-
-python scripts/staff_mobile_remediation_execution_evidence_readiness_check.py
-
-Behavioral proof:
-
-node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
-
-Retained predecessor proof remains scripts/booking_quote_experiment_approval_measurement_lock_check.py and scripts/booking_quote_experiment_approval_measurement_lock_test.mjs.
-
-The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
+## Retained staff/mobile readiness
+Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
