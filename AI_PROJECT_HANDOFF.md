@@ -14,8 +14,8 @@ Current contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.m
 ## Current Booking & Quote Experiment Approval & Measurement Lock contract
 - Reuse retained Builds 441/451/461/471 and the existing booking/quote learning workbench.
 - A supported experiment remains `owner_approval_required` until the owner explicitly records threshold, target direction, winner rule, duration, allocation, all retained stop conditions, seasonal/weather eligibility and approval.
-- The dedicated Build 481 save endpoint writes only governance evidence into the existing app settings store; no schema migration.
-- A completed record becomes an immutable measurement lock through Build 481, but `execution_authorized` and `experiment_started` remain false.
+- The dedicated current-release save endpoint writes only governance evidence into the existing app settings store; no schema migration.
+- A completed record becomes an immutable measurement lock through the current release, but `execution_authorized` and `experiment_started` remain false.
 - Southern Ontario weather-ineligible sessions are excluded from the conversion denominator; weather restrictions are not conversion failures and exact temperature limits are not inferred.
 - No automatic experiment activation, winner selection, price/discount, booking-rule/availability, outreach, provider or customer mutation is authorized.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
