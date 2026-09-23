@@ -1,29 +1,31 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review**.
+Current source direction: **Build 481 — Booking & Quote Experiment Approval & Measurement Lock**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Local Search Provider Snapshot Continuity & Descriptive Review authority
-The current release reuses the retained local-search measurement/provider/attribution workbench, preserves a bounded prior snapshot history through the existing explicit staff save action, and compares successive provider snapshots only when property/location identity matches and dated windows are equal length. Raw metric deltas are descriptive only.
+## Current Booking & Quote Experiment Approval & Measurement Lock authority
+The current release reuses the retained booking/quote learning and controlled-experiment framework, and adds a dedicated explicit owner-governance save path using the existing app settings store.
 
-Southern Ontario seasonal truth is explicit: search or booking-funnel movement does not prove a weather effect, winter service availability or a service temperature threshold. Exact cold-weather capability must come from service/product/equipment/site evidence rather than analytics.
+A supported experiment remains `owner_approval_required` until the owner records the threshold, target direction, winner rule, duration, allocation, all fail-closed stop conditions, Southern Ontario seasonal/weather eligibility and approval. A completed record becomes an immutable Build 481 measurement lock, but it still does not authorize experiment execution or any price, discount, booking-rule, availability or outreach change.
+
+Weather-ineligible sessions are excluded from the conversion denominator. Cold-weather restrictions are not counted as conversion failures, and exact service temperature limits are never inferred by this release.
 
 Focused source authority:
 
-`python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py`
+`python scripts/booking_quote_experiment_approval_measurement_lock_check.py`
 
 Behavioral proof:
 
-`node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs`
+`node scripts/booking_quote_experiment_approval_measurement_lock_test.mjs`
 
 The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the active roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md` — current bounded contract.
-4. `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md` — retained predecessor contract.
+3. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — current bounded contract.
+4. `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
 7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
@@ -32,6 +34,7 @@ The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the active r
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
 - `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
 - `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
 - `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`
@@ -165,6 +168,8 @@ python scripts/staff_mobile_remediation_verification_check.py
 node scripts/staff_mobile_remediation_verification_test.mjs
 python scripts/booking_quote_controlled_experiment_framework_check.py
 node scripts/booking_quote_controlled_experiment_framework_test.mjs
+python scripts/booking_quote_experiment_approval_measurement_lock_check.py
+node scripts/booking_quote_experiment_approval_measurement_lock_test.mjs
 python scripts/local_search_provider_window_attribution_closure_check.py
 node scripts/local_search_provider_window_attribution_closure_test.mjs
 python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py
