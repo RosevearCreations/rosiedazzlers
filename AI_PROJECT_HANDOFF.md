@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md.
+The synchronized Production predecessor is retained through BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
 
-**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.
 
-**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next only after the current release is independently GREEN on protected main.
+**Build 487 — Winter Booking Eligibility & Customer Transparency** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current reconciliation: PRODUCTION_LEARNING_476_484.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Retained renewal: BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Production Learning & Roadmap Renewal contract
+## Current Cold-Weather Service Capability Evidence Matrix contract
+- Reuse the retained Service & Add-On seasonal-operability authority and protected Service Economics workbench.
+- Matrix rows require explicit package/add-on/service identity, allowed classification, evidence source type and attributable evidence reference.
+- Allowed classifications are cold-snap-capable, temperature-limited outdoor and controlled-environment-required.
+- Evidence source types are service, product, equipment, site and process.
+- Exact temperature limits are source-owned only; no forecast, margin, demand, uptime or operator assumption may invent one.
+- Broad winter availability remains on HOLD. No automatic booking/public claim, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Production Learning & Roadmap Renewal contract
 - Reconcile the 476–484 cycle without fabricating provider, owner, recovery, device, allocation or seasonal-operability closure.
 - Preserve the canonical HOLD inventory and add a broad-winter-claim transparency HOLD until explicit service/product/equipment/site/process evidence exists.
 - Renew the roadmap through `FORWARD_BUILD_ROADMAP_486_495.md`.
@@ -38,6 +47,11 @@ Current contract: BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current recon
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
+- `.github/workflows/cold-weather-service-capability-evidence-matrix-authority.yml`
+- `scripts/cold_weather_service_capability_evidence_matrix_check.py`
+- `scripts/cold_weather_service_capability_evidence_matrix_test.mjs`
+- `functions/api/_lib/cold-weather-service-capability-evidence-matrix.js`
 - `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_476_484.md`
 - `FORWARD_BUILD_ROADMAP_486_495.md`
