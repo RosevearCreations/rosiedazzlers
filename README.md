@@ -1,25 +1,19 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 484 — Reliability, Cost & Recovery Evidence Continuity**.
+Current source direction: **Build 485 — Production Learning & Roadmap Renewal**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Reliability, Cost & Recovery Evidence Continuity authority
-This release reuses the protected reliability reassessment workbench and retains the existing trend authority. First-party application activity, provider-owned cost/quota evidence, attributable recovery observations and Southern Ontario field operability remain separate evidence classes.
+## Current Production Learning & Roadmap Renewal authority
+This release reconciles the 476–484 cycle without treating source/runtime GREEN as provider, owner, recovery, real-device, allocation or seasonal-operability closure.
 
-Provider billing, CPU, quota or dollar-cost continuity requires comparable provider-owned evidence. Source/runtime GREEN is not recovery-outcome evidence, and a non-Production drill is not proof of a Production restore. Cold-weather field restrictions are not application reliability failures; exact working-temperature limits require explicit service/product/equipment/site evidence.
+The renewed cycle is `FORWARD_BUILD_ROADMAP_486_495.md`, backed by `PRODUCTION_LEARNING_476_484.md`. It starts with explicit Southern Ontario cold-weather capability evidence, then winter booking/customer transparency and controlled-environment alternatives. Exact temperature limits are carried only from explicit service/product/equipment/site/process evidence.
 
 Focused source authority:
 
-python scripts/reliability_cost_recovery_evidence_continuity_check.py
+python scripts/production_learning_roadmap_renewal_check.py
 
-Behavioral proof:
-
-node scripts/reliability_cost_recovery_evidence_continuity_test.mjs
-
-Retained predecessor proof remains scripts/reliability_cost_resilience_trend_review_check.py and scripts/reliability_cost_resilience_trend_review_test.mjs.
-
-The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
+The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
 Retained allocation closure: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` · `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/service_addon_allocation_evidence_closure_test.mjs`.
@@ -30,8 +24,11 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` — current bounded contract.
-4. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` — retained predecessor contract.
+3. `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
+4. `PRODUCTION_LEARNING_476_484.md` — current cycle reconciliation.
+5. `FORWARD_BUILD_ROADMAP_486_495.md` — renewed evidence-driven sequence.
+6. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` — retained predecessor contract.
+7. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` — retained predecessor contract.
 5. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — retained predecessor contract.
 6. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
@@ -41,6 +38,10 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_476_484.md`
+- `FORWARD_BUILD_ROADMAP_486_495.md`
 
 - `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
 
@@ -262,4 +263,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 485 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected `main`.
+**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next only after the current release is independently GREEN on protected `main`.
