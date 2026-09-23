@@ -67,10 +67,10 @@ require(queue,[
  "it has not run out"
 ],"Build 486 queue")
 require(handoff,[
- "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
+ "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py"
-],"Build 486 handoff")
+],"retained Build 486 handoff")
 require(readme,[
  "Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
