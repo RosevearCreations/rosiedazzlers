@@ -1,19 +1,19 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.
+Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Cold-Weather Service Capability Evidence Matrix authority
-This release turns the retained seasonal-operability evidence into one read-only package/add-on/service matrix. Rows require explicit service/product/equipment/site/process evidence and one allowed classification: cold-snap-capable, temperature-limited outdoor or controlled-environment-required.
+## Current Winter Booking Eligibility & Customer Transparency authority
+This release converts the retained cold-weather capability matrix into read-only booking/quote eligibility guidance and draft customer limitation wording. Weather-ineligible sessions stay separate from ordinary conversion interpretation; a cold-weather restriction is not a conversion failure.
 
-Exact working-temperature limits are shown only when the owning source explicitly supports the exact claim. Forecasts, booking demand, margin and application uptime do not prove field capability. Broad winter availability remains on HOLD.
+Prepared customer wording requires owner review and is not published automatically. Exact working-temperature limits remain source-owned. Broad winter availability remains on HOLD.
 
-Focused source authority: `python scripts/cold_weather_service_capability_evidence_matrix_check.py`
+Focused source authority: `python scripts/winter_booking_eligibility_customer_transparency_check.py`
 
-Behavioral proof: `node scripts/cold_weather_service_capability_evidence_matrix_test.mjs`
+Behavioral proof: `node scripts/winter_booking_eligibility_customer_transparency_test.mjs`
 
-Current contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`. Retained capability contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
 Retained reliability continuity: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`.
@@ -26,7 +26,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — current bounded contract.
+3. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` — current bounded contract.
+4. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — retained capability contract.
 4. `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 5. `PRODUCTION_LEARNING_476_484.md` — retained cycle reconciliation.
 6. `FORWARD_BUILD_ROADMAP_486_495.md` — active evidence-driven sequence.
@@ -268,4 +269,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 487 — Winter Booking Eligibility & Customer Transparency** is next only after the current release is independently GREEN on protected `main`.
+**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next only after the current release is independently GREEN on protected `main`.
