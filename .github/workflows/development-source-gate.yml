@@ -543,6 +543,8 @@ jobs:
           node scripts/cold_weather_service_capability_evidence_matrix_test.mjs
           python scripts/winter_booking_eligibility_customer_transparency_check.py
           node scripts/winter_booking_eligibility_customer_transparency_test.mjs
+          python scripts/controlled_environment_weather_safe_routing_check.py
+          node scripts/controlled_environment_weather_safe_routing_test.mjs
 
       - name: Validate reliability, cost & resilience operational guardrails authority
         run: |
