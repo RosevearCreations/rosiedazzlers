@@ -5,7 +5,7 @@ Current source direction: **Build 483 — Service & Add-On Allocation Evidence C
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Current Service & Add-On Allocation Evidence Closure authority
-Build 483 reuses the retained Service Economics workbench to close only allocation gaps backed by explicit recorded revenue, material, labour, cash/refund and posted COGS linkage. Booking totals, equal/percentage splits, price weighting and overhead estimates never manufacture allocation.
+This release reuses the retained Service Economics workbench to close only allocation gaps backed by explicit recorded revenue, material, labour, cash/refund and posted COGS linkage. Booking totals, equal/percentage splits, price weighting and overhead estimates never manufacture allocation.
 
 Southern Ontario seasonal operability is carried separately only from explicit service/product/equipment/site evidence. Cold-snap-capable work, temperature-limited outdoor work and controlled-environment requirements can be classified without inventing a temperature threshold or turning margin evidence into a winter-service claim.
 
@@ -272,4 +272,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.
+**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next only after the current release is independently GREEN on protected `main`.
