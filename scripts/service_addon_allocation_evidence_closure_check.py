@@ -61,7 +61,7 @@ require(queue,[
 require(handoff,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
- "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release."
+ "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release."
 ],"retained Build 483 handoff")
 require(readme,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
