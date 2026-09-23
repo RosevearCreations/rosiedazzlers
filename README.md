@@ -16,6 +16,8 @@ python scripts/production_learning_roadmap_renewal_check.py
 The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
+Retained reliability continuity: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`.
+
 Retained allocation closure: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` · `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/service_addon_allocation_evidence_closure_test.mjs`.
 
 ## Retained staff/mobile readiness
