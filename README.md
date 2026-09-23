@@ -16,6 +16,8 @@ Behavioral proof: `node scripts/winter_booking_eligibility_customer_transparency
 Current contract: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`. Retained capability contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
+Retained cold-weather capability: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_test.mjs`.
+
 Retained reliability continuity: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`.
 
 Retained allocation closure: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` · `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/service_addon_allocation_evidence_closure_test.mjs`.
