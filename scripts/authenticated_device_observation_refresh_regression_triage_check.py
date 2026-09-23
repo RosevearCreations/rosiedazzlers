@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build 478 Authenticated Device Observation Refresh & Regression Triage source authority."""
+"""Build 478 Authenticated Device Observation Refresh & Regression Triage source authority.\nRetained validation is release-state independent: living current/next labels may advance.\n"""
 from pathlib import Path
 import re, subprocess, sys
 ROOT=Path(__file__).resolve().parents[1]; errors=[]
@@ -39,7 +39,7 @@ require(asset,["Observation triage","Triage regressions","Refresh roles","Refres
 require(launch,["current_device_observation_triage_authority","authenticated_device_observation_refresh_regression_triage"],"Launch Readiness composition")
 require(contract,["# Build 478 — Authenticated Device Observation Refresh & Regression Triage","newly observed regression","observation_refresh_required","Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision"],"Build 478 contract")
 require(blockers,["Independent device / visual evidence","Build 478","regression triage"],"canonical HOLD backlog")
-require(queue,["BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md","Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision"],"release queue")
+require(queue,["BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md","FORWARD_BUILD_ROADMAP_476_485.md","it has not run out"],"release queue retained Build 478 authority")
 require(handoff,["BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md","authenticated_device_observation_refresh_regression_triage_check.py"],"project handoff")
 require(readme,["BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md","authenticated_device_observation_refresh_regression_triage_check.py"],"README")
 require(workflow,["Build 478 — Authenticated Device Observation Refresh & Regression Triage Authority","authenticated-device-observation-refresh-regression-triage","authenticated_device_observation_refresh_regression_triage_check.py"],"focused workflow")

@@ -1,0 +1,65 @@
+name: Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-local-search-provider-snapshot-continuity-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: local-search-provider-snapshot-continuity-descriptive-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py
+          node --check functions/api/_lib/local-search-measurement-conversion-attribution.js
+          node --check functions/api/_lib/local-search-provider-evidence-refresh.js
+          node --check functions/api/admin/local_search_measurement_report.js
+          node --check functions/api/admin/local_search_provider_evidence_save.js
+          node --check functions/api/admin/local_search_measurement_conversion_attribution.js
+          node --check assets/build450-local-search-measurement-conversion-attribution.js
+          node --check scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
+      - name: Validate snapshot continuity and descriptive review
+        run: |
+          python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py
+          node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
+      - name: Authority summary
+        run: |
+          {
+            echo '### Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review'
+            echo "- SHA: `${GITHUB_SHA}`"
+            echo '- Retained Build 440/450/460/470 local-search authorities reused: PASS'
+            echo '- Bounded explicit-save snapshot continuity: PASS'
+            echo '- Matching provider identity + equal-length window requirement: PASS'
+            echo '- Raw metric deltas remain descriptive only: PASS'
+            echo '- Southern Ontario winter/service-operability inference from search data: NONE'
+            echo '- Google API contact / automatic provider write / customer identity join / permanent polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
