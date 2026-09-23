@@ -1,4 +1,4 @@
-// Build 486 — retained manual service economics UI with cold-weather capability evidence matrix.
+// Build 487 — retained manual service economics UI with winter booking eligibility and customer transparency.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -22,6 +22,7 @@
       renderAllocation(data.economics?.allocation_margin_readiness || {});
       renderClosure(data.economics?.allocation_evidence_closure || {}, data.economics?.seasonal_operability || {});
       renderColdWeatherCapabilityMatrix(data.economics?.cold_weather_capability_matrix || {});
+      renderWinterBookingEligibility(data.economics?.winter_booking_eligibility || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -38,6 +39,7 @@
       if($("closureGrid")) $("closureGrid").innerHTML = '<div class="review-empty">Allocation evidence closure is unavailable.</div>';
       if($("seasonalGrid")) $("seasonalGrid").innerHTML = '<div class="review-empty">Seasonal operability evidence is unavailable.</div>';
       if($("capabilityMatrixGrid")) $("capabilityMatrixGrid").innerHTML = '<div class="review-empty">Cold-weather capability evidence is unavailable.</div>';
+      if($("winterEligibilityGrid")) $("winterEligibilityGrid").innerHTML = '<div class="review-empty">Winter booking eligibility evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -154,6 +156,25 @@
     mount.innerHTML=cards.join("");
     const detail=$("capabilityMatrixDetail");
     if(detail) detail.textContent="Valid rows: "+String(matrix.valid_row_count??0)+" · gaps: "+String(matrix.gap_count??0)+" · exact source-owned temperature limits: "+String(matrix.counts?.exact_temperature_limit??0)+". Broad winter claim: HOLD.";
+  }
+
+  function renderWinterBookingEligibility(eligibility) {
+    const mount=$("winterEligibilityGrid"); if(!mount) return;
+    const rows=Array.isArray(eligibility.rows)?eligibility.rows:[];
+    const cards=rows.map((row)=>'<article class="review-candidate state-observed"><div class="review-head"><strong>'+
+      esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+      '</strong><span class="pill">'+esc(String(row.eligibility_state||"owner_review_required").replaceAll("_"," "))+'</span></div>'+
+      '<p><strong>Booking/quote guidance:</strong> '+esc(row.booking_quote_guidance||"Owner review required.")+'</p>'+
+      '<p class="mini"><strong>Draft customer wording:</strong> '+esc(row.customer_limitation_text||"Winter eligibility is not established.")+'</p>'+
+      '<p class="mini">'+esc(row.temperature_limit_text||"No exact source-owned working-temperature limit recorded.")+
+      ' · Prepared wording is not published automatically. · Automatic eligibility change: NO</p></article>');
+    const weather=eligibility.weather_ineligible_conversion_interpretation||{};
+    cards.push('<article class="review-candidate state-'+esc(weather.status==="observed"?"observed":"review")+'"><div class="review-head"><strong>Conversion interpretation</strong><span class="pill">'+esc(weather.status||"unavailable")+'</span></div>'+
+      '<p class="mini">Weather-ineligible sessions are excluded from ordinary conversion interpretation: YES · observed weather-ineligible sessions: '+esc(weather.weather_ineligible_session_count??"unavailable")+'</p>'+
+      '<p class="mini">Adjusted conversion metric available: '+esc(weather.adjusted_conversion_metric_available===true?"YES":"NO")+' · Missing session evidence is never inferred.</p></article>');
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No winter booking eligibility row is prepared.</div>';
+    const detail=$("winterEligibilityDetail");
+    if(detail) detail.textContent="Prepared rows: "+String(eligibility.row_count??0)+" · customer copy: "+String(eligibility.customer_copy_status||"unavailable")+". Broad winter claim remains on HOLD.";
   }
 
   function renderCandidates(rows) {

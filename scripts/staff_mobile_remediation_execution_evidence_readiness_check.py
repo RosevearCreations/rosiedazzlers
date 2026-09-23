@@ -116,20 +116,20 @@ require(roadmap, [
 ], "Build 482 roadmap")
 require(queue, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
-    "**Build 487 — Winter Booking Eligibility & Customer Transparency** is next",
+    "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.",
+    "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next",
     "it has not run out"
 ], "retained Build 482 queue")
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release."
+    "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
-    "Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.",
+    "Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.",
     "Production is not considered GREEN from source promotion alone."
 ], "retained Build 482 README")
 require(blockers, [

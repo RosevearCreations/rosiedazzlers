@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
+The synchronized Production predecessor is retained through BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md.
 
-**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.
+**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.
 
-**Build 487 — Winter Booking Eligibility & Customer Transparency** is next only after the current release is independently GREEN on protected main.
+**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Retained renewal: BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Cold-Weather Service Capability Evidence Matrix contract
+## Current Winter Booking Eligibility & Customer Transparency contract
+- Reuse the retained cold-weather capability matrix and protected Service Economics workbench.
+- Prepare booking/quote eligibility guidance without automatically changing availability.
+- Prepared customer limitation wording remains draft and requires owner review before publication or use.
+- Weather-ineligible sessions are excluded from ordinary conversion interpretation; a cold-weather restriction is not a conversion failure.
+- Missing session-level weather evidence never produces an invented adjusted conversion rate.
+- Exact temperature limits remain source-owned; broad winter availability remains on HOLD.
+- No automatic booking/quote, public claim, customer message, pricing, provider, schema/storage, outreach or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Cold-Weather Service Capability Evidence Matrix contract
 - Reuse the retained Service & Add-On seasonal-operability authority and protected Service Economics workbench.
 - Matrix rows require explicit package/add-on/service identity, allowed classification, evidence source type and attributable evidence reference.
 - Allowed classifications are cold-snap-capable, temperature-limited outdoor and controlled-environment-required.
@@ -47,6 +57,11 @@ Current contract: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. R
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`
+- `.github/workflows/winter-booking-eligibility-customer-transparency-authority.yml`
+- `scripts/winter_booking_eligibility_customer_transparency_check.py`
+- `scripts/winter_booking_eligibility_customer_transparency_test.mjs`
+- `functions/api/_lib/winter-booking-eligibility-customer-transparency.js`
 - `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
 - `.github/workflows/cold-weather-service-capability-evidence-matrix-authority.yml`
 - `scripts/cold_weather_service_capability_evidence_matrix_check.py`

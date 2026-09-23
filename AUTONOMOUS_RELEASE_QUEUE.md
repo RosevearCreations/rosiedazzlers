@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
-Retained predecessor contract: `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+The synchronized predecessor contracts are retained through `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`.
+Retained predecessor contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`.
 Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`
 - `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
 - `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_476_484.md`
@@ -112,25 +113,25 @@ Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.
+**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.
 
 Scope:
-- reuse the retained Service & Add-On seasonal-operability evidence path and protected Service Economics workbench;
-- create one read-only matrix for packages, add-ons and explicitly identified services;
-- accept only cold-snap-capable, temperature-limited-outdoor or controlled-environment-required classifications backed by explicit service/product/equipment/site/process evidence;
-- carry exact working-temperature limits only when the owning source explicitly supports the exact claim;
-- keep broad winter availability on HOLD and preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical seasonal-service transparency HOLD;
-- do not infer capability from forecasts, booking demand, margin, application uptime or operator assumption; and
-- perform no automatic booking/availability, public winter claim, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation.
+- reuse the retained cold-weather capability matrix and protected Service Economics workbench;
+- prepare booking/quote eligibility states from attributable capability evidence without changing booking availability;
+- prepare customer limitation wording as draft owner-review copy only;
+- keep weather-ineligible sessions separate from ordinary conversion interpretation and never count a cold-weather restriction as a conversion failure;
+- leave adjusted conversion metrics unavailable unless attributable session-level weather eligibility evidence and like-for-like numerator/denominator evidence exist;
+- preserve broad winter availability on HOLD and keep exact temperature limits source-owned; and
+- perform no automatic booking/availability, quote eligibility, public claim, customer message, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation.
 
-Current contract: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md. Retained seasonal authority: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
+Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
 
-The exact candidate must pass the focused capability-matrix authority, retained service/seasonal authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused winter-eligibility authority, retained capability/service authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing capability evidence remains truthful and unavailable; source/runtime GREEN does not fabricate winter capability.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing session-level weather evidence remains unavailable; source/runtime GREEN does not fabricate conversion adjustment or winter eligibility.
 
 ## Next release
-**Build 487 — Winter Booking Eligibility & Customer Transparency** is next only after the current release is independently GREEN on protected main.
+**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_486_495.md`; it has not run out.
