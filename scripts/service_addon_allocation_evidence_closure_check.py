@@ -53,22 +53,22 @@ require(doc,[
  "Build 484 — Reliability, Cost & Recovery Evidence Continuity"
 ],"Build 483 contract")
 require(queue,[
- "**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release.",
- "**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next",
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
+ "**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is the active bounded release.",
+ "**Build 485 — Production Learning & Roadmap Renewal** is next",
  "it has not run out"
-],"Build 483 queue")
+],"retained Build 483 queue")
 require(handoff,[
- "**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release.",
- "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
- "service_addon_allocation_evidence_closure_check.py"
-],"Build 483 handoff")
-require(readme,[
- "Current source direction: **Build 483 — Service & Add-On Allocation Evidence Closure**.",
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
+ "**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is the active bounded release."
+],"retained Build 483 handoff")
+require(readme,[
+ "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
+ "service_addon_allocation_evidence_closure_check.py",
+ "Current source direction: **Build 484 — Reliability, Cost & Recovery Evidence Continuity**.",
  "Production is not considered GREEN from source promotion alone."
-],"Build 483 README")
+],"retained Build 483 README")
 for text,label in [(source_gate,"Development Source Gate"),(prod_gate,"Production Business Acceptance")]:
     require(text,["python scripts/service_addon_allocation_evidence_closure_check.py","node scripts/service_addon_allocation_evidence_closure_test.mjs"],label)
 require(workflow,[
