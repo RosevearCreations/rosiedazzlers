@@ -1,4 +1,4 @@
-// Build 474 — retained manual read-only reassessment view with bounded trend review.
+// Build 484 — retained manual read-only reassessment view with evidence continuity.
 (function attachReliabilitySecurityCostReassessment(globalScope){
   "use strict";
   const BUCKETS = [
@@ -43,6 +43,7 @@
     renderGuardrails(payload.operational_guardrails||{});
     renderEvidenceAge(payload.evidence_age_review||{});
     renderTrendReview(payload.trend_review||{});
+    renderContinuityReview(payload.continuity_review||{});
     for(const [key,label] of BUCKETS) renderBucket(key,label,payload.buckets?.[key]||[]);
   }
 
@@ -117,6 +118,36 @@
   }
 
 
+  function renderContinuityReview(review){
+    const mount=$("reassessmentContinuity"), fieldMount=$("reassessmentFieldOperability");
+    if(mount){
+      const provider=review.provider_cost_quota||{}, recovery=review.recovery||{}, technical=review.technical_availability||{};
+      const rows=[
+        ["Overall continuity",value(review.status)],
+        ["Technical availability",value(technical.status)],
+        ["Provider cost/quota",value(provider.status)],
+        ["Recovery continuity",value(recovery.status)],
+        ["Provider comparable rows",value(provider.valid_provider_owned_row_count)],
+        ["Recovery comparable",recovery.comparable_window_evidence===true?"YES":"NO"]
+      ];
+      mount.innerHTML=rows.map(function(row){return '<div class="rr-metric"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong></div>';}).join("");
+      const detail=$("reassessmentContinuityDetail");
+      if(detail) detail.textContent="Technical availability is separate from field operability. First-party traffic is not a provider billing/quota proxy, and source/runtime GREEN is not a recovery outcome.";
+    }
+    if(fieldMount){
+      const field=review.field_operability||{}, counts=field.counts||{};
+      const rows=[
+        ["Cold-snap capable",value(counts.cold_snap_capable)],
+        ["Temperature-limited outdoor",value(counts.temperature_limited_outdoor)],
+        ["Controlled environment",value(counts.controlled_environment_required)],
+        ["Explicit field rows",value(field.valid_explicit_row_count)]
+      ];
+      fieldMount.innerHTML=rows.map(function(row){return '<div class="rr-metric"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong></div>';}).join("");
+      const detail=$("reassessmentFieldOperabilityDetail");
+      if(detail) detail.textContent="A cold-weather field limitation is not an application reliability failure. Exact temperature thresholds require explicit service/product/equipment/site evidence.";
+    }
+  }
+
   function renderBucket(key,label,rows){
     const mount=$(bucketId(key)); if(!mount)return;
     const count=$(bucketCountId(key)); if(count) count.textContent=String(rows.length);
@@ -138,6 +169,10 @@
     if($("reassessmentEvidenceAgeDetail")) $("reassessmentEvidenceAgeDetail").textContent="No evidence-age detail loaded.";
     if($("reassessmentTrends")) $("reassessmentTrends").innerHTML='<div class="rr-empty">No bounded trend evidence loaded.</div>';
     if($("reassessmentTrendDetail")) $("reassessmentTrendDetail").textContent="No bounded trend detail loaded.";
+    if($("reassessmentContinuity")) $("reassessmentContinuity").innerHTML='<div class="rr-empty">No continuity evidence loaded.</div>';
+    if($("reassessmentContinuityDetail")) $("reassessmentContinuityDetail").textContent="No continuity detail loaded.";
+    if($("reassessmentFieldOperability")) $("reassessmentFieldOperability").innerHTML='<div class="rr-empty">No field-operability evidence loaded.</div>';
+    if($("reassessmentFieldOperabilityDetail")) $("reassessmentFieldOperabilityDetail").textContent="No field-operability detail loaded.";
     for(const [key] of BUCKETS){
       const mount=$(bucketId(key)); if(mount) mount.innerHTML='<div class="rr-empty">No current snapshot loaded.</div>';
       const count=$(bucketCountId(key)); if(count) count.textContent="0";
