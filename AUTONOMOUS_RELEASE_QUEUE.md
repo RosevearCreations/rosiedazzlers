@@ -7,6 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
 - `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
