@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md.
+The synchronized Production predecessor is retained through BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md.
 
-**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release.
+**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is the active bounded release.
 
-**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 485 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retained allocation authority: BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Retained trend authority: BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Service & Add-On Allocation Evidence Closure contract
+## Current Reliability, Cost & Recovery Evidence Continuity contract
+- Reuse the protected reliability reassessment endpoint/workbench and retained trend authority.
+- Keep first-party technical activity, provider-owned cost/quota evidence, attributable recovery observations and Southern Ontario field operability separate.
+- Provider cost/quota continuity requires comparable provider-owned evidence; first-party traffic is never a provider-cost proxy.
+- Recovery continuity requires comparable attributable observations; source/runtime GREEN and non-Production drills never fabricate a Production recovery outcome.
+- Cold-snap-capable, temperature-limited outdoor and controlled-environment evidence requires explicit owning service/product/equipment/site evidence; no threshold is invented.
+- No automatic scaling, restore, booking/public winter claim, provider, schema/storage, business or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Service & Add-On Allocation Evidence Closure contract
 - Reuse the retained Service Economics endpoint and protected workbench.
 - Close only explicitly linked service/package or add-on allocation evidence; never infer from booking totals, equal/percentage/price-weighted splits or overhead estimates.
 - Seasonal operability stays separate from margin evidence and is classified only from explicit service/product/equipment/site evidence.
@@ -29,6 +38,11 @@ Current contract: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retaine
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
+- `.github/workflows/reliability-cost-recovery-evidence-continuity-authority.yml`
+- `scripts/reliability_cost_recovery_evidence_continuity_check.py`
+- `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`
+- `functions/api/_lib/reliability-cost-recovery-evidence-continuity.js`
 - `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
 - `.github/workflows/service-addon-allocation-evidence-closure-authority.yml`
 - `scripts/service_addon_allocation_evidence_closure_check.py`
