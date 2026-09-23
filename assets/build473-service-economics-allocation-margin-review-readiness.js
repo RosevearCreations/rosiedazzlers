@@ -1,4 +1,4 @@
-// Build 473 — manual, aggregate-only service economics allocation & margin-readiness UI.
+// Build 483 — retained manual service economics UI with allocation-evidence closure.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -20,6 +20,7 @@
       renderSummary(data);
       renderCompleteness(data.economics?.evidence_completeness || {});
       renderAllocation(data.economics?.allocation_margin_readiness || {});
+      renderClosure(data.economics?.allocation_evidence_closure || {}, data.economics?.seasonal_operability || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -33,6 +34,8 @@
       $("summaryGrid").innerHTML = '<div class="review-empty">No bounded economics snapshot is available.</div>';
       $("completenessGrid").innerHTML = '<div class="review-empty">Completeness evidence is unavailable.</div>';
       $("allocationGrid").innerHTML = '<div class="review-empty">Allocation linkage evidence is unavailable.</div>';
+      if($("closureGrid")) $("closureGrid").innerHTML = '<div class="review-empty">Allocation evidence closure is unavailable.</div>';
+      if($("seasonalGrid")) $("seasonalGrid").innerHTML = '<div class="review-empty">Seasonal operability evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -95,6 +98,28 @@
     }
     if (!cards.length) cards.push('<div class="review-empty">No defensible service/add-on allocation cohort is available. Missing linkage stays unavailable rather than inferred from booking totals.</div>');
     $("allocationGrid").innerHTML = cards.join("");
+  }
+
+  function renderClosure(closure, seasonal) {
+    const closureMount=$("closureGrid"), seasonalMount=$("seasonalGrid");
+    if(closureMount){
+      const rows=[
+        ["Allocation evidence closure", String(closure.status||"unavailable").toUpperCase(), "Explicit recorded linkage only"],
+        ["Service/package gaps", String(closure.service_package_gap_count??0), closure.service_package_closed?"closed":"remain bounded"],
+        ["Add-on gaps", String(closure.add_on_gap_count??0), closure.add_on_closed?"closed":"remain bounded"]
+      ];
+      closureMount.innerHTML=rows.map((row)=>'<article class="review-stat"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong><span class="mini">'+esc(row[2])+'</span></article>').join("");
+    }
+    if(seasonalMount){
+      const counts=seasonal.counts||{};
+      const rows=[
+        ["Cold-snap capable",counts.cold_snap_capable??0],
+        ["Temperature-limited outdoor",counts.temperature_limited_outdoor??0],
+        ["Controlled environment",counts.controlled_environment_required??0],
+        ["Explicit seasonal rows",seasonal.valid_explicit_row_count??0]
+      ];
+      seasonalMount.innerHTML=rows.map((row)=>'<article class="review-stat"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong><span class="mini">Seasonal operability is separate from margin evidence.</span></article>').join("");
+    }
   }
 
   function renderCandidates(rows) {
