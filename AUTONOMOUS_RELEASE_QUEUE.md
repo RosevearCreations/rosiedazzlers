@@ -119,11 +119,11 @@ Scope:
 - create one read-only matrix for packages, add-ons and explicitly identified services;
 - accept only cold-snap-capable, temperature-limited-outdoor or controlled-environment-required classifications backed by explicit service/product/equipment/site/process evidence;
 - carry exact working-temperature limits only when the owning source explicitly supports the exact claim;
-- keep broad winter availability on HOLD and preserve the canonical seasonal-service transparency HOLD;
+- keep broad winter availability on HOLD and preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical seasonal-service transparency HOLD;
 - do not infer capability from forecasts, booking demand, margin, application uptime or operator assumption; and
 - perform no automatic booking/availability, public winter claim, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation.
 
-Current contract: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Retained seasonal authority: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
+Current contract: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md. Retained seasonal authority: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
 
 The exact candidate must pass the focused capability-matrix authority, retained service/seasonal authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
