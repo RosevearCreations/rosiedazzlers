@@ -3,26 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`.
+The synchronized Production predecessor is retained through `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`.
 
-**Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review** is the active bounded release.
+**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is the active bounded release.
 
-**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is next only after the current release is independently GREEN on protected `main`.
+**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`. Retained local-search closure authority: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Retained framework authority: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Local Search Provider Snapshot Continuity & Descriptive Review contract
-- Reuse retained Build 440/450/460/470 local-search provider, same-session attribution, evidence-quality and provider-window closure authorities.
-- Preserve bounded prior Search Console / Google Business Profile snapshots only when staff explicitly saves a new valid snapshot; no second provider store or Google API integration.
-- Compare snapshots only when the same property/location identity and equal-length distinct dated windows are present.
-- Expose raw provider metric deltas for descriptive review only; no provider performance score, ranking claim or Google-caused booking claim.
-- Keep first-party referral/funnel context a separate anonymous population.
-- Preserve Southern Ontario seasonal truth: search/funnel movement cannot prove weather causation, winter service availability or a service temperature threshold.
-- Exact temperature/service capability limits remain future explicit service/product/equipment/site evidence work; they are not guessed from analytics.
-- No schema migration, automatic provider write, background polling, customer identity join, publishing, outreach, DNS/ad-spend mutation or automatic HOLD closure.
-- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required. Production deployment/runtime/business acceptance must independently prove that exact SHA.
+## Current Booking & Quote Experiment Approval & Measurement Lock contract
+- Reuse retained Builds 441/451/461/471 and the existing booking/quote learning workbench.
+- A supported experiment remains `owner_approval_required` until the owner explicitly records threshold, target direction, winner rule, duration, allocation, all retained stop conditions, seasonal/weather eligibility and approval.
+- The dedicated Build 481 save endpoint writes only governance evidence into the existing app settings store; no schema migration.
+- A completed record becomes an immutable measurement lock through Build 481, but `execution_authorized` and `experiment_started` remain false.
+- Southern Ontario weather-ineligible sessions are excluded from the conversion denominator; weather restrictions are not conversion failures and exact temperature limits are not inferred.
+- No automatic experiment activation, winner selection, price/discount, booking-rule/availability, outreach, provider or customer mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
+- `.github/workflows/booking-quote-experiment-approval-measurement-lock-authority.yml`
+- `scripts/booking_quote_experiment_approval_measurement_lock_check.py`
+- `scripts/booking_quote_experiment_approval_measurement_lock_test.mjs`
+- `functions/api/admin/booking_quote_experiment_approval_lock_save.js`
 - `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
 - `.github/workflows/local-search-provider-snapshot-continuity-descriptive-review-authority.yml`
 - `scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py`
