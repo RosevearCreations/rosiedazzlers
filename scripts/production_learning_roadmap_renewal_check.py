@@ -128,8 +128,8 @@ require(queue,[
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
-    "**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.",
-    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next",
+    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
+    "**Build 487 — Winter Booking Eligibility & Customer Transparency** is next",
     "it has not run out",
     "rd main protection",
     "Production deployment/runtime/business acceptance",
@@ -139,13 +139,13 @@ require(handoff,[
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
-    "**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.",
-    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next",
+    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
+    "**Build 487 — Winter Booking Eligibility & Customer Transparency** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "Current source direction: **Build 485 — Production Learning & Roadmap Renewal**.",
+    "Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.",
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
