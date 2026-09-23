@@ -3,15 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md.
+The synchronized Production predecessor is retained through BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md.
 
-**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is the active bounded release.
+**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release.
 
-**Build 483 — Service & Add-On Allocation Evidence Closure** is next only after the current release is independently GREEN on protected main.
+**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md. Retained verification authority: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retained allocation authority: BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Staff & Mobile Remediation Execution Evidence Readiness contract
+## Current Service & Add-On Allocation Evidence Closure contract
+- Reuse the retained Build 453/463/473 Service Economics endpoint and protected workbench.
+- Close only explicitly linked service/package or add-on allocation evidence; never infer from booking totals, equal/percentage/price-weighted splits or overhead estimates.
+- Seasonal operability stays separate from margin evidence and is classified only from explicit service/product/equipment/site evidence.
+- Exact working-temperature thresholds are never invented.
+- No automatic pricing, discount, booking/availability, public winter claim, accounting/inventory, provider, schema/storage or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Staff & Mobile Remediation Execution Evidence Readiness contract
 - Reuse the retained Build 452/462/472 staff/mobile endpoint and /admin-staff-workflow-support-learning.html workbench; do not create a parallel telemetry, staff, support or remediation system.
 - Current pattern evidence is not remediation execution evidence and does not prove root cause, staff fault, device/browser friction, business impact or effectiveness.
 - Any later effectiveness claim requires a separately authorized remediation execution record with authorization/change reference, execution timestamp, evidence-source reference, owning workflow scope, role scope, representative device/browser context and observation protocol.
@@ -21,6 +29,11 @@ Current contract: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
+- `.github/workflows/service-addon-allocation-evidence-closure-authority.yml`
+- `scripts/service_addon_allocation_evidence_closure_check.py`
+- `scripts/service_addon_allocation_evidence_closure_test.mjs`
+- `functions/api/_lib/service-addon-allocation-evidence-closure.js`
 - `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
 - `.github/workflows/staff-mobile-remediation-execution-evidence-readiness-authority.yml`
 - `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py`
