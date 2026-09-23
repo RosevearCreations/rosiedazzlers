@@ -71,8 +71,11 @@ require(client,[
  "Stop conditions",
  "Automatic activation: NO"
 ],"Build 471 client")
-for token in ['method:"POST"','method: "POST"','method:"PATCH"','method: "PATCH"','method:"DELETE"','method: "DELETE"',"localStorage","sessionStorage","setInterval("]:
+for token in ['method:"PATCH"','method: "PATCH"','method:"DELETE"','method: "DELETE"',"localStorage","sessionStorage","setInterval("]:
  if token in client: errors.append(f"Build 471 client contains forbidden mutation/persistence token {token!r}")
+if ('method:"POST"' in client or 'method: "POST"' in client) and "/api/admin/booking_quote_experiment_approval_lock_save" not in client:
+ errors.append("Build 471 client contains an unrecognized POST mutation path")
+require(client,["/api/admin/booking_quote_experiment_approval_lock_save"],"retained Build 471 client explicit Build 481 governance extension")
 
 require(page,[
  'data-build471="booking-quote-controlled-experiment-framework"',

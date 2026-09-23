@@ -194,6 +194,8 @@ jobs:
           node --check scripts/booking_quote_experiment_readiness_test.mjs
           python -m py_compile scripts/booking_quote_controlled_experiment_framework_check.py
           node --check scripts/booking_quote_controlled_experiment_framework_test.mjs
+          python -m py_compile scripts/booking_quote_experiment_approval_measurement_lock_check.py
+          node --check scripts/booking_quote_experiment_approval_measurement_lock_test.mjs
           python -m py_compile scripts/staff_mobile_remediation_verification_check.py
           node --check scripts/staff_mobile_remediation_verification_test.mjs
           node --check functions/api/_lib/booking-funnel-quote-pricing-learning.js
@@ -495,6 +497,11 @@ jobs:
         run: |
           python scripts/booking_quote_controlled_experiment_framework_check.py
           node scripts/booking_quote_controlled_experiment_framework_test.mjs
+
+      - name: Validate booking & quote experiment approval & measurement lock authority
+        run: |
+          python scripts/booking_quote_experiment_approval_measurement_lock_check.py
+          node scripts/booking_quote_experiment_approval_measurement_lock_test.mjs
           python scripts/staff_mobile_remediation_verification_check.py
           node scripts/staff_mobile_remediation_verification_test.mjs
 
