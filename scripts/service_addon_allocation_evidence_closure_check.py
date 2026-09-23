@@ -54,8 +54,8 @@ require(doc,[
 ],"Build 483 contract")
 require(queue,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
- "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
- "**Build 487 — Winter Booking Eligibility & Customer Transparency** is next",
+ "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.",
+ "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next",
  "it has not run out"
 ],"retained Build 483 queue")
 require(handoff,[
@@ -66,7 +66,7 @@ require(handoff,[
 require(readme,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
- "Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.",
+ "Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.",
  "Production is not considered GREEN from source promotion alone."
 ],"retained Build 483 README")
 for text,label in [(source_gate,"Development Source Gate"),(prod_gate,"Production Business Acceptance")]:
