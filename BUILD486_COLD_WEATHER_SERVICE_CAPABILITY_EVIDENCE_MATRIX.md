@@ -20,6 +20,9 @@ A service may remain unavailable in the matrix when its evidence is missing even
 ## Mutation boundary
 Read-only and manual refresh only. No automatic booking/availability change, customer-facing winter claim, price/discount change, accounting/inventory mutation, provider action, schema/storage mutation, outreach or permanent polling is authorized.
 
+## Deployment identity boundary
+A stale or still-building Cloudflare preview is not acceptance. Feature promotion requires the exact current candidate SHA to become visible as a successful Cloudflare Pages preview; retrying or replacing a stalled external deployment never changes the evidence rules above.
+
 ## Acceptance
 The exact candidate must pass the focused Build 486 checker/test, retained seasonal/service-economics authorities, Current Source Gate, exact feature-preview acceptance, exact-SHA Development deployment/runtime acceptance, protected-main governance and independent exact resulting-main Production deployment/runtime/business acceptance.
 
