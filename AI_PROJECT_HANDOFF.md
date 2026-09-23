@@ -3,21 +3,21 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md.
+The synchronized Production predecessor is retained through BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md.
 
-**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is the active bounded release.
+**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 485 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Retained trend authority: BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current reconciliation: PRODUCTION_LEARNING_476_484.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Reliability, Cost & Recovery Evidence Continuity contract
-- Reuse the protected reliability reassessment endpoint/workbench and retained trend authority.
-- Keep first-party technical activity, provider-owned cost/quota evidence, attributable recovery observations and Southern Ontario field operability separate.
-- Provider cost/quota continuity requires comparable provider-owned evidence; first-party traffic is never a provider-cost proxy.
-- Recovery continuity requires comparable attributable observations; source/runtime GREEN and non-Production drills never fabricate a Production recovery outcome.
-- Cold-snap-capable, temperature-limited outdoor and controlled-environment evidence requires explicit owning service/product/equipment/site evidence; no threshold is invented.
-- No automatic scaling, restore, booking/public winter claim, provider, schema/storage, business or polling mutation is authorized.
+## Current Production Learning & Roadmap Renewal contract
+- Reconcile the 476–484 cycle without fabricating provider, owner, recovery, device, allocation or seasonal-operability closure.
+- Preserve the canonical HOLD inventory and add a broad-winter-claim transparency HOLD until explicit service/product/equipment/site/process evidence exists.
+- Renew the roadmap through `FORWARD_BUILD_ROADMAP_486_495.md`.
+- Start the next cycle with cold-weather capability evidence, winter booking/customer transparency and controlled-environment alternatives.
+- Exact working-temperature limits remain source-owned; technical availability is not field operability.
+- No automatic booking, pricing, provider, recovery, outreach, schema/storage, business or polling mutation is authorized.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Retained Service & Add-On Allocation Evidence Closure contract
@@ -38,6 +38,9 @@ Current contract: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Ret
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_476_484.md`
+- `FORWARD_BUILD_ROADMAP_486_495.md`
 - `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
 - `.github/workflows/reliability-cost-recovery-evidence-continuity-authority.yml`
 - `scripts/reliability_cost_recovery_evidence_continuity_check.py`
