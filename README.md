@@ -1,19 +1,19 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 485 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Production Learning & Roadmap Renewal authority
-This release reconciles the 476–484 cycle without treating source/runtime GREEN as provider, owner, recovery, real-device, allocation or seasonal-operability closure.
+## Current Cold-Weather Service Capability Evidence Matrix authority
+This release turns the retained seasonal-operability evidence into one read-only package/add-on/service matrix. Rows require explicit service/product/equipment/site/process evidence and one allowed classification: cold-snap-capable, temperature-limited outdoor or controlled-environment-required.
 
-The renewed cycle is `FORWARD_BUILD_ROADMAP_486_495.md`, backed by `PRODUCTION_LEARNING_476_484.md`. It starts with explicit Southern Ontario cold-weather capability evidence, then winter booking/customer transparency and controlled-environment alternatives. Exact temperature limits are carried only from explicit service/product/equipment/site/process evidence.
+Exact working-temperature limits are shown only when the owning source explicitly supports the exact claim. Forecasts, booking demand, margin and application uptime do not prove field capability. Broad winter availability remains on HOLD.
 
-Focused source authority:
+Focused source authority: `python scripts/cold_weather_service_capability_evidence_matrix_check.py`
 
-python scripts/production_learning_roadmap_renewal_check.py
+Behavioral proof: `node scripts/cold_weather_service_capability_evidence_matrix_test.mjs`
 
-The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
 Retained reliability continuity: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`.
@@ -26,10 +26,11 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
-4. `PRODUCTION_LEARNING_476_484.md` — current cycle reconciliation.
-5. `FORWARD_BUILD_ROADMAP_486_495.md` — renewed evidence-driven sequence.
-6. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` — retained predecessor contract.
+3. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — current bounded contract.
+4. `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
+5. `PRODUCTION_LEARNING_476_484.md` — retained cycle reconciliation.
+6. `FORWARD_BUILD_ROADMAP_486_495.md` — active evidence-driven sequence.
+7. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` — retained predecessor contract.
 7. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` — retained predecessor contract.
 5. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — retained predecessor contract.
 6. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — retained predecessor contract.
@@ -40,6 +41,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
 
 - `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_476_484.md`
@@ -265,4 +268,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next only after the current release is independently GREEN on protected `main`.
+**Build 487 — Winter Booking Eligibility & Customer Transparency** is next only after the current release is independently GREEN on protected `main`.
