@@ -124,7 +124,7 @@ Scope:
 - preserve broad winter availability on HOLD and keep exact temperature limits source-owned; and
 - perform no automatic booking/availability, quote eligibility, public claim, customer message, pricing, provider, accounting/inventory, schema/storage, outreach or polling mutation.
 
-Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
+Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
 
 The exact candidate must pass the focused winter-eligibility authority, retained capability/service authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
