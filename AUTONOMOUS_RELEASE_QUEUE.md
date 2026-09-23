@@ -120,7 +120,7 @@ Current contract: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retaine
 
 The exact candidate must pass the focused closure authority, retained Build 473/463/453 economics authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing allocation or seasonal-operability evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing allocation or seasonal-operability evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
 
 ## Next release
 **Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next only after the current release is independently GREEN on protected main.
