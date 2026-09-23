@@ -123,7 +123,7 @@ require(queue, [
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release."
+    "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
