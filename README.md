@@ -1,10 +1,27 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 482 — Staff & Mobile Remediation Execution Evidence Readiness**.
+Current source direction: **Build 483 — Service & Add-On Allocation Evidence Closure**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Staff & Mobile Remediation Execution Evidence Readiness authority
+## Current Service & Add-On Allocation Evidence Closure authority
+This release reuses the retained Service Economics workbench to close only allocation gaps backed by explicit recorded revenue, material, labour, cash/refund and posted COGS linkage. Booking totals, equal/percentage splits, price weighting and overhead estimates never manufacture allocation.
+
+Southern Ontario seasonal operability is carried separately only from explicit service/product/equipment/site evidence. Cold-snap-capable work, temperature-limited outdoor work and controlled-environment requirements can be classified without inventing a temperature threshold or turning margin evidence into a winter-service claim.
+
+Focused source authority:
+
+python scripts/service_addon_allocation_evidence_closure_check.py
+
+Behavioral proof:
+
+node scripts/service_addon_allocation_evidence_closure_test.mjs
+
+Retained predecessor proof remains scripts/service_economics_allocation_margin_review_readiness_check.py and scripts/service_economics_allocation_margin_review_readiness_test.mjs.
+
+The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
+
+## Retained Staff & Mobile Remediation Execution Evidence Readiness authority
 The current release reuses the retained staff/mobile evidence workbench and adds a read-only readiness layer for any separately authorized remediation execution and later before/after observation.
 
 A current repeated pattern is not execution proof. Build 482 defines the minimum attributable execution record and materially like-for-like comparison requirements before remediation effectiveness can be claimed. Root cause, staff fault, device/browser friction and business impact remain unproven unless separately evidenced.
@@ -26,7 +43,8 @@ The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roa
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — current bounded contract.
+3. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` — current bounded contract.
+4. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — retained predecessor contract.
 4. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
@@ -35,6 +53,8 @@ The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roa
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
 
 - `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
 - `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
@@ -252,4 +272,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is next only after the current release is independently GREEN on protected `main`.
+**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next only after the current release is independently GREEN on protected `main`.
