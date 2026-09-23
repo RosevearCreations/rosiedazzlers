@@ -9,6 +9,7 @@ The synchronized predecessor contracts are retained through `BUILD475_PRODUCTION
 Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 ## Retained cumulative authority pointers
+- `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
 - `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
 - `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
 - `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
@@ -104,25 +105,25 @@ Retained predecessor contract: `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is the active bounded release.
+**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is the active bounded release.
 
 Scope:
-- reuse retained Builds 441/451/461/471 booking/quote learning and controlled-experiment definitions;
-- persist explicit owner approval only through the dedicated current-release governance save endpoint and the existing app settings store;
-- require success threshold, target direction, winner rule, duration, allocation and all retained stop conditions before measurement can lock;
-- make a recorded measurement lock immutable through the current-release endpoint and keep experiment execution separately unauthorized;
-- require Southern Ontario seasonal/weather eligibility and exclude weather-ineligible sessions from the conversion denominator without inventing service temperature limits;
-- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; and
-- perform no automatic experiment activation, winner selection, price/discount/booking-rule/availability mutation, outreach, customer identity join, provider mutation, schema migration or permanent polling.
+- reuse retained Builds 452/462/472 and the existing protected staff/mobile learning endpoint and workbench rather than creating a parallel telemetry or remediation system;
+- define the minimum attributable record required for a separately authorized remediation execution, including authorization/change reference, execution time, evidence source, owning workflow scope, role scope, representative device/browser context and observation protocol;
+- require materially comparable before/after observations before any remediation-effectiveness claim, including the same measure definition, workflow scope and role scope plus comparable device/browser context, window/sample definition and recorded material confounders;
+- keep current pattern evidence separate from execution proof, root-cause claims, staff fault, device friction and business impact;
+- keep Southern Ontario weather/site constraints as a separate operational classification so cold-weather service limits are never mislabeled as staff/mobile friction and no service temperature limit is invented;
+- preserve STARTUP_GO_LIVE_BLOCKERS.md as the canonical HOLD inventory; and
+- perform no automatic remediation execution, evidence-record creation, role/business mutation, customer/provider outreach, schema/storage mutation, background telemetry or permanent polling.
 
-Current contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Retained framework authority: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`.
+Current contract: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md. Retained verification authority: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md.
 
-The exact candidate must pass the current approval/measurement-lock authority, retained booking/quote authorities, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current execution-evidence readiness authority, retained Build 472/462/452 staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing owner approval or an incomplete measurement contract remains truthful `owner_approval_required`; source/runtime GREEN does not fabricate a lock.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing separately authorized remediation execution or materially comparable before/after evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
 
 ## Next release
-**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 483 — Service & Add-On Allocation Evidence Closure** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_476_485.md`; it has not run out.
