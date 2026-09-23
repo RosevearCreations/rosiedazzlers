@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build 479 Maintenance & Fleet Owner Approval & Pilot Decision source authority."""
+"""Build 479 Maintenance & Fleet Owner Approval & Pilot Decision source authority.\nRetained validation is release-state independent: living current/next labels may advance.\n"""
 from pathlib import Path
 import json,re,subprocess
 ROOT=Path(__file__).resolve().parents[1]; errors=[]
@@ -89,19 +89,18 @@ require(contract,[
 ],"Build 479 contract")
 require(queue,[
  "BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md",
- "Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review",
+ "FORWARD_BUILD_ROADMAP_476_485.md",
  "it has not run out"
-],"Build 479 release queue")
+],"Build 479 release queue retained authority")
 require(handoff,[
  "BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md",
  "maintenance_fleet_owner_approval_pilot_decision_check.py",
  "maintenance_fleet_owner_approval_pilot_decision_test.mjs"
 ],"Build 479 handoff")
 require(readme,[
- "Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision",
  "BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md",
  "maintenance_fleet_owner_approval_pilot_decision_check.py"
-],"Build 479 README")
+],"Build 479 README retained authority")
 require(blockers,[
  "Maintenance / fleet business approval",
  "Build 479",
