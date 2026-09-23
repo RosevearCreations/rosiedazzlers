@@ -47,6 +47,7 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     freshness_days: finiteWholeOrNull(row.freshness_days),
     freshness_limit_days: finiteWholeOrNull(row.freshness_limit_days),
     refresh_required: row.refresh_required === true,
+    metrics: objectOrEmpty(row.metrics),
     session_level_join_performed: false
   }));
 
