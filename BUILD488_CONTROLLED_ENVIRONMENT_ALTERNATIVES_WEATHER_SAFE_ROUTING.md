@@ -14,7 +14,7 @@ Not every service can move indoors. A capability classification never proves a s
 Prepared route wording is draft owner-review copy only. It is not published, sent or inserted into bookings automatically. Exact working-temperature limits remain source-owned.
 
 ## Safe rescheduling
-For temperature-constrained outdoor work without an explicitly evidenced controlled alternative, the bounded safe route is manual reschedule review. Build 488 does not choose a new appointment time and does not mutate availability.
+For temperature-constrained outdoor work without an explicitly evidenced controlled alternative, safe rescheduling remains a manual review path until source-owned conditions are met. Build 488 does not choose a new appointment time and does not mutate availability.
 
 ## Mutation boundary
 Read-only and manual refresh only. No automatic routing, rescheduling, booking/availability change, quote mutation, customer message, public winter claim, price/discount change, provider action, accounting/inventory mutation, schema/storage mutation, outreach or permanent polling is authorized.
