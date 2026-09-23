@@ -1,4 +1,4 @@
-// Build 483 — retained manual service economics UI with allocation-evidence closure.
+// Build 486 — retained manual service economics UI with cold-weather capability evidence matrix.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -21,6 +21,7 @@
       renderCompleteness(data.economics?.evidence_completeness || {});
       renderAllocation(data.economics?.allocation_margin_readiness || {});
       renderClosure(data.economics?.allocation_evidence_closure || {}, data.economics?.seasonal_operability || {});
+      renderColdWeatherCapabilityMatrix(data.economics?.cold_weather_capability_matrix || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -36,6 +37,7 @@
       $("allocationGrid").innerHTML = '<div class="review-empty">Allocation linkage evidence is unavailable.</div>';
       if($("closureGrid")) $("closureGrid").innerHTML = '<div class="review-empty">Allocation evidence closure is unavailable.</div>';
       if($("seasonalGrid")) $("seasonalGrid").innerHTML = '<div class="review-empty">Seasonal operability evidence is unavailable.</div>';
+      if($("capabilityMatrixGrid")) $("capabilityMatrixGrid").innerHTML = '<div class="review-empty">Cold-weather capability evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -120,6 +122,38 @@
       ];
       seasonalMount.innerHTML=rows.map((row)=>'<article class="review-stat"><span class="mini">'+esc(row[0])+'</span><strong>'+esc(row[1])+'</strong><span class="mini">Seasonal operability is separate from margin evidence.</span></article>').join("");
     }
+  }
+
+  function renderColdWeatherCapabilityMatrix(matrix) {
+    const mount=$("capabilityMatrixGrid"); if(!mount) return;
+    const rows=Array.isArray(matrix.rows)?matrix.rows:[];
+    const gaps=Array.isArray(matrix.gaps)?matrix.gaps:[];
+    const cards=[];
+    for(const row of rows){
+      const min=row.minimum_working_temperature_c;
+      const max=row.maximum_working_temperature_c;
+      let limit="No exact source-owned temperature limit recorded";
+      if(row.exact_temperature_claim_supported){
+        const parts=[];
+        if(min!==null&&min!==undefined) parts.push("min "+String(min)+"°C");
+        if(max!==null&&max!==undefined) parts.push("max "+String(max)+"°C");
+        limit="Source-owned limit: "+parts.join(" · ");
+      }
+      cards.push('<article class="review-candidate state-observed"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(String(row.classification||"unavailable").replaceAll("_"," "))+'</span></div>'+
+        '<p class="mini">Evidence: '+esc(row.evidence_source_type||"unavailable")+' · '+esc(row.evidence_reference||"unavailable")+'</p>'+
+        '<p class="mini">'+esc(limit)+' · Automatic booking change: NO · Broad winter claim: HOLD</p></article>');
+    }
+    for(const gap of gaps){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Evidence gap · '+esc(gap.code||"unidentified row")+
+        '</strong><span class="pill">review</span></div><p class="mini">Missing: '+esc((gap.missing||[]).join(", ")||"required attributable evidence")+
+        '. No classification or temperature threshold is inferred.</p></article>');
+    }
+    if(!cards.length) cards.push('<div class="review-empty">No attributable cold-weather capability rows are available. Broad winter claim: HOLD.</div>');
+    mount.innerHTML=cards.join("");
+    const detail=$("capabilityMatrixDetail");
+    if(detail) detail.textContent="Valid rows: "+String(matrix.valid_row_count??0)+" · gaps: "+String(matrix.gap_count??0)+" · exact source-owned temperature limits: "+String(matrix.counts?.exact_temperature_limit??0)+". Broad winter claim: HOLD.";
   }
 
   function renderCandidates(rows) {

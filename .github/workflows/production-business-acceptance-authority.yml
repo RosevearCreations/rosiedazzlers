@@ -461,6 +461,8 @@ jobs:
           node scripts/service_economics_allocation_margin_review_readiness_test.mjs
           python scripts/service_addon_allocation_evidence_closure_check.py
           node scripts/service_addon_allocation_evidence_closure_test.mjs
+          python scripts/cold_weather_service_capability_evidence_matrix_check.py
+          node scripts/cold_weather_service_capability_evidence_matrix_test.mjs
 
       - name: Validate reliability, cost & resilience operational guardrails authority
         run: |
