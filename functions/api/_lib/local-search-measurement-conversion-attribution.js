@@ -1,4 +1,4 @@
-// Build 450/460/470 — pure Local Search Measurement & Conversion Attribution + evidence-quality/window-closure helper.
+// Build 450/460/470/480 — pure Local Search Measurement & Conversion Attribution + evidence-quality/window-closure/snapshot-continuity helper.
 // Reconciles retained provider evidence with privacy-safe first-party same-session funnel evidence.
 // It never joins anonymous sessions to customer identity and never infers Google ranking/indexing outcomes.
 
@@ -26,6 +26,7 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
   const providerRefresh = objectOrEmpty(input.provider_refresh);
   const firstParty = objectOrEmpty(providerRefresh?.reconciliation?.first_party);
   const providers = safeArray(providerRefresh.providers);
+  const providerHistory = objectOrEmpty(providerRefresh.history);
   const attribution = deriveSameSessionConversionAttribution(
     input.events,
     input.events_available !== false,
@@ -69,6 +70,13 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     attribution,
     evidence_quality: evidenceQuality
   });
+  const providerSnapshotContinuity = buildLocalSearchProviderSnapshotContinuity({
+    provider_rows: providerRows,
+    provider_history: providerHistory,
+    first_party_available: firstPartyAvailable,
+    first_party_window: firstPartyWindow,
+    attribution
+  });
 
   let status = "observed";
   if (!attribution.available) status = "unavailable";
@@ -91,9 +99,11 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     build: 450,
     evidence_quality_build: 460,
     provider_window_attribution_closure_build: 470,
+    provider_snapshot_continuity_build: 480,
     authority: "local_search_measurement_conversion_attribution",
     evidence_quality_authority: "local_search_provider_attribution_evidence_quality",
     provider_window_attribution_closure_authority: "local_search_provider_window_attribution_closure",
+    provider_snapshot_continuity_authority: "local_search_provider_snapshot_continuity_descriptive_review",
     retained_provider_authority: "local_search_provider_evidence_refresh",
     generated_at: generatedAt,
     status,
@@ -110,6 +120,7 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
     conversion_attribution: attribution,
     evidence_quality: evidenceQuality,
     provider_window_attribution_closure: providerWindowAttributionClosure,
+    provider_snapshot_continuity: providerSnapshotContinuity,
     reconciliation: {
       interpretation: "Dated Search Console / Google Business Profile snapshots, first-party landing/referral rollups and anonymous same-session booking funnel evidence are reconciled side by side. Provider metrics are not joined to individual sessions and no causal Google outcome is inferred.",
       provider_window_overlap_is_correlation_only: true,
@@ -133,6 +144,10 @@ export function buildLocalSearchMeasurementConversionAttribution(input = {}) {
       provider_window_closure_is_performance_claim: false,
       provider_window_closure_is_ranking_claim: false,
       provider_window_closure_is_causal_conversion_claim: false,
+      provider_snapshot_continuity_is_performance_claim: false,
+      provider_snapshot_continuity_is_seasonal_demand_claim: false,
+      winter_service_availability_inferred_from_search_data: false,
+      service_temperature_limit_inferred_from_search_data: false,
       cross_source_identity_join_performed: false,
       customer_identity_exposed: false
     },
@@ -381,6 +396,151 @@ export function buildLocalSearchProviderWindowAttributionClosure({
       ? "Search Console property / Google Business Profile location evidence is current, explicitly dated and window-aligned with available bounded first-party referral/funnel observations. This closes the comparison window only; it does not prove rankings, Maps visibility or that Google caused any booking."
       : "The provider-window comparison remains explicitly open until provider identity, freshness, dated-window alignment and bounded first-party referral/funnel evidence satisfy the retained closure rules. Missing evidence is not inferred."
   };
+}
+
+export function buildLocalSearchProviderSnapshotContinuity({
+  provider_rows = [],
+  provider_history = {},
+  first_party_available = false,
+  first_party_window = {},
+  attribution = {}
+} = {}) {
+  const rows = safeArray(provider_rows).map((current) => {
+    const provider = clean(current?.provider) || "unknown";
+    const history = safeArray(provider_history?.[provider])
+      .map((item) => normalizeContinuitySnapshot(item, provider))
+      .filter(Boolean)
+      .sort((a,b) => Date.parse(a.observed_at) - Date.parse(b.observed_at));
+    const currentSnapshot = normalizeContinuitySnapshot({
+      provider,
+      label: current?.property_location_label,
+      period_start: current?.period_start,
+      period_end: current?.period_end,
+      observed_at: current?.observed_at,
+      metrics: current?.metrics
+    }, provider);
+    const currentClass = clean(current?.classification) || "provider_dependent";
+    const sameIdentity = currentSnapshot
+      ? history.filter((item) => normalizeIdentity(item.label) === normalizeIdentity(currentSnapshot.label)
+          && Date.parse(item.observed_at) < Date.parse(currentSnapshot.observed_at))
+      : [];
+    const previous = sameIdentity.length ? sameIdentity[sameIdentity.length - 1] : null;
+    const historyExists = history.length > 0;
+    const sameWindowLength = Boolean(previous && currentSnapshot
+      && inclusiveWindowDays(previous.period_start, previous.period_end) === inclusiveWindowDays(currentSnapshot.period_start, currentSnapshot.period_end));
+    const distinctWindow = Boolean(previous && currentSnapshot
+      && (previous.period_start !== currentSnapshot.period_start || previous.period_end !== currentSnapshot.period_end));
+
+    let continuityState = "descriptive_review_ready";
+    if (currentClass === "provider_dependent" || !currentSnapshot) continuityState = "provider_dependent";
+    else if (currentClass === "owner_action") continuityState = "owner_action";
+    else if (!historyExists) continuityState = "insufficient_history";
+    else if (!previous) continuityState = "identity_mismatch";
+    else if (!distinctWindow) continuityState = "duplicate_window";
+    else if (!sameWindowLength) continuityState = "window_mismatch";
+
+    return {
+      provider,
+      provider_label: clean(current?.provider_label) || provider,
+      continuity_state: continuityState,
+      identity_match: Boolean(previous),
+      current_snapshot: currentSnapshot,
+      previous_snapshot: previous,
+      comparable_window_length: sameWindowLength,
+      current_window_days: currentSnapshot ? inclusiveWindowDays(currentSnapshot.period_start,currentSnapshot.period_end) : null,
+      previous_window_days: previous ? inclusiveWindowDays(previous.period_start,previous.period_end) : null,
+      metric_deltas: continuityState === "descriptive_review_ready"
+        ? descriptiveMetricDeltas(previous?.metrics,currentSnapshot?.metrics)
+        : {},
+      first_party_context: {
+        available: first_party_available === true,
+        window_start: first_party_window?.start || null,
+        window_end: first_party_window?.end || null,
+        google_referral_sessions: finiteWholeOrNull(attribution?.cohorts?.google_referral?.sessions),
+        google_referral_booking_start_sessions: finiteWholeOrNull(attribution?.cohorts?.google_referral?.booking_start_sessions),
+        google_referral_checkout_completed_sessions: finiteWholeOrNull(attribution?.cohorts?.google_referral?.checkout_completed_sessions)
+      },
+      interpretation: continuityState === "descriptive_review_ready"
+        ? "Successive provider snapshots use the same property/location identity and equal-length dated windows. Metric differences are descriptive only and remain separate from first-party funnel context."
+        : "Snapshot continuity is incomplete or not comparable. Do not infer local-search improvement, decline, seasonal demand or booking causation from this provider pair."
+    };
+  });
+
+  return {
+    build:480,
+    authority:"local_search_provider_snapshot_continuity_descriptive_review",
+    status: rows.length > 0 && rows.every((row) => row.continuity_state === "descriptive_review_ready")
+      ? "descriptive_review_ready"
+      : "continuity_incomplete",
+    providers:rows,
+    counts:{
+      total_providers:rows.length,
+      descriptive_review_ready:rows.filter((row)=>row.continuity_state==="descriptive_review_ready").length,
+      continuity_incomplete:rows.filter((row)=>row.continuity_state!=="descriptive_review_ready").length
+    },
+    review_rules:{
+      same_property_or_location_required:true,
+      equal_length_provider_windows_required:true,
+      distinct_successive_windows_required:true,
+      metric_deltas_are_descriptive_only:true,
+      first_party_context_is_separate_population:true,
+      provider_performance_score_calculated:false,
+      provider_to_funnel_causation_claimed:false
+    },
+    southern_ontario_seasonal_truth_boundary:{
+      region:"Southern Ontario, Canada",
+      winter_service_availability_inferred:false,
+      service_temperature_limits_inferred:false,
+      cold_snap_service_capability_inferred:false,
+      search_or_funnel_change_interpreted_as_weather_effect:false,
+      requirement:"Seasonal search/funnel changes must not be presented as service availability, weather causation or winter-operability evidence. Exact service temperature limits require explicit service/product/equipment constraints."
+    }
+  };
+}
+
+function normalizeContinuitySnapshot(raw, provider) {
+  const source=objectOrEmpty(raw);
+  const label=clean(source.label || source.property_location_label);
+  const periodStart=dateOnly480(source.period_start);
+  const periodEnd=dateOnly480(source.period_end);
+  const observedAt=validIso(source.observed_at);
+  if(!label || !periodStart || !periodEnd || !observedAt) return null;
+  const allowed = provider === "search_console"
+    ? ["clicks","impressions","ctr_percent","average_position"]
+    : provider === "google_business_profile"
+      ? ["profile_views","website_clicks","calls","direction_requests"]
+      : Object.keys(objectOrEmpty(source.metrics));
+  const metrics={};
+  for(const key of allowed){
+    const value=Number(source?.metrics?.[key]);
+    if(Number.isFinite(value) && value>=0) metrics[key]=value;
+  }
+  if(!Object.keys(metrics).length) return null;
+  return {label,period_start:periodStart,period_end:periodEnd,observed_at:observedAt,metrics};
+}
+function descriptiveMetricDeltas(previous,current) {
+  const a=objectOrEmpty(previous),b=objectOrEmpty(current),out={};
+  for(const key of [...new Set([...Object.keys(a),...Object.keys(b)])]){
+    const prev=Number(a[key]),cur=Number(b[key]);
+    if(!Number.isFinite(prev) || !Number.isFinite(cur)) continue;
+    out[key]={
+      previous:prev,
+      current:cur,
+      delta:Math.round((cur-prev)*100)/100,
+      percent_change:prev===0?null:Math.round(((cur-prev)/prev)*1000)/10
+    };
+  }
+  return out;
+}
+function inclusiveWindowDays(start,end) {
+  const a=Date.parse(start+"T00:00:00Z"),b=Date.parse(end+"T00:00:00Z");
+  return Number.isFinite(a)&&Number.isFinite(b)&&b>=a ? Math.floor((b-a)/86400000)+1 : null;
+}
+function normalizeIdentity(value){return clean(value).toLowerCase().replace(/\s+/g," ");}
+function dateOnly480(value){
+  const text=clean(value);
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(text)) return "";
+  return Number.isFinite(Date.parse(text+"T00:00:00Z"))?text:"";
 }
 
 export function deriveSameSessionConversionAttribution(events = [], available = true, truncated = false) {
