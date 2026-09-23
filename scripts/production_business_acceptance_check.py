@@ -88,6 +88,10 @@ required_authorities = {
     "local_search_measurement": [
         "scripts/local_search_measurement_authority_check.py",
     ],
+    "local_search_snapshot_continuity": [
+        "scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py",
+        "scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs",
+    ],
     "launch_readiness": [
         "scripts/launch_readiness_consolidation_check.py",
         "scripts/launch_readiness_consolidation_test.mjs",
@@ -235,6 +239,9 @@ workflow = require(WORKFLOW, [
     "Validate admin I.T. diagnostics and observability authorities",
     "Validate workflow efficiency and accessibility authorities",
     "Validate local-search measurement authorities",
+    "Validate local search provider snapshot continuity & descriptive review authority",
+    "python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py",
+    "node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs",
     "Validate launch readiness consolidation authorities",
     "Validate controlled soft launch acceptance authority",
     "Validate provider evidence closure authority",
@@ -323,7 +330,7 @@ print("- recovery refresh/drill closure review requires explicit owner traceabil
 print("- authenticated device observation refresh keeps current negative evidence distinct from historical acceptance and prepares bounded triage without browser-farm or automatic remediation")
 print("- backup/restore/accountant-export operational proof remains read-only and artifact-truthful")
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
-print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
+print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")\nprint("- local-search provider snapshot continuity remains descriptive, identity/window-bounded and does not infer Southern Ontario weather or winter service capability")
 print("- local acquisition/content proof remains bounded, heuristic, read-only and non-publishing")
 print("- retention/maintenance/fleet operational pilot remains manual, capacity-aware and owner-action gated")
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
