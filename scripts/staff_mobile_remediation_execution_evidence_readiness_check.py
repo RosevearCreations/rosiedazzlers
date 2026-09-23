@@ -115,23 +115,23 @@ require(roadmap, [
     "cold-weather service limits are not mislabeled as staff or mobile friction"
 ], "Build 482 roadmap")
 require(queue, [
-    "**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is the active bounded release.",
-    "**Build 483 — Service & Add-On Allocation Evidence Closure** is next",
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
+    "**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release.",
+    "**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is next",
     "it has not run out"
-], "Build 482 queue")
+], "retained Build 482 queue")
 require(handoff, [
-    "**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is the active bounded release.",
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "staff_mobile_remediation_execution_evidence_readiness_check.py"
-], "Build 482 handoff")
+    "staff_mobile_remediation_execution_evidence_readiness_check.py",
+    "**Build 483 — Service & Add-On Allocation Evidence Closure** is the active bounded release."
+], "retained Build 482 handoff")
 require(readme, [
-    "Current source direction: **Build 482 — Staff & Mobile Remediation Execution Evidence Readiness**.",
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
+    "Current source direction: **Build 483 — Service & Add-On Allocation Evidence Closure**.",
     "Production is not considered GREEN from source promotion alone."
-], "Build 482 README")
+], "retained Build 482 README")
 require(blockers, [
     "# Rosie Dazzlers — Current Production HOLD Inventory",
     "A HOLD remains open until dated, attributable evidence"
