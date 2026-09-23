@@ -19,7 +19,7 @@ Behavioral proof:
 
 node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
 
-Retained Build 481 proof remains scripts/booking_quote_experiment_approval_measurement_lock_check.py and scripts/booking_quote_experiment_approval_measurement_lock_test.mjs.
+Retained predecessor proof remains scripts/booking_quote_experiment_approval_measurement_lock_check.py and scripts/booking_quote_experiment_approval_measurement_lock_test.mjs.
 
 The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
 
