@@ -119,7 +119,7 @@ Scope:
 
 Current contract: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retained allocation authority: BUILD473_SERVICE_ECONOMICS_ALLOCATION_MARGIN_REVIEW_READINESS.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md.
 
-The exact candidate must pass the focused closure authority, retained Build 473/463/453 economics authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused closure authority, retained Service Economics authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing allocation or seasonal-operability evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
 
