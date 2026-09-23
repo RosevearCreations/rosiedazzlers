@@ -5,11 +5,14 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`.
-Retained predecessor contract: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`.
+The synchronized predecessor contracts are retained through `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`.
+Retained predecessor contract: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`.
 Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_476_484.md`
+- `FORWARD_BUILD_ROADMAP_486_495.md`
 - `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
 - `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
 - `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
@@ -108,28 +111,27 @@ Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 484 — Reliability, Cost & Recovery Evidence Continuity** is the active bounded release.
+**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- reuse the retained reliability reassessment endpoint/workbench and reliability trend authority rather than creating a parallel telemetry or cost system;
-- keep first-party technical activity, provider-owned billing/CPU/quota/cost evidence, attributable recovery observations and Southern Ontario field-operability evidence as separate classes;
-- require comparable provider-owned evidence before describing provider cost/quota continuity;
-- require comparable attributable observations before describing recovery continuity, with source/runtime GREEN never treated as a recovery outcome and non-Production drills never treated as Production restore proof;
-- keep cold-snap-capable, temperature-limited outdoor and controlled-environment service evidence separate from application reliability, without inventing working-temperature thresholds;
-- preserve STARTUP_GO_LIVE_BLOCKERS.md as the canonical HOLD inventory; and
-- perform no automatic scaling, retry/cache, restore, booking/availability, public winter claim, provider, schema/storage, business or polling mutation.
+- reconcile the 476–484 cycle without converting source/runtime GREEN into provider, owner, recovery, device, allocation or seasonal-operability closure;
+- preserve STARTUP_GO_LIVE_BLOCKERS.md as the canonical HOLD inventory and add a broad-winter-claim transparency HOLD until explicit service/product/equipment/site/process evidence exists;
+- retain cold-snap-capable, temperature-limited outdoor and controlled-environment-required classifications only from attributable evidence, never invented thresholds;
+- publish PRODUCTION_LEARNING_476_484.md and renew the next bounded cycle through FORWARD_BUILD_ROADMAP_486_495.md;
+- put cold-weather capability evidence, winter booking eligibility/customer transparency and controlled-environment alternatives at the front of the next cycle; and
+- perform no automatic booking, pricing, provider, recovery, outreach, schema/storage, business or polling mutation.
 
-Current contract: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Retained trend authority: BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md.
+Current contract: BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current reconciliation: PRODUCTION_LEARNING_476_484.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
 
-The exact candidate must pass the focused continuity authority, retained reliability/recovery authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the current Production Learning & Roadmap Renewal authority, retained owning authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing provider-owned cost/quota evidence, comparable recovery evidence or field-operability evidence remains truthful and unverified; source/runtime GREEN does not fabricate an outcome.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing evidence remains a truthful HOLD; source/runtime GREEN does not fabricate an outcome.
 
 ## Next release
-**Build 485 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
-The future queue continues through `FORWARD_BUILD_ROADMAP_476_485.md`; it has not run out.
+The future queue continues through `FORWARD_BUILD_ROADMAP_486_495.md`; it has not run out.
 
 ## Continuing rule
 Never call a Rosie Dazzlers source release GREEN from source changes alone. Missing provider, owner, observed recovery or real-device evidence remains a truthful HOLD rather than inferred success. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.

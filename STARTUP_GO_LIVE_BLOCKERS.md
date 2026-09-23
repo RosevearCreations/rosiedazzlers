@@ -17,6 +17,7 @@ A HOLD remains open until dated, attributable evidence from the named authority 
 | Recovery / backup evidence | `owner_action` | Repository routes and recovery source authority do not prove a current restorable backup/export or a successfully observed recovery drill. The read-only `/api/admin/backup_recovery_evidence_closure` refresh reports whether backup artifact, retention location and bounded drill evidence form a dated closure candidate. Build 457 adds source availability and closure/readiness. Build 467 revalidates freshness and exposes an explicit drill decision package that defaults to `retain_hold`; stale or missing drill evidence can only become a bounded non-Production drill review candidate. Build 477 adds explicit owner-reviewed evidence-refresh or bounded non-Production drill planning with recorded prerequisites and post-observation evidence requirements; no package performs a refresh, drill or Production restore, and no endpoint closes this row automatically. | Operator-observed artifact/retention evidence and bounded drill evidence recorded without performing an unnecessary Production restore, followed by an explicit operator-reviewed HOLD update. |
 | Independent device / visual evidence | `owner_action` | Source responsive/accessibility checks do not replace direct authenticated phone/tablet/desktop visual observation. The read-only `/api/admin/authenticated_device_visual_acceptance` report classifies dated Customer/Detailer/Operations/Admin observations plus representative phone/tablet/desktop coverage; Build 448 requires those observations to be current within the bounded 30-day refresh window. Build 468 separates current passing evidence, current regression evidence and historical acceptance so a newer current regression is never overridden by older acceptance. Stale/historical observations remain owner action and the endpoint never closes this row automatically. | Dated authenticated operator observation with role, device, browser, safe route, viewport and outcome evidence for the current release, followed by an explicit operator-reviewed HOLD update. |
 | Maintenance / fleet business approval | `owner_action` | Commercial cadence, pricing, discount, travel, invoice, eligibility and capacity-policy terms remain owner-approved rather than inferred from source. Build 449 enriches the existing read-only owner-decision workbench with canonical decision paths, required closure fields and an `owner_review_candidate` state only when all canonical source domains are approved. Build 479 adds a pilot decision record but keeps missing owner approval/bounds as `owner_action`; it never closes this row automatically. | Explicit dated owner approval in the canonical maintenance/fleet rulebooks, followed by operator review before automation or customer reliance expands. |
+| Seasonal service capability & transparency | `owner_action` | Broad winter-availability claims remain held until explicit service/product/equipment/site/process evidence supports the relevant service classification and any exact working-temperature limits. Technical availability, booking demand, margin evidence and weather alone do not prove field operability. | Dated attributable capability evidence for the service plus explicit owner-reviewed booking/public messaging rules distinguishing cold-snap-capable, temperature-limited outdoor and controlled-environment-required work. |
 | Evidence source unavailable | `unavailable` | Any required evidence source that cannot be reached or established must remain unavailable rather than being guessed. | The authorized evidence source becomes available and produces attributable evidence. |
 Build 447 adds read-only `recovery_artifact_drill_evidence_review` age/freshness classification for the backup artifact, retention location and bounded recovery-drill evidence. Evidence age never authorizes a restore; stale, missing or unavailable evidence remains owner action.
 
@@ -35,18 +36,18 @@ Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted 
 Build 481 adds explicit owner-approved booking/quote measurement locks using the existing app settings store. A lock requires declared thresholds, duration/allocation, stop conditions and Southern Ontario seasonal/weather eligibility, but it does not authorize experiment execution or any price/discount/booking-rule/availability/outreach change. Weather-ineligible sessions are excluded from the declared conversion denominator and exact service temperature limits are not inferred.
 
 ## Current cycle reconciliation
-`PRODUCTION_LEARNING_466_474.md` confirms that the 466–474 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
+`PRODUCTION_LEARNING_476_484.md` confirms that the 476–484 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
-- `PRODUCTION_LEARNING_466_474.md`
-- `FORWARD_BUILD_ROADMAP_476_485.md`
-- `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`
-- `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
-- `BUILD474_RELIABILITY_COST_RESILIENCE_TREND_REVIEW.md`
+- `PRODUCTION_LEARNING_476_484.md`
+- `FORWARD_BUILD_ROADMAP_486_495.md`
+- `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
+- `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
 
-Build 475 renews the roadmap from observed 466–474 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval and unavailable-evidence HOLD until dated attributable closure evidence exists.
+Build 485 renews the roadmap from observed 476–484 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval, seasonal-capability and unavailable-evidence HOLD until dated attributable closure evidence exists.
 
 Build 476 carries the provider HOLD forward with explicit evidence trace and closure prerequisites. No authorized persisted operator-review record is inferred from source/runtime evidence, so the retained endpoint defaults to no review record and no automatic HOLD update.
 

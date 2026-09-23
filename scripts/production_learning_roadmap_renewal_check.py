@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Current Production Learning & Roadmap Renewal authority for Build 475."""
+"""Current Production Learning & Roadmap Renewal authority for Build 485."""
 from pathlib import Path
 import re
 import sys
@@ -19,12 +19,14 @@ def require(text,needles,label):
         if needle not in text:
             errors.append(f"{label} missing {needle!r}")
 
-contract=read("BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
-learning=read("PRODUCTION_LEARNING_466_474.md")
-roadmap=read("FORWARD_BUILD_ROADMAP_476_485.md")
-prior=read("BUILD465_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
-prior_learning=read("PRODUCTION_LEARNING_456_464.md")
-prior_roadmap=read("FORWARD_BUILD_ROADMAP_466_475.md")
+contract=read("BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
+learning=read("PRODUCTION_LEARNING_476_484.md")
+roadmap=read("FORWARD_BUILD_ROADMAP_486_495.md")
+prior=read("BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md")
+prior_learning=read("PRODUCTION_LEARNING_466_474.md")
+prior_roadmap=read("FORWARD_BUILD_ROADMAP_476_485.md")
+b484=read("BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md")
+b483=read("BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md")
 blockers=read("STARTUP_GO_LIVE_BLOCKERS.md")
 queue=read("AUTONOMOUS_RELEASE_QUEUE.md")
 handoff=read("AI_PROJECT_HANDOFF.md")
@@ -33,62 +35,82 @@ dev=read(".github/workflows/development-source-gate.yml")
 prod=read(".github/workflows/production-business-acceptance-authority.yml")
 prodcheck=read("scripts/production_business_acceptance_check.py")
 workflow=read(".github/workflows/production-learning-roadmap-renewal-authority.yml")
+convergence=read("scripts/release_authority_documentation_convergence_check.py")
 
 require(contract,[
-    "# Build 475 — Production Learning & Roadmap Renewal",
+    "# Build 485 — Production Learning & Roadmap Renewal",
     "retained", "closed", "owner_action", "provider_dependent", "unavailable",
-    "PRODUCTION_LEARNING_466_474.md", "FORWARD_BUILD_ROADMAP_476_485.md",
+    "PRODUCTION_LEARNING_476_484.md", "FORWARD_BUILD_ROADMAP_486_495.md",
+    "Southern Ontario cold-weather truth boundary",
     "Missing evidence remains a blocker or truthful HOLD, never fabricated success.",
-    "Build 476 — Provider HOLD Decision Traceability & Closure Review"
+    "Build 486 — Cold-Weather Service Capability Evidence Matrix"
 ],"current renewal contract")
 require(prior,[
-    "# Build 465 — Production Learning & Roadmap Renewal",
-    "PRODUCTION_LEARNING_456_464.md",
-    "FORWARD_BUILD_ROADMAP_466_475.md"
+    "# Build 475 — Production Learning & Roadmap Renewal",
+    "PRODUCTION_LEARNING_466_474.md",
+    "FORWARD_BUILD_ROADMAP_476_485.md"
 ],"retained prior renewal contract")
 require(prior_learning,[
-    "Production Learning Reconciliation 456–464",
-    "FORWARD_BUILD_ROADMAP_466_475.md"
+    "Production Learning Reconciliation 466–474",
+    "FORWARD_BUILD_ROADMAP_476_485.md"
 ],"retained prior reconciliation")
 require(prior_roadmap,[
-    "Build 466 — Provider Outcome Review & HOLD Decision Readiness",
-    "Build 475 — Production Learning & Roadmap Renewal"
+    "Build 476 — Provider HOLD Decision Traceability & Closure Review",
+    "Build 485 — Production Learning & Roadmap Renewal"
 ],"retained prior roadmap")
+require(b484,[
+    "# Build 484 — Reliability, Cost & Recovery Evidence Continuity",
+    "Source/runtime GREEN is not recovery-outcome evidence.",
+    "Southern Ontario"
+],"retained Build 484 contract")
+require(b483,[
+    "# Build 483 — Service & Add-On Allocation Evidence Closure",
+    "cold-snap-capable",
+    "temperature-limited-outdoor",
+    "controlled-environment-required"
+],"retained Build 483 contract")
 
 require(learning,[
-    "Provider Outcome Review & HOLD Decision Readiness",
+    "Provider HOLD Decision Traceability & Closure Review",
     "provider_dependent",
-    "Recovery Evidence Validation & Drill Decision Readiness",
+    "Recovery Drill Evidence Refresh & Closure Review",
     "owner_action",
-    "Authenticated Device Regression Closure",
-    "Maintenance & Fleet Controlled Pilot Activation Readiness",
-    "Local Search Provider Window & Attribution Closure",
-    "Booking & Quote Controlled Experiment Framework",
-    "Staff & Mobile Remediation Verification",
+    "Authenticated Device Observation Refresh & Regression Triage",
+    "Maintenance & Fleet Owner Approval & Pilot Decision",
+    "Local Search Provider Snapshot Continuity & Descriptive Review",
+    "Booking & Quote Experiment Approval & Measurement Lock",
+    "Staff & Mobile Remediation Execution Evidence Readiness",
     "retained",
-    "Service Economics Allocation & Margin Review Readiness",
-    "Reliability, Cost & Resilience Trend Review",
-    "awaiting_business_approval",
-    "payment/refund/message-delivery provider outcomes",
-    "backup / recovery artifact and bounded drill evidence",
-    "authenticated real-device / visual regression evidence",
-    "FORWARD_BUILD_ROADMAP_476_485.md"
+    "Service & Add-On Allocation Evidence Closure",
+    "Reliability, Cost & Recovery Evidence Continuity",
+    "cold-snap-capable",
+    "temperature-limited-outdoor",
+    "controlled-environment-required",
+    "FORWARD_BUILD_ROADMAP_486_495.md"
 ],"cycle reconciliation")
 
 roadmap_titles=[
-    "Build 476 — Provider HOLD Decision Traceability & Closure Review",
-    "Build 477 — Recovery Drill Evidence Refresh & Closure Review",
-    "Build 478 — Authenticated Device Observation Refresh & Regression Triage",
-    "Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision",
-    "Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review",
-    "Build 481 — Booking & Quote Experiment Approval & Measurement Lock",
-    "Build 482 — Staff & Mobile Remediation Execution Evidence Readiness",
-    "Build 483 — Service & Add-On Allocation Evidence Closure",
-    "Build 484 — Reliability, Cost & Recovery Evidence Continuity",
-    "Build 485 — Production Learning & Roadmap Renewal",
+    "Build 486 — Cold-Weather Service Capability Evidence Matrix",
+    "Build 487 — Winter Booking Eligibility & Customer Transparency",
+    "Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing",
+    "Build 489 — Provider & Local Search Evidence Continuity",
+    "Build 490 — Recovery & Authenticated Device Evidence Continuity",
+    "Build 491 — Maintenance & Fleet Pilot Outcome Evidence",
+    "Build 492 — Booking & Quote Controlled Experiment Execution Evidence",
+    "Build 493 — Staff & Mobile Remediation Outcome Evidence",
+    "Build 494 — Service Economics, Seasonal Operations & Reliability Review",
+    "Build 495 — Production Learning & Roadmap Renewal",
 ]
 for title in roadmap_titles:
     require(roadmap,[title],"renewed roadmap")
+require(roadmap,[
+    "Southern Ontario",
+    "cold-snap-capable",
+    "temperature-limited-outdoor",
+    "controlled-environment-required",
+    "weather-ineligible sessions",
+    "Missing evidence remains a truthful HOLD"
+],"seasonal roadmap boundary")
 
 require(blockers,[
     "Provider outcomes & communications",
@@ -96,32 +118,37 @@ require(blockers,[
     "Recovery / backup evidence",
     "Independent device / visual evidence",
     "Maintenance / fleet business approval",
+    "Seasonal service capability & transparency",
     "Evidence source unavailable",
-    "PRODUCTION_LEARNING_466_474.md",
-    "FORWARD_BUILD_ROADMAP_476_485.md",
-    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md"
+    "PRODUCTION_LEARNING_476_484.md",
+    "FORWARD_BUILD_ROADMAP_486_495.md",
+    "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md"
 ],"canonical HOLD backlog")
 require(queue,[
-    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
-    "PRODUCTION_LEARNING_466_474.md",
-    "FORWARD_BUILD_ROADMAP_476_485.md",
-    "BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md",
-    "STARTUP_GO_LIVE_BLOCKERS.md",
+    "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
+    "PRODUCTION_LEARNING_476_484.md",
+    "FORWARD_BUILD_ROADMAP_486_495.md",
+    "**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.",
+    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next",
+    "it has not run out",
     "rd main protection",
     "Production deployment/runtime/business acceptance",
     "Missing required checks or exact Production runtime/deployment identity are blockers"
-],"release queue Build 475 retained authority")
+],"release queue")
 require(handoff,[
-    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
-    "PRODUCTION_LEARNING_466_474.md",
-    "FORWARD_BUILD_ROADMAP_476_485.md",
+    "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
+    "PRODUCTION_LEARNING_476_484.md",
+    "FORWARD_BUILD_ROADMAP_486_495.md",
+    "**Build 485 — Production Learning & Roadmap Renewal** is the active bounded release.",
+    "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
-    "PRODUCTION_LEARNING_466_474.md",
-    "FORWARD_BUILD_ROADMAP_476_485.md",
+    "Current source direction: **Build 485 — Production Learning & Roadmap Renewal**.",
+    "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
+    "PRODUCTION_LEARNING_476_484.md",
+    "FORWARD_BUILD_ROADMAP_486_495.md",
     "python scripts/production_learning_roadmap_renewal_check.py",
     "Production is not considered GREEN from source promotion alone."
 ],"README")
@@ -134,14 +161,20 @@ require(prodcheck,[
 ],"Production business acceptance source authority")
 require(workflow,[
     "name: Production Learning & Roadmap Renewal Authority",
-    "Completed-cycle 466–474 evidence reconciliation: PASS",
-    "Roadmap 476–485 renewal: PASS",
+    "Completed-cycle 476–484 evidence reconciliation: PASS",
+    "Roadmap 486–495 renewal: PASS",
+    "Southern Ontario cold-weather truth boundary: PASS",
     "python scripts/production_learning_roadmap_renewal_check.py"
 ],"renewal workflow")
+require(convergence,[
+    'NEXT_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_486_495.md"',
+    "next_cycle_roadmap",
+    "roadmap_sequence"
+],"release convergence authority")
 
-migrations=[p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|[^0-9])475(?:[^0-9]|$)",p.name)]
+migrations=[p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|[^0-9])485(?:[^0-9]|$)",p.name)]
 if migrations:
-    errors.append("Build 475 must not introduce a schema migration: "+", ".join(str(p.relative_to(ROOT)) for p in migrations))
+    errors.append("Build 485 must not introduce a schema migration: "+", ".join(str(p.relative_to(ROOT)) for p in migrations))
 
 if errors:
     print("PRODUCTION LEARNING & ROADMAP RENEWAL AUTHORITY: FAIL")
@@ -150,8 +183,8 @@ if errors:
     sys.exit(1)
 
 print("PRODUCTION LEARNING & ROADMAP RENEWAL AUTHORITY: PASS")
-print(" - 466–474 concerns are reconciled without fabricating provider/owner/device/recovery evidence")
-print(" - canonical HOLD inventory remains current and singular")
-print(" - renewed roadmap 476–485 is present and evidence-driven")
-print(" - next cycle advances retained decision/evidence workflows without replacement systems")
-print(" - no schema, provider, customer, pricing, staff, accounting, inventory, experiment, fleet, recovery or destructive-storage mutation is authorized")
+print(" - 476–484 concerns are reconciled without fabricating provider/owner/device/recovery/allocation evidence")
+print(" - Southern Ontario seasonal-service capability remains explicit, sourced and separate from reliability/margin evidence")
+print(" - canonical HOLD inventory retains unresolved concerns and adds broad winter-claim transparency protection")
+print(" - roadmap 486–495 is renewed from observed outcomes")
+print(" - schema/provider/business mutation remains NONE")
