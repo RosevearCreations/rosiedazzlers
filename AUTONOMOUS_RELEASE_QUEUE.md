@@ -117,9 +117,9 @@ Scope:
 
 Current contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Retained framework authority: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`.
 
-The exact candidate must pass the Build 481 approval/measurement-lock authority, retained booking/quote authorities, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the Build 481 approval/measurement-lock authority, retained booking/quote authorities, Current Source Gate and feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected `main` and independent exact Production deployment/runtime/business acceptance. Missing owner approval or an incomplete measurement contract remains truthful `owner_approval_required`; source/runtime GREEN does not fabricate a lock.
+Production promotion proceeds through `rd main protection` and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing owner approval or an incomplete measurement contract remains truthful `owner_approval_required`; source/runtime GREEN does not fabricate a lock.
 
 ## Next release
 **Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is next only after Build 481 is independently GREEN on protected `main`.
