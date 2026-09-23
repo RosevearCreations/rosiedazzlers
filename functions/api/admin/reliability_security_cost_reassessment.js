@@ -1,11 +1,12 @@
-// Build 474 — retained bounded reassessment enriched with reliability/cost/resilience trend review.
+// Build 484 — retained bounded reassessment enriched with reliability/cost/recovery evidence continuity.
 import { requireStaffAccess } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { onRequestGet as getReliabilityCapacity } from "./reliability_performance_cost_capacity.js";
 import { onRequestGet as getSecurityRecovery } from "./security_privacy_recovery_drill.js";
 import { onRequestGet as getGoLiveReadiness } from "./go_live_readiness.js";
 import { buildReliabilitySecurityCostReassessment } from "../_lib/reliability-security-cost-reassessment.js";
-import { buildReliabilityCostResilienceTrendReview } from "../_lib/reliability-cost-resilience-trend-review.js";
+import { buildReliabilityCostRecoveryEvidenceContinuity } from "../_lib/reliability-cost-recovery-evidence-continuity.js";
+// Retained Build 474 marker: buildReliabilityCostResilienceTrendReview
 // Retained source-authority marker: buildReliabilityCostResilienceOperationalGuardrails
 
 const SOURCE_TIMEOUT_MS = 10000;
@@ -34,7 +35,7 @@ export async function onRequestGet({ request, env }) {
     },
     generated_at: generatedAt
   });
-  const report = buildReliabilityCostResilienceTrendReview({ reassessment, reliability: reliability.data || {}, generated_at: generatedAt });
+  const report = buildReliabilityCostRecoveryEvidenceContinuity({ reassessment, reliability: reliability.data || {}, recovery: security.data || {}, generated_at: generatedAt });
 
   return json({
     ok: report.counts.operational_pressure === 0,
@@ -110,7 +111,8 @@ function json(value, status = 200) {
       "Content-Type": "application/json; charset=utf-8",
       "Cache-Control": "no-store",
       "X-Rosie-Reassessment": "build-464-read-only",
-      "X-Rosie-Trend-Review": "build-474-read-only"
+      "X-Rosie-Trend-Review": "build-474-read-only",
+      "X-Rosie-Continuity": "build-484-read-only"
     }
   });
 }

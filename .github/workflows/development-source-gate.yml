@@ -549,6 +549,8 @@ jobs:
         run: |
           python scripts/reliability_cost_resilience_trend_review_check.py
           node scripts/reliability_cost_resilience_trend_review_test.mjs
+          python scripts/reliability_cost_recovery_evidence_continuity_check.py
+          node scripts/reliability_cost_recovery_evidence_continuity_test.mjs
 
       - name: Validate recovery export operational proof authority
         run: |
