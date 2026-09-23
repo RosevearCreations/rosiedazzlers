@@ -60,8 +60,8 @@ require(doc,[
  "Build 485 — Production Learning & Roadmap Renewal"
 ],"Build 484 contract")
 require(queue,[
- "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
- "**Build 487 — Winter Booking Eligibility & Customer Transparency** is next",
+ "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.",
+ "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "it has not run out"
 ],"Build 484 queue")
@@ -71,7 +71,7 @@ require(handoff,[
  "reliability_cost_recovery_evidence_continuity_check.py"
 ],"Build 484 handoff")
 require(readme,[
- "Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.",
+ "Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py",
  "Production is not considered GREEN from source promotion alone."
