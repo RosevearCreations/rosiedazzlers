@@ -66,7 +66,7 @@ require(queue,[
  "it has not run out"
 ],"Build 484 queue")
 require(handoff,[
- "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
+ "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py"
 ],"Build 484 handoff")
