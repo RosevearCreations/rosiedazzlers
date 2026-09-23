@@ -38,7 +38,7 @@ require(helper,[
  "automatic_booking_availability_change_allowed: false"
 ],"Build 487 helper")
 require(endpoint,["buildWinterBookingEligibilityCustomerTransparency",'authority:"winter_booking_eligibility_customer_transparency"','retained_capability_authority:"cold_weather_service_capability_evidence_matrix"'],"Build 487 endpoint")
-require(client,["renderWinterBookingEligibility","winterEligibilityGrid","draft customer wording","Weather-ineligible sessions are excluded"],"Build 487 client")
+require(client,["renderWinterBookingEligibility","winterEligibilityGrid","Draft customer wording","Weather-ineligible sessions are excluded"],"Build 487 client")
 require(page,[
  'data-build487="winter-booking-eligibility-customer-transparency"',
  "Build 487 · Winter Booking Eligibility &amp; Customer Transparency",
