@@ -96,6 +96,10 @@ required_authorities = {
         "scripts/booking_quote_experiment_approval_measurement_lock_check.py",
         "scripts/booking_quote_experiment_approval_measurement_lock_test.mjs",
     ],
+    "staff_mobile_remediation_execution_evidence_readiness": [
+        "scripts/staff_mobile_remediation_execution_evidence_readiness_check.py",
+        "scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs",
+    ],
     "launch_readiness": [
         "scripts/launch_readiness_consolidation_check.py",
         "scripts/launch_readiness_consolidation_test.mjs",
@@ -249,6 +253,9 @@ workflow = require(WORKFLOW, [
     "Validate booking & quote experiment approval & measurement lock authority",
     "python scripts/booking_quote_experiment_approval_measurement_lock_check.py",
     "node scripts/booking_quote_experiment_approval_measurement_lock_test.mjs",
+    "Validate staff & mobile remediation execution evidence readiness authority",
+    "python scripts/staff_mobile_remediation_execution_evidence_readiness_check.py",
+    "node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs",
     "Validate launch readiness consolidation authorities",
     "Validate controlled soft launch acceptance authority",
     "Validate provider evidence closure authority",
@@ -340,6 +347,7 @@ print("- customer/staff Production workflow evidence remains aggregate, role-bou
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
 print("- local-search provider snapshot continuity remains descriptive, identity/window-bounded and does not infer Southern Ontario weather or winter service capability")
 print("- booking/quote experiment approval requires an explicit immutable measurement lock and excludes weather-ineligible sessions without authorizing execution")
+print("- staff/mobile remediation effectiveness requires separately authorized execution evidence and materially comparable before/after observations; weather/site limits remain separate")
 print("- local acquisition/content proof remains bounded, heuristic, read-only and non-publishing")
 print("- retention/maintenance/fleet operational pilot remains manual, capacity-aware and owner-action gated")
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
