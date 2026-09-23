@@ -1,18 +1,18 @@
-// Build 451/461/471 — read-only booking funnel, quote/pricing learning, readiness and controlled-experiment framework.
+// Build 451/461/471/481 — booking funnel, quote/pricing learning, controlled-experiment framework and owner-approved measurement lock.
 export const BUILD451_QUOTE_VALUE_BANDS = Object.freeze([
   { key:"under_250", label:"Under $250", min_cents:0, max_cents:24999 },
   { key:"250_399", label:"$250–$399", min_cents:25000, max_cents:39999 },
   { key:"400_599", label:"$400–$599", min_cents:40000, max_cents:59999 },
   { key:"600_plus", label:"$600+", min_cents:60000, max_cents:null }
 ]);
-export function buildBookingFunnelQuotePricingLearning({funnel={},quote_rows=[],source_status={},generated_at=null}={}){
-  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes), experiment_readiness=buildExperimentReadiness(booking,quotes), controlled_experiment_framework=buildBookingQuoteControlledExperimentFramework(experiment_readiness);
+export function buildBookingFunnelQuotePricingLearning({funnel={},quote_rows=[],source_status={},approval_records={},generated_at=null}={}){
+  const booking=summarizeBooking(funnel), quotes=summarizeQuotes(quote_rows), learning_signals=deriveSignals(booking,quotes), experiment_readiness=buildExperimentReadiness(booking,quotes), controlled_experiment_framework=buildBookingQuoteControlledExperimentFramework(experiment_readiness), experiment_approval_measurement_lock=buildBookingQuoteExperimentApprovalMeasurementLock(controlled_experiment_framework,approval_records);
   const values=Object.values(source_status||{}), total=values.length, available=values.filter(x=>x?.available===true).length, restricted=values.filter(x=>x?.restricted===true).length;
   const evidence_status=total&&available===total?(booking.evidence_possibly_truncated||quotes.possibly_truncated?"partial":"observed"):available?"partial":restricted?"restricted":"unavailable";
   return {
     build:451, authority:"booking_funnel_quote_pricing_learning", generated_at:generated_at||new Date().toISOString(),
-    evidence_status, booking, quotes, learning_signals, experiment_readiness, controlled_experiment_framework, source_status, release_enrichment_build:461, controlled_experiment_framework_build:471, controlled_experiment_framework_authority:"booking_quote_controlled_experiment_framework",
-    truth_boundary:{stage_drop_proves_price_friction:false,quote_decline_proves_price_sensitivity:false,accepted_value_delta_proves_discounting:false,accepted_quote_is_completed_work:false,unresolved_quote_proves_customer_rejection:false,causal_pricing_claimed:false,experiment_result_claimed:false,experiment_winner_claimed:false,owner_approval_inferred:false},
+    evidence_status, booking, quotes, learning_signals, experiment_readiness, controlled_experiment_framework, experiment_approval_measurement_lock, source_status, release_enrichment_build:461, controlled_experiment_framework_build:471, controlled_experiment_framework_authority:"booking_quote_controlled_experiment_framework", experiment_approval_measurement_lock_build:481, experiment_approval_measurement_lock_authority:"booking_quote_experiment_approval_measurement_lock",
+    truth_boundary:{stage_drop_proves_price_friction:false,quote_decline_proves_price_sensitivity:false,accepted_value_delta_proves_discounting:false,accepted_quote_is_completed_work:false,unresolved_quote_proves_customer_rejection:false,causal_pricing_claimed:false,experiment_result_claimed:false,experiment_winner_claimed:false,owner_approval_inferred:false,measurement_lock_inferred:false,weather_ineligible_session_is_conversion_failure:false,service_temperature_limit_inferred:false},
     boundaries:{read_only_learning:true,manual_refresh_only:true,first_party_aggregate_only:true,anonymous_session_to_customer_join:false,customer_identity_exposed:false,raw_quote_identifier_exposed:false,automatic_price_change_allowed:false,automatic_discount_allowed:false,automatic_outreach_allowed:false,automatic_quote_acceptance_allowed:false,automatic_booking_creation_allowed:false,payment_or_provider_mutation_allowed:false,schema_mutation_allowed:false,permanent_polling_allowed:false}
   };
 }
@@ -184,6 +184,132 @@ export function buildBookingQuoteControlledExperimentFramework(experimentReadine
   };
 }
 
+export function buildBookingQuoteExperimentApprovalMeasurementLock(framework={},approvalRecords={}){
+  const source=obj(framework), records=obj(approvalRecords?.records||approvalRecords), definitions=Array.isArray(source.definitions)?source.definitions:[];
+  const rows=definitions.map(definition=>{
+    const key=clean(definition?.key)||"unknown";
+    const record=obj(records[key]);
+    const approvalStatus=norm(record.approval_status);
+    const approved=approvalStatus==="approved"&&record.approved===true;
+    const threshold=clean(record.success_threshold);
+    const targetDirection=norm(record.target_direction);
+    const winnerRule=clean(record.winner_rule);
+    const durationDays=whole(record.duration_days);
+    const allocationRule=clean(record.allocation_rule);
+    const stopConditions=Array.isArray(record.stop_conditions)?record.stop_conditions.map(clean).filter(Boolean):[];
+    const ownerApprovedStopConditions=stopConditions.length>=3;
+    const seasonalRule=clean(record.seasonal_eligibility_rule);
+    const weatherEligibleHandling=norm(record.weather_ineligible_handling);
+    const seasonalBoundaryComplete=seasonalRule.length>=12&&weatherEligibleHandling==="exclude_from_conversion_denominator";
+    const lockedAt=validIso(record.locked_at), lockedBy=clean(record.locked_by)||null;
+    const lockRequested=record.measurement_locked===true;
+    const sourceEligible=definition?.framework_state==="owner_approval_required"&&definition?.evidence_eligibility?.eligible_for_owner_approval===true;
+    const contractComplete=Boolean(
+      sourceEligible&&approved&&threshold&&["increase","decrease","maintain_or_improve","custom"].includes(targetDirection)
+      &&winnerRule&&durationDays>0&&allocationRule&&ownerApprovedStopConditions&&seasonalBoundaryComplete&&lockRequested&&lockedAt&&lockedBy
+    );
+    const state=!sourceEligible
+      ? (definition?.framework_state==="unavailable"?"unavailable":"needs_more_evidence")
+      : contractComplete?"measurement_locked":"owner_approval_required";
+    return {
+      key,
+      area:clean(definition?.area)||"unknown",
+      state,
+      source_framework_state:clean(definition?.framework_state)||"unavailable",
+      owner_approval:{
+        status:approvalStatus||"not_recorded",
+        approved,
+        approved_by:clean(record.approved_by)||null,
+        approved_at:validIso(record.approved_at)
+      },
+      measurement_contract:{
+        primary_metric:definition?.success_measure?.primary_metric||null,
+        baseline_rule:definition?.success_measure?.baseline_rule||null,
+        success_threshold:threshold||null,
+        target_direction:targetDirection||null,
+        winner_rule:winnerRule||null,
+        duration_days:durationDays||null,
+        allocation_rule:allocationRule||null,
+        stop_conditions:stopConditions,
+        seasonal_eligibility_rule:seasonalRule||null,
+        weather_ineligible_handling:weatherEligibleHandling||null
+      },
+      lock:{
+        required:true,
+        measurement_locked:contractComplete,
+        locked_at:contractComplete?lockedAt:null,
+        locked_by:contractComplete?lockedBy:null,
+        immutable_after_lock:true,
+        revision:whole(record.revision)||null
+      },
+      execution:{
+        separately_authorized_execution_required:true,
+        execution_authorized:false,
+        experiment_started:false,
+        pricing_mutation_allowed:false,
+        discount_mutation_allowed:false,
+        booking_rule_mutation_allowed:false,
+        availability_mutation_allowed:false,
+        outreach_allowed:false
+      },
+      seasonal_truth_boundary:{
+        region:"Southern Ontario, Canada",
+        weather_ineligible_sessions_excluded_from_conversion_denominator:seasonalBoundaryComplete,
+        cold_weather_restriction_counts_as_conversion_failure:false,
+        service_temperature_limit_inferred:false,
+        exact_service_constraints_required:true
+      }
+    };
+  });
+  const locked=rows.filter(r=>r.state==="measurement_locked").length;
+  return {
+    build:481,
+    authority:"booking_quote_experiment_approval_measurement_lock",
+    state:locked&&locked===rows.filter(r=>r.source_framework_state==="owner_approval_required").length?"measurement_locked":rows.some(r=>r.state==="owner_approval_required")?"owner_approval_required":rows.some(r=>r.state==="needs_more_evidence")?"needs_evidence":"unavailable",
+    definition_count:rows.length,
+    measurement_locked_count:locked,
+    definitions:rows,
+    measurement_lock_rules:{
+      explicit_owner_approval_required:true,
+      success_threshold_required:true,
+      target_direction_required:true,
+      winner_rule_required:true,
+      positive_duration_required:true,
+      allocation_rule_required:true,
+      explicit_stop_conditions_required:true,
+      seasonal_weather_eligibility_required:true,
+      immutable_after_lock:true,
+      lock_does_not_authorize_execution:true
+    },
+    truth_boundary:{
+      owner_approval_inferred:false,
+      measurement_lock_inferred:false,
+      winner_claimed:false,
+      experiment_result_claimed:false,
+      price_causation_claimed:false,
+      weather_ineligible_session_is_conversion_failure:false,
+      cold_weather_demand_inferred:false,
+      service_temperature_limit_inferred:false
+    },
+    boundaries:{
+      existing_workbench_only:true,
+      existing_app_settings_store_only:true,
+      schema_mutation_allowed:false,
+      experiment_execution_authorized:false,
+      automatic_experiment_activation_allowed:false,
+      automatic_winner_selection_allowed:false,
+      pricing_mutation_allowed:false,
+      discount_mutation_allowed:false,
+      booking_rule_mutation_allowed:false,
+      availability_mutation_allowed:false,
+      outreach_allowed:false,
+      provider_mutation_allowed:false,
+      customer_identity_join_allowed:false,
+      permanent_polling_allowed:false
+    }
+  };
+}
+
 function bookingStagePlan(booking){
   const drop=booking?.largest_price_adjacent_stage_drop, starts=whole(booking?.funnel_start_sessions), has=Boolean(drop)&&booking?.state!=="unavailable";
   const ready=has&&starts>=10;
@@ -247,4 +373,5 @@ function experimentPlan({key,area,readiness,hypothesis,evidence_basis,primary_me
 }
 function signal(area,evidence_state,finding,bounded_owner_review){return{area,evidence_state:evidence_state||"unavailable",finding,bounded_owner_review,causal_price_sensitivity_claimed:false,pricing_change_authorized:false,automatic_action_authorized:false};}
 function drop(r){return r?{key:r.key,stage:r.label,sessions_lost:whole(r.drop_from_previous),drop_pct:num(r.drop_from_previous_pct)}:null;}
+function validIso(v){const n=Date.parse(clean(v));return Number.isFinite(n)?new Date(n).toISOString():null}
 function obj(v){return v&&typeof v==="object"&&!Array.isArray(v)?v:{}} function clean(v){return String(v??"").trim()} function norm(v){return clean(v).toLowerCase()} function whole(v){const n=Number(v);return Number.isFinite(n)&&n>0?Math.floor(n):0} function nullableWhole(v){const n=Number(v);return Number.isFinite(n)?Math.max(0,Math.floor(n)):null} function nonneg(v){const n=Number(v);return Number.isFinite(n)&&n>0?Math.round(n):0} function num(v){const n=Number(v);return Number.isFinite(n)?n:null} function pct(a,b){return b>0?round1(a/b*100):null} function round1(v){return Math.round(Number(v)*10)/10} function fmt(v){return v==null?"unavailable":Number(v).toFixed(1)+"%"}

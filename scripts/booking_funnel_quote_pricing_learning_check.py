@@ -65,9 +65,12 @@ require(client,[
     'method:"GET"',
     "Pricing changes, discounts, outreach, quote acceptance and booking creation remain locked."
 ],"Build 451 client")
-for forbidden in ("setInterval(","localStorage","sessionStorage",'method:"POST"','method:"PUT"','method:"PATCH"','method:"DELETE"'):
+for forbidden in ("setInterval(","localStorage","sessionStorage",'method:"PUT"','method:"PATCH"','method:"DELETE"'):
     if forbidden in client:
         errors.append(f"Build 451 client must not contain {forbidden!r}")
+if 'method:"POST"' in client and "/api/admin/booking_quote_experiment_approval_lock_save" not in client:
+    errors.append("Build 451 client contains an unrecognized POST mutation path")
+require(client,["/api/admin/booking_quote_experiment_approval_lock_save"],"retained Build 451 client explicit Build 481 governance extension")
 require(test,["BUILD 451 BOOKING FUNNEL QUOTE PRICING LEARNING TEST: PASS"],"Build 451 test")
 require(contract,[
     "# Build 451 — Booking Funnel, Quote & Pricing Learning",

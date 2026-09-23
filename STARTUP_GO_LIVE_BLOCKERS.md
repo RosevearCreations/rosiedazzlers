@@ -32,6 +32,8 @@ Build 478 adds authenticated device observation refresh and regression triage to
 
 Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted pricing-review evidence only. A pricing-review signal does not authorize a price/discount change and Build 451 does not close any HOLD in this backlog.
 
+Build 481 adds explicit owner-approved booking/quote measurement locks using the existing app settings store. A lock requires declared thresholds, duration/allocation, stop conditions and Southern Ontario seasonal/weather eligibility, but it does not authorize experiment execution or any price/discount/booking-rule/availability/outreach change. Weather-ineligible sessions are excluded from the declared conversion denominator and exact service temperature limits are not inferred.
+
 ## Current cycle reconciliation
 `PRODUCTION_LEARNING_466_474.md` confirms that the 466–474 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 

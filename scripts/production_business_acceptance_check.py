@@ -92,6 +92,10 @@ required_authorities = {
         "scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py",
         "scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs",
     ],
+    "booking_quote_experiment_approval_measurement_lock": [
+        "scripts/booking_quote_experiment_approval_measurement_lock_check.py",
+        "scripts/booking_quote_experiment_approval_measurement_lock_test.mjs",
+    ],
     "launch_readiness": [
         "scripts/launch_readiness_consolidation_check.py",
         "scripts/launch_readiness_consolidation_test.mjs",
@@ -242,6 +246,9 @@ workflow = require(WORKFLOW, [
     "Validate local search provider snapshot continuity & descriptive review authority",
     "python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py",
     "node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs",
+    "Validate booking & quote experiment approval & measurement lock authority",
+    "python scripts/booking_quote_experiment_approval_measurement_lock_check.py",
+    "node scripts/booking_quote_experiment_approval_measurement_lock_test.mjs",
     "Validate launch readiness consolidation authorities",
     "Validate controlled soft launch acceptance authority",
     "Validate provider evidence closure authority",
@@ -332,6 +339,7 @@ print("- backup/restore/accountant-export operational proof remains read-only an
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
 print("- local-search provider snapshot continuity remains descriptive, identity/window-bounded and does not infer Southern Ontario weather or winter service capability")
+print("- booking/quote experiment approval requires an explicit immutable measurement lock and excludes weather-ineligible sessions without authorizing execution")
 print("- local acquisition/content proof remains bounded, heuristic, read-only and non-publishing")
 print("- retention/maintenance/fleet operational pilot remains manual, capacity-aware and owner-action gated")
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
