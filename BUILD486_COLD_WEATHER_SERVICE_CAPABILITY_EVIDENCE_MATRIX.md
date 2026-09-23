@@ -4,7 +4,7 @@
 Create one read-only matrix for Rosie Dazzlers packages, add-ons and explicitly identified services using attributable Southern Ontario cold-weather capability evidence. This release reuses the retained Service & Add-On seasonal-operability authority rather than creating a second service catalogue or weather rules engine.
 
 ## Evidence requirement
-A matrix row is valid only when it has:
+A matrix row is valid only when it has attributable service/product/equipment/site/process evidence and:
 - a package, add-on or explicit service identity;
 - one allowed classification: `cold-snap-capable`, `temperature-limited-outdoor` or `controlled-environment-required`;
 - an explicit evidence source type: service, product, equipment, site or process; and
