@@ -1,31 +1,33 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 481 — Booking & Quote Experiment Approval & Measurement Lock**.
+Current source direction: **Build 482 — Staff & Mobile Remediation Execution Evidence Readiness**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Booking & Quote Experiment Approval & Measurement Lock authority
-The current release reuses the retained booking/quote learning and controlled-experiment framework, and adds a dedicated explicit owner-governance save path using the existing app settings store.
+## Current Staff & Mobile Remediation Execution Evidence Readiness authority
+The current release reuses the retained staff/mobile evidence workbench and adds a read-only readiness layer for any separately authorized remediation execution and later before/after observation.
 
-A supported experiment remains `owner_approval_required` until the owner records the threshold, target direction, winner rule, duration, allocation, all fail-closed stop conditions, Southern Ontario seasonal/weather eligibility and approval. A completed record becomes an immutable Build 481 measurement lock, but it still does not authorize experiment execution or any price, discount, booking-rule, availability or outreach change.
+A current repeated pattern is not execution proof. Build 482 defines the minimum attributable execution record and materially like-for-like comparison requirements before remediation effectiveness can be claimed. Root cause, staff fault, device/browser friction and business impact remain unproven unless separately evidenced.
 
-Weather-ineligible sessions are excluded from the conversion denominator. Cold-weather restrictions are not counted as conversion failures, and exact service temperature limits are never inferred by this release.
+Southern Ontario weather/site restrictions remain a separate operational classification. Cold-weather limits are not staff/mobile friction, and exact service temperature thresholds are never inferred without explicit service, product, equipment or site evidence.
 
 Focused source authority:
 
-`python scripts/booking_quote_experiment_approval_measurement_lock_check.py`
+python scripts/staff_mobile_remediation_execution_evidence_readiness_check.py
 
 Behavioral proof:
 
-`node scripts/booking_quote_experiment_approval_measurement_lock_test.mjs`
+node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
 
-The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the active roadmap remains `FORWARD_BUILD_ROADMAP_476_485.md`. Production is not considered GREEN from source promotion alone.
+Retained predecessor proof remains scripts/booking_quote_experiment_approval_measurement_lock_check.py and scripts/booking_quote_experiment_approval_measurement_lock_test.mjs.
+
+The canonical HOLD inventory remains STARTUP_GO_LIVE_BLOCKERS.md; the active roadmap remains FORWARD_BUILD_ROADMAP_476_485.md. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — current bounded contract.
-4. `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md` — retained predecessor contract.
+3. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — current bounded contract.
+4. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — retained predecessor contract.
 5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
 7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
@@ -34,6 +36,7 @@ The canonical HOLD inventory remains `STARTUP_GO_LIVE_BLOCKERS.md`; the active r
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
 
+- `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
 - `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
 - `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
 - `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`

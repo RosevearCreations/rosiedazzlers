@@ -1,4 +1,4 @@
-// Build 472 — read-only remediation verification over retained Build 462 staff/mobile priorities.
+// Build 482 — read-only remediation execution-evidence readiness over retained Build 472 verification.
 import { buildStaffWorkflowSupportExceptionLearning } from "./staff-workflow-support-exception-learning.js";
 
 const REVIEW_COHORT_MIN = 2;
@@ -46,6 +46,7 @@ export function buildStaffSupportMobileEfficiencyLearning({
 
   const remediation_priorities = buildRemediationPriorities(learning_candidates, evidence_status);
   const remediation_verification = buildRemediationVerification(remediation_priorities, evidence_status);
+  const execution_evidence_readiness = buildRemediationExecutionEvidenceReadiness(remediation_verification, evidence_status);
 
   return {
     build: 452,
@@ -54,6 +55,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     release_authority: "staff_mobile_friction_remediation_priorities",
     verification_enrichment_build: 472,
     verification_authority: "staff_mobile_remediation_verification",
+    execution_evidence_readiness_build: 482,
+    execution_evidence_readiness_authority: "staff_mobile_remediation_execution_evidence_readiness",
     generated_at: generated_at || new Date().toISOString(),
     evidence_status,
     staff_workflow: retained.staff_workflow,
@@ -63,6 +66,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     remediation_priorities,
     remediation_verification_summary: remediation_verification.summary,
     remediation_verification: remediation_verification.rows,
+    remediation_execution_evidence_readiness_summary: execution_evidence_readiness.summary,
+    remediation_execution_evidence_readiness: execution_evidence_readiness.rows,
     source_status: safeSourceStatus(source_status),
     truth_boundary: {
       repeated_pattern_proves_root_cause: false,
@@ -76,6 +81,10 @@ export function buildStaffSupportMobileEfficiencyLearning({
       current_pattern_proves_remediation_effect: false,
       remediation_verification_proves_device_friction: false,
       remediation_verification_proves_business_impact: false,
+      execution_record_readiness_proves_remediation_occurred: false,
+      before_after_template_proves_effectiveness: false,
+      weather_site_constraint_proves_staff_or_mobile_friction: false,
+      service_temperature_limit_inferred: false,
       efficiency_improvement_claimed: false
     },
     boundaries: {
@@ -93,6 +102,9 @@ export function buildStaffSupportMobileEfficiencyLearning({
       automatic_exception_resolution_allowed: false,
       automatic_remediation_allowed: false,
       automatic_verification_closure_allowed: false,
+      automatic_execution_record_creation_allowed: false,
+      automatic_before_after_conclusion_allowed: false,
+      weather_site_constraint_mutation_allowed: false,
       role_ceiling_change_allowed: false,
       blame_inference_allowed: false,
       customer_or_provider_outreach_allowed: false,
@@ -259,6 +271,102 @@ function buildRemediationVerification(priorities, evidenceStatus) {
       operator_review_required: true
     },
     rows: verificationRows
+  };
+}
+
+
+function buildRemediationExecutionEvidenceReadiness(verification, evidenceStatus) {
+  const rows = Array.isArray(verification?.rows) ? verification.rows : [];
+  const currentEvidenceComplete = evidenceStatus === "observed";
+  const requiredExecutionFields = [
+    "authorization_reference",
+    "remediation_change_reference",
+    "executed_at",
+    "evidence_source_reference",
+    "owning_workflow_scope",
+    "role_scope",
+    "device_browser_context",
+    "observation_protocol_reference"
+  ];
+  const requiredComparisonFields = [
+    "same_measure_definition",
+    "same_owning_workflow_scope",
+    "same_role_scope",
+    "representative_device_browser_context",
+    "comparable_window_or_sample_definition",
+    "material_confounders_recorded"
+  ];
+  const weatherSiteClassifications = [
+    "not_applicable",
+    "cold_snap_capable",
+    "temperature_limited_outdoor",
+    "controlled_environment_required"
+  ];
+
+  const readinessRows = rows.map((row) => ({
+    rank: row.rank,
+    review_priority: row.review_priority,
+    area: row.area,
+    pattern: row.pattern,
+    readiness_status: currentEvidenceComplete
+      ? "separately_authorized_execution_record_required"
+      : "evidence_incomplete",
+    current_pattern_evidence_present: row.current_pattern_evidence_present === true,
+    separately_authorized_remediation_execution_evidence_present: false,
+    materially_comparable_before_after_evidence_present: false,
+    minimum_attributable_execution_record: {
+      authorization_reference: null,
+      remediation_change_reference: null,
+      executed_at: null,
+      evidence_source_reference: null,
+      owning_workflow_scope: row.area || null,
+      role_scope: null,
+      device_browser_context: null,
+      observation_protocol_reference: null
+    },
+    before_after_comparison: {
+      before_observation_recorded: false,
+      after_observation_recorded: false,
+      materially_like_for_like: false,
+      required_fields: requiredComparisonFields,
+      current_pattern_is_not_a_before_measurement: true
+    },
+    weather_site_constraint: {
+      classification_required: true,
+      classification: "not_recorded",
+      allowed_values: weatherSiteClassifications,
+      explicit_service_product_equipment_or_site_evidence_required: true,
+      operational_constraint_is_separate_from_staff_mobile_friction: true,
+      counts_as_staff_or_mobile_friction: false,
+      service_temperature_limit_inferred: false
+    },
+    remediation_effectiveness_verified: false,
+    root_cause_proven: false,
+    staff_fault_inferred: false,
+    device_friction_proven: false,
+    business_impact_proven: false,
+    conclusion: currentEvidenceComplete
+      ? "A current bounded pattern is available for review, but Build 482 contains no separately authorized execution record and no materially comparable before/after pair; remediation effectiveness remains unverified."
+      : "Current source evidence is incomplete, so execution evidence readiness and any remediation outcome remain open."
+  }));
+
+  return {
+    summary: {
+      state: currentEvidenceComplete
+        ? (rows.length ? "execution_record_required_before_outcome_comparison" : "no_current_priority_pattern_execution_not_inferred")
+        : "evidence_incomplete",
+      priorities_reviewed: rows.length,
+      attributable_execution_records_present: 0,
+      materially_comparable_before_after_pairs_present: 0,
+      remediation_effectiveness_verified_count: 0,
+      required_execution_fields: requiredExecutionFields,
+      required_before_after_comparability_fields: requiredComparisonFields,
+      weather_site_classification_required: true,
+      weather_site_classification_allowed_values: weatherSiteClassifications,
+      current_patterns_are_not_execution_proof: true,
+      operator_review_required: true
+    },
+    rows: readinessRows
   };
 }
 

@@ -3,24 +3,29 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`.
+The synchronized Production predecessor is retained through BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md.
 
-**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is the active bounded release.
+**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is the active bounded release.
 
-**Build 482 — Staff & Mobile Remediation Execution Evidence Readiness** is next only after the current release is independently GREEN on protected `main`.
+**Build 483 — Service & Add-On Allocation Evidence Closure** is next only after the current release is independently GREEN on protected main.
 
-Current contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Retained framework authority: `BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md. Retained verification authority: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_476_485.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Booking & Quote Experiment Approval & Measurement Lock contract
-- Reuse retained Builds 441/451/461/471 and the existing booking/quote learning workbench.
-- A supported experiment remains `owner_approval_required` until the owner explicitly records threshold, target direction, winner rule, duration, allocation, all retained stop conditions, seasonal/weather eligibility and approval.
-- The dedicated current-release save endpoint writes only governance evidence into the existing app settings store; no schema migration.
-- A completed record becomes an immutable measurement lock through the current release, but `execution_authorized` and `experiment_started` remain false.
-- Southern Ontario weather-ineligible sessions are excluded from the conversion denominator; weather restrictions are not conversion failures and exact temperature limits are not inferred.
-- No automatic experiment activation, winner selection, price/discount, booking-rule/availability, outreach, provider or customer mutation is authorized.
+## Current Staff & Mobile Remediation Execution Evidence Readiness contract
+- Reuse the retained Build 452/462/472 staff/mobile endpoint and /admin-staff-workflow-support-learning.html workbench; do not create a parallel telemetry, staff, support or remediation system.
+- Current pattern evidence is not remediation execution evidence and does not prove root cause, staff fault, device/browser friction, business impact or effectiveness.
+- Any later effectiveness claim requires a separately authorized remediation execution record with authorization/change reference, execution timestamp, evidence-source reference, owning workflow scope, role scope, representative device/browser context and observation protocol.
+- Before/after observations must be materially like-for-like: same measure definition, workflow scope and role scope, representative device/browser context, comparable window/sample definition and recorded material confounders.
+- Southern Ontario weather/site restrictions remain a separate operational classification. Cold-weather limits are not staff/mobile friction and exact service temperature thresholds are never inferred.
+- No automatic remediation execution, evidence creation, verification closure, role/business mutation, customer/provider outreach, schema/storage mutation, background telemetry or permanent polling is authorized.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
+- `.github/workflows/staff-mobile-remediation-execution-evidence-readiness-authority.yml`
+- `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py`
+- `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`
+- `functions/api/_lib/staff-support-mobile-efficiency-learning.js`
 - `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
 - `.github/workflows/booking-quote-experiment-approval-measurement-lock-authority.yml`
 - `scripts/booking_quote_experiment_approval_measurement_lock_check.py`
