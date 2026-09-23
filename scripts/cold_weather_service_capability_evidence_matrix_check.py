@@ -61,8 +61,8 @@ require(roadmap,[
  "### Build 487 — Winter Booking Eligibility & Customer Transparency"
 ],"renewed roadmap")
 require(queue,[
- "**Build 486 — Cold-Weather Service Capability Evidence Matrix** is the active bounded release.",
- "**Build 487 — Winter Booking Eligibility & Customer Transparency** is next",
+ "**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.",
+ "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "it has not run out"
 ],"Build 486 queue")
@@ -72,7 +72,7 @@ require(handoff,[
  "cold_weather_service_capability_evidence_matrix_check.py"
 ],"Build 486 handoff")
 require(readme,[
- "Current source direction: **Build 486 — Cold-Weather Service Capability Evidence Matrix**.",
+ "Current source direction: **Build 487 — Winter Booking Eligibility & Customer Transparency**.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py",
  "Production is not considered GREEN from source promotion alone."
