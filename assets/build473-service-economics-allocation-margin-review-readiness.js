@@ -1,4 +1,4 @@
-// Build 487 — retained manual service economics UI with winter booking eligibility and customer transparency.
+// Build 488 — retained manual service economics UI with controlled-environment alternatives and weather-safe routing.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -23,6 +23,7 @@
       renderClosure(data.economics?.allocation_evidence_closure || {}, data.economics?.seasonal_operability || {});
       renderColdWeatherCapabilityMatrix(data.economics?.cold_weather_capability_matrix || {});
       renderWinterBookingEligibility(data.economics?.winter_booking_eligibility || {});
+      renderWeatherSafeRouting(data.economics?.weather_safe_routing || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -40,6 +41,7 @@
       if($("seasonalGrid")) $("seasonalGrid").innerHTML = '<div class="review-empty">Seasonal operability evidence is unavailable.</div>';
       if($("capabilityMatrixGrid")) $("capabilityMatrixGrid").innerHTML = '<div class="review-empty">Cold-weather capability evidence is unavailable.</div>';
       if($("winterEligibilityGrid")) $("winterEligibilityGrid").innerHTML = '<div class="review-empty">Winter booking eligibility evidence is unavailable.</div>';
+      if($("weatherSafeRoutingGrid")) $("weatherSafeRoutingGrid").innerHTML = '<div class="review-empty">Weather-safe routing evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -175,6 +177,36 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No winter booking eligibility row is prepared.</div>';
     const detail=$("winterEligibilityDetail");
     if(detail) detail.textContent="Prepared rows: "+String(eligibility.row_count??0)+" · customer copy: "+String(eligibility.customer_copy_status||"unavailable")+". Broad winter claim remains on HOLD.";
+  }
+
+  function renderWeatherSafeRouting(routing) {
+    const mount=$("weatherSafeRoutingGrid"); if(!mount) return;
+    const rows=Array.isArray(routing.rows)?routing.rows:[];
+    const gaps=Array.isArray(routing.gaps)?routing.gaps:[];
+    const cards=[];
+    for(const row of rows){
+      const alt=row.controlled_environment_alternative_supported===true
+        ? "Controlled-environment alternative: "+String(row.controlled_environment_source_type||"source")+" · "+String(row.controlled_environment_reference||"reference unavailable")
+        : row.indoor_capable_workflow_supported===true
+          ? "Controlled-environment alternative: indoor workflow · "+String(row.indoor_workflow_reference||"reference unavailable")
+          : "Controlled-environment alternative: not evidenced. Do not assume an indoor move.";
+      cards.push('<article class="review-candidate state-observed"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(String(row.routing_state||"owner_review_required").replaceAll("_"," "))+'</span></div>'+
+        '<p><strong>Weather-safe route:</strong> '+esc(row.routing_guidance||"Owner/site review required.")+'</p>'+
+        '<p class="mini">'+esc(alt)+'</p>'+
+        '<p class="mini"><strong>Draft customer guidance:</strong> '+esc(row.customer_guidance_draft||"No weather-safe route established.")+'</p>'+
+        '<p class="mini">'+esc(row.source_owned_temperature_limit_text||"No exact source-owned working-temperature limit recorded.")+
+        ' · Automatic routing/reschedule: NO · Publication: NO</p></article>');
+    }
+    for(const gap of gaps){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Controlled-environment evidence gap · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">review</span></div><p class="mini">Missing: '+
+        esc((gap.missing||[]).join(", ")||"explicit site/workflow evidence")+' · Safe default: '+esc(gap.safe_default||"owner_review_required")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No weather-safe routing row is prepared.</div>';
+    const detail=$("weatherSafeRoutingDetail");
+    if(detail) detail.textContent="Prepared routes: "+String(routing.row_count??0)+" · gaps: "+String(routing.gap_count??0)+". Not every service can move indoors; automatic routing and rescheduling remain disabled.";
   }
 
   function renderCandidates(rows) {
