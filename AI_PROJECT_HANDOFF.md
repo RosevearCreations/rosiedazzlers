@@ -3,25 +3,31 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through `BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md`.
+The synchronized Production predecessor is retained through `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`.
 
-**Build 479 — Maintenance & Fleet Owner Approval & Pilot Decision** is the active bounded release.
+**Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review** is the active bounded release.
 
-**Build 480 — Local Search Provider Snapshot Continuity & Descriptive Review** is next only after the current release is independently GREEN on protected `main`.
+**Build 481 — Booking & Quote Experiment Approval & Measurement Lock** is next only after the current release is independently GREEN on protected `main`.
 
-Current contract: `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`. Retained pilot-readiness authority: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`. Retained local-search closure authority: `BUILD470_LOCAL_SEARCH_PROVIDER_WINDOW_ATTRIBUTION_CLOSURE.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_476_485.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-## Current Maintenance & Fleet Owner Approval & Pilot Decision contract
-- Reuse retained Build 439/449/459/469 maintenance/fleet owner-decision authorities and the existing `/api/admin/maintenance_fleet_owner_approval` surface.
-- Keep `config/maintenance-plan-business-rulebook.json` and `config/fleet-business-rulebook.json` as the canonical commercial sources; unresolved approvals remain `owner_action`.
-- Expose one read-only `pilot_decision_record` containing owner decision state, explicit participant/duration bounds, manual participant-selection rules and retained booking safeguards.
-- Never infer owner approval or pilot bounds from source/runtime GREEN, demand, availability or historical evidence.
-- Keep participant/account selection manual and eligibility subordinate to canonical source.
-- Require `/api/availability` revalidation and final `/api/checkout` collision revalidation for every real booking.
-- No auto-enrollment, recurring commitment activation, fleet activation, booking creation, capacity reservation, price/discount/invoice override, provider/accounting mutation, HOLD mutation, outreach or permanent polling.
+## Current Local Search Provider Snapshot Continuity & Descriptive Review contract
+- Reuse retained Build 440/450/460/470 local-search provider, same-session attribution, evidence-quality and provider-window closure authorities.
+- Preserve bounded prior Search Console / Google Business Profile snapshots only when staff explicitly saves a new valid snapshot; no second provider store or Google API integration.
+- Compare snapshots only when the same property/location identity and equal-length distinct dated windows are present.
+- Expose raw provider metric deltas for descriptive review only; no provider performance score, ranking claim or Google-caused booking claim.
+- Keep first-party referral/funnel context a separate anonymous population.
+- Preserve Southern Ontario seasonal truth: search/funnel movement cannot prove weather causation, winter service availability or a service temperature threshold.
+- Exact temperature/service capability limits remain future explicit service/product/equipment/site evidence work; they are not guessed from analytics.
+- No schema migration, automatic provider write, background polling, customer identity join, publishing, outreach, DNS/ad-spend mutation or automatic HOLD closure.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required. Production deployment/runtime/business acceptance must independently prove that exact SHA.
 
 ## Durable current-release authorities
+- `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`
+- `.github/workflows/local-search-provider-snapshot-continuity-descriptive-review-authority.yml`
+- `scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py`
+- `scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs`
+- `functions/api/_lib/local-search-measurement-conversion-attribution.js`
 - `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`
 - `.github/workflows/maintenance-fleet-owner-approval-pilot-decision-authority.yml`
 - `scripts/maintenance_fleet_owner_approval_pilot_decision_check.py`
