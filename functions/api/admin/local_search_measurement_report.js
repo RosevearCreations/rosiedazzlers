@@ -1,4 +1,4 @@
-// Build 414 — Local search measurement, Search Console and GBP proof.
+// Build 414/480 — Local search measurement, Search Console and GBP proof with bounded provider snapshot continuity.
 // Read-only report. First-party analytics and approved local proof are kept separate
 // from manually observed provider evidence; provider success is never inferred.
 import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js";
@@ -6,6 +6,7 @@ import { requireStaffAccess, json, serviceHeaders } from "../_lib/staff-auth.js"
 const SETTING_KEY = "local_search_provider_evidence";
 const WINDOW_DAYS = 30;
 const SNAPSHOT_FRESH_DAYS = 45;
+const SNAPSHOT_HISTORY_LIMIT = 12;
 const TARGET_PATHS = [
   "/tillsonburg-auto-detailing",
   "/woodstock-ingersoll-auto-detailing",
@@ -89,6 +90,10 @@ async function handle({ request, env }) {
       search_console: providerState(providerValue.search_console, "search_console"),
       google_business_profile: providerState(providerValue.google_business_profile, "google_business_profile")
     };
+    const providerHistory = {
+      search_console: sanitizeHistory(providerValue?.history?.search_console, "search_console"),
+      google_business_profile: sanitizeHistory(providerValue?.history?.google_business_profile, "google_business_profile")
+    };
 
     return withCors(json({
       ok: true,
@@ -97,6 +102,7 @@ async function handle({ request, env }) {
       first_party: firstParty,
       local_proof: localProof,
       providers,
+      provider_history: providerHistory,
       recommendations: buildRecommendations(firstParty, localProof, providers),
       rules: evidenceRules()
     }));
@@ -210,6 +216,15 @@ function sanitizeSnapshot(raw, provider) {
     source_note: clean(raw.source_note).slice(0, 300) || null,
     recorded_at: clean(raw.recorded_at) || null
   };
+}
+
+function sanitizeHistory(raw, provider) {
+  const rows = Array.isArray(raw) ? raw : [];
+  return rows
+    .map((item) => sanitizeSnapshot(item, provider))
+    .filter(Boolean)
+    .sort((a,b) => Date.parse(a.observed_at) - Date.parse(b.observed_at))
+    .slice(-SNAPSHOT_HISTORY_LIMIT);
 }
 
 function aggregate(rows) {
