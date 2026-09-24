@@ -100,6 +100,10 @@ required_authorities = {
         "scripts/staff_mobile_remediation_execution_evidence_readiness_check.py",
         "scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs",
     ],
+    "staff_mobile_remediation_outcome_evidence": [
+        "scripts/staff_mobile_remediation_outcome_evidence_check.py",
+        "scripts/staff_mobile_remediation_outcome_evidence_test.mjs",
+    ],
     "launch_readiness": [
         "scripts/launch_readiness_consolidation_check.py",
         "scripts/launch_readiness_consolidation_test.mjs",
@@ -256,6 +260,9 @@ workflow = require(WORKFLOW, [
     "Validate staff & mobile remediation execution evidence readiness authority",
     "python scripts/staff_mobile_remediation_execution_evidence_readiness_check.py",
     "node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs",
+    "Validate staff & mobile remediation outcome evidence authority",
+    "python scripts/staff_mobile_remediation_outcome_evidence_check.py",
+    "node scripts/staff_mobile_remediation_outcome_evidence_test.mjs",
     "Validate launch readiness consolidation authorities",
     "Validate controlled soft launch acceptance authority",
     "Validate provider evidence closure authority",
