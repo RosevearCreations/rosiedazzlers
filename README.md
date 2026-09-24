@@ -15,19 +15,6 @@ Behavioral proof: `node scripts/recovery_authenticated_device_evidence_continuit
 
 Current contract: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
 
-## Retained release pointers
-Retained provider/local-search continuity: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md` · `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_test.mjs`.
-
-Retained weather-safe routing: `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` · `scripts/controlled_environment_weather_safe_routing_check.py` · `scripts/controlled_environment_weather_safe_routing_test.mjs`.
-
-Retained winter eligibility: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` · `scripts/winter_booking_eligibility_customer_transparency_check.py` · `scripts/winter_booking_eligibility_customer_transparency_test.mjs`.
-
-Retained cold-weather capability: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_test.mjs`.
-
-Retained reliability continuity: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`.
-
-Retained allocation closure: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` · `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/service_addon_allocation_evidence_closure_test.mjs`.
-
 ## Retained staff/mobile readiness
 Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
 

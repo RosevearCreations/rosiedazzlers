@@ -13,7 +13,7 @@ Missing or stale recovery evidence remains a refresh requirement. A stale or mis
 No Production restore, Production rollback or destructive recovery action is performed by Build 490.
 
 ## Authenticated-device continuity
-Current authenticated observations remain role-specific and include representative device/browser context. Customer, Detailer, Operations and Admin coverage remains explicit, together with phone/tablet/desktop and observed browser classes.
+Current authenticated observations remain role-specific and include explicit role/device/browser coverage. Customer, Detailer, Operations and Admin coverage remains explicit, together with phone/tablet/desktop and observed browser classes.
 
 A **current negative authenticated observation** takes precedence over retained historical acceptance. Historical passes cannot cancel or override current negative evidence.
 

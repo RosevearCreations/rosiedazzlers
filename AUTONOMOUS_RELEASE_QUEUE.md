@@ -7,7 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`.
 Retained predecessor contract: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`.
-Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
+Retained immediate predecessor authority: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`.
 
 ## Retained cumulative authority pointers
 - `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`
@@ -119,7 +119,7 @@ Retained immediate predecessor: Build 482 — Staff & Mobile Remediation Executi
 **Build 490 — Recovery & Authenticated Device Evidence Continuity** is the active bounded release.
 
 Scope:
-- reuse retained Build 477 recovery refresh/closure evidence and Build 478 authenticated-device observation/triage evidence rather than creating replacement systems;
+- reuse retained recovery refresh/closure evidence and authenticated-device observation/triage evidence rather than creating replacement systems;
 - keep recovery and authenticated-device observations as separate owner-observed evidence families;
 - keep recovery drill planning bounded to non-Production targets and require separate execution authorization plus post-observation evidence;
 - preserve current-negative-over-historical logic so a current authenticated negative observation is never cancelled by an older successful acceptance;
