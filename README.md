@@ -17,6 +17,8 @@ Current contract: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md
 
 Retained provider/local-search authority: `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_test.mjs`.
 
+Retained cycle checks: `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/winter_booking_eligibility_customer_transparency_check.py` · `scripts/controlled_environment_weather_safe_routing_check.py`.
+
 ## Retained staff/mobile readiness
 Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
 
