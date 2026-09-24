@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`.
-Retained predecessor contract: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`.
+The synchronized predecessor contracts are retained through `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`.
+Retained predecessor contract: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`
 - `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`
 - `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`
 - `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`
@@ -116,25 +117,24 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 490 — Recovery & Authenticated Device Evidence Continuity** is the active bounded release.
+**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is the active bounded release.
 
 Scope:
-- reuse retained recovery refresh/closure evidence and authenticated-device observation/triage evidence rather than creating replacement systems;
-- keep recovery and authenticated-device observations as separate owner-observed evidence families;
-- keep recovery drill planning bounded to non-Production targets and require separate execution authorization plus post-observation evidence;
-- preserve current-negative-over-historical logic so a current authenticated negative observation is never cancelled by an older successful acceptance;
-- keep Customer, Detailer, Operations and Admin role coverage plus representative phone/tablet/desktop and browser coverage explicit;
-- preserve STARTUP_GO_LIVE_BLOCKERS.md as the canonical HOLD inventory for Recovery / backup evidence and Independent device / visual evidence; and
-- perform no Production restore, rollback/drill execution, browser-farm/screenshot execution, automated remediation, booking/customer/role/provider/accounting/inventory mutation, schema/storage mutation, outreach, HOLD mutation or permanent polling.
+- reuse retained maintenance/fleet owner-decision, controlled-pilot readiness and operational-pilot safety authorities rather than creating another pilot engine;
+- allow attributable outcome review only after explicit owner approval, an explicit approve pilot decision and positive participant/duration bounds exist;
+- require observed participant reference/type, start/end duration, current availability revalidation, checkout collision revalidation, invoicing outcome, travel evidence and stop-condition evidence;
+- keep missing execution evidence as owner action; source/runtime GREEN, commercial approval or pilot authorization never proves execution;
+- keep participant identity private and selection manual; and
+- perform no customer activation, maintenance enrollment, fleet-account activation, booking mutation, capacity reservation, automatic invoicing, price/discount change, recurring billing, outreach, provider/accounting/inventory/schema/storage/HOLD mutation or permanent polling.
 
-Current contract: BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md. Retained recovery authority: BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md. Retained device authority: BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
+Current contract: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner-decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Retained operational-pilot authority: BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
 
-The exact candidate must pass the focused continuity authority, retained recovery/device authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused outcome authority, retained maintenance/fleet authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing/stale recovery or device evidence and current negative device observations remain truthful HOLD evidence; source/runtime GREEN does not fabricate owner-observed recovery or real-device proof.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing authorization or execution evidence remains truthful owner action; source/runtime GREEN does not fabricate pilot outcomes.
 
 ## Next release
-**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_486_495.md`; it has not run out.

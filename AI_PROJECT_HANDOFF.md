@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md.
+The synchronized Production predecessor is retained through BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md.
 
-**Build 490 — Recovery & Authenticated Device Evidence Continuity** is the active bounded release.
+**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is the active bounded release.
 
-**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md. Retained recovery authority: BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md. Retained device authority: BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner-decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Retained operational-pilot authority: BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Recovery & Authenticated Device Evidence Continuity contract
+## Current Maintenance & Fleet Pilot Outcome Evidence contract
+- Reuse retained owner-decision, controlled-pilot readiness and operational-pilot authorities; do not create a replacement pilot engine.
+- Attributable outcome review requires explicit owner approval, an approve pilot decision and explicit positive participant/duration bounds.
+- Participant/type, observed duration, availability + checkout revalidation, invoicing, travel and stop-condition evidence must be observed rather than inferred.
+- Missing execution evidence remains owner action; source/runtime GREEN and authorization are not execution evidence.
+- Participant identity stays private; selection remains manual and no capacity reservation is inferred.
+- No customer/fleet activation, booking/invoice/pricing/provider/accounting/inventory/schema/storage/HOLD mutation, recurring billing, outreach or polling is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Recovery & Authenticated Device Evidence Continuity contract
 - Reuse retained recovery refresh/closure and authenticated-device observation/triage authorities; do not create replacement recovery, screenshot, browser-farm or evidence systems.
 - Recovery and authenticated-device evidence remain separate owner-observed populations.
 - Recovery refresh/drill planning stays bounded to non-Production targets and never performs a Production restore.
@@ -86,6 +95,12 @@ Current contract: BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`
+- `.github/workflows/maintenance-fleet-pilot-outcome-evidence-authority.yml`
+- `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`
+- `scripts/maintenance_fleet_pilot_outcome_evidence_test.mjs`
+- `functions/api/_lib/maintenance-fleet-pilot-outcome-evidence.js`
+- `functions/api/admin/maintenance_fleet_pilot_outcome_evidence.js`
 - `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`
 - `.github/workflows/recovery-authenticated-device-evidence-continuity-authority.yml`
 - `scripts/recovery_authenticated_device_evidence_continuity_check.py`
