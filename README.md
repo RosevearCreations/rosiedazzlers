@@ -1,17 +1,19 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 492 — Booking & Quote Controlled Experiment Execution Evidence**.
+Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evidence**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Booking & Quote Controlled Experiment Execution Evidence authority
-Read-only execution evidence requires a retained measurement lock plus separate execution authorization. Allocation/duration, Southern Ontario weather eligibility, stop conditions and outcome capture must be observed; no winner or success is inferred.
+## Current Staff & Mobile Remediation Outcome Evidence authority
+Read-only outcome review requires an attributable separately authorized remediation execution plus materially like-for-like before/after observations. Role, workflow and representative device/browser context stay explicit; Southern Ontario weather/site restrictions remain separate from staff/mobile friction. No effectiveness or causation claim is automatic.
 
-Focused source authority: `python scripts/booking_quote_controlled_experiment_execution_evidence_check.py`
+Focused source authority: `python scripts/staff_mobile_remediation_outcome_evidence_check.py`
 
-Behavioral proof: `node scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs`
+Behavioral proof: `node scripts/staff_mobile_remediation_outcome_evidence_test.mjs`
 
-Current contract: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+
+Retained booking/quote execution evidence: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py` · `scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs`.
 
 Retained maintenance/fleet outcome: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
 
@@ -29,7 +31,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — current bounded contract.
+3. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — current bounded contract.
+4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — retained execution-evidence contract.
 4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` — retained continuity contract.
 4. `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md` — retained continuity contract.
@@ -50,6 +53,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
 
 - `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`
 
