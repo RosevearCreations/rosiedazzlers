@@ -3,15 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md.
+The synchronized Production predecessor is retained through BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md.
 
-**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is the active bounded release.
+**Build 495 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 495 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md. Retained allocation authority: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retained seasonal authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md and BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Retained reliability authority: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Completed-cycle learning: PRODUCTION_LEARNING_486_494.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Retained predecessor: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Service Economics, Seasonal Operations & Reliability Review contract
+## Current Production Learning & Roadmap Renewal contract
+- Reconcile the 486–494 cycle without fabricating provider, owner, recovery, device, pilot, experiment, remediation, allocation, seasonal-operability or provider-cost closure.
+- Preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; source/runtime GREEN never closes a provider or owner HOLD.
+- Preserve Southern Ontario seasonal-service truth: exact working-temperature limits remain source-owned, technical availability is not field operability, and broad winter availability remains unproven.
+- Renew the bounded sequence through `FORWARD_BUILD_ROADMAP_496_505.md` from observed outcomes.
+- Keep the release read-only; no automatic booking, pricing, public content, provider, recovery, fleet, experiment, accounting/inventory, schema/storage, outreach or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Service Economics, Seasonal Operations & Reliability Review contract
 - Reuse the retained protected Service Economics and I.T. Reliability authorities; do not create a parallel ledger, weather engine, capacity model, provider telemetry source or recovery system.
 - Reconcile explicit service/add-on allocation, Southern Ontario cold-weather capability, observed operational capacity and reliability continuity only within their owning evidence rules.
 - Keep exact temperature thresholds source-owned. Seasonal restrictions are not application reliability failures and capability evidence does not establish broad winter availability.
@@ -126,6 +134,11 @@ Current contract: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REV
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_486_494.md`
+- `FORWARD_BUILD_ROADMAP_496_505.md`
+- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
 - `.github/workflows/service-economics-seasonal-operations-reliability-review-authority.yml`
 - `scripts/service_economics_seasonal_operations_reliability_review_check.py`
