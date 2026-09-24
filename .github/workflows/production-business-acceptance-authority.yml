@@ -445,6 +445,11 @@ jobs:
           python scripts/staff_mobile_remediation_verification_check.py
           node scripts/staff_mobile_remediation_verification_test.mjs
 
+      - name: Validate booking & quote controlled experiment execution evidence authority
+        run: |
+          python scripts/booking_quote_controlled_experiment_execution_evidence_check.py
+          node scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs
+
       - name: Validate staff & mobile remediation execution evidence readiness authority
         run: |
           python scripts/staff_mobile_remediation_execution_evidence_readiness_check.py
