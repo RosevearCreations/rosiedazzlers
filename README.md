@@ -15,6 +15,8 @@ Behavioral proof: `node scripts/recovery_authenticated_device_evidence_continuit
 
 Current contract: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
 
+Retained provider/local-search authority: `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_test.mjs`.
+
 ## Retained staff/mobile readiness
 Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
 
