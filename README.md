@@ -1,11 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evidence**.
+Current source direction: **Build 494 — Service Economics, Seasonal Operations & Reliability Review**.
 
-Rosie Dazzlers is a static-first site with role-gated apps.
+## Current Service Economics, Seasonal Operations & Reliability Review authority
+Authority: `scripts/service_economics_seasonal_operations_reliability_review_check.py` · `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`. Production is not considered GREEN from source promotion alone.
 
-## Current Staff & Mobile Remediation Outcome Evidence authority
-Authority: `scripts/staff_mobile_remediation_outcome_evidence_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_test.mjs` · `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+Retained staff/mobile outcome: `scripts/staff_mobile_remediation_outcome_evidence_check.py`.
 
 Retained booking/quote authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
 
@@ -25,7 +25,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — current bounded contract.
+3. `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md` — current bounded contract.
+4. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — retained execution-evidence contract.
 4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` — retained continuity contract.
@@ -47,6 +48,7 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
 
 - `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
 
@@ -123,7 +125,6 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `PRODUCTION_LEARNING_436_444.md`
 - `FORWARD_BUILD_ROADMAP_446_455.md`
 
-- `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
 - `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
@@ -193,6 +194,8 @@ This release enriches the retained economics/capacity review with aggregate pric
 Retained and current authorities include:
 
 \`\`\`bash
+python scripts/service_economics_seasonal_operations_reliability_review_check.py
+node scripts/service_economics_seasonal_operations_reliability_review_test.mjs
 python scripts/authenticated_device_observation_refresh_regression_triage_check.py
 node scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
 python scripts/recovery_drill_evidence_refresh_closure_review_check.py
@@ -277,13 +280,8 @@ python scripts/release_authority_documentation_convergence_check.py
 
 Production business acceptance remains governed by `.github/workflows/production-business-acceptance-authority.yml`.
 
-
-
 ## Release authority
 Feature candidates must pass focused authority, Current Source Gate and exact feature-preview acceptance before `dev` moves. `dev` advances only by non-force fast-forward to the exact accepted candidate.
 Production promotion is governed by `rd main protection` and a pull request to protected `main`.
 After merge, Production deployment/runtime/business acceptance must independently prove that exact SHA: the resulting protected `main` commit.
 Production is not considered GREEN from source promotion alone.
-
-## Next bounded release
-**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is next only after the current release is independently GREEN on protected `main`.

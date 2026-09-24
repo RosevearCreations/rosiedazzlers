@@ -128,8 +128,8 @@ require(queue,[
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
-    "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.",
-    "**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is next",
+    "**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is the active bounded release.",
+    "**Build 495 — Production Learning & Roadmap Renewal** is next",
     "it has not run out",
     "rd main protection",
     "Production deployment/runtime/business acceptance",
@@ -139,13 +139,13 @@ require(handoff,[
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
-    "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.",
-    "**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is next",
+    "**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is the active bounded release.",
+    "**Build 495 — Production Learning & Roadmap Renewal** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evidence**.",
+    "Current source direction: **Build 494 — Service Economics, Seasonal Operations & Reliability Review**.",
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
