@@ -2,10 +2,10 @@
 
 Current source direction: **Build 494 — Service Economics, Seasonal Operations & Reliability Review**.
 
-Rosie Dazzlers is a static-first site with role-gated apps.
-
 ## Current Service Economics, Seasonal Operations & Reliability Review authority
 Authority: `scripts/service_economics_seasonal_operations_reliability_review_check.py` · `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+
+Retained staff/mobile outcome: `scripts/staff_mobile_remediation_outcome_evidence_check.py`.
 
 Retained booking/quote authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
 
@@ -125,7 +125,6 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `PRODUCTION_LEARNING_436_444.md`
 - `FORWARD_BUILD_ROADMAP_446_455.md`
 
-- `BUILD450_LOCAL_SEARCH_MEASUREMENT_CONVERSION_ATTRIBUTION.md`
 - `BUILD441_BOOKING_QUOTE_RETENTION_PRODUCTION_LEARNING.md`
 
 - `BUILD440_LOCAL_SEARCH_PROVIDER_EVIDENCE_REFRESH.md`
