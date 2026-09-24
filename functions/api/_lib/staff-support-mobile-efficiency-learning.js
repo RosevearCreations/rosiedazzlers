@@ -8,6 +8,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
   support = {},
   detailer = {},
   source_status = {},
+  remediation_outcome_evidence = [],
+  remediation_outcome_source_available = false,
   generated_at = null
 } = {}) {
   const retained = buildStaffWorkflowSupportExceptionLearning({
@@ -47,6 +49,12 @@ export function buildStaffSupportMobileEfficiencyLearning({
   const remediation_priorities = buildRemediationPriorities(learning_candidates, evidence_status);
   const remediation_verification = buildRemediationVerification(remediation_priorities, evidence_status);
   const execution_evidence_readiness = buildRemediationExecutionEvidenceReadiness(remediation_verification, evidence_status);
+  const remediation_outcome = buildRemediationOutcomeEvidence({
+    readiness: execution_evidence_readiness,
+    evidenceStatus: evidence_status,
+    outcomeEvidence: remediation_outcome_evidence,
+    outcomeSourceAvailable: remediation_outcome_source_available
+  });
 
   return {
     build: 452,
@@ -57,6 +65,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     verification_authority: "staff_mobile_remediation_verification",
     execution_evidence_readiness_build: 482,
     execution_evidence_readiness_authority: "staff_mobile_remediation_execution_evidence_readiness",
+    remediation_outcome_evidence_build: 493,
+    remediation_outcome_evidence_authority: "staff_mobile_remediation_outcome_evidence",
     generated_at: generated_at || new Date().toISOString(),
     evidence_status,
     staff_workflow: retained.staff_workflow,
@@ -68,6 +78,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     remediation_verification: remediation_verification.rows,
     remediation_execution_evidence_readiness_summary: execution_evidence_readiness.summary,
     remediation_execution_evidence_readiness: execution_evidence_readiness.rows,
+    remediation_outcome_evidence_summary: remediation_outcome.summary,
+    remediation_outcome_evidence: remediation_outcome.rows,
     source_status: safeSourceStatus(source_status),
     truth_boundary: {
       repeated_pattern_proves_root_cause: false,
@@ -83,6 +95,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
       remediation_verification_proves_business_impact: false,
       execution_record_readiness_proves_remediation_occurred: false,
       before_after_template_proves_effectiveness: false,
+      attributable_execution_alone_proves_effectiveness: false,
+      materially_comparable_observation_alone_proves_causation: false,
       weather_site_constraint_proves_staff_or_mobile_friction: false,
       service_temperature_limit_inferred: false,
       efficiency_improvement_claimed: false
@@ -104,6 +118,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
       automatic_verification_closure_allowed: false,
       automatic_execution_record_creation_allowed: false,
       automatic_before_after_conclusion_allowed: false,
+      automatic_outcome_claim_allowed: false,
+      outcome_evidence_persistence_allowed: false,
       weather_site_constraint_mutation_allowed: false,
       role_ceiling_change_allowed: false,
       blame_inference_allowed: false,
@@ -368,6 +384,208 @@ function buildRemediationExecutionEvidenceReadiness(verification, evidenceStatus
     },
     rows: readinessRows
   };
+}
+
+
+function buildRemediationOutcomeEvidence({ readiness, evidenceStatus, outcomeEvidence, outcomeSourceAvailable }) {
+  const readinessRows = Array.isArray(readiness?.rows) ? readiness.rows : [];
+  const allowedWeather = new Set(["not_applicable", "cold_snap_capable", "temperature_limited_outdoor", "controlled_environment_required"]);
+  const priorityKeys = new Set(readinessRows.map((row) => priorityKey(row?.area, row?.pattern)).filter(Boolean));
+  const normalized = Array.isArray(outcomeEvidence) ? outcomeEvidence.map((row) => normalizeOutcomeEvidenceRow(row, priorityKeys, allowedWeather)) : [];
+  const attributable = normalized.filter((row) => row.execution.attributable === true);
+  const comparable = attributable.filter((row) => row.comparison.materially_like_for_like === true && row.weather_site.explicitly_classified === true);
+  let state = "evidence_incomplete";
+  if (evidenceStatus === "observed") {
+    if (outcomeSourceAvailable !== true) state = "outcome_evidence_source_required";
+    else if (normalized.length === 0) state = "remediation_execution_evidence_required";
+    else if (attributable.length === 0) state = "outcome_evidence_unattributable";
+    else if (comparable.length === 0) state = "materially_comparable_before_after_required";
+    else state = "bounded_outcome_evidence_review_ready";
+  }
+
+  return {
+    summary: {
+      state,
+      priorities_reviewed: readinessRows.length,
+      outcome_source_available: outcomeSourceAvailable === true,
+      evidence_rows_observed: normalized.length,
+      attributable_execution_records_present: attributable.length,
+      materially_comparable_before_after_pairs_present: comparable.length,
+      effectiveness_claimed: false,
+      causation_claimed: false,
+      operator_review_required: true,
+      required_execution_fields: [
+        "authorization_reference",
+        "remediation_change_reference",
+        "executed_at",
+        "evidence_source_reference",
+        "owning_workflow_scope",
+        "role_scope",
+        "device_browser_context",
+        "observation_protocol_reference"
+      ],
+      required_comparison_context: [
+        "same_measure_definition",
+        "same_owning_workflow_scope",
+        "same_role_scope",
+        "same_device_browser_context",
+        "same_window_or_sample_definition",
+        "before_observed_before_execution",
+        "after_observed_after_execution",
+        "material_confounders_recorded"
+      ],
+      weather_site_classification_required: true,
+      weather_site_restrictions_count_as_staff_mobile_friction: false
+    },
+    rows: normalized
+  };
+}
+
+function normalizeOutcomeEvidenceRow(value, priorityKeys, allowedWeather) {
+  const row = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  const area = token(row.area) || "workflow_review";
+  const pattern = token(row.pattern) || "bounded_repeat";
+  const execution = row.execution && typeof row.execution === "object" && !Array.isArray(row.execution) ? row.execution : {};
+  const before = normalizeObservation(row.before);
+  const after = normalizeObservation(row.after);
+  const executedAt = validIso(row.execution?.executed_at);
+  const executionFields = {
+    authorization_reference: cleanRef(execution.authorization_reference),
+    remediation_change_reference: cleanRef(execution.remediation_change_reference),
+    executed_at: executedAt,
+    evidence_source_reference: cleanRef(execution.evidence_source_reference),
+    owning_workflow_scope: token(execution.owning_workflow_scope),
+    role_scope: token(execution.role_scope),
+    device_browser_context: cleanContext(execution.device_browser_context),
+    observation_protocol_reference: cleanRef(execution.observation_protocol_reference)
+  };
+  const executionAttributable = Boolean(
+    priorityKeys.has(priorityKey(area, pattern)) &&
+    executionFields.authorization_reference &&
+    executionFields.remediation_change_reference &&
+    executionFields.executed_at &&
+    executionFields.evidence_source_reference &&
+    executionFields.owning_workflow_scope &&
+    executionFields.role_scope &&
+    executionFields.device_browser_context &&
+    executionFields.observation_protocol_reference
+  );
+  const materialConfoundersRecorded = Array.isArray(row.material_confounders);
+  const materialConfounders = materialConfoundersRecorded
+    ? row.material_confounders.map((item) => cleanContext(item)).filter(Boolean).slice(0, 8)
+    : [];
+  const sameMeasure = Boolean(before.measure_definition) && before.measure_definition === after.measure_definition;
+  const sameWorkflow = Boolean(before.owning_workflow_scope) &&
+    before.owning_workflow_scope === after.owning_workflow_scope &&
+    before.owning_workflow_scope === executionFields.owning_workflow_scope;
+  const sameRole = Boolean(before.role_scope) &&
+    before.role_scope === after.role_scope &&
+    before.role_scope === executionFields.role_scope;
+  const sameDevice = Boolean(before.device_browser_context) &&
+    before.device_browser_context === after.device_browser_context &&
+    before.device_browser_context === executionFields.device_browser_context;
+  const sameSample = Boolean(before.window_or_sample_definition) &&
+    before.window_or_sample_definition === after.window_or_sample_definition;
+  const temporalOrder = Boolean(executedAt && before.observed_at && after.observed_at) &&
+    Date.parse(before.observed_at) <= Date.parse(executedAt) &&
+    Date.parse(after.observed_at) >= Date.parse(executedAt);
+  const comparable = executionAttributable &&
+    before.value !== null && after.value !== null &&
+    sameMeasure && sameWorkflow && sameRole && sameDevice && sameSample &&
+    temporalOrder && materialConfoundersRecorded && materialConfounders.length === 0;
+
+  const weather = row.weather_site_constraint && typeof row.weather_site_constraint === "object" && !Array.isArray(row.weather_site_constraint)
+    ? row.weather_site_constraint : {};
+  const classification = token(weather.classification);
+  const weatherEvidenceRef = cleanRef(weather.evidence_reference);
+  const explicitlyClassified = allowedWeather.has(classification) &&
+    (classification === "not_applicable" || Boolean(weatherEvidenceRef));
+
+  const delta = before.value !== null && after.value !== null
+    ? Math.round((after.value - before.value) * 10000) / 10000
+    : null;
+
+  return {
+    evidence_id: cleanRef(row.evidence_id) || null,
+    area,
+    pattern,
+    outcome_status: comparable && explicitlyClassified
+      ? "bounded_outcome_evidence_review_ready"
+      : executionAttributable
+        ? "materially_comparable_before_after_required"
+        : "outcome_evidence_unattributable",
+    execution: {
+      ...executionFields,
+      attributable: executionAttributable,
+      staff_identity_exposed: false,
+      customer_identity_exposed: false
+    },
+    comparison: {
+      before,
+      after,
+      same_measure_definition: sameMeasure,
+      same_owning_workflow_scope: sameWorkflow,
+      same_role_scope: sameRole,
+      same_device_browser_context: sameDevice,
+      same_window_or_sample_definition: sameSample,
+      before_observed_before_execution: Boolean(executedAt && before.observed_at) && Date.parse(before.observed_at) <= Date.parse(executedAt),
+      after_observed_after_execution: Boolean(executedAt && after.observed_at) && Date.parse(after.observed_at) >= Date.parse(executedAt),
+      material_confounders_recorded: materialConfoundersRecorded,
+      material_confounders: materialConfounders,
+      materially_like_for_like: comparable,
+      observed_delta: delta,
+      observed_direction: delta === null ? "not_available" : delta > 0 ? "increase" : delta < 0 ? "decrease" : "no_change",
+      effectiveness_claimed: false,
+      causation_claimed: false
+    },
+    weather_site: {
+      classification: allowedWeather.has(classification) ? classification : "not_recorded",
+      evidence_reference: weatherEvidenceRef || null,
+      explicitly_classified: explicitlyClassified,
+      separate_from_staff_mobile_friction: true,
+      counts_as_staff_mobile_friction: false,
+      service_temperature_limit_inferred: false
+    },
+    conclusion: comparable && explicitlyClassified
+      ? "Attributable remediation execution and materially like-for-like before/after observations are present for operator review. The observed change remains descriptive; effectiveness and causation are not auto-claimed."
+      : executionAttributable
+        ? "An attributable remediation execution record is present, but a materially comparable before/after pair with explicit weather/site classification is still required."
+        : "Outcome evidence is not attributable to a separately authorized remediation execution for a retained staff/mobile priority."
+  };
+}
+
+function normalizeObservation(value) {
+  const row = value && typeof value === "object" && !Array.isArray(value) ? value : {};
+  return {
+    observed_at: validIso(row.observed_at),
+    measure_definition: cleanContext(row.measure_definition),
+    value: finiteNumber(row.value),
+    owning_workflow_scope: token(row.owning_workflow_scope),
+    role_scope: token(row.role_scope),
+    device_browser_context: cleanContext(row.device_browser_context),
+    window_or_sample_definition: cleanContext(row.window_or_sample_definition)
+  };
+}
+
+function priorityKey(area, pattern) {
+  const a = token(area), p = token(pattern);
+  return a && p ? a + "|" + p : "";
+}
+function validIso(value) {
+  const text = String(value ?? "").trim();
+  return text && Number.isFinite(Date.parse(text)) ? new Date(text).toISOString() : null;
+}
+function finiteNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+function cleanRef(value) {
+  const text = String(value ?? "").trim();
+  return /^[A-Za-z0-9._:/-]{1,160}$/.test(text) ? text : "";
+}
+function cleanContext(value) {
+  const text = String(value ?? "").trim();
+  return text && text.length <= 180 ? text : "";
 }
 
 function remediationSuggestion(area) {
