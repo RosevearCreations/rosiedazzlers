@@ -427,6 +427,11 @@ jobs:
         run: |
           python scripts/recovery_drill_evidence_refresh_closure_review_check.py
           node scripts/recovery_drill_evidence_refresh_closure_review_test.mjs
+
+      - name: Validate recovery & authenticated device evidence continuity authority
+        run: |
+          python scripts/recovery_authenticated_device_evidence_continuity_check.py
+          node scripts/recovery_authenticated_device_evidence_continuity_test.mjs
           node --check functions/api/_lib/recovery-drill-evidence-refresh-closure-review.js
 
       - name: Validate authenticated cross-device acceptance refresh authority
