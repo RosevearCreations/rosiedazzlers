@@ -1,17 +1,19 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 491 — Maintenance & Fleet Pilot Outcome Evidence**.
+Current source direction: **Build 492 — Booking & Quote Controlled Experiment Execution Evidence**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Maintenance & Fleet Pilot Outcome Evidence authority
-This read-only release defines attributable pilot outcomes only after explicit owner approval and bounded pilot authorization. Participants, duration, capacity checks, invoicing, travel and stop conditions require observed execution evidence; missing evidence stays owner action.
+## Current Booking & Quote Controlled Experiment Execution Evidence authority
+Read-only execution evidence requires a retained measurement lock plus separate execution authorization. Allocation/duration, Southern Ontario weather eligibility, stop conditions and outcome capture must be observed; no winner or success is inferred.
 
-Focused source authority: `python scripts/maintenance_fleet_pilot_outcome_evidence_check.py`
+Focused source authority: `python scripts/booking_quote_controlled_experiment_execution_evidence_check.py`
 
-Behavioral proof: `node scripts/maintenance_fleet_pilot_outcome_evidence_test.mjs`
+Behavioral proof: `node scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs`
 
-Current contract: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+
+Retained maintenance/fleet outcome: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
 
 Retained recovery/device continuity: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` · `scripts/recovery_authenticated_device_evidence_continuity_check.py` · `scripts/recovery_authenticated_device_evidence_continuity_test.mjs`.
 
@@ -27,7 +29,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — current bounded contract.
+3. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — current bounded contract.
+4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` — retained continuity contract.
 4. `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md` — retained continuity contract.
 4. `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` — retained routing contract.
@@ -47,6 +50,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`
 
 - `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`
 

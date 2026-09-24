@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md.
+The synchronized Production predecessor is retained through BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md.
 
-**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is the active bounded release.
+**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.
 
-**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 493 — Staff & Mobile Remediation Outcome Evidence** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner-decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Retained operational-pilot authority: BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md. Retained measurement-lock authority: BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md. Retained framework authority: BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md. Retained readiness authority: BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Maintenance & Fleet Pilot Outcome Evidence contract
+## Current Booking & Quote Controlled Experiment Execution Evidence contract
+- Reuse the retained booking/quote learning workbench and measurement-lock/framework/readiness authorities; do not create a parallel experiment system.
+- A locked measurement contract remains governance only; separate execution authorization must be traceable to the locked revision.
+- Allocation arm/timestamp, bounded duration, Southern Ontario weather eligibility, stop-condition observations and outcome capture must be observed.
+- Weather-ineligible sessions stay outside the conversion denominator and never become conversion failures.
+- Assignment references remain non-identifying; customer/session/quote identity joins remain prohibited.
+- Missing authorization/evidence remains owner action; source/runtime GREEN does not prove execution, success or a winner.
+- No automatic activation/winner, price/discount, booking-rule/availability, booking, outreach, provider/schema/storage/HOLD mutation or polling is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Maintenance & Fleet Pilot Outcome Evidence contract
 - Reuse retained owner-decision, controlled-pilot readiness and operational-pilot authorities; do not create a replacement pilot engine.
 - Attributable outcome review requires explicit owner approval, an approve pilot decision and explicit positive participant/duration bounds.
 - Participant/type, observed duration, availability + checkout revalidation, invoicing, travel and stop-condition evidence must be observed rather than inferred.
@@ -95,6 +105,11 @@ Current contract: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`
+- `.github/workflows/booking-quote-controlled-experiment-execution-evidence-authority.yml`
+- `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`
+- `scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs`
+- `functions/api/_lib/booking-quote-controlled-experiment-execution-evidence.js`
 - `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`
 - `.github/workflows/maintenance-fleet-pilot-outcome-evidence-authority.yml`
 - `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`
