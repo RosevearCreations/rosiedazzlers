@@ -111,6 +111,10 @@ jobs:
           python -m py_compile scripts/local_search_provider_window_attribution_closure_check.py
           node --check scripts/local_search_provider_window_attribution_closure_test.mjs
           python -m py_compile scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py
+          python -m py_compile scripts/provider_local_search_evidence_continuity_check.py
+          node --check functions/api/_lib/provider-local-search-evidence-continuity.js
+          node --check functions/api/admin/provider_local_search_evidence_continuity.js
+          node --check scripts/provider_local_search_evidence_continuity_test.mjs
           node --check scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
           python -m py_compile scripts/booking_funnel_quote_pricing_learning_check.py
           node --check scripts/booking_funnel_quote_pricing_learning_test.mjs
@@ -406,6 +410,8 @@ jobs:
         run: |
           python scripts/local_search_provider_snapshot_continuity_descriptive_review_check.py
           node scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
+          python scripts/provider_local_search_evidence_continuity_check.py
+          node scripts/provider_local_search_evidence_continuity_test.mjs
 
       - name: Validate booking funnel, quote & pricing learning authority
         run: |

@@ -128,8 +128,8 @@ require(queue,[
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
-    "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release.",
-    "**Build 489 — Provider & Local Search Evidence Continuity** is next",
+    "**Build 489 — Provider & Local Search Evidence Continuity** is the active bounded release.",
+    "**Build 490 — Recovery & Authenticated Device Evidence Continuity** is next",
     "it has not run out",
     "rd main protection",
     "Production deployment/runtime/business acceptance",
@@ -139,13 +139,13 @@ require(handoff,[
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",
-    "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release.",
-    "**Build 489 — Provider & Local Search Evidence Continuity** is next",
+    "**Build 489 — Provider & Local Search Evidence Continuity** is the active bounded release.",
+    "**Build 490 — Recovery & Authenticated Device Evidence Continuity** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "Current source direction: **Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing**.",
+    "Current source direction: **Build 489 — Provider & Local Search Evidence Continuity**.",
     "BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md",
     "PRODUCTION_LEARNING_476_484.md",
     "FORWARD_BUILD_ROADMAP_486_495.md",

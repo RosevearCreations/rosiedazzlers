@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md.
+The synchronized Production predecessor is retained through BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md.
 
-**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release.
+**Build 489 — Provider & Local Search Evidence Continuity** is the active bounded release.
 
-**Build 489 — Provider & Local Search Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 490 — Recovery & Authenticated Device Evidence Continuity** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Retained eligibility authority: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained local-search continuity authority: BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md. Retained provider traceability authority: BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Controlled-Environment Alternatives & Weather-Safe Routing contract
+## Current Provider & Local Search Evidence Continuity contract
+- Reuse retained provider-outcome/HOLD and local-search snapshot authorities; do not create replacement payment, message, Search Console or GBP systems.
+- Payment/refund/message outcomes and Search Console/GBP remain separate provider-owned populations.
+- Local-search continuity requires matching property/location identity and equal-length distinct dated windows; metric deltas remain descriptive only.
+- First-party referrals remain separate context and are not joined to provider metrics, customer identity or persisted bookings.
+- Seasonal messaging/search/referral movement does not prove ranking, weather causation, winter demand, service availability or booking-conversion causation.
+- No provider write/contact, payment/refund/message mutation, booking/quote mutation, outreach, content publication, schema/storage mutation or permanent polling is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Controlled-Environment Alternatives & Weather-Safe Routing contract
 - Reuse the retained cold-weather capability matrix, winter eligibility authority and protected Service Economics workbench.
 - Controlled-environment or indoor-capable alternatives require explicit attributable source evidence for that specific option.
 - Temperature-limited outdoor work without an evidenced alternative stays in manual safe-reschedule review; no appointment is changed automatically.
@@ -67,6 +76,12 @@ Current contract: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUT
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`
+- `.github/workflows/provider-local-search-evidence-continuity-authority.yml`
+- `scripts/provider_local_search_evidence_continuity_check.py`
+- `scripts/provider_local_search_evidence_continuity_test.mjs`
+- `functions/api/_lib/provider-local-search-evidence-continuity.js`
+- `functions/api/admin/provider_local_search_evidence_continuity.js`
 - `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`
 - `.github/workflows/controlled-environment-weather-safe-routing-authority.yml`
 - `scripts/controlled_environment_weather_safe_routing_check.py`
