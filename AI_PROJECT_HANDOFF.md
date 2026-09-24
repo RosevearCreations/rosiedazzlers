@@ -3,13 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md.
+The synchronized Production predecessor is retained through BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md.
 
-**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.
+**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.
 
-**Build 493 — Staff & Mobile Remediation Outcome Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md. Retained measurement-lock authority: BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md. Retained framework authority: BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md. Retained readiness authority: BUILD461_BOOKING_QUOTE_EXPERIMENT_READINESS.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md. Retained readiness authority: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md. Retained verification authority: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md. Retained priority authority: BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md. Retained learning authority: BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+
+## Current Staff & Mobile Remediation Outcome Evidence contract
+- Reuse the retained protected staff/mobile/support learning workbench; do not create a parallel remediation or telemetry system.
+- Require separately authorized remediation execution evidence mapped to a retained priority before any outcome review.
+- Require materially like-for-like before/after observations with the same measure, workflow, role, representative device/browser context and comparable window/sample definition.
+- Record material confounders explicitly; a material confounder blocks materially like-for-like status.
+- Keep Southern Ontario weather/site classification separate from staff/mobile friction and infer no temperature threshold.
+- Keep outcome review descriptive: no automatic effectiveness, causation, root-cause, staff-fault, device-friction or business-impact claim.
+- Keep staff/customer identity and raw booking/support identifiers excluded.
+- No automatic remediation, persistence, outreach, provider/business/schema/HOLD mutation, telemetry or polling.
+- Source/runtime GREEN never manufactures remediation execution or outcome evidence.
 
 ## Current Booking & Quote Controlled Experiment Execution Evidence contract
 - Reuse the retained booking/quote learning workbench and measurement-lock/framework/readiness authorities; do not create a parallel experiment system.
@@ -105,6 +116,10 @@ Current contract: BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENC
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
+- `.github/workflows/staff-mobile-remediation-outcome-evidence-authority.yml`
+- `scripts/staff_mobile_remediation_outcome_evidence_check.py`
+- `scripts/staff_mobile_remediation_outcome_evidence_test.mjs`
 - `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`
 - `.github/workflows/booking-quote-controlled-experiment-execution-evidence-authority.yml`
 - `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`
