@@ -21,7 +21,7 @@ async function refresh450() {
   }
   setStatus450("Reconciling provider, landing/referral and same-session booking-funnel evidence…", "soft");
   try {
-    const response = await fetch("/api/admin/provider_local_search_evidence_continuity", {
+    const response = await fetch("/api/admin/local_search_measurement_conversion_attribution", {
       method: "GET",
       credentials: "include",
       cache: "no-store",
@@ -36,7 +36,18 @@ async function refresh450() {
     renderEvidenceQuality460(data);
     renderProviderWindowClosure470(data);
     renderProviderSnapshotContinuity480(data);
-    renderProviderLocalSearchContinuity489(data);
+    try {
+      const continuityResponse = await fetch("/api/admin/provider_local_search_evidence_continuity", {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      });
+      const continuityData = await continuityResponse.json().catch(() => null);
+      renderProviderLocalSearchContinuity489(continuityResponse.ok && continuityData ? continuityData : {});
+    } catch {
+      renderProviderLocalSearchContinuity489({});
+    }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
     const closureState = String(data?.provider_window_attribution_closure?.status || "unavailable").replaceAll("_", " ");
