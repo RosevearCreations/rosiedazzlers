@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md.
+The synchronized Production predecessor is retained through BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md.
 
-**Build 487 — Winter Booking Eligibility & Customer Transparency** is the active bounded release.
+**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release.
 
-**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is next only after the current release is independently GREEN on protected main.
+**Build 489 — Provider & Local Search Evidence Continuity** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Retained eligibility authority: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained capability authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Winter Booking Eligibility & Customer Transparency contract
+## Current Controlled-Environment Alternatives & Weather-Safe Routing contract
+- Reuse the retained cold-weather capability matrix, winter eligibility authority and protected Service Economics workbench.
+- Controlled-environment or indoor-capable alternatives require explicit attributable source evidence for that specific option.
+- Temperature-limited outdoor work without an evidenced alternative stays in manual safe-reschedule review; no appointment is changed automatically.
+- Controlled-environment-required work without a specific evidenced site/workflow stays in site/owner confirmation.
+- Not every service can move indoors; current weather or application availability never creates indoor capability.
+- Prepared customer guidance remains draft, exact temperature limits stay source-owned, and broad winter availability remains on HOLD.
+- No automatic routing, rescheduling, booking/quote, customer-message, public claim, pricing, provider, schema/storage, outreach or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Winter Booking Eligibility & Customer Transparency contract
 - Reuse the retained cold-weather capability matrix and protected Service Economics workbench.
 - Prepare booking/quote eligibility guidance without automatically changing availability.
 - Prepared customer limitation wording remains draft and requires owner review before publication or use.
@@ -57,6 +67,11 @@ Current contract: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. 
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`
+- `.github/workflows/controlled-environment-weather-safe-routing-authority.yml`
+- `scripts/controlled_environment_weather_safe_routing_check.py`
+- `scripts/controlled_environment_weather_safe_routing_test.mjs`
+- `functions/api/_lib/controlled-environment-weather-safe-routing.js`
 - `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`
 - `.github/workflows/winter-booking-eligibility-customer-transparency-authority.yml`
 - `scripts/winter_booking_eligibility_customer_transparency_check.py`
