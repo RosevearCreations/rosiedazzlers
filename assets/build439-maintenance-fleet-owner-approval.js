@@ -1,4 +1,4 @@
-// Build 439/449/459/469/479 — manual read-only owner-decision, controlled-pilot readiness + explicit pilot decision UI.
+// Build 439/449/459/469/479/491 — manual read-only owner-decision, controlled-pilot readiness, pilot decision + outcome evidence UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -6,10 +6,13 @@ function init(){$("refreshOwnerApproval")?.addEventListener("click",refresh);set
 async function refresh(){
  const button=$("refreshOwnerApproval"); if(button)button.disabled=true; setStatus("Loading bounded maintenance/fleet evidence…","soft");
  try{
-  const response=await fetch("/api/admin/maintenance_fleet_owner_approval",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
-  const data=await response.json().catch(()=>null);
+  const [response,outcomeResponse]=await Promise.all([
+   fetch("/api/admin/maintenance_fleet_owner_approval",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}}),
+   fetch("/api/admin/maintenance_fleet_pilot_outcome_evidence",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}})
+  ]);
+  const [data,outcomeData]=await Promise.all([response.json().catch(()=>null),outcomeResponse.json().catch(()=>null)]);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
@@ -58,6 +61,15 @@ function renderPilotDecision(d){
  <p class="mini"><strong>Booking safeguards:</strong> <code>${esc(safe.availability_authority||"/api/availability")}</code> then <code>${esc(safe.collision_revalidation_authority||"/api/checkout")}</code>.</p>
  <p class="mini">${esc(d.next_step||"Explicit owner approval and pilot bounds remain required.")}</p>
  <p class="oa-boundary">This is a decision record, not pilot execution. It cannot auto-enroll customers, activate a fleet account or recurring commitment, send outreach, override price/discount/invoice terms, or reserve capacity.</p></div>`;
+}
+function renderPilotOutcome(o){
+ const mount=$("pilotOutcomeEvidence"); if(!mount)return;
+ const a=o.authorization||{},p=o.participants||{},d=o.duration||{},c=o.capacity||{},i=o.invoicing||{},t=o.travel||{},s=o.stop_conditions||{};
+ mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Pilot outcome evidence</h3><span class="oa-pill">${esc(o.status||"owner_action_authorization_required")}</span></div>
+ <p><strong>Authorization:</strong> ${a.attributable_outcome_capture_allowed===true?"recorded":"not recorded"} · <strong>execution source:</strong> ${o.execution_source?.available===true?"available":"not recorded"}</p>
+ <p class="mini"><strong>Participants:</strong> ${esc(p.observed_count??0)} / ${esc(p.participant_limit??"no bound")} · <strong>duration:</strong> ${esc(d.observed_duration_days??"not observed")} / ${esc(d.authorized_duration_days??"no bound")} days</p>
+ <p class="mini"><strong>Capacity evidence:</strong> availability ${esc(c.availability_revalidation_observed_count??0)} · checkout ${esc(c.checkout_revalidation_observed_count??0)} · <strong>invoicing:</strong> ${esc(i.observed_count??0)} · <strong>travel:</strong> ${esc(t.observed_count??0)} · <strong>stop conditions:</strong> ${esc(s.observed_count??0)}</p>
+ <p class="oa-boundary">No participant, duration, capacity, invoicing, travel or stop-condition outcome is inferred. Missing execution evidence remains owner action; this view cannot activate customers, create bookings or invoices, reserve capacity, change pricing, contact providers or enable recurring billing.</p></div>`;
 }
 function renderCapacity(c){
  const mount=$("capacityDecision"); if(!mount)return;
