@@ -206,6 +206,11 @@ jobs:
           node --check scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
           python -m py_compile scripts/staff_mobile_remediation_outcome_evidence_check.py
           node --check scripts/staff_mobile_remediation_outcome_evidence_test.mjs
+          python -m py_compile scripts/service_economics_seasonal_operations_reliability_review_check.py
+          node --check scripts/service_economics_seasonal_operations_reliability_review_test.mjs
+          node --check functions/api/_lib/service-economics-seasonal-operations-reliability-review.js
+          node --check functions/api/admin/service_economics_seasonal_operations_reliability_review.js
+          node --check assets/build494-service-economics-seasonal-operations-reliability-review.js
           node --check functions/api/_lib/booking-funnel-quote-pricing-learning.js
           node --check functions/api/admin/booking_funnel_quote_pricing_learning.js
           node --check assets/build451-booking-funnel-quote-pricing-learning.js
@@ -570,6 +575,11 @@ jobs:
           node scripts/winter_booking_eligibility_customer_transparency_test.mjs
           python scripts/controlled_environment_weather_safe_routing_check.py
           node scripts/controlled_environment_weather_safe_routing_test.mjs
+
+      - name: Validate service economics, seasonal operations & reliability review authority
+        run: |
+          python scripts/service_economics_seasonal_operations_reliability_review_check.py
+          node scripts/service_economics_seasonal_operations_reliability_review_test.mjs
 
       - name: Validate reliability, cost & resilience operational guardrails authority
         run: |
