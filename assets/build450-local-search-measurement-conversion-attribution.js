@@ -36,6 +36,18 @@ async function refresh450() {
     renderEvidenceQuality460(data);
     renderProviderWindowClosure470(data);
     renderProviderSnapshotContinuity480(data);
+    try {
+      const continuityResponse = await fetch("/api/admin/provider_local_search_evidence_continuity", {
+        method: "GET",
+        credentials: "include",
+        cache: "no-store",
+        headers: { Accept: "application/json" }
+      });
+      const continuityData = await continuityResponse.json().catch(() => null);
+      renderProviderLocalSearchContinuity489(continuityResponse.ok && continuityData ? continuityData : {});
+    } catch {
+      renderProviderLocalSearchContinuity489({});
+    }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
     const closureState = String(data?.provider_window_attribution_closure?.status || "unavailable").replaceAll("_", " ");
@@ -176,6 +188,28 @@ function renderProviderSnapshotContinuity480(data) {
     + '<div class="muted">' + esc450(seasonal.requirement || "Search/funnel changes do not prove weather effects or winter service availability. Exact temperature limits require explicit service/product/equipment constraints.") + '</div></div>'
     + '<span>no inference</span></div>';
   host.innerHTML = summary + (providerRows || '<div class="summary-item muted">No provider continuity rows are available.</div>') + seasonalBoundary;
+}
+
+function renderProviderLocalSearchContinuity489(data) {
+  const host = byId450("localProviderContinuity489");
+  if (!host) return;
+  const continuity = data?.provider_local_search_evidence_continuity || {};
+  const provider = continuity.provider_outcomes_and_communications || {};
+  const local = continuity.local_search || {};
+  const rules = continuity.continuity_rules || {};
+  const truth = continuity.truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 489 continuity state</strong>'
+    + '<div class="muted">Separate provider populations remain source-owned. Payment/refund/message evidence is not joined to Search Console/GBP or referral evidence.</div></div>'
+    + '<span>' + esc450(continuity.status || "continuity_review_incomplete") + '</span></div>';
+  const rows = [
+    ["Provider outcomes & communications", provider.status || "unavailable", "current " + String(provider.current_count ?? 0) + " / " + String(provider.required_count ?? 0)],
+    ["Local-search provider continuity", local.status || "unavailable", "descriptive-ready " + String(local.descriptive_review_ready_count ?? 0) + " / " + String(local.total_provider_rows ?? 0)],
+    ["Separate provider populations", rules.cross_family_identity_join_performed === false ? "YES" : "NO", "no payment/search provider join"],
+    ["Weather / seasonal causation", truth.search_or_referral_movement_is_weather_causation === false ? "NOT INFERRED" : "UNKNOWN", "search/referral movement never proves weather effects"]
+  ];
+  host.innerHTML = summary + rows.map((row) =>
+    '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
+  ).join("");
 }
 
 function renderProvider450(data) {
