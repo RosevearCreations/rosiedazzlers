@@ -1,4 +1,4 @@
-// Build 482 — manual execution-evidence readiness over retained Build 472 staff/mobile verification.
+// Build 493 — manual remediation outcome evidence over retained Build 482 readiness.
 (function attachBuild452Learning(globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -21,18 +21,20 @@
       if (!response.ok || !data) throw new Error(data?.error || "Efficiency learning evidence could not be loaded.");
       renderSummary(data);
       renderMobile(data.mobile_field_workflow || {});
+      renderOutcomeEvidence(data.remediation_outcome_evidence_summary || {}, data.remediation_outcome_evidence || []);
       renderExecutionEvidenceReadiness(data.remediation_execution_evidence_readiness_summary || {}, data.remediation_execution_evidence_readiness || []);
       renderVerification(data.remediation_verification_summary || {}, data.remediation_verification || []);
       renderRemediation(data.remediation_priorities || []);
       renderCandidates(data.learning_candidates || []);
       renderSources(data.source_status || {});
       setStatus(
-        "Snapshot refreshed. Evidence status: " + String(data.evidence_status || "unknown").toUpperCase() + ". Execution evidence readiness remains fail-closed until a separately authorized remediation record and materially comparable before/after evidence exist.",
+        "Snapshot refreshed. Evidence status: " + String(data.evidence_status || "unknown").toUpperCase() + ". Build 493 remains fail-closed until an approved outcome source contains attributable remediation execution and materially like-for-like before/after observations.",
         data.evidence_status === "observed" ? "ok" : "warn"
       );
     } catch (error) {
       $("summaryGrid").innerHTML = '<div class="learning-empty">No bounded learning snapshot is available.</div>';
       $("mobileGrid").innerHTML = '<div class="learning-empty">No Detailer workspace cohort evidence is available.</div>';
+      if ($("remediationOutcomeEvidenceList")) $("remediationOutcomeEvidenceList").innerHTML = '<div class="learning-empty">No staff/mobile remediation outcome evidence is available.</div>';
       if ($("remediationExecutionReadinessList")) $("remediationExecutionReadinessList").innerHTML = '<div class="learning-empty">No remediation execution-evidence readiness is available.</div>';
       $("remediationVerificationList").innerHTML = '<div class="learning-empty">No remediation verification evidence is available.</div>';
       $("remediationPriorityList").innerHTML = '<div class="learning-empty">No bounded remediation priority is available.</div>';
@@ -55,7 +57,8 @@
       ["Pending detailer responses", mobile.response_counts?.pending ?? 0, "Not proof of refusal or missed notification"],
       ["Review candidates", (data.learning_candidates || []).length, "Root cause / delay proven: NO"],
       ["Verified remediation outcomes", data.remediation_verification_summary?.remediation_outcome_verified_count ?? 0, "No outcome inferred from priority or timing"],
-      ["Execution records present", data.remediation_execution_evidence_readiness_summary?.attributable_execution_records_present ?? 0, "Separately authorized evidence only"]
+      ["Execution records present", data.remediation_outcome_evidence_summary?.attributable_execution_records_present ?? 0, "Separately authorized evidence only"],
+      ["Comparable outcome pairs", data.remediation_outcome_evidence_summary?.materially_comparable_before_after_pairs_present ?? 0, "Like-for-like role/device/workflow context required"]
     ];
     $("summaryGrid").innerHTML = cards.map((row) =>
       '<article class="learning-stat"><span class="mini">' + esc(row[0]) + '</span><strong>' + esc(row[1]) + '</strong><span class="mini">' + esc(row[2]) + '</span></article>'
@@ -84,6 +87,38 @@
     return '<article class="learning-stat"><span class="mini">' + esc(name) + '</span><strong>' + esc(value) + '</strong><span class="mini">aggregate only</span></article>';
   }
 
+
+
+  function renderOutcomeEvidence(summary, rows) {
+    const mount = $("remediationOutcomeEvidenceList");
+    if (!mount) return;
+    const head =
+      '<div class="learning-source"><strong>Build 493 outcome evidence</strong><span class="pill">' + esc(label(summary?.state || "unavailable")) + '</span><span class="mini">' +
+      esc(summary?.attributable_execution_records_present ?? 0) + ' attributable execution record(s) · ' +
+      esc(summary?.materially_comparable_before_after_pairs_present ?? 0) + ' materially comparable pair(s)</span></div>' +
+      '<div class="learning-source"><strong>Truth boundary</strong><span class="mini">Effectiveness claimed: NO · Causation claimed: NO · Weather/site restrictions count as staff/mobile friction: NO</span></div>';
+    if (!rows.length) {
+      mount.innerHTML = head + '<div class="learning-empty">No approved remediation outcome-evidence source is recorded in this runtime. Source/runtime GREEN does not prove a remediation occurred or worked.</div>';
+      return;
+    }
+    mount.innerHTML = head + rows.map((row) => {
+      const comparison = row.comparison || {};
+      const weather = row.weather_site || {};
+      return '<article class="learning-candidate priority-normal">' +
+        '<div class="learning-candidate-head"><strong>' + esc(label(row.area)) + ' · ' + esc(label(row.pattern)) + '</strong><span class="pill">' + esc(label(row.outcome_status || "unavailable")) + '</span></div>' +
+        '<p>' + esc(row.conclusion || "") + '</p>' +
+        '<p class="mini"><strong>Execution attributable:</strong> ' + (row.execution?.attributable ? "YES" : "NO") +
+        ' · <strong>Like-for-like:</strong> ' + (comparison.materially_like_for_like ? "YES" : "NO") +
+        ' · <strong>Observed direction:</strong> ' + esc(label(comparison.observed_direction || "not_available")) + '</p>' +
+        '<p class="mini"><strong>Role:</strong> ' + esc(row.execution?.role_scope || "not recorded") +
+        ' · <strong>Device/browser:</strong> ' + esc(row.execution?.device_browser_context || "not recorded") +
+        ' · <strong>Workflow:</strong> ' + esc(row.execution?.owning_workflow_scope || "not recorded") + '</p>' +
+        '<p class="mini"><strong>Weather/site classification:</strong> ' + esc(label(weather.classification || "not_recorded")) +
+        ' · separate from staff/mobile friction: YES · service temperature inferred: NO</p>' +
+        '<p class="mini">Effectiveness claimed: NO · Causation claimed: NO · Staff/customer identity exposed: NO</p>' +
+      '</article>';
+    }).join("");
+  }
 
   function renderExecutionEvidenceReadiness(summary, rows) {
     const mount = $("remediationExecutionReadinessList");
@@ -196,7 +231,7 @@
       pageKey: "admin-staff-workflow-support-learning",
       onReady: async () => {
         $("refreshEfficiencyLearning452")?.addEventListener("click", refresh);
-        setStatus("Select Refresh execution-readiness snapshot to load current bounded evidence. No background monitoring is running.", "soft");
+        setStatus("Select Refresh outcome-evidence snapshot to load current bounded evidence. No background monitoring is running.", "soft");
       }
     });
   }, { once: true });

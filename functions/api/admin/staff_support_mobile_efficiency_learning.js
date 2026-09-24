@@ -1,4 +1,4 @@
-// Build 452 — read-only Staff Workflow, Support & Mobile Efficiency Learning endpoint.
+// Build 493 — read-only Staff & Mobile Remediation Outcome Evidence over the retained learning endpoint.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { requireActionAccess } from "../_lib/action-permissions.js";
 import { onRequestGet as getTodayNeedsAttention } from "./today_needs_attention_report.js";
@@ -41,6 +41,8 @@ export async function onRequestGet({ request, env }) {
     support: support.data || {},
     detailer: detailer.data || {},
     source_status: sourceStatusMap({ today, support, detailer }),
+    remediation_outcome_evidence: [],
+    remediation_outcome_source_available: false,
     generated_at: new Date().toISOString()
   });
 

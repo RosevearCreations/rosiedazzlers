@@ -70,17 +70,17 @@ require(roadmap,[
  "### Build 492 — Booking & Quote Controlled Experiment Execution Evidence"
 ],"roadmap")
 require(queue,[
- "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.",
- "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is next",
+ "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.",
+ "**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is next",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md","it has not run out"
 ],"Build 491 queue")
 require(handoff,[
- "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.",
+ "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md",
  "maintenance_fleet_pilot_outcome_evidence_check.py"
 ],"Build 491 handoff")
 require(readme,[
- "Current source direction: **Build 492 — Booking & Quote Controlled Experiment Execution Evidence**.",
+ "Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evidence**.",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md",
  "maintenance_fleet_pilot_outcome_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."
