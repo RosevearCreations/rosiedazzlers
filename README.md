@@ -5,15 +5,15 @@ Current source direction: **Build 489 — Provider & Local Search Evidence Conti
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Current Provider & Local Search Evidence Continuity authority
-This release composes retained payment/refund/message provider evidence with retained Search Console/Google Business Profile continuity while keeping those populations separate. Local-search snapshots remain comparable only for matching property/location identities and equal-length distinct dated windows; provider outcomes remain source-owned and dated.
+This read-only release keeps payment/refund/message provider evidence separate from Search Console/Google Business Profile continuity. Search provider snapshots require matching property/location identity and equal-length distinct windows; metric deltas and referrals remain descriptive only.
 
-Seasonal messaging, provider metric movement and referral movement do not prove ranking, weather causation, winter demand, service availability or booking-conversion causation.
+Search/referral movement does not prove ranking, weather effects, winter availability or booking causation.
 
 Focused source authority: `python scripts/provider_local_search_evidence_continuity_check.py`
 
 Behavioral proof: `node scripts/provider_local_search_evidence_continuity_test.mjs`
 
-Current contract: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`. Retained local-search continuity: `BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md`. Retained provider traceability: `BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
 
 ## Retained release pointers
 Retained weather-safe routing: `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` · `scripts/controlled_environment_weather_safe_routing_check.py` · `scripts/controlled_environment_weather_safe_routing_test.mjs`.
