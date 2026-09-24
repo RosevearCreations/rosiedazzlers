@@ -2,12 +2,12 @@
 
 Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evidence**.
 
-Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
+Rosie Dazzlers is a static-first site with role-gated apps.
 
 ## Current Staff & Mobile Remediation Outcome Evidence authority
-Outcome review requires attributable authorized remediation execution plus materially like-for-like before/after evidence, with role/workflow/device context and weather/site restrictions kept separate from staff/mobile friction.
-
 Authority: `scripts/staff_mobile_remediation_outcome_evidence_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_test.mjs` · `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+
+Retained booking/quote authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
 
 Retained maintenance/fleet outcome: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
 
