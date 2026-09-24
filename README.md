@@ -17,6 +17,8 @@ Current contract: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md
 
 Retained provider/local-search authority: `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_test.mjs`.
 
+Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
+
 Retained cycle checks: `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/winter_booking_eligibility_customer_transparency_check.py` · `scripts/controlled_environment_weather_safe_routing_check.py`.
 
 ## Retained staff/mobile readiness
