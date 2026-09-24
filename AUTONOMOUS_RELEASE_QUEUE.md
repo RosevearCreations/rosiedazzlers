@@ -127,7 +127,7 @@ Scope:
 - keep participant identity private and selection manual; and
 - perform no customer activation, maintenance enrollment, fleet-account activation, booking mutation, capacity reservation, automatic invoicing, price/discount change, recurring billing, outreach, provider/accounting/inventory/schema/storage/HOLD mutation or permanent polling.
 
-Current contract: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner-decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Retained operational-pilot authority: BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md.
+Current contract: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner-decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Retained operational-pilot authority: BUILD421_RETENTION_MAINTENANCE_FLEET_OPERATIONAL_PILOT.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
 The exact candidate must pass the focused outcome authority, retained maintenance/fleet authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
