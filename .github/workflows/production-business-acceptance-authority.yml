@@ -456,6 +456,9 @@ jobs:
         run: |
           python scripts/staff_mobile_remediation_execution_evidence_readiness_check.py
           node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
+
+      - name: Validate staff & mobile remediation outcome evidence authority
+        run: |
           python scripts/staff_mobile_remediation_outcome_evidence_check.py
           node scripts/staff_mobile_remediation_outcome_evidence_test.mjs
 
