@@ -116,20 +116,20 @@ require(roadmap, [
 ], "Build 482 roadmap")
 require(queue, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release.",
-    "**Build 489 — Provider & Local Search Evidence Continuity** is next",
+    "**Build 489 — Provider & Local Search Evidence Continuity** is the active bounded release.",
+    "**Build 490 — Recovery & Authenticated Device Evidence Continuity** is next",
     "it has not run out"
 ], "retained Build 482 queue")
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing** is the active bounded release."
+    "**Build 489 — Provider & Local Search Evidence Continuity** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
-    "Current source direction: **Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing**.",
+    "Current source direction: **Build 489 — Provider & Local Search Evidence Continuity**.",
     "Production is not considered GREEN from source promotion alone."
 ], "retained Build 482 README")
 require(blockers, [
