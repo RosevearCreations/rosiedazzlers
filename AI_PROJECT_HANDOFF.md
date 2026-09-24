@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md.
+The synchronized Production predecessor is retained through BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md.
 
-**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.
+**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is the active bounded release.
 
-**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is next only after the current release is independently GREEN on protected main.
+**Build 495 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md. Retained readiness authority: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md. Retained verification authority: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md. Retained priority authority: BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md. Retained learning authority: BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md. Retained allocation authority: BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md. Retained seasonal authority: BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md and BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Retained reliability authority: BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Staff & Mobile Remediation Outcome Evidence contract
+## Current Service Economics, Seasonal Operations & Reliability Review contract
+- Reuse the retained protected Service Economics and I.T. Reliability authorities; do not create a parallel ledger, weather engine, capacity model, provider telemetry source or recovery system.
+- Reconcile explicit service/add-on allocation, Southern Ontario cold-weather capability, observed operational capacity and reliability continuity only within their owning evidence rules.
+- Keep exact temperature thresholds source-owned. Seasonal restrictions are not application reliability failures and capability evidence does not establish broad winter availability.
+- Inquiry demand, historical work, revenue and seasonal classification do not prove live capacity; availability and checkout collision revalidation remain authoritative.
+- First-party technical activity does not prove provider billing/CPU/quota, and source/runtime GREEN does not prove recovery success.
+- Missing evidence in one domain cannot be closed with unrelated evidence from another domain.
+- Keep review aggregate/read-only with no automatic allocation, pricing, booking, public winter claim, scaling, provider, restore, accounting/inventory, schema/storage or polling mutation.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Staff & Mobile Remediation Outcome Evidence contract
 - Reuse the retained protected staff/mobile/support learning workbench; do not create a parallel remediation or telemetry system.
 - Require separately authorized remediation execution evidence mapped to a retained priority before any outcome review.
 - Require materially like-for-like before/after observations with the same measure, workflow, role, representative device/browser context and comparable window/sample definition.
@@ -116,6 +126,10 @@ Current contract: BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md. Retaine
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
+- `.github/workflows/service-economics-seasonal-operations-reliability-review-authority.yml`
+- `scripts/service_economics_seasonal_operations_reliability_review_check.py`
+- `scripts/service_economics_seasonal_operations_reliability_review_test.mjs`
 - `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
 - `.github/workflows/staff-mobile-remediation-outcome-evidence-authority.yml`
 - `scripts/staff_mobile_remediation_outcome_evidence_check.py`
