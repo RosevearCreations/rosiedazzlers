@@ -60,18 +60,18 @@ require(doc,[
  "Build 485 — Production Learning & Roadmap Renewal"
 ],"Build 484 contract")
 require(queue,[
- "**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is the active bounded release.",
- "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is next",
+ "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.",
+ "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is next",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "it has not run out"
 ],"Build 484 queue")
 require(handoff,[
- "**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is the active bounded release.",
+ "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py"
 ],"Build 484 handoff")
 require(readme,[
- "Current source direction: **Build 491 — Maintenance & Fleet Pilot Outcome Evidence**.",
+ "Current source direction: **Build 492 — Booking & Quote Controlled Experiment Execution Evidence**.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py",
  "Production is not considered GREEN from source promotion alone."
