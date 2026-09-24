@@ -5,15 +5,9 @@ Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evi
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
 ## Current Staff & Mobile Remediation Outcome Evidence authority
-Read-only outcome review requires an attributable separately authorized remediation execution plus materially like-for-like before/after observations. Role, workflow and representative device/browser context stay explicit; Southern Ontario weather/site restrictions remain separate from staff/mobile friction. No effectiveness or causation claim is automatic.
+Outcome review requires attributable authorized remediation execution plus materially like-for-like before/after evidence, with role/workflow/device context and weather/site restrictions kept separate from staff/mobile friction.
 
-Focused source authority: `python scripts/staff_mobile_remediation_outcome_evidence_check.py`
-
-Behavioral proof: `node scripts/staff_mobile_remediation_outcome_evidence_test.mjs`
-
-Current contract: `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
-
-Retained booking/quote execution evidence: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py` · `scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs`.
+Authority: `scripts/staff_mobile_remediation_outcome_evidence_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_test.mjs` · `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
 
 Retained maintenance/fleet outcome: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
 
