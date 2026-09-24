@@ -102,7 +102,7 @@ roadmap_titles=[
 for title in roadmap_titles:
     require(roadmap,[title],"renewed roadmap")
 require(roadmap,[
-    "Southern Ontario","weather-ineligible sessions",
+    "Southern Ontario","Weather-ineligible sessions",
     "Missing evidence remains a truthful HOLD",
     "protected `main` PR governance"
 ],"renewed roadmap boundary")
