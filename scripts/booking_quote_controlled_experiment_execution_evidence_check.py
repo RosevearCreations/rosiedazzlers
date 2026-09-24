@@ -82,19 +82,19 @@ require(roadmap,[
  "### Build 493 — Staff & Mobile Remediation Outcome Evidence"
 ],"roadmap")
 require(queue,[
- "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.",
- "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is next",
+ "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.",
+ "**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is next",
  "BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md",
  "STARTUP_GO_LIVE_BLOCKERS.md",
  "it has not run out"
 ],"Build 492 queue")
 require(handoff,[
- "**Build 492 — Booking & Quote Controlled Experiment Execution Evidence** is the active bounded release.",
+ "**Build 493 — Staff & Mobile Remediation Outcome Evidence** is the active bounded release.",
  "BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md",
  "booking_quote_controlled_experiment_execution_evidence_check.py"
 ],"Build 492 handoff")
 require(readme,[
- "Current source direction: **Build 492 — Booking & Quote Controlled Experiment Execution Evidence**.",
+ "Current source direction: **Build 493 — Staff & Mobile Remediation Outcome Evidence**.",
  "BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md",
  "booking_quote_controlled_experiment_execution_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."
