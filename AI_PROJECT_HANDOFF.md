@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md.
+The synchronized Production predecessor is retained through BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md.
 
-**Build 489 — Provider & Local Search Evidence Continuity** is the active bounded release.
+**Build 490 — Recovery & Authenticated Device Evidence Continuity** is the active bounded release.
 
-**Build 490 — Recovery & Authenticated Device Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained local-search continuity authority: BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md. Retained provider traceability authority: BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md. Retained recovery authority: BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md. Retained device authority: BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Provider & Local Search Evidence Continuity contract
+## Current Recovery & Authenticated Device Evidence Continuity contract
+- Reuse retained recovery refresh/closure and authenticated-device observation/triage authorities; do not create replacement recovery, screenshot, browser-farm or evidence systems.
+- Recovery and authenticated-device evidence remain separate owner-observed populations.
+- Recovery refresh/drill planning stays bounded to non-Production targets and never performs a Production restore.
+- Current negative authenticated observations override retained historical acceptance; historical passes never erase current negative evidence.
+- Customer, Detailer, Operations and Admin plus representative phone/tablet/desktop and browser coverage remain explicit.
+- Missing, stale, unavailable or current-negative evidence remains an explicit HOLD; source/runtime GREEN never manufactures recovery or real-device proof.
+- No restore/rollback/drill execution, browser-farm/screenshot execution, automated remediation, role/customer/provider/business mutation, schema/storage mutation, HOLD mutation or polling is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Provider & Local Search Evidence Continuity contract
 - Reuse retained provider-outcome/HOLD and local-search snapshot authorities; do not create replacement payment, message, Search Console or GBP systems.
 - Payment/refund/message outcomes and Search Console/GBP remain separate provider-owned populations.
 - Local-search continuity requires matching property/location identity and equal-length distinct dated windows; metric deltas remain descriptive only.
@@ -76,6 +86,12 @@ Current contract: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retaine
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`
+- `.github/workflows/recovery-authenticated-device-evidence-continuity-authority.yml`
+- `scripts/recovery_authenticated_device_evidence_continuity_check.py`
+- `scripts/recovery_authenticated_device_evidence_continuity_test.mjs`
+- `functions/api/_lib/recovery-authenticated-device-evidence-continuity.js`
+- `functions/api/admin/recovery_authenticated_device_evidence_continuity.js`
 - `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`
 - `.github/workflows/provider-local-search-evidence-continuity-authority.yml`
 - `scripts/provider_local_search_evidence_continuity_check.py`

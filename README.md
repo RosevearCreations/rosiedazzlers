@@ -1,30 +1,25 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 489 — Provider & Local Search Evidence Continuity**.
+Current source direction: **Build 490 — Recovery & Authenticated Device Evidence Continuity**.
 
 Rosie Dazzlers is one platform with a static-first public website and independently authorized Customer, Detailer, Operations, Administration, I.T., Finance, DAIP and Socials & Promotion modules.
 
-## Current Provider & Local Search Evidence Continuity authority
-This read-only release keeps payment/refund/message provider evidence separate from Search Console/Google Business Profile continuity. Search provider snapshots require matching property/location identity and equal-length distinct windows; metric deltas and referrals remain descriptive only.
+## Current Recovery & Authenticated Device Evidence Continuity authority
+This read-only release composes retained recovery refresh/closure evidence with retained authenticated-device observation/triage evidence without joining the two evidence populations.
 
-Search/referral movement does not prove ranking, weather effects, winter availability or booking causation.
+Recovery drill planning remains bounded to non-Production targets. Current negative authenticated observations override historical acceptance, and current Customer/Detailer/Operations/Admin plus representative device/browser coverage remains explicit.
 
-Focused source authority: `python scripts/provider_local_search_evidence_continuity_check.py`
+Focused source authority: `python scripts/recovery_authenticated_device_evidence_continuity_check.py`
 
-Behavioral proof: `node scripts/provider_local_search_evidence_continuity_test.mjs`
+Behavioral proof: `node scripts/recovery_authenticated_device_evidence_continuity_test.mjs`
 
-Current contract: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
 
-## Retained release pointers
-Retained weather-safe routing: `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` · `scripts/controlled_environment_weather_safe_routing_check.py` · `scripts/controlled_environment_weather_safe_routing_test.mjs`.
+Retained provider/local-search authority: `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_test.mjs`.
 
-Retained winter eligibility: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` · `scripts/winter_booking_eligibility_customer_transparency_check.py` · `scripts/winter_booking_eligibility_customer_transparency_test.mjs`.
+Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
 
-Retained cold-weather capability: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_test.mjs`.
-
-Retained reliability continuity: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_test.mjs`.
-
-Retained allocation closure: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` · `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/service_addon_allocation_evidence_closure_test.mjs`.
+Retained cycle checks: `scripts/service_addon_allocation_evidence_closure_check.py` · `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/cold_weather_service_capability_evidence_matrix_check.py` · `scripts/winter_booking_eligibility_customer_transparency_check.py` · `scripts/controlled_environment_weather_safe_routing_check.py`.
 
 ## Retained staff/mobile readiness
 Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
@@ -32,7 +27,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md` — current bounded contract.
+3. `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` — current bounded contract.
+4. `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md` — retained continuity contract.
 4. `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` — retained routing contract.
 4. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` — retained eligibility contract.
 5. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — retained capability contract.
@@ -50,6 +46,8 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+
+- `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`
 
 - `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`
 
@@ -281,4 +279,4 @@ After merge, Production deployment/runtime/business acceptance must independentl
 Production is not considered GREEN from source promotion alone.
 
 ## Next bounded release
-**Build 490 — Recovery & Authenticated Device Evidence Continuity** is next only after the current release is independently GREEN on protected `main`.
+**Build 491 — Maintenance & Fleet Pilot Outcome Evidence** is next only after the current release is independently GREEN on protected `main`.
