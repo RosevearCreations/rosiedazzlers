@@ -7,7 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`.
 Retained predecessor contract: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`.
-Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
+Retained compatibility pointer: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`.
 
 ## Retained cumulative authority pointers
 - `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
@@ -132,7 +132,7 @@ Scope:
 
 Current contract: BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md. Retained readiness authority: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md. Retained verification authority: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md. Retained priority authority: BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md. Retained learning authority: BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md. Active roadmap: FORWARD_BUILD_ROADMAP_486_495.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-The exact candidate must pass the focused Build 493 authority, retained staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused outcome-evidence authority, retained staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing remediation execution or materially comparable outcome evidence remains truthful owner action; source/runtime GREEN does not fabricate remediation effectiveness.
 
