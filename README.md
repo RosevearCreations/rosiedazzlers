@@ -19,6 +19,8 @@ Retained provider/local-search authority: `scripts/provider_local_search_evidenc
 
 Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
 
+Retained reliability/recovery authority: `scripts/reliability_cost_recovery_evidence_continuity_check.py`.
+
 ## Retained staff/mobile readiness
 Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
 
