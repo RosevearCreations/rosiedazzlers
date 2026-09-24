@@ -396,6 +396,11 @@ jobs:
           python scripts/maintenance_fleet_owner_approval_pilot_decision_check.py
           node scripts/maintenance_fleet_owner_approval_pilot_decision_test.mjs
 
+      - name: Validate maintenance & fleet pilot outcome evidence authority
+        run: |
+          python scripts/maintenance_fleet_pilot_outcome_evidence_check.py
+          node scripts/maintenance_fleet_pilot_outcome_evidence_test.mjs
+
       - name: Validate local search measurement & conversion attribution authority
         run: |
           python scripts/local_search_measurement_conversion_attribution_check.py
