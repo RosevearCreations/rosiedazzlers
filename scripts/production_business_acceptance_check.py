@@ -104,6 +104,10 @@ required_authorities = {
         "scripts/staff_mobile_remediation_outcome_evidence_check.py",
         "scripts/staff_mobile_remediation_outcome_evidence_test.mjs",
     ],
+    "staff_mobile_remediation_outcome_interpretation_follow_up": [
+        "scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py",
+        "scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs",
+    ],
     "service_economics_seasonal_operations_reliability_review": [
         "scripts/service_economics_seasonal_operations_reliability_review_check.py",
         "scripts/service_economics_seasonal_operations_reliability_review_test.mjs",
@@ -283,6 +287,9 @@ workflow = require(WORKFLOW, [
     "Validate staff & mobile remediation outcome evidence authority",
     "python scripts/staff_mobile_remediation_outcome_evidence_check.py",
     "node scripts/staff_mobile_remediation_outcome_evidence_test.mjs",
+    "Validate staff & mobile remediation outcome interpretation & follow-up authority",
+    "python scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py",
+    "node scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs",
     "Validate service economics, seasonal operations & reliability review authority",
     "python scripts/service_economics_seasonal_operations_reliability_review_check.py",
     "node scripts/service_economics_seasonal_operations_reliability_review_test.mjs",
