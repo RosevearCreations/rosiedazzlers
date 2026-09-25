@@ -61,7 +61,7 @@ require(learning,[
  'controlled_experiment_outcome_interpretation_authority:"booking_quote_experiment_outcome_interpretation"'
 ],"retained learning composition")
 require(endpoint,[
- "Build 502 outcome interpretation remain read-only",
+ "Build 502 outcome interpretation remains read-only",
  "execution_authorization:{}",
  "execution_evidence:[]",
  "execution_source_available:false"
