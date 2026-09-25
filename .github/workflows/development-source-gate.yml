@@ -639,6 +639,11 @@ jobs:
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
 
+      - name: Validate seasonal capability owner review & public claim decision authority
+        run: |
+          python scripts/seasonal_capability_owner_review_public_claim_decision_check.py
+          node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs
+
       - name: Validate current reliability, security & cost reassessment
         run: python scripts/current_reliability_security_cost_reassessment_check.py
 
