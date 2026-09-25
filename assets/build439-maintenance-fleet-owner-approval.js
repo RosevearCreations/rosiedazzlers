@@ -2,13 +2,19 @@
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const retainedPilotOutcomeEndpoint="/api/admin/maintenance_fleet_pilot_outcome_evidence";
 function init(){$("refreshOwnerApproval")?.addEventListener("click",refresh);setStatus("No owner-decision snapshot loaded. Refresh manually to compare unresolved terms with current operational evidence.","soft");}
+async function fetchPilotContinuity(){
+ const primary=await fetch("/api/admin/maintenance_fleet_pilot_outcome_continuity_review",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+ if(primary.status!==404)return primary;
+ return fetch(retainedPilotOutcomeEndpoint,{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+}
 async function refresh(){
  const button=$("refreshOwnerApproval"); if(button)button.disabled=true; setStatus("Loading bounded maintenance/fleet evidence…","soft");
  try{
   const [response,outcomeResponse]=await Promise.all([
    fetch("/api/admin/maintenance_fleet_owner_approval",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}}),
-   fetch("/api/admin/maintenance_fleet_pilot_outcome_continuity_review",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}})
+   fetchPilotContinuity()
   ]);
   const [data,outcomeData]=await Promise.all([response.json().catch(()=>null),outcomeResponse.json().catch(()=>null)]);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
