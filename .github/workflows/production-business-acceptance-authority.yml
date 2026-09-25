@@ -122,6 +122,10 @@ jobs:
           node --check functions/api/_lib/recovery-authenticated-device-observation-execution-evidence.js
           node --check functions/api/admin/recovery_authenticated_device_observation_execution_evidence.js
           node --check scripts/recovery_authenticated_device_observation_execution_evidence_test.mjs
+          python -m py_compile scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py
+          node --check functions/api/_lib/maintenance-fleet-pilot-outcome-continuity-review.js
+          node --check functions/api/admin/maintenance_fleet_pilot_outcome_continuity_review.js
+          node --check scripts/maintenance_fleet_pilot_outcome_continuity_review_test.mjs
           node --check scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
           python -m py_compile scripts/booking_funnel_quote_pricing_learning_check.py
           node --check scripts/booking_funnel_quote_pricing_learning_test.mjs
@@ -414,6 +418,10 @@ jobs:
         run: |
           python scripts/maintenance_fleet_pilot_outcome_evidence_check.py
           node scripts/maintenance_fleet_pilot_outcome_evidence_test.mjs
+      - name: Validate maintenance & fleet pilot outcome continuity review authority
+        run: |
+          python scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py
+          node scripts/maintenance_fleet_pilot_outcome_continuity_review_test.mjs
 
       - name: Validate local search measurement & conversion attribution authority
         run: |
