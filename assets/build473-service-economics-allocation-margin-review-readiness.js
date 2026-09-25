@@ -1,4 +1,4 @@
-// Build 488 — retained manual service economics UI with controlled-environment alternatives and weather-safe routing.
+// Build 496 — retained manual service economics UI with seasonal capability owner/public-claim review.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -24,6 +24,7 @@
       renderColdWeatherCapabilityMatrix(data.economics?.cold_weather_capability_matrix || {});
       renderWinterBookingEligibility(data.economics?.winter_booking_eligibility || {});
       renderWeatherSafeRouting(data.economics?.weather_safe_routing || {});
+      renderSeasonalOwnerReview(data.economics?.seasonal_owner_review_public_claim || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -42,6 +43,7 @@
       if($("capabilityMatrixGrid")) $("capabilityMatrixGrid").innerHTML = '<div class="review-empty">Cold-weather capability evidence is unavailable.</div>';
       if($("winterEligibilityGrid")) $("winterEligibilityGrid").innerHTML = '<div class="review-empty">Winter booking eligibility evidence is unavailable.</div>';
       if($("weatherSafeRoutingGrid")) $("weatherSafeRoutingGrid").innerHTML = '<div class="review-empty">Weather-safe routing evidence is unavailable.</div>';
+      if($("seasonalOwnerReviewGrid")) $("seasonalOwnerReviewGrid").innerHTML = '<div class="review-empty">Seasonal owner/public-claim review is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -207,6 +209,45 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No weather-safe routing row is prepared.</div>';
     const detail=$("weatherSafeRoutingDetail");
     if(detail) detail.textContent="Prepared routes: "+String(routing.row_count??0)+" · gaps: "+String(routing.gap_count??0)+". Not every service can move indoors; automatic routing and rescheduling remain disabled.";
+  }
+
+  function renderSeasonalOwnerReview(review) {
+    const mount=$("seasonalOwnerReviewGrid"); if(!mount) return;
+    const rows=Array.isArray(review.rows)?review.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const ready=row.publication_review_ready===true;
+      const state=ready?"observed":"review";
+      const decisionLabel=ready
+        ? "Publication review ready"
+        : row.decision_state==="owner_hold"
+          ? "Owner HOLD"
+          : "Owner review required";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(decisionLabel)+'</span></div>'+
+        '<p><strong>Proposed service-specific wording:</strong> '+esc(row.proposed_service_specific_public_wording||"No supported public wording is prepared.")+'</p>'+
+        '<p class="mini">Capability evidence current: '+esc(row.capability_evidence_current===true?"YES":"NO")+
+        ' · Owner decision: '+esc(row.owner_review_decision||"not recorded")+
+        ' · Reviewed: '+esc(row.owner_reviewed_at||"not recorded")+
+        ' · Reference: '+esc(row.owner_review_reference||"not recorded")+'</p>'+
+        '<p class="mini">'+esc(row.source_owned_temperature_limit_text||"No exact source-owned working-temperature limit recorded.")+
+        ' · Automatic publication: NO · Automatic booking change: NO · Broad winter availability remains HOLD.</p></article>');
+    }
+    const gaps=Array.isArray(review.gaps)?review.gaps:[];
+    for(const gap of gaps){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Owner/public-claim evidence gap · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">HOLD</span></div><p class="mini">Missing: '+
+        esc((gap.missing||[]).join(", ")||"current attributable owner/capability evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_public_claim_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No service-specific public claim is review-ready. Broad winter availability remains HOLD.</div>';
+    const detail=$("seasonalOwnerReviewDetail");
+    if(detail) detail.textContent="Service-specific decisions: "+String(review.row_count??0)+
+      " · publication review ready: "+String(review.counts?.publication_review_ready??0)+
+      " · owner HOLD: "+String(review.counts?.owner_hold??0)+
+      " · owner review required: "+String(review.counts?.owner_review_required??0)+
+      ". Broad winter availability remains HOLD; publication remains manual.";
   }
 
   function renderCandidates(rows) {
