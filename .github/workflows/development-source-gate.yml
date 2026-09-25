@@ -217,6 +217,9 @@ jobs:
           node --check scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
           python -m py_compile scripts/staff_mobile_remediation_outcome_evidence_check.py
           node --check scripts/staff_mobile_remediation_outcome_evidence_test.mjs
+          python -m py_compile scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py
+          node --check scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs
+          node --check functions/api/_lib/staff-mobile-remediation-outcome-interpretation-follow-up.js
           python -m py_compile scripts/service_economics_seasonal_operations_reliability_review_check.py
           node --check scripts/service_economics_seasonal_operations_reliability_review_test.mjs
           node --check functions/api/_lib/service-economics-seasonal-operations-reliability-review.js
@@ -560,6 +563,8 @@ jobs:
           node scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs
           python scripts/staff_mobile_remediation_outcome_evidence_check.py
           node scripts/staff_mobile_remediation_outcome_evidence_test.mjs
+          python scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py
+          node scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs
 
       - name: Validate staff workflow, support & mobile efficiency learning authority
         run: |
