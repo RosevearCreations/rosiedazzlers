@@ -70,17 +70,17 @@ require(roadmap,[
  "### Build 492 — Booking & Quote Controlled Experiment Execution Evidence"
 ],"roadmap")
 require(queue,[
- "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
- "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next",
+ "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is the active bounded release.",
+ "**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is next",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md","it has not run out"
 ],"Build 491 queue")
 require(handoff,[
- "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
+ "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is the active bounded release.",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md",
  "maintenance_fleet_pilot_outcome_evidence_check.py"
 ],"Build 491 handoff")
 require(readme,[
- "Current source direction: **Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence**.",
+ "Current source direction: **Build 499 — Provider & Local Search Outcome Evidence Refresh**.",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md",
  "maintenance_fleet_pilot_outcome_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."
