@@ -44,9 +44,12 @@ async function refresh450() {
         headers: { Accept: "application/json" }
       });
       const continuityData = await continuityResponse.json().catch(() => null);
-      renderProviderLocalSearchContinuity489(continuityResponse.ok && continuityData ? continuityData : {});
+      const safeContinuityData = continuityResponse.ok && continuityData ? continuityData : {};
+      renderProviderLocalSearchContinuity489(safeContinuityData);
+      renderProviderLocalSearchOutcomeRefresh499(safeContinuityData);
     } catch {
       renderProviderLocalSearchContinuity489({});
+      renderProviderLocalSearchOutcomeRefresh499({});
     }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
@@ -206,6 +209,28 @@ function renderProviderLocalSearchContinuity489(data) {
     ["Local-search provider continuity", local.status || "unavailable", "descriptive-ready " + String(local.descriptive_review_ready_count ?? 0) + " / " + String(local.total_provider_rows ?? 0)],
     ["Separate provider populations", rules.cross_family_identity_join_performed === false ? "YES" : "NO", "no payment/search provider join"],
     ["Weather / seasonal causation", truth.search_or_referral_movement_is_weather_causation === false ? "NOT INFERRED" : "UNKNOWN", "search/referral movement never proves weather effects"]
+  ];
+  host.innerHTML = summary + rows.map((row) =>
+    '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
+  ).join("");
+}
+
+function renderProviderLocalSearchOutcomeRefresh499(data) {
+  const host = byId450("localProviderOutcomeRefresh499");
+  if (!host) return;
+  const refresh = data?.provider_local_search_outcome_evidence_refresh || {};
+  const provider = refresh.provider_outcomes_and_communications || {};
+  const local = refresh.local_search_provider_outcomes || {};
+  const source = refresh.source_contract || {};
+  const truth = refresh.truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 499 outcome evidence refresh</strong>'
+    + '<div class="muted">Correct provider/property/location/window sources are required. First-party referral/funnel context remains separate descriptive evidence.</div></div>'
+    + '<span>' + esc450(refresh.status || "outcome_evidence_refresh_required") + '</span></div>';
+  const rows = [
+    ["Payment / refund / message outcomes", provider.status || "unavailable", "current attributable " + String(provider.current_attributable_count ?? 0) + " / " + String(provider.required_count ?? 4)],
+    ["Search Console / GBP outcomes", local.status || "unavailable", "correct source/window " + String(local.correct_source_window_count ?? 0) + " / " + String(local.required_count ?? 2)],
+    ["First-party context", source.first_party_context_remains_separate_descriptive_evidence === true ? "SEPARATE" : "UNKNOWN", "never substitutes for provider evidence"],
+    ["Ranking / weather / demand / conversion causation", truth.weather_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "descriptive evidence only"]
   ];
   host.innerHTML = summary + rows.map((row) =>
     '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
