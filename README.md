@@ -2,10 +2,8 @@
 
 Current source direction: **Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence**.
 
-## Current Recovery Drill & Authenticated Device Observation Execution Evidence authority
+## Current Build 500 authority
 Authority: `scripts/recovery_authenticated_device_observation_execution_evidence_check.py` · `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
-
-Retained Provider & Local Search Outcome Evidence Refresh authority: `scripts/provider_local_search_outcome_evidence_refresh_check.py` · `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`.
 
 Retained Controlled-Environment Site Qualification & Service Routing Evidence authority: `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py` · `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`.
 

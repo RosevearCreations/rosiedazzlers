@@ -144,7 +144,7 @@ Current contract: `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXEC
 
 The exact candidate must pass the focused current authority, retained recovery/device authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks, missing explicit recovery/device observations or exact Production runtime/deployment identity are blockers. Build 500 reports observed execution evidence only; it never performs a Production restore or creates an automated browser farm.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing explicit recovery/device observations remain evidence HOLDs. This release reports observed execution evidence only; it never performs a Production restore or creates an automated browser farm.
 
 ## Next release
 **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is next only after the current release is independently GREEN on protected main.
