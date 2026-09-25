@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
-Retained predecessor contract: `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
+The synchronized predecessor contracts are retained through `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`.
+Retained predecessor contract: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`
 - `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
 - `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
 - `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
@@ -131,24 +132,24 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.
+**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.
 
 Scope:
-- reconcile retained pilot execution/outcome evidence only when explicit owner approval, bounded participant/duration authorization and attributable current execution rows exist;
-- require participant and duration evidence to remain inside the explicit owner bounds while preserving current availability and checkout collision revalidation as capacity evidence;
-- require attributable invoicing outcome, observed travel distance and per-row stop-condition state without creating invoices, inventing travel limits or reserving capacity;
-- surface triggered stop conditions as an explicit review-required state that never authorizes continuation or automatically executes a stop action;
-- keep missing or unavailable execution evidence as owner action and never carry historical evidence or source/runtime GREEN forward as proof that a pilot ran; and
-- perform no customer/maintenance/fleet activation, booking mutation, recurring billing, pricing/discount change, invoice creation, capacity reservation, provider/business mutation, canonical-HOLD mutation, schema/storage mutation, outreach or permanent polling while requiring exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
+- interpret only separately authorized, attributable controlled-experiment execution evidence tied to the retained locked primary metric;
+- preserve explicit allocation arms, bounded duration, Southern Ontario weather/service/site eligibility, denominator exclusion rules and locked stop-condition observations as interpretation prerequisites;
+- require comparable numeric observations for every authorized allocation arm before descriptive interpretation becomes review-ready;
+- show only descriptive per-arm counts, means, minimums and maximums while retaining owner-defined threshold, target direction and winner rule as governance text;
+- surface any triggered locked stop condition as an explicit owner-review block and keep missing, mismatched or incomplete outcome evidence fail-closed; and
+- perform no winner selection, success declaration, price/discount change, booking-rule/availability mutation, booking creation/change, outreach, provider/business mutation, schema/storage mutation or permanent polling while requiring exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
 
-Current contract: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`. Retained pilot outcome authority: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`. Retained owner decision authority: `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`. Retained controlled-pilot authority: `BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_496_505.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`. Retained execution evidence authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`. Retained measurement-lock authority: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_496_505.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused current authority, retained maintenance/fleet pilot authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused current authority, retained booking/quote experiment authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing owner approval, bounded authorization or attributable current pilot execution evidence remains owner action. This release reports continuity only; it never activates or continues a pilot automatically.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing or incomparable execution/outcome evidence remains owner action. This release interprets evidence only; it never selects a winner or changes business rules automatically.
 
 ## Next release
-**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next only after the current release is independently GREEN on protected main.
+**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_496_505.md`; it has not run out.
