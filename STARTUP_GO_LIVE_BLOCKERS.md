@@ -35,11 +35,14 @@ Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted 
 
 Build 481 adds explicit owner-approved booking/quote measurement locks using the existing app settings store. A lock requires declared thresholds, duration/allocation, stop conditions and Southern Ontario seasonal/weather eligibility, but it does not authorize experiment execution or any price/discount/booking-rule/availability/outreach change. Weather-ineligible sessions are excluded from the declared conversion denominator and exact service temperature limits are not inferred.
 
+Build 496 adds a read-only owner/public-claim decision package. `publication_review_ready` requires current attributable capability evidence plus a dated attributable owner decision; it never publishes content, changes booking/quote rules, or authorizes broad winter availability. Missing review/current evidence remains `owner_action`, and an explicit owner HOLD remains HOLD.
+
 ## Current cycle reconciliation
 `PRODUCTION_LEARNING_486_494.md` confirms that the 486–494 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
+- `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
 - `PRODUCTION_LEARNING_486_494.md`
 - `FORWARD_BUILD_ROADMAP_496_505.md`
