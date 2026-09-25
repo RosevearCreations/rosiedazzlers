@@ -562,6 +562,11 @@ jobs:
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
 
+      - name: Validate seasonal capability owner review & public claim decision authority
+        run: |
+          python scripts/seasonal_capability_owner_review_public_claim_decision_check.py
+          node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs
+
       - name: Validate current-cycle reliability, security & cost reassessment
         run: python scripts/current_reliability_security_cost_reassessment_check.py
 
@@ -590,6 +595,7 @@ jobs:
             echo "- Reliability / performance / cost capacity: PASS"
             echo "- Security / privacy / recovery drill: PASS"
             echo "- Production learning / roadmap renewal: PASS"
+            echo "- Seasonal capability owner review / public claim decision: PASS"
             echo "- Booking conversion / quote clarity: PASS"
             echo "- Service economics / job profitability evidence: PASS"
             echo "- Canonical Production HOLD inventory / authority cleanup: PASS"
