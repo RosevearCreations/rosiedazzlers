@@ -22,6 +22,7 @@ Current contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECU
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Retained Provider & Local Search Outcome Evidence Refresh contract
+Retained source authority: scripts/provider_local_search_outcome_evidence_refresh_check.py.
 - Reuse the retained provider HOLD traceability, provider/local-search continuity and local-search snapshot authorities; do not create a second provider ledger, Google integration, analytics identity or polling service.
 - Stripe, PayPal, linked refund and definitive message-delivery outcomes require the expected attributable provider evidence class, source availability, valid dated evidence, current freshness and an observed outcome.
 - Search Console requires the correct property identity; Google Business Profile requires the correct location identity; descriptive outcome continuity requires distinct equal-length current/prior dated windows.
