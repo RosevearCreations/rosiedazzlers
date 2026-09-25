@@ -93,18 +93,18 @@ require(roadmap,[
  "### Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up"
 ],"roadmap")
 require(queue,[
- "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
- "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next",
+ "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
+ "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is next",
  "BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md",
  "it has not run out"
 ],"Build 502 queue")
 require(handoff,[
- "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
+ "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
  "BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md",
  "booking_quote_experiment_outcome_interpretation_check.py"
 ],"Build 502 handoff")
 require(readme,[
- "Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.",
+ "Current source direction: **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up**.",
  "BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md",
  "booking_quote_experiment_outcome_interpretation_check.py",
  "Production is not considered GREEN from source promotion alone."
