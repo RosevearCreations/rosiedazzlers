@@ -54,18 +54,18 @@ require(doc,[
 ],"Build 487 contract")
 require(roadmap,["### Build 487 — Winter Booking Eligibility & Customer Transparency","### Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing"],"renewed roadmap")
 require(queue,[
- "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
- "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next",
+ "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
+ "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next",
  "BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md",
  "it has not run out"
 ],"Build 487 queue")
 require(handoff,[
- "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
+ "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
  "BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md",
  "winter_booking_eligibility_customer_transparency_check.py"
 ],"Build 487 handoff")
 require(readme,[
- "Current source direction: **Build 497 — Winter Booking & Quote Rule Activation Readiness**.",
+ "Current source direction: **Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence**.",
  "BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md",
  "winter_booking_eligibility_customer_transparency_check.py",
  "Production is not considered GREEN from source promotion alone."

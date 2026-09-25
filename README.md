@@ -1,13 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 497 — Winter Booking & Quote Rule Activation Readiness**.
+Current source direction: **Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence**.
 
-## Current Winter Booking & Quote Rule Activation Readiness authority
-Authority: `scripts/winter_booking_quote_rule_activation_readiness_check.py` · `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`. Production is not considered GREEN from source promotion alone.
+## Current Controlled-Environment Site Qualification & Service Routing Evidence authority
+Authority: `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py` · `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
 
 Retained Production Learning & Roadmap Renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`.
-
-Retained staff/mobile outcome: `scripts/staff_mobile_remediation_outcome_evidence_check.py`.
 
 Retained booking/quote authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
 
@@ -15,42 +13,42 @@ Retained maintenance/fleet outcome: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EV
 
 Retained recovery/device continuity: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` · `scripts/recovery_authenticated_device_evidence_continuity_check.py` · `scripts/recovery_authenticated_device_evidence_continuity_test.mjs`.
 
-Retained provider/local-search authority: `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_test.mjs`.
-
 Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
 
-Retained reliability/recovery authority: `scripts/reliability_cost_recovery_evidence_continuity_check.py`.
+Retained checks: `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_check.py`. · `scripts/winter_booking_quote_rule_activation_readiness_check.py` · `scripts/winter_booking_quote_rule_activation_readiness_test.mjs`.
 
 Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md` — current bounded contract.
-4. `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md` — retained owner/public-claim contract.
-4. `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
-4. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — retained outcome contract.
-4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — retained execution-evidence contract.
-4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — retained outcome contract.
-4. `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` — retained continuity contract.
-4. `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md` — retained continuity contract.
-4. `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` — retained routing contract.
-4. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` — retained eligibility contract.
-5. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — retained capability contract.
-4. `PRODUCTION_LEARNING_486_494.md` — current cycle reconciliation.
-5. `FORWARD_BUILD_ROADMAP_496_505.md` — active evidence-driven sequence.
-6. `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md` — retained predecessor contract.
-7. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` — retained predecessor contract.
-7. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` — retained predecessor contract.
-5. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — retained predecessor contract.
-6. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` — retained predecessor contract.
-5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
-6. `PRODUCTION_LEARNING_466_474.md` — retained cycle reconciliation.
-7. `FORWARD_BUILD_ROADMAP_476_485.md` — active evidence-driven sequence.
-8. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md` — retained recovery decision authority.
-9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
+3. `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
+4. `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
+4. `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
+4. `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+4. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
+4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`
+4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`
+4. `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`
+4. `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`
+4. `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`
+4. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`
+5. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`
+4. `PRODUCTION_LEARNING_486_494.md`
+5. `FORWARD_BUILD_ROADMAP_496_505.md`
+6. `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
+7. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
+7. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
+5. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`
+6. `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`
+5. `BUILD475_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+6. `PRODUCTION_LEARNING_466_474.md`
+7. `FORWARD_BUILD_ROADMAP_476_485.md`
+8. `BUILD467_RECOVERY_EVIDENCE_VALIDATION_DRILL_DECISION_READINESS.md`
+9. `STARTUP_GO_LIVE_BLOCKERS.md`
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 - `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 - `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`

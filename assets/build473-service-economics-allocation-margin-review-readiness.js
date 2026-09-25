@@ -1,4 +1,4 @@
-// Build 497 — retained manual service economics UI with winter booking/quote rule activation readiness.
+// Build 498 — retained manual service economics UI with controlled-environment site qualification evidence.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -26,6 +26,7 @@
       renderWeatherSafeRouting(data.economics?.weather_safe_routing || {});
       renderSeasonalOwnerReview(data.economics?.seasonal_owner_review_public_claim || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
+      renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -46,6 +47,7 @@
       if($("weatherSafeRoutingGrid")) $("weatherSafeRoutingGrid").innerHTML = '<div class="review-empty">Weather-safe routing evidence is unavailable.</div>';
       if($("seasonalOwnerReviewGrid")) $("seasonalOwnerReviewGrid").innerHTML = '<div class="review-empty">Seasonal owner/public-claim review is unavailable.</div>';
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
+      if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -285,6 +287,40 @@
       " · owner HOLD: "+String(readiness.counts?.owner_hold??0)+
       " · owner review required: "+String(readiness.counts?.owner_review_required??0)+
       ". Availability and checkout collision revalidation remain authoritative; broad winter availability remains HOLD.";
+  }
+
+  function renderControlledEnvironmentSiteQualification(qualification) {
+    const mount=$("controlledEnvironmentSiteQualificationGrid"); if(!mount) return;
+    const rows=Array.isArray(qualification.rows)?qualification.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const ready=row.controlled_environment_site_qualified===true;
+      const state=ready?"observed":row.controlled_environment_candidate_present?"review":"soft";
+      const label=ready?"Site qualified":row.controlled_environment_candidate_present?"Evidence required":"No controlled option";
+      const ev=(name,item)=>name+": "+(item?.reference||"missing")+" · current "+(item?.current===true?"YES":"NO")+" · supported "+(item?.supported===true?"YES":"NO");
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(label)+'</span></div>'+
+        '<p><strong>Service route:</strong> '+esc(String(row.service_routing_state||"owner_review_required").replaceAll("_"," "))+'</p>'+
+        '<p class="mini">'+esc(ev("Site",row.site_evidence))+'</p>'+
+        '<p class="mini">'+esc(ev("Workflow",row.workflow_evidence))+'</p>'+
+        '<p class="mini">'+esc(ev("Equipment",row.equipment_evidence))+'</p>'+
+        '<p class="mini">'+esc(ev("Product",row.product_evidence))+'</p>'+
+        '<p class="mini">Service-specific only: YES · Current site confirmation before execution: YES · Automatic appointment move/routing: NO · Universal indoor capability: HOLD.</p></article>');
+    }
+    const gaps=Array.isArray(qualification.gaps)?qualification.gaps:[];
+    for(const gap of gaps){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Controlled-environment qualification gap · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">HOLD</span></div><p class="mini">Missing: '+
+        esc((gap.missing||[]).join(", ")||"site/workflow/equipment/product evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"controlled_environment_site_confirmation_required")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No service-specific controlled-environment qualification evidence is available.</div>';
+    const detail=$("controlledEnvironmentSiteQualificationDetail");
+    if(detail) detail.textContent="Controlled-environment candidates: "+String(qualification.counts?.controlled_environment_candidate??0)+
+      " · site qualified: "+String(qualification.counts?.controlled_environment_site_qualified??0)+
+      " · evidence required: "+String(qualification.counts?.qualification_evidence_required??0)+
+      ". Missing evidence keeps manual safe-reschedule or site confirmation; appointments are never moved automatically.";
   }
 
   function renderCandidates(rows) {
