@@ -7,7 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`.
 Retained predecessor contract: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`.
-Retained compatibility pointer: Build 493 — Staff & Mobile Remediation Outcome Evidence.
+Retained compatibility pointer: Staff & Mobile Remediation Outcome Evidence.
 
 ## Retained cumulative authority pointers
 - `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`
@@ -136,7 +136,7 @@ Retained compatibility pointer: Build 493 — Staff & Mobile Remediation Outcome
 **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.
 
 Scope:
-- interpret only retained Build 493 outcome rows that already satisfy attributable execution plus materially like-for-like before/after evidence;
+- interpret only retained staff/mobile outcome rows that already satisfy attributable execution plus materially like-for-like before/after evidence;
 - preserve the exact measure, owning workflow, role, representative device/browser context, comparable sample/window definition, material-confounder record and Southern Ontario weather/site classification;
 - surface observed before/after values, numeric delta, arithmetic percent movement when valid and recorded direction as descriptive evidence only;
 - require bounded manual follow-up that repeats materially like-for-like observation context before any effectiveness or causation decision;
