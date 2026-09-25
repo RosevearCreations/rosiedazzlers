@@ -187,6 +187,11 @@ function sameEntity(source = {}, target = {}) {
   const type = clean(target.entity_type).toLowerCase();
   const code = clean(target.code);
   if (!code) return false;
+  const normalizedSourceType = clean(source.entity_type).toLowerCase();
+  const normalizedSourceCode = clean(source.code);
+  if (normalizedSourceType && normalizedSourceCode) {
+    return normalizedSourceType === type && normalizedSourceCode === code;
+  }
   if (type === "add_on") return clean(source.add_on_code) === code;
   if (type === "package") return clean(source.package_code) === code;
   if (type === "service") return clean(source.service_code) === code;
