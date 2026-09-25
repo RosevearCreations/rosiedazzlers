@@ -117,21 +117,21 @@ require(blockers,[
 require(queue,[
     "BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_486_494.md",
     "FORWARD_BUILD_ROADMAP_496_505.md",
-    "**Build 495 — Production Learning & Roadmap Renewal** is the active bounded release.",
-    "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is next",
+    "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.",
+    "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is next",
     "it has not run out","rd main protection","Production deployment/runtime/business acceptance",
     "Missing required checks or exact Production runtime/deployment identity are blockers"
 ],"release queue")
 require(handoff,[
     "BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_486_494.md",
     "FORWARD_BUILD_ROADMAP_496_505.md",
-    "**Build 495 — Production Learning & Roadmap Renewal** is the active bounded release.",
-    "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is next",
+    "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.",
+    "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "Current source direction: **Build 495 — Production Learning & Roadmap Renewal**.",
+    "Current source direction: **Build 496 — Seasonal Capability Owner Review & Public Claim Decision**.",
     "BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_486_494.md",
     "FORWARD_BUILD_ROADMAP_496_505.md","python scripts/production_learning_roadmap_renewal_check.py",
     "Production is not considered GREEN from source promotion alone."
