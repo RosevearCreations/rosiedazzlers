@@ -22,6 +22,7 @@ import { buildRecoveryEvidenceValidationDrillDecisionReadiness } from "../_lib/r
 import { buildRecoveryDrillEvidenceRefreshClosureReview } from "../_lib/recovery-drill-evidence-refresh-closure-review.js";
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { buildRecoveryAuthenticatedDeviceEvidenceContinuity } from "../_lib/recovery-authenticated-device-evidence-continuity.js";
+import { buildRecoveryAuthenticatedDeviceObservationExecutionEvidence } from "../_lib/recovery-authenticated-device-observation-execution-evidence.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -160,6 +161,17 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const recoveryAuthenticatedDeviceObservationExecutionEvidence = buildRecoveryAuthenticatedDeviceObservationExecutionEvidence({
+    recovery: {
+      recovery_export_operational_proof: recoveryExportResult.data?.proof || null,
+      refresh_closure_review: recoveryDrillEvidenceRefreshClosureReview,
+      validation_drill_decision_readiness: recoveryEvidenceValidationDrillDecisionReadiness
+    },
+    authenticated_device: authenticatedDeviceVisualAcceptance,
+    continuity: recoveryAuthenticatedDeviceEvidenceContinuity,
+    generated_at: generatedAt
+  });
+
   return json({
     ok: consolidation.source_runtime_status === "green",
     build: 419,
@@ -200,6 +212,8 @@ export async function onRequestGet({ request, env }) {
     current_device_observation_triage_authority: "authenticated_device_observation_refresh_regression_triage",
     recovery_authenticated_device_evidence_continuity: recoveryAuthenticatedDeviceEvidenceContinuity,
     current_recovery_device_continuity_authority: "recovery_authenticated_device_evidence_continuity",
+    recovery_authenticated_device_observation_execution_evidence: recoveryAuthenticatedDeviceObservationExecutionEvidence,
+    current_recovery_device_execution_evidence_authority: "recovery_authenticated_device_observation_execution_evidence",
     source_status: {
       go_live_readiness: state(readinessResult),
       production_diagnostics: state(diagnosticsResult),
@@ -261,6 +275,10 @@ export async function onRequestGet({ request, env }) {
       recovery_authenticated_device_evidence_continuity: {
         available: recoveryExportResult.ok && launchEvidenceResult.ok,
         classification: recoveryAuthenticatedDeviceEvidenceContinuity.status
+      },
+      recovery_authenticated_device_observation_execution_evidence: {
+        available: recoveryExportResult.ok && launchEvidenceResult.ok,
+        classification: recoveryAuthenticatedDeviceObservationExecutionEvidence.status
       }
     },
     ...consolidation

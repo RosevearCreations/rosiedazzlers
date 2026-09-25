@@ -1,0 +1,50 @@
+name: Recovery Drill & Authenticated Device Observation Execution Evidence Authority
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-recovery-authenticated-device-observation-execution-evidence-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: recovery-authenticated-device-observation-execution-evidence
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Recovery Drill & Authenticated Device Observation Execution Evidence
+        run: |
+          python scripts/recovery_authenticated_device_observation_execution_evidence_check.py
+          node scripts/recovery_authenticated_device_observation_execution_evidence_test.mjs
+      - name: Build 500 summary
+        run: |
+          {
+            echo '### Recovery Drill & Authenticated Device Observation Execution Evidence'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Bounded non-Production drill observation: EXPLICIT ONLY'
+            echo '- Recovery post-observation attribution: REQUIRED'
+            echo '- Authenticated role/device/browser observations: CURRENT DIRECT EVIDENCE ONLY'
+            echo '- Recovery/device populations: SEPARATE'
+            echo '- Production restore / browser farm / HOLD mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

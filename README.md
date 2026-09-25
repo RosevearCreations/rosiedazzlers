@@ -1,9 +1,9 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 499 — Provider & Local Search Outcome Evidence Refresh**.
+Current source direction: **Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence**.
 
-## Current Provider & Local Search Outcome Evidence Refresh authority
-Authority: `scripts/provider_local_search_outcome_evidence_refresh_check.py` · `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`. Production is not considered GREEN from source promotion alone.
+## Release authority
+Authority: `scripts/recovery_authenticated_device_observation_execution_evidence_check.py` · `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
 
 Retained Controlled-Environment Site Qualification & Service Routing Evidence authority: `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py` · `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`.
 
@@ -24,7 +24,8 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
+3. `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
+4. `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
 4. `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 4. `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 4. `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
@@ -51,6 +52,7 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 9. `STARTUP_GO_LIVE_BLOCKERS.md`
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
 - `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
 - `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 - `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
