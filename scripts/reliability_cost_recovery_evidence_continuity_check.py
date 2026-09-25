@@ -60,18 +60,18 @@ require(doc,[
  "Build 485 — Production Learning & Roadmap Renewal"
 ],"Build 484 contract")
 require(queue,[
- "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
- "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next",
+ "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is the active bounded release.",
+ "**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is next",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "it has not run out"
 ],"Build 484 queue")
 require(handoff,[
- "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
+ "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is the active bounded release.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py"
 ],"Build 484 handoff")
 require(readme,[
- "Current source direction: **Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence**.",
+ "Current source direction: **Build 499 — Provider & Local Search Outcome Evidence Refresh**.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py",
  "Production is not considered GREEN from source promotion alone."
