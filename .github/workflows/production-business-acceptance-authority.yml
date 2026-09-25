@@ -43,6 +43,10 @@ jobs:
       - name: Validate Production authority syntax
         run: |
           python -m py_compile scripts/production_business_acceptance_check.py
+          python -m py_compile scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py
+          node --check scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-trend-continuity.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_trend_continuity.js
           python -m py_compile scripts/build408_media_r2_operational_acceptance_check.py
           python -m py_compile scripts/build409_inventory_job_cost_operational_evidence_check.py
           python -m py_compile scripts/build410_maintenance_fleet_commercial_acceptance_check.py
