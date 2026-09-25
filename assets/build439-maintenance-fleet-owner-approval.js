@@ -1,18 +1,24 @@
-// Build 439/449/459/469/479/491 — manual read-only owner-decision, controlled-pilot readiness, pilot decision + outcome evidence UI.
+// Build 439/449/459/469/479/491/501 — manual read-only owner-decision, controlled-pilot readiness, pilot decision, outcome evidence + continuity UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const retainedPilotOutcomeEndpoint="/api/admin/maintenance_fleet_pilot_outcome_evidence";
 function init(){$("refreshOwnerApproval")?.addEventListener("click",refresh);setStatus("No owner-decision snapshot loaded. Refresh manually to compare unresolved terms with current operational evidence.","soft");}
+async function fetchPilotContinuity(){
+ const primary=await fetch("/api/admin/maintenance_fleet_pilot_outcome_continuity_review",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+ if(primary.status!==404)return primary;
+ return fetch(retainedPilotOutcomeEndpoint,{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+}
 async function refresh(){
  const button=$("refreshOwnerApproval"); if(button)button.disabled=true; setStatus("Loading bounded maintenance/fleet evidence…","soft");
  try{
   const [response,outcomeResponse]=await Promise.all([
    fetch("/api/admin/maintenance_fleet_owner_approval",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}}),
-   fetch("/api/admin/maintenance_fleet_pilot_outcome_evidence",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}})
+   fetchPilotContinuity()
   ]);
   const [data,outcomeData]=await Promise.all([response.json().catch(()=>null),outcomeResponse.json().catch(()=>null)]);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
@@ -70,6 +76,17 @@ function renderPilotOutcome(o){
  <p class="mini"><strong>Participants:</strong> ${esc(p.observed_count??0)} / ${esc(p.participant_limit??"no bound")} · <strong>duration:</strong> ${esc(d.observed_duration_days??"not observed")} / ${esc(d.authorized_duration_days??"no bound")} days</p>
  <p class="mini"><strong>Capacity evidence:</strong> availability ${esc(c.availability_revalidation_observed_count??0)} · checkout ${esc(c.checkout_revalidation_observed_count??0)} · <strong>invoicing:</strong> ${esc(i.observed_count??0)} · <strong>travel:</strong> ${esc(t.observed_count??0)} · <strong>stop conditions:</strong> ${esc(s.observed_count??0)}</p>
  <p class="oa-boundary">No participant, duration, capacity, invoicing, travel or stop-condition outcome is inferred. Missing execution evidence remains owner action; this view cannot activate customers, create bookings or invoices, reserve capacity, change pricing, contact providers or enable recurring billing.</p></div>`;
+}
+function renderPilotOutcomeContinuity(o){
+ const mount=$("pilotOutcomeContinuity"); if(!mount)return;
+ const a=o.authorization_continuity||{},e=o.execution_continuity||{},b=o.bounds||{},d=o.outcome_dimensions||{},decision=o.continuity_decision||{};
+ mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Pilot outcome continuity review</h3><span class="oa-pill">${esc(o.status||"continuity_source_unavailable")}</span></div>
+ <p><strong>Current execution:</strong> ${e.execution_source_available===true?"source available":"owner action"} · <strong>observed rows:</strong> ${esc(e.observed_row_count??0)} · <strong>historical carry-forward:</strong> ${e.historical_outcome_carry_forward_used===true?"used":"not used"}</p>
+ <p class="mini"><strong>Bounds:</strong> participants ${esc(b.observed_participant_count??"not observed")} / ${esc(b.authorized_participant_limit??"not authorized")} · duration ${esc(b.observed_duration_days??"not observed")} / ${esc(b.authorized_duration_days??"not authorized")} days</p>
+ <p class="mini"><strong>Outcome continuity:</strong> capacity ${d.capacity_revalidation_complete===true?"complete":"incomplete"} · invoicing ${d.invoicing_evidence_complete===true?"complete":"incomplete"} · travel ${d.travel_evidence_complete===true?"complete":"incomplete"} · stop conditions ${d.stop_condition_evidence_complete===true?"complete":"incomplete"}</p>
+ <p class="mini"><strong>Triggered stop conditions:</strong> ${esc(d.stop_condition_triggered_count??0)} · <strong>continuation authorized:</strong> ${decision.continue_pilot_authorized===true?"yes":"no"}</p>
+ <p class="mini"><strong>Next step:</strong> ${esc(decision.next_step||"Complete attributable current pilot evidence before review.")}</p>
+ <p class="oa-boundary">Triggered stop conditions require explicit review. Missing execution remains owner action. No pilot continuation, recurring billing or capacity reservation is authorized by this review.</p></div>`;
 }
 function renderCapacity(c){
  const mount=$("capacityDecision"); if(!mount)return;
