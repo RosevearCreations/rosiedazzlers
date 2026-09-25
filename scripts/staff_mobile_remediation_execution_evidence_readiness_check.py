@@ -116,20 +116,20 @@ require(roadmap, [
 ], "Build 482 roadmap")
 require(queue, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
-    "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next",
+    "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
+    "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next",
     "it has not run out"
 ], "retained Build 482 queue")
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release."
+    "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
-    "Current source direction: **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review**.",
+    "Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.",
     "Production is not considered GREEN from source promotion alone."
 ], "retained Build 482 README")
 require(blockers, [
