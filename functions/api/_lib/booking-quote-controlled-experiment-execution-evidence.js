@@ -237,6 +237,8 @@ function normalizeExecutionRow(value, allocationArms) {
       observed: Boolean(outcomeObservedAt) && Boolean(clean(outcome.metric_key)),
       observed_at: outcomeObservedAt,
       metric_key: clean(outcome.metric_key) || null,
+      metric_value: finiteNumber(outcome.metric_value),
+      metric_unit: clean(outcome.metric_unit) || null,
       included_in_conversion_denominator: denominatorIncluded,
       winner_inferred: false,
       success_inferred: false
@@ -248,6 +250,7 @@ function objectOrEmpty(value){ return value && typeof value === "object" && !Arr
 function clean(value){ return String(value ?? "").trim(); }
 function positiveWhole(value){ const n=Number(value); return Number.isFinite(n) && n>0 ? Math.floor(n) : null; }
 function validIso(value){ const text=clean(value); return text && Number.isFinite(Date.parse(text)) ? new Date(text).toISOString() : null; }
+function finiteNumber(value){ if(value===null||value===undefined||value==="") return null; const n=Number(value); return Number.isFinite(n)?Math.round(n*10000)/10000:null; }
 function uniqueStrings(value){ return [...new Set(safeArray(value).map(v=>clean(v).toLowerCase()).filter(Boolean))]; }
 function minIso(values){ const nums=values.filter(Boolean).map(Date.parse).filter(Number.isFinite); return nums.length?new Date(Math.min(...nums)).toISOString():null; }
 function maxIso(values){ const nums=values.filter(Boolean).map(Date.parse).filter(Number.isFinite); return nums.length?new Date(Math.max(...nums)).toISOString():null; }
