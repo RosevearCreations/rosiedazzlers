@@ -29,7 +29,7 @@ dev=read(".github/workflows/development-source-gate.yml")
 prod=read(".github/workflows/production-business-acceptance-authority.yml")
 workflow=read(".github/workflows/winter-booking-quote-rule-activation-readiness-authority.yml")
 if page!=copy: errors.append("Build 497 protected route copies diverged")
-if len(re.findall(r"<h1\\b",page,re.I))!=1: errors.append("Build 497 page must retain exactly one H1")
+if len(re.findall(r"<h1\b",page,re.I))!=1: errors.append("Build 497 page must retain exactly one H1")
 require(helper,[
  "winter_booking_quote_activation_readiness_build: 497",
  'winter_booking_quote_activation_readiness_authority: "winter_booking_quote_rule_activation_readiness"',
