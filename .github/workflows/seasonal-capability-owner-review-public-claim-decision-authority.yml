@@ -1,0 +1,54 @@
+name: Seasonal Capability Owner Review & Public Claim Decision Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-seasonal-owner-public-claim-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: seasonal-capability-owner-review-public-claim-decision
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Seasonal Capability Owner Review & Public Claim Decision
+        run: |
+          python scripts/seasonal_capability_owner_review_public_claim_decision_check.py
+          node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs
+      - name: Build 496 summary
+        run: |
+          {
+            echo '### Seasonal Capability Owner Review & Public Claim Decision'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Service-specific owner/public-claim package: PASS'
+            echo '- Source-owned temperature-limit boundary: PASS'
+            echo '- Broad winter availability: HOLD'
+            echo '- Automatic publication: NONE'
+            echo '- Automatic booking/quote mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

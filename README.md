@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 495 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 496 — Seasonal Capability Owner Review & Public Claim Decision**.
 
-## Current Production Learning & Roadmap Renewal authority
-Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`. Production is not considered GREEN from source promotion alone.
+## Current Seasonal Capability Owner Review & Public Claim Decision authority
+Authority: `scripts/seasonal_capability_owner_review_public_claim_decision_check.py` · `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`. Production is not considered GREEN from source promotion alone.
+
+Retained Production Learning & Roadmap Renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`.
 
 Retained staff/mobile outcome: `scripts/staff_mobile_remediation_outcome_evidence_check.py`.
 
@@ -19,13 +21,13 @@ Retained allocation/weather authorities: `service_addon_allocation_evidence_clos
 
 Retained reliability/recovery authority: `scripts/reliability_cost_recovery_evidence_continuity_check.py`.
 
-## Retained staff/mobile readiness
-Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
+Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
+3. `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md` — current bounded contract.
+4. `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 4. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — retained execution-evidence contract.
 4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — retained outcome contract.
@@ -48,6 +50,7 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_486_494.md`
 - `FORWARD_BUILD_ROADMAP_496_505.md`
@@ -191,6 +194,8 @@ Missing recorded material, labour, cash/refund or COGS evidence blocks contribut
 Retained and current authorities include:
 
 \`\`\`bash
+python scripts/seasonal_capability_owner_review_public_claim_decision_check.py
+node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs
 python scripts/service_economics_seasonal_operations_reliability_review_check.py
 node scripts/service_economics_seasonal_operations_reliability_review_test.mjs
 python scripts/authenticated_device_observation_refresh_regression_triage_check.py
