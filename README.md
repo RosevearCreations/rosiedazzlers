@@ -15,7 +15,7 @@ Retained recovery/device continuity: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVI
 
 Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
 
-Retained checks: `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_check.py`.
+Retained checks: `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_check.py`. · `scripts/winter_booking_quote_rule_activation_readiness_check.py` · `scripts/winter_booking_quote_rule_activation_readiness_test.mjs`.
 
 Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`.
 
