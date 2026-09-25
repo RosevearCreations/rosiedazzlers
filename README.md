@@ -13,6 +13,8 @@ Retained Production Learning & Roadmap Renewal authority: `scripts/production_le
 
 Retained booking/quote authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
 
+Retained maintenance/fleet continuity: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md` · `scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py`.
+
 Retained maintenance/fleet outcome: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
 
 Retained recovery/device continuity: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md` · `scripts/recovery_authenticated_device_evidence_continuity_check.py` · `scripts/recovery_authenticated_device_evidence_continuity_test.mjs`.
