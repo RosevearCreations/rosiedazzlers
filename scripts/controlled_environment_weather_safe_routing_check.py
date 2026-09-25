@@ -55,18 +55,18 @@ require(doc,[
 ],"Build 488 contract")
 require(roadmap,["### Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing","### Build 489 — Provider & Local Search Evidence Continuity"],"renewed roadmap")
 require(queue,[
- "**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is the active bounded release.",
- "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is next",
+ "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
+ "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next",
  "BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md",
  "it has not run out"
 ],"Build 488 queue")
 require(handoff,[
- "**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is the active bounded release.",
+ "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
  "BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md",
  "controlled_environment_weather_safe_routing_check.py"
 ],"Build 488 handoff")
 require(readme,[
- "Current source direction: **Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence**.",
+ "Current source direction: **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review**.",
  "BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md",
  "controlled_environment_weather_safe_routing_check.py",
  "Production is not considered GREEN from source promotion alone."
