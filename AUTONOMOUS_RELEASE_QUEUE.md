@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`.
-Retained predecessor contract: `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`.
+The synchronized predecessor contracts are retained through `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`.
+Retained predecessor contract: `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 - `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 - `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -126,25 +127,25 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.
+**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.
 
 Scope:
-- prepare service-specific winter booking/quote rule activation-readiness evidence only after retained capability/public-claim review is current and attributable;
-- require an explicit dated attributable owner activation-readiness decision plus classification-compatible booking and quote rule candidates;
-- preserve /api/availability and server-side checkout collision revalidation as operational authorities; neither proves weather eligibility by itself;
-- keep weather-ineligible sessions outside ordinary conversion interpretation and never treat them as conversion failures;
-- keep exact working-temperature limits source-owned and broad winter availability held;
-- keep automatic activation, booking/quote rule mutation, availability/checkout mutation, public content, customer messaging, pricing/discount, provider, accounting/inventory, schema/storage, outreach and polling disabled; and
+- require service-specific current attributable site, workflow, equipment and product evidence before a controlled-environment option can become qualification-review-ready;
+- require an explicit reference, current-evidence marker and supported/compatible marker for each of the four qualification domains;
+- keep temperature-limited outdoor work on manual safe-reschedule review and controlled-environment-required work on specific site-confirmation review whenever qualification evidence is incomplete;
+- keep current site confirmation required before execution even when a service/site evidence package is qualified;
+- preserve exact working-temperature limits as source-owned and keep universal indoor or broad winter capability claims held;
+- keep automatic appointment movement, routing/rescheduling, booking/availability, quote, customer messaging, public content, pricing/discount, provider, accounting/inventory, schema/storage, outreach and polling mutations disabled; and
 - require exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
 
-Current contract: `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`. Retained owner/public-claim authority: `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`. Retained winter eligibility/capability authorities: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` and `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_496_505.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`. Retained activation-readiness authority: `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`. Retained weather-safe routing authority: `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_496_505.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 The exact candidate must pass the focused current authority, retained seasonal authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Readiness evidence never activates a winter booking/quote rule by itself.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Site qualification evidence never moves or reroutes an appointment by itself.
 
 ## Next release
-**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next only after the current release is independently GREEN on protected main.
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_496_505.md`; it has not run out.
 
