@@ -1,5 +1,6 @@
-// Build 482 — read-only remediation execution-evidence readiness over retained Build 472 verification.
+// Build 503 — descriptive outcome interpretation/follow-up over retained Build 493 evidence.
 import { buildStaffWorkflowSupportExceptionLearning } from "./staff-workflow-support-exception-learning.js";
+import { buildStaffMobileRemediationOutcomeInterpretationFollowUp } from "./staff-mobile-remediation-outcome-interpretation-follow-up.js";
 
 const REVIEW_COHORT_MIN = 2;
 
@@ -55,6 +56,10 @@ export function buildStaffSupportMobileEfficiencyLearning({
     outcomeEvidence: remediation_outcome_evidence,
     outcomeSourceAvailable: remediation_outcome_source_available
   });
+  const remediation_outcome_interpretation = buildStaffMobileRemediationOutcomeInterpretationFollowUp({
+    outcome_summary: remediation_outcome.summary,
+    outcome_rows: remediation_outcome.rows
+  });
 
   return {
     build: 452,
@@ -67,6 +72,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     execution_evidence_readiness_authority: "staff_mobile_remediation_execution_evidence_readiness",
     remediation_outcome_evidence_build: 493,
     remediation_outcome_evidence_authority: "staff_mobile_remediation_outcome_evidence",
+    remediation_outcome_interpretation_follow_up_build: 503,
+    remediation_outcome_interpretation_follow_up_authority: "staff_mobile_remediation_outcome_interpretation_follow_up",
     generated_at: generated_at || new Date().toISOString(),
     evidence_status,
     staff_workflow: retained.staff_workflow,
@@ -80,6 +87,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
     remediation_execution_evidence_readiness: execution_evidence_readiness.rows,
     remediation_outcome_evidence_summary: remediation_outcome.summary,
     remediation_outcome_evidence: remediation_outcome.rows,
+    remediation_outcome_interpretation_follow_up_summary: remediation_outcome_interpretation.summary,
+    remediation_outcome_interpretation_follow_up: remediation_outcome_interpretation.rows,
     source_status: safeSourceStatus(source_status),
     truth_boundary: {
       repeated_pattern_proves_root_cause: false,
@@ -97,6 +106,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
       before_after_template_proves_effectiveness: false,
       attributable_execution_alone_proves_effectiveness: false,
       materially_comparable_observation_alone_proves_causation: false,
+      single_like_for_like_pair_proves_effectiveness: false,
+      descriptive_delta_proves_staff_or_device_fault: false,
       weather_site_constraint_proves_staff_or_mobile_friction: false,
       service_temperature_limit_inferred: false,
       efficiency_improvement_claimed: false
@@ -120,6 +131,8 @@ export function buildStaffSupportMobileEfficiencyLearning({
       automatic_before_after_conclusion_allowed: false,
       automatic_outcome_claim_allowed: false,
       outcome_evidence_persistence_allowed: false,
+      automatic_follow_up_action_allowed: false,
+      interpretation_persistence_allowed: false,
       weather_site_constraint_mutation_allowed: false,
       role_ceiling_change_allowed: false,
       blame_inference_allowed: false,
