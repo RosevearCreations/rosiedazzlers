@@ -67,18 +67,18 @@ require(doc,[
 ],"Build 489 contract")
 require(roadmap,["### Build 489 — Provider & Local Search Evidence Continuity","### Build 490 — Recovery & Authenticated Device Evidence Continuity"],"renewed roadmap")
 require(queue,[
- "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.",
- "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is next",
+ "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
+ "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next",
  "BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md",
  "it has not run out"
 ],"Build 489 queue")
 require(handoff,[
- "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.",
+ "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
  "BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md",
  "provider_local_search_evidence_continuity_check.py"
 ],"Build 489 handoff")
 require(readme,[
- "Current source direction: **Build 496 — Seasonal Capability Owner Review & Public Claim Decision**.",
+ "Current source direction: **Build 497 — Winter Booking & Quote Rule Activation Readiness**.",
  "BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md",
  "provider_local_search_evidence_continuity_check.py",
  "Production is not considered GREEN from source promotion alone."
