@@ -47,3 +47,5 @@ Source/runtime GREEN is not observed recovery execution and is not direct authen
 
 ## Next bounded release
 **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** begins only after Build 500 is independently GREEN on protected `main`.
+
+The future queue remains bounded by `FORWARD_BUILD_ROADMAP_496_505.md`; this release does not start Build 501 work.
