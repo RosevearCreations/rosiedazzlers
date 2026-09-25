@@ -12,7 +12,7 @@ The synchronized Production predecessor is retained through BUILD500_RECOVERY_DR
 Current contract: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Current source authority: scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py. Retained maintenance/fleet pilot outcome authority: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
 ## Current Maintenance & Fleet Pilot Outcome Continuity Review contract
-- Reuse retained owner-decision, controlled-pilot and Build 491 outcome-evidence authorities; do not create a second pilot engine, participant registry, capacity ledger, invoicing workflow or recurring-billing path.
+- Reuse retained owner-decision, controlled-pilot and pilot outcome-evidence authorities; do not create a second pilot engine, participant registry, capacity ledger, invoicing workflow or recurring-billing path.
 - Continuity is attributable only when explicit owner approval, participant/duration bounds and current execution rows remain traceable.
 - Participant and duration evidence must remain inside the explicit owner bounds; current availability revalidation and checkout collision revalidation remain the capacity evidence authorities.
 - Invoicing, travel and stop-condition evidence must be directly observed. No invoice is created or changed, no travel limit is invented and no capacity is reserved.
@@ -24,7 +24,7 @@ Current contract: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md.
 ## Retained Recovery Drill & Authenticated Device Observation Execution Evidence contract
 - Reuse retained recovery/export, recovery continuity, drill planning and authenticated-device observation authorities; do not create a second restore engine, evidence ledger, screenshot service, browser farm or readiness dashboard.
 - A recovery execution observation is review-ready only when the retained source records a current dated drill plus explicit bounded non-Production scope, observer attribution, backup and retention references, an explicit outcome, abort/deviation evidence and the current evidence trace.
-- Build 500 never executes a drill or Production restore. A source/runtime GREEN result, a recovery route or an owner-reviewed plan cannot substitute for explicit post-execution observation evidence.
+- The retained execution-evidence release never executes a drill or Production restore. A source/runtime GREEN result, a recovery route or an owner-reviewed plan cannot substitute for explicit post-execution observation evidence.
 - Current authenticated device evidence remains direct and role-specific for Customer, Detailer, Operations and Admin, with representative phone/tablet/desktop coverage plus browser, safe route, viewport and explicit outcome evidence.
 - Current negative authenticated observations remain regressions and override historical acceptance. Missing/stale/historical-only coverage remains owner action.
 - Recovery and authenticated-device populations stay separate; neither population is joined to customer/business data or used to manufacture the other population's success.
