@@ -647,6 +647,10 @@ jobs:
         run: |
           python scripts/winter_booking_quote_rule_activation_readiness_check.py
           node scripts/winter_booking_quote_rule_activation_readiness_test.mjs
+      - name: Validate controlled-environment site qualification & service routing evidence authority
+        run: |
+          python scripts/controlled_environment_site_qualification_service_routing_evidence_check.py
+          node scripts/controlled_environment_site_qualification_service_routing_evidence_test.mjs
 
       - name: Validate current reliability, security & cost reassessment
         run: python scripts/current_reliability_security_cost_reassessment_check.py
