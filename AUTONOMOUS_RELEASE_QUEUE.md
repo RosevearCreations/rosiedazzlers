@@ -7,7 +7,7 @@ The accepted synchronized source and Production deployment/runtime checkpoint im
 
 The synchronized predecessor contracts are retained through `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
 Retained predecessor contract: `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
-Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
+Retained compatibility pointer: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`.
 
 ## Retained cumulative authority pointers
 - `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
@@ -134,7 +134,7 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.
 
 Scope:
-- reconcile retained Build 491 pilot execution/outcome evidence only when explicit owner approval, bounded participant/duration authorization and attributable current execution rows exist;
+- reconcile retained pilot execution/outcome evidence only when explicit owner approval, bounded participant/duration authorization and attributable current execution rows exist;
 - require participant and duration evidence to remain inside the explicit owner bounds while preserving current availability and checkout collision revalidation as capacity evidence;
 - require attributable invoicing outcome, observed travel distance and per-row stop-condition state without creating invoices, inventing travel limits or reserving capacity;
 - surface triggered stop conditions as an explicit review-required state that never authorizes continuation or automatically executes a stop action;
