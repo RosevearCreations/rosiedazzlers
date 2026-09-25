@@ -1,5 +1,6 @@
 // Build 503 — descriptive outcome interpretation/follow-up over retained Build 493 evidence.
-import { buildStaffWorkflowSupportExceptionLearning } from "./staff-workflow-support-exception-learning.js";\nimport { buildStaffMobileRemediationOutcomeInterpretationFollowUp } from "./staff-mobile-remediation-outcome-interpretation-follow-up.js";
+import { buildStaffWorkflowSupportExceptionLearning } from "./staff-workflow-support-exception-learning.js";
+import { buildStaffMobileRemediationOutcomeInterpretationFollowUp } from "./staff-mobile-remediation-outcome-interpretation-follow-up.js";
 
 const REVIEW_COHORT_MIN = 2;
 
