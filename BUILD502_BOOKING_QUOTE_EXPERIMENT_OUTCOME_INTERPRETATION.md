@@ -39,7 +39,7 @@ Therefore every interpretation retains:
 No state selects a winner, declares experiment success, proves price causation or recommends a business mutation.
 
 ## Seasonal truth boundary
-Southern Ontario weather/site restrictions remain eligibility evidence, not conversion failures. Exact service temperature limits remain source-owned and are never inferred from experiment outcomes.
+Weather-ineligible sessions in Southern Ontario remain eligibility evidence, not conversion failures. Exact service temperature limits remain source-owned and are never inferred from experiment outcomes.
 
 ## Mutation and privacy boundary
 Build 502 authorizes no automatic price/discount change, booking-rule change, availability mutation, booking creation/change, outreach, provider action, customer identity join, schema/storage mutation or permanent polling.
