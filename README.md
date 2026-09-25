@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence**.
+Current source direction: **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review**.
 
 ## Release authority
-Authority: `scripts/recovery_authenticated_device_observation_execution_evidence_check.py` · `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py` · `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+
+Retained recovery/device execution authority: `scripts/recovery_authenticated_device_observation_execution_evidence_check.py` · `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
 
 Retained Controlled-Environment Site Qualification & Service Routing Evidence authority: `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py` · `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`.
 
@@ -24,7 +26,8 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
+3. `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
+4. `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
 4. `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
 4. `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 4. `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
@@ -52,6 +55,7 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 9. `STARTUP_GO_LIVE_BLOCKERS.md`
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
 - `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
 - `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
 - `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
