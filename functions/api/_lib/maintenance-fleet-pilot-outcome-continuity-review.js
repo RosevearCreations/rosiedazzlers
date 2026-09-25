@@ -172,5 +172,5 @@ function safeArray(value){ return Array.isArray(value) ? value : []; }
 function objectOrEmpty(value){ return value && typeof value === "object" && !Array.isArray(value) ? value : {}; }
 function clean(value){ return String(value ?? "").trim(); }
 function validIso(value){ const text=clean(value); return text && Number.isFinite(Date.parse(text)) ? new Date(text).toISOString() : null; }
-function finiteWhole(value){ const n=Number(value); return Number.isFinite(n) && n>=0 ? Math.floor(n) : null; }
-function finiteNonNegative(value){ const n=Number(value); return Number.isFinite(n) && n>=0 ? Math.round(n*100)/100 : null; }
+function finiteWhole(value){ if(value===null||value===undefined||value==="") return null; const n=Number(value); return Number.isFinite(n) && n>=0 ? Math.floor(n) : null; }
+function finiteNonNegative(value){ if(value===null||value===undefined||value==="") return null; const n=Number(value); return Number.isFinite(n) && n>=0 ? Math.round(n*100)/100 : null; }
