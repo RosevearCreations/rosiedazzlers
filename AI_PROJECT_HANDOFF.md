@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md.
+The synchronized Production predecessor is retained through BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md.
 
-**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.
+**Build 499 — Provider & Local Search Outcome Evidence Refresh** is the active bounded release.
 
-**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next only after the current release is independently GREEN on protected main.
+**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md. Retained activation-readiness authority: BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md. Retained weather-safe routing authority: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained provider/local-search continuity authority: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained local-search snapshot authority: BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md. Retained provider traceability authority: BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Controlled-Environment Site Qualification & Service Routing Evidence contract
+## Current Provider & Local Search Outcome Evidence Refresh contract
+- Reuse the retained provider HOLD traceability, provider/local-search continuity and local-search snapshot authorities; do not create a second provider ledger, Google integration, analytics identity or polling service.
+- Stripe, PayPal, linked refund and definitive message-delivery outcomes require the expected attributable provider evidence class, source availability, valid dated evidence, current freshness and an observed outcome.
+- Search Console requires the correct property identity; Google Business Profile requires the correct location identity; descriptive outcome continuity requires distinct equal-length current/prior dated windows.
+- First-party referral/funnel context remains a separate descriptive population and never substitutes for provider evidence or joins provider metrics to customers/persisted bookings.
+- Search/referral/provider movement never proves ranking, indexing, Maps visibility, weather effects, winter demand, service availability, booking-conversion causation or any service working-temperature threshold.
+- Keep the release read-only/manual-refresh only: no payment/refund/message send, provider contact, Search Console/GBP write, automatic provider snapshot save, booking/quote/customer/content, schema/storage, outreach or polling mutation.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Controlled-Environment Site Qualification & Service Routing Evidence contract
 - Reuse the retained winter activation-readiness, weather-safe routing, seasonal capability and protected Service Economics authorities; do not create a second booking, routing or weather engine.
 - A controlled-environment option is qualification-review-ready only for the specific service when current attributable site, workflow, equipment and product evidence is complete.
 - Each qualification domain requires an explicit evidence reference, current-evidence marker and supported/compatible marker. Missing evidence is never inferred from another service or a general indoor capability.
