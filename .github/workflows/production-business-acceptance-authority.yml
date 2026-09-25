@@ -115,6 +115,9 @@ jobs:
           node --check functions/api/_lib/provider-local-search-evidence-continuity.js
           node --check functions/api/admin/provider_local_search_evidence_continuity.js
           node --check scripts/provider_local_search_evidence_continuity_test.mjs
+          python -m py_compile scripts/provider_local_search_outcome_evidence_refresh_check.py
+          node --check functions/api/_lib/provider-local-search-outcome-evidence-refresh.js
+          node --check scripts/provider_local_search_outcome_evidence_refresh_test.mjs
           node --check scripts/local_search_provider_snapshot_continuity_descriptive_review_test.mjs
           python -m py_compile scripts/booking_funnel_quote_pricing_learning_check.py
           node --check scripts/booking_funnel_quote_pricing_learning_test.mjs
@@ -574,6 +577,10 @@ jobs:
         run: |
           python scripts/controlled_environment_site_qualification_service_routing_evidence_check.py
           node scripts/controlled_environment_site_qualification_service_routing_evidence_test.mjs
+      - name: Validate provider & local search outcome evidence refresh authority
+        run: |
+          python scripts/provider_local_search_outcome_evidence_refresh_check.py
+          node scripts/provider_local_search_outcome_evidence_refresh_test.mjs
 
       - name: Validate current-cycle reliability, security & cost reassessment
         run: python scripts/current_reliability_security_cost_reassessment_check.py
@@ -606,6 +613,7 @@ jobs:
             echo "- Seasonal capability owner review / public claim decision: PASS"
             echo "- Winter booking / quote rule activation readiness: PASS"
             echo "- Controlled-environment site qualification / service routing evidence: PASS"
+            echo "- Provider / local-search outcome evidence refresh: PASS"
             echo "- Booking conversion / quote clarity: PASS"
             echo "- Service economics / job profitability evidence: PASS"
             echo "- Canonical Production HOLD inventory / authority cleanup: PASS"

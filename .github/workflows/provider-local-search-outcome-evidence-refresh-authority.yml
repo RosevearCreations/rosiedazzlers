@@ -1,0 +1,54 @@
+name: Provider & Local Search Outcome Evidence Refresh Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-provider-local-search-outcome-evidence-refresh-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: provider-local-search-outcome-evidence-refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Provider & Local Search Outcome Evidence Refresh
+        run: |
+          python scripts/provider_local_search_outcome_evidence_refresh_check.py
+          node scripts/provider_local_search_outcome_evidence_refresh_test.mjs
+      - name: Build 499 summary
+        run: |
+          {
+            echo '### Provider & Local Search Outcome Evidence Refresh'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Payment/refund/message evidence source identity + freshness: REQUIRED'
+            echo '- Search Console property / GBP location + comparable windows: REQUIRED'
+            echo '- First-party referral/funnel context: SEPARATE DESCRIPTIVE EVIDENCE'
+            echo '- Ranking / weather / demand / conversion causation: NOT INFERRED'
+            echo '- Provider writes / payment-refund-message mutation / polling: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
