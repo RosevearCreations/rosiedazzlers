@@ -36,18 +36,18 @@ Build 451 adds aggregate booking-stage, quote-value-band and accepted-vs-quoted 
 Build 481 adds explicit owner-approved booking/quote measurement locks using the existing app settings store. A lock requires declared thresholds, duration/allocation, stop conditions and Southern Ontario seasonal/weather eligibility, but it does not authorize experiment execution or any price/discount/booking-rule/availability/outreach change. Weather-ineligible sessions are excluded from the declared conversion denominator and exact service temperature limits are not inferred.
 
 ## Current cycle reconciliation
-`PRODUCTION_LEARNING_476_484.md` confirms that the 476–484 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
+`PRODUCTION_LEARNING_486_494.md` confirms that the 486–494 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
-- `PRODUCTION_LEARNING_476_484.md`
-- `FORWARD_BUILD_ROADMAP_486_495.md`
-- `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
-- `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`
-- `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`
+- `PRODUCTION_LEARNING_486_494.md`
+- `FORWARD_BUILD_ROADMAP_496_505.md`
+- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
+- `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
 
-Build 485 renews the roadmap from observed 476–484 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval, seasonal-capability and unavailable-evidence HOLD until dated attributable closure evidence exists.
+Build 495 renews the roadmap from observed 486–494 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists.
 
 Build 476 carries the provider HOLD forward with explicit evidence trace and closure prerequisites. No authorized persisted operator-review record is inferred from source/runtime evidence, so the retained endpoint defaults to no review record and no automatic HOLD update.
 

@@ -5,11 +5,14 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`.
-Retained predecessor contract: `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`.
+The synchronized predecessor contracts are retained through `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`.
+Retained predecessor contract: `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_486_494.md`
+- `FORWARD_BUILD_ROADMAP_496_505.md`
 - `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
 - `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
 - `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`
@@ -121,28 +124,27 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 494 — Service Economics, Seasonal Operations & Reliability Review** is the active bounded release.
+**Build 495 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- reuse the retained Service Economics and Reliability authorities rather than creating a parallel ledger, costing, weather, capacity, provider-telemetry or recovery system;
-- reconcile only explicit service/add-on allocation, Southern Ontario cold-weather capability, observed operational capacity and reliability-continuity evidence;
-- keep booking demand, margin, seasonal capability, technical availability, provider billing/CPU/quota and recovery observations as distinct evidence classes;
-- keep exact working-temperature limits source-owned and never infer a threshold or broad winter-availability claim;
-- keep cold-weather field restrictions separate from application reliability;
-- expose aggregate read-only evidence only, with customer/staff identity and raw booking/support identifiers excluded; and
-- perform no automatic allocation, price/discount, booking/availability, public claim, scaling, provider, restore, accounting/inventory, schema/storage or polling mutation.
+- reconcile the completed 486–494 evidence cycle without manufacturing provider, owner, recovery, real-device, pilot, experiment, remediation, allocation, seasonal-operability or provider-cost success;
+- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory and close nothing without dated attributable owning evidence;
+- preserve Southern Ontario seasonal-service truth: exact temperature limits remain source-owned, technical availability is not field operability, and broad winter availability remains unproven;
+- renew the next bounded roadmap from observed outcomes rather than creating replacement payment, recovery, browser, fleet, weather, pricing, analytics, staff, economics or observability systems;
+- keep this release read-only governance with no automatic booking, pricing, public content, provider, recovery, fleet, experiment, accounting/inventory, schema/storage or polling mutation; and
+- require exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
 
-Current contract: `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`. Retained service/add-on allocation authority: `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md`. Retained cold-weather capability authority: `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md`. Retained routing authority: `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md`. Retained reliability-continuity authority: `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_486_495.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle learning: `PRODUCTION_LEARNING_486_494.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_496_505.md`. Retained predecessor: `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused reconciliation authority, retained economics/seasonal/reliability authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Production Learning & Roadmap Renewal authority, retained owning authorities for Builds 486–494, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing allocation, seasonal capability, observed capacity, provider-cost or recovery evidence remains truthful owner/provider action; source/runtime GREEN does not fabricate it.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing provider/owner/seasonal/recovery/device/execution evidence remains truthful owner/provider action; source/runtime GREEN does not fabricate it.
 
 ## Next release
-**Build 495 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
-The future queue continues through `FORWARD_BUILD_ROADMAP_486_495.md`; it has not run out.
+The future queue continues through `FORWARD_BUILD_ROADMAP_496_505.md`; it has not run out.
 
 ## Continuing rule
 Never call a Rosie Dazzlers source release GREEN from source changes alone. Missing provider, owner, observed recovery or real-device evidence remains a truthful HOLD rather than inferred success. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.

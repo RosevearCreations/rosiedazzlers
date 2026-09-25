@@ -1,9 +1,9 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 494 — Service Economics, Seasonal Operations & Reliability Review**.
+Current source direction: **Build 495 — Production Learning & Roadmap Renewal**.
 
-## Current Service Economics, Seasonal Operations & Reliability Review authority
-Authority: `scripts/service_economics_seasonal_operations_reliability_review_check.py` · `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+## Current Production Learning & Roadmap Renewal authority
+Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`. Production is not considered GREEN from source promotion alone.
 
 Retained staff/mobile outcome: `scripts/staff_mobile_remediation_outcome_evidence_check.py`.
 
@@ -25,7 +25,7 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md` — current bounded contract.
+3. `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded contract.
 4. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — retained execution-evidence contract.
 4. `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` — retained outcome contract.
@@ -34,9 +34,9 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 4. `BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md` — retained routing contract.
 4. `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md` — retained eligibility contract.
 5. `BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md` — retained capability contract.
-4. `BUILD485_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
-5. `PRODUCTION_LEARNING_476_484.md` — retained cycle reconciliation.
-6. `FORWARD_BUILD_ROADMAP_486_495.md` — active evidence-driven sequence.
+4. `PRODUCTION_LEARNING_486_494.md` — current cycle reconciliation.
+5. `FORWARD_BUILD_ROADMAP_496_505.md` — active evidence-driven sequence.
+6. `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md` — retained predecessor contract.
 7. `BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md` — retained predecessor contract.
 7. `BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md` — retained predecessor contract.
 5. `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` — retained predecessor contract.
@@ -48,6 +48,9 @@ Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDEN
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_486_494.md`
+- `FORWARD_BUILD_ROADMAP_496_505.md`
 - `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
 
 - `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
@@ -182,13 +185,7 @@ Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` cont
 - `scripts/local_acquisition_content_proof_test.mjs`
 
 ## Retained Service Economics, Capacity & Pricing Review framework
-This release enriches the retained economics/capacity review with aggregate pricing-learning context instead of creating a replacement ledger or pricing system.
-- Missing recorded material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions.
-- Service/package cohorts are computed only from recorded job-economics evidence.
-- Add-on margin remains unavailable because retained evidence does not defensibly allocate material/labour/COGS to individual add-ons.
-- Quote-value and booking-stage patterns are review context only; they do not prove price sensitivity, discount need or price causation.
-- Demand does not prove live capacity; existing availability and checkout collision revalidation remain authoritative.
-- No automatic price/discount, quote, booking, accounting/inventory, provider or polling action is introduced.
+Missing recorded material, labour, cash/refund or COGS evidence blocks contribution/margin conclusions; add-on margin remains unavailable without defensible allocation. Quote patterns do not prove price sensitivity, demand does not prove live capacity, and availability/checkout collision revalidation remain authoritative. No automatic price/discount, booking, accounting/inventory, provider or polling action is introduced.
 
 ## Durable validation
 Retained and current authorities include:

@@ -42,9 +42,9 @@ jobs:
           {
             echo '### Production Learning & Roadmap Renewal'
             echo "- SHA: `${GITHUB_SHA}`"
-            echo '- Completed-cycle 476–484 evidence reconciliation: PASS'
+            echo '- Completed-cycle 486–494 evidence reconciliation: PASS'
             echo '- Owner/provider HOLD truth boundary: PASS'
-            echo '- Southern Ontario cold-weather truth boundary: PASS'
-            echo '- Roadmap 486–495 renewal: PASS'
+            echo '- Southern Ontario seasonal-service truth boundary: PASS'
+            echo '- Roadmap 496–505 renewal: PASS'
             echo '- Schema/provider/business mutation: NONE'
           } >> "$GITHUB_STEP_SUMMARY"
