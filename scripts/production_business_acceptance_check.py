@@ -170,6 +170,10 @@ required_authorities = {
     "production_learning_roadmap_renewal": [
         "scripts/production_learning_roadmap_renewal_check.py",
     ],
+    "seasonal_capability_owner_review_public_claim_decision": [
+        "scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
+        "scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
+    ],
     "booking_conversion_quote_clarity": [
         "scripts/build427_booking_conversion_quote_clarity_check.py",
     ],
@@ -290,6 +294,9 @@ workflow = require(WORKFLOW, [
     "Validate reliability, performance & cost capacity authority",
     "Validate security, privacy & recovery drill authority",
     "Validate Production learning & roadmap renewal authority",
+    "Validate seasonal capability owner review & public claim decision authority",
+    "python scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
+    "node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
     "Validate current-cycle reliability, security & cost reassessment",
     "python scripts/current_reliability_security_cost_reassessment_check.py",
     "Validate reliability, cost & resilience operational guardrails authority",
