@@ -3,24 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md.
+The synchronized Production predecessor is retained through BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md.
 
-**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.
+**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.
 
-**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md. Retained owner/public-claim authority: BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md. Retained winter eligibility/capability authorities: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md and BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md. Retained activation-readiness authority: BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md. Retained weather-safe routing authority: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Winter Booking & Quote Rule Activation Readiness contract
-- Reuse retained seasonal capability, winter eligibility, owner/public-claim review, /api/availability and checkout collision-revalidation authorities; do not create a second booking or weather engine.
-- A service-specific rule package becomes `activation_readiness_review_ready` only from current attributable retained capability/public-claim evidence plus an explicit dated attributable owner activation-readiness review.
-- Booking and quote rule candidates must match the retained service classification. Missing or incompatible rules remain owner action; an explicit hold_activation remains HOLD.
-- Current slot availability remains owned by /api/availability, and checkout must continue server-side collision revalidation immediately before booking creation.
-- Weather-ineligible sessions remain outside ordinary conversion interpretation and are not conversion failures.
-- Exact working-temperature limits remain source-owned; service-specific readiness never authorizes broad winter availability.
-- Keep the release read-only: no automatic activation, booking/quote rule mutation, availability/checkout mutation, public content, customer message, pricing/discount, provider, accounting/inventory, schema/storage, outreach or polling mutation.
+## Current Controlled-Environment Site Qualification & Service Routing Evidence contract
+- Reuse the retained winter activation-readiness, weather-safe routing, seasonal capability and protected Service Economics authorities; do not create a second booking, routing or weather engine.
+- A controlled-environment option is qualification-review-ready only for the specific service when current attributable site, workflow, equipment and product evidence is complete.
+- Each qualification domain requires an explicit evidence reference, current-evidence marker and supported/compatible marker. Missing evidence is never inferred from another service or a general indoor capability.
+- Temperature-limited outdoor work with incomplete qualification remains in manual safe-reschedule review; controlled-environment-required work remains in specific site-confirmation review.
+- Even a qualified evidence package still requires current site confirmation before execution. Qualification is not a booking or routing mutation.
+- Exact temperature limits remain source-owned. One qualified service/site never creates universal indoor capability or broad winter availability.
+- Keep the release read-only: no automatic appointment move, routing/reschedule, booking/availability, quote, customer message, public content, pricing/discount, provider, accounting/inventory, schema/storage, outreach or polling mutation.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
+## Retained Winter Booking & Quote Rule Activation Readiness contract
+- Reuse retained seasonal capability, winter eligibility, owner/public-claim review, /api/availability and checkout collision-revalidation authorities.
+- Service-specific activation readiness remains owner-reviewed and never activates a rule automatically.
+- Current slot availability and server-side collision revalidation remain operational authorities; weather-ineligible sessions stay outside ordinary conversion interpretation.
+- Exact working-temperature limits remain source-owned and broad winter availability remains unproven.
+- Keep the retained authority read-only and require exact release acceptance.
 ## Retained Seasonal Capability Owner Review & Public Claim Decision contract
 - Reuse the retained seasonal capability and weather-safe-routing authorities rather than creating a second weather or booking engine.
 - A service-specific public claim becomes publication_review_ready only from current attributable capability evidence plus an explicit dated attributable owner decision.
@@ -150,6 +156,11 @@ Current contract: BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md. Re
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
+- `.github/workflows/controlled-environment-site-qualification-service-routing-evidence-authority.yml`
+- `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py`
+- `scripts/controlled_environment_site_qualification_service_routing_evidence_test.mjs`
+- `functions/api/_lib/controlled-environment-site-qualification-service-routing-evidence.js`
 - `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 - `.github/workflows/winter-booking-quote-rule-activation-readiness-authority.yml`
 - `scripts/winter_booking_quote_rule_activation_readiness_check.py`
