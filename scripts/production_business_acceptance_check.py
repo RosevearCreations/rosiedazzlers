@@ -174,6 +174,10 @@ required_authorities = {
         "scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
         "scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
     ],
+    "winter_booking_quote_rule_activation_readiness": [
+        "scripts/winter_booking_quote_rule_activation_readiness_check.py",
+        "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
+    ],
     "booking_conversion_quote_clarity": [
         "scripts/build427_booking_conversion_quote_clarity_check.py",
     ],
@@ -297,6 +301,9 @@ workflow = require(WORKFLOW, [
     "Validate seasonal capability owner review & public claim decision authority",
     "python scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
     "node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
+    "Validate winter booking & quote rule activation readiness authority",
+    "python scripts/winter_booking_quote_rule_activation_readiness_check.py",
+    "node scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
     "Validate current-cycle reliability, security & cost reassessment",
     "python scripts/current_reliability_security_cost_reassessment_check.py",
     "Validate reliability, cost & resilience operational guardrails authority",
@@ -375,6 +382,7 @@ print("- retention/maintenance/fleet operational pilot remains manual, capacity-
 print("- media/Photo Studio/proof operations remain read-only and evidence-truthful")
 print("- reliability/performance/cost capacity remains bounded, first-party and non-mutating")
 print("- production learning/roadmap renewal keeps stale authority closure evidence-based and unresolved HOLDs explicit")
+print("- winter booking/quote activation readiness remains owner-reviewed, availability-authoritative and non-activating")
 print("- Build 444 reliability/security/cost reassessment reuses retained read-only authority and keeps provider/recovery evidence fail-closed")
 print("- booking conversion / quote clarity retains server-authoritative pricing/availability and anonymous evidence boundaries")
 print("- service economics / job profitability keeps missing cost, labour and cash evidence fail-closed and read-only")
