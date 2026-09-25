@@ -225,6 +225,11 @@ jobs:
           node --check functions/api/_lib/service-economics-seasonal-operations-reliability-review.js
           node --check functions/api/admin/service_economics_seasonal_operations_reliability_review.js
           node --check assets/build494-service-economics-seasonal-operations-reliability-review.js
+          python -m py_compile scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py
+          node --check scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-trend-continuity.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_trend_continuity.js
+          node --check assets/build504-service-economics-seasonal-capacity-reliability-trend-continuity.js
           node --check functions/api/_lib/booking-funnel-quote-pricing-learning.js
           node --check functions/api/admin/booking_funnel_quote_pricing_learning.js
           node --check assets/build451-booking-funnel-quote-pricing-learning.js
@@ -565,6 +570,11 @@ jobs:
           node scripts/staff_mobile_remediation_outcome_evidence_test.mjs
           python scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py
           node scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs
+
+      - name: Validate service economics, seasonal capacity & reliability trend continuity authority
+        run: |
+          python scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py
+          node scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs
 
       - name: Validate staff workflow, support & mobile efficiency learning authority
         run: |

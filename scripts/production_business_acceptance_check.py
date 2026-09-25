@@ -112,6 +112,10 @@ required_authorities = {
         "scripts/service_economics_seasonal_operations_reliability_review_check.py",
         "scripts/service_economics_seasonal_operations_reliability_review_test.mjs",
     ],
+    "service_economics_seasonal_capacity_reliability_trend_continuity": [
+        "scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py",
+        "scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs",
+    ],
     "launch_readiness": [
         "scripts/launch_readiness_consolidation_check.py",
         "scripts/launch_readiness_consolidation_test.mjs",
@@ -293,6 +297,9 @@ workflow = require(WORKFLOW, [
     "Validate service economics, seasonal operations & reliability review authority",
     "python scripts/service_economics_seasonal_operations_reliability_review_check.py",
     "node scripts/service_economics_seasonal_operations_reliability_review_test.mjs",
+    "Validate service economics, seasonal capacity & reliability trend continuity authority",
+    "python scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py",
+    "node scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs",
     "Validate launch readiness consolidation authorities",
     "Validate controlled soft launch acceptance authority",
     "Validate provider evidence closure authority",
