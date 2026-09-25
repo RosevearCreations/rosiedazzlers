@@ -54,19 +54,19 @@ require(doc,[
 ],"Build 483 contract")
 require(queue,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
- "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
- "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next",
+ "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
+ "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is next",
  "it has not run out"
 ],"retained Build 483 queue")
 require(handoff,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
- "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release."
+ "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release."
 ],"retained Build 483 handoff")
 require(readme,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
- "Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.",
+ "Current source direction: **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up**.",
  "Production is not considered GREEN from source promotion alone."
 ],"retained Build 483 README")
 for text,label in [(source_gate,"Development Source Gate"),(prod_gate,"Production Business Acceptance")]:
