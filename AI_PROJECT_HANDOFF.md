@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md.
+The synchronized Production predecessor is retained through BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md.
 
-**Build 499 — Provider & Local Search Outcome Evidence Refresh** is the active bounded release.
+**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is the active bounded release.
 
-**Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Current source authority: scripts/provider_local_search_outcome_evidence_refresh_check.py. Retained provider/local-search continuity authority: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained local-search snapshot authority: BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md. Retained provider traceability authority: BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Current source authority: scripts/recovery_authenticated_device_observation_execution_evidence_check.py. Retained recovery/device continuity authority: BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md. Retained recovery drill planning authority: BUILD477_RECOVERY_DRILL_EVIDENCE_REFRESH_CLOSURE_REVIEW.md. Retained authenticated-device observation authority: BUILD478_AUTHENTICATED_DEVICE_OBSERVATION_REFRESH_REGRESSION_TRIAGE.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Provider & Local Search Outcome Evidence Refresh contract
+## Current Recovery Drill & Authenticated Device Observation Execution Evidence contract
+- Reuse retained recovery/export, recovery continuity, drill planning and authenticated-device observation authorities; do not create a second restore engine, evidence ledger, screenshot service, browser farm or readiness dashboard.
+- A recovery execution observation is review-ready only when the retained source records a current dated drill plus explicit bounded non-Production scope, observer attribution, backup and retention references, an explicit outcome, abort/deviation evidence and the current evidence trace.
+- Build 500 never executes a drill or Production restore. A source/runtime GREEN result, a recovery route or an owner-reviewed plan cannot substitute for explicit post-execution observation evidence.
+- Current authenticated device evidence remains direct and role-specific for Customer, Detailer, Operations and Admin, with representative phone/tablet/desktop coverage plus browser, safe route, viewport and explicit outcome evidence.
+- Current negative authenticated observations remain regressions and override historical acceptance. Missing/stale/historical-only coverage remains owner action.
+- Recovery and authenticated-device populations stay separate; neither population is joined to customer/business data or used to manufacture the other population's success.
+- Keep the release read-only: no Production restore, drill execution, browser farm, screenshot capture, remediation, canonical-HOLD, provider/business, schema/storage, outreach or polling mutation.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Provider & Local Search Outcome Evidence Refresh contract
 - Reuse the retained provider HOLD traceability, provider/local-search continuity and local-search snapshot authorities; do not create a second provider ledger, Google integration, analytics identity or polling service.
 - Stripe, PayPal, linked refund and definitive message-delivery outcomes require the expected attributable provider evidence class, source availability, valid dated evidence, current freshness and an observed outcome.
 - Search Console requires the correct property identity; Google Business Profile requires the correct location identity; descriptive outcome continuity requires distinct equal-length current/prior dated windows.
