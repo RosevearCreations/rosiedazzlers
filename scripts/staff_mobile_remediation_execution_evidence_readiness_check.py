@@ -116,20 +116,20 @@ require(roadmap, [
 ], "Build 482 roadmap")
 require(queue, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
-    "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next",
+    "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release.",
+    "**Build 499 — Provider & Local Search Outcome Evidence Refresh** is next",
     "it has not run out"
 ], "retained Build 482 queue")
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release."
+    "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
-    "Current source direction: **Build 497 — Winter Booking & Quote Rule Activation Readiness**.",
+    "Current source direction: **Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence**.",
     "Production is not considered GREEN from source promotion alone."
 ], "retained Build 482 README")
 require(blockers, [
