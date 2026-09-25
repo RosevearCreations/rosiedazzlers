@@ -9,7 +9,7 @@ The synchronized Production predecessor is retained through BUILD498_CONTROLLED_
 
 **Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained provider/local-search continuity authority: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained local-search snapshot authority: BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md. Retained provider traceability authority: BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Current source authority: scripts/provider_local_search_outcome_evidence_refresh_check.py. Retained provider/local-search continuity authority: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained local-search snapshot authority: BUILD480_LOCAL_SEARCH_PROVIDER_SNAPSHOT_CONTINUITY_DESCRIPTIVE_REVIEW.md. Retained provider traceability authority: BUILD476_PROVIDER_HOLD_DECISION_TRACEABILITY_CLOSURE_REVIEW.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
 ## Current Provider & Local Search Outcome Evidence Refresh contract
 - Reuse the retained provider HOLD traceability, provider/local-search continuity and local-search snapshot authorities; do not create a second provider ledger, Google integration, analytics identity or polling service.
