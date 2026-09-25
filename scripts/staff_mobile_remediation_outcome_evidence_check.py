@@ -84,17 +84,17 @@ require(roadmap,[
  "### Build 494 — Service Economics, Seasonal Operations & Reliability Review"
 ],"active roadmap")
 require(queue,[
- "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.",
- "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is next",
+ "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
+ "**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next",
  "BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md","it has not run out"
 ],"Build 493 queue")
 require(handoff,[
- "**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.",
+ "**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.",
  "BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md",
  "staff_mobile_remediation_outcome_evidence_check.py"
 ],"Build 493 handoff")
 require(readme,[
- "Current source direction: **Build 496 — Seasonal Capability Owner Review & Public Claim Decision**.",
+ "Current source direction: **Build 497 — Winter Booking & Quote Rule Activation Readiness**.",
  "BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md",
  "staff_mobile_remediation_outcome_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."
