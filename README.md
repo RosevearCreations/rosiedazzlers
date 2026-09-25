@@ -1,9 +1,9 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.
+Current source direction: **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up**.
 
 ## Release authority
-Authority: `scripts/booking_quote_experiment_outcome_interpretation_check.py` · `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py` · `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`. Production is not considered GREEN from source promotion alone.
 
 Retained recovery/device execution authority: `scripts/recovery_authenticated_device_observation_execution_evidence_check.py` · `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
 
@@ -30,13 +30,14 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`
+3. `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`
 4. `FORWARD_BUILD_ROADMAP_496_505.md`
 5. `STARTUP_GO_LIVE_BLOCKERS.md`
 6. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`
 - `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`
 - `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
 - `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
