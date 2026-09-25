@@ -549,6 +549,10 @@ jobs:
         run: |
           python scripts/booking_quote_controlled_experiment_execution_evidence_check.py
           node scripts/booking_quote_controlled_experiment_execution_evidence_test.mjs
+      - name: Validate booking & quote experiment outcome interpretation authority
+        run: |
+          python scripts/booking_quote_experiment_outcome_interpretation_check.py
+          node scripts/booking_quote_experiment_outcome_interpretation_test.mjs
 
       - name: Validate staff & mobile remediation execution evidence readiness authority
         run: |
