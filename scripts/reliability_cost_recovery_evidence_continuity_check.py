@@ -60,18 +60,18 @@ require(doc,[
  "Build 485 — Production Learning & Roadmap Renewal"
 ],"Build 484 contract")
 require(queue,[
- "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
- "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next",
+ "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
+ "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "it has not run out"
 ],"Build 484 queue")
 require(handoff,[
- "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
+ "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py"
 ],"Build 484 handoff")
 require(readme,[
- "Current source direction: **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review**.",
+ "Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.",
  "BUILD484_RELIABILITY_COST_RECOVERY_EVIDENCE_CONTINUITY.md",
  "reliability_cost_recovery_evidence_continuity_check.py",
  "Production is not considered GREEN from source promotion alone."

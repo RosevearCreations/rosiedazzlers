@@ -84,17 +84,17 @@ require(roadmap,[
  "### Build 494 — Service Economics, Seasonal Operations & Reliability Review"
 ],"active roadmap")
 require(queue,[
- "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
- "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next",
+ "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
+ "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next",
  "BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md","it has not run out"
 ],"Build 493 queue")
 require(handoff,[
- "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
+ "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
  "BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md",
  "staff_mobile_remediation_outcome_evidence_check.py"
 ],"Build 493 handoff")
 require(readme,[
- "Current source direction: **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review**.",
+ "Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.",
  "BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md",
  "staff_mobile_remediation_outcome_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."

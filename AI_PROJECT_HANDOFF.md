@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md.
+The synchronized Production predecessor is retained through BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md.
 
-**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.
+**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.
 
-**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next only after the current release is independently GREEN on protected main.
+**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained recovery/device execution source authority: scripts/recovery_authenticated_device_observation_execution_evidence_check.py. Current source authority: scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py. Retained maintenance/fleet pilot outcome authority: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md. Current source authority: scripts/booking_quote_experiment_outcome_interpretation_check.py. Retained execution-evidence authority: BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md. Retained measurement-lock authority: BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md. Retained controlled-experiment framework authority: BUILD471_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_FRAMEWORK.md. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained recovery/device execution source authority: scripts/recovery_authenticated_device_observation_execution_evidence_check.py. Retained recovery/device execution contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Retained maintenance/fleet continuity authority: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained maintenance/fleet continuity source authority: scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py. Retained maintenance/fleet pilot outcome authority: BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md. Retained owner decision authority: BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md. Retained controlled-pilot authority: BUILD469_MAINTENANCE_FLEET_CONTROLLED_PILOT_ACTIVATION_READINESS.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Maintenance & Fleet Pilot Outcome Continuity Review contract
+## Current Booking & Quote Experiment Outcome Interpretation contract
+- Reuse the retained measurement lock and controlled execution-evidence authorities; do not create a second experiment engine, analytics store, pricing authority, booking flow or availability engine.
+- Interpretation is review-ready only from separately authorized attributable execution evidence tied to the locked primary metric, allocation arms and bounded duration.
+- Southern Ontario weather/service/site eligibility remains explicit; weather-ineligible sessions stay outside the conversion denominator and never count as conversion failures.
+- A triggered locked stop condition blocks ordinary interpretation and requires explicit owner review.
+- Comparable numeric primary-metric observations are required for every authorized allocation arm. Missing or mismatched values remain fail-closed.
+- Per-arm counts, means, minimums and maximums are descriptive only. Threshold evaluation, success and winner selection remain explicit owner review.
+- Keep the release read-only: no price/discount, booking-rule/availability, booking, outreach, provider/business, schema/storage or polling mutation.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Maintenance & Fleet Pilot Outcome Continuity Review contract
 - Reuse retained owner-decision, controlled-pilot and pilot outcome-evidence authorities; do not create a second pilot engine, participant registry, capacity ledger, invoicing workflow or recurring-billing path.
 - Continuity is attributable only when explicit owner approval, participant/duration bounds and current execution rows remain traceable.
 - Participant and duration evidence must remain inside the explicit owner bounds; current availability revalidation and checkout collision revalidation remain the capacity evidence authorities.
