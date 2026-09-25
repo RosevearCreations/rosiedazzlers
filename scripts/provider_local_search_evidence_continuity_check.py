@@ -67,18 +67,18 @@ require(doc,[
 ],"Build 489 contract")
 require(roadmap,["### Build 489 — Provider & Local Search Evidence Continuity","### Build 490 — Recovery & Authenticated Device Evidence Continuity"],"renewed roadmap")
 require(queue,[
- "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
- "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is next",
+ "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release.",
+ "**Build 505 — Production Learning & Roadmap Renewal** is next",
  "BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md",
  "it has not run out"
 ],"Build 489 queue")
 require(handoff,[
- "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
+ "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release.",
  "BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md",
  "provider_local_search_evidence_continuity_check.py"
 ],"Build 489 handoff")
 require(readme,[
- "Current source direction: **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up**.",
+ "Current source direction: **Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity**.",
  "BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md",
  "provider_local_search_evidence_continuity_check.py",
  "Production is not considered GREEN from source promotion alone."
