@@ -486,6 +486,11 @@ jobs:
           python scripts/staff_mobile_remediation_outcome_evidence_check.py
           node scripts/staff_mobile_remediation_outcome_evidence_test.mjs
 
+      - name: Validate staff & mobile remediation outcome interpretation & follow-up authority
+        run: |
+          python scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py
+          node scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs
+
       - name: Validate staff workflow, support & mobile efficiency learning authority
         run: |
           python scripts/staff_support_mobile_efficiency_learning_check.py
