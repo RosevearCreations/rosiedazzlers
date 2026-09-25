@@ -1,4 +1,4 @@
-// Build 493 — manual remediation outcome evidence over retained Build 482 readiness.
+// Build 503 — descriptive outcome interpretation/follow-up over retained Build 493 evidence.
 (function attachBuild452Learning(globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -21,6 +21,7 @@
       if (!response.ok || !data) throw new Error(data?.error || "Efficiency learning evidence could not be loaded.");
       renderSummary(data);
       renderMobile(data.mobile_field_workflow || {});
+      renderOutcomeInterpretation(data.remediation_outcome_interpretation_follow_up_summary || {}, data.remediation_outcome_interpretation_follow_up || []);
       renderOutcomeEvidence(data.remediation_outcome_evidence_summary || {}, data.remediation_outcome_evidence || []);
       renderExecutionEvidenceReadiness(data.remediation_execution_evidence_readiness_summary || {}, data.remediation_execution_evidence_readiness || []);
       renderVerification(data.remediation_verification_summary || {}, data.remediation_verification || []);
@@ -28,12 +29,13 @@
       renderCandidates(data.learning_candidates || []);
       renderSources(data.source_status || {});
       setStatus(
-        "Snapshot refreshed. Evidence status: " + String(data.evidence_status || "unknown").toUpperCase() + ". Build 493 remains fail-closed until an approved outcome source contains attributable remediation execution and materially like-for-like before/after observations.",
+        "Snapshot refreshed. Evidence status: " + String(data.evidence_status || "unknown").toUpperCase() + ". Build 503 interprets only Build 493 review-ready like-for-like evidence and keeps effectiveness, causation, staff fault and device fault undecided.",
         data.evidence_status === "observed" ? "ok" : "warn"
       );
     } catch (error) {
       $("summaryGrid").innerHTML = '<div class="learning-empty">No bounded learning snapshot is available.</div>';
       $("mobileGrid").innerHTML = '<div class="learning-empty">No Detailer workspace cohort evidence is available.</div>';
+      if ($("remediationOutcomeInterpretationList")) $("remediationOutcomeInterpretationList").innerHTML = '<div class="learning-empty">No staff/mobile remediation outcome interpretation is available.</div>';
       if ($("remediationOutcomeEvidenceList")) $("remediationOutcomeEvidenceList").innerHTML = '<div class="learning-empty">No staff/mobile remediation outcome evidence is available.</div>';
       if ($("remediationExecutionReadinessList")) $("remediationExecutionReadinessList").innerHTML = '<div class="learning-empty">No remediation execution-evidence readiness is available.</div>';
       $("remediationVerificationList").innerHTML = '<div class="learning-empty">No remediation verification evidence is available.</div>';
@@ -58,7 +60,8 @@
       ["Review candidates", (data.learning_candidates || []).length, "Root cause / delay proven: NO"],
       ["Verified remediation outcomes", data.remediation_verification_summary?.remediation_outcome_verified_count ?? 0, "No outcome inferred from priority or timing"],
       ["Execution records present", data.remediation_outcome_evidence_summary?.attributable_execution_records_present ?? 0, "Separately authorized evidence only"],
-      ["Comparable outcome pairs", data.remediation_outcome_evidence_summary?.materially_comparable_before_after_pairs_present ?? 0, "Like-for-like role/device/workflow context required"]
+      ["Comparable outcome pairs", data.remediation_outcome_evidence_summary?.materially_comparable_before_after_pairs_present ?? 0, "Like-for-like role/device/workflow context required"],
+      ["Interpretation rows", data.remediation_outcome_interpretation_follow_up_summary?.materially_comparable_rows_interpreted ?? 0, "Descriptive follow-up only; no effectiveness verdict"]
     ];
     $("summaryGrid").innerHTML = cards.map((row) =>
       '<article class="learning-stat"><span class="mini">' + esc(row[0]) + '</span><strong>' + esc(row[1]) + '</strong><span class="mini">' + esc(row[2]) + '</span></article>'
@@ -87,6 +90,40 @@
     return '<article class="learning-stat"><span class="mini">' + esc(name) + '</span><strong>' + esc(value) + '</strong><span class="mini">aggregate only</span></article>';
   }
 
+
+
+  function renderOutcomeInterpretation(summary, rows) {
+    const mount = $("remediationOutcomeInterpretationList");
+    if (!mount) return;
+    const head =
+      '<div class="learning-source"><strong>Build 503 descriptive interpretation</strong><span class="pill">' + esc(label(summary?.state || "unavailable")) + '</span><span class="mini">' +
+      esc(summary?.materially_comparable_rows_interpreted ?? 0) + ' interpreted row(s) · ' +
+      esc(summary?.follow_up_required_count ?? 0) + ' bounded follow-up row(s)</span></div>' +
+      '<div class="learning-source"><strong>Decision boundary</strong><span class="mini">Effectiveness: UNDECIDED · Causation: UNDECIDED · Staff fault: UNDECIDED · Device fault: UNDECIDED</span></div>';
+    if (!rows.length) {
+      mount.innerHTML = head + '<div class="learning-empty">No Build 493 materially comparable outcome row is ready for descriptive interpretation. Source/runtime GREEN does not create an effectiveness conclusion.</div>';
+      return;
+    }
+    mount.innerHTML = head + rows.map((row) => {
+      const observation = row.descriptive_observation || {};
+      const context = row.context || {};
+      const follow = row.follow_up || {};
+      const weather = row.weather_site || {};
+      return '<article class="learning-candidate priority-normal">' +
+        '<div class="learning-candidate-head"><strong>' + esc(label(row.area)) + ' · ' + esc(label(row.pattern)) + '</strong><span class="pill">' + esc(label(row.interpretation_status || "unavailable")) + '</span></div>' +
+        '<p class="mini"><strong>Observed:</strong> ' + esc(observation.before_value ?? "—") + ' → ' + esc(observation.after_value ?? "—") +
+        ' · <strong>Delta:</strong> ' + esc(observation.observed_delta ?? "—") +
+        ' · <strong>Percent:</strong> ' + esc(observation.observed_percent_change ?? "not available") + (observation.observed_percent_change === null || observation.observed_percent_change === undefined ? '' : '%') +
+        ' · <strong>Direction:</strong> ' + esc(label(observation.observed_direction || "not_available")) + '</p>' +
+        '<p class="mini"><strong>Workflow:</strong> ' + esc(context.owning_workflow_scope || "not recorded") +
+        ' · <strong>Role:</strong> ' + esc(context.role_scope || "not recorded") +
+        ' · <strong>Device/browser:</strong> ' + esc(context.device_browser_context || "not recorded") + '</p>' +
+        '<p class="mini"><strong>Follow-up:</strong> ' + esc(label(follow.state || "repeat_like_for_like_observation_required")) + ' · preserve same measure/workflow/role/device/sample context: YES · material confounders recorded again: YES</p>' +
+        '<p class="mini"><strong>Weather/site:</strong> ' + esc(label(weather.classification || "not_recorded")) + ' · separate from staff/mobile friction: YES · temperature threshold inferred: NO</p>' +
+        '<p class="mini">Effectiveness: UNDECIDED · Causation: UNDECIDED · Staff fault: UNDECIDED · Device fault: UNDECIDED · Automatic remediation/closure: NO</p>' +
+      '</article>';
+    }).join("");
+  }
 
 
   function renderOutcomeEvidence(summary, rows) {
@@ -231,7 +268,7 @@
       pageKey: "admin-staff-workflow-support-learning",
       onReady: async () => {
         $("refreshEfficiencyLearning452")?.addEventListener("click", refresh);
-        setStatus("Select Refresh outcome-evidence snapshot to load current bounded evidence. No background monitoring is running.", "soft");
+        setStatus("Select Refresh interpretation snapshot to load current bounded evidence. No background monitoring is running.", "soft");
       }
     });
   }, { once: true });
