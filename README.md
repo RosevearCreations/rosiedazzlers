@@ -3,7 +3,7 @@
 Current source direction: **Build 496 — Seasonal Capability Owner Review & Public Claim Decision**.
 
 ## Current Seasonal Capability Owner Review & Public Claim Decision authority
-Authority: `scripts/seasonal_capability_owner_review_public_claim_decision_check.py` · `scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs` · `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md` · `.github/workflows/seasonal-capability-owner-review-public-claim-decision-authority.yml`. A service-specific claim is only publication-review-ready with current attributable capability evidence plus dated attributable owner review. Broad winter availability and automatic publication remain on HOLD. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/seasonal_capability_owner_review_public_claim_decision_check.py` · `scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs` · `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`. Broad winter availability and automatic publication remain on HOLD. Production is not considered GREEN from source promotion alone.
 
 Retained Production Learning & Roadmap Renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`.
 
@@ -20,9 +20,6 @@ Retained provider/local-search authority: `scripts/provider_local_search_evidenc
 Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
 
 Retained reliability/recovery authority: `scripts/reliability_cost_recovery_evidence_continuity_check.py`.
-
-## Retained staff/mobile readiness
-Retained staff/mobile proof: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md` · `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`. Southern Ontario weather/site limits remain separate from staff/mobile friction. Production is not considered GREEN from source promotion alone.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
