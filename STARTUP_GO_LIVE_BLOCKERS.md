@@ -39,11 +39,14 @@ Build 496 adds a read-only owner/public-claim decision package. `publication_rev
 
 Build 497 adds read-only winter booking/quote rule activation-readiness evidence. `activation_readiness_review_ready` requires the retained owner-reviewed capability/public-claim package plus a dated attributable activation-readiness owner decision and classification-compatible booking/quote rule candidates. It does not activate rules, change availability or checkout, or authorize broad winter availability. `/api/availability` and server-side checkout collision revalidation remain operational authorities; weather-ineligible sessions stay outside ordinary conversion interpretation.
 
+Build 498 adds read-only controlled-environment site qualification and service-routing evidence. A specific service/site becomes qualification-review-ready only when current attributable site, workflow, equipment and product evidence is complete; missing evidence keeps manual safe-reschedule or site-confirmation review. One qualified service/site never establishes universal indoor capability, and no package moves or reroutes an appointment automatically.
+
 ## Current cycle reconciliation
 `PRODUCTION_LEARNING_486_494.md` confirms that the 486–494 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
+- `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 - `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 - `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
