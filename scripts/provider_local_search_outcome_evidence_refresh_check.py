@@ -92,18 +92,18 @@ require(roadmap,[
     "### Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence"
 ],"active roadmap")
 require(queue,[
-    "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
-    "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is next",
+    "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
+    "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is next",
     "BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md",
     "it has not run out"
 ],"Build 499 queue")
 require(handoff,[
-    "**Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review** is the active bounded release.",
+    "**Build 502 — Booking & Quote Experiment Outcome Interpretation** is the active bounded release.",
     "BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md",
     "provider_local_search_outcome_evidence_refresh_check.py"
 ],"Build 499 handoff")
 require(readme,[
-    "Current source direction: **Build 501 — Maintenance & Fleet Pilot Outcome Continuity Review**.",
+    "Current source direction: **Build 502 — Booking & Quote Experiment Outcome Interpretation**.",
     "BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md",
     "provider_local_search_outcome_evidence_refresh_check.py",
     "Production is not considered GREEN from source promotion alone."
