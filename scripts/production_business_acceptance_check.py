@@ -132,6 +132,10 @@ required_authorities = {
         "scripts/authenticated_device_observation_refresh_regression_triage_check.py",
         "scripts/authenticated_device_observation_refresh_regression_triage_test.mjs",
     ],
+    "recovery_authenticated_device_observation_execution_evidence": [
+        "scripts/recovery_authenticated_device_observation_execution_evidence_check.py",
+        "scripts/recovery_authenticated_device_observation_execution_evidence_test.mjs",
+    ],
     "recovery_export_operational_proof": [
         "scripts/recovery_export_operational_proof_check.py",
         "scripts/recovery_export_operational_proof_test.mjs",
@@ -315,6 +319,10 @@ workflow = require(WORKFLOW, [
     "python scripts/provider_local_search_outcome_evidence_refresh_check.py",
     "node scripts/provider_local_search_outcome_evidence_refresh_test.mjs",
     "provider_local_search_outcome_evidence_refresh",
+    "Validate recovery drill & authenticated device observation execution evidence authority",
+    "python scripts/recovery_authenticated_device_observation_execution_evidence_check.py",
+    "node scripts/recovery_authenticated_device_observation_execution_evidence_test.mjs",
+    "recovery_authenticated_device_observation_execution_evidence",
     "Validate current-cycle reliability, security & cost reassessment",
     "python scripts/current_reliability_security_cost_reassessment_check.py",
     "Validate reliability, cost & resilience operational guardrails authority",
@@ -381,6 +389,7 @@ print("- provider payment/refund/delivery evidence closure remains read-only, ag
 print("- provider HOLD decision traceability requires current dated evidence plus a matching explicit operator review before any manual closure update candidate")
 print("- recovery refresh/drill closure review requires explicit owner traceability, recorded prerequisites and post-observation evidence without executing a Production restore")
 print("- authenticated device observation refresh keeps current negative evidence distinct from historical acceptance and prepares bounded triage without browser-farm or automatic remediation")
+print("- recovery/device execution evidence counts only explicit bounded non-Production drill observations and current direct authenticated role/device/browser observations; populations remain separate")
 print("- backup/restore/accountant-export operational proof remains read-only and artifact-truthful")
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")

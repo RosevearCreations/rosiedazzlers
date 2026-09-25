@@ -92,6 +92,7 @@ function renderWorkflowEvidence(data){
   const regressionClosure=acceptance.regression_closure||{};
   const observationTriage=acceptance.observation_refresh_regression_triage||{};
   const continuity=data.recovery_authenticated_device_evidence_continuity||{};
+  const execution=data.recovery_authenticated_device_observation_execution_evidence||{};
   const roles=Array.isArray(evidence.roles)?evidence.roles:[];
   const acceptedRoles=Array.isArray(acceptance.roles)?acceptance.roles:[];
   const devices=Array.isArray(acceptance.devices)?acceptance.devices:[];
@@ -112,6 +113,7 @@ function renderWorkflowEvidence(data){
       ${metric("Regression review",regressionClosure.status||"refresh_required")}
       ${metric("Observation triage",observationTriage.status||"observation_refresh_required")}
       ${metric("Build 490 continuity",continuity.status||"continuity_review_incomplete")}
+      ${metric("Build 500 execution evidence",execution.status||"execution_evidence_review_incomplete")}
       ${metric("Triage regressions",observationTriage.regression_triage_count??0)}
       ${metric("Refresh roles",(observationTriage.refresh_required_role_ids||[]).length)}
       ${metric("Refresh devices",(observationTriage.refresh_required_device_ids||[]).length)}
@@ -140,7 +142,7 @@ function renderWorkflowEvidence(data){
     <p class="mini"><strong>Current regression roles:</strong> ${esc((regressionClosure.current_regression_role_ids||[]).join(", ")||"none")} · <strong>Historical-only roles:</strong> ${esc((regressionClosure.historical_only_role_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Current browsers:</strong> ${esc((regressionClosure.current_browser_ids||[]).join(", ")||"none")} · <strong>Regression browsers:</strong> ${esc((regressionClosure.current_regression_browser_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Current devices:</strong> ${esc((regressionClosure.current_device_ids||[]).join(", ")||"none")} · <strong>Regression devices:</strong> ${esc((regressionClosure.current_regression_device_ids||[]).join(", ")||"none")}</p>
-    <p class="mini"><strong>Build 490 continuity:</strong> ${chip(continuity.status||"continuity_review_incomplete")} · roles ${esc((continuity.authenticated_device?.current_role_ids||[]).join(", ")||"none")} · devices ${esc((continuity.authenticated_device?.observed_device_ids||[]).join(", ")||"none")} · browsers ${esc((continuity.authenticated_device?.observed_browser_ids||[]).join(", ")||"none")}</p>
+    <p class="mini"><strong>Build 490 continuity:</strong> ${chip(continuity.status||"continuity_review_incomplete")} · roles ${esc((continuity.authenticated_device?.current_role_ids||[]).join(", ")||"none")} · devices ${esc((continuity.authenticated_device?.observed_device_ids||[]).join(", ")||"none")} · browsers ${esc((continuity.authenticated_device?.observed_browser_ids||[]).join(", ")||"none")}</p>\n    <p class="mini"><strong>Build 500 execution evidence:</strong> ${chip(execution.status||"execution_evidence_review_incomplete")} · device ${esc(execution.authenticated_device?.status||"observation_execution_evidence_required")} · current roles ${esc((execution.authenticated_device?.current_role_ids||[]).join(", ")||"none")} · representative devices ${esc((execution.authenticated_device?.observed_device_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Truth boundary:</strong> Historical acceptance does not override a current regression. Current negative device observations override historical acceptance. No browser farm or source-check inference can prove the absence of a real-device regression.</p>
     <p class="mini"><strong>Current surfaces:</strong> ${esc((deviceClosure.current_role_ids||[]).join(", ")||"none")} · <strong>Current devices:</strong> ${esc((deviceClosure.current_device_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Canonical HOLD:</strong> ${esc(acceptance.canonical_hold?.detail||"Representative authenticated phone/tablet/desktop evidence remains owner-observed.")}</p>
@@ -197,7 +199,7 @@ function renderProviderClosure(data){
 
 function renderRecovery(data){
   const recovery=data.recovery||{}, exports=Array.isArray(data.exports)?data.exports:[];
-  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{}, review=data.recovery_artifact_drill_evidence_review||{}, readiness=data.recovery_evidence_closure_drill_readiness||{}, decision=data.recovery_evidence_validation_drill_decision_readiness||{}, refresh=data.recovery_drill_evidence_refresh_closure_review||{}, continuity=data.recovery_authenticated_device_evidence_continuity||{};
+  const proof=data.recovery_export_operational_proof||{}, closure=data.backup_recovery_evidence_closure||{}, review=data.recovery_artifact_drill_evidence_review||{}, readiness=data.recovery_evidence_closure_drill_readiness||{}, decision=data.recovery_evidence_validation_drill_decision_readiness||{}, refresh=data.recovery_drill_evidence_refresh_closure_review||{}, continuity=data.recovery_authenticated_device_evidence_continuity||{}, execution=data.recovery_authenticated_device_observation_execution_evidence||{};
   const backup=proof.backup||{}, drill=proof.recovery_drill||{}, accountant=proof.accountant_export||{}, artifact=proof.export_artifact||{};
   const required=Array.isArray(proof.required)?proof.required:[], closureRequired=Array.isArray(closure.required)?closure.required:[];
   $("#recoveryOut").innerHTML=`
@@ -220,7 +222,7 @@ function renderRecovery(data){
       ${metric("Plan kind",refresh.refresh_or_drill_plan?.kind||"none")}
       ${metric("Owner review trace",refresh.owner_review_traceability?.status||"owner_review_not_recorded")}
       ${metric("Build 490 continuity",continuity.status||"continuity_review_incomplete")}
-      ${metric("Recovery / device continuity",continuity.recovery?.status||"review_required")}
+      ${metric("Recovery / device continuity",continuity.recovery?.status||"review_required")}\n      ${metric("Build 500 execution evidence",execution.status||"execution_evidence_review_incomplete")}\n      ${metric("Bounded recovery execution",execution.recovery?.status||"current_execution_observation_required")}
     </div>
     <p><strong>Backup evidence observed:</strong> ${chip(recovery.backup_evidence_observed?"verified":"owner action")} · <strong>Rollback drill observed:</strong> ${chip(recovery.rollback_drill_observed?"verified":"owner action")}</p>
     <p class="mini"><strong>Build 447 recovery review:</strong> ${chip(review.status||"owner_action")} · backup ${esc(review.backup_artifact?.age_days==null?"not dated":`${review.backup_artifact.age_days} d`)} · retention ${esc(review.retention_location?.age_days==null?"not dated":`${review.retention_location.age_days} d`)} · drill ${esc(review.recovery_drill?.age_days==null?"not dated":`${review.recovery_drill.age_days} d`)}</p>
@@ -230,14 +232,14 @@ function renderRecovery(data){
     <p class="mini"><strong>Build 467 validation & drill decision:</strong> ${chip(decision.status||"retain_hold_missing_evidence")} · ${esc(decision.decision_package?.detail||"Retain the HOLD until current attributable recovery evidence supports an operator decision.")}</p>
     <p class="mini"><strong>Bounded drill decision:</strong> ${chip(decision.drill_decision?.status||"retain_hold_missing_drill_evidence")} · <strong>Production restore authorized:</strong> ${decision.drill_decision?.production_restore_authorized?"yes":"no"}</p>
     <p class="mini"><strong>Build 477 refresh / closure review:</strong> ${chip(refresh.status||"retain_hold_recovery_package_not_ready")} · ${esc(refresh.closure_review?.detail||"Retain the HOLD until an explicit owner-reviewed recovery evidence plan or closure review is traceable to the current evidence snapshot.")}</p>
-    <p class="mini"><strong>Build 490 continuity:</strong> ${chip(continuity.status||"continuity_review_incomplete")} · recovery ${esc(continuity.recovery?.status||"review_required")} · device ${esc(continuity.authenticated_device?.status||"observation_refresh_required")}</p>
+    <p class="mini"><strong>Build 490 continuity:</strong> ${chip(continuity.status||"continuity_review_incomplete")} · recovery ${esc(continuity.recovery?.status||"review_required")} · device ${esc(continuity.authenticated_device?.status||"observation_refresh_required")}</p>\n    <p class="mini"><strong>Build 500 execution evidence:</strong> ${chip(execution.status||"execution_evidence_review_incomplete")} · recovery ${esc(execution.recovery?.status||"current_execution_observation_required")} · current authenticated device observations ${esc(execution.authenticated_device?.status||"observation_execution_evidence_required")}</p>\n    <p class="mini"><strong>Recovery post-observation evidence:</strong> ${execution.recovery?.post_observation_requirements_complete?"complete":"incomplete"} · bounded non-Production scope ${execution.recovery?.bounded_nonproduction_scope_explicit?"explicit":"not explicit"} · outcome ${esc(execution.recovery?.outcome_classification||"not_recorded")}</p>
     <p class="mini"><strong>Plan prerequisites:</strong> ${esc((refresh.refresh_or_drill_plan?.prerequisites||[]).join(" · ")||"none")}</p>
     <p class="mini"><strong>Post-observation evidence:</strong> ${esc((refresh.refresh_or_drill_plan?.post_observation_evidence_requirements||[]).join(" · ")||"none")} · <strong>Production restore authorized:</strong> ${refresh.refresh_or_drill_plan?.production_restore_authorized?"yes":"no"}</p>
     <div class="stack">${closureRequired.map(x=>`<article class="evidence-row"><div><strong>${esc(x.title||x.id)}</strong><p class="mini">${esc(x.detail||"")}</p><p class="mini">Observed: ${esc(x.observed_at?new Date(x.observed_at).toLocaleString("en-CA",{dateStyle:"medium",timeStyle:"short"}):"not dated")}</p></div>${chip(x.status||x.classification||"owner_action")}</article>`).join("")}</div>
     <p class="mini"><strong>Retention location:</strong> ${chip(backup.retention_location_observed?"verified":"owner action")} · <strong>Retained accountant-export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")}</p>
     <p class="mini"><strong>Source route presence is not artifact proof.</strong> This read-only view does not generate an export or perform a Production restore; it also does not execute a drill.</p>
     <p class="mini"><strong>Retained export artifact:</strong> ${chip(artifact.observed?"verified":artifact.classification||"owner_action")} · <strong>Operational proof rows:</strong> ${esc(required.length)}</p>
-    <p class="muted">A ready decision package never edits the HOLD backlog automatically. Build 477 may make a refresh or bounded non-Production drill plan ready for separate execution only after explicit owner review; it never performs the refresh or drill and never authorizes a Production restore.</p>`;
+    <p class="muted">A ready decision package never edits the HOLD backlog automatically. Build 477 may make a refresh or bounded non-Production drill plan ready for separate execution only after explicit owner review. Build 500 reports execution evidence only where an explicitly performed bounded non-Production observation is attributable; it does not execute a Production restore or manufacture a drill result.</p>`;
 }
 
 function renderExternal(data){

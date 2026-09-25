@@ -5,6 +5,13 @@ const ARTIFACT_PATTERN = /(backup|snapshot|export|dump|artifact|archive|point[- 
 const RETENTION_PATTERN = /(retention|retained|stored|storage|vault|bucket|archive|backup location|drive|supabase|cloud|offsite|r2)/i;
 const EXPORT_PATTERN = /(accountant|accounting export|export package|year[- ]?end|csv|general ledger|profit and loss|balance sheet|accountant package)/i;
 const DRILL_PATTERN = /(rollback|restore|recovery|drill|known[- ]?good|recovery point)/i;
+const NON_PRODUCTION_PATTERN = /\b(non[- ]?production|nonprod|development|dev environment|staging|preview|sandbox|test environment)\b/i;
+const OBSERVER_ROLE_PATTERN = /\b(owner|operator|admin(?:istrator)?|it|developer|engineer)\b/i;
+const OUTCOME_SUCCESS_PATTERN = /\b(pass(?:ed)?|success(?:ful|fully)?|completed|working|restored|recovered|rolled back|rollback succeeded)\b/i;
+const OUTCOME_NEGATIVE_PATTERN = /\b(fail(?:ed|ure|ing)?|aborted|blocked|error|unsuccessful|rollback failed|restore failed)\b/i;
+const BACKUP_REFERENCE_PATTERN = /\b(backup(?: artifact| id| reference)?|snapshot|dump|archive|recovery point)\b/i;
+const RETENTION_REFERENCE_PATTERN = /\b(retention|retained|storage location|backup location|bucket|vault|offsite|r2)\b/i;
+const ABORT_DEVIATION_PATTERN = /\b(no deviations?|deviation(?:s)?|abort(?:ed| criteria)?|stop condition(?:s)?|completed without deviations?)\b/i;
 
 export function buildRecoveryExportOperationalProof({
   launch_evidence = [],
@@ -97,6 +104,8 @@ function classifyRecoveryDrill(row) {
   const note = clean(row?.evidence_note);
   const verifiedAt = clean(row?.verified_at) || null;
   const observed = status === "verified" && !!verifiedAt && !!note && DRILL_PATTERN.test(note);
+  const negativeOutcome = observed && OUTCOME_NEGATIVE_PATTERN.test(note);
+  const positiveOutcome = observed && OUTCOME_SUCCESS_PATTERN.test(note) && !negativeOutcome;
   return {
     status,
     classification: observed ? "owner_action_observed" : "owner_action",
@@ -104,6 +113,13 @@ function classifyRecoveryDrill(row) {
     verified_at: observed ? verifiedAt : null,
     note_present: !!note,
     scope_language_present: DRILL_PATTERN.test(note),
+    bounded_nonproduction_scope_explicit: observed && NON_PRODUCTION_PATTERN.test(note),
+    observer_role_present: observed && OBSERVER_ROLE_PATTERN.test(note),
+    backup_reference_present: observed && BACKUP_REFERENCE_PATTERN.test(note),
+    retention_reference_present: observed && RETENTION_REFERENCE_PATTERN.test(note),
+    outcome_recorded: observed && (positiveOutcome || negativeOutcome),
+    outcome_classification: negativeOutcome ? "unsuccessful" : positiveOutcome ? "successful" : "not_recorded",
+    abort_or_deviation_recorded: observed && ABORT_DEVIATION_PATTERN.test(note),
     production_restore_inferred: false,
     evidence_note_exposed: false
   };
