@@ -3,22 +3,30 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md.
+The synchronized Production predecessor is retained through BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
 
-**Build 495 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.
 
-**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is next only after the current release is independently GREEN on protected main.
+**Build 497 — Winter Booking & Quote Rule Activation Readiness** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Completed-cycle learning: PRODUCTION_LEARNING_486_494.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Retained predecessor: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md. Retained seasonal authorities: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md, BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md and BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Retained renewal: BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Production Learning & Roadmap Renewal contract
+## Current Seasonal Capability Owner Review & Public Claim Decision contract
+- Reuse the retained Build 486–488 seasonal capability, winter-eligibility and weather-safe-routing authorities rather than creating a second weather or booking engine.
+- A service-specific public claim becomes `publication_review_ready` only from current attributable capability evidence plus an explicit dated attributable owner decision.
+- An explicit `hold_public_claim` remains an owner HOLD; missing or invalid owner review remains truthful `owner_action`.
+- Exact working-temperature limits remain source-owned. Service-specific readiness never authorizes a broad winter-availability claim.
+- Technical uptime, demand, margin, search movement, weather and source/runtime GREEN do not prove field operability or owner approval.
+- Keep the package read-only: no automatic publication, booking/quote change, routing/rescheduling, price/discount, provider, accounting/inventory, schema/storage, outreach or polling mutation.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Production Learning & Roadmap Renewal contract
 - Reconcile the 486–494 cycle without fabricating provider, owner, recovery, device, pilot, experiment, remediation, allocation, seasonal-operability or provider-cost closure.
 - Preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; source/runtime GREEN never closes a provider or owner HOLD.
 - Preserve Southern Ontario seasonal-service truth: exact working-temperature limits remain source-owned, technical availability is not field operability, and broad winter availability remains unproven.
 - Renew the bounded sequence through `FORWARD_BUILD_ROADMAP_496_505.md` from observed outcomes.
 - Keep the release read-only; no automatic booking, pricing, public content, provider, recovery, fleet, experiment, accounting/inventory, schema/storage, outreach or polling mutation is authorized.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
-
 ## Retained Service Economics, Seasonal Operations & Reliability Review contract
 - Reuse the retained protected Service Economics and I.T. Reliability authorities; do not create a parallel ledger, weather engine, capacity model, provider telemetry source or recovery system.
 - Reconcile explicit service/add-on allocation, Southern Ontario cold-weather capability, observed operational capacity and reliability continuity only within their owning evidence rules.
@@ -134,6 +142,11 @@ Current contract: BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Completed-cyc
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
+- `.github/workflows/seasonal-capability-owner-review-public-claim-decision-authority.yml`
+- `scripts/seasonal_capability_owner_review_public_claim_decision_check.py`
+- `scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs`
+- `functions/api/_lib/seasonal-capability-owner-review-public-claim-decision.js`
 - `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_486_494.md`
 - `FORWARD_BUILD_ROADMAP_496_505.md`
