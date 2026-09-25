@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up**.
+Current source direction: **Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity**.
 
 ## Release authority
-Authority: `scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py` · `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py` · `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained staff/mobile outcome interpretation authority: `scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py` · `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`.
 
 Retained recovery/device execution authority: `scripts/recovery_authenticated_device_observation_execution_evidence_check.py` · `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`.
 

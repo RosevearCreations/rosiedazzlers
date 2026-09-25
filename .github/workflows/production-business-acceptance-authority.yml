@@ -491,6 +491,11 @@ jobs:
           python scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py
           node scripts/staff_mobile_remediation_outcome_interpretation_follow_up_test.mjs
 
+      - name: Validate service economics, seasonal capacity & reliability trend continuity authority
+        run: |
+          python scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py
+          node scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs
+
       - name: Validate staff workflow, support & mobile efficiency learning authority
         run: |
           python scripts/staff_support_mobile_efficiency_learning_check.py
