@@ -1,0 +1,55 @@
+name: Winter Booking & Quote Rule Activation Readiness Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-winter-rule-readiness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: winter-booking-quote-rule-activation-readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Winter Booking & Quote Rule Activation Readiness
+        run: |
+          python scripts/winter_booking_quote_rule_activation_readiness_check.py
+          node scripts/winter_booking_quote_rule_activation_readiness_test.mjs
+      - name: Build 497 summary
+        run: |
+          {
+            echo '### Winter Booking & Quote Rule Activation Readiness'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Service-specific readiness package: PASS'
+            echo '- /api/availability retained as operational authority: PASS'
+            echo '- Checkout collision revalidation retained: PASS'
+            echo '- Weather-ineligible conversion handling retained: PASS'
+            echo '- Automatic activation: NONE'
+            echo '- Broad winter availability: HOLD'
+          } >> "$GITHUB_STEP_SUMMARY"

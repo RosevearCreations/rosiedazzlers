@@ -643,6 +643,10 @@ jobs:
         run: |
           python scripts/seasonal_capability_owner_review_public_claim_decision_check.py
           node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs
+      - name: Validate winter booking & quote rule activation readiness authority
+        run: |
+          python scripts/winter_booking_quote_rule_activation_readiness_check.py
+          node scripts/winter_booking_quote_rule_activation_readiness_test.mjs
 
       - name: Validate current reliability, security & cost reassessment
         run: python scripts/current_reliability_security_cost_reassessment_check.py

@@ -1,9 +1,9 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 496 — Seasonal Capability Owner Review & Public Claim Decision**.
+Current source direction: **Build 497 — Winter Booking & Quote Rule Activation Readiness**.
 
-## Current Seasonal Capability Owner Review & Public Claim Decision authority
-Authority: `scripts/seasonal_capability_owner_review_public_claim_decision_check.py` · `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`. Production is not considered GREEN from source promotion alone.
+## Current Winter Booking & Quote Rule Activation Readiness authority
+Authority: `scripts/winter_booking_quote_rule_activation_readiness_check.py` · `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`. Production is not considered GREEN from source promotion alone.
 
 Retained Production Learning & Roadmap Renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`.
 
@@ -24,9 +24,10 @@ Retained reliability/recovery authority: `scripts/reliability_cost_recovery_evid
 Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`.
 
 ## Start here
-1. `AI_PROJECT_HANDOFF.md` — current implementation/deployment/release truth.
-2. `AUTONOMOUS_RELEASE_QUEUE.md` — current/next bounded work.
-3. `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md` — current bounded contract.
+1. `AI_PROJECT_HANDOFF.md`
+2. `AUTONOMOUS_RELEASE_QUEUE.md`
+3. `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md` — current bounded contract.
+4. `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md` — retained owner/public-claim contract.
 4. `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained renewal contract.
 4. `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md` — retained outcome contract.
 4. `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` — retained execution-evidence contract.
@@ -50,6 +51,7 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 9. `STARTUP_GO_LIVE_BLOCKERS.md` — canonical Production HOLD/evidence backlog.
 Git history and exact-SHA workflows are the release archive. `DOC_INDEX.md` contains specialist references.
 ## Retained cumulative authority pointers
+- `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 - `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_486_494.md`

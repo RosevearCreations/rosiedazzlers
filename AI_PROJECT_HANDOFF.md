@@ -3,23 +3,31 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
+The synchronized Production predecessor is retained through BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md.
 
-**Build 496 — Seasonal Capability Owner Review & Public Claim Decision** is the active bounded release.
+**Build 497 — Winter Booking & Quote Rule Activation Readiness** is the active bounded release.
 
-**Build 497 — Winter Booking & Quote Rule Activation Readiness** is next only after the current release is independently GREEN on protected main.
+**Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md. Retained seasonal authorities: BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md, BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md and BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Retained renewal: BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md. Retained owner/public-claim authority: BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md. Retained winter eligibility/capability authorities: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md and BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Seasonal Capability Owner Review & Public Claim Decision contract
-- Reuse the retained Build 486–488 seasonal capability, winter-eligibility and weather-safe-routing authorities rather than creating a second weather or booking engine.
-- A service-specific public claim becomes `publication_review_ready` only from current attributable capability evidence plus an explicit dated attributable owner decision.
-- An explicit `hold_public_claim` remains an owner HOLD; missing or invalid owner review remains truthful `owner_action`.
-- Exact working-temperature limits remain source-owned. Service-specific readiness never authorizes a broad winter-availability claim.
-- Technical uptime, demand, margin, search movement, weather and source/runtime GREEN do not prove field operability or owner approval.
-- Keep the package read-only: no automatic publication, booking/quote change, routing/rescheduling, price/discount, provider, accounting/inventory, schema/storage, outreach or polling mutation.
+## Current Winter Booking & Quote Rule Activation Readiness contract
+- Reuse retained seasonal capability, winter eligibility, owner/public-claim review, /api/availability and checkout collision-revalidation authorities; do not create a second booking or weather engine.
+- A service-specific rule package becomes `activation_readiness_review_ready` only from current attributable retained capability/public-claim evidence plus an explicit dated attributable owner activation-readiness review.
+- Booking and quote rule candidates must match the retained service classification. Missing or incompatible rules remain owner action; an explicit hold_activation remains HOLD.
+- Current slot availability remains owned by /api/availability, and checkout must continue server-side collision revalidation immediately before booking creation.
+- Weather-ineligible sessions remain outside ordinary conversion interpretation and are not conversion failures.
+- Exact working-temperature limits remain source-owned; service-specific readiness never authorizes broad winter availability.
+- Keep the release read-only: no automatic activation, booking/quote rule mutation, availability/checkout mutation, public content, customer message, pricing/discount, provider, accounting/inventory, schema/storage, outreach or polling mutation.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
+## Retained Seasonal Capability Owner Review & Public Claim Decision contract
+- Reuse the retained seasonal capability and weather-safe-routing authorities rather than creating a second weather or booking engine.
+- A service-specific public claim becomes publication_review_ready only from current attributable capability evidence plus an explicit dated attributable owner decision.
+- An explicit hold_public_claim remains an owner HOLD; missing or invalid owner review remains truthful owner_action.
+- Exact working-temperature limits remain source-owned. Service-specific readiness never authorizes a broad winter-availability claim.
+- Technical uptime, demand, margin, search movement, weather and source/runtime GREEN do not prove field operability or owner approval.
+- Keep the package read-only and require exact feature, Development, protected-main and Production acceptance.
 ## Retained Production Learning & Roadmap Renewal contract
 - Reconcile the 486–494 cycle without fabricating provider, owner, recovery, device, pilot, experiment, remediation, allocation, seasonal-operability or provider-cost closure.
 - Preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; source/runtime GREEN never closes a provider or owner HOLD.
@@ -142,6 +150,11 @@ Current contract: BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISIO
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
+- `.github/workflows/winter-booking-quote-rule-activation-readiness-authority.yml`
+- `scripts/winter_booking_quote_rule_activation_readiness_check.py`
+- `scripts/winter_booking_quote_rule_activation_readiness_test.mjs`
+- `functions/api/_lib/winter-booking-quote-rule-activation-readiness.js`
 - `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
 - `.github/workflows/seasonal-capability-owner-review-public-claim-decision-authority.yml`
 - `scripts/seasonal_capability_owner_review_public_claim_decision_check.py`

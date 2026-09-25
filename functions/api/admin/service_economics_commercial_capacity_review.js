@@ -1,10 +1,11 @@
-// Build 496 — bounded read-only Seasonal Capability Owner Review & Public Claim Decision endpoint.
+// Build 497 — bounded read-only Winter Booking & Quote Rule Activation Readiness endpoint.
 // Retained Build 463 completeness/add-on-cost authority remains the base.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildSeasonalCapabilityOwnerReviewPublicClaimDecision } from "../_lib/seasonal-capability-owner-review-public-claim-decision.js";
+import { buildWinterBookingQuoteRuleActivationReadiness } from "../_lib/winter-booking-quote-rule-activation-readiness.js";
+// Retained Build 496 marker: buildSeasonalCapabilityOwnerReviewPublicClaimDecision
 // Retained Build 488 marker: buildControlledEnvironmentWeatherSafeRouting
 // Retained Build 487 marker: buildWinterBookingEligibilityCustomerTransparency
 // Retained Build 486 marker: buildColdWeatherServiceCapabilityEvidenceMatrix
@@ -25,8 +26,8 @@ export async function onRequestGet({request,env}){
     collect("fleet_commercial",()=>getFleetLearning({request:request.clone(),env})),
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
-  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Seasonal Capability Owner Review & Public Claim Decision requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildSeasonalCapabilityOwnerReviewPublicClaimDecision({
+  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Winter Booking & Quote Rule Activation Readiness requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
+  const review=buildWinterBookingQuoteRuleActivationReadiness({
     economics:economicsSource.data?.operational_profitability||{},
     fleet:fleetSource.data?.learning||{},
     pricing:pricingSource.data||{},
@@ -39,8 +40,11 @@ export async function onRequestGet({request,env}){
     year,
     pricing_window_days:days,
     ...review,
-    authority:"seasonal_capability_owner_review_public_claim_decision",
-    release_authority:"seasonal_capability_owner_review_public_claim_decision",
+    authority:"winter_booking_quote_rule_activation_readiness",
+    release_authority:"winter_booking_quote_rule_activation_readiness",
+    retained_owner_review_authority:"seasonal_capability_owner_review_public_claim_decision",
+    retained_availability_authority:"/api/availability",
+    retained_checkout_collision_authority:"checkout_server_side_collision_revalidation",
     retained_weather_safe_routing_authority:"controlled_environment_alternatives_weather_safe_routing",
     retained_winter_eligibility_authority:"winter_booking_eligibility_customer_transparency",
     retained_capability_authority:"cold_weather_service_capability_evidence_matrix",
@@ -58,4 +62,4 @@ async function collect(name,runner){let timer;try{const response=await Promise.r
 function sourceStatusMap(economics,fleet,pricing){return{service_economics:sourceState(economics),fleet_commercial:sourceState(fleet),pricing_learning:sourceState(pricing)};}
 function sourceState(row){return{available:row?.available===true,restricted:row?.restricted===true,http_status:Number(row?.status)||null,error_class:row?.error_class||null};}
 function requestWithQuery(request,values){const url=new URL(request.url);for(const [key,value] of Object.entries(values))url.searchParams.set(key,value);return new Request(url.toString(),request);}
-function readOnly(){return json({ok:false,error:"Seasonal Capability Owner Review & Public Claim Decision is read-only. Use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}
+function readOnly(){return json({ok:false,error:"Winter Booking & Quote Rule Activation Readiness is read-only. Use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}
