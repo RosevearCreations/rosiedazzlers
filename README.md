@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 508 — Controlled-Environment Operational Readiness & Routing Continuity**.
+Current source direction: **Build 509 — Provider & Local Search Closure Evidence Continuity Review**.
 
 ## Release authority
-Authority: `scripts/controlled_environment_operational_readiness_routing_continuity_check.py` · `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/provider_local_search_closure_evidence_continuity_review_check.py` · `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+
+Retained controlled-environment operational-readiness authority: `scripts/controlled_environment_operational_readiness_routing_continuity_check.py` · `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`.
 
 Retained winter booking/quote controlled-activation authority: `scripts/winter_booking_quote_rule_controlled_activation_decision_check.py` · `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`.
 
@@ -34,21 +36,23 @@ Retained winter transparency authority: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUS
 
 Retained allocation/weather authorities: `service_addon_allocation_evidence_closure_check.py` · `cold_weather_service_capability_evidence_matrix_check.py` · `winter_booking_eligibility_customer_transparency_check.py` · `controlled_environment_weather_safe_routing_check.py`.
 
-Retained checks: `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_outcome_evidence_refresh_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_check.py`. · `scripts/winter_booking_quote_rule_activation_readiness_check.py` · `scripts/winter_booking_quote_rule_activation_readiness_test.mjs`.
+Retained checks: `scripts/reliability_cost_recovery_evidence_continuity_check.py` · `scripts/provider_local_search_evidence_continuity_check.py` · `scripts/provider_local_search_outcome_evidence_refresh_check.py` · `scripts/provider_local_search_closure_evidence_continuity_review_check.py` · `scripts/staff_mobile_remediation_outcome_evidence_check.py`. · `scripts/winter_booking_quote_rule_activation_readiness_check.py` · `scripts/winter_booking_quote_rule_activation_readiness_test.mjs`.
 
 Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidence_readiness_check.py` · `scripts/staff_mobile_remediation_execution_evidence_readiness_test.mjs`.
 
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
-4. `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
-5. `FORWARD_BUILD_ROADMAP_506_515.md`
-6. `STARTUP_GO_LIVE_BLOCKERS.md`
-7. `DOC_INDEX.md`
+3. `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
+4. `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
+5. `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
+6. `FORWARD_BUILD_ROADMAP_506_515.md`
+7. `STARTUP_GO_LIVE_BLOCKERS.md`
+8. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
 - `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 - `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
 - `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`

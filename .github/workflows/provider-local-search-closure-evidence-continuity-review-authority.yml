@@ -1,0 +1,54 @@
+name: Provider & Local Search Closure Evidence Continuity Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-provider-local-search-closure-review-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: provider-local-search-closure-evidence-continuity-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Provider & Local Search Closure Evidence Continuity Review
+        run: |
+          python scripts/provider_local_search_closure_evidence_continuity_review_check.py
+          node scripts/provider_local_search_closure_evidence_continuity_review_test.mjs
+      - name: Build 509 summary
+        run: |
+          {
+            echo '### Provider & Local Search Closure Evidence Continuity Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Matching provider/property/location/window sources: REQUIRED'
+            echo '- First-party context: SEPARATE DESCRIPTIVE EVIDENCE'
+            echo '- Manual source-owned closure review: REQUIRED'
+            echo '- Automatic HOLD closure: NONE'
+            echo '- Ranking/weather/demand/conversion causation: NOT INFERRED'
+          } >> "$GITHUB_STEP_SUMMARY"
