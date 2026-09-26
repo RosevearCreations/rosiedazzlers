@@ -61,18 +61,18 @@ require(roadmap,[
  "### Build 487 — Winter Booking Eligibility & Customer Transparency"
 ],"renewed roadmap")
 require(queue,[
- "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
- "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next",
+ "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
+ "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "it has not run out"
 ],"Build 486 queue")
 require(handoff,[
- "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
+ "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py"
 ],"retained Build 486 handoff")
 require(readme,[
- "Current source direction: **Build 505 — Production Learning & Roadmap Renewal**.",
+ "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py",
  "Production is not considered GREEN from source promotion alone."

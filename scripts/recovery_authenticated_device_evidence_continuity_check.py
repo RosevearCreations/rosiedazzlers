@@ -74,18 +74,18 @@ require(roadmap,[
   "### Build 491 — Maintenance & Fleet Pilot Outcome Evidence"
 ],"renewed roadmap")
 require(queue,[
-  "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
-  "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next",
+  "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
+  "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
   "BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md",
   "it has not run out"
 ],"Build 490 queue")
 require(handoff,[
-  "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
+  "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
   "BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md",
   "recovery_authenticated_device_evidence_continuity_check.py"
 ],"Build 490 handoff")
 require(readme,[
-  "Current source direction: **Build 505 — Production Learning & Roadmap Renewal**.",
+  "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
   "BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md",
   "recovery_authenticated_device_evidence_continuity_check.py",
   "Production is not considered GREEN from source promotion alone."

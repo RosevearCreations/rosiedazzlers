@@ -41,6 +41,8 @@ Build 497 adds read-only winter booking/quote rule activation-readiness evidence
 
 Build 498 adds read-only controlled-environment site qualification and service-routing evidence. A specific service/site becomes qualification-review-ready only when current attributable site, workflow, equipment and product evidence is complete; missing evidence keeps manual safe-reschedule or site-confirmation review. One qualified service/site never establishes universal indoor capability, and no package moves or reroutes an appointment automatically.
 
+Build 506 adds a read-only seasonal capability/public-claim activation decision package. `public_claim_activation_decision_ready` requires retained service-specific publication-review readiness, current attributable capability evidence, confirmed final service-specific wording and an explicit dated attributable owner activation decision. Actual publication remains a separate manual action; source-owned temperature limits cannot be widened, broad winter availability remains held, and no booking/quote/content/customer mutation occurs automatically.
+
 Build 499 adds read-only provider/local-search outcome evidence refresh. Payment/refund/message rows require the correct current attributable provider evidence class; Search Console and GBP require the correct provider/property/location/window evidence. First-party referral/funnel context remains separate, and no ranking, weather, demand, service-availability or booking-conversion causation is inferred. Source/runtime GREEN never manufactures provider evidence or narrows these HOLDs automatically.
 
 Build 500 adds read-only recovery-drill and authenticated-device observation execution evidence. Recovery evidence counts only where an explicitly performed bounded non-Production observation is current and attributable with the required post-observation fields. Authenticated-device evidence counts only where current direct role/device/browser observations are recorded. The populations remain separate; no Production restore, browser farm, manufactured success or automatic HOLD narrowing is authorized.
@@ -51,6 +53,7 @@ Build 500 adds read-only recovery-drill and authenticated-device observation exe
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
+- `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_496_504.md`
 - `FORWARD_BUILD_ROADMAP_506_515.md`

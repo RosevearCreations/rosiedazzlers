@@ -199,6 +199,9 @@ jobs:
           node --check functions/api/_lib/service-economics-job-profitability.js
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
+          python -m py_compile scripts/seasonal_capability_public_claim_activation_decision_check.py
+          node --check scripts/seasonal_capability_public_claim_activation_decision_test.mjs
+          node --check functions/api/_lib/seasonal-capability-public-claim-activation-decision.js
           python -m py_compile scripts/current_reliability_security_cost_reassessment_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
@@ -607,6 +610,10 @@ jobs:
         run: |
           python scripts/controlled_environment_site_qualification_service_routing_evidence_check.py
           node scripts/controlled_environment_site_qualification_service_routing_evidence_test.mjs
+      - name: Validate seasonal capability & public claim activation decision authority
+        run: |
+          python scripts/seasonal_capability_public_claim_activation_decision_check.py
+          node scripts/seasonal_capability_public_claim_activation_decision_test.mjs
       - name: Validate provider & local search outcome evidence refresh authority
         run: |
           python scripts/provider_local_search_outcome_evidence_refresh_check.py
@@ -647,6 +654,7 @@ jobs:
             echo "- Seasonal capability owner review / public claim decision: PASS"
             echo "- Winter booking / quote rule activation readiness: PASS"
             echo "- Controlled-environment site qualification / service routing evidence: PASS"
+            echo "- Seasonal capability / public claim activation decision: PASS"
             echo "- Provider / local-search outcome evidence refresh: PASS"
             echo "- Booking conversion / quote clarity: PASS"
             echo "- Service economics / job profitability evidence: PASS"
