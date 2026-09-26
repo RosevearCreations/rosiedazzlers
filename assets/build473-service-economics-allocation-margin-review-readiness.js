@@ -1,4 +1,4 @@
-// Build 506 — retained manual service economics UI with seasonal public-claim activation decisions.
+// Build 507 — retained manual service economics UI with winter booking/quote controlled activation decisions.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -27,6 +27,7 @@
       renderSeasonalOwnerReview(data.economics?.seasonal_owner_review_public_claim || {});
       renderSeasonalPublicClaimActivationDecision(data.economics?.seasonal_public_claim_activation_decision || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
+      renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
@@ -49,6 +50,7 @@
       if($("seasonalOwnerReviewGrid")) $("seasonalOwnerReviewGrid").innerHTML = '<div class="review-empty">Seasonal owner/public-claim review is unavailable.</div>';
       if($("seasonalPublicClaimActivationDecisionGrid")) $("seasonalPublicClaimActivationDecisionGrid").innerHTML = '<div class="review-empty">Seasonal public-claim activation decision evidence is unavailable.</div>';
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
+      if($("winterRuleControlledActivationDecisionGrid")) $("winterRuleControlledActivationDecisionGrid").innerHTML = '<div class="review-empty">Winter booking/quote controlled activation decision evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
@@ -328,6 +330,42 @@
       " · owner HOLD: "+String(readiness.counts?.owner_hold??0)+
       " · owner review required: "+String(readiness.counts?.owner_review_required??0)+
       ". Availability and checkout collision revalidation remain authoritative; broad winter availability remains HOLD.";
+  }
+
+  function renderWinterRuleControlledActivationDecision(decision) {
+    const mount=$("winterRuleControlledActivationDecisionGrid"); if(!mount) return;
+    const rows=Array.isArray(decision.rows)?decision.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const ready=row.controlled_activation_decision_ready===true;
+      const state=row.controlled_activation_decision_state||"controlled_activation_owner_review_required";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc((row.entity_type||"item")+": "+(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(ready?"Controlled activation decision ready":state.replaceAll("_"," "))+
+        '</span></div><p class="mini">Classification: '+esc(row.classification||"unavailable")+
+        ' · Booking rule: '+esc(row.booking_rule_candidate||"HOLD")+
+        ' · Quote rule: '+esc(row.quote_rule_candidate||"HOLD")+
+        '</p><p class="mini">Customer limitation: '+esc(row.customer_limitation_text||"not established")+
+        ' · Transparency confirmed: '+esc(row.winter_rule_customer_transparency_confirmed===true?"yes":"no")+
+        '</p><p class="mini">Owner decision: '+esc(row.controlled_activation_owner_decision||"not recorded")+
+        ' · Reviewed: '+esc(row.controlled_activation_reviewed_at||"not recorded")+
+        ' · Reference: '+esc(row.controlled_activation_reference||"not recorded")+
+        '</p><p class="mini">Actual rule activation remains manual. /api/availability and checkout collision revalidation remain authoritative.</p></article>');
+    }
+    for(const gap of (Array.isArray(decision.gaps)?decision.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>'+
+        esc((gap.entity_type||"item")+": "+(gap.code||"unknown"))+
+        '</strong><span class="pill">Owner action</span></div><p class="mini">Missing: '+
+        esc((gap.missing||[]).join(", ")||"current attributable controlled activation evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_winter_booking_quote_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No service-specific winter booking/quote rule has a controlled activation decision. No automatic winter rule activation.</div>';
+    const detail=$("winterRuleControlledActivationDecisionDetail");
+    if(detail) detail.textContent="Service-specific decision rows: "+String(decision.row_count??0)+
+      " · controlled activation decision ready: "+String(decision.counts?.controlled_activation_decision_ready??0)+
+      " · owner HOLD: "+String(decision.counts?.owner_hold??0)+
+      " · owner review required: "+String(decision.counts?.owner_review_required??0)+
+      ". Actual rule activation remains manual; broad winter availability remains HOLD.";
   }
 
   function renderControlledEnvironmentSiteQualification(qualification) {

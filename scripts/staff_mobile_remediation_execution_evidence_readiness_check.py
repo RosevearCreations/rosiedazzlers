@@ -116,20 +116,20 @@ require(roadmap, [
 ], "Build 482 roadmap")
 require(queue, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
-    "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
+    "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
+    "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is next",
     "it has not run out"
 ], "retained Build 482 queue")
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release."
+    "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
-    "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
+    "Current source direction: **Build 507 — Winter Booking & Quote Rule Controlled Activation Decision**.",
     "Production is not considered GREEN from source promotion alone."
 ], "retained Build 482 README")
 require(blockers, [

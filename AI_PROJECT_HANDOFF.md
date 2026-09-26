@@ -3,22 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
+The synchronized Production predecessor is retained through BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md.
 
-**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.
+**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.
 
-**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next only after the current release is independently GREEN on protected main.
+**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md. Current source authority: scripts/seasonal_capability_public_claim_activation_decision_check.py. Retained Production-learning predecessor: BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Retained prior continuity authority: BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md. Retained prior continuity source authority: scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py. Retained owner/public-claim authority: BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md. Retained owner/public-claim source authority: scripts/seasonal_capability_owner_review_public_claim_decision_check.py. Retained site/routing authority: BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md. Retained site/routing source authority: scripts/controlled_environment_site_qualification_service_routing_evidence_check.py. Retained staff/mobile authority: BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md. Retained staff/mobile source authority: scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained recovery/device execution contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Retained recovery/device execution source authority: scripts/recovery_authenticated_device_observation_execution_evidence_check.py. Retained maintenance/fleet continuity authority: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained maintenance/fleet continuity source authority: scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py. Retained booking/quote interpretation authority: BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md. Retained booking/quote interpretation source authority: scripts/booking_quote_experiment_outcome_interpretation_check.py. Active roadmap: FORWARD_BUILD_ROADMAP_506_515.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md. Retained execution source authorities: scripts/booking_quote_experiment_outcome_interpretation_check.py; scripts/recovery_authenticated_device_observation_execution_evidence_check.py; scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py; scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py; scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py. Current source authority: scripts/winter_booking_quote_rule_controlled_activation_decision_check.py. Retained public-claim activation authority: BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md. Retained public-claim activation source authority: scripts/seasonal_capability_public_claim_activation_decision_check.py. Retained winter activation-readiness authority: BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md. Retained winter activation-readiness source authority: scripts/winter_booking_quote_rule_activation_readiness_check.py. Retained customer-transparency authority: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained customer-transparency source authority: scripts/winter_booking_eligibility_customer_transparency_check.py. Retained site/routing authority: BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md. Retained site/routing source authority: scripts/controlled_environment_site_qualification_service_routing_evidence_check.py. Retained Production-learning predecessor: BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Retained prior continuity authority: BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md. Retained staff/mobile authority: BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained recovery/device execution contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Retained maintenance/fleet continuity authority: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained booking/quote interpretation authority: BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md. Active roadmap: FORWARD_BUILD_ROADMAP_506_515.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Seasonal Capability & Public Claim Activation Decision contract
-- Reuse the retained seasonal capability, customer-transparency, weather-safe routing, owner/public-claim and controlled-environment qualification authorities; do not create a second weather engine, capability matrix, content publishing system or booking authority.
-- A row becomes public-claim activation-decision-ready only when the retained service-specific claim is publication-review-ready, current attributable capability evidence remains present, final wording is explicitly confirmed and the owner records a dated attributable activation decision.
-- Exact working-temperature limits remain source-owned and cannot be widened or invented by owner activation review.
-- Actual website publication remains a separate manual action in the owning content workflow.
-- A service-specific activation decision never authorizes broad winter availability, automatic booking/quote changes, customer outreach, routing or rescheduling.
-- Missing or stale evidence remains owner action/HOLD; source/runtime GREEN never manufactures owner approval or capability.
-- Keep the release read-only: no schema/storage, content-publication, booking/availability, quote-rule, customer-message, pricing, provider, accounting/inventory, outreach or polling mutation.
+## Current Winter Booking & Quote Rule Controlled Activation Decision contract
+- Reuse the retained Build 497 service-specific booking/quote readiness package, Build 487 customer-transparency wording, Build 506 seasonal/public-claim authority and existing operational booking authorities; do not create a second weather engine, capability matrix, booking engine, quote engine or content system.
+- A row becomes controlled-activation-decision-ready only when retained activation readiness is already explicit, the service-specific booking/quote rule pair remains present, retained customer limitation wording is available, the owner confirms that wording and records a dated attributable controlled-activation approval.
+- `hold_controlled_activation` remains an owner HOLD. Missing/stale/incompatible evidence remains owner action and never becomes inferred approval.
+- `/api/availability` and checkout collision revalidation remain authoritative. A decision-ready row does not mutate either authority or prove weather eligibility by itself.
+- Exact working-temperature limits remain source-owned and cannot be widened or invented by the owner decision package.
+- Weather-ineligible sessions remain outside ordinary conversion interpretation and are not conversion failures.
+- Actual rule activation remains a separate manual change in the owning booking/quote workflow. Broad winter availability remains HOLD.
+- Keep the release read-only: no schema/storage, booking/availability, quote-rule, checkout, customer-message, content-publication, pricing, provider, accounting/inventory, outreach or polling mutation.
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Retained Service Economics, Seasonal Capacity & Reliability Trend Continuity contract
@@ -228,6 +229,11 @@ Retained source authority: scripts/provider_local_search_outcome_evidence_refres
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
+- `.github/workflows/winter-booking-quote-rule-controlled-activation-decision-authority.yml`
+- `scripts/winter_booking_quote_rule_controlled_activation_decision_check.py`
+- `scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs`
+- `functions/api/_lib/winter-booking-quote-rule-controlled-activation-decision.js`
 - `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `.github/workflows/seasonal-capability-public-claim-activation-decision-authority.yml`
 - `scripts/seasonal_capability_public_claim_activation_decision_check.py`

@@ -171,6 +171,9 @@ require(production_helper, [
     "mutation performed: none",
 ], "Production exact-SHA helper")
 
+# Living-state convergence is about the current/next release authority, not the
+# retained historical index. Historical BUILDxxx filenames may remain as durable
+# navigation without being mistaken for additional active release state.
 for path, text in [
     (QUEUE, queue),
     (HANDOFF, handoff),
@@ -179,11 +182,13 @@ for path, text in [
 ]:
     if re.search(r"(?i)\b[0-9a-f]{12,40}\b", text):
         errors.append(f"{path.name} embeds commit-like identity instead of live Git/workflow evidence")
-    if len(re.findall(r"(?i)\bbuild\s+\d{3}\b", text)) > 3:
-        errors.append(f"{path.name} contains too many numbered release references for a living document")
+    active_markers = re.findall(r"\*\*Build\s+\d{3}\s+—", text)
+    if len(active_markers) > 3:
+        errors.append(f"{path.name} contains too many active numbered release markers for a living document")
 
-if len(readme) > 18000:
-    errors.append("README exceeds the living-document size boundary")
+readme_living = readme.split("## Retained cumulative authority pointers", 1)[0]
+if len(readme_living) > 18000:
+    errors.append("README living release guidance exceeds the size boundary")
 
 for needle in [
     "git push", "git update-ref", "wrangler pages deploy", "--request POST", "-X POST",

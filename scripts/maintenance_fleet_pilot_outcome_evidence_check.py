@@ -70,17 +70,17 @@ require(roadmap,[
  "### Build 492 — Booking & Quote Controlled Experiment Execution Evidence"
 ],"roadmap")
 require(queue,[
- "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
- "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
+ "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
+ "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is next",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md","it has not run out"
 ],"Build 491 queue")
 require(handoff,[
- "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
+ "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md",
  "maintenance_fleet_pilot_outcome_evidence_check.py"
 ],"Build 491 handoff")
 require(readme,[
- "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
+ "Current source direction: **Build 507 — Winter Booking & Quote Rule Controlled Activation Decision**.",
  "BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md",
  "maintenance_fleet_pilot_outcome_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."

@@ -76,18 +76,18 @@ require(roadmap,[
  "### Build 498 — Controlled-Environment Site Qualification & Service Routing Evidence"
 ],"active roadmap")
 require(queue,[
- "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
- "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
+ "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
+ "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is next",
  "BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md",
  "it has not run out"
 ],"Build 497 queue")
 require(handoff,[
- "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
+ "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
  "BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md",
  "winter_booking_quote_rule_activation_readiness_check.py"
 ],"Build 497 handoff")
 require(readme,[
- "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
+ "Current source direction: **Build 507 — Winter Booking & Quote Rule Controlled Activation Decision**.",
  "BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md",
  "winter_booking_quote_rule_activation_readiness_check.py",
  "Production is not considered GREEN from source promotion alone."
