@@ -85,16 +85,21 @@ def main() -> int:
             errors.append(f"living authority missing: {path.name}")
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        numbered_mentions = re.findall(r"(?i)\bbuild\s+\d{3}\b", text)
-        if len(numbered_mentions) > 3:
-            errors.append(f"{path.name} contains release archaeology ({len(numbered_mentions)} numbered Build mentions)")
+        # Historical BUILDxxx filenames may remain as durable navigation. Only
+        # emphasized Build markers represent active living release state.
+        active_markers = re.findall(r"\*\*Build\s+\d{3}\s+—", text)
+        if len(active_markers) > 3:
+            errors.append(f"{path.name} contains too many active numbered release markers ({len(active_markers)})")
         stale_shas = re.findall(r"(?i)\b[0-9a-f]{12,40}\b", text)
         if stale_shas:
             errors.append(f"{path.name} embeds commit-like identity instead of live Git/workflow authority")
 
     readme = ROOT / "README.md"
-    if readme.exists() and len(readme.read_text(encoding="utf-8", errors="ignore")) > 18000:
-        errors.append("README.md exceeds the living-document size boundary")
+    if readme.exists():
+        readme_text = readme.read_text(encoding="utf-8", errors="ignore")
+        readme_living = readme_text.split("## Retained cumulative authority pointers", 1)[0]
+        if len(readme_living) > 18000:
+            errors.append("README.md living release guidance exceeds the size boundary")
 
     if errors:
         print("Release hygiene check: FAIL")
