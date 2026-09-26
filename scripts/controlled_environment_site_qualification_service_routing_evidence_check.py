@@ -71,18 +71,18 @@ require(roadmap,[
  "### Build 499 — Provider & Local Search Outcome Evidence Refresh"
 ],"active roadmap")
 require(queue,[
- "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
- "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next",
+ "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
+ "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next",
  "BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md",
  "it has not run out"
 ],"Build 498 queue")
 require(handoff,[
- "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
+ "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
  "BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md",
  "controlled_environment_site_qualification_service_routing_evidence_check.py"
 ],"Build 498 handoff")
 require(readme,[
- "Current source direction: **Build 508 — Controlled-Environment Operational Readiness & Routing Continuity**.",
+ "Current source direction: **Build 509 — Provider & Local Search Closure Evidence Continuity Review**.",
  "BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md",
  "controlled_environment_site_qualification_service_routing_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."

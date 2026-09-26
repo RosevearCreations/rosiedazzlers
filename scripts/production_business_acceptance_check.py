@@ -198,6 +198,10 @@ required_authorities = {
         "scripts/controlled_environment_operational_readiness_routing_continuity_check.py",
         "scripts/controlled_environment_operational_readiness_routing_continuity_test.mjs",
     ],
+    "provider_local_search_closure_evidence_continuity_review": [
+        "scripts/provider_local_search_closure_evidence_continuity_review_check.py",
+        "scripts/provider_local_search_closure_evidence_continuity_review_test.mjs",
+    ],
     "winter_booking_quote_rule_activation_readiness": [
         "scripts/winter_booking_quote_rule_activation_readiness_check.py",
         "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
@@ -354,6 +358,10 @@ workflow = require(WORKFLOW, [
     "python scripts/provider_local_search_outcome_evidence_refresh_check.py",
     "node scripts/provider_local_search_outcome_evidence_refresh_test.mjs",
     "provider_local_search_outcome_evidence_refresh",
+    "Validate provider & local search closure evidence continuity review authority",
+    "python scripts/provider_local_search_closure_evidence_continuity_review_check.py",
+    "node scripts/provider_local_search_closure_evidence_continuity_review_test.mjs",
+    "provider_local_search_closure_evidence_continuity_review",
     "Validate recovery drill & authenticated device observation execution evidence authority",
     "python scripts/recovery_authenticated_device_observation_execution_evidence_check.py",
     "node scripts/recovery_authenticated_device_observation_execution_evidence_test.mjs",
@@ -429,6 +437,7 @@ print("- backup/restore/accountant-export operational proof remains read-only an
 print("- customer/staff Production workflow evidence remains aggregate, role-bounded and fail-closed")
 print("- local acquisition evidence closure remains source-attributed, read-only and fail-closed")
 print("- local-search provider snapshot continuity remains descriptive, identity/window-bounded and does not infer Southern Ontario weather or winter service capability")
+print("- provider/local-search closure evidence continuity requires source-matched fresh evidence and explicit manual HOLD review; no causation or automatic closure is inferred")
 print("- booking/quote experiment approval requires an explicit immutable measurement lock and excludes weather-ineligible sessions without authorizing execution")
 print("- staff/mobile remediation effectiveness requires separately authorized execution evidence and materially comparable before/after observations; weather/site limits remain separate")
 print("- service economics, seasonal operations and reliability reconciliation keeps allocation, cold-weather capability, observed capacity, provider cost and recovery evidence independently sourced")

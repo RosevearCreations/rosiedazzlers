@@ -47,9 +47,11 @@ async function refresh450() {
       const safeContinuityData = continuityResponse.ok && continuityData ? continuityData : {};
       renderProviderLocalSearchContinuity489(safeContinuityData);
       renderProviderLocalSearchOutcomeRefresh499(safeContinuityData);
+      renderProviderLocalSearchClosureReview509(safeContinuityData);
     } catch {
       renderProviderLocalSearchContinuity489({});
       renderProviderLocalSearchOutcomeRefresh499({});
+      renderProviderLocalSearchClosureReview509({});
     }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
@@ -231,6 +233,29 @@ function renderProviderLocalSearchOutcomeRefresh499(data) {
     ["Search Console / GBP outcomes", local.status || "unavailable", "correct source/window " + String(local.correct_source_window_count ?? 0) + " / " + String(local.required_count ?? 2)],
     ["First-party context", source.first_party_context_remains_separate_descriptive_evidence === true ? "SEPARATE" : "UNKNOWN", "never substitutes for provider evidence"],
     ["Ranking / weather / demand / conversion causation", truth.weather_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "descriptive evidence only"]
+  ];
+  host.innerHTML = summary + rows.map((row) =>
+    '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
+  ).join("");
+}
+
+function renderProviderLocalSearchClosureReview509(data) {
+  const host = byId450("localProviderClosureReview509");
+  if (!host) return;
+  const review = data?.provider_local_search_closure_evidence_continuity_review || {};
+  const provider = review.provider_closure_evidence || {};
+  const local = review.local_search_closure_evidence || {};
+  const closure = review.closure_contract || {};
+  const truth = review.truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 509 closure evidence continuity review</strong>'
+    + '<div class="muted">Fresh source-owned provider evidence and matching Search Console property / GBP location windows are required. Manual source-owned closure review remains required.</div></div>'
+    + '<span>' + esc450(review.status || "closure_evidence_continuity_review_required") + '</span></div>';
+  const rows = [
+    ["Payment / refund / message closure evidence", provider.status || "unavailable", "review-ready " + String(provider.closure_review_ready_count ?? 0) + " / " + String(provider.required_count ?? 4)],
+    ["Search Console / GBP closure evidence", local.status || "unavailable", "review-ready " + String(local.closure_review_ready_count ?? 0) + " / " + String(local.required_count ?? 2)],
+    ["First-party context", closure.first_party_context_used_as_provider_substitute === false ? "SEPARATE" : "UNKNOWN", "separate descriptive evidence only"],
+    ["Canonical HOLD update", closure.manual_hold_update_required === true && closure.automatic_hold_closure_performed === false ? "MANUAL" : "UNKNOWN", "no automatic closure or narrowing"],
+    ["Ranking / weather / demand / conversion causation", truth.ranking_outcome_inferred === false && truth.weather_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "closure evidence remains descriptive"]
   ];
   host.innerHTML = summary + rows.map((row) =>
     '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
