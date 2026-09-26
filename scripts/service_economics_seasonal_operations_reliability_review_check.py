@@ -113,18 +113,18 @@ require(roadmap, [
     "### Build 495 — Production Learning & Roadmap Renewal"
 ], "active roadmap")
 require(queue, [
-    "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
-    "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next",
+    "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
+    "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is next",
     "BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md",
     "it has not run out"
 ], "Build 494 queue")
 require(handoff, [
-    "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
+    "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
     "BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md",
     "service_economics_seasonal_operations_reliability_review_check.py"
 ], "Build 494 handoff")
 require(readme, [
-    "Current source direction: **Build 509 — Provider & Local Search Closure Evidence Continuity Review**.",
+    "Current source direction: **Build 510 — Recovery Drill & Authenticated Device Closure Review**.",
     "BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md",
     "service_economics_seasonal_operations_reliability_review_check.py",
     "Production is not considered GREEN from source promotion alone."
