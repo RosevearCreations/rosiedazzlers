@@ -61,18 +61,18 @@ require(roadmap,[
  "### Build 487 — Winter Booking Eligibility & Customer Transparency"
 ],"renewed roadmap")
 require(queue,[
- "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
- "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is next",
+ "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release.",
+ "**Build 505 — Production Learning & Roadmap Renewal** is next",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "it has not run out"
 ],"Build 486 queue")
 require(handoff,[
- "**Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up** is the active bounded release.",
+ "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py"
 ],"retained Build 486 handoff")
 require(readme,[
- "Current source direction: **Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up**.",
+ "Current source direction: **Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity**.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py",
  "Production is not considered GREEN from source promotion alone."
