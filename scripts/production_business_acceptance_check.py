@@ -190,6 +190,10 @@ required_authorities = {
         "scripts/seasonal_capability_public_claim_activation_decision_check.py",
         "scripts/seasonal_capability_public_claim_activation_decision_test.mjs",
     ],
+    "winter_booking_quote_rule_controlled_activation_decision": [
+        "scripts/winter_booking_quote_rule_controlled_activation_decision_check.py",
+        "scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs",
+    ],
     "winter_booking_quote_rule_activation_readiness": [
         "scripts/winter_booking_quote_rule_activation_readiness_check.py",
         "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
@@ -330,6 +334,9 @@ workflow = require(WORKFLOW, [
     "Validate seasonal capability & public claim activation decision authority",
     "python scripts/seasonal_capability_public_claim_activation_decision_check.py",
     "node scripts/seasonal_capability_public_claim_activation_decision_test.mjs",
+    "Validate winter booking & quote rule controlled activation decision authority",
+    "python scripts/winter_booking_quote_rule_controlled_activation_decision_check.py",
+    "node scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs",
     "Validate winter booking & quote rule activation readiness authority",
     "python scripts/winter_booking_quote_rule_activation_readiness_check.py",
     "node scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
