@@ -6,6 +6,7 @@ import { onRequestGet as getProviderEvidence } from "./provider_evidence_reconci
 import { onRequestGet as getLocalSearch } from "./local_search_measurement_conversion_attribution.js";
 import { buildProviderLocalSearchEvidenceContinuity } from "../_lib/provider-local-search-evidence-continuity.js";
 import { buildProviderLocalSearchOutcomeEvidenceRefresh } from "../_lib/provider-local-search-outcome-evidence-refresh.js";
+import { buildProviderLocalSearchClosureEvidenceContinuityReview } from "../_lib/provider-local-search-closure-evidence-continuity-review.js";
 
 export async function onRequestGet({ request, env }) {
   const [providerResponse, localResponse] = await Promise.all([
@@ -32,6 +33,10 @@ export async function onRequestGet({ request, env }) {
     continuity,
     generated_at: generatedAt
   });
+  const closureReview = buildProviderLocalSearchClosureEvidenceContinuityReview({
+    outcome_refresh: outcomeRefresh,
+    generated_at: generatedAt
+  });
 
   return json({
     ...(localPayload && typeof localPayload === "object" ? localPayload : {}),
@@ -40,9 +45,12 @@ export async function onRequestGet({ request, env }) {
     continuity_authority: "provider_local_search_evidence_continuity",
     outcome_evidence_refresh_build: 499,
     outcome_evidence_refresh_authority: "provider_local_search_outcome_evidence_refresh",
+    closure_evidence_continuity_review_build: 509,
+    closure_evidence_continuity_review_authority: "provider_local_search_closure_evidence_continuity_review",
     generated_at: generatedAt,
     provider_local_search_evidence_continuity: continuity,
     provider_local_search_outcome_evidence_refresh: outcomeRefresh,
+    provider_local_search_closure_evidence_continuity_review: closureReview,
     continuity_source_status: {
       provider_outcomes: { available: providerResponse.ok && Boolean(providerPayload?.ok), http_status: providerResponse.status },
       local_search: { available: localResponse.ok && Boolean(localPayload?.ok), http_status: localResponse.status }
@@ -73,7 +81,8 @@ function json(value,status=200){
       "Content-Type":"application/json; charset=utf-8",
       "Cache-Control":"no-store",
       "X-Rosie-Provider-Local-Search-Continuity":"build-489-read-only",
-      "X-Rosie-Provider-Local-Search-Outcome-Refresh":"build-499-read-only"
+      "X-Rosie-Provider-Local-Search-Outcome-Refresh":"build-499-read-only",
+      "X-Rosie-Provider-Local-Search-Closure-Review":"build-509-read-only"
     }
   });
 }
