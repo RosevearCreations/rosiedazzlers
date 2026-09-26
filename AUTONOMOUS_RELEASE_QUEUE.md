@@ -5,8 +5,8 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
-Retained predecessor contract: `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
+Retained predecessor contract: `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
@@ -142,25 +142,25 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.
+**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.
 
 Scope:
-- reuse retained Build 500 recovery/authenticated-device execution evidence and Build 490 continuity; do not create a second recovery system, evidence ledger, browser farm or screenshot service;
-- require a current attributable bounded non-Production recovery observation with complete post-observation fields and an explicit successful outcome before Recovery / backup evidence becomes a manual closure-review candidate;
-- require current direct Customer, Detailer, Operations and Admin observations across representative phone, tablet and desktop classes, with browser evidence and no current regression, before Independent device / visual evidence becomes a manual closure-review candidate;
-- keep recovery and authenticated-device evidence as separate populations; one can never close or substitute for the other;
-- current negative, missing, stale, unavailable or source-only evidence retains its owning HOLD, and historical acceptance never overrides current negative evidence;
-- closure-review-ready means explicit manual operator review only; no canonical HOLD is narrowed automatically; and
-- perform no Production restore/rollback/drill, browser farm, screenshot capture, remediation, customer/booking, role, provider, accounting/inventory, HOLD, schema/storage, outreach or polling mutation.
+- reuse retained Build 501 maintenance/fleet pilot outcome continuity, Build 491 outcome evidence and retained owner-decision / controlled-pilot authorities; do not create a second pilot engine, participant registry, capacity ledger, invoicing workflow, recurring-billing path or booking flow;
+- require explicit owner approval and bounded participant/duration authorization plus current attributable execution evidence before continuation decision review;
+- require complete current availability/checkout collision revalidation, invoicing, travel and stop-condition evidence;
+- treat any triggered stop condition as explicit review-required evidence that blocks an accepted continue decision;
+- require an attributable explicit owner `continue` or `hold` record before recording a continuation decision;
+- keep a recorded continue decision non-executing: no customer enrollment, fleet activation, booking mutation, capacity reservation, invoice mutation, recurring billing or price/discount change; and
+- perform no provider/business, accounting/inventory, HOLD, schema/storage, outreach or polling mutation.
 
-Current contract: `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`. Current source authority: `scripts/recovery_authenticated_device_closure_review_check.py`. Retained execution-evidence authority: `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`. Retained recovery/device continuity authority: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`. Current source authority: `scripts/maintenance_fleet_pilot_continuation_decision_check.py`. Retained continuity authority: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`. Retained outcome authority: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`. Retained owner decision authority: `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 510 authority, retained Build 500/490/477/478 recovery/device authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 511 authority, retained Build 501/491/479/469/421 maintenance/fleet authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Manual closure-review readiness never substitutes for current owner-observed evidence.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. A recorded continuation decision never substitutes for execution authorization.
 
 ## Next release
-**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is next only after the current release is independently GREEN on protected main.
+**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.
