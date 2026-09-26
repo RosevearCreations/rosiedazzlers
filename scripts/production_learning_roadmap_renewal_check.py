@@ -117,21 +117,21 @@ require(blockers,[
 require(queue,[
     "BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_496_504.md",
     "FORWARD_BUILD_ROADMAP_506_515.md",
-    "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
-    "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next",
+    "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
+    "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next",
     "it has not run out","rd main protection","Production deployment/runtime/business acceptance",
     "Missing required checks or exact Production runtime/deployment identity are blockers"
 ],"release queue")
 require(handoff,[
     "BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_496_504.md",
     "FORWARD_BUILD_ROADMAP_506_515.md",
-    "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
-    "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next",
+    "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
+    "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "Current source direction: **Build 508 — Controlled-Environment Operational Readiness & Routing Continuity**.",
+    "Current source direction: **Build 509 — Provider & Local Search Closure Evidence Continuity Review**.",
     "BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_496_504.md",
     "FORWARD_BUILD_ROADMAP_506_515.md","scripts/production_learning_roadmap_renewal_check.py",
     "Production is not considered GREEN from source promotion alone."
