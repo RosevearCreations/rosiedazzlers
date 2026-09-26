@@ -49,6 +49,8 @@ Build 506 adds a read-only seasonal capability/public-claim activation decision 
 
 Build 499 adds read-only provider/local-search outcome evidence refresh. Payment/refund/message rows require the correct current attributable provider evidence class; Search Console and GBP require the correct provider/property/location/window evidence. First-party referral/funnel context remains separate, and no ranking, weather, demand, service-availability or booking-conversion causation is inferred. Source/runtime GREEN never manufactures provider evidence or narrows these HOLDs automatically.
 
+Build 509 adds a read-only provider/local-search closure evidence continuity review. Closure-review readiness requires fresh retained provider outcomes plus matching Search Console property / GBP location identities and comparable dated windows. First-party context remains separate descriptive evidence. Manual source-owned closure review remains required; no canonical HOLD is narrowed automatically, and no ranking, weather, winter-demand, service-availability or booking-conversion causation is inferred.
+
 Build 500 adds read-only recovery-drill and authenticated-device observation execution evidence. Recovery evidence counts only where an explicitly performed bounded non-Production observation is current and attributable with the required post-observation fields. Authenticated-device evidence counts only where current direct role/device/browser observations are recorded. The populations remain separate; no Production restore, browser farm, manufactured success or automatic HOLD narrowing is authorized.
 
 ## Current cycle reconciliation
