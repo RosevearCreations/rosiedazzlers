@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 509 — Provider & Local Search Closure Evidence Continuity Review**.
+Current source direction: **Build 510 — Recovery Drill & Authenticated Device Closure Review**.
 
 ## Release authority
-Authority: `scripts/provider_local_search_closure_evidence_continuity_review_check.py` · `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/recovery_authenticated_device_closure_review_check.py` · `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+
+Retained provider/local-search closure authority: `scripts/provider_local_search_closure_evidence_continuity_review_check.py` · `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
 
 Retained controlled-environment operational-readiness authority: `scripts/controlled_environment_operational_readiness_routing_continuity_check.py` · `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`.
 
@@ -43,15 +45,16 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
-4. `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
-5. `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
+3. `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`
+4. `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
+5. `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 6. `FORWARD_BUILD_ROADMAP_506_515.md`
 7. `STARTUP_GO_LIVE_BLOCKERS.md`
 8. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`
 - `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
 - `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 - `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
