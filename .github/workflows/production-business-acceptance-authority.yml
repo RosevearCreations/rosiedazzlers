@@ -202,6 +202,9 @@ jobs:
           python -m py_compile scripts/seasonal_capability_public_claim_activation_decision_check.py
           node --check scripts/seasonal_capability_public_claim_activation_decision_test.mjs
           node --check functions/api/_lib/seasonal-capability-public-claim-activation-decision.js
+          python -m py_compile scripts/winter_booking_quote_rule_controlled_activation_decision_check.py
+          node --check scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs
+          node --check functions/api/_lib/winter-booking-quote-rule-controlled-activation-decision.js
           python -m py_compile scripts/current_reliability_security_cost_reassessment_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
@@ -614,6 +617,10 @@ jobs:
         run: |
           python scripts/seasonal_capability_public_claim_activation_decision_check.py
           node scripts/seasonal_capability_public_claim_activation_decision_test.mjs
+      - name: Validate winter booking & quote rule controlled activation decision authority
+        run: |
+          python scripts/winter_booking_quote_rule_controlled_activation_decision_check.py
+          node scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs
       - name: Validate provider & local search outcome evidence refresh authority
         run: |
           python scripts/provider_local_search_outcome_evidence_refresh_check.py
@@ -655,6 +662,7 @@ jobs:
             echo "- Winter booking / quote rule activation readiness: PASS"
             echo "- Controlled-environment site qualification / service routing evidence: PASS"
             echo "- Seasonal capability / public claim activation decision: PASS"
+            echo "- Winter booking / quote controlled activation decision: PASS"
             echo "- Provider / local-search outcome evidence refresh: PASS"
             echo "- Booking conversion / quote clarity: PASS"
             echo "- Service economics / job profitability evidence: PASS"
