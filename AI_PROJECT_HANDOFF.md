@@ -3,15 +3,25 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md.
+The synchronized Production predecessor is retained through BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md.
 
-**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.
+**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.
 
-**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next only after the current release is independently GREEN on protected main.
+**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md. Current source authority: scripts/controlled_environment_operational_readiness_routing_continuity_check.py. Retained controlled-activation authority: BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md. Retained controlled-activation source authority: scripts/winter_booking_quote_rule_controlled_activation_decision_check.py. Retained site/routing authority: BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md. Retained site/routing source authority: scripts/controlled_environment_site_qualification_service_routing_evidence_check.py. Retained customer-transparency authority: BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md. Retained public-claim activation authority: BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md. Retained Production-learning predecessor: BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Active roadmap: FORWARD_BUILD_ROADMAP_506_515.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained provider/local-search outcome source authority: scripts/provider_local_search_outcome_evidence_refresh_check.py. Retained recovery/device execution authority: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Retained recovery/device execution source authority: scripts/recovery_authenticated_device_observation_execution_evidence_check.py. Retained maintenance/fleet continuity authority: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained maintenance/fleet continuity source authority: scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py. Retained booking/quote interpretation authority: BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md. Retained booking/quote interpretation source authority: scripts/booking_quote_experiment_outcome_interpretation_check.py. Retained staff/mobile outcome interpretation authority: BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md. Retained staff/mobile outcome interpretation source authority: scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py. Retained service-economics seasonal continuity authority: BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md. Retained service-economics seasonal continuity source authority: scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py.
+Current contract: BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_continuity_review_check.py. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained provider/local-search outcome source authority: scripts/provider_local_search_outcome_evidence_refresh_check.py. Retained provider/local-search continuity authority: BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md. Retained provider/local-search continuity source authority: scripts/provider_local_search_evidence_continuity_check.py. Retained controlled-environment operational-readiness authority: BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md. Retained controlled-environment operational-readiness source authority: scripts/controlled_environment_operational_readiness_routing_continuity_check.py. Active roadmap: FORWARD_BUILD_ROADMAP_506_515.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Controlled-Environment Operational Readiness & Routing Continuity contract
+## Current Provider & Local Search Closure Evidence Continuity Review contract
+- Reuse retained Build 499 provider/local-search outcome refresh and Build 489 continuity authorities; do not create replacement payment, message, Search Console, GBP, analytics or HOLD systems.
+- Provider closure review requires all four retained Stripe/PayPal/refund/delivery evidence classes to remain source-available, attributable, validly dated, current and observed with the retained evidence trace key.
+- Local-search closure review requires the correct Search Console property and GBP location identities with distinct equal-length current/prior dated windows and current attributable observations.
+- First-party referral/funnel context remains a separate descriptive population and never substitutes for provider evidence or becomes a cross-family identity join.
+- Closure-review-ready means only ready for explicit manual source-owned review. Canonical provider/local-search HOLDs are never narrowed automatically.
+- Ranking, indexing, Maps visibility, weather effects, winter demand, service availability, booking-conversion causation and exact service temperature limits remain explicitly unproven by this evidence.
+- Keep the release read-only: no payment/refund/message send, provider contact/write, Search Console/GBP write, provider snapshot write, booking/quote/customer/content/HOLD/schema/storage/outreach/polling mutation.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Controlled-Environment Operational Readiness & Routing Continuity contract
 - Reuse retained Build 498 site/workflow/equipment/product qualification, Build 507 service-specific winter-rule decision evidence and existing routing/booking authorities; do not create a second weather engine, site registry, booking engine or routing engine.
 - A controlled-environment path becomes operational-review-ready only when that exact service/site path remains qualified, its retained routing state remains review-ready, and current attributable routing-continuity, manual site-confirmation and manual safe-reschedule practice evidence are all present.
 - Qualification remains service-specific. Evidence from one service/site never establishes another service, universal indoor capability or a broad winter-availability claim.
@@ -227,6 +237,11 @@ Retained source authority: scripts/provider_local_search_outcome_evidence_refres
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
+- `.github/workflows/provider-local-search-closure-evidence-continuity-review-authority.yml`
+- `scripts/provider_local_search_closure_evidence_continuity_review_check.py`
+- `scripts/provider_local_search_closure_evidence_continuity_review_test.mjs`
+- `functions/api/_lib/provider-local-search-closure-evidence-continuity-review.js`
 - `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 - `.github/workflows/controlled-environment-operational-readiness-routing-continuity-authority.yml`
 - `scripts/controlled_environment_operational_readiness_routing_continuity_check.py`
