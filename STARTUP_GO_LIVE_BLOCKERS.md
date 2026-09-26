@@ -46,27 +46,30 @@ Build 499 adds read-only provider/local-search outcome evidence refresh. Payment
 Build 500 adds read-only recovery-drill and authenticated-device observation execution evidence. Recovery evidence counts only where an explicitly performed bounded non-Production observation is current and attributable with the required post-observation fields. Authenticated-device evidence counts only where current direct role/device/browser observations are recorded. The populations remain separate; no Production restore, browser farm, manufactured success or automatic HOLD narrowing is authorized.
 
 ## Current cycle reconciliation
-`PRODUCTION_LEARNING_486_494.md` confirms that the 486–494 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
+`PRODUCTION_LEARNING_496_504.md` confirms that the 496–504 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
+- `AUTONOMOUS_RELEASE_QUEUE.md`
+- `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_496_504.md`
+- `FORWARD_BUILD_ROADMAP_506_515.md`
+- `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`
+- `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`
+- `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`
+- `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
 - `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
 - `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
 - `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 - `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
 - `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
-- `AUTONOMOUS_RELEASE_QUEUE.md`
+- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_486_494.md`
 - `FORWARD_BUILD_ROADMAP_496_505.md`
-- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
-- `BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md`
-- `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`
 
-Build 495 renews the roadmap from observed 486–494 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists.
+Build 505 renews the roadmap from observed 496–504 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists. Retained provider decision state `operator_hold_decision_ready` remains review-only and never closes a HOLD automatically.
 
-Build 476 carries the provider HOLD forward with explicit evidence trace and closure prerequisites. No authorized persisted operator-review record is inferred from source/runtime evidence, so the retained endpoint defaults to no review record and no automatic HOLD update.
-
-Build 466 retains provider outcome decisions as explicit operator review rather than automatic HOLD mutation. `operator_hold_decision_ready` means only that dated current provider evidence is ready for explicit operator review; it never narrows this backlog automatically. Build 467 retains recovery evidence as owner-observed and never manufactures proof through an unnecessary Production restore. Build 468 keeps current authenticated regression evidence separate from historical success. Build 469 records maintenance/fleet pilot readiness as `owner_action` while canonical rulebooks remain `awaiting_business_approval`. Build 479 adds the explicit read-only pilot decision record: missing owner decision or participant/duration bounds remain `owner_action`, participant selection stays manual, and no pilot activation or capacity reservation is inferred. Build 501 preserves that boundary while reconciling only attributable current pilot outcome continuity and surfacing any triggered stop condition for explicit review. Build 470 preserves provider-window descriptive review without causal attribution. Builds 471–474 preserve owner approval, remediation attribution, explicit economics allocation and comparable-history boundaries.
+Build 504 preserves same-domain continuity only when comparable attributable history exists. Missing history remains insufficient, seasonal field restrictions stay separate from application reliability, observed capacity does not prove future capacity, and technical reliability does not establish provider billing/CPU/quota or recovery success.
 
 ## Closure rule
 A row is removed or narrowed only when dated, attributable evidence exists and the relevant source/runtime/provider/owner boundary remains explicit. Missing evidence is never converted into success, and closure of one row does not silently close another.
