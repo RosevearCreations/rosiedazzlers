@@ -116,20 +116,20 @@ require(roadmap, [
 ], "Build 482 roadmap")
 require(queue, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
-    "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release.",
-    "**Build 505 — Production Learning & Roadmap Renewal** is next",
+    "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
+    "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next",
     "it has not run out"
 ], "retained Build 482 queue")
 require(handoff, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
-    "**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release."
+    "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release."
 ], "retained Build 482 handoff")
 require(readme, [
     "BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md",
     "staff_mobile_remediation_execution_evidence_readiness_check.py",
     "staff_mobile_remediation_execution_evidence_readiness_test.mjs",
-    "Current source direction: **Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity**.",
+    "Current source direction: **Build 505 — Production Learning & Roadmap Renewal**.",
     "Production is not considered GREEN from source promotion alone."
 ], "retained Build 482 README")
 require(blockers, [
