@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`.
-Retained predecessor contract: `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`.
+The synchronized predecessor contracts are retained through `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
+Retained predecessor contract: `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`
 - `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
 - `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 - `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
@@ -141,25 +142,25 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.
+**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.
 
 Scope:
-- review only fresh retained Build 499 payment/refund/message outcome evidence and Search Console/Google Business Profile evidence from matching provider/property/location/window sources;
-- require all four provider-owned outcome classes to remain source-available, attributable, validly dated, current and observed with the retained evidence trace key before provider closure review can become ready;
-- require the correct Search Console property and Google Business Profile location identities plus distinct equal-length current/prior dated windows and current attributable observations before local-search closure review can become ready;
-- keep first-party referral/funnel context separate and descriptive; it never substitutes for provider evidence and is not joined to provider metrics, customer identity or persisted bookings;
-- preserve manual source-owned closure: closure-review-ready never removes or narrows a canonical HOLD automatically and any HOLD change remains a separate explicit operator-reviewed update;
-- preserve Southern Ontario seasonal truth: provider/search/referral movement never proves ranking, weather effects, winter demand, service availability, booking conversion causation or any working-temperature threshold; and
-- perform no payment/refund/message, provider, Search Console/GBP, provider-snapshot, booking/quote, customer, content-publication, HOLD, schema/storage, outreach or polling mutation while requiring exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
+- reuse retained Build 500 recovery/authenticated-device execution evidence and Build 490 continuity; do not create a second recovery system, evidence ledger, browser farm or screenshot service;
+- require a current attributable bounded non-Production recovery observation with complete post-observation fields and an explicit successful outcome before Recovery / backup evidence becomes a manual closure-review candidate;
+- require current direct Customer, Detailer, Operations and Admin observations across representative phone, tablet and desktop classes, with browser evidence and no current regression, before Independent device / visual evidence becomes a manual closure-review candidate;
+- keep recovery and authenticated-device evidence as separate populations; one can never close or substitute for the other;
+- current negative, missing, stale, unavailable or source-only evidence retains its owning HOLD, and historical acceptance never overrides current negative evidence;
+- closure-review-ready means explicit manual operator review only; no canonical HOLD is narrowed automatically; and
+- perform no Production restore/rollback/drill, browser farm, screenshot capture, remediation, customer/booking, role, provider, accounting/inventory, HOLD, schema/storage, outreach or polling mutation.
 
-Current contract: `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`. Current source authority: `scripts/provider_local_search_closure_evidence_continuity_review_check.py`. Retained provider/local-search outcome authority: `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`. Retained provider/local-search continuity authority: `BUILD489_PROVIDER_LOCAL_SEARCH_EVIDENCE_CONTINUITY.md`. Retained controlled-environment operational-readiness authority: `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`. Current source authority: `scripts/recovery_authenticated_device_closure_review_check.py`. Retained execution-evidence authority: `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`. Retained recovery/device continuity authority: `BUILD490_RECOVERY_AUTHENTICATED_DEVICE_EVIDENCE_CONTINUITY.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused closure-evidence-continuity authority, retained Build 499/489 provider-local-search authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 510 authority, retained Build 500/490/477/478 recovery/device authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Closure-review readiness never substitutes for provider-owned evidence or explicit manual HOLD review.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Manual closure-review readiness never substitutes for current owner-observed evidence.
 
 ## Next release
-**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next only after the current release is independently GREEN on protected main.
+**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.

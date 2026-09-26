@@ -23,6 +23,7 @@ import { buildRecoveryDrillEvidenceRefreshClosureReview } from "../_lib/recovery
 import { buildAuthenticatedDeviceVisualAcceptance } from "../_lib/authenticated-device-visual-acceptance.js";
 import { buildRecoveryAuthenticatedDeviceEvidenceContinuity } from "../_lib/recovery-authenticated-device-evidence-continuity.js";
 import { buildRecoveryAuthenticatedDeviceObservationExecutionEvidence } from "../_lib/recovery-authenticated-device-observation-execution-evidence.js";
+import { buildRecoveryAuthenticatedDeviceClosureReview } from "../_lib/recovery-authenticated-device-closure-review.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -172,6 +173,11 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const recoveryAuthenticatedDeviceClosureReview = buildRecoveryAuthenticatedDeviceClosureReview({
+    execution_evidence: recoveryAuthenticatedDeviceObservationExecutionEvidence,
+    generated_at: generatedAt
+  });
+
   return json({
     ok: consolidation.source_runtime_status === "green",
     build: 419,
@@ -214,6 +220,8 @@ export async function onRequestGet({ request, env }) {
     current_recovery_device_continuity_authority: "recovery_authenticated_device_evidence_continuity",
     recovery_authenticated_device_observation_execution_evidence: recoveryAuthenticatedDeviceObservationExecutionEvidence,
     current_recovery_device_execution_evidence_authority: "recovery_authenticated_device_observation_execution_evidence",
+    recovery_authenticated_device_closure_review: recoveryAuthenticatedDeviceClosureReview,
+    current_recovery_device_closure_review_authority: "recovery_authenticated_device_closure_review",
     source_status: {
       go_live_readiness: state(readinessResult),
       production_diagnostics: state(diagnosticsResult),
@@ -279,6 +287,10 @@ export async function onRequestGet({ request, env }) {
       recovery_authenticated_device_observation_execution_evidence: {
         available: recoveryExportResult.ok && launchEvidenceResult.ok,
         classification: recoveryAuthenticatedDeviceObservationExecutionEvidence.status
+      },
+      recovery_authenticated_device_closure_review: {
+        available: recoveryExportResult.ok && launchEvidenceResult.ok,
+        classification: recoveryAuthenticatedDeviceClosureReview.status
       }
     },
     ...consolidation
