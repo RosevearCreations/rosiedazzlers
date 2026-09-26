@@ -1,4 +1,4 @@
-// Build 498 — retained manual service economics UI with controlled-environment site qualification evidence.
+// Build 506 — retained manual service economics UI with seasonal public-claim activation decisions.
 (function (globalScope) {
   "use strict";
   const $ = (id) => document.getElementById(id);
@@ -25,6 +25,7 @@
       renderWinterBookingEligibility(data.economics?.winter_booking_eligibility || {});
       renderWeatherSafeRouting(data.economics?.weather_safe_routing || {});
       renderSeasonalOwnerReview(data.economics?.seasonal_owner_review_public_claim || {});
+      renderSeasonalPublicClaimActivationDecision(data.economics?.seasonal_public_claim_activation_decision || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderCandidates(data.review_candidates || []);
@@ -46,6 +47,7 @@
       if($("winterEligibilityGrid")) $("winterEligibilityGrid").innerHTML = '<div class="review-empty">Winter booking eligibility evidence is unavailable.</div>';
       if($("weatherSafeRoutingGrid")) $("weatherSafeRoutingGrid").innerHTML = '<div class="review-empty">Weather-safe routing evidence is unavailable.</div>';
       if($("seasonalOwnerReviewGrid")) $("seasonalOwnerReviewGrid").innerHTML = '<div class="review-empty">Seasonal owner/public-claim review is unavailable.</div>';
+      if($("seasonalPublicClaimActivationDecisionGrid")) $("seasonalPublicClaimActivationDecisionGrid").innerHTML = '<div class="review-empty">Seasonal public-claim activation decision evidence is unavailable.</div>';
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
@@ -252,6 +254,45 @@
       " · owner HOLD: "+String(review.counts?.owner_hold??0)+
       " · owner review required: "+String(review.counts?.owner_review_required??0)+
       ". Broad winter availability remains HOLD; publication remains manual.";
+  }
+
+  function renderSeasonalPublicClaimActivationDecision(decision) {
+    const mount=$("seasonalPublicClaimActivationDecisionGrid"); if(!mount) return;
+    const rows=Array.isArray(decision.rows)?decision.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const ready=row.public_claim_activation_decision_ready===true;
+      const state=ready?"observed":"review";
+      const label=ready
+        ? "Activation decision ready"
+        : row.activation_decision_state==="owner_hold"
+          ? "Owner HOLD"
+          : "Owner activation review required";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(label)+'</span></div>'+
+        '<p><strong>Reviewed service-specific wording:</strong> '+esc(row.proposed_service_specific_public_wording||"No supported wording is prepared.")+'</p>'+
+        '<p class="mini">Owner activation decision: '+esc(row.public_claim_activation_decision||"not recorded")+
+        ' · reviewed: '+esc(row.public_claim_activation_reviewed_at||"not recorded")+
+        ' · reference: '+esc(row.public_claim_activation_reference||"not recorded")+
+        ' · final wording confirmed: '+esc(row.public_claim_activation_wording_confirmed===true?"YES":"NO")+'</p>'+
+        '<p class="mini">'+esc(row.source_owned_temperature_limit_text||"No exact source-owned working-temperature limit recorded.")+
+        ' · Actual publication remains manual · Broad winter availability: HOLD · Automatic booking/quote/publication mutation: NONE.</p></article>');
+    }
+    const gaps=Array.isArray(decision.gaps)?decision.gaps:[];
+    for(const gap of gaps){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Activation HOLD · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">HOLD</span></div><p class="mini">Missing: '+
+        esc((gap.missing||[]).join(", ")||"current attributable owner activation evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_public_claim_activation_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No service-specific public claim has a final owner activation decision. Actual publication remains manual.</div>';
+    const detail=$("seasonalPublicClaimActivationDecisionDetail");
+    if(detail) detail.textContent="Service-specific activation decisions: "+String(decision.row_count??0)+
+      " · activation decision ready: "+String(decision.counts?.public_claim_activation_decision_ready??0)+
+      " · owner HOLD: "+String(decision.counts?.owner_hold??0)+
+      " · owner activation review required: "+String(decision.counts?.activation_owner_review_required??0)+
+      ". Actual publication remains manual; broad winter availability remains HOLD.";
   }
 
   function renderWinterRuleActivationReadiness(readiness) {

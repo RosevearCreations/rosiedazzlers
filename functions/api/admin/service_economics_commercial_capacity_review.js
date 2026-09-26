@@ -1,10 +1,11 @@
-// Build 498 — bounded read-only Controlled-Environment Site Qualification & Service Routing Evidence endpoint.
+// Build 506 — bounded read-only Seasonal Capability & Public Claim Activation Decision endpoint.
 // Retained Build 463 completeness/add-on-cost authority remains the base.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildControlledEnvironmentSiteQualificationServiceRoutingEvidence } from "../_lib/controlled-environment-site-qualification-service-routing-evidence.js";
+import { buildSeasonalCapabilityPublicClaimActivationDecision } from "../_lib/seasonal-capability-public-claim-activation-decision.js";
+// Retained Build 498 marker: buildControlledEnvironmentSiteQualificationServiceRoutingEvidence
 // Retained Build 497 marker: buildWinterBookingQuoteRuleActivationReadiness
 // Retained Build 496 marker: buildSeasonalCapabilityOwnerReviewPublicClaimDecision
 // Retained Build 488 marker: buildControlledEnvironmentWeatherSafeRouting
@@ -27,8 +28,8 @@ export async function onRequestGet({request,env}){
     collect("fleet_commercial",()=>getFleetLearning({request:request.clone(),env})),
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
-  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Controlled-Environment Site Qualification & Service Routing Evidence requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildControlledEnvironmentSiteQualificationServiceRoutingEvidence({
+  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Seasonal Capability & Public Claim Activation Decision requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
+  const review=buildSeasonalCapabilityPublicClaimActivationDecision({
     economics:economicsSource.data?.operational_profitability||{},
     fleet:fleetSource.data?.learning||{},
     pricing:pricingSource.data||{},
@@ -41,8 +42,10 @@ export async function onRequestGet({request,env}){
     year,
     pricing_window_days:days,
     ...review,
-    authority:"controlled_environment_site_qualification_service_routing_evidence",
-    release_authority:"controlled_environment_site_qualification_service_routing_evidence",
+    authority:"seasonal_capability_public_claim_activation_decision",
+    release_authority:"seasonal_capability_public_claim_activation_decision",
+    retained_owner_public_claim_authority:"seasonal_capability_owner_review_public_claim_decision",
+    retained_site_qualification_authority:"controlled_environment_site_qualification_service_routing_evidence",
     retained_activation_readiness_authority:"winter_booking_quote_rule_activation_readiness",
     retained_owner_review_authority:"seasonal_capability_owner_review_public_claim_decision",
     retained_availability_authority:"/api/availability",
@@ -64,4 +67,4 @@ async function collect(name,runner){let timer;try{const response=await Promise.r
 function sourceStatusMap(economics,fleet,pricing){return{service_economics:sourceState(economics),fleet_commercial:sourceState(fleet),pricing_learning:sourceState(pricing)};}
 function sourceState(row){return{available:row?.available===true,restricted:row?.restricted===true,http_status:Number(row?.status)||null,error_class:row?.error_class||null};}
 function requestWithQuery(request,values){const url=new URL(request.url);for(const [key,value] of Object.entries(values))url.searchParams.set(key,value);return new Request(url.toString(),request);}
-function readOnly(){return json({ok:false,error:"Controlled-Environment Site Qualification & Service Routing Evidence is read-only. Use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}
+function readOnly(){return json({ok:false,error:"Seasonal Capability & Public Claim Activation Decision is read-only. Actual publication remains a separate manual action in the owning content workflow; use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}

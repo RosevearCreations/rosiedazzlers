@@ -275,6 +275,9 @@ jobs:
           node --check functions/api/admin/reliability_performance_cost_capacity.js
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
+          python -m py_compile scripts/seasonal_capability_public_claim_activation_decision_check.py
+          node --check scripts/seasonal_capability_public_claim_activation_decision_test.mjs
+          node --check functions/api/_lib/seasonal-capability-public-claim-activation-decision.js
           python -m py_compile scripts/provider_outcome_review_hold_decision_readiness_check.py
           node --check scripts/provider_outcome_review_hold_decision_readiness_test.mjs
           node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
@@ -685,6 +688,10 @@ jobs:
         run: |
           python scripts/controlled_environment_site_qualification_service_routing_evidence_check.py
           node scripts/controlled_environment_site_qualification_service_routing_evidence_test.mjs
+      - name: Validate seasonal capability & public claim activation decision authority
+        run: |
+          python scripts/seasonal_capability_public_claim_activation_decision_check.py
+          node scripts/seasonal_capability_public_claim_activation_decision_test.mjs
       - name: Validate provider & local search outcome evidence refresh authority
         run: |
           python scripts/provider_local_search_outcome_evidence_refresh_check.py

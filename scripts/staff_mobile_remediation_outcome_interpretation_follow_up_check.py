@@ -95,17 +95,17 @@ require(roadmap,[
  "### Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity"
 ],"active roadmap")
 require(queue,[
- "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
- "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next",
+ "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
+ "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
  "BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md","it has not run out"
 ],"Build 503 queue")
 require(handoff,[
- "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
+ "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
  "BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md",
  "staff_mobile_remediation_outcome_interpretation_follow_up_check.py"
 ],"Build 503 handoff")
 require(readme,[
- "Current source direction: **Build 505 — Production Learning & Roadmap Renewal**.",
+ "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
  "BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md",
  "staff_mobile_remediation_outcome_interpretation_follow_up_check.py",
  "Production is not considered GREEN from source promotion alone."

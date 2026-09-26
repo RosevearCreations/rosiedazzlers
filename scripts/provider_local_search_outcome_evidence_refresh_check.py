@@ -92,18 +92,18 @@ require(roadmap,[
     "### Build 500 — Recovery Drill & Authenticated Device Observation Execution Evidence"
 ],"active roadmap")
 require(queue,[
-    "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
-    "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next",
+    "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
+    "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next",
     "BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md",
     "it has not run out"
 ],"Build 499 queue")
 require(handoff,[
-    "**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.",
+    "**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.",
     "BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md",
     "provider_local_search_outcome_evidence_refresh_check.py"
 ],"Build 499 handoff")
 require(readme,[
-    "Current source direction: **Build 505 — Production Learning & Roadmap Renewal**.",
+    "Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.",
     "BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md",
     "provider_local_search_outcome_evidence_refresh_check.py",
     "Production is not considered GREEN from source promotion alone."
