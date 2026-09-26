@@ -1,11 +1,12 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 505 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 506 — Seasonal Capability & Public Claim Activation Decision**.
 
 ## Release authority
-Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_496_504.md` · `FORWARD_BUILD_ROADMAP_506_515.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/seasonal_capability_public_claim_activation_decision_check.py` · `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`. Production is not considered GREEN from source promotion alone.
 
-Retained Build 504 authority: `scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py` · `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`.
+
+Retained continuity: `scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py` · `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`.
 
 Retained staff/mobile outcome interpretation authority: `scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py` · `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`.
 
@@ -13,7 +14,7 @@ Retained recovery/device execution authority: `scripts/recovery_authenticated_de
 
 Retained Controlled-Environment Site Qualification & Service Routing Evidence authority: `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py` · `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`.
 
-Retained Production Learning & Roadmap Renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_496_504.md` · `FORWARD_BUILD_ROADMAP_506_515.md`.
+Retained renewal: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 Retained booking/quote interpretation: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md` · `scripts/booking_quote_experiment_outcome_interpretation_check.py`.
 
@@ -36,13 +37,14 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+3. `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 4. `FORWARD_BUILD_ROADMAP_506_515.md`
 5. `STARTUP_GO_LIVE_BLOCKERS.md`
 6. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_496_504.md`
 - `FORWARD_BUILD_ROADMAP_506_515.md`

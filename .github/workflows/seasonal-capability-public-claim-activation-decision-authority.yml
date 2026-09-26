@@ -1,0 +1,54 @@
+name: Seasonal Capability & Public Claim Activation Decision Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-seasonal-public-claim-activation-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: seasonal-capability-public-claim-activation-decision
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Seasonal Capability & Public Claim Activation Decision
+        run: |
+          python scripts/seasonal_capability_public_claim_activation_decision_check.py
+          node scripts/seasonal_capability_public_claim_activation_decision_test.mjs
+      - name: Build 506 summary
+        run: |
+          {
+            echo '### Seasonal Capability & Public Claim Activation Decision'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Service-specific activation decision package: PASS'
+            echo '- Source-owned temperature limits: PRESERVED'
+            echo '- Actual publication: MANUAL'
+            echo '- Broad winter availability: HOLD'
+            echo '- Automatic booking/quote/publication mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

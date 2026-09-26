@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`.
-Retained predecessor contract: `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`.
+The synchronized predecessor contracts are retained through `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Retained predecessor contract: `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_496_504.md`
 - `FORWARD_BUILD_ROADMAP_506_515.md`
@@ -137,25 +138,25 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 506 — Seasonal Capability & Public Claim Activation Decision** is the active bounded release.
 
 Scope:
-- reconcile the completed 496–504 evidence cycle without manufacturing provider, owner, recovery, real-device, maintenance/fleet, experiment, remediation, allocation, capacity, seasonal-operability or provider-cost success;
-- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory and close nothing without dated attributable owning evidence;
-- preserve Southern Ontario seasonal-service truth: exact temperature limits remain source-owned, technical availability is not field operability, and broad winter availability remains unproven;
-- preserve `/api/availability` plus checkout collision revalidation as operational booking authorities while weather-ineligible sessions remain outside ordinary conversion interpretation;
-- renew the next bounded roadmap from observed outcomes rather than creating replacement payment, recovery, browser, fleet, weather, pricing, analytics, staff, economics or observability systems;
-- keep this release read-only governance with no automatic booking, pricing, public content, provider, recovery, fleet, experiment, accounting/inventory, schema/storage, outreach or polling mutation; and
-- require exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
+- converge current attributable seasonal capability evidence, source-owned temperature limits, retained service-specific public wording and explicit owner review into a final bounded public-claim activation decision package;
+- require retained publication-review readiness plus an explicit dated owner activation decision, attributable activation reference and confirmed final service-specific wording before a row can become activation-decision-ready;
+- keep actual publication a separate manual action in the owning content workflow;
+- preserve Southern Ontario seasonal-service truth: service classifications and exact working-temperature limits remain source-owned, and one service-specific claim never establishes broad winter availability;
+- preserve booking/quote/availability authorities separately; no activation decision changes booking availability, quote rules, checkout behavior, routing or rescheduling;
+- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; missing, stale or incomplete owner/capability evidence remains owner action rather than inferred success; and
+- perform no schema/storage, public-content, customer-message, pricing, provider, accounting/inventory, outreach or polling mutation while requiring exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
 
-Current contract: `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle learning: `PRODUCTION_LEARNING_496_504.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Retained predecessor: `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`. Current source authority: `scripts/seasonal_capability_public_claim_activation_decision_check.py`. Retained owner/public-claim authority: `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`. Retained site/routing authority: `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Production Learning & Roadmap Renewal authority, retained owning authorities for Builds 496–504, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused activation-decision authority, retained seasonal authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Missing provider/owner/seasonal/recovery/device/execution/comparable-history evidence remains truthful owner/provider action; source/runtime GREEN does not fabricate it.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Decision readiness never substitutes for actual publication or owner/provider evidence.
 
 ## Next release
-**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next only after the current release is independently GREEN on protected main.
+**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.

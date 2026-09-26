@@ -186,6 +186,10 @@ required_authorities = {
         "scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
         "scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
     ],
+    "seasonal_capability_public_claim_activation_decision": [
+        "scripts/seasonal_capability_public_claim_activation_decision_check.py",
+        "scripts/seasonal_capability_public_claim_activation_decision_test.mjs",
+    ],
     "winter_booking_quote_rule_activation_readiness": [
         "scripts/winter_booking_quote_rule_activation_readiness_check.py",
         "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
@@ -323,6 +327,9 @@ workflow = require(WORKFLOW, [
     "Validate seasonal capability owner review & public claim decision authority",
     "python scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
     "node scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
+    "Validate seasonal capability & public claim activation decision authority",
+    "python scripts/seasonal_capability_public_claim_activation_decision_check.py",
+    "node scripts/seasonal_capability_public_claim_activation_decision_test.mjs",
     "Validate winter booking & quote rule activation readiness authority",
     "python scripts/winter_booking_quote_rule_activation_readiness_check.py",
     "node scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
@@ -417,6 +424,7 @@ print("- media/Photo Studio/proof operations remain read-only and evidence-truth
 print("- reliability/performance/cost capacity remains bounded, first-party and non-mutating")
 print("- production learning/roadmap renewal keeps stale authority closure evidence-based and unresolved HOLDs explicit")
 print("- winter booking/quote activation readiness remains owner-reviewed, availability-authoritative and non-activating")
+print("- seasonal public-claim activation decisions remain service-specific, owner-reviewed and manual-publication-only")
 print("- controlled-environment site qualification requires attributable site/workflow/equipment/product evidence and never moves appointments automatically")
 print("- Build 444 reliability/security/cost reassessment reuses retained read-only authority and keeps provider/recovery evidence fail-closed")
 print("- booking conversion / quote clarity retains server-authoritative pricing/availability and anonymous evidence boundaries")
