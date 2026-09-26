@@ -15,8 +15,6 @@ Retained Controlled-Environment Site Qualification & Service Routing Evidence au
 
 Retained Production Learning & Roadmap Renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_496_504.md` · `FORWARD_BUILD_ROADMAP_506_515.md`.
 
-Prior renewal authority: `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `PRODUCTION_LEARNING_486_494.md` · `FORWARD_BUILD_ROADMAP_496_505.md`.
-
 Retained booking/quote interpretation: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md` · `scripts/booking_quote_experiment_outcome_interpretation_check.py`.
 
 Retained booking/quote authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
