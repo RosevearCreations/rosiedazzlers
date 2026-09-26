@@ -1,10 +1,11 @@
-// Build 507 — bounded read-only Winter Booking & Quote Rule Controlled Activation Decision endpoint.
+// Build 508 — bounded read-only Controlled-Environment Operational Readiness & Routing Continuity endpoint.
 // Retained Build 463 completeness/add-on-cost authority remains the base.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildWinterBookingQuoteRuleControlledActivationDecision } from "../_lib/winter-booking-quote-rule-controlled-activation-decision.js";
+import { buildControlledEnvironmentOperationalReadinessRoutingContinuity } from "../_lib/controlled-environment-operational-readiness-routing-continuity.js";
+// Retained Build 507 marker: buildWinterBookingQuoteRuleControlledActivationDecision
 // Retained Build 506 marker: buildSeasonalCapabilityPublicClaimActivationDecision
 // Retained Build 498 marker: buildControlledEnvironmentSiteQualificationServiceRoutingEvidence
 // Retained Build 497 marker: buildWinterBookingQuoteRuleActivationReadiness
@@ -29,8 +30,8 @@ export async function onRequestGet({request,env}){
     collect("fleet_commercial",()=>getFleetLearning({request:request.clone(),env})),
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
-  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Winter Booking & Quote Rule Controlled Activation Decision requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildWinterBookingQuoteRuleControlledActivationDecision({
+  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Controlled-Environment Operational Readiness & Routing Continuity requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
+  const review=buildControlledEnvironmentOperationalReadinessRoutingContinuity({
     economics:economicsSource.data?.operational_profitability||{},
     fleet:fleetSource.data?.learning||{},
     pricing:pricingSource.data||{},
@@ -43,8 +44,9 @@ export async function onRequestGet({request,env}){
     year,
     pricing_window_days:days,
     ...review,
-    authority:"winter_booking_quote_rule_controlled_activation_decision",
-    release_authority:"winter_booking_quote_rule_controlled_activation_decision",
+    authority:"controlled_environment_operational_readiness_routing_continuity",
+    release_authority:"controlled_environment_operational_readiness_routing_continuity",
+    retained_controlled_activation_decision_authority:"winter_booking_quote_rule_controlled_activation_decision",
     retained_public_claim_activation_authority:"seasonal_capability_public_claim_activation_decision",
     retained_owner_public_claim_authority:"seasonal_capability_owner_review_public_claim_decision",
     retained_site_qualification_authority:"controlled_environment_site_qualification_service_routing_evidence",
@@ -70,4 +72,4 @@ async function collect(name,runner){let timer;try{const response=await Promise.r
 function sourceStatusMap(economics,fleet,pricing){return{service_economics:sourceState(economics),fleet_commercial:sourceState(fleet),pricing_learning:sourceState(pricing)};}
 function sourceState(row){return{available:row?.available===true,restricted:row?.restricted===true,http_status:Number(row?.status)||null,error_class:row?.error_class||null};}
 function requestWithQuery(request,values){const url=new URL(request.url);for(const [key,value] of Object.entries(values))url.searchParams.set(key,value);return new Request(url.toString(),request);}
-function readOnly(){return json({ok:false,error:"Winter Booking & Quote Rule Controlled Activation Decision is read-only. Actual rule activation remains a separate manual change in the owning booking/quote workflow; use the owning Finance, fleet, quote, booking and accounting workflows for explicit action."},405);}
+function readOnly(){return json({ok:false,error:"Controlled-Environment Operational Readiness & Routing Continuity is read-only. Manual site confirmation and safe-reschedule decisions remain in the owning workflow; no appointment is moved automatically."},405);}
