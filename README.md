@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 507 — Winter Booking & Quote Rule Controlled Activation Decision**.
+Current source direction: **Build 508 — Controlled-Environment Operational Readiness & Routing Continuity**.
 
 ## Release authority
-Authority: `scripts/winter_booking_quote_rule_controlled_activation_decision_check.py` · `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/controlled_environment_operational_readiness_routing_continuity_check.py` · `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained winter booking/quote controlled-activation authority: `scripts/winter_booking_quote_rule_controlled_activation_decision_check.py` · `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`.
 
 Retained seasonal public-claim activation authority: `scripts/seasonal_capability_public_claim_activation_decision_check.py` · `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`.
 
@@ -39,14 +41,15 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
-4. `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
+3. `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
+4. `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
 5. `FORWARD_BUILD_ROADMAP_506_515.md`
 6. `STARTUP_GO_LIVE_BLOCKERS.md`
 7. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 - `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
 - `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
