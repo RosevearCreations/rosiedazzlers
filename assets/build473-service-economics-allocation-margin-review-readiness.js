@@ -29,6 +29,7 @@
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
+      renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -52,6 +53,7 @@
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
       if($("winterRuleControlledActivationDecisionGrid")) $("winterRuleControlledActivationDecisionGrid").innerHTML = '<div class="review-empty">Winter booking/quote controlled activation decision evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
+      if($("controlledEnvironmentOperationalReadinessGrid")) $("controlledEnvironmentOperationalReadinessGrid").innerHTML = '<div class="review-empty">Controlled-environment operational readiness evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -366,6 +368,39 @@
       " · owner HOLD: "+String(decision.counts?.owner_hold??0)+
       " · owner review required: "+String(decision.counts?.owner_review_required??0)+
       ". Actual rule activation remains manual; broad winter availability remains HOLD.";
+  }
+
+  function renderControlledEnvironmentOperationalReadiness(readiness) {
+    const mount=$("controlledEnvironmentOperationalReadinessGrid"); if(!mount) return;
+    const rows=Array.isArray(readiness.rows)?readiness.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const ready=row.controlled_environment_operational_review_ready===true;
+      const state=row.operational_readiness_state||"not_applicable";
+      const displayLabel=ready?"Operational review ready":state.replaceAll("_"," ");
+      const practice=(name,item)=>name+": "+(item?.reference||"missing")+" · current "+(item?.current===true?"YES":"NO");
+      cards.push('<article class="review-candidate state-'+esc(ready?"observed":row.controlled_environment_candidate_present?"review":"soft")+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(displayLabel)+'</span></div>'+
+        '<p><strong>Retained route:</strong> '+esc(String(row.retained_service_routing_state||"owner_review_required").replaceAll("_"," "))+'.</p>'+
+        '<p class="mini">'+esc(practice("Routing continuity",row.routing_continuity_evidence))+'</p>'+
+        '<p class="mini">'+esc(practice("Manual site confirmation",row.manual_site_confirmation_practice))+'</p>'+
+        '<p class="mini">'+esc(practice("Safe reschedule",row.manual_safe_reschedule_practice))+'</p>'+
+        '<p class="mini">Manual site confirmation remains required. Automatic appointment move/routing: NO · Universal indoor capability: HOLD.</p></article>');
+    }
+    for(const gap of (Array.isArray(readiness.gaps)?readiness.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Operational continuity gap · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">HOLD</span></div><p class="mini">Missing: '+
+        esc((gap.missing||[]).join(", ")||"current controlled-environment operational evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_manual_site_confirmation_and_safe_reschedule")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No controlled-environment operational readiness evidence is available.</div>';
+    const detail=$("controlledEnvironmentOperationalReadinessDetail");
+    if(detail) detail.textContent="Controlled-environment candidates: "+String(readiness.counts?.controlled_environment_candidate??0)+
+      " · retained qualified: "+String(readiness.counts?.retained_site_qualified??0)+
+      " · operational review ready: "+String(readiness.counts?.operational_review_ready??0)+
+      " · routing continuity evidence required: "+String(readiness.counts?.routing_continuity_evidence_required??0)+
+      ". Manual site confirmation remains required; appointments are never moved automatically.";
   }
 
   function renderControlledEnvironmentSiteQualification(qualification) {

@@ -55,18 +55,18 @@ require(doc,[
 ],"Build 488 contract")
 require(roadmap,["### Build 488 — Controlled-Environment Alternatives & Weather-Safe Routing","### Build 489 — Provider & Local Search Evidence Continuity"],"renewed roadmap")
 require(queue,[
- "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
- "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is next",
+ "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
+ "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next",
  "BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md",
  "it has not run out"
 ],"Build 488 queue")
 require(handoff,[
- "**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.",
+ "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
  "BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md",
  "controlled_environment_weather_safe_routing_check.py"
 ],"Build 488 handoff")
 require(readme,[
- "Current source direction: **Build 507 — Winter Booking & Quote Rule Controlled Activation Decision**.",
+ "Current source direction: **Build 508 — Controlled-Environment Operational Readiness & Routing Continuity**.",
  "BUILD488_CONTROLLED_ENVIRONMENT_ALTERNATIVES_WEATHER_SAFE_ROUTING.md",
  "controlled_environment_weather_safe_routing_check.py",
  "Production is not considered GREEN from source promotion alone."
