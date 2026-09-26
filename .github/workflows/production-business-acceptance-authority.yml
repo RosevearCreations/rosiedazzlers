@@ -211,6 +211,10 @@ jobs:
           python -m py_compile scripts/provider_local_search_closure_evidence_continuity_review_check.py
           node --check scripts/provider_local_search_closure_evidence_continuity_review_test.mjs
           node --check functions/api/_lib/provider-local-search-closure-evidence-continuity-review.js
+          python -m py_compile scripts/recovery_authenticated_device_closure_review_check.py
+          node --check scripts/recovery_authenticated_device_closure_review_test.mjs
+          node --check functions/api/_lib/recovery-authenticated-device-closure-review.js
+          node --check functions/api/admin/recovery_authenticated_device_closure_review.js
           python -m py_compile scripts/current_reliability_security_cost_reassessment_check.py
           python -m py_compile scripts/security_privacy_recovery_drill_check.py
           node --check scripts/security_privacy_recovery_drill_test.mjs
@@ -639,6 +643,10 @@ jobs:
         run: |
           python scripts/provider_local_search_closure_evidence_continuity_review_check.py
           node scripts/provider_local_search_closure_evidence_continuity_review_test.mjs
+      - name: Validate recovery drill & authenticated device closure review authority
+        run: |
+          python scripts/recovery_authenticated_device_closure_review_check.py
+          node scripts/recovery_authenticated_device_closure_review_test.mjs
       - name: Validate recovery drill & authenticated device observation execution evidence authority
         run: |
           python scripts/recovery_authenticated_device_observation_execution_evidence_check.py
@@ -680,6 +688,7 @@ jobs:
             echo "- Controlled-environment operational readiness / routing continuity: PASS"
             echo "- Provider / local-search outcome evidence refresh: PASS"
             echo "- Provider / local-search closure evidence continuity review: PASS"
+            echo "- Recovery drill / authenticated-device closure review: PASS"
             echo "- Booking conversion / quote clarity: PASS"
             echo "- Service economics / job profitability evidence: PASS"
             echo "- Canonical Production HOLD inventory / authority cleanup: PASS"
