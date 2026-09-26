@@ -1,9 +1,9 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 510 — Recovery Drill & Authenticated Device Closure Review**.
+Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.
 
 ## Release authority
-Authority: `scripts/recovery_authenticated_device_closure_review_check.py` · `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/maintenance_fleet_pilot_continuation_decision_check.py` · `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`. Production is not considered GREEN from source promotion alone.\n\nRetained recovery/device closure authority: `scripts/recovery_authenticated_device_closure_review_check.py` · `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
 
 Retained provider/local-search closure authority: `scripts/provider_local_search_closure_evidence_continuity_review_check.py` · `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
 
