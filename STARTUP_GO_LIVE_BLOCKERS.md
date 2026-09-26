@@ -53,6 +53,7 @@ Build 500 adds read-only recovery-drill and authenticated-device observation exe
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
+- `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_496_504.md`
 - `FORWARD_BUILD_ROADMAP_506_515.md`
