@@ -61,18 +61,18 @@ require(roadmap,[
  "### Build 487 — Winter Booking Eligibility & Customer Transparency"
 ],"renewed roadmap")
 require(queue,[
- "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
- "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next",
+ "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
+ "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is next",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "it has not run out"
 ],"Build 486 queue")
 require(handoff,[
- "**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.",
+ "**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is the active bounded release.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py"
 ],"retained Build 486 handoff")
 require(readme,[
- "Current source direction: **Build 508 — Controlled-Environment Operational Readiness & Routing Continuity**.",
+ "Current source direction: **Build 509 — Provider & Local Search Closure Evidence Continuity Review**.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py",
  "Production is not considered GREEN from source promotion alone."
