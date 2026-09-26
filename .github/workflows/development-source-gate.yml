@@ -284,6 +284,9 @@ jobs:
           python -m py_compile scripts/controlled_environment_operational_readiness_routing_continuity_check.py
           node --check scripts/controlled_environment_operational_readiness_routing_continuity_test.mjs
           node --check functions/api/_lib/controlled-environment-operational-readiness-routing-continuity.js
+          python -m py_compile scripts/provider_local_search_closure_evidence_continuity_review_check.py
+          node --check scripts/provider_local_search_closure_evidence_continuity_review_test.mjs
+          node --check functions/api/_lib/provider-local-search-closure-evidence-continuity-review.js
           python -m py_compile scripts/provider_outcome_review_hold_decision_readiness_check.py
           node --check scripts/provider_outcome_review_hold_decision_readiness_test.mjs
           node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
@@ -710,6 +713,10 @@ jobs:
         run: |
           python scripts/provider_local_search_outcome_evidence_refresh_check.py
           node scripts/provider_local_search_outcome_evidence_refresh_test.mjs
+      - name: Validate provider & local search closure evidence continuity review authority
+        run: |
+          python scripts/provider_local_search_closure_evidence_continuity_review_check.py
+          node scripts/provider_local_search_closure_evidence_continuity_review_test.mjs
       - name: Validate recovery drill & authenticated device observation execution evidence authority
         run: |
           python scripts/recovery_authenticated_device_observation_execution_evidence_check.py
