@@ -3,15 +3,24 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md.
+The synchronized Production predecessor is retained through BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md.
 
-**Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity** is the active bounded release.
+**Build 505 — Production Learning & Roadmap Renewal** is the active bounded release.
 
-**Build 505 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+**Build 506 — Seasonal Capability & Public Claim Activation Decision** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md. Current source authority: scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py. Current focused workflow: .github/workflows/service-economics-seasonal-capacity-reliability-trend-continuity-authority.yml. Retained service-economics reconciliation authority: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md. Retained staff/mobile authority: BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md. Retained staff/mobile source authority: scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained recovery/device execution contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Retained recovery/device execution source authority: scripts/recovery_authenticated_device_observation_execution_evidence_check.py. Retained maintenance/fleet continuity authority: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained maintenance/fleet continuity source authority: scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py. Retained booking/quote interpretation authority: BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md. Retained booking/quote interpretation source authority: scripts/booking_quote_experiment_outcome_interpretation_check.py. Active roadmap: FORWARD_BUILD_ROADMAP_496_505.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Completed-cycle learning: PRODUCTION_LEARNING_496_504.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_506_515.md. Retained predecessor: BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md. Retained staff/mobile authority: BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md. Retained staff/mobile source authority: scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py. Retained provider/local-search outcome authority: BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md. Retained recovery/device execution contract: BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md. Retained maintenance/fleet continuity authority: BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md. Retained booking/quote interpretation authority: BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-## Current Service Economics, Seasonal Capacity & Reliability Trend Continuity contract
+## Current Production Learning & Roadmap Renewal contract
+- Reconcile the 496–504 cycle without fabricating provider, owner, recovery, device, pilot, experiment, remediation, allocation, capacity, seasonal-operability or provider-cost closure.
+- Preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; source/runtime GREEN never closes a provider or owner HOLD.
+- Preserve Southern Ontario seasonal-service truth: exact working-temperature limits remain source-owned, technical availability is not field operability, and broad winter availability remains unproven.
+- Preserve `/api/availability` and checkout collision revalidation as operational booking authorities while weather-ineligible sessions remain outside ordinary conversion interpretation.
+- Renew the bounded sequence through `FORWARD_BUILD_ROADMAP_506_515.md` from observed outcomes.
+- Keep the release read-only; no automatic booking, pricing, public content, provider, recovery, fleet, experiment, accounting/inventory, schema/storage, outreach or polling mutation is authorized.
+- Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
+
+## Retained Service Economics, Seasonal Capacity & Reliability Trend Continuity contract
 - Reuse the retained cross-domain service-economics reconciliation and owning economics, seasonal, capacity and reliability authorities; do not create a second ledger, weather engine, capacity model, provider telemetry source, recovery engine or trend store.
 - Describe continuity only from attributable like-for-like observations inside the same owning evidence class.
 - Explicit allocation continuity requires repeated evidence for the same service/package or add-on cohort; booking totals, equal splits, percentages, price weighting and overhead estimates never manufacture allocation.
@@ -218,6 +227,11 @@ Retained source authority: scripts/provider_local_search_outcome_evidence_refres
 - Exact feature, Development, protected-main and Production deployment/runtime/business acceptance remain required.
 
 ## Durable current-release authorities
+- `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_496_504.md`
+- `FORWARD_BUILD_ROADMAP_506_515.md`
+- `.github/workflows/production-learning-roadmap-renewal-authority.yml`
+- `scripts/production_learning_roadmap_renewal_check.py`
 - `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
 - `.github/workflows/controlled-environment-site-qualification-service-routing-evidence-authority.yml`
 - `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py`
