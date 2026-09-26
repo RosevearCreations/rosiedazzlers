@@ -67,7 +67,7 @@ The current living release authorities are:
 - `PRODUCTION_LEARNING_486_494.md`
 - `FORWARD_BUILD_ROADMAP_496_505.md`
 
-Build 505 renews the roadmap from observed 496–504 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists.
+Build 505 renews the roadmap from observed 496–504 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists. Retained provider decision state `operator_hold_decision_ready` remains review-only and never closes a HOLD automatically.
 
 Build 504 preserves same-domain continuity only when comparable attributable history exists. Missing history remains insufficient, seasonal field restrictions stay separate from application reliability, observed capacity does not prove future capacity, and technical reliability does not establish provider billing/CPU/quota or recovery success.
 
