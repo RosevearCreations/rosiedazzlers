@@ -194,6 +194,10 @@ required_authorities = {
         "scripts/winter_booking_quote_rule_controlled_activation_decision_check.py",
         "scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs",
     ],
+    "controlled_environment_operational_readiness_routing_continuity": [
+        "scripts/controlled_environment_operational_readiness_routing_continuity_check.py",
+        "scripts/controlled_environment_operational_readiness_routing_continuity_test.mjs",
+    ],
     "winter_booking_quote_rule_activation_readiness": [
         "scripts/winter_booking_quote_rule_activation_readiness_check.py",
         "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
@@ -337,6 +341,9 @@ workflow = require(WORKFLOW, [
     "Validate winter booking & quote rule controlled activation decision authority",
     "python scripts/winter_booking_quote_rule_controlled_activation_decision_check.py",
     "node scripts/winter_booking_quote_rule_controlled_activation_decision_test.mjs",
+    "Validate controlled-environment operational readiness & routing continuity authority",
+    "python scripts/controlled_environment_operational_readiness_routing_continuity_check.py",
+    "node scripts/controlled_environment_operational_readiness_routing_continuity_test.mjs",
     "Validate winter booking & quote rule activation readiness authority",
     "python scripts/winter_booking_quote_rule_activation_readiness_check.py",
     "node scripts/winter_booking_quote_rule_activation_readiness_test.mjs",

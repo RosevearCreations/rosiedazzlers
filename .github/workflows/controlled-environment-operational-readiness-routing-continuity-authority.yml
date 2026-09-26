@@ -1,0 +1,54 @@
+name: Controlled-Environment Operational Readiness & Routing Continuity Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-controlled-environment-operational-readiness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: controlled-environment-operational-readiness-routing-continuity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Controlled-Environment Operational Readiness & Routing Continuity
+        run: |
+          python scripts/controlled_environment_operational_readiness_routing_continuity_check.py
+          node scripts/controlled_environment_operational_readiness_routing_continuity_test.mjs
+      - name: Build 508 summary
+        run: |
+          {
+            echo '### Controlled-Environment Operational Readiness & Routing Continuity'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Service-specific qualified path continuity: PASS'
+            echo '- Current routing / safe-reschedule practice evidence: REQUIRED'
+            echo '- Manual site confirmation: REQUIRED'
+            echo '- Automatic appointment move/routing: NONE'
+            echo '- Universal indoor capability: HOLD'
+          } >> "$GITHUB_STEP_SUMMARY"

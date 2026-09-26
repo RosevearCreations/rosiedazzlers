@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`.
-Retained predecessor contract: `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`.
+The synchronized predecessor contracts are retained through `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`.
+Retained predecessor contract: `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
 - `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
 - `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -139,26 +140,25 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 507 — Winter Booking & Quote Rule Controlled Activation Decision** is the active bounded release.
+**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is the active bounded release.
 
 Scope:
-- review only service-specific winter booking/quote rule candidates that already satisfy retained Build 497 activation-readiness and retained seasonal evidence;
-- require an explicit dated attributable owner controlled-activation decision plus explicit confirmation of retained customer-transparency wording before a row can become controlled-activation-decision-ready;
-- preserve source-owned temperature limits and service classifications; a decision for one service never establishes broad winter availability;
-- keep `/api/availability` and server-side checkout collision revalidation authoritative and unchanged;
-- keep weather-ineligible sessions outside ordinary conversion interpretation and never count them as conversion failures;
-- keep actual booking/quote rule activation a separate manual change in the owning workflow; no decision package mutates availability, checkout, quote logic or customer messaging automatically;
-- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; missing, stale, incompatible or incomplete owner/capability/transparency evidence remains owner action rather than inferred success; and
-- perform no schema/storage, booking/availability, quote-rule, checkout, customer-message, public-content, pricing, provider, accounting/inventory, outreach or polling mutation while requiring exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
+- reconcile only service-specific controlled-environment paths already represented by retained Build 498 qualification evidence with current routing, manual site-confirmation and safe-reschedule practice evidence;
+- require current attributable routing-continuity, manual site-confirmation and safe-reschedule practice evidence before a qualified path can become controlled-environment-operational-review-ready;
+- preserve the retained site/workflow/equipment/product qualification and source-owned temperature limits; a qualified path for one service/site never proves universal indoor capability or another service's readiness;
+- keep manual site confirmation required before execution and preserve manual safe-reschedule practice when the actual appointment cannot use the qualified path;
+- keep `/api/availability`, checkout collision revalidation and retained booking/quote authorities unchanged; no operational-readiness package moves, routes, reschedules or changes availability automatically;
+- preserve `STARTUP_GO_LIVE_BLOCKERS.md` as the canonical HOLD inventory; missing, stale or incomplete qualification/routing/practice evidence remains owner action rather than inferred success; and
+- perform no schema/storage, appointment/routing/reschedule, booking/availability, quote-rule, checkout, customer-message, public-content, pricing, provider, accounting/inventory, outreach or polling mutation while requiring exact feature, Development, protected-main and Production deployment/runtime/business acceptance.
 
-Current contract: `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`. Current source authority: `scripts/winter_booking_quote_rule_controlled_activation_decision_check.py`. Retained activation-readiness authority: `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`. Retained customer-transparency authority: `BUILD487_WINTER_BOOKING_ELIGIBILITY_CUSTOMER_TRANSPARENCY.md`. Retained public-claim activation authority: `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`. Current source authority: `scripts/controlled_environment_operational_readiness_routing_continuity_check.py`. Retained site/routing authority: `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`. Retained controlled-activation authority: `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused controlled-activation decision authority, retained seasonal/booking authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused operational-readiness/routing-continuity authority, retained controlled-environment and winter-rule authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Decision readiness never substitutes for actual rule activation or owner/provider evidence.
+Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. Operational review readiness never substitutes for current site confirmation, qualification evidence or actual routing/reschedule action.
 
 ## Next release
-**Build 508 — Controlled-Environment Operational Readiness & Routing Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 509 — Provider & Local Search Closure Evidence Continuity Review** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.
