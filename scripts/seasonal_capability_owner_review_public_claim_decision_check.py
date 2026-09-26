@@ -64,18 +64,18 @@ require(roadmap,[
  "### Build 497 — Winter Booking & Quote Rule Activation Readiness"
 ],"active roadmap")
 require(queue,[
- "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is next",
+ "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next",
  "BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md",
  "it has not run out"
 ],"Build 496 queue")
 require(handoff,[
- "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
+ "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
  "BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md",
  "seasonal_capability_owner_review_public_claim_decision_check.py"
 ],"Build 496 handoff")
 require(readme,[
- "Current source direction: **Build 510 — Recovery Drill & Authenticated Device Closure Review**.",
+ "Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.",
  "BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md",
  "seasonal_capability_owner_review_public_claim_decision_check.py",
  "Production is not considered GREEN from source promotion alone."

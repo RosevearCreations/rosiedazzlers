@@ -95,17 +95,17 @@ require(roadmap,[
  "### Build 504 — Service Economics, Seasonal Capacity & Reliability Trend Continuity"
 ],"active roadmap")
 require(queue,[
- "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is next",
+ "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next",
  "BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md","it has not run out"
 ],"Build 503 queue")
 require(handoff,[
- "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
+ "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
  "BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md",
  "staff_mobile_remediation_outcome_interpretation_follow_up_check.py"
 ],"Build 503 handoff")
 require(readme,[
- "Current source direction: **Build 510 — Recovery Drill & Authenticated Device Closure Review**.",
+ "Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.",
  "BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md",
  "staff_mobile_remediation_outcome_interpretation_follow_up_check.py",
  "Production is not considered GREEN from source promotion alone."

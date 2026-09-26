@@ -54,19 +54,19 @@ require(doc,[
 ],"Build 483 contract")
 require(queue,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
- "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release.",
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is next",
+ "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next",
  "it has not run out"
 ],"retained Build 483 queue")
 require(handoff,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
- "**Build 510 — Recovery Drill & Authenticated Device Closure Review** is the active bounded release."
+ "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release."
 ],"retained Build 483 handoff")
 require(readme,[
  "BUILD483_SERVICE_ADDON_ALLOCATION_EVIDENCE_CLOSURE.md",
  "service_addon_allocation_evidence_closure_check.py",
- "Current source direction: **Build 510 — Recovery Drill & Authenticated Device Closure Review**.",
+ "Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.",
  "Production is not considered GREEN from source promotion alone."
 ],"retained Build 483 README")
 for text,label in [(source_gate,"Development Source Gate"),(prod_gate,"Production Business Acceptance")]:
