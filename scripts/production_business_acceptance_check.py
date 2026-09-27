@@ -186,6 +186,10 @@ required_authorities = {
         "scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
         "scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
     ],
+    "seasonal_capability_public_claim_decision_outcome_continuity": [
+        "scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py",
+        "scripts/seasonal_capability_public_claim_decision_outcome_continuity_test.mjs",
+    ],
     "seasonal_capability_public_claim_activation_decision": [
         "scripts/seasonal_capability_public_claim_activation_decision_check.py",
         "scripts/seasonal_capability_public_claim_activation_decision_test.mjs",

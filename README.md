@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 515 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**.
 
 ## Release authority
-Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py` · `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
 Retained service-economics/seasonal-capacity/reliability decision readiness: `scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py` · `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`.
 

@@ -215,6 +215,9 @@ jobs:
           node --check functions/api/_lib/service-economics-job-profitability.js
           python -m py_compile scripts/hold_inventory_authority_cleanup_check.py
           python -m py_compile scripts/production_learning_roadmap_renewal_check.py
+          python -m py_compile scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py
+          node --check scripts/seasonal_capability_public_claim_decision_outcome_continuity_test.mjs
+          node --check functions/api/_lib/seasonal-capability-public-claim-decision-outcome-continuity.js
           python -m py_compile scripts/seasonal_capability_public_claim_activation_decision_check.py
           node --check scripts/seasonal_capability_public_claim_activation_decision_test.mjs
           node --check functions/api/_lib/seasonal-capability-public-claim-activation-decision.js
@@ -646,6 +649,11 @@ jobs:
 
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
+
+      - name: Validate seasonal capability & public claim decision outcome continuity authority
+        run: |
+          python scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py
+          node scripts/seasonal_capability_public_claim_decision_outcome_continuity_test.mjs
 
       - name: Validate seasonal capability owner review & public claim decision authority
         run: |
