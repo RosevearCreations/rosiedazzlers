@@ -8,83 +8,23 @@ on:
       - '.github/workflows/_temporary-build517-repository-hygiene.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  prune-merged-build-branches:
+  retained-pointer-scan:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout candidate
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Report unreferenced root historical Markdown
-        shell: python
-        run: |
-          from pathlib import Path
-          import re
-
-          root = Path(".")
-          ignored = {".git", "node_modules", ".wrangler"}
-          text_files = []
-          for p in root.rglob("*"):
-              if not p.is_file() or any(part in ignored for part in p.parts):
-                  continue
-              if p.suffix.lower() not in {".md",".py",".js",".mjs",".cjs",".json",".yml",".yaml",".html",".css",".sh",".toml",".txt"}:
-                  continue
-              try:
-                  text_files.append((p, p.read_text(encoding="utf-8", errors="ignore")))
-              except Exception:
-                  pass
-
-          candidates = sorted(
-              p for p in root.glob("*.md")
-              if re.match(r"^(BUILD\d+_|FORWARD_BUILD_ROADMAP_|PRODUCTION_LEARNING_)", p.name)
-          )
-          unreferenced = []
-          for candidate in candidates:
-              refs = []
-              for p, text in text_files:
-                  if p == candidate:
-                      continue
-                  if candidate.name in text:
-                      refs.append(str(p))
-              if not refs:
-                  unreferenced.append(candidate.name)
-          print(f"UNREFERENCED_ROOT_HISTORICAL_MARKDOWN_COUNT={len(unreferenced)}")
-          for name in unreferenced:
-              print(f"UNREFERENCED_ROOT_HISTORICAL_MARKDOWN={name}")
-
-      - name: Delete only fully merged historical build branches
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          CURRENT_BRANCH: ${{ github.ref_name }}
+      - name: Report retained current-release hardcodes
         shell: bash
         run: |
           set -euo pipefail
-          deleted=0
-          skipped=0
-          gh api --paginate "repos/$REPO/branches?per_page=100" --jq '.[].name' | while IFS= read -r branch; do
-            case "$branch" in
-              main|dev|"$CURRENT_BRANCH") continue ;;
-              build*) ;;
-              *) continue ;;
-            esac
-            encoded="${branch//\//%2F}"
-            ahead="$(gh api "repos/$REPO/compare/main...$encoded" --jq '.ahead_by' 2>/dev/null || echo unknown)"
-            if [[ "$ahead" == "0" ]]; then
-              if gh api -X DELETE "repos/$REPO/git/refs/heads/$encoded"; then
-                echo "DELETED_MERGED_BUILD_BRANCH=$branch"
-                deleted=$((deleted+1))
-              else
-                echo "SKIPPED_DELETE_FAILURE=$branch"
-                skipped=$((skipped+1))
-              fi
-            else
-              echo "SKIPPED_UNMERGED_BUILD_BRANCH=$branch ahead_by=$ahead"
-              skipped=$((skipped+1))
-            fi
-          done
-          echo "Merged build-branch pruning completed."
+          echo "=== BUILD516_ACTIVE_POINTERS ==="
+          grep -RIlF '**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release.' . --exclude-dir=.git || true
+          echo "=== BUILD516_README_POINTERS ==="
+          grep -RIlF 'Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**.' . --exclude-dir=.git || true
+          echo "=== BUILD517_NEXT_POINTERS ==="
+          grep -RIlF '**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is next' . --exclude-dir=.git || true
+          echo "=== BUILD516_CONTRACT_POINTERS_IN_CHECKS ==="
+          grep -RIlF 'BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md' scripts .github/workflows 2>/dev/null || true
