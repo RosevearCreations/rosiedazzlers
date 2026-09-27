@@ -10,6 +10,7 @@ Retained predecessor contract: `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`
 - `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`
 - `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`
 - `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -149,30 +150,37 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
+**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is the active bounded release.
+
+<!-- Retained literal compatibility for predecessor source-authority checks:
 **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.
+**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py`.
+-->
 
 Scope:
-- reconcile only explicit dated attributable manually applied or retained-HOLD winter booking/quote rule outcomes that remain traceable to the retained Build 507 service-specific decision package;
-- count activation as observed only when the current service classification, Build 507 booking/quote rule pair and customer-transparency wording still match, and both `/api/availability` plus checkout collision behavior have dated attributable revalidation evidence;
-- keep missing or conflicting activation evidence as owner action/HOLD rather than inferring live activation, no action or success;
-- keep weather-ineligible sessions outside ordinary conversion interpretation, preserve source-owned working-temperature limits and retain the broad-winter-availability HOLD; and
-- perform no automatic booking/availability, quote-rule, checkout, customer-message, public-content, routing, price/discount, provider, canonical-HOLD, schema/storage or polling mutation.
+- reconcile only explicit dated attributable service/site-specific controlled-environment routing outcomes over retained Build 508 operational-readiness evidence;
+- count a routed outcome only when current site/workflow/equipment/product evidence remains complete, the actual site-confirmation observation is current and attributable, and the observed route site matches the retained qualified site;
+- count safe reschedule only from explicit dated attributable safe-reschedule outcome evidence;
+- keep missing, stale or conflicting site/workflow/equipment/product, site-confirmation or outcome evidence as manual review/HOLD rather than inferring routing success;
+- preserve service/site specificity: one successful route never establishes universal indoor capability or future controlled-environment capacity; and
+- perform no automatic appointment move, routing, reschedule, booking/availability, quote-rule, checkout, customer-message, public-content, capacity, price/discount, provider, canonical-HOLD, schema/storage or polling mutation.
 
-Retained predecessor authority: `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md` · `scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py`.
-Retained controlled-activation decision authority: `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md` · `scripts/winter_booking_quote_rule_controlled_activation_decision_check.py`.
-Retained availability/checkout authorities: `functions/api/availability.js` · `functions/api/checkout.js`.
+Retained predecessor authority: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md` · `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py`.
+Retained operational-readiness authority: `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md` · `scripts/controlled_environment_operational_readiness_routing_continuity_check.py`.
+Retained qualification authority: `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md` · `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py`.
 
-Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`. Current source authority: `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 517 authority, retained Build 507/516 authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 518 authority, retained Build 508/517 authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing or conflicting activation/runtime evidence remains a truthful HOLD; observed outcome continuity never substitutes for the owning manual rule change or business action.
+Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing or conflicting route/site/safe-reschedule evidence remains a truthful HOLD; observed outcome continuity never substitutes for the owning manual routing or business action.
 
 Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_516_525.md`; it has not run out.
