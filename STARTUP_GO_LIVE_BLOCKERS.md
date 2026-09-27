@@ -47,6 +47,8 @@ Build 514 adds a read-only service-economics, seasonal-capacity and reliability 
 
 Build 515 reconciles the 506–514 cycle without closing provider or owner evidence gaps from source/runtime GREEN. `PRODUCTION_LEARNING_506_514.md` preserves the current classifications and `FORWARD_BUILD_ROADMAP_516_525.md` advances only observed decision/action outcomes where explicit attributable evidence exists. Missing evidence, unperformed manual action, stale evidence and unavailable sources remain truthful HOLDs; this renewal performs no canonical-HOLD mutation.
 
+Build 516 adds read-only seasonal public-claim outcome continuity over retained Build 506 activation decisions and current service-specific capability evidence. Manual publication is counted only from dated attributable publication evidence whose observed wording matches the reviewed service-specific wording; publication is observed rather than inferred. Explicit retain-HOLD and no-action outcomes must also be dated and attributable. Missing or conflicting evidence stays owner action/HOLD, source-owned working-temperature limits remain unchanged, broad winter availability remains held, and no booking/quote/publication/canonical-HOLD mutation occurs automatically.
+
 Build 496 adds a read-only owner/public-claim decision package. `publication_review_ready` requires current attributable capability evidence plus a dated attributable owner decision; it never publishes content, changes booking/quote rules, or authorizes broad winter availability. Missing review/current evidence remains `owner_action`, and an explicit owner HOLD remains HOLD.
 
 Build 497 adds read-only winter booking/quote rule activation-readiness evidence. `activation_readiness_review_ready` requires the retained owner-reviewed capability/public-claim package plus a dated attributable activation-readiness owner decision and classification-compatible booking/quote rule candidates. It does not activate rules, change availability or checkout, or authorize broad winter availability. `/api/availability` and server-side checkout collision revalidation remain operational authorities; weather-ineligible sessions stay outside ordinary conversion interpretation.
@@ -69,6 +71,7 @@ Build 510 adds a read-only recovery/device closure review. Recovery and authenti
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
+- `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`
 - `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_506_514.md`
 - `FORWARD_BUILD_ROADMAP_516_525.md`
