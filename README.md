@@ -1,9 +1,15 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**.
+Current source direction: **Build 518 — Controlled-Environment Routing Outcome Evidence Continuity**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py` · `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py` · `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained winter booking/quote controlled-activation outcome continuity: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py` · `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`.
+
+Retained controlled-environment operational-readiness authority: `scripts/controlled_environment_operational_readiness_routing_continuity_check.py` · `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`.
 
 Retained seasonal public-claim outcome continuity: `scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py` · `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`.
 
