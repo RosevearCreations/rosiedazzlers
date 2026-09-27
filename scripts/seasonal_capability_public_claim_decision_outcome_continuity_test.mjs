@@ -30,7 +30,7 @@ const economics={
       public_claim_outcome:"published",
       public_claim_outcome_observed_at:"2026-09-27T08:30:00-04:00",
       public_claim_outcome_reference:"manual-publication-review-516-interior",
-      published_public_claim_wording:"Interior detailing can be scheduled during cold snaps when the working environment remains suitable.",
+      published_public_claim_wording:"This service has recorded cold-weather capability, but current site and weather conditions still need confirmation.",
       public_claim_published_at:"2026-09-27T08:20:00-04:00",
       public_claim_publication_reference:"content-change-516-interior"
     },
