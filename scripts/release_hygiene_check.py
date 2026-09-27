@@ -85,9 +85,11 @@ def main() -> int:
             errors.append(f"living authority missing: {path.name}")
             continue
         text = path.read_text(encoding="utf-8", errors="ignore")
-        # Historical BUILDxxx filenames may remain as durable navigation. Only
-        # emphasized Build markers represent active living release state.
-        active_markers = re.findall(r"\*\*Build\s+\d{3}\s+—", text)
+        visible_text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+        # Historical BUILDxxx filenames and compatibility assertions may remain
+        # as durable navigation. Only visible emphasized Build markers represent
+        # active living release state.
+        active_markers = re.findall(r"\*\*Build\s+\d{3}\s+—", visible_text)
         if len(active_markers) > 3:
             errors.append(f"{path.name} contains too many active numbered release markers ({len(active_markers)})")
         stale_shas = re.findall(r"(?i)\b[0-9a-f]{12,40}\b", text)
