@@ -55,10 +55,12 @@ for token in ["close_ready_candidate", "automatic_close: false", "accounting_pos
     if token not in helper:
         raise SystemExit(f"Build 384 must retain Build 375 fail-closed closure authority: {token}")
 
-current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", queue)
-next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", queue)
-handoff_current = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", handoff)
-handoff_next = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", handoff)
+queue_visible = re.sub(r"<!--.*?-->", "", queue, flags=re.S)
+handoff_visible = re.sub(r"<!--.*?-->", "", handoff, flags=re.S)
+current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", queue_visible)
+next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", queue_visible)
+handoff_current = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", handoff_visible)
+handoff_next = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", handoff_visible)
 if not all([current_match, next_match, handoff_current, handoff_next]):
     raise SystemExit("Build 384 cannot resolve living current/next release authority.")
 current, next_release = int(current_match.group(1)), int(next_match.group(1))

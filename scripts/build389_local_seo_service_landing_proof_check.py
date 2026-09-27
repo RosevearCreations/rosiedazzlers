@@ -35,8 +35,9 @@ def normalized_path(url: str) -> str:
 
 
 def living_release_pair(text: str, label: str) -> tuple[int, int]:
-    current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", text)
-    next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", text)
+    visible = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", visible)
+    next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", visible)
     assert current_match and next_match, f"{label}: unable to resolve living current/next release"
     return int(current_match.group(1)), int(next_match.group(1))
 
