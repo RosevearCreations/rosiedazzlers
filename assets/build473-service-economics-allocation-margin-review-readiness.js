@@ -29,6 +29,7 @@
       renderSeasonalPublicClaimOutcomeContinuity(data.economics?.seasonal_public_claim_outcome_continuity || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
+      renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
       renderCandidates(data.review_candidates || []);
@@ -445,6 +446,52 @@
       " · operational review ready: "+String(readiness.counts?.operational_review_ready??0)+
       " · routing continuity evidence required: "+String(readiness.counts?.routing_continuity_evidence_required??0)+
       ". Manual site confirmation remains required; appointments are never moved automatically.";
+  }
+
+  function renderWinterRuleControlledActivationOutcomeContinuity(continuity) {
+    const mount=$("winterRuleControlledActivationOutcomeContinuityGrid"); if(!mount) return;
+    const rows=Array.isArray(continuity.rows)?continuity.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const observed=row.controlled_activation_observed===true||row.retain_hold_observed===true;
+      const state=observed?"observed":"review";
+      const label=row.outcome_state==="controlled_activation_observed"?"Activation observed":
+        row.outcome_state==="retain_hold_observed"?"Retain HOLD observed":
+        row.outcome_state==="controlled_activation_evidence_conflict"?"Activation evidence conflict":
+        row.outcome_state==="retain_hold_evidence_conflict"?"Retain HOLD evidence conflict":"Owner action required";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc((row.entity_type||"item")+": "+(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(label)+'</span></div>'+
+        '<p class="mini">Classification: '+esc(row.classification||"unavailable")+
+        ' · current match: '+esc(row.current_service_classification_matches_build507===true?"YES":"NO")+
+        ' · source limit: '+esc(row.source_owned_temperature_limit_text||"no exact recorded limit")+'</p>'+
+        '<p class="mini">Outcome: '+esc(row.controlled_activation_outcome||"not recorded")+
+        ' · observed: '+esc(row.controlled_activation_outcome_observed_at||"not recorded")+
+        ' · reference: '+esc(row.controlled_activation_outcome_reference||"not recorded")+'</p>'+
+        '<p class="mini">Booking rule match: '+esc(row.applied_booking_rule_matches_build507===true?"YES":"NO")+
+        ' · quote rule match: '+esc(row.applied_quote_rule_matches_build507===true?"YES":"NO")+
+        ' · customer wording match: '+esc(row.customer_transparency_wording_matches_build507===true?"YES":"NO")+'</p>'+
+        '<p class="mini">/api/availability revalidated: '+esc(row.availability_revalidated===true?"YES":"NO")+
+        ' · checkout collision revalidated: '+esc(row.checkout_collision_revalidated===true?"YES":"NO")+
+        ' · runtime proof: '+esc(row.runtime_revalidation_reference||"not recorded")+'</p>'+
+        '<p class="mini">Activation state is observed, never inferred. Weather-ineligible sessions remain outside ordinary conversion interpretation. Broad winter availability remains HOLD. Automatic booking/quote/rule/HOLD mutation: NONE.</p></article>');
+    }
+    for(const gap of (Array.isArray(continuity.gaps)?continuity.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>'+
+        esc((gap.entity_type||"item")+": "+(gap.code||"unknown"))+
+        '</strong><span class="pill">HOLD</span></div><p class="mini">State: '+
+        esc(gap.state||"outcome_owner_action_required")+' · Missing: '+
+        esc((gap.missing||[]).join(", ")||"dated attributable activation outcome and runtime revalidation evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_winter_booking_quote_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No winter booking/quote controlled-activation outcome has been observed. Decision readiness never means live activation.</div>';
+    const detail=$("winterRuleControlledActivationOutcomeContinuityDetail");
+    if(detail) detail.textContent="Outcome rows: "+String(continuity.row_count??0)+
+      " · activation observed: "+String(continuity.counts?.controlled_activation_observed??0)+
+      " · retain HOLD observed: "+String(continuity.counts?.retain_hold_observed??0)+
+      " · activation conflicts: "+String(continuity.counts?.activation_evidence_conflict??0)+
+      " · HOLD conflicts: "+String(continuity.counts?.retain_hold_evidence_conflict??0)+
+      ". /api/availability and checkout collision revalidation remain authoritative.";
   }
 
   function renderControlledEnvironmentSiteQualification(qualification) {
