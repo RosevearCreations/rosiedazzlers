@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**.
+Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**.
 
 ## Release authority
-Authority: `scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py` · `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py` · `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained seasonal public-claim outcome continuity: `scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py` · `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`.
 
 Retained renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 

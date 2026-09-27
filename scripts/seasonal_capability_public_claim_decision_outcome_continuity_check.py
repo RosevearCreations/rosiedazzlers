@@ -67,7 +67,8 @@ require(client,[
 
 require(page,[
     'data-build516="seasonal-capability-public-claim-decision-outcome-continuity"',
-    "Build 516 · Seasonal Capability &amp; Public Claim Decision Outcome Continuity",
+    "Build 517 · Winter Booking &amp; Quote Rule Controlled-Activation Outcome Continuity",
+    "Seasonal capability &amp; public claim decision outcome continuity",
     'id="seasonalPublicClaimOutcomeContinuityGrid"',
     "Publication state is observed, never inferred.",
     "Broad winter availability remains HOLD."
@@ -87,20 +88,20 @@ require(roadmap,[
 ],"active roadmap")
 
 require(queue,[
-    "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release.",
-    "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is next",
+    "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.",
+    "**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is next",
     "BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md",
     "it has not run out"
 ],"Build 516 queue")
 
 require(handoff,[
-    "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release.",
+    "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.",
     "BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md",
     "seasonal_capability_public_claim_decision_outcome_continuity_check.py"
 ],"Build 516 handoff")
 
 require(readme,[
-    "Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**.",
+    "Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**.",
     "BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md",
     "scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py",
     "Production is not considered GREEN from source promotion alone."

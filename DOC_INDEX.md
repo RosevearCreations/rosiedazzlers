@@ -6,7 +6,7 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md` — current bounded release contract.
+3. `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md` — current bounded release contract.
 4. `FORWARD_BUILD_ROADMAP_516_525.md` — active forward sequence and cross-build rules.
 5. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and evidence still requiring proof.
 6. `README.md` — repository entry point and canonical source locations.

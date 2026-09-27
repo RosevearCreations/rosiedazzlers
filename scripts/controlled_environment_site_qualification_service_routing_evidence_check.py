@@ -71,18 +71,18 @@ require(roadmap,[
  "### Build 499 — Provider & Local Search Outcome Evidence Refresh"
 ],"active roadmap")
 require(queue,[
- "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release.",
- "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is next",
+ "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.",
+ "**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is next",
  "BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md",
  "it has not run out"
 ],"Build 498 queue")
 require(handoff,[
- "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release.",
+ "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.",
  "BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md",
  "controlled_environment_site_qualification_service_routing_evidence_check.py"
 ],"Build 498 handoff")
 require(readme,[
- "Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**.",
+ "Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**.",
  "BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md",
  "controlled_environment_site_qualification_service_routing_evidence_check.py",
  "Production is not considered GREEN from source promotion alone."
