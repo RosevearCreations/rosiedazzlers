@@ -153,6 +153,8 @@ Scope:
 - keep every accepted follow-up decision non-executing: no winner selection, price/discount mutation, booking-rule or availability change, outreach, booking creation/change, provider mutation or customer identity join; and
 - perform no canonical HOLD, schema/storage or permanent-polling mutation.
 
+Retained predecessor authority: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md` · `scripts/maintenance_fleet_pilot_continuation_decision_check.py`.
+
 Current contract: `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`. Current source authority: `scripts/booking_quote_experiment_follow_up_decision_check.py`. Retained outcome authority: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`. Retained execution authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`. Retained measurement-lock authority: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 The exact candidate must pass the focused Build 512 authority, retained Build 502/492/481/471/461 booking/quote authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
