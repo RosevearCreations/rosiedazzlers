@@ -218,6 +218,9 @@ jobs:
           python -m py_compile scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py
           node --check scripts/seasonal_capability_public_claim_decision_outcome_continuity_test.mjs
           node --check functions/api/_lib/seasonal-capability-public-claim-decision-outcome-continuity.js
+          python -m py_compile scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py
+          node --check scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_test.mjs
+          node --check functions/api/_lib/winter-booking-quote-rule-controlled-activation-outcome-continuity.js
           python -m py_compile scripts/seasonal_capability_public_claim_activation_decision_check.py
           node --check scripts/seasonal_capability_public_claim_activation_decision_test.mjs
           node --check functions/api/_lib/seasonal-capability-public-claim-activation-decision.js
@@ -654,6 +657,8 @@ jobs:
         run: |
           python scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py
           node scripts/seasonal_capability_public_claim_decision_outcome_continuity_test.mjs
+          python scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py
+          node scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_test.mjs
 
       - name: Validate seasonal capability owner review & public claim decision authority
         run: |
