@@ -7,8 +7,6 @@ Authority: `scripts/seasonal_capability_public_claim_decision_outcome_continuity
 
 Retained renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 
-Retained compatibility marker for historical authority checks only; not current direction: Current source direction: **Build 515 — Production Learning & Roadmap Renewal**.
-
 Retained service-economics/seasonal-capacity/reliability decision readiness: `scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py` · `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`.
 
 Retained staff/mobile closure readiness: `scripts/staff_mobile_remediation_closure_readiness_check.py` · `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`.
