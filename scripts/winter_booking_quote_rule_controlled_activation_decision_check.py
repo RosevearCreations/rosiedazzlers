@@ -100,20 +100,20 @@ require(roadmap,[
 ],"active roadmap")
 
 require(queue,[
-    "**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.",
-    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is next",
+    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
+    "**Build 515 — Production Learning & Roadmap Renewal** is next",
     "BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md",
     "it has not run out"
 ],"Build 507 queue")
 
 require(handoff,[
-    "**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.",
+    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
     "BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md",
     "winter_booking_quote_rule_controlled_activation_decision_check.py"
 ],"Build 507 handoff")
 
 require(readme,[
-    "Current source direction: **Build 513 — Staff & Mobile Remediation Closure Readiness**.",
+    "Current source direction: **Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness**.",
     "BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md",
     "winter_booking_quote_rule_controlled_activation_decision_check.py",
     "Production is not considered GREEN from source promotion alone."

@@ -5,11 +5,14 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
-Retained predecessor contract: `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`.
+Retained predecessor contract: `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`
+- `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`
+- `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`
 - `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`
 - `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
 - `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
@@ -142,28 +145,27 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.
+**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.
 
 Scope:
-- reuse retained Build 503 descriptive follow-up, Build 493 attributable outcome evidence and Build 482 execution-evidence readiness; do not create a second remediation, staff telemetry, device telemetry, task or role-management system;
-- require explicit source traceability plus materially like-for-like measure, workflow, role, representative device/browser and window/sample context before closure-readiness review;
-- require material confounders to be explicitly recorded and block closure readiness when a material confounder is present;
-- preserve Southern Ontario weather/site classification separately from staff/mobile friction and never infer service temperature limits or broad winter capability;
-- keep remediation effectiveness, causation, staff fault, device fault and business impact undecided even when the evidence package is closure-review-ready; and
-- perform no automatic remediation/closure, role/permission change, job/task/support-exception action, outreach, provider/payment/accounting/inventory transaction, canonical HOLD, schema/storage, telemetry or polling mutation.
+- reuse retained Build 504 trend continuity and its owning allocation, Southern Ontario seasonal-operability, observed-capacity and technical-reliability authorities; do not create a second ledger, weather engine, capacity model, provider telemetry source, recovery engine or decision store;
+- require same-domain attributable like-for-like comparable evidence independently for explicit allocation, seasonal operability, observed capacity and technical reliability;
+- keep missing comparable history explicitly insufficient and never let evidence in one domain close another domain;
+- preserve exact working-temperature limits as source-owned and keep broad winter availability unproven unless separately supported service by service;
+- never infer provider billing/CPU/quota, recovery success, future capacity, price sensitivity or causal explanation from first-party continuity; and
+- perform no automatic allocation/margin, price/discount, booking/availability, public winter claim, capacity/scaling, provider/recovery, accounting/inventory, canonical HOLD, schema/storage, outreach or polling mutation.
 
-Retained predecessor authority: `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md` · `scripts/booking_quote_experiment_follow_up_decision_check.py`.
+Retained predecessor authority: `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md` · `scripts/staff_mobile_remediation_closure_readiness_check.py`.
+Retained continuity authority: `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md` · `scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py`.
 
-Retained maintenance/fleet predecessor authority: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md` · `scripts/maintenance_fleet_pilot_continuation_decision_check.py`.
+Current contract: `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`. Current source authority: `scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-Current contract: `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`. Current source authority: `scripts/staff_mobile_remediation_closure_readiness_check.py`. Retained interpretation authority: `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`. Retained outcome authority: `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Retained execution-readiness authority: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+The exact candidate must pass the focused Build 514 authority, retained Build 504/494/484/483/486 evidence authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-The exact candidate must pass the focused Build 513 authority, retained Build 503/493/482/472/462/452 staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
-
-Production promotion proceeds through rd main protection and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. A closure-readiness classification never substitutes for explicit manual remediation closure or HOLD change.
+Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing evidence remains a truthful HOLD; decision readiness never substitutes for an explicit business, provider, recovery or public-claim action.
 
 ## Next release
-**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is next only after the current release is independently GREEN on protected main.
+**Build 515 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.
