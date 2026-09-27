@@ -157,7 +157,7 @@ Current contract: `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`. Cur
 
 The exact candidate must pass the focused Build 512 authority, retained Build 502/492/481/471/461 booking/quote authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. A follow-up decision record never substitutes for separate business-change authorization.
+Production promotion proceeds through rd main protection and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. A follow-up decision record never substitutes for separate business-change authorization.
 
 ## Next release
 **Build 513 — Staff & Mobile Remediation Closure Readiness** is next only after the current release is independently GREEN on protected main.
