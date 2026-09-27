@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`.
-Retained predecessor contract: `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`.
+The synchronized predecessor contracts are retained through `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`.
+Retained predecessor contract: `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
 - `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`
 - `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`
 - `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`
@@ -145,33 +146,32 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.
+**Build 515 — Production Learning & Roadmap Renewal** is the active bounded release.
 
 Scope:
-- reuse retained Build 504 trend continuity and its owning allocation, Southern Ontario seasonal-operability, observed-capacity and technical-reliability authorities; do not create a second ledger, weather engine, capacity model, provider telemetry source, recovery engine or decision store;
-- require same-domain attributable like-for-like comparable evidence independently for explicit allocation, seasonal operability, observed capacity and technical reliability;
-- keep missing comparable history explicitly insufficient and never let evidence in one domain close another domain;
-- preserve exact working-temperature limits as source-owned and keep broad winter availability unproven unless separately supported service by service;
-- never infer provider billing/CPU/quota, recovery success, future capacity, price sensitivity or causal explanation from first-party continuity; and
-- perform no automatic allocation/margin, price/discount, booking/availability, public winter claim, capacity/scaling, provider/recovery, accounting/inventory, canonical HOLD, schema/storage, outreach or polling mutation.
+- reconcile the completed 506–514 cycle without treating source/runtime GREEN as provider, owner, recovery, real-device, execution, allocation, capacity or provider-cost evidence;
+- classify concerns only as `retained`, `closed`, `owner_action`, `provider_dependent` or `unavailable`, and mark `closed` only from dated attributable owning evidence;
+- preserve the Southern Ontario seasonal-service truth boundary, source-owned working-temperature limits, customer transparency and separation of field operability from application reliability;
+- retain all unresolved canonical HOLDs truthfully and keep any public claim, winter rule, maintenance/fleet continuation, experiment follow-up, remediation closure, pricing/capacity or provider/recovery action separate and explicit; and
+- renew the bounded roadmap through Builds 516–525 from observed outcomes without schema, provider, customer, booking, pricing, publication, HOLD, recovery or polling mutation.
 
-Retained predecessor authority: `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md` · `scripts/staff_mobile_remediation_closure_readiness_check.py`.
-Retained continuity authority: `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md` · `scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py`.
+Retained predecessor authority: `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md` · `scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py`.
+Retained prior renewal authority: `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` · `scripts/production_learning_roadmap_renewal_check.py`.
 
-Current contract: `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`. Current source authority: `scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current source authority: `scripts/production_learning_roadmap_renewal_check.py`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_506_514.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 514 authority, retained Build 504/494/484/483/486 evidence authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 515 authority, retained Builds 506–514 owning authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing evidence remains a truthful HOLD; decision readiness never substitutes for an explicit business, provider, recovery or public-claim action.
+Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing evidence remains a truthful HOLD; roadmap renewal never substitutes for an explicit business, provider, recovery, public-claim or canonical-HOLD action.
 
 Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 515 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
-The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.
+The future queue continues through `FORWARD_BUILD_ROADMAP_516_525.md`; it has not run out.
 
 ## Continuing rule
 Never call a Rosie Dazzlers source release GREEN from source changes alone. Missing provider, owner, observed recovery or real-device evidence remains a truthful HOLD rather than inferred success. Database migrations and provider/business mutations remain separate explicit acceptance boundaries.

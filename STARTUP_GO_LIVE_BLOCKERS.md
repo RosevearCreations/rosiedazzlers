@@ -45,6 +45,8 @@ Build 513 adds a read-only staff/mobile remediation closure-readiness layer over
 
 Build 514 adds a read-only service-economics, seasonal-capacity and reliability decision-readiness layer over retained Build 504 continuity. Each of explicit allocation, Southern Ontario seasonal operability, observed capacity and technical reliability must retain its own attributable comparable evidence; one domain never closes another. Missing comparable history remains insufficient. Decision readiness does not infer provider billing/CPU/quota, recovery success, future capacity, price sensitivity, working-temperature thresholds or broad winter availability, and it does not mutate pricing, bookings, capacity, public claims, provider/recovery state or this canonical HOLD inventory.
 
+Build 515 reconciles the 506–514 cycle without closing provider or owner evidence gaps from source/runtime GREEN. `PRODUCTION_LEARNING_506_514.md` preserves the current classifications and `FORWARD_BUILD_ROADMAP_516_525.md` advances only observed decision/action outcomes where explicit attributable evidence exists. Missing evidence, unperformed manual action, stale evidence and unavailable sources remain truthful HOLDs; this renewal performs no canonical-HOLD mutation.
+
 Build 496 adds a read-only owner/public-claim decision package. `publication_review_ready` requires current attributable capability evidence plus a dated attributable owner decision; it never publishes content, changes booking/quote rules, or authorizes broad winter availability. Missing review/current evidence remains `owner_action`, and an explicit owner HOLD remains HOLD.
 
 Build 497 adds read-only winter booking/quote rule activation-readiness evidence. `activation_readiness_review_ready` requires the retained owner-reviewed capability/public-claim package plus a dated attributable activation-readiness owner decision and classification-compatible booking/quote rule candidates. It does not activate rules, change availability or checkout, or authorize broad winter availability. `/api/availability` and server-side checkout collision revalidation remain operational authorities; weather-ineligible sessions stay outside ordinary conversion interpretation.
@@ -62,11 +64,15 @@ Build 500 adds read-only recovery-drill and authenticated-device observation exe
 Build 510 adds a read-only recovery/device closure review. Recovery and authenticated-device populations remain separate. Current negative, missing, stale, unavailable or source-only evidence retains its owning HOLD; only complete current evidence becomes a manual operator-reviewed closure candidate. No Production restore, browser farm, remediation or automatic HOLD narrowing is authorized.
 
 ## Current cycle reconciliation
-`PRODUCTION_LEARNING_496_504.md` confirms that the 496–504 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
+`PRODUCTION_LEARNING_506_514.md` confirms that the 506–514 evidence cycle does not close any provider or owner row above merely because source/runtime acceptance is GREEN.
 
 The current living release authorities are:
 - `AI_PROJECT_HANDOFF.md`
 - `AUTONOMOUS_RELEASE_QUEUE.md`
+- `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_506_514.md`
+- `FORWARD_BUILD_ROADMAP_516_525.md`
+- `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
 - `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_496_504.md`
@@ -83,6 +89,8 @@ The current living release authorities are:
 - `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_486_494.md`
 - `FORWARD_BUILD_ROADMAP_496_505.md`
+
+Build 515 renews the roadmap from observed 506–514 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists. Decision-ready, closure-ready and source/runtime GREEN states remain review evidence only unless the owning manual/provider action is separately observed and attributable.
 
 Build 505 renews the roadmap from observed 496–504 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists. Retained provider decision state `operator_hold_decision_ready` remains review-only and never closes a HOLD automatically.
 

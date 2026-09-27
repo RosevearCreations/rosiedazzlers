@@ -74,20 +74,20 @@ require(roadmap,[
  "### Build 515 — Production Learning & Roadmap Renewal"
 ],"active roadmap")
 require(queue,[
- "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
- "**Build 515 — Production Learning & Roadmap Renewal** is next",
+ "**Build 515 — Production Learning & Roadmap Renewal** is the active bounded release.",
+ "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is next",
  "BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md",
  "BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md",
  "it has not run out"
 ],"Build 514 queue")
 require(handoff,[
- "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
+ "**Build 515 — Production Learning & Roadmap Renewal** is the active bounded release.",
  "BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md",
  "service_economics_seasonal_capacity_reliability_decision_readiness_check.py",
  "BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md"
 ],"Build 514 handoff")
 require(readme,[
- "Current source direction: **Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness**.",
+ "Current source direction: **Build 515 — Production Learning & Roadmap Renewal**.",
  "BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md",
  "service_economics_seasonal_capacity_reliability_decision_readiness_check.py",
  "Production is not considered GREEN from source promotion alone."
