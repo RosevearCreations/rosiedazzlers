@@ -32,6 +32,7 @@
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
+      renderControlledEnvironmentRoutingOutcomeContinuity(data.economics?.controlled_environment_routing_outcome_continuity || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -526,6 +527,49 @@
       " · site qualified: "+String(qualification.counts?.controlled_environment_site_qualified??0)+
       " · evidence required: "+String(qualification.counts?.qualification_evidence_required??0)+
       ". Missing evidence keeps manual safe-reschedule or site confirmation; appointments are never moved automatically.";
+  }
+
+  function renderControlledEnvironmentRoutingOutcomeContinuity(continuity) {
+    const mount=$("controlledEnvironmentRoutingOutcomeContinuityGrid"); if(!mount) return;
+    const rows=Array.isArray(continuity.rows)?continuity.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const observed=row.route_outcome_observed===true||row.safe_reschedule_outcome_observed===true;
+      const label=row.outcome_state==="route_outcome_observed"?"Route observed":
+        row.outcome_state==="safe_reschedule_outcome_observed"?"Safe reschedule observed":
+        row.outcome_state==="routing_outcome_evidence_conflict"?"Outcome evidence conflict":
+        row.outcome_state==="outcome_owner_action_required"?"Owner action required":"Not applicable";
+      cards.push('<article class="review-candidate state-'+esc(observed?"observed":row.controlled_environment_candidate_present?"review":"soft")+'"><div class="review-head"><strong>'+
+        esc((row.entity_type||"item")+": "+(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(label)+'</span></div>'+
+        '<p class="mini">Retained Build 508 readiness: '+esc(row.retained_controlled_environment_operational_review_ready===true?"READY":"NOT READY")+
+        ' · qualification evidence current: '+esc(row.current_site_workflow_equipment_product_evidence===true?"YES":"NO")+'</p>'+
+        '<p class="mini">Outcome: '+esc(row.controlled_environment_routing_outcome||"not recorded")+
+        ' · observed: '+esc(row.controlled_environment_routing_outcome_observed_at||"not recorded")+
+        ' · reference: '+esc(row.controlled_environment_routing_outcome_reference||"not recorded")+'</p>'+
+        '<p class="mini">Qualified site: '+esc(row.expected_site_reference||"not recorded")+
+        ' · observed route site: '+esc(row.controlled_environment_routing_outcome_site_reference||"not recorded")+
+        ' · site match: '+esc(row.qualified_site_reference_matches_observed_route===true?"YES":row.qualified_site_reference_matches_observed_route===false?"NO":"N/A")+'</p>'+
+        '<p class="mini">Current site confirmation: '+esc(row.current_site_confirmation_observation_reference||"not recorded")+
+        ' · safe-reschedule evidence: '+esc(row.safe_reschedule_reference||"not recorded")+'</p>'+
+        '<p class="mini">Route outcome is observed, never inferred. One successful route does not establish universal indoor capability or future capacity. Automatic route/reschedule/HOLD mutation: NONE.</p></article>');
+    }
+    for(const gap of (Array.isArray(continuity.gaps)?continuity.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>'+
+        esc((gap.entity_type||"item")+": "+(gap.code||"unknown"))+
+        '</strong><span class="pill">HOLD</span></div><p class="mini">State: '+
+        esc(gap.state||"outcome_owner_action_required")+' · Missing: '+
+        esc((gap.missing||[]).join(", ")||"current attributable route/site-confirmation or safe-reschedule outcome evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_manual_site_confirmation_or_safe_reschedule_review")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No controlled-environment routing outcome has been observed. Operational readiness never proves a route occurred.</div>';
+    const detail=$("controlledEnvironmentRoutingOutcomeContinuityDetail");
+    if(detail) detail.textContent="Outcome rows: "+String(continuity.row_count??0)+
+      " · routes observed: "+String(continuity.counts?.route_outcome_observed??0)+
+      " · safe reschedules observed: "+String(continuity.counts?.safe_reschedule_outcome_observed??0)+
+      " · evidence conflicts: "+String(continuity.counts?.routing_outcome_evidence_conflict??0)+
+      " · owner action required: "+String(continuity.counts?.outcome_owner_action_required??0)+
+      ". Current service/site qualification remains authoritative; universal indoor capability and future capacity remain HOLD.";
   }
 
   function renderCandidates(rows) {
