@@ -81,19 +81,19 @@ require(roadmap,[
     "### Build 511 — Maintenance & Fleet Pilot Continuation Decision"
 ],"active roadmap")
 require(queue,[
-    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
-    "**Build 515 — Production Learning & Roadmap Renewal** is next",
+    "**Build 515 — Production Learning & Roadmap Renewal** is the active bounded release.",
+    "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is next",
     "BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md",
     "it has not run out"
 ],"Build 510 queue")
 require(handoff,[
-    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
+    "**Build 515 — Production Learning & Roadmap Renewal** is the active bounded release.",
     "BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md",
     "recovery_authenticated_device_closure_review_check.py",
     "BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md"
 ],"Build 510 handoff")
 require(readme,[
-    "Current source direction: **Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness**.",
+    "Current source direction: **Build 515 — Production Learning & Roadmap Renewal**.",
     "BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md",
     "recovery_authenticated_device_closure_review_check.py",
     "Production is not considered GREEN from source promotion alone."
