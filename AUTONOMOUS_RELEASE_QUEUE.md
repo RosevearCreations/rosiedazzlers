@@ -164,6 +164,9 @@ The exact candidate must pass the focused Build 514 authority, retained Build 50
 
 Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing evidence remains a truthful HOLD; decision readiness never substitutes for an explicit business, provider, recovery or public-claim action.
 
+Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
+Missing required checks or exact Production runtime/deployment identity are blockers.
+
 ## Next release
 **Build 515 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
