@@ -8,23 +8,82 @@ on:
       - '.github/workflows/_temporary-build517-repository-hygiene.yml'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  retained-pointer-scan:
+  retained-pointer-repair-and-prune:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout candidate
         uses: actions/checkout@v4
-      - name: Report retained current-release hardcodes
+        with:
+          fetch-depth: 0
+
+      - name: Advance retained current-release assertions
+        shell: python
+        run: |
+          from pathlib import Path
+
+          old_active = "**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release."
+          new_active = "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release."
+          old_next = "**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is next"
+          new_next = "**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is next"
+          old_readme = "Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**."
+          new_readme = "Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**."
+
+          changed = []
+          for p in sorted(Path("scripts").glob("*.py")):
+              text = p.read_text(encoding="utf-8", errors="ignore")
+              if old_active not in text and old_readme not in text and old_next not in text:
+                  continue
+              next_text = text.replace(old_active, new_active).replace(old_next, new_next).replace(old_readme, new_readme)
+              next_text = next_text.replace("[516, 517]", "[517, 518]")
+              if next_text != text:
+                  p.write_text(next_text, encoding="utf-8")
+                  changed.append(str(p))
+          print(f"RETAINED_POINTER_FILES_UPDATED={len(changed)}")
+          for p in changed:
+              print(f"RETAINED_POINTER_UPDATED={p}")
+
+      - name: Commit retained pointer repairs
+        env:
+          BRANCH: ${{ github.ref_name }}
         shell: bash
         run: |
           set -euo pipefail
-          echo "=== BUILD516_ACTIVE_POINTERS ==="
-          grep -RIlF '**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is the active bounded release.' . --exclude-dir=.git || true
-          echo "=== BUILD516_README_POINTERS ==="
-          grep -RIlF 'Current source direction: **Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity**.' . --exclude-dir=.git || true
-          echo "=== BUILD517_NEXT_POINTERS ==="
-          grep -RIlF '**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is next' . --exclude-dir=.git || true
-          echo "=== BUILD516_CONTRACT_POINTERS_IN_CHECKS ==="
-          grep -RIlF 'BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md' scripts .github/workflows 2>/dev/null || true
+          if git diff --quiet -- scripts; then
+            echo "No retained pointer changes required."
+            exit 0
+          fi
+          git config user.name "RosieDazzlers Release Hygiene"
+          git config user.email "actions@users.noreply.github.com"
+          git add scripts
+          git commit -m "Build 517 — advance retained release pointer assertions"
+          git push origin "HEAD:$BRANCH"
+
+      - name: Delete only fully merged historical work branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          CURRENT_BRANCH: ${{ github.ref_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api --paginate "repos/$REPO/branches?per_page=100" --jq '.[].name' | while IFS= read -r branch; do
+            case "$branch" in
+              main|dev|"$CURRENT_BRANCH") continue ;;
+              build*|feature*|work*|wip*|promote*|release*|planning*|fix*|diag*) ;;
+              *) continue ;;
+            esac
+            encoded="${branch//\//%2F}"
+            ahead="$(gh api "repos/$REPO/compare/main...$encoded" --jq '.ahead_by' 2>/dev/null || echo unknown)"
+            if [[ "$ahead" == "0" ]]; then
+              if gh api -X DELETE "repos/$REPO/git/refs/heads/$encoded"; then
+                echo "DELETED_FULLY_MERGED_WORK_BRANCH=$branch"
+              else
+                echo "SKIPPED_DELETE_FAILURE=$branch"
+              fi
+            else
+              echo "SKIPPED_UNMERGED_WORK_BRANCH=$branch ahead_by=$ahead"
+            fi
+          done
