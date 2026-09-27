@@ -142,25 +142,25 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.
+**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.
 
 Scope:
-- reuse retained Build 501 maintenance/fleet pilot outcome continuity, Build 491 outcome evidence and retained owner-decision / controlled-pilot authorities; do not create a second pilot engine, participant registry, capacity ledger, invoicing workflow, recurring-billing path or booking flow;
-- require explicit owner approval and bounded participant/duration authorization plus current attributable execution evidence before continuation decision review;
-- require complete current availability/checkout collision revalidation, invoicing, travel and stop-condition evidence;
-- treat any triggered stop condition as explicit review-required evidence that blocks an accepted continue decision;
-- require an attributable explicit owner `continue` or `hold` record before recording a continuation decision;
-- keep a recorded continue decision non-executing: no customer enrollment, fleet activation, booking mutation, capacity reservation, invoice mutation, recurring billing or price/discount change; and
-- perform no provider/business, accounting/inventory, HOLD, schema/storage, outreach or polling mutation.
+- reuse retained Build 502 outcome interpretation, Build 492 controlled-execution evidence and Build 481 owner-approved measurement locks; do not create a second experiment engine, pricing authority, booking flow or availability engine;
+- require comparable attributable outcomes tied to the exact retained measurement lock, allocation arms, bounded duration, observed weather eligibility and stop-condition evidence;
+- keep Southern Ontario weather-ineligible sessions outside the conversion denominator and never infer exact service temperature limits from experiment outcomes;
+- require an attributable explicit owner follow-up record before a follow-up decision is accepted;
+- treat triggered stop conditions, incomplete outcomes or incomparable allocation evidence as review blockers rather than a winner or success result;
+- keep every accepted follow-up decision non-executing: no winner selection, price/discount mutation, booking-rule or availability change, outreach, booking creation/change, provider mutation or customer identity join; and
+- perform no canonical HOLD, schema/storage or permanent-polling mutation.
 
-Current contract: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`. Current source authority: `scripts/maintenance_fleet_pilot_continuation_decision_check.py`. Retained continuity authority: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`. Retained outcome authority: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md`. Retained owner decision authority: `BUILD479_MAINTENANCE_FLEET_OWNER_APPROVAL_PILOT_DECISION.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Current contract: `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`. Current source authority: `scripts/booking_quote_experiment_follow_up_decision_check.py`. Retained outcome authority: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`. Retained execution authority: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md`. Retained measurement-lock authority: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 511 authority, retained Build 501/491/479/469/421 maintenance/fleet authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 512 authority, retained Build 502/492/481/471/461 booking/quote authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through rd main protection and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. A recorded continuation decision never substitutes for execution authorization.
+Production promotion proceeds through protected main and a pull request to `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing required checks or exact Production runtime/deployment identity are blockers. A follow-up decision record never substitutes for separate business-change authorization.
 
 ## Next release
-**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next only after the current release is independently GREEN on protected main.
+**Build 513 — Staff & Mobile Remediation Closure Readiness** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_506_515.md`; it has not run out.
