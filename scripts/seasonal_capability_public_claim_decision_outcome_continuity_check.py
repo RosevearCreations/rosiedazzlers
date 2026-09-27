@@ -67,7 +67,8 @@ require(client,[
 
 require(page,[
     'data-build516="seasonal-capability-public-claim-decision-outcome-continuity"',
-    "Build 516 · Seasonal Capability &amp; Public Claim Decision Outcome Continuity",
+    "Build 517 · Winter Booking &amp; Quote Rule Controlled-Activation Outcome Continuity",
+    "Seasonal capability &amp; public claim decision outcome continuity",
     'id="seasonalPublicClaimOutcomeContinuityGrid"',
     "Publication state is observed, never inferred.",
     "Broad winter availability remains HOLD."
