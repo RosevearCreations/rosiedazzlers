@@ -26,6 +26,7 @@
       renderWeatherSafeRouting(data.economics?.weather_safe_routing || {});
       renderSeasonalOwnerReview(data.economics?.seasonal_owner_review_public_claim || {});
       renderSeasonalPublicClaimActivationDecision(data.economics?.seasonal_public_claim_activation_decision || {});
+      renderSeasonalPublicClaimOutcomeContinuity(data.economics?.seasonal_public_claim_outcome_continuity || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
@@ -50,6 +51,7 @@
       if($("weatherSafeRoutingGrid")) $("weatherSafeRoutingGrid").innerHTML = '<div class="review-empty">Weather-safe routing evidence is unavailable.</div>';
       if($("seasonalOwnerReviewGrid")) $("seasonalOwnerReviewGrid").innerHTML = '<div class="review-empty">Seasonal owner/public-claim review is unavailable.</div>';
       if($("seasonalPublicClaimActivationDecisionGrid")) $("seasonalPublicClaimActivationDecisionGrid").innerHTML = '<div class="review-empty">Seasonal public-claim activation decision evidence is unavailable.</div>';
+      if($("seasonalPublicClaimOutcomeContinuityGrid")) $("seasonalPublicClaimOutcomeContinuityGrid").innerHTML = '<div class="review-empty">Seasonal public-claim outcome continuity evidence is unavailable.</div>';
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
       if($("winterRuleControlledActivationDecisionGrid")) $("winterRuleControlledActivationDecisionGrid").innerHTML = '<div class="review-empty">Winter booking/quote controlled activation decision evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
@@ -297,6 +299,48 @@
       " · owner HOLD: "+String(decision.counts?.owner_hold??0)+
       " · owner activation review required: "+String(decision.counts?.activation_owner_review_required??0)+
       ". Actual publication remains manual; broad winter availability remains HOLD.";
+  }
+
+  function renderSeasonalPublicClaimOutcomeContinuity(continuity) {
+    const mount=$("seasonalPublicClaimOutcomeContinuityGrid"); if(!mount) return;
+    const rows=Array.isArray(continuity.rows)?continuity.rows:[];
+    const cards=[];
+    for(const row of rows){
+      const state=row.outcome_state==="publication_observed"?"observed":"review";
+      const label=row.outcome_state==="publication_observed"?"Publication observed":
+        row.outcome_state==="retain_hold_observed"?"Retain HOLD observed":
+        row.outcome_state==="no_action_observed"?"No action observed":
+        row.outcome_state==="publication_evidence_conflict"?"Publication evidence conflict":"Owner action required";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(label)+'</span></div>'+
+        '<p><strong>Reviewed service-specific wording:</strong> '+esc(row.reviewed_service_specific_public_wording||"No supported wording is retained.")+'</p>'+
+        '<p class="mini">Outcome: '+esc(row.public_claim_outcome||"not recorded")+
+        ' · observed: '+esc(row.public_claim_outcome_observed_at||"not recorded")+
+        ' · reference: '+esc(row.public_claim_outcome_reference||"not recorded")+'</p>'+
+        '<p class="mini">Published wording: '+esc(row.published_public_claim_wording||"not observed")+
+        ' · published: '+esc(row.public_claim_published_at||"not observed")+
+        ' · publication reference: '+esc(row.public_claim_publication_reference||"not observed")+
+        ' · reviewed wording match: '+esc(row.published_wording_matches_reviewed_wording===true?"YES":"NO")+'</p>'+
+        '<p class="mini">'+esc(row.source_owned_temperature_limit_text||"No exact source-owned working-temperature limit recorded.")+
+        ' · Publication state is observed, never inferred · Broad winter availability remains HOLD. · Automatic booking/quote/publication/HOLD mutation: NONE.</p></article>');
+    }
+    const gaps=Array.isArray(continuity.gaps)?continuity.gaps:[];
+    for(const gap of gaps){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Outcome continuity HOLD · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">HOLD</span></div><p class="mini">State: '+
+        esc(gap.state||"outcome_owner_action_required")+' · Missing: '+
+        esc((gap.missing||[]).join(", ")||"dated attributable service-specific outcome evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_public_claim_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No service-specific public-claim outcome has been observed. Missing publication evidence never means no action.</div>';
+    const detail=$("seasonalPublicClaimOutcomeContinuityDetail");
+    if(detail) detail.textContent="Outcome rows: "+String(continuity.row_count??0)+
+      " · publication observed: "+String(continuity.counts?.publication_observed??0)+
+      " · retain HOLD observed: "+String(continuity.counts?.retain_hold_observed??0)+
+      " · no action observed: "+String(continuity.counts?.no_action_observed??0)+
+      " · publication conflicts: "+String(continuity.counts?.publication_evidence_conflict??0)+
+      ". Publication state is observed, never inferred; broad winter availability remains HOLD.";
   }
 
   function renderWinterRuleActivationReadiness(readiness) {
