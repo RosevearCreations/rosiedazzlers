@@ -168,10 +168,6 @@ The exact candidate must pass the focused Build 516 authority, retained Build 50
 
 Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing or conflicting publication evidence remains a truthful HOLD; observed outcome continuity never substitutes for the owning manual publication or business action.
 
-Retained historical compatibility marker for Build 515 authority checks only; this is not current release state:
-**Build 515 — Production Learning & Roadmap Renewal** is the active bounded release.
-**Build 516 — Seasonal Capability & Public Claim Decision Outcome Continuity** is next only after the current release is independently GREEN on protected main.
-
 Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
