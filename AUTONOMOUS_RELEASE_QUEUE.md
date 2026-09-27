@@ -154,6 +154,8 @@ Scope:
 
 Retained predecessor authority: `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md` · `scripts/booking_quote_experiment_follow_up_decision_check.py`.
 
+Retained maintenance/fleet predecessor authority: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md` · `scripts/maintenance_fleet_pilot_continuation_decision_check.py`.
+
 Current contract: `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`. Current source authority: `scripts/staff_mobile_remediation_closure_readiness_check.py`. Retained interpretation authority: `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`. Retained outcome authority: `BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md`. Retained execution-readiness authority: `BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md`. Active roadmap: `FORWARD_BUILD_ROADMAP_506_515.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
 The exact candidate must pass the focused Build 513 authority, retained Build 503/493/482/472/462/452 staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
