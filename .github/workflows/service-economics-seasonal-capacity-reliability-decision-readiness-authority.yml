@@ -1,0 +1,43 @@
+name: Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rosiedazzlers-service-economics-seasonal-capacity-reliability-decision-readiness-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  authority:
+    name: service-economics-seasonal-capacity-reliability-decision-readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: { fetch-depth: 0 }
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '22' }
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-decision-readiness.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_decision_readiness.js
+          node --check scripts/service_economics_seasonal_capacity_reliability_decision_readiness_test.mjs
+      - name: Validate Build 514 source authority
+        run: |
+          python scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py
+          node scripts/service_economics_seasonal_capacity_reliability_decision_readiness_test.mjs
+      - name: Authority summary
+        run: |
+          echo "### Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Explicit allocation, seasonal operability, observed capacity and technical reliability remain independent evidence domains" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Missing comparable history remains insufficient; no cross-domain evidence substitution" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Southern Ontario field restrictions remain separate from application reliability and exact temperature limits remain source-owned" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Provider billing/CPU/quota, recovery success, future capacity, price sensitivity and broad winter availability are not inferred" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Automatic price, booking, capacity, provider, restore, HOLD, schema and polling mutation: NONE" >> "$GITHUB_STEP_SUMMARY"

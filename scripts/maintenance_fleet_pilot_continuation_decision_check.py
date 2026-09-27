@@ -72,18 +72,18 @@ require(roadmap,[
  "### Build 512 — Booking & Quote Experiment Follow-Up Decision"
 ],"roadmap")
 require(queue,[
- "**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.",
- "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is next",
+ "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
+ "**Build 515 — Production Learning & Roadmap Renewal** is next",
  "BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md",
  "it has not run out"
 ],"Build 511 queue")
 require(handoff,[
- "**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.",
+ "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is the active bounded release.",
  "BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md",
  "maintenance_fleet_pilot_continuation_decision_check.py"
 ],"Build 511 handoff")
 require(readme,[
- "Current source direction: **Build 513 — Staff & Mobile Remediation Closure Readiness**.",
+ "Current source direction: **Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness**.",
  "BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md",
  "maintenance_fleet_pilot_continuation_decision_check.py",
  "Production is not considered GREEN from source promotion alone."
