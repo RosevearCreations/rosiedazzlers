@@ -73,19 +73,28 @@ The current living release authorities are:
 - `PRODUCTION_LEARNING_506_514.md`
 - `FORWARD_BUILD_ROADMAP_516_525.md`
 - `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
-- `BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md`
-- `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`
-- `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`
-- `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`
-- `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
-- `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`
-- `BUILD507_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_DECISION.md`
 - `BUILD506_SEASONAL_CAPABILITY_PUBLIC_CLAIM_ACTIVATION_DECISION.md`
 - `BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_496_504.md`
 - `FORWARD_BUILD_ROADMAP_506_515.md`
+- `BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md`
+- `BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md`
+- `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md`
+- `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md`
+- `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md`
+- `BUILD499_PROVIDER_LOCAL_SEARCH_OUTCOME_EVIDENCE_REFRESH.md`
+- `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md`
+- `BUILD497_WINTER_BOOKING_QUOTE_RULE_ACTIVATION_READINESS.md`
+- `BUILD496_SEASONAL_CAPABILITY_OWNER_REVIEW_PUBLIC_CLAIM_DECISION.md`
+- `BUILD495_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+- `PRODUCTION_LEARNING_486_494.md`
+- `FORWARD_BUILD_ROADMAP_496_505.md`
 
 Build 515 renews the roadmap from observed 506–514 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists. Decision-ready, closure-ready and source/runtime GREEN states remain review evidence only unless the owning manual/provider action is separately observed and attributable.
+
+Build 505 renews the roadmap from observed 496–504 outcomes while preserving every unresolved provider, local-search, recovery, real-device, maintenance/fleet approval/execution, experiment, remediation, allocation, seasonal-capability, observed-capacity, comparable-history, provider-cost and unavailable-evidence HOLD until dated attributable closure evidence exists. Retained provider decision state `operator_hold_decision_ready` remains review-only and never closes a HOLD automatically.
+
+Build 504 preserves same-domain continuity only when comparable attributable history exists. Missing history remains insufficient, seasonal field restrictions stay separate from application reliability, observed capacity does not prove future capacity, and technical reliability does not establish provider billing/CPU/quota or recovery success.
 
 ## Closure rule
 A row is removed or narrowed only when dated, attributable evidence exists and the relevant source/runtime/provider/owner boundary remains explicit. Missing evidence is never converted into success, and closure of one row does not silently close another.
