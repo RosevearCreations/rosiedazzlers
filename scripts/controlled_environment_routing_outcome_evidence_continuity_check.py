@@ -115,7 +115,7 @@ require(readme,[
 require(blockers,[
     "Seasonal service capability & transparency",
     "Build 518 adds read-only controlled-environment routing outcome evidence continuity",
-    "one successful route does not establish universal indoor capability or future capacity"
+    "One successful route does not establish universal indoor capability or future capacity"
 ],"canonical HOLD backlog")
 
 for text,label in [(dev,"Development Source Gate"),(prod,"Production Business Acceptance")]:
