@@ -93,18 +93,18 @@ require(roadmap,[
  "### Build 503 — Staff & Mobile Remediation Outcome Interpretation & Follow-Up"
 ],"roadmap")
 require(queue,[
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
- "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.",
+ "**Build 513 — Staff & Mobile Remediation Closure Readiness** is next",
  "BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md",
  "it has not run out"
 ],"Build 502 queue")
 require(handoff,[
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.",
  "BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md",
  "booking_quote_experiment_outcome_interpretation_check.py"
 ],"Build 502 handoff")
 require(readme,[
- "Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.",
+ "Current source direction: **Build 512 — Booking & Quote Experiment Follow-Up Decision**.",
  "BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md",
  "booking_quote_experiment_outcome_interpretation_check.py",
  "Production is not considered GREEN from source promotion alone."

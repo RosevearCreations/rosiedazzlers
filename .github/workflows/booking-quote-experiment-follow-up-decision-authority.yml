@@ -1,0 +1,59 @@
+name: Build 512 — Booking & Quote Experiment Follow-Up Decision Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+      - 'release*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-booking-quote-experiment-follow-up-decision-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: booking-quote-experiment-follow-up-decision
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/booking_quote_experiment_follow_up_decision_check.py
+          node --check scripts/booking_quote_experiment_follow_up_decision_test.mjs
+          node --check functions/api/_lib/booking-quote-experiment-follow-up-decision.js
+          node --check functions/api/admin/booking_quote_experiment_follow_up_decision.js
+      - name: Validate Build 512 source authority
+        run: |
+          python scripts/booking_quote_experiment_follow_up_decision_check.py
+          node scripts/booking_quote_experiment_follow_up_decision_test.mjs
+      - name: Authority summary
+        run: |
+          echo "### Build 512 — Booking & Quote Experiment Follow-Up Decision" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Retained Build 502/492/481 attributable evidence remains authoritative" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Weather-ineligible Southern Ontario sessions remain outside the conversion denominator" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Triggered stop conditions and incomparable outcomes block accepted follow-up readiness" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Explicit owner follow-up never selects a winner or executes a business change" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Pricing/discount, booking-rule, availability, outreach, booking, provider, HOLD, schema/storage mutation and polling: NONE" >> "$GITHUB_STEP_SUMMARY"

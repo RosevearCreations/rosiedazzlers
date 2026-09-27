@@ -1,9 +1,11 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.
+Current source direction: **Build 512 — Booking & Quote Experiment Follow-Up Decision**.
 
 ## Release authority
-Authority: `scripts/maintenance_fleet_pilot_continuation_decision_check.py` · `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`. Production is not considered GREEN from source promotion alone.\n\nRetained recovery/device closure authority: `scripts/recovery_authenticated_device_closure_review_check.py` · `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
+Authority: `scripts/booking_quote_experiment_follow_up_decision_check.py` · `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`. Production is not considered GREEN from source promotion alone.\n\nRetained maintenance/fleet continuation decision: `scripts/maintenance_fleet_pilot_continuation_decision_check.py` · `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`.
+
+Retained recovery/device closure authority: `scripts/recovery_authenticated_device_closure_review_check.py` · `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`.
 
 Retained provider/local-search closure authority: `scripts/provider_local_search_closure_evidence_continuity_review_check.py` · `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`.
 
@@ -54,6 +56,8 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md`
+- `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md`
 - `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md`
 - `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md`
 - `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md`

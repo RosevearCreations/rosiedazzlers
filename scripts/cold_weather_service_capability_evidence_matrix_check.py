@@ -61,18 +61,18 @@ require(roadmap,[
  "### Build 487 — Winter Booking Eligibility & Customer Transparency"
 ],"renewed roadmap")
 require(queue,[
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
- "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is next",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.",
+ "**Build 513 — Staff & Mobile Remediation Closure Readiness** is next",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "it has not run out"
 ],"Build 486 queue")
 require(handoff,[
- "**Build 511 — Maintenance & Fleet Pilot Continuation Decision** is the active bounded release.",
+ "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py"
 ],"retained Build 486 handoff")
 require(readme,[
- "Current source direction: **Build 511 — Maintenance & Fleet Pilot Continuation Decision**.",
+ "Current source direction: **Build 512 — Booking & Quote Experiment Follow-Up Decision**.",
  "BUILD486_COLD_WEATHER_SERVICE_CAPABILITY_EVIDENCE_MATRIX.md",
  "cold_weather_service_capability_evidence_matrix_check.py",
  "Production is not considered GREEN from source promotion alone."
