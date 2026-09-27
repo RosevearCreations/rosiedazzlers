@@ -20,8 +20,9 @@ def require(text, needles, label):
             errors.append(f"{label} missing {needle!r}")
 
 def living_pair(text,label):
-    current=re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.",text)
-    nxt=re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after",text)
+    visible=re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    current=re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.",visible)
+    nxt=re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after",visible)
     if not current or not nxt:
         errors.append(f"{label} cannot resolve living current/next release")
         return None

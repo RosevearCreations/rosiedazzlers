@@ -1,0 +1,56 @@
+name: Controlled-Environment Routing Outcome Evidence Continuity Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-controlled-environment-routing-outcome-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: controlled-environment-routing-outcome-evidence-continuity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Controlled-Environment Routing Outcome Evidence Continuity
+        run: |
+          python scripts/controlled_environment_routing_outcome_evidence_continuity_check.py
+          node scripts/controlled_environment_routing_outcome_evidence_continuity_test.mjs
+      - name: Build 518 summary
+        run: |
+          {
+            echo '### Controlled-Environment Routing Outcome Evidence Continuity'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Route outcome: OBSERVED, NEVER INFERRED'
+            echo '- Current site confirmation for routed outcome: REQUIRED'
+            echo '- Safe-reschedule outcome: OBSERVED + ATTRIBUTABLE'
+            echo '- Stale site/workflow/equipment/product evidence: MANUAL REVIEW'
+            echo '- Universal indoor capability: HOLD'
+            echo '- Future controlled-environment capacity: NOT INFERRED'
+            echo '- Automatic route/reschedule/HOLD mutation: NONE'
+          } >> "${GITHUB_STEP_SUMMARY}"

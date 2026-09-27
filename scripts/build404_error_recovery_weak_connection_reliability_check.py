@@ -12,8 +12,9 @@ def req(text, needles, label):
     for n in needles:
         if n not in text: errors.append(f'{label} missing {n!r}')
 def pair(text,label):
-    c=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.',text)
-    n=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after',text)
+    visible=re.sub(r'<!--.*?-->', '', text, flags=re.S)
+    c=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.',visible)
+    n=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after',visible)
     if not c or not n: errors.append(f'{label} cannot resolve current/next'); return None
     return int(c.group(1)),int(n.group(1))
 asset=read('assets/reliability-recovery-v404.js')

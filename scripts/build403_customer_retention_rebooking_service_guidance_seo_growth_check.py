@@ -12,8 +12,9 @@ def req(t,ns,label):
     for n in ns:
         if n not in t: errors.append(f'{label} missing {n!r}')
 def pair(t,label):
-    c=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.',t)
-    n=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after',t)
+    visible=re.sub(r'<!--.*?-->', '', t, flags=re.S)
+    c=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.',visible)
+    n=re.search(r'\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after',visible)
     if not c or not n: errors.append(f'{label} cannot resolve current/next'); return None
     return int(c.group(1)),int(n.group(1))
 endpoint=read('functions/api/client/retention.js'); retention=read('functions/api/client/_lib/customer-retention.js')

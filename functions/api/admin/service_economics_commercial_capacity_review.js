@@ -1,10 +1,11 @@
-// Build 517 — bounded read-only Winter Booking & Quote Rule Controlled-Activation Outcome Continuity endpoint.
-// Retained Build 507 decision, Build 516 public-claim outcome and current availability/checkout authorities remain the evidence base.
+// Build 518 — bounded read-only Controlled-Environment Routing Outcome Evidence Continuity endpoint.
+// Retained Build 517 outcome continuity and Build 508 operational-readiness authorities remain the evidence base.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildWinterBookingQuoteRuleControlledActivationOutcomeContinuity } from "../_lib/winter-booking-quote-rule-controlled-activation-outcome-continuity.js";
+import { buildControlledEnvironmentRoutingOutcomeEvidenceContinuity } from "../_lib/controlled-environment-routing-outcome-evidence-continuity.js";
+// Retained Build 517 marker: buildWinterBookingQuoteRuleControlledActivationOutcomeContinuity · authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity"
 // Retained Build 516 marker: buildSeasonalCapabilityPublicClaimDecisionOutcomeContinuity · authority:"seasonal_capability_public_claim_decision_outcome_continuity"
 // Retained Build 508 compatibility marker: buildControlledEnvironmentOperationalReadinessRoutingContinuity · authority:"controlled_environment_operational_readiness_routing_continuity"
 // Retained Build 507 marker: buildWinterBookingQuoteRuleControlledActivationDecision
@@ -32,8 +33,8 @@ export async function onRequestGet({request,env}){
     collect("fleet_commercial",()=>getFleetLearning({request:request.clone(),env})),
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
-  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Winter Booking & Quote Rule Controlled-Activation Outcome Continuity requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildWinterBookingQuoteRuleControlledActivationOutcomeContinuity({
+  if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Controlled-Environment Routing Outcome Evidence Continuity requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
+  const review=buildControlledEnvironmentRoutingOutcomeEvidenceContinuity({
     economics:economicsSource.data?.operational_profitability||{},
     fleet:fleetSource.data?.learning||{},
     pricing:pricingSource.data||{},
@@ -46,8 +47,9 @@ export async function onRequestGet({request,env}){
     year,
     pricing_window_days:days,
     ...review,
-    authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity",
-    release_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity",
+    authority:"controlled_environment_routing_outcome_evidence_continuity",
+    release_authority:"controlled_environment_routing_outcome_evidence_continuity",
+    retained_predecessor_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity",
     retained_public_claim_outcome_authority:"seasonal_capability_public_claim_decision_outcome_continuity",
     retained_operational_readiness_authority:"controlled_environment_operational_readiness_routing_continuity",
     retained_controlled_activation_decision_authority:"winter_booking_quote_rule_controlled_activation_decision",

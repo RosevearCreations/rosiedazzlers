@@ -25,8 +25,9 @@ def require(text: str, needles: list[str], label: str) -> None:
 
 
 def living_release_pair(text: str, label: str) -> tuple[int, int] | None:
-    current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", text)
-    next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", text)
+    visible = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    current_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.", visible)
+    next_match = re.search(r"\*\*Build\s+(\d{3})\s+—\s+[^*\n]+\*\*\s+is next only after", visible)
     if not current_match or not next_match:
         errors.append(f"{label} must expose one current and one next numbered release")
         return None
