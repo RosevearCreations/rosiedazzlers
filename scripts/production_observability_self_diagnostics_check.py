@@ -97,9 +97,10 @@ if any(token in workflow for token in ["wrangler pages deploy", "curl -X POST", 
 # The retained Build 379 gate must validate the enduring observability capability,
 # not freeze the release queue at Build 379. Require exactly one active bounded
 # release and ensure release numbering has not moved backwards past this authority.
+visible_queue = re.sub(r"<!--.*?-->", "", queue, flags=re.S)
 active_release_matches = re.findall(
     r"\*\*Build\s+(\d+)\s+—\s+[^*\n]+\*\*\s+is the active bounded release\.",
-    queue,
+    visible_queue,
 )
 if len(active_release_matches) != 1:
     fail("release queue must identify exactly one active bounded release")

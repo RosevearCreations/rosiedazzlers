@@ -39,7 +39,12 @@ def require(text: str, needles: list[str], label: str) -> None:
             errors.append(f"{label} missing required release authority: {needle!r}")
 
 
+def visible_text(text: str) -> str:
+    return re.sub(r"<!--.*?-->", "", text, flags=re.S)
+
+
 def section_body(text: str, heading: str) -> str:
+    text = visible_text(text)
     match = re.search(
         rf"^##\s+{re.escape(heading)}\s*$\n(.*?)(?=^##\s+|\Z)",
         text,
@@ -93,8 +98,8 @@ if None not in (current, next_release):
     if next_release != current + 1:
         errors.append(f"next release {next_release} is not sequential after current release {current}")
 
-    queue_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", queue)]
-    handoff_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", handoff)]
+    queue_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", visible_text(queue))]
+    handoff_builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", visible_text(handoff))]
     expected = [current, next_release]
     if queue_builds != expected:
         errors.append(f"queue current/next sequence {queue_builds} does not match {expected}")
@@ -184,7 +189,7 @@ for path, text in [
 ]:
     if re.search(r"(?i)\b[0-9a-f]{12,40}\b", text):
         errors.append(f"{path.name} embeds commit-like identity instead of live Git/workflow evidence")
-    active_markers = re.findall(r"\*\*Build\s+\d{3}\s+—", text)
+    active_markers = re.findall(r"\*\*Build\s+\d{3}\s+—", visible_text(text))
     if len(active_markers) > 3:
         errors.append(f"{path.name} contains too many active numbered release markers for a living document")
 
