@@ -117,21 +117,21 @@ require(blockers,[
 require(queue,[
     "BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_496_504.md",
     "FORWARD_BUILD_ROADMAP_506_515.md",
-    "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.",
-    "**Build 513 — Staff & Mobile Remediation Closure Readiness** is next",
+    "**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.",
+    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is next",
     "it has not run out","rd main protection","Production deployment/runtime/business acceptance",
     "Missing required checks or exact Production runtime/deployment identity are blockers"
 ],"release queue")
 require(handoff,[
     "BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_496_504.md",
     "FORWARD_BUILD_ROADMAP_506_515.md",
-    "**Build 512 — Booking & Quote Experiment Follow-Up Decision** is the active bounded release.",
-    "**Build 513 — Staff & Mobile Remediation Closure Readiness** is next",
+    "**Build 513 — Staff & Mobile Remediation Closure Readiness** is the active bounded release.",
+    "**Build 514 — Service Economics, Seasonal Capacity & Reliability Decision Readiness** is next",
     "STARTUP_GO_LIVE_BLOCKERS.md",
     "Production deployment/runtime/business acceptance must independently prove that exact SHA."
 ],"project handoff")
 require(readme,[
-    "Current source direction: **Build 512 — Booking & Quote Experiment Follow-Up Decision**.",
+    "Current source direction: **Build 513 — Staff & Mobile Remediation Closure Readiness**.",
     "BUILD505_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md","PRODUCTION_LEARNING_496_504.md",
     "FORWARD_BUILD_ROADMAP_506_515.md","scripts/production_learning_roadmap_renewal_check.py",
     "Production is not considered GREEN from source promotion alone."
