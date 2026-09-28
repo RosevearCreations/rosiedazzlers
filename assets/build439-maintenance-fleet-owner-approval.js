@@ -2,11 +2,14 @@
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const retainedPilotContinuityEndpoint="/api/admin/maintenance_fleet_pilot_outcome_continuity_review";
 const retainedPilotOutcomeEndpoint="/api/admin/maintenance_fleet_pilot_outcome_evidence";
 function init(){$("refreshOwnerApproval")?.addEventListener("click",refresh);setStatus("No owner-decision snapshot loaded. Refresh manually to compare unresolved terms with current operational evidence.","soft");}
 async function fetchPilotContinuity(){
  const primary=await fetch("/api/admin/maintenance_fleet_pilot_continuation_decision",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
  if(primary.status!==404)return primary;
+ const continuity=await fetch(retainedPilotContinuityEndpoint,{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+ if(continuity.status!==404)return continuity;
  return fetch(retainedPilotOutcomeEndpoint,{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
 }
 async function refresh(){
