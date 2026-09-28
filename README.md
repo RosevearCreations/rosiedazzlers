@@ -1,6 +1,8 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity**.
+Current source direction: **Build 521 — Maintenance & Fleet Continuation Outcome Continuity**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 519 — Provider & Local Search Manual Closure Outcome Continuity**. -->
 
@@ -9,7 +11,9 @@ Current source direction: **Build 520 — Recovery Drill & Authenticated Device 
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py` · `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py` · `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained recovery/device manual closure outcome continuity: `scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py` · `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`.
 
 Retained provider/local-search manual closure outcome continuity: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py` · `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`.
 

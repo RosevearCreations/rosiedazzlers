@@ -150,9 +150,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
 
+Current contract: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py`.
+
+<!-- Retained literal compatibility for Build 520 source-authority checks:
+**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 Current contract: `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py`.
+-->
 
 <!-- Retained literal compatibility for Build 519 source-authority checks:
 **Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is the active bounded release.
@@ -172,28 +178,28 @@ Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTC
 -->
 
 Scope:
-- reconcile only explicit operator-reviewed recovery and authenticated-device manual HOLD outcomes over retained Build 510/500/490 evidence;
-- require current attributable bounded non-Production recovery observation evidence before any recovery narrowing outcome can be observed;
-- require current direct authenticated Customer/Detailer/Operations/Admin role observations across representative phone/tablet/desktop classes with browser evidence and no current regression before any device narrowing outcome can be observed;
-- keep recovery and authenticated-device populations separate, with an independent evidence trace and operator outcome for each owning HOLD;
-- retain the owning HOLD truthfully whenever evidence is negative, missing, stale, unavailable, incomplete or trace-mismatched;
-- preserve restricted-credential, protected-content, provider-owned device/session/network and first-party observation boundaries;
-- perform no Production restore, recovery drill, authenticated login, account/session mutation, browser farm, screenshot capture, remediation, automatic HOLD mutation, schema/storage mutation or permanent polling.
+- review only explicit owner continue-or-hold outcomes over retained Build 511 decisions and current Build 501/491 bounded pilot evidence;
+- require participant/duration bounds plus current capacity, invoicing, travel and stop-condition evidence to remain complete;
+- require the Build 521 outcome to match the exact current Build 511 decision trace and decision value;
+- require an explicit continuation authorization timestamp plus later attributable continuation observation before a continue outcome can be observed;
+- require explicit review whenever a current stop condition is triggered;
+- preserve maintenance/fleet owner approval and evidence boundaries without inferring pilot execution from source/runtime GREEN;
+- perform no enrollment, fleet activation, recurring billing, booking mutation, invoice mutation, capacity reservation, price/discount change, outreach, provider mutation, schema/storage mutation, canonical-HOLD mutation or permanent polling.
 
-Retained Build 510 contract: `BUILD510_RECOVERY_DRILL_AUTHENTICATED_DEVICE_CLOSURE_REVIEW.md` · `scripts/recovery_authenticated_device_closure_review_check.py`.
-Retained Build 500 contract: `BUILD500_RECOVERY_DRILL_AUTHENTICATED_DEVICE_OBSERVATION_EXECUTION_EVIDENCE.md` · `scripts/recovery_authenticated_device_observation_execution_evidence_check.py`.
-Retained Build 490 authority: `scripts/recovery_authenticated_device_evidence_continuity_check.py`.
+Retained Build 511 contract: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md` · `scripts/maintenance_fleet_pilot_continuation_decision_check.py`.
+Retained Build 501 contract: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md` · `scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py`.
+Retained Build 491 contract: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
 Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 520 authority, retained Build 510/500/490/477/478 recovery/device authorities, retained Build 519 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 521 authority, retained Build 511/501/491/479/469/421 maintenance/fleet authorities, retained Build 520 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, negative, unavailable, trace-mismatched or operator-unreviewed recovery/device evidence remains a truthful HOLD; source/runtime GREEN never substitutes for the owning manual closure action.
+Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing, conflicting, unobserved or stop-blocked maintenance/fleet outcome evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for an explicit owner outcome.
 
 Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_516_525.md`; it has not run out.
