@@ -1,0 +1,56 @@
+name: Recovery Drill & Authenticated Device Manual Closure Outcome Continuity Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-recovery-device-manual-closure-outcome-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: recovery-authenticated-device-manual-closure-outcome-continuity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Recovery Drill & Authenticated Device Manual Closure Outcome Continuity
+        run: |
+          python scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py
+          node scripts/recovery_authenticated_device_manual_closure_outcome_continuity_test.mjs
+      - name: Build 520 summary
+        run: |
+          {
+            echo '### Recovery Drill & Authenticated Device Manual Closure Outcome Continuity'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Recovery evidence: CURRENT + ATTRIBUTABLE + BOUNDED NON-PRODUCTION REQUIRED'
+            echo '- Authenticated device evidence: CURRENT DIRECT ROLE/DEVICE/BROWSER REQUIRED'
+            echo '- Recovery/device populations: SEPARATE'
+            echo '- Operator-reviewed manual HOLD outcomes: EXPLICIT + DATED + TRACE-MATCHED REQUIRED'
+            echo '- Negative/missing/stale/unavailable evidence: OWNING HOLD RETAINED'
+            echo '- Production restore / authenticated login / credential storage: NONE'
+            echo '- Automatic canonical HOLD narrowing: NONE'
+          } >> "${GITHUB_STEP_SUMMARY}"
