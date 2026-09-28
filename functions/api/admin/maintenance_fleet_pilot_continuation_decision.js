@@ -1,9 +1,10 @@
-// Build 511 — authenticated GET-only Maintenance & Fleet Pilot Continuation Decision.
-// Composes retained Build 501 continuity evidence plus an optional explicit owner decision record.
-// No decision returned here executes pilot continuation or mutates customer/business state.
+// Builds 511/521 — authenticated GET-only Maintenance & Fleet continuation decision + outcome continuity.
+// Composes retained Build 501 evidence, an optional explicit Build 511 owner decision and an optional Build 521 outcome record.
+// No response from this endpoint executes continuation or mutates customer/business state.
 
 import { onRequestGet as getContinuityReview } from "./maintenance_fleet_pilot_outcome_continuity_review.js";
 import { buildMaintenanceFleetPilotContinuationDecision } from "../_lib/maintenance-fleet-pilot-continuation-decision.js";
+import { buildMaintenanceFleetContinuationOutcomeContinuity } from "../_lib/maintenance-fleet-continuation-outcome-continuity.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getContinuityReview({ request: request.clone(), env });
@@ -14,16 +15,24 @@ export async function onRequestGet({ request, env }) {
       ok:false,
       continuation_decision_build:511,
       continuation_decision_authority:"maintenance_fleet_pilot_continuation_decision",
+      continuation_outcome_build:521,
+      continuation_outcome_authority:"maintenance_fleet_continuation_outcome_continuity",
       error:"Unauthorized."
     },source.status);
   }
 
   const generatedAt = new Date().toISOString();
   const continuity = payload?.pilot_outcome_continuity_review || {};
-  const decisionRecord = parseDecisionRecord(env?.MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION_JSON);
+  const decisionRecord = parseJsonObject(env?.MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION_JSON);
   const decision = buildMaintenanceFleetPilotContinuationDecision({
     pilot_outcome_continuity_review: continuity,
     continuation_decision_record: decisionRecord,
+    generated_at: generatedAt
+  });
+  const outcomeRecord = parseJsonObject(env?.MAINTENANCE_FLEET_CONTINUATION_OUTCOME_JSON);
+  const outcome = buildMaintenanceFleetContinuationOutcomeContinuity({
+    pilot_continuation_decision: decision,
+    continuation_outcome_record: outcomeRecord,
     generated_at: generatedAt
   });
 
@@ -31,13 +40,18 @@ export async function onRequestGet({ request, env }) {
     ok: source.ok && Boolean(payload?.ok),
     continuation_decision_build:511,
     continuation_decision_authority:"maintenance_fleet_pilot_continuation_decision",
+    continuation_outcome_build:521,
+    continuation_outcome_authority:"maintenance_fleet_continuation_outcome_continuity",
     generated_at:generatedAt,
     pilot_outcome_continuity_review:continuity,
     continuation_decision_record:decisionRecord,
     maintenance_fleet_pilot_continuation_decision:decision,
+    continuation_outcome_record:outcomeRecord,
+    maintenance_fleet_continuation_outcome_continuity:outcome,
     source_status:{
       pilot_outcome_continuity_review:{available:source.ok&&Boolean(payload),http_status:source.status},
-      owner_continuation_decision:{available:Boolean(decisionRecord && Object.keys(decisionRecord).length)}
+      owner_continuation_decision:{available:Boolean(decisionRecord && Object.keys(decisionRecord).length)},
+      owner_continuation_outcome:{available:Boolean(outcomeRecord && Object.keys(outcomeRecord).length)}
     }
   },200);
 }
@@ -52,7 +66,7 @@ export async function onRequestOptions(){
     "Access-Control-Allow-Headers":"Content-Type"
   }});
 }
-function parseDecisionRecord(value){
+function parseJsonObject(value){
   if (!value) return {};
   try {
     const parsed=JSON.parse(String(value));
@@ -65,6 +79,7 @@ function json(value,status=200){
   return new Response(JSON.stringify(value),{status,headers:{
     "Content-Type":"application/json; charset=utf-8",
     "Cache-Control":"no-store",
-    "X-Rosie-Maintenance-Fleet-Pilot-Continuation-Decision":"build-511-read-only"
+    "X-Rosie-Maintenance-Fleet-Pilot-Continuation-Decision":"build-511-read-only",
+    "X-Rosie-Maintenance-Fleet-Continuation-Outcome":"build-521-read-only"
   }});
 }

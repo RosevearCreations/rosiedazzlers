@@ -5,9 +5,15 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
 
-**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
 
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained literal compatibility for Build 520 source-authority checks:
+**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
 **Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md. Current source authority: scripts/maintenance_fleet_continuation_outcome_continuity_check.py. Retained Build 520 authority: BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md / scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 519 source-authority checks:
 **Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is the active bounded release.
@@ -677,3 +683,12 @@ Historical numbered contracts are retained in Git and the document index. The li
 
 ## Restart point
 Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, current contract, active roadmap and go-live blockers. Preserve feature → exact Development → protected-main PR → exact Production acceptance discipline.
+
+
+## Current Maintenance & Fleet Continuation Outcome Continuity contract
+- Reuse retained Build 511 explicit owner continuation decision plus current Build 501/491 bounded evidence; do not create a replacement pilot, enrollment, billing, booking or capacity system.
+- Owner outcomes must be explicit, attributable and trace-matched to the exact current Build 511 decision.
+- A continue outcome additionally requires explicit authorization and a later attributable observation; the decision itself never proves continuation occurred.
+- Current participant/duration, capacity, invoicing, travel and stop-condition evidence must remain complete.
+- Any triggered stop condition requires review and blocks accepted continuation outcome continuity.
+- No enrollment, recurring billing, booking mutation, invoice mutation, capacity reservation, automatic stop action or canonical-HOLD mutation is performed.
