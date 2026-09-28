@@ -150,7 +150,14 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
+**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is the active bounded release.
+
+Current contract: `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py`.
+
+<!-- Retained literal compatibility for Build 518 source-authority checks:
 **Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is the active bounded release.
+**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+-->
 
 <!-- Retained literal compatibility for predecessor source-authority checks:
 **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.
@@ -159,28 +166,29 @@ Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTC
 -->
 
 Scope:
-- reconcile only explicit dated attributable service/site-specific controlled-environment routing outcomes over retained Build 508 operational-readiness evidence;
-- count a routed outcome only when current site/workflow/equipment/product evidence remains complete, the actual site-confirmation observation is current and attributable, and the observed route site matches the retained qualified site;
-- count safe reschedule only from explicit dated attributable safe-reschedule outcome evidence;
-- keep missing, stale or conflicting site/workflow/equipment/product, site-confirmation or outcome evidence as manual review/HOLD rather than inferring routing success;
-- preserve service/site specificity: one successful route never establishes universal indoor capability or future controlled-environment capacity; and
-- perform no automatic appointment move, routing, reschedule, booking/availability, quote-rule, checkout, customer-message, public-content, capacity, price/discount, provider, canonical-HOLD, schema/storage or polling mutation.
+- reconcile only matching fresh provider/payment/refund/message evidence and matching Search Console property / GBP location windows over retained Build 509/499/489 authorities;
+- require an explicit dated operator-reviewed manual HOLD outcome tied to the current combined evidence trace before a narrowing outcome can be observed;
+- allow an explicit trace-matched retain-HOLD outcome to remain visibly retained without manufacturing closure;
+- keep first-party referral/funnel context separate descriptive evidence and never use it as a provider substitute or cross-family identity join;
+- infer no ranking, indexing, Maps visibility, demand, weather, service availability, booking-conversion causation or service temperature limit; and
+- perform no automatic provider/payment/refund/message/Search Console/GBP, booking/quote/customer/content/canonical-HOLD/schema/storage/outreach or polling mutation.
 
-Retained predecessor authority: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md` · `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py`.
+Retained release predecessor authority: `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md` / `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py`.
+Retained provider/local-search closure authority: `BUILD509_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_CONTINUITY_REVIEW.md` / `scripts/provider_local_search_closure_evidence_continuity_review_check.py`.
 Retained operational-readiness authority: `BUILD508_CONTROLLED_ENVIRONMENT_OPERATIONAL_READINESS_ROUTING_CONTINUITY.md` · `scripts/controlled_environment_operational_readiness_routing_continuity_check.py`.
 Retained qualification authority: `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFICATION_SERVICE_ROUTING_EVIDENCE.md` · `scripts/controlled_environment_site_qualification_service_routing_evidence_check.py`.
 
-Current contract: `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`. Current source authority: `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
+Retained Build 518 contract: `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md` · `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 518 authority, retained Build 508/517 authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 519 authority, retained Build 509/499/489 provider/local-search authorities, retained Build 518 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing or conflicting route/site/safe-reschedule evidence remains a truthful HOLD; observed outcome continuity never substitutes for the owning manual routing or business action.
+Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, trace-mismatched or operator-unreviewed provider/local-search evidence remains a truthful HOLD; source/runtime GREEN never substitutes for the owning manual provider/local-search closure action.
 
 Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_516_525.md`; it has not run out.
