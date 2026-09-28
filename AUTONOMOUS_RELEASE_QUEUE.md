@@ -180,7 +180,7 @@ Retained qualification authority: `BUILD498_CONTROLLED_ENVIRONMENT_SITE_QUALIFIC
 
 Retained Build 518 contract: `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md` · `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py`. Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 519 authority, retained Build 509/499/489 provider/local-search authorities, retained Build 518 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 519 authority, retained Build 509/499/489 provider/local-search authorities, retained Build 518 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
 Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, trace-mismatched or operator-unreviewed provider/local-search evidence remains a truthful HOLD; source/runtime GREEN never substitutes for the owning manual provider/local-search closure action.
 
