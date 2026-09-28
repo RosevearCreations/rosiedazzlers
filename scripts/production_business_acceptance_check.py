@@ -214,6 +214,10 @@ required_authorities = {
         "scripts/provider_local_search_closure_evidence_continuity_review_check.py",
         "scripts/provider_local_search_closure_evidence_continuity_review_test.mjs",
     ],
+    "provider_local_search_manual_closure_outcome_continuity": [
+        "scripts/provider_local_search_manual_closure_outcome_continuity_check.py",
+        "scripts/provider_local_search_manual_closure_outcome_continuity_test.mjs",
+    ],
     "recovery_authenticated_device_closure_review": [
         "scripts/recovery_authenticated_device_closure_review_check.py",
         "scripts/recovery_authenticated_device_closure_review_test.mjs",
