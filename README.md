@@ -1,11 +1,15 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 518 — Controlled-Environment Routing Outcome Evidence Continuity**.
+Current source direction: **Build 519 — Provider & Local Search Manual Closure Outcome Continuity**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 518 — Controlled-Environment Routing Outcome Evidence Continuity**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py` · `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py` · `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained controlled-environment routing outcome continuity: `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py` · `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`.
 
 Retained winter booking/quote controlled-activation outcome continuity: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py` · `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`.
 
