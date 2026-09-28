@@ -48,10 +48,12 @@ async function refresh450() {
       renderProviderLocalSearchContinuity489(safeContinuityData);
       renderProviderLocalSearchOutcomeRefresh499(safeContinuityData);
       renderProviderLocalSearchClosureReview509(safeContinuityData);
+      renderProviderLocalSearchManualClosureOutcome519(safeContinuityData);
     } catch {
       renderProviderLocalSearchContinuity489({});
       renderProviderLocalSearchOutcomeRefresh499({});
       renderProviderLocalSearchClosureReview509({});
+      renderProviderLocalSearchManualClosureOutcome519({});
     }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
@@ -284,4 +286,28 @@ function setStatus450(message, tone) {
   if (!node) return;
   node.className = "notice " + (tone || "soft");
   node.textContent = message;
+}
+
+
+function renderProviderLocalSearchManualClosureOutcome519(data) {
+  const host = byId450("localProviderManualClosureOutcome519");
+  if (!host) return;
+  const review = data?.provider_local_search_manual_closure_outcome_continuity || {};
+  const evidence = review.evidence_continuity || {};
+  const outcome = review.manual_hold_outcome || {};
+  const closure = review.closure_contract || {};
+  const truth = review.truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 519 manual closure outcome continuity</strong>'
+    + '<div class="muted">Fresh matching provider evidence plus an explicit operator-reviewed manual HOLD outcome are required. Runtime does not manufacture or persist that outcome.</div></div>'
+    + '<span>' + esc450(review.status || "manual_closure_operator_outcome_required") + '</span></div>';
+  const rows = [
+    ["Provider / local-search evidence", evidence.closure_review_ready === true ? "MATCHED + CURRENT" : "REVIEW REQUIRED", "Build 509 closure review must still be ready"],
+    ["Explicit operator-reviewed manual HOLD outcome", outcome.valid === true ? String(outcome.outcome || "OBSERVED") : "REQUIRED", outcome.trace_match === true ? "current evidence trace matched" : "dated review + role + outcome reference + matching trace required"],
+    ["First-party context", closure.first_party_context_remains_separate_descriptive_evidence === true ? "SEPARATE" : "UNKNOWN", "descriptive only; never substitutes for provider evidence"],
+    ["Automatic canonical HOLD narrowing", closure.automatic_canonical_hold_narrowing_performed === false ? "NONE" : "UNKNOWN", "canonical backlog update remains a separate explicit manual source action"],
+    ["Ranking / weather / demand / conversion causation", truth.ranking_outcome_inferred === false && truth.weather_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "evidence remains source-bounded and descriptive"]
+  ];
+  host.innerHTML = summary + rows.map((row) =>
+    '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
+  ).join("");
 }
