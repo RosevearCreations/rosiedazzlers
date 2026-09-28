@@ -156,6 +156,7 @@ Current contract: `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINU
 
 <!-- Retained literal compatibility for Build 518 source-authority checks:
 **Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is the active bounded release.
+**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 -->
 
 <!-- Retained literal compatibility for predecessor source-authority checks:
