@@ -1,6 +1,8 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 521 — Maintenance & Fleet Continuation Outcome Continuity**.
+Current source direction: **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 521 — Maintenance & Fleet Continuation Outcome Continuity**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity**. -->
 
@@ -11,7 +13,9 @@ Current source direction: **Build 521 — Maintenance & Fleet Continuation Outco
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py` · `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py` · `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained maintenance/fleet continuation outcome continuity: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py` · `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`.
 
 Retained recovery/device manual closure outcome continuity: `scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py` · `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`.
 

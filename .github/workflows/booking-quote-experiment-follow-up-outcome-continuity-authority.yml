@@ -1,0 +1,58 @@
+name: Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+      - 'release*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-booking-quote-experiment-follow-up-outcome-continuity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: booking-quote-experiment-follow-up-outcome-continuity
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate syntax
+        run: |
+          python -m py_compile scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py
+          node --check scripts/booking_quote_experiment_follow_up_outcome_continuity_test.mjs
+          node --check functions/api/_lib/booking-quote-experiment-follow-up-outcome-continuity.js
+          node --check functions/api/admin/booking_quote_experiment_follow_up_decision.js
+      - name: Validate Build 522 source authority
+        run: |
+          python scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py
+          node scripts/booking_quote_experiment_follow_up_outcome_continuity_test.mjs
+      - name: Authority summary
+        run: |
+          echo "### Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity" >> "$GITHUB_STEP_SUMMARY"
+          echo "- SHA: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Retained Build 512 decision and Build 502/492/481 evidence remain authoritative" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Continued observation requires separate authorization plus later attributable bounded observation" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Southern Ontario weather eligibility, allocation/duration and stop-condition boundaries remain explicit" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Winner/success inference and price, booking-rule, availability, outreach, provider or HOLD mutation: NONE" >> "$GITHUB_STEP_SUMMARY"
