@@ -5,9 +5,15 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
 
-**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is the active bounded release.
 
+**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained literal compatibility for Build 521 source-authority checks:
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
 **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md. Current source authority: scripts/maintenance_fleet_continuation_outcome_continuity_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 520 source-authority checks:
 **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
@@ -680,6 +686,14 @@ Historical numbered contracts are retained in Git and the document index. The li
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
 - Database migrations remain separate explicit acceptance boundaries.
 - Provider/business mutations remain separately authorized.
+
+## Current Booking & Quote Experiment Follow-Up Outcome Continuity contract
+- Current contract: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Current source authority: scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py.
+- Retain BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md and BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md as the immediate booking/quote evidence authorities.
+- Reuse current Build 502/492/481 locked measurement, allocation, bounded-duration, comparable-outcome and Southern Ontario weather-eligibility evidence.
+- A `continue_observation` outcome requires a separate authorization after the Build 512 decision and a later attributable observation tied to the exact decision trace.
+- Triggered retained or follow-up stop conditions require review; incomplete or incomparable evidence never becomes a winner or success claim.
+- No price/discount, booking-rule, availability, outreach, booking, provider, customer-identity, canonical-HOLD or schema/storage mutation is performed.
 
 ## Restart point
 Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read this file, the queue, current contract, active roadmap and go-live blockers. Preserve feature → exact Development → protected-main PR → exact Production acceptance discipline.
