@@ -170,6 +170,7 @@ Current contract: `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_O
 <!-- Retained literal compatibility for Build 519 source-authority checks:
 **Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is the active bounded release.
 **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py`.
 -->
 
 <!-- Retained literal compatibility for Build 518 source-authority checks:
