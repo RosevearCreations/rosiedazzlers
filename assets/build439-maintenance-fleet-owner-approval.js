@@ -1,12 +1,15 @@
-// Build 439/449/459/469/479/491/501 — manual read-only owner-decision, controlled-pilot readiness, pilot decision, outcome evidence + continuity UI.
+// Build 439/449/459/469/479/491/501/511/521 — manual read-only owner-decision, pilot evidence, continuation decision + outcome continuity UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const retainedPilotContinuityEndpoint="/api/admin/maintenance_fleet_pilot_outcome_continuity_review";
 const retainedPilotOutcomeEndpoint="/api/admin/maintenance_fleet_pilot_outcome_evidence";
 function init(){$("refreshOwnerApproval")?.addEventListener("click",refresh);setStatus("No owner-decision snapshot loaded. Refresh manually to compare unresolved terms with current operational evidence.","soft");}
 async function fetchPilotContinuity(){
- const primary=await fetch("/api/admin/maintenance_fleet_pilot_outcome_continuity_review",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+ const primary=await fetch("/api/admin/maintenance_fleet_pilot_continuation_decision",{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
  if(primary.status!==404)return primary;
+ const continuity=await fetch(retainedPilotContinuityEndpoint,{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
+ if(continuity.status!==404)return continuity;
  return fetch(retainedPilotOutcomeEndpoint,{method:"GET",credentials:"include",cache:"no-store",headers:{Accept:"application/json"}});
 }
 async function refresh(){
@@ -18,7 +21,7 @@ async function refresh(){
   ]);
   const [data,outcomeData]=await Promise.all([response.json().catch(()=>null),outcomeResponse.json().catch(()=>null)]);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderPilotContinuationDecision(outcomeData?.maintenance_fleet_pilot_continuation_decision||{});renderPilotContinuationOutcome(outcomeData?.maintenance_fleet_continuation_outcome_continuity||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
@@ -88,6 +91,27 @@ function renderPilotOutcomeContinuity(o){
  <p class="mini"><strong>Next step:</strong> ${esc(decision.next_step||"Complete attributable current pilot evidence before review.")}</p>
  <p class="oa-boundary">Triggered stop conditions require explicit review. Missing execution remains owner action. No pilot continuation, recurring billing or capacity reservation is authorized by this review.</p></div>`;
 }
+
+function renderPilotContinuationDecision(d){
+ const mount=$("pilotContinuationDecision"); if(!mount)return;
+ const e=d.evidence||{},o=d.owner_decision||{},b=d.bounds||{};
+ mount.innerHTML='<div class="oa-card"><div class="oa-head"><h3>Build 511 owner continuation decision</h3><span class="oa-pill">'+esc(d.status||"continuation_source_unavailable")+'</span></div>'+
+ '<p><strong>Decision:</strong> '+esc(o.decision||"not_recorded")+' · <strong>attributable:</strong> '+(o.attributable===true?"yes":"no")+'</p>'+
+ '<p class="mini"><strong>Current evidence:</strong> '+(e.evidence_complete===true?"complete":"incomplete")+' · <strong>participants:</strong> '+esc(b.observed_participant_count??"not observed")+'/'+esc(b.participant_limit??"not bounded")+' · <strong>duration:</strong> '+esc(b.observed_duration_days??"not observed")+'/'+esc(b.duration_days??"not bounded")+' days</p>'+
+ '<p class="mini"><strong>Stop condition triggered:</strong> '+(e.stop_condition_triggered===true?"yes — review required":"no")+'</p>'+
+ '<p class="oa-boundary">A continue decision is only a decision record. It does not execute continuation, enroll a customer, activate recurring billing, create a booking or reserve capacity.</p></div>';
+}
+function renderPilotContinuationOutcome(o){
+ const mount=$("pilotContinuationOutcome"); if(!mount)return;
+ const e=o.evidence||{},r=o.owner_outcome||{},boundary=o.outcome_boundary||{};
+ mount.innerHTML='<div class="oa-card"><div class="oa-head"><h3>Build 521 continuation outcome continuity</h3><span class="oa-pill">'+esc(o.status||"continuation_source_unavailable")+'</span></div>'+
+ '<p><strong>Owner outcome:</strong> '+esc(r.outcome||"not_recorded")+' · <strong>trace match:</strong> '+(e.record_trace_matches===true?"yes":"no")+'</p>'+
+ '<p class="mini"><strong>Expected decision trace:</strong> <code>'+esc(e.expected_decision_trace_key||"not available")+'</code></p>'+
+ '<p class="mini"><strong>Continuation authorized:</strong> '+esc(r.continuation_authorized_at||"not recorded")+' · <strong>observed:</strong> '+esc(r.continuation_observed_at||"not recorded")+'</p>'+
+ '<p class="mini"><strong>Next step:</strong> '+esc(boundary.next_step||"Retain owner action until exact current evidence and an explicit outcome are available.")+'</p>'+
+ '<p class="oa-boundary">Automatic activation: none. No enrollment, recurring billing, booking mutation, invoice mutation, capacity reservation, automatic stop action or canonical HOLD narrowing is performed here.</p></div>';
+}
+
 function renderCapacity(c){
  const mount=$("capacityDecision"); if(!mount)return;
  mount.innerHTML=`<div class="oa-card"><div class="oa-head"><h3>Commercial capacity commitment</h3><span class="oa-pill">${esc(c.status||"unavailable")}</span></div><p><strong>Owner decision:</strong> ${esc(c.question||"Capacity commitments require explicit review.")}</p><p class="mini">${esc(c.explanation||"Live capacity is not inferred.")}</p><p class="mini"><strong>Commercial policy source:</strong> <code>${esc(c.commercial_policy_source||"config/maintenance-plan-business-rulebook.json#decisions.priority")}</code></p><p class="mini"><strong>Required closure fields:</strong> ${esc((c.required_fields||[]).join(", ")||"priority/capacity policy")}</p><p class="mini">Availability: <code>${esc(c.availability_authority||"/api/availability")}</code> · collision revalidation: <code>${esc(c.collision_revalidation_authority||"/api/checkout")}</code></p><p class="oa-boundary">No guaranteed slot or capacity reservation is created here. Commercial capacity policy and live slot availability remain separate.</p></div>`;

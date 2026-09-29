@@ -226,6 +226,10 @@ required_authorities = {
         "scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py",
         "scripts/recovery_authenticated_device_manual_closure_outcome_continuity_test.mjs",
     ],
+    "maintenance_fleet_continuation_outcome_continuity": [
+        "scripts/maintenance_fleet_continuation_outcome_continuity_check.py",
+        "scripts/maintenance_fleet_continuation_outcome_continuity_test.mjs",
+    ],
     "winter_booking_quote_rule_activation_readiness": [
         "scripts/winter_booking_quote_rule_activation_readiness_check.py",
         "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
