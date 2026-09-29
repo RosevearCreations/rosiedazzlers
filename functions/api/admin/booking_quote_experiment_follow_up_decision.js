@@ -1,4 +1,5 @@
 // Build 512 — authenticated GET-only Booking & Quote Experiment Follow-Up Decision.
+// Build 522 exact Pages preview marker; no runtime behavior or mutation authority changes.
 // Composes the retained Build 502 outcome interpretation and an optional explicit owner follow-up record.
 // No response from this route executes an experiment, selects a winner, or mutates business state.
 
