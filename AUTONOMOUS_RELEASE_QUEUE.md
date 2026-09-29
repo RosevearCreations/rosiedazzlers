@@ -10,6 +10,7 @@ Retained predecessor contract: `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`
 - `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`
 - `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`
 - `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`
@@ -150,9 +151,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is the active bounded release.
 
+Current contract: `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py`.
+
+<!-- Retained literal compatibility for Build 521 source-authority checks:
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 Current contract: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py`.
+-->
 
 <!-- Retained literal compatibility for Build 520 source-authority checks:
 **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
@@ -163,7 +170,6 @@ Current contract: `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_O
 <!-- Retained literal compatibility for Build 519 source-authority checks:
 **Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is the active bounded release.
 **Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
-Current contract: `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py`.
 -->
 
 <!-- Retained literal compatibility for Build 518 source-authority checks:
@@ -178,28 +184,31 @@ Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTC
 -->
 
 Scope:
-- review only explicit owner continue-or-hold outcomes over retained Build 511 decisions and current Build 501/491 bounded pilot evidence;
-- require participant/duration bounds plus current capacity, invoicing, travel and stop-condition evidence to remain complete;
-- require the Build 521 outcome to match the exact current Build 511 decision trace and decision value;
-- require an explicit continuation authorization timestamp plus later attributable continuation observation before a continue outcome can be observed;
-- require explicit review whenever a current stop condition is triggered;
-- preserve maintenance/fleet owner approval and evidence boundaries without inferring pilot execution from source/runtime GREEN;
-- perform no enrollment, fleet activation, recurring billing, booking mutation, invoice mutation, capacity reservation, price/discount change, outreach, provider mutation, schema/storage mutation, canonical-HOLD mutation or permanent polling.
+- review only explicit trace-matched outcomes over retained Build 512 booking/quote follow-up decisions and current Build 502/492/481 evidence;
+- require the locked measurement revision and primary metric, comparable allocation evidence, complete allocation coverage and bounded duration to remain current;
+- keep Southern Ontario weather/service/site eligibility explicit and weather-ineligible sessions outside the conversion denominator;
+- require a separate authorization after the Build 512 decision plus later attributable observation before a `continue_observation` outcome can be observed;
+- require follow-up activity to retain the same locked revision, primary metric and allocation arms, remain within duration bounds, record comparable allocation observations and preserve stop-condition truth;
+- treat triggered retained or follow-up stop conditions as review blockers;
+- preserve hold, no-change closure and separate-change-review outcomes as explicit evidence only;
+- perform no winner selection, success declaration, price/discount change, booking-rule change, availability mutation, outreach, booking mutation, provider mutation, customer identity join, schema/storage mutation, canonical-HOLD mutation or permanent polling.
 
-Retained Build 511 contract: `BUILD511_MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION.md` · `scripts/maintenance_fleet_pilot_continuation_decision_check.py`.
-Retained Build 501 contract: `BUILD501_MAINTENANCE_FLEET_PILOT_OUTCOME_CONTINUITY_REVIEW.md` · `scripts/maintenance_fleet_pilot_outcome_continuity_review_check.py`.
-Retained Build 491 contract: `BUILD491_MAINTENANCE_FLEET_PILOT_OUTCOME_EVIDENCE.md` · `scripts/maintenance_fleet_pilot_outcome_evidence_check.py`.
+Retained Build 512 contract: `BUILD512_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_DECISION.md` · `scripts/booking_quote_experiment_follow_up_decision_check.py`.
+Retained Build 502 contract: `BUILD502_BOOKING_QUOTE_EXPERIMENT_OUTCOME_INTERPRETATION.md` · `scripts/booking_quote_experiment_outcome_interpretation_check.py`.
+Retained Build 492 contract: `BUILD492_BOOKING_QUOTE_CONTROLLED_EXPERIMENT_EXECUTION_EVIDENCE.md` · `scripts/booking_quote_controlled_experiment_execution_evidence_check.py`.
+Retained Build 481 contract: `BUILD481_BOOKING_QUOTE_EXPERIMENT_APPROVAL_MEASUREMENT_LOCK.md` · `scripts/booking_quote_experiment_approval_measurement_lock_check.py`.
+Retained immediate predecessor: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md` · `scripts/maintenance_fleet_continuation_outcome_continuity_check.py`.
 Active roadmap: `FORWARD_BUILD_ROADMAP_516_525.md`. Canonical HOLD backlog: `STARTUP_GO_LIVE_BLOCKERS.md`.
 
-The exact candidate must pass the focused Build 521 authority, retained Build 511/501/491/479/469/421 maintenance/fleet authorities, retained Build 520 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 522 authority, retained Build 512/502/492/481/471/461 booking/quote authorities, retained Build 521 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing, conflicting, unobserved or stop-blocked maintenance/fleet outcome evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for an explicit owner outcome.
+Production promotion proceeds through protected main and a pull request to protected `main`, followed by independent exact Production deployment/runtime/business acceptance. Missing, conflicting, incomparable, unobserved or stop-blocked follow-up evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for an explicit follow-up outcome.
 
 Historical compatibility marker for retained source-authority checks: `rd main protection` is the legacy wording; the active rule is protected `main`.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_516_525.md`; it has not run out.
