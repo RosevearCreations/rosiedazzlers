@@ -166,6 +166,47 @@ Current contract: BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current sourc
 Current contract: BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md. Current source authority: scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py.
 -->
 
+<!-- Retained literal compatibility for predecessor source-authority checks:
+**Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity** is the active bounded release.
+**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py`.
+-->
+
+<!-- Retained literal compatibility for Build 518 source-authority checks:
+**Build 518 — Controlled-Environment Routing Outcome Evidence Continuity** is the active bounded release.
+**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+-->
+
+<!-- Retained literal compatibility for Build 519 source-authority checks:
+**Build 519 — Provider & Local Search Manual Closure Outcome Continuity** is the active bounded release.
+**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py`.
+-->
+
+<!-- Retained literal compatibility for Build 520 source-authority checks:
+**Build 520 — Recovery Drill & Authenticated Device Manual Closure Outcome Continuity** is the active bounded release.
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py`.
+-->
+
+<!-- Retained literal compatibility for Build 521 source-authority checks:
+**Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Current source authority: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py`.
+-->
+
+<!-- Retained literal compatibility for Build 522 source-authority checks:
+**Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is the active bounded release.
+**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Current source authority: scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py.
+-->
+
+<!-- Retained literal compatibility for Build 523 source-authority checks:
+**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is the active bounded release.
+**Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md. Current source authority: scripts/staff_mobile_remediation_closure_outcome_continuity_check.py.
+-->
+
 Scope:
 - reconcile the 516–524 cycle without treating exact-SHA source/runtime GREEN as provider, owner or business closure evidence;
 - classify continuing concerns only as retained, closed, owner_action, provider_dependent or unavailable;
