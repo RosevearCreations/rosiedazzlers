@@ -1,5 +1,6 @@
 // Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity.
 // Read-only explicit human decision outcomes over retained Build 514 decision-readiness evidence.
+// Final candidate touch keeps exact Cloudflare feature-preview identity aligned with release authority.
 
 const DOMAIN_KEYS=Object.freeze(["explicit_allocation","seasonal_operability","observed_capacity","technical_reliability"]);
 const ALLOWED_OUTCOMES=Object.freeze(["retain_current_controls","retain_hold","bounded_manual_follow_up"]);
