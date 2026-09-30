@@ -214,6 +214,10 @@ jobs:
           node --check scripts/staff_mobile_remediation_closure_readiness_test.mjs
           node --check functions/api/_lib/staff-mobile-remediation-closure-readiness.js
           node --check functions/api/admin/staff_mobile_remediation_closure_readiness.js
+          python -m py_compile scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py
+          node --check scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_test.mjs
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-decision-outcome-continuity.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_decision_readiness.js
           python -m py_compile scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py
           node --check scripts/service_economics_seasonal_capacity_reliability_decision_readiness_test.mjs
           node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-decision-readiness.js
@@ -335,6 +339,10 @@ jobs:
           node --check scripts/staff_mobile_remediation_closure_outcome_continuity_test.mjs
           node --check functions/api/_lib/staff-mobile-remediation-closure-outcome-continuity.js
           node --check functions/api/admin/staff_mobile_remediation_closure_readiness.js
+          python -m py_compile scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py
+          node --check scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_test.mjs
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-decision-outcome-continuity.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_decision_readiness.js
           python -m py_compile scripts/provider_outcome_review_hold_decision_readiness_check.py
           node --check scripts/provider_outcome_review_hold_decision_readiness_test.mjs
           node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
@@ -817,6 +825,10 @@ jobs:
         run: |
           python scripts/staff_mobile_remediation_closure_outcome_continuity_check.py
           node scripts/staff_mobile_remediation_closure_outcome_continuity_test.mjs
+      - name: Validate service economics, seasonal capacity & reliability decision outcome continuity authority
+        run: |
+          python scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py
+          node scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device observation execution evidence authority
         run: |
           python scripts/recovery_authenticated_device_observation_execution_evidence_check.py
