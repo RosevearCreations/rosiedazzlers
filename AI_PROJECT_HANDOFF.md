@@ -3,11 +3,20 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md.
+The synchronized Production predecessor is retained through BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md.
 
+**Build 525 — Production Learning & Roadmap Renewal** is the active bounded release.
+
+**Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
+
+Current contract: BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current source authority: scripts/production_learning_roadmap_renewal_check.py.
+Completed-cycle reconciliation: PRODUCTION_LEARNING_516_524.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+
+<!-- Retained literal compatibility for Build 524 source-authority checks:
 **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is the active bounded release.
-
 **Build 525 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md. Current source authority: scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 523 source-authority checks:
 **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is the active bounded release.
