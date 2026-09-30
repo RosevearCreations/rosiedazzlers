@@ -1,6 +1,8 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity**.
+Current source direction: **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 521 — Maintenance & Fleet Continuation Outcome Continuity**. -->
 
@@ -13,7 +15,9 @@ Current source direction: **Build 522 — Booking & Quote Experiment Follow-Up O
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py` · `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/staff_mobile_remediation_closure_outcome_continuity_check.py` · `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained booking/quote follow-up outcome continuity: `scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py` · `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`.
 
 Retained maintenance/fleet continuation outcome continuity: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py` · `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`.
 

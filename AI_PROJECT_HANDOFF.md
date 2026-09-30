@@ -3,11 +3,17 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
+The synchronized Production predecessor is retained through BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md.
 
+**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is the active bounded release.
+
+**Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained literal compatibility for Build 522 source-authority checks:
 **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is the active bounded release.
-
 **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Current source authority: scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 521 source-authority checks:
 **Build 521 — Maintenance & Fleet Continuation Outcome Continuity** is the active bounded release.
@@ -686,6 +692,15 @@ Historical numbered contracts are retained in Git and the document index. The li
 - Missing deployment identity, required check, Functions metadata or runtime smoke is a blocker.
 - Database migrations remain separate explicit acceptance boundaries.
 - Provider/business mutations remain separately authorized.
+
+## Current Staff & Mobile Remediation Closure Outcome Continuity contract
+- Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md. Current source authority: scripts/staff_mobile_remediation_closure_outcome_continuity_check.py.
+- Retain BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md and BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md as the immediate staff/mobile evidence authorities.
+- Reuse current Build 493/482/472/462/452 attributable execution, like-for-like comparison, workflow/role/device/browser and bounded-learning evidence rather than creating a second remediation system.
+- Manual close or retain-open outcomes require reviewer/time/reference, an explicit observed outcome, the exact Build 513 readiness trace and review after the latest retained evidence.
+- Workflow, role, representative device/browser, window/sample, material-confounder review and Southern Ontario weather/site separation must be explicitly confirmed.
+- Close does not prove effectiveness or causation; retain-open does not prove failure. Staff fault, device fault and business impact remain undecided.
+- No automatic closure, role/task/support action, outreach, provider/business, booking, canonical-HOLD, schema/storage, telemetry or polling mutation is performed.
 
 ## Current Booking & Quote Experiment Follow-Up Outcome Continuity contract
 - Current contract: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Current source authority: scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py.
