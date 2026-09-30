@@ -10,6 +10,7 @@ Retained predecessor contract: `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`
 - `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`
 - `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`
 - `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`
@@ -152,9 +153,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is the active bounded release.
+**Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is the active bounded release.
 
+Current contract: BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md. Current source authority: scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py.
+
+<!-- Retained literal compatibility for Build 523 source-authority checks:
+**Build 523 — Staff & Mobile Remediation Closure Outcome Continuity** is the active bounded release.
+**Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md. Current source authority: scripts/staff_mobile_remediation_closure_outcome_continuity_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 522 source-authority checks:
 **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity** is the active bounded release.
@@ -192,34 +199,30 @@ Current contract: `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTC
 -->
 
 Scope:
-- reconcile only explicit trace-matched manual close or retain-open outcomes over retained Build 513 closure-readiness evidence;
-- require the retained Build 513 row to remain bounded_closure_readiness_review_ready;
-- require reviewer, review time, outcome reference, explicit observed outcome and the exact Build 513 readiness trace;
-- require the manual review to occur after the latest attributable retained closure evidence;
-- explicitly confirm workflow, role, representative device/browser, comparable window/sample, material-confounder review and Southern Ontario weather/site separation;
-- preserve effectiveness, causation, staff fault, device fault and business impact as undecided;
-- treat retain-open as an explicit outcome, not proof of remediation failure;
-- perform no automatic closure, role/permission change, job/task/support-exception mutation, outreach, provider/business mutation, booking change, schema/storage mutation, canonical-HOLD mutation, background telemetry or permanent polling.
+- reconcile only explicit human decision outcomes against the exact current Build 514 domain readiness trace;
+- require the retained Build 514 domain to remain bounded_domain_decision_review_ready with same-domain comparable evidence;
+- accept only explicit retain_current_controls, retain_hold or bounded_manual_follow_up outcomes with reviewer, review time, outcome reference and observed state;
+- require independent-domain evidence review, reject cross-domain substitution and never override missing comparable history;
+- preserve Southern Ontario service-specific classifications and source-owned working-temperature limits without inferring broad winter availability;
+- keep observed capacity descriptive and never infer future capacity, reserve availability or change booking rules;
+- keep first-party technical reliability separate from provider billing/CPU/quota, scaling need and recovery success;
+- keep all accepted human outcomes non-executing and perform no automatic allocation/margin, pricing/discount, booking/availability, public-claim, capacity/scaling, provider/recovery, accounting/inventory, canonical-HOLD, schema/storage, outreach or polling mutation.
 
-Retained Build 513 contract: BUILD513_STAFF_MOBILE_REMEDIATION_CLOSURE_READINESS.md · scripts/staff_mobile_remediation_closure_readiness_check.py.
-Retained Build 503 contract: BUILD503_STAFF_MOBILE_REMEDIATION_OUTCOME_INTERPRETATION_FOLLOW_UP.md · scripts/staff_mobile_remediation_outcome_interpretation_follow_up_check.py.
-Retained Build 493 contract: BUILD493_STAFF_MOBILE_REMEDIATION_OUTCOME_EVIDENCE.md · scripts/staff_mobile_remediation_outcome_evidence_check.py.
-Retained Build 482 contract: BUILD482_STAFF_MOBILE_REMEDIATION_EXECUTION_EVIDENCE_READINESS.md · scripts/staff_mobile_remediation_execution_evidence_readiness_check.py.
-Retained Build 472 contract: BUILD472_STAFF_MOBILE_REMEDIATION_VERIFICATION.md · scripts/staff_mobile_remediation_verification_check.py.
-Retained Build 462 contract: BUILD462_STAFF_MOBILE_FRICTION_REMEDIATION_PRIORITIES.md · scripts/staff_mobile_friction_remediation_priorities_check.py.
-Retained Build 452 contract: BUILD452_STAFF_SUPPORT_MOBILE_EFFICIENCY_LEARNING.md · scripts/staff_support_mobile_efficiency_learning_check.py.
-Retained immediate predecessor: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md · scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py.
+Retained Build 514 contract: BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md · scripts/service_economics_seasonal_capacity_reliability_decision_readiness_check.py.
+Retained Build 504 contract: BUILD504_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_TREND_CONTINUITY.md · scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py.
+Retained Build 494 contract: BUILD494_SERVICE_ECONOMICS_SEASONAL_OPERATIONS_RELIABILITY_REVIEW.md · scripts/service_economics_seasonal_operations_reliability_review_check.py.
+Retained immediate predecessor: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md · scripts/staff_mobile_remediation_closure_outcome_continuity_check.py.
 Active roadmap: FORWARD_BUILD_ROADMAP_516_525.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-The exact candidate must pass the focused Build 523 authority, retained Build 513/503/493/482/472/462/452 staff/mobile authorities, retained Build 522 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 524 authority, retained Build 514/504 authorities, retained Build 523 predecessor authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, conflicting, unobserved, context-incomplete or trace-mismatched closure evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for an explicit manual closure outcome.
+Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing comparable history, missing explicit human decisions, trace mismatch, incomplete truth-boundary review or unavailable provider/recovery evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for an explicit decision outcome.
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 
 ## Next release
-**Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is next only after the current release is independently GREEN on protected main.
+**Build 525 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_516_525.md`; it has not run out.
