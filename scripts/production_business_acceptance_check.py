@@ -234,6 +234,10 @@ required_authorities = {
         "scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py",
         "scripts/booking_quote_experiment_follow_up_outcome_continuity_test.mjs",
     ],
+    "staff_mobile_remediation_closure_outcome_continuity": [
+        "scripts/staff_mobile_remediation_closure_outcome_continuity_check.py",
+        "scripts/staff_mobile_remediation_closure_outcome_continuity_test.mjs",
+    ],
     "winter_booking_quote_rule_activation_readiness": [
         "scripts/winter_booking_quote_rule_activation_readiness_check.py",
         "scripts/winter_booking_quote_rule_activation_readiness_test.mjs",
