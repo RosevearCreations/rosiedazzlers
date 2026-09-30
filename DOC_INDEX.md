@@ -6,15 +6,16 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md` — current bounded release contract.
-4. `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md` — retained immediate predecessor outcome-continuity contract.
-5. `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md` — retained predecessor manual-closure contract.
-6. `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md` — retained predecessor manual-closure contract.
-7. `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md` — retained predecessor outcome-continuity contract.
-8. `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md` — retained prior predecessor outcome-continuity contract.
-9. `FORWARD_BUILD_ROADMAP_516_525.md` — active forward sequence and cross-build rules.
-10. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and evidence still requiring proof.
-11. `README.md` — repository entry point and canonical source locations.
+3. `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md` — current bounded release contract.
+4. `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md` — retained immediate predecessor outcome-continuity contract.
+5. `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md` — retained predecessor outcome-continuity contract.
+6. `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md` — retained predecessor manual-closure contract.
+7. `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md` — retained predecessor manual-closure contract.
+8. `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md` — retained predecessor outcome-continuity contract.
+9. `BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md` — retained prior predecessor outcome-continuity contract.
+10. `FORWARD_BUILD_ROADMAP_516_525.md` — active forward sequence and cross-build rules.
+11. `STARTUP_GO_LIVE_BLOCKERS.md` — current acceptance gaps and evidence still requiring proof.
+12. `README.md` — repository entry point and canonical source locations.
 
 Do not reconstruct current state from old Build summaries, old chat handoffs or historical roadmap phases.
 
