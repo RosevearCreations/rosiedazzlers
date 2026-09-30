@@ -1,6 +1,8 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity**.
+Current source direction: **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity**. -->
 
@@ -15,7 +17,9 @@ Current source direction: **Build 523 — Staff & Mobile Remediation Closure Out
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/staff_mobile_remediation_closure_outcome_continuity_check.py` · `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+
+Retained staff/mobile closure outcome continuity: `scripts/staff_mobile_remediation_closure_outcome_continuity_check.py` · `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`.
 
 Retained booking/quote follow-up outcome continuity: `scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py` · `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`.
 
@@ -87,16 +91,19 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
-4. `PRODUCTION_LEARNING_506_514.md`
-5. `FORWARD_BUILD_ROADMAP_516_525.md`
-6. `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
-7. `FORWARD_BUILD_ROADMAP_506_515.md`
-8. `STARTUP_GO_LIVE_BLOCKERS.md`
-9. `DOC_INDEX.md`
+3. `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`
+4. `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+5. `PRODUCTION_LEARNING_506_514.md`
+6. `FORWARD_BUILD_ROADMAP_516_525.md`
+7. `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
+8. `FORWARD_BUILD_ROADMAP_506_515.md`
+9. `STARTUP_GO_LIVE_BLOCKERS.md`
+10. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
 ## Retained cumulative authority pointers
+- `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`
+- `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`
 - `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_506_514.md`
 - `FORWARD_BUILD_ROADMAP_516_525.md`
