@@ -4,6 +4,8 @@ Current source direction: **Build 525 — Production Learning & Roadmap Renewal*
 
 <!-- Retained literal compatibility: Current source direction: **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity**. -->
 
+<!-- Retained Build 524 authority compatibility: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`. -->
+
 <!-- Retained literal compatibility: Current source direction: **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 522 — Booking & Quote Experiment Follow-Up Outcome Continuity**. -->
