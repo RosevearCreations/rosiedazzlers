@@ -331,6 +331,10 @@ jobs:
           node --check scripts/booking_quote_experiment_follow_up_outcome_continuity_test.mjs
           node --check functions/api/_lib/booking-quote-experiment-follow-up-outcome-continuity.js
           node --check functions/api/admin/booking_quote_experiment_follow_up_decision.js
+          python -m py_compile scripts/staff_mobile_remediation_closure_outcome_continuity_check.py
+          node --check scripts/staff_mobile_remediation_closure_outcome_continuity_test.mjs
+          node --check functions/api/_lib/staff-mobile-remediation-closure-outcome-continuity.js
+          node --check functions/api/admin/staff_mobile_remediation_closure_readiness.js
           python -m py_compile scripts/provider_outcome_review_hold_decision_readiness_check.py
           node --check scripts/provider_outcome_review_hold_decision_readiness_test.mjs
           node --check functions/api/_lib/provider-outcome-review-hold-decision-readiness.js
@@ -809,6 +813,10 @@ jobs:
         run: |
           python scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py
           node scripts/booking_quote_experiment_follow_up_outcome_continuity_test.mjs
+      - name: Validate staff & mobile remediation closure outcome continuity authority
+        run: |
+          python scripts/staff_mobile_remediation_closure_outcome_continuity_check.py
+          node scripts/staff_mobile_remediation_closure_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device observation execution evidence authority
         run: |
           python scripts/recovery_authenticated_device_observation_execution_evidence_check.py
