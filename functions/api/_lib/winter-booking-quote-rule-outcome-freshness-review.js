@@ -123,7 +123,7 @@ export function buildWinterBookingQuoteRuleOutcomeFreshnessReview({
       automatic_quote_rule_change_authorized:false,canonical_hold_mutation_authorized:false
     })}),
     truth_boundary:Object.freeze({...base.truth_boundary,stale_rule_outcome_may_be_treated_as_current:false,
-      rule_state_may_be_inferred_from_source_or_runtime_green:false,availability_endpoint_green_proves_weather_eligibility:false,
+      rule_state_may_be_inferred_from_source_or_runtime_green: false,availability_endpoint_green_proves_weather_eligibility:false,
       checkout_collision_revalidation_proves_weather_eligibility:false,weather_ineligible_session_is_conversion_failure:false,
       broad_winter_availability_inferred:false}),
     boundaries:Object.freeze({...base.boundaries,read_only:true,automatic_rule_activation_allowed:false,
