@@ -31,6 +31,7 @@
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
+      renderWinterBookingQuoteRuleOutcomeFreshnessReview(data.economics?.winter_booking_quote_rule_outcome_freshness_review || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
       renderControlledEnvironmentRoutingOutcomeContinuity(data.economics?.controlled_environment_routing_outcome_continuity || {});
@@ -58,6 +59,7 @@
       if($("seasonalPublicClaimOutcomeFreshnessReviewGrid")) $("seasonalPublicClaimOutcomeFreshnessReviewGrid").innerHTML = '<div class="review-empty">Seasonal public-claim freshness evidence is unavailable.</div>';
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
       if($("winterRuleControlledActivationDecisionGrid")) $("winterRuleControlledActivationDecisionGrid").innerHTML = '<div class="review-empty">Winter booking/quote controlled activation decision evidence is unavailable.</div>';
+      if($("winterRuleOutcomeFreshnessReviewGrid")) $("winterRuleOutcomeFreshnessReviewGrid").innerHTML = '<div class="review-empty">Winter booking/quote rule freshness evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
       if($("controlledEnvironmentOperationalReadinessGrid")) $("controlledEnvironmentOperationalReadinessGrid").innerHTML = '<div class="review-empty">Controlled-environment operational readiness evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
@@ -512,6 +514,41 @@
       " · activation conflicts: "+String(continuity.counts?.activation_evidence_conflict??0)+
       " · HOLD conflicts: "+String(continuity.counts?.retain_hold_evidence_conflict??0)+
       ". /api/availability and checkout collision revalidation remain authoritative.";
+  }
+
+
+  function renderWinterBookingQuoteRuleOutcomeFreshnessReview(review) {
+    const mount=$("winterRuleOutcomeFreshnessReviewGrid"); if(!mount) return;
+    const labels={controlled_activation_current:"Activation current",retain_hold_current:"Retain HOLD current",stale_outcome_review_required:"Stale outcome review required",service_classification_or_capability_drift_review_required:"Service classification/capability drift",customer_transparency_drift_review_required:"Customer wording drift",applied_rule_drift_review_required:"Applied rule drift",runtime_safety_revalidation_required:"Runtime safety revalidation required",outcome_evidence_conflict_review_required:"Outcome evidence conflict",predecessor_outcome_review_required:"Predecessor outcome review required",freshness_source_unavailable:"Freshness source unavailable"};
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      const current=row.freshness_review_current===true;
+      cards.push('<article class="review-candidate state-'+esc(current?"observed":"review")+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(labels[row.freshness_state]||"Manual review required")+'</span></div>'+
+        '<p class="mini">Outcome: '+esc(row.current_controlled_activation_outcome||"not recorded")+
+        ' · observed age: '+esc(row.outcome_age_days==null?"unknown":String(row.outcome_age_days)+" day(s)")+
+        ' · runtime age: '+esc(row.runtime_age_days==null?"unknown":String(row.runtime_age_days)+" day(s)")+
+        ' · freshness window: '+esc(String(row.freshness_window_days||review.freshness_window_days||30))+' day(s)</p>'+
+        '<p class="mini">Classification match: '+esc(row.current_service_classification_matches_retained_decision_trace===true?"YES":"NO")+
+        ' · customer wording match: '+esc(row.customer_transparency_wording_matches_retained_decision_trace===true?"YES":"NO")+
+        ' · booking rule match: '+esc(row.applied_booking_rule_matches_retained_decision_trace===true?"YES":"NO")+
+        ' · quote rule match: '+esc(row.applied_quote_rule_matches_retained_decision_trace===true?"YES":"NO")+'</p>'+
+        '<p class="mini">/api/availability revalidated: '+esc(row.availability_revalidated===true?"YES":"NO")+
+        ' · checkout collision revalidated: '+esc(row.checkout_collision_revalidated===true?"YES":"NO")+
+        ' · runtime proof: '+esc(row.runtime_revalidation_reference||"not recorded")+'</p>'+
+        '<p class="mini">Weather-ineligible sessions remain outside ordinary conversion interpretation. Broad winter availability remains HOLD. No booking, quote or checkout rule is changed automatically.</p></article>');
+    }
+    for(const gap of (Array.isArray(review.gaps)?review.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Winter rule freshness HOLD · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">MANUAL REVIEW</span></div><p class="mini">State: '+
+        esc(gap.state||"freshness_review_required")+' · Missing/re-review: '+
+        esc((gap.missing||[]).join(", ")||"current attributable winter rule outcome evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_winter_booking_quote_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No winter booking/quote rule outcome freshness rows are available. Missing evidence remains HOLD.</div>';
+    const detail=$("winterRuleOutcomeFreshnessReviewDetail");
+    if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · rule/wording/classification drift: "+String(review.counts?.rule_or_wording_drift??0)+" · runtime safety review: "+String(review.counts?.runtime_safety_review??0)+". /api/availability and checkout collision revalidation remain authoritative.";
   }
 
   function renderControlledEnvironmentSiteQualification(qualification) {
