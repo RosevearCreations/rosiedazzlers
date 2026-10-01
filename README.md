@@ -23,6 +23,8 @@ Current source direction: **Build 525 — Production Learning & Roadmap Renewal*
 ## Release authority
 Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_516_524.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
 
+Retained Build 524 service-economics/seasonal-capacity/reliability decision-outcome continuity: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`.
+
 Retained staff/mobile closure outcome continuity: `scripts/staff_mobile_remediation_closure_outcome_continuity_check.py` · `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`.
 
 Retained booking/quote follow-up outcome continuity: `scripts/booking_quote_experiment_follow_up_outcome_continuity_check.py` · `BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md`.
