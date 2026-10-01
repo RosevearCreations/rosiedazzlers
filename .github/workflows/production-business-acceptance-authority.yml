@@ -222,6 +222,9 @@ jobs:
           python -m py_compile scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py
           node --check scripts/seasonal_capability_public_claim_decision_outcome_continuity_test.mjs
           node --check functions/api/_lib/seasonal-capability-public-claim-decision-outcome-continuity.js
+          python -m py_compile scripts/seasonal_capability_public_claim_outcome_freshness_review_check.py
+          node --check scripts/seasonal_capability_public_claim_outcome_freshness_review_test.mjs
+          node --check functions/api/_lib/seasonal-capability-public-claim-outcome-freshness-review.js
           python -m py_compile scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py
           node --check scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_test.mjs
           node --check functions/api/_lib/winter-booking-quote-rule-controlled-activation-outcome-continuity.js
@@ -682,6 +685,11 @@ jobs:
 
       - name: Validate Production learning & roadmap renewal authority
         run: python scripts/production_learning_roadmap_renewal_check.py
+
+      - name: Validate seasonal capability & public claim outcome freshness review authority
+        run: |
+          python scripts/seasonal_capability_public_claim_outcome_freshness_review_check.py
+          node scripts/seasonal_capability_public_claim_outcome_freshness_review_test.mjs
 
       - name: Validate seasonal capability & public claim decision outcome continuity authority
         run: |

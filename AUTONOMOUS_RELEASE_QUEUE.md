@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`.
-Retained predecessor contract: `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`.
+The synchronized predecessor contracts are retained through `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
+Retained predecessor contract: `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`
 - `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
 - `PRODUCTION_LEARNING_516_524.md`
 - `FORWARD_BUILD_ROADMAP_526_535.md`
@@ -156,9 +157,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 525 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is the active bounded release.
 
+Current contract: BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md. Current source authority: scripts/seasonal_capability_public_claim_outcome_freshness_review_check.py.
+
+<!-- Retained literal compatibility for Build 525 source-authority checks:
+**Build 525 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current source authority: scripts/production_learning_roadmap_renewal_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 524 source-authority checks:
 **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity** is the active bounded release.
@@ -208,25 +215,23 @@ Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.m
 -->
 
 Scope:
-- reconcile the 516–524 cycle without treating exact-SHA source/runtime GREEN as provider, owner or business closure evidence;
-- classify continuing concerns only as retained, closed, owner_action, provider_dependent or unavailable;
-- close a concern only from current dated attributable owning evidence for the required source identity, population, service/site, trace and window;
-- preserve Southern Ontario service-specific seasonal classifications, customer transparency and source-owned working-temperature limits;
-- keep provider/local-search, recovery/device, maintenance/fleet, booking/quote, staff/mobile and economics/capacity evidence boundaries independent;
-- write the next bounded sequence to PRODUCTION_LEARNING_516_524.md and FORWARD_BUILD_ROADMAP_526_535.md;
-- perform no schema, booking, pricing, provider, public-content, capacity, accounting/inventory, canonical-HOLD, recovery, outreach or polling mutation.
+- revalidate retained Build 516 publication, retain-HOLD and no-action outcomes against current service-specific owning evidence;
+- flag stale dated outcomes rather than extending them from prior release acceptance;
+- detect explicit current capability-classification drift, source-owned working-temperature threshold changes and observed published-wording drift;
+- preserve Southern Ontario service-specific classifications, customer transparency and source-owned working-temperature limits without inferring broad winter availability;
+- keep publication and HOLD updates manual and attributable;
+- perform no schema, booking, pricing, provider, public-content publication, capacity, accounting/inventory, canonical-HOLD, recovery, outreach or polling mutation.
 
-Retained immediate predecessor: BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md.
-Completed-cycle roadmap: FORWARD_BUILD_ROADMAP_516_525.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Retained immediate predecessor: BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Retained seasonal outcome authority: BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-The exact candidate must pass the focused Production Learning & Roadmap Renewal authority, retained Build 516–524 owning authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 526 authority, retained Build 516 authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward through the protected pull-request path to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for a provider or business outcome.
+Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale or drifted seasonal/public-claim evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for freshness evidence.
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
+**Build 527 — Winter Booking & Quote Rule Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_526_535.md`; it has not run out.

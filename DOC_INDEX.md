@@ -6,10 +6,11 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded release contract.
-4. `PRODUCTION_LEARNING_516_524.md` — completed-cycle evidence classification and carry-forward direction.
-5. `FORWARD_BUILD_ROADMAP_526_535.md` — renewed active forward sequence beginning with Build 526.
-6. `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md` — retained immediate predecessor outcome-continuity contract.
+3. `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md` — current bounded release contract.
+4. `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained immediate predecessor renewal contract.
+5. `PRODUCTION_LEARNING_516_524.md` — completed-cycle evidence classification and carry-forward direction.
+6. `FORWARD_BUILD_ROADMAP_526_535.md` — renewed active forward sequence beginning with Build 526.
+7. `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md` — retained predecessor outcome-continuity contract.
 
 <!-- Retained literal compatibility for Build 524 source-authority checks: `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md` — current bounded release contract. -->
 4. `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md` — retained immediate predecessor outcome-continuity contract.

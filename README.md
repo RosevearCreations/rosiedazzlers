@@ -1,6 +1,8 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 525 — Production Learning & Roadmap Renewal**.
+Current source direction: **Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 525 — Production Learning & Roadmap Renewal**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity**. -->
 
@@ -21,7 +23,9 @@ Current source direction: **Build 525 — Production Learning & Roadmap Renewal*
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_516_524.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/seasonal_capability_public_claim_outcome_freshness_review_check.py` · `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`. Retained Build 516 outcome continuity: `scripts/seasonal_capability_public_claim_decision_outcome_continuity_check.py` · `BUILD516_SEASONAL_CAPABILITY_PUBLIC_CLAIM_DECISION_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
+
+Retained Build 525 renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_516_524.md`.
 
 Retained Build 524 service-economics/seasonal-capacity/reliability decision-outcome continuity: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`.
 
@@ -97,10 +101,10 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`
-4. `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
-5. `PRODUCTION_LEARNING_506_514.md`
-6. `FORWARD_BUILD_ROADMAP_516_525.md`
+3. `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`
+4. `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
+5. `PRODUCTION_LEARNING_516_524.md`
+6. `FORWARD_BUILD_ROADMAP_526_535.md`
 7. `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
 8. `FORWARD_BUILD_ROADMAP_506_515.md`
 9. `STARTUP_GO_LIVE_BLOCKERS.md`

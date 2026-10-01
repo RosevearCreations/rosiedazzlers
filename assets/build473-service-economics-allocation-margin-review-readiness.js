@@ -27,6 +27,7 @@
       renderSeasonalOwnerReview(data.economics?.seasonal_owner_review_public_claim || {});
       renderSeasonalPublicClaimActivationDecision(data.economics?.seasonal_public_claim_activation_decision || {});
       renderSeasonalPublicClaimOutcomeContinuity(data.economics?.seasonal_public_claim_outcome_continuity || {});
+      renderSeasonalPublicClaimOutcomeFreshnessReview(data.economics?.seasonal_public_claim_outcome_freshness_review || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
@@ -54,6 +55,7 @@
       if($("seasonalOwnerReviewGrid")) $("seasonalOwnerReviewGrid").innerHTML = '<div class="review-empty">Seasonal owner/public-claim review is unavailable.</div>';
       if($("seasonalPublicClaimActivationDecisionGrid")) $("seasonalPublicClaimActivationDecisionGrid").innerHTML = '<div class="review-empty">Seasonal public-claim activation decision evidence is unavailable.</div>';
       if($("seasonalPublicClaimOutcomeContinuityGrid")) $("seasonalPublicClaimOutcomeContinuityGrid").innerHTML = '<div class="review-empty">Seasonal public-claim outcome continuity evidence is unavailable.</div>';
+      if($("seasonalPublicClaimOutcomeFreshnessReviewGrid")) $("seasonalPublicClaimOutcomeFreshnessReviewGrid").innerHTML = '<div class="review-empty">Seasonal public-claim freshness evidence is unavailable.</div>';
       if($("winterRuleActivationReadinessGrid")) $("winterRuleActivationReadinessGrid").innerHTML = '<div class="review-empty">Winter booking/quote activation-readiness evidence is unavailable.</div>';
       if($("winterRuleControlledActivationDecisionGrid")) $("winterRuleControlledActivationDecisionGrid").innerHTML = '<div class="review-empty">Winter booking/quote controlled activation decision evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
@@ -343,6 +345,23 @@
       " · no action observed: "+String(continuity.counts?.no_action_observed??0)+
       " · publication conflicts: "+String(continuity.counts?.publication_evidence_conflict??0)+
       ". Publication state is observed, never inferred; broad winter availability remains HOLD.";
+  }
+
+
+  function renderSeasonalPublicClaimOutcomeFreshnessReview(review) {
+    const mount=$("seasonalPublicClaimOutcomeFreshnessReviewGrid"); if(!mount) return;
+    const rows=Array.isArray(review.rows)?review.rows:[];
+    const labels={publication_current:"Publication current",retain_hold_current:"Retain HOLD current",no_action_current:"No action current",stale_outcome_review_required:"Stale outcome review required",source_owned_threshold_change_review_required:"Source-owned threshold changed",public_wording_drift_review_required:"Published wording drift",capability_evidence_drift_review_required:"Capability evidence drift",outcome_evidence_drift_review_required:"Outcome evidence drift",predecessor_outcome_review_required:"Predecessor outcome review required",freshness_source_unavailable:"Freshness source unavailable"};
+    const cards=[];
+    for(const row of rows){
+      const current=row.freshness_review_current===true;
+      cards.push('<article class="review-candidate state-'+esc(current?"observed":"review")+'"><div class="review-head"><strong>'+esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+'</strong><span class="pill">'+esc(labels[row.freshness_state]||"Manual review required")+'</span></div><p class="mini">Outcome: '+esc(row.current_public_claim_outcome||"not recorded")+' · observed: '+esc(row.outcome_observed_at||"not recorded")+' · age: '+esc(row.outcome_age_days==null?"unknown":String(row.outcome_age_days)+" day(s)")+' · freshness window: '+esc(String(row.freshness_window_days||review.freshness_window_days||30))+' day(s)</p><p class="mini">Classification: '+esc(row.current_classification||"not recorded")+' · threshold changed: '+esc(row.source_owned_temperature_threshold_changed===true?"YES":"NO")+' · published wording drift: '+esc(row.published_wording_drift_detected===true?"YES":"NO")+' · capability evidence current: '+esc(row.capability_evidence_current===true?"YES":"NO")+'</p><p class="mini">Stale evidence never extends a public claim. Source-owned temperature limits cannot be widened. Broad winter availability remains HOLD. Automatic publication/booking/quote/HOLD mutation: NONE.</p></article>');
+    }
+    const gaps=Array.isArray(review.gaps)?review.gaps:[];
+    for(const gap of gaps) cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Freshness HOLD · '+esc(gap.code||"unknown")+'</strong><span class="pill">MANUAL REVIEW</span></div><p class="mini">State: '+esc(gap.state||"freshness_review_required")+' · Missing/re-review: '+esc((gap.missing||[]).join(", ")||"current attributable service-specific freshness evidence")+' · Safe default: '+esc(gap.safe_default||"retain_public_claim_hold")+'</p></article>');
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No seasonal public-claim outcome freshness rows are available. Missing evidence remains HOLD.</div>';
+    const detail=$("seasonalPublicClaimOutcomeFreshnessReviewDetail");
+    if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · drift: "+String(review.counts?.drift??0)+" · manual review: "+String(review.counts?.review_required??0)+". Stale evidence never extends a public claim; broad winter availability remains HOLD.";
   }
 
   function renderWinterRuleActivationReadiness(readiness) {
