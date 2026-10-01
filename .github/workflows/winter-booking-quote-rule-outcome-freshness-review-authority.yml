@@ -1,0 +1,53 @@
+name: Winter Booking & Quote Rule Outcome Freshness Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-winter-rule-outcome-freshness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: winter-booking-quote-rule-outcome-freshness-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Winter Booking & Quote Rule Outcome Freshness Review
+        run: |
+          python scripts/winter_booking_quote_rule_outcome_freshness_review_check.py
+          node scripts/winter_booking_quote_rule_outcome_freshness_review_test.mjs
+      - name: Build 527 summary
+        run: |
+          {
+            echo '### Winter Booking & Quote Rule Outcome Freshness Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Retained Build 517 outcome continuity: REVALIDATED'
+            echo '- /api/availability + checkout collision safety: AUTHORITATIVE'
+            echo '- Weather-ineligible sessions: EXCLUDED FROM ORDINARY CONVERSION INTERPRETATION'
+            echo '- Automatic booking/quote/checkout/HOLD mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
