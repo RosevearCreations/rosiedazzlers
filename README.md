@@ -1,6 +1,10 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity**.
+Current source direction: **Build 525 — Production Learning & Roadmap Renewal**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 524 — Service Economics, Seasonal Capacity & Reliability Decision Outcome Continuity**. -->
+
+<!-- Retained Build 524 authority compatibility: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 523 — Staff & Mobile Remediation Closure Outcome Continuity**. -->
 
@@ -17,7 +21,9 @@ Current source direction: **Build 524 — Service Economics, Seasonal Capacity &
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_516_524.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
+
+Retained Build 524 service-economics/seasonal-capacity/reliability decision-outcome continuity: `scripts/service_economics_seasonal_capacity_reliability_decision_outcome_continuity_check.py` · `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`.
 
 Retained staff/mobile closure outcome continuity: `scripts/staff_mobile_remediation_closure_outcome_continuity_check.py` · `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`.
 
