@@ -163,7 +163,7 @@ Current contract: BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_RE
 
 <!-- Retained literal compatibility for Build 525 source-authority checks:
 **Build 525 — Production Learning & Roadmap Renewal** is the active bounded release.
-**Build 527 — Winter Booking & Quote Rule Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
+**Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current source authority: scripts/production_learning_roadmap_renewal_check.py.
 -->
 
@@ -231,7 +231,7 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
+**Build 527 — Winter Booking & Quote Rule Outcome Freshness Review** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_526_535.md`; it has not run out.
