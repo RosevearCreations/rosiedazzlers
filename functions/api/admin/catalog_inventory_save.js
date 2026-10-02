@@ -25,7 +25,10 @@ export async function onRequestPost(context) {
       qty_on_hand: Number(body?.qty_on_hand || 0),
       reorder_point: Number(body?.reorder_point || 0),
       reorder_qty: Number(body?.reorder_qty || 0),
-      unit_label: String(body?.unit_label || "").trim() || null,
+      unit_label: String(body?.stock_unit || body?.unit_label || "").trim() || null,
+      stock_unit: String(body?.stock_unit || body?.unit_label || "").trim() || null,
+      usage_unit: String(body?.usage_unit || "").trim() || null,
+      usage_units_per_stock_unit: body?.usage_units_per_stock_unit == null || body?.usage_units_per_stock_unit === "" ? 1 : Number(body.usage_units_per_stock_unit),
       cost_cents: costCad == null ? null : Math.round(costCad * 100),
       rating_value: body?.rating_value == null || body?.rating_value === "" ? null : Number(body.rating_value),
       rating_count: Number(body?.rating_count || 0),
@@ -56,6 +59,7 @@ export async function onRequestPost(context) {
     if (!payload.item_key || !payload.name || !["tool", "consumable"].includes(payload.item_type)) return withCors(json({ error: "Missing required fields." }, 400));
     if (!["reorder", "single_use", "never_reuse"].includes(payload.reuse_policy)) return withCors(json({ error: "Invalid reuse policy." }, 400));
     const numericErrors = validateInventoryPayloadNumbers(payload);
+    if (!(Number(payload.usage_units_per_stock_unit) > 0)) numericErrors.push("usage_units_per_stock_unit must be greater than zero.");
     if (numericErrors.length) return withCors(json({ error: numericErrors.join(' '), integrity_validation: true }, 400));
 
     const readiness = evaluateCatalogReadiness(payload);
