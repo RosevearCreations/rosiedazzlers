@@ -27,7 +27,8 @@ export function validateInventoryPayloadNumbers(payload = {}) {
     ['reorder_qty', 'reorder_qty'],
     ['cost_cents', 'cost'],
     ['rating_count', 'rating_count'],
-    ['estimated_jobs_per_unit', 'estimated_jobs_per_unit']
+    ['estimated_jobs_per_unit', 'estimated_jobs_per_unit'],
+    ['usage_units_per_stock_unit', 'usage_units_per_stock_unit']
   ]) {
     const value = payload[field];
     if (value === null || value === undefined || value === '') continue;
