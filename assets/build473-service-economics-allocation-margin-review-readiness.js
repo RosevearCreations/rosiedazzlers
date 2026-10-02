@@ -35,6 +35,7 @@
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
       renderControlledEnvironmentRoutingOutcomeContinuity(data.economics?.controlled_environment_routing_outcome_continuity || {});
+      renderControlledEnvironmentRoutingOutcomeFreshnessCapacityReview(data.economics?.controlled_environment_routing_outcome_freshness_capacity_review || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -62,6 +63,7 @@
       if($("winterRuleOutcomeFreshnessReviewGrid")) $("winterRuleOutcomeFreshnessReviewGrid").innerHTML = '<div class="review-empty">Winter booking/quote rule freshness evidence is unavailable.</div>';
       if($("controlledEnvironmentSiteQualificationGrid")) $("controlledEnvironmentSiteQualificationGrid").innerHTML = '<div class="review-empty">Controlled-environment site qualification evidence is unavailable.</div>';
       if($("controlledEnvironmentOperationalReadinessGrid")) $("controlledEnvironmentOperationalReadinessGrid").innerHTML = '<div class="review-empty">Controlled-environment operational readiness evidence is unavailable.</div>';
+      if($("controlledEnvironmentRoutingFreshnessCapacityGrid")) $("controlledEnvironmentRoutingFreshnessCapacityGrid").innerHTML = '<div class="review-empty">Controlled-environment routing freshness/capacity evidence is unavailable.</div>';
       $("candidateList").innerHTML = '<div class="review-empty">No margin conclusion can be supported from unavailable evidence.</div>';
       $("sourceList").innerHTML = '<div class="review-empty">Evidence source status unavailable.</div>';
       setStatus(error?.message || "Service-economics allocation evidence could not be loaded.", "bad");
@@ -626,6 +628,48 @@
       " · evidence conflicts: "+String(continuity.counts?.routing_outcome_evidence_conflict??0)+
       " · owner action required: "+String(continuity.counts?.outcome_owner_action_required??0)+
       ". Current service/site qualification remains authoritative; universal indoor capability and future capacity remain HOLD.";
+  }
+
+
+  function renderControlledEnvironmentRoutingOutcomeFreshnessCapacityReview(review) {
+    const mount=$("controlledEnvironmentRoutingFreshnessCapacityGrid"); if(!mount) return;
+    const routeLabels={route_outcome_current:"Route outcome current",safe_reschedule_outcome_current:"Safe reschedule current",stale_routing_outcome_review_required:"Stale routing outcome",site_confirmation_freshness_review_required:"Site confirmation refresh required",safe_reschedule_freshness_review_required:"Safe reschedule refresh required",service_site_workflow_drift_review_required:"Service/site/workflow drift",routing_outcome_drift_review_required:"Routing outcome drift",predecessor_outcome_review_required:"Predecessor outcome review required",freshness_source_unavailable:"Freshness source unavailable",not_applicable:"Not applicable"};
+    const capacityLabels={bounded_observed_capacity_current:"Bounded observed capacity current",capacity_not_observed:"Capacity not observed",stale_observed_capacity_review_required:"Stale capacity observation",capacity_site_mismatch_review_required:"Capacity site mismatch",capacity_evidence_invalid_review_required:"Capacity evidence invalid"};
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      const state=row.manual_review_required===true?"review":row.controlled_environment_candidate_present?"observed":"soft";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(routeLabels[row.routing_freshness_state]||"Manual review")+'</span></div>'+
+        '<p class="mini">Classification: '+esc(row.classification||"unavailable")+
+        ' · route age: '+esc(row.routing_outcome_age_days==null?"unknown":String(row.routing_outcome_age_days)+" day(s)")+
+        ' · site confirmation age: '+esc(row.current_site_confirmation_age_days==null?"n/a":String(row.current_site_confirmation_age_days)+" day(s)")+'</p>'+
+        '<p class="mini">Qualification current: '+esc(row.current_site_workflow_equipment_product_evidence===true?"YES":"NO")+
+        ' · route practice current: '+esc(row.current_routing_continuity_practice===true?"YES":"NO")+
+        ' · site confirmation practice current: '+esc(row.current_site_confirmation_practice===true?"YES":"NO")+
+        ' · safe-reschedule practice current: '+esc(row.current_safe_reschedule_practice===true?"YES":"NO")+'</p>'+
+        '<p class="mini">Capacity: '+esc(capacityLabels[row.capacity_state]||"Review")+
+        ' · observed jobs: '+esc(row.observed_capacity_jobs==null?"not recorded":String(row.observed_capacity_jobs))+
+        ' · window: '+esc(row.capacity_observation_window_days==null?"not recorded":String(row.capacity_observation_window_days)+" day(s)")+
+        ' · capacity age: '+esc(row.capacity_age_days==null?"unknown":String(row.capacity_age_days)+" day(s)")+'</p>'+
+        '<p class="mini">One successful route never establishes universal indoor capability or future capacity. A bounded capacity observation is historical/site-specific only. Automatic appointment/routing/reschedule/capacity mutation: NONE.</p></article>');
+    }
+    for(const gap of (Array.isArray(review.gaps)?review.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Routing/capacity review · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">MANUAL REVIEW</span></div><p class="mini">Routing: '+
+        esc(gap.routing_state||"review_required")+' · capacity: '+esc(gap.capacity_state||"capacity_not_observed")+
+        ' · Missing/re-review: '+esc((gap.missing||[]).join(", ")||"current attributable service/site/workflow evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_manual_site_confirmation_or_safe_reschedule_review")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No controlled-environment routing freshness/capacity rows are available.</div>';
+    const detail=$("controlledEnvironmentRoutingFreshnessCapacityDetail");
+    if(detail) detail.textContent="Candidates: "+String(review.counts?.controlled_environment_candidate??0)+
+      " · route current: "+String(review.counts?.route_outcome_current??0)+
+      " · safe reschedule current: "+String(review.counts?.safe_reschedule_outcome_current??0)+
+      " · capacity current: "+String(review.counts?.bounded_observed_capacity_current??0)+
+      " · capacity not observed: "+String(review.counts?.capacity_not_observed??0)+
+      " · manual review: "+String(review.counts?.manual_review_required??0)+
+      ". Historical observed capacity never establishes future capacity.";
   }
 
   function renderCandidates(rows) {
