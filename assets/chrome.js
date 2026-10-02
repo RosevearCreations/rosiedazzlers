@@ -34,6 +34,7 @@ let DEFAULT_NAV_LINKS = [
   ["/gallery", "Gallery"],
   ["/gift-cards", "Gift Cards"],
   ["/fleet", "Fleet"],
+  ["/tools-supplies", "Tools & Supplies"],
   ["/blog", "Help"],
   ["/faq", "FAQ"],
   ["/contact", "Contact"],
@@ -113,7 +114,15 @@ function applyNavigationSettings(nav) {
   const cleanLinks = links
     .map((item) => [String(item.href || "").trim(), String(item.label || "").trim()])
     .filter((item) => item[0] && item[1]);
-  if (cleanLinks.length) DEFAULT_NAV_LINKS = cleanLinks;
+  if (cleanLinks.length) {
+    DEFAULT_NAV_LINKS = cleanLinks;
+    if (!DEFAULT_NAV_LINKS.some(([href]) => href === "/tools-supplies")) {
+      const helpIndex = DEFAULT_NAV_LINKS.findIndex(([href]) => href === "/blog");
+      const insertion = ["/tools-supplies", "Tools & Supplies"];
+      if (helpIndex >= 0) DEFAULT_NAV_LINKS.splice(helpIndex, 0, insertion);
+      else DEFAULT_NAV_LINKS.push(insertion);
+    }
+  }
 }
 
 function businessProfileSchema() {
