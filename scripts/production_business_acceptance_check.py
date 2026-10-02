@@ -190,6 +190,13 @@ required_authorities = {
         "scripts/provider_local_search_closure_evidence_freshness_review_check.py",
         "scripts/provider_local_search_closure_evidence_freshness_review_test.mjs",
     ],
+    "recovery_authenticated_device_closure_evidence_freshness_review": [
+        "scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py",
+        "scripts/recovery_authenticated_device_closure_evidence_freshness_review_test.mjs",
+    ],
+    "inventory_stock_usage_public_catalog": [
+        "scripts/inventory_stock_usage_public_catalog_check.py",
+    ],
     "controlled_environment_routing_outcome_freshness_capacity_review": [
         "scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py",
         "scripts/controlled_environment_routing_outcome_freshness_capacity_review_test.mjs",
