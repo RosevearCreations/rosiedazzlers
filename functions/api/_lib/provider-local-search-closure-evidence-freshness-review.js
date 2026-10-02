@@ -18,7 +18,7 @@ export function buildProviderLocalSearchClosureEvidenceFreshnessReview({
   const providerTraceKey = clean(provider?.evidence_trace_key) || null;
   const retainedProviderTraceKey = clean(manual_closure_outcome?.evidence_continuity?.provider_evidence_trace_key) || null;
   const retainedLocalTraceKey = clean(manual_closure_outcome?.evidence_continuity?.local_search_evidence_trace_key) || null;
-  const currentLocalTraceKey = buildLocalSearchTraceKey(localRows);
+  const currentLocalTraceKey = buildLocalSearchTraceKey(safeArray(local?.rows));
   const traceMatchesCurrent = Boolean(evidenceTraceKey && providerTraceKey && retainedProviderTraceKey && retainedLocalTraceKey && currentLocalTraceKey) &&
     providerTraceKey === retainedProviderTraceKey && currentLocalTraceKey === retainedLocalTraceKey;
 
