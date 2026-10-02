@@ -6,8 +6,9 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md` — current bounded release contract.
-4. `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md` — retained immediate predecessor freshness contract.
+3. `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md` — current bounded release contract.
+4. `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md` — retained immediate predecessor freshness contract.
+5. `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md` — retained predecessor freshness contract.
 5. `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor renewal contract.
 5. `PRODUCTION_LEARNING_516_524.md` — completed-cycle evidence classification and carry-forward direction.
 6. `FORWARD_BUILD_ROADMAP_526_535.md` — renewed active forward sequence beginning with Build 526.
