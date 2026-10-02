@@ -93,7 +93,7 @@ function renderWorkflowEvidence(data){
   const observationTriage=acceptance.observation_refresh_regression_triage||{};
   const continuity=data.recovery_authenticated_device_evidence_continuity||{};
   const execution=data.recovery_authenticated_device_observation_execution_evidence||{};
-  const closureReview=data.recovery_authenticated_device_closure_review||{}, manualClosure=data.recovery_authenticated_device_manual_closure_outcome_continuity||{};
+  const closureReview=data.recovery_authenticated_device_closure_review||{}, manualClosure=data.recovery_authenticated_device_manual_closure_outcome_continuity||{}, closureFreshness=data.recovery_authenticated_device_closure_evidence_freshness_review||{};
   const roles=Array.isArray(evidence.roles)?evidence.roles:[];
   const acceptedRoles=Array.isArray(acceptance.roles)?acceptance.roles:[];
   const devices=Array.isArray(acceptance.devices)?acceptance.devices:[];
@@ -117,6 +117,7 @@ function renderWorkflowEvidence(data){
       ${metric("Build 500 execution evidence",execution.status||"execution_evidence_review_incomplete")}
       ${metric("Build 510 closure review",closureReview.status||"closure_review_required")}
       ${metric("Build 520 manual closure outcome continuity",manualClosure.status||"manual_closure_operator_outcome_required")}
+      ${metric("Build 530 closure evidence freshness",closureFreshness.status||"closure_evidence_current_operator_review_required")}
       ${metric("Triage regressions",observationTriage.regression_triage_count??0)}
       ${metric("Refresh roles",(observationTriage.refresh_required_role_ids||[]).length)}
       ${metric("Refresh devices",(observationTriage.refresh_required_device_ids||[]).length)}
@@ -148,6 +149,7 @@ function renderWorkflowEvidence(data){
     <p class="mini"><strong>Build 490 continuity:</strong> ${chip(continuity.status||"continuity_review_incomplete")} · roles ${esc((continuity.authenticated_device?.current_role_ids||[]).join(", ")||"none")} · devices ${esc((continuity.authenticated_device?.observed_device_ids||[]).join(", ")||"none")} · browsers ${esc((continuity.authenticated_device?.observed_browser_ids||[]).join(", ")||"none")}</p>\n    <p class="mini"><strong>Build 500 execution evidence:</strong> ${chip(execution.status||"execution_evidence_review_incomplete")} · device ${esc(execution.authenticated_device?.status||"observation_execution_evidence_required")} · current roles ${esc((execution.authenticated_device?.current_role_ids||[]).join(", ")||"none")} · representative devices ${esc((execution.authenticated_device?.observed_device_ids||[]).join(", ")||"none")}</p>
     <p class="mini"><strong>Build 510 closure review:</strong> ${chip(closureReview.status||"closure_review_required")} · device ${esc(closureReview.authenticated_device_closure?.status||"authenticated_device_closure_observation_refresh_required")} · <strong>Manual HOLD update candidate:</strong> ${closureReview.authenticated_device_closure?.manual_hold_update_candidate?"yes":"no"}</p>
     <p class="mini"><strong>Build 520 manual closure outcome continuity:</strong> ${chip(manualClosure.status||"manual_closure_operator_outcome_required")} · <strong>Authenticated-device manual outcome:</strong> ${esc(manualClosure.authenticated_device?.status||"evidence_not_ready_retains_hold")} · <strong>Automatic canonical HOLD narrowing:</strong> none.</p>
+    <p class="mini"><strong>Build 530 closure evidence freshness:</strong> ${chip(closureFreshness.status||"closure_evidence_current_operator_review_required")} · recovery ${esc(closureFreshness.recovery?.freshness_state||"recovery_evidence_freshness_review_required")} · authenticated devices ${esc(closureFreshness.authenticated_device?.freshness_state||"authenticated_device_evidence_freshness_review_required")} · freshness window ${esc(closureFreshness.freshness_window_days??30)} days.</p>
     <p class="mini"><strong>Current negative evidence retains its own HOLD.</strong> Recovery and authenticated-device populations remain separate; historical acceptance never overrides a current negative observation.</p>
     <p class="mini"><strong>Truth boundary:</strong> Historical acceptance does not override a current regression. Current negative device observations override historical acceptance. No browser farm or source-check inference can prove the absence of a real-device regression.</p>
     <p class="mini"><strong>Current surfaces:</strong> ${esc((deviceClosure.current_role_ids||[]).join(", ")||"none")} · <strong>Current devices:</strong> ${esc((deviceClosure.current_device_ids||[]).join(", ")||"none")}</p>
