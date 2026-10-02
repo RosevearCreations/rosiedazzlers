@@ -2,6 +2,7 @@
 import { onRequestGet as getExecutionEvidence } from "./recovery_authenticated_device_observation_execution_evidence.js";
 import { buildRecoveryAuthenticatedDeviceClosureReview } from "../_lib/recovery-authenticated-device-closure-review.js";
 import { buildRecoveryAuthenticatedDeviceManualClosureOutcomeContinuity } from "../_lib/recovery-authenticated-device-manual-closure-outcome-continuity.js";
+import { buildRecoveryAuthenticatedDeviceClosureEvidenceFreshnessReview } from "../_lib/recovery-authenticated-device-closure-evidence-freshness-review.js";
 
 export async function onRequestGet({request,env}) {
   const executionResponse = await getExecutionEvidence({request:request.clone(),env});
@@ -22,6 +23,12 @@ export async function onRequestGet({request,env}) {
     manual_device_hold_outcome: null,
     generated_at: generatedAt
   });
+  const closureEvidenceFreshnessReview = buildRecoveryAuthenticatedDeviceClosureEvidenceFreshnessReview({
+    manual_closure_outcome: manualClosureOutcome,
+    execution_evidence: executionEvidence,
+    generated_at: generatedAt,
+    freshness_window_days: 30
+  });
   return json({
     ok: executionResponse.ok && Boolean(executionPayload?.ok),
     closure_review_build:510,
@@ -31,6 +38,9 @@ export async function onRequestGet({request,env}) {
     manual_closure_outcome_build:520,
     manual_closure_outcome_authority:"recovery_authenticated_device_manual_closure_outcome_continuity",
     recovery_authenticated_device_manual_closure_outcome_continuity:manualClosureOutcome,
+    recovery_authenticated_device_closure_freshness_build:530,
+    recovery_authenticated_device_closure_freshness_authority:"recovery_authenticated_device_closure_evidence_freshness_review",
+    recovery_authenticated_device_closure_evidence_freshness_review:closureEvidenceFreshnessReview,
     source_status:{
       execution_evidence:{
         available:executionResponse.ok && Boolean(executionPayload?.ok),
@@ -41,4 +51,4 @@ export async function onRequestGet({request,env}) {
 }
 export async function onRequestHead(context){const response=await onRequestGet(context);return new Response(null,{status:response.status,headers:response.headers})}
 export async function onRequestOptions(){return new Response(null,{status:204,headers:{"Cache-Control":"no-store","Access-Control-Allow-Methods":"GET,HEAD,OPTIONS","Access-Control-Allow-Headers":"Content-Type"}})}
-function json(value,status=200){return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Recovery-Device-Closure-Review":"build-510-read-only","X-Rosie-Recovery-Device-Manual-Closure":"build-520-read-only"}})}
+function json(value,status=200){return new Response(JSON.stringify(value),{status,headers:{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store","X-Rosie-Recovery-Device-Closure-Review":"build-510-read-only","X-Rosie-Recovery-Device-Manual-Closure":"build-520-read-only","X-Rosie-Recovery-Device-Closure-Freshness":"build-530-read-only"}})}
