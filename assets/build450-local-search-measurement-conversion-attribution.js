@@ -49,11 +49,13 @@ async function refresh450() {
       renderProviderLocalSearchOutcomeRefresh499(safeContinuityData);
       renderProviderLocalSearchClosureReview509(safeContinuityData);
       renderProviderLocalSearchManualClosureOutcome519(safeContinuityData);
+      renderProviderLocalSearchClosureFreshness529(safeContinuityData);
     } catch {
       renderProviderLocalSearchContinuity489({});
       renderProviderLocalSearchOutcomeRefresh499({});
       renderProviderLocalSearchClosureReview509({});
       renderProviderLocalSearchManualClosureOutcome519({});
+      renderProviderLocalSearchClosureFreshness529({});
     }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
@@ -258,6 +260,38 @@ function renderProviderLocalSearchClosureReview509(data) {
     ["First-party context", closure.first_party_context_used_as_provider_substitute === false ? "SEPARATE" : "UNKNOWN", "separate descriptive evidence only"],
     ["Canonical HOLD update", closure.manual_hold_update_required === true && closure.automatic_hold_closure_performed === false ? "MANUAL" : "UNKNOWN", "no automatic closure or narrowing"],
     ["Ranking / weather / demand / conversion causation", truth.ranking_outcome_inferred === false && truth.weather_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "closure evidence remains descriptive"]
+  ];
+  host.innerHTML = summary + rows.map((row) =>
+    '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
+  ).join("");
+}
+
+
+function renderProviderLocalSearchClosureFreshness529(data) {
+  const host = byId450("localProviderClosureFreshness529");
+  if (!host) return;
+  const review = data?.provider_local_search_closure_evidence_freshness_review || {};
+  const provider = review.provider_evidence || {};
+  const local = review.local_search_evidence || {};
+  const operator = review.operator_review || {};
+  const contract = review.review_contract || {};
+  const truth = review.truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 529 closure evidence freshness</strong>'
+    + '<div class="muted">Provider outcomes, Search Console / GBP windows and operator review are revalidated independently. Fresh evidence without a current explicit operator review remains review-ready, not closed.</div></div>'
+    + '<span>' + esc450(review.status || "closure_evidence_operator_review_required") + '</span></div>';
+  const providerAge = Array.isArray(provider.rows) && provider.rows.length
+    ? Math.max(...provider.rows.map((row) => Number(row.evidence_age_days ?? 9999)))
+    : null;
+  const localAge = Array.isArray(local.rows) && local.rows.length
+    ? Math.max(...local.rows.map((row) => Number(row.evidence_age_days ?? 9999)))
+    : null;
+  const rows = [
+    ["Provider evidence freshness", provider.status || "unavailable", "current " + String(provider.current_count ?? 0) + " / " + String(provider.required_count ?? 4) + (providerAge == null ? "" : " · oldest " + String(providerAge) + " day(s)")],
+    ["Search Console / GBP freshness", local.status || "unavailable", "current " + String(local.current_count ?? 0) + " / " + String(local.required_count ?? 2) + (localAge == null ? "" : " · oldest " + String(localAge) + " day(s)")],
+    ["Current operator review", operator.freshness_state || "operator_review_not_recorded", operator.present === true ? "review age " + String(operator.review_age_days ?? "unknown") + " day(s) · current trace match " + String(operator.trace_matches_current_evidence === true ? "YES" : "NO") : "explicit current review required before any manual closure/HOLD outcome is treated as current"],
+    ["First-party context", contract.first_party_context_remains_separate_descriptive_evidence === true ? "SEPARATE" : "UNKNOWN", "descriptive only; never substitutes for provider/property/location/window evidence"],
+    ["Automatic canonical HOLD narrowing", contract.automatic_canonical_hold_narrowing_performed === false ? "NONE" : "UNKNOWN", "canonical backlog update remains a separate explicit manual source action"],
+    ["Ranking / demand / conversion causation", truth.ranking_outcome_inferred === false && truth.demand_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "provider/search movement remains descriptive"]
   ];
   host.innerHTML = summary + rows.map((row) =>
     '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'

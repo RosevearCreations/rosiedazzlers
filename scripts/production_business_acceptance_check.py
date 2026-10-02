@@ -186,6 +186,10 @@ required_authorities = {
         "scripts/seasonal_capability_owner_review_public_claim_decision_check.py",
         "scripts/seasonal_capability_owner_review_public_claim_decision_test.mjs",
     ],
+    "provider_local_search_closure_evidence_freshness_review": [
+        "scripts/provider_local_search_closure_evidence_freshness_review_check.py",
+        "scripts/provider_local_search_closure_evidence_freshness_review_test.mjs",
+    ],
     "controlled_environment_routing_outcome_freshness_capacity_review": [
         "scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py",
         "scripts/controlled_environment_routing_outcome_freshness_capacity_review_test.mjs",

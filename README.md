@@ -1,6 +1,8 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review**.
+Current source direction: **Build 529 — Provider & Local Search Closure Evidence Freshness Review**.
+
+<!-- Retained literal compatibility: Current source direction: **Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 527 — Winter Booking & Quote Rule Outcome Freshness Review**. -->
 
@@ -27,7 +29,9 @@ Current source direction: **Build 528 — Controlled-Environment Routing Outcome
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py` · `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`. Retained Build 518 routing continuity: `scripts/controlled_environment_routing_outcome_evidence_continuity_check.py` · `BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/provider_local_search_closure_evidence_freshness_review_check.py` · `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Retained Build 519 manual closure continuity: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py` · `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
+
+Retained Build 528 freshness/capacity authority: `scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py` · `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
 
 Retained Build 527 freshness authority: `scripts/winter_booking_quote_rule_outcome_freshness_review_check.py` · `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`.
 
@@ -109,9 +113,9 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 ## Start here
 1. `AI_PROJECT_HANDOFF.md`
 2. `AUTONOMOUS_RELEASE_QUEUE.md`
-3. `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`
-4. `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`
-5. `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`
+3. `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`
+4. `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`
+5. `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`
 6. `FORWARD_BUILD_ROADMAP_526_535.md`
 7. `BUILD514_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_READINESS.md`
 8. `FORWARD_BUILD_ROADMAP_506_515.md`

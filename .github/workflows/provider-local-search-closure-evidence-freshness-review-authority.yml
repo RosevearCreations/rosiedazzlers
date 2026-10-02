@@ -1,0 +1,55 @@
+name: Provider & Local Search Closure Evidence Freshness Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-provider-local-search-closure-freshness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: provider-local-search-closure-evidence-freshness-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Provider & Local Search Closure Evidence Freshness Review
+        run: |
+          python scripts/provider_local_search_closure_evidence_freshness_review_check.py
+          node scripts/provider_local_search_closure_evidence_freshness_review_test.mjs
+      - name: Build 529 summary
+        run: |
+          {
+            echo '### Provider & Local Search Closure Evidence Freshness Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Provider/payment/refund/message evidence: CURRENT + ATTRIBUTABLE REQUIRED'
+            echo '- Search Console property / GBP location windows: CURRENT + MATCHING REQUIRED'
+            echo '- Current explicit operator review: TRACE-MATCHED REQUIRED FOR CURRENT OUTCOME'
+            echo '- First-party context: SEPARATE DESCRIPTIVE EVIDENCE'
+            echo '- Ranking/demand/conversion causation: NOT INFERRED'
+            echo '- Automatic canonical HOLD narrowing: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
