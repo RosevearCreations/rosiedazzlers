@@ -35,7 +35,7 @@ if hub!=hub_file:
     errors.append("tools-supplies route copies diverged")
 
 require(page,[
-    'id="viewMode"','<option value="cards">Cards</option>','class="card-main-image"',
+    'id="viewMode"','<option value="cards">Cards</option>','class="card-main-image"','class="table-main-image"','function mainImageCell(x)',
     'data-f="stock_unit"','data-f="usage_unit"','data-f="usage_units_per_stock_unit"',
     'function primaryImage(item)','function costPerUsage(item)',
     "out.image_url=out.gallery_image_urls[0]",
