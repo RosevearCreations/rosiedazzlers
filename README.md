@@ -2,6 +2,8 @@
 
 Current source direction: **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review**.
 
+<!-- Retained Build 529 source-authority compatibility: Current source direction: **Build 529 — Provider & Local Search Closure Evidence Freshness Review**. Authority: `scripts/provider_local_search_closure_evidence_freshness_review_check.py` · `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Production is not considered GREEN from source promotion alone. -->
+
 <!-- Retained literal compatibility: Current source direction: **Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review**. -->
 
 <!-- Retained literal compatibility: Current source direction: **Build 527 — Winter Booking & Quote Rule Outcome Freshness Review**. -->
