@@ -23,3 +23,6 @@ The exact candidate must pass the focused Build 529 checker/test, retained Build
 
 ## Next bounded release
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** begins only after Build 529 is independently GREEN on protected main.
+
+## Release checkpoint
+This exact source contract is the final Build 529 candidate boundary. Source/runtime GREEN never substitutes for current provider/property/location/window evidence or an explicit current operator review.
