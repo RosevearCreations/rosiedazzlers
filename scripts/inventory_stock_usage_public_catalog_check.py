@@ -43,8 +43,10 @@ require(page,[
 ],"inventory manager")
 require(save,[
     "stock_unit: String(body?.stock_unit || body?.unit_label ||",
-    'usage_unit: String(body?.usage_unit || "")',
-    "usage_units_per_stock_unit:",
+    'Object.prototype.hasOwnProperty.call(body || {}, "usage_unit")',
+    'Object.prototype.hasOwnProperty.call(body || {}, "usage_units_per_stock_unit")',
+    "payload.usage_unit = String(body?.usage_unit ||",
+    "payload.usage_units_per_stock_unit =",
     "usage_units_per_stock_unit must be greater than zero"
 ],"inventory save API")
 require(integrity,["['usage_units_per_stock_unit', 'usage_units_per_stock_unit']"],"inventory numeric integrity")
