@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
-Retained predecessor contract: `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`.
+Retained predecessor contract: `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`
 - `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`
 - `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`
 - `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`
