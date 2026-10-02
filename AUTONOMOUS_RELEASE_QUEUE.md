@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`.
-Retained predecessor contract: `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
+Retained predecessor contract: `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`
 - `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`
 - `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`
 - `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`
@@ -159,9 +160,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is the active bounded release.
+**Build 529 — Provider & Local Search Closure Evidence Freshness Review** is the active bounded release.
 
+Current contract: BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_freshness_review_check.py.
+
+<!-- Retained literal compatibility for Build 528 source-authority checks:
+**Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is the active bounded release.
+**Build 529 — Provider & Local Search Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md. Current source authority: scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 527 source-authority checks:
 **Build 527 — Winter Booking & Quote Rule Outcome Freshness Review** is the active bounded release.
@@ -229,23 +236,23 @@ Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.m
 -->
 
 Scope:
-- revalidate retained Build 518 route and safe-reschedule outcomes against current service/site/workflow qualification and current routing/site-confirmation/safe-reschedule practice;
-- require routed outcomes to retain a matching qualified-site reference plus fresh attributable site confirmation;
-- require safe-reschedule outcomes to remain explicitly observed and fresh;
-- review bounded observed capacity only from dated attributable site-matched observations with an explicit 1–90 day observation window;
-- preserve the distinction between historical route freshness, historical observed capacity, universal indoor capability and future capacity;
-- perform no appointment movement, automatic routing/reschedule, booking/availability, quote, customer-message, public-claim, capacity reservation, pricing, provider, accounting/inventory, schema/storage, canonical-HOLD, outreach or polling mutation.
+- revalidate the four provider/payment/refund/message evidence classes against current attributable dated source evidence;
+- revalidate Search Console property and Google Business Profile location identity plus distinct equal-length current/prior windows and current attributable observations;
+- revalidate an explicit operator-reviewed closure or retain-HOLD outcome only while its review remains current and its combined evidence trace still matches the current provider plus local-search package;
+- keep current provider/local-search evidence without a current explicit operator review in review-ready state rather than treating it as closed;
+- keep first-party referral/funnel context separate and descriptive; do not infer ranking, indexing, Maps visibility, demand, weather effects or booking-conversion causation;
+- perform no provider contact, payment/refund/message mutation, Search Console/GBP write, booking/quote mutation, customer outreach, content publication, canonical-HOLD mutation, schema/storage mutation or polling.
 
-Retained immediate predecessor: BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md. Retained routing outcome authority: BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Retained immediate predecessor: BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md. Retained provider/local-search closure authority: BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-The exact candidate must pass the focused Build 528 authority, retained Build 518 authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 529 authority, retained Build 519/509/499/489 authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, drifted or unobserved capacity evidence remains truthful review/HOLD; source/runtime GREEN never substitutes for route freshness or future-capacity evidence.
+Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, unattributed, identity-mismatched or trace-mismatched evidence remains truthful review/HOLD; source/runtime GREEN never substitutes for provider/local-search freshness or operator review.
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 529 — Provider & Local Search Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+**Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_526_535.md`; it has not run out.
