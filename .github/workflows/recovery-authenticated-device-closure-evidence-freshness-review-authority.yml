@@ -1,0 +1,57 @@
+name: Recovery & Authenticated Device Closure Evidence Freshness Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-recovery-device-closure-freshness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: recovery-authenticated-device-closure-evidence-freshness-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Build 530 freshness authority
+        run: |
+          python scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py
+          node scripts/recovery_authenticated_device_closure_evidence_freshness_review_test.mjs
+          python scripts/inventory_stock_usage_public_catalog_check.py
+      - name: Build 530 summary
+        run: |
+          {
+            echo '### Recovery & Authenticated Device Closure Evidence Freshness Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Recovery evidence: CURRENT BOUNDED NON-PRODUCTION OBSERVATION REQUIRED'
+            echo '- Authenticated role/device/browser evidence: CURRENT DIRECT OBSERVATION REQUIRED'
+            echo '- Current negative evidence: RETAINS ITS OWNING HOLD'
+            echo '- Current operator review: FRESH + TRACE-MATCHED REQUIRED'
+            echo '- Recovery/device populations: SEPARATE'
+            echo '- Production restore: NONE'
+            echo '- Automatic canonical HOLD narrowing: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"

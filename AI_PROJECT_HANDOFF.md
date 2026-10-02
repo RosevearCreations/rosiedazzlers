@@ -3,14 +3,21 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md.
+The synchronized Production predecessor is retained through BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md.
 
+**Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
+
+**Build 531 — Maintenance & Fleet Continuation Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+
+Current contract: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py.
+Retained recovery/device outcome authority: BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+User-requested operational enhancement in this release: restore the public Tools & Supplies navigation, provide explicit admin table/card views with the same primary item image, and separate stock units from usage units so per-use cost can be calculated without treating a whole bottle/package as one job use.
+
+<!-- Retained literal compatibility for Build 529 source-authority checks:
 **Build 529 — Provider & Local Search Closure Evidence Freshness Review** is the active bounded release.
-
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
-
 Current contract: BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_freshness_review_check.py.
-Retained provider/local-search outcome authority: BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+-->
 
 <!-- Retained literal compatibility for Build 528 source-authority checks:
 **Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is the active bounded release.
