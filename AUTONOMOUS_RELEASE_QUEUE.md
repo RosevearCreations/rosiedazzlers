@@ -164,6 +164,12 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 
 Current contract: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py.
 
+<!-- Retained literal compatibility for Build 529 source-authority checks:
+**Build 529 — Provider & Local Search Closure Evidence Freshness Review** is the active bounded release.
+**Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_freshness_review_check.py.
+-->
+
 <!-- Retained literal compatibility for Build 528 source-authority checks:
 **Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is the active bounded release.
 **Build 529 — Provider & Local Search Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
