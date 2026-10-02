@@ -28,3 +28,6 @@ The exact candidate must pass the focused Build 529 checker/test, retained Build
 
 ## Release checkpoint
 This exact source contract is the final Build 529 candidate boundary. Source/runtime GREEN never substitutes for current provider/property/location/window evidence or an explicit current operator review.
+
+## Source-gate rerun checkpoint
+This documentation-only checkpoint exists solely to obtain an uncancelled exact-SHA Current Source Gate after GitHub concurrency cancelled the prior run. The Build 529 implementation and truth boundaries are unchanged.
