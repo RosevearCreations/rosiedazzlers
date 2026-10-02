@@ -1,0 +1,54 @@
+name: Controlled-Environment Routing Outcome Freshness & Capacity Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-controlled-environment-routing-freshness-capacity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: controlled-environment-routing-outcome-freshness-capacity-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Controlled-Environment Routing Outcome Freshness & Capacity Review
+        run: |
+          python scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py
+          node scripts/controlled_environment_routing_outcome_freshness_capacity_review_test.mjs
+      - name: Build 528 summary
+        run: |
+          {
+            echo '### Controlled-Environment Routing Outcome Freshness & Capacity Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Retained Build 518 routing outcomes: REVALIDATED'
+            echo '- Bounded observed capacity: HISTORICAL / SITE-SPECIFIC ONLY'
+            echo '- One successful route establishes future capacity: NO'
+            echo '- Universal indoor capability from one route: NO'
+            echo '- Automatic appointment/routing/reschedule/capacity mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
