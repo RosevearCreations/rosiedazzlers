@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 529 — Provider & Local Search Closure Evidence Freshness Review**.
+Current source direction: **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review**.
 
 <!-- Retained literal compatibility: Current source direction: **Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review**. -->
 
@@ -29,7 +29,7 @@ Current source direction: **Build 529 — Provider & Local Search Closure Eviden
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
-Authority: `scripts/provider_local_search_closure_evidence_freshness_review_check.py` · `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Retained Build 519 manual closure continuity: `scripts/provider_local_search_manual_closure_outcome_continuity_check.py` · `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
+Authority: `scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py` · `BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Retained Build 520 manual closure continuity: `scripts/recovery_authenticated_device_manual_closure_outcome_continuity_check.py` · `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Inventory/public-catalog acceptance: `scripts/inventory_stock_usage_public_catalog_check.py`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
 
 Retained Build 528 freshness/capacity authority: `scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py` · `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
 
