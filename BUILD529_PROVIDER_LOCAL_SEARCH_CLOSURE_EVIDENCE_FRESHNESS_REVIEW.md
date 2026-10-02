@@ -10,6 +10,7 @@ This release is read-only. Provider/payment/refund/message evidence, Search Cons
 - Search Console and Google Business Profile rows must retain the correct property/location identity, distinct equal-length current/prior windows, the correct provider/property/location/window source, and a current attributable observation within the bounded freshness window.
 - An operator-reviewed retain-HOLD or dated narrowing outcome is current only when the review remains within the freshness window and its combined evidence trace still matches the current provider plus local-search package.
 - Current provider/local-search evidence without a current explicit operator review remains closure_evidence_current_operator_review_required; it is not treated as closed.
+- A present but stale or otherwise non-current explicit operator review is classified as operator_review_freshness_required.
 - Stale provider evidence, stale local-search evidence, stale operator review or evidence-trace mismatch remains review/HOLD.
 
 ## Truth boundary
