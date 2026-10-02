@@ -12,6 +12,7 @@ This release is read-only. Provider/payment/refund/message evidence, Search Cons
 - Current provider/local-search evidence without a current explicit operator review remains closure_evidence_current_operator_review_required; it is not treated as closed.
 - A present but stale or otherwise non-current explicit operator review is classified as operator_review_freshness_required.
 - Stale provider evidence, stale local-search evidence, stale operator review or evidence-trace mismatch remains review/HOLD.
+- A stale or otherwise non-current explicit operator review is classified as `operator_review_freshness_required` and cannot be reused to narrow the current HOLD.
 
 ## Truth boundary
 First-party referral/funnel context remains separate descriptive evidence and never substitutes for provider evidence. Provider/search evidence does not prove ranking, indexing, Maps visibility, demand, weather effects, booking-conversion causation, service availability or service working-temperature limits.
