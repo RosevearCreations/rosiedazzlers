@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`.
-Retained predecessor contract: `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`.
+Retained predecessor contract: `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`
 - `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`
 - `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`
 - `BUILD525_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
@@ -158,9 +159,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 527 — Winter Booking & Quote Rule Outcome Freshness Review** is the active bounded release.
+**Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is the active bounded release.
 
+Current contract: BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md. Current source authority: scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py.
+
+<!-- Retained literal compatibility for Build 527 source-authority checks:
+**Build 527 — Winter Booking & Quote Rule Outcome Freshness Review** is the active bounded release.
+**Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md. Current source authority: scripts/winter_booking_quote_rule_outcome_freshness_review_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 526 source-authority checks:
 **Build 526 — Seasonal Capability & Public Claim Outcome Freshness Review** is the active bounded release.
@@ -222,23 +229,23 @@ Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.m
 -->
 
 Scope:
-- revalidate retained Build 517 activated and retain-HOLD outcomes against current service-specific capability/classification and the retained Build 507 decision trace;
-- require current customer-transparency wording and applied booking/quote rule pairs to remain traceable and matching;
-- require current attributable /api/availability and checkout collision safety revalidation;
-- keep weather-ineligible sessions outside ordinary conversion interpretation and preserve Southern Ontario service-specific seasonal limits;
-- flag stale outcomes/runtime evidence, rule/wording/classification drift and missing safety revalidation as manual review/HOLD;
-- perform no schema, booking/availability, quote, checkout, pricing, provider, public-content, capacity, accounting/inventory, canonical-HOLD, outreach or polling mutation.
+- revalidate retained Build 518 route and safe-reschedule outcomes against current service/site/workflow qualification and current routing/site-confirmation/safe-reschedule practice;
+- require routed outcomes to retain a matching qualified-site reference plus fresh attributable site confirmation;
+- require safe-reschedule outcomes to remain explicitly observed and fresh;
+- review bounded observed capacity only from dated attributable site-matched observations with an explicit 1–90 day observation window;
+- preserve the distinction between historical route freshness, historical observed capacity, universal indoor capability and future capacity;
+- perform no appointment movement, automatic routing/reschedule, booking/availability, quote, customer-message, public-claim, capacity reservation, pricing, provider, accounting/inventory, schema/storage, canonical-HOLD, outreach or polling mutation.
 
-Retained immediate predecessor: BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md. Retained winter outcome authority: BUILD517_WINTER_BOOKING_QUOTE_RULE_CONTROLLED_ACTIVATION_OUTCOME_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Retained immediate predecessor: BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md. Retained routing outcome authority: BUILD518_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_EVIDENCE_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-The exact candidate must pass the focused Build 527 authority, retained Build 517 authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 528 authority, retained Build 518 authority, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale or drifted winter booking/quote evidence remains truthful owner action/HOLD; source/runtime GREEN never substitutes for freshness evidence.
+Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, drifted or unobserved capacity evidence remains truthful review/HOLD; source/runtime GREEN never substitutes for route freshness or future-capacity evidence.
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 528 — Controlled-Environment Routing Outcome Freshness & Capacity Review** is next only after the current release is independently GREEN on protected main.
+**Build 529 — Provider & Local Search Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_526_535.md`; it has not run out.
