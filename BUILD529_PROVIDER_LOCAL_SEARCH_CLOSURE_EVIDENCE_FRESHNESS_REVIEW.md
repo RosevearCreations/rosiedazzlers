@@ -31,3 +31,6 @@ This exact source contract is the final Build 529 candidate boundary. Source/run
 
 ## Source-gate rerun checkpoint
 This documentation-only checkpoint exists solely to obtain an uncancelled exact-SHA Current Source Gate after GitHub concurrency cancelled the prior run. The Build 529 implementation and truth boundaries are unchanged.
+
+## Development-stage checkpoint
+This checkpoint contains no Build 529 logic change. It exists to bind feature-preview/source acceptance and subsequent `dev` Cloudflare Development Acceptance to one exact SHA.
