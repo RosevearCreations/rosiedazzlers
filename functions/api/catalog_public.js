@@ -3,7 +3,7 @@ export async function onRequestGet({ request, env }) {
   try {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return json({ ok: true, items: [], source: "unconfigured" });
     const kind = (new URL(request.url).searchParams.get("kind") || "").trim().toLowerCase();
-    const base = "id,item_key,item_type,name,category,subcategory,description,image_url,gallery_image_urls,amazon_url,qty_on_hand,reorder_point,unit_label,rating_value,rating_count,preferred_vendor,reuse_policy,sort_key,notes,purchase_date,estimated_jobs_per_unit";
+    const base = "id,item_key,item_type,name,category,subcategory,description,image_url,gallery_image_urls,amazon_url,qty_on_hand,reorder_point,unit_label,stock_unit,usage_unit,usage_units_per_stock_unit,rating_value,rating_count,preferred_vendor,reuse_policy,sort_key,notes,purchase_date,estimated_jobs_per_unit";
     const fallback = base.replace(",gallery_image_urls", "");
     let result = await loadCatalog(env, kind, base);
     if (!result.ok && /gallery_image_urls|schema cache|PGRST204/i.test(result.error || "")) result = await loadCatalog(env, kind, fallback);
