@@ -5,6 +5,7 @@
 import { onRequestGet as getContinuityReview } from "./maintenance_fleet_pilot_outcome_continuity_review.js";
 import { buildMaintenanceFleetPilotContinuationDecision } from "../_lib/maintenance-fleet-pilot-continuation-decision.js";
 import { buildMaintenanceFleetContinuationOutcomeContinuity } from "../_lib/maintenance-fleet-continuation-outcome-continuity.js";
+import { buildMaintenanceFleetContinuationEvidenceFreshnessReview } from "../_lib/maintenance-fleet-continuation-evidence-freshness-review.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getContinuityReview({ request: request.clone(), env });
@@ -17,12 +18,15 @@ export async function onRequestGet({ request, env }) {
       continuation_decision_authority:"maintenance_fleet_pilot_continuation_decision",
       continuation_outcome_build:521,
       continuation_outcome_authority:"maintenance_fleet_continuation_outcome_continuity",
+      maintenance_fleet_continuation_freshness_build:531,
+      maintenance_fleet_continuation_freshness_authority:"maintenance_fleet_continuation_evidence_freshness_review",
       error:"Unauthorized."
     },source.status);
   }
 
   const generatedAt = new Date().toISOString();
   const continuity = payload?.pilot_outcome_continuity_review || {};
+  const pilotOutcomeEvidence = payload?.pilot_outcome_evidence || {};
   const decisionRecord = parseJsonObject(env?.MAINTENANCE_FLEET_PILOT_CONTINUATION_DECISION_JSON);
   const decision = buildMaintenanceFleetPilotContinuationDecision({
     pilot_outcome_continuity_review: continuity,
@@ -35,6 +39,12 @@ export async function onRequestGet({ request, env }) {
     continuation_outcome_record: outcomeRecord,
     generated_at: generatedAt
   });
+  const freshness = buildMaintenanceFleetContinuationEvidenceFreshnessReview({
+    continuation_outcome: outcome,
+    pilot_outcome_evidence: pilotOutcomeEvidence,
+    generated_at: generatedAt,
+    freshness_window_days: 30
+  });
 
   return json({
     ok: source.ok && Boolean(payload?.ok),
@@ -42,14 +52,19 @@ export async function onRequestGet({ request, env }) {
     continuation_decision_authority:"maintenance_fleet_pilot_continuation_decision",
     continuation_outcome_build:521,
     continuation_outcome_authority:"maintenance_fleet_continuation_outcome_continuity",
+    maintenance_fleet_continuation_freshness_build:531,
+    maintenance_fleet_continuation_freshness_authority:"maintenance_fleet_continuation_evidence_freshness_review",
     generated_at:generatedAt,
+    pilot_outcome_evidence:pilotOutcomeEvidence,
     pilot_outcome_continuity_review:continuity,
     continuation_decision_record:decisionRecord,
     maintenance_fleet_pilot_continuation_decision:decision,
     continuation_outcome_record:outcomeRecord,
     maintenance_fleet_continuation_outcome_continuity:outcome,
+    maintenance_fleet_continuation_evidence_freshness_review:freshness,
     source_status:{
       pilot_outcome_continuity_review:{available:source.ok&&Boolean(payload),http_status:source.status},
+      pilot_outcome_evidence:{available:Boolean(pilotOutcomeEvidence && Object.keys(pilotOutcomeEvidence).length),status:pilotOutcomeEvidence?.status||"unavailable"},
       owner_continuation_decision:{available:Boolean(decisionRecord && Object.keys(decisionRecord).length)},
       owner_continuation_outcome:{available:Boolean(outcomeRecord && Object.keys(outcomeRecord).length)}
     }
@@ -80,6 +95,7 @@ function json(value,status=200){
     "Content-Type":"application/json; charset=utf-8",
     "Cache-Control":"no-store",
     "X-Rosie-Maintenance-Fleet-Pilot-Continuation-Decision":"build-511-read-only",
-    "X-Rosie-Maintenance-Fleet-Continuation-Outcome":"build-521-read-only"
+    "X-Rosie-Maintenance-Fleet-Continuation-Outcome":"build-521-read-only",
+    "X-Rosie-Maintenance-Fleet-Continuation-Freshness":"build-531-read-only"
   }});
 }
