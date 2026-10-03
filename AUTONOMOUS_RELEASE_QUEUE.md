@@ -166,11 +166,7 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 
 Current contract: BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/maintenance_fleet_continuation_evidence_freshness_review_check.py.
 
-<!-- Retained literal compatibility for Build 530 source-authority checks:
-**Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
-**Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
-Current contract: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py.
--->
+
 
 <!-- Retained literal compatibility for Build 529 source-authority checks:
 **Build 529 — Provider & Local Search Closure Evidence Freshness Review** is the active bounded release.
@@ -266,7 +262,13 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
+**Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained literal compatibility for Build 530 source-authority checks:
+**Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
 **Build 531 — Maintenance & Fleet Continuation Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+Current contract: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py.
+-->
 
 ## Future queue
 The future queue continues through `FORWARD_BUILD_ROADMAP_526_535.md`; it has not run out.
