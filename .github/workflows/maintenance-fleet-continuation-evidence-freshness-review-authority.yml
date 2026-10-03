@@ -1,0 +1,56 @@
+name: Maintenance & Fleet Continuation Evidence Freshness Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-maintenance-fleet-continuation-freshness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: maintenance-fleet-continuation-evidence-freshness-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Build 531 freshness authority
+        run: |
+          python scripts/maintenance_fleet_continuation_evidence_freshness_review_check.py
+          node scripts/maintenance_fleet_continuation_evidence_freshness_review_test.mjs
+      - name: Build 531 summary
+        run: |
+          {
+            echo '### Maintenance & Fleet Continuation Evidence Freshness Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Participant/duration bounds: CURRENT EVIDENCE REQUIRED'
+            echo '- Capacity/invoicing/travel/stop evidence: CURRENT DATED EVIDENCE REQUIRED'
+            echo '- Continue outcome: CURRENT AUTHORIZATION + LATER OBSERVATION REQUIRED'
+            echo '- Triggered stop condition: REVIEW REQUIRED'
+            echo '- Enrollment / recurring billing / booking mutation: NONE'
+            echo '- Capacity reservation: NONE'
+            echo '- Automatic canonical HOLD narrowing: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
