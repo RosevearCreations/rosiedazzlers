@@ -1,0 +1,56 @@
+name: Staff & Mobile Closure Evidence Freshness Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-staff-mobile-closure-freshness-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: staff-mobile-closure-evidence-freshness-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Build 533 freshness authority
+        run: |
+          python scripts/staff_mobile_closure_evidence_freshness_review_check.py
+          node scripts/staff_mobile_closure_evidence_freshness_review_test.mjs
+      - name: Build 533 summary
+        run: |
+          {
+            echo '### Staff & Mobile Closure Evidence Freshness Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Workflow / role / device / browser context: EXPLICIT'
+            echo '- Comparable window/sample and like-for-like observations: REQUIRED'
+            echo '- Material confounder + Southern Ontario weather/site review: REQUIRED'
+            echo '- Retained evidence + owner review freshness: REQUIRED'
+            echo '- Effectiveness / causation / staff fault / device fault / business impact inference: NONE'
+            echo '- Schema / storage / telemetry / polling mutation: NONE'
+            echo '- Automatic closure / canonical HOLD mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
