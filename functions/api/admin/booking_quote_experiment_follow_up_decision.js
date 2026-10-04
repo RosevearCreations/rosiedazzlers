@@ -6,6 +6,7 @@
 import { onRequestGet as getLearning } from "./booking_funnel_quote_pricing_learning.js";
 import { buildBookingQuoteExperimentFollowUpDecision } from "../_lib/booking-quote-experiment-follow-up-decision.js";
 import { buildBookingQuoteExperimentFollowUpOutcomeContinuity } from "../_lib/booking-quote-experiment-follow-up-outcome-continuity.js";
+import { buildBookingQuoteFollowUpEvidenceFreshnessReview } from "../_lib/booking-quote-follow-up-evidence-freshness-review.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getLearning({ request: request.clone(), env });
@@ -18,6 +19,8 @@ export async function onRequestGet({ request, env }) {
       follow_up_decision_authority:"booking_quote_experiment_follow_up_decision",
       follow_up_outcome_build:522,
       follow_up_outcome_authority:"booking_quote_experiment_follow_up_outcome_continuity",
+      booking_quote_follow_up_freshness_build:532,
+      booking_quote_follow_up_freshness_authority:"booking_quote_follow_up_evidence_freshness_review",
       error:"Unauthorized."
     },source.status);
   }
@@ -37,6 +40,11 @@ export async function onRequestGet({ request, env }) {
     follow_up_outcome_records: outcomeRecords,
     generated_at: generatedAt
   });
+  const freshness = buildBookingQuoteFollowUpEvidenceFreshnessReview({
+    follow_up_outcome_continuity: continuity,
+    generated_at: generatedAt,
+    freshness_window_days: 30
+  });
 
   return json({
     ok: source.ok && Boolean(payload?.ok),
@@ -44,12 +52,15 @@ export async function onRequestGet({ request, env }) {
     follow_up_decision_authority:"booking_quote_experiment_follow_up_decision",
     follow_up_outcome_build:522,
     follow_up_outcome_authority:"booking_quote_experiment_follow_up_outcome_continuity",
+    booking_quote_follow_up_freshness_build:532,
+    booking_quote_follow_up_freshness_authority:"booking_quote_follow_up_evidence_freshness_review",
     generated_at:generatedAt,
     controlled_experiment_outcome_interpretation:outcome,
     follow_up_decision_records:records,
     booking_quote_experiment_follow_up_decision:decision,
     follow_up_outcome_records:outcomeRecords,
     booking_quote_experiment_follow_up_outcome_continuity:continuity,
+    booking_quote_follow_up_evidence_freshness_review:freshness,
     source_status:{
       outcome_interpretation:{available:source.ok&&Boolean(payload),http_status:source.status},
       owner_follow_up_decision:{available:Boolean(records && Object.keys(records).length)},
@@ -82,6 +93,7 @@ function json(value,status=200){
     "Content-Type":"application/json; charset=utf-8",
     "Cache-Control":"no-store",
     "X-Rosie-Booking-Quote-Experiment-Follow-Up-Decision":"build-512-read-only",
-    "X-Rosie-Booking-Quote-Experiment-Follow-Up-Outcome":"build-522-read-only"
+    "X-Rosie-Booking-Quote-Experiment-Follow-Up-Outcome":"build-522-read-only",
+    "X-Rosie-Booking-Quote-Follow-Up-Freshness":"build-532-read-only"
   }});
 }
