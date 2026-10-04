@@ -1,8 +1,10 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 533 — Staff & Mobile Closure Evidence Freshness Review**.
+Current source direction: **Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review**.
 
-Current contract: `BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Current source authority: `scripts/staff_mobile_closure_evidence_freshness_review_check.py`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD534_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVIDENCE_FRESHNESS_REVIEW.md`. Current source authority: `scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py`. Production is not considered GREEN from source promotion alone.
+
+<!-- Retained Build 533 source-authority compatibility: Current source direction: **Build 533 — Staff & Mobile Closure Evidence Freshness Review**. Authority: `scripts/staff_mobile_closure_evidence_freshness_review_check.py` · `BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. -->
 
 <!-- Retained Build 532 source-authority compatibility: Current source direction: **Build 532 — Booking & Quote Follow-Up Evidence Freshness Review**. Authority: `scripts/booking_quote_follow_up_evidence_freshness_review_check.py` · `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md`. -->
 

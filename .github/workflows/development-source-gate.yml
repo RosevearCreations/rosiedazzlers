@@ -323,6 +323,9 @@ jobs:
           python -m py_compile scripts/staff_mobile_closure_evidence_freshness_review_check.py
           node --check scripts/staff_mobile_closure_evidence_freshness_review_test.mjs
           node --check functions/api/_lib/staff-mobile-closure-evidence-freshness-review.js
+          python -m py_compile scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py
+          node --check scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_test.mjs
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-evidence-freshness-review.js
           python -m py_compile scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py
           node --check scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_test.mjs
           node --check functions/api/_lib/winter-booking-quote-rule-controlled-activation-outcome-continuity.js
@@ -826,6 +829,11 @@ jobs:
         run: |
           python scripts/staff_mobile_closure_evidence_freshness_review_check.py
           node scripts/staff_mobile_closure_evidence_freshness_review_test.mjs
+
+      - name: Validate service economics, seasonal capacity & reliability evidence freshness review authority
+        run: |
+          python scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py
+          node scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_test.mjs
 
       - name: Validate seasonal capability & public claim decision outcome continuity authority
         run: |
