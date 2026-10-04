@@ -206,6 +206,10 @@ required_authorities = {
         "scripts/staff_mobile_closure_evidence_freshness_review_check.py",
         "scripts/staff_mobile_closure_evidence_freshness_review_test.mjs",
     ],
+    "service_economics_seasonal_capacity_reliability_evidence_freshness_review": [
+        "scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py",
+        "scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_test.mjs",
+    ],
     "inventory_stock_usage_public_catalog": [
         "scripts/inventory_stock_usage_public_catalog_check.py",
     ],
