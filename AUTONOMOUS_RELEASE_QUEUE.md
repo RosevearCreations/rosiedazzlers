@@ -164,9 +164,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is the active bounded release.
+**Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is the active bounded release.
 
+Current contract: BUILD534_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py.
+
+<!-- Retained literal compatibility for Build 533 source-authority checks:
+**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is the active bounded release.
+**Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/staff_mobile_closure_evidence_freshness_review_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 532 source-authority checks:
 **Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is the active bounded release.
@@ -276,7 +282,7 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+**Build 535 — Production Learning & Roadmap Renewal** is next only after the current release is independently GREEN on protected main.
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
