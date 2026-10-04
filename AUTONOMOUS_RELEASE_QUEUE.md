@@ -5,11 +5,12 @@ This living queue records only the current bounded release path. Historical impl
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
 
-The synchronized predecessor contracts are retained through `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`.
-Retained predecessor contract: `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`.
+The synchronized predecessor contracts are retained through `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md`.
+Retained predecessor contract: `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md`.
 Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Execution Evidence Readiness.
 
 ## Retained cumulative authority pointers
+- `BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`
 - `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md`
 - `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`
 - `BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`
@@ -163,9 +164,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is the active bounded release.
+**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is the active bounded release.
 
+Current contract: BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/staff_mobile_closure_evidence_freshness_review_check.py.
+
+<!-- Retained literal compatibility for Build 532 source-authority checks:
+**Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is the active bounded release.
+**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/booking_quote_follow_up_evidence_freshness_review_check.py.
+-->
 
 <!-- Retained literal compatibility for Build 531 source-authority checks:
 **Build 531 — Maintenance & Fleet Continuation Evidence Freshness Review** is the active bounded release.
@@ -251,26 +258,25 @@ Current contract: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.m
 -->
 
 Scope:
-- revalidate only explicit trace-matched Build 522 booking/quote follow-up outcomes against the current retained Build 512/502/492/481 evidence chain;
-- require the locked measurement revision and primary metric to remain matched;
-- require comparable allocation coverage and bounded duration to remain current;
-- keep Southern Ontario weather/service/site eligibility explicit and weather-ineligible sessions outside the conversion denominator;
-- require current explicit owner review plus, for `continue_observation`, a separate current authorization and later current attributable observation;
-- require the same retained allocation arms, duration bounds and comparable observations to remain intact;
-- treat retained or follow-up triggered stop conditions as review blockers;
-- preserve hold, no-change closure and separate-change-review outcomes as explicit evidence only;
-- perform no winner selection, success declaration, price/discount change, booking-rule change, availability mutation, outreach, booking mutation, provider mutation, customer-identity join, schema/storage mutation, canonical-HOLD mutation or permanent polling.
+- revalidate only explicit trace-matched Build 523 manual close or retain-open outcomes;
+- require the exact retained Build 513 readiness trace to remain matched;
+- require workflow, role, representative device/browser and measure context to remain explicit;
+- require the retained window/sample definition plus matching, attributable, materially like-for-like and unconfounded observations;
+- require material-confounder review and Southern Ontario weather/site separation to remain explicit;
+- require both the retained closure evidence and explicit owner close/retain-open review to remain within the bounded freshness window;
+- preserve remediation effectiveness, causation, staff fault, device fault, business impact and root cause as undecided;
+- perform no automatic closure, role/permission mutation, job/task/support-exception mutation, outreach, booking/provider/business mutation, canonical-HOLD mutation, schema/storage mutation, background telemetry or permanent polling.
 
-Retained immediate predecessor: BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md. Retained booking/quote outcome authority: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Retained immediate predecessor: BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md. Retained staff/mobile outcome authority: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md. Active roadmap: FORWARD_BUILD_ROADMAP_526_535.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 
-The exact candidate must pass the focused Build 532 authority, retained Build 522/512/502/492/481/471/461 booking/quote authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
+The exact candidate must pass the focused Build 533 authority, retained Build 523/513/503/493/482/472/462/452 staff/mobile authorities, Current Source Gate and exact feature-preview acceptance before dev moves. dev advances only by non-force fast-forward to the exact accepted candidate and then requires independent exact-SHA Development deployment/runtime acceptance.
 
-Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, incomparable, unavailable, stop-blocked or trace-mismatched follow-up evidence remains truthful review/HOLD; source/runtime GREEN never substitutes for a current explicit owner review or current bounded follow-up evidence.
+Production promotion proceeds through protected main and a pull request to protected main, followed by independent exact Production deployment/runtime/business acceptance. Missing, stale, context-incomplete, incomparable, confounded or trace-mismatched staff/mobile evidence remains truthful review/HOLD; source/runtime GREEN never substitutes for a current explicit owner outcome and materially like-for-like evidence.
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+**Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.

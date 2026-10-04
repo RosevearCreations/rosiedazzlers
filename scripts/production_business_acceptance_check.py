@@ -202,6 +202,10 @@ required_authorities = {
         "scripts/booking_quote_follow_up_evidence_freshness_review_check.py",
         "scripts/booking_quote_follow_up_evidence_freshness_review_test.mjs",
     ],
+    "staff_mobile_closure_evidence_freshness_review": [
+        "scripts/staff_mobile_closure_evidence_freshness_review_check.py",
+        "scripts/staff_mobile_closure_evidence_freshness_review_test.mjs",
+    ],
     "inventory_stock_usage_public_catalog": [
         "scripts/inventory_stock_usage_public_catalog_check.py",
     ],
