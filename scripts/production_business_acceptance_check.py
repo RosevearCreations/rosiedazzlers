@@ -198,6 +198,10 @@ required_authorities = {
         "scripts/maintenance_fleet_continuation_evidence_freshness_review_check.py",
         "scripts/maintenance_fleet_continuation_evidence_freshness_review_test.mjs",
     ],
+    "booking_quote_follow_up_evidence_freshness_review": [
+        "scripts/booking_quote_follow_up_evidence_freshness_review_check.py",
+        "scripts/booking_quote_follow_up_evidence_freshness_review_test.mjs",
+    ],
     "inventory_stock_usage_public_catalog": [
         "scripts/inventory_stock_usage_public_catalog_check.py",
     ],

@@ -3,14 +3,21 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md.
+The synchronized Production predecessor is retained through BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md.
 
+**Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is the active bounded release.
+
+**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+
+Current contract: BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/booking_quote_follow_up_evidence_freshness_review_check.py.
+Retained booking/quote outcome authority: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+
+<!-- Retained literal compatibility for Build 531 source-authority checks:
 **Build 531 — Maintenance & Fleet Continuation Evidence Freshness Review** is the active bounded release.
-
 **Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
-
 Current contract: BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/maintenance_fleet_continuation_evidence_freshness_review_check.py.
-Retained maintenance/fleet outcome authority: BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+Retained maintenance/fleet outcome authority: BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md.
+-->
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
