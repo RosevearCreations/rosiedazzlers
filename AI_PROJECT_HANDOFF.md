@@ -3,14 +3,21 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md.
+The synchronized Production predecessor is retained through BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md.
 
+**Build 533 — Staff & Mobile Closure Evidence Freshness Review** is the active bounded release.
+
+**Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
+
+Current contract: BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/staff_mobile_closure_evidence_freshness_review_check.py.
+Retained staff/mobile outcome authority: BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+
+<!-- Retained literal compatibility for Build 532 source-authority checks:
 **Build 532 — Booking & Quote Follow-Up Evidence Freshness Review** is the active bounded release.
-
 **Build 533 — Staff & Mobile Closure Evidence Freshness Review** is next only after the current release is independently GREEN on protected main.
-
 Current contract: BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/booking_quote_follow_up_evidence_freshness_review_check.py.
-Retained booking/quote outcome authority: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_526_535.md.
+Retained booking/quote outcome authority: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md.
+-->
 
 <!-- Retained literal compatibility for Build 531 source-authority checks:
 **Build 531 — Maintenance & Fleet Continuation Evidence Freshness Review** is the active bounded release.

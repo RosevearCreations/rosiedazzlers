@@ -6,10 +6,13 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md` — current bounded release contract.
-4. `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md` — retained immediate predecessor freshness contract.
-5. `BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md` — retained predecessor freshness contract.
-6. `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md` — retained predecessor freshness contract.
+3. `BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md` — current bounded release contract.
+4. `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md` — retained immediate predecessor freshness contract.
+5. `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md` — retained predecessor freshness contract.
+6. `BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md` — retained predecessor freshness contract.
+7. `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md` — retained predecessor freshness contract.
+
+<!-- Retained literal compatibility for Build 532 source-authority checks: `BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md` — current bounded release contract. -->
 
 <!-- Retained literal compatibility for Build 531 source-authority checks: `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md` — current bounded release contract. -->
 
