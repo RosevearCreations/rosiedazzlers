@@ -164,9 +164,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 535 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is the active bounded release.
 
+Current contract: BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py. Retained freshness authority: BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+
+<!-- Retained literal compatibility for Build 535 source-authority checks:
+**Build 535 — Production Learning & Roadmap Renewal** is the active bounded release.
+**Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current source authority: scripts/production_learning_roadmap_renewal_check.py. Completed-cycle reconciliation: PRODUCTION_LEARNING_526_534.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+-->
 
 <!-- Retained literal compatibility for Build 534 source-authority checks:
 **Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is the active bounded release.
@@ -288,7 +294,7 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+**Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
