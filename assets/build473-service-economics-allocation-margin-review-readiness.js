@@ -28,6 +28,7 @@
       renderSeasonalPublicClaimActivationDecision(data.economics?.seasonal_public_claim_activation_decision || {});
       renderSeasonalPublicClaimOutcomeContinuity(data.economics?.seasonal_public_claim_outcome_continuity || {});
       renderSeasonalPublicClaimOutcomeFreshnessReview(data.economics?.seasonal_public_claim_outcome_freshness_review || {});
+      renderSeasonalPublicClaimEvidenceIntegrityReview(data.economics?.seasonal_public_claim_evidence_integrity_review || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
@@ -366,6 +367,59 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No seasonal public-claim outcome freshness rows are available. Missing evidence remains HOLD.</div>';
     const detail=$("seasonalPublicClaimOutcomeFreshnessReviewDetail");
     if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · drift: "+String(review.counts?.drift??0)+" · manual review: "+String(review.counts?.review_required??0)+". Stale evidence never extends a public claim; broad winter availability remains HOLD.";
+  }
+
+  function renderSeasonalPublicClaimEvidenceIntegrityReview(review) {
+    const mount=$("seasonalPublicClaimEvidenceIntegrityReviewGrid"); if(!mount) return;
+    const labels={
+      integrity_current:"Evidence integrity current",
+      owning_evidence_identity_review_required:"Owning evidence identity required",
+      owning_evidence_identity_drift_review_required:"Owning evidence identity drift",
+      owner_action_identity_review_required:"Owner action identity required",
+      owner_action_identity_drift_review_required:"Owner action identity drift",
+      freshness_window_integrity_review_required:"Freshness window review required",
+      source_owned_limit_integrity_review_required:"Source-owned limit integrity review",
+      public_claim_wording_integrity_review_required:"Public claim wording integrity review",
+      public_claim_outcome_integrity_review_required:"Public claim outcome integrity review",
+      service_specific_identity_review_required:"Service-specific identity required",
+      integrity_source_unavailable:"Integrity source unavailable"
+    };
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      const current=row.evidence_integrity_current===true;
+      cards.push('<article class="review-candidate state-'+esc(current?"observed":"review")+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(labels[row.integrity_state]||"Manual review required")+'</span></div>'+
+        '<p class="mini">Owning evidence identity: '+esc(row.owning_evidence_identity_matches_outcome_snapshot===true?"MATCH":row.owning_evidence_identity_recorded===true?"DRIFT":"NOT RECORDED")+
+        ' · current source: '+esc(row.current_owning_evidence_source_type||"unknown")+' / '+esc(row.current_owning_evidence_source||"not recorded")+
+        ' · outcome snapshot: '+esc(row.outcome_snapshot_owning_evidence_source_type||"unknown")+' / '+esc(row.outcome_snapshot_owning_evidence_source||"not recorded")+'</p>'+
+        '<p class="mini">Owner action identity: '+esc(row.owner_action_identity_matches_outcome_snapshot===true?"MATCH":row.owner_action_identity_recorded===true?"DRIFT":"NOT RECORDED")+
+        ' · current: '+esc(row.current_owner_action_reference||"not recorded")+
+        ' · outcome snapshot: '+esc(row.outcome_snapshot_owner_action_reference||"not recorded")+
+        ' · publication identity: '+esc(row.publication_identity_matches_outcome_snapshot===true?"MATCH/CURRENT":"REVIEW")+'</p>'+
+        '<p class="mini">Freshness integrity: '+esc(row.freshness_window_integrity_current===true?"CURRENT":"REVIEW")+
+        ' · source-owned limits: '+esc(row.source_owned_limits_integrity_current===true?"CURRENT":"REVIEW")+
+        ' · published wording: '+esc(row.public_claim_wording_integrity_current===true?"CURRENT":"REVIEW")+
+        ' · outcome: '+esc(row.public_claim_outcome_integrity_current===true?"CURRENT":"REVIEW")+'</p>'+
+        '<p class="mini">Missing identity snapshots remain manual review/HOLD. Source-owned limits cannot be widened. Broad winter availability remains HOLD. Automatic publication/booking/quote/HOLD mutation: NONE.</p></article>');
+    }
+    for(const gap of (Array.isArray(review.gaps)?review.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Integrity HOLD · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">MANUAL REVIEW</span></div><p class="mini">State: '+
+        esc(gap.state||"integrity_review_required")+' · Missing/re-review: '+
+        esc((gap.missing||[]).join(", ")||"current attributable seasonal/public-claim integrity evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_public_claim_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No seasonal/public-claim evidence-integrity rows are available. Missing evidence remains HOLD.</div>';
+    const detail=$("seasonalPublicClaimEvidenceIntegrityReviewDetail");
+    if(detail) detail.textContent="Integrity rows: "+String(review.row_count??0)+
+      " · current: "+String(review.counts?.integrity_current??0)+
+      " · owning evidence identity review: "+String(review.counts?.owning_evidence_identity_review??0)+
+      " · owner action identity review: "+String(review.counts?.owner_action_identity_review??0)+
+      " · freshness review: "+String(review.counts?.freshness_window_review??0)+
+      " · source-owned limit review: "+String(review.counts?.source_owned_limit_review??0)+
+      " · manual review: "+String(review.counts?.review_required??0)+
+      ". Evidence identity is never inferred from source/runtime GREEN.";
   }
 
   function renderWinterRuleActivationReadiness(readiness) {

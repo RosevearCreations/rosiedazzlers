@@ -6,6 +6,8 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
+3. `BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md` — current bounded release contract.
+4. `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor renewal contract.
 3. `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded release contract.
 4. `PRODUCTION_LEARNING_526_534.md` — completed-cycle evidence classification and carry-forward direction.
 5. `FORWARD_BUILD_ROADMAP_536_545.md` — renewed active forward sequence beginning with Build 536.
