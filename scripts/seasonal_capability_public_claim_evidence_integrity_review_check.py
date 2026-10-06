@@ -121,7 +121,7 @@ require(readme,[
 require(blockers,[
     "Seasonal service capability & transparency",
     "Build 536 adds read-only seasonal/public-claim evidence integrity review",
-    "missing identity snapshots remain manual review/HOLD"
+    "Missing identity snapshots remain manual review/HOLD"
 ],"canonical HOLD backlog")
 
 require(docindex,[
