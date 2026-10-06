@@ -1,10 +1,11 @@
-// Build 518 — bounded read-only Controlled-Environment Routing Outcome Evidence Continuity endpoint.
-// Retained Build 517 outcome continuity and Build 508 operational-readiness authorities remain the evidence base.
+// Build 536 — bounded read-only Seasonal Capability & Public Claim Evidence Integrity Review endpoint.
+// Retained Build 528/527/526 freshness authorities and earlier seasonal/routing evidence remain in the composed evidence base.
 import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildControlledEnvironmentRoutingOutcomeFreshnessCapacityReview } from "../_lib/controlled-environment-routing-outcome-freshness-capacity-review.js";
+import { buildSeasonalCapabilityPublicClaimEvidenceIntegrityReview } from "../_lib/seasonal-capability-public-claim-evidence-integrity-review.js";
+// Retained Build 528 endpoint marker: buildControlledEnvironmentRoutingOutcomeFreshnessCapacityReview · authority:"controlled_environment_routing_outcome_freshness_capacity_review"
 // Retained Build 527 endpoint markers: buildWinterBookingQuoteRuleOutcomeFreshnessReview · authority:"winter_booking_quote_rule_outcome_freshness_review" · retained_winter_rule_outcome_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity"
 // Retained Build 526 endpoint markers: buildSeasonalCapabilityPublicClaimOutcomeFreshnessReview · authority:"seasonal_capability_public_claim_outcome_freshness_review" · retained_public_claim_outcome_authority:"seasonal_capability_public_claim_decision_outcome_continuity" · retained_controlled_environment_routing_outcome_authority:"controlled_environment_routing_outcome_evidence_continuity"
 // Retained Build 518 runtime marker: buildControlledEnvironmentRoutingOutcomeEvidenceContinuity · authority:"controlled_environment_routing_outcome_evidence_continuity" · retained_predecessor_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity" · retained_operational_readiness_authority:"controlled_environment_operational_readiness_routing_continuity"
@@ -37,7 +38,7 @@ export async function onRequestGet({request,env}){
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
   if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Controlled-Environment Routing Outcome Evidence Continuity requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildControlledEnvironmentRoutingOutcomeFreshnessCapacityReview({
+  const review=buildSeasonalCapabilityPublicClaimEvidenceIntegrityReview({
     economics:economicsSource.data?.operational_profitability||{},
     fleet:fleetSource.data?.learning||{},
     pricing:pricingSource.data||{},
@@ -50,8 +51,9 @@ export async function onRequestGet({request,env}){
     year,
     pricing_window_days:days,
     ...review,
-    authority:"controlled_environment_routing_outcome_freshness_capacity_review",
-    release_authority:"controlled_environment_routing_outcome_freshness_capacity_review",
+    authority:"seasonal_capability_public_claim_evidence_integrity_review",
+    release_authority:"seasonal_capability_public_claim_evidence_integrity_review",
+    retained_seasonal_public_claim_freshness_authority:"seasonal_capability_public_claim_outcome_freshness_review",
     retained_routing_outcome_authority:"controlled_environment_routing_outcome_evidence_continuity",
     retained_winter_rule_outcome_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity",
     retained_controlled_environment_routing_outcome_authority:"controlled_environment_routing_outcome_evidence_continuity",
@@ -84,4 +86,4 @@ async function collect(name,runner){let timer;try{const response=await Promise.r
 function sourceStatusMap(economics,fleet,pricing){return{service_economics:sourceState(economics),fleet_commercial:sourceState(fleet),pricing_learning:sourceState(pricing)};}
 function sourceState(row){return{available:row?.available===true,restricted:row?.restricted===true,http_status:Number(row?.status)||null,error_class:row?.error_class||null};}
 function requestWithQuery(request,values){const url=new URL(request.url);for(const [key,value] of Object.entries(values))url.searchParams.set(key,value);return new Request(url.toString(),request);}
-function readOnly(){return json({ok:false,error:"Controlled-Environment Routing Outcome Freshness & Capacity Review is read-only. Appointment movement, routing, reschedule, booking/availability and capacity reservation remain separate explicit manual actions."},405);}
+function readOnly(){return json({ok:false,error:"Seasonal Capability & Public Claim Evidence Integrity Review is read-only. Publication, booking/availability, quote rules, source-owned limits and canonical HOLD changes remain separate explicit manual actions."},405);}
