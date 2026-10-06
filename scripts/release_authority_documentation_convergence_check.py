@@ -19,7 +19,7 @@ NEXT_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_486_495.md"
 RENEWED_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_496_505.md"
 LATEST_RENEWED_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_506_515.md"
 NEXT_RENEWED_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_516_525.md"
-FUTURE_RENEWED_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_526_535.md"
+FUTURE_RENEWED_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_526_535.md"\nCURRENT_RENEWED_CYCLE_ROADMAP = ROOT / "FORWARD_BUILD_ROADMAP_536_545.md"
 GOVERNANCE = ROOT / "RELEASE_GOVERNANCE.md"
 PRODUCTION_WORKFLOW = ROOT / ".github/workflows/production-business-acceptance-authority.yml"
 PRODUCTION_CHECK = ROOT / "scripts/production_business_acceptance_check.py"
@@ -77,8 +77,8 @@ next_cycle_roadmap = read(NEXT_CYCLE_ROADMAP, "next-cycle renewed roadmap") if N
 renewed_cycle_roadmap = read(RENEWED_CYCLE_ROADMAP, "renewed-cycle roadmap") if RENEWED_CYCLE_ROADMAP.exists() else ""
 latest_renewed_cycle_roadmap = read(LATEST_RENEWED_CYCLE_ROADMAP, "latest renewed-cycle roadmap") if LATEST_RENEWED_CYCLE_ROADMAP.exists() else ""
 next_renewed_cycle_roadmap = read(NEXT_RENEWED_CYCLE_ROADMAP, "next renewed-cycle roadmap") if NEXT_RENEWED_CYCLE_ROADMAP.exists() else ""
-future_renewed_cycle_roadmap = read(FUTURE_RENEWED_CYCLE_ROADMAP, "future renewed-cycle roadmap") if FUTURE_RENEWED_CYCLE_ROADMAP.exists() else ""
-roadmap_sequence = roadmap + "\n" + next_roadmap + "\n" + future_roadmap + "\n" + latest_roadmap + "\n" + next_cycle_roadmap + "\n" + renewed_cycle_roadmap + "\n" + latest_renewed_cycle_roadmap + "\n" + next_renewed_cycle_roadmap + "\n" + future_renewed_cycle_roadmap
+future_renewed_cycle_roadmap = read(FUTURE_RENEWED_CYCLE_ROADMAP, "future renewed-cycle roadmap") if FUTURE_RENEWED_CYCLE_ROADMAP.exists() else ""\ncurrent_renewed_cycle_roadmap = read(CURRENT_RENEWED_CYCLE_ROADMAP, "current renewed-cycle roadmap") if CURRENT_RENEWED_CYCLE_ROADMAP.exists() else ""
+roadmap_sequence = roadmap + "\n" + next_roadmap + "\n" + future_roadmap + "\n" + latest_roadmap + "\n" + next_cycle_roadmap + "\n" + renewed_cycle_roadmap + "\n" + latest_renewed_cycle_roadmap + "\n" + next_renewed_cycle_roadmap + "\n" + future_renewed_cycle_roadmap + "\n" + current_renewed_cycle_roadmap
 governance = read(GOVERNANCE, "release governance")
 production_workflow = read(PRODUCTION_WORKFLOW, "Production workflow")
 production_check = read(PRODUCTION_CHECK, "Production source authority")
