@@ -3,15 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD534_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVIDENCE_FRESHNESS_REVIEW.md.
+The synchronized Production predecessor is retained through BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
 
+**Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is the active bounded release.
+
+**Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+
+Current contract: BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py.
+Retained seasonal/public-claim freshness authority: BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Production deployment/runtime/business acceptance must independently prove that exact SHA.
+
+<!-- Retained literal compatibility for Build 535 source-authority checks:
 **Build 535 — Production Learning & Roadmap Renewal** is the active bounded release.
-
 **Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
-
 Current contract: BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md. Current source authority: scripts/production_learning_roadmap_renewal_check.py.
 Completed-cycle reconciliation: PRODUCTION_LEARNING_526_534.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 Production deployment/runtime/business acceptance must independently prove that exact SHA.
+-->
 
 <!-- Retained literal compatibility for Build 534 source-authority checks:
 **Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review** is the active bounded release.
