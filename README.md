@@ -1,8 +1,10 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review**.
+Current source direction: **Build 535 — Production Learning & Roadmap Renewal**.
 
-Current contract: `BUILD534_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVIDENCE_FRESHNESS_REVIEW.md`. Current source authority: `scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current source authority: `scripts/production_learning_roadmap_renewal_check.py`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_526_534.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+
+<!-- Retained Build 534 source-authority compatibility: Current source direction: **Build 534 — Service Economics, Seasonal Capacity & Reliability Evidence Freshness Review**. Current contract: `BUILD534_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVIDENCE_FRESHNESS_REVIEW.md`. Current source authority: `scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py`. -->
 
 <!-- Retained Build 533 source-authority compatibility: Current source direction: **Build 533 — Staff & Mobile Closure Evidence Freshness Review**. Authority: `scripts/staff_mobile_closure_evidence_freshness_review_check.py` · `BUILD533_STAFF_MOBILE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. -->
 
@@ -41,6 +43,8 @@ Current contract: `BUILD534_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVID
 <!-- Retained literal compatibility: Current source direction: **Build 517 — Winter Booking & Quote Rule Controlled-Activation Outcome Continuity**. -->
 
 ## Release authority
+Current Build 535 renewal authority: `scripts/production_learning_roadmap_renewal_check.py` · `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_526_534.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`.
+
 Authority: `scripts/maintenance_fleet_continuation_evidence_freshness_review_check.py` · `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`. Retained Build 521 continuation outcome authority: `scripts/maintenance_fleet_continuation_outcome_continuity_check.py` · `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_526_535.md`. Production is not considered GREEN from source promotion alone.
 
 Retained Build 528 freshness/capacity authority: `scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py` · `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`.
