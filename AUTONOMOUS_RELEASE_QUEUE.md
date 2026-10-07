@@ -164,9 +164,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is the active bounded release.
+**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release.
 
+Current contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py. Retained provider/local-search freshness authority: BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Retained provider/local-search manual closure authority: BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+
+<!-- Retained literal compatibility for Build 538 source-authority checks:
+**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is the active bounded release.
+**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py. Retained routing/capacity freshness authority: BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md. Retained winter-rule integrity authority: BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+-->
 
 <!-- Retained literal compatibility for Build 537 source-authority checks:
 **Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is the active bounded release.
@@ -305,19 +311,10 @@ Production promotion proceeds through protected main and a pull request to prote
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
-## Current release
-**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release.
-
+## Next release
 **Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py. Retained provider/local-search freshness authority: BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md.
-Production deployment/runtime/business acceptance must independently prove that exact SHA.
-
-<!-- Retained literal compatibility for Build 538 source-authority checks:
-**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is the active bounded release.
-**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
-Current contract: BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py.
--->
+Build 540 begins only after Build 539 is independently GREEN on protected main. Production deployment/runtime/business acceptance for Build 539 must independently prove the exact promoted SHA before the queue advances.
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
