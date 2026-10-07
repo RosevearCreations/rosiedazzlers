@@ -8,7 +8,8 @@ import { buildProviderLocalSearchEvidenceContinuity } from "../_lib/provider-loc
 import { buildProviderLocalSearchOutcomeEvidenceRefresh } from "../_lib/provider-local-search-outcome-evidence-refresh.js";
 import { buildProviderLocalSearchClosureEvidenceContinuityReview } from "../_lib/provider-local-search-closure-evidence-continuity-review.js";
 import { buildProviderLocalSearchManualClosureOutcomeContinuity } from "../_lib/provider-local-search-manual-closure-outcome-continuity.js";
-import { buildProviderLocalSearchClosureEvidenceFreshnessReview } from "../_lib/provider-local-search-closure-evidence-freshness-review.js";\nimport { buildProviderLocalSearchClosureEvidenceIntegrityReview } from "../_lib/provider-local-search-closure-evidence-integrity-review.js";
+import { buildProviderLocalSearchClosureEvidenceFreshnessReview } from "../_lib/provider-local-search-closure-evidence-freshness-review.js";
+import { buildProviderLocalSearchClosureEvidenceIntegrityReview } from "../_lib/provider-local-search-closure-evidence-integrity-review.js";
 
 export async function onRequestGet({ request, env }) {
   const [providerResponse, localResponse] = await Promise.all([
