@@ -93,7 +93,7 @@ function renderWorkflowEvidence(data){
   const observationTriage=acceptance.observation_refresh_regression_triage||{};
   const continuity=data.recovery_authenticated_device_evidence_continuity||{};
   const execution=data.recovery_authenticated_device_observation_execution_evidence||{};
-  const closureReview=data.recovery_authenticated_device_closure_review||{}, manualClosure=data.recovery_authenticated_device_manual_closure_outcome_continuity||{}, closureFreshness=data.recovery_authenticated_device_closure_evidence_freshness_review||{};
+  const closureReview=data.recovery_authenticated_device_closure_review||{}, manualClosure=data.recovery_authenticated_device_manual_closure_outcome_continuity||{}, closureFreshness=data.recovery_authenticated_device_closure_evidence_freshness_review||{}, closureIntegrity=data.recovery_authenticated_device_closure_evidence_integrity_review||{};
   const roles=Array.isArray(evidence.roles)?evidence.roles:[];
   const acceptedRoles=Array.isArray(acceptance.roles)?acceptance.roles:[];
   const devices=Array.isArray(acceptance.devices)?acceptance.devices:[];
@@ -118,6 +118,7 @@ function renderWorkflowEvidence(data){
       ${metric("Build 510 closure review",closureReview.status||"closure_review_required")}
       ${metric("Build 520 manual closure outcome continuity",manualClosure.status||"manual_closure_operator_outcome_required")}
       ${metric("Build 530 closure evidence freshness",closureFreshness.status||"closure_evidence_current_operator_review_required")}
+      ${metric("Build 540 closure evidence integrity",closureIntegrity.status||"retained_freshness_review_required")}
       ${metric("Triage regressions",observationTriage.regression_triage_count??0)}
       ${metric("Refresh roles",(observationTriage.refresh_required_role_ids||[]).length)}
       ${metric("Refresh devices",(observationTriage.refresh_required_device_ids||[]).length)}
