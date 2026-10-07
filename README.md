@@ -1,8 +1,10 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review**.
+Current source direction: **Build 537 — Winter Booking & Quote Rule Evidence Integrity Review**.
 
-Current contract: `BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py`. Retained freshness authority: `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/winter_booking_quote_rule_evidence_integrity_review_check.py`. Retained winter-rule freshness authority: `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+
+<!-- Retained Build 536 source-authority compatibility: Current source direction: **Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review**. Current contract: `BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py`. Retained freshness authority: `BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md`. -->
 
 <!-- Retained Build 535 source-authority compatibility: Current source direction: **Build 535 — Production Learning & Roadmap Renewal**. Current contract: `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`. Current source authority: `scripts/production_learning_roadmap_renewal_check.py`. Completed-cycle reconciliation: `PRODUCTION_LEARNING_526_534.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. -->
 
