@@ -33,6 +33,7 @@
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
       renderWinterBookingQuoteRuleOutcomeFreshnessReview(data.economics?.winter_booking_quote_rule_outcome_freshness_review || {});
+      renderWinterBookingQuoteRuleEvidenceIntegrityReview(data.economics?.winter_booking_quote_rule_evidence_integrity_review || {});
       renderControlledEnvironmentSiteQualification(data.economics?.controlled_environment_site_qualification || {});
       renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
       renderControlledEnvironmentRoutingOutcomeContinuity(data.economics?.controlled_environment_routing_outcome_continuity || {});
@@ -605,6 +606,56 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No winter booking/quote rule outcome freshness rows are available. Missing evidence remains HOLD.</div>';
     const detail=$("winterRuleOutcomeFreshnessReviewDetail");
     if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · rule/wording/classification drift: "+String(review.counts?.rule_or_wording_drift??0)+" · runtime safety review: "+String(review.counts?.runtime_safety_review??0)+". /api/availability and checkout collision revalidation remain authoritative.";
+  }
+
+  function renderWinterBookingQuoteRuleEvidenceIntegrityReview(review) {
+    const mount=$("winterRuleEvidenceIntegrityReviewGrid"); if(!mount) return;
+    const labels={
+      integrity_current:"Evidence integrity current",
+      decision_trace_identity_review_required:"Decision trace identity required",
+      decision_trace_identity_drift_review_required:"Decision trace identity drift",
+      service_classification_integrity_review_required:"Service classification integrity review",
+      customer_transparency_integrity_review_required:"Customer transparency integrity review",
+      booking_quote_rule_integrity_review_required:"Booking / quote rule integrity review",
+      runtime_safety_identity_review_required:"Runtime safety identity required",
+      runtime_safety_identity_drift_review_required:"Runtime safety identity drift",
+      runtime_safety_integrity_review_required:"Runtime safety integrity review",
+      freshness_window_integrity_review_required:"Freshness window integrity review",
+      integrity_source_unavailable:"Integrity source unavailable"
+    };
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      const current=row.evidence_integrity_current===true;
+      cards.push('<article class="review-candidate state-'+esc(current?"observed":"review")+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(labels[row.integrity_state]||"Manual review required")+'</span></div>'+
+        '<p class="mini">Decision trace identity: '+esc(row.decision_trace_identity_matches_outcome_snapshot===true?"MATCH":row.decision_trace_identity_recorded===true?"DRIFT":"NOT RECORDED")+
+        ' · current decision: '+esc(row.current_decision_reference||"not recorded")+
+        ' · outcome snapshot: '+esc(row.outcome_snapshot_decision_reference||"not recorded")+'</p>'+
+        '<p class="mini">Service classification integrity: '+esc(row.service_classification_integrity_current===true?"CURRENT":"REVIEW")+
+        ' · customer transparency: '+esc(row.customer_transparency_integrity_current===true?"CURRENT":"REVIEW")+
+        ' · booking/quote rule pair: '+esc(row.booking_quote_rule_integrity_current===true?"CURRENT":"REVIEW")+'</p>'+
+        '<p class="mini">Runtime safety identity: '+esc(row.runtime_safety_identity_matches_outcome_snapshot===true?"MATCH":row.runtime_safety_identity_recorded===true?"DRIFT":"NOT RECORDED")+
+        ' · /api/availability: '+esc(row.availability_revalidated===true?"REVALIDATED":"REVIEW")+
+        ' · checkout collision: '+esc(row.checkout_collision_revalidated===true?"REVALIDATED":"REVIEW")+
+        ' · runtime proof: '+esc(row.current_runtime_revalidation_reference||"not recorded")+'</p>'+
+        '<p class="mini">Weather-ineligible sessions remain outside ordinary conversion interpretation. Missing identity snapshots remain manual review/HOLD. Broad winter availability remains HOLD. Automatic booking/quote/checkout/HOLD mutation: NONE.</p></article>');
+    }
+    for(const gap of (Array.isArray(review.gaps)?review.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Winter rule integrity HOLD · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">MANUAL REVIEW</span></div><p class="mini">State: '+
+        esc(gap.state||"integrity_review_required")+' · Missing/re-review: '+
+        esc((gap.missing||[]).join(", ")||"current attributable winter booking/quote rule integrity evidence")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_winter_booking_quote_hold")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No winter booking/quote rule evidence-integrity rows are available. Missing evidence remains HOLD.</div>';
+    const detail=$("winterRuleEvidenceIntegrityReviewDetail");
+    if(detail) detail.textContent="Integrity rows: "+String(review.row_count??0)+
+      " · current: "+String(review.counts?.integrity_current??0)+
+      " · decision identity review: "+String(review.counts?.decision_trace_identity_review??0)+
+      " · classification/wording/rule review: "+String((review.counts?.service_classification_review??0)+(review.counts?.customer_transparency_review??0)+(review.counts?.booking_quote_rule_review??0))+
+      " · runtime identity/safety review: "+String((review.counts?.runtime_safety_identity_review??0)+(review.counts?.runtime_safety_review??0))+
+      ". /api/availability and checkout collision revalidation remain authoritative.";
   }
 
   function renderControlledEnvironmentSiteQualification(qualification) {
