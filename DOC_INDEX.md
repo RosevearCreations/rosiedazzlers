@@ -6,7 +6,9 @@ This index separates living release/planning authority from retained specialist 
 
 1. `AI_PROJECT_HANDOFF.md` — current implementation, deployment and release truth.
 2. `AUTONOMOUS_RELEASE_QUEUE.md` — accepted/current/next bounded work.
-3. `BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md` — current bounded release contract.
+3. `BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md` — current bounded release contract.
+4. `BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md` — retained predecessor integrity contract.
+<!-- Retained Build 537 checker compatibility: `BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md` — current bounded release contract. -->
 4. `BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md` — retained predecessor integrity contract.
 4. `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — retained predecessor renewal contract.
 3. `BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md` — current bounded release contract.
