@@ -5,6 +5,8 @@ import { onRequestGet as getAccountingStatement } from "./accounting_statement_r
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
 import { buildWinterBookingQuoteRuleEvidenceIntegrityReview } from "../_lib/winter-booking-quote-rule-evidence-integrity-review.js";
+// Retained Build 536 endpoint marker: buildSeasonalCapabilityPublicClaimEvidenceIntegrityReview · authority:"seasonal_capability_public_claim_evidence_integrity_review" · retained_seasonal_public_claim_freshness_authority:"seasonal_capability_public_claim_outcome_freshness_review"
+
 // Retained Build 528 endpoint marker: buildControlledEnvironmentRoutingOutcomeFreshnessCapacityReview · authority:"controlled_environment_routing_outcome_freshness_capacity_review"
 // Retained Build 527 endpoint markers: buildWinterBookingQuoteRuleOutcomeFreshnessReview · authority:"winter_booking_quote_rule_outcome_freshness_review" · retained_winter_rule_outcome_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity"
 // Retained Build 526 endpoint markers: buildSeasonalCapabilityPublicClaimOutcomeFreshnessReview · authority:"seasonal_capability_public_claim_outcome_freshness_review" · retained_public_claim_outcome_authority:"seasonal_capability_public_claim_decision_outcome_continuity" · retained_controlled_environment_routing_outcome_authority:"controlled_environment_routing_outcome_evidence_continuity"
