@@ -221,6 +221,10 @@ required_authorities = {
         "scripts/winter_booking_quote_rule_outcome_freshness_review_check.py",
         "scripts/winter_booking_quote_rule_outcome_freshness_review_test.mjs",
     ],
+    "winter_booking_quote_rule_evidence_integrity_review": [
+        "scripts/winter_booking_quote_rule_evidence_integrity_review_check.py",
+        "scripts/winter_booking_quote_rule_evidence_integrity_review_test.mjs",
+    ],
     "seasonal_capability_public_claim_evidence_integrity_review": [
         "scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py",
         "scripts/seasonal_capability_public_claim_evidence_integrity_review_test.mjs",
