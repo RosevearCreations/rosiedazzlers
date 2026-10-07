@@ -168,7 +168,7 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 
 Current contract: BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py. Retained recovery/device freshness authority: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Retained manual closure authority: BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
 
-<!-- Retained Build 539 source-authority compatibility: **Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release. Current contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py. -->
+<!-- Retained Build 539 source-authority compatibility:\n**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release.\n**Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.\nCurrent contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py.\n-->
 
 <!-- Retained literal compatibility for Build 538 source-authority checks:
 **Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is the active bounded release.
