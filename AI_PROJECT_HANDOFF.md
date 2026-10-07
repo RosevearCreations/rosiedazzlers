@@ -3,15 +3,23 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD535_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md.
+The synchronized Production predecessor is retained through BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md.
 
+**Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is the active bounded release.
+
+**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+
+Current contract: BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/winter_booking_quote_rule_evidence_integrity_review_check.py.
+Retained winter-rule freshness authority: BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md. Retained seasonal/public-claim integrity authority: BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Production deployment/runtime/business acceptance must independently prove that exact SHA.
+
+<!-- Retained literal compatibility for Build 536 source-authority checks:
 **Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is the active bounded release.
-
 **Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
-
 Current contract: BUILD536_SEASONAL_CAPABILITY_PUBLIC_CLAIM_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py.
 Retained seasonal/public-claim freshness authority: BUILD526_SEASONAL_CAPABILITY_PUBLIC_CLAIM_OUTCOME_FRESHNESS_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 Production deployment/runtime/business acceptance must independently prove that exact SHA.
+-->
 
 <!-- Retained literal compatibility for Build 535 source-authority checks:
 **Build 535 — Production Learning & Roadmap Renewal** is the active bounded release.
