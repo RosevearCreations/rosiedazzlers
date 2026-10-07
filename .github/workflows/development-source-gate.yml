@@ -316,6 +316,9 @@ jobs:
           python -m py_compile scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py
           node --check scripts/controlled_environment_routing_capacity_evidence_integrity_review_test.mjs
           node --check functions/api/_lib/controlled-environment-routing-capacity-evidence-integrity-review.js
+          python -m py_compile scripts/provider_local_search_closure_evidence_integrity_review_check.py
+          node --check scripts/provider_local_search_closure_evidence_integrity_review_test.mjs
+          node --check functions/api/_lib/provider-local-search-closure-evidence-integrity-review.js
           python -m py_compile scripts/provider_local_search_closure_evidence_freshness_review_check.py
           node --check scripts/provider_local_search_closure_evidence_freshness_review_test.mjs
           node --check functions/api/_lib/provider-local-search-closure-evidence-freshness-review.js
@@ -827,6 +830,11 @@ jobs:
         run: |
           python scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py
           node scripts/controlled_environment_routing_capacity_evidence_integrity_review_test.mjs
+
+      - name: Validate provider & local search closure evidence integrity review authority
+        run: |
+          python scripts/provider_local_search_closure_evidence_integrity_review_check.py
+          node scripts/provider_local_search_closure_evidence_integrity_review_test.mjs
 
       - name: Validate provider & local search closure evidence freshness review authority
         run: |

@@ -1,8 +1,10 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review**.
+Current source direction: **Build 539 — Provider & Local Search Closure Evidence Integrity Review**.
 
-Current contract: `BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py`. Retained routing/capacity freshness authority: `BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md`. Retained winter-rule integrity authority: `BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/provider_local_search_closure_evidence_integrity_review_check.py`. Retained provider/local-search freshness authority: `BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Retained manual closure authority: `BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+
+<!-- Retained Build 538 source-authority compatibility: Current source direction: **Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review**. Current contract: `BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py`. -->
 
 <!-- Retained Build 537 source-authority compatibility: Current source direction: **Build 537 — Winter Booking & Quote Rule Evidence Integrity Review**. Current contract: `BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/winter_booking_quote_rule_evidence_integrity_review_check.py`. Retained winter-rule freshness authority: `BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md`. -->
 

@@ -50,12 +50,14 @@ async function refresh450() {
       renderProviderLocalSearchClosureReview509(safeContinuityData);
       renderProviderLocalSearchManualClosureOutcome519(safeContinuityData);
       renderProviderLocalSearchClosureFreshness529(safeContinuityData);
+      renderProviderLocalSearchClosureIntegrity539(safeContinuityData);
     } catch {
       renderProviderLocalSearchContinuity489({});
       renderProviderLocalSearchOutcomeRefresh499({});
       renderProviderLocalSearchClosureReview509({});
       renderProviderLocalSearchManualClosureOutcome519({});
       renderProviderLocalSearchClosureFreshness529({});
+      renderProviderLocalSearchClosureIntegrity539({});
     }
     const stamp = data.generated_at ? new Date(data.generated_at).toLocaleString("en-CA") : "unknown time";
     const qualityState = String(data?.evidence_quality?.status || "unavailable").replaceAll("_", " ");
@@ -290,6 +292,31 @@ function renderProviderLocalSearchClosureFreshness529(data) {
     ["Search Console / GBP freshness", local.status || "unavailable", "current " + String(local.current_count ?? 0) + " / " + String(local.required_count ?? 2) + (localAge == null ? "" : " · oldest " + String(localAge) + " day(s)")],
     ["Current operator review", operator.freshness_state || "operator_review_not_recorded", operator.present === true ? "review age " + String(operator.review_age_days ?? "unknown") + " day(s) · current trace match " + String(operator.trace_matches_current_evidence === true ? "YES" : "NO") : "explicit current review required before any manual closure/HOLD outcome is treated as current"],
     ["First-party context", contract.first_party_context_remains_separate_descriptive_evidence === true ? "SEPARATE" : "UNKNOWN", "descriptive only; never substitutes for provider/property/location/window evidence"],
+    ["Automatic canonical HOLD narrowing", contract.automatic_canonical_hold_narrowing_performed === false ? "NONE" : "UNKNOWN", "canonical backlog update remains a separate explicit manual source action"],
+    ["Ranking / demand / conversion causation", truth.ranking_outcome_inferred === false && truth.demand_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "provider/search movement remains descriptive"]
+  ];
+  host.innerHTML = summary + rows.map((row) =>
+    '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
+  ).join("");
+}
+
+function renderProviderLocalSearchClosureIntegrity539(data) {
+  const host = byId450("localProviderClosureIntegrity539");
+  if (!host) return;
+  const review = data?.provider_local_search_closure_evidence_integrity_review || {};
+  const provider = review.provider_source_identity || {};
+  const local = review.local_search_identity || {};
+  const operator = review.operator_review_identity || {};
+  const contract = review.integrity_contract || {};
+  const truth = review.truth_boundary || {};
+  const summary = '<div class="summary-item"><div><strong>Build 539 closure evidence integrity</strong>'
+    + '<div class="muted">Exact provider source trace, Search Console / GBP property-location-window trace and current explicit operator review must still match. Missing or drifted identity remains review/HOLD.</div></div>'
+    + '<span>' + esc450(review.status || "retained_freshness_review_required") + '</span></div>';
+  const rows = [
+    ["Provider source trace", provider.trace_match === true ? "EXACT" : "REVIEW", provider.identity_complete === true ? "provider/payment/refund/message identity explicit" : "missing provider source identity"],
+    ["Search Console / GBP property-location-window trace", local.trace_match === true ? "EXACT" : "REVIEW", local.identity_complete === true ? "property/location and dated comparison windows explicit" : "missing local-search identity"],
+    ["Explicit operator review", operator.current === true ? "CURRENT + MATCHED" : "REVIEW", operator.identity_complete === true ? "manual review identity present" : "dated reviewer/outcome/reference/trace identity required"],
+    ["First-party context", contract.first_party_context_remains_separate_descriptive_evidence === true ? "SEPARATE" : "UNKNOWN", "descriptive only; never substitutes for provider or local-search evidence"],
     ["Automatic canonical HOLD narrowing", contract.automatic_canonical_hold_narrowing_performed === false ? "NONE" : "UNKNOWN", "canonical backlog update remains a separate explicit manual source action"],
     ["Ranking / demand / conversion causation", truth.ranking_outcome_inferred === false && truth.demand_causation_inferred === false && truth.booking_conversion_causation_inferred === false ? "NOT INFERRED" : "UNKNOWN", "provider/search movement remains descriptive"]
   ];
