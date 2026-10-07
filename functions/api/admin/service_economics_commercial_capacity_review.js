@@ -4,7 +4,7 @@ import { requireStaffAccess, json } from "../_lib/staff-auth.js";
 import { onRequestGet as getAccountingStatement } from "./accounting_statement_report.js";
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
-import { buildSeasonalCapabilityPublicClaimEvidenceIntegrityReview } from "../_lib/seasonal-capability-public-claim-evidence-integrity-review.js";
+import { buildWinterBookingQuoteRuleEvidenceIntegrityReview } from "../_lib/winter-booking-quote-rule-evidence-integrity-review.js";
 // Retained Build 528 endpoint marker: buildControlledEnvironmentRoutingOutcomeFreshnessCapacityReview · authority:"controlled_environment_routing_outcome_freshness_capacity_review"
 // Retained Build 527 endpoint markers: buildWinterBookingQuoteRuleOutcomeFreshnessReview · authority:"winter_booking_quote_rule_outcome_freshness_review" · retained_winter_rule_outcome_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity"
 // Retained Build 526 endpoint markers: buildSeasonalCapabilityPublicClaimOutcomeFreshnessReview · authority:"seasonal_capability_public_claim_outcome_freshness_review" · retained_public_claim_outcome_authority:"seasonal_capability_public_claim_decision_outcome_continuity" · retained_controlled_environment_routing_outcome_authority:"controlled_environment_routing_outcome_evidence_continuity"
@@ -38,7 +38,7 @@ export async function onRequestGet({request,env}){
     collect("pricing_learning",()=>getPricingLearning({request:pricingRequest,env}))
   ]);
   if(economicsSource.restricted||fleetSource.restricted)return json({ok:false,error:"Controlled-Environment Routing Outcome Evidence Continuity requires the retained Administration/Finance and commercial evidence authorities.",source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource)},403);
-  const review=buildSeasonalCapabilityPublicClaimEvidenceIntegrityReview({
+  const review=buildWinterBookingQuoteRuleEvidenceIntegrityReview({
     economics:economicsSource.data?.operational_profitability||{},
     fleet:fleetSource.data?.learning||{},
     pricing:pricingSource.data||{},
@@ -51,8 +51,12 @@ export async function onRequestGet({request,env}){
     year,
     pricing_window_days:days,
     ...review,
-    authority:"seasonal_capability_public_claim_evidence_integrity_review",
-    release_authority:"seasonal_capability_public_claim_evidence_integrity_review",
+    authority:"winter_booking_quote_rule_evidence_integrity_review",
+    release_authority:"winter_booking_quote_rule_evidence_integrity_review",
+    retained_winter_rule_freshness_authority:"winter_booking_quote_rule_outcome_freshness_review",
+    retained_seasonal_public_claim_integrity_authority:"seasonal_capability_public_claim_evidence_integrity_review",
+    retained_availability_authority:"/api/availability",
+    retained_checkout_collision_authority:"checkout_server_side_collision_revalidation",
     retained_seasonal_public_claim_freshness_authority:"seasonal_capability_public_claim_outcome_freshness_review",
     retained_routing_outcome_authority:"controlled_environment_routing_outcome_evidence_continuity",
     retained_winter_rule_outcome_authority:"winter_booking_quote_rule_controlled_activation_outcome_continuity",
