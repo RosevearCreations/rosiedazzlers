@@ -3,15 +3,17 @@
 This is the living restart authority. Historical release evidence belongs in Git history/workflows; exact accepted identities come from live refs and exact-SHA evidence.
 
 ## Current release boundary
-The synchronized Production predecessor is retained through BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md.
+The synchronized Production predecessor is retained through BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md.
 
-**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release.
+**Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is the active bounded release.
 
-**Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+**Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 
-Current contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py.
-Retained provider/local-search freshness authority: BUILD529_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Retained manual closure authority: BUILD519_PROVIDER_LOCAL_SEARCH_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
+Current contract: BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py.
+Retained recovery/device freshness authority: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Retained manual closure authority: BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 Production deployment/runtime/business acceptance must independently prove that exact SHA.
+
+<!-- Retained Build 539 source-authority compatibility: **Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release. **Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main. Current contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py. -->
 
 <!-- Retained literal compatibility for Build 538 source-authority checks:
 **Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is the active bounded release.
