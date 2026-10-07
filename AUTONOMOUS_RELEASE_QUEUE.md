@@ -164,9 +164,15 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is the active bounded release.
+**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is the active bounded release.
 
+Current contract: BUILD538_CONTROLLED_ENVIRONMENT_ROUTING_CAPACITY_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py. Retained routing/capacity freshness authority: BUILD528_CONTROLLED_ENVIRONMENT_ROUTING_OUTCOME_FRESHNESS_CAPACITY_REVIEW.md. Retained winter-rule integrity authority: BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+
+<!-- Retained literal compatibility for Build 537 source-authority checks:
+**Build 537 — Winter Booking & Quote Rule Evidence Integrity Review** is the active bounded release.
+**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 Current contract: BUILD537_WINTER_BOOKING_QUOTE_RULE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/winter_booking_quote_rule_evidence_integrity_review_check.py. Retained winter-rule freshness authority: BUILD527_WINTER_BOOKING_QUOTE_RULE_OUTCOME_FRESHNESS_REVIEW.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+-->
 
 <!-- Retained literal compatibility for Build 536 source-authority checks:
 **Build 536 — Seasonal Capability & Public Claim Evidence Integrity Review** is the active bounded release.
@@ -300,7 +306,7 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 538 — Controlled-Environment Routing & Capacity Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
