@@ -217,6 +217,10 @@ required_authorities = {
         "scripts/controlled_environment_routing_outcome_freshness_capacity_review_check.py",
         "scripts/controlled_environment_routing_outcome_freshness_capacity_review_test.mjs",
     ],
+    "controlled_environment_routing_capacity_evidence_integrity_review": [
+        "scripts/controlled_environment_routing_capacity_evidence_integrity_review_check.py",
+        "scripts/controlled_environment_routing_capacity_evidence_integrity_review_test.mjs",
+    ],
     "winter_booking_quote_rule_outcome_freshness_review": [
         "scripts/winter_booking_quote_rule_outcome_freshness_review_check.py",
         "scripts/winter_booking_quote_rule_outcome_freshness_review_test.mjs",

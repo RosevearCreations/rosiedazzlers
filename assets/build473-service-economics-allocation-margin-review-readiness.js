@@ -38,6 +38,7 @@
       renderControlledEnvironmentOperationalReadiness(data.economics?.controlled_environment_operational_readiness || {});
       renderControlledEnvironmentRoutingOutcomeContinuity(data.economics?.controlled_environment_routing_outcome_continuity || {});
       renderControlledEnvironmentRoutingOutcomeFreshnessCapacityReview(data.economics?.controlled_environment_routing_outcome_freshness_capacity_review || {});
+      renderControlledEnvironmentRoutingCapacityEvidenceIntegrityReview(data.economics?.controlled_environment_routing_capacity_evidence_integrity_review || {});
       renderCandidates(data.review_candidates || []);
       renderSources(data.source_status || {});
       const allocation = data.economics?.allocation_margin_readiness || {};
@@ -775,6 +776,58 @@
       " · capacity not observed: "+String(review.counts?.capacity_not_observed??0)+
       " · manual review: "+String(review.counts?.manual_review_required??0)+
       ". Historical observed capacity never establishes future capacity.";
+  }
+
+
+  function renderControlledEnvironmentRoutingCapacityEvidenceIntegrityReview(review) {
+    const mount=$("controlledEnvironmentRoutingCapacityIntegrityGrid"); if(!mount) return;
+    const labels={
+      integrity_current:"Evidence integrity current",
+      retained_routing_capacity_review_required:"Retained routing/capacity review required",
+      service_site_workflow_identity_review_required:"Service/site/workflow identity required",
+      service_site_workflow_identity_drift_review_required:"Service/site/workflow identity drift",
+      routing_outcome_identity_review_required:"Routing outcome identity required",
+      routing_outcome_identity_drift_review_required:"Routing outcome identity drift",
+      site_confirmation_identity_review_required:"Site confirmation identity required",
+      site_confirmation_identity_drift_review_required:"Site confirmation identity drift",
+      safe_reschedule_identity_review_required:"Safe reschedule identity required",
+      safe_reschedule_identity_drift_review_required:"Safe reschedule identity drift",
+      bounded_capacity_context_identity_review_required:"Bounded capacity context required",
+      bounded_capacity_context_identity_drift_review_required:"Bounded capacity context drift",
+      integrity_source_unavailable:"Integrity source unavailable",
+      not_applicable:"Not applicable"
+    };
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      const state=row.manual_review_required===true?"review":row.evidence_integrity_current===true?"observed":"soft";
+      cards.push('<article class="review-candidate state-'+esc(state)+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service").replaceAll("_"," ")+" · "+String(row.code||"unknown"))+
+        '</strong><span class="pill">'+esc(labels[row.integrity_state]||"Manual review")+'</span></div>'+
+        '<p class="mini">Service/site/workflow identity: '+esc(row.service_site_workflow_identity_matches_outcome_snapshot===true?"MATCH":row.service_site_workflow_identity_recorded===true?"DRIFT":"MISSING")+
+        ' · routing outcome identity: '+esc(row.routing_outcome_identity_matches_outcome_snapshot===true?"MATCH":row.routing_outcome_identity_recorded===true?"DRIFT":"MISSING")+'</p>'+
+        '<p class="mini">Site confirmation identity: '+esc(row.site_confirmation_identity_matches_outcome_snapshot===true?"MATCH":row.site_confirmation_identity_recorded===true?"DRIFT":"MISSING")+
+        ' · safe-reschedule identity: '+esc(row.safe_reschedule_identity_matches_outcome_snapshot===true?"MATCH":row.safe_reschedule_identity_recorded===true?"DRIFT":"MISSING")+'</p>'+
+        '<p class="mini">Bounded capacity context: '+esc(row.bounded_capacity_context_identity_matches_outcome_snapshot===true?"MATCH":row.bounded_capacity_context_identity_recorded===true?"DRIFT":"MISSING")+
+        ' · state: '+esc(row.current_capacity_state||"capacity_not_observed")+
+        ' · observed jobs: '+esc(row.observed_capacity_jobs==null?"not recorded":String(row.observed_capacity_jobs))+'</p>'+
+        '<p class="mini">A qualified site or successful route does not establish universal indoor capability, another service safe operability, or future capacity. Automatic route/reschedule/capacity reservation/HOLD mutation: NONE.</p></article>');
+    }
+    for(const gap of (Array.isArray(review.gaps)?review.gaps:[])){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>Controlled-environment integrity · '+
+        esc(gap.code||"unknown")+'</strong><span class="pill">MANUAL REVIEW</span></div><p class="mini">State: '+
+        esc(gap.state||"review_required")+' · Missing/re-review: '+esc((gap.missing||[]).join(", ")||"exact outcome-time identity snapshot")+
+        ' · Safe default: '+esc(gap.safe_default||"retain_manual_site_confirmation_safe_reschedule_or_capacity_review")+'</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No controlled-environment routing/capacity integrity rows are available.</div>';
+    const detail=$("controlledEnvironmentRoutingCapacityIntegrityDetail");
+    if(detail) detail.textContent="Candidates: "+String(review.counts?.controlled_environment_candidate??0)+
+      " · integrity current: "+String(review.counts?.integrity_current??0)+
+      " · service/site/workflow identity review: "+String(review.counts?.service_site_workflow_identity_review??0)+
+      " · site confirmation identity review: "+String(review.counts?.site_confirmation_identity_review??0)+
+      " · safe reschedule identity review: "+String(review.counts?.safe_reschedule_identity_review??0)+
+      " · bounded capacity context review: "+String(review.counts?.bounded_capacity_context_identity_review??0)+
+      " · manual review: "+String(review.counts?.review_required??0)+
+      ". Missing identity snapshots remain HOLD; historical capacity never establishes future capacity.";
   }
 
   function renderCandidates(rows) {
