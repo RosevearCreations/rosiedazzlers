@@ -968,7 +968,7 @@ jobs:
             echo "::error::Merge-conflict markers remain in source."
             exit 2
           fi
-      - name: Build 543 Staff Mobile Integrity Acceptance
+      - name: Current Staff Mobile Integrity Acceptance
         run: |
           node --check functions/api/_lib/staff-mobile-closure-evidence-integrity-review.js
           node --check scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
