@@ -1,0 +1,55 @@
+name: Booking & Quote Follow-Up Evidence Integrity Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-booking-quote-follow-up-integrity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: booking-quote-follow-up-evidence-integrity-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Booking & Quote Follow-Up Evidence Integrity Review
+        run: |
+          python scripts/booking_quote_follow_up_evidence_integrity_review_check.py
+          node scripts/booking_quote_follow_up_evidence_integrity_review_test.mjs
+      - name: Build 542 summary
+        run: |
+          {
+            echo '### Booking & Quote Follow-Up Evidence Integrity Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Retained Build 531 freshness authority: REVALIDATED'
+            echo '- Measurement/metric/allocation/duration: EXACT OR REVIEW'
+            echo '- Weather-ineligible sessions: EXCLUDED'
+            echo '- Owner outcome/decision trace/authorization/observation: EXACT OR REVIEW'
+            echo '- Pricing / outreach / booking / canonical HOLD mutation: NONE'
+            echo '- Triggered stop condition: REVIEW/HOLD'
+          } >> "$GITHUB_STEP_SUMMARY"
