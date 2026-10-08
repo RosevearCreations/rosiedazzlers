@@ -1,0 +1,24 @@
+name: Staff & Mobile Closure Evidence Integrity Review Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integrity:
+    name: staff-mobile-closure-evidence-integrity-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Build 543 source, runtime helper and regression tests
+        run: |
+          node --check functions/api/_lib/staff-mobile-closure-evidence-integrity-review.js
+          node --check scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
+          node scripts/staff_mobile_closure_evidence_integrity_review_test.mjs

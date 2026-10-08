@@ -885,6 +885,11 @@ jobs:
           python scripts/release_rollback_recovery_check.py
           python scripts/performance_accessibility_security_check.py
           python scripts/release_hygiene_check.py
+      - name: Build 543 Staff Mobile Integrity Acceptance
+        run: |
+          node --check functions/api/_lib/staff-mobile-closure-evidence-integrity-review.js
+          node --check scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
+          node scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
 
       - name: Source acceptance summary
         run: |
