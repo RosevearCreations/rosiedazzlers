@@ -164,9 +164,11 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is the active bounded release.
+**Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is the active bounded release.
 
-Current contract: BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py. Retained recovery/device freshness authority: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Retained manual closure authority: BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+Current contract: BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py. Retained freshness authority: BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md. Retained outcome authority: BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md.
+
+<!-- Retained Build 540 source-authority compatibility:\n**Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is the active bounded release.\n**Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.\nCurrent contract: BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py.\n-->
 
 <!-- Retained Build 539 source-authority compatibility:\n**Build 539 — Provider & Local Search Closure Evidence Integrity Review** is the active bounded release.\n**Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.\nCurrent contract: BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/provider_local_search_closure_evidence_integrity_review_check.py.\n-->
 
@@ -314,9 +316,9 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+**Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
 
-Build 541 begins only after Build 540 is independently GREEN on protected main. Production deployment/runtime/business acceptance for Build 540 must independently prove the exact promoted SHA before the queue advances.
+Build 542 begins only after Build 541 is independently GREEN on protected main. Production deployment/runtime/business acceptance for Build 541 must independently prove the exact promoted SHA before the queue advances.
 
 <!-- Retained literal compatibility for Build 530 source-authority checks:
 **Build 530 — Recovery & Authenticated Device Closure Evidence Freshness Review** is the active bounded release.
