@@ -194,7 +194,7 @@ function inspectRow(retained, fresh, sourcesCurrent, evaluatedAt, days) {
     newOwner.stop_condition_triggered !== true &&
     srcMeasurement.stop_condition_triggered_count === 0;
   let integrityState = "retained_freshness_review_required";
-  if (!sourcesCurrent || !newBoundary.current || newBoundary.review_required !== false) integrityState = "retained_freshness_review_required";
+  if (!sourcesCurrent || !newBoundary.current || newBoundary.review_required !== false || clean(fresh.freshness_state) !== currentState) integrityState = "retained_freshness_review_required";
   else if (!stopFree || !weatherValid) integrityState = "weather_or_stop_condition_review_required";
   else if (!measureExact) integrityState = "measurement_allocation_duration_identity_review_required";
   else if (!ownerExact) integrityState = "owner_follow_up_identity_review_required";
