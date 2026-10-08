@@ -1,0 +1,25 @@
+name: Service Economics, Seasonal Capacity & Reliability Evidence Integrity Review Authority
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  integrity:
+    name: service-economics-seasonal-capacity-reliability-integrity-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate bounded four-domain source and regression
+        run: |
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-evidence-integrity-review.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_decision_readiness.js
+          node --check scripts/service_economics_seasonal_capacity_reliability_evidence_integrity_review_test.mjs
+          node scripts/service_economics_seasonal_capacity_reliability_evidence_integrity_review_test.mjs
