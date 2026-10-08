@@ -1,0 +1,20 @@
+name: Repository Cleanup Dependency Guard
+on:
+  push:
+    branches: [dev, main, 'build*']
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cleanup-contract:
+    name: repository-cleanup-dependency-contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate source archival and retained dependencies
+        run: python scripts/repository_cleanup_check.py
