@@ -36,7 +36,7 @@ for(const outcome of ["hold","close_no_change","separate_change_review"]) {
   assert.equal(integrity({follow_up_freshness:item.freshness,follow_up_outcome_continuity:item.retained,generated_at:now}).status,"booking_quote_follow_up_integrity_current",outcome);
 }
 function check(mutator, expected) {
-  const item=fixture();mutator(item);
+  const item=structuredClone(fixture());mutator(item);
   assert.equal(integrity({follow_up_freshness:item.freshness,follow_up_outcome_continuity:item.retained,generated_at:now}).status,expected);
 }
 check(x=>{x.freshness.rows[0].retained_measurement.primary_metric="different";},"measurement_allocation_duration_identity_review_required");

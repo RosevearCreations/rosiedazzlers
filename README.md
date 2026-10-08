@@ -1,8 +1,12 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review**.
+Current source direction: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review**.
 
-Current contract: `BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py`. Retained freshness authority: `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`. Retained outcome authority: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+<!-- Retained Build 541 compatibility: Current source direction: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review**. -->
+
+Current contract: `BUILD542_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/booking_quote_follow_up_evidence_integrity_review_check.py`.
+
+<!-- Retained Build 541 source authority: Current contract: `BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py`. --> Retained freshness authority: `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`. Retained outcome authority: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
 
 <!-- Retained Build 540 checker compatibility: Current source direction: **Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review**. `BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md` `scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py` -->
 

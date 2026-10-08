@@ -5,11 +5,17 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md.
 
-**Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is the active bounded release.
+**Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is the active bounded release.
 
-**Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+<!-- Retained Build 541 source authority: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is the active bounded release. -->
 
-Current contract: BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py.
+**Build 543 — Staff & Mobile Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained Build 541 compatibility: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is next only after the current release is independently GREEN on protected main. -->
+
+Current contract: BUILD542_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/booking_quote_follow_up_evidence_integrity_review_check.py. Retained freshness: BUILD532_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_FRESHNESS_REVIEW.md; retained outcome: BUILD522_BOOKING_QUOTE_EXPERIMENT_FOLLOW_UP_OUTCOME_CONTINUITY.md.
+
+<!-- Retained Build 541 source authority: Current contract: BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md. Current source authority: scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py. -->
 Retained freshness authority: BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md. Retained outcome authority: BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md. Renewed roadmap: FORWARD_BUILD_ROADMAP_536_545.md. Canonical HOLD backlog: STARTUP_GO_LIVE_BLOCKERS.md.
 Production deployment/runtime/business acceptance must independently prove that exact SHA.
 
