@@ -1,0 +1,55 @@
+name: Recovery & Authenticated Device Closure Evidence Integrity Review Authority
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+      - 'build*'
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rosiedazzlers-recovery-authenticated-device-closure-integrity-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  authority:
+    name: recovery-authenticated-device-closure-evidence-integrity-review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Validate Recovery & Authenticated Device Closure Evidence Integrity Review
+        run: |
+          python scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py
+          node scripts/recovery_authenticated_device_closure_evidence_integrity_review_test.mjs
+      - name: Build 540 summary
+        run: |
+          {
+            echo '### Recovery & Authenticated Device Closure Evidence Integrity Review'
+            echo "- SHA: ${GITHUB_SHA}"
+            echo '- Retained Build 530 freshness authority: REVALIDATED'
+            echo '- Bounded non-Production recovery trace: EXACT OR REVIEW'
+            echo '- Authenticated role/device/browser trace: EXACT OR REVIEW'
+            echo '- Separate population operator reviews: CURRENT + TRACE-MATCHED OR REVIEW'
+            echo '- Production restore / authenticated-session mutation: NONE'
+            echo '- Canonical HOLD / Supabase / schema / storage / telemetry mutation: NONE'
+          } >> "$GITHUB_STEP_SUMMARY"
