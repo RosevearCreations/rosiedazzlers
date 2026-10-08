@@ -974,6 +974,13 @@ jobs:
           node --check scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
           node scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
 
+      - name: Current Service Economics Evidence Integrity Acceptance
+        run: |
+          node --check functions/api/_lib/service-economics-seasonal-capacity-reliability-evidence-integrity-review.js
+          node --check functions/api/admin/service_economics_seasonal_capacity_reliability_decision_readiness.js
+          node --check scripts/service_economics_seasonal_capacity_reliability_evidence_integrity_review_test.mjs
+          node scripts/service_economics_seasonal_capacity_reliability_evidence_integrity_review_test.mjs
+
       - name: Current source summary
         run: |
           {

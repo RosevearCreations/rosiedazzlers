@@ -5,13 +5,14 @@ import { onRequestGet as getTrendContinuity } from "./service_economics_seasonal
 import { buildServiceEconomicsSeasonalCapacityReliabilityDecisionReadiness } from "../_lib/service-economics-seasonal-capacity-reliability-decision-readiness.js";
 import { buildServiceEconomicsSeasonalCapacityReliabilityDecisionOutcomeContinuity } from "../_lib/service-economics-seasonal-capacity-reliability-decision-outcome-continuity.js";
 import { buildServiceEconomicsSeasonalCapacityReliabilityEvidenceFreshnessReview } from "../_lib/service-economics-seasonal-capacity-reliability-evidence-freshness-review.js";
+import { buildServiceEconomicsSeasonalCapacityReliabilityEvidenceIntegrityReview } from "../_lib/service-economics-seasonal-capacity-reliability-evidence-integrity-review.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getTrendContinuity({ request:request.clone(), env });
   const payload = await source.json().catch(() => null);
 
   if ([401,403].includes(source.status)) {
-    return json({ ok:false, error:"Unauthorized.", decision_readiness_build:514, decision_outcome_build:524, service_economics_seasonal_capacity_reliability_freshness_build:534 }, source.status);
+    return json({ ok:false, error:"Unauthorized.", decision_readiness_build:514, decision_outcome_build:524, service_economics_seasonal_capacity_reliability_freshness_build:534, service_economics_seasonal_capacity_reliability_integrity_build:544 }, source.status);
   }
 
   const generatedAt=new Date().toISOString();
@@ -33,6 +34,14 @@ export async function onRequestGet({ request, env }) {
     freshness_window_days:30
   });
 
+  const integrityReview=buildServiceEconomicsSeasonalCapacityReliabilityEvidenceIntegrityReview({
+    freshness_review:freshnessReview,
+    decision_outcome_continuity:outcomeContinuity,
+    decision_readiness:readiness,
+    trend_continuity:payload || {},
+    generated_at:generatedAt
+  });
+
   return json({
     ok:source.ok && Boolean(payload) && readiness.status !== "evidence_sources_unavailable",
     decision_readiness_build:514,
@@ -44,6 +53,9 @@ export async function onRequestGet({ request, env }) {
     service_economics_seasonal_capacity_reliability_freshness_build:534,
     service_economics_seasonal_capacity_reliability_freshness_authority:"service_economics_seasonal_capacity_reliability_evidence_freshness_review",
     service_economics_seasonal_capacity_reliability_evidence_freshness_review:freshnessReview,
+    service_economics_seasonal_capacity_reliability_integrity_build:544,
+    service_economics_seasonal_capacity_reliability_integrity_authority:"service_economics_seasonal_capacity_reliability_evidence_integrity_review",
+    service_economics_seasonal_capacity_reliability_evidence_integrity_review:integrityReview,
     source_status:{
       retained_build504_continuity:{
         available:source.ok && Boolean(payload),
@@ -81,6 +93,7 @@ function json(value,status=200) {
     "Cache-Control":"no-store",
     "X-Rosie-Service-Economics-Decision-Readiness":"build-514-read-only",
     "X-Rosie-Service-Economics-Decision-Outcome":"build-524-read-only",
-    "X-Rosie-Service-Economics-Evidence-Freshness":"build-534-read-only"
+    "X-Rosie-Service-Economics-Evidence-Freshness":"build-534-read-only",
+    "X-Rosie-Service-Economics-Evidence-Integrity":"build-544-read-only"
   }});
 }
