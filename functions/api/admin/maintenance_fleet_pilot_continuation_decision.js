@@ -6,6 +6,7 @@ import { onRequestGet as getContinuityReview } from "./maintenance_fleet_pilot_o
 import { buildMaintenanceFleetPilotContinuationDecision } from "../_lib/maintenance-fleet-pilot-continuation-decision.js";
 import { buildMaintenanceFleetContinuationOutcomeContinuity } from "../_lib/maintenance-fleet-continuation-outcome-continuity.js";
 import { buildMaintenanceFleetContinuationEvidenceFreshnessReview } from "../_lib/maintenance-fleet-continuation-evidence-freshness-review.js";
+import { buildMaintenanceFleetContinuationEvidenceIntegrityReview } from "../_lib/maintenance-fleet-continuation-evidence-integrity-review.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getContinuityReview({ request: request.clone(), env });
@@ -20,6 +21,8 @@ export async function onRequestGet({ request, env }) {
       continuation_outcome_authority:"maintenance_fleet_continuation_outcome_continuity",
       maintenance_fleet_continuation_freshness_build:531,
       maintenance_fleet_continuation_freshness_authority:"maintenance_fleet_continuation_evidence_freshness_review",
+      maintenance_fleet_continuation_integrity_build:541,
+      maintenance_fleet_continuation_integrity_authority:"maintenance_fleet_continuation_evidence_integrity_review",
       error:"Unauthorized."
     },source.status);
   }
@@ -45,6 +48,11 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt,
     freshness_window_days: 30
   });
+  const integrity = buildMaintenanceFleetContinuationEvidenceIntegrityReview({
+    continuation_freshness: freshness,
+    continuation_outcome: outcome,
+    generated_at: generatedAt
+  });
 
   return json({
     ok: source.ok && Boolean(payload?.ok),
@@ -54,6 +62,8 @@ export async function onRequestGet({ request, env }) {
     continuation_outcome_authority:"maintenance_fleet_continuation_outcome_continuity",
     maintenance_fleet_continuation_freshness_build:531,
     maintenance_fleet_continuation_freshness_authority:"maintenance_fleet_continuation_evidence_freshness_review",
+    maintenance_fleet_continuation_integrity_build:541,
+    maintenance_fleet_continuation_integrity_authority:"maintenance_fleet_continuation_evidence_integrity_review",
     generated_at:generatedAt,
     pilot_outcome_evidence:pilotOutcomeEvidence,
     pilot_outcome_continuity_review:continuity,
@@ -62,6 +72,7 @@ export async function onRequestGet({ request, env }) {
     continuation_outcome_record:outcomeRecord,
     maintenance_fleet_continuation_outcome_continuity:outcome,
     maintenance_fleet_continuation_evidence_freshness_review:freshness,
+    maintenance_fleet_continuation_evidence_integrity_review:integrity,
     source_status:{
       pilot_outcome_continuity_review:{available:source.ok&&Boolean(payload),http_status:source.status},
       pilot_outcome_evidence:{available:Boolean(pilotOutcomeEvidence && Object.keys(pilotOutcomeEvidence).length),status:pilotOutcomeEvidence?.status||"unavailable"},
@@ -96,6 +107,7 @@ function json(value,status=200){
     "Cache-Control":"no-store",
     "X-Rosie-Maintenance-Fleet-Pilot-Continuation-Decision":"build-511-read-only",
     "X-Rosie-Maintenance-Fleet-Continuation-Outcome":"build-521-read-only",
-    "X-Rosie-Maintenance-Fleet-Continuation-Freshness":"build-531-read-only"
+    "X-Rosie-Maintenance-Fleet-Continuation-Freshness":"build-531-read-only",
+    "X-Rosie-Maintenance-Fleet-Continuation-Integrity":"build-541-read-only"
   }});
 }
