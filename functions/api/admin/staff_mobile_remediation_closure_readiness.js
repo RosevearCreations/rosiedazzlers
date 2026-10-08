@@ -6,6 +6,7 @@ import { onRequestGet as getLearning } from "./staff_support_mobile_efficiency_l
 import { buildStaffMobileRemediationClosureReadiness } from "../_lib/staff-mobile-remediation-closure-readiness.js";
 import { buildStaffMobileRemediationClosureOutcomeContinuity } from "../_lib/staff-mobile-remediation-closure-outcome-continuity.js";
 import { buildStaffMobileClosureEvidenceFreshnessReview } from "../_lib/staff-mobile-closure-evidence-freshness-review.js";
+import { buildStaffMobileClosureEvidenceIntegrityReview } from "../_lib/staff-mobile-closure-evidence-integrity-review.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getLearning({ request: request.clone(), env });
@@ -36,7 +37,13 @@ export async function onRequestGet({ request, env }) {
     freshness_window_days: 30
   });
 
+  const closureIntegrity = buildStaffMobileClosureEvidenceIntegrityReview({
+    closure_freshness:closureFreshness, closure_outcome_continuity:closureOutcome, generated_at:generatedAt
+  });
   return json({
+    staff_mobile_closure_integrity_build:543,
+    staff_mobile_closure_integrity_authority:"staff_mobile_closure_evidence_integrity_review",
+    staff_mobile_closure_evidence_integrity_review:closureIntegrity,
     ok: source.ok && Boolean(payload?.ok),
     closure_readiness_build:513,
     closure_readiness_authority:"staff_mobile_remediation_closure_readiness",
@@ -85,6 +92,7 @@ function json(value,status=200){
     "Cache-Control":"no-store",
     "X-Rosie-Staff-Mobile-Closure-Readiness":"build-513-read-only",
     "X-Rosie-Staff-Mobile-Closure-Outcome":"build-523-read-only",
-    "X-Rosie-Staff-Mobile-Closure-Freshness":"build-533-read-only"
+    "X-Rosie-Staff-Mobile-Closure-Freshness":"build-533-read-only",
+    "X-Rosie-Staff-Mobile-Closure-Integrity":"build-543-read-only"
   }});
 }
