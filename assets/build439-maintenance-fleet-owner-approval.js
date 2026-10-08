@@ -1,4 +1,4 @@
-// Build 439/449/459/469/479/491/501/511/521/531 — manual read-only owner-decision, pilot evidence, continuation decision/outcome + freshness UI.
+// Build 439/449/459/469/479/491/501/511/521/531/541 — manual read-only owner-decision, pilot evidence, continuation decision/outcome + freshness UI.
 (function(g){"use strict";
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -21,7 +21,7 @@ async function refresh(){
   ]);
   const [data,outcomeData]=await Promise.all([response.json().catch(()=>null),outcomeResponse.json().catch(()=>null)]);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderPilotContinuationDecision(outcomeData?.maintenance_fleet_pilot_continuation_decision||{});renderPilotContinuationOutcome(outcomeData?.maintenance_fleet_continuation_outcome_continuity||{});renderPilotContinuationFreshness(outcomeData?.maintenance_fleet_continuation_evidence_freshness_review||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderPilotContinuationDecision(outcomeData?.maintenance_fleet_pilot_continuation_decision||{});renderPilotContinuationOutcome(outcomeData?.maintenance_fleet_continuation_outcome_continuity||{});renderPilotContinuationFreshness(outcomeData?.maintenance_fleet_continuation_evidence_freshness_review||{});renderPilotContinuationIntegrity(outcomeData?.maintenance_fleet_continuation_evidence_integrity_review||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
@@ -122,6 +122,17 @@ function renderPilotContinuationFreshness(f){
  '<p class="mini"><strong>Owner outcome:</strong> '+esc(o.outcome||"not_recorded")+' · <strong>review current:</strong> '+(o.review_current===true?"yes":"no")+' · <strong>continuation observation current:</strong> '+(o.continuation_observation_current===true?"yes":"no")+'</p>'+
  '<p class="mini"><strong>Freshness window:</strong> '+esc(f.freshness_window_days??30)+' days · <strong>stop condition triggered:</strong> '+(e.stop_condition_triggered===true?"yes — review required":"no")+'</p>'+
  '<p class="oa-boundary">A prior continue outcome does not reserve future capacity or create a recurring commitment. Build 531 performs no enrollment, booking/invoice mutation, recurring billing, capacity reservation, automatic stop action or canonical HOLD narrowing.</p></div>';
+}
+
+function renderPilotContinuationIntegrity(i){
+ const mount=$("pilotContinuationIntegrity"); if(!mount)return;
+ const e=i.pilot_execution_identity||{},o=i.owner_outcome_identity||{};
+ mount.innerHTML='<div class="oa-card"><div class="oa-head"><h3>Build 541 continuation evidence integrity</h3><span class="oa-pill">'+esc(i.status||"retained_freshness_review_required")+'</span></div>'+
+ '<p><strong>Execution identity:</strong> '+(e.identity_complete===true?"complete":"review required")+' · <strong>trace match:</strong> '+(e.trace_match===true?"yes":"no")+'</p>'+
+ '<p class="mini"><strong>Bounds:</strong> participants '+(e.participant_bound_satisfied===true?"current":"review")+' · duration '+(e.duration_bound_satisfied===true?"current":"review")+' · <strong>stop triggered:</strong> '+(e.stop_condition_triggered===true?"yes — review required":"no")+'</p>'+
+ '<p class="mini"><strong>Dimensions:</strong> capacity '+(e.capacity_revalidation_complete===true?"complete":"review")+' · invoicing '+(e.invoicing_evidence_complete===true?"complete":"review")+' · travel '+(e.travel_evidence_complete===true?"complete":"review")+' · stop evidence '+(e.stop_condition_evidence_complete===true?"complete":"review")+'</p>'+
+ '<p class="mini"><strong>Owner outcome:</strong> '+esc(o.outcome||"not_recorded")+' · <strong>identity complete:</strong> '+(o.identity_complete===true?"yes":"no")+' · <strong>continuation observation identity:</strong> '+(o.continuation_observation_identity_complete===true?"yes":"no")+'</p>'+
+ '<p class="oa-boundary">Build 541 is read-only. Historical continuation cannot reserve future capacity or override a current stop condition. No enrollment, recurring billing, booking/invoice mutation, capacity reservation or canonical HOLD narrowing is performed here.</p></div>';
 }
 
 function renderCapacity(c){
