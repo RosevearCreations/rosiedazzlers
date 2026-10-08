@@ -1,8 +1,10 @@
 # Rosie Dazzlers
 
-Current source direction: **Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review**.
+Current source direction: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review**.
 
-Current contract: `BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py`. Retained recovery/device freshness authority: `BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md`. Retained manual closure authority: `BUILD520_RECOVERY_DRILL_AUTHENTICATED_DEVICE_MANUAL_CLOSURE_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+Current contract: `BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py`. Retained freshness authority: `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`. Retained outcome authority: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
+
+<!-- Retained Build 540 checker compatibility: Current source direction: **Build 540 — Recovery & Authenticated Device Closure Evidence Integrity Review**. `BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md` `scripts/recovery_authenticated_device_closure_evidence_integrity_review_check.py` -->
 
 <!-- Retained Build 539 source-authority compatibility: Current source direction: **Build 539 — Provider & Local Search Closure Evidence Integrity Review**. Current contract: `BUILD539_PROVIDER_LOCAL_SEARCH_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/provider_local_search_closure_evidence_integrity_review_check.py`. -->
 
