@@ -7,9 +7,9 @@ The synchronized Production predecessor is retained through BUILD540_RECOVERY_AU
 
 **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is the active bounded release.
 
-<!-- Retained Build 541 source authority: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is the active bounded release. -->
-
 **Build 543 — Staff & Mobile Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained Build 541 source authority: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is the active bounded release. -->
 
 <!-- Retained Build 541 compatibility: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is next only after the current release is independently GREEN on protected main. -->
 
