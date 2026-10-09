@@ -2,7 +2,7 @@
 
 This living queue records only the current bounded release path. Historical implementation belongs in Git/workflow evidence.
 
-Current bounded release: Build 544 — Service Economics, Seasonal Capacity & Reliability Evidence Integrity Review. Its contract is `BUILD544_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_EVIDENCE_INTEGRITY_REVIEW.md`; Build 545 is next only after independent Production GREEN. No actual business/provider evidence is inferred from source GREEN.
+Current bounded release: Build 545 — Production Learning & Roadmap Renewal. Its contract is `BUILD545_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`, reconciliation is `PRODUCTION_LEARNING_536_544.md`, and forward queue is `FORWARD_BUILD_ROADMAP_546_555.md`. Build 546 follows only after independent Build 545 Production GREEN. No actual business/provider evidence is inferred from source GREEN.
 
 ## Accepted checkpoint
 The accepted synchronized source and Production deployment/runtime checkpoint immediately precedes the current release. Resolve exact identity from live `dev`/`main` refs and exact-SHA workflow evidence rather than embedding commit identities here.
