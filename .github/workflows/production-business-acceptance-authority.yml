@@ -737,6 +737,19 @@ jobs:
           python scripts/seasonal_capability_public_claim_outcome_freshness_review_check.py
           node scripts/seasonal_capability_public_claim_outcome_freshness_review_test.mjs
 
+      - name: Validate observed winter booking safety and private DAIP storyboard
+        run: |
+          python -m py_compile scripts/winter_booking_safety_daip_storyboard_check.py
+          node --check functions/api/_lib/winter-booking-rule-observed-safety-transparency.js
+          node --check assets/daip-multicamera-storyboard.js
+          node --check scripts/winter_booking_rule_observed_safety_transparency_test.mjs
+          node --check scripts/daip_multicamera_storyboard_test.mjs
+          node --check functions/api/admin/service_economics_commercial_capacity_review.js
+          node --check assets/build473-service-economics-allocation-margin-review-readiness.js
+          python scripts/winter_booking_safety_daip_storyboard_check.py
+          node scripts/winter_booking_rule_observed_safety_transparency_test.mjs
+          node scripts/daip_multicamera_storyboard_test.mjs
+
       - name: Validate seasonal owner evidence closure & public claim readiness
         run: |
           python -m py_compile scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py

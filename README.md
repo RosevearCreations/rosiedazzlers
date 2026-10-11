@@ -1,8 +1,10 @@
 # Rosie Dazzlers
 
-**Current active build: 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness.** Staff-only, GET-only evidence workbench and owner/manual publication review. Contract: `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md`; validator: `scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py`; next: Build 547. Production GREEN requires independent exact-main Cloudflare deployment/runtime/business acceptance. The older Build 542 paragraph below is retained for compatibility with historical source checkers.
+**Current active build: 547 — Winter Booking Rule Observed Safety & Transparency with private DAIP multi-camera storyboard planning.** Staff-only, GET-only evidence workbench and owner/manual publication review. Contract: `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md`; DAIP roadmap: `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`; validator: `scripts/winter_booking_safety_daip_storyboard_check.py`; next: Build 548. Production GREEN requires independent exact-main Cloudflare deployment/runtime/business acceptance. The older Build 542 paragraph below is retained for compatibility with historical source checkers.
 
-Current source direction: **Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness**.
+Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**.
+
+<!-- Retained Build 546 source compatibility: Current source direction: **Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness**. -->
 
 <!-- Retained Build 542 source compatibility: Current source direction: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review**. -->
 
