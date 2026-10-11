@@ -29,6 +29,7 @@
       renderSeasonalPublicClaimOutcomeContinuity(data.economics?.seasonal_public_claim_outcome_continuity || {});
       renderSeasonalPublicClaimOutcomeFreshnessReview(data.economics?.seasonal_public_claim_outcome_freshness_review || {});
       renderSeasonalPublicClaimEvidenceIntegrityReview(data.economics?.seasonal_public_claim_evidence_integrity_review || {});
+      renderSeasonalOwnerPublicClaimReadiness(data.economics?.seasonal_owner_public_claim_readiness || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
@@ -369,6 +370,34 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No seasonal public-claim outcome freshness rows are available. Missing evidence remains HOLD.</div>';
     const detail=$("seasonalPublicClaimOutcomeFreshnessReviewDetail");
     if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · drift: "+String(review.counts?.drift??0)+" · manual review: "+String(review.counts?.review_required??0)+". Stale evidence never extends a public claim; broad winter availability remains HOLD.";
+  }
+
+  function renderSeasonalOwnerPublicClaimReadiness(review) {
+    const mount=$("seasonalOwnerPublicClaimReadinessGrid");
+    if(!mount)return;
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      const ready=row.manual_review_ready===true;
+      cards.push('<article class="review-candidate state-'+(ready?'observed':'review')+'"><div class="review-head"><strong>'+
+        esc(String(row.entity_type||"service")+" · "+String(row.code||"unknown"))+'</strong><span class="pill">'+
+        esc(row.state||"owner_evidence_or_decision_review_required")+'</span></div>'+
+        '<p class="mini">Service classification: '+esc(row.classification||"not verified")+
+        ' · source: '+esc(row.owning_evidence_source_type||"missing")+' / '+esc(row.owning_evidence_source||"missing")+
+        ' · minimum °C: '+esc(row.source_owned_minimum_working_temperature_c??"source-owned / not recorded")+'</p>'+
+        '<p class="mini">Owner decision: '+esc(row.owner_decision||"missing")+' · date: '+esc(row.owner_decision_at||"missing")+
+        ' · reference: '+esc(row.owner_decision_reference||"missing")+
+        ' · prior integrity: '+esc(row.integrity_state||"unavailable")+'</p>'+
+        '<p class="mini">Review wording: '+esc(row.proposed_wording||"not recorded")+'</p>'+
+        '<p class="mini">Missing/re-review: '+esc((row.missing||[]).join(", ")||"none; separate manual action still required")+
+        ' · Safe default: retain public-claim HOLD. Automatic publication/booking/quote/HOLD changes: NONE.</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No attributable service-specific owner evidence is available. Retain seasonal/public claim HOLD.</div>';
+    const detail=$("seasonalOwnerPublicClaimReadinessDetail");
+    if(detail)detail.textContent="Build 546 rows: "+String(review.row_count??0)+
+      " · manual publication decision review candidates: "+String(review.decision_ready_count??0)+
+      " · explicit retain-HOLD: "+String(review.retained_hold_count??0)+
+      " · review required: "+String(review.review_required_count??0)+
+      ". Readiness never means published or broadly winter-capable.";
   }
 
   function renderSeasonalPublicClaimEvidenceIntegrityReview(review) {

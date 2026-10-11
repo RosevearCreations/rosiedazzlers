@@ -82,3 +82,4 @@ Going forward:
 - do not create a `docs/archive/` copy of files already preserved by Git;
 - do not create build-numbered copies of current module/navigation registries;
 - release history belongs in Git commits/tags and retained workflow evidence, not duplicate source files.
+- `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md` — current bounded Build 546 release contract, source-owned seasonal limits, owner decisions, fail-closed claims, and independent Production acceptance.

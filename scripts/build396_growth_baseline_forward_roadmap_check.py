@@ -43,7 +43,9 @@ def queue_pair(text: str) -> tuple[int | None, int | None]:
 
 
 def handoff_pair(text: str) -> tuple[int | None, int | None]:
-    builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", text)]
+    # Historical release markers in HTML comments are not the living release queue.
+    visible = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    builds = [int(value) for value in re.findall(r"\*\*Build\s+(\d{3})\s+—", visible)]
     if len(builds) < 2:
         errors.append("project handoff cannot resolve living current/next release")
         return None, None
