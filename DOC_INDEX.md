@@ -83,3 +83,6 @@ Going forward:
 - do not create build-numbered copies of current module/navigation registries;
 - release history belongs in Git commits/tags and retained workflow evidence, not duplicate source files.
 - `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md` — current bounded Build 546 release contract, source-owned seasonal limits, owner decisions, fail-closed claims, and independent Production acceptance.
+
+- `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md` — Build 547 read-only winter observation safety and private multi-camera DAIP editorial plan.
+- `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md` — cross-release DAIP private intake, verification, multicamera story/edit, media workers, publication authorization and telemetry roadmap.
