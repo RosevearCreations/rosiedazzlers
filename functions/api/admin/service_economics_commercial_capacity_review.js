@@ -5,6 +5,7 @@ import { onRequestGet as getAccountingStatement } from "./accounting_statement_r
 import { onRequestGet as getFleetLearning } from "./fleet_commercial_operations_learning.js";
 import { onRequestGet as getPricingLearning } from "./booking_funnel_quote_pricing_learning.js";
 import { buildControlledEnvironmentRoutingCapacityEvidenceIntegrityReview } from "../_lib/controlled-environment-routing-capacity-evidence-integrity-review.js";
+import { buildSeasonalOwnerPublicClaimReadiness } from "../_lib/seasonal-owner-evidence-closure-public-claim-readiness.js";
 // Retained Build 537 endpoint marker: buildWinterBookingQuoteRuleEvidenceIntegrityReview · authority:"winter_booking_quote_rule_evidence_integrity_review" · retained_winter_rule_freshness_authority:"winter_booking_quote_rule_outcome_freshness_review" · retained_availability_authority:"/api/availability"
 // Retained Build 536 endpoint marker: buildSeasonalCapabilityPublicClaimEvidenceIntegrityReview · authority:"seasonal_capability_public_claim_evidence_integrity_review" · retained_seasonal_public_claim_freshness_authority:"seasonal_capability_public_claim_outcome_freshness_review"
 
@@ -48,12 +49,18 @@ export async function onRequestGet({request,env}){
     source_status:sourceStatusMap(economicsSource,fleetSource,pricingSource),
     generated_at:new Date().toISOString()
   });
+  const ownerPublicClaimReadiness=buildSeasonalOwnerPublicClaimReadiness({
+    report:review,economics:economicsSource.data?.operational_profitability||{},
+    generated_at:new Date().toISOString()
+  });
   return json({
     ok:review.evidence_status!=="unavailable",
     month,
     year,
     pricing_window_days:days,
     ...review,
+    economics:{...(review.economics||{}),seasonal_owner_public_claim_readiness:ownerPublicClaimReadiness},
+    seasonal_owner_public_claim_readiness_authority:"seasonal_owner_evidence_closure_public_claim_decision_readiness",
     authority:"controlled_environment_routing_capacity_evidence_integrity_review",
     release_authority:"controlled_environment_routing_capacity_evidence_integrity_review",
     retained_winter_rule_evidence_integrity_authority:"winter_booking_quote_rule_evidence_integrity_review",
