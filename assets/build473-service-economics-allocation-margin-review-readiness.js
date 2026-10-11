@@ -30,6 +30,7 @@
       renderSeasonalPublicClaimOutcomeFreshnessReview(data.economics?.seasonal_public_claim_outcome_freshness_review || {});
       renderSeasonalPublicClaimEvidenceIntegrityReview(data.economics?.seasonal_public_claim_evidence_integrity_review || {});
       renderSeasonalOwnerPublicClaimReadiness(data.economics?.seasonal_owner_public_claim_readiness || {});
+      renderWinterBookingObservedSafetyTransparency(data.economics?.winter_booking_observed_safety_transparency || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
@@ -370,6 +371,31 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No seasonal public-claim outcome freshness rows are available. Missing evidence remains HOLD.</div>';
     const detail=$("seasonalPublicClaimOutcomeFreshnessReviewDetail");
     if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · drift: "+String(review.counts?.drift??0)+" · manual review: "+String(review.counts?.review_required??0)+". Stale evidence never extends a public claim; broad winter availability remains HOLD.";
+  }
+
+  function renderWinterBookingObservedSafetyTransparency(review) {
+    const mount=$("winterBookingObservedSafetyGrid");
+    if(!mount)return;
+    const rows=Array.isArray(review.rows)?review.rows:[],cards=[];
+    for(const row of rows){
+      cards.push('<article class="review-candidate state-review"><div class="review-head"><strong>'+
+        esc((row.entity_type||"service")+" · "+(row.code||"unknown"))+'</strong><span class="pill">'+
+        esc(row.review_state||"unavailable")+'</span></div>'+
+        '<p class="mini">Rule: '+esc(row.booking_rule||"unavailable")+' · Quote: '+esc(row.quote_rule||"unavailable")+
+        ' · Eligibility: '+esc(row.eligibility_state||"unavailable")+' · Owner outcome: '+esc(row.recorded_owner_outcome||"unavailable")+'</p>'+
+        '<p class="mini">Customer wording: '+esc(row.source_owned_disclosure||"not source-confirmed")+'</p>'+
+        '<p class="mini">Observed reservation collisions: '+esc(row.observed_collision_count??"not observed")+
+        ' · evidence: '+esc(row.observed_collision_reference||"not recorded")+'</p>'+
+        '<p class="mini">Missing or safety re-review: '+esc((row.gaps||[]).join(", ")||"none; manual decision still required")+
+        ' · Default: retain winter-rule HOLD. Automatic booking/quote/customer/publication changes: NONE.</p></article>');
+    }
+    mount.innerHTML=cards.join("")||'<div class="review-empty">No source-owned winter booking-rule observation records are available. HOLD remains.</div>';
+    const d=$("winterBookingObservedSafetyDetail");
+    if(d)d.textContent="Build 547 · "+String(review.row_count??0)+" service-specific rows · "+
+      String(review.review_required_count??0)+" requiring review · weather excluded "+
+      String(review.weather_evidence?.ineligible??0)+" observed session(s), unknown "+
+      String(review.weather_evidence?.unknown??0)+
+      ". Excluded sessions are not conversion failures. Availability and checkout collision decisions remain server-owned.";
   }
 
   function renderSeasonalOwnerPublicClaimReadiness(review) {

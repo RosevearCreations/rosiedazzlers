@@ -25,3 +25,7 @@ Reconcile 546–554 using attributed evidence and explicit HOLD decisions, then 
 
 ## Standing limits
 No new schema, Supabase/R2 objects, persistent telemetry, pricing changes, automatic customer messaging, payment actions, public publication, booking mutation or irreversible business operations without separate evidence and authorization. Missing evidence remains a truthful HOLD. Protected-main PR and independent exact-SHA Production runtime/business acceptance remain required.
+
+## Standing DAIP development stream (from Build 547 onward)
+Every new Rosie Dazzlers build includes a DAIP milestone with its own privacy, processing and operator acceptance tests. The detailed live plan is `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`.
+The existing Creative Project/private R2 original and resumable intake stay authoritative. Social media content remains draft-only until approved source media, proven consent, plate/face/address redaction, human edit/approval, and explicit channel authorization are independently established.
