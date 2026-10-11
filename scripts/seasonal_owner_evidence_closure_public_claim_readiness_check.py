@@ -31,7 +31,7 @@ for name,text,terms in [
 if a!=b:errors.append("Protected route copies diverge")
 for name in [".github/workflows/development-source-gate.yml",".github/workflows/production-business-acceptance-authority.yml"]:
     content=read(name)
-    for term in ["Validate Build 546 seasonal owner evidence closure & public claim readiness",
+    for term in ["Validate seasonal owner evidence closure & public claim readiness",
                  "python scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py",
                  "node scripts/seasonal_owner_evidence_closure_public_claim_readiness_test.mjs"]:
         if term not in content:errors.append(name+" missing "+term)
