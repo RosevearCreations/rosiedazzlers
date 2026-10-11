@@ -21,3 +21,6 @@ Start with **one real detailing Creative Project**, then the other jobs. Batch u
 
 ## Non-negotiable limits
 Private raw masters stay immutable in `DAIP_MEDIA_BUCKET`, not the public `rosie-assets` bucket. Customer names, faces, house numbers, plates, VINs, addresses, payment and evidence imagery are not exported/published without redaction, consent and explicit approval. Never present a draft plan as a rendered movie, a queued processor job as completed or a social-platform post as published. Preserve bookings, finance, R2 capacity and Cloudflare worker CPU budget, with no paid services required for unimplemented prototype steps. DAIP releases must pass a dedicated regression and protected-main/Cloudflare exact-SHA evidence before Production GREEN.
+
+### Build 548 active work
+Private metadata-only DAIP intake report compares Creative Project asset IDs, private R2 key ownership, MIME/size, candidate duplicates, multipart session identity, and recorded video duration. It does **not** perform an R2 HEAD, transcode a proxy or publish. Source-owned worker execution needs a later observed integration.
