@@ -86,3 +86,5 @@ Going forward:
 
 - `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md` — Build 547 read-only winter observation safety and private multi-camera DAIP editorial plan.
 - `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md` — cross-release DAIP private intake, verification, multicamera story/edit, media workers, publication authorization and telemetry roadmap.
+
+- `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md` — Build 548 controlled-site owner and DAIP private media metadata acceptance.
