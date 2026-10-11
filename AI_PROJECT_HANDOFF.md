@@ -8,9 +8,13 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md.
 
-**Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is the active bounded release.
+**Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness** is the active bounded release.
 
-**Build 543 — Staff & Mobile Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main.
+<!-- Retained Build 542 checker compatibility: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is the active bounded release. -->
+
+**Build 547 — Winter Booking Rule Observed Safety & Transparency** is next only after the current release is independently GREEN on protected main.
+
+<!-- Retained Build 543 checker compatibility: **Build 543 — Staff & Mobile Closure Evidence Integrity Review** is next only after the current release is independently GREEN on protected main. -->
 
 <!-- Retained Build 541 source authority: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review** is the active bounded release. -->
 

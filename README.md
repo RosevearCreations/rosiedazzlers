@@ -2,7 +2,9 @@
 
 **Current active build: 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness.** Staff-only, GET-only evidence workbench and owner/manual publication review. Contract: `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md`; validator: `scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py`; next: Build 547. Production GREEN requires independent exact-main Cloudflare deployment/runtime/business acceptance. The older Build 542 paragraph below is retained for compatibility with historical source checkers.
 
-Current source direction: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review**.
+Current source direction: **Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness**.
+
+<!-- Retained Build 542 source compatibility: Current source direction: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review**. -->
 
 <!-- Retained Build 541 compatibility: Current source direction: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review**. -->
 
