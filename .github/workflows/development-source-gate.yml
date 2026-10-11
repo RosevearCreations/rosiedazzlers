@@ -815,6 +815,16 @@ jobs:
           python scripts/seasonal_capability_public_claim_outcome_freshness_review_check.py
           node scripts/seasonal_capability_public_claim_outcome_freshness_review_test.mjs
 
+      - name: Validate Build 546 seasonal owner evidence closure & public claim readiness
+        run: |
+          python -m py_compile scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py
+          node --check functions/api/_lib/seasonal-owner-evidence-closure-public-claim-readiness.js
+          node --check scripts/seasonal_owner_evidence_closure_public_claim_readiness_test.mjs
+          node --check functions/api/admin/service_economics_commercial_capacity_review.js
+          node --check assets/build473-service-economics-allocation-margin-review-readiness.js
+          python scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py
+          node scripts/seasonal_owner_evidence_closure_public_claim_readiness_test.mjs
+
       - name: Validate seasonal capability & public claim evidence integrity review authority
         run: |
           python scripts/seasonal_capability_public_claim_evidence_integrity_review_check.py

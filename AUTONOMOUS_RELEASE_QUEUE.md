@@ -1,5 +1,8 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
+## Current bounded release — Build 546
+Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness is active. Contract: `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md`; current read-only source authority: `scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py`. Next: **Build 547 — Winter Booking Rule Observed Safety & Transparency** only after independent exact-main Cloudflare Production GREEN. Canonical seasonal owner HOLD is retained; no source test or publication-readiness output closes it. The previously recorded Build 545 queue status below is historic.
+
 This living queue records only the current bounded release path. Historical implementation belongs in Git/workflow evidence.
 
 Current bounded release: Build 545 — Production Learning & Roadmap Renewal. Its contract is `BUILD545_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`, reconciliation is `PRODUCTION_LEARNING_536_544.md`, and forward queue is `FORWARD_BUILD_ROADMAP_546_555.md`. Build 546 follows only after independent Build 545 Production GREEN. No actual business/provider evidence is inferred from source GREEN.
