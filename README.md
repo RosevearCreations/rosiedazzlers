@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current active build: 547 — Winter Booking Rule Observed Safety & Transparency with private DAIP multi-camera storyboard planning.** Staff-only, GET-only evidence workbench and owner/manual publication review. Contract: `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md`; DAIP roadmap: `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`; validator: `scripts/winter_booking_safety_daip_storyboard_check.py`; next: Build 548. Production GREEN requires independent exact-main Cloudflare deployment/runtime/business acceptance. The older Build 542 paragraph below is retained for compatibility with historical source checkers.
+**Current active build: 547 — Winter Booking Rule Observed Safety & Transparency with private DAIP multi-camera storyboard planning.** Staff-only read-only evidence and editorial drafts. Contract: `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md`; DAIP plan: `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`; validator: `scripts/winter_booking_safety_daip_storyboard_check.py`; next Build 548. Production requires exact-main Cloudflare evidence.
 
 Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**.
 
