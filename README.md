@@ -3,7 +3,6 @@
 **Current active build: 550 — Backup Recovery & Authenticated Device Field Closure.** Contract: `BUILD550_RECOVERY_DEVICE_FIELD_DAIP_SCENE_ALIGNMENT.md`. Next 551; exact-main Cloudflare GREEN required.
 
 Current source direction: **Build 550 — Backup Recovery & Authenticated Device Field Closure**.
-<!-- Prior: Current source direction: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure**. -->
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->
