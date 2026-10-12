@@ -26,7 +26,7 @@ for a,b in [("admin-seo-tasks.html","admin-seo-tasks/index.html"),("admin-daip-m
  if read(a)!=read(b):errors.append("protected route copies diverge: "+a)
 for path in [".github/workflows/development-source-gate.yml",".github/workflows/production-business-acceptance-authority.yml"]:
  t=read(path)
- for n in ["Validate Build 549 provider and private DAIP review","python scripts/build549_provider_daip_privacy_check.py","node scripts/build549_provider_daip_privacy_test.mjs"]:
+ for n in ["Validate provider and private DAIP review","python scripts/build549_provider_daip_privacy_check.py","node scripts/build549_provider_daip_privacy_test.mjs"]:
   if n not in t:errors.append(path+" missing "+n)
 for p in ["functions/api/_lib/provider-local-search-manual-evidence-closure-549.js","assets/daip-processing-privacy-observability-549.js","scripts/build549_provider_daip_privacy_test.mjs"]:
  v=subprocess.run(["node","--check",p],cwd=root,text=True,capture_output=True)
