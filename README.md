@@ -1,8 +1,9 @@
 # Rosie Dazzlers
 
-**Current active build: 548 — Controlled Site Routing & Capacity Owner Verification + DAIP Intake Verification.** Contract: `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. DAIP: `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`; next 549. Exact Cloudflare Production GREEN required.
+**Current active build: 549 — Provider Delivery & Local Search Manual Evidence Closure + DAIP Private Processing/Privacy Review.** Contract: `BUILD549_PROVIDER_DELIVERY_LOCAL_SEARCH_DAIP_PRIVACY_REVIEW.md`. DAIP: `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`; next 550. Build 548 Production promotion remains a prerequisite; Cloudflare exact-main GREEN required.
 
-Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**.
+Current source direction: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure**.
+<!-- Retained Build 548 checker context: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->
 
