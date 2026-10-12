@@ -30,3 +30,6 @@ The staff-only intake screen checks project/asset/multipart metadata for MIME, d
 
 ### Build 549 implementation note — private job-state observability and operator privacy evidence
 The protected media intake workspace now reads existing private processing-job records for the selected Creative Project (proxy, frame/thumbnail, audio, transcript and privacy-review phases) and surfaces failures, attempts and operator gaps. A completed job record is **not** an inspected artifact: private proxy, thumbnail, transcript, redaction and licensed-audio proof remain unverified until real processor outputs and human review exist. No processor or R2 write is performed by the review. Public export remains unauthorized and raw masters remain private.
+
+### Build 550 implementation note — manual, private multi-camera scene alignment
+Actual selected story assets can be annotated with editor-supplied camera clock offsets, confirmed sync, in/out timecodes, before/after match groups and manual shake/exposure/focus classifications. The output is a browser-session-only private JSON edit brief; no scene scores are computed by AI, no media worker runs, and no proxy, transcript, redaction, export or social publishing is performed. Build 551 adds an operator timeline editing workspace after successful exact-main Production acceptance.
