@@ -206,7 +206,7 @@ export async function onRequestGet({ request, env }) {
     integrity:recoveryAuthenticatedDeviceClosureEvidenceIntegrityReview,
     freshness:recoveryAuthenticatedDeviceClosureEvidenceFreshnessReview,
     manual:recoveryAuthenticatedDeviceManualClosureOutcomeContinuity,
-    source_status:{execution_evidence:{available:true}}
+    source_status:{execution_evidence:{available:recoveryExportResult.ok===true&&launchEvidenceResult.ok===true}}
   });
   return json({
     ok: consolidation.source_runtime_status === "green",
