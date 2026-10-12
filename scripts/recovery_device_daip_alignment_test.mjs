@@ -27,9 +27,9 @@ assert.equal(ready.correspondence_group_count,1);assert.equal(ready.camera_angle
 assert.equal(ready.ffmpeg_alignment_performed,false);assert.equal(ready.publishing_authorized,false);
 const noSync=scene({project_id:id,assets:footage,editor_notes:{...notes,second:{...notes.second,sync_confirmed:false}}});
 assert.equal(noSync.status,"manual_alignment_review_required");
-assert.ok(noSync.rows[1].gaps.includes("editor_confirmed_camera_clock_offset_required"));
+assert.ok(noSync.rows.find(r=>r.asset_id==="second").gaps.includes("editor_confirmed_camera_clock_offset_required"));
 const invalid=scene({project_id:id,assets:footage,editor_notes:{...notes,second:{...notes.second,out_seconds:222}}});
 assert.equal(invalid.status,"manual_alignment_review_required");
-assert.ok(invalid.rows[1].gaps.includes("valid_editor_in_out_timecodes_required"));
+assert.ok(invalid.rows.find(r=>r.asset_id==="second").gaps.includes("valid_editor_in_out_timecodes_required"));
 assert.equal(scene({}).status,"manual_alignment_review_required");
 console.log("BUILD 550 RECOVERY, DEVICE AND PRIVATE MULTICAMERA REGRESSION: PASS");
