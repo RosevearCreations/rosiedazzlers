@@ -10,8 +10,8 @@ The existing protected media workspace shows recorded project-specific proxy-vid
 
 ## Source and release verification
 Run:
-- python scripts/build549_provider_daip_privacy_check.py
-- node scripts/build549_provider_daip_privacy_test.mjs
+- python scripts/provider_daip_private_review_check.py
+- node scripts/provider_daip_private_review_test.mjs
 
 Both Development and Production source workflows must invoke the focused tests. Mirror parity is required for protected SEO and DAIP routes. Exact development and production Git SHAs, required protected-main checks and independent Cloudflare Functions/static/runtime business acceptance are required for GREEN. All missing evidence retains manual REVIEW/HOLD.
 
