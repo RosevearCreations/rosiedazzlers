@@ -11,6 +11,11 @@
 <section class="section grid2"><div class="card"><h2>Project raw-media library</h2><p class="mini">Build 248 adds explicit story-evidence review. Selecting an item only allows its private metadata to be referenced by internal content planning; it does not create a public URL.</p><div id="assets" class="asset-list"><p class="mini">Select a project to view raw media.</p></div></div><div class="card"><h2>DAIP processing queue</h2><p class="mini">Processing jobs remain private. Failed or blocked jobs can be reviewed, retried, cancelled, or moved to dead-letter review. Retry controls never delete the raw source.</p><div id="jobs" class="job-list"><p class="mini">No processing jobs loaded.</p></div></div></section>
 <section class="section card" data-build548="private-source-verification"><h2>Build 548 · Private footage intake verification <span title="ⓘ Verifies stored metadata only; actual R2 objects, duration and rendered proxies still require processor evidence.">ⓘ</span></h2><p class="mini">Check private Creative Project media and multipart records for identity mismatch, duplicate candidates, missing duration/MIME/consent metadata and readiness for later proxy workers. This view does not transcode, export or publish footage.</p><div class="button-row"><button class="btn ghost" id="daipVerifyIntake" type="button">Verify project intake metadata</button></div><p id="daipVerifySummary" class="mini">Choose a project to start.</p><div id="daipVerifyRows" class="job-list"></div></section>
 <section class="section card" data-build549="private-processing-privacy-review"><h2>Build 549 · Private processing &amp; human privacy review <span title="ⓘ Job records alone do not verify worker output, human redaction or audio licensing.">ⓘ</span></h2><p class="mini">Review recorded proxy, frame/thumbnail, audio, transcript and privacy-job states. Completed queue records do NOT verify rendered files, face/plate/address redaction or music rights. No automatic public release.</p><button class="btn ghost" id="daipReviewProcessing549" type="button">Review private job evidence</button><p id="daipProcessingSummary549" class="mini" aria-live="polite">Choose a project.</p><div id="daipProcessingRows549" class="job-list"></div></section>
+<section class="section card" data-build550="private-multicamera-scene-alignment">
+<h2>Build 550 · Private multi-camera scene alignment <span title="ⓘ Enter genuine camera offsets and clip timecodes. Shake, exposure and focus ratings are editor assessments, not machine analysis.">ⓘ</span></h2>
+<p class="mini">Select actual uploaded story assets above, then record a verified camera angle, editor-confirmed clock offset in seconds, in/out timecodes, before/after match group and shake/exposure/focus checks. This only creates a local edit plan. No automatic detection, proxy playback, FFmpeg render or publication.</p>
+<div class="button-row"><button id="daipSceneLoad550" class="btn ghost" type="button">Load selected shots for alignment</button><button id="daipScenePreview550" class="btn" type="button">Review private draft timeline</button><button id="daipSceneDownload550" class="btn ghost" type="button" disabled>Export private edit notes JSON</button></div>
+<p id="daipSceneSummary550" class="mini" role="status" aria-live="polite">Select a Creative Project and private uploaded story shots.</p><div id="daipSceneEditor550" class="job-list"></div><div id="daipSceneResults550" class="job-list"></div></section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -74,6 +79,53 @@ async function reviewDaipProcessing549(){
  $('#daipProcessingSummary549').textContent='Build 549: '+r.status+' · '+r.asset_count+' private asset(s), '+r.job_count+' job(s). No rendered proxy, redaction or licensed audio proven.';
  $('#daipProcessingRows549').innerHTML=r.rows.map(a=>'<article class="media-card"><div><strong>'+esc(a.filename||a.asset_id)+'</strong><div class="mini">'+esc(a.status)+' · '+a.job_count+' stage job(s)</div><div class="mini">Recorded: '+esc(a.jobs.map(j=>j.kind+': '+j.status).join(', ')||'none')+'</div><div class="mini">Review: '+esc(a.gaps.join(', '))+'</div></div><span class="status-pill waiting">Private / HOLD</span></article>').join('')||'<p class="mini">No project media evidence available.</p>';
 }
+
+const alignmentNotes550={},scene550={brief:null};
+function renderSceneEditor550(){
+ const pid=projectId(),assets=(state.data?.assets||[]).filter(a=>a.project_id===pid&&a.story_review_status==='selected'&&a.upload_status==='uploaded');
+ $('#daipSceneEditor550').innerHTML=assets.map(a=>{
+  const id=esc(a.id),n=alignmentNotes550[a.id]||{},angle=n.camera_angle||state.cameraAngles[a.id]||'',v=k=>esc(n[k]??'');
+  const quality=(field)=>'<label>'+field+'<select data-scene-field="'+field+'">'+['unrated','acceptable','needs_review'].map(x=>'<option value="'+x+'" '+((n[field]||'unrated')===x?'selected':'')+'>'+x.replace('_',' ')+'</option>').join('')+'</select></label>';
+  return '<article class="card" data-scene-id="'+id+'"><strong>'+esc(a.original_filename||a.id)+'</strong><p class="mini">'+esc(a.capture_stage||'stage unknown')+' · reported duration '+esc(a.duration_seconds??'unverified')+' seconds</p><div class="grid3">'+
+    '<label>Verified camera angle<input data-scene-field="camera_angle" value="'+esc(angle)+'" placeholder="front / tripod / handheld"></label>'+
+    '<label>Clock offset seconds<input data-scene-field="clock_offset_seconds" type="number" step="0.001" value="'+v('clock_offset_seconds')+'" placeholder="e.g. -1.25"></label>'+
+    '<label>Operator confirms sync<input data-scene-field="sync_confirmed" type="checkbox" '+(n.sync_confirmed?'checked':'')+'></label>'+
+    '<label>In second<input data-scene-field="in_seconds" type="number" min="0" step="0.001" value="'+v('in_seconds')+'"></label>'+
+    '<label>Out second<input data-scene-field="out_seconds" type="number" min="0" step="0.001" value="'+v('out_seconds')+'"></label>'+
+    '<label>Before/after match group<input data-scene-field="match_group" value="'+v('match_group')+'" placeholder="e.g. front-bumper-1"></label>'+
+    quality('shake')+quality('exposure')+quality('focus')+'</div></article>';
+ }).join('')||'<p class="mini">No selected uploaded story shots for this project. Select private evidence in the raw-media library above.</p>';
+ $('#daipSceneEditor550').querySelectorAll('[data-scene-field]').forEach(input=>{
+  input.addEventListener('change',()=>{
+   const id=input.closest('[data-scene-id]').dataset.sceneId,field=input.dataset.sceneField;
+   const n=alignmentNotes550[id]||{};n[field]=input.type==='checkbox'?input.checked:input.value;
+   alignmentNotes550[id]=n;scene550.brief=null;$('#daipSceneDownload550').disabled=true;
+  });
+ });
+}
+async function reviewScene550(){
+ const {build550DaipSceneAlignment}=await import('/assets/daip-scene-alignment-550.js');
+ const pid=projectId(),effective={...alignmentNotes550};
+ (state.data?.assets||[]).filter(a=>a.project_id===pid&&a.story_review_status==='selected').forEach(a=>{
+  if(!effective[a.id])effective[a.id]={};
+  if(!effective[a.id].camera_angle&&state.cameraAngles[a.id])effective[a.id].camera_angle=state.cameraAngles[a.id];
+ });
+ const brief=build550DaipSceneAlignment({project_id:pid,assets:state.data?.assets||[],editor_notes:effective});
+ scene550.brief=brief;
+ $('#daipSceneSummary550').textContent='Build 550 '+brief.status+' · '+brief.shot_count+' shot(s), '+brief.camera_angle_count+' labeled angles, '+brief.correspondence_group_count+' matched before/after groups. Gaps: '+(brief.gaps.join(', ')||'none in editor notes; independent privacy/source proof still required')+'.';
+ $('#daipSceneResults550').innerHTML=brief.rows.map(r=>'<article class="media-card"><div><strong>'+esc(r.filename||r.asset_id)+'</strong><div class="mini">'+esc(r.stage)+' · '+esc(r.camera_angle||'no verified angle')+' · '+esc(r.status)+'</div><div class="mini">Review gaps: '+esc(r.gaps.join(', ')||'none in manual inputs')+'</div></div></article>').join('');
+ $('#daipSceneDownload550').disabled=!brief.shot_count;
+}
+function downloadScene550(){
+ const brief=scene550.brief;if(!brief||!brief.project_id||!brief.shot_count)return;
+ const payload={...brief,notice:'PRIVATE EDITORIAL PLAN ONLY. NOT SYNCED/RENDERED/REDACTED/PUBLISHED.'};
+ const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='daip-private-alignment-build550.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+$('#daipSceneLoad550').onclick=renderSceneEditor550;
+$('#daipScenePreview550').onclick=()=>reviewScene550().catch(e=>note('Scene-alignment review unavailable: '+e.message,'error'));
+$('#daipSceneDownload550').onclick=downloadScene550;
+
 $('#daipReviewProcessing549').onclick=()=>reviewDaipProcessing549().catch(e=>note('Private processing review unavailable: '+e.message,'error'));
 $('#daipVerifyIntake').onclick=()=>verifyDaipIntake().catch(e=>note("Intake verification unavailable: "+e.message,"error"));
 const drop=$('#drop'),input=$('#files');input.onchange=()=>addFiles(input.files||[]);drop.ondragover=e=>{e.preventDefault();drop.classList.add('drag')};drop.ondragleave=()=>drop.classList.remove('drag');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('drag');addFiles(e.dataTransfer.files||[])};$('#project').onchange=()=>{const p=(state.data?.projects||[]).find(x=>x.id===projectId());$('#projectSummary').textContent=p?`${p.title} · ${p.lifecycle_status}`:'No project selected.';load()};$('#uploadAll').onclick=uploadAll;$('#pauseAll').onclick=()=>{state.pauseAll=true;for(const f of state.files)if(f.status==='uploading')f.paused=true;renderQueue();note('Uploads will pause after the current chunk.','warn')};$('#clearDone').onclick=()=>{state.files=state.files.filter(x=>!['done','aborted'].includes(x.status));renderQueue()};$('#refresh').onclick=load;
