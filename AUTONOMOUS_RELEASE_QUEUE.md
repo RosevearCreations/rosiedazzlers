@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
 ## Current bounded release — Build 549
-Build 549 — Provider Delivery & Local Search Manual Evidence Closure + DAIP Private Processing/Privacy Review. Contract: `BUILD549_PROVIDER_DELIVERY_LOCAL_SEARCH_DAIP_PRIVACY_REVIEW.md`; focused tests: `scripts/build549_provider_daip_privacy_check.py`. Build 548 is a required predecessor: it must be independently Production GREEN before Build 549 may advance to Production. Pending exact Cloudflare runtime evidence, this is source development only; no unverified release is GREEN.
+Build 549 — Provider Delivery & Local Search Manual Evidence Closure + DAIP Private Processing/Privacy Review. Contract: `BUILD549_PROVIDER_DELIVERY_LOCAL_SEARCH_DAIP_PRIVACY_REVIEW.md`; focused tests: `scripts/provider_daip_private_review_check.py`. Build 548 is a required predecessor: it must be independently Production GREEN before Build 549 may advance to Production. Pending exact Cloudflare runtime evidence, this is source development only; no unverified release is GREEN.
 
 <!-- Previous Build 548 handoff: Build 548 — Controlled Site Routing & Capacity Owner Verification + DAIP private media intake metadata verification is active; see `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. Build 547 is the preceding Cloudflare-live release. See `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md` and `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`. Build 546 is the previous Production GREEN checkpoint. -->
 
