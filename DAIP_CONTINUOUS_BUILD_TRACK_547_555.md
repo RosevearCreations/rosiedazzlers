@@ -24,3 +24,6 @@ Private raw masters stay immutable in `DAIP_MEDIA_BUCKET`, not the public `rosie
 
 ### Build 548 active work
 Private metadata-only DAIP intake report compares Creative Project asset IDs, private R2 key ownership, MIME/size, candidate duplicates, multipart session identity, and recorded video duration. It does **not** perform an R2 HEAD, transcode a proxy or publish. Source-owned worker execution needs a later observed integration.
+
+### Build 548 implementation note — source-verification acceptance
+The staff-only intake screen checks project/asset/multipart metadata for MIME, duration declaration, duplicate candidates, private raw-key identity and known queued job metadata. It is a read-only source-verification workbench, not a processing pipeline. **No actual worker execution** was performed or verified; no R2 HEAD proof, transcoded proxy, thumbnail, transcript, redaction artifact or public derivative is asserted. Any asset with missing or conflicting source evidence stays in manual review. Build 549 will add truthful job-state observability and operator privacy-review planning, without fabricating completed jobs or lifting consent controls.
