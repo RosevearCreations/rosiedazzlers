@@ -739,12 +739,12 @@ jobs:
 
       - name: Validate provider and private DAIP review
         run: |
-          python -m py_compile scripts/build549_provider_daip_privacy_check.py
+          python -m py_compile scripts/provider_daip_private_review_check.py
           node --check functions/api/_lib/provider-local-search-manual-evidence-closure-549.js
           node --check assets/daip-processing-privacy-observability-549.js
-          node --check scripts/build549_provider_daip_privacy_test.mjs
-          python scripts/build549_provider_daip_privacy_check.py
-          node scripts/build549_provider_daip_privacy_test.mjs
+          node --check scripts/provider_daip_private_review_test.mjs
+          python scripts/provider_daip_private_review_check.py
+          node scripts/provider_daip_private_review_test.mjs
 
       - name: Validate site owner capacity and private DAIP source verification
         run: |
