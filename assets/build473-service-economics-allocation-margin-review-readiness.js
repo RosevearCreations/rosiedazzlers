@@ -31,6 +31,7 @@
       renderSeasonalPublicClaimEvidenceIntegrityReview(data.economics?.seasonal_public_claim_evidence_integrity_review || {});
       renderSeasonalOwnerPublicClaimReadiness(data.economics?.seasonal_owner_public_claim_readiness || {});
       renderWinterBookingObservedSafetyTransparency(data.economics?.winter_booking_observed_safety_transparency || {});
+      renderControlledSiteOwnerVerification(data.economics?.controlled_site_capacity_owner_verification || {});
       renderWinterRuleActivationReadiness(data.economics?.winter_booking_quote_activation_readiness || {});
       renderWinterRuleControlledActivationDecision(data.economics?.winter_booking_quote_controlled_activation_decision || {});
       renderWinterRuleControlledActivationOutcomeContinuity(data.economics?.winter_booking_quote_controlled_activation_outcome_continuity || {});
@@ -371,6 +372,23 @@
     mount.innerHTML=cards.join("")||'<div class="review-empty">No seasonal public-claim outcome freshness rows are available. Missing evidence remains HOLD.</div>';
     const detail=$("seasonalPublicClaimOutcomeFreshnessReviewDetail");
     if(detail) detail.textContent="Freshness rows: "+String(review.row_count??0)+" · current: "+String(review.counts?.current??0)+" · stale: "+String(review.counts?.stale??0)+" · drift: "+String(review.counts?.drift??0)+" · manual review: "+String(review.counts?.review_required??0)+". Stale evidence never extends a public claim; broad winter availability remains HOLD.";
+  }
+
+  function renderControlledSiteOwnerVerification(report){
+    const mount=$("controlledSiteOwnerVerificationGrid");if(!mount)return;
+    const rows=Array.isArray(report.rows)?report.rows:[];
+    mount.innerHTML=rows.map(r=>'<article class="review-candidate state-review"><strong>'+esc(r.entity_type+" · "+r.code)+'</strong>'+
+      '<p class="mini">Site: '+esc(r.site_reference||"unavailable")+' · workflow: '+esc(r.workflow_reference||"unavailable")+
+      ' · outcome: '+esc(r.routing_outcome||"not observed")+'</p>'+
+      '<p class="mini">Owner ref: '+esc(r.owner_verification_reference||"missing")+' · reviewed: '+esc(r.owner_verified_at||"missing")+'</p>'+
+      '<p class="mini">Bounded observations: '+esc(r.observed_capacity_jobs??"not proven")+" jobs / "+esc(r.observation_window_days??"unknown")+
+      ' days. Not a future capacity promise.</p>'+
+      '<p class="mini">State: '+esc(r.status)+' · outstanding: '+esc((r.missing||[]).join(", ")||"none; manual routing and signoff still required")+
+      '. Auto moves, reservations and universal indoor claims: NONE.</p></article>').join("")||
+      '<div class="review-empty">No attributed service/site/workflow outcome has been recorded. Manual site review required.</div>';
+    const detail=$("controlledSiteOwnerVerificationDetail");
+    if(detail)detail.textContent="Build 548 — "+String(report.row_count??0)+" source-owned routing rows; "+
+      String(report.manual_review_ready_count??0)+" eligible for separate human review. Read-only.";
   }
 
   function renderWinterBookingObservedSafetyTransparency(review) {

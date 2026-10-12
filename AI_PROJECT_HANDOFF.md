@@ -1,7 +1,9 @@
 # Rosie Dazzlers — Current Project Handoff
 
-## Current active release — Build 547
-Winter Booking Rule Observed Safety & Transparency plus the first private multi-camera DAIP editing-plan stage. Contract `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md`; DAIP roadmap `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`. No automatic winter booking change, privacy bypass, rendering, public asset or social publishing. Build 548 follows independent Production GREEN.
+## Current active release — Build 548
+Controlled Site Routing & Capacity Owner Verification with DAIP private metadata integrity checks. Contract: `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. Processing, proxy creation, R2 HEAD and publishing are not inferred. Next Build 549.
+
+<!-- Historical: Winter Booking Rule Observed Safety & Transparency plus the first private multi-camera DAIP editing-plan stage. --> Contract `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md`; DAIP roadmap `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`. No automatic winter booking change, privacy bypass, rendering, public asset or social publishing. Build 548 follows independent Production GREEN.
 
 <!-- Retained Build 546 note: Seasonal Owner Evidence Closure & Public Claim Decision Readiness. --> Contract `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md`; implementation `functions/api/_lib/seasonal-owner-evidence-closure-public-claim-readiness.js`; staff GET composite `functions/api/admin/service_economics_commercial_capacity_review.js`; regression `scripts/seasonal_owner_evidence_closure_public_claim_readiness_test.mjs`; source gate `scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py`. Next: Build 547. Retain all canonical seasonal HOLDs absent explicit owner manual action and independent exact-main Cloudflare Production runtime/business acceptance. The older build header below is a historical compatibility pointer, not the active queue.
 
@@ -10,13 +12,17 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md.
 
-**Build 547 — Winter Booking Rule Observed Safety & Transparency** is the active bounded release.
+**Build 548 — Controlled Site Routing & Capacity Owner Verification** is the active bounded release.
+
+<!-- Historical: **Build 547 — Winter Booking Rule Observed Safety & Transparency** is the active bounded release. -->
 
 <!-- Retained Build 546 continuity: **Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness** is the active bounded release. -->
 
 <!-- Retained Build 542 checker compatibility: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is the active bounded release. -->
 
-**Build 548 — Controlled Site Routing & Capacity Owner Verification** is next only after the current release is independently GREEN on protected main.
+**Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is next only after the current release is independently GREEN on protected main.
+
+<!-- Historical: **Build 548 — Controlled Site Routing & Capacity Owner Verification** is next only after the current release is independently GREEN on protected main. -->
 
 <!-- Retained Build 547 continuity: **Build 547 — Winter Booking Rule Observed Safety & Transparency** is next only after the current release is independently GREEN on protected main. -->
 
