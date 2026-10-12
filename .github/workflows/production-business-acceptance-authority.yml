@@ -746,6 +746,15 @@ jobs:
           python scripts/build549_provider_daip_privacy_check.py
           node scripts/build549_provider_daip_privacy_test.mjs
 
+      - name: Validate recovery device field and private camera alignment
+        run: |
+          python -m py_compile scripts/recovery_device_daip_alignment_check.py
+          node --check functions/api/_lib/recovery-authenticated-device-field-closure-550.js
+          node --check assets/daip-scene-alignment-550.js
+          node --check scripts/recovery_device_daip_alignment_test.mjs
+          python scripts/recovery_device_daip_alignment_check.py
+          node scripts/recovery_device_daip_alignment_test.mjs
+
       - name: Validate site owner capacity and private DAIP source verification
         run: |
           python -m py_compile scripts/controlled_site_daip_intake_verification_check.py
