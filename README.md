@@ -1,8 +1,8 @@
 # Rosie Dazzlers
 
-**Current active build: 552 — Booking & Quote Controlled Follow-Up Interpretation.** Contract: `BUILD552_BOOKING_QUOTE_DAIP_PRIVATE_RENDER_PREFLIGHT.md`. Next 553; exact-main Cloudflare acceptance required.
+**Current active build: 553 — Staff Mobile Field Regression Evidence.** Contract: `BUILD553_STAFF_MOBILE_FIELD_DAIP_SOCIAL_DRAFTS.md`. Next 554; exact-main Cloudflare acceptance required.
 
-Current source direction: **Build 552 — Booking & Quote Controlled Follow-Up Interpretation**.
+Current source direction: **Build 553 — Staff Mobile Field Regression Evidence**.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->

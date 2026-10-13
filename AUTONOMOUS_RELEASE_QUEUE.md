@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-## Current bounded release — Build 552
-Build 552 — Booking & Quote Controlled Follow-Up Interpretation, plus DAIP private render preflight, is the current source candidate. Contract: `BUILD552_BOOKING_QUOTE_DAIP_PRIVATE_RENDER_PREFLIGHT.md`; guard: `scripts/booking_quote_daip_private_render_check.py`. Earlier builds must be source-GREEN and exact-main Cloudflare Production accepted. No booking changes, FFmpeg output or auto-publishing.
+## Current bounded release — Build 553
+Build 553 — Staff Mobile Field Regression Evidence plus DAIP private social-video copy drafts is current source candidate. Contract: `BUILD553_STAFF_MOBILE_FIELD_DAIP_SOCIAL_DRAFTS.md`; guard: `scripts/staff_mobile_daip_social_drafts_check.py`. Prior builds require exact-main Cloudflare Production verification. No staff fault inference, rendered media or automatic posting.
 
 <!-- Previous Build 548 handoff: Build 548 — Controlled Site Routing & Capacity Owner Verification + DAIP private media intake metadata verification is active; see `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. Build 547 is the preceding Cloudflare-live release. See `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md` and `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`. Build 546 is the previous Production GREEN checkpoint. -->
 
@@ -173,7 +173,7 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
 ## Current release
-**Build 552 — Booking & Quote Controlled Follow-Up Interpretation** is the active bounded release.
+**Build 553 — Staff Mobile Field Regression Evidence** is the active bounded release.
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is the active bounded release. -->
 <!-- Prior: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is the active bounded release. -->
 <!-- Historical: **Build 548 — Controlled Site Routing & Capacity Owner Verification** is the active bounded release. -->
@@ -338,7 +338,7 @@ Production promotion proceeds through protected main and a pull request to prote
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
 ## Next release
-**Build 553 — Staff Mobile Field Regression Evidence** is next only after the current release is independently GREEN on protected main.
+**Build 554 — Service Economics, Capacity & Technical Reliability Owner Review** is next only after the current release is independently GREEN on protected main.
 <!-- Prior: **Build 551 — Maintenance & Fleet Pilot Commercial Decision** is next only after the current release is independently GREEN on protected main. -->
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is next only after the current release is independently GREEN on protected main. -->
 <!-- Retained 548 queue: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is next only after the current release is independently GREEN on protected main. -->

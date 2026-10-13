@@ -7,6 +7,7 @@ import { buildStaffMobileRemediationClosureReadiness } from "../_lib/staff-mobil
 import { buildStaffMobileRemediationClosureOutcomeContinuity } from "../_lib/staff-mobile-remediation-closure-outcome-continuity.js";
 import { buildStaffMobileClosureEvidenceFreshnessReview } from "../_lib/staff-mobile-closure-evidence-freshness-review.js";
 import { buildStaffMobileClosureEvidenceIntegrityReview } from "../_lib/staff-mobile-closure-evidence-integrity-review.js";
+import { build553StaffMobileFieldRegression } from "../_lib/staff-mobile-field-regression-553.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getLearning({ request: request.clone(), env });
@@ -40,7 +41,13 @@ export async function onRequestGet({ request, env }) {
   const closureIntegrity = buildStaffMobileClosureEvidenceIntegrityReview({
     closure_freshness:closureFreshness, closure_outcome_continuity:closureOutcome, generated_at:generatedAt
   });
+  const fieldRegression = build553StaffMobileFieldRegression({
+    integrity:closureIntegrity,
+    field_observations:parseObject(env?.STAFF_MOBILE_FIELD_REGRESSION_553_JSON),
+    source_available:source.ok&&Boolean(payload?.ok)
+  });
   return json({
+    staff_mobile_field_regression_553:fieldRegression,
     staff_mobile_closure_integrity_build:543,
     staff_mobile_closure_integrity_authority:"staff_mobile_closure_evidence_integrity_review",
     staff_mobile_closure_evidence_integrity_review:closureIntegrity,
