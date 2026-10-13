@@ -44,6 +44,31 @@
 <div class="button-row"><button id="daipSocialReview553" type="button" class="btn ghost">Preview four private social drafts</button><button id="daipSocialDownload553" type="button" class="btn ghost" disabled>Export private social draft JSON</button></div>
 <p id="daipSocialStatus553" class="mini" role="status" aria-live="polite">Complete the Build 551 edit list first. No platform posts will be created.</p><div id="daipSocialCards553" class="job-list"></div>
 </section>
+<section class="section card" data-build554="daip-human-channel-delivery-review">
+<h2>Build 554 · Manual channel delivery evidence (private only)</h2>
+<p class="mini">Review one Build 553 private channel draft. Record actual consent, inspected rendered/redacted file, licensed/silent audio, worker costs and authorized platform limits. This exports a PRIVATE evidence packet only; it cannot schedule, publish or withdraw a post.</p>
+<div class="grid3">
+<label>Channel<select id="daipDeliveryPlatform554"><option value="instagram">Instagram</option><option value="tiktok">TikTok</option><option value="facebook">Facebook</option><option value="youtube">YouTube</option></select></label>
+<label>Operator reviewer reference<input id="daipDeliveryOperator554" maxlength="120" placeholder="Owner review identifier (not a password)"></label>
+<label>Consent record reference<input id="daipDeliveryConsent554" maxlength="120" placeholder="Current public-use consent evidence"></label>
+<label>Inspected redaction reference<input id="daipDeliveryPrivacy554" maxlength="120" placeholder="Actual faces/plates/address output inspection"></label>
+<label>Audio license/silence record<input id="daipDeliveryAudio554" maxlength="120" placeholder="Audio rights review reference"></label>
+<label>Inspected private output reference<input id="daipDeliveryOutput554" maxlength="120" placeholder="Actual rendered file proof, no URL"></label>
+<label>Worker CPU/storage measurement<input id="daipDeliveryWorker554" maxlength="120" placeholder="Measured processing/quota record"></label>
+<label>Platform account/scopes/limits review<input id="daipDeliveryPlatformRef554" maxlength="120" placeholder="Authorized scopes + limits reference, no token"></label>
+</div>
+<div class="grid2">
+<label><input id="daipDeliveryApproved554" type="checkbox"> Explicit operator approval for this channel and asset</label>
+<label><input id="daipDeliveryConsentCurrent554" type="checkbox"> Current job-specific public consent verified</label>
+<label><input id="daipDeliveryRedaction554" type="checkbox"> Inspected output has approved privacy redactions</label>
+<label><input id="daipDeliveryAudioRights554" type="checkbox"> Actual audio rights / silence verified</label>
+<label><input id="daipDeliveryRender554" type="checkbox"> Actual private render inspected</label>
+<label><input id="daipDeliveryBudget554" type="checkbox"> Worker quota and storage measurements verified</label>
+<label><input id="daipDeliveryScopes554" type="checkbox"> Platform scopes, connection and limits verified</label>
+</div>
+<div class="button-row"><button id="daipDeliveryReview554" class="btn ghost" type="button">Review channel proof (no posting)</button><button id="daipDeliveryExport554" class="btn ghost" type="button" disabled>Export private review packet JSON</button></div>
+<p id="daipDeliveryStatus554" class="mini" role="status" aria-live="polite">Requires an actual Build 553 draft and independent source proof. No posts dispatched.</p><div id="daipDeliveryGaps554" class="job-list"></div>
+</section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -277,6 +302,33 @@ $('#daipSocialDownload553').onclick=()=>{
  if(!socialDraft553||socialDraft553.project_id!==projectId())return;
  const blob=new Blob([JSON.stringify(socialDraft553,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='rosie-private-social-drafts-build553.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+
+let delivery554=null;
+$('#daipDeliveryReview554').onclick=async()=>{
+ if(!socialDraft553||socialDraft553.project_id!==projectId()){
+  $('#daipDeliveryStatus554').textContent='First review the current project Build 553 private social drafts.';
+  $('#daipDeliveryExport554').disabled=true;delivery554=null;return;
+ }
+ const {build554DaipManualDeliveryPacket}=await import('/assets/daip-operator-delivery-review-554.js');
+ const val=id=>$(id).value.trim(),yes=id=>$(id).checked;
+ delivery554=build554DaipManualDeliveryPacket({private_drafts:socialDraft553,project_id:projectId(),platform:val('#daipDeliveryPlatform554'),
+  approval:{operator_approved:yes('#daipDeliveryApproved554'),operator_reference:val('#daipDeliveryOperator554'),
+   consent_current:yes('#daipDeliveryConsentCurrent554'),consent_reference:val('#daipDeliveryConsent554'),
+   faces_plates_addresses_inspected:yes('#daipDeliveryRedaction554'),redaction_reference:val('#daipDeliveryPrivacy554'),
+   audio_rights_confirmed:yes('#daipDeliveryAudioRights554'),audio_rights_reference:val('#daipDeliveryAudio554'),
+   private_render_verified:yes('#daipDeliveryRender554'),private_output_reference:val('#daipDeliveryOutput554'),
+   worker_budget_verified:yes('#daipDeliveryBudget554'),worker_reference:val('#daipDeliveryWorker554'),
+   platform_authorization_verified:yes('#daipDeliveryScopes554'),platform_authorization_reference:val('#daipDeliveryPlatformRef554')}});
+ $('#daipDeliveryStatus554').textContent='Build 554 '+delivery554.status+' · '+delivery554.gaps.length+' evidence gap(s). Local packet only. No social network posting, scheduling or public output.';
+ $('#daipDeliveryGaps554').replaceChildren();
+ for(const gap of delivery554.gaps){const item=document.createElement('p');item.className='mini';item.textContent='Required: '+gap.replaceAll('_',' ');$('#daipDeliveryGaps554').append(item)}
+ $('#daipDeliveryExport554').disabled=false;
+};
+$('#daipDeliveryExport554').onclick=()=>{
+ if(!delivery554||delivery554.project_id!==projectId())return;
+ const blob=new Blob([JSON.stringify(delivery554,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rosie-private-daip-channel-review-build554.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 
 $('#daipEditLoad551').onclick=loadEdit551;
