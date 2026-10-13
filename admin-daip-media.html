@@ -21,6 +21,9 @@
 <p class="mini">Use the Build 550 verified shot alignment immediately above. Arrange shots, trim source in/out, set safe crop framing, playback-speed instructions, captions and a brand label. Preview your <strong>timed story cards</strong>, not the underlying private footage; raw R2 objects never receive public URLs. Render and publication are still separate human-approved steps.</p>
 <div class="grid3"><label>Private output canvas<select id="daipEditFormat551"><option value="9:16">9:16 Reel / Shorts</option><option value="16:9">16:9 YouTube</option><option value="4:5">4:5 Facebook</option></select></label><label>Brand label<input id="daipEditBrand551" value="Rosie Dazzlers" maxlength="60"></label><label>Audio source review or silence<input id="daipEditAudio551" placeholder="silence confirmed, or licensed track record" maxlength="160"></label></div>
 <div class="button-row"><button id="daipEditLoad551" class="btn ghost" type="button">Load verified shot edit list</button><button id="daipEditReview551" class="btn" type="button">Preview private shot timeline</button><button id="daipEditDownload551" class="btn ghost" type="button" disabled>Export private editing instructions JSON</button></div>
+<div class="card private"><strong>Private local clip preview (optional)</strong><p class="mini">Select one aligned shot and choose its original file from your computer. Its filename and size must match the private Creative Project record. The browser plays that local file only; it is not sent to the server, saved or made public. Use the trim fields below to preview the selected in/out position.</p>
+<div class="grid3"><label>Aligned shot<select id="daipEditSourceShot551"><option value="">Load verified shot edit list first</option></select></label><label>Matching file on this computer<input id="daipEditLocalFile551" type="file" accept="video/mp4,video/quicktime,video/webm,.mp4,.mov,.m4v,.webm"></label><div class="button-row"><button id="daipEditSeekIn551" class="btn ghost" type="button">Seek in</button><button id="daipEditSeekOut551" class="btn ghost" type="button">Seek out</button></div></div>
+<p id="daipEditLocalStatus551" class="mini" aria-live="polite">No local video selected. Uploaded raw media stays private in R2.</p><video id="daipEditVideo551" controls playsinline preload="metadata" hidden style="max-width:100%;width:100%;max-height:400px;background:#000;border-radius:12px"></video></div>
 <p id="daipEditStatus551" class="mini" role="status" aria-live="polite">Review Build 550 source alignment first. No video output has been generated.</p><div id="daipEditControls551" class="job-list"></div><div id="daipEditTimeline551" class="job-grid" aria-live="polite"></div>
 </section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
@@ -131,11 +134,48 @@ function downloadScene550(){
 }
 
 const edit551={shot:{},brief:null};
+const localClip551={url:null,assetId:null};
+function clearLocalClip551(){
+ const player=$('#daipEditVideo551');player.pause();player.removeAttribute('src');player.load();player.hidden=true;
+ if(localClip551.url)URL.revokeObjectURL(localClip551.url);
+ localClip551.url=null;localClip551.assetId=null;
+}
+function selectedLocalShot551(){const id=$('#daipEditSourceShot551').value;
+ return (state.data?.assets||[]).find(a=>a.id===id&&a.project_id===projectId()&&a.story_review_status==='selected'&&a.upload_status==='uploaded');}
+$('#daipEditSourceShot551').addEventListener('change',()=>{clearLocalClip551();$('#daipEditLocalFile551').value='';$('#daipEditLocalStatus551').textContent='Select the matching private source file from your computer.'});
+$('#project').addEventListener('change',()=>{clearLocalClip551();$('#daipEditSourceShot551').innerHTML='<option value="">Load verified shots</option>';$('#daipEditLocalFile551').value='';});
+$('#daipEditLocalFile551').addEventListener('change',()=>{
+ clearLocalClip551();const file=$('#daipEditLocalFile551').files?.[0],source=selectedLocalShot551();
+ if(!file||!source){$('#daipEditLocalStatus551').textContent='Select an aligned Creative Project shot and a matching local video file.';return;}
+ const declaredSize=Number(source.file_size_bytes);
+ if(file.name!==source.original_filename||(Number.isFinite(declaredSize)&&declaredSize>0&&file.size!==declaredSize)){
+  $('#daipEditLocalStatus551').textContent='Local file does not match selected project media filename and size. No preview opened.';return;
+ }
+ if(!/\.(mp4|m4v|mov|webm)$/i.test(file.name)){ $('#daipEditLocalStatus551').textContent='Video preview only: choose a matching MP4/MOV/WebM clip.';return;}
+ const player=$('#daipEditVideo551');
+ localClip551.url=URL.createObjectURL(file);localClip551.assetId=source.id;
+ player.src=localClip551.url;player.hidden=false;$('#daipEditLocalStatus551').textContent='Playing local-only private source. Clip is not uploaded or published.';
+});
+function seekEdit551(edge){
+ const id=$('#daipEditSourceShot551').value,video=$('#daipEditVideo551');
+ if(!localClip551.url||id!==localClip551.assetId){$('#daipEditLocalStatus551').textContent='Open the matching local clip first.';return;}
+ const source=scene550.brief?.rows?.find(s=>s.asset_id===id),note=edit551.shot[id]||{};
+ const seconds=Number(note[edge+'_seconds']??source?.[edge+'_seconds']);
+ if(!Number.isFinite(seconds)||seconds<0||!Number.isFinite(video.duration)||seconds>video.duration){
+  $('#daipEditLocalStatus551').textContent='Valid trim timecode and loaded local duration are required.';return;}
+ video.currentTime=seconds;
+}
+$('#daipEditSeekIn551').onclick=()=>seekEdit551('in');
+$('#daipEditSeekOut551').onclick=()=>seekEdit551('out');
+
 function loadEdit551(){
  const a=scene550.brief;
  if(!a||!a.rows?.length||a.project_id!==projectId()){
   $('#daipEditStatus551').textContent='First choose this Creative Project and use Review private draft timeline in Build 550. No raw-video preview is enabled.';return;
  }
+ clearLocalClip551();
+ $('#daipEditLocalFile551').value='';
+ $('#daipEditSourceShot551').innerHTML='<option value="">Select aligned shot</option>'+a.rows.map(s=>'<option value="'+esc(s.asset_id)+'">'+esc(s.filename||s.asset_id)+'</option>').join('');
  $('#daipEditControls551').innerHTML=a.rows.map((s,i)=>{
   const id=esc(s.asset_id),existing=edit551.shot[s.asset_id]||{};
   const value=(k,fallback)=>esc(existing[k]??fallback??'');
