@@ -96,3 +96,5 @@ Going forward:
 - `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md` — commercial pilot owner decision and private DAIP browser-only video editing instructions. Requires independent source/runtime/owner acceptance.
 
 - `BUILD552_BOOKING_QUOTE_DAIP_PRIVATE_RENDER_PREFLIGHT.md` — bounded weather-excluded booking/quote interpretation and private DAIP FFmpeg worker/CPU/storage evidence preflight.
+
+- `BUILD553_STAFF_MOBILE_FIELD_DAIP_SOCIAL_DRAFTS.md` — authenticated staff/mobile field regression and private four-channel social video copy drafts.
