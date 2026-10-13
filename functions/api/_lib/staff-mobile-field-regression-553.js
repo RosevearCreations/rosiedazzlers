@@ -5,7 +5,7 @@ const count=x=>x!==""&&x!=null&&Number.isInteger(Number(x))&&Number(x)>=0?Number
 export function build553StaffMobileFieldRegression({integrity={},field_observations={},source_available=false}={}){
  const source=Array.isArray(integrity?.rows)?integrity.rows:[],observations=field_observations||{};
  const rows=source.map(row=>{
-  const key=clean(row.key),record=observations[key]||{},gaps=[],base=record.before||{},after=record.after||{};
+  const key=clean(row.evidence_id),record=observations[key]||{},gaps=[],base=record.before||{},after=record.after||{};
   if(!source_available||row.integrity_state!=="staff_mobile_closure_integrity_current")gaps.push("current_source_owned_staff_mobile_integrity_required");
   if(!iso(record.reviewed_at)||!clean(record.review_reference))gaps.push("dated_operator_review_reference_required");
   for(const field of ["owning_workflow_scope","role_scope","device_browser_context","measure_definition","window_or_sample_definition"]){
