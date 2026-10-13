@@ -13,7 +13,7 @@ rules={
  "assets/build439-maintenance-fleet-owner-approval.js":["renderPilotCommercial551","maintenance_fleet_commercial_pilot_decision_551"],
  "admin-maintenance-fleet-owner-approval.html":['data-build551="maintenance-fleet-commercial-pilot-decision"','id="maintenanceFleetCommercial551"'],
  "assets/daip-private-video-editor-551.js":["build551DaipPrivateEditWorkspace","public_export_authorized:false","media_rendered:false","privacy_redaction_verified:false"],
- "admin-daip-media.html":['data-build551="private-video-edit-workspace"','id="daipEditReview551"',"build551DaipPrivateEditWorkspace"],
+ "admin-daip-media.html":['data-build551="private-video-edit-workspace"','id="daipEditReview551"','id="daipEditVideo551"','id="daipEditLocalFile551"',"build551DaipPrivateEditWorkspace","URL.createObjectURL(file)","URL.revokeObjectURL"],
  "BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md":["Build 551","Build 552","Cloudflare"],
  "scripts/maintenance_fleet_daip_private_editor_test.mjs":["private_cut_list_ready_for_render_authorization","retain_commercial_pilot_hold"]
 }
