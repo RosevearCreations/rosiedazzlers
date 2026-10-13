@@ -1,0 +1,17 @@
+# Build 551 — Maintenance & Fleet Pilot Commercial Decision + Private DAIP Editor
+
+## Commercial decision workbench
+The authenticated maintenance/fleet owner page includes a **read-only** evidence review that composes existing Build 491 pilot observations, Build 511 owner continuation decision, Build 521 outcome continuity, Build 531 freshness and Build 541 trace integrity. The only optional current decision is the explicit source-owned `MAINTENANCE_FLEET_PILOT_COMMERCIAL_REVIEW_JSON` binding; absent or inconsistent evidence reports a HOLD instead of inferring approval.
+
+An attributable owner decision records `decision` (`hold` or `proceed_to_separate_pilot_authorization`), `owner_role`, `reviewed_at`, `decision_reference`, `pilot_trace`, `participant_limit`, `duration_days`, `estimated_cost_cad`, `estimated_revenue_cad`, and traceable `travel_evidence_reference`, `capacity_evidence_reference`, `invoicing_evidence_reference` and `stop_conditions_reference`. A triggered stop condition, stale evidence, mismatched trace or missing authorization fails closed. Estimated CAD margin is arithmetic on supplied figures, **not actual invoices or guaranteed profitability**. Source-ready commercial review does **not** activate a plan, fleet account, booking, recurring billing, capacity reservation, automated outreach or canonical HOLD change. No production binding is created or altered by this source change.
+
+## DAIP editing workspace
+Under the existing staff-only DAIP private media page, operators first verify actual source clips and Build 550 camera offsets/timecodes. Build 551 adds a **browser-session-only** EDL editor that supports: reorder shots, source-bounded trims, 0.25–4× speed instruction, aspect target 9:16 / 16:9 / 4:5, original / center-safe / manually positioned safe crops, individual captions, brand label, audio-rights-or-silence review reference and per-shot editor confirmation. The UI previews a **text-only timed shot card sequence** and provides a private JSON editing instruction download.
+
+This does not stream the private raw media, run FFmpeg, create playable proxy video, persist the edit, apply redactions, produce a rendered file, authorize a channel or post to social accounts. It never generates a public R2 URL. Missing source evidence, crop/timecode validation, audio rights or editor confirmation remains review-required. Real worker-backed private video preview/render is reserved for the subsequent gated milestone.
+
+## Regression and Promotion
+`python scripts/maintenance_fleet_daip_private_editor_check.py` and `node scripts/maintenance_fleet_daip_private_editor_test.mjs` validate read-only source, protected route mirrors and key negative cases through both Development and Production workflow source gates. Protected PR acceptance and exact-SHA Cloudflare Production runtime/business acceptance remain independent prerequisites; a GitHub source pass does not verify live customer/provider evidence. No migration, new R2 object, pricing or state mutation, worker execution or paid hosting service.
+
+## Next queued
+**Build 552 — Booking & Quote Controlled Follow-Up Interpretation**, with DAIP bounded private FFmpeg/render pipeline design and gated worker acceptance. Actual rendered private samples, redaction and cost/CPU evidence are mandatory before any output is called complete.
