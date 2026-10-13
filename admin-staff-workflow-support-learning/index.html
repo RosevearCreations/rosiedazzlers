@@ -24,6 +24,11 @@
       <div class="learning-actions"><button class="btn primary" id="refreshEfficiencyLearning452" type="button">Refresh interpretation snapshot</button><a class="btn ghost" href="/app/admin/">Administration home</a></div>
     </section>
     <span id="refreshLearning" hidden aria-hidden="true"></span>
+    <section class="panel" data-build553="staff-mobile-field-regression-evidence"><h2>Build 553 · Staff/Mobile Field Regression Evidence</h2>
+    <p class="mini">Authenticated observation and matched like-for-like measure, role, workflow, device/browser, sample window and network conditions are required. Missing observations and weather restrictions remain separate HOLDs; no staff fault or device fault is inferred.</p>
+    <button class="btn ghost" id="refreshStaffField553" type="button">Review current field evidence</button>
+    <p id="staffFieldStatus553" class="mini" role="status" aria-live="polite">Select review to inspect the current source-owned device cohort evidence.</p>
+    <div id="staffFieldRows553" class="learning-list"></div></section>
     <div id="learningStatus" class="notice soft" role="status" aria-live="polite">Select Refresh interpretation snapshot to load current bounded evidence. No background monitoring is running.</div>
     <section class="panel learning-boundary"><strong>Evidence and mutation boundary</strong><ul class="mini"><li>Only aggregate task, exception and field-workflow cohorts are returned; customer/staff identity, booking IDs and raw exception IDs are excluded.</li><li>Two or more current rows with the same pattern is a review cohort; it does not prove a shared root cause, delay, staff fault or mobile friction.</li><li>Role ceilings and canonical job, booking, Detailer field-evidence and business-state APIs remain authoritative.</li><li>Missing or restricted evidence remains partial, restricted, unavailable or provider-dependent.</li><li>Weather/site restrictions are a separate operational classification. A cold-weather or site constraint is not staff/mobile friction, and exact service temperature limits must come from explicit service, product, equipment or site evidence.</li><li>No role escalation, automatic job/task action, automatic exception correction or remediation, blame inference, silent posting, outreach, provider transaction, background telemetry or permanent polling is authorized.</li></ul></section>
     <section class="panel"><h2>Current bounded snapshot</h2><div id="summaryGrid" class="learning-summary"><div class="learning-empty">No snapshot loaded.</div></div></section>
@@ -41,5 +46,6 @@
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-shell.js"></script>
   <script src="/assets/build452-staff-support-mobile-efficiency-learning.js"></script>
+  <script type="module" src="/assets/staff-mobile-field-regression-553.js"></script>
 </body>
 </html>
