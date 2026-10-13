@@ -33,3 +33,6 @@ The protected media intake workspace now reads existing private processing-job r
 
 ### Build 550 implementation note — manual, private multi-camera scene alignment
 Actual selected story assets can be annotated with editor-supplied camera clock offsets, confirmed sync, in/out timecodes, before/after match groups and manual shake/exposure/focus classifications. The output is a browser-session-only private JSON edit brief; no scene scores are computed by AI, no media worker runs, and no proxy, transcript, redaction, export or social publishing is performed. Build 551 adds an operator timeline editing workspace after successful exact-main Production acceptance.
+
+### Build 551 implementation note — private edit decisions, not rendered video
+The authenticated DAIP workspace now supports manual shot reordering, source-bounded trims, speed, safe crop settings, captions, output aspect ratio, brand label, audio license/silence evidence and per-shot operator review, resulting in a private JSON EDL and timed shot-card preview. It does not stream public raw video, persist revisions, run a worker, create playable media, verify redaction, render a file or publish. Build 552 requires a separately authorized, quota-aware private render pipeline and inspected output before any movie is called rendered.
