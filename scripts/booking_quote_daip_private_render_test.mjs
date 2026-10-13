@@ -19,7 +19,8 @@ assert.equal(valid.rows[0].arms[1].observed_rate_pct,35);
 assert.equal(valid.rows[0].total_weather_excluded,10);
 assert.equal(valid.rows[0].winner_declared,false);
 assert.equal(interpret({integrity:current,source_available:true,operator_measurements:{"booking-starts":{...comparable,weather_exclusion_audited:false}}}).status,"retain_booking_quote_follow_up_hold");
-assert.equal(interpret({integrity:current,source_available:true,operator_measurements:{"booking-starts":{...comparable,arms:[comparable.arms[0],{...comparable.arms[1],eligible_sessions:0}]}}).status,"retain_booking_quote_follow_up_hold");
+const zeroSample={"booking-starts":{...comparable,arms:[comparable.arms[0],{...comparable.arms[1],eligible_sessions:0}]}};
+assert.equal(interpret({integrity:current,source_available:true,operator_measurements:zeroSample}).status,"retain_booking_quote_follow_up_hold");
 const edit={project_id:"p552",canvas:"9:16",estimated_duration_seconds:40,audio_review_reference:"silence confirmed",
  raw_media_private:true,no_raw_media_url:true,media_rendered:false,
  timeline:[{asset_id:"private-source-1",review_confirmed:true,order:1,trim_in_seconds:0,trim_out_seconds:40,speed:1,crop_mode:"center_safe",caption:"Private"}]};
