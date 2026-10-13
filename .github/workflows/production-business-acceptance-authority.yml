@@ -746,6 +746,14 @@ jobs:
           python scripts/provider_daip_private_review_check.py
           node scripts/provider_daip_private_review_test.mjs
 
+      - name: Validate staff mobile cohorts and DAIP private social drafts
+        run: |
+          python -m py_compile scripts/staff_mobile_daip_social_drafts_check.py
+          node --check functions/api/_lib/staff-mobile-field-regression-553.js
+          node --check assets/daip-social-video-drafts-553.js
+          python scripts/staff_mobile_daip_social_drafts_check.py
+          node scripts/staff_mobile_daip_social_drafts_test.mjs
+
       - name: Validate booking quote seasonal analysis and DAIP private render preflight
         run: |
           python -m py_compile scripts/booking_quote_daip_private_render_check.py

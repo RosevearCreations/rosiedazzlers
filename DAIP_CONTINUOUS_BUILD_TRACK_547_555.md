@@ -39,3 +39,6 @@ The authenticated DAIP workspace now supports manual shot reordering, source-bou
 
 ### Build 552 implementation note — quota-aware private render preflight, not FFmpeg execution
 The admin DAIP workspace now inspects the current private EDL's clip duration, canvas, shot review, temporary storage estimate, declared Cloudflare CPU budget and missing worker/R2/consent/redaction evidence. Without a real authenticated private runner and inspected private output the pipeline remains BLOCKED; no transcode, private or public output, publication or paid service is performed or implied.
+
+### Build 553 implementation note — private four-channel social copy drafts
+Source-owned Creative Project shot metadata and Build 551 confirmed EDL support private, in-browser draft title/caption/hashtag/call-to-action packages for Instagram, TikTok, Facebook and YouTube. Actual consent, redaction, rendered footage, licensed music, connected social accounts and public publishing remain separate unproven gates. Export is local private JSON only.
