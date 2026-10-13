@@ -69,6 +69,26 @@
 <div class="button-row"><button id="daipDeliveryReview554" class="btn ghost" type="button">Review channel proof (no posting)</button><button id="daipDeliveryExport554" class="btn ghost" type="button" disabled>Export private review packet JSON</button></div>
 <p id="daipDeliveryStatus554" class="mini" role="status" aria-live="polite">Requires an actual Build 553 draft and independent source proof. No posts dispatched.</p><div id="daipDeliveryGaps554" class="job-list"></div>
 </section>
+<section class="section card" data-build555="daip-quality-cost-reliability"><h2>Build 555 · DAIP quality, processing cost &amp; reliability review</h2>
+<p class="mini">Review real private project media and processing-job metadata. Enter only actual measured amounts with traceable references. This view never proves a completed render, public post, consent or ROI from draft-only data.</p>
+<div class="grid3">
+<label>Measured editor effort (minutes)<input id="daipQualityMinutes555" type="number" min="0" step="any" placeholder="Actual minutes"></label>
+<label>Measured worker CPU (ms)<input id="daipQualityCpu555" type="number" min="0" step="any" placeholder="Provider evidence required"></label>
+<label>Measured processing cost (CAD)<input id="daipQualityCost555" type="number" min="0" step="any" placeholder="Actual billed amount"></label>
+<label>Actual channel views<input id="daipQualityViews555" type="number" min="0" step="1" placeholder="Provider analytics"></label>
+<label>Actual attributed leads<input id="daipQualityLeads555" type="number" min="0" step="1" placeholder="Matched source"></label>
+<label>Recorded attributable revenue (CAD)<input id="daipQualityRevenue555" type="number" min="0" step="any" placeholder="Actual matched revenue"></label>
+<label>Evidence/source reference<input id="daipQualityRef555" maxlength="120" placeholder="Source-owned private record identifier"></label>
+<label>Observed date and time<input id="daipQualityDate555" type="datetime-local"></label>
+<label>Comparable measurement window<input id="daipQualityWindow555" maxlength="120" placeholder="Exact start/end and sample"></label>
+<label>Attribution method<input id="daipQualityAttribution555" maxlength="120" placeholder="Like-for-like measured source"></label>
+<label>Confounders<input id="daipQualityConfounders555" maxlength="120" placeholder="Season, geography, platform"></label>
+<label>Inspected private output reference<input id="daipQualityRender555" maxlength="120" placeholder="Real rendered output"></label>
+<label>Channel delivery proof reference<input id="daipQualityDelivery555" maxlength="120" placeholder="Actual platform post record"></label>
+<label>Provider quota/CPU/storage reference<input id="daipQualityQuota555" maxlength="120" placeholder="Real provider observation"></label>
+</div>
+<div class="button-row"><button class="btn ghost" id="daipQualityReview555" type="button">Review DAIP quality &amp; measured costs</button><button class="btn ghost" id="daipQualityExport555" type="button" disabled>Export private review JSON</button></div>
+<p class="mini" id="daipQualityStatus555" role="status" aria-live="polite">Choose an existing Creative Project. Incomplete evidence stays HOLD. No video rendered or posted.</p><div class="job-list" id="daipQualityRows555"></div></section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -329,6 +349,31 @@ $('#daipDeliveryExport554').onclick=()=>{
  if(!delivery554||delivery554.project_id!==projectId())return;
  const blob=new Blob([JSON.stringify(delivery554,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rosie-private-daip-channel-review-build554.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+
+let daipQuality555=null;
+$('#daipQualityReview555').onclick=async()=>{
+ const {build555DaipQualityReliabilityReview}=await import('/assets/daip-quality-cost-reliability-review-555.js');
+ const val=id=>$(id).value.trim(),num=id=>val(id)===""?null:Number(val(id));
+ daipQuality555=build555DaipQualityReliabilityReview({project_id:projectId(),projects:state.data?.projects||[],
+  assets:state.data?.assets||[],processing_jobs:state.data?.processing_jobs||[],
+  measurements:{editing_minutes:num('#daipQualityMinutes555'),worker_cpu_ms:num('#daipQualityCpu555'),processing_cost_cad:num('#daipQualityCost555'),
+   observed_views:num('#daipQualityViews555'),observed_leads:num('#daipQualityLeads555'),attributed_revenue_cad:num('#daipQualityRevenue555'),
+   evidence_reference:val('#daipQualityRef555'),observed_at:val('#daipQualityDate555'),window_definition:val('#daipQualityWindow555'),
+   attribution_method:val('#daipQualityAttribution555'),confounders:val('#daipQualityConfounders555'),
+   verified_render_reference:val('#daipQualityRender555'),verified_delivery_reference:val('#daipQualityDelivery555'),
+   worker_quota_reference:val('#daipQualityQuota555')}});
+ $('#daipQualityStatus555').textContent='Build 555 '+daipQuality555.status+' · '+daipQuality555.quality.private_asset_count+' project media record(s), '+
+   daipQuality555.reliability.processing_job_count+' recorded job(s), '+
+   daipQuality555.reliability.failed_or_dead_lettered_job_count+' failure(s), '+daipQuality555.reliability.queue_or_running_count+' pending/running. No provider data independently verified.';
+ const rows=$('#daipQualityRows555');rows.replaceChildren();
+ for(const gap of daipQuality555.gaps){const p=document.createElement('p');p.className='mini';p.textContent='Review: '+gap.replaceAll('_',' ');rows.append(p)}
+ $('#daipQualityExport555').disabled=false;
+};
+$('#daipQualityExport555').onclick=()=>{
+ if(!daipQuality555||daipQuality555.project_id!==projectId())return;
+ const blob=new Blob([JSON.stringify(daipQuality555,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='rosie-private-daip-quality-build555.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 
 $('#daipEditLoad551').onclick=loadEdit551;
