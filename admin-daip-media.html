@@ -26,6 +26,14 @@
 <p id="daipEditLocalStatus551" class="mini" aria-live="polite">No local video selected. Uploaded raw media stays private in R2.</p><video id="daipEditVideo551" controls playsinline preload="metadata" hidden style="max-width:100%;width:100%;max-height:400px;background:#000;border-radius:12px"></video></div>
 <p id="daipEditStatus551" class="mini" role="status" aria-live="polite">Review Build 550 source alignment first. No video output has been generated.</p><div id="daipEditControls551" class="job-list"></div><div id="daipEditTimeline551" class="job-grid" aria-live="polite"></div>
 </section>
+<section class="section card" data-build552="private-render-preflight"><h2>Build 552 · Quota-aware private render preflight <span title="ⓘ Checks a planned FFmpeg worker handoff only. It does not run a renderer, create output or publish footage.">ⓘ</span></h2>
+<p class="mini">Use the Build 551 private edit list. Declare temporary private storage and Cloudflare worker CPU budget; verify redaction and consent separately. Nothing is rendered until an authenticated private FFmpeg worker, actual R2 object proofs, inspected redaction and owner dispatch exist.</p>
+<div class="grid3"><label>Free private storage remaining (MiB)<input id="daipRenderStorage552" type="number" min="0" step="1" placeholder="Enter verified available MiB"></label>
+<label>Max allowable worker CPU (ms)<input id="daipRenderCpu552" type="number" min="1" step="1" placeholder="Enter measured budget"></label>
+<label>Max planned video length (seconds)<input id="daipRenderMaxLength552" type="number" min="1" max="3600" step="1" value="120"></label></div>
+<button id="daipRenderCheck552" class="btn ghost" type="button">Inspect private render readiness</button>
+<p id="daipRenderStatus552" class="mini" role="status" aria-live="polite">No worker credentials or private output are created by this review.</p>
+<div id="daipRenderGaps552" class="job-list"></div></section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -216,6 +224,26 @@ function exportEdit551(){
  const b=new Blob([JSON.stringify(a,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(b),link=document.createElement('a');link.href=url;link.download='rosie-private-edit-list-551.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+
+async function privateRenderPreflight552(){
+ const {build552PrivateDaipRenderPlan}=await import('/assets/daip-private-render-preflight-552.js');
+ if(!edit551.brief||edit551.brief.project_id!==projectId()){
+  $('#daipRenderStatus552').textContent='First review a current Build 551 private edit list for this project.';return;
+ }
+ const rawStorage=$('#daipRenderStorage552').value,rawCpu=$('#daipRenderCpu552').value,rawDuration=$('#daipRenderMaxLength552').value;
+ const policy={
+  private_r2_available_bytes:rawStorage===''?null:Number(rawStorage)*1048576,
+  max_worker_cpu_ms:rawCpu===''?null:Number(rawCpu),
+  max_duration_seconds:rawDuration===''?null:Number(rawDuration)
+ };
+ // No real FFmpeg capability or redaction/consent evidence is assumed from a browser input.
+ const report=build552PrivateDaipRenderPlan({edit_list:edit551.brief,policy,worker_capabilities:{}});
+ $('#daipRenderStatus552').textContent=report.status+' · '+report.shot_count+' edit shots · estimated '+(report.estimated_output_megabytes??'unavailable')+' MiB draft budget. Actual output, R2 source proof, privacy approval and worker execution: NOT VERIFIED.';
+ $('#daipRenderGaps552').innerHTML=(report.gaps||[]).map(g=>'<div class="job"><strong>Required:</strong> '+esc(g.replaceAll('_',' '))+'</div>').join('')||
+  '<p class="mini">A reviewed plan is not permission to run a worker or publish media.</p>';
+}
+$('#daipRenderCheck552').onclick=()=>privateRenderPreflight552().catch(e=>note('Render preflight unavailable: '+e.message,'error'));
+
 $('#daipEditLoad551').onclick=loadEdit551;
 $('#daipEditReview551').onclick=()=>previewEdit551().catch(e=>note('Private editor unavailable: '+e.message,'error'));
 $('#daipEditDownload551').onclick=exportEdit551;

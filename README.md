@@ -1,8 +1,8 @@
 # Rosie Dazzlers
 
-**Current active build: 551 — Maintenance & Fleet Pilot Commercial Decision.** Contract: `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md`. Next 552; protected-main/Cloudflare GREEN required.
+**Current active build: 552 — Booking & Quote Controlled Follow-Up Interpretation.** Contract: `BUILD552_BOOKING_QUOTE_DAIP_PRIVATE_RENDER_PREFLIGHT.md`. Next 553; exact-main Cloudflare acceptance required.
 
-Current source direction: **Build 551 — Maintenance & Fleet Pilot Commercial Decision**.
+Current source direction: **Build 552 — Booking & Quote Controlled Follow-Up Interpretation**.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->

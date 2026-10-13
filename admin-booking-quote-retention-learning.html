@@ -49,6 +49,12 @@
     <section class="panel"><h2>Quote-value review cohorts</h2><p class="mini">Broad quoted-value bands support owner review only. Differences between cohorts are not causal evidence of price sensitivity.</p><div id="pricingBands451" class="learning-list"><div class="learning-empty">Refresh Build 451 learning to load quote-value cohorts.</div></div></section>
     <section class="panel"><h2>Supported Build 451 learning signals</h2><div id="pricingSignals451" class="learning-list"><div class="learning-empty">Refresh Build 451 learning to load supported review signals.</div></div></section>
     <section class="panel"><h2>Build 451 evidence source status</h2><div id="pricingSources451" class="learning-list"><div class="learning-empty">No Build 451 source status loaded.</div></div></section>
+    <section class="panel" data-build552="booking-quote-controlled-follow-up-interpretation"><h2>Build 552 · Booking &amp; Quote Controlled Follow-Up Interpretation</h2>
+      <p class="mini">Current owner-approved comparable experiments only. Exclude Southern Ontario weather-ineligible sessions, verify equal measurement window and allocation, check capacity and booking conflicts, and retain triggered stop conditions. A conversion difference does not establish causation or a winner.</p>
+      <button type="button" class="btn ghost" id="refreshFollowup552">Review observed comparable cohorts</button>
+      <p class="mini" id="followupStatus552" role="status" aria-live="polite">Select review to check source-owned evidence. No changes are authorized.</p>
+      <div id="followupRows552" class="learning-list"></div>
+    </section>
     <div id="learningStatus" class="notice soft" role="status" aria-live="polite">Select Refresh retained Build 441 to load the retained bounded evidence.</div>
     <section class="panel learning-boundary"><strong>Evidence and mutation boundary</strong><ul class="mini"><li>Anonymous booking sessions are not joined to customer identity.</li><li>Quote evidence is aggregated; customer names, emails and record identifiers are not returned by this learning endpoint.</li><li>Repeat booking uses exact persisted profile linkage only and remains correlation, not causal proof.</li><li>Missing identity, consent, price/cost or provider-delivery evidence remains partial, provider-dependent or unavailable.</li><li>No automatic outreach, segmentation, discount, pricing change, booking creation, maintenance enrollment, payment or provider mutation is authorized.</li></ul></section>
     <section class="panel"><h2>Current evidence snapshot</h2><div id="summaryGrid" class="learning-summary"><div class="learning-empty">No snapshot loaded.</div></div></section>
@@ -60,5 +66,6 @@
   <script src="/assets/admin-shell.js"></script>
   <script src="/assets/build441-booking-quote-retention-learning.js"></script>
   <script src="/assets/build451-booking-funnel-quote-pricing-learning.js"></script>
+  <script type="module" src="/assets/booking-quote-followup-interpretation-552.js"></script>
 </body>
 </html>
