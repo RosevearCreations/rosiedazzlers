@@ -1,8 +1,8 @@
 # Rosie Dazzlers
 
-**Current active build: 549 — Provider Delivery & Local Search Manual Evidence Closure.** Contract: `BUILD549_PROVIDER_DELIVERY_LOCAL_SEARCH_DAIP_PRIVACY_REVIEW.md`. Next: 550; exact-main Cloudflare GREEN required.
+**Current active build: 551 — Maintenance & Fleet Pilot Commercial Decision.** Contract: `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md`. Next 552; protected-main/Cloudflare GREEN required.
 
-Current source direction: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure**.
+Current source direction: **Build 551 — Maintenance & Fleet Pilot Commercial Decision**.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->

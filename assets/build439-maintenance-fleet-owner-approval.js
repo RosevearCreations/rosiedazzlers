@@ -21,11 +21,22 @@ async function refresh(){
   ]);
   const [data,outcomeData]=await Promise.all([response.json().catch(()=>null),outcomeResponse.json().catch(()=>null)]);
   if(!response.ok||!data) throw new Error(data?.error||`Owner-decision snapshot returned HTTP ${response.status}.`);
-  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderPilotContinuationDecision(outcomeData?.maintenance_fleet_pilot_continuation_decision||{});renderPilotContinuationOutcome(outcomeData?.maintenance_fleet_continuation_outcome_continuity||{});renderPilotContinuationFreshness(outcomeData?.maintenance_fleet_continuation_evidence_freshness_review||{});renderPilotContinuationIntegrity(outcomeData?.maintenance_fleet_continuation_evidence_integrity_review||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
+  renderSummary(data);renderActivation(data.activation_readiness||{});renderControlledPilot(data.controlled_pilot_readiness||{});renderPilotDecision(data.pilot_decision_record||{});renderPilotOutcome(outcomeData?.pilot_outcome_evidence||{});renderPilotOutcomeContinuity(outcomeData?.pilot_outcome_continuity_review||{});renderPilotContinuationDecision(outcomeData?.maintenance_fleet_pilot_continuation_decision||{});renderPilotContinuationOutcome(outcomeData?.maintenance_fleet_continuation_outcome_continuity||{});renderPilotContinuationFreshness(outcomeData?.maintenance_fleet_continuation_evidence_freshness_review||{});renderPilotContinuationIntegrity(outcomeData?.maintenance_fleet_continuation_evidence_integrity_review||{});renderPilotCommercial551(outcomeData?.maintenance_fleet_commercial_pilot_decision_551||{});renderGroup("maintenanceDecisions",data.maintenance?.decisions||[]);renderGroup("fleetDecisions",data.fleet?.decisions||[]);renderCapacity(data.capacity||{});renderSources(data.source_status||{});
   setStatus(`Snapshot refreshed ${new Date(data.generated_at).toLocaleString("en-CA")}. ${data.summary?.owner_action_count||0} decision(s) remain owner_action. No term was approved or changed.`,"warn");
  }catch(error){setStatus(error?.message||"Could not load owner-decision evidence.","bad");}
  finally{if(button)button.disabled=false;}
 }
+
+function renderPilotCommercial551(r){
+ const mount=$("maintenanceFleetCommercial551");if(!mount)return;
+ const gaps=Array.isArray(r.gaps)?r.gaps:[ "commercial_pilot_source_unavailable" ];
+ mount.innerHTML='<div class="oa-card"><div class="oa-head"><h3>Source-owned commercial pilot review</h3><span class="oa-pill">'+esc(r.status||"retain_commercial_pilot_hold")+'</span></div>'+
+ '<p><strong>Owner decision:</strong> '+esc(r.decision||"not_recorded")+' · <strong>Participants:</strong> '+esc(r.participant_limit??"unverified")+' · <strong>Duration:</strong> '+esc(r.duration_days??"unverified")+' days</p>'+
+ '<p><strong>Estimated CAD cost / revenue / margin:</strong> '+esc(r.cost_estimate_cad??"not provided")+' / '+esc(r.revenue_estimate_cad??"not provided")+' / '+esc(r.estimated_margin_cad??"not available")+'</p>'+
+ '<p class="mini"><strong>Evidence gaps:</strong> '+esc(gaps.length?gaps.join(", "):"none in this bounded source review; still requires separate activation authorization")+'</p>'+
+ '<p class="oa-boundary">No future capacity is reserved; owner commercial review does not enroll anyone, alter price, generate an invoice, send outreach, charge a payment method or close an operational HOLD.</p></div>';
+}
+
 function renderSummary(data){
  const s=data.summary||{},closure=data.decision_closure||{},mount=$("ownerApprovalSummary"); if(!mount)return;
  const a=data.activation_readiness||{},p=data.controlled_pilot_readiness||{},d=data.pilot_decision_record||{}; const rows=[["Closure state",closure.status||s.closure_status||"owner_action"],["Activation readiness",a.status||"owner_action"],["Controlled pilot",p.status||"owner_action"],["Pilot decision",d.status||"owner_action"],["Owner actions",s.owner_action_count||0],["Fleet inquiries",s.fleet_inquiry_total||0]];

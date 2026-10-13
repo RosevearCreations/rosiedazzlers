@@ -4,6 +4,7 @@ import { buildRecoveryAuthenticatedDeviceClosureReview } from "../_lib/recovery-
 import { buildRecoveryAuthenticatedDeviceManualClosureOutcomeContinuity } from "../_lib/recovery-authenticated-device-manual-closure-outcome-continuity.js";
 import { buildRecoveryAuthenticatedDeviceClosureEvidenceFreshnessReview } from "../_lib/recovery-authenticated-device-closure-evidence-freshness-review.js";
 import { buildRecoveryAuthenticatedDeviceClosureEvidenceIntegrityReview } from "../_lib/recovery-authenticated-device-closure-evidence-integrity-review.js";
+import { build550RecoveryDeviceFieldClosure } from "../_lib/recovery-authenticated-device-field-closure-550.js";
 
 export async function onRequestGet({request,env}) {
   const executionResponse = await getExecutionEvidence({request:request.clone(),env});
@@ -35,6 +36,11 @@ export async function onRequestGet({request,env}) {
     manual_closure_outcome: manualClosureOutcome,
     generated_at: generatedAt
   });
+  const field550 = build550RecoveryDeviceFieldClosure({
+    integrity: closureEvidenceIntegrityReview, freshness:closureEvidenceFreshnessReview,
+    manual:manualClosureOutcome,
+    source_status:{execution_evidence:{available:executionResponse.ok&&Boolean(executionPayload?.ok)}}
+  });
   return json({
     ok: executionResponse.ok && Boolean(executionPayload?.ok),
     closure_review_build:510,
@@ -50,6 +56,7 @@ export async function onRequestGet({request,env}) {
     recovery_authenticated_device_closure_integrity_build:540,
     recovery_authenticated_device_closure_integrity_authority:"recovery_authenticated_device_closure_evidence_integrity_review",
     recovery_authenticated_device_closure_evidence_integrity_review:closureEvidenceIntegrityReview,
+    recovery_authenticated_device_field_closure_550:field550,
     source_status:{
       execution_evidence:{
         available:executionResponse.ok && Boolean(executionPayload?.ok),

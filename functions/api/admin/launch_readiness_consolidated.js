@@ -27,6 +27,7 @@ import { buildRecoveryAuthenticatedDeviceClosureReview } from "../_lib/recovery-
 import { buildRecoveryAuthenticatedDeviceManualClosureOutcomeContinuity } from "../_lib/recovery-authenticated-device-manual-closure-outcome-continuity.js";
 import { buildRecoveryAuthenticatedDeviceClosureEvidenceFreshnessReview } from "../_lib/recovery-authenticated-device-closure-evidence-freshness-review.js";
 import { buildRecoveryAuthenticatedDeviceClosureEvidenceIntegrityReview } from "../_lib/recovery-authenticated-device-closure-evidence-integrity-review.js";
+import { build550RecoveryDeviceFieldClosure } from "../_lib/recovery-authenticated-device-field-closure-550.js";
 import { onRequestPost as getJobHandoffEvidence } from "./job_handoff_evidence.js";
 
 export async function onRequestGet({ request, env }) {
@@ -201,6 +202,12 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const recoveryDeviceField550 = build550RecoveryDeviceFieldClosure({
+    integrity:recoveryAuthenticatedDeviceClosureEvidenceIntegrityReview,
+    freshness:recoveryAuthenticatedDeviceClosureEvidenceFreshnessReview,
+    manual:recoveryAuthenticatedDeviceManualClosureOutcomeContinuity,
+    source_status:{execution_evidence:{available:recoveryExportResult.ok===true&&launchEvidenceResult.ok===true}}
+  });
   return json({
     ok: consolidation.source_runtime_status === "green",
     build: 419,
@@ -252,6 +259,7 @@ export async function onRequestGet({ request, env }) {
     recovery_authenticated_device_closure_integrity_build:540,
     recovery_authenticated_device_closure_integrity_authority:"recovery_authenticated_device_closure_evidence_integrity_review",
     recovery_authenticated_device_closure_evidence_integrity_review: recoveryAuthenticatedDeviceClosureEvidenceIntegrityReview,
+    recovery_authenticated_device_field_closure_550:recoveryDeviceField550,
     current_recovery_device_closure_integrity_authority: "recovery_authenticated_device_closure_evidence_integrity_review",
     source_status: {
       go_live_readiness: state(readinessResult),
