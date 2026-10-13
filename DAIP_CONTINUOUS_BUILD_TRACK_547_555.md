@@ -42,3 +42,6 @@ The admin DAIP workspace now inspects the current private EDL's clip duration, c
 
 ### Build 553 implementation note — private four-channel social copy drafts
 Source-owned Creative Project shot metadata and Build 551 confirmed EDL support private, in-browser draft title/caption/hashtag/call-to-action packages for Instagram, TikTok, Facebook and YouTube. Actual consent, redaction, rendered footage, licensed music, connected social accounts and public publishing remain separate unproven gates. Export is local private JSON only.
+
+### Build 554 implementation note — manual private channel evidence packet only
+A selected Build 553 four-channel draft can be reconciled with editor-entered references and confirmations for consent, real rendered file/output inspection, face/plate/address redaction, audio licensing, worker quota, operator approval and connected platform scopes/limits. A private local JSON report is generated with explicit gaps, zero remote dispatch, no remote post ID and no public URL. The application has **not** posted, scheduled, rendered a video, or withdrawn anything as part of Build 554. External channel integration requires separate evidence and authorization.

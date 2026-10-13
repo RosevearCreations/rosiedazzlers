@@ -975,6 +975,11 @@ jobs:
           node --check scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
           node scripts/staff_mobile_closure_evidence_integrity_review_test.mjs
 
+      - name: Validate Build 554 owner review and private DAIP delivery
+        run: |
+          python scripts/service_economics_daip_owner_review_554_check.py
+          node scripts/service_economics_daip_owner_review_554_test.mjs
+
       - name: Source acceptance summary
         run: |
           {
