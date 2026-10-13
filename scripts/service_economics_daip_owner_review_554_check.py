@@ -27,7 +27,7 @@ for p in ["admin-daip-media","admin-service-economics-commercial-capacity-review
  if read(p+".html")!=read(p+"/index.html"):errors.append("Protected route mirror mismatch "+p)
 for p in [".github/workflows/development-source-gate.yml",".github/workflows/production-business-acceptance-authority.yml"]:
  c=read(p)
- for phrase in ["Validate Build 554 owner review and private DAIP delivery","python scripts/service_economics_daip_owner_review_554_check.py","node scripts/service_economics_daip_owner_review_554_test.mjs"]:
+ for phrase in ["Validate current owner review and private DAIP delivery","python scripts/service_economics_daip_owner_review_554_check.py","node scripts/service_economics_daip_owner_review_554_test.mjs"]:
   if phrase not in c:errors.append(p+" missing "+phrase)
 files=["functions/api/_lib/service-economics-capacity-technical-owner-review-554.js","functions/api/admin/service_economics_capacity_technical_owner_review.js",
 "assets/daip-operator-delivery-review-554.js","assets/service-economics-owner-review-554.js","scripts/service_economics_daip_owner_review_554_test.mjs"]

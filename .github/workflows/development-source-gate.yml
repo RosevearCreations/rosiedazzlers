@@ -1058,7 +1058,7 @@ jobs:
           node --check scripts/service_economics_seasonal_capacity_reliability_evidence_integrity_review_test.mjs
           node scripts/service_economics_seasonal_capacity_reliability_evidence_integrity_review_test.mjs
 
-      - name: Validate Build 554 owner review and private DAIP delivery
+      - name: Validate current owner review and private DAIP delivery
         run: |
           python scripts/service_economics_daip_owner_review_554_check.py
           node scripts/service_economics_daip_owner_review_554_test.mjs
