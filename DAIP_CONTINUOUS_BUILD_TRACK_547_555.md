@@ -36,3 +36,6 @@ Actual selected story assets can be annotated with editor-supplied camera clock 
 
 ### Build 551 implementation note — private edit decisions, not rendered video
 The authenticated DAIP workspace now supports manual shot reordering, source-bounded trims, speed, safe crop settings, captions, output aspect ratio, brand label, audio license/silence evidence and per-shot operator review, resulting in a private JSON EDL and timed shot-card preview. It does not stream public raw video, persist revisions, run a worker, create playable media, verify redaction, render a file or publish. Build 552 requires a separately authorized, quota-aware private render pipeline and inspected output before any movie is called rendered.
+
+### Build 552 implementation note — quota-aware private render preflight, not FFmpeg execution
+The admin DAIP workspace now inspects the current private EDL's clip duration, canvas, shot review, temporary storage estimate, declared Cloudflare CPU budget and missing worker/R2/consent/redaction evidence. Without a real authenticated private runner and inspected private output the pipeline remains BLOCKED; no transcode, private or public output, publication or paid service is performed or implied.
