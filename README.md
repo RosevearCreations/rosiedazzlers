@@ -1,8 +1,8 @@
 # Rosie Dazzlers
 
-**Current active build: 550 — Backup Recovery & Authenticated Device Field Closure.** Contract: `BUILD550_RECOVERY_DEVICE_FIELD_DAIP_SCENE_ALIGNMENT.md`. Next 551; exact-main Cloudflare GREEN required.
+**Current active build: 551 — Maintenance & Fleet Pilot Commercial Decision.** Contract: `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md`. Next 552; protected-main/Cloudflare GREEN required.
 
-Current source direction: **Build 550 — Backup Recovery & Authenticated Device Field Closure**.
+Current source direction: **Build 551 — Maintenance & Fleet Pilot Commercial Decision**.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->
