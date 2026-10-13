@@ -372,3 +372,18 @@ function renderProviderLocalSearchManualClosureOutcome519(data) {
     '<div class="summary-item"><div><strong>' + esc450(row[0]) + '</strong><div class="muted">' + esc450(row[2]) + '</div></div><span>' + esc450(row[1]) + '</span></div>'
   ).join("");
 }
+
+function renderProviderManual549(data) {
+  const host=byId450("providerManual549Rows");
+  if(!host)return;
+  const report=data?.provider_delivery_local_search_manual_evidence_closure_549||{};
+  const rows=[
+    ["Provider delivery source proof",String(report.provider?.current??0)+" / "+String(report.provider?.required??4),"payment/refund/message/delivery from provider records"],
+    ["Search Console + GBP source windows",String(report.local_search?.current??0)+" / "+String(report.local_search?.required??2),"exact property/location, dated distinct equal-length windows"],
+    ["Independent operator review",report.operator?.current===true?"CURRENT":"REQUIRED","dated reviewer role, evidence reference and exact source trace"],
+    ["Canonical HOLD change",report.canonical_hold_mutated===false?"NONE":"NONE","separate authorized manual action is required"],
+    ["Gaps",Array.isArray(report.gaps)&&report.gaps.length?report.gaps.join(", "):"No source gaps observed","no ranking or booking causation is inferred"]
+  ];
+  host.innerHTML='<div class="summary-item"><strong>Build 549 · '+esc450(report.status||"source_unavailable")+'</strong><span>Read-only</span></div>'+
+    rows.map(r=>'<div class="summary-item"><div><strong>'+esc450(r[0])+'</strong><div class="muted">'+esc450(r[2])+'</div></div><span>'+esc450(r[1])+'</span></div>').join("");
+}
