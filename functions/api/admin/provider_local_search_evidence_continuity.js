@@ -10,6 +10,7 @@ import { buildProviderLocalSearchClosureEvidenceContinuityReview } from "../_lib
 import { buildProviderLocalSearchManualClosureOutcomeContinuity } from "../_lib/provider-local-search-manual-closure-outcome-continuity.js";
 import { buildProviderLocalSearchClosureEvidenceFreshnessReview } from "../_lib/provider-local-search-closure-evidence-freshness-review.js";
 import { buildProviderLocalSearchClosureEvidenceIntegrityReview } from "../_lib/provider-local-search-closure-evidence-integrity-review.js";
+import { build549ProviderManualEvidenceReview } from "../_lib/provider-local-search-manual-evidence-closure-549.js";
 
 export async function onRequestGet({ request, env }) {
   const [providerResponse, localResponse] = await Promise.all([
@@ -56,6 +57,9 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const providerManual549 = build549ProviderManualEvidenceReview({
+    freshness:closureFreshness,integrity:closureIntegrity,manual:manualClosureOutcome
+  });
   return json({
     ...(localPayload && typeof localPayload === "object" ? localPayload : {}),
     ok: localResponse.ok && Boolean(localPayload?.ok),
@@ -78,6 +82,7 @@ export async function onRequestGet({ request, env }) {
     provider_local_search_manual_closure_outcome_continuity: manualClosureOutcome,
     provider_local_search_closure_evidence_freshness_review: closureFreshness,
     provider_local_search_closure_evidence_integrity_review: closureIntegrity,
+    provider_delivery_local_search_manual_evidence_closure_549: providerManual549,
     continuity_source_status: {
       provider_outcomes: { available: providerResponse.ok && Boolean(providerPayload?.ok), http_status: providerResponse.status },
       local_search: { available: localResponse.ok && Boolean(localPayload?.ok), http_status: localResponse.status }
