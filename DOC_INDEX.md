@@ -92,3 +92,5 @@ Going forward:
 - `BUILD549_PROVIDER_DELIVERY_LOCAL_SEARCH_DAIP_PRIVACY_REVIEW.md` — Build 549 provider delivery / local-search manual proof and private DAIP processing/privacy review contract; protected-main exact Production acceptance required.
 
 - `BUILD550_RECOVERY_DEVICE_FIELD_DAIP_SCENE_ALIGNMENT.md` — Build 550 split recovery/device field HOLDs and private DAIP manual camera alignment. Exact protected source and Cloudflare production checks required.
+
+- `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md` — commercial pilot owner decision and private DAIP browser-only video editing instructions. Requires independent source/runtime/owner acceptance.

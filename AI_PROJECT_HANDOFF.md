@@ -1,7 +1,7 @@
 # Rosie Dazzlers — Current Project Handoff
 
-## Current active release — Build 550
-Backup Recovery & Authenticated Device Field Closure with private DAIP camera/timecode/quality review. Contract: `BUILD550_RECOVERY_DEVICE_FIELD_DAIP_SCENE_ALIGNMENT.md`; next Build 551. Build 549 protected Production promotion and exact-main Cloudflare runtime checks remain prerequisites. No real restore, field login, automated sync, video render or HOLD closure is inferred.
+## Current active release — Build 551
+Maintenance & Fleet Pilot Commercial Decision plus DAIP staff-only browser-session private edit EDL. Contract: `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md`; next Build 552. Builds 549–550 exact-main Cloudflare approval remain prerequisites. No automatic customer enrollment, billing, video rendering, privacy-redaction approval or social publishing.
 <!-- Previous active release — Build 548: Controlled Site Routing & Capacity Owner Verification with DAIP private metadata integrity checks. Contract: `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. Processing, proxy creation, R2 HEAD and publishing are not inferred. Next Build 549. -->
 
 <!-- Historical: Winter Booking Rule Observed Safety & Transparency plus the first private multi-camera DAIP editing-plan stage. --> Contract `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md`; DAIP roadmap `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`. No automatic winter booking change, privacy bypass, rendering, public asset or social publishing. Build 548 follows independent Production GREEN.
@@ -13,7 +13,8 @@ This is the living restart authority. Historical release evidence belongs in Git
 ## Current release boundary
 The synchronized Production predecessor is retained through BUILD540_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_INTEGRITY_REVIEW.md.
 
-**Build 550 — Backup Recovery & Authenticated Device Field Closure** is the active bounded release.
+**Build 551 — Maintenance & Fleet Pilot Commercial Decision** is the active bounded release.
+<!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is the active bounded release. -->
 <!-- Prior: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is the active bounded release. -->
 <!-- Retained Build 548 authority: **Build 548 — Controlled Site Routing & Capacity Owner Verification** is the active bounded release. -->
 
@@ -23,7 +24,8 @@ The synchronized Production predecessor is retained through BUILD540_RECOVERY_AU
 
 <!-- Retained Build 542 checker compatibility: **Build 542 — Booking & Quote Follow-Up Evidence Integrity Review** is the active bounded release. -->
 
-**Build 551 — Maintenance & Fleet Pilot Commercial Decision** is next only after the current release is independently GREEN on protected main.
+**Build 552 — Booking & Quote Controlled Follow-Up Interpretation** is next only after the current release is independently GREEN on protected main.
+<!-- Prior: **Build 551 — Maintenance & Fleet Pilot Commercial Decision** is next only after the current release is independently GREEN on protected main. -->
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is next only after the current release is independently GREEN on protected main. -->
 <!-- Retained Build 548 queue: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is next only after the current release is independently GREEN on protected main. -->
 
