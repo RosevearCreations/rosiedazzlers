@@ -8,6 +8,7 @@ import { buildBookingQuoteExperimentFollowUpDecision } from "../_lib/booking-quo
 import { buildBookingQuoteExperimentFollowUpOutcomeContinuity } from "../_lib/booking-quote-experiment-follow-up-outcome-continuity.js";
 import { buildBookingQuoteFollowUpEvidenceFreshnessReview } from "../_lib/booking-quote-follow-up-evidence-freshness-review.js";
 import { buildBookingQuoteFollowUpEvidenceIntegrityReview } from "../_lib/booking-quote-follow-up-evidence-integrity-review.js";
+import { build552BookingQuoteControlledInterpretation } from "../_lib/booking-quote-controlled-interpretation-552.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getLearning({ request: request.clone(), env });
@@ -55,6 +56,10 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const interpretation = build552BookingQuoteControlledInterpretation({
+    integrity,operator_measurements:parseDecisionRecords(env?.BOOKING_QUOTE_FOLLOW_UP_MEASUREMENTS_JSON),
+    source_available:source.ok&&Boolean(payload?.ok)
+  });
   return json({
     ok: source.ok && Boolean(payload?.ok),
     follow_up_decision_build:512,
@@ -73,6 +78,7 @@ export async function onRequestGet({ request, env }) {
     booking_quote_experiment_follow_up_outcome_continuity:continuity,
     booking_quote_follow_up_evidence_freshness_review:freshness,
     booking_quote_follow_up_evidence_integrity_review:integrity,
+    booking_quote_controlled_follow_up_interpretation_552:interpretation,
     source_status:{
       outcome_interpretation:{available:source.ok&&Boolean(payload),http_status:source.status},
       owner_follow_up_decision:{available:Boolean(records && Object.keys(records).length)},
