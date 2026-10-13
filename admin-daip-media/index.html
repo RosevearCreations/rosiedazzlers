@@ -34,6 +34,16 @@
 <button id="daipRenderCheck552" class="btn ghost" type="button">Inspect private render readiness</button>
 <p id="daipRenderStatus552" class="mini" role="status" aria-live="polite">No worker credentials or private output are created by this review.</p>
 <div id="daipRenderGaps552" class="job-list"></div></section>
+<section class="section card" data-build553="private-daip-social-video-packages">
+<h2>Build 553 · Private DAIP social-video package drafts</h2>
+<p class="mini">Draft platform-specific titles, captions, calls to action and tags from verified multi-angle project clips. Preview copy for Instagram, TikTok, Facebook and YouTube. This creates private local JSON only — it does not render videos, grant customer consent or publish posts.</p>
+<div class="grid2"><label>Draft video title<input id="daipSocialTitle553" maxlength="130" placeholder="Detailing transformation"></label><label>Call to action<input id="daipSocialCta553" maxlength="150" placeholder="Book local mobile detailing"></label></div>
+<label>Caption<textarea id="daipSocialCaption553" rows="3" maxlength="2200" placeholder="Describe only verified details of this actual job."></textarea></label>
+<label>Hashtags<input id="daipSocialTags553" maxlength="400" placeholder="#RosieDazzlers #AutoDetailing"></label>
+<label><input id="daipSocialClaims553" type="checkbox"> I reviewed the draft for factual job/service claims (not customer consent or publication approval)</label>
+<div class="button-row"><button id="daipSocialReview553" type="button" class="btn ghost">Preview four private social drafts</button><button id="daipSocialDownload553" type="button" class="btn ghost" disabled>Export private social draft JSON</button></div>
+<p id="daipSocialStatus553" class="mini" role="status" aria-live="polite">Complete the Build 551 edit list first. No platform posts will be created.</p><div id="daipSocialCards553" class="job-list"></div>
+</section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -243,6 +253,31 @@ async function privateRenderPreflight552(){
   '<p class="mini">A reviewed plan is not permission to run a worker or publish media.</p>';
 }
 $('#daipRenderCheck552').onclick=()=>privateRenderPreflight552().catch(e=>note('Render preflight unavailable: '+e.message,'error'));
+
+
+let socialDraft553=null;
+async function previewSocial553(){
+ const {build553DaipSocialVideoDrafts}=await import('/assets/daip-social-video-drafts-553.js');
+ if(!edit551.brief||edit551.brief.project_id!==projectId()){
+  $('#daipSocialStatus553').textContent='Review the Build 551 private edit list for this project first.';return;
+ }
+ const channels=['instagram','tiktok','facebook','youtube'],notes={};
+ channels.forEach(platform=>notes[platform]={title:$('#daipSocialTitle553').value,caption:$('#daipSocialCaption553').value,
+   hashtags:$('#daipSocialTags553').value,call_to_action:$('#daipSocialCta553').value,
+   factual_claims_reviewed:$('#daipSocialClaims553').checked,channel_approved:false});
+ const brief=build553DaipSocialVideoDrafts({edit_list:edit551.brief,
+   render_preflight:{private_render_completed:false},project_id:projectId(),notes});
+ socialDraft553=brief;
+ $('#daipSocialStatus553').textContent=brief.status+' · '+brief.drafts.length+' private channel drafts. No video, privacy approval, upload or publishing is inferred. '+(brief.gaps.join(', ')||'Source editorial review complete, actual output still absent.');
+ $('#daipSocialCards553').innerHTML=brief.drafts.map(d=>'<article class="job"><strong>'+esc(d.platform)+' '+esc(d.format)+'</strong><p>'+esc(d.title||'Title required')+'</p><div class="mini">'+esc(d.caption||'Caption required')+'</div><div class="mini">CTA: '+esc(d.call_to_action||'missing')+' · '+esc(d.status)+'</div><div class="mini">Review: '+esc(d.gaps.join(', ')||'Copy reviewed; no publication approval')+'</div></article>').join('');
+ $('#daipSocialDownload553').disabled=brief.drafts.length===0;
+}
+$('#daipSocialReview553').onclick=()=>previewSocial553().catch(e=>note('Social draft preview unavailable: '+e.message,'error'));
+$('#daipSocialDownload553').onclick=()=>{
+ if(!socialDraft553||socialDraft553.project_id!==projectId())return;
+ const blob=new Blob([JSON.stringify(socialDraft553,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='rosie-private-social-drafts-build553.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
 
 $('#daipEditLoad551').onclick=loadEdit551;
 $('#daipEditReview551').onclick=()=>previewEdit551().catch(e=>note('Private editor unavailable: '+e.message,'error'));
