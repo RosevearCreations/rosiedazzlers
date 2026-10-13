@@ -7,6 +7,7 @@ import { buildMaintenanceFleetPilotContinuationDecision } from "../_lib/maintena
 import { buildMaintenanceFleetContinuationOutcomeContinuity } from "../_lib/maintenance-fleet-continuation-outcome-continuity.js";
 import { buildMaintenanceFleetContinuationEvidenceFreshnessReview } from "../_lib/maintenance-fleet-continuation-evidence-freshness-review.js";
 import { buildMaintenanceFleetContinuationEvidenceIntegrityReview } from "../_lib/maintenance-fleet-continuation-evidence-integrity-review.js";
+import { build551MaintenanceFleetCommercialDecision } from "../_lib/maintenance-fleet-commercial-decision-551.js";
 
 export async function onRequestGet({ request, env }) {
   const source = await getContinuityReview({ request: request.clone(), env });
@@ -54,6 +55,11 @@ export async function onRequestGet({ request, env }) {
     generated_at: generatedAt
   });
 
+  const ownerCommercialRecord = parseJsonObject(env?.MAINTENANCE_FLEET_PILOT_COMMERCIAL_REVIEW_JSON);
+  const commercialReview = build551MaintenanceFleetCommercialDecision({
+    integrity,freshness,owner_decision:ownerCommercialRecord,pilot_outcome:pilotOutcomeEvidence,
+    source_available:source.ok&&Boolean(payload?.ok),generated_at:generatedAt
+  });
   return json({
     ok: source.ok && Boolean(payload?.ok),
     continuation_decision_build:511,
@@ -73,6 +79,7 @@ export async function onRequestGet({ request, env }) {
     maintenance_fleet_continuation_outcome_continuity:outcome,
     maintenance_fleet_continuation_evidence_freshness_review:freshness,
     maintenance_fleet_continuation_evidence_integrity_review:integrity,
+    maintenance_fleet_commercial_pilot_decision_551:commercialReview,
     source_status:{
       pilot_outcome_continuity_review:{available:source.ok&&Boolean(payload),http_status:source.status},
       pilot_outcome_evidence:{available:Boolean(pilotOutcomeEvidence && Object.keys(pilotOutcomeEvidence).length),status:pilotOutcomeEvidence?.status||"unavailable"},
