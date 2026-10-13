@@ -22,7 +22,7 @@ export function build552BookingQuoteControlledInterpretation({integrity={},opera
   if(sample.weather_exclusion_audited!==true||sample.capacity_confounds_reviewed!==true||sample.booking_collision_reviewed!==true)
     gaps.push("manual_weather_capacity_collision_confounder_review_required");
   const comparison=gaps.length===0?parsed.map(a=>Object.freeze({arm:a.name,eligible:a.eligible,weather_excluded:a.weather_excluded,
-     observed_conversions:a.conversions,observed_rate_pct:Math.round(a.conversions/a.eligible*10000)/100})):[]; 
+     observed_conversions:a.conversions,observed_rate_pct:Math.round(a.conversions/a.eligible*10000)/100})):[];
   if(!gaps.length&&parsed.some(a=>a.eligible===0)){gaps.push("zero_eligible_population_cannot_compare");comparison.length=0;}
   return Object.freeze({key,area:clean(row.area),status:gaps.length?"retain_follow_up_interpretation_hold":"bounded_descriptive_comparison_ready",
    arms:Object.freeze(comparison),total_weather_excluded:totalWeather,gaps:Object.freeze(gaps),
