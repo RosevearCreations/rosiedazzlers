@@ -94,3 +94,5 @@ Going forward:
 - `BUILD550_RECOVERY_DEVICE_FIELD_DAIP_SCENE_ALIGNMENT.md` — Build 550 split recovery/device field HOLDs and private DAIP manual camera alignment. Exact protected source and Cloudflare production checks required.
 
 - `BUILD551_MAINTENANCE_FLEET_DAIP_PRIVATE_EDITOR.md` — commercial pilot owner decision and private DAIP browser-only video editing instructions. Requires independent source/runtime/owner acceptance.
+
+- `BUILD552_BOOKING_QUOTE_DAIP_PRIVATE_RENDER_PREFLIGHT.md` — bounded weather-excluded booking/quote interpretation and private DAIP FFmpeg worker/CPU/storage evidence preflight.
