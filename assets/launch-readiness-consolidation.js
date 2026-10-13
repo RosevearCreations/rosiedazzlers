@@ -37,6 +37,7 @@ function render(data){
   renderWorkflowEvidence(data);
   renderProviderClosure(data);
   renderRecovery(data);
+  renderRecoveryDeviceField550(data);
   renderExternal(data);
   renderActions(data);
   const generated=$("#generatedAt");
@@ -279,3 +280,17 @@ function status(message,tone=""){
   if(tone==="bad"&&message)el.focus({preventScroll:true});
 }
 function setBusy(button,busy,busyLabel,idleLabel){if(!button)return;button.disabled=busy;button.setAttribute("aria-busy",busy?"true":"false");button.textContent=busy?busyLabel:idleLabel;}
+
+function renderRecoveryDeviceField550(data){
+ const host=document.getElementById("recoveryDeviceField550"); if(!host)return;
+ const r=data.recovery_authenticated_device_field_closure_550||{},backup=r.recovery||{},device=r.authenticated_device||{};
+ const gaps=(a)=>Array.isArray(a)?a.map(x=>esc(x).replaceAll("_"," ")).join("; "):"Source unavailable";
+ host.innerHTML='<h2>Build 550 · Backup recovery and authenticated device field closure</h2>'+
+ '<p class="mini">Separate source-owned HOLDs; no Production restore, real login or automatic closure.</p>'+
+ '<div class="readiness-grid"><div class="panel"><strong>Non-Production restore drill</strong>'+
+ '<p>'+chip(backup.status||"retain_recovery_hold")+'</p><p class="mini">Missing proof: '+gaps(backup.gaps)+'</p>'+
+ '</div><div class="panel"><strong>Customer / Detailer / Operations / Admin devices</strong>'+
+ '<p>'+chip(device.status||"retain_device_hold")+'</p><p class="mini">Phone, tablet, desktop, browser and current negative observations must be directly verified.</p>'+
+ '<p class="mini">Missing proof: '+gaps(device.gaps)+'</p></div></div>'+
+ '<p class="mini">An operator must separately review a genuine encrypted backup restore in an isolated environment and direct authenticated role/device/browser evidence. Source checks cannot close either HOLD.</p>';
+}

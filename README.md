@@ -1,8 +1,8 @@
 # Rosie Dazzlers
 
-**Current active build: 549 — Provider Delivery & Local Search Manual Evidence Closure.** Contract: `BUILD549_PROVIDER_DELIVERY_LOCAL_SEARCH_DAIP_PRIVACY_REVIEW.md`. Next: 550; exact-main Cloudflare GREEN required.
+**Current active build: 550 — Backup Recovery & Authenticated Device Field Closure.** Contract: `BUILD550_RECOVERY_DEVICE_FIELD_DAIP_SCENE_ALIGNMENT.md`. Next 551; exact-main Cloudflare GREEN required.
 
-Current source direction: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure**.
+Current source direction: **Build 550 — Backup Recovery & Authenticated Device Field Closure**.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->
