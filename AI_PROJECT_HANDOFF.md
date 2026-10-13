@@ -1,5 +1,8 @@
 # Rosie Dazzlers — Current Project Handoff
 
+## Current active release — Build 554
+Service Economics, Capacity & Technical Reliability Owner Review plus DAIP manual, private channel delivery evidence/approval packet. Contract: `BUILD554_SERVICE_ECONOMICS_CAPACITY_TECHNICAL_RELIABILITY_OWNER_REVIEW.md`. Requires independent protected-main Cloudflare exact-SHA acceptance; next Build 555 — Production Learning & Roadmap Renewal. No business/HOLD mutation, actual worker render or social publish is implied.
+
 ## Current active release — Build 553
 Staff Mobile Field Regression Evidence plus DAIP private Instagram/TikTok/Facebook/YouTube editorial copy packages. Contract: `BUILD553_STAFF_MOBILE_FIELD_DAIP_SOCIAL_DRAFTS.md`; next Build 554. Prior protected-main and exact Cloudflare acceptance remain independent prerequisites; no staff fault inference, real media render or publication is claimed.
 <!-- Previous active release — Build 548: Controlled Site Routing & Capacity Owner Verification with DAIP private metadata integrity checks. Contract: `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. Processing, proxy creation, R2 HEAD and publishing are not inferred. Next Build 549. -->
