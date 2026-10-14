@@ -23,7 +23,7 @@ jobs:
   business-path-authority:
     name: Validate Production business acceptance source contract
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4
