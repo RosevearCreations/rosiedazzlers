@@ -1,0 +1,25 @@
+import assert from "node:assert/strict";
+import {build557DaipWorkerQuotaBaseline as audit} from "../assets/daip-worker-delivery-quota-557.js";
+const p="11111111-1111-4111-8111-111111111111",now="2026-10-14T15:00:00Z";
+const projects=[{id:p}],processing_jobs=[{id:"job-1",project_id:p,status:"completed"},{id:"job-2",project_id:p,status:"failed"}];
+const quota={window_start:"2026-10-14T00:00:00Z",window_end:"2026-10-15T00:00:00Z",observed_at:"2026-10-14T14:00:00Z",source_reference:"cf-quota-001",cpu_limit_ms:1000,storage_limit_bytes:10000,dispatch_limit:5,cost_ceiling_cad:10};
+const receipt={job_id:"job-1",outcome:"succeeded",source_reference:"worker-log-001",worker_reference:"worker-001",observed_at:"2026-10-14T14:00:00Z",cpu_ms:200,elapsed_ms:400,private_output_bytes:2000,cost_cad:2};
+const input={project_id:p,projects,processing_jobs,delivery_receipts:[receipt],quota_observation:quota,now};
+let r=audit(input);
+assert.equal(r.private_job_metadata.completed,1);assert.equal(r.private_job_metadata.failed,1);
+assert.equal(r.matched_operator_receipt_count,1);
+assert.equal(r.reported_quota_utilization.cpu_percent,20);
+assert.equal(r.reported_quota_utilization.storage_percent,20);
+assert.equal(r.reported_quota_utilization.dispatch_percent,20);
+assert.equal(r.reported_quota_utilization.cost_percent,20);
+assert.equal(r.provider_verified,false);assert.equal(r.real_private_output_inspected,false);
+assert.equal(r.db_or_storage_written,false);assert.equal(r.social_post_created,false);
+assert.equal(audit({...input,delivery_receipts:[receipt,receipt]}).gaps.includes("invalid_duplicate_mismatched_or_unverified_job_receipt"),true);
+for(const bad of [{...receipt,job_id:"job-2"},{...receipt,job_id:"unrelated"},{...receipt,cpu_ms:-1},{...receipt,source_reference:"https://private.example/secret"},{...receipt,observed_at:"2027-01-01T00:00:00Z"}])
+ assert.equal(audit({...input,delivery_receipts:[bad]}).matched_operator_receipt_count,0);
+assert.equal(audit({...input,quota_observation:{...quota,cpu_limit_ms:0}}).provider_quota_claim,null);
+assert.equal(audit({...input,quota_observation:null}).gaps.includes("real_provider_quota_observation_required"),true);
+assert.equal(audit({...input,project_id:"other"}).private_job_metadata.total,0);
+assert.equal(audit({...input,delivery_receipts:[{...receipt,cpu_ms:900}]}).warnings.includes("quota_headroom_below_twenty_percent"),true);
+assert.equal(audit({...input,delivery_receipts:[{...receipt,cpu_ms:2000}]}).gaps.includes("reported_usage_exceeds_quota_limit"),true);
+console.log("BUILD 557 DAIP WORKER DELIVERY & QUOTA BASELINE: PASS");
