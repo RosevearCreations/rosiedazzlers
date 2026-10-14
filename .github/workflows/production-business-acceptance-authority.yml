@@ -985,7 +985,7 @@ jobs:
           python scripts/production_learning_daip_555_check.py
           node scripts/production_learning_daip_555_test.mjs
 
-      - name: Validate Build 556 manual HOLD evidence intake
+      - name: Validate current manual owner HOLD evidence intake
         run: |
           python scripts/hold_evidence_intake_556_check.py
           node scripts/hold_evidence_intake_556_test.mjs
