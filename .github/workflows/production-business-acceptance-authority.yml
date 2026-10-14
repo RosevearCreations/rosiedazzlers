@@ -990,7 +990,7 @@ jobs:
           python scripts/hold_evidence_intake_556_check.py
           node scripts/hold_evidence_intake_556_test.mjs
 
-      - name: Validate Build 557 private worker and quota review
+      - name: Validate private DAIP worker delivery and quota review
         run: |
           python scripts/daip_worker_delivery_quota_557_check.py
           node scripts/daip_worker_delivery_quota_557_test.mjs

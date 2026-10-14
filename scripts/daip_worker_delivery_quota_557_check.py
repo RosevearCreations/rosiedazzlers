@@ -18,7 +18,7 @@ for path,terms in needed.items():
 if read("admin-daip-media.html")!=read("admin-daip-media/index.html"):errors.append("admin DAIP route mirror differs")
 for path in [".github/workflows/development-source-gate.yml",".github/workflows/production-business-acceptance-authority.yml"]:
  body=read(path)
- for term in ["Validate Build 557 private worker and quota review","python scripts/daip_worker_delivery_quota_557_check.py","node scripts/daip_worker_delivery_quota_557_test.mjs"]:
+ for term in ["Validate private DAIP worker delivery and quota review","python scripts/daip_worker_delivery_quota_557_check.py","node scripts/daip_worker_delivery_quota_557_test.mjs"]:
   if term not in body:errors.append(path+" missing "+term)
 for path in ["assets/daip-worker-delivery-quota-557.js","scripts/daip_worker_delivery_quota_557_test.mjs"]:
  r=subprocess.run(["node","--check",path],cwd=root,capture_output=True,text=True)
