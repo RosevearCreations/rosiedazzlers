@@ -1,5 +1,8 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
+## Current bounded release — Build 557
+Project-scoped private worker-delivery receipt matching and on-demand quota measurement baseline; independent provider-verification HOLD remains. Contract: BUILD557_DAIP_MEASURED_WORKER_DELIVERY_QUOTA_BASELINE.md. Build 558 follows only after exact-main Production GREEN. No worker dispatch, renders or posting.
+
 ## Current bounded release — Build 555
 Release/source evidence and DAIP job-quality/worker-cost review. Contract: `BUILD555_PRODUCTION_LEARNING_DAIP_RELIABILITY.md`; next Build 556 only after exact-main Production acceptance. Truthful source-owned HOLD remains.
 

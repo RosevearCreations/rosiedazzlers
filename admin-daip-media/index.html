@@ -89,6 +89,16 @@
 </div>
 <div class="button-row"><button class="btn ghost" id="daipQualityReview555" type="button">Review DAIP quality &amp; measured costs</button><button class="btn ghost" id="daipQualityExport555" type="button" disabled>Export private review JSON</button></div>
 <p class="mini" id="daipQualityStatus555" role="status" aria-live="polite">Choose an existing Creative Project. Incomplete evidence stays HOLD. No video rendered or posted.</p><div class="job-list" id="daipQualityRows555"></div></section>
+<section class="section card" data-build557="daip-worker-delivery-quota"><h2>Build 557 · Worker delivery &amp; quota baseline</h2>
+<p class="mini">Read-only evidence from the selected Creative Project. Enter only actual sanitized source references: no customer details, private R2 keys, URLs or tokens. Local operator-entered numbers do not independently verify provider delivery. This does not start a worker or publish media.</p>
+<div class="grid2">
+<label>Completed-job worker receipts (JSON array)<textarea id="daipWorkerReceipts557" rows="6" spellcheck="false" placeholder='[{"job_id":"existing-completed-job-id","outcome":"succeeded","source_reference":"worker-log-001","worker_reference":"worker-001","observed_at":"2026-10-14T14:00:00Z","cpu_ms":200,"elapsed_ms":400,"private_output_bytes":2000,"cost_cad":0.10}]'></textarea></label>
+<label>Provider quota window and limits (JSON object)<textarea id="daipQuotaObservation557" rows="6" spellcheck="false" placeholder='{"window_start":"2026-10-14T00:00:00Z","window_end":"2026-10-15T00:00:00Z","observed_at":"2026-10-14T14:00:00Z","source_reference":"provider-quota-001","cpu_limit_ms":1000,"storage_limit_bytes":10000,"dispatch_limit":5,"cost_ceiling_cad":10}'></textarea></label>
+</div>
+<div class="button-row"><button class="btn ghost" id="daipWorkerReview557" type="button">Review worker and quota evidence</button><button class="btn ghost" id="daipWorkerExport557" type="button" disabled>Export private baseline JSON</button></div>
+<p class="mini" id="daipWorkerStatus557" role="status" aria-live="polite">Choose and refresh a Creative Project to inspect actual job metadata. No worker or provider quota independently verified.</p>
+<div class="job-list" id="daipWorkerRows557"></div>
+</section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -375,6 +385,40 @@ $('#daipQualityExport555').onclick=()=>{
  const blob=new Blob([JSON.stringify(daipQuality555,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='rosie-private-daip-quality-build555.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
+
+let daipBaseline557=null;
+$('#daipWorkerReview557').onclick=async()=>{
+ const output=$('#daipWorkerStatus557'),button=$('#daipWorkerReview557');if(button.disabled)return;
+ button.disabled=true;button.textContent='Reviewing...';$('#daipWorkerExport557').disabled=true;
+ try{
+  const parse=(selector,empty)=>{const raw=$(selector).value.trim();return raw?JSON.parse(raw):empty};
+  const {build557DaipWorkerQuotaBaseline}=await import('/assets/daip-worker-delivery-quota-557.js');
+  daipBaseline557=build557DaipWorkerQuotaBaseline({project_id:projectId(),projects:state.data?.projects||[],
+    processing_jobs:state.data?.processing_jobs||[],delivery_receipts:parse('#daipWorkerReceipts557',[]),
+    quota_observation:parse('#daipQuotaObservation557',null)});
+  const r=daipBaseline557,j=r.private_job_metadata,u=r.reported_quota_utilization;
+  output.textContent='Build 557: '+j.total+' recorded job(s), '+j.completed+' completed row(s), '+
+    j.queued+' queued/running, '+j.failed+' failed; '+r.matched_operator_receipt_count+
+    ' locally matched receipt(s). '+(u?'Reported CPU '+u.cpu_percent+'%, storage '+u.storage_percent+
+    '%, dispatch '+u.dispatch_percent+'%, cost '+u.cost_percent+'%. ':'No valid quota baseline. ')+
+    'Independent worker/provider delivery and real video inspection: NOT VERIFIED.';
+  const rows=$('#daipWorkerRows557');rows.replaceChildren();
+  for(const label of [...r.gaps.map(g=>'HOLD: '+g),...r.warnings.map(g=>'WARNING: '+g)]){
+   const el=document.createElement('p');el.className='mini';el.textContent=label.replaceAll('_',' ');rows.append(el);
+  }
+  if(!r.gaps.length){const el=document.createElement('p');el.className='mini';el.textContent='Local receipts matched job metadata; provider attestation is still required.';rows.append(el)}
+  $('#daipWorkerExport557').disabled=!r.project_id;
+ }catch(e){daipBaseline557=null;output.textContent='HOLD: Invalid evidence JSON or unavailable baseline: '+e.message;$('#daipWorkerRows557').replaceChildren()}
+ finally{button.disabled=false;button.textContent='Review worker and quota evidence'}
+};
+$('#daipWorkerExport557').onclick=()=>{
+ const r=daipBaseline557;if(!r?.project_id||r.project_id!==projectId())return;
+ const blob=new Blob([JSON.stringify(r,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='rosie-private-daip-worker-quota-build557.json';
+ a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+$('#project').addEventListener('change',()=>{daipBaseline557=null;$('#daipWorkerExport557').disabled=true;
+ $('#daipWorkerStatus557').textContent='Project changed. Refresh and review current job metadata again; provider evidence unverified.'});
 
 $('#daipEditLoad551').onclick=loadEdit551;
 $('#daipEditReview551').onclick=()=>previewEdit551().catch(e=>note('Private editor unavailable: '+e.message,'error'));
