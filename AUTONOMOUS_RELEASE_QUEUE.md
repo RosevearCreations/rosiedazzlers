@@ -1,5 +1,9 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
+## Current bounded release — Build 558
+Authenticated private R2 raw object HEAD and separate consent/privacy acceptance review; signed consent and rendered derivative remain HOLD. Contract: BUILD558_REAL_MEDIA_ARTIFACT_CONSENT_ACCEPTANCE.md. Build 559 follows Production GREEN.
+
+
 ## Current bounded release — Build 557
 Project-scoped private worker-delivery receipt matching and on-demand quota measurement baseline; independent provider-verification HOLD remains. Contract: BUILD557_DAIP_MEASURED_WORKER_DELIVERY_QUOTA_BASELINE.md. Build 558 follows only after exact-main Production GREEN. No worker dispatch, renders or posting.
 

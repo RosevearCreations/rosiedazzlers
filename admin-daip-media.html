@@ -99,6 +99,19 @@
 <p class="mini" id="daipWorkerStatus557" role="status" aria-live="polite">Choose and refresh a Creative Project to inspect actual job metadata. No worker or provider quota independently verified.</p>
 <div class="job-list" id="daipWorkerRows557"></div>
 </section>
+<section class="section card" data-build558="daip-real-artifact-consent"><h2>Build 558 · Private artifact &amp; consent acceptance</h2>
+<p class="mini">Authenticated R2 HEAD validates that the selected project's uploaded raw original exists; a raw file is not proof of a rendered or privacy-reviewed video. No media link or object key is returned, and no customer publishing is enabled.</p>
+<div class="grid2">
+<label>Uploaded private asset<select id="daipArtifactAsset558"><option value="">Choose project and uploaded asset</option></select></label>
+<label>Signed customer consent document reference (internal ID only)<input id="daipConsentRef558" maxlength="100" placeholder="consent-001; no customer details or URLs"></label>
+<label>Privacy reviewer reference (internal ID only)<input id="daipInspector558" maxlength="100" placeholder="reviewer-001"></label>
+<label>Inspection date and time<input id="daipInspectionTime558" type="datetime-local"></label>
+<label><input type="checkbox" id="daipFacesReview558"> Faces, plates and addresses reviewed</label>
+<label><input type="checkbox" id="daipAudioReview558"> Audio licensing reviewed</label>
+</div>
+<div class="button-row"><button class="btn ghost" id="daipArtifactCheck558" type="button">Verify R2 artifact &amp; review consent</button><button class="btn ghost" id="daipArtifactExport558" type="button" disabled>Export private review JSON</button></div>
+<p class="mini" id="daipArtifactStatus558" role="status" aria-live="polite">Select an existing project and uploaded raw asset. Consent and render are not verified.</p>
+<div class="job-list" id="daipArtifactGaps558"></div></section>
 <section class="section card" data-build547="daip-private-multicamera"><h2>Build 547 · Private multi-camera storyboard planner <span title="ⓘ Choose a Creative Project, select uploaded story evidence, label actual camera angles, then preview an editorial plan. This does not process or publish video.">ⓘ</span></h2><p class="mini">For your detailing projects with clips from several angles: select evidence in the raw library, classify actual camera angles, and generate a private cut-list for 1 YouTube edit, 3 Facebook cuts, 5 Instagram Reels and 5 TikTok variants. This is an <strong>editable staff-only editorial brief</strong>; processing, face/plate privacy blurring, final video rendering, export and public posting need separate review and worker integration.</p><div class="button-row"><button id="daipPreviewStoryboard" class="btn" type="button">Prepare private storyboard</button><button id="daipDownloadStoryboard" class="btn ghost" type="button" disabled>Download private edit brief JSON</button></div><div id="daipStoryboardSummary" class="mini" role="status" aria-live="polite">Choose a project, select private media, and label angles to start.</div><div id="daipStoryboardCards" class="job-grid"></div></section>
 <section class="section card"><h2>What happens after upload</h2><div class="job-grid"><div class="job"><strong>Raw master</strong><div class="mini">Immutable private R2 object.</div></div><div class="job"><strong>Proxy</strong><div class="mini">Smaller working video for analysis/editing.</div></div><div class="job"><strong>Frames & audio</strong><div class="mini">Extracted evidence used by DAIP.</div></div><div class="job"><strong>Transcript & scenes</strong><div class="mini">Story and important-moment analysis.</div></div><div class="job"><strong>Content candidates</strong><div class="mini">Before/after, long video, Shorts/Reels/TikTok candidates.</div></div><div class="job"><strong>Human review</strong><div class="mini">Consent/privacy approval before any public copy.</div></div></div></section>
 </main>
@@ -110,7 +123,7 @@ function fmt(n){const v=Number(n||0);if(v>=1073741824)return `${(v/1073741824).t
 function note(t,k='soft'){$('#status').className='notice '+k;$('#status').textContent=t}
 async function api(url,opt={}){const r=await AdminAuth.fetchWithAuth(url,{method:opt.method||'GET',headers:opt.headers||{'Content-Type':'application/json'},body:opt.body===undefined?undefined:(typeof opt.body==='string'||opt.body instanceof Blob?opt.body:JSON.stringify(opt.body))});let d={};try{d=await r.json()}catch{}if(!r.ok||d.ok===false)throw new Error(d.error||`Request failed (${r.status})`);return d}
 function projectId(){return $('#project').value}
-async function load(){try{const q=projectId()?`?project_id=${encodeURIComponent(projectId())}`:'';const d=await api('/api/admin/daip_media_dashboard'+q);state.data=d;$('#bindingState').innerHTML=d.r2_binding_ready?`<strong class="ok">Ready · ${esc(d.r2_binding)}</strong><p class="mini">Private R2 binding detected. Chunk size ${fmt(d.part_size_bytes)}.</p>`:`<strong class="bad">Not configured</strong><p class="mini">Add the private R2 binding described below, redeploy, then refresh.</p>`;renderProjects(d.projects||[]);renderAssets();renderJobs();renderStoryboardPlaceholder();note(d.warning||'DAIP private media intake is ready.',d.warning?'warn':'success')}catch(e){note(e.message,'error')}}
+async function load(){try{const q=projectId()?`?project_id=${encodeURIComponent(projectId())}`:'';const d=await api('/api/admin/daip_media_dashboard'+q);state.data=d;$('#bindingState').innerHTML=d.r2_binding_ready?`<strong class="ok">Ready · ${esc(d.r2_binding)}</strong><p class="mini">Private R2 binding detected. Chunk size ${fmt(d.part_size_bytes)}.</p>`:`<strong class="bad">Not configured</strong><p class="mini">Add the private R2 binding described below, redeploy, then refresh.</p>`;renderProjects(d.projects||[]);renderAssets();renderJobs();renderStoryboardPlaceholder();refreshPrivateAssets558();note(d.warning||'DAIP private media intake is ready.',d.warning?'warn':'success')}catch(e){note(e.message,'error')}}
 function renderProjects(rows){const select=$('#project'),keep=select.value||new URL(location.href).searchParams.get('project_id')||'';select.innerHTML='<option value="">Choose a Creative Project</option>'+rows.map(p=>`<option value="${esc(p.id)}">${esc(p.project_code)} · ${esc(p.title)}</option>`).join('');if(rows.some(p=>p.id===keep))select.value=keep;const p=rows.find(x=>x.id===select.value);$('#projectSummary').textContent=p?`${p.title} · ${p.lifecycle_status}`:'No project selected.'}
 function captureOptions(value){return ['before','process','after','damage','interior','exterior','engine','other'].map(x=>`<option value="${x}" ${x===value?'selected':''}>${x.replace('_',' ')}</option>`).join('')}
 function consentOptions(value){return ['not_reviewed','internal_only','approved_public','declined','expired'].map(x=>`<option value="${x}" ${x===value?'selected':''}>${x.replaceAll('_',' ')}</option>`).join('')}
@@ -384,6 +397,47 @@ $('#daipQualityExport555').onclick=()=>{
  if(!daipQuality555||daipQuality555.project_id!==projectId())return;
  const blob=new Blob([JSON.stringify(daipQuality555,null,2)],{type:'application/json'});
  const url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download='rosie-private-daip-quality-build555.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+
+
+let daipArtifact558=null;
+function refreshPrivateAssets558(){
+ const select=$('#daipArtifactAsset558'),keep=select.value;
+ const rows=(state.data?.assets||[]).filter(a=>a.project_id===projectId()&&a.upload_status==='uploaded');
+ select.replaceChildren(new Option('Choose an uploaded private asset',''));
+ for(const a of rows)select.add(new Option(String(a.original_filename||a.id).slice(0,100),a.id));
+ if(rows.some(a=>a.id===keep))select.value=keep;
+ daipArtifact558=null;$('#daipArtifactExport558').disabled=true;
+ $('#daipArtifactStatus558').textContent='Choose a private raw asset; consent and derivative render remain independently unverified.';
+ $('#daipArtifactGaps558').replaceChildren();
+}
+$('#daipArtifactCheck558').onclick=async()=>{
+ const btn=$('#daipArtifactCheck558'),p=projectId(),a=$('#daipArtifactAsset558').value;
+ if(btn.disabled)return;
+ daipArtifact558=null;$('#daipArtifactExport558').disabled=true;
+ if(!p||!a){$('#daipArtifactStatus558').textContent='HOLD: Choose project and uploaded private asset.';return;}
+ btn.disabled=true;btn.textContent='Checking private R2...';
+ try{
+  const artifact=await api('/api/admin/daip_media_artifact_acceptance?project_id='+encodeURIComponent(p)+'&asset_id='+encodeURIComponent(a));
+  if(p!==projectId()||a!==$('#daipArtifactAsset558').value)throw Error('Project or asset changed: check again.');
+  const {build558PrivateArtifactConsentReview}=await import('/assets/daip-real-artifact-consent-558.js');
+  const date=$('#daipInspectionTime558').value;
+  const report=build558PrivateArtifactConsentReview({project_id:p,asset_id:a,artifact,review:{
+   customer_consent_reference:$('#daipConsentRef558').value.trim(),privacy_inspector_reference:$('#daipInspector558').value.trim(),
+   inspected_at:date?new Date(date).toISOString():'',faces_plates_addresses_reviewed:$('#daipFacesReview558').checked,audio_rights_reviewed:$('#daipAudioReview558').checked}});
+  daipArtifact558=report;$('#daipArtifactExport558').disabled=false;
+  $('#daipArtifactStatus558').textContent=(report.private_raw_verified?'Real private raw R2 object VERIFIED ('+fmt(report.private_raw_size_bytes)+').':'Private R2 raw object verification HOLD.')+
+   ' Actual rendered media inspection and independent signed consent: NOT VERIFIED. Public posting disabled.';
+  const out=$('#daipArtifactGaps558');out.replaceChildren();
+  for(const g of report.gaps){const el=document.createElement('p');el.className='mini';el.textContent='HOLD: '+g.replaceAll('_',' ');out.append(el);}
+ }catch(e){$('#daipArtifactStatus558').textContent='HOLD: '+(e?.message||'Private R2 verification unavailable.');$('#daipArtifactGaps558').replaceChildren();}
+ finally{btn.disabled=false;btn.textContent='Verify R2 artifact & review consent';}
+};
+$('#daipArtifactAsset558').addEventListener('change',()=>{daipArtifact558=null;$('#daipArtifactExport558').disabled=true;});
+$('#daipArtifactExport558').onclick=()=>{
+ const r=daipArtifact558;if(!r||r.project_id!==projectId()||r.asset_id!==$('#daipArtifactAsset558').value)return;
+ const blob=new Blob([JSON.stringify(r,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');
+ link.href=url;link.download='rosie-private-artifact-consent-build558.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
 };
 
 let daipBaseline557=null;

@@ -1078,6 +1078,11 @@ jobs:
           python scripts/daip_worker_delivery_quota_557_check.py
           node scripts/daip_worker_delivery_quota_557_test.mjs
 
+      - name: Validate DAIP private artifact and consent reconciliation
+        run: |
+          python scripts/daip_real_artifact_consent_558_check.py
+          node scripts/daip_real_artifact_consent_558_test.mjs
+
       - name: Current source summary
         run: |
           {
