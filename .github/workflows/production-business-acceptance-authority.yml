@@ -980,6 +980,11 @@ jobs:
           python scripts/service_economics_daip_owner_review_554_check.py
           node scripts/service_economics_daip_owner_review_554_test.mjs
 
+      - name: Validate current production learning and private DAIP evidence
+        run: |
+          python scripts/production_learning_daip_555_check.py
+          node scripts/production_learning_daip_555_test.mjs
+
       - name: Source acceptance summary
         run: |
           {

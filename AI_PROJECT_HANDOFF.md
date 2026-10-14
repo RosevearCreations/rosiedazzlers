@@ -1,5 +1,8 @@
 # Rosie Dazzlers — Current Project Handoff
 
+## Current active release — Build 555
+Production Learning and Roadmap Renewal plus DAIP source-derived quality/cost/reliability workspace. `BUILD555_PRODUCTION_LEARNING_DAIP_RELIABILITY.md`. Protected main and independent exact-SHA Cloudflare production acceptance required. Next Build 556 — Evidence Intake and Owner HOLD Resolution. No automatic booking, pricing, publication or HOLD mutation.
+
 ## Current active release — Build 554
 Service Economics, Capacity & Technical Reliability Owner Review plus DAIP manual, private channel delivery evidence/approval packet. Contract: `BUILD554_SERVICE_ECONOMICS_CAPACITY_TECHNICAL_RELIABILITY_OWNER_REVIEW.md`. Requires independent protected-main Cloudflare exact-SHA acceptance; next Build 555 — Production Learning & Roadmap Renewal. No business/HOLD mutation, actual worker render or social publish is implied.
 
