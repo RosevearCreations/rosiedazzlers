@@ -175,15 +175,27 @@ exact_id=""
 exact_status=""
 observed_exact_id=""
 for attempt in $(seq 1 12); do
-  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=100" > "$TMP_DIR/deployments.json"
-  jq -e '.success == true' "$TMP_DIR/deployments.json" >/dev/null || fail "Cloudflare deployment listing failed." 13
-  exact_id=$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
-    [.result[]? | select(
-      (.deployment_trigger.metadata.branch // "") == $branch and
-      (.deployment_trigger.metadata.commit_hash // "") == $sha
-    )][0].id // empty
-  ' "$TMP_DIR/deployments.json")
-  exact_status=$(jq -r --arg id "$exact_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' "$TMP_DIR/deployments.json" | head -n1)
+  exact_id=""
+  exact_status=""
+  # Cloudflare Pages limits this list to 25 deployments per page. Examine
+  # bounded older pages rather than asking for an unsupported page size or
+  # treating a busy latest page as authoritative absence of this commit.
+  for page in $(seq 1 8); do
+    cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25&page=${page}" > "$TMP_DIR/deployments.json"
+    jq -e '.success == true' "$TMP_DIR/deployments.json" >/dev/null || fail "Cloudflare deployment listing failed." 13
+    exact_id=$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
+      [.result[]? | select(
+        (.deployment_trigger.metadata.branch // "") == $branch and
+        (.deployment_trigger.metadata.commit_hash // "") == $sha
+      )][0].id // empty
+    ' "$TMP_DIR/deployments.json")
+    if [[ -n "$exact_id" ]]; then
+      exact_status=$(jq -r --arg id "$exact_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' "$TMP_DIR/deployments.json" | head -n1)
+      break
+    fi
+    count=$(jq -r '.result | length' "$TMP_DIR/deployments.json")
+    [[ "$count" == "25" ]] || break
+  done
   if [[ -n "$exact_id" ]]; then
     observed_exact_id="$exact_id"
   elif [[ -n "$observed_exact_id" ]]; then
