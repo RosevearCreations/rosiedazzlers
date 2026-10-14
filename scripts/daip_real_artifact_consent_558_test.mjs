@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {build558PrivateArtifactConsentReview as verify} from '../assets/daip-real-artifact-consent-558.js';
+const p='11111111-1111-4111-8111-111111111111',a='22222222-2222-4222-8222-222222222222';
+const artifact={ok:true,build:558,project_id:p,asset_id:a,private_raw_object_head_checked:true,private_raw_object_exists:true,private_raw_size_matches:true,private_raw_etag_matches:true,private_raw_size_bytes:1000,upload_status:'uploaded',asset_consent_status:'approved_public',project_consent_status:'approved_public',project_public_publish_allowed:true};
+const review={customer_consent_reference:'consent-001',privacy_inspector_reference:'reviewer-001',inspected_at:'2026-10-14T13:00:00Z',faces_plates_addresses_reviewed:true,audio_rights_reviewed:true};
+const input={project_id:p,asset_id:a,artifact,review,now:'2026-10-14T16:00:00Z'},result=verify(input);
+assert.equal(result.private_raw_verified,true);assert.equal(result.public_release_allowed,false);assert.equal(result.signed_customer_consent_independently_verified,false);
+assert.equal(result.rendered_media_verified,false);assert.equal(result.db_or_storage_written,false);assert.equal(result.canonical_hold_closed,false);
+assert(result.gaps.includes('real_rendered_derivative_not_verified'));assert(result.gaps.includes('customer_consent_document_not_independently_verified'));
+assert.equal(verify({...input,asset_id:p}).private_raw_verified,false);
+assert.equal(verify({...input,artifact:{...artifact,private_raw_object_exists:false}}).private_raw_verified,false);
+assert.equal(verify({...input,artifact:{...artifact,private_raw_size_matches:false}}).private_raw_verified,false);
+assert(verify({...input,artifact:{...artifact,asset_consent_status:'declined'}}).gaps.includes('declined_or_expired_consent'));
+assert(verify({...input,review:{...review,customer_consent_reference:'https://private-record'}}).gaps.includes('customer_signed_consent_source_reference_required'));
+assert(verify({...input,review:{...review,inspected_at:'2027-01-01T01:00:00Z'}}).gaps.includes('dated_human_privacy_and_audio_review_required'));
+console.log('BUILD 558 PRIVATE R2 & CONSENT TEST PASS');
