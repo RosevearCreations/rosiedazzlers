@@ -173,8 +173,9 @@ recover_exact_feature_preview() {
 
 exact_id=""
 exact_status=""
+observed_exact_id=""
 for attempt in $(seq 1 12); do
-  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/deployments.json"
+  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=100" > "$TMP_DIR/deployments.json"
   jq -e '.success == true' "$TMP_DIR/deployments.json" >/dev/null || fail "Cloudflare deployment listing failed." 13
   exact_id=$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
     [.result[]? | select(
@@ -183,6 +184,22 @@ for attempt in $(seq 1 12); do
     )][0].id // empty
   ' "$TMP_DIR/deployments.json")
   exact_status=$(jq -r --arg id "$exact_id" '.result[]? | select(.id == $id) | (.latest_stage.status // "unknown")' "$TMP_DIR/deployments.json" | head -n1)
+  if [[ -n "$exact_id" ]]; then
+    observed_exact_id="$exact_id"
+  elif [[ -n "$observed_exact_id" ]]; then
+    # A busy Pages project can evict an observed deployment from the latest list.
+    # Continue only by looking up that immutable ID and rechecking exact SHA/branch.
+    cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${observed_exact_id}" > "$TMP_DIR/observed-exact.json"
+    jq -e --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
+      .success == true and
+      .result.deployment_trigger.metadata.commit_hash == $sha and
+      .result.deployment_trigger.metadata.branch == $branch and
+      .result.environment == "preview"
+    ' "$TMP_DIR/observed-exact.json" >/dev/null || fail "Previously observed feature deployment changed identity." 39
+    exact_id="$observed_exact_id"
+    exact_status=$(jq -r '.result.latest_stage.status // "unknown"' "$TMP_DIR/observed-exact.json")
+    note "Exact preview no longer in recent listing; verifying immutable deployment ID ${exact_id}."
+  fi
   if [[ -n "$exact_id" ]]; then
     note "Exact feature deployment ${exact_id}: ${exact_status:-unknown} (attempt ${attempt}/12)."
     case "$exact_status" in
