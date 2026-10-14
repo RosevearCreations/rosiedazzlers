@@ -10,7 +10,7 @@ export const HOLD_DEFINITIONS_556=Object.freeze([
 ]);
 const obj=x=>Boolean(x&&typeof x==="object"&&!Array.isArray(x));
 const allowed=(x,keys)=>obj(x)&&Object.keys(x).every(k=>keys.includes(k));
-const safe=x=>typeof x==="string"&&/^[A-Za-z0-9][A-Za-z0-9_.:/#-]{2,95}$/.test(x)&&!/(secret|token|password|api.key|customer|email|telephone|bearer)/i.test(x)&&!/^https?:/i.test(x);
+const safe=x=>typeof x==="string"&&/^[A-Za-z0-9/][A-Za-z0-9_.:/#-]{2,95}$/.test(x)&&!/(secret|token|password|api.key|customer|email|telephone|bearer)/i.test(x)&&!/^https?:/i.test(x);
 const time=x=>typeof x==="string"&&/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)$/.test(x)&&Number.isFinite(Date.parse(x))?Date.parse(x):null;
 const rowKeys=["hold_id","evidence_class","scope_key","evidence","owner_review"];
 const evidenceKeys=["type","source_system","source_reference","scope_key","observed_at","outcome","device_type","browser_reference","route_reference","viewport_reference"];
