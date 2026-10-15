@@ -1104,6 +1104,11 @@ jobs:
           node --check assets/daip-trusted-consent-ledger-562.js
           node scripts/daip_trusted_consent_ledger_562_test.mjs
 
+      - name: Validate trusted provider adapter and idempotent ledger contract
+        run: |
+          node --check assets/daip-trusted-provider-persistence-563.js
+          node scripts/daip_trusted_provider_persistence_563_test.mjs
+
       - name: Current source summary
         run: |
           {
