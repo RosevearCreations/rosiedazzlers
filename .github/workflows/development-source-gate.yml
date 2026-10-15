@@ -1109,6 +1109,11 @@ jobs:
           node --check assets/daip-trusted-provider-persistence-563.js
           node scripts/daip_trusted_provider_persistence_563_test.mjs
 
+      - name: Validate atomic private acceptance ledger adapter
+        run: |
+          node --check assets/daip-atomic-ledger-564.js
+          node scripts/daip_atomic_ledger_564_test.mjs
+
       - name: Current source summary
         run: |
           {
