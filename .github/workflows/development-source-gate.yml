@@ -1114,6 +1114,11 @@ jobs:
           node --check assets/daip-atomic-ledger-564.js
           node scripts/daip_atomic_ledger_564_test.mjs
 
+      - name: Validate Build 565 server digest and runtime HOLD
+        run: |
+          node --check assets/daip-server-digest-runtime-565.js
+          node scripts/daip_server_digest_runtime_565_test.mjs
+
       - name: Current source summary
         run: |
           {
