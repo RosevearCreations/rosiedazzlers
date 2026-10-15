@@ -1000,6 +1000,12 @@ jobs:
           python scripts/daip_real_artifact_consent_558_check.py
           node scripts/daip_real_artifact_consent_558_test.mjs
 
+      - name: Validate private rendered derivative evidence
+        run: |
+          node --check assets/daip-rendered-derivative-559.js
+          node --check functions/api/admin/daip_media_derivative_acceptance.js
+          node scripts/daip_rendered_derivative_559_test.mjs
+
       - name: Source acceptance summary
         run: |
           {

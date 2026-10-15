@@ -1,0 +1,6 @@
+# Build 559 — Private Rendered Derivative Evidence
+A staff-authenticated GET endpoint at /api/admin/daip_media_derivative_acceptance accepts project_id, asset_id, derivative_id UUIDs and a strictly allowlisted format (mp4, webm, webp, jpg, png). It looks up the actual project and raw asset in Supabase, HEAD-verifies the private raw object, and only then HEAD-checks the project-scoped private R2 derivative location. It does not fetch private media bytes or leak object keys to the client.
+This is a **bounded presence-and-metadata check**, not an actual rendering operation, content inspection, render provenance attestation, or a verified consent document. It never publishes, writes storage, dispatches workers, or closes existing holds.
+A positive response requires an existing derivative produced through a separately authorized private rendering worker. Until such a worker and human inspection are evidenced, the output is **HOLD**, not production/media acceptance.
+Source test: `node scripts/daip_rendered_derivative_559_test.mjs`. Promotion through development and main requires independent deployment and runtime acceptance.
+**Next proposed:** Build 560 — Render provenance, privacy inspection and operator-reviewed derivative acceptance.
