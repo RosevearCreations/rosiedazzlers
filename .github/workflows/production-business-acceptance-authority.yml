@@ -1006,6 +1006,11 @@ jobs:
           node --check functions/api/admin/daip_media_derivative_acceptance.js
           node scripts/daip_rendered_derivative_559_test.mjs
 
+      - name: Validate derivative provenance and privacy acceptance HOLD
+        run: |
+          node --check assets/daip-render-provenance-privacy-560.js
+          node scripts/daip_render_provenance_privacy_560_test.mjs
+
       - name: Source acceptance summary
         run: |
           {
