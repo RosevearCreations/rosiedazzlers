@@ -1099,6 +1099,11 @@ jobs:
           node --check assets/daip-signed-release-561.js
           node scripts/daip_signed_release_561_test.mjs
 
+      - name: Validate trusted provider and private acceptance ledger contract
+        run: |
+          node --check assets/daip-trusted-consent-ledger-562.js
+          node scripts/daip_trusted_consent_ledger_562_test.mjs
+
       - name: Current source summary
         run: |
           {
