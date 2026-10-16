@@ -1,0 +1,26 @@
+name: Provider Staging Readiness (HOLD)
+on:
+  push:
+    branches:
+      - build568-staging-integration-readiness
+  pull_request:
+    branches:
+      - build567-provider-owner-decision-gates
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  staging-plan-contract:
+    name: Build 568 staging integration readiness contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate staging plan source
+        run: node --check assets/daip-staging-integration-readiness-568.js
+      - name: Verify fail-closed staging plan contract
+        run: node scripts/daip_staging_integration_readiness_568_test.mjs
