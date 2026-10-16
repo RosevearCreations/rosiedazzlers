@@ -1,0 +1,6 @@
+# Build 560 — Render Provenance, Privacy Inspection & Derivative Acceptance
+This phase implements a **fail-closed evidence evaluator**, designed to be invoked only after Build 559’s authenticated private derivative HEAD review and after operator evidence is collected in a future protected UI. It requires source-bound render job and checksum references, dated human playback/privacy/redaction inspection, and derivative-specific current customer consent review. A foreign project/asset/derivative, missing fields, expired consent, failed privacy inspection, or future-dated evidence produces HOLD.
+**Limitations:** The evidence is operator-supplied; no provider-signed worker attestation, actual image/audio inspection, independent signed customer consent verification, persistence, R2 rendering, or production data change occurs in this build. Even complete operator references stay on **independent acceptance HOLD**. Neither this evaluation nor Build 559 grants public export.
+Regression: `node scripts/daip_render_provenance_privacy_560_test.mjs`.
+**Dependency:** Build 559 PR #351 must pass its own source, deployment and production gates before Build 560 can be considered production-ready.
+**Next proposed:** Build 561 — Signed Worker Evidence, Verified Consent & Supervised Release Authorization.
