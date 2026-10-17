@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build 520 source authority for Recovery Drill & Authenticated Device Manual Closure Outcome Continuity."""
 from pathlib import Path
-import re, subprocess, sys
+import os, re, subprocess, sys
 
 ROOT=Path(__file__).resolve().parents[1]
 errors=[]
@@ -170,6 +170,17 @@ for cmd in [
     [sys.executable,"scripts/authenticated_device_observation_refresh_regression_triage_check.py"],
     ["node","scripts/authenticated_device_observation_refresh_regression_triage_test.mjs"]
 ]:
+    # Complete CI gates run these same commands individually, and require ALL
+    # source/business partitions to pass. Avoid an exponential repeated
+    # subprocess tree only in those gates; standalone execution is unchanged.
+    if os.environ.get("ROSIE_SOURCE_GATE_DEDUP") == "1":
+        executable = Path(str(cmd[0])).name
+        executable = "python" if executable.startswith("python") else executable
+        rendered = " ".join([executable, *[str(part) for part in cmd[1:]]])
+        if not (rendered in dev and rendered in prod):
+            print("Required independent gate coverage missing:", rendered)
+            sys.exit(1)
+        continue
     r=subprocess.run(cmd,cwd=ROOT,text=True,capture_output=True)
     if r.returncode:
         print("BUILD 520 RECOVERY DRILL & AUTHENTICATED DEVICE MANUAL CLOSURE OUTCOME CONTINUITY AUTHORITY: FAIL")

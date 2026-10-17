@@ -991,6 +991,8 @@ jobs:
           python scripts/provider_local_search_manual_closure_outcome_continuity_check.py
           node scripts/provider_local_search_manual_closure_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device closure review authority
+        env:
+          ROSIE_SOURCE_GATE_DEDUP: "1"
         run: |
           python scripts/recovery_authenticated_device_closure_review_check.py
           node scripts/recovery_authenticated_device_closure_review_test.mjs
