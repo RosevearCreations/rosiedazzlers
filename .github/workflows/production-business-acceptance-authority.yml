@@ -23,6 +23,9 @@ jobs:
   business-path-authority-partition-a:
     name: Validate Production business acceptance source contract suite A
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -519,6 +522,9 @@ jobs:
   business-path-authority-partition-b:
     name: Validate Production business acceptance source contract suite B
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -713,6 +719,9 @@ jobs:
   business-path-authority-partition-c:
     name: Validate Production business acceptance source contract suite C
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -934,6 +943,9 @@ jobs:
   business-path-authority-partition-d:
     name: Validate Production business acceptance source contract suite D
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
