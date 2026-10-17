@@ -23,6 +23,9 @@ jobs:
   source-gate-partition-a:
     name: source checks suite A
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 30
     steps:
       - name: Checkout exact commit
@@ -544,6 +547,9 @@ jobs:
   source-gate-partition-b:
     name: source checks suite B
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 30
     steps:
       - name: Checkout exact commit
@@ -754,6 +760,9 @@ jobs:
   source-gate-partition-c:
     name: source checks suite C
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 30
     steps:
       - name: Checkout exact commit
@@ -1000,6 +1009,9 @@ jobs:
   source-gate-partition-d:
     name: source checks suite D
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 30
     steps:
       - name: Checkout exact commit
@@ -1069,6 +1081,8 @@ jobs:
           python scripts/provider_local_search_manual_closure_outcome_continuity_check.py
           node scripts/provider_local_search_manual_closure_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device closure review authority
+        env:
+          ROSIE_SOURCE_GATE_DEDUP: "1"
         run: |
           python scripts/recovery_authenticated_device_closure_review_check.py
           node scripts/recovery_authenticated_device_closure_review_test.mjs
@@ -1172,6 +1186,16 @@ jobs:
           node --check assets/daip-trusted-provider-persistence-563.js
           node scripts/daip_trusted_provider_persistence_563_test.mjs
 
+      - name: Validate atomic private acceptance ledger adapter
+        run: |
+          node --check assets/daip-atomic-ledger-564.js
+          node scripts/daip_atomic_ledger_564_test.mjs
+
+      - name: Validate server digest and runtime HOLD
+        run: |
+          node --check assets/daip-server-digest-runtime-565.js
+          node scripts/daip_server_digest_runtime_565_test.mjs
+
 
   source-gate:
     name: source checks
@@ -1180,7 +1204,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Confirm ALL prior source and business checks succeeded
+      - name: Verify every source checks partition passed
         env:
           SHARD_1: ${{ needs.source-gate-partition-a.result }}
           SHARD_2: ${{ needs.source-gate-partition-b.result }}
@@ -1193,7 +1217,7 @@ jobs:
               exit 1
             fi
           done
-          echo "All four source-authority partitions completed successfully."
+          echo "All four partitions passed."
       - name: Current source summary
         run: |
           {

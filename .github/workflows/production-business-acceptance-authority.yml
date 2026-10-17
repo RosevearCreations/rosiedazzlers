@@ -23,6 +23,9 @@ jobs:
   business-path-authority-partition-a:
     name: Validate Production business acceptance source contract suite A
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -519,6 +522,9 @@ jobs:
   business-path-authority-partition-b:
     name: Validate Production business acceptance source contract suite B
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -713,6 +719,9 @@ jobs:
   business-path-authority-partition-c:
     name: Validate Production business acceptance source contract suite C
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -934,6 +943,9 @@ jobs:
   business-path-authority-partition-d:
     name: Validate Production business acceptance source contract suite D
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -991,6 +1003,8 @@ jobs:
           python scripts/provider_local_search_manual_closure_outcome_continuity_check.py
           node scripts/provider_local_search_manual_closure_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device closure review authority
+        env:
+          ROSIE_SOURCE_GATE_DEDUP: "1"
         run: |
           python scripts/recovery_authenticated_device_closure_review_check.py
           node scripts/recovery_authenticated_device_closure_review_test.mjs
@@ -1089,6 +1103,16 @@ jobs:
           node --check assets/daip-trusted-provider-persistence-563.js
           node scripts/daip_trusted_provider_persistence_563_test.mjs
 
+      - name: Validate atomic private acceptance ledger adapter
+        run: |
+          node --check assets/daip-atomic-ledger-564.js
+          node scripts/daip_atomic_ledger_564_test.mjs
+
+      - name: Validate server digest and runtime HOLD
+        run: |
+          node --check assets/daip-server-digest-runtime-565.js
+          node scripts/daip_server_digest_runtime_565_test.mjs
+
 
   business-path-authority:
     name: Validate Production business acceptance source contract
@@ -1097,7 +1121,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Confirm ALL prior source and business checks succeeded
+      - name: Verify every Validate Production business acceptance source contract partition passed
         env:
           SHARD_1: ${{ needs.business-path-authority-partition-a.result }}
           SHARD_2: ${{ needs.business-path-authority-partition-b.result }}
@@ -1110,7 +1134,7 @@ jobs:
               exit 1
             fi
           done
-          echo "All four source-authority partitions completed successfully."
+          echo "All four partitions passed."
       - name: Source acceptance summary
         run: |
           {

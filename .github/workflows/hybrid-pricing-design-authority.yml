@@ -1,0 +1,26 @@
+name: Hybrid Pricing Design Authority (No Public Changes)
+on:
+  push:
+    branches:
+      - build569-hybrid-pricing-impact-design
+  pull_request:
+    branches:
+      - build568-staging-integration-readiness
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  design-only-boundary:
+    name: Build 569 design-only safety and decision contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check module syntax
+        run: node --check assets/hybrid-pricing-design-569.js
+      - name: Test fail-closed design review boundary
+        run: node scripts/hybrid_pricing_design_569_test.mjs
