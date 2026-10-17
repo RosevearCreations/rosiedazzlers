@@ -1,0 +1,26 @@
+name: Build 566 Provider Readiness (HOLD)
+on:
+  push:
+    branches:
+      - build566-provider-readiness-reconciliation
+  pull_request:
+    branches:
+      - build565-server-digest-runtime-gates
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  readiness-inventory:
+    name: Build 566 fail-closed inventory and release contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Build 566 module syntax
+        run: node --check assets/daip-provider-readiness-566.js
+      - name: Verify Build 566 safe inventory gates
+        run: node scripts/daip_provider_readiness_566_test.mjs

@@ -20,9 +20,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  business-path-authority:
-    name: Validate Production business acceptance source contract
+  business-path-authority-partition-a:
+    name: Validate Production business acceptance source contract suite A
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 45
     steps:
       - name: Checkout exact commit
@@ -515,6 +518,30 @@ jobs:
           python scripts/authenticated_device_observation_refresh_regression_triage_check.py
           node scripts/authenticated_device_observation_refresh_regression_triage_test.mjs
 
+
+  business-path-authority-partition-b:
+    name: Validate Production business acceptance source contract suite B
+    runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Validate fleet & maintenance commercial decision closure authority
         run: |
           python scripts/fleet_maintenance_commercial_decision_closure_check.py
@@ -687,6 +714,30 @@ jobs:
           node scripts/reliability_cost_resilience_trend_review_test.mjs
           python scripts/reliability_cost_recovery_evidence_continuity_check.py
           node scripts/reliability_cost_recovery_evidence_continuity_test.mjs
+
+
+  business-path-authority-partition-c:
+    name: Validate Production business acceptance source contract suite C
+    runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - name: Validate recovery export operational proof authority
         run: |
@@ -888,6 +939,30 @@ jobs:
           python scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_check.py
           node scripts/winter_booking_quote_rule_controlled_activation_outcome_continuity_test.mjs
 
+
+  business-path-authority-partition-d:
+    name: Validate Production business acceptance source contract suite D
+    runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
+    timeout-minutes: 45
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Validate controlled-environment routing outcome evidence continuity authority
         run: |
           python scripts/controlled_environment_routing_outcome_evidence_continuity_check.py
@@ -928,6 +1003,8 @@ jobs:
           python scripts/provider_local_search_manual_closure_outcome_continuity_check.py
           node scripts/provider_local_search_manual_closure_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device closure review authority
+        env:
+          ROSIE_SOURCE_GATE_DEDUP: "1"
         run: |
           python scripts/recovery_authenticated_device_closure_review_check.py
           node scripts/recovery_authenticated_device_closure_review_test.mjs
@@ -1021,6 +1098,43 @@ jobs:
           node --check assets/daip-trusted-consent-ledger-562.js
           node scripts/daip_trusted_consent_ledger_562_test.mjs
 
+      - name: Validate trusted provider adapter and idempotent ledger contract
+        run: |
+          node --check assets/daip-trusted-provider-persistence-563.js
+          node scripts/daip_trusted_provider_persistence_563_test.mjs
+
+      - name: Validate atomic private acceptance ledger adapter
+        run: |
+          node --check assets/daip-atomic-ledger-564.js
+          node scripts/daip_atomic_ledger_564_test.mjs
+
+      - name: Validate server digest and runtime HOLD
+        run: |
+          node --check assets/daip-server-digest-runtime-565.js
+          node scripts/daip_server_digest_runtime_565_test.mjs
+
+
+  business-path-authority:
+    name: Validate Production business acceptance source contract
+    needs: [business-path-authority-partition-a, business-path-authority-partition-b, business-path-authority-partition-c, business-path-authority-partition-d]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify every Validate Production business acceptance source contract partition passed
+        env:
+          SHARD_1: ${{ needs.business-path-authority-partition-a.result }}
+          SHARD_2: ${{ needs.business-path-authority-partition-b.result }}
+          SHARD_3: ${{ needs.business-path-authority-partition-c.result }}
+          SHARD_4: ${{ needs.business-path-authority-partition-d.result }}
+        run: |
+          for result in "$SHARD_1" "$SHARD_2" "$SHARD_3" "$SHARD_4"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Full gate not accepted; one or more test partitions failed or were cancelled."
+              exit 1
+            fi
+          done
+          echo "All four partitions passed."
       - name: Source acceptance summary
         run: |
           {

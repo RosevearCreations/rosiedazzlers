@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {deriveAcceptanceDigest565,runtimeAcceptance565} from '../assets/daip-server-digest-runtime-565.js';
+const scope={project_id:'11111111-1111-4111-8111-111111111111',asset_id:'22222222-2222-4222-8222-222222222222',derivative_id:'33333333-3333-4333-8333-333333333333'};
+const w={...scope,signature_verified_by_server:true,receipt_digest:'sha256-worker-verified-01'};
+const c={...scope,signature_verified_by_server:true,provider_verified_by_server:true,revoked:false,document_digest:'sha256-consent-verified-01'};
+const a={...scope,status:'private_derivative_technical_acceptance'};
+const r=await deriveAcceptanceDigest565({scope,worker:w,consent:c,acceptance:a});
+assert.match(r.evidence_digest,/^[0-9a-f]{64}$/);
+assert.equal(r.evidence_digest,(await deriveAcceptanceDigest565({scope,worker:w,consent:c,acceptance:a})).evidence_digest);
+await assert.rejects(deriveAcceptanceDigest565({scope,worker:w,consent:{...c,revoked:true},acceptance:a}));
+await assert.rejects(deriveAcceptanceDigest565({scope,worker:{...w,project_id:scope.asset_id},consent:c,acceptance:a}));
+assert.equal(runtimeAcceptance565({}).status,'HOLD');
+assert.equal(runtimeAcceptance565({configured:true,providersVerified:true,migrationApplied:true,dbReplayVerified:true,cloudflareExactShaVerified:true,privateOperatorVerified:true}).public_release_allowed,false);
+console.log('BUILD 565 SERVER DIGEST AND RUNTIME HOLD PASS');

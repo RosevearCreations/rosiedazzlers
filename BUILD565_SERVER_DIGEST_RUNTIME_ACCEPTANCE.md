@@ -1,0 +1,4 @@
+# Build 565 — Live Provider Verification, Server Digest Binding & Runtime Acceptance
+Adds stable SHA-256 evidence digest derivation that requires source-bound trusted provider assertions and an explicit six-gate runtime acceptance evaluator. The digest is calculated only by trusted server callers. The module has **no configured live provider**, writes no database rows, does not grant public publication, and does not claim runtime acceptance.
+Prerequisites: real worker and consent API provider credentials, successful independently verified provider calls, Build 562/564 SQL applied, real atomic replay and conflict checks, exact Cloudflare commit deployment, and protected human private-media acceptance. Until each is independently verified, the result is HOLD.
+Check: `node scripts/daip_server_digest_runtime_565_test.mjs`. Next: reconcile production credential provisioning and deployment backlog before more build numbers.

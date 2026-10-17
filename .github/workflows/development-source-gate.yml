@@ -20,9 +20,12 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  source-gate:
-    name: source checks
+  source-gate-partition-a:
+    name: source checks suite A
     runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 30
     steps:
       - name: Checkout exact commit
@@ -540,6 +543,30 @@ jobs:
           node scripts/provider_evidence_closure_availability_review_test.mjs
           node --check functions/api/_lib/provider-evidence-closure-availability-review.js
 
+
+  source-gate-partition-b:
+    name: source checks suite B
+    runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Validate provider outcome review & HOLD decision readiness authority
         run: |
           python scripts/provider_outcome_review_hold_decision_readiness_check.py
@@ -728,6 +755,30 @@ jobs:
           python scripts/service_economics_capacity_pricing_review_check.py
           python scripts/reliability_security_cost_resilience_reassessment_check.py
           node scripts/service_economics_capacity_pricing_review_test.mjs
+
+
+  source-gate-partition-c:
+    name: source checks suite C
+    runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
 
       - name: Validate service economics completeness & add-on cost readiness authority
         run: |
@@ -954,6 +1005,30 @@ jobs:
           python scripts/staff_mobile_closure_evidence_freshness_review_check.py
           node scripts/staff_mobile_closure_evidence_freshness_review_test.mjs
 
+
+  source-gate-partition-d:
+    name: source checks suite D
+    runs-on: ubuntu-latest
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Validate service economics, seasonal capacity & reliability evidence freshness review authority
         run: |
           python scripts/service_economics_seasonal_capacity_reliability_evidence_freshness_review_check.py
@@ -1006,6 +1081,8 @@ jobs:
           python scripts/provider_local_search_manual_closure_outcome_continuity_check.py
           node scripts/provider_local_search_manual_closure_outcome_continuity_test.mjs
       - name: Validate recovery drill & authenticated device closure review authority
+        env:
+          ROSIE_SOURCE_GATE_DEDUP: "1"
         run: |
           python scripts/recovery_authenticated_device_closure_review_check.py
           node scripts/recovery_authenticated_device_closure_review_test.mjs
@@ -1104,6 +1181,43 @@ jobs:
           node --check assets/daip-trusted-consent-ledger-562.js
           node scripts/daip_trusted_consent_ledger_562_test.mjs
 
+      - name: Validate trusted provider adapter and idempotent ledger contract
+        run: |
+          node --check assets/daip-trusted-provider-persistence-563.js
+          node scripts/daip_trusted_provider_persistence_563_test.mjs
+
+      - name: Validate atomic private acceptance ledger adapter
+        run: |
+          node --check assets/daip-atomic-ledger-564.js
+          node scripts/daip_atomic_ledger_564_test.mjs
+
+      - name: Validate server digest and runtime HOLD
+        run: |
+          node --check assets/daip-server-digest-runtime-565.js
+          node scripts/daip_server_digest_runtime_565_test.mjs
+
+
+  source-gate:
+    name: source checks
+    needs: [source-gate-partition-a, source-gate-partition-b, source-gate-partition-c, source-gate-partition-d]
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Verify every source checks partition passed
+        env:
+          SHARD_1: ${{ needs.source-gate-partition-a.result }}
+          SHARD_2: ${{ needs.source-gate-partition-b.result }}
+          SHARD_3: ${{ needs.source-gate-partition-c.result }}
+          SHARD_4: ${{ needs.source-gate-partition-d.result }}
+        run: |
+          for result in "$SHARD_1" "$SHARD_2" "$SHARD_3" "$SHARD_4"; do
+            if [ "$result" != "success" ]; then
+              echo "::error::Full gate not accepted; one or more test partitions failed or were cancelled."
+              exit 1
+            fi
+          done
+          echo "All four partitions passed."
       - name: Current source summary
         run: |
           {
