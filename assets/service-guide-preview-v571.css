@@ -1,0 +1,20 @@
+/* Scoped, unindexed service information preview. Does not alter public /services or /pricing. */
+.service-guide-preview{color:#f2f6ff;background:#121e31;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;margin:0}
+.service-preview-wrap{max-width:1050px;padding:28px clamp(18px,4vw,44px) 70px;margin:auto}
+.service-preview-top{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+.service-preview-top a,.service-preview-actions a{color:#c7dcff}
+.service-preview-kicker{font-size:.85rem;font-weight:800;letter-spacing:.09em;color:#a8c9ff;text-transform:uppercase}
+.service-preview-wrap h1{font-size:clamp(2rem,4.6vw,3.2rem);line-height:1.13;margin:18px 0 12px}
+.service-preview-wrap h2{font-size:1.5rem;margin-top:38px}
+.service-preview-wrap p{line-height:1.55;color:#d2deee}
+.service-preview-warning{background:#342d18;color:#fff1c3!important;border:1px solid #998552;border-radius:12px;padding:15px}
+.service-preview-status{background:#1f344f;border-radius:12px;padding:13px;border:1px solid #506988}
+.service-preview-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+.service-preview-card{background:#20324e;border:1px solid #506585;border-radius:14px;padding:18px;min-width:0}
+.service-preview-card h3{font-size:1.12rem;margin:0 0 10px;color:#fff}
+.service-preview-card p{margin:8px 0}
+.service-preview-note{font-weight:700;color:#f5e0aa!important;font-size:.9rem}
+.service-preview-actions{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0}
+.service-preview-actions a{display:inline-flex;align-items:center;min-height:48px;box-sizing:border-box;padding:9px 18px;text-decoration:none;border:1px solid #96b6e7;border-radius:12px}
+.service-preview-actions a:focus-visible,.service-preview-top a:focus-visible{outline:3px solid #ffda80;outline-offset:3px}
+@media(max-width:660px){.service-preview-grid{grid-template-columns:1fr}}
