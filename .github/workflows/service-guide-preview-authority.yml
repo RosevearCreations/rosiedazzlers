@@ -1,0 +1,27 @@
+name: Service Guide Preview (Read Only)
+on:
+  push:
+    branches:
+      - build571-service-architecture-catalog-preview
+  pull_request:
+    branches:
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  read-only-service-guide:
+    name: Build 571 catalog view and SEO parity
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Build 571 scripts
+        run: |
+          node --check assets/service-guide-model-v571.js
+          node --check assets/service-guide-preview-v571.js
+      - name: Test public route parity and service read-only mapping
+        run: node scripts/service_guide_571_test.mjs
