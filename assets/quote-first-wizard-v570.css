@@ -1,0 +1,38 @@
+/* Scoped prototype styles; no changes to accepted public booking CSS. */
+#quote-first-preview{max-width:860px;margin:0 auto}
+.qf-page{color:#f6f8ff;background:linear-gradient(160deg,#0c172c,#182640 70%,#121c2c);min-height:100vh;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+.qf-header,.qf-footer{max-width:1100px;margin:auto;padding:22px clamp(18px,4vw,48px)}
+.qf-header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.qf-brand{font-weight:850;letter-spacing:.02em;font-size:1.25rem;color:#fff;text-decoration:none}
+.qf-subtitle{color:#afbed7;font-size:.88rem}
+.qf-header a:not(.qf-brand),.qf-footer a{color:#bcd1ff}
+.qf-main{padding:24px 18px 60px}
+.qf-hero{max-width:860px;margin:0 auto 20px}
+.qf-eyebrow{color:#a6c4ff;text-transform:uppercase;font-size:.78rem;font-weight:800;letter-spacing:.13em}
+.qf-hero h1{font-size:clamp(2rem,5vw,3.3rem);line-height:1.07;max-width:730px;margin:10px 0 13px;color:white}
+.qf-hero p{color:#d0d9e9;max-width:680px;line-height:1.65}
+.qf-banner{padding:14px 18px;border:1px solid #b9a85b;border-radius:14px;background:#342d18;color:#fff0b7;line-height:1.5;margin:16px 0 22px}
+.qf-card{background:#14243c;border:1px solid #344765;border-radius:22px;padding:clamp(18px,4vw,34px);box-shadow:0 20px 48px rgba(0,0,0,.23)}
+.qf-progress{font-weight:800;color:#9ebcff;font-size:.86rem}
+.qf-card h2{font-size:clamp(1.4rem,3.5vw,2.1rem);color:#fff;margin:12px 0 6px}
+.qf-help{color:#c6d4e7;margin:0 0 20px;line-height:1.55}
+.qf-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.qf-option{appearance:none;cursor:pointer;border:1px solid #536a8e;background:#1d3150;color:#fff;border-radius:15px;text-align:left;padding:18px;font:inherit;min-height:96px;display:flex;flex-direction:column;gap:7px;transition:border-color .12s,background .12s}
+.qf-option strong{font-size:1.03rem}.qf-option span{color:#c0d0e8;font-size:.92rem;line-height:1.45}
+.qf-option:hover{background:#294264;border-color:#8fbbff}
+.qf-option[aria-pressed=true]{background:#2b4d78;border:2px solid #91c2ff;padding:17px}
+.qf-option[aria-pressed=true] strong::before{content:"✓ ";color:#c4f1ce}
+#quote-first-preview button:focus-visible,#quote-first-preview a:focus-visible{outline:3px solid #ffdb7b;outline-offset:3px}
+.qf-review-row{border-bottom:1px solid #405473;padding:13px 0;display:grid;grid-template-columns:minmax(120px,.35fr) 1fr;gap:12px}
+.qf-review-row strong{color:#bfd0f0}.qf-review-row span{color:white;overflow-wrap:anywhere}
+.qf-review-notice{color:#fae5a2;border:1px solid #88744b;background:#322e21;padding:12px;border-radius:12px;line-height:1.5}
+.qf-nav{display:flex;justify-content:space-between;gap:14px;margin-top:26px;flex-wrap:wrap}
+.qf-nav button{font:inherit;border:1px solid #7aa8ea;border-radius:12px;min-height:48px;min-width:140px;padding:11px 21px;cursor:pointer;background:#477aff;color:white;font-weight:750}
+.qf-nav button.qf-secondary{background:transparent;color:#c8ddff}
+.qf-nav button:disabled{cursor:not-allowed;opacity:.55}
+.qf-status{font-size:.88rem;color:#b4c4de;line-height:1.5;margin-top:18px}
+.qf-error{color:#ffb5ba;font-weight:750}
+.qf-link{display:inline-block;background:transparent;border:1px solid #8eb5ec;border-radius:12px;color:white;padding:11px 20px;text-decoration:none;font-weight:700;min-height:48px;box-sizing:border-box}
+.qf-footer{color:#bdcce2;font-size:.92rem;line-height:1.6}
+@media(max-width:650px){.qf-choices{grid-template-columns:1fr}.qf-nav{display:grid;grid-template-columns:1fr 1fr}.qf-nav button{min-width:0}.qf-review-row{grid-template-columns:1fr;gap:4px}}
+@media(prefers-reduced-motion:reduce){.qf-option{transition:none}}

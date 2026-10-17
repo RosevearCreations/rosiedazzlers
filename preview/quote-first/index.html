@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>Quote-first Wizard Prototype | Rosie Dazzlers</title>
+<meta name="description" content="Private prototype: explore a future Rosie Dazzlers detailing quote journey. Not a booking or a live quote.">
+<link rel="stylesheet" href="/assets/quote-first-wizard-v570.css">
+<script type="module" src="/assets/quote-first-wizard-v570.js"></script>
+</head>
+<body class="qf-page">
+<header class="qf-header">
+ <a class="qf-brand" href="/">Rosie Dazzlers</a>
+ <span class="qf-subtitle">Mobile Auto Detailing · Oxford &amp; Norfolk Counties</span>
+ <a href="/book">Current booking experience →</a>
+</header>
+<main class="qf-main">
+ <div class="qf-hero">
+  <p class="qf-eyebrow">Experience preview · Build 570</p>
+  <h1>Tell us what your vehicle needs.</h1>
+  <p>Explore a simpler way to find a suitable detailing service. You can try the steps below without sharing personal details. Rosie brings normal detailing water and power; site and weather suitability must still be confirmed.</p>
+  <div class="qf-banner" role="note"><strong>Prototype only:</strong> No quotes are sent, prices are calculated, appointments are reserved or payments are taken here. For a real booking use the current booking page.</div>
+ </div>
+ <section id="quote-first-preview" class="qf-card" aria-label="Quote-first preview wizard">
+  <p id="wizard-progress" class="qf-progress" aria-live="polite">Step 1 of 5</p>
+  <h2 id="wizard-heading" tabindex="-1">What are we detailing?</h2>
+  <p id="wizard-help" class="qf-help">Choose the closest vehicle size.</p>
+  <div id="wizard-choices" class="qf-choices" role="group" aria-labelledby="wizard-heading"></div>
+  <div id="wizard-review" aria-label="Selection review" hidden></div>
+  <p id="wizard-error" class="qf-error" role="alert" tabindex="-1" hidden></p>
+  <nav class="qf-nav" aria-label="Wizard navigation">
+   <button id="wizard-back" type="button" class="qf-secondary" disabled>Back</button>
+   <button id="wizard-next" type="button">Continue</button>
+  </nav>
+  <p id="wizard-status" class="qf-status" aria-live="polite">Selections stay in your browser while the page is open.</p>
+ </section>
+ <div style="max-width:860px;margin:22px auto 0">
+  <a class="qf-link" href="/book">Need an actual appointment? Use the current booking system →</a>
+ </div>
+</main>
+<footer class="qf-footer">Rosie Dazzlers · Preview-only concept · No personal information is collected by this wizard.</footer>
+</body>
+</html>
