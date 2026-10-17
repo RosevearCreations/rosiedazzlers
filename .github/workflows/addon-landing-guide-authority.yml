@@ -1,0 +1,25 @@
+name: Add-on Landing Guide Preview Authority
+on:
+  push:
+    branches: [build572-detailed-addon-guides-approved-media]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  addon-preview:
+    name: Build 572 editorial, media approval and route safety
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate Build 572 scripts
+        run: |
+          node --check assets/addon-guides-v572.js
+          node --check assets/addon-guide-directory-v572.js
+          node --check 'functions/preview/addons/[code].js'
+      - name: Validate all 24 pages and approval behavior
+        run: node scripts/addon_guides_572_test.mjs
