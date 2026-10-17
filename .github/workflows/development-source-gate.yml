@@ -1172,6 +1172,16 @@ jobs:
           node --check assets/daip-trusted-provider-persistence-563.js
           node scripts/daip_trusted_provider_persistence_563_test.mjs
 
+      - name: Validate atomic private acceptance ledger adapter
+        run: |
+          node --check assets/daip-atomic-ledger-564.js
+          node scripts/daip_atomic_ledger_564_test.mjs
+
+      - name: Validate server digest and runtime HOLD
+        run: |
+          node --check assets/daip-server-digest-runtime-565.js
+          node scripts/daip_server_digest_runtime_565_test.mjs
+
 
   source-gate:
     name: source checks
@@ -1180,7 +1190,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Confirm ALL prior source and business checks succeeded
+      - name: Verify every source checks partition passed
         env:
           SHARD_1: ${{ needs.source-gate-partition-a.result }}
           SHARD_2: ${{ needs.source-gate-partition-b.result }}
@@ -1193,7 +1203,7 @@ jobs:
               exit 1
             fi
           done
-          echo "All four source-authority partitions completed successfully."
+          echo "All four partitions passed."
       - name: Current source summary
         run: |
           {

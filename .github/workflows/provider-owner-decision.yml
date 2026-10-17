@@ -1,0 +1,26 @@
+name: Provider Owner Decision Gates (HOLD)
+on:
+  push:
+    branches:
+      - build567-provider-owner-decision-gates
+  pull_request:
+    branches:
+      - build566-provider-readiness-reconciliation
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  owner-decision-contract:
+    name: Build 567 fail-closed owner decision contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax
+        run: node --check assets/daip-owner-decision-567.js
+      - name: Verify owner decision contract
+        run: node scripts/daip_owner_decision_567_test.mjs

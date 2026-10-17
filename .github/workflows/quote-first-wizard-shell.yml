@@ -1,0 +1,28 @@
+name: Quote-first Wizard Preview Safety
+on:
+  push:
+    branches:
+      - build570-quote-first-wizard-shell
+  pull_request:
+    branches:
+      - build569-hybrid-pricing-impact-design
+      - dev
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  preview-model:
+    name: Quote-first preview model safety
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify source syntax
+        run: |
+          node --check assets/quote-first-wizard-model-v570.js
+          node --check assets/quote-first-wizard-v570.js
+      - name: Run wizard-state and no-operation checks
+        run: node scripts/quote_first_wizard_570_test.mjs
