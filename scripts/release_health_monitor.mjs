@@ -51,6 +51,32 @@ export function releaseHealth({mainSha,mainUpdated,project,deployments,checks,no
       reason:"Exact-main Production source/runtime/business acceptance is incomplete",alert:oldEnough};
   return {...out,state:"GREEN",reason:"Exact main, Cloudflare Production and business checks agree",alert:false};
 }
+export function recoveryGuidance(h) {
+  const steps={
+    FAILED:["Inspect the failed Cloudflare deployment or exact-SHA acceptance job; capture its run ID.","Compare failure scope against the last independently accepted Production SHA.","Propose the smallest reversible fix; obtain explicit owner approval before rollback or redeployment."],
+    DRIFT:["Compare GitHub main against latest Cloudflare Production SHA and Pages project configuration.","Check the deployment queue and source connection without mutating production.","Request owner authorization before any manual deployment or branch operation."],
+    STALLED:["Inspect pending Cloudflare deployment, build logs and required acceptance checks.","Check GitHub Actions capacity/permissions and Cloudflare provider status.","Escalate to owner for a manual intervention decision; never assume a retry succeeded."],
+    UNAVAILABLE:["Verify read-only Cloudflare credentials, account/project access and GitHub permissions.","Restore visibility through an authorized secrets/configuration change outside this monitor.","Do not mark GREEN until independent exact-SHA proof is available."],
+    PENDING:["Within the deployment grace period, observe the next scheduled run.","Do not intervene before checking current deployment progress."],
+    GREEN:["No recovery action needed; retain exact-SHA evidence and close resolved incident."]
+  };
+  return steps[h.state]||steps.UNAVAILABLE;
+}
+export function ownerAcknowledged(comments,sha,owner) {
+  if(!SHA.test(sha||"")||!owner||!Array.isArray(comments)) return false;
+  return comments.some(c=>c?.user?.login?.toLowerCase()===owner.toLowerCase() &&
+    String(c.body||"").trim()===("/ack-release-incident "+sha));
+}
+export function incidentDashboard(h,{acknowledged=false}={}) {
+  return dashboard(h)+"\\n## Build 577 — incident recovery and owner escalation\\n"+
+    "Owner acknowledgement: **"+(acknowledged?"ACKNOWLEDGED":"REQUIRED")+"** (not recovery approval).\\n"+
+    "To acknowledge this exact incident, the repository owner comments "+
+    "\\`/ack-release-incident "+String(h.mainSha||"unavailable")+"\\` on this GitHub issue.\\n"+
+    "Acknowledgement does NOT trigger rollback, retry, redeployment, or issue closure.\\n"+
+    "Recovery guidance (manual decisions only):\\n"+
+    recoveryGuidance(h).map((step,i)=>(i+1)+". "+step).join("\\n")+"\\n"+
+    "After separately approved remediation, rerun exact-main Cloudflare and business acceptance.\\n";
+}
 export function dashboard(h) {
   const sanitize=s=>String(s??"unavailable").replace(/[|<>\r\n]/g," ").slice(0,200);
   const lines=[
@@ -143,7 +169,24 @@ export async function run(){
           String(error.message).slice(0,110)+")",alert:true,graceMinutes:30};
     }
   }
-  const body=dashboard(health);
+  let acknowledged=false;
+  if(health.alert && SHA.test(health.mainSha||"")){
+    const root="https://api.github.com/repos/"+owner+"/"+name;
+    const open=await getJSON(root+"/issues?state=open&per_page=100",env.GITHUB_TOKEN);
+    const issue=open.find(i=>!i.pull_request&&i.title===ISSUE_TITLE);
+    if(issue){
+      const comments=[];
+      for(let page=1;page<=10;page++){
+        const batch=await getJSON(root+"/issues/"+issue.number+"/comments?per_page=100&page="+page,env.GITHUB_TOKEN);
+        if(!Array.isArray(batch)) throw Error("Owner acknowledgement comments unavailable");
+        comments.push(...batch);
+        if(batch.length<100) break;
+        if(page===10) throw Error("Owner acknowledgement evidence exceeded bounded pages");
+      }
+      acknowledged=ownerAcknowledged(comments,health.mainSha,owner);
+    }
+  }
+  const body=incidentDashboard(health,{acknowledged});
   console.log("RELEASE HEALTH: "+health.state+" — "+health.reason);
   if(env.GITHUB_STEP_SUMMARY){
     const fs=await import("node:fs/promises");
