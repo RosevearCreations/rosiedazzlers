@@ -1,8 +1,13 @@
 name: Guarded Production Auto Promotion
-# Trusted default-branch workflow. Does not checkout or execute PR code.
+# Build 575: trusted default-branch code only; never checkout or execute PR code.
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
+  workflow_run:
+    workflows:
+      - Current Source Gate
+      - Cloudflare Development Acceptance
+    types: [completed]
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
@@ -10,6 +15,8 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  checks: read
+  actions: read
 
 concurrency:
   group: rd-guarded-production-promotion
@@ -19,53 +26,131 @@ jobs:
   guarded-promotion:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      HAS_RELEASE_TOKEN: ${{ secrets.ROSIEDAZZLERS_RELEASE_TOKEN != '' }}
     steps:
-      - name: Verify exact Development acceptance and merge through protection
+      - name: Verify exact Development, prior Production and protected PR readiness
         uses: actions/github-script@v7
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          # A separately scoped GitHub App/PAT token allows the resulting main push
+          # to trigger Production Actions. GITHUB_TOKEN merges suppress downstream
+          # push-triggered Actions, so never use it for a direct merge.
+          github-token: ${{ secrets.ROSIEDAZZLERS_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
           script: |
             const {owner, repo} = context.repo;
-            const target = (await github.rest.repos.getBranch({owner,repo,branch:'dev'})).data.commit.sha;
-            const main = (await github.rest.repos.getBranch({owner,repo,branch:'main'})).data.commit.sha;
-            const prs = (await github.paginate(github.rest.pulls.list,{
-              owner,repo,state:'open',base:'main',per_page:100
-            })).filter(p=>p.head.ref==='dev' && p.head.repo?.full_name===owner+'/'+repo);
+            const summary = ['## Build 575 — guarded production promotion',
+              '- Trigger: ' + context.eventName];
+            function note(message) {
+              core.notice(message);
+              summary.push('- ' + message);
+            }
+            function latest(all, name) {
+              return all.filter(c => c.name === name)
+                .sort((a,b) => b.id - a.id)[0];
+            }
+            function passed(all, name) {
+              const c = latest(all,name);
+              return !!c && c.status === 'completed' && c.conclusion === 'success';
+            }
             async function checks(sha) {
-              const all=await github.paginate(github.rest.checks.listForRef,{
-                owner,repo,ref:sha,per_page:100
-              },response=>response.data.check_runs);
-              return all;
-            }
-            function passed(all,name) {
-              return all.some(c=>c.name===name && c.status==='completed' && c.conclusion==='success');
-            }
-            if(!prs.length) {core.info('No dev-to-main production PR');return;}
-            const development=await checks(target);
-            const devOk=passed(development,'Cloudflare Pages') &&
-              passed(development,'Verify Development deployment') &&
-              passed(development,'source checks');
-            for(const pr of prs) {
-              if(pr.draft || pr.head.sha!==target || !devOk) {
-                core.notice('HOLD PR #'+pr.number+': draft, non-current dev SHA, or missing exact Development acceptance');
-                continue;
+              // Checks API returns an object {total_count, check_runs}, not a
+              // plain array. Octokit paginate may flatten it incorrectly.
+              const result=[];
+              for(let page=1;page<=30;page++) {
+                const response=await github.rest.checks.listForRef({
+                  owner,repo,ref:sha,per_page:100,page
+                });
+                const batch=response?.data?.check_runs;
+                if(!Array.isArray(batch)) {
+                  throw Error('GitHub checks API returned an invalid page for '+sha);
+                }
+                result.push(...batch);
+                if(batch.length<100) return result;
               }
+              throw Error('More than 3000 check runs; refusing incomplete acceptance');
+            }
+            try {
+              const dev=(await github.rest.repos.getBranch({owner,repo,branch:'dev'})).data.commit.sha;
+              const main=(await github.rest.repos.getBranch({owner,repo,branch:'main'})).data.commit.sha;
+              summary.push('- Current dev SHA: ' + dev);
+              summary.push('- Current main SHA: ' + main);
+              const prs=(await github.paginate(github.rest.pulls.list,{
+                owner,repo,state:'open',base:'main',per_page:100
+              })).filter(p => p.head.ref === 'dev' && p.head.repo?.full_name === owner+'/'+repo);
+              if (!prs.length) {
+                note('No dev-to-main Production PR; no mutation.');
+                return;
+              }
+              if (prs.length !== 1) {
+                note('HOLD: multiple dev-to-main Production PRs; review required.');
+                return;
+              }
+              const pr=prs[0];
               const current=(await github.rest.pulls.get({owner,repo,pull_number:pr.number})).data;
-              const prChecks=await checks(pr.head.sha);
-              if(!passed(prChecks,'source checks') ||
-                  prChecks.some(c=>c.conclusion==='failure' || c.conclusion==='timed_out' || c.conclusion==='cancelled')) {
-                core.notice('HOLD PR #'+pr.number+': required PR source checks or failing CI');
-                continue;
+              summary.push('- Candidate PR: #' + pr.number + ' / ' + pr.head.sha);
+              if (pr.draft || current.state !== 'open' || current.head.sha !== dev) {
+                note('HOLD: draft, closed or stale candidate; no merge.');
+                return;
               }
-              if(current.mergeable_state!=='clean' || current.mergeable!==true) {
-                core.notice('HOLD PR #'+pr.number+': GitHub protection/mergeability not clean: '+current.mergeable_state);
-                continue;
+              const [devChecks,mainChecks] = await Promise.all([checks(dev),checks(main)]);
+              if (!passed(devChecks,'Cloudflare Pages') ||
+                  !passed(devChecks,'Verify Development deployment') ||
+                  !passed(devChecks,'source checks')) {
+                note('HOLD: exact dev SHA lacks successful Cloudflare, Development acceptance or source checks.');
+                return;
               }
-              const latestMain=(await github.rest.repos.getBranch({owner,repo,branch:'main'})).data.commit.sha;
-              if(latestMain!==main) {core.warning('Main advanced; abort to avoid racing another release');return;}
-              await github.rest.pulls.merge({owner,repo,pull_number:pr.number,
-                merge_method:'merge',sha:target,
-                commit_title:'Guarded production promotion: '+pr.title});
-              core.notice('Merged PR #'+pr.number+' via protected route. Await exact-SHA Production acceptance before declaring GREEN.');
-              return; // at most one promotion per run
+              if (!passed(mainChecks,'Cloudflare Pages') ||
+                  !passed(mainChecks,'Verify exact Production deployment') ||
+                  !passed(mainChecks,'Validate Production business acceptance source contract')) {
+                note('HOLD: preceding main SHA lacks complete Production Cloudflare/runtime/business acceptance.');
+                return;
+              }
+              if (current.mergeable !== true) {
+                note('HOLD: GitHub reports conflicts or mergeability is not yet known.');
+                return;
+              }
+              // Recheck ancestry immediately before requesting any promotion.
+              const [freshDev,freshMain]=await Promise.all([
+                github.rest.repos.getBranch({owner,repo,branch:'dev'}),
+                github.rest.repos.getBranch({owner,repo,branch:'main'})
+              ]);
+              if(freshDev.data.commit.sha !== dev || freshMain.data.commit.sha !== main) {
+                note('HOLD: branch head changed during review; retry on next event.');
+                return;
+              }
+              if (current.mergeable_state === 'blocked') {
+                // GitHub itself performs the eventual merge after required checks.
+                // That avoids suppressed downstream workflow events from GITHUB_TOKEN.
+                try {
+                  await github.graphql(
+                    'mutation($id:ID!){enablePullRequestAutoMerge(input:{pullRequestId:$id,mergeMethod:MERGE}){pullRequest{id}}}',
+                    {id:current.node_id}
+                  );
+                  note('GitHub native auto-merge enabled for PR #' + pr.number + '; awaiting protected checks.');
+                } catch(error) {
+                  note('HOLD: native auto-merge could not be enabled: ' + String(error.message).slice(0,220));
+                }
+                return;
+              }
+              if (current.mergeable_state !== 'clean') {
+                note('HOLD: PR not clean ('+current.mergeable_state+'); next event/hourly retry.');
+                return;
+              }
+              if (!passed(devChecks,'source checks')) {
+                note('HOLD: missing exact source authority.');
+                return;
+              }
+              if (process.env.HAS_RELEASE_TOKEN !== 'true') {
+                note('HOLD: PR ready, but ROSIEDAZZLERS_RELEASE_TOKEN is not configured. GITHUB_TOKEN direct merges would suppress Production Actions. Use native auto-merge while checks are pending or configure a scoped release token.');
+                return;
+              }
+              // A GitHub App installation token / scoped PAT can trigger downstream
+              // Production push workflows; protected main is still authoritative.
+              await github.rest.pulls.merge({
+                owner,repo,pull_number:pr.number,merge_method:'merge',sha:dev,
+                commit_title:'Guarded Production promotion: ' + pr.title
+              });
+              note('Merged PR #' + pr.number + ' through protected main. Exact new main Cloudflare/Production acceptance remains required for GREEN.');
+            } finally {
+              await core.summary.addRaw(summary.join('\n')+'\n').write();
             }

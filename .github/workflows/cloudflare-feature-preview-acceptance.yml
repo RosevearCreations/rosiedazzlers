@@ -46,6 +46,9 @@ jobs:
           node scripts/quote_first_intake_573_test.mjs
           node scripts/build574_mobile_booking_regression_test.mjs
 
+      - name: Validate Build 575 release promotion safety
+        run: node scripts/build575_release_promotion_test.mjs
+
       - name: Validate public SEO metadata
         run: python scripts/seo_metadata_check.py
 
