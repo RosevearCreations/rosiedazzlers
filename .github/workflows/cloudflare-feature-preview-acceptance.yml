@@ -46,6 +46,11 @@ jobs:
           node scripts/quote_first_intake_573_test.mjs
           node scripts/build574_mobile_booking_regression_test.mjs
 
+      - name: Verify production release health and drift alerting contracts
+        run: |
+          node --check scripts/release_health_monitor.mjs
+          node scripts/release_health_monitor_test.mjs
+
       - name: Validate Build 575 release promotion safety
         run: node scripts/build575_release_promotion_test.mjs
 
