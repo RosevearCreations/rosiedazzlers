@@ -38,3 +38,23 @@
 @media(prefers-reduced-motion:reduce){.qf-option{transition:none}}
 
 #quote-first-intake-v573 label{display:block;margin:12px 0;color:#f6f8ff}#quote-first-intake-v573 input:not([type=checkbox]),#quote-first-intake-v573 textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;background:#0f1d33;color:#fff;border:1px solid #748dac;border-radius:9px;padding:11px;margin-top:5px;font:inherit}#quote-first-intake-v573 button{margin:15px 0;background:#477aff;color:white;border:1px solid #a4c6fc;border-radius:10px;min-height:48px;padding:10px 20px;font:inherit;font-weight:700}#quote-first-intake-v573 button:disabled{opacity:.5}#quote-first-intake-v573 :focus-visible{outline:3px solid #ffdc82;outline-offset:2px}.qf-hidden-honeypot{position:absolute!important;left:-10000px!important;height:1px;width:1px;overflow:hidden}#quote-first-intake-v573[hidden]{display:none}
+
+
+/* Build 574 — touch usability and narrow-screen overflow prevention, scoped to the preview. */
+.qf-page, .qf-page *{box-sizing:border-box}
+.qf-header > *, .qf-main > *, .qf-card > *, .qf-choices > *{min-width:0}
+.qf-page button, .qf-page input, .qf-page textarea{font-size:16px}
+#quote-first-intake-v573{width:100%;max-width:860px;overflow-wrap:anywhere}
+#quote-first-intake-v573 input:not([type=checkbox]),#quote-first-intake-v573 textarea{min-width:0}
+#quote-first-intake-v573 input[type=checkbox]{width:20px;height:20px;vertical-align:middle}
+#quote-first-intake-v573 p, .qf-hero p, .qf-status{overflow-wrap:anywhere}
+@media(max-width:420px){
+ .qf-main{padding:16px 12px 48px}
+ .qf-header{padding:16px 12px}
+ .qf-card{padding:16px;border-radius:16px}
+ .qf-nav{grid-template-columns:minmax(0,1fr)}
+ .qf-nav button{width:100%;min-height:48px}
+ #quote-first-intake-v573{padding:16px!important;margin:16px auto!important}
+ #quote-first-intake-v573 button[type=submit]{width:100%;white-space:normal}
+ .qf-link{width:100%;text-align:center;white-space:normal}
+}
