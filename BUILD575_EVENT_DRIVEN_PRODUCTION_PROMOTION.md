@@ -31,3 +31,6 @@ No database migration, Cloudflare account setting, new billing account or produc
 5. Report final SHA and Cloudflare/CI evidence; no GREEN if any part is missing.
 
 **Next proposed build: Build 576 — Release Health Dashboard, Drift Detection & Operator Alerting**, to be confirmed from the current roadmap after Build 575 Production GREEN.
+
+## Production-discovered API correction
+During PR #383 the previous Production promotion job failed while reading GitHub's check-runs collection. The Build 575 correction reads explicit paged REST responses (`data.check_runs`) instead of assuming Octokit's generic pagination map produces that shape. It validates every page and fails closed above 3,000 check runs. The deterministic test includes a 205+ check-run multi-page case; a partial or malformed page can never count as deployment evidence.
