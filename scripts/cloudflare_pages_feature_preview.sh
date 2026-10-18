@@ -228,6 +228,44 @@ for attempt in $(seq 1 12); do
   fi
   [[ "$attempt" -ge 12 ]] || sleep 10
 done
+if [[ -z "$exact_id" ]]; then
+  # One bounded missing-webhook recovery for build-numbered feature previews.
+  # Main and dev are explicitly excluded by the authority checks above.
+  [[ "$CF_FEATURE_BRANCH" =~ ^build[0-9]+ ]] || fail "Missing preview recovery requires a build-numbered branch." 40
+  note "Exact GitHub feature SHA not present; checking again before one feature-only create."
+  cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments?per_page=25" > "$TMP_DIR/pre-create.json"
+  exact_id=$(jq -r --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
+    [.result[]? | select(.deployment_trigger.metadata.commit_hash == $sha and .deployment_trigger.metadata.branch == $branch)][0].id // empty
+  ' "$TMP_DIR/pre-create.json")
+  if [[ -z "$exact_id" ]]; then
+    code=$(curl --silent --show-error --output "$TMP_DIR/feature-create.json" --write-out '%{http_code}' \
+      --request POST --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+      "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments" \
+      -F "branch=${CF_FEATURE_BRANCH}" -F "commit_dirty=false" -F "commit_hash=${TARGET_SHA}" \
+      -F "commit_message=RosieDazzlers exact feature preview dispatch ${TARGET_SHA}" || true)
+    [[ "$code" == "200" ]] || fail "Feature-only Pages create returned HTTP ${code}; no Production change." 41
+    jq -e --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
+      .success == true and (.result.id // "") != "" and .result.environment == "preview" and
+      .result.deployment_trigger.metadata.commit_hash == $sha and .result.deployment_trigger.metadata.branch == $branch
+    ' "$TMP_DIR/feature-create.json" >/dev/null || fail "Cloudflare did not confirm exact feature identity." 42
+    exact_id=$(jq -r '.result.id' "$TMP_DIR/feature-create.json")
+    note "Created one missing feature-only deployment ${exact_id}."
+  fi
+  exact_status=""
+  for attempt in $(seq 1 30); do
+    cf_curl "https://api.cloudflare.com/client/v4/accounts/${account_id}/pages/projects/${CF_PROJECT_NAME}/deployments/${exact_id}" > "$TMP_DIR/feature-create-status.json"
+    jq -e --arg sha "$TARGET_SHA" --arg branch "$CF_FEATURE_BRANCH" '
+      .success == true and .result.environment == "preview" and
+      .result.deployment_trigger.metadata.commit_hash == $sha and .result.deployment_trigger.metadata.branch == $branch
+    ' "$TMP_DIR/feature-create-status.json" >/dev/null || fail "Feature preview identity changed." 43
+    exact_status=$(jq -r '.result.latest_stage.status // "unknown"' "$TMP_DIR/feature-create-status.json")
+    [[ "$exact_status" == "success" ]] && break
+    [[ "$exact_status" != "failure" && "$exact_status" != "failed" && "$exact_status" != "canceled" ]] \
+      || fail "Feature-only preview failed with status ${exact_status}." 44
+    [[ "$attempt" -eq 30 ]] || sleep 10
+  done
+  [[ "$exact_status" == "success" ]] || fail "Missing feature-preview recovery never became successful." 45
+fi
 [[ -n "$exact_id" ]] || fail "Cloudflare does not show exact feature commit ${TARGET_SHA} on ${CF_FEATURE_BRANCH}." 15
 if [[ "$exact_status" != "success" ]]; then
   [[ "$exact_status" == "active" ]] || fail "Exact feature deployment did not become successful; last status ${exact_status:-unknown}." 16

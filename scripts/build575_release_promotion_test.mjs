@@ -48,7 +48,9 @@ async function scenario(settings={}){
        list:()=>{},get:async()=>({data:current}),
        merge:async args=>{calls.merges.push(args);return {data:{merged:true}};}
      },
-     checks:{listForRef:()=>{}}
+     checks:{listForRef:async ({ref,page=1,per_page=100})=>({
+       data:{check_runs:(allChecks[ref]||[]).slice((page-1)*per_page,page*per_page)}
+     })}
    },
    paginate:async(fn,args)=>fn===github.rest.pulls.list?[pr]:(allChecks[args.ref]||[]),
    graphql:async (_mutation,args)=>{calls.native.push(args);return {enablePullRequestAutoMerge:{}};}
@@ -84,4 +86,10 @@ const latestFailure=await scenario({checks:{[sha.dev]:[
  check("source checks",10,"success"),check("source checks",11,"failure")
 ]}});
 assert.equal(latestFailure.native.length,0,"latest failing check must HOLD");
+
+const many=[...Array.from({length:205},(_,i)=>check("advisory-"+i,i+1)),...goodDev];
+const paged=await scenario({checks:{[sha.dev]:many}});
+assert.equal(paged.native.length,1,"checks over multiple pages must preserve exact Development proof");
+assert.ok(workflow.includes("github.rest.checks.listForRef"));
+assert.ok(!workflow.includes("github.paginate(github.rest.checks.listForRef"));
 console.log("Build 575 guarded production promotion: event, SHA, prior GREEN, credential, race and replay tests PASS");
