@@ -40,6 +40,12 @@ jobs:
       - name: Run cumulative source authority
         run: python scripts/release_check.py
 
+      - name: Verify Build 574 mobile and booking safety regression
+        run: |
+          node scripts/quote_first_wizard_570_test.mjs
+          node scripts/quote_first_intake_573_test.mjs
+          node scripts/build574_mobile_booking_regression_test.mjs
+
       - name: Validate public SEO metadata
         run: python scripts/seo_metadata_check.py
 
