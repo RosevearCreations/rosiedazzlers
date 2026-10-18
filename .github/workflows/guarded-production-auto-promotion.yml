@@ -1,0 +1,71 @@
+name: Guarded Production Auto Promotion
+# Trusted default-branch workflow. Does not checkout or execute PR code.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+  schedule:
+    - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+concurrency:
+  group: rd-guarded-production-promotion
+  cancel-in-progress: false
+
+jobs:
+  guarded-promotion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify exact Development acceptance and merge through protection
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const {owner, repo} = context.repo;
+            const target = (await github.rest.repos.getBranch({owner,repo,branch:'dev'})).data.commit.sha;
+            const main = (await github.rest.repos.getBranch({owner,repo,branch:'main'})).data.commit.sha;
+            const prs = (await github.paginate(github.rest.pulls.list,{
+              owner,repo,state:'open',base:'main',per_page:100
+            })).filter(p=>p.head.ref==='dev' && p.head.repo?.full_name===owner+'/'+repo);
+            async function checks(sha) {
+              const all=await github.paginate(github.rest.checks.listForRef,{
+                owner,repo,ref:sha,per_page:100
+              },response=>response.data.check_runs);
+              return all;
+            }
+            function passed(all,name) {
+              return all.some(c=>c.name===name && c.status==='completed' && c.conclusion==='success');
+            }
+            if(!prs.length) {core.info('No dev-to-main production PR');return;}
+            const development=await checks(target);
+            const devOk=passed(development,'Cloudflare Pages') &&
+              passed(development,'Verify Development deployment') &&
+              passed(development,'source checks');
+            for(const pr of prs) {
+              if(pr.draft || pr.head.sha!==target || !devOk) {
+                core.notice('HOLD PR #'+pr.number+': draft, non-current dev SHA, or missing exact Development acceptance');
+                continue;
+              }
+              const current=(await github.rest.pulls.get({owner,repo,pull_number:pr.number})).data;
+              const prChecks=await checks(pr.head.sha);
+              if(!passed(prChecks,'source checks') ||
+                  prChecks.some(c=>c.conclusion==='failure' || c.conclusion==='timed_out' || c.conclusion==='cancelled')) {
+                core.notice('HOLD PR #'+pr.number+': required PR source checks or failing CI');
+                continue;
+              }
+              if(current.mergeable_state!=='clean' || current.mergeable!==true) {
+                core.notice('HOLD PR #'+pr.number+': GitHub protection/mergeability not clean: '+current.mergeable_state);
+                continue;
+              }
+              const latestMain=(await github.rest.repos.getBranch({owner,repo,branch:'main'})).data.commit.sha;
+              if(latestMain!==main) {core.warning('Main advanced; abort to avoid racing another release');return;}
+              await github.rest.pulls.merge({owner,repo,pull_number:pr.number,
+                merge_method:'merge',sha:target,
+                commit_title:'Guarded production promotion: '+pr.title});
+              core.notice('Merged PR #'+pr.number+' via protected route. Await exact-SHA Production acceptance before declaring GREEN.');
+              return; // at most one promotion per run
+            }
