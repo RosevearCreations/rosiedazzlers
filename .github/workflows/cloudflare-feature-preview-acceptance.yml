@@ -27,6 +27,11 @@ jobs:
       TARGET_SHA: ${{ github.sha }}
       CF_FEATURE_BRANCH: ${{ github.ref_name }}
     steps:
+      - name: Verify production release health and drift alerting contracts
+        run: |
+          node --check scripts/release_health_monitor.mjs
+          node scripts/release_health_monitor_test.mjs
+
       - name: Checkout exact feature commit
         uses: actions/checkout@v4
         with:
