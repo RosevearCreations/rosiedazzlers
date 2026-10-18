@@ -53,9 +53,21 @@ jobs:
               return !!c && c.status === 'completed' && c.conclusion === 'success';
             }
             async function checks(sha) {
-              return github.paginate(github.rest.checks.listForRef,{
-                owner, repo, ref:sha, per_page:100
-              }, response => response.data.check_runs);
+              // Checks API returns an object {total_count, check_runs}, not a
+              // plain array. Octokit paginate may flatten it incorrectly.
+              const result=[];
+              for(let page=1;page<=30;page++) {
+                const response=await github.rest.checks.listForRef({
+                  owner,repo,ref:sha,per_page:100,page
+                });
+                const batch=response?.data?.check_runs;
+                if(!Array.isArray(batch)) {
+                  throw Error('GitHub checks API returned an invalid page for '+sha);
+                }
+                result.push(...batch);
+                if(batch.length<100) return result;
+              }
+              throw Error('More than 3000 check runs; refusing incomplete acceptance');
             }
             try {
               const dev=(await github.rest.repos.getBranch({owner,repo,branch:'dev'})).data.commit.sha;
