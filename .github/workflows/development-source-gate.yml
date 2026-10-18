@@ -43,6 +43,11 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Verify production release health and drift alerting contracts
+        run: |
+          node --check scripts/release_health_monitor.mjs
+          node scripts/release_health_monitor_test.mjs
+
       - name: Validate guarded release promotion automation
         run: node scripts/guarded_production_promotion_test.mjs
 
