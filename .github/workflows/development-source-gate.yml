@@ -43,6 +43,9 @@ jobs:
         with:
           node-version: "22"
 
+      - name: Validate Build 575 release promotion safety
+        run: node scripts/build575_release_promotion_test.mjs
+
       - name: Check current JavaScript syntax
         run: |
           node --check assets/admin-shell.js
