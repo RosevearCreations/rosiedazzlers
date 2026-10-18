@@ -1,0 +1,46 @@
+name: Release Health Dashboard & Drift Alerts
+
+on:
+  push:
+    branches: [main]
+  workflow_run:
+    workflows:
+      - Production Business Acceptance & Exact-SHA Authority
+      - Current Source Gate
+    types: [completed]
+  schedule:
+    - cron: '43 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: read
+  issues: write
+
+concurrency:
+  group: rd-release-health-production
+  cancel-in-progress: false
+
+jobs:
+  release-health:
+    name: Production release health and operator alert
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout trusted default branch monitor
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run release health contract tests
+        run: node scripts/release_health_monitor_test.mjs
+      - name: Compare exact main to latest Cloudflare Production and notify operator
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: node scripts/release_health_monitor.mjs
