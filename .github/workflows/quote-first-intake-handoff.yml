@@ -1,0 +1,25 @@
+name: Quote-first Intake Staff Handoff Safety
+on:
+  push:
+    branches: [build573-quote-first-intake-staff-handoff]
+  pull_request:
+    branches: [dev, main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  quote-intake-contract:
+    name: Build 573 quote intake consent, replay and staff handoff
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check Build 573 syntax
+        run: |
+          node --check assets/quote-first-intake-v573.js
+          node --check assets/quote-first-intake-ui-v573.js
+          node --check functions/api/quote_first_request.js
+      - name: Test guarded intake and existing lead routing
+        run: node scripts/quote_first_intake_573_test.mjs

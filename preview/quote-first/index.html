@@ -8,6 +8,7 @@
 <meta name="description" content="Private prototype: explore a future Rosie Dazzlers detailing quote journey. Not a booking or a live quote.">
 <link rel="stylesheet" href="/assets/quote-first-wizard-v570.css">
 <script type="module" src="/assets/quote-first-wizard-v570.js"></script>
+<script type="module" src="/assets/quote-first-intake-ui-v573.js"></script>
 </head>
 <body class="qf-page">
 <header class="qf-header">
@@ -35,6 +36,21 @@
   </nav>
   <p id="wizard-status" class="qf-status" aria-live="polite">Selections stay in your browser while the page is open.</p>
  </section>
+ <section id="quote-first-intake-v573" hidden style="max-width:860px;margin:22px auto;background:#20324e;padding:22px;border-radius:14px" aria-labelledby="quote-intake-head">
+ <h2 id="quote-intake-head">Ask Rosie for a tailored quote</h2>
+ <p>Submitting this form requests manual staff contact only. It is not a confirmed price or appointment.</p>
+ <form id="quote-intake-form">
+ <label>Full name <input name="full_name" maxlength="180" autocomplete="name" required></label>
+ <label>Email <input name="email" type="email" autocomplete="email"></label>
+ <label>Telephone <input name="phone" type="tel" autocomplete="tel"></label>
+ <label>Town or service area <input name="service_area" maxlength="120"></label>
+ <label>Optional condition notes <textarea name="notes" maxlength="450"></textarea></label>
+ <label class="qf-hidden-honeypot">Website <input name="website" autocomplete="off" tabindex="-1"></label>
+ <label><input name="contact_consent" type="checkbox" required> I agree that Rosie Dazzlers may contact me about this specific inquiry. This is not marketing consent.</label>
+ <div id="quote-turnstile"></div>
+ <button type="submit" id="quote-intake-submit" disabled>Send inquiry for staff review</button>
+ <p id="quote-intake-status" role="status" aria-live="polite">Intake is not enabled.</p>
+ </form></section>
  <div style="max-width:860px;margin:22px auto 0">
   <a class="qf-link" href="/book">Need an actual appointment? Use the current booking system →</a>
  </div>

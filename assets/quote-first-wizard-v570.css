@@ -36,3 +36,5 @@
 .qf-footer{color:#bdcce2;font-size:.92rem;line-height:1.6}
 @media(max-width:650px){.qf-choices{grid-template-columns:1fr}.qf-nav{display:grid;grid-template-columns:1fr 1fr}.qf-nav button{min-width:0}.qf-review-row{grid-template-columns:1fr;gap:4px}}
 @media(prefers-reduced-motion:reduce){.qf-option{transition:none}}
+
+#quote-first-intake-v573 label{display:block;margin:12px 0;color:#f6f8ff}#quote-first-intake-v573 input:not([type=checkbox]),#quote-first-intake-v573 textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;background:#0f1d33;color:#fff;border:1px solid #748dac;border-radius:9px;padding:11px;margin-top:5px;font:inherit}#quote-first-intake-v573 button{margin:15px 0;background:#477aff;color:white;border:1px solid #a4c6fc;border-radius:10px;min-height:48px;padding:10px 20px;font:inherit;font-weight:700}#quote-first-intake-v573 button:disabled{opacity:.5}#quote-first-intake-v573 :focus-visible{outline:3px solid #ffdc82;outline-offset:2px}.qf-hidden-honeypot{position:absolute!important;left:-10000px!important;height:1px;width:1px;overflow:hidden}#quote-first-intake-v573[hidden]{display:none}

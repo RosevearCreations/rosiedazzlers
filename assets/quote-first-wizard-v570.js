@@ -61,7 +61,8 @@ if(root){
   prev.disabled=state.step===0;
   next.disabled=step==="review";
   next.textContent=step==="extras"?"Review choices":"Continue";
-  status.textContent=step==="review"?"This is a prototype. No information is sent.":"Selections stay only in this page while it is open.";
+  status.textContent=step==="review"?"Review complete. A real inquiry is only available if intake is explicitly enabled.":"Selections stay only in this page while it is open.";
+  if(step==="review")window.dispatchEvent(new CustomEvent("rosie-quote-preview-review",{detail:{vehicle:state.vehicle,goal:state.goal,condition:state.condition,extras:[...state.extras]}}));
  }
  prev.addEventListener("click",()=>{state=moveWizard570(state,"back");render();heading.focus();});
  next.addEventListener("click",()=>{
