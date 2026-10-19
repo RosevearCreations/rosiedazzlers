@@ -56,3 +56,6 @@ assert.match(flow,/release_health_monitor.mjs/);
 assert.match(flow,/release_health_monitor_test.mjs/);
 assert.ok(!flow.includes("force:true"));
 console.log("Release health monitor: exact-SHA, live drift, stale, failed, pending, newest-check, visibility and operator-alert tests PASS");
+
+// Build 578: retain deterministic remediation decision acceptance in release-health gate.
+await import('./release_incident_decision_ledger_test.mjs');
