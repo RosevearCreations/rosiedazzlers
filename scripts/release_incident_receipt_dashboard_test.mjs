@@ -1,0 +1,18 @@
+import assert from "node:assert/strict";
+import {parseReceipt,receiptDashboard,dashboardMarkdown,RECEIPT_PREFIX} from "./release_incident_receipt_dashboard.mjs";
+const sha="a".repeat(40),owner="RosevearCreations";
+const basic={incidentSha:sha,decisionId:"release-579",action:"observe",owner,reason:"Observe recovery",state:"PROPOSED"};
+const approved={...basic,state:"OWNER_APPROVED",evidenceRef:"issue:123",approvalRef:"comment:456"};
+const make=(decision,id,login=owner)=>({id,user:{login},body:RECEIPT_PREFIX+JSON.stringify(decision),created_at:"2026-10-18T10:00:00Z"});
+assert.equal(parseReceipt(make(basic,1,"stranger"),owner),null);
+assert.equal(parseReceipt({...make(basic,1),body:"invalid"},owner),null);
+assert.equal(receiptDashboard({comments:[make(basic,1),make(approved,2)],owner}).rows[0].state,"OWNER_APPROVED");
+const invalid=receiptDashboard({comments:[make(approved,2),make(basic,1),make(basic,3,"stranger")],owner});
+assert.equal(invalid.rows[0].evidenceCount,2);
+assert.equal(invalid.rejected.length,0);
+assert.equal(invalid.rows[0].recoveryVerified,false);
+const bad=receiptDashboard({comments:[make(approved,1)],owner});
+assert.equal(bad.rejected.length,1);
+assert.match(dashboardMarkdown(bad),/Invalid or out-of-sequence/);
+assert.throws(()=>receiptDashboard({comments:Array(251).fill(make(basic,1)),owner}),/limit/);
+console.log("Build 579 receipts, trust, ordering, boundedness and dashboard PASS");
