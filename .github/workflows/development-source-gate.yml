@@ -16,8 +16,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-current-source-gate-${{ github.ref }}
-  cancel-in-progress: true
+  group: rosiedazzlers-current-source-gate-${{ github.event_name }}-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
 
 jobs:
   source-gate-partition-a:
