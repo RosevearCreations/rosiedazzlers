@@ -59,3 +59,6 @@ console.log("Release health monitor: exact-SHA, live drift, stale, failed, pendi
 
 // Build 578: retain deterministic remediation decision acceptance in release-health gate.
 await import('./release_incident_decision_ledger_test.mjs');
+
+// Build 579: require persisted receipt dashboard safety regressions in source gate.
+await import('./release_incident_receipt_dashboard_test.mjs');
