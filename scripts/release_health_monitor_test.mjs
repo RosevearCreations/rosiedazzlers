@@ -93,3 +93,6 @@ await import('./release_incident_external_register_review_cli_test.mjs');
 
 // Build 588: pin revision continuity and require signed, chained manual owner exception history.
 await import('./release_incident_external_register_continuity_test.mjs');
+
+// Build 589: independently pinned Ed25519 owner exception registers and advisory escalation ledger.
+await import('./release_incident_external_exception_register_test.mjs');
