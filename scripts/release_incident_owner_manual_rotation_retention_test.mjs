@@ -30,3 +30,6 @@ await fail({rotationReceipt:{...receipt,signature:"AAAA"}});
 assert.throws(()=>manualRotationClaims({verified,previousHead:verified.ownerDecisionDigest,
  newHead:verified.ownerDecisionDigest,rotationRef:"owner:bad",issuedAt:claims.issuedAt}),/HOLD/);
 console.log("Build 604 signed manual head rotation and independent retention PASS");
+
+// Build 605 synthetic independently pinned manual rotation fixture.
+export const build604Fixture={args,owner,pem,fp,now};
