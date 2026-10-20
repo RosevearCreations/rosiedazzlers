@@ -93,6 +93,8 @@ assert.equal(verifiedHandoff.ownerReviewRequired,true);
 assert.equal(verifiedHandoff.auditHoldCleared,false);
 assert.equal(verifiedHandoff.automaticClosure,false);
 await assert.rejects(verifyManualExceptionHandoff({...handoffArgs,
+  ownerPublicKeyPem:pem(impostor),pinnedOwnerFingerprint:fp(impostor)}),/retained owner key/);
+await assert.rejects(verifyManualExceptionHandoff({...handoffArgs,
   receipts:[second]}),/predecessor changed|mismatch/);
 await assert.rejects(verifyManualExceptionHandoff({...handoffArgs,
   receipts:[first]}),/head pin missing/);
@@ -112,4 +114,7 @@ assert.throws(()=>manualExceptionHandoffClaims({retainedProof:{
   ...proven,status:"VERIFIED"},issueNumber:77,incidentRef:"issue:77",
   action:"REQUEST_MANUAL_REVIEW",handoffRef:"owner:bad",
   issuedAt:"2026-10-20T08:05:00.000Z"}),/HOLD/);
+until="2026-11-02T00:00:00.000Z";
+await assert.rejects(retainOwnerReviewHead({...inputs,
+  objectKey:"rosie/owner-review/77/short-lock-591.json"}),/shorter than approved/);
 console.log("Build 591 independent WORM head retention, separate object pin, owner handoff signatures and fail-closed governance PASS");
