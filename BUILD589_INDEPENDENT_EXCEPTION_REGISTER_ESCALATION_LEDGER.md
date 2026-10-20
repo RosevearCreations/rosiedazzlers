@@ -15,7 +15,7 @@ The verification API accepts:
 `verifyExceptionRegisterHistory({revisions,continuityArguments,ownerReceipts,ownerPublicKeyPem,pinnedOwnerFingerprint,pinnedSourceRegisterFingerprint,pinnedExceptionSignerFingerprint,now})`
 where each revision contains `signedRegister`, `publicKeyPem`, `pinnedSignerFingerprint` and `externalPin`, and `continuityArguments` contains the complete Build 588 independently pinned source rotation-register revisions, GitHub comments and detached signed owner/archive evidence. The adapter deliberately performs **no** mutations.
 
-Use `ownerEscalationLedger({history,now,reviewAfterDays})` only with the verified history returned by the verifier. This is an advisory ledger; actual owner review is still required.
+Use `ownerEscalationLedger({verifyArguments,now,reviewAfterDays})` with the full separately pinned arguments required by `verifyExceptionRegisterHistory`. It **re-runs signature and continuity verification**, refusing a caller-supplied `status: VERIFIED` object. This is an advisory ledger; actual owner review is still required.
 
 ## Tests and production gate
 - `node scripts/release_incident_external_exception_register_test.mjs`
