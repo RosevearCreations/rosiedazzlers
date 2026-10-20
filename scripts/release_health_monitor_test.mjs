@@ -126,3 +126,6 @@ await import('./release_incident_followup_handoff_review_test.mjs');
 
 // Build 599: metadata-only owner decision receipt export and independent reviewer acknowledgement.
 await import('./release_incident_owner_handoff_decision_export_test.mjs');
+
+// Build 600: independently pinned recipient acknowledgement and manual owner follow-up history.
+await import('./release_incident_recipient_acknowledgement_ledger_test.mjs');
