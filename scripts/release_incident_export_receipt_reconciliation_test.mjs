@@ -60,7 +60,7 @@ await assert.rejects(badReconciliation({recipientReceipt:{...signedAck,
 await assert.rejects(badReconciliation({recipientReceipt:{...signedAck,
  claims:{...claims,exportDigest:"f".repeat(64)}}}),/provenance/);
 await assert.rejects(badReconciliation({recipientReceipt:signature({...claims,
- receivedAt:"2026-10-20T09:40:00.000Z"},recipient)}),/predates/);
+ receivedAt:"2026-10-20T09:47:00.000Z"},recipient)}),/predates/);
 await assert.rejects(badReconciliation({recipientReceipt:signature({...claims,
  receivedAt:"2026-10-20T11:00:00.000Z"},recipient)}),/future/);
 await assert.rejects(badReconciliation({handoffArguments:{
