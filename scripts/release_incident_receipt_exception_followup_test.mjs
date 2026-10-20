@@ -100,3 +100,6 @@ assert.throws(()=>ownerReceiptReconciliationClaims({verifiedEvidence:evidence,
  issuedAt:"2026-10-20T09:59:00.000Z"}),/HOLD/);
 assert.equal(JSON.stringify(workbench).includes("signature"),false);
 console.log("Build 596 independent receipt follow-up signer, pinned manual reconciliation and no-close workbench PASS");
+
+// Build 597 synthetic signed owner follow-up fixture, never live keys or approvals.
+export const build596Fixture={params,owner,investigator,impostor,pem,fp,signature,now};
