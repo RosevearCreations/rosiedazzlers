@@ -129,3 +129,6 @@ await import('./release_incident_owner_handoff_decision_export_test.mjs');
 
 // Build 600: independently pinned recipient acknowledgement and manual owner follow-up history.
 await import('./release_incident_recipient_acknowledgement_ledger_test.mjs');
+
+// Build 601: complete signed recipient exception review and independently pinned owner handoff.
+await import('./release_incident_owner_exception_handoff_test.mjs');
