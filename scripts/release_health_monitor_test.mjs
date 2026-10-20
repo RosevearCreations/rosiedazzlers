@@ -135,3 +135,6 @@ await import('./release_incident_owner_exception_handoff_test.mjs');
 
 // Build 602: require independent signed handoff reconciliation and manual-only review.
 await import('./release_incident_owner_handoff_reconciliation_test.mjs');
+
+// Build 603: independently pinned reconciliation history and manual owner continuity.
+await import('./release_incident_reconciliation_history_test.mjs');
