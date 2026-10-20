@@ -65,3 +65,6 @@ assert.throws(()=>signedCloseoutDecisionClaims({candidate:{...candidate,status:"
  issueNumber:sourceIssue,action:"DEFER_REVIEW",
  decisionRef:"owner:unsafe",issuedAt:"2026-10-20T09:30:00.000Z"}),/HOLD/);
 console.log("Build 593 signed owner closeout decisions, independent ledger pin and read-only workbench PASS");
+
+// Build 594 consumes only synthetic Ed25519 source proofs for cumulative tests.
+export const build593Fixture={params,owner,impostor,pem,fp,signature,now};
