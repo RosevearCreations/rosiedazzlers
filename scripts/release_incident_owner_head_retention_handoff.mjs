@@ -84,7 +84,7 @@ function checkLock(lock,key,versionId,now,minRetentionDays){
   const until=Date.parse(lock?.retainUntil||"");
   if(lock?.key!==key||lock?.versionId!==versionId||
     lock?.mode!=="COMPLIANCE"||!Number.isFinite(until)||
-    until<new Date(now).getTime()+Math.max(0,minRetentionDays*DAY-(minRetentionDays?60000:0))
+    until<new Date(now).getTime()+Math.max(0,minRetentionDays*DAY-(minRetentionDays?60000:0)))
     throw Error("Exact-version S3 COMPLIANCE retention is shorter than approved: HOLD");
   return new Date(until).toISOString();
 }
