@@ -1,0 +1,23 @@
+import assert from "node:assert/strict";
+import {collectIssueComments,createAuditSnapshot,verifyAuditSnapshot} from "./release_incident_audit_snapshot.mjs";
+const owner="RosevearCreations",sha="a".repeat(40);
+const decision={incidentSha:sha,decisionId:"incident-580",action:"observe",owner,reason:"review",state:"PROPOSED"};
+const comment={id:1,user:{login:owner},body:"RD-REMEDIATION-RECEIPT "+JSON.stringify(decision),updated_at:"2026-10-19"};
+const request=async (url,options)=>{
+ assert.match(url,/github.com\/repos\/RosevearCreations\/rosiedazzlers\/issues\/1\/comments/);
+ assert.equal(options.headers.Authorization,"Bearer test-token");
+ return {ok:true,json:async()=>[comment]};
+};
+const comments=await collectIssueComments({owner,repo:"rosiedazzlers",issueNumber:1,token:"test-token",request});
+assert.equal(comments.length,1);
+const snap=createAuditSnapshot({comments,owner,repository:"RosevearCreations/rosiedazzlers",issueNumber:1});
+assert.equal(verifyAuditSnapshot(snap),true);
+assert.equal(verifyAuditSnapshot({...snap,scanned:999}),false);
+const changed=createAuditSnapshot({comments:[{...comment,body:"altered"}],owner,repository:"RosevearCreations/rosiedazzlers",issueNumber:1});
+assert.notEqual(snap.digest,changed.digest);
+const chained=createAuditSnapshot({comments,owner,repository:"RosevearCreations/rosiedazzlers",issueNumber:1,previousHash:snap.digest});
+assert.equal(verifyAuditSnapshot(chained,snap.digest),true);
+assert.equal(verifyAuditSnapshot(chained,null),false);
+await assert.rejects(collectIssueComments({owner,repo:"rosiedazzlers",issueNumber:1,token:"test-token",request:async()=>({ok:false,status:403})}),/HTTP 403/);
+await assert.rejects(collectIssueComments({owner,repo:"rosiedazzlers",issueNumber:1,token:"",request}),/token/);
+console.log("Build 580 privilege, bounded collection and tamper-evidence PASS");

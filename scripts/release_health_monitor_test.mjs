@@ -62,3 +62,13 @@ await import('./release_incident_decision_ledger_test.mjs');
 
 // Build 579: require persisted receipt dashboard safety regressions in source gate.
 await import('./release_incident_receipt_dashboard_test.mjs');
+
+// Build 580 privileged collector and chained audit snapshot acceptance.
+await import('./release_incident_audit_snapshot_test.mjs');
+
+// Build 581: trusted retention contract acceptance.
+await import('./release_incident_trusted_retention_test.mjs');
+
+// Build 582: AWS WORM provider and scheduled, owner-scoped operations tests.
+await import('./release_incident_s3_worm_adapter_test.mjs');
+await import('./release_incident_worm_operations_test.mjs');
