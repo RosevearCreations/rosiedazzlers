@@ -79,3 +79,6 @@ await import('./release_incident_audit_review_operations_test.mjs');
 
 // Build 584: pinned cryptographic anchor and proposal-only owner rotation proof.
 await import('./release_incident_anchor_provenance_test.mjs');
+
+// Build 585: require signed owner rotation chain and manual acceptance proofs.
+await import('./release_incident_manual_rotation_acceptance_test.mjs');
