@@ -17,17 +17,19 @@ assert.throws(()=>verifyAnchorProvenance({...args,manifest:{...m,expectedDigest:
 assert.throws(()=>verifyAnchorProvenance({...args,attestation:{...attestation,signature:"A".repeat(86)+"=="}}),/signature/);
 assert.throws(()=>verifyAnchorProvenance({...args,now:new Date("2026-10-18T00:00:00Z")}),/future/);
 const review={status:"VERIFIED",expiry:{status:"ACTIVE"}};
-assert.equal(rotationDecisionWorkbench({manifest:m,provenance:proof,review}).status,"OWNER_REVIEW_REQUIRED");
-assert.equal(rotationDecisionWorkbench({manifest:m,provenance:proof,review:{status:"HOLD"}}).status,"HOLD");
+const verifyInputs={attestation,publicKeyPem:pem,trustedFingerprint,now:new Date("2026-10-20T00:00:00Z")};
+assert.equal(rotationDecisionWorkbench({manifest:m,...verifyInputs,review}).status,"OWNER_REVIEW_REQUIRED");
+assert.equal(rotationDecisionWorkbench({manifest:m,...verifyInputs,review:{status:"HOLD"}}).status,"HOLD");
 const decision={actor:"RosevearCreations",reference:"issue:12",action:"PROPOSE_ROTATION"};
 const successor={...m,versionId:"version-585",key:"rosie/audit/archive-585.json",
  expectedDigest:"b".repeat(64),previousHash:m.expectedDigest};
-const proposal=rotationDecisionWorkbench({manifest:m,provenance:proof,review,ownerDecision:decision,successor});
+const proposal=rotationDecisionWorkbench({manifest:m,...verifyInputs,review,ownerDecision:decision,successor});
+assert.equal(rotationDecisionWorkbench({manifest:m,review,provenance:{verified:true,fingerprint:trustedFingerprint},ownerDecision:decision,successor}).status,"HOLD");
 assert.equal(proposal.status,"ROTATION_PROPOSED");
 assert.equal(proposal.requiresIndependentSignature,true);
-assert.equal(rotationDecisionWorkbench({manifest:m,provenance:proof,review,ownerDecision:decision,
+assert.equal(rotationDecisionWorkbench({manifest:m,...verifyInputs,review,ownerDecision:decision,
  successor:{...successor,previousHash:"c".repeat(64)}}).status,"HOLD");
-assert.equal(rotationDecisionWorkbench({manifest:m,provenance:proof,review,ownerDecision:{...decision,actor:"stranger"},successor}).status,"HOLD");
-assert.equal(rotationDecisionWorkbench({manifest:m,provenance:proof,review,
+assert.equal(rotationDecisionWorkbench({manifest:m,...verifyInputs,review,ownerDecision:{...decision,actor:"stranger"},successor}).status,"HOLD");
+assert.equal(rotationDecisionWorkbench({manifest:m,...verifyInputs,review,
  ownerDecision:{...decision,action:"DEFER"}}).status,"DEFERRED");
 console.log("Build 584 cryptographic provenance and owner rotation workbench PASS");

@@ -36,10 +36,10 @@ export function verifyAnchorProvenance({manifest,attestation,publicKeyPem,truste
   return {verified:true,signer:claims.signer,signedAt:claims.signedAt,
     fingerprint,independentEvidenceRef:claims.independentEvidenceRef};
 }
-export function rotationDecisionWorkbench({manifest,provenance,review,ownerDecision=null,successor=null}){
+export function rotationDecisionWorkbench({manifest,attestation,publicKeyPem,trustedFingerprint,review,ownerDecision=null,successor=null,now=new Date()}){
   const m=validateOwnerEvidence(manifest);
-  if(provenance?.verified!==true||!SHA.test(provenance.fingerprint||""))
-    return {status:"HOLD",reason:"Independent provenance proof unavailable"};
+  try{verifyAnchorProvenance({manifest:m,attestation,publicKeyPem,trustedFingerprint,now})}
+  catch{return {status:"HOLD",reason:"Independent signature or key provenance unavailable"}}
   if(!review||!["VERIFIED","REVIEW","HOLD"].includes(review.status))
     return {status:"HOLD",reason:"Exact-version owner audit review missing"};
   if(review.status==="HOLD"||review.expiry?.status==="EXPIRED")
