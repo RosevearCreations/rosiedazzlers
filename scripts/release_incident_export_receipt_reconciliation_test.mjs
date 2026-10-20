@@ -85,3 +85,6 @@ assert.throws(()=>ownerReceiptReviewClaims({reconciled:rec,sequence:1,
  issuedAt:"2026-10-20T09:55:00.000Z"}),/HOLD/);
 assert.equal(JSON.stringify(workbench).includes("signature"),false);
 console.log("Build 595 recipient signed export reconciliation, independently pinned owner review history, replay HOLD and no-close workbench PASS");
+
+// Build 596 reuses synthetic independently signed recipient/owner register evidence.
+export const build595Fixture={args,owner,recipient,impostor,pem,fp,signature,now};

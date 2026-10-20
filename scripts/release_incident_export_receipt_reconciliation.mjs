@@ -146,6 +146,7 @@ export async function verifyOwnerHandoffReviewRegister({
      !REF.test(independentRegisterHeadPin.externalReference||""))
     throw Error("Independent complete signed owner handoff review register head missing: HOLD");
   return {status:"INDEPENDENT_OWNER_HANDOFF_REVIEW_REGISTER_VERIFIED",
+    issueNumber:reconciled.issueNumber,incidentRef:reconciled.incidentRef,
     exportDigest:reconciled.exportDigest,
     recipientReceiptDigest:reconciled.recipientReceiptDigest,
     registerHeadDigest:previous,receiptCount:entries.length,
