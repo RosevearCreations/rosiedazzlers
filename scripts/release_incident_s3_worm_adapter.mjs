@@ -57,11 +57,11 @@ export function s3ComplianceAdapter({config,run=awsCli,now=()=>new Date()}) {
     if(!head?.VersionId) throw Error("S3 immutable object VersionId unavailable: HOLD");
     return head.VersionId;
   }
-  async function verifyLock(key,version){
+  async function verifyLock(key,version,minimumUntil=now().getTime()){
     const lock=await s3("get-object-retention",[...b,"--key",key,"--version-id",version]);
     const mode=lock?.Retention?.Mode;
     const until=Date.parse(lock?.Retention?.RetainUntilDate||"");
-    if(mode!=="COMPLIANCE"||!Number.isFinite(until)||until<=now().getTime())
+    if(mode!=="COMPLIANCE"||!Number.isFinite(until)||until<minimumUntil)
       throw Error("S3 object version is not locked in COMPLIANCE mode: HOLD");
   }
   async function createOnce(key,value){
@@ -77,7 +77,7 @@ export function s3ComplianceAdapter({config,run=awsCli,now=()=>new Date()}) {
         "--object-lock-mode","COMPLIANCE","--object-lock-retain-until-date",until]);
       if(!put?.VersionId) throw Error("Object Lock upload gave no VersionId: HOLD");
       versions.set(key,put.VersionId);
-      await verifyLock(key,put.VersionId);
+      await verifyLock(key,put.VersionId,Date.parse(until)-60000);
       return {created:true,versionId:put.VersionId};
     }finally{await rm(dir,{recursive:true,force:true});}
   }
