@@ -108,3 +108,6 @@ await import('./release_incident_review_head_rotation_closeout_test.mjs');
 
 // Build 593: complete owner-signed closeout decision history, external head and read-only owner workbench.
 await import('./release_incident_signed_closeout_decision_ledger_test.mjs');
+
+// Build 594: cryptographically reverified redacted closeout evidence export and signed manual handoff.
+await import('./release_incident_manual_closeout_evidence_export_test.mjs');
