@@ -55,6 +55,8 @@ export function verifiedReviewHeadEnvelope({verifyArguments,reviewReceipts,
     !SHA.test(payload.ownerSignerFingerprint)||
     !REF.test(payload.independentReviewHeadRef))
     throw Error("Exact independently anchored owner review head incomplete: HOLD");
+  if(issued<checkedTime(payload.lastOwnerReviewAt))
+    throw Error("Archived review head cannot predate its last signed owner review: HOLD");
   const contentDigest=digestOf(payload);
   return {payload,contentDigest};
 }
@@ -82,7 +84,7 @@ function checkLock(lock,key,versionId,now,minRetentionDays){
   const until=Date.parse(lock?.retainUntil||"");
   if(lock?.key!==key||lock?.versionId!==versionId||
     lock?.mode!=="COMPLIANCE"||!Number.isFinite(until)||
-    until<new Date(now).getTime()+minRetentionDays*DAY-60000)
+    until<new Date(now).getTime()+Math.max(0,minRetentionDays*DAY-(minRetentionDays?60000:0))
     throw Error("Exact-version S3 COMPLIANCE retention is shorter than approved: HOLD");
   return new Date(until).toISOString();
 }
@@ -169,8 +171,9 @@ export function manualExceptionHandoffClaims({retainedProof,issueNumber,incident
     recordDigest:retainedProof.recordDigest,reviewHeadDigest:retainedProof.reviewHeadDigest,
     incidentRef,action,owner:"RosevearCreations",handoffRef,issuedAt,previousHandoffDigest};
 }
-export function verifyManualExceptionHandoff({retainedProof,issueNumber,receipts,
+export async function verifyManualExceptionHandoff({retentionVerification,issueNumber,receipts,
   ownerPublicKeyPem,pinnedOwnerFingerprint,independentHandoffHeadPin,now=new Date()}){
+  const retainedProof=await verifyRetainedOwnerReviewHead({...retentionVerification,now});
   if(!Array.isArray(receipts)||receipts.length<1||receipts.length>100)
     throw Error("Complete signed manual handoff history required: HOLD");
   const key=trustedOwnerKey(ownerPublicKeyPem,pinnedOwnerFingerprint);
