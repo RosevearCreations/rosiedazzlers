@@ -85,3 +85,6 @@ assert.throws(()=>independentExportReviewReceiptClaims({prepared,ownerHandoffDig
  recipientRef:claims.recipientRef,ackRef:"test:1",disposition:"CLOSE_AUDIT_HOLD",
  receivedAt:"2026-10-20T10:00:00.000Z"}),/HOLD/);
 console.log("Build 599 metadata decision export, independent owner/recipient signatures, pin and no-close review PASS");
+
+// Build 600 synthetic owner and independently signed recipient export fixture.
+export const build599Fixture={args,owner,recipient,reviewer,impostor,pem,fp,signature,now};
