@@ -130,3 +130,6 @@ await assert.rejects(evaluateExplicitOwnerExceptionCloseout({...closeoutArgs,
 await assert.rejects(evaluateExplicitOwnerExceptionCloseout({...closeoutArgs,
  rotationArguments:{...rotationArguments,independentRotationPin:null}}),/rotation-register/);
 console.log("Build 592 external review-head rotation, signed auditor resolution and manual-only exception closeout safeguards PASS");
+
+// Build 593 shares only synthetic signed cryptographic test data.
+export const build592Fixture={closeoutArgs,owner,impostor,pem,fp,signature,now};
