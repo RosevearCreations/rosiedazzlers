@@ -181,7 +181,10 @@ export function verifyExceptionRegisterHistory({revisions,continuityArguments,
   return {status:"EXTERNAL_EXCEPTION_HISTORY_VERIFIED",latest:last,
     revisions:checked,externalWritePerformed:false};
 }
-export function ownerEscalationLedger({history,now=new Date(),reviewAfterDays=7}){
+export function ownerEscalationLedger({verifyArguments,now=new Date(),reviewAfterDays=7}){
+  if(!verifyArguments||typeof verifyArguments!=="object")
+    throw Error("Fresh independently pinned exception-register verification inputs required: HOLD");
+  const history=verifyExceptionRegisterHistory({...verifyArguments,now});
   if(history?.status!=="EXTERNAL_EXCEPTION_HISTORY_VERIFIED"||
     !Array.isArray(history.latest?.decisions)||
     !Number.isInteger(reviewAfterDays)||reviewAfterDays<1||reviewAfterDays>365)
