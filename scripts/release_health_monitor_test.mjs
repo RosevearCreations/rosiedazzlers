@@ -144,3 +144,6 @@ await import('./release_incident_owner_manual_rotation_retention_test.mjs');
 
 // Build 605: independently signed rotated head review and separate manual owner retention acceptance.
 await import('./release_incident_rotated_head_retention_acceptance_test.mjs');
+
+// Build 606: independent retained head manual follow-up source gate.
+await import('./release_incident_retention_followup_test.mjs');
