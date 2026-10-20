@@ -117,3 +117,6 @@ await import('./release_incident_export_receipt_reconciliation_test.mjs');
 
 // Build 596: independently signed recipient-exception follow-up and manual owner reconciliation.
 await import('./release_incident_receipt_exception_followup_test.mjs');
+
+// Build 597: independently pinned exact-version follow-up head and owner manual handoff.
+await import('./release_incident_followup_head_retention_handoff_test.mjs');
