@@ -51,7 +51,7 @@ const secondEvidence=proof(second,third,"2026-10-19T11:00:00.000Z","2026-10-19T1
 const secondReceipt=prepareHandoff({evidence:secondEvidence,previousReceiptDigest:record.receiptDigest,
   issuedAt:"2026-10-20T05:30:00.000Z"});
 assert.equal(crossAnchorHistory({comments:[make(secondReceipt,102),first],expectedIssueNumber:77}).entries.length,2);
-assert.throws(()=>crossAnchorHistory({comments:[first,make({...secondReceipt,previousReceiptDigest:"c".repeat(64)},102)]),/hash mismatch|diverged/);
+assert.throws(()=>crossAnchorHistory({comments:[first,make({...secondReceipt,previousReceiptDigest:"c".repeat(64)},102)]}),/hash mismatch|diverged/);
 const outsider=make(record,90,"unauthorized");
 assert.deepEqual(crossAnchorHistory({comments:[outsider,first]}).unauthorized,[90]);
 const independentEvidence=new Map([[record.receiptDigest,evidence],[secondReceipt.receiptDigest,secondEvidence]]);
