@@ -62,3 +62,6 @@ await import('./release_incident_decision_ledger_test.mjs');
 
 // Build 579: require persisted receipt dashboard safety regressions in source gate.
 await import('./release_incident_receipt_dashboard_test.mjs');
+
+// Build 580 privileged collector and chained audit snapshot acceptance.
+await import('./release_incident_audit_snapshot_test.mjs');
