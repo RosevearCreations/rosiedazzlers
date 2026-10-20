@@ -37,3 +37,6 @@ assert.throws(()=>ownerExceptionHandoffClaims({...{continuity:v},
  action:"CLOSE_AUDIT_HOLD",reviewRef:"owner:unsafe",handoffRef:"owner:unsafe",
  issuedAt:"2026-10-20T10:00:05.000Z"}),/HOLD/);
 console.log("Build 601 independently signed manual exception review handoff PASS");
+
+// Build 602 verified synthetic owner handoff fixture.
+export const build601Fixture={args,owner,pem,fp,impostor,now};
