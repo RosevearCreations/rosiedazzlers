@@ -101,12 +101,13 @@ const result=verifyExceptionRegisterHistory(input);
 assert.equal(result.status,"EXTERNAL_EXCEPTION_HISTORY_VERIFIED");
 assert.equal(result.revisions.length,2);
 assert.equal(result.latest.decisions.length,2);
-const ledger=ownerEscalationLedger({history:result,now,reviewAfterDays:7});
+const ledger=ownerEscalationLedger({verifyArguments:input,now,reviewAfterDays:7});
 assert.equal(ledger.status,"READ_ONLY_ESCALATION_LEDGER");
 assert.equal(ledger.rows[0].reviewStatus,"OWNER_REVIEW_OPEN");
 assert.equal(ledger.rows[0].auditHoldCleared,false);
 assert.equal(ledger.automaticEscalation,false);
-assert.equal(ownerEscalationLedger({history:result,now:new Date("2026-10-31T08:00:00.000Z"),
+assert.throws(()=>ownerEscalationLedger({history:result,now}),/HOLD/);
+assert.equal(ownerEscalationLedger({verifyArguments:input,now:new Date("2026-10-31T08:00:00.000Z"),
  reviewAfterDays:7}).rows[0].reviewStatus,"OWNER_ESCALATION_REVIEW_DUE");
 assert.throws(()=>verifyExceptionRegisterHistory({...input,
  pinnedExceptionSignerFingerprint:fp(impostor)}),/signing identity/);
@@ -119,9 +120,9 @@ assert.throws(()=>verifyExceptionRegisterHistory({...input,
 const tampered=register([{...all[0],ownerApprovalRef:"owner:changed"},all[1]],
  2,"2026-10-20T06:45:00.000Z",exceptionRegisterDigest(record1));
 assert.throws(()=>verifyExceptionRegisterHistory({...input,
- revisions:[versions[0],rev(tampered)]}),/rewritten|differs/);
+ revisions:[versions[0],rev(tampered)]}),/rewritten|differs|altered|incomplete/);
 assert.throws(()=>verifyExceptionRegisterHistory({...input,
  revisions:[versions[0],{...versions[1],externalPin:{
  ...versions[1].externalPin,registerDigest:"f".repeat(64)}}]}),/pin/);
-assert.throws(()=>ownerEscalationLedger({history:{status:"HOLD"}}),/HOLD/);
+assert.throws(()=>ownerEscalationLedger({verifyArguments:{status:"EXTERNAL_EXCEPTION_HISTORY_VERIFIED"}}),/HOLD/);
 console.log("Build 589 externally pinned Ed25519 exception register, chronology, audit linkage, read-only escalation PASS");
