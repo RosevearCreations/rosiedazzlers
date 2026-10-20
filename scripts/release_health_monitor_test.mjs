@@ -129,3 +129,18 @@ await import('./release_incident_owner_handoff_decision_export_test.mjs');
 
 // Build 600: independently pinned recipient acknowledgement and manual owner follow-up history.
 await import('./release_incident_recipient_acknowledgement_ledger_test.mjs');
+
+// Build 601: complete signed recipient exception review and independently pinned owner handoff.
+await import('./release_incident_owner_exception_handoff_test.mjs');
+
+// Build 602: require independent signed handoff reconciliation and manual-only review.
+await import('./release_incident_owner_handoff_reconciliation_test.mjs');
+
+// Build 603: independently pinned reconciliation history and manual owner continuity.
+await import('./release_incident_reconciliation_history_test.mjs');
+
+// Build 604: complete independently retained signed manual head rotation.
+await import('./release_incident_owner_manual_rotation_retention_test.mjs');
+
+// Build 605: independently signed rotated head review and separate manual owner retention acceptance.
+await import('./release_incident_rotated_head_retention_acceptance_test.mjs');
