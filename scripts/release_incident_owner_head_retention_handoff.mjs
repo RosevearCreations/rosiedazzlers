@@ -145,6 +145,7 @@ export async function verifyRetainedOwnerReviewHead({verifyArguments,reviewRecei
   return {status:"INDEPENDENTLY_PINNED_OWNER_HEAD_RETAINED",
     recordDigest:pin.recordDigest,reviewHeadDigest:pin.reviewHeadDigest,
     issueNumber:record.payload.issueNumber,
+    ownerSignerFingerprint:record.payload.ownerSignerFingerprint,
     objectKey:pin.objectKey,versionId:pin.versionId,
     externalReference:pin.externalReference,retainedUntil,
     automaticClosure:false,externalWritePerformed:false};
@@ -176,6 +177,8 @@ export function manualExceptionHandoffClaims({retainedProof,issueNumber,incident
 export async function verifyManualExceptionHandoff({retentionVerification,issueNumber,receipts,
   ownerPublicKeyPem,pinnedOwnerFingerprint,independentHandoffHeadPin,now=new Date()}){
   const retainedProof=await verifyRetainedOwnerReviewHead({...retentionVerification,now});
+  if(pinnedOwnerFingerprint!==retainedProof.ownerSignerFingerprint)
+    throw Error("Manual handoff signer must match independently verified retained owner key: HOLD");
   if(!Array.isArray(receipts)||receipts.length<1||receipts.length>100)
     throw Error("Complete signed manual handoff history required: HOLD");
   const key=trustedOwnerKey(ownerPublicKeyPem,pinnedOwnerFingerprint);
