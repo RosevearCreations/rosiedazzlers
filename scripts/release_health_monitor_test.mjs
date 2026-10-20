@@ -120,3 +120,6 @@ await import('./release_incident_receipt_exception_followup_test.mjs');
 
 // Build 597: independently pinned exact-version follow-up head and owner manual handoff.
 await import('./release_incident_followup_head_retention_handoff_test.mjs');
+
+// Build 598: independently signed follow-up handoff receipt and manual owner governance.
+await import('./release_incident_followup_handoff_review_test.mjs');

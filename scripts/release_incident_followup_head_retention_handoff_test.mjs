@@ -115,3 +115,6 @@ assert.throws(()=>manualFollowUpHandoffClaims({retained:{...verified,status:"VER
  action:"REQUEST_MANUAL_RECONCILIATION",handoffRef:"owner:bad",
  issuedAt:"2026-10-20T09:59:55.000Z"}),/HOLD/);
 console.log("Build 597 manual-only WORM follow-up head, external pins and signed no-close owner handoff PASS");
+
+// Build 598 reuses synthetic pinned WORM and signed manual owner handoff evidence.
+export const build597Fixture={handoffArgs,owner,impostor,pem,fp,signature,now};
