@@ -93,6 +93,29 @@ export function s3ComplianceAdapter({config,run=awsCli,now=()=>new Date()}) {
       return JSON.parse(await readFile(filename,"utf8"));
     }finally{await rm(dir,{recursive:true,force:true});}
   }
+  async function retentionEvidence(key,versionId){
+    if(!ready) await ensureReady();
+    if(!KEY.test(key||"")||typeof versionId!=="string"||
+       !versionId||versionId.length>256||/[\x00-\x1f\x7f]/.test(versionId)||versionId==="null")
+      throw Error("Exact key and immutable VersionId required: HOLD");
+    const lock=await s3("get-object-retention",[...b,"--key",key,"--version-id",versionId]);
+    const until=Date.parse(lock?.Retention?.RetainUntilDate||"");
+    if(lock?.Retention?.Mode!=="COMPLIANCE"||!Number.isFinite(until))
+      throw Error("Exact object version lacks COMPLIANCE retention evidence: HOLD");
+    return {key,versionId,mode:"COMPLIANCE",retainUntil:new Date(until).toISOString(),
+      bucket,account};
+  }
+  async function readVersioned(key,versionId){
+    await retentionEvidence(key,versionId);
+    const dir=await mkdtemp(join(tmpdir(),"rd-audit-"));
+    const filename=join(dir,"snapshot.json");
+    try{
+      await s3("get-object",[...b,"--key",key,"--version-id",versionId,filename]);
+      const bytes=await readFile(filename,"utf8");
+      if(bytes.length>1024*1024)throw Error("Audit evidence exceeds review size limit: HOLD");
+      return JSON.parse(bytes);
+    }finally{await rm(dir,{recursive:true,force:true});}
+  }
   return {capabilities:{immutableCreate:true,retentionLock:true,independentTrustRoot:true},
-    ensureReady,createOnce,read};
+    ensureReady,createOnce,read,retentionEvidence,readVersioned};
 }

@@ -34,6 +34,12 @@ const retained=await retainSnapshot({snapshot,adapter,key:"rosie/audit/582",owne
 assert.equal(retained.status,"RETAINED");
 assert.equal(uploads,1);
 assert.equal((await ownerAuditEvidence({adapter,key:"rosie/audit/582",expectedDigest:snapshot.digest})).status,"VERIFIED");
+const retentionProof=await adapter.retentionEvidence("rosie/audit/582","version-1");
+assert.equal(retentionProof.mode,"COMPLIANCE");
+assert.equal(retentionProof.versionId,"version-1");
+const storedVersion=await adapter.readVersioned("rosie/audit/582","version-1");
+assert.equal(storedVersion.snapshot.digest,snapshot.digest);
+await assert.rejects(adapter.readVersioned("rosie/audit/582","null"),/VersionId/);
 expires="2026-10-20T00:00:00Z";
 await assert.rejects(adapter.createOnce("rosie/audit/short",{snapshot}),/COMPLIANCE|locked/);
 expires="2030-01-01T00:00:00Z";

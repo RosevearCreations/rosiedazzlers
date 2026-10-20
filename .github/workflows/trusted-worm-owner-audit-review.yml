@@ -1,0 +1,59 @@
+name: Trusted WORM Audit Retrieval & Expiry Review
+
+on:
+  schedule:
+    - cron: '41 14 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: read
+  id-token: write
+
+concurrency:
+  group: rosiedazzlers-worm-owner-audit-review
+  cancel-in-progress: false
+
+jobs:
+  read-only-audit-review:
+    name: Independently anchored WORM evidence review
+    if: github.ref == 'refs/heads/main' && vars.RD_WORM_AUDIT_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout trusted main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate retrieval and owner evidence review contracts
+        run: |
+          node scripts/release_incident_audit_retrieval_review_test.mjs
+          node scripts/release_incident_audit_review_operations_test.mjs
+      - name: Obtain audit read-only AWS credentials through OIDC
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: ${{ vars.RD_WORM_AUDIT_ROLE_ARN }}
+          aws-region: ${{ vars.RD_WORM_REGION }}
+      - name: Compare exact locked object to separately retained owner anchor and GitHub source
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RD_WORM_AUDIT_ENABLED: ${{ vars.RD_WORM_AUDIT_ENABLED }}
+          RD_WORM_OWNER_ANCHOR_CONFIRMED: ${{ vars.RD_WORM_OWNER_ANCHOR_CONFIRMED }}
+          RD_WORM_AUDIT_KEY: ${{ vars.RD_WORM_AUDIT_KEY }}
+          RD_WORM_AUDIT_VERSION_ID: ${{ vars.RD_WORM_AUDIT_VERSION_ID }}
+          RD_WORM_AUDIT_DIGEST: ${{ vars.RD_WORM_AUDIT_DIGEST }}
+          RD_WORM_AUDIT_PREVIOUS_HASH: ${{ vars.RD_WORM_AUDIT_PREVIOUS_HASH }}
+          RD_WORM_AUDIT_APPROVAL_REF: ${{ vars.RD_WORM_AUDIT_APPROVAL_REF }}
+          RD_WORM_AUDIT_INDEPENDENT_REF: ${{ vars.RD_WORM_AUDIT_INDEPENDENT_REF }}
+          RD_WORM_ISSUE_NUMBER: ${{ vars.RD_WORM_ISSUE_NUMBER }}
+          RD_WORM_EXPIRY_WARNING_DAYS: ${{ vars.RD_WORM_EXPIRY_WARNING_DAYS }}
+          RD_WORM_BUCKET: ${{ vars.RD_WORM_BUCKET }}
+          RD_WORM_REGION: ${{ vars.RD_WORM_REGION }}
+          RD_WORM_ACCOUNT_ID: ${{ vars.RD_WORM_ACCOUNT_ID }}
+          RD_WORM_RETENTION_DAYS: ${{ vars.RD_WORM_RETENTION_DAYS }}
+        run: node scripts/release_incident_audit_review_operations.mjs

@@ -72,3 +72,13 @@ await import('./release_incident_trusted_retention_test.mjs');
 // Build 582: AWS WORM provider and scheduled, owner-scoped operations tests.
 await import('./release_incident_s3_worm_adapter_test.mjs');
 await import('./release_incident_worm_operations_test.mjs');
+
+// Build 583: exact-version WORM retrieval and independent owner audit review.
+await import('./release_incident_audit_retrieval_review_test.mjs');
+await import('./release_incident_audit_review_operations_test.mjs');
+
+// Build 584: pinned cryptographic anchor and proposal-only owner rotation proof.
+await import('./release_incident_anchor_provenance_test.mjs');
+
+// Build 585: require signed owner rotation chain and manual acceptance proofs.
+await import('./release_incident_manual_rotation_acceptance_test.mjs');
