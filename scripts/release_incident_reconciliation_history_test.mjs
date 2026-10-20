@@ -34,3 +34,6 @@ await assert.rejects(verifyPinnedReconciliationHistory({...hargs,reconciliationA
 await assert.rejects(ownerManualDecisionContinuity({...dargs,ownerDecisionReceipt:{...ownerReceipt,claims:{...ownerClaims,action:"CLOSE_EXCEPTION"}}}));
 await assert.rejects(ownerManualDecisionContinuity({...dargs,independentOwnerDecisionPin:null}));
 console.log("Build 603 signed pinned history and manual owner decision PASS");
+
+// Build 604 synthetic signed manual owner decision fixture.
+export const build603Fixture={dargs,owner,pem,fp,now};
