@@ -36,3 +36,6 @@ await fail({handoffArguments:{...args,independentHandoffPin:null}});
 assert.throws(()=>exceptionReconciliationClaims({verifiedHandoff:upstream,
  action:"CLOSE_EXCEPTION",reviewRef:"owner:unsafe",issuedAt:claims.issuedAt}),/HOLD/);
 console.log("Build 602 independent signed owner handoff exception reconciliation PASS");
+
+// Build 603 synthetic independently signed reconciliation fixture.
+export const build602Fixture={payload,reviewer,owner,pem,fp,now};
