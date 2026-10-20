@@ -99,3 +99,6 @@ await import('./release_incident_external_exception_register_test.mjs');
 
 // Build 590: verify signed, independently pinned owner review receipt chains and no-auto-closure governance.
 await import('./release_incident_owner_escalation_review_test.mjs');
+
+// Build 591: manual-only WORM owner review head retention and independently pinned signed handoff.
+await import('./release_incident_owner_head_retention_handoff_test.mjs');
