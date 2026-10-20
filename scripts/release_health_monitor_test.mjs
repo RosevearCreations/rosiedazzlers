@@ -86,3 +86,7 @@ await import('./release_incident_manual_rotation_acceptance_test.mjs');
 // Build 586: persisted signed rotation receipts, independent history and guarded CLI.
 await import('./release_incident_rotation_handoff_receipts_test.mjs');
 await import('./release_incident_rotation_handoff_cli_test.mjs');
+
+// Build 587: signed external receipt-head register and read-only owner reconciliation.
+await import('./release_incident_external_rotation_register_test.mjs');
+await import('./release_incident_external_register_review_cli_test.mjs');
