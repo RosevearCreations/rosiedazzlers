@@ -151,3 +151,37 @@ export async function persistRotationHandoff({
     receiptDigest:receipt.record.receiptDigest,previousReceiptDigest:history.headDigest,
     url:receipt.url,requiresIndependentHeadPin:true};
 }
+
+/** Independently verify every receipt against a separately retained, signed
+ * evidence package. A GitHub-only digest chain is never enough for VERIFIED.
+ * evidenceByReceiptDigest is an independent owner-supplied Map, not GitHub data.
+ */
+export function reconcileCrossAnchorProofHistory({comments,owner="RosevearCreations",
+  independentHeadDigest,evidenceByReceiptDigest}){
+  if(!SHA.test(independentHeadDigest||"")||
+     !(evidenceByReceiptDigest instanceof Map))
+    throw Error("Separately trusted head digest and signed source packages required: HOLD");
+  const chain=crossAnchorHistory({comments,owner,independentHeadDigest});
+  if(chain.entries.length===0)throw Error("No independently signed rotation handoffs to reconcile: HOLD");
+  const originals=new Map();
+  for(const comment of comments){
+    if(comment?.user?.login===owner && String(comment.body||"").startsWith(HANDOFF_PREFIX)){
+      const p=parseHandoff(comment,owner);
+      originals.set(p.record.receiptDigest,p.record);
+    }
+  }
+  let previous=null;
+  for(const entry of chain.entries){
+    const source=evidenceByReceiptDigest.get(entry.receiptDigest);
+    if(!source)throw Error("Signed evidence missing for persisted rotation receipt: HOLD");
+    const r=originals.get(entry.receiptDigest);
+    const expected=prepareHandoff({evidence:source,
+      previousReceiptDigest:previous,issuedAt:r.issuedAt});
+    if(expected.receiptDigest!==r.receiptDigest||expected.evidenceDigest!==r.evidenceDigest)
+      throw Error("Persisted handoff does not reconcile to independently signed evidence: HOLD");
+    previous=r.receiptDigest;
+  }
+  return {status:"VERIFIED_WITH_EXTERNAL_HEAD_AND_SIGNATURES",
+    headDigest:chain.headDigest,verifiedReceipts:chain.entries.length,
+    untrustedForeignComments:chain.unauthorized.length};
+}
