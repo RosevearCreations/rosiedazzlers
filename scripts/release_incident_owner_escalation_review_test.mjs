@@ -69,3 +69,6 @@ assert.throws(()=>ownerReviewClaims({verifiedHistory:history,incidentRef:last.in
   ownerReviewRef:"owner:bad",evidenceRef:"offsite:bad",
   issuedAt:"2026-10-20T07:00:00.000Z"}),/unverified/);
 console.log("Build 590 owner review Ed25519 receipts, complete externally pinned head, continuity and no closure PASS");
+
+// Build 591 uses only deterministic ephemeral signing keys and synthetic signed evidence.
+export const build590Fixture={args,owner,impostor,pem,fp,signature,now};
