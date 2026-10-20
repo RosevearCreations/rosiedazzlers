@@ -105,3 +105,6 @@ await import('./release_incident_owner_head_retention_handoff_test.mjs');
 
 // Build 592: independently anchored owner-review head rotation and explicit manual exception closeout.
 await import('./release_incident_review_head_rotation_closeout_test.mjs');
+
+// Build 593: complete owner-signed closeout decision history, external head and read-only owner workbench.
+await import('./release_incident_signed_closeout_decision_ledger_test.mjs');
