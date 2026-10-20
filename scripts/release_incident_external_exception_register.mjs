@@ -5,7 +5,7 @@
  */
 import {createHash,createPublicKey,verify} from "node:crypto";
 import {canonicalBytes} from "./release_incident_external_rotation_register.mjs";
-import {verifyOwnerExceptionHistory} from "./release_incident_external_register_continuity.mjs";
+import {reviewExternalRegisterContinuity,verifyOwnerExceptionHistory} from "./release_incident_external_register_continuity.mjs";
 const SHA=/^[a-f0-9]{64}$/;
 const REF=/^[A-Za-z0-9][A-Za-z0-9._:/#-]{2,180}$/;
 const MAX=100,DAY=86400000;
@@ -68,7 +68,7 @@ function validateRecord(record){
 export function exceptionRegisterDigest(record){
   return createHash("sha256").update(canonicalBytes(record)).digest("hex");
 }
-export function verifyExceptionRegisterRevision({revision,previousPin=null,continuity,
+function verifyExceptionRegisterRevision({revision,previousPin=null,continuity,
   ownerReceipts,ownerPublicKeyPem,pinnedOwnerFingerprint,pinnedSourceRegisterFingerprint,
   now=new Date()}){
   const {signedRegister,publicKeyPem,pinnedSignerFingerprint,externalPin}=revision||{};
@@ -139,16 +139,28 @@ export function verifyExceptionRegisterRevision({revision,previousPin=null,conti
     issuedAt:record.issuedAt,record,externalReference:externalPin.externalReference,
     externalWritePerformed:false};
 }
-export function verifyExceptionRegisterHistory({revisions,continuity,
+export function verifyExceptionRegisterHistory({revisions,continuityArguments,
   ownerReceipts,ownerPublicKeyPem,pinnedOwnerFingerprint,
-  pinnedSourceRegisterFingerprint,now=new Date()}){
+  pinnedSourceRegisterFingerprint,pinnedExceptionSignerFingerprint,now=new Date()}){
+  if(!Array.isArray(continuityArguments?.revisions)||
+     continuityArguments.revisions.length<1||
+     pinnedSourceRegisterFingerprint!==continuityArguments.revisions.at(-1).trustedFingerprint)
+    throw Error("Independently pinned rotation register signer required: HOLD");
+  const continuity=reviewExternalRegisterContinuity({...continuityArguments,now});
+  if(!SHA.test(pinnedExceptionSignerFingerprint||"")||
+     !Array.isArray(ownerReceipts)||ownerReceipts.length>MAX)
+    throw Error("Independent exception signer pin and complete signed owner receipts required: HOLD");
   if(!Array.isArray(revisions)||revisions.length<1||revisions.length>MAX)
     throw Error("Complete bounded exception-register history required: HOLD");
   let last=null,prevRecord=null,lastIssued=-Infinity;const checked=[];
   for(const revision of revisions){
+    if(revision?.pinnedSignerFingerprint!==pinnedExceptionSignerFingerprint)
+      throw Error("Exception register signing identity drift requires independent owner review: HOLD");
+    const prefixCount=revision?.signedRegister?.register?.decisionCount;
     const result=verifyExceptionRegisterRevision({
       revision,previousPin:last?{registerDigest:last.registerDigest,sequence:last.sequence}:null,
-      continuity,ownerReceipts,ownerPublicKeyPem,pinnedOwnerFingerprint,
+      continuity,ownerReceipts:ownerReceipts.slice(0,prefixCount),
+      ownerPublicKeyPem,pinnedOwnerFingerprint,
       pinnedSourceRegisterFingerprint,now});
     const issued=time(result.issuedAt);
     if(issued<=lastIssued)throw Error("Externally pinned exception register timestamp rollback: HOLD");
