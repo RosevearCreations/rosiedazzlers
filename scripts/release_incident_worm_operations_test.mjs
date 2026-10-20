@@ -10,7 +10,7 @@ assert.equal(writeAuthorization({...base,GITHUB_ACTOR:"untrusted-user"}).authori
 assert.equal(writeAuthorization({...base,RD_WORM_WRITE:"false"}).authorized,false);
 assert.equal(writeAuthorization({...base,RD_WORM_OWNER_APPROVED:"false"}).authorized,false);
 assert.equal(writeAuthorization({...base,RD_WORM_APPROVAL_REF:""}).authorized,false);
-const workflow=readFileSync(new URL("../.github/workflows/build582-worm-evidence-retention.yml",import.meta.url),"utf8");
+const workflow=readFileSync(new URL("../.github/workflows/trusted-worm-evidence-retention.yml",import.meta.url),"utf8");
 assert.match(workflow,/cron:/);
 assert.match(workflow,/id-token: write/);
 assert.match(workflow,/github.ref == 'refs\/heads\/main'/);
