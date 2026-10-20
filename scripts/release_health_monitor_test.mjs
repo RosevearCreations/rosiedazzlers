@@ -138,3 +138,6 @@ await import('./release_incident_owner_handoff_reconciliation_test.mjs');
 
 // Build 603: independently pinned reconciliation history and manual owner continuity.
 await import('./release_incident_reconciliation_history_test.mjs');
+
+// Build 604: complete independently retained signed manual head rotation.
+await import('./release_incident_owner_manual_rotation_retention_test.mjs');
