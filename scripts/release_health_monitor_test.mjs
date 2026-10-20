@@ -102,3 +102,6 @@ await import('./release_incident_owner_escalation_review_test.mjs');
 
 // Build 591: manual-only WORM owner review head retention and independently pinned signed handoff.
 await import('./release_incident_owner_head_retention_handoff_test.mjs');
+
+// Build 592: independently anchored owner-review head rotation and explicit manual exception closeout.
+await import('./release_incident_review_head_rotation_closeout_test.mjs');
