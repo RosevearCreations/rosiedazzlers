@@ -90,3 +90,6 @@ await import('./release_incident_rotation_handoff_cli_test.mjs');
 // Build 587: signed external receipt-head register and read-only owner reconciliation.
 await import('./release_incident_external_rotation_register_test.mjs');
 await import('./release_incident_external_register_review_cli_test.mjs');
+
+// Build 588: pin revision continuity and require signed, chained manual owner exception history.
+await import('./release_incident_external_register_continuity_test.mjs');
