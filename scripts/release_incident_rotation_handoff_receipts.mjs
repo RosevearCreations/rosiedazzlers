@@ -116,8 +116,15 @@ export async function persistRotationHandoff({
      !Number.isSafeInteger(issueNumber)||issueNumber<1||typeof token!=="string"||!token||
      authorization?.event!=="workflow_dispatch"||
      authorization?.actor!==owner||authorization?.confirmed!==true||
-     !REF.test(authorization.reference||""))
+     !REF.test(authorization.reference||"")||
+     !SHA.test(authorization.trustedOwnerFingerprint||"")||
+     !SHA.test(authorization.trustedPriorFingerprint||"")||
+     !SHA.test(authorization.trustedSuccessorFingerprint||""))
     throw Error("Manually authorized owner write and authenticated issue required: HOLD");
+  if(authorization.trustedOwnerFingerprint!==evidence?.ownerFingerprint||
+     authorization.trustedPriorFingerprint!==evidence?.priorFingerprint||
+     authorization.trustedSuccessorFingerprint!==evidence?.successorFingerprint)
+    throw Error("Owner or archive key fingerprints not independently pinned: HOLD");
   if(authorization.reference!==evidence?.ownerApproval?.claims?.approvalRef)
     throw Error("Manual GitHub approval does not match independently signed consent: HOLD");
   const opts={owner,repo,issueNumber,token,request};
@@ -157,9 +164,10 @@ export async function persistRotationHandoff({
  * evidenceByReceiptDigest is an independent owner-supplied Map, not GitHub data.
  */
 export function reconcileCrossAnchorProofHistory({comments,owner="RosevearCreations",
-  independentHeadDigest,evidenceByReceiptDigest}){
+  independentHeadDigest,evidenceByReceiptDigest,trustedFingerprintsByReceiptDigest}){
   if(!SHA.test(independentHeadDigest||"")||
-     !(evidenceByReceiptDigest instanceof Map))
+     !(evidenceByReceiptDigest instanceof Map)||
+     !(trustedFingerprintsByReceiptDigest instanceof Map))
     throw Error("Separately trusted head digest and signed source packages required: HOLD");
   const chain=crossAnchorHistory({comments,owner,independentHeadDigest});
   if(chain.entries.length===0)throw Error("No independently signed rotation handoffs to reconcile: HOLD");
@@ -174,6 +182,11 @@ export function reconcileCrossAnchorProofHistory({comments,owner="RosevearCreati
   for(const entry of chain.entries){
     const source=evidenceByReceiptDigest.get(entry.receiptDigest);
     if(!source)throw Error("Signed evidence missing for persisted rotation receipt: HOLD");
+    const pins=trustedFingerprintsByReceiptDigest.get(entry.receiptDigest);
+    if(!pins||!SHA.test(pins.owner||"")||!SHA.test(pins.prior||"")||
+       !SHA.test(pins.successor||"")||pins.owner!==source.ownerFingerprint||
+       pins.prior!==source.priorFingerprint||pins.successor!==source.successorFingerprint)
+      throw Error("Independent key fingerprint pins missing or inconsistent: HOLD");
     const r=originals.get(entry.receiptDigest);
     const expected=prepareHandoff({evidence:source,
       previousReceiptDigest:previous,issuedAt:r.issuedAt});
