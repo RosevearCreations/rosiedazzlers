@@ -68,3 +68,7 @@ await import('./release_incident_audit_snapshot_test.mjs');
 
 // Build 581: trusted retention contract acceptance.
 await import('./release_incident_trusted_retention_test.mjs');
+
+// Build 582: AWS WORM provider and scheduled, owner-scoped operations tests.
+await import('./release_incident_s3_worm_adapter_test.mjs');
+await import('./release_incident_worm_operations_test.mjs');
