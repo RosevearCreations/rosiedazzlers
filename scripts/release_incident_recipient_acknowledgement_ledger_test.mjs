@@ -123,3 +123,6 @@ assert.throws(()=>ownerAcknowledgementFollowUpClaims({
  action:"ACKNOWLEDGE_RECIPIENT_REVIEW",ownerReviewRef:"owner:unsafe",
  issuedAt:"2026-10-20T10:00:03.000Z"}),/HOLD/);
 console.log("Build 600 independent recipient Ed25519 acknowledgement and owner manual continuity with external pins PASS");
+
+// Build 601 synthetic fully verified owner/recipient follow-up fixture.
+export const build600Fixture={ownerArgs,owner,pem,fp,signature,impostor,now};
