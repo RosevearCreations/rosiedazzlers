@@ -37,7 +37,7 @@ export function reviewExternalRegisterContinuity({revisions,comments,evidenceByR
          record.receiptCount<prevRecord.receiptCount)
         throw Error("External register identity or receipt count rollback: HOLD");
       for(let i=0;i<prevRecord.entries.length;i++){
-        if(JSON.stringify(record.entries[i])!==JSON.stringify(prevRecord.entries[i]))
+        if(Buffer.compare(canonicalBytes(record.entries[i]),canonicalBytes(prevRecord.entries[i]))!==0)
           throw Error("Historical registered receipt was rewritten: HOLD");
       }
       if(record.receiptCount===prevRecord.receiptCount&&
@@ -130,6 +130,8 @@ export function verifyOwnerExceptionHistory({continuity,receipts,ownerPublicKeyP
 export function registerOperatorReview({continuityArguments,ownerReceipts=[],
   ownerPublicKeyPem,pinnedOwnerFingerprint,pinnedRegisterFingerprint,now=new Date()}){
   const continuity=reviewExternalRegisterContinuity({...continuityArguments,now});
+  if(pinnedRegisterFingerprint!==continuityArguments?.revisions?.at(-1)?.trustedFingerprint)
+    throw Error("Owner-exception review key separation does not match pinned external register signer: HOLD");
   const exceptions=verifyOwnerExceptionHistory({continuity,receipts:ownerReceipts,
     ownerPublicKeyPem,pinnedOwnerFingerprint,pinnedRegisterFingerprint,now});
   return {status:"READ_ONLY_OWNER_REVIEW_COMPLETE",continuity,exceptions,
