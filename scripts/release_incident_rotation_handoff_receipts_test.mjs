@@ -3,7 +3,7 @@ import {generateKeyPairSync,createHash,sign} from "node:crypto";
 import {anchorClaims} from "./release_incident_anchor_provenance.mjs";
 import {manualRotationClaims} from "./release_incident_manual_rotation_acceptance.mjs";
 import {HANDOFF_PREFIX,prepareHandoff,parseHandoff,crossAnchorHistory,
- persistRotationHandoff} from "./release_incident_rotation_handoff_receipts.mjs";
+ persistRotationHandoff,reconcileCrossAnchorProofHistory} from "./release_incident_rotation_handoff_receipts.mjs";
 const archive=generateKeyPairSync("ed25519"),ownerSigner=generateKeyPairSync("ed25519");
 const pem=k=>k.publicKey.export({format:"pem",type:"spki"});
 const fp=k=>createHash("sha256").update(k.publicKey.export({format:"der",type:"spki"})).digest("hex");
@@ -54,7 +54,24 @@ assert.equal(crossAnchorHistory({comments:[make(secondReceipt,102),first],expect
 assert.throws(()=>crossAnchorHistory({comments:[first,make({...secondReceipt,previousReceiptDigest:"c".repeat(64)},102)]),/hash mismatch|diverged/);
 const outsider=make(record,90,"unauthorized");
 assert.deepEqual(crossAnchorHistory({comments:[outsider,first]}).unauthorized,[90]);
-const authorization={event:"workflow_dispatch",actor:"RosevearCreations",confirmed:true,reference:"owner:rotation-77"};
+const independentEvidence=new Map([[record.receiptDigest,evidence],[secondReceipt.receiptDigest,secondEvidence]]);
+const independentPins=new Map([[record.receiptDigest,{owner:fp(ownerSigner),prior:fp(archive),successor:fp(archive)}],
+ [secondReceipt.receiptDigest,{owner:fp(ownerSigner),prior:fp(archive),successor:fp(archive)}]]);
+const reconciled=reconcileCrossAnchorProofHistory({
+ comments:[make(secondReceipt,102),first],independentHeadDigest:secondReceipt.receiptDigest,
+ evidenceByReceiptDigest:independentEvidence,trustedFingerprintsByReceiptDigest:independentPins});
+assert.equal(reconciled.status,"VERIFIED_WITH_EXTERNAL_HEAD_AND_SIGNATURES");
+assert.equal(reconciled.verifiedReceipts,2);
+assert.throws(()=>reconcileCrossAnchorProofHistory({
+ comments:[first],independentHeadDigest:record.receiptDigest,
+ evidenceByReceiptDigest:new Map(),trustedFingerprintsByReceiptDigest:independentPins}),/missing/);
+assert.throws(()=>reconcileCrossAnchorProofHistory({
+ comments:[first],independentHeadDigest:record.receiptDigest,
+ evidenceByReceiptDigest:independentEvidence,trustedFingerprintsByReceiptDigest:new Map()}),/fingerprint/);
+
+const authorization={event:"workflow_dispatch",actor:"RosevearCreations",confirmed:true,
+ reference:"owner:rotation-77",trustedOwnerFingerprint:fp(ownerSigner),
+ trustedPriorFingerprint:fp(archive),trustedSuccessorFingerprint:fp(archive)};
 let written=null,postCalls=0;
 const request=async (url,opts)=>{
   if(url.includes("comments?"))return {ok:true,json:async()=>[]};
@@ -76,6 +93,7 @@ assert.equal(persisted.status,"PERSISTED_MUTABLE_GITHUB_RECEIPT");
 assert.equal(persisted.receiptDigest,record.receiptDigest);
 assert.equal(postCalls,1);
 await assert.rejects(persistRotationHandoff({...params,authorization:{...authorization,actor:"outsider"}}),/HOLD/);
+await assert.rejects(persistRotationHandoff({...params,authorization:{...authorization,trustedOwnerFingerprint:"0".repeat(64)}}),/HOLD/);
 await assert.rejects(persistRotationHandoff({...params,authorization:{...authorization,reference:"issue:wrong"}}),/HOLD|invalid/);
 await assert.rejects(persistRotationHandoff({...params,evidence:{...evidence,ownerApproval:{...evidence.ownerApproval,signature:"invalid"}}}),/HOLD/);
 await assert.rejects(persistRotationHandoff({...params,request:async(url,opts)=>{
