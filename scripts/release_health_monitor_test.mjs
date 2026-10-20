@@ -132,3 +132,6 @@ await import('./release_incident_recipient_acknowledgement_ledger_test.mjs');
 
 // Build 601: complete signed recipient exception review and independently pinned owner handoff.
 await import('./release_incident_owner_exception_handoff_test.mjs');
+
+// Build 602: require independent signed handoff reconciliation and manual-only review.
+await import('./release_incident_owner_handoff_reconciliation_test.mjs');
