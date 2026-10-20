@@ -96,3 +96,6 @@ await import('./release_incident_external_register_continuity_test.mjs');
 
 // Build 589: independently pinned Ed25519 owner exception registers and advisory escalation ledger.
 await import('./release_incident_external_exception_register_test.mjs');
+
+// Build 590: verify signed, independently pinned owner review receipt chains and no-auto-closure governance.
+await import('./release_incident_owner_escalation_review_test.mjs');

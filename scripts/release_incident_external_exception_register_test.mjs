@@ -126,3 +126,6 @@ assert.throws(()=>verifyExceptionRegisterHistory({...input,
  ...versions[1].externalPin,registerDigest:"f".repeat(64)}}]}),/pin/);
 assert.throws(()=>ownerEscalationLedger({verifyArguments:{status:"EXTERNAL_EXCEPTION_HISTORY_VERIFIED"}}),/HOLD/);
 console.log("Build 589 externally pinned Ed25519 exception register, chronology, audit linkage, read-only escalation PASS");
+
+// Build 590 reuses the fully signed and verified in-memory fixture, without production keys.
+export const build589Fixture={input,now,owner,sourceSigner,exceptionSigner,impostor,pem,fp,signature};
