@@ -114,3 +114,6 @@ await import('./release_incident_manual_closeout_evidence_export_test.mjs');
 
 // Build 595: independently signed recipient evidence receipt and complete owner handoff review register.
 await import('./release_incident_export_receipt_reconciliation_test.mjs');
+
+// Build 596: independently signed recipient-exception follow-up and manual owner reconciliation.
+await import('./release_incident_receipt_exception_followup_test.mjs');
