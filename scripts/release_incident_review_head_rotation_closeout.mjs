@@ -160,7 +160,7 @@ export async function evaluateExplicitOwnerExceptionCloseout({
   const rotation=await verifyReviewHeadRotationRegister({...rotationArguments,now});
   const handOff=await verifyManualExceptionHandoff({...handoffArguments,now});
   if(rotation.ownerFingerprint!==pinnedOwnerFingerprint||
-     rotation.successorRecordDigest!==handoff.recordDigest||
+     rotation.successorRecordDigest!==handOff.recordDigest||
      rotation.issueNumber!==handoffArguments.issueNumber||
      pinnedAuditorFingerprint===pinnedOwnerFingerprint)
     throw Error("Independent owner/auditor identity or retained owner head differs: HOLD");
