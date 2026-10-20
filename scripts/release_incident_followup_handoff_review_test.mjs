@@ -109,3 +109,6 @@ assert.throws(()=>manualExceptionHandoffDecisionClaims({review:{
   ...verifiedReview,status:"VERIFIED"},sequence:1,action:"ACKNOWLEDGE_REVIEW_RECEIPT",
   decisionRef:"owner:unsafe",issuedAt:"2026-10-20T09:59:54.000Z"}),/HOLD/);
 console.log("Build 598 independent reviewer Ed25519 receipt, complete owner governance chain, external pins and no-close policy PASS");
+
+// Build 599 deterministic signed owner governance fixture; no real customer or signer data.
+export const build598Fixture={params,owner,reviewer,impostor,pem,fp,signature,now};
