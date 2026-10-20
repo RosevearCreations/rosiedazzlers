@@ -123,3 +123,6 @@ await import('./release_incident_followup_head_retention_handoff_test.mjs');
 
 // Build 598: independently signed follow-up handoff receipt and manual owner governance.
 await import('./release_incident_followup_handoff_review_test.mjs');
+
+// Build 599: metadata-only owner decision receipt export and independent reviewer acknowledgement.
+await import('./release_incident_owner_handoff_decision_export_test.mjs');
