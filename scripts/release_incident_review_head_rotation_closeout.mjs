@@ -49,7 +49,7 @@ function signedClaim(receipt,fields,expected,key){
   if(sig.length!==64||!verify(null,canonicalBytes(expected),key,sig))
     throw Error("Manual owner evidence signature invalid: HOLD");
 }
-function rotationClaims(previous,successor,approvalRef,issuedAt,previousRotationDigest=null){
+export function reviewHeadRotationClaims(previous,successor,approvalRef,issuedAt,previousRotationDigest=null){
   if(previous?.status!=="INDEPENDENTLY_PINNED_OWNER_HEAD_RETAINED"||
      successor?.status!=="INDEPENDENTLY_PINNED_OWNER_HEAD_RETAINED"||
      !Number.isSafeInteger(previous.issueNumber)||previous.issueNumber<1||
@@ -98,7 +98,7 @@ export async function verifyReviewHeadRotationRegister({transitions,ownerPublicK
        previousHead.objectKey!==prior.objectKey))
       throw Error("Rotation predecessor retained head is not contiguous: HOLD");
     const claims=transition.ownerApproval.claims;
-    const expected=rotationClaims(prior,successor,claims?.approvalRef,
+    const expected=reviewHeadRotationClaims(prior,successor,claims?.approvalRef,
       claims?.issuedAt,previousDigest);
     if(iso(expected.issuedAt)<=previousAt||iso(expected.issuedAt)>clock+300000)
       throw Error("Owner rotation approval timestamp replay or future claim: HOLD");
@@ -124,7 +124,7 @@ export async function verifyReviewHeadRotationRegister({transitions,ownerPublicK
     history,ownerFingerprint:pinnedOwnerFingerprint,automaticRotation:false,
     automaticClosure:false,externalWritePerformed:false};
 }
-function auditorClaims({rotation,handOff,incidentRef,evidenceRef,reviewedAt}){
+export function independentResolutionClaims({rotation,handOff,incidentRef,evidenceRef,reviewedAt}){
   if(rotation?.status!=="INDEPENDENTLY_ANCHORED_ROTATION_REVIEW"||
      handOff?.status!=="SIGNED_MANUAL_EXCEPTION_HANDOFF_VERIFIED"||
      !REF.test(incidentRef||"")||!REF.test(evidenceRef||""))
@@ -136,7 +136,7 @@ function auditorClaims({rotation,handOff,incidentRef,evidenceRef,reviewedAt}){
     handoffDigest:handOff.headDigest,evidenceRef,resolution:"REVIEWED_RESOLUTION_EVIDENCE",
     reviewedAt};
 }
-function closeoutClaims(rotation,handOff,auditor,ownerReceipt){
+export function ownerCloseoutReviewClaims(rotation,handOff,auditor,ownerReceipt){
   const claims=ownerReceipt?.claims;
   if(!claims||!REF.test(claims.incidentRef||"")||!REF.test(claims.approvalRef||""))
     throw Error("Explicit owner closeout receipt missing: HOLD");
@@ -166,11 +166,11 @@ export async function evaluateExplicitOwnerExceptionCloseout({
     throw Error("Independent owner/auditor identity or retained owner head differs: HOLD");
   const auditKey=pinnedKey(auditorPublicKeyPem,pinnedAuditorFingerprint);
   const audit=resolutionReceipt?.claims;
-  const expected=auditorClaims({rotation,handOff,incidentRef:audit?.incidentRef,
+  const expected=independentResolutionClaims({rotation,handOff,incidentRef:audit?.incidentRef,
     evidenceRef:audit?.evidenceRef,reviewedAt:audit?.reviewedAt});
   signedClaim(resolutionReceipt,resolveKeys,expected,auditKey);
   const ownerKey=pinnedKey(ownerPublicKeyPem,pinnedOwnerFingerprint);
-  const close=closeoutClaims(rotation,handOff,resolutionReceipt,ownerCloseoutReceipt);
+  const close=ownerCloseoutReviewClaims(rotation,handOff,resolutionReceipt,ownerCloseoutReceipt);
   if(close.incidentRef!==expected.incidentRef||
      iso(close.issuedAt)<iso(expected.reviewedAt)||
      iso(close.issuedAt)>new Date(now).getTime()+300000)
