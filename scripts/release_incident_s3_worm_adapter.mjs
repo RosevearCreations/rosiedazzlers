@@ -96,7 +96,7 @@ export function s3ComplianceAdapter({config,run=awsCli,now=()=>new Date()}) {
   async function retentionEvidence(key,versionId){
     if(!ready) await ensureReady();
     if(!KEY.test(key||"")||typeof versionId!=="string"||
-       !versionId||versionId.length>256||/[\\x00-\\x1f\\x7f]/.test(versionId)||versionId==="null")
+       !versionId||versionId.length>256||/[\x00-\x1f\x7f]/.test(versionId)||versionId==="null")
       throw Error("Exact key and immutable VersionId required: HOLD");
     const lock=await s3("get-object-retention",[...b,"--key",key,"--version-id",versionId]);
     const until=Date.parse(lock?.Retention?.RetainUntilDate||"");
