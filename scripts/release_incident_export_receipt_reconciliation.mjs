@@ -71,6 +71,8 @@ export async function verifyExportRecipientReconciliation({
   const expected=recipientExportReceiptClaims({handoff,
     receiptRef:claims?.receiptRef,disposition:claims?.disposition,
     receivedAt:claims?.receivedAt});
+  if(time(expected.receivedAt)<time(handoffArguments.handoffReceipt?.claims?.issuedAt))
+    throw Error("Recipient receipt predates signed owner handoff approval: HOLD");
   if(time(expected.receivedAt)>new Date(now).getTime()+300000)
     throw Error("Recipient receipt cannot be dated in future: HOLD");
   checkSigned(recipientReceipt,RECEIPT_KEYS,expected,
