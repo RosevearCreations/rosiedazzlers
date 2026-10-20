@@ -93,3 +93,18 @@ await import('./release_incident_external_register_review_cli_test.mjs');
 
 // Build 588: pin revision continuity and require signed, chained manual owner exception history.
 await import('./release_incident_external_register_continuity_test.mjs');
+
+// Build 589: independently pinned Ed25519 owner exception registers and advisory escalation ledger.
+await import('./release_incident_external_exception_register_test.mjs');
+
+// Build 590: verify signed, independently pinned owner review receipt chains and no-auto-closure governance.
+await import('./release_incident_owner_escalation_review_test.mjs');
+
+// Build 591: manual-only WORM owner review head retention and independently pinned signed handoff.
+await import('./release_incident_owner_head_retention_handoff_test.mjs');
+
+// Build 592: independently anchored owner-review head rotation and explicit manual exception closeout.
+await import('./release_incident_review_head_rotation_closeout_test.mjs');
+
+// Build 593: complete owner-signed closeout decision history, external head and read-only owner workbench.
+await import('./release_incident_signed_closeout_decision_ledger_test.mjs');
