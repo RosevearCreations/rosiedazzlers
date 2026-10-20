@@ -82,3 +82,7 @@ await import('./release_incident_anchor_provenance_test.mjs');
 
 // Build 585: require signed owner rotation chain and manual acceptance proofs.
 await import('./release_incident_manual_rotation_acceptance_test.mjs');
+
+// Build 586: persisted signed rotation receipts, independent history and guarded CLI.
+await import('./release_incident_rotation_handoff_receipts_test.mjs');
+await import('./release_incident_rotation_handoff_cli_test.mjs');
