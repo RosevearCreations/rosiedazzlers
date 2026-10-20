@@ -144,6 +144,7 @@ export async function verifyRetainedOwnerReviewHead({verifyArguments,reviewRecei
     throw Error("Pinned retained owner review head digest mismatch: HOLD");
   return {status:"INDEPENDENTLY_PINNED_OWNER_HEAD_RETAINED",
     recordDigest:pin.recordDigest,reviewHeadDigest:pin.reviewHeadDigest,
+    issueNumber:record.payload.issueNumber,
     objectKey:pin.objectKey,versionId:pin.versionId,
     externalReference:pin.externalReference,retainedUntil,
     automaticClosure:false,externalWritePerformed:false};
@@ -160,6 +161,7 @@ export function manualExceptionHandoffClaims({retainedProof,issueNumber,incident
     !KEY.test(retainedProof.objectKey||"")||
     typeof retainedProof.versionId!=="string"||!retainedProof.versionId||
     !Number.isSafeInteger(issueNumber)||issueNumber<1||
+    issueNumber!==retainedProof.issueNumber||
     !REF.test(incidentRef||"")||!REF.test(handoffRef||"")||
     !HANDOFF_ACTIONS.has(action)||
     !(previousHandoffDigest===null||SHA.test(previousHandoffDigest||"")))
