@@ -36,3 +36,6 @@ await fail({pinnedReviewerFingerprint:fp(owner)});
 await fail({rotationArguments:{...args,independentRetentionPin:null}});
 await fail({ownerAcceptanceReceipt:{...ownerReceipt,claims:{...oc,action:"CLOSE_EXCEPTION"}}});
 console.log("Build 605 independent rotated receipt review and manual owner retention PASS");
+
+// Build 606 synthetic end-to-end independently signed retention evidence fixture.
+export const build605Fixture={payload,pem,fp,owner,now};
