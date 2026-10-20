@@ -111,3 +111,6 @@ await import('./release_incident_signed_closeout_decision_ledger_test.mjs');
 
 // Build 594: cryptographically reverified redacted closeout evidence export and signed manual handoff.
 await import('./release_incident_manual_closeout_evidence_export_test.mjs');
+
+// Build 595: independently signed recipient evidence receipt and complete owner handoff review register.
+await import('./release_incident_export_receipt_reconciliation_test.mjs');

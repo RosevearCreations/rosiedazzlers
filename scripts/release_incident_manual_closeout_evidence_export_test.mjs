@@ -77,3 +77,6 @@ assert.throws(()=>manualEvidenceHandoffClaims({
  recipientRef:"reviewer:1",approvalRef:"owner:1",
  issuedAt:"2026-10-20T09:50:00.000Z",expiresAt:"2026-10-21T09:50:00.000Z"}),/exact export/);
 console.log("Build 594 bounded redacted owner closeout export, independent signed handoff, pin, expiry and no-write PASS");
+
+// Build 595 synthetic signed export and recipient handoff verification fixture.
+export const build594Fixture={inputs,owner,impostor,pem,fp,signature,now};
