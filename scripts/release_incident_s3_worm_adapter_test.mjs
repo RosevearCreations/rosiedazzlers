@@ -10,7 +10,7 @@ const owner="RosevearCreations",sha="a".repeat(40);
 const record={incidentSha:sha,decisionId:"incident-582",action:"observe",owner,reason:"review",state:"PROPOSED"};
 const comments=[{id:1,user:{login:owner},body:"RD-REMEDIATION-RECEIPT "+JSON.stringify(record)}];
 const snapshot=createAuditSnapshot({comments,owner,repository:"RosevearCreations/rosiedazzlers",issueNumber:1});
-let stored="",mode="COMPLIANCE",locked=true,uploads=0;
+let stored="",mode="COMPLIANCE",locked=true,uploads=0,expires="2030-01-01T00:00:00Z";
 const runner=async args=>{
   const cmd=args[1],find=flag=>args[args.indexOf(flag)+1];
   if(args[0]==="sts")return {Account:config.account};
@@ -23,7 +23,7 @@ const runner=async args=>{
     stored=await readFile(find("--body"),"utf8");
     return {VersionId:"version-1"};
   }
-  if(cmd==="get-object-retention")return {Retention:{Mode:mode,RetainUntilDate:"2030-01-01T00:00:00Z"}};
+  if(cmd==="get-object-retention")return {Retention:{Mode:mode,RetainUntilDate:expires}};
   if(cmd==="head-object")return {VersionId:"version-1"};
   if(cmd==="get-object"){await writeFile(args[args.indexOf("--version-id")+2],stored);return {VersionId:"version-1"};}
   throw Error("Unexpected AWS request "+args.join(" "));
@@ -34,6 +34,9 @@ const retained=await retainSnapshot({snapshot,adapter,key:"rosie/audit/582",owne
 assert.equal(retained.status,"RETAINED");
 assert.equal(uploads,1);
 assert.equal((await ownerAuditEvidence({adapter,key:"rosie/audit/582",expectedDigest:snapshot.digest})).status,"VERIFIED");
+expires="2026-10-20T00:00:00Z";
+await assert.rejects(adapter.createOnce("rosie/audit/short",{snapshot}),/COMPLIANCE|locked/);
+expires="2030-01-01T00:00:00Z";
 mode="GOVERNANCE";
 await assert.rejects(adapter.read("rosie/audit/582"),/COMPLIANCE/);
 mode="COMPLIANCE";
