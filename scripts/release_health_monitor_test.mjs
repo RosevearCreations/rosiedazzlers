@@ -141,3 +141,6 @@ await import('./release_incident_reconciliation_history_test.mjs');
 
 // Build 604: complete independently retained signed manual head rotation.
 await import('./release_incident_owner_manual_rotation_retention_test.mjs');
+
+// Build 605: independently signed rotated head review and separate manual owner retention acceptance.
+await import('./release_incident_rotated_head_retention_acceptance_test.mjs');
