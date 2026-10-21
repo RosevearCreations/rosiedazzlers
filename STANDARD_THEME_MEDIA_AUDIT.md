@@ -84,3 +84,12 @@ Theme and media audit includes the wizard as a separate UI surface: `preview/quo
 **Competitor research:** docs/research/ROSIE_COMPETITOR_PROCESS_FEATURE_AUDIT_2026-10-20.md contains four-site primary-source observations, known Rosie overlap, 24 prioritized requirements, release safeguards, user journeys, and separate media concepts. This is research, not approval to change production pricing, accept quote photos, create another booking system or launch a public wizard.
 
 **Still to verify:** a complete executed local scanner report; DOM-based rendered-image audit across every actual public and Admin route; binary image dimensions/crop and original SVG asset geometry; private R2/media records under staff authorization; any missing-file and broken-URL findings; accessibility and browser visual acceptance; deployment. No production GREEN claim.
+
+## Phase 4 — runtime QA tooling and Admin image source classification (2026-10-21)
+
+- \`assets/visual-audit-inspector.js\`: manually triggered, no-network browser report of rendered/natural image sizes, SVG viewBoxes and labels, CSS backgrounds, video posters, alt/placeholder/broken counts; redacts protected and external URLs. On shared pages append \`?rosieVisualAudit=1\` and click to download a local JSON report. The protected Media Health screen has a separate \`Audit this rendered Admin page\` button.
+- \`data/standard_admin_visual_source_inventory.json\`: **17 inspected template source files, 39 image elements**, with dynamic/approved-R2/empty-state/brand classifications and five Admin illustration design requests. Source inspection only; no claim of exhaustive Admin coverage.
+- \`assets/theme-runtime.js\`: one approved Standard theme, whitelist-controlled future theme preview with no persisted preference or public switcher. Existing site setting and Photo Studio images remain authoritative.
+- \`scripts/audit_standard_theme_media.mjs\`: now detects missing local static image files separately from reserved-but-not-yet-uploaded Standard illustrations. CI emits generated full-checkout source reports.
+- \`docs/audits/ROSIE_STANDARD_THEME_PHASE2_VISUAL_QA.md\`: exact operating instructions, safe handling, source vs rendered verification boundaries and future theme acceptance.
+- These additions DO NOT by themselves finish a rendered audit of all live public/Admin pages, supply missing artwork, inspect protected R2 objects or certify Cloudflare Production. Those are separate measured acceptance steps.
