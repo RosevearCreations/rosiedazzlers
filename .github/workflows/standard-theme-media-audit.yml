@@ -1,0 +1,63 @@
+name: Standard Theme Media Source Audit
+
+on:
+  pull_request:
+    paths:
+      - 'assets/**'
+      - '**/index.html'
+      - 'data/standard_theme_image_slots.json'
+      - 'data/theme_registry.json'
+      - 'scripts/audit_standard_theme_media.mjs'
+      - 'docs/audits/**'
+      - 'docs/research/**'
+      - '.github/workflows/standard-theme-media-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  scan-static-visuals:
+    name: scan static media references
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax-check theme scripts and scanner
+        run: |
+          node --check scripts/audit_standard_theme_media.mjs
+          node --check assets/standard-static-media.js
+          node --check assets/standard-image-slots.js
+          node --check assets/landing-page-build388.js
+          node --check assets/chrome.js
+      - name: Generate static, JS, CSS and SVG source inventory
+        run: node scripts/audit_standard_theme_media.mjs
+      - name: Validate registered slots and wired public process images
+        run: |
+          node --input-type=module -e '
+          import fs from "node:fs";
+          const target=JSON.parse(fs.readFileSync("data/build253_photo_targets.json"));
+          const slots=JSON.parse(fs.readFileSync("data/standard_theme_image_slots.json"));
+          const out=JSON.parse(fs.readFileSync("data/generated_media_reference_inventory.json"));
+          if(target.targets.length !== 617) throw Error("Unexpected Photo Studio target count; reconcile catalogue");
+          if(out.count < 100 || out.svgAssets.length < 10) throw Error("Incomplete media source scan");
+          const processes=slots.entries.filter(x=>x.status==="wired_safe_local_fallback_only");
+          if(processes.length !== 24) throw Error("Expected 24 wired Standard process slots");
+          for(const x of processes){
+            const slug=x.route?.slice(1);
+            const html=fs.readFileSync(slug+"/index.html","utf8");
+            if(!html.includes(`data-standard-filename="${x.filename}"`)) throw Error("Missing wired filename: "+slug);
+          }
+          console.log(JSON.stringify({sources:out.count,svg:out.svgAssets.length,studio:target.targets.length,processes:processes.length}));
+          '
+      - name: Attach source inventory as audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: standard-media-source-inventory
+          retention-days: 14
+          path: |
+            docs/audits/GENERATED_MEDIA_REFERENCES.md
+            data/generated_media_reference_inventory.json
