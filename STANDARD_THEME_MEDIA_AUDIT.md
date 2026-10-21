@@ -60,3 +60,9 @@ Verified slug-to-filename mappings in the live renderer:
 Upload under `assets/themes/standard/images/` with *exact spelling*. These mappings apply to dynamic landing images using the shared media resolver; pre-rendered static HTML images and arbitrary Admin cards remain separate audit tasks and are **not** represented as rewired.
 
 This is a partial audit/wiring pass, **not** a claim that every image or SVG in the repository has been inventoried. No deployed route, browser or Cloudflare Production validation has been performed.
+
+## Quote-first wizard coverage and development continuity
+
+The optional quote-first wizard is independently documented by `BUILD570_QUOTE_FIRST_WIZARD_SHELL.md`, `BUILD573_QUOTE_REQUEST_STAFF_BOOKING_INTEGRATION.md` and `BUILD574_MOBILE_PRODUCTION_PARITY_BOOKING_REGRESSION.md`. Its preview route is `/preview/quote-first/`; the ordinary `/book` wizard remains active and independent. Customer contact intake requires explicit owner activation and Turnstile configuration, and must not be activated as a consequence of theme or artwork releases.
+
+Theme and media audit includes the wizard as a separate UI surface: `preview/quote-first/index.html`, `assets/quote-first-wizard-v570.css`, `assets/quote-first-wizard-v570.js`, `assets/quote-first-intake-ui-v573.js`. Do not add a generic banner over the preview's existing no-quote/no-booking notice, and do not change its consent, validation or payments boundaries. Theme-switch implementation must provide accessible wizard styles and real-device visual verification before activation.
