@@ -35,3 +35,28 @@ Before replacing image placeholders, check consent/privacy. Do not publish real 
 
 ## Current status
 Standard baseline and reserved naming contract created. Full page-by-page audit and live placeholder rewiring **not complete**. No Cloudflare Production GREEN claim is made by these files.
+
+## Phase 2 update — live filename fallback wiring (development only)
+
+The shared `assets/landing-page-build388.js` now imports `assets/standard-image-slots.js`. Its `bindLandingMedia()` tries the existing original image and known-format alternatives first; then a Standard static filename for the current service slug; then the original safe service placeholder. An absent image remains a normal placeholder. Photo Studio explicit assignments and authored R2 images retain precedence.
+
+Verified slug-to-filename mappings in the live renderer:
+
+| Service route | Standard filename | Preferred canvas |
+|---|---|---|
+| `/pet-hair-removal` | `addon-pet-hair-removal.webp` | 1600 × 1067 |
+| `/odor-removal` | `addon-odor-treatment.webp` | 1600 × 1067 |
+| `/seat-shampoo` | `addon-seat-shampoo.webp` | 1600 × 1067 |
+| `/carpet-shampoo` | `addon-carpet-shampoo.webp` | 1600 × 1067 |
+| `/salt-stain-treatment` | `addon-salt-stain-treatment.webp` | 1600 × 1067 |
+| `/headlight-restoration` | `addon-headlight-restoration.webp` | 1600 × 1067 |
+| `/windshield-ceramic-coating` | `addon-windshield-ceramic-coating.webp` | 1600 × 1067 |
+| `/ceramic-spray-wax` | `addon-ceramic-spray-wax.webp` | 1600 × 1067 |
+| `/trim-restoration` | `addon-trim-restoration.webp` | 1600 × 1067 |
+| `/bug-tar-removal` | `addon-bug-tar-removal.webp` | 1600 × 1067 |
+| `/truck-box-wash` | `addon-truck-box-wash.webp` | 1600 × 1067 |
+| `/fleet-vehicle-add-on` | `addon-fleet-vehicle.webp` | 1600 × 1067 |
+
+Upload under `assets/themes/standard/images/` with *exact spelling*. These mappings apply to dynamic landing images using the shared media resolver; pre-rendered static HTML images and arbitrary Admin cards remain separate audit tasks and are **not** represented as rewired.
+
+This is a partial audit/wiring pass, **not** a claim that every image or SVG in the repository has been inventoried. No deployed route, browser or Cloudflare Production validation has been performed.
