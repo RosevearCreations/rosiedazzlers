@@ -10,6 +10,10 @@ on:
       - 'scripts/audit_standard_theme_media.mjs'
       - 'scripts/standard_theme_phase2_test.mjs'
       - 'data/standard_admin_visual_source_inventory.json'
+      - 'data/standard_missing_addon_assets.json'
+      - 'scripts/addon_image_reconciliation_test.mjs'
+      - 'data/landing_pages_content.json'
+      - 'data/rosie_services_pricing_and_packages.json'
       - 'admin-media-health.html'
       - 'admin-media-health/index.html'
       - 'docs/audits/**'
@@ -40,8 +44,11 @@ jobs:
           node --check assets/visual-audit-inspector.js
           node --check assets/theme-runtime.js
           node --check scripts/standard_theme_phase2_test.mjs
+          node --check scripts/addon_image_reconciliation_test.mjs
       - name: Test Standard theme and protected media boundaries
         run: node scripts/standard_theme_phase2_test.mjs
+      - name: Test local addon SVG fallback reconciliation
+        run: node scripts/addon_image_reconciliation_test.mjs
       - name: Generate static, JS, CSS and SVG source inventory
         run: node scripts/audit_standard_theme_media.mjs
       - name: Validate registered slots and wired public process images
