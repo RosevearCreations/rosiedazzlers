@@ -1,0 +1,13 @@
+<svg role="img" aria-label="Front vehicle photo guide, Standard theme" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" fill="none">
+  <rect width="640" height="360" rx="28" fill="#111820"/>
+  <path d="M186 214c10-40 34-86 71-104 20-10 147-10 167 0 37 18 61 64 71 104" stroke="#F4F5F6" stroke-width="10" stroke-linecap="round"/>
+  <path d="M173 214h294c16 0 29 13 29 29v12c0 15-12 27-27 27h-298c-15 0-27-12-27-27v-12c0-16 13-29 29-29Z" stroke="#F4F5F6" stroke-width="10"/>
+  <path d="M238 214v-35c0-19 15-34 34-34h96c19 0 34 15 34 34v35" stroke="#F4F5F6" stroke-width="10"/>
+  <circle cx="221" cy="268" r="28" stroke="#F4F5F6" stroke-width="10"/>
+  <circle cx="419" cy="268" r="28" stroke="#F4F5F6" stroke-width="10"/>
+  <path d="M252 233h136" stroke="#F4F5F6" stroke-width="8" stroke-linecap="round"/>
+  <path d="M203 232h28M409 232h28" stroke="#D6AE5A" stroke-width="8" stroke-linecap="round"/>
+  <path d="M276 182h88" stroke="#BCC9D4" stroke-width="8" stroke-linecap="round"/>
+  <text x="320" y="326" fill="#E8C87C" font-size="24" font-family="Arial, sans-serif" text-anchor="middle">Front photo guide</text>
+  <desc>Visual geometry and placements preserved from original IMG-110; colours only updated for owner-review Standard theme.</desc>
+</svg>
