@@ -964,6 +964,15 @@ async function initChrome() {
     console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
   }
 
+  // Shared cross-surface theme registry; Standard remains the only approved theme.
+  // No user preference is stored and no alternative theme is activated automatically.
+  try {
+    const themeRuntime = await import("/assets/theme-runtime.js");
+    window.RosieThemes = themeRuntime.initThemeRuntime(document);
+  } catch (error) {
+    console.warn("Optional theme registry helper unavailable; Standard remains active.", error);
+  }
+
   // Opt-in, operator-requested, read-only browser visual audit. No background scanning.
   if (new URLSearchParams(location.search).get("rosieVisualAudit") === "1") {
     try {
