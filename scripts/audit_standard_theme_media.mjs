@@ -69,7 +69,6 @@ data.missingLocalStatic=missing;
 data.optionalPlannedStandardArtwork=optionalPlanned;
 data.resolvedLocalStaticCount=available.length;
 const missingSection=["","## Missing authored local asset references","","These may represent actual broken paths. They must be reviewed against build-time generated assets.","","| Source file | Line | Referenced image filename |","|---|---:|---|",...missing.map(x=>"| "+esc(x.file)+" | "+x.line+" | "+esc(x.path)+" |"),"","## Planned Standard artwork not yet uploaded","","| Source file | Line | Reserved filename |","|---|---:|---|",...optionalPlanned.map(x=>"| "+esc(x.file)+" | "+x.line+" | "+esc(x.path)+" |")];
-const nextContent=content+"\n"+missingSection.join("\n");
 await fs.mkdir(path.join(root,"docs/audits"),{recursive:true});
 const content=["# Rosie Dazzlers generated source visual inventory","","Static HTML, JS, CSS and SVG references. Run on full checkout; media approvals and runtime DOM remain separate.","",
 "## SVG file geometry","","| File | Width | Height | ViewBox |","|---|---|---|---|",
@@ -77,6 +76,7 @@ const content=["# Rosie Dazzlers generated source visual inventory","","Static H
 "","## All source references","","| File | Line | Image reference | Kind | Restricted review |","|---|---:|---|---|---|",
 ...rows.map(x=>"| "+esc(x.file)+" | "+x.line+" | "+esc(x.source)+" | "+x.slot+" | "+(x.privateContext?"Yes":"Check approval")+" |"),
 "","No image assignment, public consent, R2 asset, or live production setting is changed by this scanner."].join("\n");
+const nextContent=content+"\n"+missingSection.join("\n");
 await fs.writeFile(path.join(root,"docs/audits/GENERATED_MEDIA_REFERENCES.md"),nextContent+"\n");
 await fs.writeFile(path.join(root,"data/generated_media_reference_inventory.json"),JSON.stringify(data,null,2)+"\n");
 console.log("references",rows.length,"svg",svgs.length,"missing-local",missing.length,"reserved-unuploaded",optionalPlanned.length);
