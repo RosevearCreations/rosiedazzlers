@@ -222,10 +222,10 @@ function heroMediaForPage(page, addon, relatedProducts, r2Matches = [], slug = "
   return "/assets/placeholders/service-photo-needed.svg";
 }
 
-function mediaImageMarkup(src, alt, className = "proof-media", extra = "") {
+function mediaImageMarkup(src, alt, className = "proof-media", extra = "", allowStandardFallback = false) {
   const source = cleanText(src);
   if (!source) return "";
-  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/placeholders/service-photo-needed.svg" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${extra}>`;
+  return `<img data-media-source="${escapeHtml(source)}" data-media-fallback="/assets/placeholders/service-photo-needed.svg" alt="${escapeHtml(alt)}" class="${escapeHtml(className)}" loading="lazy" decoding="async" ${allowStandardFallback ? 'data-standard-hero="true"' : ""} ${extra}>`;
 }
 
 function bindLandingMedia(root) {
@@ -234,7 +234,7 @@ function bindLandingMedia(root) {
     img.dataset.mediaResolverBound = "true";
     bindImageWithCandidates(img, img.dataset.mediaSource || "", {
       // Static Standard artwork is tried only after approved primary R2/Photo Studio media fails.
-      extra: standardLandingFallback(slugFromPath()) ? [standardLandingFallback(slugFromPath())] : [],
+      extra: img.dataset.standardHero === "true" && standardLandingFallback(slugFromPath()) ? [standardLandingFallback(slugFromPath())] : [],
       fallback: img.dataset.mediaFallback || "/assets/placeholders/service-photo-needed.svg",
       onExhausted: (node) => {
         node.classList.add("visual-placeholder-img");
@@ -421,7 +421,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
       </div>
       <aside class="panel hero-sidecard">
         <figure class="landing-region-photo">
-          ${mediaImageMarkup(heroImage, heroAlt, "proof-media", heroExtra)}
+          ${mediaImageMarkup(heroImage, heroAlt, "proof-media", heroExtra, true)}
           ${photoCaption || photoSource ? `<figcaption>${escapeHtml(photoCaption || "Regional/service photo")}${photoSourceUrl ? ` <a href="${escapeHtml(photoSourceUrl)}" target="_blank" rel="noopener">${escapeHtml(photoSource || "source")}</a>` : (photoSource ? ` ${escapeHtml(photoSource)}` : "")}</figcaption>` : ""}
         </figure>
         <h2 style="margin-top:0">What to expect</h2>
