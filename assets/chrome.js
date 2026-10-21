@@ -1,6 +1,11 @@
 // Build 236 restored full editable public chrome; historical labels: Help articles / Help Articles.
 // /assets/chrome.js
 
+// The existing site appearance is the named Standard theme by default.
+if (typeof document !== 'undefined' && !document.documentElement.dataset.rosieTheme) {
+  document.documentElement.dataset.rosieTheme = 'standard';
+}
+
 /* =========================
    BRAND / NAV / FOOTER
    Editable footer fallback includes Help articles. */
@@ -949,6 +954,14 @@ async function initChrome() {
     await imageTools.hydrateGlobalSiteImageOverrides(document);
   } catch (error) {
     console.warn('Optional Photo Studio presentation overrides could not be applied.', error);
+  }
+
+  // Optional Standard process imagery only; media loads after approved Photo Studio overrides.
+  try {
+    const standardArt = await import("/assets/standard-static-media.js");
+    standardArt.hydrateStandardProcessImages(document);
+  } catch (error) {
+    console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
   }
 
   attachRotators("#homePackages");
