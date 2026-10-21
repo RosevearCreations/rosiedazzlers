@@ -1,3 +1,4 @@
+import { standardLandingFallback } from "/assets/standard-image-slots.js";
 // Historical Build 258 image module: /assets/website-images.js?v=20260813build258
 // Historical Build 256 image module: /assets/website-images.js?v=20260812build256
 // Historical Build 254 image module: /assets/website-images.js?v=20260812build254
@@ -232,6 +233,8 @@ function bindLandingMedia(root) {
     if (img.dataset.mediaResolverBound === "true") return;
     img.dataset.mediaResolverBound = "true";
     bindImageWithCandidates(img, img.dataset.mediaSource || "", {
+      // Static Standard artwork is tried only after approved primary R2/Photo Studio media fails.
+      extra: standardLandingFallback(slugFromPath()) ? [standardLandingFallback(slugFromPath())] : [],
       fallback: img.dataset.mediaFallback || "/assets/placeholders/service-photo-needed.svg",
       onExhausted: (node) => {
         node.classList.add("visual-placeholder-img");
