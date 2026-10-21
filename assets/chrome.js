@@ -1,6 +1,11 @@
 // Build 236 restored full editable public chrome; historical labels: Help articles / Help Articles.
 // /assets/chrome.js
 
+// The existing site appearance is the named Standard theme by default.
+if (typeof document !== 'undefined' && !document.documentElement.dataset.rosieTheme) {
+  document.documentElement.dataset.rosieTheme = 'standard';
+}
+
 /* =========================
    BRAND / NAV / FOOTER
    Editable footer fallback includes Help articles. */
