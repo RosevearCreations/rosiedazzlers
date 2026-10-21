@@ -1,5 +1,23 @@
 # Rosie Dazzlers — Standard Theme & Visual Asset Audit (Phase 1)
 
+## Standard colour refresh — owner artwork handoff (2026-10-21)
+
+`assets/themes/standard.css` now styles unlabelled pages (the current default)
+and pages explicitly marked `data-rosie-theme="standard"` with a consistent
+charcoal `#0b0e11`, metallic gold `#dec06d`, bright gold `#f0d58c`, deep gold
+`#b58c38`, silver `#aeb7be`, and white `#f5f6f7` theme. Shared navigation,
+hero cards, primary buttons, booking selections, notifications, focus rings,
+and semantic theme variables use the palette. Error and success colours stay
+distinct for legibility. The `assets/site.css` import version was updated.
+
+This changes visual CSS only; **it does not turn on a theme picker, override
+approved Photo Studio/R2 assets or activate any not-yet-uploaded image**.
+Static candidate filenames and required canvases are in
+`docs/audits/ROSIE_APPLICATION_STATIC_IMAGE_CATALOG.md`. The owner can upload
+them to `assets/themes/standard/images/` on `dev` for subsequent visual review.
+Run `node scripts/standard_theme_palette_test.mjs` to check the palette contract.
+The original phase-one audit below remains historical context.
+
 ## Current theme preserved
 The original dark appearance is **Standard**. Existing CSS is `/assets/site.css` which imports `site-base-build396.css` and `build397-responsive-baseline.css`. Baseline variables are recorded in `/assets/themes/standard.css`; this stylesheet does not replace the existing rules. Registry: `data/theme_registry.json`.
 
