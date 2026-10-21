@@ -12,6 +12,11 @@ on:
       - 'scripts/reconcile_rendered_visual_audits_test.mjs'
       - 'scripts/triage_visual_image_slots.mjs'
       - 'scripts/triage_visual_image_slots_test.mjs'
+      - 'scripts/build_application_static_image_catalog.mjs'
+      - 'scripts/accept_rendered_visual_audit_matrix.mjs'
+      - 'scripts/build611_image_catalog_test.mjs'
+      - 'data/application_static_image_catalog.json'
+      - 'BUILD611_IMAGE_CATALOG_VISUAL_ACCEPTANCE.md'
       - 'BUILD610_IMAGE_SLOT_ADMIN_TRIAGE.md'
       - 'BUILD609_RENDERED_VISUAL_EVIDENCE_RECONCILIATION.md'
       - 'docs/audits/**'
@@ -43,10 +48,17 @@ jobs:
           node --check scripts/reconcile_rendered_visual_audits_test.mjs
           node --check scripts/triage_visual_image_slots.mjs
           node --check scripts/triage_visual_image_slots_test.mjs
+          node --check scripts/build_application_static_image_catalog.mjs
+          node --check scripts/accept_rendered_visual_audit_matrix.mjs
+          node --check scripts/build611_image_catalog_test.mjs
       - name: Test Build 609 local reconciliation
         run: node scripts/reconcile_rendered_visual_audits_test.mjs
       - name: Test Build 610 Admin visual triage
         run: node scripts/triage_visual_image_slots_test.mjs
+      - name: Verify Build 611 owner-controlled image catalog and reviewed evidence boundary
+        run: |
+          node scripts/build_application_static_image_catalog.mjs --check
+          node scripts/build611_image_catalog_test.mjs
       - name: Generate static, JS, CSS and SVG source inventory
         run: node scripts/audit_standard_theme_media.mjs
       - name: Validate registered slots and wired public process images
