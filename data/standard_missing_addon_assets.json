@@ -1,0 +1,294 @@
+{
+  "schema": "rosie.missing-addon-static-images.v1",
+  "source": "Standard Theme Phase 2 full checkout scanner; 2026-10-21; GitHub Actions run 39602138635",
+  "originalMissingReferences": 73,
+  "originalUniqueMissingFilenames": 17,
+  "verifiedExistingSvgReplacements": 5,
+  "correctedReferencesOnStagingBranch": 25,
+  "awaitingOriginalPngArtwork": 12,
+  "originalPngReferencesRemaining": 48,
+  "notes": [
+    "Paths beginning /assets/addons are local static fallback paths, not R2 package keys.",
+    "Approved public R2 and Photo Studio remain authoritative.",
+    "Do not create fake before-after proofs or overwrite consented images.",
+    "Staging branch changes are not deployed until protected release approval."
+  ],
+  "assets": [
+    {
+      "slot": "bug_tar_removal",
+      "originalMissingLocalPath": "/assets/addons/bug_tar_removal.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "bug_tar_removal.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "carpet_shampoo",
+      "originalMissingLocalPath": "/assets/addons/carpet_shampoo.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "carpet_shampoo.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "ceramic_spray_wax",
+      "originalMissingLocalPath": "/assets/addons/ceramic_spray_wax.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "ceramic_spray_wax.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "de_badging",
+      "originalMissingLocalPath": "/assets/addons/de_badging.png",
+      "status": "staged-svg-replacement",
+      "resolvedSvgPath": "/assets/addons/de_badging.svg",
+      "uploadFilename": null,
+      "uploadDirectory": null,
+      "minPixels": null,
+      "preferredPixels": null,
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "de_ionizing_treatment",
+      "originalMissingLocalPath": "/assets/addons/de_ionizing_treatment.png",
+      "status": "staged-svg-replacement",
+      "resolvedSvgPath": "/assets/addons/de_ionizing_treatment.svg",
+      "uploadFilename": null,
+      "uploadDirectory": null,
+      "minPixels": null,
+      "preferredPixels": null,
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "external_graphene_fine_finish",
+      "originalMissingLocalPath": "/assets/addons/external_graphene_fine_finish.png",
+      "status": "staged-svg-replacement",
+      "resolvedSvgPath": "/assets/addons/external_graphene_fine_finish.svg",
+      "uploadFilename": null,
+      "uploadDirectory": null,
+      "minPixels": null,
+      "preferredPixels": null,
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "external_wax",
+      "originalMissingLocalPath": "/assets/addons/external_wax.png",
+      "status": "staged-svg-replacement",
+      "resolvedSvgPath": "/assets/addons/external_wax.svg",
+      "uploadFilename": null,
+      "uploadDirectory": null,
+      "minPixels": null,
+      "preferredPixels": null,
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "fleet_vehicle_add_on",
+      "originalMissingLocalPath": "/assets/addons/fleet_vehicle_add_on.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "fleet_vehicle_add_on.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "headlight_restoration",
+      "originalMissingLocalPath": "/assets/addons/headlight_restoration.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "headlight_restoration.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "odor_treatment",
+      "originalMissingLocalPath": "/assets/addons/odor_treatment.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "odor_treatment.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "pet_hair_removal",
+      "originalMissingLocalPath": "/assets/addons/pet_hair_removal.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "pet_hair_removal.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "salt_stain_treatment",
+      "originalMissingLocalPath": "/assets/addons/salt_stain_treatment.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "salt_stain_treatment.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "seat_shampoo",
+      "originalMissingLocalPath": "/assets/addons/seat_shampoo.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "seat_shampoo.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "trim_restoration",
+      "originalMissingLocalPath": "/assets/addons/trim_restoration.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "trim_restoration.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "truck_box_wash",
+      "originalMissingLocalPath": "/assets/addons/truck_box_wash.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "truck_box_wash.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "window_tinting",
+      "originalMissingLocalPath": "/assets/addons/window_tinting.png",
+      "status": "staged-svg-replacement",
+      "resolvedSvgPath": "/assets/addons/window_tinting.svg",
+      "uploadFilename": null,
+      "uploadDirectory": null,
+      "minPixels": null,
+      "preferredPixels": null,
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    },
+    {
+      "slot": "windshield_ceramic_coating",
+      "originalMissingLocalPath": "/assets/addons/windshield_ceramic_coating.png",
+      "status": "awaiting-owned-png",
+      "resolvedSvgPath": null,
+      "uploadFilename": "windshield_ceramic_coating.png",
+      "uploadDirectory": "assets/addons/",
+      "minPixels": {
+        "width": 1200,
+        "height": 800
+      },
+      "preferredPixels": {
+        "width": 1600,
+        "height": 1067
+      },
+      "approval": "non-personal service illustration or genuinely owned/approved photo, not customer proof",
+      "fallbackWhenMissing": "Use current approved media source or safe generic empty state; do not invent file or claim it exists"
+    }
+  ]
+}
