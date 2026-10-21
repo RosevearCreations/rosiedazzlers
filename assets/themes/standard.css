@@ -1,0 +1,22 @@
+/* Rosie Dazzlers — Standard theme baseline.
+   Deliberately inherits the exact current site CSS without altering appearance.
+   Future themes override these same semantic tokens. */
+:root[data-rosie-theme="standard"] {
+  --bg: #070b10;
+  --panel: rgba(255,255,255,.03);
+  --border: rgba(255,255,255,.12);
+  --text: rgba(234,242,255,.92);
+  --muted: rgba(234,242,255,.68);
+  --accent: #4d77ff;
+  --accent2: #22c55e;
+  --danger: #ef4444;
+  --warn: #f59e0b;
+  --ok: #22c55e;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow: 0 12px 30px rgba(0,0,0,.35);
+  --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+  --maxw: 1100px;
+  --hero-bg: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
+  --r: 16px;
+}
