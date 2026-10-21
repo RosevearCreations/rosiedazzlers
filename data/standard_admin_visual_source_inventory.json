@@ -1,0 +1,593 @@
+{
+  "schema": "rosie.admin-public-visual-source-inventory.v1",
+  "auditedSourceBranch": "audit/standard-theme-rendered-media",
+  "scope": "17 known key public/Admin templates; full repo scanner is separate",
+  "inspectedPages": 17,
+  "imagesInTemplateSource": 39,
+  "registryTargets": 617,
+  "protectedAdminIllustrations": 5,
+  "sourceInspectionOnly": true,
+  "placeholderIllustrations": [
+    {
+      "key": "roadmap_execution_centre",
+      "page": "/admin-roadmap-execution.html",
+      "privacy": "internal_only",
+      "proposal": "admin-roadmap-execution-centre.svg",
+      "desiredGeometry": "1600x900 proposal",
+      "status": "not uploaded; no automatic insertion",
+      "notes": "Abstract checklist, evidence trail, and locked DAIP gate diagram; no customer data."
+    },
+    {
+      "key": "creative_project_cost_content_workflow",
+      "page": "/admin-creative-projects.html",
+      "privacy": "internal_only",
+      "proposal": "admin-creative-project-cost-content-workflow.svg",
+      "desiredGeometry": "1600x900 proposal",
+      "status": "not uploaded; no automatic insertion",
+      "notes": "A project timeline flowing into materials, labour, costs, story drafts and reviewed outputs; no customer data."
+    },
+    {
+      "key": "creative_project_profit_learning_workflow",
+      "page": "Admin/shared",
+      "privacy": "internal-review",
+      "proposal": "admin-creative-project-profit-learning-workflow.svg",
+      "desiredGeometry": "1600x900 proposal",
+      "status": "not uploaded; no automatic insertion",
+      "notes": "Internal visual showing approved project evidence flowing into costs, learning, platform plans and archive manifests."
+    },
+    {
+      "key": "creative_project_budget_archive_history",
+      "page": "/admin-creative-projects.html",
+      "privacy": "internal-review",
+      "proposal": "admin-creative-project-budget-archive-history.svg",
+      "desiredGeometry": "1600x900",
+      "status": "not uploaded; no automatic insertion",
+      "notes": "Internal visual showing budget, consent, draft history and archive flow"
+    },
+    {
+      "key": "startup_go_live_command_path",
+      "page": "/admin-startup-guide.html",
+      "privacy": "internal_only",
+      "proposal": "admin-startup-go-live-command-path.svg",
+      "desiredGeometry": "1600x900 proposal",
+      "status": "not uploaded; no automatic insertion",
+      "notes": "Simple labelled launch path using Rosie brand visuals; no customer, payment or private deployment data."
+    }
+  ],
+  "pages": [
+    {
+      "sourceFile": "admin-photo-studio.html",
+      "route": "/admin-photo-studio",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 3,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "managed-image-preview",
+          "domId": "editorPreview",
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 3,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-media-health.html",
+      "route": "/admin-media-health",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-catalog.html",
+      "route": "/admin-catalog",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 2,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "purposeful-empty-state",
+          "domId": "formImagePreview",
+          "source": "/assets/placeholders/inventory-tools-photo.jpg",
+          "sourceOfTruth": "local-asset",
+          "staticAltProvided": true,
+          "review": "Keep placeholder until actual inventory proof is assigned"
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-inventory-manager.html",
+      "route": "/admin-inventory-manager",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 5,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 3,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 4,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 5,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-gallery.html",
+      "route": "/admin-gallery",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 4,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 3,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 4,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-daip-gate-c.html",
+      "route": "/admin-daip-gate-c",
+      "registeredStudioTargets": [
+        "admin:gate-c:feature",
+        "admin:gate-c:strip:1",
+        "admin:gate-c:strip:2",
+        "admin:gate-c:strip:3"
+      ],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 5,
+      "images": [
+        {
+          "index": 1,
+          "role": "authored-r2-reference",
+          "domId": "gateHeroPhoto",
+          "source": "https://assets.rosiedazzlers.ca/CarPhotos/tillsonburg-interior-proof-before.webp",
+          "sourceOfTruth": "approved-r2-and-Photo-Studio",
+          "staticAltProvided": true,
+          "review": "Check permissions and R2 asset existence"
+        },
+        {
+          "index": 2,
+          "role": "authored-r2-reference",
+          "domId": null,
+          "source": "https://assets.rosiedazzlers.ca/CarPhotos/woodstock-exterior-proof-before.webp",
+          "sourceOfTruth": "approved-r2-and-Photo-Studio",
+          "staticAltProvided": true,
+          "review": "Check permissions and R2 asset existence"
+        },
+        {
+          "index": 3,
+          "role": "authored-r2-reference",
+          "domId": null,
+          "source": "https://assets.rosiedazzlers.ca/CarPhotos/simcoe-pet-hair-proof-before.webp",
+          "sourceOfTruth": "approved-r2-and-Photo-Studio",
+          "staticAltProvided": true,
+          "review": "Check permissions and R2 asset existence"
+        },
+        {
+          "index": 4,
+          "role": "authored-r2-reference",
+          "domId": null,
+          "source": "https://assets.rosiedazzlers.ca/CarPhotos/port-dover-ceramic-proof-before.webp",
+          "sourceOfTruth": "approved-r2-and-Photo-Studio",
+          "staticAltProvided": true,
+          "review": "Check permissions and R2 asset existence"
+        },
+        {
+          "index": 5,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-content.html",
+      "route": "/admin-content",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-startup-guide.html",
+      "route": "/admin-startup-guide",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-leads.html",
+      "route": "/admin-leads",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-quotes.html",
+      "route": "/admin-quotes",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-ui-health.html",
+      "route": "/admin-ui-health",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-operations.html",
+      "route": "/admin-operations",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 1,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        }
+      ]
+    },
+    {
+      "sourceFile": "admin-upload.html",
+      "route": "/admin-upload",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 2,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "managed-image-preview",
+          "domId": "previewImg",
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "booking-planner.html",
+      "route": "/booking-planner",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 4,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "managed-image-preview",
+          "domId": "modalImg",
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 3,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 4,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "gallery.html",
+      "route": "/gallery",
+      "registeredStudioTargets": [
+        "gallery:evidence:1",
+        "gallery:evidence:2",
+        "gallery:evidence:3",
+        "gallery:evidence:4",
+        "gallery:evidence:5",
+        "gallery:evidence:6",
+        "gallery:evidence:7",
+        "gallery:evidence:8",
+        "gallery:evidence:9",
+        "gallery:evidence:10",
+        "gallery:evidence:11",
+        "gallery:evidence:12",
+        "gallery:technique:1",
+        "gallery:technique:2",
+        "gallery:technique:3",
+        "gallery:technique:4",
+        "gallery:technique:5",
+        "gallery:technique:6",
+        "gallery:technique:7",
+        "gallery:technique:8",
+        "gallery:technique:9",
+        "gallery:technique:10",
+        "gallery:technique:11",
+        "gallery:technique:12",
+        "gallery:efficiency:1"
+      ],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 5,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 3,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 4,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        },
+        {
+          "index": 5,
+          "role": "managed-image-preview",
+          "domId": null,
+          "source": "[runtime-bound]",
+          "sourceOfTruth": "authorized-app-data",
+          "staticAltProvided": true,
+          "review": "Only approved database images; do not theme-replace"
+        }
+      ]
+    },
+    {
+      "sourceFile": "index.html",
+      "route": "/index",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 2,
+      "images": [
+        {
+          "index": 1,
+          "role": "site-brand-logo",
+          "domId": null,
+          "source": "site:brand:logo",
+          "sourceOfTruth": "site-settings",
+          "staticAltProvided": true,
+          "review": null
+        },
+        {
+          "index": 2,
+          "role": "authored-r2-reference",
+          "domId": null,
+          "source": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+          "sourceOfTruth": "approved-r2-and-Photo-Studio",
+          "staticAltProvided": true,
+          "review": "Check permissions and R2 asset existence"
+        }
+      ]
+    },
+    {
+      "sourceFile": "preview/quote-first/index.html",
+      "route": "/preview/quote-first",
+      "registeredStudioTargets": [],
+      "inlineSvgTagCount": 0,
+      "imageElementsInSource": 0,
+      "images": []
+    }
+  ]
+}
