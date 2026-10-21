@@ -956,6 +956,14 @@ async function initChrome() {
     console.warn('Optional Photo Studio presentation overrides could not be applied.', error);
   }
 
+  // Optional Standard process imagery only; media loads after approved Photo Studio overrides.
+  try {
+    const standardArt = await import("/assets/standard-static-media.js");
+    standardArt.hydrateStandardProcessImages(document);
+  } catch (error) {
+    console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
+  }
+
   attachRotators("#homePackages");
   attachRotators("#packageCards");
   attachRotators("#pricingCards");
