@@ -964,6 +964,16 @@ async function initChrome() {
     console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
   }
 
+  // Opt-in, operator-requested, read-only browser visual audit. No background scanning.
+  if (new URLSearchParams(location.search).get("rosieVisualAudit") === "1") {
+    try {
+      const visualAudit = await import("/assets/visual-audit-inspector.js");
+      visualAudit.installOptInVisualAudit(document);
+    } catch (error) {
+      console.warn("Visual audit helper was unavailable; no media was changed.", error);
+    }
+  }
+
   attachRotators("#homePackages");
   attachRotators("#packageCards");
   attachRotators("#pricingCards");
