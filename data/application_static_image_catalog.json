@@ -1,0 +1,2660 @@
+{
+  "schema": "rosie.application-nonemployee-image-catalog.v1",
+  "defaultTheme": "standard",
+  "authority": "Owner/developer maintained. Dynamic Photo Studio, R2 and customer evidence remain managed in their existing systems.",
+  "generatedFrom": [
+    "data/standard_theme_image_slots.json",
+    "data/build253_photo_targets.json",
+    "data/standard_admin_visual_source_inventory.json",
+    "checked-in public assets and source references"
+  ],
+  "policy": {
+    "staffMayReplaceTheseFiles": false,
+    "themeArtRequiresOwnerReview": true,
+    "dynamicTargetsExcluded": 617,
+    "reservedThemeProofExcluded": 49,
+    "dynamicProofTypes": [
+      "before_after_pair",
+      "gallery_before_after_pair",
+      "gallery_efficiency",
+      "gallery_evidence",
+      "gallery_technique",
+      "landing_gallery",
+      "proof",
+      "proof_image"
+    ],
+    "note": "Policy describes intended ownership, not a change to existing Admin permissions. Do not infer customer-media consent."
+  },
+  "entries": [
+    {
+      "key": "theme:addon_bug_tar_removal",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon bug tar removal",
+      "path": "assets/themes/standard/images/addon-bug-tar-removal.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 1,
+      "id": "IMG-001"
+    },
+    {
+      "key": "theme:addon_carpet_shampoo",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon carpet shampoo",
+      "path": "assets/themes/standard/images/addon-carpet-shampoo.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 2,
+      "id": "IMG-002"
+    },
+    {
+      "key": "theme:addon_ceramic_spray_wax",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon ceramic spray wax",
+      "path": "assets/themes/standard/images/addon-ceramic-spray-wax.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 3,
+      "id": "IMG-003"
+    },
+    {
+      "key": "theme:addon_fleet_vehicle_add_on",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon fleet vehicle add on",
+      "path": "assets/themes/standard/images/addon-fleet-vehicle.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 4,
+      "id": "IMG-004"
+    },
+    {
+      "key": "theme:addon_headlight_restoration",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon headlight restoration",
+      "path": "assets/themes/standard/images/addon-headlight-restoration.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 5,
+      "id": "IMG-005"
+    },
+    {
+      "key": "theme:addon_odor_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon odor treatment",
+      "path": "assets/themes/standard/images/addon-odor-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 6,
+      "id": "IMG-006"
+    },
+    {
+      "key": "theme:addon_pet_hair_removal",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon pet hair removal",
+      "path": "assets/themes/standard/images/addon-pet-hair-removal.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 7,
+      "id": "IMG-007"
+    },
+    {
+      "key": "theme:addon_salt_stain_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon salt stain treatment",
+      "path": "assets/themes/standard/images/addon-salt-stain-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 8,
+      "id": "IMG-008"
+    },
+    {
+      "key": "theme:addon_seat_shampoo",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon seat shampoo",
+      "path": "assets/themes/standard/images/addon-seat-shampoo.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 9,
+      "id": "IMG-009"
+    },
+    {
+      "key": "theme:addon_trim_restoration",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon trim restoration",
+      "path": "assets/themes/standard/images/addon-trim-restoration.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 10,
+      "id": "IMG-010"
+    },
+    {
+      "key": "theme:addon_truck_box_wash",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon truck box wash",
+      "path": "assets/themes/standard/images/addon-truck-box-wash.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 11,
+      "id": "IMG-011"
+    },
+    {
+      "key": "theme:addon_windshield_ceramic_coating",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "addon windshield ceramic coating",
+      "path": "assets/themes/standard/images/addon-windshield-ceramic-coating.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 12,
+      "id": "IMG-012"
+    },
+    {
+      "key": "theme:brand_banner",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "brand banner",
+      "path": "assets/themes/standard/images/brand-banner.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 480,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme candidate only: active site-settings/R2 branding retains precedence",
+      "number": 13,
+      "id": "IMG-013"
+    },
+    {
+      "key": "theme:brand_logo",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "brand logo",
+      "path": "assets/themes/standard/images/brand-logo.png",
+      "format": "png",
+      "size": {
+        "width": 800,
+        "height": 800,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "shared public/Admin header"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme candidate only: active site-settings/R2 branding retains precedence",
+      "number": 14,
+      "id": "IMG-014"
+    },
+    {
+      "key": "theme:hero_background",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "hero background",
+      "path": "assets/themes/standard/images/hero-background.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Current stylesheet retains KatBlackCar.PNG",
+      "number": 15,
+      "id": "IMG-015"
+    },
+    {
+      "key": "theme:landing_fallback_ceramic_coating",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback ceramic coating",
+      "path": "assets/themes/standard/images/addon-ceramic-coating.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/ceramic-coating"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 16,
+      "id": "IMG-016"
+    },
+    {
+      "key": "theme:landing_fallback_de_badging",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback de badging",
+      "path": "assets/themes/standard/images/addon-de-badging.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/de-badging"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 17,
+      "id": "IMG-017"
+    },
+    {
+      "key": "theme:landing_fallback_de_ionizing_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback de ionizing treatment",
+      "path": "assets/themes/standard/images/addon-de-ionizing-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/de-ionizing-treatment"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 18,
+      "id": "IMG-018"
+    },
+    {
+      "key": "theme:landing_fallback_engine_cleaning",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback engine cleaning",
+      "path": "assets/themes/standard/images/addon-engine-cleaning.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/engine-cleaning"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 19,
+      "id": "IMG-019"
+    },
+    {
+      "key": "theme:landing_fallback_exterior_wax",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback exterior wax",
+      "path": "assets/themes/standard/images/addon-exterior-wax.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/exterior-wax"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 20,
+      "id": "IMG-020"
+    },
+    {
+      "key": "theme:landing_fallback_full_clay_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback full clay treatment",
+      "path": "assets/themes/standard/images/addon-full-clay-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/full-clay-treatment"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 21,
+      "id": "IMG-021"
+    },
+    {
+      "key": "theme:landing_fallback_graphene_finish",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback graphene finish",
+      "path": "assets/themes/standard/images/addon-graphene-finish.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/graphene-finish"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 22,
+      "id": "IMG-022"
+    },
+    {
+      "key": "theme:landing_fallback_high_grade_paint_sealant",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback high grade paint sealant",
+      "path": "assets/themes/standard/images/addon-high-grade-paint-sealant.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/high-grade-paint-sealant"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 23,
+      "id": "IMG-023"
+    },
+    {
+      "key": "theme:landing_fallback_two_stage_polish",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback two stage polish",
+      "path": "assets/themes/standard/images/addon-two-stage-polish.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/two-stage-polish"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 24,
+      "id": "IMG-024"
+    },
+    {
+      "key": "theme:landing_fallback_uv_protectant",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback uv protectant",
+      "path": "assets/themes/standard/images/addon-uv-protectant.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/uv-protectant"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 25,
+      "id": "IMG-025"
+    },
+    {
+      "key": "theme:landing_fallback_vinyl_wrapping",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback vinyl wrapping",
+      "path": "assets/themes/standard/images/addon-vinyl-wrapping.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/vinyl-wrapping"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 26,
+      "id": "IMG-026"
+    },
+    {
+      "key": "theme:landing_fallback_window_tinting",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "landing fallback window tinting",
+      "path": "assets/themes/standard/images/addon-window-tinting.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 1067,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/window-tinting"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
+      "number": 27,
+      "id": "IMG-027"
+    },
+    {
+      "key": "theme:package_basic",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "package basic",
+      "path": "assets/themes/standard/images/package-basic.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services",
+        "/pricing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 28,
+      "id": "IMG-028"
+    },
+    {
+      "key": "theme:package_complete",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "package complete",
+      "path": "assets/themes/standard/images/package-complete.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services",
+        "/pricing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 29,
+      "id": "IMG-029"
+    },
+    {
+      "key": "theme:package_premium_wash",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "package premium wash",
+      "path": "assets/themes/standard/images/package-premium-wash.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/services",
+        "/pricing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
+      "number": 30,
+      "id": "IMG-030"
+    },
+    {
+      "key": "theme:process_bug_tar_removal",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process bug tar removal",
+      "path": "assets/themes/standard/images/process-bug-tar-removal.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/bug-tar-removal"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 31,
+      "id": "IMG-031"
+    },
+    {
+      "key": "theme:process_carpet_shampoo",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process carpet shampoo",
+      "path": "assets/themes/standard/images/process-carpet-shampoo.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/carpet-shampoo"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 32,
+      "id": "IMG-032"
+    },
+    {
+      "key": "theme:process_ceramic_coating",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process ceramic coating",
+      "path": "assets/themes/standard/images/process-ceramic-coating.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/ceramic-coating"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 33,
+      "id": "IMG-033"
+    },
+    {
+      "key": "theme:process_ceramic_spray_wax",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process ceramic spray wax",
+      "path": "assets/themes/standard/images/process-ceramic-spray-wax.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/ceramic-spray-wax"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 34,
+      "id": "IMG-034"
+    },
+    {
+      "key": "theme:process_de_badging",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process de badging",
+      "path": "assets/themes/standard/images/process-de-badging.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/de-badging"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 35,
+      "id": "IMG-035"
+    },
+    {
+      "key": "theme:process_de_ionizing_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process de ionizing treatment",
+      "path": "assets/themes/standard/images/process-de-ionizing-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/de-ionizing-treatment"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 36,
+      "id": "IMG-036"
+    },
+    {
+      "key": "theme:process_engine_cleaning",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process engine cleaning",
+      "path": "assets/themes/standard/images/process-engine-cleaning.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/engine-cleaning"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 37,
+      "id": "IMG-037"
+    },
+    {
+      "key": "theme:process_exterior_wax",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process exterior wax",
+      "path": "assets/themes/standard/images/process-exterior-wax.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/exterior-wax"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 38,
+      "id": "IMG-038"
+    },
+    {
+      "key": "theme:process_fleet_vehicle_add_on",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process fleet vehicle add on",
+      "path": "assets/themes/standard/images/process-fleet-vehicle-add-on.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/fleet-vehicle-add-on"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 39,
+      "id": "IMG-039"
+    },
+    {
+      "key": "theme:process_full_clay_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process full clay treatment",
+      "path": "assets/themes/standard/images/process-full-clay-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/full-clay-treatment"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 40,
+      "id": "IMG-040"
+    },
+    {
+      "key": "theme:process_graphene_finish",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process graphene finish",
+      "path": "assets/themes/standard/images/process-graphene-finish.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/graphene-finish"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 41,
+      "id": "IMG-041"
+    },
+    {
+      "key": "theme:process_headlight_restoration",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process headlight restoration",
+      "path": "assets/themes/standard/images/process-headlight-restoration.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/headlight-restoration"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 42,
+      "id": "IMG-042"
+    },
+    {
+      "key": "theme:process_high_grade_paint_sealant",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process high grade paint sealant",
+      "path": "assets/themes/standard/images/process-high-grade-paint-sealant.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/high-grade-paint-sealant"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 43,
+      "id": "IMG-043"
+    },
+    {
+      "key": "theme:process_odor_removal",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process odor removal",
+      "path": "assets/themes/standard/images/process-odor-removal.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/odor-removal"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 44,
+      "id": "IMG-044"
+    },
+    {
+      "key": "theme:process_pet_hair_removal",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process pet hair removal",
+      "path": "assets/themes/standard/images/process-pet-hair-removal.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/pet-hair-removal"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 45,
+      "id": "IMG-045"
+    },
+    {
+      "key": "theme:process_salt_stain_treatment",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process salt stain treatment",
+      "path": "assets/themes/standard/images/process-salt-stain-treatment.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/salt-stain-treatment"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 46,
+      "id": "IMG-046"
+    },
+    {
+      "key": "theme:process_seat_shampoo",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process seat shampoo",
+      "path": "assets/themes/standard/images/process-seat-shampoo.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/seat-shampoo"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 47,
+      "id": "IMG-047"
+    },
+    {
+      "key": "theme:process_trim_restoration",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process trim restoration",
+      "path": "assets/themes/standard/images/process-trim-restoration.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/trim-restoration"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 48,
+      "id": "IMG-048"
+    },
+    {
+      "key": "theme:process_truck_box_wash",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process truck box wash",
+      "path": "assets/themes/standard/images/process-truck-box-wash.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/truck-box-wash"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 49,
+      "id": "IMG-049"
+    },
+    {
+      "key": "theme:process_two_stage_polish",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process two stage polish",
+      "path": "assets/themes/standard/images/process-two-stage-polish.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/two-stage-polish"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 50,
+      "id": "IMG-050"
+    },
+    {
+      "key": "theme:process_uv_protectant",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process uv protectant",
+      "path": "assets/themes/standard/images/process-uv-protectant.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/uv-protectant"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 51,
+      "id": "IMG-051"
+    },
+    {
+      "key": "theme:process_vinyl_wrapping",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process vinyl wrapping",
+      "path": "assets/themes/standard/images/process-vinyl-wrapping.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/vinyl-wrapping"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 52,
+      "id": "IMG-052"
+    },
+    {
+      "key": "theme:process_window_tinting",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process window tinting",
+      "path": "assets/themes/standard/images/process-window-tinting.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/window-tinting"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 53,
+      "id": "IMG-053"
+    },
+    {
+      "key": "theme:process_windshield_ceramic_coating",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "process windshield ceramic coating",
+      "path": "assets/themes/standard/images/process-windshield-ceramic-coating.webp",
+      "format": "webp",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/windshield-ceramic-coating"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
+      "number": 54,
+      "id": "IMG-054"
+    },
+    {
+      "key": "theme:town_norwich_otterville",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town norwich otterville",
+      "path": "assets/themes/standard/images/town-norwich-otterville.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/norwich-otterville-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 55,
+      "id": "IMG-055"
+    },
+    {
+      "key": "theme:town_port_dover",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town port dover",
+      "path": "assets/themes/standard/images/town-port-dover.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/port-dover-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 56,
+      "id": "IMG-056"
+    },
+    {
+      "key": "theme:town_port_rowan_turkey_point",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town port rowan turkey point",
+      "path": "assets/themes/standard/images/town-port-rowan-turkey-point.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/port-rowan-turkey-point-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 57,
+      "id": "IMG-057"
+    },
+    {
+      "key": "theme:town_simcoe_delhi",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town simcoe delhi",
+      "path": "assets/themes/standard/images/town-simcoe-delhi.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/simcoe-delhi-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 58,
+      "id": "IMG-058"
+    },
+    {
+      "key": "theme:town_tillsonburg",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town tillsonburg",
+      "path": "assets/themes/standard/images/town-tillsonburg.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/tillsonburg-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 59,
+      "id": "IMG-059"
+    },
+    {
+      "key": "theme:town_waterford_vittoria",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town waterford vittoria",
+      "path": "assets/themes/standard/images/town-waterford-vittoria.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/waterford-vittoria-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 60,
+      "id": "IMG-060"
+    },
+    {
+      "key": "theme:town_woodstock_ingersoll",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town woodstock ingersoll",
+      "path": "assets/themes/standard/images/town-woodstock-ingersoll.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/woodstock-ingersoll-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 61,
+      "id": "IMG-061"
+    },
+    {
+      "key": "theme:town_zorra_thamesford_embro",
+      "ownership": "theme-owner-only",
+      "theme": "standard",
+      "name": "town zorra thamesford embro",
+      "path": "assets/themes/standard/images/town-zorra-thamesford-embro.webp",
+      "format": "webp",
+      "size": {
+        "width": 1920,
+        "height": 1080,
+        "basis": "recommended-canvas-not-upload-minimum"
+      },
+      "pages": [
+        "/zorra-thamesford-embro-auto-detailing"
+      ],
+      "placement": "planned-or-fallback-not-live-verified",
+      "filePresent": false,
+      "notes": "Town banner: permanent theme artwork, not town customer proof",
+      "number": 62,
+      "id": "IMG-062"
+    },
+    {
+      "key": "static:assets/addons/de_badging.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "de_badging.svg",
+      "path": "assets/addons/de_badging.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 63,
+      "id": "IMG-063"
+    },
+    {
+      "key": "static:assets/addons/de_ionizing_treatment.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "de_ionizing_treatment.svg",
+      "path": "assets/addons/de_ionizing_treatment.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 64,
+      "id": "IMG-064"
+    },
+    {
+      "key": "static:assets/addons/engine_cleaning.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "engine_cleaning.png",
+      "path": "assets/addons/engine_cleaning.png",
+      "format": "png",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 65,
+      "id": "IMG-065"
+    },
+    {
+      "key": "static:assets/addons/engine_cleaning.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "engine_cleaning.svg",
+      "path": "assets/addons/engine_cleaning.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 66,
+      "id": "IMG-066"
+    },
+    {
+      "key": "static:assets/addons/external_ceramic_coating.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "external_ceramic_coating.png",
+      "path": "assets/addons/external_ceramic_coating.png",
+      "format": "png",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 67,
+      "id": "IMG-067"
+    },
+    {
+      "key": "static:assets/addons/external_ceramic_coating.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "external_ceramic_coating.svg",
+      "path": "assets/addons/external_ceramic_coating.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 68,
+      "id": "IMG-068"
+    },
+    {
+      "key": "static:assets/addons/external_graphene_fine_finish.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "external_graphene_fine_finish.svg",
+      "path": "assets/addons/external_graphene_fine_finish.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 69,
+      "id": "IMG-069"
+    },
+    {
+      "key": "static:assets/addons/external_wax.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "external_wax.svg",
+      "path": "assets/addons/external_wax.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 70,
+      "id": "IMG-070"
+    },
+    {
+      "key": "static:assets/addons/full_clay_treatment.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "full_clay_treatment.png",
+      "path": "assets/addons/full_clay_treatment.png",
+      "format": "png",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 71,
+      "id": "IMG-071"
+    },
+    {
+      "key": "static:assets/addons/full_clay_treatment.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "full_clay_treatment.svg",
+      "path": "assets/addons/full_clay_treatment.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 72,
+      "id": "IMG-072"
+    },
+    {
+      "key": "static:assets/addons/generic_addon.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "generic_addon.png",
+      "path": "assets/addons/generic_addon.png",
+      "format": "png",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "/booking-planner"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/admin-catalog-v311.js",
+        "assets/booking-specialty-cards.js",
+        "assets/pricing-catalog-client-legacy.js",
+        "assets/site.js",
+        "booking-planner.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 73,
+      "id": "IMG-073"
+    },
+    {
+      "key": "static:assets/addons/generic_addon.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "generic_addon.svg",
+      "path": "assets/addons/generic_addon.svg",
+      "format": "svg",
+      "size": {
+        "width": 1200,
+        "height": 800,
+        "viewBox": "0 0 1200 800",
+        "basis": "svg-viewbox-scalable-not-pixels"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 74,
+      "id": "IMG-074"
+    },
+    {
+      "key": "static:assets/addons/high_grade_paint_sealant.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "high_grade_paint_sealant.png",
+      "path": "assets/addons/high_grade_paint_sealant.png",
+      "format": "png",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 75,
+      "id": "IMG-075"
+    },
+    {
+      "key": "static:assets/addons/high_grade_paint_sealant.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "high_grade_paint_sealant.svg",
+      "path": "assets/addons/high_grade_paint_sealant.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 76,
+      "id": "IMG-076"
+    },
+    {
+      "key": "static:assets/addons/two_stage_polish.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "two_stage_polish.png",
+      "path": "assets/addons/two_stage_polish.png",
+      "format": "png",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 77,
+      "id": "IMG-077"
+    },
+    {
+      "key": "static:assets/addons/two_stage_polish.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "two_stage_polish.svg",
+      "path": "assets/addons/two_stage_polish.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 78,
+      "id": "IMG-078"
+    },
+    {
+      "key": "static:assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "uv_protectant_applied_on_interior_panels.png",
+      "path": "assets/addons/uv_protectant_applied_on_interior_panels.png",
+      "format": "png",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 79,
+      "id": "IMG-079"
+    },
+    {
+      "key": "static:assets/addons/uv_protectant_applied_on_interior_panels.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "uv_protectant_applied_on_interior_panels.svg",
+      "path": "assets/addons/uv_protectant_applied_on_interior_panels.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 80,
+      "id": "IMG-080"
+    },
+    {
+      "key": "static:assets/addons/vinyl_wrapping.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "vinyl_wrapping.png",
+      "path": "assets/addons/vinyl_wrapping.png",
+      "format": "png",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/site.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 81,
+      "id": "IMG-081"
+    },
+    {
+      "key": "static:assets/addons/vinyl_wrapping.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "vinyl_wrapping.svg",
+      "path": "assets/addons/vinyl_wrapping.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 82,
+      "id": "IMG-082"
+    },
+    {
+      "key": "static:assets/addons/window_tinting.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "window_tinting.svg",
+      "path": "assets/addons/window_tinting.svg",
+      "format": "svg",
+      "size": {
+        "width": 1400,
+        "height": 900,
+        "viewBox": "0 0 1400 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 83,
+      "id": "IMG-083"
+    },
+    {
+      "key": "static:assets/app-icons/rosie-192.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "rosie-192.png",
+      "path": "assets/app-icons/rosie-192.png",
+      "format": "png",
+      "size": {
+        "width": 192,
+        "height": 192,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "service-worker.js"
+      ],
+      "notes": "Browser/PWA icon; not a Photo Studio upload",
+      "number": 84,
+      "id": "IMG-084"
+    },
+    {
+      "key": "static:assets/app-icons/rosie-512.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "rosie-512.png",
+      "path": "assets/app-icons/rosie-512.png",
+      "format": "png",
+      "size": {
+        "width": 512,
+        "height": 512,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "service-worker.js"
+      ],
+      "notes": "Browser/PWA icon; not a Photo Studio upload",
+      "number": 85,
+      "id": "IMG-085"
+    },
+    {
+      "key": "static:assets/app-icons/rosie-maskable-512.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "rosie-maskable-512.png",
+      "path": "assets/app-icons/rosie-maskable-512.png",
+      "format": "png",
+      "size": {
+        "width": 512,
+        "height": 512,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "service-worker.js"
+      ],
+      "notes": "Browser/PWA icon; not a Photo Studio upload",
+      "number": 86,
+      "id": "IMG-086"
+    },
+    {
+      "key": "static:assets/brand/CarPrice2025.PNG",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "CarPrice2025.PNG",
+      "path": "assets/brand/CarPrice2025.PNG",
+      "format": "png",
+      "size": {
+        "width": 1900,
+        "height": 2200,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/pricing-catalog-client-legacy.js",
+        "assets/site.js",
+        "functions/api/_lib/pricing-catalog.js",
+        "functions/api/admin/_lib/pricing-catalog.js",
+        "functions/api/before_after_gallery_public.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 87,
+      "id": "IMG-087"
+    },
+    {
+      "key": "static:assets/brand/CarPriceDetails2025.PNG",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "CarPriceDetails2025.PNG",
+      "path": "assets/brand/CarPriceDetails2025.PNG",
+      "format": "png",
+      "size": {
+        "width": 1900,
+        "height": 1500,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/pricing-catalog-client-legacy.js",
+        "assets/site.js",
+        "functions/api/_lib/pricing-catalog.js",
+        "functions/api/admin/_lib/pricing-catalog.js",
+        "functions/api/before_after_gallery_public.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 88,
+      "id": "IMG-088"
+    },
+    {
+      "key": "static:assets/brand/CarSizeChart.PNG",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "CarSizeChart.PNG",
+      "path": "assets/brand/CarSizeChart.PNG",
+      "format": "png",
+      "size": {
+        "width": 1700,
+        "height": 1080,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "/gifts"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "functions/api/before_after_gallery_public.js",
+        "gifts.html",
+        "gifts/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 89,
+      "id": "IMG-089"
+    },
+    {
+      "key": "static:assets/brand/rosie-reviews-fallback.png",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "rosie-reviews-fallback.png",
+      "path": "assets/brand/rosie-reviews-fallback.png",
+      "format": "png",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/build389-local-seo-proof.js",
+        "assets/chrome.js",
+        "assets/landing-page-build388.js"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 90,
+      "id": "IMG-090"
+    },
+    {
+      "key": "static:assets/brand/rosie-reviews-fallback.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "rosie-reviews-fallback.svg",
+      "path": "assets/brand/rosie-reviews-fallback.svg",
+      "format": "svg",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "viewBox": "0 0 1600 900",
+        "basis": "svg-explicit-canvas"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 91,
+      "id": "IMG-091"
+    },
+    {
+      "key": "static:assets/photos/coating-detail.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "coating-detail.jpg",
+      "path": "assets/photos/coating-detail.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 92,
+      "id": "IMG-092"
+    },
+    {
+      "key": "static:assets/photos/customer-review.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "customer-review.jpg",
+      "path": "assets/photos/customer-review.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 93,
+      "id": "IMG-093"
+    },
+    {
+      "key": "static:assets/photos/engine-bay.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "engine-bay.jpg",
+      "path": "assets/photos/engine-bay.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 94,
+      "id": "IMG-094"
+    },
+    {
+      "key": "static:assets/photos/interior-detail.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "interior-detail.jpg",
+      "path": "assets/photos/interior-detail.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 95,
+      "id": "IMG-095"
+    },
+    {
+      "key": "static:assets/photos/inventory-room.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "inventory-room.jpg",
+      "path": "assets/photos/inventory-room.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 96,
+      "id": "IMG-096"
+    },
+    {
+      "key": "static:assets/photos/launch-checklist.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launch-checklist.jpg",
+      "path": "assets/photos/launch-checklist.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 97,
+      "id": "IMG-097"
+    },
+    {
+      "key": "static:assets/photos/local-town.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "local-town.jpg",
+      "path": "assets/photos/local-town.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 98,
+      "id": "IMG-098"
+    },
+    {
+      "key": "static:assets/photos/service-exterior.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "service-exterior.jpg",
+      "path": "assets/photos/service-exterior.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "/landing"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "landing/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 99,
+      "id": "IMG-099"
+    },
+    {
+      "key": "static:assets/photos/workflow-tablet.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "workflow-tablet.jpg",
+      "path": "assets/photos/workflow-tablet.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 100,
+      "id": "IMG-100"
+    },
+    {
+      "key": "static:assets/photos/wrap-tint.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "wrap-tint.jpg",
+      "path": "assets/photos/wrap-tint.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 101,
+      "id": "IMG-101"
+    },
+    {
+      "key": "static:assets/placeholders/inventory-tools-photo.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "inventory-tools-photo.jpg",
+      "path": "assets/placeholders/inventory-tools-photo.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "/admin-catalog"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "admin-catalog.html",
+        "admin-catalog/index.html",
+        "assets/admin-catalog-v311.js",
+        "assets/visual-placeholders.js"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 102,
+      "id": "IMG-102"
+    },
+    {
+      "key": "static:assets/placeholders/launch-readiness-photo.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "launch-readiness-photo.jpg",
+      "path": "assets/placeholders/launch-readiness-photo.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/visual-placeholders.js"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 103,
+      "id": "IMG-103"
+    },
+    {
+      "key": "static:assets/placeholders/local-proof-photo.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "local-proof-photo.jpg",
+      "path": "assets/placeholders/local-proof-photo.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/visual-placeholders.js"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 104,
+      "id": "IMG-104"
+    },
+    {
+      "key": "static:assets/placeholders/product-gallery-photo.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "product-gallery-photo.jpg",
+      "path": "assets/placeholders/product-gallery-photo.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "/admin-inventory-manager"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "admin-inventory-manager.html",
+        "admin-inventory-manager/index.html",
+        "assets/visual-placeholders.js"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 105,
+      "id": "IMG-105"
+    },
+    {
+      "key": "static:assets/placeholders/service-photo-needed.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "service-photo-needed.svg",
+      "path": "assets/placeholders/service-photo-needed.svg",
+      "format": "svg",
+      "size": {
+        "width": 1200,
+        "height": 750,
+        "viewBox": "0 0 1200 750",
+        "basis": "svg-viewbox-scalable-not-pixels"
+      },
+      "pages": [
+        "/booking-planner",
+        "/bug-tar-removal",
+        "/carpet-shampoo",
+        "/ceramic-coating",
+        "/ceramic-spray-wax",
+        "/de-badging",
+        "/de-ionizing-treatment",
+        "/engine-cleaning",
+        "/exterior-wax",
+        "/fall-winter-protection-detailing",
+        "/fleet-vehicle-add-on",
+        "/full-clay-treatment",
+        "/graphene-finish",
+        "/headlight-restoration",
+        "/high-grade-paint-sealant",
+        "/odor-removal",
+        "/pet-hair-removal",
+        "/pre-sale-lease-return-detailing",
+        "/salt-stain-treatment",
+        "/seat-shampoo",
+        "/spring-salt-recovery-detailing",
+        "/trim-restoration",
+        "/truck-box-wash",
+        "/two-stage-polish",
+        "/uv-protectant",
+        "/vinyl-wrapping",
+        "/window-tinting",
+        "/windshield-ceramic-coating"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/landing-page-build388.js",
+        "assets/standard-static-media.js",
+        "booking-planner.html",
+        "bug-tar-removal/index.html",
+        "carpet-shampoo/index.html",
+        "ceramic-coating/index.html",
+        "ceramic-spray-wax/index.html",
+        "de-badging/index.html",
+        "de-ionizing-treatment/index.html",
+        "engine-cleaning/index.html",
+        "exterior-wax/index.html",
+        "fall-winter-protection-detailing/index.html",
+        "fleet-vehicle-add-on/index.html",
+        "full-clay-treatment/index.html",
+        "graphene-finish/index.html",
+        "headlight-restoration/index.html",
+        "high-grade-paint-sealant/index.html",
+        "odor-removal/index.html",
+        "pet-hair-removal/index.html",
+        "pre-sale-lease-return-detailing/index.html"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 106,
+      "id": "IMG-106"
+    },
+    {
+      "key": "static:assets/placeholders/service-photo.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "service-photo.jpg",
+      "path": "assets/placeholders/service-photo.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "/admin-daip-gate-c"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "admin-daip-gate-c.html",
+        "admin-daip-gate-c/index.html",
+        "assets/visual-placeholders.js"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 107,
+      "id": "IMG-107"
+    },
+    {
+      "key": "static:assets/placeholders/workflow-photo.jpg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "workflow-photo.jpg",
+      "path": "assets/placeholders/workflow-photo.jpg",
+      "format": "jpg",
+      "size": {
+        "width": 1448,
+        "height": 1086,
+        "basis": "measured-file"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "assets/visual-placeholders.js"
+      ],
+      "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
+      "number": 108,
+      "id": "IMG-108"
+    },
+    {
+      "key": "static:assets/vehicles/outline_back.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "outline_back.svg",
+      "path": "assets/vehicles/outline_back.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-viewbox-scalable-not-pixels"
+      },
+      "pages": [
+        "/my-account"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "my-account.html",
+        "my-account/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 109,
+      "id": "IMG-109"
+    },
+    {
+      "key": "static:assets/vehicles/outline_front.svg",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "outline_front.svg",
+      "path": "assets/vehicles/outline_front.svg",
+      "format": "svg",
+      "size": {
+        "width": 640,
+        "height": 360,
+        "viewBox": "0 0 640 360",
+        "basis": "svg-viewbox-scalable-not-pixels"
+      },
+      "pages": [
+        "/my-account"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [
+        "my-account.html",
+        "my-account/index.html"
+      ],
+      "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
+      "number": 110,
+      "id": "IMG-110"
+    },
+    {
+      "key": "static:favicon.ico",
+      "ownership": "application-owner-only",
+      "theme": "shared",
+      "name": "favicon.ico",
+      "path": "favicon.ico",
+      "format": "ico",
+      "size": {
+        "sizes": [
+          "16×16",
+          "32×32",
+          "48×48",
+          "64×64"
+        ],
+        "basis": "measured-ico-directory"
+      },
+      "pages": [
+        "shared runtime / placement not verified"
+      ],
+      "placement": "checked-in local file; render usage not verified",
+      "filePresent": true,
+      "sourceFiles": [],
+      "notes": "Browser/PWA icon; not a Photo Studio upload",
+      "number": 111,
+      "id": "IMG-111"
+    },
+    {
+      "key": "admin-art:creative_project_budget_archive_history",
+      "ownership": "application-owner-only",
+      "theme": "standard",
+      "name": "creative project budget archive history",
+      "path": "assets/themes/standard/admin/admin-creative-project-budget-archive-history.svg",
+      "format": "svg",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "proposed-canvas-not-measured"
+      },
+      "pages": [
+        "/admin-creative-projects.html"
+      ],
+      "placement": "reserved admin artwork; not approved or installed",
+      "filePresent": false,
+      "notes": "Internal illustration only. Never depict private customer information or tokens.",
+      "number": 112,
+      "id": "IMG-112"
+    },
+    {
+      "key": "admin-art:creative_project_cost_content_workflow",
+      "ownership": "application-owner-only",
+      "theme": "standard",
+      "name": "creative project cost content workflow",
+      "path": "assets/themes/standard/admin/admin-creative-project-cost-content-workflow.svg",
+      "format": "svg",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "proposed-canvas-not-measured"
+      },
+      "pages": [
+        "/admin-creative-projects.html"
+      ],
+      "placement": "reserved admin artwork; not approved or installed",
+      "filePresent": false,
+      "notes": "Internal illustration only. Never depict private customer information or tokens.",
+      "number": 113,
+      "id": "IMG-113"
+    },
+    {
+      "key": "admin-art:creative_project_profit_learning_workflow",
+      "ownership": "application-owner-only",
+      "theme": "standard",
+      "name": "creative project profit learning workflow",
+      "path": "assets/themes/standard/admin/admin-creative-project-profit-learning-workflow.svg",
+      "format": "svg",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "proposed-canvas-not-measured"
+      },
+      "pages": [
+        "Admin/shared"
+      ],
+      "placement": "reserved admin artwork; not approved or installed",
+      "filePresent": false,
+      "notes": "Internal illustration only. Never depict private customer information or tokens.",
+      "number": 114,
+      "id": "IMG-114"
+    },
+    {
+      "key": "admin-art:roadmap_execution_centre",
+      "ownership": "application-owner-only",
+      "theme": "standard",
+      "name": "roadmap execution centre",
+      "path": "assets/themes/standard/admin/admin-roadmap-execution-centre.svg",
+      "format": "svg",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "proposed-canvas-not-measured"
+      },
+      "pages": [
+        "/admin-roadmap-execution.html"
+      ],
+      "placement": "reserved admin artwork; not approved or installed",
+      "filePresent": false,
+      "notes": "Internal illustration only. Never depict private customer information or tokens.",
+      "number": 115,
+      "id": "IMG-115"
+    },
+    {
+      "key": "admin-art:startup_go_live_command_path",
+      "ownership": "application-owner-only",
+      "theme": "standard",
+      "name": "startup go live command path",
+      "path": "assets/themes/standard/admin/admin-startup-go-live-command-path.svg",
+      "format": "svg",
+      "size": {
+        "width": 1600,
+        "height": 900,
+        "basis": "proposed-canvas-not-measured"
+      },
+      "pages": [
+        "/admin-startup-guide.html"
+      ],
+      "placement": "reserved admin artwork; not approved or installed",
+      "filePresent": false,
+      "notes": "Internal illustration only. Never depict private customer information or tokens.",
+      "number": 116,
+      "id": "IMG-116"
+    }
+  ]
+}

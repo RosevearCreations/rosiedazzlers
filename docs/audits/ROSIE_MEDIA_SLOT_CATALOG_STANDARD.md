@@ -1,5 +1,7 @@
 # Rosie Dazzlers — Master Visual Slot & Upload Filename Catalogue
 
+> **Build 611 ownership separation:** This is the historical **all-target** inventory, including employee/Photo Studio-managed uploads. For the authoritative numbered list of images **employees are not meant to update**, use [ROSIE_APPLICATION_STATIC_IMAGE_CATALOG.md](ROSIE_APPLICATION_STATIC_IMAGE_CATALOG.md) and its machine-readable single source of truth `data/application_static_image_catalog.json`. Town banners are theme-owned static artwork; before/after, galleries, reviews, progress, and customer evidence are not. Do not treat numbered `slot-NNN` suggestions in this historical document as approved, permanent theme assets.
+
 Generated from **repository registries** on 2026-10-20. This document inventories registered slots, not actual uploaded file existence.
 
 ## Source-of-truth distinction
