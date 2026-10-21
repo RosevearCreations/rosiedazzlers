@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "defaultTheme": "standard",
+  "themes": {
+    "standard": {
+      "label": "Standard",
+      "stylesheet": "/assets/themes/standard.css",
+      "description": "Original Rosie Dazzlers dark appearance and current imagery, preserved without visual redesign.",
+      "status": "baseline"
+    }
+  },
+  "notes": [
+    "No theme toggle or administrative persistence is enabled by this baseline.",
+    "Dynamic site-setting and approved R2 media take priority over static artwork.",
+    "Future themes should add complete palette, logo, banner, imagery and component override contracts."
+  ]
+}
