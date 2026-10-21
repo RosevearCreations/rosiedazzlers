@@ -93,3 +93,11 @@ Theme and media audit includes the wizard as a separate UI surface: `preview/quo
 - \`scripts/audit_standard_theme_media.mjs\`: now detects missing local static image files separately from reserved-but-not-yet-uploaded Standard illustrations. CI emits generated full-checkout source reports.
 - \`docs/audits/ROSIE_STANDARD_THEME_PHASE2_VISUAL_QA.md\`: exact operating instructions, safe handling, source vs rendered verification boundaries and future theme acceptance.
 - These additions DO NOT by themselves finish a rendered audit of all live public/Admin pages, supply missing artwork, inspect protected R2 objects or certify Cloudflare Production. Those are separate measured acceptance steps.
+
+## Build 609 candidate — local add-on artwork reconciliation (2026-10-21)
+
+The Build 608 full-checkout scanner produced an actual media inventory of **2,263 source references, 17 SVGs**, and **73 broken local-path references pointing to 17 unique local add-on PNG filenames**. See \`docs/audits/ROSIE_MISSING_ADDON_ASSET_RECONCILIATION.md\` and \`data/standard_missing_addon_assets.json\`.
+
+Five names have existing matching SVG files; 25 copies of their missing PNG references are corrected on the **separate candidate branch** \`audit/addon-static-asset-reconciliation\`. The remaining 12 names represent 48 source references and remain exact required PNG upload slots, not customer proof assets. \`scripts/addon_image_reconciliation_test.mjs\` prevents missing equivalent SVG fallbacks and verifies the planned upload register. Do not count 73 missing paths as 73 distinct images.
+
+Build 609 is staging-only until the preceding Build 608's exact \`main\` SHA is independently Cloudflare Production GREEN. Preserve Photo Studio and R2 precedence, real customer media consent, and current booking/pricing logic.
