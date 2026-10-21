@@ -10,6 +10,9 @@ on:
       - 'scripts/audit_standard_theme_media.mjs'
       - 'scripts/reconcile_rendered_visual_audits.mjs'
       - 'scripts/reconcile_rendered_visual_audits_test.mjs'
+      - 'scripts/triage_visual_image_slots.mjs'
+      - 'scripts/triage_visual_image_slots_test.mjs'
+      - 'BUILD610_IMAGE_SLOT_ADMIN_TRIAGE.md'
       - 'BUILD609_RENDERED_VISUAL_EVIDENCE_RECONCILIATION.md'
       - 'docs/audits/**'
       - 'docs/research/**'
@@ -38,8 +41,12 @@ jobs:
           node --check assets/chrome.js
           node --check scripts/reconcile_rendered_visual_audits.mjs
           node --check scripts/reconcile_rendered_visual_audits_test.mjs
+          node --check scripts/triage_visual_image_slots.mjs
+          node --check scripts/triage_visual_image_slots_test.mjs
       - name: Test Build 609 local reconciliation
         run: node scripts/reconcile_rendered_visual_audits_test.mjs
+      - name: Test Build 610 Admin visual triage
+        run: node scripts/triage_visual_image_slots_test.mjs
       - name: Generate static, JS, CSS and SVG source inventory
         run: node scripts/audit_standard_theme_media.mjs
       - name: Validate registered slots and wired public process images
