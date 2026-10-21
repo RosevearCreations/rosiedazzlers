@@ -9,6 +9,9 @@ on:
       - 'data/theme_registry.json'
       - 'scripts/audit_standard_theme_media.mjs'
       - 'scripts/standard_theme_phase2_test.mjs'
+      - 'scripts/reconcile_rendered_visual_audits.mjs'
+      - 'scripts/reconcile_rendered_visual_audits_test.mjs'
+      - 'BUILD609_RENDERED_VISUAL_EVIDENCE_RECONCILIATION.md'
       - 'data/standard_admin_visual_source_inventory.json'
       - 'admin-media-health.html'
       - 'admin-media-health/index.html'
@@ -40,8 +43,12 @@ jobs:
           node --check assets/visual-audit-inspector.js
           node --check assets/theme-runtime.js
           node --check scripts/standard_theme_phase2_test.mjs
+          node --check scripts/reconcile_rendered_visual_audits.mjs
+          node --check scripts/reconcile_rendered_visual_audits_test.mjs
       - name: Test Standard theme and protected media boundaries
-        run: node scripts/standard_theme_phase2_test.mjs
+        run: |
+          node scripts/standard_theme_phase2_test.mjs
+          node scripts/reconcile_rendered_visual_audits_test.mjs
       - name: Generate static, JS, CSS and SVG source inventory
         run: node scripts/audit_standard_theme_media.mjs
       - name: Validate registered slots and wired public process images
