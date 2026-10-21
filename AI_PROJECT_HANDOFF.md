@@ -889,3 +889,12 @@ Resolve live `dev`/`main` refs and exact-SHA workflow evidence first, then read 
 - Current participant/duration, capacity, invoicing, travel and stop-condition evidence must remain complete.
 - Any triggered stop condition requires review and blocks accepted continuation outcome continuity.
 - No enrollment, recurring billing, booking mutation, invoice mutation, capacity reservation, automatic stop action or canonical-HOLD mutation is performed.
+
+## Current research and Standard theme visual inventory continuation (2026-10-20)
+
+- Primary research reference: docs/research/ROSIE_COMPETITOR_PROCESS_FEATURE_AUDIT_2026-10-20.md (four public competitor websites, source URLs, confirmed vs unverified features, 24 RCI candidate requirements, staged rollout acceptance and copyright/privacy boundaries).
+- Master image slot catalogue: docs/audits/ROSIE_MEDIA_SLOT_CATALOG_STANDARD.md (all 617 registered Photo Studio target keys across 62 page paths, original 24 R2 requirements, 38 placeholder categories, existing Standard image filename registry, proposed dimensions and approval classes). Do not mistake registered targets for missing uploaded assets or automatically treat a filename as a public proof assignment.
+- Static source scanner: scripts/audit_standard_theme_media.mjs; on a complete checkout, run with Node to create docs/audits/GENERATED_MEDIA_REFERENCES.md plus data/generated_media_reference_inventory.json. Not yet executed against a full checked-out repository here.
+- Standard baseline and tracked source changes: STANDARD_THEME_MEDIA_AUDIT.md; assets/themes/standard.css; data/theme_registry.json; data/standard_theme_image_slots.json; assets/standard-image-slots.js; assets/standard-static-media.js. Twenty-four static service process placeholders have been bound to safe exact Standard process filenames on dev; existing Photo Studio/R2 values remain authoritative, all private and actual before/after proof remain approval gated.
+- Quote-first preview continues independently at /preview/quote-first/; Build 570/573/574 documents govern preview, gated lead intake and separate production authorization. Do not activate public upload, price submission or parallel booking through these visual/research changes.
+- Outstanding: run the full source scanner, inspect actual rendered customer/Admin/media pages and asset dimensions, reconcile any unresolved SVGs and metadata, complete customer privacy review, run full CI/browser tests and verify exact-SHA protected-main + Cloudflare Production before GREEN.

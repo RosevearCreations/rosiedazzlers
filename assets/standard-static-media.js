@@ -1,0 +1,26 @@
+/** Standard theme public static *process* illustration loader.
+ * Never replaces existing approved R2, Photo Studio, before/after, customer or admin media.
+ * An uploaded filename is used only if an actual image loads successfully.
+ */
+export function hydrateStandardProcessImages(root=document){
+ if(document.body?.dataset?.page?.startsWith("admin")||location.pathname.startsWith("/admin"))return;
+ root.querySelectorAll('img[data-standard-filename]').forEach((img)=>{
+  if(img.dataset.standardImageChecked==="true")return;
+  img.dataset.standardImageChecked="true";
+  const name=String(img.dataset.standardFilename||"");
+  if(!/^process-[a-z0-9-]+\.webp$/.test(name))return;
+  const original="/assets/placeholders/service-photo-needed.svg";
+  if(img.getAttribute("src")!==original)return;
+  const proposed="/assets/themes/standard/images/"+name;
+  const check=new Image();
+  check.onload=()=>{
+   // Respect any later Photo Studio or client assignment rather than overwriting it.
+   if(!img.isConnected||img.getAttribute("src")!==original)return;
+   img.src=proposed;
+   img.alt=img.dataset.standardAlt||"Rosie Dazzlers detailing process illustration";
+   img.dataset.standardImageLoaded="true";
+  };
+  check.onerror=()=>{}; // Retain correct original placeholder until owner uploads artwork.
+  check.src=proposed;
+ });
+}

@@ -1,0 +1,895 @@
+{
+  "schema": "rosie-standard-static-image-manifest.v2",
+  "theme": "standard",
+  "basePath": "/assets/themes/standard/images/",
+  "entries": [
+    {
+      "slot": "brand_logo",
+      "filename": "brand-logo.png",
+      "recommendedWidth": 800,
+      "recommendedHeight": 800,
+      "notes": "Current live image uses site-settings/R2; do not override automatically"
+    },
+    {
+      "slot": "brand_banner",
+      "filename": "brand-banner.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 480,
+      "notes": "Current live banner uses site-settings/R2; future opt-in override only"
+    },
+    {
+      "slot": "hero_background",
+      "filename": "hero-background.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080,
+      "notes": "Current stylesheet retains KatBlackCar.PNG"
+    },
+    {
+      "slot": "reviews",
+      "filename": "reviews-proof.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "notes": "Only approved public testimonials; generic fallback stays until approval"
+    },
+    {
+      "slot": "package_basic",
+      "filename": "package-basic.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900
+    },
+    {
+      "slot": "package_complete",
+      "filename": "package-complete.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900
+    },
+    {
+      "slot": "package_premium_wash",
+      "filename": "package-premium-wash.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900
+    },
+    {
+      "slot": "addon_pet_hair_removal",
+      "filename": "addon-pet-hair-removal.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_odor_treatment",
+      "filename": "addon-odor-treatment.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_seat_shampoo",
+      "filename": "addon-seat-shampoo.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_carpet_shampoo",
+      "filename": "addon-carpet-shampoo.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_salt_stain_treatment",
+      "filename": "addon-salt-stain-treatment.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_headlight_restoration",
+      "filename": "addon-headlight-restoration.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_windshield_ceramic_coating",
+      "filename": "addon-windshield-ceramic-coating.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_ceramic_spray_wax",
+      "filename": "addon-ceramic-spray-wax.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_trim_restoration",
+      "filename": "addon-trim-restoration.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_bug_tar_removal",
+      "filename": "addon-bug-tar-removal.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_truck_box_wash",
+      "filename": "addon-truck-box-wash.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "addon_fleet_vehicle_add_on",
+      "filename": "addon-fleet-vehicle.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1067
+    },
+    {
+      "slot": "town_tillsonburg",
+      "filename": "town-tillsonburg.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_woodstock_ingersoll",
+      "filename": "town-woodstock-ingersoll.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_simcoe_delhi",
+      "filename": "town-simcoe-delhi.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_port_dover",
+      "filename": "town-port-dover.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_norwich_otterville",
+      "filename": "town-norwich-otterville.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_zorra_thamesford_embro",
+      "filename": "town-zorra-thamesford-embro.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_waterford_vittoria",
+      "filename": "town-waterford-vittoria.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "town_port_rowan_turkey_point",
+      "filename": "town-port-rowan-turkey-point.webp",
+      "recommendedWidth": 1920,
+      "recommendedHeight": 1080
+    },
+    {
+      "slot": "process_de_badging",
+      "filename": "process-de-badging.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/de-badging",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_de_badging_before",
+      "filename": "proof-de-badging-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/de-badging",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_de_badging_after",
+      "filename": "proof-de-badging-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/de-badging",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_odor_removal",
+      "filename": "process-odor-removal.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/odor-removal",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_odor_removal_before",
+      "filename": "proof-odor-removal-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/odor-removal",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_odor_removal_after",
+      "filename": "proof-odor-removal-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/odor-removal",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_seat_shampoo",
+      "filename": "process-seat-shampoo.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/seat-shampoo",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_seat_shampoo_before",
+      "filename": "proof-seat-shampoo-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/seat-shampoo",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_seat_shampoo_after",
+      "filename": "proof-seat-shampoo-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/seat-shampoo",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_exterior_wax",
+      "filename": "process-exterior-wax.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/exterior-wax",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_exterior_wax_before",
+      "filename": "proof-exterior-wax-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/exterior-wax",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_exterior_wax_after",
+      "filename": "proof-exterior-wax-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/exterior-wax",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_uv_protectant",
+      "filename": "process-uv-protectant.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/uv-protectant",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_uv_protectant_before",
+      "filename": "proof-uv-protectant-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/uv-protectant",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_uv_protectant_after",
+      "filename": "proof-uv-protectant-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/uv-protectant",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_vinyl_wrapping",
+      "filename": "process-vinyl-wrapping.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/vinyl-wrapping",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_vinyl_wrapping_before",
+      "filename": "proof-vinyl-wrapping-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/vinyl-wrapping",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_vinyl_wrapping_after",
+      "filename": "proof-vinyl-wrapping-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/vinyl-wrapping",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_window_tinting",
+      "filename": "process-window-tinting.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/window-tinting",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_window_tinting_before",
+      "filename": "proof-window-tinting-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/window-tinting",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_window_tinting_after",
+      "filename": "proof-window-tinting-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/window-tinting",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_truck_box_wash",
+      "filename": "process-truck-box-wash.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/truck-box-wash",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_truck_box_wash_before",
+      "filename": "proof-truck-box-wash-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/truck-box-wash",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_truck_box_wash_after",
+      "filename": "proof-truck-box-wash-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/truck-box-wash",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_graphene_finish",
+      "filename": "process-graphene-finish.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/graphene-finish",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_graphene_finish_before",
+      "filename": "proof-graphene-finish-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/graphene-finish",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_graphene_finish_after",
+      "filename": "proof-graphene-finish-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/graphene-finish",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_ceramic_coating",
+      "filename": "process-ceramic-coating.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/ceramic-coating",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_ceramic_coating_before",
+      "filename": "proof-ceramic-coating-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/ceramic-coating",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_ceramic_coating_after",
+      "filename": "proof-ceramic-coating-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/ceramic-coating",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_engine_cleaning",
+      "filename": "process-engine-cleaning.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/engine-cleaning",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_engine_cleaning_before",
+      "filename": "proof-engine-cleaning-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/engine-cleaning",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_engine_cleaning_after",
+      "filename": "proof-engine-cleaning-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/engine-cleaning",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_bug_tar_removal",
+      "filename": "process-bug-tar-removal.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/bug-tar-removal",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_bug_tar_removal_before",
+      "filename": "proof-bug-tar-removal-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/bug-tar-removal",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_bug_tar_removal_after",
+      "filename": "proof-bug-tar-removal-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/bug-tar-removal",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_two_stage_polish",
+      "filename": "process-two-stage-polish.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/two-stage-polish",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_two_stage_polish_before",
+      "filename": "proof-two-stage-polish-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/two-stage-polish",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_two_stage_polish_after",
+      "filename": "proof-two-stage-polish-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/two-stage-polish",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_trim_restoration",
+      "filename": "process-trim-restoration.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/trim-restoration",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_trim_restoration_before",
+      "filename": "proof-trim-restoration-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/trim-restoration",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_trim_restoration_after",
+      "filename": "proof-trim-restoration-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/trim-restoration",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_pet_hair_removal",
+      "filename": "process-pet-hair-removal.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/pet-hair-removal",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_pet_hair_removal_before",
+      "filename": "proof-pet-hair-removal-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/pet-hair-removal",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_pet_hair_removal_after",
+      "filename": "proof-pet-hair-removal-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/pet-hair-removal",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_ceramic_spray_wax",
+      "filename": "process-ceramic-spray-wax.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/ceramic-spray-wax",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_ceramic_spray_wax_before",
+      "filename": "proof-ceramic-spray-wax-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/ceramic-spray-wax",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_ceramic_spray_wax_after",
+      "filename": "proof-ceramic-spray-wax-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/ceramic-spray-wax",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_full_clay_treatment",
+      "filename": "process-full-clay-treatment.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/full-clay-treatment",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_full_clay_treatment_before",
+      "filename": "proof-full-clay-treatment-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/full-clay-treatment",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_full_clay_treatment_after",
+      "filename": "proof-full-clay-treatment-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/full-clay-treatment",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_salt_stain_treatment",
+      "filename": "process-salt-stain-treatment.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/salt-stain-treatment",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_salt_stain_treatment_before",
+      "filename": "proof-salt-stain-treatment-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/salt-stain-treatment",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_salt_stain_treatment_after",
+      "filename": "proof-salt-stain-treatment-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/salt-stain-treatment",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_fleet_vehicle_add_on",
+      "filename": "process-fleet-vehicle-add-on.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/fleet-vehicle-add-on",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_fleet_vehicle_add_on_before",
+      "filename": "proof-fleet-vehicle-add-on-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/fleet-vehicle-add-on",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_fleet_vehicle_add_on_after",
+      "filename": "proof-fleet-vehicle-add-on-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/fleet-vehicle-add-on",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_de_ionizing_treatment",
+      "filename": "process-de-ionizing-treatment.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/de-ionizing-treatment",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_de_ionizing_treatment_before",
+      "filename": "proof-de-ionizing-treatment-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/de-ionizing-treatment",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_de_ionizing_treatment_after",
+      "filename": "proof-de-ionizing-treatment-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/de-ionizing-treatment",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_high_grade_paint_sealant",
+      "filename": "process-high-grade-paint-sealant.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/high-grade-paint-sealant",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_high_grade_paint_sealant_before",
+      "filename": "proof-high-grade-paint-sealant-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/high-grade-paint-sealant",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_high_grade_paint_sealant_after",
+      "filename": "proof-high-grade-paint-sealant-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/high-grade-paint-sealant",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_windshield_ceramic_coating",
+      "filename": "process-windshield-ceramic-coating.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/windshield-ceramic-coating",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_windshield_ceramic_coating_before",
+      "filename": "proof-windshield-ceramic-coating-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/windshield-ceramic-coating",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_windshield_ceramic_coating_after",
+      "filename": "proof-windshield-ceramic-coating-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/windshield-ceramic-coating",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_carpet_shampoo",
+      "filename": "process-carpet-shampoo.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/carpet-shampoo",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_carpet_shampoo_before",
+      "filename": "proof-carpet-shampoo-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/carpet-shampoo",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_carpet_shampoo_after",
+      "filename": "proof-carpet-shampoo-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/carpet-shampoo",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    },
+    {
+      "slot": "process_headlight_restoration",
+      "filename": "process-headlight-restoration.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 900,
+      "route": "/headlight-restoration",
+      "visibility": "public",
+      "status": "wired_safe_local_fallback_only",
+      "notes": "After R2 and Photo Studio; original SVG remains if local upload missing"
+    },
+    {
+      "slot": "proof_headlight_restoration_before",
+      "filename": "proof-headlight-restoration-before.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/headlight-restoration",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Never auto-populate as static or simulated before photo"
+    },
+    {
+      "slot": "proof_headlight_restoration_after",
+      "filename": "proof-headlight-restoration-after.webp",
+      "recommendedWidth": 1600,
+      "recommendedHeight": 1200,
+      "route": "/headlight-restoration",
+      "visibility": "public_only_after_verified_consent",
+      "status": "reserved_requires_photo_studio_assignment",
+      "notes": "Actual same-job after photo; require matching pair and approval"
+    }
+  ],
+  "uploadPolicy": "These are RESERVED THEME ARTWORK FILENAMES, not a claim that every slot is wired to live pages. Existing active R2 keys remain authoritative. Do not substitute customer/private media or overwrite approved public images without explicit approval.",
+  "auditStatus": "24 static service process placeholders wired on dev; registered Photo Studio proof pairs remain approval gated; exhaustive rendered media audit unverified"
+}
