@@ -27,3 +27,6 @@ await assert.rejects(verifyIndependentRetentionFollowUp({...args,pinnedIndepende
 await assert.rejects(verifyIndependentRetentionFollowUp({...args,followUpReceipt:{...receipt,claims:{...claims,action:"CLOSE_EXCEPTION"}}}));
 await assert.rejects(verifyIndependentRetentionFollowUp({...args,retentionArguments:{...payload,independentOwnerAcceptancePin:null}}));
 console.log("Build 606 independently pinned manual retention follow-up PASS");
+
+// Build 607 deterministic independent retention follow-up fixture.
+export const build606Fixture={args,owner,pem,fp,now};
