@@ -51,6 +51,12 @@ jobs:
       - name: Validate guarded release promotion automation
         run: node scripts/guarded_production_promotion_test.mjs
 
+      - name: Validate Build 613 bounded quote-first guidance
+        run: |
+          node --check assets/quote-first-guidance-v613.js
+          node --check assets/quote-first-wizard-v570.js
+          node scripts/quote_first_guidance_613_test.mjs
+
       - name: Check current JavaScript syntax
         run: |
           node --check assets/admin-shell.js

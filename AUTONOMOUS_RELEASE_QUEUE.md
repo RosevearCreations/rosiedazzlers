@@ -1,5 +1,23 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
+## Current 2026-10-22 queue — Builds 613–621
+
+The owner-approved Build 612 Standard Theme visual source release is merged
+to protected `main` and has exact Cloudflare Production/source/business
+acceptance proof under PR #453. Real-device visual and provider/media
+acceptance still require explicit observation; code GREEN does not close
+those manual HOLDs.
+
+**Current bounded release: Build 613 — Condition-Aware Quote-First Guidance
+Preview.** Contract: `BUILD613_QUOTE_FIRST_CONDITION_GUIDANCE_PREVIEW.md`.
+The next planned release, **Build 614 — Live Pricing Source Parity & Owner
+Review**, begins only after independent exact-main Production GREEN for 613.
+
+**Queue count:** nine planned builds 613–621 (one active, eight remaining).
+The full bounded plan and owner HOLDs live in
+`FORWARD_BUILD_ROADMAP_613_621.md`. Earlier build numbers below are
+historical compatibility notes, not an additional active queue.
+
 ## Current bounded release — Build 558
 Authenticated private R2 raw object HEAD and separate consent/privacy acceptance review; signed consent and rendered derivative remain HOLD. Contract: BUILD558_REAL_MEDIA_ARTIFACT_CONSENT_ACCEPTANCE.md. Build 559 follows Production GREEN.
 
