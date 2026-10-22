@@ -46,7 +46,7 @@
     <text x="1236" y="440" font-size="35" font-weight="700" fill="#FFFFFF">Archive Record</text>
     <text x="1236" y="493" font-size="27" fill="#C9D1D8">Prepare metadata</text>
     <text x="1236" y="534" font-size="27" fill="#C9D1D8">and recovery path</text>
-    
+
   </g></g>
   <rect x="74" y="677" width="1452" height="96" rx="20" fill="#101820" stroke="#6D5A32" stroke-width="2"/>
   <circle cx="117" cy="726" r="18" fill="#D6AE5A"/><path d="M 117 716 v 10 M 117 735 v 1" stroke="#17202A" stroke-width="5" stroke-linecap="round"/>
