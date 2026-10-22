@@ -10,6 +10,7 @@ const manifest = JSON.parse(read('manifest.webmanifest'));
 const css = read('assets/themes/standard.css');
 const chrome = read('assets/chrome.js');
 const sw = read('service-worker.js');
+const reviews = read('assets/reviews.js');
 
 assert.equal(catalog.entries.length, 116, 'Existing numbered catalog IDs stay stable');
 assert.equal(catalog.policy.dynamicTargetsExcluded, 617, 'Employee Photo Studio remains separate');
@@ -49,6 +50,8 @@ assert.match(css, /not\(:has\(> img\.r2-card-photo\)\)/, 'Managed R2 images supp
 assert.match(css, /overflow-x: clip/);
 assert.match(css, /text-wrap: balance/);
 assert.match(css, /@media \(max-width: 720px\)/);
+assert.doesNotMatch(reviews, /FALLBACK_REVIEWS|Melissa R\.|Jason K\./, 'Never publish fabricated review proof');
+assert.match(reviews, /Verified customer reviews are not currently available/);
 
 // Exercise the renderer without a browser or live R2 credentials.
 const originalDocument = globalThis.document, originalLocation = globalThis.location;
