@@ -3,6 +3,9 @@
 // Build 253 adds explicit DB-backed card/page assignments. Build 254 protects established images: consumers may use explicit assignments as overrides, while automatic filename matches are fallback-only when an established image exists.
 // Build 256 adds explicit paired Before & After landing-page slots. A pair is public only when both sides are assigned.
 // Build 258 wires explicit assignments into aggregate cards, proof slots, FAQ/gift visuals, and the mixed public Gallery while preserving authored-image precedence.
+// Theme-owned service/town marketing cards use the selected theme's static artwork;
+// genuine customer proof, gallery, and job photography remain managed R2 media.
+import { standardLandingFallback } from './standard-image-slots.js';
 
 let manifestPromise = null;
 
@@ -292,6 +295,12 @@ export async function hydrateR2CardImages(root=document){
   const manifest = await loadWebsiteImageManifest();
   await hydrateManagedImageSlots(root, manifest);
   for (const node of nodes) {
+    const route=clean(node.dataset.r2ImageHref).split('?')[0].replace(/^\/+|\/+$/g,'');
+    const isStandard=(document.documentElement.dataset.rosieTheme||'standard')==='standard';
+    if (isStandard && node.matches('.service-link-card,.local-town-card') && standardLandingFallback(route)) {
+      // This is a theme-design slot, not an R2/customer proof slot.
+      continue;
+    }
     if (node.dataset.r2ImageHydrated === 'true') continue;
     node.dataset.r2ImageHydrated = 'true';
     const link = node.querySelector('a[href]');
@@ -364,28 +373,34 @@ function applyExplicitImage(img,picked,target){
 export async function hydrateGlobalSiteImageOverrides(root=document,manifest=null){
   if(!root || normalizedPagePath(location.pathname).startsWith('/admin'))return;
   const data=manifest||await loadWebsiteImageManifest();
+  const standardTheme=(document.documentElement.dataset.rosieTheme||'standard')==='standard';
   const brandTargets=[
     ['site:brand:logo','[data-logo]'],
     ['site:brand:banner','[data-banner],img[data-main-banner],#bannerImage,#globalMainBanner img'],
     ['site:brand:reviews','[data-reviews],#reviewsImage,.reviews img,[data-reviews-panel] img']
   ];
   for(const [target,selector] of brandTargets){
+    if(standardTheme && (target==='site:brand:logo'||target==='site:brand:banner'))continue;
     const picked=explicitImageForTarget(data,target);if(!picked?.url)continue;
     root.querySelectorAll(selector).forEach((img)=>applyExplicitImage(img,picked,target));
   }
   const siteBackground=explicitImageForTarget(data,'site:brand:background');
-  if(siteBackground?.url){
+  // A theme owns its backdrop just as it owns its logo and marketing banner.
+  // Explicit R2 background assignments belong to other/future themes.
+  if(!standardTheme && siteBackground?.url){
     document.documentElement.style.setProperty('--hero-bg',`url("${String(siteBackground.url).replaceAll('\"','%22')}")`);
     document.documentElement.dataset.photoBackgroundTarget='site:brand:background';
   }
   for(const img of root.querySelectorAll('img[src]')){
     if(img.dataset.photoAssignmentTarget)continue;
+    if(standardTheme && (img.dataset.themeStatic==='true' || img.matches('[data-logo],[data-banner],img[data-main-banner],#bannerImage,#globalMainBanner img')))continue;
+    if(standardTheme && img.getAttribute('src')?.startsWith('/assets/themes/standard/'))continue;
     const target=explicitAssetTargetForImage(img);if(!target)continue;
     const picked=explicitImageForTarget(data,target);if(picked?.url)applyExplicitImage(img,picked,target);
   }
   const pageTarget=`page-background:${normalizedPagePath(location.pathname)}`;
   const bg=explicitImageForTarget(data,pageTarget);
-  if(bg?.url){
+  if(!standardTheme && bg?.url){
     document.body.style.backgroundImage=`linear-gradient(rgba(8,13,24,.88),rgba(8,13,24,.94)),url("${String(bg.url).replaceAll('"','%22')}")`;
     document.body.style.backgroundSize='cover';
     document.body.style.backgroundPosition=bg.focal_point||'center';

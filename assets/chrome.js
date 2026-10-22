@@ -16,11 +16,12 @@ if (typeof document !== 'undefined' && !document.documentElement.dataset.rosieTh
 
 let BRAND = {
   name: "Rosie Dazzlers",
-  // Standard is the bundled default; explicit Owner site settings still win.
-  logo: "/assets/themes/standard/images/brand-logo.png",
+  // Design/brand artwork belongs to the selected theme. Business profile
+  // settings continue to control contact and business information.
+  logo: "/assets/themes/standard/images/cropgold.png",
   banner: "/assets/themes/standard/images/brand-banner.webp",
   reviews: "/assets/themes/standard/images/rosie-reviews-fallback.png",
-  footerLogo: "/assets/themes/standard/images/brand-logo.png",
+  footerLogo: "/assets/themes/standard/images/cropgold.png",
 };
 
 let SOCIALS = [
@@ -92,13 +93,14 @@ function applyBusinessProfileSettings(profile) {
   const business = profile && typeof profile === "object" ? (profile.business || profile) : null;
   if (!business || typeof business !== "object") return;
   const contact = business.contact || {};
+  const standardTheme = (document.documentElement.dataset.rosieTheme || 'standard') === 'standard';
   BRAND = {
     ...BRAND,
     name: business.short_name || business.name || BRAND.name,
-    logo: business.logo_url || BRAND.logo,
-    banner: business.banner_url || BRAND.banner,
+    logo: standardTheme ? '/assets/themes/standard/images/cropgold.png' : (business.logo_url || BRAND.logo),
+    banner: standardTheme ? '/assets/themes/standard/images/brand-banner.webp' : (business.banner_url || BRAND.banner),
     reviews: business.reviews_image_url || BRAND.reviews,
-    footerLogo: business.footer_logo_url || business.logo_url || BRAND.footerLogo
+    footerLogo: standardTheme ? '/assets/themes/standard/images/cropgold.png' : (business.footer_logo_url || business.logo_url || BRAND.footerLogo)
   };
   if (Array.isArray(business.social_links) && business.social_links.length) {
     SOCIALS = business.social_links
@@ -465,7 +467,7 @@ function setFooter() {
           <img
             src="${escapeAttr(BRAND.footerLogo)}"
             alt="${escapeAttr(shortName)} logo"
-            style="width:72px;height:72px;object-fit:contain;border-radius:14px;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);padding:6px;"
+            style="width:clamp(110px, 15vw, 172px);height:auto;aspect-ratio:945 / 476;object-fit:contain;border-radius:10px;flex:0 1 auto;min-width:0;max-width:100%;background:#080809;border:1px solid rgba(222,192,109,.22);"
           >
           <div>
             <div class="footer-title">${escapeHtml(shortName)}</div>
@@ -968,7 +970,8 @@ async function initChrome() {
     console.warn('Optional Photo Studio presentation overrides could not be applied.', error);
   }
 
-  // Optional Standard process imagery only; media loads after approved Photo Studio overrides.
+  // Standard marketing cards render theme-owned artwork; other proof/gallery
+  // media remains in the separate managed media layer above.
   try {
     const standardArt = await import("/assets/standard-static-media.js");
     standardArt.hydrateStandardProcessImages(document);

@@ -1,5 +1,5 @@
-/** Standard theme approved static image candidates. Never overwrite authored R2 media.
- * Used only after the original image and its format variants fail.
+/** Owner-controlled Standard theme marketing artwork, separate from customer
+ * evidence and employee Photo Studio media. The image path is a stable slot ID.
  */
 const SERVICE_IMAGES=Object.freeze({
  "pet-hair-removal":"addon-pet-hair-removal.webp",

@@ -140,12 +140,24 @@
 :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.nav,.footer,#rosieStickyCtaBar) {
   border-color: rgba(222,192,109,.24);
 }
-:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .brand img {
+/* The approved cropgold wordmark is 945 × 476, not the former square icon.
+   Preserve its aspect ratio in the header and avoid duplicated visible text. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .brand img[data-logo] {
+  display: block;
+  width: clamp(130px, 15vw, 174px);
+  height: auto;
+  aspect-ratio: 945 / 476;
+  max-width: 100%;
+  max-height: none;
   object-fit: contain;
+  border-radius: 4px;
 }
-/* Decorative theme photography fills a missing service/town card slot. If a
-   managed R2 image exists now or arrives later, it wins without duplicate art. */
-:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.service-link-card,.local-town-card)[data-standard-theme-card="true"]:not(.managed-photo-resolved):not(:has(> img.r2-card-photo))::before {
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .brand strong {
+  display: none;
+}
+/* Fixed marketing cards are theme-owned. Real Photo Studio proof stays in
+   dedicated proof/gallery elements, so the card artwork switches as a unit. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.service-link-card,.local-town-card)[data-standard-theme-card="true"]::before {
   content: "";
   display: block;
   width: 100%;

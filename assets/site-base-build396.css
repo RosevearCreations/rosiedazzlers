@@ -22,7 +22,7 @@
   --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
   --maxw: 1100px;
 
-  --hero-bg: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
+  --hero-bg: url("/assets/themes/standard/images/hero-background.webp");
   --r: 16px;
 }
 

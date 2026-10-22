@@ -5,24 +5,24 @@
   "entries": [
     {
       "slot": "brand_logo",
-      "filename": "brand-logo.png",
-      "recommendedWidth": 800,
-      "recommendedHeight": 800,
-      "notes": "Current live image uses site-settings/R2; do not override automatically"
+      "filename": "cropgold.png",
+      "recommendedWidth": 945,
+      "recommendedHeight": 476,
+      "notes": "Approved Standard gold-on-charcoal Rosie Dazzlers wordmark; applied to public header and footer"
     },
     {
       "slot": "brand_banner",
       "filename": "brand-banner.webp",
       "recommendedWidth": 1920,
       "recommendedHeight": 480,
-      "notes": "Current live banner uses site-settings/R2; future opt-in override only"
+      "notes": "Approved Standard charcoal-and-gold banner replaces the old bright R2 artwork in static marketing placements"
     },
     {
       "slot": "hero_background",
       "filename": "hero-background.webp",
       "recommendedWidth": 1920,
       "recommendedHeight": 1080,
-      "notes": "Current stylesheet retains KatBlackCar.PNG"
+      "notes": "Standard owns the site backdrop; legacy R2 image assignments may not override the selected theme"
     },
     {
       "slot": "reviews",

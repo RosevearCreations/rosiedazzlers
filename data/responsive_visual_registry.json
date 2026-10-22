@@ -48,7 +48,7 @@
       "label": "Homepage hero banner",
       "recommended_size": "1600x900",
       "status": "active",
-      "fallback": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png"
+      "fallback": "/assets/themes/standard/images/brand-banner.webp"
     },
     {
       "key": "review_proof",

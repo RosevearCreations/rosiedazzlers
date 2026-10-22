@@ -1,9 +1,9 @@
 const DATA_URL = "/api/pricing_catalog_public";
 
 const BRAND = {
-  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
-  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
+  logo: "/assets/themes/standard/images/cropgold.png",
+  banner: "/assets/themes/standard/images/brand-banner.webp",
+  reviews: "/assets/themes/standard/images/rosie-reviews-fallback.png"
 };
 
 const CONTACT = {

@@ -24,7 +24,7 @@
 | IMG-011 | addon truck box wash | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-truck-box-wash.webp` |
 | IMG-012 | addon windshield ceramic coating | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-windshield-ceramic-coating.webp` |
 | IMG-013 | brand banner | WEBP | 1920×480 | / | standard | In repo | `assets/themes/standard/images/brand-banner.webp` |
-| IMG-014 | brand logo | PNG | 800×800 | shared public/Admin header | standard | In repo | `assets/themes/standard/images/brand-logo.png` |
+| IMG-014 | brand logo | PNG | 945×476 | shared public/Admin header | standard | In repo | `assets/themes/standard/images/cropgold.png` |
 | IMG-015 | hero background | WEBP | 1920×1080 | / | standard | In repo | `assets/themes/standard/images/hero-background.webp` |
 | IMG-016 | landing fallback ceramic coating | WEBP | 1600×1067 | /ceramic-coating | standard | In repo | `assets/themes/standard/images/addon-ceramic-coating.webp` |
 | IMG-017 | landing fallback de badging | WEBP | 1600×1067 | /de-badging | standard | In repo | `assets/themes/standard/images/addon-de-badging.webp` |

@@ -295,7 +295,7 @@
       ],
       "placement": "planned-or-fallback-not-live-verified",
       "filePresent": true,
-      "notes": "Standard theme is the bundled default; explicit Owner site-settings/R2 branding retains precedence",
+      "notes": "Owner-approved Standard artwork takes precedence in public branded placements; R2 customer proof remains separate",
       "number": 13,
       "id": "IMG-013"
     },
@@ -304,11 +304,11 @@
       "ownership": "theme-owner-only",
       "theme": "standard",
       "name": "brand logo",
-      "path": "assets/themes/standard/images/brand-logo.png",
+      "path": "assets/themes/standard/images/cropgold.png",
       "format": "png",
       "size": {
-        "width": 800,
-        "height": 800,
+        "width": 945,
+        "height": 476,
         "basis": "recommended-canvas-not-upload-minimum"
       },
       "pages": [
@@ -316,7 +316,7 @@
       ],
       "placement": "planned-or-fallback-not-live-verified",
       "filePresent": true,
-      "notes": "Standard theme is the bundled default; explicit Owner site-settings/R2 branding retains precedence",
+      "notes": "Owner-approved Standard artwork takes precedence in public branded placements; R2 customer proof remains separate",
       "number": 14,
       "id": "IMG-014"
     },
@@ -337,7 +337,7 @@
       ],
       "placement": "planned-or-fallback-not-live-verified",
       "filePresent": true,
-      "notes": "Current stylesheet retains KatBlackCar.PNG",
+      "notes": "Standard owns the site backdrop; legacy R2 image assignments may not override the selected theme",
       "number": 15,
       "id": "IMG-015"
     },

@@ -10,7 +10,7 @@
     "primary_location": "Tillsonburg, Ontario",
     "website": "https://rosiedazzlers.ca",
     "assets_base_url": "https://assets.rosiedazzlers.ca/",
-    "logo_url": "https://assets.rosiedazzlers.ca/brand/Untitled.png",
+    "logo_url": "/assets/themes/standard/images/cropgold.png",
     "description": "Mobile auto detailing for Oxford County and Norfolk County customers, with package, quote, gift-card, fleet, and maintenance workflows.",
     "social_links": [
       {
@@ -54,7 +54,7 @@
       "@type": "AutoDetailing",
       "name": "Rosie Dazzlers Mobile Auto Detailing",
       "url": "https://rosiedazzlers.ca/",
-      "image": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+      "image": "https://rosiedazzlers.ca/assets/themes/standard/images/brand-banner.webp",
       "telephone": "+1-226-752-7613",
       "priceRange": "$$",
       "areaServed": [
@@ -102,9 +102,9 @@
         "https://www.linkedin.com/in/rosiedazzlers/"
       ]
     },
-    "banner_url": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
+    "banner_url": "/assets/themes/standard/images/brand-banner.webp",
     "reviews_image_url": "/assets/brand/rosie-reviews-fallback.png",
-    "footer_logo_url": "https://assets.rosiedazzlers.ca/brand/Untitled.png",
+    "footer_logo_url": "/assets/themes/standard/images/cropgold.png",
     "tagline": "Mobile Auto Detailing for Oxford & Norfolk Counties"
   }
 }

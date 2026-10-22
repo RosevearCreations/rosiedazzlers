@@ -202,6 +202,12 @@ function addonPriceSummary(addon) {
 }
 
 function heroMediaForPage(page, addon, relatedProducts, r2Matches = [], slug = "") {
+  // Landing hero is a themed marketing banner, distinct from the real-world
+  // before/after, Gallery, Photo Studio and linked product proof below it.
+  if ((document.documentElement.dataset.rosieTheme || 'standard') === 'standard') {
+    const themeHero=standardLandingFallback(slug || page?.slug);
+    if (themeHero) return themeHero;
+  }
   // Build 254 safety rule: existing authored imagery remains authoritative.
   // An explicit Photo Studio hero assignment is the only R2 image allowed to replace it deliberately.
   const heroTarget = `landing:${cleanText(slug || page?.slug)}:hero`;

@@ -89,7 +89,7 @@ function proposedPages(slot){
   return ['placement unverified'];
 }
 function noteFor(slot){
-  if(slot.slot==='brand_logo'||slot.slot==='brand_banner')return 'Standard theme is the bundled default; explicit Owner site-settings/R2 branding retains precedence';
+  if(slot.slot==='brand_logo'||slot.slot==='brand_banner')return 'Owner-approved Standard artwork takes precedence in public branded placements; R2 customer proof remains separate';
   if(slot.slot.startsWith('town_'))return 'Town banner: permanent theme artwork, not town customer proof';
   return slot.notes||'Theme-designed static artwork; existing approved dynamic assignments retain precedence';
 }

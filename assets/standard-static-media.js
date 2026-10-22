@@ -1,6 +1,6 @@
-/** Standard theme public static *process* illustration loader.
- * Never replaces existing approved R2, Photo Studio, before/after, customer or admin media.
- * An uploaded filename is used only if an actual image loads successfully.
+/** Standard theme public marketing artwork loader.
+ * Process illustration slots are fallback-only; theme-owned service/town cards
+ * always use the selected theme, not unrelated R2 job/gallery photographs.
  */
 import { standardLandingFallback } from "./standard-image-slots.js";
 
@@ -32,9 +32,8 @@ export function hydrateStandardProcessImages(root=document){
  });
 }
 
-/** Decorative fallback for public service/town cards only.
- * Photo Studio may add/remove a real R2 image later; the CSS hides this backdrop
- * whenever a managed photo exists. No customer proof or reviews use this path.
+/** Theme artwork for fixed public service/town marketing cards.
+ * Customer proof, actual job results and reviews do not use these slots.
  */
 export function hydrateStandardCardArtwork(root=document){
  if(!isPublicStandard())return;

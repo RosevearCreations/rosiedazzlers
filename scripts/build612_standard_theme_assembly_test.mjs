@@ -12,6 +12,10 @@ const css = read('assets/themes/standard.css');
 const chrome = read('assets/chrome.js');
 const sw = read('service-worker.js');
 const reviews = read('assets/reviews.js');
+const imageHydration = read('assets/website-images.js');
+const landing = read('assets/landing-page-build388.js');
+const home = read('index.html');
+const site = read('assets/site.js');
 
 assert.equal(catalog.entries.length, 116, 'Existing numbered catalog IDs stay stable');
 assert.equal(catalog.policy.dynamicTargetsExcluded, 617, 'Employee Photo Studio remains separate');
@@ -32,7 +36,7 @@ assert.equal(standardPackageFallback('complete_detail'), '/assets/themes/standar
 assert.equal(standardPackageFallback('interior_detail'), '', 'Do not invent unregistered package images');
 
 for (const file of [
-  'brand-logo.png','brand-banner.webp','hero-background.webp',
+  'cropgold.png','brand-banner.webp','hero-background.webp',
   'rosie-192.png','rosie-512.png','rosie-maskable-512.png','favicon.ico',
   'CarPrice2025.PNG','CarPriceDetails2025.PNG','CarSizeChart.PNG',
   'rosie-reviews-fallback.png','rosie-reviews-fallback.svg','service-photo-needed.svg'
@@ -46,8 +50,19 @@ assert.match(sw, /assets\/themes\/standard\/images\/rosie-192\.png/);
 assert.match(chrome, /standardArt\.hydrateStandardCardArtwork\(document\)/);
 assert.match(chrome, /hydrateGlobalSiteImageOverrides\(document\)/);
 assert.ok(chrome.indexOf('hydrateGlobalSiteImageOverrides(document)') < chrome.indexOf('hydrateStandardCardArtwork(document)'),
-  'Photo Studio must hydrate before decorative Standard fallback');
-assert.match(css, /not\(:has\(> img\.r2-card-photo\)\)/, 'Managed R2 images suppress the decorative fallback');
+  'Keep customer proof hydration distinct from Standard theme card styling');
+assert.match(css, /\[data-standard-theme-card="true"\]::before/, 'Standard marketing cards use theme artwork even when R2 has other matches');
+assert.match(imageHydration, /standardLandingFallback\(route\)/, 'R2 card matching must skip registered Standard theme marketing cards');
+assert.match(landing, /const themeHero=standardLandingFallback/, 'Service and town marketing heroes must use Standard artwork');
+assert.match(home, /src="\/assets\/themes\/standard\/images\/brand-banner\.webp"/, 'Homepage showcase must not use the old R2 brand banner');
+assert.doesNotMatch(home, /assets\.rosiedazzlers\.ca\/brand\/RosieDazzlersBanner/, 'Do not reintroduce the old banner');
+assert.doesNotMatch(home, /assets\.rosiedazzlers\.ca\/brand\/KatBlackCar/, 'Standard backdrop must not use the previous R2 art');
+assert.match(site, /logo: "\/assets\/themes\/standard\/images\/cropgold\.png"/);
+assert.match(chrome, /standardTheme \? '\/assets\/themes\/standard\/images\/cropgold\.png'/, 'Public business settings may not overwrite the approved Standard logo');
+assert.doesNotMatch(chrome, /brand-logo\.png|RosieDazzlersBanner\.png|brand\/Untitled\.png/, 'Public chrome must not reference superseded branding');
+assert.match(imageHydration, /!standardTheme && siteBackground\?\.url/, 'R2 site background must not override Standard artwork');
+assert.match(imageHydration, /!standardTheme && bg\?\.url/, 'Page background override must not replace Standard artwork');
+assert.match(imageHydration, /img\.dataset\.themeStatic==='true'/, 'Explicit theme artwork stays outside Photo Studio presentation overrides');
 assert.match(css, /overflow-x: clip/);
 assert.match(css, /text-wrap: balance/);
 assert.match(css, /@media \(max-width: 720px\)/);
