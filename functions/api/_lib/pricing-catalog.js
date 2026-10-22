@@ -4,7 +4,7 @@
 
 import { serviceHeaders } from "./staff-session.js";
 
-import FALLBACK_CATALOG from "../data/rosie_services_pricing_and_packages.json";
+import FALLBACK_CATALOG from "../data/rosie_services_pricing_and_packages.json" with { type: "json" };
 
 const LOCAL_CHART_URLS = {
   "CarPrice2025.PNG": "/assets/brand/CarPrice2025.PNG",
@@ -164,7 +164,7 @@ function mergeRowsByCode(primaryRows, fallbackRows) {
   return merged;
 }
 
-function mergeCatalog(primary, fallback) {
+export function mergeCatalog(primary, fallback) {
   return normalizeCatalog({
     ...fallback,
     ...primary,
