@@ -2,7 +2,9 @@
 
 Created after the owner-approved Build 612 Standard Theme release. This is a
 **nine-build planned batch**, not a claim that future code or owner decisions
-exist. At the start: **one active build (613), eight queued (614–621)**.
+exist. Build 613 reached verified Production GREEN. Build 614 is the current
+read-only pricing parity and owner-decision review; seven builds (615–621)
+are planned after its release. Pricing policy remains on owner HOLD.
 
 | Build | Planned scope | Completion boundary |
 | --- | --- | --- |
@@ -27,6 +29,10 @@ exist. At the start: **one active build (613), eight queued (614–621)**.
 After **Build 613** reaches verified Production GREEN, **8 planned builds**
 remain in this batch. After Build 621, assess actual field acceptance and
 create the next batch; do not automatically invent business acceptance.
+
+When Build 614 reaches exact-SHA Production GREEN, **7 queued builds** remain
+(615–621). See `BUILD614_LIVE_PRICING_SOURCE_PARITY_OWNER_REVIEW.md`: a GREEN
+diagnostic release does not resolve the financial source-of-truth discrepancy.
 
 Every build travels through feature review if needed, `dev`, a protected
 `main` pull request, Cloudflare deployment and exact-SHA Production proof.

@@ -109,6 +109,8 @@
           <div id="localSeoProofDiagnostics" class="warning-panel" data-state="loading">Loading town/service proof reminders…</div>
           <h2 style="margin-top:18px">Pricing catalog source</h2>
           <div id="pricingCatalogDiagnostics" class="warning-panel" data-state="loading">Loading pricing catalog source and repair status…</div>
+          <h2 style="margin-top:18px">Live pricing parity · owner review</h2>
+          <div id="pricingSourceParity614" class="warning-panel" data-state="loading">Comparing App Management, bundled, public and checkout pricing authority…</div>
           <h2 style="margin-top:18px">Route-copy parity</h2>
           <div id="routeCopyDiagnostics" class="warning-panel" data-state="loading">Checking root HTML and folder route copies…</div>
           <h2 style="margin-top:18px">Desktop / mobile &amp; visual polish</h2>
@@ -472,6 +474,7 @@
         fallbackReport: document.getElementById('fallbackSettingsReport'),
         seoProof: document.getElementById('localSeoProofDiagnostics'),
         pricingCatalog: document.getElementById('pricingCatalogDiagnostics'),
+        pricingSourceParity: document.getElementById('pricingSourceParity614'),
         routeCopy: document.getElementById('routeCopyDiagnostics'),
         responsiveVisual: document.getElementById('responsiveVisualDiagnostics'),
         galleryImageHealth: document.getElementById('galleryImageHealthDiagnostics'),
@@ -577,6 +580,19 @@
         els.pricingCatalog.innerHTML = `<strong>${missing ? 'Pricing catalog needs repair review' : 'Pricing catalog fallback coverage looks healthy'}</strong><div class="muted">Source: ${esc(data.source_status || 'unknown')} · Current rows ${Number(summary.current_rows||0)} · Fallback rows ${Number(summary.fallback_rows||0)}</div>${rows}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-app">Open App Management</a> ${data.repair_available && missing ? '<button class="btn ghost small" type="button" data-repair-pricing>Repair partial pricing catalog</button>' : ''}</div>`;
         const repairBtn = els.pricingCatalog.querySelector('[data-repair-pricing]');
         if(repairBtn) repairBtn.addEventListener('click', repairPricingCatalog, { once:false });
+      }
+      async function loadPricingSourceParity614(){
+        if(!els.pricingSourceParity) return;
+        const res = await fetch('/api/admin/pricing_source_parity_614', { credentials:'include', cache:'no-store' });
+        const data = await res.json().catch(()=>null);
+        if(!res.ok || !data?.ok) throw new Error(data?.error || 'Pricing source parity review unavailable.');
+        const summary = data.summary || {};
+        const ownerHold = summary.owner_decision_required !== false;
+        const mismatches = (data.findings || []).slice(0,14);
+        const fmt = (v)=>v === null || v === undefined ? '—' : esc(String(v));
+        const detail = mismatches.map((row)=>`<div class="warning-row"><strong>${esc(row.group)} / ${esc(row.code)} / ${esc(row.field)}</strong><div class="muted">Bundled: ${fmt(row.bundled)} · App Management: ${fmt(row.app_management)} · Checkout/quote: ${fmt(row.checkout)} · Public API projection: ${fmt(row.public_api)}</div></div>`).join('');
+        els.pricingSourceParity.dataset.state = ownerHold ? 'warn' : 'ok';
+        els.pricingSourceParity.innerHTML = `<strong>${ownerHold ? 'OWNER PRICE REVIEW REQUIRED — do not edit live prices' : 'Compared pricing fields agree'}</strong><div class="muted">Read-only · ${data.db_verified ? 'App Management row verified' : 'App Management row NOT verified'} · ${Number(summary.differing_fields || 0)} differing fields · ${Number(summary.public_checkout_differences || 0)} public/checkout differences · DB updated: ${fmt(data.updated_at)}</div>${data.warning ? `<div class="warning-row">${esc(data.warning)}</div>` : ''}${detail}<div class="muted">${(data.findings||[]).length > mismatches.length ? 'Additional mismatches are included in the protected report. ' : ''}${esc(data.recommendation || '')}</div><div style="margin-top:10px"><a class="btn ghost small" href="/admin-app">Review stored App Management values (no edits)</a></div>`;
       }
       async function repairPricingCatalog(){
         if(!confirm('Repair missing pricing catalog groups/rows from the bundled fallback? Existing DB values will be preserved.')) return;
@@ -718,7 +734,7 @@
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics), guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics), guardedLoad('Today Needs Attention diagnostics', loadTodayAttentionDiagnostics), guardedLoad('Production reliability diagnostics', loadProductionReliabilityDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Pricing parity owner review', loadPricingSourceParity614), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics), guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics), guardedLoad('Today Needs Attention diagnostics', loadTodayAttentionDiagnostics), guardedLoad('Production reliability diagnostics', loadProductionReliabilityDiagnostics)]); } });
     })();
   </script>
 </body>
