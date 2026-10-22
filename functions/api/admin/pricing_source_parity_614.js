@@ -1,13 +1,14 @@
 // Owner-facing, staff-protected GET-only price source review.
 import { requireStaffAccess, serviceHeaders, json, methodNotAllowed } from "../_lib/staff-auth.js";
 import { buildPricingSourceParity614 } from "../_lib/pricing-source-parity-614.js";
-import bundled from "../data/rosie_services_pricing_and_packages.json" with { type: "json" };
+import { normalizeCatalog, mergeCatalog } from "../_lib/pricing-catalog.js";
+import bundled from "../data/rosie_services_pricing_and_packages.json";
 
 export async function onRequestGet({ request, env }) {
   const access = await requireStaffAccess({ request, env, capability: "manage_staff", allowLegacyAdminFallback: true });
   if (!access.ok) return noStore(access.response);
   if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) {
-    return noStore(json(buildPricingSourceParity614({ bundled, warning: "Supabase pricing credentials unavailable; database row not verified." })));
+    return noStore(json(buildPricingSourceParity614({ bundled, checkoutCatalog: normalizeCatalog(bundled), warning: "Supabase pricing credentials unavailable; database row not verified." })));
   }
   try {
     const response = await fetch(`${env.SUPABASE_URL}/rest/v1/app_management_settings?select=key,value,updated_at&key=eq.pricing_catalog&limit=1`, {
@@ -17,9 +18,9 @@ export async function onRequestGet({ request, env }) {
     const rows = await response.json();
     const row = Array.isArray(rows) ? rows[0] : null;
     if (!row?.value || typeof row.value !== "object") throw new Error("No valid pricing_catalog row was found.");
-    return noStore(json(buildPricingSourceParity614({ bundled, appManagement: row.value, dbAvailable: true, updatedAt: row.updated_at })));
+    return noStore(json(buildPricingSourceParity614({ bundled, appManagement: row.value, checkoutCatalog: mergeCatalog(row.value, bundled), dbAvailable: true, updatedAt: row.updated_at })));
   } catch (error) {
-    return noStore(json(buildPricingSourceParity614({ bundled, warning: error?.message || "Cannot verify App Management pricing." })));
+    return noStore(json(buildPricingSourceParity614({ bundled, checkoutCatalog: normalizeCatalog(bundled), warning: error?.message || "Cannot verify App Management pricing." })));
   }
 }
 
