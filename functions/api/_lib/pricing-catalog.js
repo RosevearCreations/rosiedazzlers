@@ -164,7 +164,7 @@ function mergeRowsByCode(primaryRows, fallbackRows) {
   return merged;
 }
 
-function mergeCatalog(primary, fallback) {
+export function mergeCatalog(primary, fallback) {
   return normalizeCatalog({
     ...fallback,
     ...primary,
