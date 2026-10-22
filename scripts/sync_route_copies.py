@@ -62,6 +62,7 @@ ROUTE_COPY_PAGES = [
     "pricing.html",
     "gift-cards.html",
     "faq.html",
+    "login.html",
     "gallery.html",
 ]
 

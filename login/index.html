@@ -2,86 +2,87 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Client or Staff Login | Rosie Dazzlers</title>
   <link rel="canonical" href="https://www.rosiedazzlers.ca/login" />
-  <meta name="description" content="Sign in to your Rosie Dazzlers client account, or use the same page to reach staff tools when you are part of the Rosie Dazzlers team." />
+  <meta name="description" content="Sign in to your Rosie Dazzlers client account, create an account, reset your password, verify your email, or request help finding your sign-in email." />
   <meta name="robots" content="noindex,follow" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="stylesheet" href="/assets/site.css?v=20260703build220" />
+  <link rel="stylesheet" href="/assets/login-standard.css?v=build612-faq-login" />
 </head>
-<body>
-  <div class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><div class="nav-links" id="navLinks"></div><a class="btn primary" href="/book">Book now</a></div></div>
-  <div class="container">
-    <div class="grid cards" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr));align-items:start;">
-      <section class="panel">
-        <h1 style="margin-top:0">Client or Staff Login</h1>
-        <p class="muted">Customers can sign in to view bookings and gifts. Staff can also use this page and will be sent to the admin tools automatically.</p>
+<body data-page="login" data-build220="customer-recovery">
+  <div class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button class="btn small ghost nav-toggle" id="navToggle" type="button" aria-expanded="false">Menu</button><div class="nav-links" id="navLinks"></div><a class="btn primary" href="/book">Book now</a></div></div>
+  <main class="container section login-shell">
+    <header class="login-heading">
+      <p class="eyebrow">Your Rosie Dazzlers account</p>
+      <h1>Welcome back</h1>
+      <p>Sign in to manage your account, or get started with a new client profile.</p>
+    </header>
+    <div class="login-grid">
+      <section class="panel login-card login-signin">
+        <p class="badge login-badge">Secure account access</p>
+        <h2>Sign in</h2>
+        <p class="muted login-description">Use the email address associated with your account. Staff can sign in here too.</p>
         <form id="loginForm">
           <div class="field"><label for="loginEmail">Email</label><input id="loginEmail" type="email" required autocomplete="username" /></div>
           <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" required autocomplete="current-password" /></div>
-          <button class="btn primary" id="loginBtn" type="submit">Sign In</button>
-          <div id="loginStatus" class="muted" style="margin-top:12px"></div>
+          <button class="btn primary login-submit" id="loginBtn" type="submit">Sign in securely</button><div id="loginStatus" class="login-status muted" aria-live="polite"></div>
         </form>
-        <div class="hr"></div>
-        <p class="muted" style="margin:0">Staff tip: if you are already signed in as staff, your public account widget will also show an Admin shortcut.</p>
+        <a class="login-recovery-link" href="#password-help">Forgot your password?</a>
+        <div class="hr"></div><p class="login-quiet">Staff accounts use the same secure login. When you sign in, we'll take you to your tools automatically.</p>
       </section>
-      <section class="panel">
-        <h2 style="margin-top:0">Create Client Account</h2>
-        <p class="muted">Create a customer login with your most important profile details.</p>
-        <form id="signupForm">
-          <div class="field"><label for="signupName">Full Name</label><input id="signupName" required autocomplete="name" /></div>
+      <section class="panel login-card login-new-client">
+        <img class="login-theme-art" src="/assets/themes/standard/images/workflow-tablet.webp" loading="lazy" decoding="async" alt="Gold-and-charcoal detailing booking experience" />
+        <p class="eyebrow">New to Rosie Dazzlers?</p>
+        <h2>Create your client account</h2>
+        <p class="muted login-description">Keep your details together for future bookings and estimates. Creating an account is optional if you just want to browse.</p>
+        <details class="login-registration">
+          <summary>Create an account <span aria-hidden="true">+</span></summary>
+          <form id="signupForm" class="login-signup-fields">
+          <div class="field"><label for="signupName">Full name</label><input id="signupName" required autocomplete="name" /></div>
           <div class="field"><label for="signupEmail">Email</label><input id="signupEmail" type="email" required autocomplete="email" /></div>
           <div class="field"><label for="signupPhone">Phone</label><input id="signupPhone" autocomplete="tel" /></div>
           <div class="field"><label for="signupPassword">Password</label><input id="signupPassword" type="password" required minlength="8" autocomplete="new-password" /></div>
-          <div class="field"><label for="signupAddress1">Address</label><input id="signupAddress1" autocomplete="street-address" /></div>
+          <div class="field login-wide"><label for="signupAddress1">Address</label><input id="signupAddress1" autocomplete="street-address" /></div>
           <div class="field"><label for="signupCity">City</label><input id="signupCity" autocomplete="address-level2" /></div>
           <div class="field"><label for="signupProvince">Province</label><input id="signupProvince" value="ON" autocomplete="address-level1" /></div>
-          <div class="field"><label for="signupPostal">Postal Code</label><input id="signupPostal" autocomplete="postal-code" /></div>
-          <div class="field"><label for="signupVehicleNotes">Vehicle Details</label><textarea id="signupVehicleNotes"></textarea></div>
-          <button class="btn primary" id="signupBtn" type="submit">Create Account</button>
-          <div id="signupStatus" class="muted" style="margin-top:12px"></div>
-        </form>
+          <div class="field"><label for="signupPostal">Postal code</label><input id="signupPostal" autocomplete="postal-code" /></div>
+          <div class="field login-wide"><label for="signupVehicleNotes">Vehicle details (optional)</label><textarea id="signupVehicleNotes" rows="2"></textarea></div>
+          <button class="btn primary login-wide login-submit" id="signupBtn" type="submit">Create my account</button><div id="signupStatus" class="login-status muted login-wide" aria-live="polite"></div>
+          </form>
+        </details>
       </section>
     </div>
-    <div class="footer" data-footer></div>
-  </div>
-  <script src="/assets/client-auth.js"></script>
-  <script src="/assets/admin-auth.js"></script>
-  <script type="module" src="/assets/chrome.js"></script>
+    <section class="section login-support" id="password-help">
+      <h2>Need help signing in?</h2>
+      <div id="resetPanel" class="panel login-hidden"><h2 style="margin-top:0">Choose a new password</h2><p class="muted">This link is time-limited and can be used once.</p><form id="resetForm"><div class="field"><label for="resetPassword">New password</label><input id="resetPassword" type="password" required minlength="8" autocomplete="new-password"/></div><div class="field"><label for="resetPasswordConfirm">Confirm new password</label><input id="resetPasswordConfirm" type="password" required minlength="8" autocomplete="new-password"/></div><button class="btn primary" type="submit">Save new password</button><div id="resetStatus" class="login-status muted" aria-live="polite"></div></form></div>
+      <div id="verifyPanel" class="panel login-hidden"><h2 style="margin-top:0">Verify your email</h2><p class="muted">Confirm this address to finish account setup. The secure verification token stays in this browser request and is never displayed on the page.</p><button id="verifyBtn" class="btn primary" type="button">Verify email</button><div id="verifyStatus" class="login-status muted" aria-live="polite"></div></div>
+      <div class="login-grid">
+        <section class="panel"><h2 style="margin-top:0">Forgot your password?</h2><p class="muted">Enter the email used for sign-in. For privacy, the response is the same whether or not an account is found.</p><form id="forgotForm"><div class="field"><label for="forgotEmail">Sign-in email</label><input id="forgotEmail" type="email" required autocomplete="email"/></div><button class="btn ghost" type="submit">Send reset instructions</button><div id="forgotStatus" class="login-status muted" aria-live="polite"></div></form></section>
+        <section class="panel"><h2 style="margin-top:0">Forgot which email you used?</h2><p class="muted">Send a private support request with your name and either a phone number or an email hint. This form does not confirm whether an account exists.</p><form id="accountHelpForm"><input id="accountHelpWebsite" class="login-hidden" tabindex="-1" autocomplete="off"/><div class="field"><label for="accountHelpName">Full name</label><input id="accountHelpName" required autocomplete="name"/></div><div class="field"><label for="accountHelpPhone">Phone number</label><input id="accountHelpPhone" autocomplete="tel"/></div><div class="field"><label for="accountHelpEmail">Possible email</label><input id="accountHelpEmail" type="email" autocomplete="email"/></div><div class="field"><label for="accountHelpMessage">Optional note</label><textarea id="accountHelpMessage" maxlength="700" placeholder="Do not include passwords, payment data, or reset links."></textarea></div><button class="btn ghost" type="submit">Request account help</button><div id="accountHelpStatus" class="login-status muted" aria-live="polite"></div></form></section>
+      </div>
+    </section>
+  </main>
+  <div class="footer container" data-footer></div>
+  <script src="/assets/client-auth.js"></script><script src="/assets/admin-auth.js"></script><script type="module" src="/assets/chrome.js"></script>
   <script>
-    const loginForm = document.getElementById('loginForm');
-    const signupForm = document.getElementById('signupForm');
-    function status(el, msg, ok=false){ el.textContent = msg || ''; el.style.color = ok ? '#86efac' : '#fca5a5'; }
-    function nextUrl(fallback){ const u=new URL(location.href); const n=u.searchParams.get('next'); if(!n || !n.startsWith('/') || n.startsWith('//')) return fallback; return n; }
-
-    async function signInWithFallback(email, password){
-      try {
-        const client = await window.ClientAuth.signIn({ email, password });
-        return { kind: 'client', result: client, redirect: nextUrl('/my-account') };
-      } catch (clientErr) {
-        try {
-          const staff = await window.AdminAuth.signIn({ email, password });
-          return { kind: 'staff', result: staff, redirect: nextUrl('/admin') };
-        } catch (staffErr) {
-          throw new Error((clientErr && clientErr.message) || (staffErr && staffErr.message) || 'Login failed.');
-        }
-      }
-    }
-
-    loginForm.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const out=document.getElementById('loginStatus');
-      status(out,'');
-      try {
-        const email = document.getElementById('loginEmail').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        const auth = await signInWithFallback(email, password);
-        status(out, auth.kind === 'staff' ? 'Staff login accepted. Redirecting…' : 'Signed in. Redirecting…', true);
-        setTimeout(()=>location.replace(auth.redirect),300);
-      } catch(err){ status(out, err.message || 'Login failed.'); }
-    });
-
-    signupForm.addEventListener('submit', async (e)=>{ e.preventDefault(); const out=document.getElementById('signupStatus'); status(out,''); try { await window.ClientAuth.signUp({ full_name: document.getElementById('signupName').value.trim(), email: document.getElementById('signupEmail').value.trim(), phone: document.getElementById('signupPhone').value.trim(), password: document.getElementById('signupPassword').value, address_line1: document.getElementById('signupAddress1').value.trim(), city: document.getElementById('signupCity').value.trim(), province: document.getElementById('signupProvince').value.trim(), postal_code: document.getElementById('signupPostal').value.trim(), vehicle_notes: document.getElementById('signupVehicleNotes').value.trim() }); status(out,'Account created. Redirecting...',true); setTimeout(()=>location.replace('/my-account'),300); } catch(err){ status(out, err.message || 'Sign-up failed.'); } });
+  (function(){
+    const $=(id)=>document.getElementById(id); const params=new URL(location.href).searchParams;const resetToken=params.get('reset_token')||'';const verifyToken=params.get('verify_token')||'';
+    const registration=document.querySelector('.login-registration');
+    const revealRegistration=()=>{if(location.hash==='#signupForm' || location.hash==='#create-account'){registration.open=true;$('signupForm').scrollIntoView({block:'nearest'});}};
+    window.addEventListener('hashchange',revealRegistration);revealRegistration();
+    const status=(el,msg,ok=false)=>{el.textContent=msg||'';el.style.color=ok?'#86efac':'#fca5a5';};
+    const nextUrl=(fallback)=>{const n=params.get('next');return n&&n.startsWith('/')&&!n.startsWith('//')?n:fallback;};
+    async function post(url,body){const res=await fetch(url,{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await res.json().catch(()=>({}));if(!res.ok||data.ok===false)throw new Error(data.error||'Request failed.');return data;}
+    async function signInWithFallback(email,password){try{return {kind:'client',result:await window.ClientAuth.signIn({email,password}),redirect:nextUrl('/my-account')};}catch(clientErr){try{return {kind:'staff',result:await window.AdminAuth.signIn({email,password}),redirect:nextUrl('/admin')};}catch(staffErr){throw new Error(clientErr?.message||staffErr?.message||'Login failed.');}}}
+    $('loginForm').addEventListener('submit',async(e)=>{e.preventDefault();const out=$('loginStatus');status(out,'');try{const auth=await signInWithFallback($('loginEmail').value.trim(),$('loginPassword').value);status(out,auth.kind==='staff'?'Staff login accepted. Redirecting…':'Signed in. Redirecting…',true);setTimeout(()=>location.replace(auth.redirect),250);}catch(err){status(out,err.message||'Login failed.');}});
+    $('signupForm').addEventListener('submit',async(e)=>{e.preventDefault();const out=$('signupStatus');status(out,'');try{await window.ClientAuth.signUp({full_name:$('signupName').value.trim(),email:$('signupEmail').value.trim(),phone:$('signupPhone').value.trim(),password:$('signupPassword').value,address_line1:$('signupAddress1').value.trim(),city:$('signupCity').value.trim(),province:$('signupProvince').value.trim(),postal_code:$('signupPostal').value.trim(),vehicle_notes:$('signupVehicleNotes').value.trim()});status(out,'Account created. Redirecting…',true);setTimeout(()=>location.replace('/my-account'),250);}catch(err){status(out,err.message||'Could not create account.');}});
+    $('forgotForm').addEventListener('submit',async(e)=>{e.preventDefault();const out=$('forgotStatus');status(out,'');try{const d=await post('/api/client/auth_forgot_password',{email:$('forgotEmail').value.trim()});status(out,d.message||'If that email exists, reset instructions have been sent.',true);}catch(err){status(out,err.message||'Could not request reset.');}});
+    $('accountHelpForm').addEventListener('submit',async(e)=>{e.preventDefault();const out=$('accountHelpStatus');status(out,'');try{const d=await post('/api/client/auth_account_help',{website:$('accountHelpWebsite').value,full_name:$('accountHelpName').value.trim(),phone:$('accountHelpPhone').value.trim(),email_hint:$('accountHelpEmail').value.trim(),message:$('accountHelpMessage').value.trim()});status(out,d.message||'Thanks. Our team will review the request.',true);e.target.reset();}catch(err){status(out,err.message||'Could not send account-help request.');}});
+    if(resetToken){$('resetPanel').classList.remove('login-hidden');$('resetForm').addEventListener('submit',async(e)=>{e.preventDefault();const out=$('resetStatus');status(out,'');const p=$('resetPassword').value;if(p!==$('resetPasswordConfirm').value)return status(out,'The passwords do not match.');try{const d=await post('/api/client/auth_reset_password',{token:resetToken,password:p});status(out,d.message||'Password reset successful. Redirecting…',true);history.replaceState({},document.title,'/login');setTimeout(()=>location.replace('/my-account'),350);}catch(err){status(out,err.message||'Could not reset password.');}});}
+    if(verifyToken){$('verifyPanel').classList.remove('login-hidden');$('verifyBtn').addEventListener('click',async()=>{const out=$('verifyStatus');status(out,'');try{const d=await post('/api/client/auth_verify_email',{token:verifyToken});status(out,d.message||'Email verified.',true);history.replaceState({},document.title,'/login');}catch(err){status(out,err.message||'Could not verify email.');}});}
+  })();
   </script>
 </body>
 </html>
