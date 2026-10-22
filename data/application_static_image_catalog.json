@@ -42,7 +42,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 1,
       "id": "IMG-001"
@@ -63,7 +63,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 2,
       "id": "IMG-002"
@@ -84,7 +84,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 3,
       "id": "IMG-003"
@@ -105,7 +105,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 4,
       "id": "IMG-004"
@@ -126,7 +126,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 5,
       "id": "IMG-005"
@@ -147,7 +147,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 6,
       "id": "IMG-006"
@@ -168,7 +168,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 7,
       "id": "IMG-007"
@@ -189,7 +189,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 8,
       "id": "IMG-008"
@@ -210,7 +210,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 9,
       "id": "IMG-009"
@@ -231,7 +231,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 10,
       "id": "IMG-010"
@@ -252,7 +252,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 11,
       "id": "IMG-011"
@@ -273,7 +273,7 @@
         "/services"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 12,
       "id": "IMG-012"
@@ -294,8 +294,8 @@
         "/"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
-      "notes": "Theme candidate only: active site-settings/R2 branding retains precedence",
+      "filePresent": true,
+      "notes": "Owner-approved Standard artwork takes precedence in public branded placements; R2 customer proof remains separate",
       "number": 13,
       "id": "IMG-013"
     },
@@ -304,19 +304,19 @@
       "ownership": "theme-owner-only",
       "theme": "standard",
       "name": "brand logo",
-      "path": "assets/themes/standard/images/brand-logo.png",
+      "path": "assets/themes/standard/images/cropgold.png",
       "format": "png",
       "size": {
-        "width": 800,
-        "height": 800,
+        "width": 945,
+        "height": 476,
         "basis": "recommended-canvas-not-upload-minimum"
       },
       "pages": [
         "shared public/Admin header"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
-      "notes": "Theme candidate only: active site-settings/R2 branding retains precedence",
+      "filePresent": true,
+      "notes": "Owner-approved Standard artwork takes precedence in public branded placements; R2 customer proof remains separate",
       "number": 14,
       "id": "IMG-014"
     },
@@ -336,8 +336,8 @@
         "/"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
-      "notes": "Current stylesheet retains KatBlackCar.PNG",
+      "filePresent": true,
+      "notes": "Standard owns the site backdrop; legacy R2 image assignments may not override the selected theme",
       "number": 15,
       "id": "IMG-015"
     },
@@ -357,7 +357,7 @@
         "/ceramic-coating"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 16,
       "id": "IMG-016"
@@ -378,7 +378,7 @@
         "/de-badging"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 17,
       "id": "IMG-017"
@@ -399,7 +399,7 @@
         "/de-ionizing-treatment"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 18,
       "id": "IMG-018"
@@ -420,7 +420,7 @@
         "/engine-cleaning"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 19,
       "id": "IMG-019"
@@ -441,7 +441,7 @@
         "/exterior-wax"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 20,
       "id": "IMG-020"
@@ -462,7 +462,7 @@
         "/full-clay-treatment"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 21,
       "id": "IMG-021"
@@ -483,7 +483,7 @@
         "/graphene-finish"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 22,
       "id": "IMG-022"
@@ -504,16 +504,16 @@
         "/high-grade-paint-sealant"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 23,
       "id": "IMG-023"
     },
     {
-      "key": "theme:landing_fallback_two_stage_polish",
+      "key": "theme:landing_fallback_paint_correction",
       "ownership": "theme-owner-only",
       "theme": "standard",
-      "name": "landing fallback two stage polish",
+      "name": "landing fallback paint correction",
       "path": "assets/themes/standard/images/addon-two-stage-polish.webp",
       "format": "webp",
       "size": {
@@ -522,10 +522,10 @@
         "basis": "recommended-canvas-not-upload-minimum"
       },
       "pages": [
-        "/two-stage-polish"
+        "/paint-correction"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 24,
       "id": "IMG-024"
@@ -546,7 +546,7 @@
         "/uv-protectant"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 25,
       "id": "IMG-025"
@@ -567,7 +567,7 @@
         "/vinyl-wrapping"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 26,
       "id": "IMG-026"
@@ -588,7 +588,7 @@
         "/window-tinting"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling",
       "number": 27,
       "id": "IMG-027"
@@ -610,7 +610,7 @@
         "/pricing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 28,
       "id": "IMG-028"
@@ -632,7 +632,7 @@
         "/pricing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 29,
       "id": "IMG-029"
@@ -654,7 +654,7 @@
         "/pricing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Theme-designed static artwork; existing approved dynamic assignments retain precedence",
       "number": 30,
       "id": "IMG-030"
@@ -675,7 +675,7 @@
         "/bug-tar-removal"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 31,
       "id": "IMG-031"
@@ -696,7 +696,7 @@
         "/carpet-shampoo"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 32,
       "id": "IMG-032"
@@ -717,7 +717,7 @@
         "/ceramic-coating"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 33,
       "id": "IMG-033"
@@ -738,7 +738,7 @@
         "/ceramic-spray-wax"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 34,
       "id": "IMG-034"
@@ -759,7 +759,7 @@
         "/de-badging"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 35,
       "id": "IMG-035"
@@ -780,7 +780,7 @@
         "/de-ionizing-treatment"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 36,
       "id": "IMG-036"
@@ -801,7 +801,7 @@
         "/engine-cleaning"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 37,
       "id": "IMG-037"
@@ -822,7 +822,7 @@
         "/exterior-wax"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 38,
       "id": "IMG-038"
@@ -843,7 +843,7 @@
         "/fleet-vehicle-add-on"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 39,
       "id": "IMG-039"
@@ -864,7 +864,7 @@
         "/full-clay-treatment"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 40,
       "id": "IMG-040"
@@ -885,7 +885,7 @@
         "/graphene-finish"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 41,
       "id": "IMG-041"
@@ -906,7 +906,7 @@
         "/headlight-restoration"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 42,
       "id": "IMG-042"
@@ -927,7 +927,7 @@
         "/high-grade-paint-sealant"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 43,
       "id": "IMG-043"
@@ -948,7 +948,7 @@
         "/odor-removal"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 44,
       "id": "IMG-044"
@@ -969,7 +969,7 @@
         "/pet-hair-removal"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 45,
       "id": "IMG-045"
@@ -990,7 +990,7 @@
         "/salt-stain-treatment"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 46,
       "id": "IMG-046"
@@ -1011,7 +1011,7 @@
         "/seat-shampoo"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 47,
       "id": "IMG-047"
@@ -1032,7 +1032,7 @@
         "/trim-restoration"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 48,
       "id": "IMG-048"
@@ -1053,7 +1053,7 @@
         "/truck-box-wash"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 49,
       "id": "IMG-049"
@@ -1074,7 +1074,7 @@
         "/two-stage-polish"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 50,
       "id": "IMG-050"
@@ -1095,7 +1095,7 @@
         "/uv-protectant"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 51,
       "id": "IMG-051"
@@ -1116,7 +1116,7 @@
         "/vinyl-wrapping"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 52,
       "id": "IMG-052"
@@ -1137,7 +1137,7 @@
         "/window-tinting"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 53,
       "id": "IMG-053"
@@ -1158,7 +1158,7 @@
         "/windshield-ceramic-coating"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "After R2 and Photo Studio; original SVG remains if local upload missing",
       "number": 54,
       "id": "IMG-054"
@@ -1179,7 +1179,7 @@
         "/norwich-otterville-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 55,
       "id": "IMG-055"
@@ -1200,7 +1200,7 @@
         "/port-dover-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 56,
       "id": "IMG-056"
@@ -1221,7 +1221,7 @@
         "/port-rowan-turkey-point-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 57,
       "id": "IMG-057"
@@ -1242,7 +1242,7 @@
         "/simcoe-delhi-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 58,
       "id": "IMG-058"
@@ -1263,7 +1263,7 @@
         "/tillsonburg-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 59,
       "id": "IMG-059"
@@ -1284,7 +1284,7 @@
         "/waterford-vittoria-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 60,
       "id": "IMG-060"
@@ -1305,7 +1305,7 @@
         "/woodstock-ingersoll-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 61,
       "id": "IMG-061"
@@ -1326,7 +1326,7 @@
         "/zorra-thamesford-embro-auto-detailing"
       ],
       "placement": "planned-or-fallback-not-live-verified",
-      "filePresent": false,
+      "filePresent": true,
       "notes": "Town banner: permanent theme artwork, not town customer proof",
       "number": 62,
       "id": "IMG-062"
@@ -1582,7 +1582,6 @@
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
       "sourceFiles": [
-        "assets/admin-catalog-v311.js",
         "assets/booking-specialty-cards.js",
         "assets/pricing-catalog-client-legacy.js",
         "assets/site.js",
@@ -1843,9 +1842,7 @@
       ],
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
-      "sourceFiles": [
-        "service-worker.js"
-      ],
+      "sourceFiles": [],
       "notes": "Browser/PWA icon; not a Photo Studio upload",
       "number": 84,
       "id": "IMG-084"
@@ -1867,9 +1864,7 @@
       ],
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
-      "sourceFiles": [
-        "service-worker.js"
-      ],
+      "sourceFiles": [],
       "notes": "Browser/PWA icon; not a Photo Studio upload",
       "number": 85,
       "id": "IMG-085"
@@ -1891,9 +1886,7 @@
       ],
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
-      "sourceFiles": [
-        "service-worker.js"
-      ],
+      "sourceFiles": [],
       "notes": "Browser/PWA icon; not a Photo Studio upload",
       "number": 86,
       "id": "IMG-086"
@@ -1999,8 +1992,7 @@
       "filePresent": true,
       "sourceFiles": [
         "assets/build389-local-seo-proof.js",
-        "assets/chrome.js",
-        "assets/landing-page-build388.js"
+        "assets/chrome.js"
       ],
       "notes": "Application-controlled asset; any approved dynamic R2/Photo Studio image keeps precedence",
       "number": 90,
@@ -2264,14 +2256,11 @@
         "basis": "measured-file"
       },
       "pages": [
-        "/admin-catalog"
+        "shared runtime / placement not verified"
       ],
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
       "sourceFiles": [
-        "admin-catalog.html",
-        "admin-catalog/index.html",
-        "assets/admin-catalog-v311.js",
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
@@ -2546,7 +2535,9 @@
       ],
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
-      "sourceFiles": [],
+      "sourceFiles": [
+        "assets/chrome.js"
+      ],
       "notes": "Browser/PWA icon; not a Photo Studio upload",
       "number": 111,
       "id": "IMG-111"
@@ -2561,13 +2552,14 @@
       "size": {
         "width": 1600,
         "height": 900,
-        "basis": "proposed-canvas-not-measured"
+        "viewBox": "0 0 1600 900",
+        "basis": "svg-explicit-canvas"
       },
       "pages": [
         "/admin-creative-projects.html"
       ],
-      "placement": "reserved admin artwork; not approved or installed",
-      "filePresent": false,
+      "placement": "theme illustration in repository; render acceptance pending",
+      "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
       "number": 112,
       "id": "IMG-112"
@@ -2582,13 +2574,14 @@
       "size": {
         "width": 1600,
         "height": 900,
-        "basis": "proposed-canvas-not-measured"
+        "viewBox": "0 0 1600 900",
+        "basis": "svg-explicit-canvas"
       },
       "pages": [
         "/admin-creative-projects.html"
       ],
-      "placement": "reserved admin artwork; not approved or installed",
-      "filePresent": false,
+      "placement": "theme illustration in repository; render acceptance pending",
+      "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
       "number": 113,
       "id": "IMG-113"
@@ -2603,13 +2596,14 @@
       "size": {
         "width": 1600,
         "height": 900,
-        "basis": "proposed-canvas-not-measured"
+        "viewBox": "0 0 1600 900",
+        "basis": "svg-explicit-canvas"
       },
       "pages": [
         "Admin/shared"
       ],
-      "placement": "reserved admin artwork; not approved or installed",
-      "filePresent": false,
+      "placement": "theme illustration in repository; render acceptance pending",
+      "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
       "number": 114,
       "id": "IMG-114"
@@ -2624,13 +2618,14 @@
       "size": {
         "width": 1600,
         "height": 900,
-        "basis": "proposed-canvas-not-measured"
+        "viewBox": "0 0 1600 900",
+        "basis": "svg-explicit-canvas"
       },
       "pages": [
         "/admin-roadmap-execution.html"
       ],
-      "placement": "reserved admin artwork; not approved or installed",
-      "filePresent": false,
+      "placement": "theme illustration in repository; render acceptance pending",
+      "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
       "number": 115,
       "id": "IMG-115"
@@ -2645,13 +2640,14 @@
       "size": {
         "width": 1600,
         "height": 900,
-        "basis": "proposed-canvas-not-measured"
+        "viewBox": "0 0 1600 900",
+        "basis": "svg-explicit-canvas"
       },
       "pages": [
         "/admin-startup-guide.html"
       ],
-      "placement": "reserved admin artwork; not approved or installed",
-      "filePresent": false,
+      "placement": "theme illustration in repository; render acceptance pending",
+      "filePresent": true,
       "notes": "Internal illustration only. Never depict private customer information or tokens.",
       "number": 116,
       "id": "IMG-116"

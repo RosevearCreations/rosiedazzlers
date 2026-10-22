@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title description">
+  <title id="title">Project Cost &amp; Content Workflow</title><desc id="description">Capture work, account for effort and review public derivatives. Raw intake media remains private; only explicitly approved derivatives publish.</desc>
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0B1118"/><stop offset="1" stop-color="#29313A"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#A37B35"/><stop offset="0.5" stop-color="#F0D28A"/><stop offset="1" stop-color="#B58A40"/></linearGradient>
+    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" fill="none" stroke="#FFFFFF" stroke-opacity="0.035"/></pattern>
+  </defs>
+  <rect width="1600" height="900" rx="32" fill="url(#back)"/>
+  <rect width="1600" height="900" rx="32" fill="url(#grid)"/>
+  <rect x="65" y="60" width="9" height="120" rx="4" fill="url(#gold)"/>
+  <text x="104" y="105" fill="#EAC774" font-size="25" font-family="Arial, Helvetica, sans-serif" font-weight="700" letter-spacing="3">ROSIE DAZZLERS / STANDARD</text>
+  <text x="104" y="172" fill="#FFFFFF" font-size="60" font-family="Arial, Helvetica, sans-serif" font-weight="700">Project Cost &amp; Content Workflow</text>
+  <text x="104" y="226" fill="#BCC6D0" font-size="28" font-family="Arial, Helvetica, sans-serif">Capture work, account for effort and review public derivatives</text>
+  <g font-family="Arial, Helvetica, sans-serif"><g>
+    <rect x="74" y="285" width="320" height="320" rx="28" fill="#1B242D" stroke="#B4914D" stroke-width="2"/>
+    <rect x="98" y="306" width="272" height="6" rx="3" fill="url(#gold)"/>
+    <circle cx="132" cy="365" r="31" fill="#43351D" stroke="#D5AF5B" stroke-width="2"/>
+    <text x="132" y="377" font-size="34" font-weight="700" fill="#FFE4A4" text-anchor="middle">1</text>
+    <text x="102" y="440" font-size="35" font-weight="700" fill="#FFFFFF">Work Sessions</text>
+    <text x="102" y="493" font-size="27" fill="#C9D1D8">Timeline and</text>
+    <text x="102" y="534" font-size="27" fill="#C9D1D8">activity notes</text>
+    <path d="M 394 449 h 47" stroke="#E0BB67" stroke-width="6" stroke-linecap="round"/><path d="M 429 436 l 15 13 -15 13" fill="none" stroke="#E0BB67" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g><g>
+    <rect x="452" y="285" width="320" height="320" rx="28" fill="#1B242D" stroke="#B4914D" stroke-width="2"/>
+    <rect x="476" y="306" width="272" height="6" rx="3" fill="url(#gold)"/>
+    <circle cx="510" cy="365" r="31" fill="#43351D" stroke="#D5AF5B" stroke-width="2"/>
+    <text x="510" y="377" font-size="34" font-weight="700" fill="#FFE4A4" text-anchor="middle">2</text>
+    <text x="480" y="440" font-size="35" font-weight="700" fill="#FFFFFF">True Costs</text>
+    <text x="480" y="493" font-size="27" fill="#C9D1D8">Materials, labour</text>
+    <text x="480" y="534" font-size="27" fill="#C9D1D8">and overhead</text>
+    <path d="M 772 449 h 47" stroke="#E0BB67" stroke-width="6" stroke-linecap="round"/><path d="M 807 436 l 15 13 -15 13" fill="none" stroke="#E0BB67" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g><g>
+    <rect x="830" y="285" width="320" height="320" rx="28" fill="#1B242D" stroke="#B4914D" stroke-width="2"/>
+    <rect x="854" y="306" width="272" height="6" rx="3" fill="url(#gold)"/>
+    <circle cx="888" cy="365" r="31" fill="#43351D" stroke="#D5AF5B" stroke-width="2"/>
+    <text x="888" y="377" font-size="34" font-weight="700" fill="#FFE4A4" text-anchor="middle">3</text>
+    <text x="858" y="440" font-size="35" font-weight="700" fill="#FFFFFF">Story Drafts</text>
+    <text x="858" y="493" font-size="27" fill="#C9D1D8">Prepare content</text>
+    <text x="858" y="534" font-size="27" fill="#C9D1D8">for review</text>
+    <path d="M 1150 449 h 47" stroke="#E0BB67" stroke-width="6" stroke-linecap="round"/><path d="M 1185 436 l 15 13 -15 13" fill="none" stroke="#E0BB67" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  </g><g>
+    <rect x="1208" y="285" width="320" height="320" rx="28" fill="#1B242D" stroke="#B4914D" stroke-width="2"/>
+    <rect x="1232" y="306" width="272" height="6" rx="3" fill="url(#gold)"/>
+    <circle cx="1266" cy="365" r="31" fill="#43351D" stroke="#D5AF5B" stroke-width="2"/>
+    <text x="1266" y="377" font-size="34" font-weight="700" fill="#FFE4A4" text-anchor="middle">4</text>
+    <text x="1236" y="440" font-size="35" font-weight="700" fill="#FFFFFF">Reviewed Output</text>
+    <text x="1236" y="493" font-size="27" fill="#C9D1D8">Consent-gated</text>
+    <text x="1236" y="534" font-size="27" fill="#C9D1D8">public derivative</text>
+
+  </g></g>
+  <rect x="74" y="677" width="1452" height="96" rx="20" fill="#101820" stroke="#6D5A32" stroke-width="2"/>
+  <circle cx="117" cy="726" r="18" fill="#D6AE5A"/><path d="M 117 716 v 10 M 117 735 v 1" stroke="#17202A" stroke-width="5" stroke-linecap="round"/>
+  <text x="152" y="738" fill="#F1E3C5" font-size="26" font-family="Arial, Helvetica, sans-serif">Raw intake media remains private; only explicitly approved derivatives publish.</text>
+  <text x="1500" y="843" text-anchor="end" font-size="22" fill="#9EACB8" font-family="Arial, Helvetica, sans-serif">Owner-review artwork · IMG-113</text>
+</svg>

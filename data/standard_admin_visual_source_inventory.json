@@ -574,10 +574,10 @@
           "index": 2,
           "role": "authored-r2-reference",
           "domId": null,
-          "source": "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-          "sourceOfTruth": "approved-r2-and-Photo-Studio",
+          "source": "/assets/themes/standard/images/brand-banner.webp",
+          "sourceOfTruth": "standard-theme-static",
           "staticAltProvided": true,
-          "review": "Check permissions and R2 asset existence"
+          "review": "Ensure Standard owner-approved banner is present in public build"
         }
       ]
     },

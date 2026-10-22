@@ -40,7 +40,7 @@ def load_json(rel: str) -> dict:
 shell = read("assets/admin-shell.js")
 design = read("assets/admin-design-system.css")
 for token in [
-    'ensureStylesheet("/assets/admin-design-system.css?v=20260906build347"',
+    'ensureStylesheet("/assets/admin-design-system.css?v=',
     'rosie-admin-design-system-css',
     'dataset.adminProtected = "true"',
     "markProtectedPage(pageKey)",

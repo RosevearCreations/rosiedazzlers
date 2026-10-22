@@ -1,9 +1,11 @@
+import { standardPackageFallback, standardAddonFallback, standardThemeIsActive } from "./standard-image-slots.js";
+
 const DATA_URL = "/api/pricing_catalog_public";
 
 const BRAND = {
-  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
-  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "https://assets.rosiedazzlers.ca/brand/RosieReviews.png"
+  logo: "/assets/themes/standard/images/cropgold.png",
+  banner: "/assets/themes/standard/images/brand-banner.webp",
+  reviews: "/assets/themes/standard/images/rosie-reviews-fallback.png"
 };
 
 const CONTACT = {
@@ -18,9 +20,9 @@ const pkgFile = (filename) => encodeURI(`${PACKAGES_BASE}${filename}`);
 
 // Hover/rotation images shown on package cards (these filenames MUST match R2 exactly)
 const HOVER_MEDIA = {
-  exterior: pkgFile("Exterior Detail.png"),
-  interior: pkgFile("Interior Detail.png"),
-  size: pkgFile("CarSizeChart.PNG")
+  exterior: "/assets/themes/standard/images/service-exterior.webp",
+  interior: "/assets/themes/standard/images/interior-detail.webp",
+  size: "/assets/themes/standard/images/CarSizeChart.PNG"
 };
 
 const ADDON_IMAGE_FILES = {
@@ -83,14 +85,23 @@ function packagePrice(pkg, size) {
 }
 
 function packageImageForSize(pkg, size) {
+  if (standardThemeIsActive()) {
+    const image=standardPackageFallback(pkg?.code);
+    if (image) return image;
+  }
   return pkg?.images_by_size?.[size] || "";
 }
 
 function addonImageForCode(code) {
+  if (standardThemeIsActive()) {
+    const image=standardAddonFallback(code);
+    if (image) return image;
+  }
   return ADDON_MEDIA[code] || LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.png';
 }
 
 function addonFallbackForCode(code) {
+  if (standardThemeIsActive()) return standardAddonFallback(code) || '/assets/addons/generic_addon.png';
   return LOCAL_ADDON_FALLBACKS[code] || '/assets/addons/generic_addon.png';
 }
 

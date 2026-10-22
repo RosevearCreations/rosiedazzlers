@@ -21,6 +21,7 @@ ROUTE_COPY_PAGES = [
     "admin-water-rules.html",
     "admin-social.html",
     "admin-booking.html",
+    "admin-staff.html",
     "admin-assign.html",
     "admin-leads.html",
     "admin-catalog.html",
@@ -62,6 +63,7 @@ ROUTE_COPY_PAGES = [
     "pricing.html",
     "gift-cards.html",
     "faq.html",
+    "login.html",
     "gallery.html",
 ]
 
@@ -93,8 +95,18 @@ def sync_route_copies(check_only: bool = False) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="fail if a route copy differs")
+    parser.add_argument("--only", metavar="PAGE", help="synchronize just the named HTML page")
     args = parser.parse_args()
-    changed = sync_route_copies(check_only=args.check)
+    if args.only:
+        if args.only not in ROUTE_COPY_PAGES:
+            parser.error(f"--only must be one of: {', '.join(ROUTE_COPY_PAGES)}")
+        source = ROOT / args.only
+        target = route_dir_for(args.only) / "index.html"
+        changed = [f"{args.only} -> {target.relative_to(ROOT)}"] if source.exists() and target.exists() and source.read_bytes() != target.read_bytes() else []
+        if changed and not args.check:
+            target.write_bytes(source.read_bytes())
+    else:
+        changed = sync_route_copies(check_only=args.check)
     if args.check and changed:
         print("Route-copy drift found:")
         for row in changed:

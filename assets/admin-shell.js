@@ -99,7 +99,7 @@
     });
   }
 
-  ensureStylesheet("/assets/admin-design-system.css?v=20260906build347", "rosie-admin-design-system-css");
+  ensureStylesheet("/assets/admin-design-system.css?v=build612-admin-layout", "rosie-admin-design-system-css");
   ensureAdminCssFallback();
   void ensureContextualHelp(document.body?.dataset?.page || "");
 

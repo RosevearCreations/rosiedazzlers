@@ -16,10 +16,12 @@ if (typeof document !== 'undefined' && !document.documentElement.dataset.rosieTh
 
 let BRAND = {
   name: "Rosie Dazzlers",
-  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
-  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "/assets/brand/rosie-reviews-fallback.png",
-  footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
+  // Design/brand artwork belongs to the selected theme. Business profile
+  // settings continue to control contact and business information.
+  logo: "/assets/themes/standard/images/cropgold.png",
+  banner: "/assets/themes/standard/images/brand-banner.webp",
+  reviews: "/assets/themes/standard/images/rosie-reviews-fallback.png",
+  footerLogo: "/assets/themes/standard/images/cropgold.png",
 };
 
 let SOCIALS = [
@@ -91,13 +93,14 @@ function applyBusinessProfileSettings(profile) {
   const business = profile && typeof profile === "object" ? (profile.business || profile) : null;
   if (!business || typeof business !== "object") return;
   const contact = business.contact || {};
+  const standardTheme = (document.documentElement.dataset.rosieTheme || 'standard') === 'standard';
   BRAND = {
     ...BRAND,
     name: business.short_name || business.name || BRAND.name,
-    logo: business.logo_url || BRAND.logo,
-    banner: business.banner_url || BRAND.banner,
+    logo: standardTheme ? '/assets/themes/standard/images/cropgold.png' : (business.logo_url || BRAND.logo),
+    banner: standardTheme ? '/assets/themes/standard/images/brand-banner.webp' : (business.banner_url || BRAND.banner),
     reviews: business.reviews_image_url || BRAND.reviews,
-    footerLogo: business.footer_logo_url || business.logo_url || BRAND.footerLogo
+    footerLogo: standardTheme ? '/assets/themes/standard/images/cropgold.png' : (business.footer_logo_url || business.logo_url || BRAND.footerLogo)
   };
   if (Array.isArray(business.social_links) && business.social_links.length) {
     SOCIALS = business.social_links
@@ -190,6 +193,10 @@ function setBrandImagesEverywhere() {
 
 function ensureMainBanner() {
   const path = normalizePath(location.pathname);
+  // Internal/Admin workspaces use compact theme branding in their navigation.
+  // Never inject the public advertising banner above working controls.
+  if (path === '/app' || path.startsWith('/app/') || path.startsWith('/admin') ||
+      document.body?.dataset?.adminProtected === 'true') return;
   if (["/book","/login","/my-account","/progress","/complete","/detailer-jobs"].includes(path)) return;
 
   const existingImg =
@@ -278,7 +285,7 @@ function ensureReviewsPanel() {
   if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
     directImg.src = BRAND.reviews;
     directImg.alt = "Rosie Dazzlers reviews";
-    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/brand/rosie-reviews-fallback.png"; };
+    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/themes/standard/images/rosie-reviews-fallback.png"; };
     directImg.loading = "lazy";
     directImg.style.display = "block";
     directImg.style.width = "100%";
@@ -296,7 +303,7 @@ function ensureReviewsPanel() {
     wrapTarget.innerHTML = `
       <img
         src="${BRAND.reviews}"
-        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.png'"
+        onerror="this.onerror=null;this.src='/assets/themes/standard/images/rosie-reviews-fallback.png'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;height:auto;object-fit:contain"
@@ -464,7 +471,7 @@ function setFooter() {
           <img
             src="${escapeAttr(BRAND.footerLogo)}"
             alt="${escapeAttr(shortName)} logo"
-            style="width:72px;height:72px;object-fit:contain;border-radius:14px;flex:0 0 auto;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.10);padding:6px;"
+            style="width:clamp(110px, 15vw, 172px);height:auto;aspect-ratio:945 / 476;object-fit:contain;border-radius:10px;flex:0 1 auto;min-width:0;max-width:100%;background:#080809;border:1px solid rgba(222,192,109,.22);"
           >
           <div>
             <div class="footer-title">${escapeHtml(shortName)}</div>
@@ -585,6 +592,10 @@ function buildPlaylist(baseSrc) {
 }
 
 function attachRotators(containerSelector) {
+  // Legacy hover playlists point to blue R2 package advertisements. The
+  // Standard theme uses its own consistent static imagery and should not
+  // temporarily swap it for old catalogue art on mouseover.
+  if ((document.documentElement.dataset.rosieTheme || 'standard') === 'standard') return;
   const container = document.querySelector(containerSelector);
   if (!container) return;
 
@@ -826,7 +837,17 @@ function ensureManifest(){
   m.href='/manifest.webmanifest';
   let theme=head.querySelector('meta[name="theme-color"]');
   if(!theme){ theme=document.createElement('meta'); theme.name='theme-color'; head.appendChild(theme); }
-  theme.content='#0f172a';
+  theme.content='#0b0e11';
+}
+
+function ensureThemeFavicon(){
+  const head=document.head||document.querySelector('head');
+  if(!head||head.querySelector('link[rel="icon"]'))return;
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/x-icon';
+  icon.href='/assets/themes/standard/images/favicon.ico';
+  head.appendChild(icon);
 }
 
 
@@ -872,18 +893,18 @@ function ensureStickyConversionCta() {
       position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;
       display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;
       padding:10px;border-radius:18px;border:1px solid rgba(255,255,255,.14);
-      background:rgba(15,23,42,.92);backdrop-filter:blur(14px);
+      background:rgba(11,14,17,.95);backdrop-filter:blur(14px);
       box-shadow:0 18px 45px rgba(0,0,0,.35);
     }
     #rosieStickyCtaBar a{
       text-decoration:none;border-radius:999px;padding:9px 12px;font-weight:800;font-size:.9rem;
-      border:1px solid rgba(255,255,255,.16);color:#eaf2ff;background:rgba(255,255,255,.07);
+      border:1px solid rgba(222,192,109,.24);color:#f5f6f7;background:rgba(255,255,255,.07);
       white-space:nowrap;
     }
-    #rosieStickyCtaBar a.primary{background:linear-gradient(135deg,#f97316,#facc15);color:#111827;border-color:transparent;}
+    #rosieStickyCtaBar a.primary{background:linear-gradient(135deg,#f0d58c,#b58c38);color:#15130e;border-color:transparent;}
     #rosieStickyCtaBar a.photo{background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.45);}
     #rosieStickyCtaBar button{
-      border:0;background:transparent;color:rgba(234,242,255,.72);font-weight:900;cursor:pointer;padding:6px 8px;
+      border:0;background:transparent;color:#c4cbd0;font-weight:900;cursor:pointer;padding:6px 8px;
     }
     @media (min-width:980px){
       #rosieStickyCtaBar{left:auto;right:18px;bottom:18px;max-width:540px}
@@ -932,6 +953,7 @@ function ensureVisualPlaceholderSystem(){
 async function initChrome() {
   setViewportTier();
   window.addEventListener("resize", setViewportTier, { passive: true });
+  ensureThemeFavicon();
   ensureManifest();
   await loadPublicSiteSettings();
   ensureNavLinks();
@@ -956,24 +978,24 @@ async function initChrome() {
     console.warn('Optional Photo Studio presentation overrides could not be applied.', error);
   }
 
-  // Optional Standard process imagery only; media loads after approved Photo Studio overrides.
+  // Standard marketing cards render theme-owned artwork; other proof/gallery
+  // media remains in the separate managed media layer above.
   try {
     const standardArt = await import("/assets/standard-static-media.js");
     standardArt.hydrateStandardProcessImages(document);
+    standardArt.hydrateStandardCardArtwork(document);
   } catch (error) {
     console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
   }
 
-  // Shared cross-surface theme registry; Standard remains the only approved theme.
-  // No user preference is stored and no alternative theme is activated automatically.
+  // Keep the Production theme registry and opt-in visual audit intact.
+  // Standard remains the only approved theme; neither helper changes owner media.
   try {
     const themeRuntime = await import("/assets/theme-runtime.js");
     window.RosieThemes = themeRuntime.initThemeRuntime(document);
   } catch (error) {
     console.warn("Optional theme registry helper unavailable; Standard remains active.", error);
   }
-
-  // Opt-in, operator-requested, read-only browser visual audit. No background scanning.
   if (new URLSearchParams(location.search).get("rosieVisualAudit") === "1") {
     try {
       const visualAudit = await import("/assets/visual-audit-inspector.js");
