@@ -49,6 +49,28 @@ const esc=x=>String(x??"").replace(/\|/g,"\\|").replace(/[\r\n]/g," ");
 await scan(root);rows.sort((a,b)=>a.file.localeCompare(b.file)||a.line-b.line);
 const data={schema:"rosie-media-source-audit.v1",generatedAt:new Date().toISOString(),count:rows.length,
  warning:"Static source scan only, not deployment/R2/consent proof",svgAssets:svgs,references:rows};
+// Retain the Production auditor's local-missing versus planned-but-unuploaded
+// distinction; neither state is proof of an R2 or owner media assignment.
+const filesystemReferences=rows.filter(x=>
+ /^\/assets\/[\w./%+-]+\.(?:png|jpe?g|svg|webp|avif|gif|ico)(?:\?.*)?$/i.test(x.source));
+const missing=[],available=[],optionalPlanned=[];
+for(const x of filesystemReferences){
+ const publicPath=x.source.split(/[?#]/)[0];
+ let pathname;
+ try{pathname=decodeURIComponent(publicPath)}catch{continue}
+ if(!pathname.startsWith('/assets/')||pathname.includes('..'))continue;
+ const disk=path.join(root,pathname.slice(1));
+ try{await fs.access(disk);available.push({file:x.file,line:x.line,path:pathname})}
+ catch{
+  const row={file:x.file,line:x.line,path:pathname};
+  if(pathname.startsWith('/assets/themes/standard/images/'))optionalPlanned.push(row);
+  else missing.push(row);
+ }
+}
+data.missingLocalStatic=missing;
+data.optionalPlannedStandardArtwork=optionalPlanned;
+data.resolvedLocalStaticCount=available.length;
+const missingSection=['','## Missing authored local asset references','','These may represent broken paths. Review against build-time generated assets.','','| Source file | Line | Referenced image filename |','|---|---:|---|',...missing.map(x=>'| '+esc(x.file)+' | '+x.line+' | '+esc(x.path)+' |'),'','## Planned Standard artwork not yet uploaded','','| Source file | Line | Reserved filename |','|---|---:|---|',...optionalPlanned.map(x=>'| '+esc(x.file)+' | '+x.line+' | '+esc(x.path)+' |')];
 await fs.mkdir(path.join(root,"docs/audits"),{recursive:true});
 const content=["# Rosie Dazzlers generated source visual inventory","","Static HTML, JS, CSS and SVG references. Run on full checkout; media approvals and runtime DOM remain separate.","",
 "## SVG file geometry","","| File | Width | Height | ViewBox |","|---|---|---|---|",
@@ -56,6 +78,6 @@ const content=["# Rosie Dazzlers generated source visual inventory","","Static H
 "","## All source references","","| File | Line | Image reference | Kind | Restricted review |","|---|---:|---|---|---|",
 ...rows.map(x=>"| "+esc(x.file)+" | "+x.line+" | "+esc(x.source)+" | "+x.slot+" | "+(x.privateContext?"Yes":"Check approval")+" |"),
 "","No image assignment, public consent, R2 asset, or live production setting is changed by this scanner."].join("\n");
-await fs.writeFile(path.join(root,"docs/audits/GENERATED_MEDIA_REFERENCES.md"),content+"\n");
+await fs.writeFile(path.join(root,"docs/audits/GENERATED_MEDIA_REFERENCES.md"),content+"\n"+missingSection.join("\n")+"\n");
 await fs.writeFile(path.join(root,"data/generated_media_reference_inventory.json"),JSON.stringify(data,null,2)+"\n");
-console.log("references",rows.length,"svg",svgs.length);
+console.log("references",rows.length,"svg",svgs.length,"missing-local",missing.length,"reserved-unuploaded",optionalPlanned.length);

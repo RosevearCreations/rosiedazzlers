@@ -988,6 +988,23 @@ async function initChrome() {
     console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
   }
 
+  // Keep the Production theme registry and opt-in visual audit intact.
+  // Standard remains the only approved theme; neither helper changes owner media.
+  try {
+    const themeRuntime = await import("/assets/theme-runtime.js");
+    window.RosieThemes = themeRuntime.initThemeRuntime(document);
+  } catch (error) {
+    console.warn("Optional theme registry helper unavailable; Standard remains active.", error);
+  }
+  if (new URLSearchParams(location.search).get("rosieVisualAudit") === "1") {
+    try {
+      const visualAudit = await import("/assets/visual-audit-inspector.js");
+      visualAudit.installOptInVisualAudit(document);
+    } catch (error) {
+      console.warn("Visual audit helper was unavailable; no media was changed.", error);
+    }
+  }
+
   attachRotators("#homePackages");
   attachRotators("#packageCards");
   attachRotators("#pricingCards");
