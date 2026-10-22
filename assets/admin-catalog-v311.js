@@ -56,13 +56,13 @@
   function galleryValues(){ return galleryInputs().map((input)=>cleanImageUrl(input.value)).filter(Boolean).slice(0,7); }
   function renderGalleryEditor(values){
     const grid=qs('#galleryGrid'); if(!grid) return; const urls=normalizeGalleryImageUrls(values); while(urls.length<7) urls.push('');
-    grid.innerHTML=urls.map((url,index)=>`<div class="gallery-slot" draggable="true" data-gallery-slot="${index}"><img src="${esc(url || '/assets/addons/generic_addon.png')}" alt="Gallery image ${index+1} preview" loading="lazy" onerror="this.src='/assets/placeholders/inventory-tools-photo.jpg'"><label>Gallery ${index+1}<input data-gallery-input="${index}" list="inventoryImageOptions" type="url" value="${esc(url)}" placeholder="Paste or select image URL"></label><div class="gallery-slot-actions"><button class="btn ghost small" type="button" data-gallery-up="${index}" aria-label="Move gallery image ${index+1} up">↑</button><button class="btn ghost small" type="button" data-gallery-down="${index}" aria-label="Move gallery image ${index+1} down">↓</button><button class="btn ghost small" type="button" data-gallery-clear="${index}" aria-label="Clear gallery image ${index+1}">×</button></div></div>`).join('');
+    grid.innerHTML=urls.map((url,index)=>`<div class="gallery-slot" draggable="true" data-gallery-slot="${index}"><img src="${esc(url || '/assets/themes/standard/images/generic-addon.webp')}" alt="Gallery image ${index+1} preview" loading="lazy" onerror="this.onerror=null;this.src='/assets/themes/standard/images/inventory-tools-photo.webp'"><label>Gallery ${index+1}<input data-gallery-input="${index}" list="inventoryImageOptions" type="url" value="${esc(url)}" placeholder="Paste or select image URL"></label><div class="gallery-slot-actions"><button class="btn ghost small" type="button" data-gallery-up="${index}" aria-label="Move gallery image ${index+1} up">↑</button><button class="btn ghost small" type="button" data-gallery-down="${index}" aria-label="Move gallery image ${index+1} down">↓</button><button class="btn ghost small" type="button" data-gallery-clear="${index}" aria-label="Clear gallery image ${index+1}">×</button></div></div>`).join('');
     bindGalleryEditor(); updateGalleryCount();
   }
   function updateGalleryCount(){ const count=galleryValues().length; const el=qs('#galleryCount'); if(el) el.textContent=`${count} / 7 gallery images`; }
   function moveGallerySlot(index,delta){ const inputs=galleryInputs(),target=index+delta; if(target<0||target>=inputs.length) return; const a=inputs[index].value,b=inputs[target].value; inputs[index].value=b; inputs[target].value=a; renderGalleryEditor(galleryValues()); }
   function bindGalleryEditor(){
-    galleryInputs().forEach((input)=>input.addEventListener('input',()=>{ const slot=input.closest('.gallery-slot'),img=slot?.querySelector('img'); if(img) img.src=cleanImageUrl(input.value)||'/assets/addons/generic_addon.png'; updateGalleryCount(); }));
+    galleryInputs().forEach((input)=>input.addEventListener('input',()=>{ const slot=input.closest('.gallery-slot'),img=slot?.querySelector('img'); if(img) img.src=cleanImageUrl(input.value)||'/assets/themes/standard/images/generic-addon.webp'; updateGalleryCount(); }));
     document.querySelectorAll('[data-gallery-up]').forEach((btn)=>btn.addEventListener('click',()=>moveGallerySlot(Number(btn.dataset.galleryUp),-1)));
     document.querySelectorAll('[data-gallery-down]').forEach((btn)=>btn.addEventListener('click',()=>moveGallerySlot(Number(btn.dataset.galleryDown),1)));
     document.querySelectorAll('[data-gallery-clear]').forEach((btn)=>btn.addEventListener('click',()=>{ const input=qs(`[data-gallery-input="${btn.dataset.galleryClear}"]`); if(input){ input.value=''; input.dispatchEvent(new Event('input')); } }));
@@ -99,7 +99,7 @@
     const title=qs('#imagePreviewTitle');
     const meta=qs('#imagePreviewMeta');
     const match=findMatchingBundledImage();
-    if(img){ img.src=url || '/assets/placeholders/inventory-tools-photo.jpg'; img.onerror=()=>{ img.onerror=null; img.src='/assets/placeholders/inventory-tools-photo.jpg'; }; }
+    if(img){ img.src=url || '/assets/themes/standard/images/inventory-tools-photo.webp'; img.onerror=()=>{ img.onerror=null; img.src='/assets/themes/standard/images/inventory-tools-photo.webp'; }; }
     if(title) title.textContent = url ? 'Selected product image' : (match ? 'Matching bundled image found' : 'No product image selected yet');
     if(meta) meta.textContent = url ? url : (match ? `Available: ${match.item?.name || match.item?.item_key || 'bundled catalog image'}` : 'Use the matching bundled image or open the picker to select an uploaded product image.');
   }
@@ -109,7 +109,7 @@
     const rows=imagePickerRows.filter((row)=>!q || row.search.includes(q)).slice(0,80);
     const count=qs('#imagePickerCount'); if(count) count.textContent=`${rows.length} shown · ${imagePickerRows.length} available`;
     const grid=qs('#imagePickerGrid'); if(!grid) return;
-    grid.innerHTML=rows.map((row,idx)=>`<button class="image-choice" type="button" data-image-choice="${idx}" title="Use ${esc(row.name)}"><img src="${esc(row.url)}" alt="${esc(row.name)}" loading="lazy" onerror="this.src='/assets/placeholders/inventory-tools-photo.jpg'"><span>${esc(row.name)}</span><span class="image-source">${esc(row.source)} · ${esc(row.type || 'image')}</span></button>`).join('') || '<div class="mini">No matching images found. Try a shorter search term.</div>';
+    grid.innerHTML=rows.map((row,idx)=>`<button class="image-choice" type="button" data-image-choice="${idx}" title="Use ${esc(row.name)}"><img src="${esc(row.url)}" alt="${esc(row.name)}" loading="lazy" onerror="this.onerror=null;this.src='/assets/themes/standard/images/inventory-tools-photo.webp'"><span>${esc(row.name)}</span><span class="image-source">${esc(row.source)} · ${esc(row.type || 'image')}</span></button>`).join('') || '<div class="mini">No matching images found. Try a shorter search term.</div>';
     document.querySelectorAll('[data-image-choice]').forEach((btn)=>btn.addEventListener('click',()=>{ const row=rows[Number(btn.dataset.imageChoice)]; if(!row) return; qs('#formImage').value=row.url; updateImagePreview(); show(`Selected existing image for ${row.name}. Save the inventory item to keep it.`, 'ok'); }));
   }
   function renderInventoryDatalists(){

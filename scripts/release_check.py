@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import json, subprocess, sys
+import json, re, subprocess, sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 errors=[]
@@ -57,9 +57,12 @@ for rel in ['assets/app-core/module-resolver.js','apps/detailer/detailer-app.js'
     if 'setInterval(' in txt(rel): errors.append(f'prohibited setInterval in {rel}')
 if 'setInterval(' in txt('progress.html'): errors.append('customer progress has perpetual interval')
 
-# Thin/event-driven service worker + Build 270 cache identity
+# Thin/event-driven service worker. The PWA shell's cache identity advances
+# with a release; it must not stay pinned to the first Build 270 value.
 sw=txt('service-worker.js')
-for token in ["rosie-app-v20260829build270","addEventListener('push'","addEventListener('notificationclick'"]:
+if not re.search(r"const CACHE='rosie-app-v20\d{6}build\d+';",sw):
+    errors.append('service worker missing a versioned Rosie app cache identity')
+for token in ["addEventListener('push'","addEventListener('notificationclick'"]:
     if token not in sw: errors.append(f'service worker missing {token}')
 precache=sw.split("self.addEventListener('install'",1)[0]
 for heavy in ['/app/detailer/','/app/operations/','/app/admin/','/app/finance/','live-job-module.js']:

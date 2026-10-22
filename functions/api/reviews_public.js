@@ -1,45 +1,10 @@
 import { serviceHeaders } from "./_lib/staff-auth.js";
 
 const DEFAULT_REVIEWS = {
-  source_status: "temporary_sample_until_review_api_connected",
-  items: [
-    {
-      rating: 5,
-      name: "Melissa R.",
-      location: "Tillsonburg, ON",
-      service: "SUV interior detail",
-      quote: "Our SUV had winter salt in every corner. The interior detail made it feel fresh again, especially the mats and door jambs."
-    },
-    {
-      rating: 5,
-      name: "Jason K.",
-      location: "Woodstock, ON",
-      service: "Engine cleaning",
-      quote: "The engine bay cleaning was exactly what we wanted before selling the car. It looked cared for without being overdone."
-    },
-    {
-      rating: 5,
-      name: "Amanda P.",
-      location: "Ingersoll, ON",
-      service: "Pet hair removal",
-      quote: "Pet hair was our biggest problem. They took the time to work through the seats and cargo area and the car finally looked presentable again."
-    },
-    {
-      rating: 5,
-      name: "Trevor M.",
-      location: "Simcoe, ON",
-      service: "Clay treatment and sealant",
-      quote: "The clay treatment and sealant brought the paint back to a smooth shine. Water beads much better now after washing."
-    },
-    {
-      rating: 5,
-      name: "Rachel D.",
-      location: "Delhi, ON",
-      service: "Complete detail",
-      quote: "We booked a complete detail before a family trip. The van smelled cleaner, the glass was spotless, and the kids noticed first."
-    }
-  ]
+  source_status: "not_connected",
+  items: []
 };
+const VERIFIED_REVIEW_SOURCES = new Set(["verified", "connected_verified", "owner_approved"]);
 
 export async function onRequestGet({ env }) {
   try {
@@ -49,7 +14,7 @@ export async function onRequestGet({ env }) {
     return withCors(json({
       ok: true,
       ...DEFAULT_REVIEWS,
-      warning: err?.message || "Could not load review proof; using sample fallback data."
+      warning: "Verified review proof is currently unavailable."
     }));
   }
 }
@@ -73,6 +38,8 @@ async function loadReviews(env) {
 
 function normalizeReviews(value) {
   const src = value && typeof value === "object" ? value : DEFAULT_REVIEWS;
+  const status = cleanText(src.source_status || "").toLowerCase();
+  if (!VERIFIED_REVIEW_SOURCES.has(status)) return cloneValue(DEFAULT_REVIEWS);
   const items = Array.isArray(src.items) ? src.items : [];
   const normalized = items
     .filter((item) => item && typeof item === "object")
@@ -85,8 +52,8 @@ function normalizeReviews(value) {
     }))
     .filter((item) => item.quote);
   return {
-    source_status: cleanText(src.source_status || "temporary_sample_until_review_api_connected"),
-    items: normalized.length ? normalized : cloneValue(DEFAULT_REVIEWS.items)
+    source_status: status,
+    items: normalized
   };
 }
 

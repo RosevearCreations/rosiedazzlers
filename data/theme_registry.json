@@ -5,12 +5,14 @@
     "standard": {
       "label": "Standard",
       "stylesheet": "/assets/themes/standard.css",
+      "staticImageBase": "/assets/themes/standard/images/",
+      "adminArtworkBase": "/assets/themes/standard/admin/",
       "description": "Charcoal black, metallic gold, white and subtle silver presentation. Owner-managed static artwork uses the Standard image catalog; approved media retains priority.",
-      "status": "baseline"
+      "status": "assembled_pending_rendered_acceptance"
     }
   },
   "notes": [
-    "No theme toggle or administrative persistence is enabled by this baseline.",
+    "Standard Theme #1 is installed as the baseline; Owner theme selection and persistence belong to a future build.",
     "Dynamic site-setting and approved R2 media take priority over static artwork.",
     "Future themes should add complete palette, logo, banner, imagery and component override contracts."
   ]

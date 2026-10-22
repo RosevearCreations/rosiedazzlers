@@ -202,6 +202,12 @@ function addonPriceSummary(addon) {
 }
 
 function heroMediaForPage(page, addon, relatedProducts, r2Matches = [], slug = "") {
+  // Landing hero is a themed marketing banner, distinct from the real-world
+  // before/after, Gallery, Photo Studio and linked product proof below it.
+  if ((document.documentElement.dataset.rosieTheme || 'standard') === 'standard') {
+    const themeHero=standardLandingFallback(slug || page?.slug);
+    if (themeHero) return themeHero;
+  }
   // Build 254 safety rule: existing authored imagery remains authoritative.
   // An explicit Photo Studio hero assignment is the only R2 image allowed to replace it deliberately.
   const heroTarget = `landing:${cleanText(slug || page?.slug)}:hero`;
@@ -314,11 +320,18 @@ function visualBriefsMarkup(page, websiteImageManifest, slug) {
 }
 
 function galleryMarkup(page, relatedProducts, r2Matches = []) {
+  // The saved service-page gallery contains old blue R2 package advertisements.
+  // Those are not evidence of a completed customer job and must not be shown
+  // as Standard theme artwork. Real linked products and assigned Photo Studio
+  // evidence remain unaffected.
+  const isStandard=(document.documentElement.dataset.rosieTheme||'standard')==='standard';
+  const isOldCatalogArt=(url)=>/^https?:\/\/assets\.rosiedazzlers\.ca\/packages\/|^\/assets\/addons\//i.test(String(url||''));
+  const keepPhoto=(url)=>!isStandard || !isOldCatalogArt(url);
   const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
-  const gallery = gallerySource.filter(Boolean);
+  const gallery = gallerySource.filter((url)=>url && keepPhoto(url));
   const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
-  const explicitR2Rows = (r2Matches || []).filter((item) => item?.url && item?.explicit_assignment === true && String(item?.target_key || '').includes(':gallery:'));
-  const automaticR2Rows = (r2Matches || []).filter((item) => item?.url && item?.explicit_assignment !== true);
+  const explicitR2Rows = (r2Matches || []).filter((item) => item?.url && keepPhoto(item.url) && item?.explicit_assignment === true && String(item?.target_key || '').includes(':gallery:'));
+  const automaticR2Rows = (r2Matches || []).filter((item) => item?.url && keepPhoto(item.url) && item?.explicit_assignment !== true);
   const approvedR2Rows = [...explicitR2Rows, ...automaticR2Rows];
   const r2Meta = new Map(approvedR2Rows.map((item) => [item.url, item]));
   // Explicit gallery choices are intentional additions; otherwise authored gallery/product images stay first.
@@ -523,7 +536,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          ${mediaImageMarkup(reviewProofImage?.url || "/assets/brand/rosie-reviews-fallback.png", reviewProofImage?.alt_text || "Rosie Dazzlers reviews", "proof-media", reviewProofImage?.focal_point ? `style="object-position:${escapeHtml(reviewProofImage.focal_point)}"` : "")}
+          ${mediaImageMarkup(reviewProofImage?.url || "/assets/themes/standard/images/rosie-reviews-fallback.png", reviewProofImage?.alt_text || "Verified customer feedback placeholder", "proof-media", reviewProofImage?.focal_point ? `style="object-position:${escapeHtml(reviewProofImage.focal_point)}"` : "")}
         </article>
         <article class="proof-card">
           <h3>Booking fit</h3>

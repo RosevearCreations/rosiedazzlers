@@ -1,9 +1,16 @@
-/** Standard theme public static *process* illustration loader.
- * Never replaces existing approved R2, Photo Studio, before/after, customer or admin media.
- * An uploaded filename is used only if an actual image loads successfully.
+/** Standard theme public marketing artwork loader.
+ * Process illustration slots are fallback-only; theme-owned service/town cards
+ * always use the selected theme, not unrelated R2 job/gallery photographs.
  */
+import { standardLandingFallback } from "./standard-image-slots.js";
+
+function isPublicStandard(){
+ return !location.pathname.startsWith("/admin") &&
+   (document.documentElement.dataset.rosieTheme || "standard") === "standard";
+}
+
 export function hydrateStandardProcessImages(root=document){
- if(document.body?.dataset?.page?.startsWith("admin")||location.pathname.startsWith("/admin"))return;
+ if(!isPublicStandard())return;
  root.querySelectorAll('img[data-standard-filename]').forEach((img)=>{
   if(img.dataset.standardImageChecked==="true")return;
   img.dataset.standardImageChecked="true";
@@ -22,5 +29,19 @@ export function hydrateStandardProcessImages(root=document){
   };
   check.onerror=()=>{}; // Retain correct original placeholder until owner uploads artwork.
   check.src=proposed;
+ });
+}
+
+/** Theme artwork for fixed public service/town marketing cards.
+ * Customer proof, actual job results and reviews do not use these slots.
+ */
+export function hydrateStandardCardArtwork(root=document){
+ if(!isPublicStandard())return;
+ root.querySelectorAll(".service-link-card[data-r2-image-href],.local-town-card[data-r2-image-href]").forEach((card)=>{
+  const route=String(card.dataset.r2ImageHref||"").split("?")[0].replace(/^\/+|\/+$/g,"");
+  const fallback=standardLandingFallback(route);
+  if(!fallback)return;
+  card.style.setProperty("--standard-card-art",`url("${fallback}")`);
+  card.dataset.standardThemeCard="true";
  });
 }
