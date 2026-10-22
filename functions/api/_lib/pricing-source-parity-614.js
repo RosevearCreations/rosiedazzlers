@@ -1,5 +1,4 @@
 // Read-only pricing authority comparison. No catalog repair, booking or payment writes.
-import { normalizeCatalog, mergeCatalog } from "./pricing-catalog.js";
 import { applyCommercialAccuracy } from "./commercial-accuracy.js";
 
 const SIZES = ["small", "mid", "oversize"];
@@ -33,18 +32,16 @@ function compareGroup(group, fields, bundledRows, appRows, checkoutRows, publicR
   return findings;
 }
 
-export function buildPricingSourceParity614({ bundled, appManagement = null, dbAvailable = false, updatedAt = null, warning = null } = {}) {
+export function buildPricingSourceParity614({ bundled, appManagement = null, checkoutCatalog, dbAvailable = false, updatedAt = null, warning = null } = {}) {
   const hasDbRow = dbAvailable && !!appManagement && typeof appManagement === "object";
   const source = hasDbRow ? "app_management_settings" : "bundled_fallback";
-  const bundledCatalog = normalizeCatalog(bundled);
-  const appCatalog = hasDbRow ? normalizeCatalog(appManagement) : null;
-  // Same merge as checkout and quote-to-booking. The public API applies another
-  // source-owned layer after that merge; this is the difference being audited.
-  const checkoutCatalog = hasDbRow ? mergeCatalog(appManagement, bundled) : bundledCatalog;
+  // The authenticated route supplies the exact same normalized/merged catalog
+  // used by checkout. Keeping this comparator pure avoids a second DB fetch.
+  if (!checkoutCatalog?.packages || !checkoutCatalog?.addons) throw new Error("Checkout catalog projection is required.");
   const publicCatalog = applyCommercialAccuracy(checkoutCatalog);
   const findings = [
-    ...compareGroup("packages", PACKAGE_FIELDS, bundledCatalog.packages, appCatalog?.packages, checkoutCatalog.packages, publicCatalog.packages, hasDbRow),
-    ...compareGroup("addons", ADDON_FIELDS, bundledCatalog.addons, appCatalog?.addons, checkoutCatalog.addons, publicCatalog.addons, hasDbRow)
+    ...compareGroup("packages", PACKAGE_FIELDS, bundled?.packages, hasDbRow ? appManagement.packages : null, checkoutCatalog.packages, publicCatalog.packages, hasDbRow),
+    ...compareGroup("addons", ADDON_FIELDS, bundled?.addons, hasDbRow ? appManagement.addons : null, checkoutCatalog.addons, publicCatalog.addons, hasDbRow)
   ];
   const publicCheckoutCount = findings.filter((item) => item.differences.includes("public_vs_checkout")).length;
   return {
