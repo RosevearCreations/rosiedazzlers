@@ -1,5 +1,6 @@
 // /assets/pricing-catalog-client.js
 // Shared client-side pricing catalog loader and normalizer for public Rosie Dazzlers pages.
+import { standardPackageFallback } from "./standard-image-slots.js";
 
 const DEFAULT_CHARTS = [
   { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "/assets/brand/CarPrice2025.PNG" },
@@ -298,7 +299,10 @@ export function packagePrice(pkg, size) {
 }
 
 export function packageImageForSize(pkg, size) {
-  return pkg?.images_by_size?.[size] || Object.values(pkg?.images_by_size || {}).find(Boolean) || "";
+  // Keep catalogued product/vehicle pictures authoritative. Static theme art
+  // fills only an otherwise-empty package image slot.
+  return pkg?.images_by_size?.[size] || Object.values(pkg?.images_by_size || {}).find(Boolean) ||
+    standardPackageFallback(pkg?.code) || "";
 }
 
 export function addonPrimaryImage(addon) {

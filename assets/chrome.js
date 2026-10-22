@@ -16,10 +16,11 @@ if (typeof document !== 'undefined' && !document.documentElement.dataset.rosieTh
 
 let BRAND = {
   name: "Rosie Dazzlers",
-  logo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
-  banner: "https://assets.rosiedazzlers.ca/brand/RosieDazzlersBanner.png",
-  reviews: "/assets/brand/rosie-reviews-fallback.png",
-  footerLogo: "https://assets.rosiedazzlers.ca/brand/Untitled.png",
+  // Standard is the bundled default; explicit Owner site settings still win.
+  logo: "/assets/themes/standard/images/brand-logo.png",
+  banner: "/assets/themes/standard/images/brand-banner.webp",
+  reviews: "/assets/themes/standard/images/rosie-reviews-fallback.png",
+  footerLogo: "/assets/themes/standard/images/brand-logo.png",
 };
 
 let SOCIALS = [
@@ -278,7 +279,7 @@ function ensureReviewsPanel() {
   if (directImg && directImg.tagName && directImg.tagName.toLowerCase() === "img") {
     directImg.src = BRAND.reviews;
     directImg.alt = "Rosie Dazzlers reviews";
-    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/brand/rosie-reviews-fallback.png"; };
+    directImg.onerror = function(){ this.onerror = null; this.src = "/assets/themes/standard/images/rosie-reviews-fallback.png"; };
     directImg.loading = "lazy";
     directImg.style.display = "block";
     directImg.style.width = "100%";
@@ -296,7 +297,7 @@ function ensureReviewsPanel() {
     wrapTarget.innerHTML = `
       <img
         src="${BRAND.reviews}"
-        onerror="this.onerror=null;this.src='/assets/brand/rosie-reviews-fallback.png'"
+        onerror="this.onerror=null;this.src='/assets/themes/standard/images/rosie-reviews-fallback.png'"
         alt="Rosie Dazzlers reviews"
         loading="lazy"
         style="display:block;width:100%;height:auto;object-fit:contain"
@@ -826,7 +827,17 @@ function ensureManifest(){
   m.href='/manifest.webmanifest';
   let theme=head.querySelector('meta[name="theme-color"]');
   if(!theme){ theme=document.createElement('meta'); theme.name='theme-color'; head.appendChild(theme); }
-  theme.content='#0f172a';
+  theme.content='#0b0e11';
+}
+
+function ensureThemeFavicon(){
+  const head=document.head||document.querySelector('head');
+  if(!head||head.querySelector('link[rel="icon"]'))return;
+  const icon=document.createElement('link');
+  icon.rel='icon';
+  icon.type='image/x-icon';
+  icon.href='/assets/themes/standard/images/favicon.ico';
+  head.appendChild(icon);
 }
 
 
@@ -872,18 +883,18 @@ function ensureStickyConversionCta() {
       position:fixed;left:12px;right:12px;bottom:12px;z-index:9999;
       display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;
       padding:10px;border-radius:18px;border:1px solid rgba(255,255,255,.14);
-      background:rgba(15,23,42,.92);backdrop-filter:blur(14px);
+      background:rgba(11,14,17,.95);backdrop-filter:blur(14px);
       box-shadow:0 18px 45px rgba(0,0,0,.35);
     }
     #rosieStickyCtaBar a{
       text-decoration:none;border-radius:999px;padding:9px 12px;font-weight:800;font-size:.9rem;
-      border:1px solid rgba(255,255,255,.16);color:#eaf2ff;background:rgba(255,255,255,.07);
+      border:1px solid rgba(222,192,109,.24);color:#f5f6f7;background:rgba(255,255,255,.07);
       white-space:nowrap;
     }
-    #rosieStickyCtaBar a.primary{background:linear-gradient(135deg,#f97316,#facc15);color:#111827;border-color:transparent;}
+    #rosieStickyCtaBar a.primary{background:linear-gradient(135deg,#f0d58c,#b58c38);color:#15130e;border-color:transparent;}
     #rosieStickyCtaBar a.photo{background:rgba(34,197,94,.16);border-color:rgba(34,197,94,.45);}
     #rosieStickyCtaBar button{
-      border:0;background:transparent;color:rgba(234,242,255,.72);font-weight:900;cursor:pointer;padding:6px 8px;
+      border:0;background:transparent;color:#c4cbd0;font-weight:900;cursor:pointer;padding:6px 8px;
     }
     @media (min-width:980px){
       #rosieStickyCtaBar{left:auto;right:18px;bottom:18px;max-width:540px}
@@ -932,6 +943,7 @@ function ensureVisualPlaceholderSystem(){
 async function initChrome() {
   setViewportTier();
   window.addEventListener("resize", setViewportTier, { passive: true });
+  ensureThemeFavicon();
   ensureManifest();
   await loadPublicSiteSettings();
   ensureNavLinks();
@@ -960,6 +972,7 @@ async function initChrome() {
   try {
     const standardArt = await import("/assets/standard-static-media.js");
     standardArt.hydrateStandardProcessImages(document);
+    standardArt.hydrateStandardCardArtwork(document);
   } catch (error) {
     console.warn("Optional Standard process images unavailable; existing placeholders remain.", error);
   }

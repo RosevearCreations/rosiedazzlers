@@ -523,7 +523,7 @@ function pageTemplate(page, pricing, slug, productCatalog, websiteImageManifest)
       <div class="proof-grid">
         <article class="proof-card">
           <h3>Review proof</h3>
-          ${mediaImageMarkup(reviewProofImage?.url || "/assets/brand/rosie-reviews-fallback.png", reviewProofImage?.alt_text || "Rosie Dazzlers reviews", "proof-media", reviewProofImage?.focal_point ? `style="object-position:${escapeHtml(reviewProofImage.focal_point)}"` : "")}
+          ${mediaImageMarkup(reviewProofImage?.url || "/assets/themes/standard/images/rosie-reviews-fallback.png", reviewProofImage?.alt_text || "Verified customer feedback placeholder", "proof-media", reviewProofImage?.focal_point ? `style="object-position:${escapeHtml(reviewProofImage.focal_point)}"` : "")}
         </article>
         <article class="proof-card">
           <h3>Booking fit</h3>

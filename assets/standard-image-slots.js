@@ -27,8 +27,29 @@ const SERVICE_IMAGES=Object.freeze({
  "de-ionizing-treatment":"addon-de-ionizing-treatment.webp",
  "high-grade-paint-sealant":"addon-high-grade-paint-sealant.webp"
 });
+// Town banners are owner-managed theme artwork, not employee Photo Studio proof.
+const TOWN_IMAGES=Object.freeze({
+ "tillsonburg-auto-detailing":"town-tillsonburg.webp",
+ "woodstock-ingersoll-auto-detailing":"town-woodstock-ingersoll.webp",
+ "simcoe-delhi-auto-detailing":"town-simcoe-delhi.webp",
+ "port-dover-auto-detailing":"town-port-dover.webp",
+ "norwich-otterville-auto-detailing":"town-norwich-otterville.webp",
+ "zorra-thamesford-embro-auto-detailing":"town-zorra-thamesford-embro.webp",
+ "waterford-vittoria-auto-detailing":"town-waterford-vittoria.webp",
+ "port-rowan-turkey-point-auto-detailing":"town-port-rowan-turkey-point.webp"
+});
+const PACKAGE_IMAGES=Object.freeze({
+ premium_wash:"package-premium-wash.webp",
+ basic_detail:"package-basic.webp",
+ complete_detail:"package-complete.webp"
+});
+const BASE="/assets/themes/standard/images/";
 export function standardLandingFallback(slug) {
  const normalized=String(slug||"").trim().toLowerCase();
- const filename=SERVICE_IMAGES[normalized];
- return filename ? "/assets/themes/standard/images/"+filename : "";
+ const filename=SERVICE_IMAGES[normalized]||TOWN_IMAGES[normalized];
+ return filename ? BASE+filename : "";
+}
+export function standardPackageFallback(code){
+ const filename=PACKAGE_IMAGES[String(code||"").trim().toLowerCase()];
+ return filename ? BASE+filename : "";
 }

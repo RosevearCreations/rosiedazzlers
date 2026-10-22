@@ -23,8 +23,8 @@
   --shadow: 0 14px 34px rgba(0,0,0,.45);
   --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
   --maxw: 1100px;
-  /* Keep existing live hero until owner artwork has been uploaded and approved. */
-  --hero-bg: url("https://assets.rosiedazzlers.ca/brand/KatBlackCar.PNG");
+  /* Owner-prepared static theme artwork. Dynamic Photo Studio images are separate. */
+  --hero-bg: url("/assets/themes/standard/images/hero-background.webp");
   --r: 16px;
 }
 
@@ -77,4 +77,119 @@
 :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(a, button, input, select, textarea, summary):focus-visible {
   outline: 2px solid var(--gold-bright);
   outline-offset: 3px;
+}
+
+/* Build 612 — Standard Theme #1 assembly and responsive finishing pass. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) {
+  color-scheme: dark;
+  accent-color: var(--gold-deep);
+  scrollbar-color: #7b663f #121619;
+  overflow-x: clip;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body {
+  font-family: var(--font);
+  line-height: 1.5;
+  max-width: 100%;
+  overflow-x: clip;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(h1,h2,h3,h4) {
+  line-height: 1.18;
+  letter-spacing: -.015em;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.hero h1,main h1) {
+  font-size: clamp(1.85rem, 4vw, 3.5rem);
+  text-wrap: balance;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.container,.hero,.panel,.card,.proof-card,.service-link-card,.local-town-card,.package-card,.nav-inner,.nav-links,.price-grid,.grid,.row) {
+  min-width: 0;
+  max-width: 100%;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(p,li,td,th,.notice,.help,.kicker,.badge,.tag,.price-chip,.addon-meta,.nav-links a) {
+  overflow-wrap: anywhere;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(input,select,textarea) {
+  max-width: 100%;
+  background-color: #141a1e;
+  border-color: rgba(196,203,208,.3);
+  color: var(--text);
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(input,select,textarea)::placeholder {
+  color: #adb8c0;
+  opacity: 1;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.badge,.tag,.eyebrow,.kicker) {
+  border-color: rgba(222,192,109,.25);
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.card,.panel,.package-card,.service-link-card,.local-town-card,.proof-card) {
+  border-color: rgba(196,203,208,.24);
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.card,.panel,.package-card,.service-link-card,.local-town-card,.proof-card) :is(img,svg) {
+  max-width: 100%;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.package-card.active,.service-package-card--recommended,.service-card.active,.addon-card.active) {
+  outline-color: rgba(222,192,109,.7);
+  border-color: var(--gold-deep);
+  box-shadow: 0 0 0 1px rgba(222,192,109,.25) inset;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.price-chip.current,.date-pill.is-selected) {
+  border-color: var(--gold-deep);
+  background-color: rgba(222,192,109,.1);
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.nav,.footer,#rosieStickyCtaBar) {
+  border-color: rgba(222,192,109,.24);
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .brand img {
+  object-fit: contain;
+}
+/* Decorative theme photography fills a missing service/town card slot. If a
+   managed R2 image exists now or arrives later, it wins without duplicate art. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.service-link-card,.local-town-card)[data-standard-theme-card="true"]:not(.managed-photo-resolved):not(:has(> img.r2-card-photo))::before {
+  content: "";
+  display: block;
+  width: 100%;
+  min-height: 145px;
+  aspect-ratio: 16/9;
+  margin-bottom: 12px;
+  border-radius: 12px;
+  background-color: #172026;
+  background-image: var(--standard-card-art);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.service-link-card,.local-town-card)[data-standard-theme-card="true"] {
+  isolation: isolate;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .standard-admin-static-art {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 14px;
+  border: 1px solid rgba(222,192,109,.24);
+  background: #12191e;
+}
+@media (max-width: 720px) {
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body {
+    background-attachment: scroll;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.hero,.grid.cards,.visual-showcase,.review-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.hero h1,main h1) {
+    font-size: clamp(1.7rem, 8vw, 2.5rem);
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.nav-inner,.nav-links,.row,.cta-row,.actions,.wizard-nav) {
+    flex-wrap: wrap;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(.btn,.nav-links a,.price-chip,.package-card) {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) :is(table,.compare-wrap,.table-wrap) {
+    max-width: 100%;
+  }
 }

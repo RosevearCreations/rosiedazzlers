@@ -11,68 +11,68 @@
 
 | # | Name | Format | Size / viewBox | Page or context | Theme | Availability | Exact repository path |
 |---|---|---|---|---|---|---|---|
-| IMG-001 | addon bug tar removal | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-bug-tar-removal.webp` |
-| IMG-002 | addon carpet shampoo | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-carpet-shampoo.webp` |
-| IMG-003 | addon ceramic spray wax | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-ceramic-spray-wax.webp` |
-| IMG-004 | addon fleet vehicle add on | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-fleet-vehicle.webp` |
-| IMG-005 | addon headlight restoration | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-headlight-restoration.webp` |
-| IMG-006 | addon odor treatment | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-odor-treatment.webp` |
-| IMG-007 | addon pet hair removal | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-pet-hair-removal.webp` |
-| IMG-008 | addon salt stain treatment | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-salt-stain-treatment.webp` |
-| IMG-009 | addon seat shampoo | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-seat-shampoo.webp` |
-| IMG-010 | addon trim restoration | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-trim-restoration.webp` |
-| IMG-011 | addon truck box wash | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-truck-box-wash.webp` |
-| IMG-012 | addon windshield ceramic coating | WEBP | 1600×1067 | /services | standard | Not uploaded | `assets/themes/standard/images/addon-windshield-ceramic-coating.webp` |
-| IMG-013 | brand banner | WEBP | 1920×480 | / | standard | Not uploaded | `assets/themes/standard/images/brand-banner.webp` |
-| IMG-014 | brand logo | PNG | 800×800 | shared public/Admin header | standard | Not uploaded | `assets/themes/standard/images/brand-logo.png` |
-| IMG-015 | hero background | WEBP | 1920×1080 | / | standard | Not uploaded | `assets/themes/standard/images/hero-background.webp` |
-| IMG-016 | landing fallback ceramic coating | WEBP | 1600×1067 | /ceramic-coating | standard | Not uploaded | `assets/themes/standard/images/addon-ceramic-coating.webp` |
-| IMG-017 | landing fallback de badging | WEBP | 1600×1067 | /de-badging | standard | Not uploaded | `assets/themes/standard/images/addon-de-badging.webp` |
-| IMG-018 | landing fallback de ionizing treatment | WEBP | 1600×1067 | /de-ionizing-treatment | standard | Not uploaded | `assets/themes/standard/images/addon-de-ionizing-treatment.webp` |
-| IMG-019 | landing fallback engine cleaning | WEBP | 1600×1067 | /engine-cleaning | standard | Not uploaded | `assets/themes/standard/images/addon-engine-cleaning.webp` |
-| IMG-020 | landing fallback exterior wax | WEBP | 1600×1067 | /exterior-wax | standard | Not uploaded | `assets/themes/standard/images/addon-exterior-wax.webp` |
-| IMG-021 | landing fallback full clay treatment | WEBP | 1600×1067 | /full-clay-treatment | standard | Not uploaded | `assets/themes/standard/images/addon-full-clay-treatment.webp` |
-| IMG-022 | landing fallback graphene finish | WEBP | 1600×1067 | /graphene-finish | standard | Not uploaded | `assets/themes/standard/images/addon-graphene-finish.webp` |
-| IMG-023 | landing fallback high grade paint sealant | WEBP | 1600×1067 | /high-grade-paint-sealant | standard | Not uploaded | `assets/themes/standard/images/addon-high-grade-paint-sealant.webp` |
-| IMG-024 | landing fallback two stage polish | WEBP | 1600×1067 | /two-stage-polish | standard | Not uploaded | `assets/themes/standard/images/addon-two-stage-polish.webp` |
-| IMG-025 | landing fallback uv protectant | WEBP | 1600×1067 | /uv-protectant | standard | Not uploaded | `assets/themes/standard/images/addon-uv-protectant.webp` |
-| IMG-026 | landing fallback vinyl wrapping | WEBP | 1600×1067 | /vinyl-wrapping | standard | Not uploaded | `assets/themes/standard/images/addon-vinyl-wrapping.webp` |
-| IMG-027 | landing fallback window tinting | WEBP | 1600×1067 | /window-tinting | standard | Not uploaded | `assets/themes/standard/images/addon-window-tinting.webp` |
-| IMG-028 | package basic | WEBP | 1600×900 | /services, /pricing | standard | Not uploaded | `assets/themes/standard/images/package-basic.webp` |
-| IMG-029 | package complete | WEBP | 1600×900 | /services, /pricing | standard | Not uploaded | `assets/themes/standard/images/package-complete.webp` |
-| IMG-030 | package premium wash | WEBP | 1600×900 | /services, /pricing | standard | Not uploaded | `assets/themes/standard/images/package-premium-wash.webp` |
-| IMG-031 | process bug tar removal | WEBP | 1600×900 | /bug-tar-removal | standard | Not uploaded | `assets/themes/standard/images/process-bug-tar-removal.webp` |
-| IMG-032 | process carpet shampoo | WEBP | 1600×900 | /carpet-shampoo | standard | Not uploaded | `assets/themes/standard/images/process-carpet-shampoo.webp` |
-| IMG-033 | process ceramic coating | WEBP | 1600×900 | /ceramic-coating | standard | Not uploaded | `assets/themes/standard/images/process-ceramic-coating.webp` |
-| IMG-034 | process ceramic spray wax | WEBP | 1600×900 | /ceramic-spray-wax | standard | Not uploaded | `assets/themes/standard/images/process-ceramic-spray-wax.webp` |
-| IMG-035 | process de badging | WEBP | 1600×900 | /de-badging | standard | Not uploaded | `assets/themes/standard/images/process-de-badging.webp` |
-| IMG-036 | process de ionizing treatment | WEBP | 1600×900 | /de-ionizing-treatment | standard | Not uploaded | `assets/themes/standard/images/process-de-ionizing-treatment.webp` |
-| IMG-037 | process engine cleaning | WEBP | 1600×900 | /engine-cleaning | standard | Not uploaded | `assets/themes/standard/images/process-engine-cleaning.webp` |
-| IMG-038 | process exterior wax | WEBP | 1600×900 | /exterior-wax | standard | Not uploaded | `assets/themes/standard/images/process-exterior-wax.webp` |
-| IMG-039 | process fleet vehicle add on | WEBP | 1600×900 | /fleet-vehicle-add-on | standard | Not uploaded | `assets/themes/standard/images/process-fleet-vehicle-add-on.webp` |
-| IMG-040 | process full clay treatment | WEBP | 1600×900 | /full-clay-treatment | standard | Not uploaded | `assets/themes/standard/images/process-full-clay-treatment.webp` |
-| IMG-041 | process graphene finish | WEBP | 1600×900 | /graphene-finish | standard | Not uploaded | `assets/themes/standard/images/process-graphene-finish.webp` |
-| IMG-042 | process headlight restoration | WEBP | 1600×900 | /headlight-restoration | standard | Not uploaded | `assets/themes/standard/images/process-headlight-restoration.webp` |
-| IMG-043 | process high grade paint sealant | WEBP | 1600×900 | /high-grade-paint-sealant | standard | Not uploaded | `assets/themes/standard/images/process-high-grade-paint-sealant.webp` |
-| IMG-044 | process odor removal | WEBP | 1600×900 | /odor-removal | standard | Not uploaded | `assets/themes/standard/images/process-odor-removal.webp` |
-| IMG-045 | process pet hair removal | WEBP | 1600×900 | /pet-hair-removal | standard | Not uploaded | `assets/themes/standard/images/process-pet-hair-removal.webp` |
-| IMG-046 | process salt stain treatment | WEBP | 1600×900 | /salt-stain-treatment | standard | Not uploaded | `assets/themes/standard/images/process-salt-stain-treatment.webp` |
-| IMG-047 | process seat shampoo | WEBP | 1600×900 | /seat-shampoo | standard | Not uploaded | `assets/themes/standard/images/process-seat-shampoo.webp` |
-| IMG-048 | process trim restoration | WEBP | 1600×900 | /trim-restoration | standard | Not uploaded | `assets/themes/standard/images/process-trim-restoration.webp` |
-| IMG-049 | process truck box wash | WEBP | 1600×900 | /truck-box-wash | standard | Not uploaded | `assets/themes/standard/images/process-truck-box-wash.webp` |
-| IMG-050 | process two stage polish | WEBP | 1600×900 | /two-stage-polish | standard | Not uploaded | `assets/themes/standard/images/process-two-stage-polish.webp` |
-| IMG-051 | process uv protectant | WEBP | 1600×900 | /uv-protectant | standard | Not uploaded | `assets/themes/standard/images/process-uv-protectant.webp` |
-| IMG-052 | process vinyl wrapping | WEBP | 1600×900 | /vinyl-wrapping | standard | Not uploaded | `assets/themes/standard/images/process-vinyl-wrapping.webp` |
-| IMG-053 | process window tinting | WEBP | 1600×900 | /window-tinting | standard | Not uploaded | `assets/themes/standard/images/process-window-tinting.webp` |
-| IMG-054 | process windshield ceramic coating | WEBP | 1600×900 | /windshield-ceramic-coating | standard | Not uploaded | `assets/themes/standard/images/process-windshield-ceramic-coating.webp` |
-| IMG-055 | town norwich otterville | WEBP | 1920×1080 | /norwich-otterville-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-norwich-otterville.webp` |
-| IMG-056 | town port dover | WEBP | 1920×1080 | /port-dover-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-port-dover.webp` |
-| IMG-057 | town port rowan turkey point | WEBP | 1920×1080 | /port-rowan-turkey-point-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-port-rowan-turkey-point.webp` |
-| IMG-058 | town simcoe delhi | WEBP | 1920×1080 | /simcoe-delhi-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-simcoe-delhi.webp` |
-| IMG-059 | town tillsonburg | WEBP | 1920×1080 | /tillsonburg-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-tillsonburg.webp` |
-| IMG-060 | town waterford vittoria | WEBP | 1920×1080 | /waterford-vittoria-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-waterford-vittoria.webp` |
-| IMG-061 | town woodstock ingersoll | WEBP | 1920×1080 | /woodstock-ingersoll-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-woodstock-ingersoll.webp` |
-| IMG-062 | town zorra thamesford embro | WEBP | 1920×1080 | /zorra-thamesford-embro-auto-detailing | standard | Not uploaded | `assets/themes/standard/images/town-zorra-thamesford-embro.webp` |
+| IMG-001 | addon bug tar removal | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-bug-tar-removal.webp` |
+| IMG-002 | addon carpet shampoo | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-carpet-shampoo.webp` |
+| IMG-003 | addon ceramic spray wax | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-ceramic-spray-wax.webp` |
+| IMG-004 | addon fleet vehicle add on | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-fleet-vehicle.webp` |
+| IMG-005 | addon headlight restoration | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-headlight-restoration.webp` |
+| IMG-006 | addon odor treatment | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-odor-treatment.webp` |
+| IMG-007 | addon pet hair removal | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-pet-hair-removal.webp` |
+| IMG-008 | addon salt stain treatment | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-salt-stain-treatment.webp` |
+| IMG-009 | addon seat shampoo | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-seat-shampoo.webp` |
+| IMG-010 | addon trim restoration | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-trim-restoration.webp` |
+| IMG-011 | addon truck box wash | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-truck-box-wash.webp` |
+| IMG-012 | addon windshield ceramic coating | WEBP | 1600×1067 | /services | standard | In repo | `assets/themes/standard/images/addon-windshield-ceramic-coating.webp` |
+| IMG-013 | brand banner | WEBP | 1920×480 | / | standard | In repo | `assets/themes/standard/images/brand-banner.webp` |
+| IMG-014 | brand logo | PNG | 800×800 | shared public/Admin header | standard | In repo | `assets/themes/standard/images/brand-logo.png` |
+| IMG-015 | hero background | WEBP | 1920×1080 | / | standard | In repo | `assets/themes/standard/images/hero-background.webp` |
+| IMG-016 | landing fallback ceramic coating | WEBP | 1600×1067 | /ceramic-coating | standard | In repo | `assets/themes/standard/images/addon-ceramic-coating.webp` |
+| IMG-017 | landing fallback de badging | WEBP | 1600×1067 | /de-badging | standard | In repo | `assets/themes/standard/images/addon-de-badging.webp` |
+| IMG-018 | landing fallback de ionizing treatment | WEBP | 1600×1067 | /de-ionizing-treatment | standard | In repo | `assets/themes/standard/images/addon-de-ionizing-treatment.webp` |
+| IMG-019 | landing fallback engine cleaning | WEBP | 1600×1067 | /engine-cleaning | standard | In repo | `assets/themes/standard/images/addon-engine-cleaning.webp` |
+| IMG-020 | landing fallback exterior wax | WEBP | 1600×1067 | /exterior-wax | standard | In repo | `assets/themes/standard/images/addon-exterior-wax.webp` |
+| IMG-021 | landing fallback full clay treatment | WEBP | 1600×1067 | /full-clay-treatment | standard | In repo | `assets/themes/standard/images/addon-full-clay-treatment.webp` |
+| IMG-022 | landing fallback graphene finish | WEBP | 1600×1067 | /graphene-finish | standard | In repo | `assets/themes/standard/images/addon-graphene-finish.webp` |
+| IMG-023 | landing fallback high grade paint sealant | WEBP | 1600×1067 | /high-grade-paint-sealant | standard | In repo | `assets/themes/standard/images/addon-high-grade-paint-sealant.webp` |
+| IMG-024 | landing fallback two stage polish | WEBP | 1600×1067 | /two-stage-polish | standard | In repo | `assets/themes/standard/images/addon-two-stage-polish.webp` |
+| IMG-025 | landing fallback uv protectant | WEBP | 1600×1067 | /uv-protectant | standard | In repo | `assets/themes/standard/images/addon-uv-protectant.webp` |
+| IMG-026 | landing fallback vinyl wrapping | WEBP | 1600×1067 | /vinyl-wrapping | standard | In repo | `assets/themes/standard/images/addon-vinyl-wrapping.webp` |
+| IMG-027 | landing fallback window tinting | WEBP | 1600×1067 | /window-tinting | standard | In repo | `assets/themes/standard/images/addon-window-tinting.webp` |
+| IMG-028 | package basic | WEBP | 1600×900 | /services, /pricing | standard | In repo | `assets/themes/standard/images/package-basic.webp` |
+| IMG-029 | package complete | WEBP | 1600×900 | /services, /pricing | standard | In repo | `assets/themes/standard/images/package-complete.webp` |
+| IMG-030 | package premium wash | WEBP | 1600×900 | /services, /pricing | standard | In repo | `assets/themes/standard/images/package-premium-wash.webp` |
+| IMG-031 | process bug tar removal | WEBP | 1600×900 | /bug-tar-removal | standard | In repo | `assets/themes/standard/images/process-bug-tar-removal.webp` |
+| IMG-032 | process carpet shampoo | WEBP | 1600×900 | /carpet-shampoo | standard | In repo | `assets/themes/standard/images/process-carpet-shampoo.webp` |
+| IMG-033 | process ceramic coating | WEBP | 1600×900 | /ceramic-coating | standard | In repo | `assets/themes/standard/images/process-ceramic-coating.webp` |
+| IMG-034 | process ceramic spray wax | WEBP | 1600×900 | /ceramic-spray-wax | standard | In repo | `assets/themes/standard/images/process-ceramic-spray-wax.webp` |
+| IMG-035 | process de badging | WEBP | 1600×900 | /de-badging | standard | In repo | `assets/themes/standard/images/process-de-badging.webp` |
+| IMG-036 | process de ionizing treatment | WEBP | 1600×900 | /de-ionizing-treatment | standard | In repo | `assets/themes/standard/images/process-de-ionizing-treatment.webp` |
+| IMG-037 | process engine cleaning | WEBP | 1600×900 | /engine-cleaning | standard | In repo | `assets/themes/standard/images/process-engine-cleaning.webp` |
+| IMG-038 | process exterior wax | WEBP | 1600×900 | /exterior-wax | standard | In repo | `assets/themes/standard/images/process-exterior-wax.webp` |
+| IMG-039 | process fleet vehicle add on | WEBP | 1600×900 | /fleet-vehicle-add-on | standard | In repo | `assets/themes/standard/images/process-fleet-vehicle-add-on.webp` |
+| IMG-040 | process full clay treatment | WEBP | 1600×900 | /full-clay-treatment | standard | In repo | `assets/themes/standard/images/process-full-clay-treatment.webp` |
+| IMG-041 | process graphene finish | WEBP | 1600×900 | /graphene-finish | standard | In repo | `assets/themes/standard/images/process-graphene-finish.webp` |
+| IMG-042 | process headlight restoration | WEBP | 1600×900 | /headlight-restoration | standard | In repo | `assets/themes/standard/images/process-headlight-restoration.webp` |
+| IMG-043 | process high grade paint sealant | WEBP | 1600×900 | /high-grade-paint-sealant | standard | In repo | `assets/themes/standard/images/process-high-grade-paint-sealant.webp` |
+| IMG-044 | process odor removal | WEBP | 1600×900 | /odor-removal | standard | In repo | `assets/themes/standard/images/process-odor-removal.webp` |
+| IMG-045 | process pet hair removal | WEBP | 1600×900 | /pet-hair-removal | standard | In repo | `assets/themes/standard/images/process-pet-hair-removal.webp` |
+| IMG-046 | process salt stain treatment | WEBP | 1600×900 | /salt-stain-treatment | standard | In repo | `assets/themes/standard/images/process-salt-stain-treatment.webp` |
+| IMG-047 | process seat shampoo | WEBP | 1600×900 | /seat-shampoo | standard | In repo | `assets/themes/standard/images/process-seat-shampoo.webp` |
+| IMG-048 | process trim restoration | WEBP | 1600×900 | /trim-restoration | standard | In repo | `assets/themes/standard/images/process-trim-restoration.webp` |
+| IMG-049 | process truck box wash | WEBP | 1600×900 | /truck-box-wash | standard | In repo | `assets/themes/standard/images/process-truck-box-wash.webp` |
+| IMG-050 | process two stage polish | WEBP | 1600×900 | /two-stage-polish | standard | In repo | `assets/themes/standard/images/process-two-stage-polish.webp` |
+| IMG-051 | process uv protectant | WEBP | 1600×900 | /uv-protectant | standard | In repo | `assets/themes/standard/images/process-uv-protectant.webp` |
+| IMG-052 | process vinyl wrapping | WEBP | 1600×900 | /vinyl-wrapping | standard | In repo | `assets/themes/standard/images/process-vinyl-wrapping.webp` |
+| IMG-053 | process window tinting | WEBP | 1600×900 | /window-tinting | standard | In repo | `assets/themes/standard/images/process-window-tinting.webp` |
+| IMG-054 | process windshield ceramic coating | WEBP | 1600×900 | /windshield-ceramic-coating | standard | In repo | `assets/themes/standard/images/process-windshield-ceramic-coating.webp` |
+| IMG-055 | town norwich otterville | WEBP | 1920×1080 | /norwich-otterville-auto-detailing | standard | In repo | `assets/themes/standard/images/town-norwich-otterville.webp` |
+| IMG-056 | town port dover | WEBP | 1920×1080 | /port-dover-auto-detailing | standard | In repo | `assets/themes/standard/images/town-port-dover.webp` |
+| IMG-057 | town port rowan turkey point | WEBP | 1920×1080 | /port-rowan-turkey-point-auto-detailing | standard | In repo | `assets/themes/standard/images/town-port-rowan-turkey-point.webp` |
+| IMG-058 | town simcoe delhi | WEBP | 1920×1080 | /simcoe-delhi-auto-detailing | standard | In repo | `assets/themes/standard/images/town-simcoe-delhi.webp` |
+| IMG-059 | town tillsonburg | WEBP | 1920×1080 | /tillsonburg-auto-detailing | standard | In repo | `assets/themes/standard/images/town-tillsonburg.webp` |
+| IMG-060 | town waterford vittoria | WEBP | 1920×1080 | /waterford-vittoria-auto-detailing | standard | In repo | `assets/themes/standard/images/town-waterford-vittoria.webp` |
+| IMG-061 | town woodstock ingersoll | WEBP | 1920×1080 | /woodstock-ingersoll-auto-detailing | standard | In repo | `assets/themes/standard/images/town-woodstock-ingersoll.webp` |
+| IMG-062 | town zorra thamesford embro | WEBP | 1920×1080 | /zorra-thamesford-embro-auto-detailing | standard | In repo | `assets/themes/standard/images/town-zorra-thamesford-embro.webp` |
 | IMG-063 | de_badging.svg | SVG | 1400×900 | shared runtime / placement not verified | shared | In repo | `assets/addons/de_badging.svg` |
 | IMG-064 | de_ionizing_treatment.svg | SVG | 1400×900 | shared runtime / placement not verified | shared | In repo | `assets/addons/de_ionizing_treatment.svg` |
 | IMG-065 | engine_cleaning.png | PNG | 1448×1086 | shared runtime / placement not verified | shared | In repo | `assets/addons/engine_cleaning.png` |
@@ -122,11 +122,11 @@
 | IMG-109 | outline_back.svg | SVG | 640×360 | /my-account | shared | In repo | `assets/vehicles/outline_back.svg` |
 | IMG-110 | outline_front.svg | SVG | 640×360 | /my-account | shared | In repo | `assets/vehicles/outline_front.svg` |
 | IMG-111 | favicon.ico | ICO | 16×16, 32×32, 48×48, 64×64 | shared runtime / placement not verified | shared | In repo | `favicon.ico` |
-| IMG-112 | creative project budget archive history | SVG | 1600×900 | /admin-creative-projects.html | standard | Not uploaded | `assets/themes/standard/admin/admin-creative-project-budget-archive-history.svg` |
-| IMG-113 | creative project cost content workflow | SVG | 1600×900 | /admin-creative-projects.html | standard | Not uploaded | `assets/themes/standard/admin/admin-creative-project-cost-content-workflow.svg` |
-| IMG-114 | creative project profit learning workflow | SVG | 1600×900 | Admin/shared | standard | Not uploaded | `assets/themes/standard/admin/admin-creative-project-profit-learning-workflow.svg` |
-| IMG-115 | roadmap execution centre | SVG | 1600×900 | /admin-roadmap-execution.html | standard | Not uploaded | `assets/themes/standard/admin/admin-roadmap-execution-centre.svg` |
-| IMG-116 | startup go live command path | SVG | 1600×900 | /admin-startup-guide.html | standard | Not uploaded | `assets/themes/standard/admin/admin-startup-go-live-command-path.svg` |
+| IMG-112 | creative project budget archive history | SVG | 1600×900 | /admin-creative-projects.html | standard | In repo | `assets/themes/standard/admin/admin-creative-project-budget-archive-history.svg` |
+| IMG-113 | creative project cost content workflow | SVG | 1600×900 | /admin-creative-projects.html | standard | In repo | `assets/themes/standard/admin/admin-creative-project-cost-content-workflow.svg` |
+| IMG-114 | creative project profit learning workflow | SVG | 1600×900 | Admin/shared | standard | In repo | `assets/themes/standard/admin/admin-creative-project-profit-learning-workflow.svg` |
+| IMG-115 | roadmap execution centre | SVG | 1600×900 | /admin-roadmap-execution.html | standard | In repo | `assets/themes/standard/admin/admin-roadmap-execution-centre.svg` |
+| IMG-116 | startup go live command path | SVG | 1600×900 | /admin-startup-guide.html | standard | In repo | `assets/themes/standard/admin/admin-startup-go-live-command-path.svg` |
 
 ## Approval and update rules
 

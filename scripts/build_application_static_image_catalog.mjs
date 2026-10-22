@@ -89,7 +89,7 @@ function proposedPages(slot){
   return ['placement unverified'];
 }
 function noteFor(slot){
-  if(slot.slot==='brand_logo'||slot.slot==='brand_banner')return 'Theme candidate only: active site-settings/R2 branding retains precedence';
+  if(slot.slot==='brand_logo'||slot.slot==='brand_banner')return 'Standard theme is the bundled default; explicit Owner site-settings/R2 branding retains precedence';
   if(slot.slot.startsWith('town_'))return 'Town banner: permanent theme artwork, not town customer proof';
   return slot.notes||'Theme-designed static artwork; existing approved dynamic assignments retain precedence';
 }
@@ -112,7 +112,9 @@ export async function buildCatalog(){
       notes:'Registered runtime candidate (not necessarily loaded); verify geometry and owner artwork before enabling'});
   }
   const planned=[...planMap.values()].sort((a,b)=>a.slot.localeCompare(b.slot));
-  const physical=(await files('assets')).filter(x=>imageExt.test(x));
+  // A theme file is already represented by its numbered planned slot. Do not
+  // double-count owner uploads as new "shared" images on each batch.
+  const physical=(await files('assets')).filter(x=>imageExt.test(x)&&!x.startsWith('assets/themes/'));
   if(await exists('favicon.ico'))physical.push('favicon.ico');
   const sourceFiles=(await files('.')).filter(x=>/\.(?:html|css|js|mjs)$/i.test(x)&&!x.startsWith('scripts/')&&!x.startsWith('tests/'));
   const source=[];
@@ -142,10 +144,12 @@ export async function buildCatalog(){
   }
   for(const item of admin.placeholderIllustrations.slice().sort((a,b)=>a.key.localeCompare(b.key))){
     const size=(item.desiredGeometry||'').match(/(\d+)\s*x\s*(\d+)/i);
+    const target=`assets/themes/standard/admin/${item.proposal}`;
+    const present=await exists(target);
     entries.push({key:'admin-art:'+item.key,ownership:'application-owner-only',theme:'standard',name:item.key.replace(/_/g,' '),
-      path:`assets/themes/standard/admin/${item.proposal}`,format:path.extname(item.proposal).slice(1).toLowerCase(),
-      size:{width:size?Number(size[1]):null,height:size?Number(size[2]):null,basis:'proposed-canvas-not-measured'},
-      pages:[item.page],placement:'reserved admin artwork; not approved or installed',filePresent:false,
+      path:target,format:path.extname(item.proposal).slice(1).toLowerCase(),
+      size:present?dimension(await fs.readFile(path.join(root,target)),target):{width:size?Number(size[1]):null,height:size?Number(size[2]):null,basis:'proposed-canvas-not-measured'},
+      pages:[item.page],placement:present?'theme illustration in repository; render acceptance pending':'reserved admin artwork; not approved or installed',filePresent:present,
       notes:'Internal illustration only. Never depict private customer information or tokens.'});
   }
   const seen=new Set();

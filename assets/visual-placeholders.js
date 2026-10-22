@@ -45,6 +45,13 @@
     seo_preflight: '/assets/placeholders/launch-readiness-photo.jpg',
     default: '/assets/placeholders/service-photo.jpg'
   };
+  // Owner-authored illustrations are static theme elements, not customer/job
+  // evidence. Never substitute them for uploaded Photo Studio media.
+  const STANDARD_ADMIN_ART = Object.freeze({
+    creative_project_profit_learning_workflow: '/assets/themes/standard/admin/admin-creative-project-profit-learning-workflow.svg',
+    roadmap_execution_centre: '/assets/themes/standard/admin/admin-roadmap-execution-centre.svg',
+    startup_command_center_unified_path: '/assets/themes/standard/admin/admin-startup-go-live-command-path.svg'
+  });
   function esc(v){ return String(v ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function titleFor(type){
     return ({service_card:'Service photo coming soon',town_card:'Local proof image coming soon',gallery_pair:'Before/after image pending',seasonal_campaign:'Campaign graphic coming soon',fleet:'Fleet photo coming soon',incident_evidence:'Evidence photo private or pending',review_proof:'Review proof coming soon', quote_pipeline:'Quote pipeline graphic coming soon', booking_conversion:'Booking flow graphic coming soon', proof_of_work:'Proof-of-work visual coming soon', invoice_payment:'Invoice/payment graphic coming soon', review_public_proof:'Review proof visual coming soon', repeat_maintenance:'Maintenance visual coming soon', live_customer_update:'Live customer update coming soon', private_staff_note:'Private staff update', video_update:'Progress video coming soon', production_test_centre:'Guided production test visual', owner_attention:'Owner action visual', customer_acknowledgement:'Customer acknowledgement visual', security_posture:'Security posture visual', media_recovery_alert:'Public media recovery visual', secure_payment:'Secure payment status visual', daip_governance_gates:'DAIP governance gate visual', customer_access_control:'Customer account access visual', daip_gate_c_technical_review:'DAIP Gate C review visual', social_analytics_connection_centre:'Social and analytics connection visual', daip_integration_boundary:'DAIP connection boundary visual', block_calendar:'Availability calendar visual', inventory_workbench:'Inventory workbench visual', launch_readiness:'Launch readiness visual', product_gallery:'Product gallery visual', local_service_proof:'Local service proof visual', inventory_merge:'Reviewed inventory merge visual', inventory_audit:'Inventory audit history visual', transactional_batch:'Transactional batch update visual', seo_preflight:'Local SEO preflight visual', daip_intake_dry_run:'DAIP intake dry-run visual'}[type] || 'Image coming soon');
@@ -124,6 +131,19 @@
     const selectors = isAdmin ? ['.card[data-build206]', '.card[data-build205]', '.panel[data-needs-visual]'] : ['.service-link-card', '.local-town-card', '.proof-card', '.card[data-needs-visual]', '.panel[data-needs-visual]'];
     selectors.forEach(sel=>root.querySelectorAll(sel).forEach(node=>{
       if (node.dataset.visualPlaceholderSkip === 'true') return;
+      const standardAdminArt=isAdmin && (document.documentElement.dataset.rosieTheme||'standard')==='standard'
+        ? STANDARD_ADMIN_ART[node.dataset.visualPlaceholder||''] : '';
+      if (standardAdminArt && !node.querySelector('img')) {
+        const visual=document.createElement('img');
+        visual.src=standardAdminArt;
+        visual.alt='Rosie Dazzlers Standard theme workflow illustration';
+        visual.className='standard-admin-static-art';
+        visual.loading='lazy';
+        visual.decoding='async';
+        visual.addEventListener('error',()=>{ visual.remove(); if(!node.querySelector('.visual-placeholder-card')) node.insertBefore(buildBlock(inferType(node),node.querySelector('h2,h3,strong')?.textContent||''),node.firstChild); },{once:true});
+        node.insertBefore(visual,node.firstChild);
+        return;
+      }
       // Build 258: managed photo slots own their image lifecycle. Do not pre-insert a generic placeholder
       // that can remain beside a later Photo Studio/R2 image and create a duplicate-photo card.
       if (node.dataset.r2ImageKeywords || node.dataset.photoTarget || node.dataset.photoImageTarget) return;

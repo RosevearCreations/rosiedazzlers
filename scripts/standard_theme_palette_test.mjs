@@ -19,9 +19,12 @@ assert.match(css, /\.date-pill\.is-selected/);
 assert.match(css, /:focus-visible/);
 assert.match(css, /--ok: #5dd6a1/);
 assert.match(css, /--danger: #f07578/);
-assert.match(site, /themes\/standard\.css\?v=standard-v2-gold/);
+assert.match(site, /themes\/standard\.css\?v=build612-standard-assembly/);
 assert.equal(registry.defaultTheme, 'standard');
 assert.equal(registry.themes.standard.stylesheet, '/assets/themes/standard.css');
-assert.equal(css.includes('hero-background.webp'), false,
-  'Do not activate unapproved or absent theme imagery through the palette');
+assert.match(css, /hero-background\.webp/,
+  'Use the owner-created bundled Standard hero');
+assert.match(css, /overflow-x: clip/);
+assert.match(css, /text-wrap: balance/);
+assert.match(css, /standard-card-art/);
 console.log('Rosie Standard charcoal/gold theme CSS contract PASS');
