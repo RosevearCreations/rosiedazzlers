@@ -22,6 +22,7 @@ const SERVICE_IMAGES=Object.freeze({
  "graphene-finish":"addon-graphene-finish.webp",
  "engine-cleaning":"addon-engine-cleaning.webp",
  "ceramic-coating":"addon-ceramic-coating.webp",
+ "paint-correction":"addon-two-stage-polish.webp",
  "two-stage-polish":"addon-two-stage-polish.webp",
  "full-clay-treatment":"addon-full-clay-treatment.webp",
  "de-ionizing-treatment":"addon-de-ionizing-treatment.webp",

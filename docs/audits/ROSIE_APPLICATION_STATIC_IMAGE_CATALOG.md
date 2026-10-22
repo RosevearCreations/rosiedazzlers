@@ -34,7 +34,7 @@
 | IMG-021 | landing fallback full clay treatment | WEBP | 1600×1067 | /full-clay-treatment | standard | In repo | `assets/themes/standard/images/addon-full-clay-treatment.webp` |
 | IMG-022 | landing fallback graphene finish | WEBP | 1600×1067 | /graphene-finish | standard | In repo | `assets/themes/standard/images/addon-graphene-finish.webp` |
 | IMG-023 | landing fallback high grade paint sealant | WEBP | 1600×1067 | /high-grade-paint-sealant | standard | In repo | `assets/themes/standard/images/addon-high-grade-paint-sealant.webp` |
-| IMG-024 | landing fallback two stage polish | WEBP | 1600×1067 | /two-stage-polish | standard | In repo | `assets/themes/standard/images/addon-two-stage-polish.webp` |
+| IMG-024 | landing fallback paint correction | WEBP | 1600×1067 | /paint-correction | standard | In repo | `assets/themes/standard/images/addon-two-stage-polish.webp` |
 | IMG-025 | landing fallback uv protectant | WEBP | 1600×1067 | /uv-protectant | standard | In repo | `assets/themes/standard/images/addon-uv-protectant.webp` |
 | IMG-026 | landing fallback vinyl wrapping | WEBP | 1600×1067 | /vinyl-wrapping | standard | In repo | `assets/themes/standard/images/addon-vinyl-wrapping.webp` |
 | IMG-027 | landing fallback window tinting | WEBP | 1600×1067 | /window-tinting | standard | In repo | `assets/themes/standard/images/addon-window-tinting.webp` |

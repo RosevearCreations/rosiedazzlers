@@ -510,10 +510,10 @@
       "id": "IMG-023"
     },
     {
-      "key": "theme:landing_fallback_two_stage_polish",
+      "key": "theme:landing_fallback_paint_correction",
       "ownership": "theme-owner-only",
       "theme": "standard",
-      "name": "landing fallback two stage polish",
+      "name": "landing fallback paint correction",
       "path": "assets/themes/standard/images/addon-two-stage-polish.webp",
       "format": "webp",
       "size": {
@@ -522,7 +522,7 @@
         "basis": "recommended-canvas-not-upload-minimum"
       },
       "pages": [
-        "/two-stage-polish"
+        "/paint-correction"
       ],
       "placement": "planned-or-fallback-not-live-verified",
       "filePresent": true,

@@ -31,6 +31,7 @@ assert.equal(registry.themes.standard.status, 'assembled_pending_rendered_accept
 
 assert.equal(standardLandingFallback('tillsonburg-auto-detailing'), '/assets/themes/standard/images/town-tillsonburg.webp');
 assert.equal(standardLandingFallback('headlight-restoration'), '/assets/themes/standard/images/addon-headlight-restoration.webp');
+assert.equal(standardLandingFallback('paint-correction'), '/assets/themes/standard/images/addon-two-stage-polish.webp', 'The sixth homepage service card must not fall back to an old R2 image');
 assert.equal(standardLandingFallback('not-a-service'), '');
 assert.equal(standardPackageFallback('complete_detail'), '/assets/themes/standard/images/package-complete.webp');
 assert.equal(standardPackageFallback('interior_detail'), '', 'Do not invent unregistered package images');
