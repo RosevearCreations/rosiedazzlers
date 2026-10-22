@@ -12,6 +12,8 @@ async function loadReviews(limit) {
     const res = await fetch("/api/reviews_public", { credentials: "include", cache: "no-store" });
     const out = await res.json().catch(() => null);
     if (!res.ok || !out || !Array.isArray(out.items)) throw new Error(out?.error || "Review proof unavailable.");
+    const status = String(out.source_status || "").trim().toLowerCase();
+    if (!["verified", "connected_verified", "owner_approved"].includes(status)) return [];
     return out.items.slice(0, limit).map(normalizeReview).filter((item) => item.quote);
   } catch (err) {
     console.warn("Verified review source unavailable; displaying a neutral state:", err);

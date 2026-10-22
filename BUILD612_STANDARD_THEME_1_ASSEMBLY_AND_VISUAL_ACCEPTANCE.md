@@ -20,7 +20,8 @@ GREEN at the promoted `main` SHA.
   customer PWA icons and favicon within the theme namespace. An explicit Owner
   business-profile logo/banner still takes precedence over the bundled default.
 - Removed hard-coded sample testimonials from the review feed fallback; when
-  verified review data is unavailable, the page shows a neutral message.
+  verified review data is unavailable, the page shows a neutral message. The
+  public endpoint also fails closed without an explicitly verified source.
 - Added mapped town and service artwork as **decorative fallbacks only**.
   Managed Photo Studio/R2 imagery is displayed in preference; simulated
   before/after work, reviews and customer proof are never inserted.

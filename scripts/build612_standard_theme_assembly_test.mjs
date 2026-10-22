@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { standardLandingFallback, standardPackageFallback } from '../assets/standard-image-slots.js';
 import { hydrateStandardCardArtwork } from '../assets/standard-static-media.js';
+import { onRequestGet as publicReviews } from '../functions/api/reviews_public.js';
 
 const read = file => fs.readFileSync(file, 'utf8');
 const catalog = JSON.parse(read('data/application_static_image_catalog.json'));
@@ -52,6 +53,10 @@ assert.match(css, /text-wrap: balance/);
 assert.match(css, /@media \(max-width: 720px\)/);
 assert.doesNotMatch(reviews, /FALLBACK_REVIEWS|Melissa R\.|Jason K\./, 'Never publish fabricated review proof');
 assert.match(reviews, /Verified customer reviews are not currently available/);
+const unconnectedReviews = await (await publicReviews({ env: {} })).json();
+assert.equal(unconnectedReviews.source_status, 'not_connected');
+assert.deepEqual(unconnectedReviews.items, [], 'Unconnected review source must not simulate customers');
+assert.doesNotMatch(read('functions/api/reviews_public.js'), /Melissa R\.|Jason K\.|temporary_sample_until_review_api_connected/);
 
 // Exercise the renderer without a browser or live R2 credentials.
 const originalDocument = globalThis.document, originalLocation = globalThis.location;
