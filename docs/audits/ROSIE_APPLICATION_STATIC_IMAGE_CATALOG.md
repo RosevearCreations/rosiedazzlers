@@ -112,7 +112,7 @@
 | IMG-099 | service-exterior.jpg | JPG | 1448×1086 | /landing | shared | In repo | `assets/photos/service-exterior.jpg` |
 | IMG-100 | workflow-tablet.jpg | JPG | 1448×1086 | shared runtime / placement not verified | shared | In repo | `assets/photos/workflow-tablet.jpg` |
 | IMG-101 | wrap-tint.jpg | JPG | 1448×1086 | shared runtime / placement not verified | shared | In repo | `assets/photos/wrap-tint.jpg` |
-| IMG-102 | inventory-tools-photo.jpg | JPG | 1448×1086 | /admin-catalog | shared | In repo | `assets/placeholders/inventory-tools-photo.jpg` |
+| IMG-102 | inventory-tools-photo.jpg | JPG | 1448×1086 | shared runtime / placement not verified | shared | In repo | `assets/placeholders/inventory-tools-photo.jpg` |
 | IMG-103 | launch-readiness-photo.jpg | JPG | 1448×1086 | shared runtime / placement not verified | shared | In repo | `assets/placeholders/launch-readiness-photo.jpg` |
 | IMG-104 | local-proof-photo.jpg | JPG | 1448×1086 | shared runtime / placement not verified | shared | In repo | `assets/placeholders/local-proof-photo.jpg` |
 | IMG-105 | product-gallery-photo.jpg | JPG | 1448×1086 | /admin-inventory-manager | shared | In repo | `assets/placeholders/product-gallery-photo.jpg` |

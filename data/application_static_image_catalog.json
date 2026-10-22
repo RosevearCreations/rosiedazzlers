@@ -1582,7 +1582,6 @@
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
       "sourceFiles": [
-        "assets/admin-catalog-v311.js",
         "assets/booking-specialty-cards.js",
         "assets/pricing-catalog-client-legacy.js",
         "assets/site.js",
@@ -2257,14 +2256,11 @@
         "basis": "measured-file"
       },
       "pages": [
-        "/admin-catalog"
+        "shared runtime / placement not verified"
       ],
       "placement": "checked-in local file; render usage not verified",
       "filePresent": true,
       "sourceFiles": [
-        "admin-catalog.html",
-        "admin-catalog/index.html",
-        "assets/admin-catalog-v311.js",
         "assets/visual-placeholders.js"
       ],
       "notes": "Generic interface placeholder, never a substitute for actual customer evidence",
