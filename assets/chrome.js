@@ -193,6 +193,10 @@ function setBrandImagesEverywhere() {
 
 function ensureMainBanner() {
   const path = normalizePath(location.pathname);
+  // Internal/Admin workspaces use compact theme branding in their navigation.
+  // Never inject the public advertising banner above working controls.
+  if (path === '/app' || path.startsWith('/app/') || path.startsWith('/admin') ||
+      document.body?.dataset?.adminProtected === 'true') return;
   if (["/book","/login","/my-account","/progress","/complete","/detailer-jobs"].includes(path)) return;
 
   const existingImg =

@@ -6,6 +6,9 @@ body[data-admin-protected="true"]{
   margin:0;
   color-scheme:dark;
   color:var(--text,#eef6ff);
+  /* Admin screens are workspaces, not public marketing canvases. */
+  background:radial-gradient(circle at 90% 0%,rgba(181,140,56,.09),transparent 42%),linear-gradient(180deg,#0d1013,#0b0e11 70%);
+  background-attachment:scroll;
 }
 
 body[data-admin-protected="true"] *,
@@ -94,7 +97,48 @@ body[data-admin-protected="true"] .admin-module-menu__item:focus-visible{backgro
 body[data-admin-protected="true"] .admin-module-menu__item.active,
 body[data-admin-protected="true"] .admin-module-menu__item[aria-current="page"]{border-color:rgba(77,119,255,.65);background:rgba(77,119,255,.16)}
 
+/* The shared navigation has a two-column layout when full-width. In legacy
+   Admin sidebars that layout exceeded the column width and physically covered
+   the adjacent workspace. Keep each menu in its own column instead. */
+body[data-admin-protected="true"] :is(.staff-shell__menu,.app-shell__menu,.menu-col,.span-4) .admin-module-menu,
+body[data-admin-protected="true"] .media-health-layout>[data-admin-menu-mount] .admin-module-menu{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  padding:11px;
+  gap:11px;
+}
+body[data-admin-protected="true"] :is(.staff-shell__menu,.app-shell__menu,.menu-col,.span-4) .admin-module-menu__group,
+body[data-admin-protected="true"] .media-health-layout>[data-admin-menu-mount] .admin-module-menu__group{
+  grid-template-columns:minmax(0,1fr);
+}
+body[data-admin-protected="true"] :is(.staff-shell__menu,.app-shell__menu,.menu-col,.span-4) .admin-module-menu__head .row,
+body[data-admin-protected="true"] .media-health-layout>[data-admin-menu-mount] .admin-module-menu__head .row{
+  display:flex;
+  flex-wrap:wrap;
+}
+body[data-admin-protected="true"] :is(.staff-shell__menu,.app-shell__menu,.menu-col,.span-4) .admin-module-menu :is(.btn,.admin-module-menu__item),
+body[data-admin-protected="true"] .media-health-layout>[data-admin-menu-mount] .admin-module-menu :is(.btn,.admin-module-menu__item){
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+body[data-admin-protected="true"] .admin-module-menu__item.active,
+body[data-admin-protected="true"] .admin-module-menu__item[aria-current="page"]{
+  border-color:rgba(222,192,109,.6);
+  background:rgba(222,192,109,.13);
+}
+body[data-admin-protected="true"] :is(.btn.primary,button.primary){
+  color:#15130e!important;
+  border-color:#b58c38!important;
+  background:linear-gradient(135deg,#f0d58c,#b58c38)!important;
+  box-shadow:0 3px 16px rgba(181,140,56,.19);
+}
+
 body[data-admin-protected="true"] main{min-width:0}
+body[data-admin-protected="true"] :is(.app-shell,.staff-shell,.media-health-layout)>*{min-width:0;max-width:100%}
 body[data-admin-protected="true"] .container,
 body[data-admin-protected="true"] .shell,
 body[data-admin-protected="true"] main.cp,
