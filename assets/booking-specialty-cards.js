@@ -47,12 +47,12 @@ function injectStyles() {
   style.textContent = `
     #addonGrid.addon-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
     .addon-rich-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:rgba(255,255,255,.035);box-shadow:0 12px 28px rgba(0,0,0,.12)}
-    .addon-rich-card:hover{border-color:rgba(77,119,255,.45);transform:translateY(-1px)}
-    .addon-rich-card.is-selected{outline:2px solid #4d77ff;border-color:rgba(77,119,255,.75);background:rgba(77,119,255,.08)}
+    .addon-rich-card:hover{border-color:rgba(221,177,100,.55);transform:translateY(-1px)}
+    .addon-rich-card.is-selected{outline:2px solid #d6ab66;border-color:rgba(221,177,100,.8);background:rgba(221,177,100,.09)}
     .addon-rich-media{display:block;position:relative;overflow:hidden;background:rgba(255,255,255,.04)}
     .addon-rich-media img{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;transition:transform .18s ease}
     .addon-rich-media:hover img,.addon-rich-media:focus-visible img{transform:scale(1.025)}
-    .addon-rich-media:focus-visible,.addon-rich-title:focus-visible,.addon-rich-guide:focus-visible{outline:3px solid rgba(124,155,255,.9);outline-offset:2px}
+    .addon-rich-media:focus-visible,.addon-rich-title:focus-visible,.addon-rich-guide:focus-visible{outline:3px solid rgba(221,177,100,.95);outline-offset:2px}
     .addon-rich-body{display:flex;flex:1;flex-direction:column;gap:10px;padding:13px 14px 14px}
     .addon-rich-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
     .addon-rich-title{color:inherit;text-decoration:none;font-weight:800;font-size:1.05rem;line-height:1.25}
@@ -64,13 +64,13 @@ function injectStyles() {
     .addon-rich-chip.quote{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
     .addon-rich-compat{margin:0;color:rgba(251,191,36,.95);font-size:.82rem;line-height:1.35}
     .addon-rich-actions{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;margin-top:2px}
-    .addon-rich-card .addon-card.addon-rich-select{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;margin:0;padding:9px 11px;border-radius:11px;text-align:center;background:rgba(77,119,255,.12);border-color:rgba(77,119,255,.4)}
-    .addon-rich-card .addon-card.addon-rich-select:hover{background:rgba(77,119,255,.2);border-color:rgba(77,119,255,.65)}
-    .addon-rich-card .addon-card.addon-rich-select.active{outline:none;background:rgba(77,119,255,.28);border-color:rgba(77,119,255,.75)}
+    .addon-rich-card .addon-card.addon-rich-select{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;margin:0;padding:9px 11px;border-radius:11px;text-align:center;background:rgba(221,177,100,.13);border-color:rgba(221,177,100,.45)}
+    .addon-rich-card .addon-card.addon-rich-select:hover{background:rgba(221,177,100,.23);border-color:rgba(221,177,100,.75)}
+    .addon-rich-card .addon-card.addon-rich-select.active{outline:none;background:rgba(221,177,100,.28);border-color:rgba(221,177,100,.85)}
     .addon-rich-card .addon-card.addon-rich-select:disabled{opacity:.62;background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.1)}
     .addon-rich-card .addon-rich-select .addon-indicator{width:22px;height:22px;flex-basis:22px;margin:0}
     .addon-rich-guide{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:8px 10px;border-radius:11px;border:1px solid rgba(255,255,255,.12);color:inherit;text-decoration:none;font-size:.82rem;font-weight:750;white-space:nowrap}
-    .addon-rich-guide:hover{border-color:rgba(77,119,255,.5);background:rgba(77,119,255,.08)}
+    .addon-rich-guide:hover{border-color:rgba(221,177,100,.55);background:rgba(221,177,100,.09)}
     @media(max-width:1100px){#addonGrid.addon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
     @media(max-width:720px){#addonGrid.addon-grid{grid-template-columns:1fr}.addon-rich-actions{grid-template-columns:1fr}.addon-rich-guide{width:100%}}
   `;

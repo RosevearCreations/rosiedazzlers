@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { standardLandingFallback, standardPackageFallback } from '../assets/standard-image-slots.js';
+import { standardLandingFallback, standardPackageFallback, standardAddonFallback } from '../assets/standard-image-slots.js';
+import { packageImageForSize, addonPrimaryImage, addonFallbackImage } from '../assets/pricing-catalog-client-legacy.js';
 import { hydrateStandardCardArtwork } from '../assets/standard-static-media.js';
 import { onRequestGet as publicReviews } from '../functions/api/reviews_public.js';
 
@@ -34,7 +35,20 @@ assert.equal(standardLandingFallback('headlight-restoration'), '/assets/themes/s
 assert.equal(standardLandingFallback('paint-correction'), '/assets/themes/standard/images/addon-two-stage-polish.webp', 'The sixth homepage service card must not fall back to an old R2 image');
 assert.equal(standardLandingFallback('not-a-service'), '');
 assert.equal(standardPackageFallback('complete_detail'), '/assets/themes/standard/images/package-complete.webp');
-assert.equal(standardPackageFallback('interior_detail'), '', 'Do not invent unregistered package images');
+assert.equal(standardPackageFallback('interior_detail'), '/assets/themes/standard/images/interior-detail.webp');
+assert.equal(standardPackageFallback('exterior_detail'), '/assets/themes/standard/images/service-exterior.webp');
+const pricing=JSON.parse(read('data/rosie_services_pricing_and_packages.json'));
+for (const pkg of pricing.packages) {
+  const expected=standardPackageFallback(pkg.code);
+  assert.ok(expected && fs.existsSync(expected.slice(1)), `No Standard theme package art for ${pkg.code}`);
+  assert.equal(packageImageForSize(pkg, 'small'), expected, `Booking must not use old R2 image for ${pkg.code}`);
+}
+for (const addon of pricing.addons) {
+  const expected=standardAddonFallback(addon.code);
+  assert.ok(expected && fs.existsSync(expected.slice(1)), `No Standard theme add-on art for ${addon.code}`);
+  assert.equal(addonPrimaryImage(addon), expected, `Booking must not use old R2 image for ${addon.code}`);
+  assert.equal(addonFallbackImage(addon), expected, `Missing Standard fallback for ${addon.code}`);
+}
 
 for (const file of [
   'cropgold.png','brand-banner.webp','hero-background.webp',
@@ -55,10 +69,12 @@ assert.ok(chrome.indexOf('hydrateGlobalSiteImageOverrides(document)') < chrome.i
 assert.match(css, /\[data-standard-theme-card="true"\]::before/, 'Standard marketing cards use theme artwork even when R2 has other matches');
 assert.match(imageHydration, /standardLandingFallback\(route\)/, 'R2 card matching must skip registered Standard theme marketing cards');
 assert.match(landing, /const themeHero=standardLandingFallback/, 'Service and town marketing heroes must use Standard artwork');
+assert.match(landing, /const keepPhoto=\(url\)=>!isStandard \|\| !isOldCatalogArt\(url\)/, 'Remove former R2 promotional artwork from Standard service galleries');
 assert.match(home, /src="\/assets\/themes\/standard\/images\/brand-banner\.webp"/, 'Homepage showcase must not use the old R2 brand banner');
 assert.doesNotMatch(home, /assets\.rosiedazzlers\.ca\/brand\/RosieDazzlersBanner/, 'Do not reintroduce the old banner');
 assert.doesNotMatch(home, /assets\.rosiedazzlers\.ca\/brand\/KatBlackCar/, 'Standard backdrop must not use the previous R2 art');
 assert.match(site, /logo: "\/assets\/themes\/standard\/images\/cropgold\.png"/);
+assert.match(chrome, /Legacy hover playlists point to blue R2 package advertisements/, 'Standard card hovers must not rotate back to old blue graphics');
 assert.match(chrome, /standardTheme \? '\/assets\/themes\/standard\/images\/cropgold\.png'/, 'Public business settings may not overwrite the approved Standard logo');
 assert.doesNotMatch(chrome, /brand-logo\.png|RosieDazzlersBanner\.png|brand\/Untitled\.png/, 'Public chrome must not reference superseded branding');
 assert.match(imageHydration, /!standardTheme && siteBackground\?\.url/, 'R2 site background must not override Standard artwork');
@@ -87,11 +103,25 @@ assert.equal(town.dataset.standardThemeCard, 'true');
 assert.equal(service.style.props.get('--standard-card-art'), 'url("/assets/themes/standard/images/addon-carpet-shampoo.webp")');
 assert.equal(unknown.style.props.size, 0);
 globalThis.document.documentElement.dataset.rosieTheme = 'future-theme';
+const oldPkg = pricing.packages[0];
+const oldAddon = pricing.addons[0];
+assert.equal(packageImageForSize(oldPkg, 'small'), oldPkg.images_by_size.small, 'Other themes must retain their existing catalogue images');
+assert.equal(addonPrimaryImage(oldAddon), oldAddon.image_url, 'Other themes must retain existing addon images');
 const skipped=card('/port-dover-auto-detailing');
 hydrateStandardCardArtwork({ querySelectorAll: () => [skipped] });
 assert.equal(skipped.style.props.size, 0, 'Do not leak Standard fallback into a future theme');
 globalThis.document = originalDocument;
 globalThis.location = originalLocation;
+
+for (const { code } of pricing.addons) {
+  const slug=code==='headlight_restoration_addon' ? 'headlight-restoration' :
+    code==='external_ceramic_coating' ? 'ceramic-coating' :
+    code==='external_graphene_fine_finish' ? 'graphene-finish' :
+    code==='external_wax' ? 'exterior-wax' :
+    code==='uv_protectant_applied_on_interior_panels' ? 'uv-protectant' :
+    code==='odor_treatment' ? 'odor-removal' : code.replaceAll('_','-');
+  assert.match(read(`${slug}/index.html`), /src="\/assets\/themes\/standard\/images\/addon-[^\"]+\.webp"/, `Static first paint remains outdated at ${slug}`);
+}
 
 // 2025 charts were intentionally not mapped as live pricing references.
 assert.match(read('assets/pricing-catalog-client-legacy.js'), /"CarPrice2025\.PNG"/);

@@ -297,8 +297,9 @@ export async function hydrateR2CardImages(root=document){
   for (const node of nodes) {
     const route=clean(node.dataset.r2ImageHref).split('?')[0].replace(/^\/+|\/+$/g,'');
     const isStandard=(document.documentElement.dataset.rosieTheme||'standard')==='standard';
-    if (isStandard && node.matches('.service-link-card,.local-town-card') && standardLandingFallback(route)) {
-      // This is a theme-design slot, not an R2/customer proof slot.
+    if (isStandard && node.matches('.hero-sidecard,.service-link-card,.local-town-card') && standardLandingFallback(route)) {
+      // These are theme-design slots, not automatic R2 catalogue artwork.
+      // Explicit Photo Studio target assignments were handled above.
       continue;
     }
     if (node.dataset.r2ImageHydrated === 'true') continue;

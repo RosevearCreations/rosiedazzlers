@@ -588,6 +588,10 @@ function buildPlaylist(baseSrc) {
 }
 
 function attachRotators(containerSelector) {
+  // Legacy hover playlists point to blue R2 package advertisements. The
+  // Standard theme uses its own consistent static imagery and should not
+  // temporarily swap it for old catalogue art on mouseover.
+  if ((document.documentElement.dataset.rosieTheme || 'standard') === 'standard') return;
   const container = document.querySelector(containerSelector);
   if (!container) return;
 

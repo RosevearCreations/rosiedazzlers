@@ -1,6 +1,6 @@
 // /assets/pricing-catalog-client.js
 // Shared client-side pricing catalog loader and normalizer for public Rosie Dazzlers pages.
-import { standardPackageFallback } from "./standard-image-slots.js";
+import { standardPackageFallback, standardAddonFallback, standardThemeIsActive } from "./standard-image-slots.js";
 
 const DEFAULT_CHARTS = [
   { filename: "CarPrice2025.PNG", title: "Vehicle Price Chart 2025", r2_url: "/assets/brand/CarPrice2025.PNG" },
@@ -299,17 +299,29 @@ export function packagePrice(pkg, size) {
 }
 
 export function packageImageForSize(pkg, size) {
-  // Keep catalogued product/vehicle pictures authoritative. Static theme art
-  // fills only an otherwise-empty package image slot.
+  // A booking card is owner-controlled theme marketing media, not a customer
+  // proof photo. Historical R2 package graphics remain in catalog data but
+  // cannot replace the selected Standard theme presentation.
+  if (standardThemeIsActive()) {
+    const themeImage = standardPackageFallback(pkg?.code);
+    if (themeImage) return themeImage;
+  }
   return pkg?.images_by_size?.[size] || Object.values(pkg?.images_by_size || {}).find(Boolean) ||
     standardPackageFallback(pkg?.code) || "";
 }
 
 export function addonPrimaryImage(addon) {
+  if (standardThemeIsActive()) {
+    const themeImage = standardAddonFallback(addon?.code);
+    if (themeImage) return themeImage;
+  }
   return String(addon?.image_url || "").trim() || "";
 }
 
 export function addonFallbackImage(addon) {
+  if (standardThemeIsActive()) {
+    return standardAddonFallback(addon?.code) || "/assets/addons/generic_addon.png";
+  }
   return String(addon?.image_fallback_url || "").trim() || "/assets/addons/generic_addon.png";
 }
 

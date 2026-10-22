@@ -320,11 +320,18 @@ function visualBriefsMarkup(page, websiteImageManifest, slug) {
 }
 
 function galleryMarkup(page, relatedProducts, r2Matches = []) {
+  // The saved service-page gallery contains old blue R2 package advertisements.
+  // Those are not evidence of a completed customer job and must not be shown
+  // as Standard theme artwork. Real linked products and assigned Photo Studio
+  // evidence remain unaffected.
+  const isStandard=(document.documentElement.dataset.rosieTheme||'standard')==='standard';
+  const isOldCatalogArt=(url)=>/^https?:\/\/assets\.rosiedazzlers\.ca\/packages\/|^\/assets\/addons\//i.test(String(url||''));
+  const keepPhoto=(url)=>!isStandard || !isOldCatalogArt(url);
   const gallerySource = Array.isArray(page?.gallery_image_urls) ? page.gallery_image_urls : (Array.isArray(page?.gallery_images) ? page.gallery_images : []);
-  const gallery = gallerySource.filter(Boolean);
+  const gallery = gallerySource.filter((url)=>url && keepPhoto(url));
   const productImages = (relatedProducts || []).map((item) => item.image_url).filter(Boolean);
-  const explicitR2Rows = (r2Matches || []).filter((item) => item?.url && item?.explicit_assignment === true && String(item?.target_key || '').includes(':gallery:'));
-  const automaticR2Rows = (r2Matches || []).filter((item) => item?.url && item?.explicit_assignment !== true);
+  const explicitR2Rows = (r2Matches || []).filter((item) => item?.url && keepPhoto(item.url) && item?.explicit_assignment === true && String(item?.target_key || '').includes(':gallery:'));
+  const automaticR2Rows = (r2Matches || []).filter((item) => item?.url && keepPhoto(item.url) && item?.explicit_assignment !== true);
   const approvedR2Rows = [...explicitR2Rows, ...automaticR2Rows];
   const r2Meta = new Map(approvedR2Rows.map((item) => [item.url, item]));
   // Explicit gallery choices are intentional additions; otherwise authored gallery/product images stay first.
