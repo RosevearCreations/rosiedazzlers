@@ -58,3 +58,15 @@
  #quote-first-intake-v573 button[type=submit]{width:100%;white-space:normal}
  .qf-link{width:100%;text-align:center;white-space:normal}
 }
+
+/* Build 613 — accessible, theme-aligned review guidance cards. */
+.qf-guidance{margin-top:24px;border-top:1px solid #6f674e;padding-top:18px}
+.qf-guidance h3{font-size:clamp(1.12rem,2.5vw,1.4rem);color:#f0d38a;margin:0 0 7px}
+.qf-guidance h4{font-size:1rem;color:#f0d38a;margin:20px 0 8px}
+.qf-guidance-help,.qf-guidance-note{color:#e2e1d9;line-height:1.55;margin:8px 0 16px}
+.qf-guidance-list{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,225px),1fr));gap:12px}
+.qf-guidance-list li{min-width:0;background:#202c34;border:1px solid #9b854e;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:7px;overflow-wrap:anywhere}
+.qf-guidance-list strong{color:#f3d995}
+.qf-guidance-list span{color:#e6e9e5;line-height:1.5}
+.qf-concern-list{margin:0;padding:0 0 0 20px;color:#f6e6b7;line-height:1.65}
+.qf-guidance-note{border-left:3px solid #d0ac59;padding:8px 12px;background:#272920;border-radius:0 8px 8px 0;margin-top:16px}

@@ -25,4 +25,6 @@ jobs:
           node --check assets/quote-first-wizard-model-v570.js
           node --check assets/quote-first-wizard-v570.js
       - name: Run wizard-state and no-operation checks
-        run: node scripts/quote_first_wizard_570_test.mjs
+        run: |
+          node scripts/quote_first_wizard_570_test.mjs
+          node scripts/quote_first_guidance_613_test.mjs
