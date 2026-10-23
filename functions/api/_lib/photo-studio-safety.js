@@ -19,12 +19,16 @@ export function isPrivateMediaKey(key=''){
   return PRIVATE_MEDIA_PREFIX_HINTS.some((prefix)=>normalized.startsWith(prefix));
 }
 
-export function isPhotoStudioPublicRow(row={}){
+export function isPhotoStudioReviewableRow(row={}){
   const key=String(row?.r2_key||'').trim();
   if(!key||isPrivateMediaKey(key)||!isApprovedImageKey(key))return false;
-  if(String(row?.source_status||'active').toLowerCase()==='archived')return false;
   const mediaType=String(row?.media_type||'image').toLowerCase();
   return mediaType==='image' || String(row?.mime_type||'').toLowerCase().startsWith('image/');
+}
+
+export function isPhotoStudioPublicRow(row={}){
+  // An R2 presence or a staff-side review record is not publication consent.
+  return isPhotoStudioReviewableRow(row)&&String(row?.source_status||'').toLowerCase()==='active';
 }
 
 export function beforeAfterPlacement(targetKey='',targetType=''){

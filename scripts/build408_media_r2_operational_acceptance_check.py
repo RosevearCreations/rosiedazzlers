@@ -32,19 +32,19 @@ for binding in ["ROSIE_PUBLIC_ASSETS_BUCKET","PUBLIC_ASSETS_BUCKET","R2_PUBLIC_A
 
 sync=require(
     "functions/api/admin/photo_library_sync.js",
-    "const BUILD=408",
+    "const BUILD=617",
     "Build 260 sync requires one approved R2 prefix per request.",
     "mode:'single_prefix_page'",
     "result_status:resultStatus",
-    "partial_result:resultStatus==='partial'",
-    "retry:{prefix:requested,cursor:String(result?.next_cursor||''),same_request_safe:true}",
+    "partial_result:resultStatus!=='complete'",
+    "manual_review_required:",
     "bucket_identity:identity",
 )
 
 library=require(
     "functions/api/_lib/photo-library.js",
     "maxListPagesPerPrefix:1",
-    "limitPerPrefix:100",
+    "limitPerPrefix:perPrefixLimit",
     "next_cursor:nextCursor",
     "has_more:Boolean(nextCursor)",
 )

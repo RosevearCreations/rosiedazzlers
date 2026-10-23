@@ -45,6 +45,13 @@ drills and R2 cross-record reconciliation are not inferred from passing source
 tests. After Build 616 reaches exact-SHA Production GREEN, **5 builds** remain
 (617–621); see `BUILD616_PHOTO_STUDIO_AUTOSAVE_FAILURE_RECOVERY.md`.
 
+Build 617 introduces bounded, review-held R2 registration, conditional
+asset-only provenance updates and manual cursor recovery; it does not infer
+customer consent, R2 object disappearance or public publication approval.
+After Build 617 reaches independently verified exact-SHA Production GREEN,
+**4 planned builds remain (618–621)**. See
+`BUILD617_R2_MEDIA_SYNC_PUBLICATION_RECONCILIATION.md` for acceptance checks.
+
 Every build travels through feature review if needed, `dev`, a protected
 `main` pull request, Cloudflare deployment and exact-SHA Production proof.
 Only truthfully observed results close a HOLD.

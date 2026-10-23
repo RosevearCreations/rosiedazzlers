@@ -62,9 +62,9 @@ for token in (
 
 for token in (
     "mode:'single_prefix_page'",
-    "partial_result:resultStatus==='partial'",
+    "partial_result:resultStatus!=='complete'",
     "next_cursor",
-    "same_request_safe:true",
+    "manual_review_required:",
 ):
     if token not in sync:
         errors.append(f"retained bounded sync authority missing {token}")
