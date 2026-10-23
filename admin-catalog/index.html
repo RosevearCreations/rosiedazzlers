@@ -47,6 +47,12 @@
     .catalog-review{max-height:360px;overflow:auto;border:1px solid rgba(255,255,255,.08);border-radius:14px}
     .catalog-review table{margin:0}
     .catalog-select-col{width:42px;text-align:center}
+    .inventory-row-check{width:18px;height:18px;accent-color:#60a5fa;cursor:pointer}
+    #invBody tr:has(.inventory-row-check:checked){background:rgba(59,130,246,.12)}
+    .inventory-item-identity{display:flex;align-items:flex-start;gap:10px}
+    .inventory-item-thumb{width:72px;height:64px;flex:none;object-fit:contain;border-radius:10px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12)}
+    .inventory-item-identity>div{min-width:0}
+    @media(max-width:600px){.inventory-item-thumb{width:52px;height:52px}.inventory-item-identity{gap:6px}}
     .mobile-stock-card{border:1px dashed rgba(125,163,255,.35);border-radius:16px;padding:12px;background:rgba(125,163,255,.06)}
     .amazon-status-strong{color:#bbf7d0}.amazon-status-review{color:#fde68a}.amazon-status-unmatched{color:#fecaca}
     .amazon-title{display:block;max-width:560px;overflow-wrap:anywhere}
@@ -207,7 +213,8 @@
         <select id="invSort"><option value="updated_desc">Sort: Updated</option><option value="name_asc">Sort: Name</option><option value="stock_asc">Sort: Stock low→high</option><option value="rating_desc">Sort: Rating</option><option value="sort_key_asc">Sort: Saved order</option></select>
       </div>
       <div class="mini" id="invSummary"></div>
-      <div class="table-wrap"><table><thead><tr><th class="catalog-select-col"><input id="selectVisibleInventory" type="checkbox" title="Select visible rows" /></th><th>Item</th><th>Stock / Cost</th><th>Rating</th><th>Reuse</th><th>Action</th></tr></thead><tbody id="invBody"><tr><td colspan="5">Loading…</td></tr></tbody></table></div>
+      <div class="row"><div class="mini" id="inventorySelectionSummary" role="status" aria-live="polite">0 selected</div><button class="btn ghost small" id="clearInventorySelection" type="button">Clear selection</button></div>
+      <div class="table-wrap"><table><thead><tr><th class="catalog-select-col"><input id="selectVisibleInventory" type="checkbox" aria-label="Select all visible inventory rows" /></th><th>Item</th><th>Stock / Cost</th><th>Image quality</th><th>Reuse</th><th>Action</th></tr></thead><tbody id="invBody"><tr><td colspan="6">Loading…</td></tr></tbody></table></div>
     </article>
 
     <article class="panel stack">
@@ -238,7 +245,9 @@
           <label>Category<input id="formCategory" list="inventoryCategoryOptions" placeholder="cleaning liquids, buckets, towels" /></label>
           <label>Type / subcategory<input id="formSubcategory" list="inventorySubcategoryOptions" placeholder="chemicals, linens, scrubbers" /></label>
           <label>Preferred vendor<input id="formVendor" list="inventoryVendorOptions" /></label>
-          <label>Unit label<input id="formUnit" list="inventoryUnitOptions" placeholder="bottle, pad, piece" /></label>
+          <label>Stock unit<input id="formUnit" list="inventoryUnitOptions" placeholder="bottle, pad, piece" /></label>
+          <label>Usage unit<input id="formUsageUnit" list="inventoryUnitOptions" placeholder="ml, gram, towel, piece" /></label>
+          <label>Usage units per stock unit<input id="formUsageConversion" type="number" step="0.0001" min="0.0001" value="1" /></label>
           <label>Qty on hand<input id="formQty" type="number" step="0.01" /></label>
           <label>Reorder point<input id="formReorderPoint" type="number" step="0.01" /></label>
           <label>Reorder qty<input id="formReorderQty" type="number" step="0.01" /></label>
@@ -312,11 +321,12 @@
         <div class="grid3">
           <label>Booking ID<input id="usageBookingId" placeholder="Booking UUID" /></label>
           <label>Inventory item<select id="usageItemKey"><option value="">Select inventory item</option></select></label>
-          <label>Quantity used<input id="usageQty" type="number" step="0.01" min="0.01" value="1" /></label>
+          <label>Quantity used<input id="usageQty" type="number" step="0.0001" min="0.0001" value="1" /></label>
         </div>
+        <div class="notice" id="usageEstimate" role="status" aria-live="polite">Choose an inventory item to preview the usage conversion and estimated job cost.</div>
         <label>Usage note<textarea id="usageNote" rows="3" placeholder="Optional note for the detail record"></textarea></label>
         <div class="row"><button class="btn primary" type="submit">Record products used</button><button class="btn ghost" id="usageResetBtn" type="button">Clear</button></div>
-        <div class="mini">This writes a job-use inventory movement and reduces stock on hand immediately.</div>
+        <div class="mini">This posts an audited job-use movement and reduces stock atomically. Quantity is entered in the configured usage unit; stock and job cost are converted to stock units. Repeating the same action will not debit twice.</div>
       </form>
     </section>
   </section>
