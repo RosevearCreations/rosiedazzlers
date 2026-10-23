@@ -212,7 +212,7 @@
     editorSnapshot=editorTargetKey ? structuredClone(item||{}) : null;
     qs('#formItemType').value=item?.item_type||'tool'; qs('#formItemKey').value=item?.item_key||''; qs('#formName').value=item?.name||'';
     qs('#formCategory').value=item?.category||''; qs('#formSubcategory').value=item?.subcategory||''; qs('#formVendor').value=item?.preferred_vendor||'';
-    qs('#formUnit').value=item?.unit_label||''; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
+    qs('#formUnit').value=item?.stock_unit||item?.unit_label||''; qs('#formUsageUnit').value=item?.usage_unit||''; qs('#formUsageConversion').value=item?.usage_units_per_stock_unit??1; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
     qs('#formReorderQty').value=item?.reorder_qty ?? 0; qs('#formCostCad').value=item?.cost_cents != null ? Number(item.cost_cents || 0) / 100 : ''; qs('#formVendorSku').value=item?.vendor_sku || ''; qs('#formRating').value=item?.rating_value ?? ''; qs('#formRatingCount').value=item?.rating_count ?? 0;
     qs('#formSortKey').value=item?.sort_key ?? 0; qs('#formPurchaseDate').value=(item?.purchase_date||'').slice(0,10); qs('#formEstimatedJobs').value=item?.estimated_jobs_per_unit ?? 0; qs('#formReuse').value=item?.reuse_policy||'reorder'; qs('#formAmazon').value=item?.amazon_url||'';
     qs('#formImage').value=item?.image_url||''; renderGalleryEditor(item?.gallery_image_urls || item?.gallery_images || []); qs('#formReceiptUrl').value=item?.receipt_url || item?.bill_url || ''; qs('#formAssignedStation').value=item?.assigned_station || item?.station_label || ''; qs('#formServiceTags').value=Array.isArray(item?.service_tags) ? item.service_tags.join(', ') : (item?.service_tags || item?.service_link_tags || '');
@@ -241,6 +241,18 @@
     const options='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join('');
     const usageSel=qs('#usageItemKey'); if(usageSel) usageSel.innerHTML=options;
     const quickSel=qs('#quickStockItem'); if(quickSel) quickSel.innerHTML=options;
+    renderUsageEstimate();
+  }
+  function renderUsageEstimate(){
+    const box=qs('#usageEstimate');if(!box)return;
+    const item=inventory.find(x=>String(x.item_key)===String(qs('#usageItemKey')?.value));
+    if(!item){box.textContent='Choose an inventory item to preview the usage conversion and estimated job cost.';return;}
+    const used=Number(qs('#usageQty')?.value),conversion=Number(item.usage_units_per_stock_unit??1);
+    const stockUnit=item.stock_unit||item.unit_label||'stock unit',usageUnit=item.usage_unit||stockUnit;
+    const stock=used/conversion,rounded=Math.round(stock*1000)/1000;
+    if(!(used>0)||!(conversion>0)||!Number.isFinite(stock)||rounded<=0||Math.abs(stock-rounded)>1e-9){box.textContent=`Enter a positive ${usageUnit} amount that converts exactly to 0.001 ${stockUnit}.`;return;}
+    const cost=Number(item.cost_cents||0)*rounded/100;
+    box.textContent=`${used} ${usageUnit} = ${rounded} ${stockUnit} to debit · ${item.qty_on_hand} ${stockUnit} on hand · Estimated job cost: ${Number.isFinite(cost)&&cost>0?cost.toLocaleString('en-CA',{style:'currency',currency:'CAD'}):'cost unavailable'}.`;
   }
 
   function itemQualityScore(item){
@@ -731,6 +743,8 @@
   qs('#bulkActiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:true }));
   qs('#bulkInactiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:false }));
   qs('#bulkRepairImagesBtn')?.addEventListener('click', repairSelectedImages);
+  qs('#usageItemKey')?.addEventListener('change',renderUsageEstimate);
+  qs('#usageQty')?.addEventListener('input',renderUsageEstimate);
   qs('#selectVisibleInventory')?.addEventListener('change',(event)=>{
     document.querySelectorAll('.inventory-row-check').forEach((box)=>{
       if(event.target.checked)inventorySelection.add(box.value);else inventorySelection.delete(box.value);
@@ -756,6 +770,10 @@
   qs('#itemForm').addEventListener('submit', async(e)=>{
     e.preventDefault();
     const payload={ item_key: editorTargetKey || qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), description:qs('#formDescription').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), gallery_image_urls: galleryValues(), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim(), ...supplierMetaState };
+    payload.stock_unit=qs('#formUnit').value.trim();
+    payload.usage_unit=qs('#formUsageUnit').value.trim()||payload.stock_unit;
+    payload.usage_units_per_stock_unit=Number(qs('#formUsageConversion').value);
+    if(!(payload.usage_units_per_stock_unit>0))return show('Usage units per stock unit must be positive.','bad');
     const x=await postJson('/api/admin/catalog_inventory_save', payload);
     if(!x.ok||!x.out?.ok){const r=x.out?.publish_readiness;const detail=r?.blockers?.length?` ${r.blockers.join(' ')}`:'';return show(((x.out&&x.out.error)||'Could not save inventory item.')+detail,'bad');}
     const saved=x.out.item||payload;show(editorTargetKey?`Existing inventory item ${editorTargetKey} updated.`:'New inventory item saved.','ok');fillForm(saved,{targetKey:saved.item_key});await loadInventory();loadLowStock();

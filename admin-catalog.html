@@ -245,7 +245,9 @@
           <label>Category<input id="formCategory" list="inventoryCategoryOptions" placeholder="cleaning liquids, buckets, towels" /></label>
           <label>Type / subcategory<input id="formSubcategory" list="inventorySubcategoryOptions" placeholder="chemicals, linens, scrubbers" /></label>
           <label>Preferred vendor<input id="formVendor" list="inventoryVendorOptions" /></label>
-          <label>Unit label<input id="formUnit" list="inventoryUnitOptions" placeholder="bottle, pad, piece" /></label>
+          <label>Stock unit<input id="formUnit" list="inventoryUnitOptions" placeholder="bottle, pad, piece" /></label>
+          <label>Usage unit<input id="formUsageUnit" list="inventoryUnitOptions" placeholder="ml, gram, towel, piece" /></label>
+          <label>Usage units per stock unit<input id="formUsageConversion" type="number" step="0.0001" min="0.0001" value="1" /></label>
           <label>Qty on hand<input id="formQty" type="number" step="0.01" /></label>
           <label>Reorder point<input id="formReorderPoint" type="number" step="0.01" /></label>
           <label>Reorder qty<input id="formReorderQty" type="number" step="0.01" /></label>
@@ -319,11 +321,12 @@
         <div class="grid3">
           <label>Booking ID<input id="usageBookingId" placeholder="Booking UUID" /></label>
           <label>Inventory item<select id="usageItemKey"><option value="">Select inventory item</option></select></label>
-          <label>Quantity used<input id="usageQty" type="number" step="0.01" min="0.01" value="1" /></label>
+          <label>Quantity used<input id="usageQty" type="number" step="0.0001" min="0.0001" value="1" /></label>
         </div>
+        <div class="notice" id="usageEstimate" role="status" aria-live="polite">Choose an inventory item to preview the usage conversion and estimated job cost.</div>
         <label>Usage note<textarea id="usageNote" rows="3" placeholder="Optional note for the detail record"></textarea></label>
         <div class="row"><button class="btn primary" type="submit">Record products used</button><button class="btn ghost" id="usageResetBtn" type="button">Clear</button></div>
-        <div class="mini">This writes a job-use inventory movement and reduces stock on hand immediately.</div>
+        <div class="mini">This posts an audited job-use movement and reduces stock atomically. Quantity is entered in the configured usage unit; stock and job cost are converted to stock units. Repeating the same action will not debit twice.</div>
       </form>
     </section>
   </section>
