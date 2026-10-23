@@ -70,3 +70,15 @@
 .qf-guidance-list span{color:#e6e9e5;line-height:1.5}
 .qf-concern-list{margin:0;padding:0 0 0 20px;color:#f6e6b7;line-height:1.65}
 .qf-guidance-note{border-left:3px solid #d0ac59;padding:8px 12px;background:#272920;border-radius:0 8px 8px 0;margin-top:16px}
+
+/* Build 615: visible disabled-state messaging and accessible, narrow-screen handoff. */
+.qf-intake{max-width:860px;margin:22px auto;padding:clamp(18px,4vw,28px);overflow-wrap:anywhere}
+.qf-intake h2{font-size:clamp(1.4rem,3.5vw,2rem);margin:6px 0 10px}
+.qf-intake p{line-height:1.6;color:#e3eaf5}
+#quote-intake-status{padding:14px 16px;background:#332d21;color:#fff0bc;border:1px solid #b59b57;border-radius:12px}
+#quote-intake-status[data-state="ready"]{background:#193a35;color:#d7ffef;border-color:#6bac96}
+#quote-intake-status[data-state="error"]{background:#45262b;color:#ffe1e0;border-color:#ce8686}
+#quote-intake-form[hidden]{display:none}
+#quote-intake-form label{line-height:1.5}
+#quote-intake-consent-help{font-size:.92rem;color:#d5e3f4}
+@media(max-width:420px){.qf-intake{margin:16px auto;padding:16px}.qf-intake button{width:100%;white-space:normal}}
