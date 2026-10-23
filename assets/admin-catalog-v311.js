@@ -1,6 +1,7 @@
 (function(){
   const qs=(s)=>document.querySelector(s);
   let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[], usageActionId=crypto.randomUUID(), editorTargetKey=null, editorSnapshot=null, supplierMetaState={};
+  const inventorySelection=new Set();
   const optionStorageKey='rosie_inventory_dropdown_options_v2';
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
   function show(msg,kind=''){ const el=qs('#status'); el.style.display='block'; el.className='notice '+(kind||''); el.textContent=msg; }
@@ -211,7 +212,7 @@
     editorSnapshot=editorTargetKey ? structuredClone(item||{}) : null;
     qs('#formItemType').value=item?.item_type||'tool'; qs('#formItemKey').value=item?.item_key||''; qs('#formName').value=item?.name||'';
     qs('#formCategory').value=item?.category||''; qs('#formSubcategory').value=item?.subcategory||''; qs('#formVendor').value=item?.preferred_vendor||'';
-    qs('#formUnit').value=item?.unit_label||''; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
+    qs('#formUnit').value=item?.stock_unit||item?.unit_label||''; qs('#formUsageUnit').value=item?.usage_unit||''; qs('#formUsageConversion').value=item?.usage_units_per_stock_unit??1; qs('#formQty').value=item?.qty_on_hand ?? 0; qs('#formReorderPoint').value=item?.reorder_point ?? 0;
     qs('#formReorderQty').value=item?.reorder_qty ?? 0; qs('#formCostCad').value=item?.cost_cents != null ? Number(item.cost_cents || 0) / 100 : ''; qs('#formVendorSku').value=item?.vendor_sku || ''; qs('#formRating').value=item?.rating_value ?? ''; qs('#formRatingCount').value=item?.rating_count ?? 0;
     qs('#formSortKey').value=item?.sort_key ?? 0; qs('#formPurchaseDate').value=(item?.purchase_date||'').slice(0,10); qs('#formEstimatedJobs').value=item?.estimated_jobs_per_unit ?? 0; qs('#formReuse').value=item?.reuse_policy||'reorder'; qs('#formAmazon').value=item?.amazon_url||'';
     qs('#formImage').value=item?.image_url||''; renderGalleryEditor(item?.gallery_image_urls || item?.gallery_images || []); qs('#formReceiptUrl').value=item?.receipt_url || item?.bill_url || ''; qs('#formAssignedStation').value=item?.assigned_station || item?.station_label || ''; qs('#formServiceTags').value=Array.isArray(item?.service_tags) ? item.service_tags.join(', ') : (item?.service_tags || item?.service_link_tags || '');
@@ -240,6 +241,18 @@
     const options='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join('');
     const usageSel=qs('#usageItemKey'); if(usageSel) usageSel.innerHTML=options;
     const quickSel=qs('#quickStockItem'); if(quickSel) quickSel.innerHTML=options;
+    renderUsageEstimate();
+  }
+  function renderUsageEstimate(){
+    const box=qs('#usageEstimate');if(!box)return;
+    const item=inventory.find(x=>String(x.item_key)===String(qs('#usageItemKey')?.value));
+    if(!item){box.textContent='Choose an inventory item to preview the usage conversion and estimated job cost.';return;}
+    const used=Number(qs('#usageQty')?.value),conversion=Number(item.usage_units_per_stock_unit??1);
+    const stockUnit=item.stock_unit||item.unit_label||'stock unit',usageUnit=item.usage_unit||stockUnit;
+    const stock=used/conversion,rounded=Math.round(stock*1000)/1000;
+    if(!(used>0)||!(conversion>0)||!Number.isFinite(stock)||rounded<=0||Math.abs(stock-rounded)>1e-9){box.textContent=`Enter a positive ${usageUnit} amount that converts exactly to 0.001 ${stockUnit}.`;return;}
+    const cost=Number(item.cost_cents||0)*rounded/100;
+    box.textContent=`${used} ${usageUnit} = ${rounded} ${stockUnit} to debit · ${item.qty_on_hand} ${stockUnit} on hand · Estimated job cost: ${Number.isFinite(cost)&&cost>0?cost.toLocaleString('en-CA',{style:'currency',currency:'CAD'}):'cost unavailable'}.`;
   }
 
   function itemQualityScore(item){
@@ -284,7 +297,16 @@
     return `${name}::${image}`;
   }
   function selectedInventoryKeys(){
-    return [...document.querySelectorAll('.inventory-row-check:checked')].map((el)=>el.value).filter(Boolean);
+    return [...inventorySelection];
+  }
+  function syncInventorySelection(){
+    const visible=[...document.querySelectorAll('.inventory-row-check')];
+    visible.forEach((box)=>{box.checked=inventorySelection.has(box.value)});
+    const selectedVisible=visible.filter((box)=>box.checked).length;
+    const toggle=qs('#selectVisibleInventory');
+    if(toggle){toggle.checked=visible.length>0&&selectedVisible===visible.length;toggle.indeterminate=selectedVisible>0&&selectedVisible<visible.length;}
+    const summary=qs('#inventorySelectionSummary');
+    if(summary) summary.textContent=`${inventorySelection.size} selected · ${selectedVisible} visible selection(s)`;
   }
   function imageUrlKey(url){ return cleanImageUrl(url).toLowerCase().split('?')[0].replace(/^https?:\/\//,''); }
   function duplicateImageGroups(rows=inventory){
@@ -491,9 +513,22 @@
       const score=itemQualityScore(item);
       return `<tr><td class="catalog-select-col"><input class="inventory-row-check" type="checkbox" value="${esc(item.item_key)}" ${item._source==='fallback'?'title="Save/import fallback row before DB-only bulk updates"':''}></td><td><button class="inventory-name-edit" type="button" data-edit="${esc(item.item_key)}" title="Edit ${esc(item.name)}">${esc(item.name)}</button><div class="mini">${esc(item.item_key)} · ${esc(item.item_type||'')} · ${esc(item.category||'')}</div>${item.subcategory?`<div class="mini">Type: ${esc(item.subcategory)}</div>`:''}${item.preferred_vendor?`<div class="mini">Vendor: ${esc(item.preferred_vendor)}</div>`:''}${item.vendor_sku?`<div class="mini">SKU: ${esc(item.vendor_sku)}</div>`:''}<span class="source-pill ${item._source==='saved'?'saved':'fallback'}">${item._source==='saved'?'Saved DB item':'Bundled fallback — save/import to edit stock'}</span>${item.is_public===false?'<span class="source-pill fallback">Hidden from public</span>':'<span class="source-pill saved">Public</span>'}<div class="mini ${readinessClass(item)}">${esc(readinessLabel(item))}</div></td><td>${esc(item.qty_on_hand)} ${esc(item.unit_label||'')}<div class="mini">RP ${esc(item.reorder_point)} / RQ ${esc(item.reorder_qty)}</div>${item.cost_cents!=null&&Number(item.cost_cents)>0?`<div class="mini">Cost: ${esc((Number(item.cost_cents)/100).toFixed(2))} CAD</div>`:`<div class="mini danger-note">Missing unit cost</div>`}${item.purchase_date?`<div class="mini">Bought: ${esc(String(item.purchase_date).slice(0,10))}</div>`:''}${item.estimated_jobs_per_unit?`<div class="mini">Est. jobs/unit: ${esc(item.estimated_jobs_per_unit)}</div>`:''}</td><td><span class="${itemQualityClass(score)}">${score}%</span><div class="quality-meter"><span style="width:${score}%"></span></div>${item.image_url?`<div class="mini quality-good">Image set${item._image_from_fallback?' · fallback matched':''}</div>`:'<div class="mini quality-bad">Missing image</div>'}${imageDiagnosticsForItem(item)}</td><td>${esc(item.reuse_policy||'reorder')}</td><td><div class="row"><button class="btn ghost" data-edit="${esc(item.item_key)}">Edit</button>${String(item.reuse_policy||'reorder')!=='never_reuse' ? `<button class="btn ghost" data-reorder="${esc(item.item_key)}">Reorder</button>` : `<span class="pill">No reorder</span>`}</div></td></tr>`;
     }).join('') || '<tr><td colspan="6">No inventory items found.</td></tr>';
+    // Thumbnails are deliberately constructed as elements, never as untrusted HTML.
+    qs('#invBody').querySelectorAll('tr').forEach((tr,index)=>{
+      const item=items[index], cell=tr.querySelector('td:nth-child(2)');
+      if(!item||!cell)return;
+      const wrapper=document.createElement('div');wrapper.className='inventory-item-identity';
+      const image=document.createElement('img');image.className='inventory-item-thumb';
+      image.src=cleanImageUrl(item.image_url)||'/assets/themes/standard/images/inventory-tools-photo.webp';
+      image.alt=`Image for ${item.name||item.item_key}`;image.loading='lazy';
+      image.addEventListener('error',()=>{if(!image.dataset.fallback){image.dataset.fallback='1';image.src='/assets/themes/standard/images/inventory-tools-photo.webp';}});
+      const details=document.createElement('div');while(cell.firstChild)details.appendChild(cell.firstChild);
+      wrapper.append(image,details);cell.appendChild(wrapper);
+    });
     document.querySelectorAll('[data-edit]').forEach((btn)=>btn.addEventListener('click',()=>{ const item=inventory.find((x)=>String(x.item_key)===String(btn.dataset.edit)) || null; fillForm(item,{targetKey:item?.item_key||null}); qs('#formName')?.focus({preventScroll:true}); document.querySelector('#itemForm')?.scrollIntoView({behavior:'smooth', block:'start'}); }));
     document.querySelectorAll('[data-reorder]').forEach((btn)=>btn.addEventListener('click', ()=>createReorder(btn.dataset.reorder)));
-    qs('#selectVisibleInventory')?.addEventListener('change', (event)=>{ document.querySelectorAll('.inventory-row-check').forEach((box)=>{ box.checked=event.target.checked; }); });
+    qs('#invBody').querySelectorAll('.inventory-row-check').forEach((box)=>box.addEventListener('change',()=>{if(box.checked)inventorySelection.add(box.value);else inventorySelection.delete(box.value);syncInventorySelection()}));
+    syncInventorySelection();
     refreshQualitySummary();
   }
   function renderMovements(){ const q=(qs('#moveSearch').value||'').trim().toLowerCase(); const type=qs('#moveType').value||''; const rows=movements.filter((m)=>!type || String(m.movement_type||'')===type).filter((m)=>!q || `${m.item_key||''} ${m.note||''} ${m.actor_name||''} ${m.booking_id||''}`.toLowerCase().includes(q)); qs('#moveSummary').textContent=`${rows.length} movements shown`; qs('#moveBody').innerHTML=rows.map((m)=>`<tr><td>${esc(new Date(m.created_at||Date.now()).toLocaleString())}<div class="mini">${esc(m.movement_type||'')}</div></td><td><strong>${esc(m.item_key||'')}</strong><div class="mini">${esc(m.item_name||'')}</div></td><td>${esc(m.qty_delta)}<div class="mini">${esc(m.previous_qty)} → ${esc(m.new_qty)}</div></td><td>${m.booking_id?`<div class="mini">Booking: ${esc(m.booking_id)}</div>`:''}<div class="mini">${esc(m.actor_name||'')}</div>${m.note?`<div class="mini">${esc(m.note)}</div>`:''}</td></tr>`).join('') || '<tr><td colspan="4">No movement history found.</td></tr>'; }
@@ -647,11 +682,13 @@
     mediaLibraryRows = Array.isArray(mediaRows) ? mediaRows : [];
     if(!r.ok||!r.out?.ok){
       inventory=mergeInventoryWithFallback([], fallbackRows);
+      const valid=new Set(inventory.map((item)=>String(item.item_key)));for(const key of inventorySelection)if(!valid.has(key))inventorySelection.delete(key);
       renderInventoryDatalists(); fillUsageItems(); renderInventory(); refreshQualitySummary(); lowStock=[]; renderLowStock();
       return show(((r.out&&r.out.error)||'Could not load saved inventory from the database.') + ' Showing bundled gear/consumables fallback so we can still edit and save items.', 'bad');
     }
     savedInventoryItems=Array.isArray(r.out.items)?r.out.items:[];
     inventory=mergeInventoryWithFallback(savedInventoryItems, fallbackRows);
+    const valid=new Set(inventory.map((item)=>String(item.item_key)));for(const key of inventorySelection)if(!valid.has(key))inventorySelection.delete(key);
     renderInventoryDatalists(); fillUsageItems(); renderInventory(); refreshQualitySummary();
     lowStock=Array.isArray(r.out.low_stock)&&r.out.low_stock.length ? r.out.low_stock : computeLowStockItems(savedInventoryItems);
     renderLowStock();
@@ -706,6 +743,15 @@
   qs('#bulkActiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:true }));
   qs('#bulkInactiveBtn')?.addEventListener('click', ()=>bulkSetVisibility({ is_active:false }));
   qs('#bulkRepairImagesBtn')?.addEventListener('click', repairSelectedImages);
+  qs('#usageItemKey')?.addEventListener('change',renderUsageEstimate);
+  qs('#usageQty')?.addEventListener('input',renderUsageEstimate);
+  qs('#selectVisibleInventory')?.addEventListener('change',(event)=>{
+    document.querySelectorAll('.inventory-row-check').forEach((box)=>{
+      if(event.target.checked)inventorySelection.add(box.value);else inventorySelection.delete(box.value);
+    });
+    syncInventorySelection();
+  });
+  qs('#clearInventorySelection')?.addEventListener('click',()=>{inventorySelection.clear();syncInventorySelection()});
   qs('#scanImageHealthBtn')?.addEventListener('click', scanVisibleImages);
   qs('#quickStockBtn')?.addEventListener('click', applyQuickStock);
   qs('#formImage')?.addEventListener('input', updateImagePreview);
@@ -724,6 +770,10 @@
   qs('#itemForm').addEventListener('submit', async(e)=>{
     e.preventDefault();
     const payload={ item_key: editorTargetKey || qs('#formItemKey').value.trim(), item_type: qs('#formItemType').value, name: qs('#formName').value.trim(), category: qs('#formCategory').value.trim(), subcategory: qs('#formSubcategory').value.trim(), description:qs('#formDescription').value.trim(), preferred_vendor: qs('#formVendor').value.trim(), vendor_sku: qs('#formVendorSku').value.trim(), unit_label: qs('#formUnit').value.trim(), qty_on_hand: Number(qs('#formQty').value||0), reorder_point: Number(qs('#formReorderPoint').value||0), reorder_qty: Number(qs('#formReorderQty').value||0), cost_cad: qs('#formCostCad').value === '' ? null : Number(qs('#formCostCad').value||0), rating_value: qs('#formRating').value, rating_count: Number(qs('#formRatingCount').value||0), sort_key: Number(qs('#formSortKey').value||0), purchase_date: qs('#formPurchaseDate').value || null, estimated_jobs_per_unit: Number(qs('#formEstimatedJobs').value||0), reuse_policy: qs('#formReuse').value, amazon_url: qs('#formAmazon').value.trim(), image_url: qs('#formImage').value.trim() || (findMatchingBundledImage()?.url || ''), gallery_image_urls: galleryValues(), receipt_url: qs('#formReceiptUrl').value.trim(), assigned_station: qs('#formAssignedStation').value.trim(), service_tags: qs('#formServiceTags').value.trim(), is_public: qs('#formIsPublic').checked, is_active: qs('#formIsActive').checked, notes: qs('#formNotes').value.trim(), ...supplierMetaState };
+    payload.stock_unit=qs('#formUnit').value.trim();
+    payload.usage_unit=qs('#formUsageUnit').value.trim()||payload.stock_unit;
+    payload.usage_units_per_stock_unit=Number(qs('#formUsageConversion').value);
+    if(!(payload.usage_units_per_stock_unit>0))return show('Usage units per stock unit must be positive.','bad');
     const x=await postJson('/api/admin/catalog_inventory_save', payload);
     if(!x.ok||!x.out?.ok){const r=x.out?.publish_readiness;const detail=r?.blockers?.length?` ${r.blockers.join(' ')}`:'';return show(((x.out&&x.out.error)||'Could not save inventory item.')+detail,'bad');}
     const saved=x.out.item||payload;show(editorTargetKey?`Existing inventory item ${editorTargetKey} updated.`:'New inventory item saved.','ok');fillForm(saved,{targetKey:saved.item_key});await loadInventory();loadLowStock();
