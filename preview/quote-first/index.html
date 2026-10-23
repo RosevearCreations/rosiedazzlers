@@ -18,10 +18,10 @@
 </header>
 <main class="qf-main">
  <div class="qf-hero">
-  <p class="qf-eyebrow">Experience preview · Build 613</p>
+  <p class="qf-eyebrow">Experience preview · Build 615</p>
   <h1>Tell us what your vehicle needs.</h1>
   <p>Explore a simpler way to find a suitable detailing service. You can try the steps below without sharing personal details. Rosie brings normal detailing water and power; site and weather suitability must still be confirmed.</p>
-  <div class="qf-banner" role="note"><strong>Prototype only:</strong> Service suggestions are for staff discussion and may differ from the live catalog. No prices are calculated, appointments are reserved or payments are taken here. A separate, disabled-by-default inquiry form is shown only if approved intake is enabled. For a real booking use the current booking page.</div>
+  <div class="qf-banner" role="note"><strong>Prototype only:</strong> Service suggestions are for staff discussion and may differ from the live catalog. No prices are calculated, appointments are reserved or payments are taken here. Inquiry intake is disabled by default and requires separate owner authorization. For a real booking use the current booking page.</div>
  </div>
  <section id="quote-first-preview" class="qf-card" aria-label="Quote-first preview wizard">
   <p id="wizard-progress" class="qf-progress" aria-live="polite">Step 1 of 5</p>
@@ -36,20 +36,22 @@
   </nav>
   <p id="wizard-status" class="qf-status" aria-live="polite">Selections stay in your browser while the page is open.</p>
  </section>
- <section id="quote-first-intake-v573" hidden style="max-width:860px;margin:22px auto;background:#20324e;padding:22px;border-radius:14px" aria-labelledby="quote-intake-head">
- <h2 id="quote-intake-head">Ask Rosie for a tailored quote</h2>
- <p>Submitting this form requests manual staff contact only. It is not a confirmed price or appointment.</p>
- <form id="quote-intake-form">
+ <section id="quote-first-intake-v573" class="qf-card qf-intake" aria-labelledby="quote-intake-head">
+ <p class="qf-eyebrow">Build 615 · Intake and handoff acceptance</p>
+ <h2 id="quote-intake-head">Requesting a staff review</h2>
+ <p id="quote-intake-explainer">When separately approved and enabled, an inquiry can enter the existing staff Leads queue for manual review. Staff would assess the vehicle, discuss pricing and confirm any next steps. No inquiry is a booked appointment or accepted quote.</p>
+ <p id="quote-intake-status" role="status" aria-live="polite">Checking whether quote intake is enabled. Do not enter personal details yet.</p>
+ <form id="quote-intake-form" aria-describedby="quote-intake-explainer quote-intake-consent-help" hidden>
  <label>Full name <input name="full_name" maxlength="180" autocomplete="name" required></label>
  <label>Email <input name="email" type="email" autocomplete="email"></label>
  <label>Telephone <input name="phone" type="tel" autocomplete="tel"></label>
  <label>Town or service area <input name="service_area" maxlength="120"></label>
  <label>Optional condition notes <textarea name="notes" maxlength="450"></textarea></label>
  <label class="qf-hidden-honeypot">Website <input name="website" autocomplete="off" tabindex="-1"></label>
- <label><input name="contact_consent" type="checkbox" required> I agree that Rosie Dazzlers may contact me about this specific inquiry. This is not marketing consent.</label>
+ <label><input name="contact_consent" type="checkbox" required> I agree that Rosie Dazzlers may contact me about this specific inquiry.</label>
+ <p id="quote-intake-consent-help">This permission is only for a response to this request. It does not subscribe you to advertising or marketing, and nothing is sent until you choose to submit.</p>
  <div id="quote-turnstile"></div>
  <button type="submit" id="quote-intake-submit" disabled>Send inquiry for staff review</button>
- <p id="quote-intake-status" role="status" aria-live="polite">Intake is not enabled.</p>
  </form></section>
  <div style="max-width:860px;margin:22px auto 0">
   <a class="qf-link" href="/book">Need an actual appointment? Use the current booking system →</a>

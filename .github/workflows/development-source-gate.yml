@@ -56,6 +56,7 @@ jobs:
           node --check assets/quote-first-guidance-v613.js
           node --check assets/quote-first-wizard-v570.js
           node scripts/quote_first_guidance_613_test.mjs
+          node scripts/quote_first_handoff_615_test.mjs
 
       - name: Check current JavaScript syntax
         run: |
