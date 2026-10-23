@@ -39,6 +39,12 @@ Build 615 does not activate quote intake. After Build 615 reaches exact-SHA
 Production GREEN, **6 queued builds** remain (616–621); see
 `BUILD615_QUOTE_INTAKE_STAFF_HANDOFF_ACCEPTANCE.md` for the hold and acceptance.
 
+Build 616 adds revision-protected Photo Studio metadata saves, read-only
+saved-version checking and an operator-controlled recovery draft. Live recovery
+drills and R2 cross-record reconciliation are not inferred from passing source
+tests. After Build 616 reaches exact-SHA Production GREEN, **5 builds** remain
+(617–621); see `BUILD616_PHOTO_STUDIO_AUTOSAVE_FAILURE_RECOVERY.md`.
+
 Every build travels through feature review if needed, `dev`, a protected
 `main` pull request, Cloudflare deployment and exact-SHA Production proof.
 Only truthfully observed results close a HOLD.
