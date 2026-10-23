@@ -1,0 +1,19 @@
+{
+  "schema": "rosie-owner-theme-preview.v1",
+  "version": 1,
+  "activePublicTheme": "standard",
+  "previewOnly": true,
+  "baseline": {
+    "id": "standard",
+    "label": "Standard",
+    "version": 1,
+    "status": "baseline",
+    "palette": {"background":"#0b0e11","surface":"#191d20","text":"#f5f6f7","accent":"#dec06d"},
+    "slots": {"static":{},"managed":{}}
+  },
+  "rules": [
+    "Owner previews do not modify data/theme_registry.json or assets/theme-runtime.js.",
+    "Static artwork is theme-owned; managed Photo Studio/R2 assets have separate provenance and approval.",
+    "Exported review receipts are evidence only, not a public activation or an API command."
+  ]
+}

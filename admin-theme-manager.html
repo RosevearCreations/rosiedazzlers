@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Owner Theme Manager Preview | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css">
+<style>
+  .theme-shell{max-width:1180px;margin:20px auto;padding:0 16px 50px}.theme-grid{display:grid;grid-template-columns:minmax(280px,420px) minmax(0,1fr);gap:18px;align-items:start}
+  .theme-panel{border:1px solid #46505d;border-radius:18px;padding:18px;background:#141b24;color:#f5f6f7;min-width:0}.theme-panel h2{margin-top:0}.theme-panel label{display:grid;gap:5px;margin:10px 0;color:#d9e1eb}
+  .theme-panel input,.theme-panel select,.theme-panel textarea{width:100%;max-width:100%;min-height:42px;padding:9px;border:1px solid #66758b;background:#0b1220;color:#fff;border-radius:9px;box-sizing:border-box}
+  .theme-panel input[type=color]{padding:3px}.theme-colours{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.theme-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  .theme-actions button{border:1px solid #a1b5d4;background:#23344c;color:#fff;border-radius:10px;padding:10px 14px;min-height:44px;cursor:pointer}.theme-actions button:disabled{opacity:.5;cursor:not-allowed}
+  .theme-preview{padding:22px;border-radius:15px;background:var(--theme-bg,#0b0e11);color:var(--theme-text,#f5f6f7);min-height:250px}
+  .theme-preview-card{border:1px solid var(--theme-accent,#dec06d);background:var(--theme-surface,#191d20);border-radius:14px;padding:16px;margin-top:12px}
+  .theme-preview-cta{display:inline-block;border-radius:10px;padding:10px 16px;background:var(--theme-accent,#dec06d);color:var(--theme-bg,#0b0e11);font-weight:800}
+  .theme-slot-list{display:grid;gap:7px;max-height:310px;overflow:auto}.theme-slot{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:9px;border:1px solid #46505d;border-radius:9px;align-items:center}
+  .theme-slot small{display:block;color:#b9c7d7}.theme-status{padding:12px;border:1px solid #6b7890;border-radius:10px;margin-bottom:14px}.theme-status[data-kind=error]{border-color:#ff8787}.theme-status[data-kind=ok]{border-color:#5dd6a1}
+  .theme-review{border:1px solid #66758b;padding:10px;border-radius:12px}.theme-review label{display:flex;gap:10px;align-items:flex-start}.theme-review input[type=checkbox]{width:20px;min-height:auto;flex:none}
+  .theme-muted{color:#b9c7d7}.theme-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.theme-tabs button[aria-selected=true]{background:#465e86;outline:2px solid #a5c5fc}
+  @media(max-width:800px){.theme-grid{grid-template-columns:1fr}.theme-colours{grid-template-columns:1fr}}
+</style></head>
+<body data-page="admin-app"><nav class="nav"><div class="nav-inner"><a href="/admin.html">Rosie Dazzlers Admin</a><a href="/admin-app.html">App Management</a><a href="/admin.html">Dashboard</a></div></nav>
+<main class="theme-shell">
+  <h1>Owner Theme Manager <span class="pill">Build 620 · Preview only</span></h1>
+  <p class="theme-muted">Clone Standard into a versioned local review draft, inspect colours and image ownership, then export a review receipt. Public Standard remains unchanged until a separately approved Build 621 activation.</p>
+  <div class="theme-status" id="themeStatus" role="status" aria-live="polite">Checking Admin access and loading the Standard baseline…</div>
+  <div class="theme-grid" id="themeWorkspace" hidden>
+    <section class="theme-panel" aria-label="Theme draft controls">
+      <h2>Draft identity</h2>
+      <label>Selected draft<select id="themeSelect"></select></label>
+      <label>New theme ID<input id="themeNewId" placeholder="studio-gold" maxlength="40" pattern="[a-z][a-z0-9-]{2,39}"></label>
+      <label>New theme name<input id="themeNewLabel" placeholder="Studio Gold" maxlength="80"></label>
+      <div class="theme-actions"><button id="themeClone" type="button">Clone selected version</button><button id="themeSave" type="button">Save draft locally</button></div>
+      <div class="theme-colours">
+        <label>Background<input type="color" id="themeBackground"></label>
+        <label>Surface<input type="color" id="themeSurface"></label>
+        <label>Text<input type="color" id="themeText"></label>
+        <label>Accent<input type="color" id="themeAccent"></label>
+      </div>
+      <p class="theme-muted" id="themeContrast">Contrast will be checked before a review receipt can be exported.</p>
+      <div class="theme-review"><label><input id="themeAcknowledge" type="checkbox"><span>I have reviewed this preview and its static/managed image boundaries. This does not authorize public activation.</span></label>
+        <label>Owner review notes<textarea id="themeNotes" rows="3" placeholder="What to adjust before activation"></textarea></label></div>
+      <div class="theme-actions"><button id="themeExport" type="button">Export review receipt</button><button id="themeReset" type="button">Reset unsaved edits</button></div>
+      <p class="theme-muted">Drafts are saved only in this browser; export the receipt for a durable handoff. No theme settings are sent to a database or published.</p>
+    </section>
+    <section class="theme-panel" aria-label="Theme preview and asset slots">
+      <h2 id="themePreviewHeading">Standard — v1</h2>
+      <div class="theme-preview" id="themePreview"><p>Rosie Dazzlers Mobile Auto Detailing</p><h2>Care for every finish</h2><div class="theme-preview-card"><strong>Complete Detail</strong><p>Sample static marketing card, isolated from real pricing and booking.</p><span class="theme-preview-cta">Preview button</span></div></div>
+      <h3>Artwork ownership</h3>
+      <div class="theme-tabs" role="tablist" aria-label="Image ownership tabs"><button id="themeStaticTab" role="tab" aria-selected="true" aria-controls="themeSlots" type="button">Static theme artwork</button><button id="themeManagedTab" role="tab" aria-selected="false" aria-controls="themeSlots" type="button">Managed Photo Studio/R2</button></div>
+      <div id="themeSlots" class="theme-slot-list" role="tabpanel" aria-live="polite"></div>
+    </section>
+  </div>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script><script type="module" src="/assets/admin-theme-manager.js"></script></body></html>
