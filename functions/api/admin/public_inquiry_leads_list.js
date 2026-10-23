@@ -42,14 +42,15 @@ export async function onRequestPost({ request, env }) {
     const limit = clampInt(body.limit, 1, 100, 50);
     const status = normalizeStatus(body.status, true);
     const topic = normalizeTopic(body.topic, true);
+    const quoteFirstOnly = body.source === "quote_first";
     const q = cleanText(body.q || body.search);
 
-    const rows = await fetchLeadRows(env, { limit, status, topic, q });
+    const rows = await fetchLeadRows(env, { limit, status, topic, q, quoteFirstOnly });
     return withCors(json({
       ok: true,
       table_ready: true,
       leads: rows,
-      filters: { limit, status, topic, q: q || null }
+      filters: { limit, status, topic, q: q || null, source: quoteFirstOnly ? "quote_first" : "all" }
     }));
   } catch (err) {
     return withCors(json({
@@ -69,13 +70,14 @@ export async function onRequestPut() {
   return withCors(methodNotAllowed());
 }
 
-async function fetchLeadRows(env, { limit, status, topic, q }) {
+async function fetchLeadRows(env, { limit, status, topic, q, quoteFirstOnly }) {
   const params = new URLSearchParams();
   params.set("select", LEAD_SELECT);
   params.set("order", "created_at.desc");
   params.set("limit", String(limit));
   if (status && status !== "all") params.set("status", `eq.${status}`);
   if (topic && topic !== "all") params.set("topic", `eq.${topic}`);
+  if (quoteFirstOnly) params.set("source_path", "eq./preview/quote-first/");
   if (q) {
     const like = `*${q.replace(/[*,()]/g, " ").trim()}*`;
     params.set("or", `(full_name.ilike.${like},email.ilike.${like},phone.ilike.${like},service_area.ilike.${like},message.ilike.${like})`);

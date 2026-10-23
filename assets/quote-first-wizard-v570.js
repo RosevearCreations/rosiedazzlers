@@ -79,6 +79,7 @@ if(root){
     notice.textContent="Quote preview only. No request was sent. Pricing and availability are not confirmed.";
     summary.append(notice);
   }else{
+    window.dispatchEvent(new CustomEvent("rosie-quote-preview-review",{detail:null}));
     const options=WIZARD_OPTIONS_570[step];
     for(const opt of options){
       const selected=step==="extras"?state.extras.includes(opt.id):state[step]===opt.id;

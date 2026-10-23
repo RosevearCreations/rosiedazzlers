@@ -29,3 +29,4 @@ jobs:
           node scripts/quote_first_wizard_570_test.mjs
           node scripts/quote_first_guidance_613_test.mjs
           node scripts/pricing_source_parity_614_test.mjs
+          node scripts/quote_first_handoff_615_test.mjs

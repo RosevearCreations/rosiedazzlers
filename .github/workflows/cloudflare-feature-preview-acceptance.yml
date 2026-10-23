@@ -46,6 +46,7 @@ jobs:
           node scripts/quote_first_intake_573_test.mjs
           node scripts/build574_mobile_booking_regression_test.mjs
           node scripts/quote_first_guidance_613_test.mjs
+          node scripts/quote_first_handoff_615_test.mjs
 
       - name: Verify production release health and drift alerting contracts
         run: |

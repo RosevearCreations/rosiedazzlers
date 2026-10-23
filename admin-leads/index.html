@@ -66,10 +66,12 @@
         <article class="panel">
           <h2 style="margin-top:0">Structured public leads</h2>
           <p class="muted">Shows records from <code>public_inquiry_leads</code>. Use statuses to keep quote-first requests from getting lost.</p>
+          <p class="muted"><strong>Quote-first review:</strong> Use Source → Quote-first preview to find these inquiries. Verify contact permission, details and current approved catalog pricing before contacting or drafting a quote. An inquiry is not a booking, a confirmed price or marketing consent.</p>
           <div class="lead-toolbar">
             <label>Search<input id="leadSearch" type="search" placeholder="name, email, town, message" /></label>
             <label>Status<select id="leadStatus" data-option-library="lead_statuses"><option value="all">All</option><option value="new">New</option><option value="reviewing">Reviewing</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="converted">Converted</option><option value="closed">Closed</option><option value="spam">Spam</option></select></label>
             <label>Topic<select id="leadTopic"><option value="all">All</option><option value="fleet">Fleet</option><option value="maintenance">Maintenance</option><option value="gift_card">Gift card</option><option value="special">Special</option><option value="photo_estimate">Photo estimate</option><option value="general">General</option></select></label>
+            <label>Source<select id="leadSource"><option value="all">All</option><option value="quote_first">Quote-first preview</option></select></label>
             <button class="btn primary" type="button" id="leadRefresh">Refresh</button>
           </div>
           <div id="leadList" class="lead-list"><div class="muted">Loading leads…</div></div>
@@ -103,6 +105,7 @@
         leadSearch: document.getElementById('leadSearch'),
         leadStatus: document.getElementById('leadStatus'),
         leadTopic: document.getElementById('leadTopic'),
+        leadSource: document.getElementById('leadSource'),
         leadRefresh: document.getElementById('leadRefresh'),
         uploadList: document.getElementById('uploadList'),
         uploadSearch: document.getElementById('uploadSearch'),
@@ -132,7 +135,7 @@
       }
       async function loadLeads(){
         els.leadList.innerHTML = '<div class="muted">Loading leads…</div>';
-        const data = await api('/api/admin/public_inquiry_leads_list',{q:els.leadSearch.value,status:els.leadStatus.value,topic:els.leadTopic.value,limit:50});
+        const data = await api('/api/admin/public_inquiry_leads_list',{q:els.leadSearch.value,status:els.leadStatus.value,topic:els.leadTopic.value,source:els.leadSource.value,limit:50});
         const rows = data.leads || [];
         if(!rows.length){els.leadList.innerHTML='<div class="muted">No matching public leads yet.</div>';return;}
         els.leadList.innerHTML = rows.map(renderLead).join('');
@@ -140,8 +143,10 @@
       }
       function renderLead(row){
         const tone = row.status === 'converted' ? 'good' : row.status === 'spam' ? 'bad' : row.status === 'new' ? 'warn' : '';
+        const isQuoteFirst = row.source_path === '/preview/quote-first/';
         return `<article class="lead-card" data-lead-id="${esc(row.id)}">
-          <div class="lead-card__head"><div><h3 class="lead-card__title">${esc(row.full_name || 'Unnamed lead')}</h3><div class="lead-meta">${badge(row.topic)}${badge(row.status,tone)}<span>${esc(dateText(row.created_at))}</span></div></div><a class="btn ghost small" href="mailto:${esc(row.email||'')}">Email</a></div>
+          <div class="lead-card__head"><div><h3 class="lead-card__title">${esc(row.full_name || 'Unnamed lead')}</h3><div class="lead-meta">${badge(row.topic)}${badge(row.status,tone)}${isQuoteFirst?badge('Quote-first preview','warn'):''}<span>${esc(dateText(row.created_at))}</span></div></div><a class="btn ghost small" href="mailto:${esc(row.email||'')}">Email</a></div>
+          ${isQuoteFirst?'<div class="lead-field" role="note"><strong>Manual inquiry review only</strong>This customer opted into a response about this request, not marketing. Confirm their vehicle details, current prices and availability separately. No appointment or payment is authorized by this inquiry.</div>':''}
           <div class="lead-grid">
             <div class="lead-field"><strong>Email</strong>${esc(row.email || '—')}</div><div class="lead-field"><strong>Phone</strong>${esc(row.phone || '—')}</div><div class="lead-field"><strong>Area</strong>${esc(row.service_area || '—')}</div><div class="lead-field"><strong>Vehicles/Cadence</strong>${esc(row.vehicle_count || '—')} / ${esc(row.preferred_cadence || '—')}</div>
           </div>
@@ -469,7 +474,7 @@
           els.leadSearch.addEventListener(eventName,debounce(()=>loadLeads().catch((err)=>setStatus(err.message,'error'))));
           els.uploadSearch.addEventListener(eventName,debounce(()=>loadUploads().catch((err)=>setStatus(err.message,'error'))));
         });
-        [els.leadStatus,els.leadTopic].forEach((node)=>node.addEventListener('change',()=>loadLeads().catch((err)=>setStatus(err.message,'error'))));
+        [els.leadStatus,els.leadTopic,els.leadSource].forEach((node)=>node.addEventListener('change',()=>loadLeads().catch((err)=>setStatus(err.message,'error'))));
         [els.uploadStatus,els.uploadPrivacy].forEach((node)=>node.addEventListener('change',()=>loadUploads().catch((err)=>setStatus(err.message,'error'))));
         await Promise.all([loadLeads().catch((err)=>{els.leadList.innerHTML='<div class="danger-note">'+esc(err.message)+'</div>';}),loadUploads().catch((err)=>{els.uploadList.innerHTML='<div class="danger-note">'+esc(err.message)+'</div>';})]);
       }});

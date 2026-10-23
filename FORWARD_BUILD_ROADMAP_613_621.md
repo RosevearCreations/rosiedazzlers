@@ -2,9 +2,10 @@
 
 Created after the owner-approved Build 612 Standard Theme release. This is a
 **nine-build planned batch**, not a claim that future code or owner decisions
-exist. Build 613 reached verified Production GREEN. Build 614 is the current
-read-only pricing parity and owner-decision review; seven builds (615–621)
-are planned after its release. Pricing policy remains on owner HOLD.
+exist. Builds 613 and 614 reached verified Production GREEN. Build 615 provides
+quote-intake and staff-handoff code acceptance without activating live intake;
+the remaining six builds (616–621) stay queued after its Production release.
+Pricing policy and real customer inquiry activation remain on owner HOLD.
 
 | Build | Planned scope | Completion boundary |
 | --- | --- | --- |
@@ -33,6 +34,10 @@ create the next batch; do not automatically invent business acceptance.
 When Build 614 reaches exact-SHA Production GREEN, **7 queued builds** remain
 (615–621). See `BUILD614_LIVE_PRICING_SOURCE_PARITY_OWNER_REVIEW.md`: a GREEN
 diagnostic release does not resolve the financial source-of-truth discrepancy.
+
+Build 615 does not activate quote intake. After Build 615 reaches exact-SHA
+Production GREEN, **6 queued builds** remain (616–621); see
+`BUILD615_QUOTE_INTAKE_STAFF_HANDOFF_ACCEPTANCE.md` for the hold and acceptance.
 
 Every build travels through feature review if needed, `dev`, a protected
 `main` pull request, Cloudflare deployment and exact-SHA Production proof.
