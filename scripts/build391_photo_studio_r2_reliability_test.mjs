@@ -20,7 +20,7 @@ assert.match(assignment,/multi_placement_supported:true/);
 assert.match(assignment,/Before and After must use two different photos/);
 
 const list=fs.readFileSync('functions/api/admin/photo_library_list.js','utf8');
-assert.match(list,/filter\(isPhotoStudioPublicRow\)/);
+assert.match(list,/filter\(isPhotoStudioReviewableRow\)/);
 assert.match(list,/private_media_isolated:true/);
 assert.match(list,/before_after_pairs:Object\.values\(beforeAfterPairs\)/);
 assert.match(list,/r2_scan_per_load:false/);

@@ -34,3 +34,4 @@ jobs:
           python scripts/media_photo_studio_proof_operations_check.py
           node scripts/media_photo_studio_proof_operations_test.mjs
           node scripts/photo_studio_autosave_recovery_616_test.mjs
+          node scripts/r2_media_sync_publication_617_test.mjs
