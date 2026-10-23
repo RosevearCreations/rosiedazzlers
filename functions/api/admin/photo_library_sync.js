@@ -1,11 +1,11 @@
 // Historical Build 258 compatibility token: build:258
 // Historical Build 253 compatibility token: build:253
 // Build 260: subrequest-safe, prefix-bounded R2 synchronization.
-// Build 408: truthful bucket/environment identity, continuation and retry evidence.
+// Build 617: bounded atomic provenance reconciliation, owner review and truthful cursor recovery.
 import { requireStaffAccess, json } from '../_lib/staff-auth.js';
 import { APPROVED_IMAGE_PREFIXES, photoSchemaStatus, syncR2IntoLibrary } from '../_lib/photo-library.js';
 
-const BUILD=408;
+const BUILD=617;
 const EXPECTED_BINDINGS=['ROSIE_PUBLIC_ASSETS_BUCKET','PUBLIC_ASSETS_BUCKET','R2_PUBLIC_ASSETS_BUCKET','ASSETS_BUCKET'];
 function bucketIdentity(env){
   const bindingName=EXPECTED_BINDINGS.find((name)=>env?.[name])||null;
@@ -30,12 +30,13 @@ export async function onRequestPost({request,env}){
     if(!APPROVED_IMAGE_PREFIXES.includes(requested))return json({ok:false,build:BUILD,error:'That R2 prefix is not approved for the public Photo Studio.',approved_prefixes:APPROVED_IMAGE_PREFIXES,bucket_identity:identity},400);
     const cursor=String(body?.cursor||'').trim().slice(0,2048);
     const result=await syncR2IntoLibrary(env,access.actor?.email||'staff',{prefixes:[requested],cursor});
-    const resultStatus=result?.bucket_ready!==true||result?.db_ready!==true?'unavailable':result?.has_more?'partial':'complete';
+    const resultStatus=result?.bucket_ready!==true||result?.db_ready!==true?'unavailable':result?.review_required===true?'review_required':result?.has_more?'partial':'complete';
     return json({
-      ok:resultStatus!=='unavailable',build:BUILD,mode:'single_prefix_page',result_status:resultStatus,
-      partial_result:resultStatus==='partial',approved_prefixes:APPROVED_IMAGE_PREFIXES,bucket_identity:identity,
-      retry:{prefix:requested,cursor:String(result?.next_cursor||''),same_request_safe:true},...result
-    },resultStatus==='unavailable'?503:200);
+      ok:resultStatus==='partial'||resultStatus==='complete',build:BUILD,mode:'single_prefix_page',result_status:resultStatus,
+      partial_result:resultStatus!=='complete',approved_prefixes:APPROVED_IMAGE_PREFIXES,bucket_identity:identity,
+      error:resultStatus==='review_required'?'Concurrent edits or duplicate registration require staff review; do not advance the cursor.':resultStatus==='unavailable'?'R2 synchronization outcome was not confirmed. Review the managed library before deliberately resuming the same page.':null,
+      retry:{prefix:requested,cursor:resultStatus==='unavailable'||resultStatus==='review_required'?cursor:String(result?.next_cursor||''),manual_review_required:resultStatus==='unavailable'||resultStatus==='review_required',same_request_safe:false},...result
+    },resultStatus==='unavailable'?503:resultStatus==='review_required'?409:200);
   }catch(err){return json({ok:false,build:BUILD,result_status:'unavailable',bucket_identity:identity,error:err?.message||'Could not sync the R2 photo library.'},500);}
 }
 export async function onRequestGet(){return json({ok:false,build:BUILD,error:'POST required.'},405);}

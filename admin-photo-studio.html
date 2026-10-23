@@ -36,6 +36,7 @@
       <section class="panel">
         <div class="photo-toolbar">
           <button class="btn primary" id="syncR2" type="button">Sync approved R2 photos</button>
+          <button class="btn ghost" id="resumeR2" type="button" hidden>Continue paused sync after review</button>
           <button class="btn ghost" id="refreshLibrary" type="button">Refresh view</button>
           <button class="btn ghost" id="downloadUnassignedTargets" type="button">Download unassigned placements CSV</button>
           <button class="btn ghost" id="printUnassignedTargets" type="button">Print unassigned placements</button>
@@ -43,6 +44,8 @@
           <label>Folder<select id="folderFilter"><option value="">All folders</option></select></label>
           <label>Review<select id="reviewFilter"><option value="">All photos</option><option value="missing-alt">Missing alt text</option><option value="assigned">Assigned</option><option value="unassigned">Unassigned</option><option value="not-saved">R2 only / not synced</option><option value="missing-r2">DB row / R2 missing</option></select></label>
         </div>
+        <div class="status-box" id="syncReconciliation" role="status" aria-live="polite" hidden></div>
+        <p class="field-help">“R2 live” below means a managed R2 reference exists; ordinary library loads do not verify each object. Newly synchronized photos stay under review until explicit rights/consent approval.</p>
         <div class="photo-stats" id="photoStats"></div><div class="status-box" id="placementAuditNote" style="margin-top:0"><strong>Manual placement audit:</strong> a location listed as unassigned may still show its authored/default or automatic fallback image; it simply has no deliberate Photo Studio override yet.</div>
         <details class="panel" style="margin:10px 0 14px"><summary><strong>Upload or replace a public photo</strong></summary><form id="uploadForm" class="upload-grid" style="margin-top:12px"><label>R2 folder<select id="uploadFolder" name="folder"></select></label><label>Filename<input id="uploadFilename" name="filename" placeholder="complete-detail-mid-size.png" required><span class="field-help">Descriptive filenames help humans and search engines understand the image.</span></label><label>Image file<input id="uploadFile" name="file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" required></label><button class="btn primary" type="submit">Upload / replace</button></form></details>
         <div class="status-box" style="margin:0 0 12px"><strong>Click a photo to edit it.</strong> The editor opens immediately on the right. Selecting a photo does not change the website; choose a destination and press <strong>Use this image here</strong> only when you want to replace that one location.</div>
@@ -76,7 +79,7 @@
         </div>
         <div class="editor-grid">
           <label>Display name<input id="editLabel"><span class="field-help">Internal/admin-friendly image name.</span></label>
-          <label>Status<select id="editStatus"><option value="active">Active</option><option value="needs_review">Needs review</option><option value="archived">Archived metadata</option></select></label>
+          <label>Status<select id="editStatus"><option value="active">Active (eligible for publication)</option><option value="needs_review">Needs review (not public)</option><option value="archived">Archived metadata</option></select></label>
           <label class="span2">Alt text<textarea id="editAlt" rows="2" maxlength="300" placeholder="Describe what is visible and relevant on the page."></textarea><span class="field-help">For meaningful images, describe the visible subject in context. Decorative images may use empty alt text.</span><span class="counter" id="altCount"></span></label>
           <label>SEO/image title<input id="editSeoTitle" maxlength="240"></label>
           <label>Focal point<select id="editFocal"><option>center</option><option>top</option><option>bottom</option><option>left</option><option>right</option><option>top-left</option><option>top-right</option><option>bottom-left</option><option>bottom-right</option></select></label>
@@ -86,6 +89,7 @@
           <label>Recommended size<input id="editRecommended" placeholder="1600×1000 landscape"></label>
           <label>Attribution/source<input id="editAttribution" placeholder="Rosie Dazzlers original photo"></label>
           <label class="span2">License / consent notes<textarea id="editLicense" rows="2" maxlength="600" placeholder="Public-use/ownership note; never place private customer details here."></textarea></label>
+          <label class="span2"><input id="approvePublicUse" type="checkbox" style="width:auto"> I have verified public-use rights and any required customer consent before changing a review-held photo to Active.</label>
           <label class="span2"><input id="editDecorative" type="checkbox" style="width:auto"> Decorative image — use empty alt text</label>
         </div>
         <div class="small-actions" style="margin-top:10px"><button class="btn primary" id="saveMetadata" type="button">Save photo metadata</button><button class="btn ghost" id="suggestAlt" type="button">Suggest alt from name</button><button class="btn ghost" id="copyUrl" type="button">Copy public URL</button></div>
@@ -124,7 +128,7 @@
 <script type="module">
 const $=(s)=>document.querySelector(s);const esc=(v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const FOLDERS=['packages/','landing_pages/','landing-pages/','CarPhotos/','addons/','brand/','gallery/','products/'];
-let state={photos:[],assignments:[],targets:[],selected:null,schemaReady:false,metadataDirty:false,recoverySavedPhoto:null};
+let state={photos:[],assignments:[],targets:[],selected:null,schemaReady:false,metadataDirty:false,recoverySavedPhoto:null,syncCheckpoint:null,syncBusy:false};
 function status(message,type=''){const box=$('#pageStatus');box.hidden=!message;box.textContent=message||'';box.className='status-box '+(type||'');}
 // Build 262 CPU stabilization: interactive Photo Studio requests do not auto-retry 5xx/CPU failures.
 // A failed write may have partially completed; refresh/review state before deliberately retrying.
@@ -160,14 +164,14 @@ function clearAssignmentChoice(){
 }
 // Historical Build255 guard: clearAssignmentChoice();updateAltCount()
 function showEditor(photo){
-  const changed=state.selected?.r2_key!==photo.r2_key;state.selected=photo;state.metadataDirty=false;state.recoverySavedPhoto=null;$('#metadataRecovery').hidden=true;$('#photoEditor').hidden=false;$('#editorHeading').textContent=photo.label||photo.filename||'Photo';$('#editorPreview').src=photoDisplayUrl(photo);$('#editorPreview').style.objectPosition=photo.focal_point||'center';$('#editorTechnical').textContent=`${photo.r2_key||'No R2 key'} · ${photo.mime_type||'image'} · ${photo.width||'—'}×${photo.height||'—'} · ${prettyBytes(photo.byte_size)}`;$('#editLabel').value=photo.label||'';$('#editStatus').value=photo.source_status||'active';$('#editAlt').value=photo.alt_text||'';$('#editSeoTitle').value=photo.seo_title||'';$('#editCaption').value=photo.caption||'';$('#editTags').value=(photo.tags||[]).join(', ');$('#editUsage').value=(photo.usage_contexts||[]).join(', ');$('#editRecommended').value=photo.recommended_size||'';$('#editFocal').value=photo.focal_point||'center';$('#editAttribution').value=photo.attribution||'';$('#editLicense').value=photo.license_notes||'';$('#editDecorative').checked=photo.decorative===true;$('#editFolder').value=photo.r2_prefix||FOLDERS[0];$('#editFilename').value=photo.filename||'';if(changed)clearAssignmentChoice();renderTargetSelect(changed?'':$('#targetSelect').value);updateAltCount();renderAssignments();updateSelectedCardState();const deleteBtn=$('#deletePhoto');const deleteHelp=$('#deletePhotoHelp');const assignedCount=selectedAssignments().length;deleteBtn.disabled=!photo.id||assignedCount>0;deleteHelp.textContent=!photo.id?'Sync this R2 photo into the managed library before deleting it.':(assignedCount?`Remove ${assignedCount} active assignment(s) before deletion can be attempted.`:'No active assignments are shown. The server will perform a final active-assignment check before deletion; inactive placement history for this deleted file is cleaned up safely.');requestAnimationFrame(()=>$('#targetSelect').focus({preventScroll:true}));
+  const changed=state.selected?.r2_key!==photo.r2_key;state.selected=photo;state.metadataDirty=false;state.recoverySavedPhoto=null;$('#metadataRecovery').hidden=true;$('#photoEditor').hidden=false;$('#editorHeading').textContent=photo.label||photo.filename||'Photo';$('#editorPreview').src=photoDisplayUrl(photo);$('#editorPreview').style.objectPosition=photo.focal_point||'center';$('#editorTechnical').textContent=`${photo.r2_key||'No R2 key'} · ${photo.mime_type||'image'} · ${photo.width||'—'}×${photo.height||'—'} · ${prettyBytes(photo.byte_size)}`;$('#editLabel').value=photo.label||'';$('#editStatus').value=photo.source_status||'active';$('#editAlt').value=photo.alt_text||'';$('#editSeoTitle').value=photo.seo_title||'';$('#editCaption').value=photo.caption||'';$('#editTags').value=(photo.tags||[]).join(', ');$('#editUsage').value=(photo.usage_contexts||[]).join(', ');$('#editRecommended').value=photo.recommended_size||'';$('#editFocal').value=photo.focal_point||'center';$('#editAttribution').value=photo.attribution||'';$('#editLicense').value=photo.license_notes||'';$('#approvePublicUse').checked=false;$('#editDecorative').checked=photo.decorative===true;$('#editFolder').value=photo.r2_prefix||FOLDERS[0];$('#editFilename').value=photo.filename||'';if(changed)clearAssignmentChoice();renderTargetSelect(changed?'':$('#targetSelect').value);updateAltCount();renderAssignments();updateSelectedCardState();const deleteBtn=$('#deletePhoto');const deleteHelp=$('#deletePhotoHelp');const assignedCount=selectedAssignments().length;deleteBtn.disabled=!photo.id||assignedCount>0;deleteHelp.textContent=!photo.id?'Sync this R2 photo into the managed library before deleting it.':(assignedCount?`Remove ${assignedCount} active assignment(s) before deletion can be attempted.`:'No active assignments are shown. The server will perform a final active-assignment check before deletion; inactive placement history for this deleted file is cleaned up safely.');requestAnimationFrame(()=>$('#targetSelect').focus({preventScroll:true}));
 }
-const METADATA_FIELDS=['editLabel','editStatus','editAlt','editSeoTitle','editCaption','editTags','editUsage','editRecommended','editFocal','editAttribution','editLicense','editDecorative'];
-function metadataPayload(){return {id:state.selected?.id,expected_updated_at:state.selected?.updated_at,label:$('#editLabel').value,source_status:$('#editStatus').value,alt_text:$('#editAlt').value,seo_title:$('#editSeoTitle').value,caption:$('#editCaption').value,tags:$('#editTags').value,usage_contexts:$('#editUsage').value,recommended_size:$('#editRecommended').value,focal_point:$('#editFocal').value,attribution:$('#editAttribution').value,license_notes:$('#editLicense').value,decorative:$('#editDecorative').checked};}
+const METADATA_FIELDS=['editLabel','editStatus','editAlt','editSeoTitle','editCaption','editTags','editUsage','editRecommended','editFocal','editAttribution','editLicense','editDecorative','approvePublicUse'];
+function metadataPayload(){return {id:state.selected?.id,expected_updated_at:state.selected?.updated_at,expected_source_status:state.selected?.source_status,publication_approval:$('#approvePublicUse').checked,label:$('#editLabel').value,source_status:$('#editStatus').value,alt_text:$('#editAlt').value,seo_title:$('#editSeoTitle').value,caption:$('#editCaption').value,tags:$('#editTags').value,usage_contexts:$('#editUsage').value,recommended_size:$('#editRecommended').value,focal_point:$('#editFocal').value,attribution:$('#editAttribution').value,license_notes:$('#editLicense').value,decorative:$('#editDecorative').checked};}
 function recoveryDraft(){return JSON.stringify({photo_key:state.selected?.r2_key,original_revision:state.selected?.updated_at,fields:metadataPayload(),copied_at:new Date().toISOString()},null,2);}
 function preserveRecovery(message){state.metadataDirty=true;state.recoverySavedPhoto=null;$('#loadSavedPhoto').disabled=true;$('#metadataRecovery').hidden=false;$('#metadataRecoveryMessage').textContent=`${message} No automatic retry or overwrite will occur. Check the saved version before deliberately trying again.`;$('#metadataDraftExport').value=recoveryDraft();status(message,'error');}
 function allowDiscardDraft(){return !state.metadataDirty||confirm('Unsaved photo metadata is still in the editor. Discard those edits? Copy them from the recovery panel first if needed.');}
-for(const id of METADATA_FIELDS){const field=$('#'+id);field.addEventListener(id==='editDecorative'||field.tagName==='SELECT'?'change':'input',()=>{state.metadataDirty=true;if(!$('#metadataRecovery').hidden)$('#metadataDraftExport').value=recoveryDraft();});}
+for(const id of METADATA_FIELDS){const field=$('#'+id);field.addEventListener(field.type==='checkbox'||field.tagName==='SELECT'?'change':'input',()=>{state.metadataDirty=true;if(!$('#metadataRecovery').hidden)$('#metadataDraftExport').value=recoveryDraft();});}
 window.addEventListener('beforeunload',event=>{if(!state.metadataDirty)return;event.preventDefault();event.returnValue='';});
 function updateAltCount(){$('#altCount').textContent=`${$('#editAlt').value.length}/300 characters`;}
 function targetGroupLabel(type){return ({package_card:'Principal package cards',addon_card:'Service and add-on cards',service_hub:'Services hub cards',landing_hero:'Landing-page hero images',landing_gallery:'Landing-page gallery images',proof_image:'Review / proof images',faq_card:'FAQ access cards',gift_card:'Gift card visuals',gallery_evidence:'Gallery evidence',gallery_technique:'Gallery technique',gallery_efficiency:'Gallery efficiency',before_after_pair:'Before & After pairs',home_service_card:'Home service cards',home_location_card:'Home location cards',site_brand:'Site logo / banners / reviews / default background',site_asset:'Shared website images / charts',page_background:'Optional page backgrounds',maintenance_page:'Maintenance-plan images',admin_visual:'Admin visuals'})[type]||'Other website locations';}
@@ -202,29 +206,51 @@ async function loadMediaProofOps(){
   finally{if(button)button.disabled=false;}
 }
 async function loadLibrary(keep=true){if(!allowDiscardDraft())return false;status('Loading managed photo library…');const data=await api('/api/admin/photo_library_list',null,'GET');state.photos=data.photos||[];state.assignments=data.assignments||[];renderTargetSelect($('#targetSelect').value);state.schemaReady=data.schema?.ready===true;$('#migrationNotice').hidden=state.schemaReady;renderStats(data.stats||{});const params=new URLSearchParams(location.search);const requestedId=params.get('photo_id');const requestedKey=params.get('r2_key');const currentKey=keep?state.selected?.r2_key:null;state.selected=currentKey?state.photos.find(p=>p.r2_key===currentKey)||null:null;if(!state.selected&&requestedId)state.selected=state.photos.find(p=>String(p.id||'')===requestedId)||null;if(!state.selected&&requestedKey)state.selected=state.photos.find(p=>String(p.r2_key||'')===requestedKey)||null;renderGrid();if(state.selected)showEditor(state.selected);else $('#photoEditor').hidden=true;const folders=[...new Set(state.photos.map(p=>p.r2_prefix).filter(Boolean))];for(const f of folders)if(!FOLDERS.includes(f))FOLDERS.push(f);fillFolderSelects();status(data.warnings?.length?`Loaded with warning: ${data.warnings[0]}`:'Managed photo library loaded. Use Sync only when you have added or removed files directly in R2.',data.warnings?.length?'':'success');return true;}
-async function syncR2(keepSelection=false,onlyPrefix=''){
-  if(!allowDiscardDraft())return null;
-  const prefixes=onlyPrefix?[onlyPrefix]:[...FOLDERS];
-  const totals={scanned:0,inserted:0,refreshed:0,unchanged:0,batches:0,pages:0,warnings:[]};
-  const button=$('#syncR2');if(button){button.disabled=true;button.textContent='Syncing…';}
+function syncReviewNote(message,paused=false){const note=$('#syncReconciliation');note.hidden=false;note.textContent=message;note.className='status-box'+(paused?' error':'');$('#resumeR2').hidden=!paused;}
+async function syncR2(keepSelection=false,onlyPrefix='',resume=false){
+  if(state.syncBusy||!allowDiscardDraft())return null;
+  // An uncertain previous page is never automatically retried or silently skipped.
+  if(state.syncCheckpoint&&!resume&&!confirm('A previous R2 sync was paused. Start a fresh scan and discard its cursor checkpoint? Previously saved photo rows will not be rolled back.'))return null;
+  const prefixes=resume?[...(state.syncCheckpoint?.prefixes||[])]:onlyPrefix?[onlyPrefix]:[...FOLDERS];
+  if(!prefixes.length)return null;
+  const totals=resume?state.syncCheckpoint.totals:{scanned:0,inserted:0,refreshed:0,unchanged:0,conflicts:0,batches:0,pages:0,warnings:[]};
+  const startIndex=resume?state.syncCheckpoint.index:0;
+  const startCursor=resume?state.syncCheckpoint.cursor:'';
+  const button=$('#syncR2');state.syncBusy=true;if(button){button.disabled=true;button.textContent='Syncing…';}$('#resumeR2').disabled=true;
   try{
-    for(let i=0;i<prefixes.length;i++){
-      const prefix=prefixes[i];let cursor='';let page=0;
+    for(let i=startIndex;i<prefixes.length;i++){
+      const prefix=prefixes[i];let cursor=i===startIndex?startCursor:'';let page=0;
       do{
-        page+=1;totals.pages+=1;
+        page+=1;
+        state.syncCheckpoint={prefixes,index:i,cursor,totals};
         status(`Syncing approved R2 photos ${i+1}/${prefixes.length}: ${prefix} · page ${page}…`);
-        const data=await api('/api/admin/photo_library_sync',{prefix,cursor});
+        let data;
+        try{data=await api('/api/admin/photo_library_sync',{prefix,cursor});}
+        catch(err){
+          const checkpoint=state.syncCheckpoint;
+          syncReviewNote(`Sync paused at ${checkpoint.prefixes[checkpoint.index]}, ${checkpoint.cursor?'continuation page':'start of folder'}. ${err.message} Earlier completed pages may be saved. Review managed metadata and public placements before manually continuing.`,true);
+          status('R2 sync is PAUSED — publication is not fully reconciled. No automatic retry.', 'error');
+          return {...totals,paused:true};
+        }
+        totals.pages+=1;
         for(const key of ['scanned','inserted','refreshed','unchanged','batches'])totals[key]+=Number(data[key]||0);
         if(Array.isArray(data.warnings))totals.warnings.push(...data.warnings);
+        if(data.conflicts||data.reconciliation_complete===false){
+          state.syncCheckpoint={prefixes,index:i,cursor,totals};
+          syncReviewNote(`R2 sync paused: ${Number(data.conflicts||0)} record conflicts in ${prefix}. No staff metadata was overwritten. Inspect the managed library before manually retrying this page. Newly imported images require explicit publication review.`,true);
+          return {...totals,paused:true};
+        }
         cursor=String(data.next_cursor||'');
-        if(page>=100&&cursor){totals.warnings.push(`${prefix} still has more than 100 sync pages. Run Sync again to continue safely.`);break;}
+        if(page>=100&&cursor){state.syncCheckpoint={prefixes,index:i,cursor,totals};syncReviewNote(`Sync paused after 100 pages in ${prefix}. Continue from the saved cursor after reviewing progress.`,true);return {...totals,paused:true};}
       }while(cursor);
     }
+    state.syncCheckpoint=null;$('#resumeR2').hidden=true;
     const warning=[...new Set(totals.warnings.filter(Boolean))][0]||'';
-    status(`R2 sync complete in ${totals.pages} bounded request${totals.pages===1?'':'s'}. ${totals.scanned} scanned; ${totals.inserted} new; ${totals.refreshed} replaced/changed; ${totals.unchanged} unchanged.${warning?' '+warning:''}`,warning?'':'success');
+    syncReviewNote(`All ${prefixes.length} selected folder(s) scanned: ${totals.pages} bounded requests, ${totals.inserted} new images held for review, ${totals.refreshed} R2 provenance updates, ${totals.unchanged} unchanged. Public placements were not changed. Deleted R2 objects and customer consent cannot be inferred from this listing.`);
     await loadLibrary(keepSelection);
+    status(`R2 reconciliation complete for selected folders. ${totals.inserted} newly discovered photos require staff review before publication.${warning?' '+warning:''}`,warning?'':'success');
     return totals;
-  }finally{if(button){button.disabled=false;button.textContent='Sync approved R2 photos';}}
+  }finally{state.syncBusy=false;if(button){button.disabled=false;button.textContent='Sync approved R2 photos';}$('#resumeR2').disabled=false;}
 }
 async function ensureSelectedManaged(){if(state.selected?.id)return state.selected;if(!state.selected?.r2_key)throw new Error('Select a photo first.');const key=state.selected.r2_key;await syncR2(true,state.selected.r2_prefix||'');const managed=state.photos.find(p=>p.r2_key===key);if(!managed?.id)throw new Error('This R2 photo could not be registered in the managed library. Check the Build 253 migration and try again.');state.selected=managed;showEditor(managed);return managed;}
 function counterpartTargetKey(target){if(target?.target_type!=='before_after_pair')return'';if(/:before$/.test(target.target_key))return target.target_key.replace(/:before$/,':after');if(/:after$/.test(target.target_key))return target.target_key.replace(/:after$/,':before');return'';}
@@ -235,6 +261,7 @@ $('#resetTarget').addEventListener('click',async()=>{const key=$('#targetKey').v
 $('#assignmentList').addEventListener('click',async e=>{const key=e.target.closest('[data-remove-assignment]')?.getAttribute('data-remove-assignment');if(!key)return;if(!confirm(`Reset ${targetLabelForAssignment(state.assignments.find(a=>a.target_key===key)||{target_key:key})} to its authored/default image? This removes only the explicit Photo Studio override.`))return;try{await api('/api/admin/photo_assignment_save',{action:'remove',target_key:key});status('Location reset to its authored/default image.','success');await loadLibrary(true);}catch(err){status(err.message,'error');}});
 let gridRenderRaf=0;function scheduleGridRender(){if(gridRenderRaf)cancelAnimationFrame(gridRenderRaf);gridRenderRaf=requestAnimationFrame(()=>{gridRenderRaf=0;renderGrid();});}for(const id of ['photoSearch','folderFilter','reviewFilter'])$(id.startsWith('#')?id:'#'+id).addEventListener(id==='photoSearch'?'input':'change',scheduleGridRender);
 $('#refreshLibrary').addEventListener('click',()=>loadLibrary(true).catch(err=>status(err.message,'error')));$('#refreshMediaProofOps').addEventListener('click',()=>loadMediaProofOps());$('#syncR2').addEventListener('click',()=>syncR2(false).catch(err=>status(err.message,'error')));$('#downloadUnassignedTargets').addEventListener('click',downloadUnassignedPlacementCsv);$('#printUnassignedTargets').addEventListener('click',printUnassignedPlacementList);$('#closeEditor').addEventListener('click',()=>{if(!allowDiscardDraft())return;$('#photoEditor').hidden=true;state.selected=null;state.metadataDirty=false;$('#metadataRecovery').hidden=true;clearAssignmentChoice();updateSelectedCardState();});$('#editAlt').addEventListener('input',updateAltCount);$('#editFocal').addEventListener('change',()=>{$('#editorPreview').style.objectPosition=$('#editFocal').value;});$('#editDecorative').addEventListener('change',()=>{if($('#editDecorative').checked)$('#editAlt').value='';state.metadataDirty=true;updateAltCount();});
+$('#resumeR2').addEventListener('click',()=>syncR2(false,'',true).catch(err=>status(err.message,'error')));
 $('#saveMetadata').addEventListener('click',async()=>{
   if(!state.selected)return;
   const button=$('#saveMetadata');if(button.disabled)return;button.disabled=true;

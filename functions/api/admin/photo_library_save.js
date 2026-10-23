@@ -1,7 +1,7 @@
 // Build 616: bounded recovery and version-checked Photo Studio metadata writes.
 import { requireStaffAccess, serviceHeaders, json } from '../_lib/staff-auth.js';
 import { cleanStringList, normalizeAdminPhoto, safeText } from '../_lib/photo-library.js';
-const BUILD=616;
+const BUILD=617;
 const validRevision=(value)=>typeof value==='string'&&value.length<=80&&/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d+)?(?:Z|[+-]\d\d:\d\d)$/.test(value)&&Number.isFinite(Date.parse(value));
 const upstreamStatus=(response)=>[429,502,503,504].includes(response.status)?503:502;
 
@@ -29,6 +29,10 @@ export async function onRequestPost({request,env}){
   // The client must provide the revision observed on its last successful load.
   // A PostgREST conditional PATCH applies the revision check atomically in the database.
   if(!validRevision(body.expected_updated_at))return json({ok:false,build:BUILD,code:'revision_required',recovery:'review_saved_version',error:'No verified saved revision was supplied. Review the saved photo before saving.'},428);
+  const expectedStatus=String(body.expected_source_status||'');
+  const desiredStatus=String(body.source_status||'');
+  if(!['active','needs_review','archived'].includes(expectedStatus)||!['active','needs_review','archived'].includes(desiredStatus))return json({ok:false,build:BUILD,code:'source_status_required',recovery:'review_saved_version',error:'A verified prior and desired publication status is required. Review the saved photo before retrying.'},428);
+  if(expectedStatus!=='active'&&desiredStatus==='active'&&(!body.publication_approval||!safeText(body.license_notes,600)))return json({ok:false,build:BUILD,code:'public_use_approval_required',error:'Before publishing a review-held photo, explicitly confirm verified public-use rights/consent and enter a non-private license/consent note.'},409);
   try{
     const decorative=body.decorative===true;
     const altText=safeText(body.alt_text,300);
@@ -44,11 +48,11 @@ export async function onRequestPost({request,env}){
       decorative,
       attribution:safeText(body.attribution,300)||null,
       license_notes:safeText(body.license_notes,600)||null,
-      source_status:['active','needs_review','archived'].includes(String(body.source_status||''))?String(body.source_status):'active',
+      source_status:desiredStatus,
       updated_at:new Date().toISOString(),
       updated_by:access.actor?.email||'staff'
     };
-    const params=new URLSearchParams({id:`eq.${id}`,updated_at:`eq.${body.expected_updated_at}`,select:'*'});
+    const params=new URLSearchParams({id:`eq.${id}`,updated_at:`eq.${body.expected_updated_at}`,source_status:`eq.${expectedStatus}`,select:'*'});
     const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?${params.toString()}`,{method:'PATCH',headers:{...serviceHeaders(env),Prefer:'return=representation'},body:JSON.stringify(payload)});
     if(!response.ok)return json({ok:false,build:BUILD,code:'save_unconfirmed',recovery:'review_saved_version',error:'Photo metadata save was not confirmed. Keep your edits and review the saved version before choosing to retry.'},upstreamStatus(response));
     const rows=await response.json();

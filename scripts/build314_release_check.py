@@ -27,15 +27,15 @@ delete = read("functions/api/admin/photo_library_delete.js")
 studio = read("admin-photo-studio.html")
 
 # Cloudflare/R2 safety: the route requires a single approved prefix, and the
-# helper caps that prefix to one 100-object R2 page. Ordinary Photo Studio loads
+# helper caps that prefix to one 20-object R2 page. Ordinary Photo Studio loads
 # remain database-only.
 require(sync, "single_prefix_page", "single-prefix sync route")
-require(photo_lib, "limitPerPrefix:100,maxPerPrefix:100", "100-object R2 sync page")
+require(photo_lib, "limitPerPrefix:perPrefixLimit,maxPerPrefix:perPrefixLimit", "bounded R2 sync page")
 require(photo_lib, "maxListPagesPerPrefix:1", "single R2 list page per Worker invocation")
 require(photo_lib, "loadMediaLibraryRowsByR2Keys", "bounded sync reconciliation")
 require(listing, "r2_scan_per_load:false", "database-only ordinary Photo Studio load")
 reject(listing, "listApprovedR2Images", "ordinary library load")
-require(studio, "R2 sync complete in ${totals.pages} bounded request", "bounded sync UI reporting")
+require(studio, "R2 reconciliation complete for selected folders", "bounded sync UI reporting")
 
 # Assignment tracking is carried on each photo so deletion/editor views do not
 # have to guess whether a photo is in use.
