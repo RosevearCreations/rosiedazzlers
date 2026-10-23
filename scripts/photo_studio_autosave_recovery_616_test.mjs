@@ -9,7 +9,7 @@ const env={SUPABASE_URL:'https://database.invalid',SUPABASE_SERVICE_ROLE_KEY:'te
 const headers={'x-admin-password':'test-only','content-type':'application/json'};
 const request=(body={})=>new Request('https://rosiedazzlers.ca/api/admin/photo_library_save',{method:'POST',headers,body:JSON.stringify(body)});
 const getRequest=()=>new Request('https://rosiedazzlers.ca/api/admin/photo_library_save?id=photo-123',{headers});
-const input={id:'photo-123',expected_updated_at:REV,label:'Unconfirmed photo edit',alt_text:'Customer vehicle interior detailing'};
+const input={id:'photo-123',expected_updated_at:REV,expected_source_status:'active',source_status:'active',label:'Unconfirmed photo edit',alt_text:'Customer vehicle interior detailing'};
 const originalFetch=globalThis.fetch;
 let calls=[];
 const mockFetch=(handler)=>{calls=[];globalThis.fetch=async(url,options={})=>{calls.push({url:String(url),options});return handler(String(url),options);};};
@@ -30,6 +30,7 @@ try{
   const params=new URL(calls[0].url).searchParams;
   assert.equal(params.get('updated_at'),`eq.${REV}`,'The DB—not browser—enforces the prior revision');
   assert.equal(params.get('id'),'eq.photo-123');
+  assert.equal(params.get('source_status'),'eq.active','Publication status must also be version-checked');
   assert.match(calls[0].options.headers.Prefer,/return=representation/);
 
   mockFetch(()=>jsonResponse({error:'service unavailable'},503));

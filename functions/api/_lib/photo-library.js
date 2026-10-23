@@ -285,19 +285,25 @@ export function normalizeAdminPhoto(row={}){
 // New-photo metadata safety formerly seeded: alt_text:null caption:null
 // Historical Build 257 guard token: Prefer:'return=minimal'
 export async function syncR2IntoLibrary(env, actorEmail='staff', {prefixes=APPROVED_IMAGE_PREFIXES,cursor=''}={}){
-  // Build 260: one sync invocation must stay comfortably below Workers Free external-subrequest limits.
-  // R2 listing is bounded, and Supabase writes are batched as upserts instead of one PATCH per refreshed photo.
+  // Build 617: bounded reconcile; never upsert stale copies of staff-owned metadata.
+  // Existing asset changes use an atomic revision/etag conditional PATCH, while new files
+  // are insert-if-absent and require explicit owner review before website publication.
   const requestedPrefixes=[...new Set((Array.isArray(prefixes)?prefixes:APPROVED_IMAGE_PREFIXES).filter((prefix)=>APPROVED_IMAGE_PREFIXES.includes(prefix)))];
   const singlePrefix=requestedPrefixes.length===1?requestedPrefixes[0]:'';
   const startCursors=singlePrefix&&cursor?{[singlePrefix]:safeText(cursor,2048)}:{};
-  // A Build 260 sync page uses one R2 list call and at most 100 approved objects. The browser follows
-  // next_cursor in a new HTTP request, so an arbitrarily large folder never becomes one Worker invocation.
-  const live = await listApprovedR2Images(env,{limitPerPrefix:100,maxPerPrefix:100,maxTotal:Math.min(800,Math.max(100,requestedPrefixes.length*100)),includeMetadata:false,prefixes:requestedPrefixes,startCursors,maxListPagesPerPrefix:1});
+  // At most 20 image writes + one lookup + one R2 list + auth/schema work per invocation.
+  // The cursor always represents an entire R2 listing page, never a partially consumed batch.
+  const perPrefixLimit=20;
+  const live = await listApprovedR2Images(env,{limitPerPrefix:perPrefixLimit,maxPerPrefix:perPrefixLimit,maxTotal:Math.max(perPrefixLimit,requestedPrefixes.length*perPrefixLimit),includeMetadata:false,prefixes:requestedPrefixes,startCursors,maxListPagesPerPrefix:1});
   const nextCursor=singlePrefix?safeText(live.next_cursors?.[singlePrefix]||'',2048):'';
-  const summary=()=>({bucket_ready:live.bucket_ready===true,scanned:Number(live.images?.length||0),prefixes:requestedPrefixes,next_cursor:nextCursor,has_more:Boolean(nextCursor),warnings:[...(live.warnings||[])]});
-  if (!live.bucket_ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, unchanged:0, batches:0};
+  const warnings=[...(live.warnings||[])];
+  const summary=()=>({bucket_ready:live.bucket_ready===true,scanned:Number(live.images?.length||0),prefixes:requestedPrefixes,next_cursor:nextCursor,has_more:Boolean(nextCursor),warnings:[...warnings],retry_cursor:safeText(cursor,2048),publications_activated:0,consent_inferred:false,auto_retry:false});
+  if (!live.bucket_ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, unchanged:0, conflicts:0, batches:0};
+  if(warnings.some((warning)=>/^Could not list /i.test(warning))){
+    return {...summary(),db_ready:false,inserted:0,refreshed:0,unchanged:0,conflicts:0,batches:0,warnings:[...warnings,'R2 listing is incomplete; retry the same cursor only after operator review.']};
+  }
   const existing = await loadMediaLibraryRowsByR2Keys(env,(live.images||[]).map((row)=>row.r2_key));
-  if (!existing.ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, unchanged:0, batches:0, warnings:[...summary().warnings, existing.warning].filter(Boolean)};
+  if (!existing.ready) return {...summary(), db_ready:false, inserted:0, refreshed:0, unchanged:0, conflicts:0, batches:0, warnings:[...warnings, existing.warning].filter(Boolean)};
   const existingByKey = new Map();
   const existingByUrl = new Map();
   for(const row of existing.rows||[]){
@@ -307,8 +313,9 @@ export async function syncR2IntoLibrary(env, actorEmail='staff', {prefixes=APPRO
     if(url)existingByUrl.set(url,row);
   }
   const now=new Date().toISOString();
-  const rows=[];
-  let inserted=0, refreshed=0, unchanged=0;
+  const inserts=[];
+  const refreshes=[];
+  let inserted=0, refreshed=0, unchanged=0, conflicts=0, batches=0;
   for(const row of live.images||[]){
     const current=existingByKey.get(row.r2_key)||existingByUrl.get(row.media_url)||null;
     const oldEtag=String(current?.r2_etag||'');
@@ -318,55 +325,64 @@ export async function syncR2IntoLibrary(env, actorEmail='staff', {prefixes=APPRO
     const oldUploaded=String(current?.uploaded_at||'');
     const newUploaded=String(row.uploaded_at||'');
     const changed=!current || (newEtag&&newEtag!==oldEtag) || newSize!==oldSize || (newUploaded&&newUploaded!==oldUploaded) || String(current?.media_url||'')!==row.media_url || cleanKey(current?.r2_key||'')!==row.r2_key;
-    if(!current) inserted+=1; else if(changed) refreshed+=1; else unchanged+=1;
-    rows.push({
-      media_key:safeText(current?.media_key||`r2:${row.r2_key}`,500),
-      label:safeText(current?.label||row.label_suggestion||prettifyFilename(row.r2_key)||row.filename,240),
-      media_type:safeText(current?.media_type||'image',40)||'image',
+    if(current){
+      if(changed)refreshes.push({current,row});else unchanged+=1;
+      continue;
+    }
+    inserts.push({
+      media_key:safeText(`r2:${row.r2_key}`,500),
+      label:safeText(row.label_suggestion||prettifyFilename(row.r2_key)||row.filename,240),
+      media_type:'image',
       media_url:row.media_url,
-      fallback_url:current?.fallback_url||null,
-      alt_text:current?.alt_text||null,
-      caption:current?.caption||null,
-      group_key:safeText(current?.group_key||row.r2_prefix.replace(/\/$/,''),120)||null,
-      usage_contexts:Array.isArray(current?.usage_contexts)?current.usage_contexts:['website'],
-      recommended_size:current?.recommended_size||null,
-      source_status:safeText(current?.source_status||'active',40)||'active',
-      sort_order:Number(current?.sort_order||0),
-      updated_at:changed?now:(current?.updated_at||now),
-      updated_by:changed?(actorEmail||'staff'):(current?.updated_by||actorEmail||'staff'),
+      fallback_url:null,alt_text:null,caption:null,
+      group_key:safeText(row.r2_prefix.replace(/\/$/,''),120)||null,
+      usage_contexts:[],recommended_size:null,
+      source_status:'needs_review',sort_order:0,
+      updated_at:now,updated_by:actorEmail||'staff',
       r2_key:row.r2_key,
       filename:row.filename,
       r2_prefix:row.r2_prefix,
-      seo_title:current?.seo_title||null,
-      tags:Array.isArray(current?.tags)?current.tags:[],
-      mime_type:row.mime_type||current?.mime_type||null,
-      width:current?.width==null?null:Number(current.width),
-      height:current?.height==null?null:Number(current.height),
+      seo_title:null,tags:[],mime_type:row.mime_type||null,
+      width:null,height:null,
       byte_size:row.byte_size||null,
       r2_etag:row.r2_etag||null,
-      uploaded_at:row.uploaded_at||current?.uploaded_at||null,
+      uploaded_at:row.uploaded_at||null,
       last_seen_at:now,
-      source_type:safeText(current?.source_type||'r2_sync',40)||'r2_sync',
-      focal_point:safeText(current?.focal_point||'center',40)||'center',
-      decorative:current?.decorative===true,
-      attribution:current?.attribution||null,
-      license_notes:current?.license_notes||null
+      source_type:'r2_sync',focal_point:'center',decorative:false,
+      attribution:null,license_notes:null
     });
   }
-  if(!rows.length)return {...summary(),db_ready:true,inserted:0,refreshed:0,unchanged:0,batches:0};
-  const headers={...serviceHeaders(env),Prefer:'resolution=merge-duplicates,return=minimal'};
-  let batches=0;
-  // A sync page has at most 100 rows, so this is normally one Supabase write. The loop remains
-  // defensive if the page size changes later, while still preventing per-photo PATCH fan-out.
-  for(let offset=0;offset<rows.length;offset+=100){
-    const batch=rows.slice(offset,offset+100);
-    const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?on_conflict=media_key`,{method:'POST',headers,body:JSON.stringify(batch)});
-    batches+=1;
-    if(!response.ok){
-      return {...summary(),db_ready:false,inserted:0,refreshed:0,unchanged:0,batches,warnings:[...summary().warnings,`Could not upsert R2 photo sync batch ${batches}: ${(await response.text()).slice(0,400)}`]};
+  const headers=serviceHeaders(env);
+  const incomplete=(message)=>{warnings.push(message);return {...summary(),db_ready:false,inserted,refreshed,unchanged,conflicts,batches,reconciliation_complete:false};};
+  try{
+    if(inserts.length){
+      // DO NOTHING on a duplicate media_key. Another actor's record wins; we never update it.
+      const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?on_conflict=media_key&select=media_key`,{method:'POST',headers:{...headers,Prefer:'resolution=ignore-duplicates,return=representation'},body:JSON.stringify(inserts)});
+      batches+=1;
+      if(!response.ok)return incomplete(`R2 new-image registration not confirmed: ${(await response.text()).slice(0,220)}`);
+      const created=await response.json().catch(()=>null);
+      if(!Array.isArray(created))return incomplete('R2 new-image registration response was unreadable. Review the saved library before retrying.');
+      inserted=created.length;
+      conflicts+=inserts.length-inserted;
     }
+    for(const {current,row} of refreshes){
+      // Compare both metadata revision and previous object ETag at update time.
+      // Updating only asset provenance prevents stale sync reads clobbering staff metadata.
+      if(!current.id){conflicts+=1;continue;}
+      const params=new URLSearchParams({id:`eq.${current.id}`,updated_at:current.updated_at?`eq.${current.updated_at}`:'is.null',r2_etag:current.r2_etag?`eq.${current.r2_etag}`:'is.null',select:'id'});
+      const payload={r2_key:row.r2_key,filename:row.filename,r2_prefix:row.r2_prefix,media_url:row.media_url,mime_type:row.mime_type||current.mime_type||null,byte_size:row.byte_size||null,r2_etag:row.r2_etag||null,uploaded_at:row.uploaded_at||current.uploaded_at||null,last_seen_at:now,updated_at:now,updated_by:actorEmail||'staff'};
+      const response=await fetch(`${env.SUPABASE_URL}/rest/v1/app_media_library?${params.toString()}`,{method:'PATCH',headers:{...headers,Prefer:'return=representation'},body:JSON.stringify(payload)});
+      batches+=1;
+      if(!response.ok)return incomplete(`R2 provenance refresh not confirmed for ${row.r2_key}. Review the library before retrying: ${(await response.text()).slice(0,160)}`);
+      const changedRows=await response.json().catch(()=>null);
+      if(!Array.isArray(changedRows))return incomplete(`R2 provenance response unconfirmed for ${row.r2_key}. Review before retrying.`);
+      if(changedRows.length===1)refreshed+=1;else conflicts+=1;
+    }
+  }catch{
+    return incomplete('R2 synchronization ended with an uncertain database outcome. Some changes may have saved. Review before deliberately retrying the same cursor.');
   }
-  return {...summary(),db_ready:true,inserted,refreshed,unchanged,batches};
+  if(conflicts)warnings.push(`${conflicts} record(s) changed concurrently or already existed. No staff metadata was overwritten; review those records and repeat the same page manually if necessary.`);
+  return {...summary(),db_ready:true,inserted,refreshed,unchanged,conflicts,batches,reconciliation_complete:conflicts===0,review_required:conflicts>0};
 }
 
 export function guessContentType(key){
