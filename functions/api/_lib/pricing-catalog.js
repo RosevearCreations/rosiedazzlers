@@ -3,7 +3,6 @@
 // Reads app_management_settings.pricing_catalog first, then falls back to bundled JSON.
 
 import { serviceHeaders } from "./staff-session.js";
-import { applyCommercialAccuracy } from "./commercial-accuracy.js";
 
 import FALLBACK_CATALOG from "../data/rosie_services_pricing_and_packages.json";
 
@@ -52,7 +51,7 @@ const DEFAULT_BOOKING_RULES = {
 
 export async function loadPricingCatalog(env) {
   if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) {
-    return applyCommercialAccuracy(normalizeCatalog(FALLBACK_CATALOG));
+    return normalizeCatalog(FALLBACK_CATALOG);
   }
 
   try {
@@ -65,12 +64,12 @@ export async function loadPricingCatalog(env) {
       const rows = await res.json().catch(() => []);
       const row = Array.isArray(rows) ? rows[0] || null : null;
       if (row && row.value && typeof row.value === "object") {
-        return applyCommercialAccuracy(mergeCatalog(row.value, FALLBACK_CATALOG));
+        return mergeCatalog(row.value, FALLBACK_CATALOG);
       }
     }
   } catch {}
 
-  return applyCommercialAccuracy(normalizeCatalog(FALLBACK_CATALOG));
+  return normalizeCatalog(FALLBACK_CATALOG);
 }
 
 export function normalizeCatalog(raw) {
