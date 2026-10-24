@@ -31,7 +31,22 @@ if 'setInterval(' in asset: errors.append('Build 404 must not add permanent poll
 for m in ['POST','PATCH','PUT','DELETE']:
     if f"SAFE_READ_METHODS = new Set(['GET', 'HEAD', '{m}'" in asset: errors.append('safeRead includes mutation method')
 req(policies,['reliability-recovery-v404.js?v=20260915build404','RDReliability404?.installConnectionUX','canonical server paths remain authoritative'], 'site bootstrap')
-req(booking,['const DRAFT_KEY = "rd_booking_draft_v380"','sessionStorage','client_request_id','/api/checkout_recovery'], 'retained booking recovery')
+# Build 631: Build 630 intentionally purges the former PII-bearing v380 draft.
+# Keep the retained session/checkout contract, while forbidding v380 as the active key.
+req(booking,[
+    'const DRAFT_KEY = "rd_booking_draft_v630"',
+    'const LEGACY_DRAFT_KEY = "rd_booking_draft_v380"',
+    'safeSessionRemove(LEGACY_DRAFT_KEY)',
+    'sessionStorage','client_request_id','/api/checkout_recovery',
+    'data-recovery-continue'
+], 'retained booking recovery')
+if 'const DRAFT_KEY = "rd_booking_draft_v380"' in booking:
+    errors.append('v380 private draft must not be active')
+draft_policy=read('assets/booking-draft-policy-v630.js')
+req(draft_policy,[
+    'BOOKING_DRAFT_SCHEMA_630','["service_area","vehicle_size"]',
+    'parseBookingChoices630','BOOKING_DRAFT_MAX_AGE_630'
+], 'privacy-minimized draft policy')
 req(booking_check,['canonical checkout remains authoritative','no localStorage, recurring polling, direct booking mutation, or schema migration'], 'retained Build 380 checker')
 req(contract,['GET` and `HEAD','stale_review_required: true','No local/offline artifact can masquerade as accepted server state','No sensitive/payment-secret persistence','Production deployment/runtime/business acceptance must independently prove that exact SHA'], 'Build 404 contract')
 q=pair(queue,'release queue'); h=pair(handoff,'handoff')

@@ -18,7 +18,10 @@ for (const id of ['veh_year','veh_make','veh_model','veh_color','veh_mileage','v
   requireText(ux, id, `vehicle UX contract ${id}`);
 }
 
-requireText(planner, '<script src="/assets/site-policies.js" defer></script>', 'planner enhancement hook');
+// Build 631: accept the reviewed cache-busted policy loader while keeping the defer and exact path.
+if (!/<script\s+src="\/assets\/site-policies\.js(?:\?v=[a-zA-Z0-9_-]+)?"\s+defer><\/script>/.test(planner)) {
+  fail('planner enhancement hook must load the exact site-policies.js path with defer and optional safe version');
+}
 requireText(policies, "currentPath() === '/booking-planner'", 'planner route guard');
 requireText(policies, "return currentPath() === '/book';", 'public /book hook remains isolated');
 requireText(policies, '/assets/booking-vehicle-form-ux.js?v=20260904build339', 'Build 339 module import');

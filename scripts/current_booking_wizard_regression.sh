@@ -8,3 +8,4 @@ node scripts/build627_customer_wizard_usability_test.mjs
 node scripts/build628_booking_context_help_test.mjs
 node scripts/build629_package_comparison_test.mjs
 node scripts/build630_booking_draft_safe_return_test.mjs
+node scripts/build631_final_review_validation_test.mjs
