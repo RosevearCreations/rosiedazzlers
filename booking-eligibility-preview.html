@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vehicle & Service Fit Check | Rosie Dazzlers</title>
+<meta name="description" content="Review vehicle size, cleaning service options and condition-based detailing eligibility before booking.">
+<meta name="robots" content="noindex,follow"><link rel="stylesheet" href="/assets/site.css">
+<style>
+.fit-shell{max-width:1080px;margin:22px auto;padding:16px}.fit-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.fit-panel{padding:20px;background:rgba(15,23,42,.84);color:#eef4ff;border:1px solid #627895;border-radius:16px}
+.fit-panel label{display:block;margin:12px 0;font-weight:650}.fit-panel select,.fit-panel input:not([type=checkbox]){
+  display:block;width:100%;min-width:0;box-sizing:border-box;padding:10px;border-radius:9px;min-height:44px;
+  border:1px solid #9badc6;color:white;background:#142137
+}
+.fit-check{display:flex!important;align-items:start;gap:9px}.fit-check input{margin-top:5px}
+.fit-panel button{padding:12px 18px;border-radius:10px;min-height:44px;border:1px solid #9badc6;background:#294b76;color:white;cursor:pointer}
+.fit-panel button:disabled{opacity:.55;cursor:not-allowed}
+.fit-help{display:inline-grid;place-items:center;border:1px solid #b5c9e2;color:#eaf1ff;border-radius:50%;height:1.25em;width:1.25em;font-size:.82em;margin-left:3px}
+.fit-result{border:1px solid #8aa4c8;border-radius:12px;padding:14px;margin-top:16px;overflow-wrap:anywhere}
+.fit-result[data-status=hold]{border-color:#ec9898}.fit-result[data-status=quote_review_required]{border-color:#eccc83}
+.fit-panel small,.fit-muted{color:#d4deeb} .fit-panel h2{margin-top:0}
+.fit-condition{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+@media(max-width:760px){.fit-grid,.fit-condition{grid-template-columns:1fr}.fit-shell{padding:10px}}
+</style></head><body>
+<nav class="nav"><div class="nav-inner"><a href="/book">Services & Booking</a> <a href="/">Rosie Dazzlers</a></div></nav>
+<main class="fit-shell"><h1>Vehicle & Service Fit Check <span class="pill">Build 625 · Preview</span></h1>
+<p>This guided check helps identify the right vehicle-size pricing and any services that need a personal estimate. <strong>It does not reserve a date, create a booking or charge a deposit.</strong> <a href="/book">Return to regular booking</a> when ready.</p>
+<div id="fitStatus" role="status" aria-live="polite">Loading the current service catalog…</div>
+<form id="fitForm" class="fit-grid" hidden>
+<section class="fit-panel"><h2>1. Vehicle & service</h2>
+<label>Detailing package <span class="fit-help" title="Select the level of cleaning. Actual scope may depend on vehicle condition.">i</span><select name="package_code" id="fitPackage" required></select></label>
+<label>Vehicle price class <span class="fit-help" title="Small, mid and oversize are price classes, not guesses based on the vehicle's body style.">i</span>
+<select name="vehicle_size" id="fitSize" required><option value="">Choose size</option><option value="small">Small</option><option value="mid">Medium</option><option value="oversize">Oversize</option></select></label>
+<label>Confirm your selected price class <span class="fit-help" title="Confirm the class shown on the service pricing chart. Staff can help with uncertain vehicles.">i</span>
+<select name="vehicle_size_confirmed" required><option value="">Confirm size</option><option value="small">Small</option><option value="mid">Medium</option><option value="oversize">Oversize</option></select></label>
+<label>Model year<input type="number" name="vehicle_year" min="1950" max="2100" placeholder="2020" required></label>
+<label>Make<input name="vehicle_make" maxlength="70" autocomplete="off" placeholder="Toyota" required></label>
+<label>Model<input name="vehicle_model" maxlength="70" autocomplete="off" placeholder="Corolla" required></label>
+<label>Vehicle body style <span class="fit-help" title="Large, unusual or difficult-access vehicles may need extra review.">i</span><select name="vehicle_type" required>
+<option value="">Choose body style</option><option value="car">Car</option><option value="suv">SUV</option><option value="truck">Truck</option>
+<option value="van">Van</option><option value="minivan">Minivan</option><option value="motorcycle">Motorcycle</option>
+<option value="rv">RV / Motorhome</option><option value="other">Other</option></select></label>
+</section>
+<section class="fit-panel"><h2>2. Condition, location & availability</h2>
+<p class="fit-muted">Select any concerns that affect scope. Difficult jobs will be flagged for staff inspection—not automatically charged.</p>
+<div class="fit-condition">
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="heavy_soiling">Heavy soil</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="pet_hair">Pet hair</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="staining">Staining</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="odor">Odour</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="spill">Spill / wet interior</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="water_intrusion">Water intrusion</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="mold">Suspected mould</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="biohazard">Potential biohazard</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="paint_damage">Paint damage</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="road_salt">Road salt</label>
+<label class="fit-check"><input type="checkbox" name="condition_flag" value="special_access">Restricted access</label>
+</div>
+<label>Service area<select name="service_area" id="fitArea" required></select></label>
+<label>Preferred date (optional)<input type="date" name="service_date"></label>
+<label>Preferred slot <select name="start_slot"><option value="">Not yet selected</option><option value="AM">Morning</option><option value="PM">Afternoon</option></select></label>
+<label>Appointment length<select name="duration_slots"><option value="">Not yet selected</option><option value="1">Half-day</option><option value="2">Full-day (AM start)</option></select></label>
+<button type="submit" id="fitSubmit">Check service fit</button>
+<p class="fit-muted">Rosie brings standard detailing water and power. Safe access, local restrictions, weather and the final scope must still be confirmed.</p>
+</section>
+</form>
+<section id="fitResult" class="fit-result" hidden aria-live="polite"><h2 id="fitResultHeading">Vehicle review</h2><p id="fitDecision"></p>
+<p id="fitPrice"></p><ul id="fitIssues"></ul><p><a href="/book">Continue to Services & Booking</a></p>
+<p class="fit-muted">This result is advisory only. The live checkout independently revalidates prices, capacity and payment terms.</p></section>
+</main>
+<script type="module" src="/assets/booking-eligibility-preview-625.js"></script></body></html>
