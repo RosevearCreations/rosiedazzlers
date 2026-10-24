@@ -109,7 +109,7 @@ export function buildUnifiedBookingContract623({selection = {},checkoutCatalog,p
   if (slot.status !== "tentatively_available") issues.push(issue(slot.code,"Slot selection requires a fresh server check."));
   const needsQuote = !!(displayed?.manual?.length || checkout?.manual?.length);
   if (needsQuote) issues.push(issue("STAFF_ESTIMATE_REQUIRED","One or more selected services require an estimate."));
-  const hasHold = issues.some(i=>!["AREA_NOT_SELECTED","DATE_AND_SLOT_NOT_SELECTED"].includes(i.code));
+  const hasHold = issues.some(i=>!["AREA_NOT_SELECTED","DATE_AND_SLOT_NOT_SELECTED","STAFF_ESTIMATE_REQUIRED"].includes(i.code));
   return {
     schema:CONTRACT_VERSION_623, preview_only:true, booking_created:false, payment_taken:false,
     reservation_created:false, can_commit_booking:false, currency:"CAD",
@@ -121,7 +121,7 @@ export function buildUnifiedBookingContract623({selection = {},checkoutCatalog,p
       amount_is_final:false, includes_taxes:false, includes_travel:false},
     eligibility:{service_area:area, seasonal_site_and_weather_approval:"not_verified",
       staff_review_required:true}, availability:slot,
-    decision:hasHold?"hold":needsQuote?"quote_review_required":"incomplete",
+    decision:hasHold?"hold":needsQuote?"quote_review_required":(area.status === "incomplete" || !slotRequested)?"incomplete":"review_ready",
     issues, authority:"Read-only selection snapshot; checkout, live inventory, site review and transactional booking retain independent server authority."
   };
 }
