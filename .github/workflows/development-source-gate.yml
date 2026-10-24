@@ -51,8 +51,8 @@ jobs:
           node --check scripts/release_health_monitor.mjs
           node scripts/release_health_monitor_test.mjs
 
-      - name: Build 632 — Verify required source gate and queue de-duplication
-        run: node scripts/build632_source_gate_dedup_test.mjs
+      - name: Validate protected source-gate policy and retained booking authority
+        run: bash scripts/current_source_gate_contracts.sh
 
       - name: Validate current booking wizard, comparison and safe draft regression
         run: |
@@ -63,9 +63,7 @@ jobs:
           node --check assets/booking-recovery.js
           node --check assets/booking-final-review-v631.js
           bash scripts/current_booking_wizard_regression.sh
-          node scripts/build339-vehicle-form-ux-gate.mjs
           python3 scripts/booking_recovery_failure_handling_check.py
-          python3 scripts/build404_error_recovery_weak_connection_reliability_check.py
 
       - name: Validate guarded release promotion automation
         run: node scripts/guarded_production_promotion_test.mjs

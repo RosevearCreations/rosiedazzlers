@@ -22,7 +22,9 @@ for(const job of ["source-gate-partition-a","source-gate-partition-b","source-ga
   assert.ok(aggregate.includes(job),"Aggregate must depend on "+job);
 assert.match(aggregate,/if:\s*\$\{\{\s*always\(\)\s*\}\}/);
 assert.match(workflow,/node scripts\/build631_final_review_validation_test\.mjs|bash scripts\/current_booking_wizard_regression\.sh/);
-assert.match(workflow,/python3 scripts\/build404_error_recovery_weak_connection_reliability_check\.py/);
-assert.match(workflow,/node scripts\/build339-vehicle-form-ux-gate\.mjs/);
-assert.match(workflow,/node scripts\/build632_source_gate_dedup_test\.mjs/);
+const retained=readFileSync(new URL("./current_source_gate_contracts.sh",import.meta.url),"utf8");
+assert.match(workflow,/bash scripts\/current_source_gate_contracts\.sh/);
+assert.match(retained,/python3 scripts\/build404_error_recovery_weak_connection_reliability_check\.py/);
+assert.match(retained,/node scripts\/build339-vehicle-form-ux-gate\.mjs/);
+assert.match(retained,/node scripts\/build632_source_gate_dedup_test\.mjs/);
 console.log("Build 632: mandatory source checks A-D + aggregate intact, PR supersession enabled, main/dev source gate retained: PASS");
