@@ -38,7 +38,7 @@ queue = read("AUTONOMOUS_RELEASE_QUEUE.md")
 production_helper = read("scripts/cloudflare_pages_production_acceptance.sh")
 
 required_client = [
-    'const DRAFT_KEY = "rd_booking_draft_v380"', "sessionStorage", "DRAFT_MAX_AGE_MS",
+    'const DRAFT_KEY = "rd_booking_draft_v630"', 'const LEGACY_DRAFT_KEY = "rd_booking_draft_v380"', "sessionStorage",
     '"/api/checkout_recovery"', '"rd:booking-checkout-conflict"', 'window.addEventListener("pagehide"',
     "MutationObserver", 'recovery_state === "pending_session_attach"', 'recovery_state === "stale_availability"',
     'recovery_state === "payment_session_expired"', "bookingIdFromAnyContext", 'params.get("fresh") === "1"',
@@ -46,6 +46,23 @@ required_client = [
 for needle in required_client:
     if needle not in client:
         fail(f"browser recovery contract missing: {needle}")
+privacy_policy = read("assets/booking-draft-policy-v630.js")
+for needle in [
+    "BOOKING_DRAFT_SCHEMA_630", "BOOKING_DRAFT_MAX_AGE_630",
+    '["service_area","vehicle_size"]', "parseBookingChoices630",
+    "sanitizedBookingChoices630", "requires_availability_recheck:true",
+    "requires_price_recheck:true", 'service_date:"",slot:""',
+]:
+    if needle not in privacy_policy:
+        fail(f"Build 630 protected draft policy missing: {needle}")
+for needle in [
+    "safeSessionRemove(LEGACY_DRAFT_KEY)", "data-recovery-continue",
+    "Continue your package choices?", "if (!restoring) safeSessionSet",
+]:
+    if needle not in client:
+        fail(f"Build 630 consent/privacy restore contract missing: {needle}")
+if "photo_estimate_links" in privacy_policy or "customer_email" in privacy_policy or "customer_phone" in privacy_policy:
+    fail("Build 630 stored-field policy must not contain private customer fields")
 if "localStorage" in client:
     fail("booking draft must not use durable localStorage")
 if "setInterval(" in client:
