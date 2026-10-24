@@ -5,6 +5,7 @@
 
 import { onRequestPost as canonicalCheckout, onRequestOptions as canonicalOptions } from "./checkout.js";
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
+import { evaluateBookingRecovery626 } from "./_lib/booking-recovery-contract-626.js";
 
 export async function onRequestOptions() {
   return typeof canonicalOptions === "function" ? canonicalOptions() : corsResponse("", 204);
@@ -38,12 +39,15 @@ export async function onRequestPost(context) {
   }
 
   let holdMinutes = 30;
+  let pricing = null;
   try {
-    const pricing = await loadPricingCatalog(env);
+    pricing = await loadPricingCatalog(env);
     const configured = Number(pricing?.booking_rules?.hold_minutes || 30);
     if (Number.isFinite(configured) && configured > 0 && configured <= 240) holdMinutes = configured;
   } catch {
-    // Canonical checkout currently defaults to 30 minutes as well.
+    // Do not resume an old payment session unless its present-day price can be rechecked.
+    return corsJson({ error: "Booking prices could not be rechecked. Please retry later.",
+      recovery_state: "pricing_unavailable", retryable: true }, 503);
   }
 
   const holdSinceMs = Date.now() - holdMinutes * 60 * 1000;
@@ -74,6 +78,18 @@ export async function onRequestPost(context) {
     }, 409);
   }
 
+  // Build 626: never disclose/reopen an existing session based only on email + overlapping slot.
+  // Exact customer, slot, vehicle, add-ons, area, address, provider and current price must agree.
+  const recoveryDecision = evaluateBookingRecovery626({
+    booking: candidate, requestBody: body, catalog: pricing,
+    holdMinutes, nowMs: Date.now()
+  });
+  if (!recoveryDecision.ok) return corsJson({
+    error: "The earlier booking hold does not exactly match these details or today's pricing. No payment session was reopened. Contact Rosie to review the hold or choose another available slot.",
+    recovery_state: "details_changed",
+    retryable: false
+  }, 409);
+
   const provider = String(candidate.payment_provider || body.payment_provider || "stripe").trim().toLowerCase();
 
   if (provider === "paypal") {
@@ -87,6 +103,8 @@ async function fetchSameDateBookings(env, serviceDate) {
   const fields = [
     "id", "status", "created_at", "service_date", "start_slot", "duration_slots",
     "customer_email", "package_code", "vehicle_size", "payment_provider",
+    "service_area", "address_line1", "vehicle_year", "vehicle_make", "vehicle_model",
+    "addons", "price_total_cents", "deposit_cents",
     "stripe_session_id", "paypal_order_id"
   ].join(",");
   const path = `/rest/v1/bookings?select=${encodeURIComponent(fields)}&service_date=eq.${encodeURIComponent(serviceDate)}&status=in.(pending,confirmed)&order=created_at.desc&limit=100`;
