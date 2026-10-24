@@ -54,8 +54,8 @@ jobs:
       - name: Validate protected source-gate policy and retained booking authority
         run: bash scripts/current_source_gate_contracts.sh
 
-      - name: Build 633 — Optional authority workflow trigger regression
-        run: node scripts/build633_optional_authority_triggers_test.mjs
+      - name: Validate optional authority workflow trigger regression
+        run: bash scripts/current_optional_authority_triggers.sh
 
       - name: Validate current booking wizard, comparison and safe draft regression
         run: |

@@ -44,6 +44,9 @@ const gate=readFileSync(new URL("../.github/workflows/development-source-gate.ym
 for(const name of ["source checks suite A","source checks suite B","source checks suite C","source checks suite D","source checks"]){
   assert.ok(gate.includes("name: "+name),"Must not weaken required "+name);
 }
-assert.match(gate,/node scripts\/build633_optional_authority_triggers_test\.mjs/);
+assert.match(gate,/bash scripts\/current_optional_authority_triggers\.sh/);
+const wrapper=readFileSync(new URL("./current_optional_authority_triggers.sh",import.meta.url),"utf8");
+assert.match(wrapper,/set -euo pipefail/);
+assert.match(wrapper,/node scripts\/build633_optional_authority_triggers_test\.mjs/);
 assert.match(gate,/source-gate-partition-a, source-gate-partition-b, source-gate-partition-c, source-gate-partition-d/);
 console.log("Build 633: 21 optional authority workflow triggers narrowed; all required source gates preserved: PASS");
