@@ -104,7 +104,7 @@
     const path = currentPath();
     if (!['/book', '/booking-planner', '/complete', '/booking-confirmed'].includes(path)) return;
     try {
-      const module = await import('/assets/booking-recovery.js?v=20260911build380');
+      const module = await import('/assets/booking-recovery.js?v=20261024build630');
       module.wireBookingRecovery?.(document);
     } catch (error) { console.warn('Booking recovery enhancement unavailable; canonical booking and checkout remain usable.', error); }
   }
