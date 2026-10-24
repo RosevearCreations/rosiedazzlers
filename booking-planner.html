@@ -176,6 +176,7 @@
       .wizard-actions .btn{width:100%}
     }
   </style>
+  <link rel="stylesheet" href="/assets/booking-wizard-v627.css?v=1" />
 </head>
 <body>
   <div class="nav">
@@ -204,7 +205,22 @@
         </div>
       </div>
       <div id="bookingStatus" class="notice" style="display:none;margin-top:12px"></div>
-      <div class="wizard-nav" id="wizardNav" style="margin-top:14px"></div>
+      <div class="booking-wizard-627" aria-label="Booking progress">
+        <div class="booking-wizard-627__top">
+          <strong id="wizardProgressText627">Step 1 of 5 — Date, area &amp; vehicle · 20%</strong>
+          <span>Choose at your pace; review before paying</span>
+        </div>
+        <progress id="wizardProgress627" value="1" max="5" aria-label="Booking progress">1 of 5</progress>
+        <div class="booking-wizard-627__notes" id="wizardStepAnnounce627" role="status" aria-live="polite" aria-atomic="true">Step 1 — Date, area &amp; vehicle</div>
+      </div>
+      <nav class="wizard-nav" id="wizardNav" aria-label="Booking wizard steps" style="margin-top:14px"></nav>
+      <details class="booking-wizard-627__help">
+        <summary><span class="booking-wizard-627__info" aria-hidden="true">i</span> How does this booking work?</summary>
+        <p>Start with your preferred date, service area and vehicle. Next choose the detailing package and optional treatments. Review location requirements before entering contact details and continuing to payment.</p>
+        <p>The availability display does not itself reserve a spot. The server rechecks the date, vehicle size and current price when you submit. Extra restoration, contamination or specialty work may require an estimate instead of a fixed price.</p>
+        <p><strong>Payment:</strong> You review your booking and deposit before continuing to your payment provider. A booking is confirmed only after the required payment or other approved confirmation completes.</p>
+        <p><a href="/booking-eligibility-preview.html">Not sure about vehicle size? Open the optional vehicle and service fit check.</a> It does not create an appointment or collect a deposit.</p>
+      </details>
       <div class="mobile-toolbar" style="margin-top:14px">
         <div class="kicker" id="wizardHint">Step 1 of 5</div>
         <div class="row">
@@ -2272,6 +2288,7 @@
     }
   </script>
 
+  <script type="module" src="/assets/booking-wizard-v627.js?v=1"></script>
   <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
   <script src="/assets/site-policies.js" defer></script>
   <script src="/assets/booking-hours.js" defer></script>
