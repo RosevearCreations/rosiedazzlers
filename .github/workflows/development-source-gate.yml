@@ -48,6 +48,13 @@ jobs:
           node --check scripts/release_health_monitor.mjs
           node scripts/release_health_monitor_test.mjs
 
+      - name: Build 627 and 628 customer wizard regression
+        run: |
+          node --check assets/booking-wizard-v627.js
+          node --check assets/booking-context-help-v628.js
+          node scripts/build627_customer_wizard_usability_test.mjs
+          node scripts/build628_booking_context_help_test.mjs
+
       - name: Validate guarded release promotion automation
         run: node scripts/guarded_production_promotion_test.mjs
 
