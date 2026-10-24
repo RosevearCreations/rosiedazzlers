@@ -44,7 +44,7 @@ export function initBookingWizard627(doc = typeof document === "undefined" ? nul
     const state=wizardStepPresentation627(step,panels.length);
     progress.max=state.total;progress.value=state.current;
     progress.setAttribute("aria-valuetext",state.label+": "+state.name);
-    output.textContent=state.label+" — "+state.name+" · "+state.percent+"%";
+    output.textContent=state.label+" — "+state.name+" · "+state.percent+"% of form steps";
     const buttons=[...nav.querySelectorAll("[data-step-nav]")];
     buttons.forEach(button=>{
       const n=Number(button.dataset.stepNav);
