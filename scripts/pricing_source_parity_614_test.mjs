@@ -12,15 +12,17 @@ assert.equal(report.source_status, "app_management_settings");
 assert.equal(report.summary.owner_decision_required, true);
 assert.equal(report.db_verified, true);
 assert.equal(report.updated_at, "2026-03-25T22:18:30Z");
-for (const [size, bundledPrice, publicPrice] of [["small", 115, 229], ["mid", 135, 269], ["oversize", 170, 309]]) {
-  const field = report.findings.find((row) => row.group === "packages" && row.code === "basic_detail" && row.field === `prices_cad.${size}`);
-  assert.ok(field, `Basic Detail ${size} must be surfaced`);
-  assert.equal(field.bundled, bundledPrice);
-  assert.equal(field.app_management, bundledPrice);
-  assert.equal(field.checkout, bundledPrice);
-  assert.equal(field.public_api, publicPrice);
-  assert.ok(field.differences.includes("public_vs_checkout"));
+for (const [size, approvedPrice] of [["small",229],["mid",269],["oversize",309]]) {
+  const mismatches = report.findings.filter((row) => row.group === "packages" && row.code === "basic_detail" && row.field === `prices_cad.${size}`);
+  assert.equal(mismatches.length,0, `Basic Detail ${size} should now have source parity at $${approvedPrice}`);
+  assert.equal(catalog.packages.find((row) => row.code === "basic_detail").prices_cad[size], approvedPrice);
 }
+// Deliberately stale DB values must still show a mismatch, not silently mask it.
+const outdated = JSON.parse(JSON.stringify(catalog));
+outdated.packages.find((row)=>row.code==="basic_detail").prices_cad={small:115,mid:135,oversize:170};
+const staleReport = buildPricingSourceParity614({bundled:catalog,appManagement:outdated,checkoutCatalog:outdated,dbAvailable:true});
+assert.ok(staleReport.findings.some((row)=>row.code==="basic_detail" && row.field==="prices_cad.small" && row.differences.includes("app_management_vs_bundled")));
+
 assert.ok(report.findings.some((row) => row.group === "addons" && row.code === "engine_cleaning" && row.field === "quote_required" && row.checkout === false && row.public_api === true));
 assert.equal(catalog.addons.find((row) => row.code === "engine_cleaning").quote_required, true, "parity cannot change the bundled catalog");
 
