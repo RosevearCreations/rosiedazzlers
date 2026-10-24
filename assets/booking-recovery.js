@@ -100,6 +100,8 @@ function createNotice() {
   box = document.createElement("div");
   box.id = "bookingRecoveryNotice";
   box.className = "notice warn";
+  box.setAttribute("role","region");
+  box.setAttribute("aria-label","Saved booking choices");
   box.style.display = "none";
   box.style.marginBottom = "14px";
   box.innerHTML = `<strong data-recovery-title>Booking recovery</strong><div data-recovery-copy class="mini" style="margin-top:4px"></div><div style="margin-top:8px"><button type="button" class="btn primary small" data-recovery-continue hidden>Continue saved choices</button> <button type="button" class="btn ghost small" data-recovery-discard>Discard saved choices</button></div>`;
@@ -141,6 +143,7 @@ function restoreSimpleDraft(draft) {
   for (const id of SIMPLE_FIELDS) {
     const node = document.getElementById(id);
     const value = draft.fields?.[id];
+    if (id==="service_area" && value && ![...document.querySelectorAll("#service_area_options option")].some(o=>o.value.toLowerCase()===value.toLowerCase()))continue;
     if (node && typeof value==="string")setNodeValue(node,value);
   }
 }
@@ -163,7 +166,7 @@ function restoreDynamicDraft(draft) {
   const addonCodes = Array.isArray(draft.addon_codes) ? draft.addon_codes : [];
   addonCodes.forEach((code) => {
     const button = document.querySelector(`[data-addon='${CSS.escape(String(code))}']`);
-    if (button && !button.classList.contains("active") && !button.hasAttribute("data-disabled")) {
+    if (button && !button.classList.contains("active") && !button.hasAttribute("data-disabled") && !button.querySelector(".tag.warn")) {
       button.click();
       resolved = false;
     } else if (!button && !document.querySelector("#addonsBox")?.children?.length) {
