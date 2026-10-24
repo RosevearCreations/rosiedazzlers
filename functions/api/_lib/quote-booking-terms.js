@@ -73,6 +73,7 @@ export function evaluateSlotAvailability({ dateBlocked = false, blockedSlots = [
   const duration = Number(durationSlots || 1);
   if (dateBlocked) return fail("BOOKING_DATE_BLOCKED", "The selected service date is blocked.");
   if (!["AM", "PM"].includes(slot) || ![1, 2].includes(duration)) return fail("BOOKING_SLOT_INVALID", "A valid AM/PM start slot and duration are required.");
+  if (duration === 2 && slot !== "AM") return fail("BOOKING_SLOT_INVALID", "A full-day booking must start in the AM slot.");
   const blocked = new Set((blockedSlots || []).map((value) => String(value || "").trim().toUpperCase()));
   const requested = duration === 2 ? ["AM", "PM"] : [slot];
   if (requested.some((value) => blocked.has(value))) return fail("BOOKING_SLOT_UNAVAILABLE", "The selected appointment slot is no longer available.");
