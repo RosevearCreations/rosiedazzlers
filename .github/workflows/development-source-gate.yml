@@ -1,11 +1,12 @@
 name: Current Source Gate
 
 on:
+  # Feature build branches are covered by the required pull_request source gate.
+  # Do not spawn a second identical 4-suite push run for every interim build commit.
   push:
     branches:
       - dev
       - main
-      - 'build*'
   pull_request:
     branches:
       - dev
@@ -15,9 +16,11 @@ on:
 permissions:
   contents: read
 
+# New commits on the same PR supersede queued checks for older PR versions.
+# Never cancel default-branch push runs; final required PR check still runs.
 concurrency:
-  group: rosiedazzlers-current-source-gate-${{ github.event_name }}-${{ github.ref }}-${{ github.sha }}
-  cancel-in-progress: false
+  group: rosiedazzlers-current-source-gate-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   source-gate-partition-a:
@@ -47,6 +50,9 @@ jobs:
         run: |
           node --check scripts/release_health_monitor.mjs
           node scripts/release_health_monitor_test.mjs
+
+      - name: Build 632 — Verify required source gate and queue de-duplication
+        run: node scripts/build632_source_gate_dedup_test.mjs
 
       - name: Validate current booking wizard, comparison and safe draft regression
         run: |
