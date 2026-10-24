@@ -47,6 +47,9 @@ assert.equal(verify({...booking,price_total_cents:11500}).code,"CURRENT_PRICE_CH
 assert.equal(verify(booking,body,{...catalog,packages:[{...catalog.packages[0],prices_cad:{small:229,mid:279,oversize:309}}]}).code,"CURRENT_PRICE_CHANGED");
 assert.equal(verify(booking,body,{...catalog,addons:[{...catalog.addons[0],prices_cad:{mid:30}}]}).code,"CURRENT_PRICE_CHANGED");
 assert.equal(verify(booking,{...body,start_slot:"PM"}).code,"SLOT_CHANGED");
+assert.equal(verify(booking,{...body,service_date:"2026-11-09"}).code,"BOOKING_DATE_CHANGED");
+const noAddonsBooking={...booking,addons:[],price_total_cents:26900};
+assert.equal(verify(noAddonsBooking,{...body,addon_codes:undefined}).ok,true);
 assert.deepEqual(normalizedRecoverySlots626("AM",2),["AM","PM"]);
 assert.deepEqual(normalizedRecoverySlots626("PM",2),[],"full day cannot start PM");
 assert.equal(priceSnapshot626(catalog,{...body,addon_codes:["ozone"]}).code,"QUOTE_REQUIRED");
