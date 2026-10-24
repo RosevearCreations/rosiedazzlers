@@ -54,14 +54,17 @@ assert.equal(attachVehicleEligibility625(booking,evalProfile({})).decision,"revi
 assert.equal(attachVehicleEligibility625({...booking,decision:"hold"},p).decision,"hold");
 const endpoint=readFileSync(new URL("../functions/api/booking_contract_623.js",import.meta.url),"utf8");
 const page=readFileSync(new URL("../booking-eligibility-preview.html",import.meta.url),"utf8");
+const ui=readFileSync(new URL("../assets/booking-eligibility-preview-625.js",import.meta.url),"utf8");
 const root=readFileSync(new URL("../book.html",import.meta.url),"utf8");
 const mirrored=readFileSync(new URL("../book/index.html",import.meta.url),"utf8");
 assert.match(endpoint,/evaluateVehicleServiceEligibility625/);
 assert.match(endpoint,/attachVehicleEligibility625/);
 assert.match(endpoint,/export function onRequestPost/);
-assert.match(page,/booking_contract_623/);
+assert.match(page,/booking-eligibility-preview-625\.js/);
+assert.match(ui,/booking_contract_623/);
 assert.match(page,/role="status"/);
 assert.match(page,/vehicle_size_confirmed/);
+assert.match(ui,/new FormData/);
 assert.match(page,/does not reserve a date, create a booking or charge a deposit/);
 assert.equal(root,mirrored,"public booking route copies must be identical");
 assert.match(root,/booking-eligibility-preview.html/);
