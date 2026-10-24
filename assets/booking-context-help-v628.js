@@ -53,12 +53,11 @@ export const BOOKING_FIELD_HELP_628 = Object.freeze([
   {step:1,id:"service_area",text:"Choose the closest service town; staff verify the actual address and local restrictions."},
   {step:1,id:"vehicle_size",text:"Size changes the package price. Confirm your class using the size chart; ask staff if uncertain."},
   {step:1,id:"veh_year",text:"Your model year helps staff verify the vehicle and its expected size."},
-  {step:2,id:"",text:""},
   {step:3,id:"gift_code",text:"Optional. Gift balances and eligible redemption amounts are confirmed by the server."},
   {step:3,id:"promo_code",text:"Optional. Promotion eligibility is checked at checkout; displayed prices may change."},
   {step:5,id:"customer_email",text:"Use an email you can access for booking and payment confirmation."},
   {step:5,id:"address_line1",text:"Enter the location where the vehicle can be safely detailed; staff may confirm site access."}
-].filter(row=>row.id));
+]);
 export function validateBookingHelpPlan628(steps=BOOKING_STEP_HELP_628,fields=BOOKING_FIELD_HELP_628) {
   if(!Array.isArray(steps)||steps.length!==5) return {ok:false,code:"STEPS_MISSING"};
   if(steps.some((row,index)=>row.step!==index+1 || !row.title || !row.description ||
