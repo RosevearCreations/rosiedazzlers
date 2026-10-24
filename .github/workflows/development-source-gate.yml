@@ -54,6 +54,9 @@ jobs:
       - name: Build 632 — Verify required source gate and queue de-duplication
         run: node scripts/build632_source_gate_dedup_test.mjs
 
+      - name: Build 633 — Optional authority workflow trigger regression
+        run: node scripts/build633_optional_authority_triggers_test.mjs
+
       - name: Validate current booking wizard, comparison and safe draft regression
         run: |
           node --check assets/booking-wizard-v627.js
