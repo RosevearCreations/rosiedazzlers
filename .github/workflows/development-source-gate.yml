@@ -48,17 +48,15 @@ jobs:
           node --check scripts/release_health_monitor.mjs
           node scripts/release_health_monitor_test.mjs
 
-      - name: Build 627 and 628 customer wizard regression
+      - name: Validate current booking wizard, comparison and safe draft regression
         run: |
           node --check assets/booking-wizard-v627.js
           node --check assets/booking-context-help-v628.js
-          node scripts/build627_customer_wizard_usability_test.mjs
-          node scripts/build628_booking_context_help_test.mjs
           node --check assets/booking-service-comparison-v629.js
-          node scripts/build629_package_comparison_test.mjs
           node --check assets/booking-draft-policy-v630.js
           node --check assets/booking-recovery.js
-          node scripts/build630_booking_draft_safe_return_test.mjs
+          node --check assets/booking-final-review-v631.js
+          bash scripts/current_booking_wizard_regression.sh
           python3 scripts/booking_recovery_failure_handling_check.py
 
       - name: Validate guarded release promotion automation
