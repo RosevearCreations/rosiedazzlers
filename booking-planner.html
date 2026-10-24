@@ -206,7 +206,7 @@
                     <a class="btn ghost" href="/pricing">Pricing page</a>
         </div>
       </div>
-      <div id="bookingStatus" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="bookingStatus" class="notice" role="alert" aria-live="assertive" tabindex="-1" style="display:none;margin-top:12px"></div>
       <div class="booking-wizard-627" aria-label="Booking progress">
         <div class="booking-wizard-627__top">
           <strong id="wizardProgressText627">Step 1 of 5 — Date, area &amp; vehicle · 20%</strong>
@@ -2161,7 +2161,14 @@
 
     qsa("[data-631-edit-step]").forEach(btn=>btn.addEventListener("click",()=>{
       const step=Number(btn.getAttribute("data-631-edit-step"));
-      if(Number.isInteger(step)&&step>=1&&step<=4)gotoStep(step);
+      if(Number.isInteger(step)&&step>=1&&step<=4){
+        gotoStep(step);
+        const heading=qs(`.wizard-step[data-step="${step}"] h2`);
+        if(heading){
+          heading.setAttribute("tabindex","-1");
+          try{heading.focus({preventScroll:true});}catch{heading.focus();}
+        }
+      }
     }));
     for(const id of ["customer_name","customer_email","address_line1","postal_code"]){
       qs("#"+id)?.addEventListener("input",()=>{
@@ -2255,7 +2262,9 @@
         location.href = out.checkout_url;
       } catch (err) {
         analyticsTrack("checkout_error", { message: err?.message || "Checkout failed." });
-        showStatus(err.message || "Checkout failed.", "bad");
+        showStatus((err?.message || "Checkout could not be completed.") +
+          " No confirmation has been made by this form. Review your details and availability before retrying.", "bad");
+        try{qs("#bookingStatus")?.focus({preventScroll:true});}catch{qs("#bookingStatus")?.focus();}
         btn.disabled = false;
         btn.textContent = "Book and pay deposit";
       }
