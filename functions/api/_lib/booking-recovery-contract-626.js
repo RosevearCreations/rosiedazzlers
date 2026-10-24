@@ -66,6 +66,8 @@ export function evaluateBookingRecovery626({
   const existing=normalizedRecoverySlots626(booking?.start_slot,booking?.duration_slots);
   if(!incoming.length || !existing.length || incoming.join(",")!==existing.join(","))
     return {ok:false,code:"SLOT_CHANGED"};
+  if(clean(requestBody?.service_date)!==clean(booking?.service_date))
+    return {ok:false,code:"BOOKING_DATE_CHANGED"};
   const fields=["customer_email","package_code","vehicle_size","service_area","address_line1","vehicle_make","vehicle_model"];
   if(fields.some(k=>!clean(booking?.[k]) || !clean(requestBody?.[k] ?? (
       k==="vehicle_make" ? requestBody?.vehicle?.make :
@@ -79,7 +81,7 @@ export function evaluateBookingRecovery626({
   const incomingProvider=norm(requestBody?.payment_provider || "stripe");
   if(!["stripe","paypal"].includes(incomingProvider) || norm(booking?.payment_provider)!==incomingProvider)
     return {ok:false,code:"PAYMENT_PROVIDER_CHANGED"};
-  const chosen=uniqueCodes(requestBody?.addon_codes);
+  const chosen=uniqueCodes(requestBody?.addon_codes ?? []);
   const recorded=uniqueCodes(booking?.addons);
   if(!chosen || !recorded || chosen.join(",")!==recorded.join(","))
     return {ok:false,code:"ADDON_SELECTION_CHANGED"};
