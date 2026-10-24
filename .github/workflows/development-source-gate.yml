@@ -56,6 +56,10 @@ jobs:
           node scripts/build628_booking_context_help_test.mjs
           node --check assets/booking-service-comparison-v629.js
           node scripts/build629_package_comparison_test.mjs
+          node --check assets/booking-draft-policy-v630.js
+          node --check assets/booking-recovery.js
+          node scripts/build630_booking_draft_safe_return_test.mjs
+          python3 scripts/booking_recovery_failure_handling_check.py
 
       - name: Validate guarded release promotion automation
         run: node scripts/guarded_production_promotion_test.mjs
