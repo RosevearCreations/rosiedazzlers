@@ -71,9 +71,9 @@
       "name": "Basic Detail",
       "subtitle": "Quick interior clean",
       "prices_cad": {
-        "small": 229,
-        "mid": 269,
-        "oversize": 309
+        "small": 115,
+        "mid": 135,
+        "oversize": 170
       },
       "deposit_cad": 50,
       "images_by_size": {
