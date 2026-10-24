@@ -230,7 +230,12 @@ function applyPackageAccuracy(pkg) {
   if (!canonical) return pkg;
   return {
     ...pkg,
-    prices_cad: { ...canonical },
+    // Build 624: honour editable Basic Detail vehicle-size prices after owner approval.
+    // The public overlay must not silently overwrite the stored catalog when prices change later.
+    prices_cad: code === "basic_detail" && ["small", "mid", "oversize"].every((size) =>
+      typeof pkg?.prices_cad?.[size] === "number" && Number.isFinite(pkg.prices_cad[size]) && pkg.prices_cad[size] >= 0)
+      ? { ...pkg.prices_cad }
+      : { ...canonical },
     ...rule,
     pricing_note: STANDARD_PRICING_NOTE,
     estimate_rule: "The listed package price is the base for the selected vehicle class. If inspection shows restoration-level or separately priced work, the expanded scope is quoted before it is added."
