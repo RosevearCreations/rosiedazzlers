@@ -4,6 +4,7 @@ import { mergeCatalog, normalizeCatalog } from "./_lib/pricing-catalog.js";
 import { applyCommercialAccuracy } from "./_lib/commercial-accuracy.js";
 import { serviceHeaders } from "./_lib/staff-session.js";
 import { checkCurrentBookingAvailability } from "./_lib/quote-booking-authority.js";
+import { evaluateVehicleServiceEligibility625, attachVehicleEligibility625 } from "./_lib/booking-vehicle-eligibility-625.js";
 import { normalizeBookingSelection623, validateBookingSelection623, buildUnifiedBookingContract623 }
   from "./_lib/booking-unified-contract-623.js";
 
@@ -16,10 +17,13 @@ export async function onRequestGet({request, env}) {
   const input = normalizeBookingSelection623(url.searchParams);
   // A malformed selection must not trigger an availability query.
   if (validateBookingSelection623(input).length) return respond({
-    ...buildUnifiedBookingContract623({
-      selection:input, checkoutCatalog:normalizeCatalog(bundled),
-      publicCatalog:applyCommercialAccuracy(normalizeCatalog(bundled))
-    }), read_only:true
+    ...attachVehicleEligibility625(
+      buildUnifiedBookingContract623({
+        selection:input, checkoutCatalog:normalizeCatalog(bundled),
+        publicCatalog:applyCommercialAccuracy(normalizeCatalog(bundled))
+      }),
+      evaluateVehicleServiceEligibility625({input:url.searchParams,selection:input,catalog:normalizeCatalog(bundled)})
+    ), read_only:true
   }, 400);
   let catalog = normalizeCatalog(bundled);
   let authorityVerified = false;
@@ -49,7 +53,11 @@ export async function onRequestGet({request, env}) {
     selection:input,checkoutCatalog:catalog,publicCatalog:applyCommercialAccuracy(catalog),
     availability,authorityVerified
   });
-  return respond({...result,read_only:true, generated_at:new Date().toISOString()});
+  const vehicle = evaluateVehicleServiceEligibility625({
+    input:url.searchParams,selection:input,catalog
+  });
+  return respond({...attachVehicleEligibility625(result,vehicle),
+    read_only:true,generated_at:new Date().toISOString()});
 }
 export function onRequestPost(){return respond({ok:false,error:"Read-only contract: bookings and payments use separate endpoints."},405);}
 export function onRequestPut(){return onRequestPost();}
