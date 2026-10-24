@@ -70,6 +70,7 @@ export async function checkCurrentBookingAvailability(env, input = {}) {
 
   if (!/^\d{4}-\d{2}-\d{2}$/.test(serviceDate)) return fail("BOOKING_SLOT_INVALID", "service_date must be YYYY-MM-DD.");
   if (!["AM", "PM"].includes(startSlot) || ![1, 2].includes(durationSlots)) return fail("BOOKING_SLOT_INVALID", "A valid AM/PM start slot and duration are required.");
+  if (durationSlots === 2 && startSlot !== "AM") return fail("BOOKING_SLOT_INVALID", "A full-day booking must start in AM.");
 
   const dateRows = await supabaseRows(env, `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${encodeURIComponent(serviceDate)}`);
   if (!dateRows.ok) return fail("BOOKING_AVAILABILITY_CHECK_FAILED", dateRows.error);
