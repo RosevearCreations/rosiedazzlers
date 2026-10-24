@@ -4,7 +4,7 @@ import { applyCommercialAccuracy, CANONICAL_PACKAGE_PRICES_CAD } from "../functi
 const staleCatalog = {
   packages: [
     { code: "premium_wash", name: "Premium Wash", prices_cad: { small: 1, mid: 2, oversize: 3 } },
-    { code: "basic_detail", name: "Basic Detail", prices_cad: { small: 115, mid: 135, oversize: 170 } },
+    { code: "basic_detail", name: "Basic Detail", prices_cad: { small: 229, mid: 269, oversize: 309 } },
     { code: "complete_detail", name: "Complete Detail", prices_cad: { small: 1, mid: 2, oversize: 3 } },
     { code: "interior_detail", name: "Interior Detail", prices_cad: { small: 1, mid: 2, oversize: 3 } },
     { code: "exterior_detail", name: "Exterior Detail", prices_cad: { small: 1, mid: 2, oversize: 3 } }
@@ -24,6 +24,8 @@ const result = applyCommercialAccuracy(staleCatalog);
 
 assert.deepEqual(result.package_map.premium_wash.prices_cad, CANONICAL_PACKAGE_PRICES_CAD.premium_wash);
 assert.deepEqual(result.package_map.basic_detail.prices_cad, { small: 229, mid: 269, oversize: 309 });
+const changedBasic = applyCommercialAccuracy({...staleCatalog, packages:staleCatalog.packages.map(p=>p.code==="basic_detail"? {...p,prices_cad:{small:239,mid:279,oversize:319}}:p)});
+assert.deepEqual(changedBasic.package_map.basic_detail.prices_cad, {small:239,mid:279,oversize:319}, "An owner catalog edit must propagate to public pricing.");
 assert.deepEqual(result.package_map.complete_detail.prices_cad, { small: 319, mid: 369, oversize: 419 });
 assert.deepEqual(result.package_map.interior_detail.prices_cad, { small: 195, mid: 220, oversize: 245 });
 assert.deepEqual(result.package_map.exterior_detail.prices_cad, { small: 195, mid: 220, oversize: 245 });
@@ -61,6 +63,6 @@ assert.equal(result.commercial_accuracy.currency, "CAD");
 assert.equal(result.commercial_accuracy.source_owned_package_matrix, true);
 
 // Input remains untouched: source overlay is read-only transformation, not a catalog mutation.
-assert.deepEqual(staleCatalog.packages[1].prices_cad, { small: 115, mid: 135, oversize: 170 });
+assert.deepEqual(staleCatalog.packages[1].prices_cad, { small: 229, mid: 269, oversize: 309 });
 
 console.log("Build 388 commercial accuracy behavior: PASS");
