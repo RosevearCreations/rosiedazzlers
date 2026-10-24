@@ -1,0 +1,16 @@
+/* Build 631 final-review accessibility: client UI only. */
+.booking-final-review-631{margin-top:16px;padding:16px;border:1px solid rgba(181,204,244,.5);
+ background:rgba(26,43,75,.55);border-radius:15px;color:#f2f7ff}
+.booking-final-review-631 h3{margin:0 0 10px;line-height:1.35;color:#fff}
+.booking-final-review-631 p{line-height:1.5}
+.booking-final-review-631__edits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0 18px}
+.booking-final-review-631__edits button{border:1px solid #b3c9ed;color:#fff;background:#2b4e80;border-radius:9px;
+ padding:10px;min-height:44px;cursor:pointer;text-align:center;overflow-wrap:anywhere}
+.booking-final-review-631__edits button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.booking-final-review-631__notice{padding:10px;border-left:3px solid #accbff;background:#203957;color:#f3f7ff;line-height:1.5}
+#step5Error:not(:empty){margin-top:14px;padding:10px;border-radius:8px;background:rgba(155,30,30,.22);color:#ffe9eb}
+#step5Error:focus{outline:3px solid #f2b4b4;outline-offset:2px}
+.wizard-step input[aria-invalid="true"]{border:2px solid #ffb2bb;box-shadow:0 0 0 1px #ffb2bb}
+@media(max-width:600px){.booking-final-review-631{padding:12px}
+.booking-final-review-631__edits{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.booking-final-review-631 *,#step5Error{transition:none!important;scroll-behavior:auto}}

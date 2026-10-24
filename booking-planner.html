@@ -178,6 +178,7 @@
   </style>
   <link rel="stylesheet" href="/assets/booking-wizard-v627.css?v=1" />
   <link rel="stylesheet" href="/assets/booking-context-help-v628.css?v=1" />
+  <link rel="stylesheet" href="/assets/booking-final-review-v631.css?v=1" />
 </head>
 <body>
   <div class="nav">
@@ -205,7 +206,7 @@
                     <a class="btn ghost" href="/pricing">Pricing page</a>
         </div>
       </div>
-      <div id="bookingStatus" class="notice" style="display:none;margin-top:12px"></div>
+      <div id="bookingStatus" class="notice" role="alert" aria-live="assertive" tabindex="-1" style="display:none;margin-top:12px"></div>
       <div class="booking-wizard-627" aria-label="Booking progress">
         <div class="booking-wizard-627__top">
           <strong id="wizardProgressText627">Step 1 of 5 — Date, area &amp; vehicle · 20%</strong>
@@ -595,8 +596,19 @@
       <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
 
       <div class="hr"></div>
-      <div id="finalSummary" class="summary-box"></div>
-      <div id="step5Error" class="field-error"></div>
+      <div class="booking-final-review-631" aria-labelledby="finalReviewHeading631">
+        <h3 id="finalReviewHeading631">Check these details before paying <span aria-hidden="true">ⓘ</span></h3>
+        <p class="mini">Please confirm the selected date, time, location, vehicle size and package. You can make changes before beginning checkout. The server will verify current availability and prices again.</p>
+        <div class="booking-final-review-631__edits" role="group" aria-label="Edit earlier booking steps">
+          <button type="button" data-631-edit-step="1" aria-label="Edit date, vehicle and service area">Edit date &amp; vehicle</button>
+          <button type="button" data-631-edit-step="2" aria-label="Edit main cleaning package">Edit package</button>
+          <button type="button" data-631-edit-step="3" aria-label="Edit optional add-ons">Edit add-ons</button>
+          <button type="button" data-631-edit-step="4" aria-label="Review site and policy requirements">Review requirements</button>
+        </div>
+        <div id="finalSummary" class="summary-box" role="region" aria-label="Current non-binding booking estimate"></div>
+        <p id="finalReviewDisclosure631" class="booking-final-review-631__notice" role="status" aria-live="polite">Estimated amount only. A slot is not held by this review.</p>
+      </div>
+      <div id="step5Error" class="field-error" role="alert" aria-live="assertive" tabindex="-1"></div>
 
       <div class="wizard-actions">
         <a class="btn ghost" href="/waiver">Terms, waiver, and requirements</a>
@@ -618,6 +630,7 @@
   </div>
 
   <script type="module">
+    import { validateFinalReviewContact631, finalReviewDisclosure631 } from "/assets/booking-final-review-v631.js?v=1";
     import {
       loadPricingCatalogClient,
       fetchJsonStrict,
@@ -1147,7 +1160,12 @@
 
     function showFieldError(step, msg) {
       const el = qs(`#step${step}Error`);
-      if (el) el.textContent = msg || "";
+      if (el) {
+        el.textContent = msg || "";
+        el.setAttribute("role", "alert");
+        el.setAttribute("aria-live", "assertive");
+        el.setAttribute("tabindex", "-1");
+      }
       return false;
     }
 
@@ -1562,6 +1580,10 @@
       renderWizardNav();
       if (state.currentStep === 4) renderReviewVehicle();
       if (state.currentStep === 5) renderFinalSummary();
+      const errorNode = qs(`#step${state.currentStep}Error`);
+      if (errorNode?.textContent?.trim()) {
+        try { errorNode.focus({ preventScroll: true }); } catch { errorNode.focus(); }
+      }
       analyticsTrack("booking_step_view", { step_number: state.currentStep });
       postEmbedState();
     }
@@ -2075,7 +2097,18 @@
         ["Quote-only extras", totals.quoteOnly ? "Some selected extras are quote-required and will be confirmed separately." : "None"],
         ["Photo estimate", (qs("#photo_estimate_requested")?.checked || state.photoEstimateRequested || parsePhotoEstimateLinks().length) ? `Requested/reviewable${parsePhotoEstimateLinks().length ? ` · ${parsePhotoEstimateLinks().length} link(s)` : ""}` : "Not requested"]
       ];
+      const contactName=qs("#customer_name")?.value?.trim() || "Not entered";
+      const contactEmail=qs("#customer_email")?.value?.trim() || "Not entered";
+      rows.push(["Customer", contactName],["Confirmation email",contactEmail]);
       qs("#finalSummary").innerHTML = rows.map(([label, value]) => `<div class="summary-row"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+      const disclosure=finalReviewDisclosure631({
+        hasDate:Boolean(selectedDate()),hasSlot:Boolean(state.selectedSlotChoice),
+        hasPackage:Boolean(pkg),hasSize:Boolean(selectedSize())
+      });
+      const notice=qs("#finalReviewDisclosure631");
+      if(notice) notice.textContent=disclosure.missing.length
+        ? "Please choose a " + disclosure.missing.join(", ") + " before proceeding. " + disclosure.disclaimer
+        : disclosure.disclaimer;
       postEmbedState();
     }
 
@@ -2109,14 +2142,39 @@
       }
 
       if (step === 5) {
-        if (!qs("#customer_name").value.trim()) return showFieldError(5, "Enter your full name.");
-        if (!qs("#customer_email").value.trim()) return showFieldError(5, "Enter your email address.");
-        if (!qs("#address_line1").value.trim()) return showFieldError(5, "Enter the service address.");
-        if (!validateCanadianPostalCode(qs("#postal_code").value)) return showFieldError(5, "Check the postal code format or leave it blank until staff confirm it.");
+        const result=validateFinalReviewContact631({
+          name:qs("#customer_name").value,email:qs("#customer_email").value,
+          address:qs("#address_line1").value,postal:qs("#postal_code").value
+        });
+        for(const id of ["customer_name","customer_email","address_line1","postal_code"])
+          qs("#"+id)?.removeAttribute("aria-invalid");
+        if (!result.ok) {
+          const issue=result.issues[0];
+          qs("#"+issue.field)?.setAttribute("aria-invalid","true");
+          return showFieldError(5,issue.message);
+        }
         return true;
       }
 
       return true;
+    }
+
+    qsa("[data-631-edit-step]").forEach(btn=>btn.addEventListener("click",()=>{
+      const step=Number(btn.getAttribute("data-631-edit-step"));
+      if(Number.isInteger(step)&&step>=1&&step<=4){
+        gotoStep(step);
+        const heading=qs(`.wizard-step[data-step="${step}"] h2`);
+        if(heading){
+          heading.setAttribute("tabindex","-1");
+          try{heading.focus({preventScroll:true});}catch{heading.focus();}
+        }
+      }
+    }));
+    for(const id of ["customer_name","customer_email","address_line1","postal_code"]){
+      qs("#"+id)?.addEventListener("input",()=>{
+        qs("#"+id)?.removeAttribute("aria-invalid");
+        if(state.currentStep===5)renderFinalSummary();
+      });
     }
 
     qs("#checkoutBtn").addEventListener("click", async () => {
@@ -2204,7 +2262,9 @@
         location.href = out.checkout_url;
       } catch (err) {
         analyticsTrack("checkout_error", { message: err?.message || "Checkout failed." });
-        showStatus(err.message || "Checkout failed.", "bad");
+        showStatus((err?.message || "Checkout could not be completed.") +
+          " No confirmation has been made by this form. Review your details and availability before retrying.", "bad");
+        try{qs("#bookingStatus")?.focus({preventScroll:true});}catch{qs("#bookingStatus")?.focus();}
         btn.disabled = false;
         btn.textContent = "Book and pay deposit";
       }
