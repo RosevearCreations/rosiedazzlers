@@ -1,0 +1,24 @@
+/* Build 628 contextual step and field help: visual/read-only only. */
+.booking-628-step-help{margin:12px 0 18px;padding:10px 14px;border:1px solid rgba(167,191,227,.45);
+ border-radius:13px;background:rgba(28,50,91,.42);color:#eaf2ff}
+.booking-628-step-help__summary{display:flex;align-items:center;gap:9px;cursor:pointer;
+ font-weight:750;padding:5px 0;line-height:1.5;color:#f7faff}
+.booking-628-step-help__summary:focus-visible{outline:3px solid #c9defb;outline-offset:3px;border-radius:5px}
+.booking-628-info{display:inline-grid;place-items:center;vertical-align:middle;flex:0 0 auto;
+ width:1.35em;height:1.35em;border:1.5px solid currentColor;border-radius:50%;
+ font:800 .82em/1 system-ui,sans-serif;color:#e3edff}
+.booking-628-step-help__summary .booking-628-info{margin-right:3px}
+.booking-628-step-help__summary span:last-child{min-width:0;overflow-wrap:anywhere}
+.booking-628-help-intro{margin:10px 0 6px;line-height:1.5;color:#f1f6ff}
+.booking-628-help-list{padding-left:1.35rem;margin:10px 0 6px;display:grid;gap:8px}
+.booking-628-help-list li{color:#dce8fc;line-height:1.48;overflow-wrap:anywhere}
+.booking-628-field-hint{color:#dfeafb;line-height:1.5;font-size:.88rem;margin:5px 0 8px;max-width:66ch}
+.booking-628-field-hint .booking-628-info{margin-right:7px;color:#d9e8ff}
+@media(max-width:600px){
+ .booking-628-step-help{padding:10px 12px;margin:10px 0 15px}
+ .booking-628-help-list{gap:10px}
+ .booking-628-field-hint{font-size:.9rem}
+}
+@media(prefers-reduced-motion:reduce){
+ .booking-628-step-help,.booking-628-step-help *{scroll-behavior:auto;transition:none!important}
+}
