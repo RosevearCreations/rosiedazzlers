@@ -59,6 +59,7 @@
     @media(max-width:1100px){.package-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.addon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.unified-hero,.booking-layout{grid-template-columns:1fr}.selection-bar{position:static}}
     @media(max-width:720px){.choice-toolbar,.package-grid,.addon-grid{grid-template-columns:1fr}.price-grid{grid-template-columns:repeat(3,1fr)}.planner-frame{height:1720px}.planner-shell{min-height:1400px}}
   </style>
+  <link rel="stylesheet" href="/assets/booking-service-comparison-v629.css?v=1" />
 </head>
 <body>
   <div class="nav">
@@ -98,6 +99,14 @@
         <div class="notice compact mini" id="priceHelp">Choose a size to highlight the price that applies. The booking planner verifies the vehicle details before checkout.</div>
       </div>
       <div id="packageGrid" class="package-grid" aria-live="polite"></div>
+      <section class="service-compare-629" id="packageCompare629" aria-labelledby="packageCompare629Heading">
+        <h3 id="packageCompare629Heading">Compare detailing packages side by side <span aria-hidden="true">ⓘ</span></h3>
+        <p>Choose up to three services to compare their included work and current catalog prices. Prices follow the vehicle size you choose above; ask for an estimate when a vehicle needs inspection.</p>
+        <div class="service-compare-629__choices" id="packageCompareChoices629" role="group" aria-label="Packages to compare"></div>
+        <p class="service-compare-629__status" id="packageCompareStatus629" aria-live="polite"></p>
+        <div class="service-compare-629__table-wrap" id="packageCompareTable629" tabindex="0" role="region" aria-label="Side-by-side package comparison"></div>
+        <p class="service-compare-629__note">Only listed services are included in each package. Add-ons, taxes and special-condition work may be separate. Booking, exact price and availability are rechecked before payment.</p>
+      </section>
       <div id="catalogError" class="notice bad" style="display:none;margin-top:12px"></div>
     </section>
 
@@ -147,12 +156,13 @@
   <script type="module">
     import { loadPricingCatalogClient, money, escapeHtml, packageImageForSize, packagePrice, addonPrimaryImage, chartUrl } from "/assets/pricing-catalog-client-legacy.js?v=20260904build336";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
+    import { buildServiceComparison629, PACKAGE_COMPARE_LIMIT_629 } from "/assets/booking-service-comparison-v629.js?v=1";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const params = new URLSearchParams(location.search);
     const qs = (s) => document.querySelector(s);
     const qsa = (s) => [...document.querySelectorAll(s)];
-    const state = { catalog:null, size:"", packageCode:"", addons:new Set(), plannerTouched:false, plannerLoaded:false, plannerState:null };
+    const state = { catalog:null, size:"", packageCode:"", addons:new Set(), compareCodes:new Set(), compareInitialized:false, plannerTouched:false, plannerLoaded:false, plannerState:null };
 
     function analytics(event, detail={}) { try { window.dispatchEvent(new CustomEvent("rd:analytics", { detail:{ event, ...detail } })); } catch {} }
     function packageRow() { return (state.catalog?.packages || []).find((row) => row.code === state.packageCode) || null; }
@@ -199,6 +209,65 @@
       if (state.addons.size) next.set("addons", [...state.addons].join(",")); else next.delete("addons");
       history.replaceState(null,"",`${location.pathname}${next.toString()?`?${next}`:""}${location.hash}`);
     }
+
+    function renderPackageComparison629(){
+      const packages=state.catalog?.packages || [];
+      if(!state.compareInitialized){
+        ["basic_detail","complete_detail"].forEach(code=>{
+          if(packages.some(pkg=>pkg.code===code))state.compareCodes.add(code);
+        });
+        if(!state.compareCodes.size && packages[0])state.compareCodes.add(packages[0].code);
+        state.compareInitialized=true;
+      }
+      const selected=state.compareCodes;
+      const limited=selected.size>=PACKAGE_COMPARE_LIMIT_629;
+      qs("#packageCompareChoices629").innerHTML=packages.map(pkg=>
+        '<label class="service-compare-629__choice"><input type="checkbox" data-compare-toggle="'+escapeHtml(pkg.code)+
+        '" '+(selected.has(pkg.code)?'checked ':'')+(limited&&!selected.has(pkg.code)?'disabled ':'')+
+        '><span>'+escapeHtml(pkg.name)+'</span></label>'
+      ).join("");
+      qsa("[data-compare-toggle]").forEach(box=>box.addEventListener("change",()=>{
+        const code=box.dataset.compareToggle;
+        if(box.checked && selected.size<PACKAGE_COMPARE_LIMIT_629)selected.add(code);
+        if(!box.checked)selected.delete(code);
+        renderPackageComparison629();
+      }));
+      const result=buildServiceComparison629({catalog:state.catalog,codes:[...selected],vehicleSize:state.size});
+      const cols=result.columns;
+      const status=qs("#packageCompareStatus629");
+      status.textContent=cols.length
+        ? cols.length+" of "+PACKAGE_COMPARE_LIMIT_629+" packages selected. "+
+          (state.size?"Showing prices for "+(state.size==="mid"?"medium":state.size)+" vehicles.":"Choose a vehicle size above to compare exact package prices.")
+        : "Select one or more packages above to begin comparing.";
+      const holder=qs("#packageCompareTable629");
+      if(!cols.length){holder.replaceChildren();return;}
+      const cell=(content)=>'<td>'+content+'</td>';
+      const row=(label,values)=>'<tr><th scope="row">'+escapeHtml(label)+'</th>'+values.map(cell).join("")+'</tr>';
+      const n=(value)=>value==null?'Confirm with staff':money(value/100);
+      const h=(value)=>escapeHtml(value || "See current package details");
+      let rows='';
+      rows+=row("Package price",cols.map(col=>state.size?n(col.price_cents):"Choose vehicle size"));
+      rows+=row("Deposit",cols.map(col=>n(col.deposit_cents)));
+      rows+=row("Best for",cols.map(col=>h(col.best_for)));
+      rows+=row("Customer goal",cols.map(col=>h(col.goal)));
+      rows+=row("Photo review",cols.map(col=>col.photo_estimate_recommended?"Recommended for inspection":"Not specifically flagged"));
+      for(const service of result.service_rows){
+        rows+=row(service.name,service.included.map(yes=>yes
+          ?'<span class="service-compare-629__yes">Included</span>'
+          :'<span class="service-compare-629__no">Not listed</span>'));
+      }
+      rows+=row("Next step",cols.map(col=>
+        '<button type="button" class="service-compare-629__select" data-compare-choose="'+escapeHtml(col.code)+'">'+
+        (state.packageCode===col.code?"Selected service":"Choose "+escapeHtml(col.name))+'</button>'));
+      holder.innerHTML='<table class="service-compare-629__table"><caption class="sr-only">Live package contents and vehicle-size prices</caption><thead><tr><th scope="col">Service comparison</th>'+
+        cols.map(col=>'<th scope="col">'+escapeHtml(col.name)+'</th>').join("")+
+        '</tr></thead><tbody>'+rows+'</tbody></table>';
+      holder.querySelectorAll("[data-compare-choose]").forEach(button=>button.addEventListener("click",()=>{
+        const code=button.dataset.compareChoose;
+        const card=qsa("[data-choose-package]").find(item=>item.dataset.choosePackage===code);
+        if(card){card.click();qs("#booking").scrollIntoView({behavior:"smooth",block:"start"});}
+      }));
+    }
     function renderPackages() {
       const packages = state.catalog?.packages || [];
       qs("#packageGrid").innerHTML = packages.map((pkg) => {
@@ -218,6 +287,7 @@
         renderPackages(); renderAddons(); renderSummary(); syncUrl(); maybeRefreshPlanner();
         analytics("unified_service_pick",{package_code:state.packageCode,vehicle_size:state.size||null});
       }));
+      renderPackageComparison629();
     }
     function setAddonSelection(code, selected) {
       const addon=(state.catalog?.addons||[]).find((row)=>row.code===code);
@@ -299,7 +369,7 @@
     init();
   </script>
   <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
-  <script src="/assets/site-policies.js" defer></script>
+  <script src="/assets/site-policies.js?v=20261024build630" defer></script>
   <script src="/assets/booking-hours.js" defer></script>
 </body>
 </html>
