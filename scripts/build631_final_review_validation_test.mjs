@@ -46,7 +46,7 @@ assert.match(css,/max-width:600px/);
 assert.equal(mainBook,copy);
 assert.match(old339,/optional safe version/);
 assert.match(old339,/site-policies\\\.js/);
-assert.match(old404,/DRAFT_KEY = \\"rd_booking_draft_v630\\"/);
+assert.match(old404,/const DRAFT_KEY = "rd_booking_draft_v630"/);
 assert.match(old404,/safeSessionRemove\(LEGACY_DRAFT_KEY\)/);
 assert.match(recovery,/safeSessionRemove\(LEGACY_DRAFT_KEY\)/);
 assert.match(recovery,/data-recovery-continue/);
