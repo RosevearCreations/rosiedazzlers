@@ -28,6 +28,7 @@ export async function onRequestPost({ request, env }) {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(String(body.service_date || ""))) return corsJson({ error: "service_date must be YYYY-MM-DD" }, 400);
     if (!["AM", "PM"].includes(String(body.start_slot || ""))) return corsJson({ error: "start_slot must be AM or PM" }, 400);
     if (![1,2].includes(Number(body.duration_slots))) return corsJson({ error: "duration_slots must be 1 or 2" }, 400);
+    if (Number(body.duration_slots) === 2 && String(body.start_slot) !== "AM") return corsJson({ error: "Full-day bookings must start in AM" }, 400);
     if (!["small", "mid", "oversize"].includes(String(body.vehicle_size || ""))) return corsJson({ error: "vehicle_size must be small, mid, or oversize" }, 400);
 
     for (const ack of ["ack_driveway", "ack_power_water", "ack_bylaw", "ack_cancellation"]) {
