@@ -1,23 +1,16 @@
 // Build 380 — booking recovery, refresh/back resilience, and customer-safe checkout retry.
 // Session state stays in this browser tab only. Server pricing, availability, booking, and payment rules remain authoritative.
 
-const DRAFT_KEY = "rd_booking_draft_v380";
+import { sanitizedBookingChoices630, parseBookingChoices630, BOOKING_DRAFT_FIELDS_630 } from "./booking-draft-policy-v630.js";
+
+const LEGACY_DRAFT_KEY = "rd_booking_draft_v380";
+const DRAFT_KEY = "rd_booking_draft_v630";
 const REQUEST_KEY = "rd_booking_request_v380";
 const PAYMENT_KEY = "rd_booking_payment_v380";
 const CANCEL_KEY = "rd_booking_cancel_v380";
-const DRAFT_MAX_AGE_MS = 6 * 60 * 60 * 1000;
-
-const SIMPLE_FIELDS = [
-  "service_date", "service_area", "veh_year", "veh_make", "veh_model", "veh_plate", "veh_photo",
-  "veh_body", "veh_category", "veh_color", "veh_mileage", "vehicle_size", "gift_code", "promo_code",
-  "special_notes", "photo_estimate_links", "customer_name", "customer_email", "customer_phone",
-  "address_line1", "city", "postal_code"
-];
-
-const CHECKBOX_FIELDS = [
-  "ack_driveway", "ack_power_water", "ack_bylaw", "ack_cancellation", "need_mobile_water_power",
-  "photo_estimate_requested"
-];
+// Only anonymous package preferences are persisted. Never store PII, VIN/plate,
+// date/slot, payment details, prices, gift codes, consent or acknowledgements.
+const SIMPLE_FIELDS = BOOKING_DRAFT_FIELDS_630;
 
 function normalizedPath() {
   return String(location.pathname || "/").replace(/\.html$/i, "").replace(/\/+$/, "") || "/";
@@ -36,7 +29,7 @@ function safeSessionRemove(key) {
 }
 
 function clearRecoveryState() {
-  [DRAFT_KEY, REQUEST_KEY, PAYMENT_KEY, CANCEL_KEY].forEach(safeSessionRemove);
+  [DRAFT_KEY, LEGACY_DRAFT_KEY, REQUEST_KEY, PAYMENT_KEY, CANCEL_KEY].forEach(safeSessionRemove);
 }
 
 function parseJson(text, fallback = null) {
@@ -76,12 +69,9 @@ function todayIso() {
 }
 
 function readDraft() {
-  const draft = parseJson(safeSessionGet(DRAFT_KEY), null);
-  if (!draft || typeof draft !== "object") return null;
-  if (!Number.isFinite(Number(draft.saved_at)) || Date.now() - Number(draft.saved_at) > DRAFT_MAX_AGE_MS) {
-    safeSessionRemove(DRAFT_KEY);
-    return null;
-  }
+  const existing=safeSessionGet(DRAFT_KEY);
+  const draft=parseBookingChoices630(existing);
+  if(existing && !draft)safeSessionRemove(DRAFT_KEY);
   return draft;
 }
 
@@ -95,30 +85,12 @@ function captureDraft() {
     const node = document.getElementById(id);
     if (node) fields[id] = node.value ?? "";
   });
-
-  const checks = {};
-  CHECKBOX_FIELDS.forEach((id) => {
-    const node = document.getElementById(id);
-    if (node) checks[id] = node.checked === true;
+  return sanitizedBookingChoices630({
+    saved_at:Date.now(),fields,
+    package_code:selectedCode("[data-package]","data-package"),
+    addon_codes:[...document.querySelectorAll("[data-addon].active")]
+      .map(node=>node.getAttribute("data-addon")).filter(Boolean)
   });
-
-  const mediaConsent = document.querySelector("input[name='media_consent_preference']:checked")?.value || "estimate_only";
-  const conditionFlags = [...document.querySelectorAll("[data-condition-flag]:checked")]
-    .map((node) => node.getAttribute("data-condition-flag"))
-    .filter(Boolean);
-
-  return {
-    version: 380,
-    saved_at: Date.now(),
-    fields,
-    checks,
-    media_consent_preference: mediaConsent,
-    condition_flags: conditionFlags,
-    package_code: selectedCode("[data-package]", "data-package"),
-    addon_codes: [...document.querySelectorAll("[data-addon].active")].map((node) => node.getAttribute("data-addon")).filter(Boolean),
-    slot: selectedCode("[data-slot]", "data-slot"),
-    current_step: Number(document.querySelector(".wizard-step:not([hidden])")?.dataset?.step || 1)
-  };
 }
 
 function createNotice() {
@@ -130,7 +102,7 @@ function createNotice() {
   box.className = "notice warn";
   box.style.display = "none";
   box.style.marginBottom = "14px";
-  box.innerHTML = `<strong data-recovery-title>Booking recovery</strong><div data-recovery-copy class="mini" style="margin-top:4px"></div><div style="margin-top:8px"><button type="button" class="btn ghost small" data-recovery-discard>Discard saved booking</button></div>`;
+  box.innerHTML = `<strong data-recovery-title>Booking recovery</strong><div data-recovery-copy class="mini" style="margin-top:4px"></div><div style="margin-top:8px"><button type="button" class="btn primary small" data-recovery-continue hidden>Continue saved choices</button> <button type="button" class="btn ghost small" data-recovery-discard>Discard saved choices</button></div>`;
   host.prepend(box);
   box.querySelector("[data-recovery-discard]")?.addEventListener("click", () => {
     clearRecoveryState();
@@ -165,34 +137,12 @@ function setNodeValue(node, value) {
 }
 
 function restoreSimpleDraft(draft) {
-  Object.entries(draft.fields || {}).forEach(([id, value]) => {
+  // Only anonymous fields. Never restore a date, time, approvals or payment state.
+  for (const id of SIMPLE_FIELDS) {
     const node = document.getElementById(id);
-    if (!node) return;
-    if (id === "service_date" && value && String(value) < todayIso()) return;
-    setNodeValue(node, value);
-  });
-
-  Object.entries(draft.checks || {}).forEach(([id, value]) => {
-    const node = document.getElementById(id);
-    if (!node || node.checked === Boolean(value)) return;
-    node.checked = Boolean(value);
-    node.dispatchEvent(new Event("change", { bubbles: true }));
-  });
-
-  const consent = document.querySelector(`input[name='media_consent_preference'][value='${CSS.escape(String(draft.media_consent_preference || "estimate_only"))}']`);
-  if (consent && !consent.checked) {
-    consent.checked = true;
-    consent.dispatchEvent(new Event("change", { bubbles: true }));
+    const value = draft.fields?.[id];
+    if (node && typeof value==="string")setNodeValue(node,value);
   }
-
-  const wantedFlags = new Set(Array.isArray(draft.condition_flags) ? draft.condition_flags : []);
-  document.querySelectorAll("[data-condition-flag]").forEach((node) => {
-    const wanted = wantedFlags.has(node.getAttribute("data-condition-flag"));
-    if (node.checked !== wanted) {
-      node.checked = wanted;
-      node.dispatchEvent(new Event("change", { bubbles: true }));
-    }
-  });
 }
 
 function restoreDynamicDraft(draft) {
@@ -221,15 +171,7 @@ function restoreDynamicDraft(draft) {
     }
   });
 
-  if (draft.slot) {
-    const button = document.querySelector(`[data-slot='${CSS.escape(String(draft.slot))}']`);
-    if (button && !button.disabled && !button.classList.contains("active")) {
-      button.click();
-      resolved = false;
-    } else if (!button || button.disabled) {
-      resolved = false;
-    }
-  }
+  // Build 630: intentionally do not restore a date or slot. Availability must be fetched fresh.
 
   return resolved;
 }
@@ -242,51 +184,53 @@ function installDraftPersistence() {
     saveQueued = true;
     queueMicrotask(() => {
       saveQueued = false;
-      safeSessionSet(DRAFT_KEY, JSON.stringify(captureDraft()));
+      if (!restoring) safeSessionSet(DRAFT_KEY, JSON.stringify(captureDraft()));
     });
   };
-
   document.addEventListener("input", save, true);
   document.addEventListener("change", save, true);
-  document.addEventListener("click", (event) => {
-    if (event.target?.closest?.("[data-package],[data-addon],[data-slot],[data-step-nav],[data-inline-next-step],#prevStepBtn,#nextStepBtn")) save();
-  }, true);
-  window.addEventListener("pagehide", () => {
-    if (!restoring) safeSessionSet(DRAFT_KEY, JSON.stringify(captureDraft()));
+  document.addEventListener("click", event => {
+    if(event.target?.closest?.("[data-package],[data-addon],[data-slot],[data-step-nav],[data-inline-next-step],#prevStepBtn,#nextStepBtn"))save();
+  },true);
+  window.addEventListener("pagehide",()=>{
+    if(!restoring)safeSessionSet(DRAFT_KEY,JSON.stringify(captureDraft()));
   });
-
-  const draft = readDraft();
+  const draft=readDraft();
   if (!draft || hasExplicitBookingPrefill()) {
-    restoring = false;
-    if (draft && hasExplicitBookingPrefill()) {
-      showNotice("Saved booking available", "This link contains explicit booking choices, so they were kept instead of overwriting them with the saved session.", "ok");
+    restoring=false;
+    if(draft && hasExplicitBookingPrefill()){
+      // An explicitly shared booking URL must win; never overwrite its selections.
+      showNotice("Saved choices not applied","This link specified new booking choices. They take priority. You can discard the older choices.", "ok");
     }
     return;
   }
-
-  restoreSimpleDraft(draft);
-  const observer = new MutationObserver(() => {
-    if (restoreDynamicDraft(draft)) finishRestore();
-  });
-  observer.observe(document.documentElement, { subtree: true, childList: true, attributes: true, attributeFilter: ["class", "disabled"] });
-
-  let finished = false;
-  function finishRestore() {
-    if (finished) return;
-    finished = true;
-    observer.disconnect();
-    restoring = false;
-    safeSessionSet(DRAFT_KEY, JSON.stringify(captureDraft()));
-    const cancelledId = bookingIdFromAnyContext() || safeSessionGet(CANCEL_KEY);
-    if (cancelledId) {
-      showNotice("Payment not completed", "Your booking details were restored. You can review availability and press Book and pay deposit again; the server will resume the same recent booking hold when it is safe to do so.", "warn");
-    } else {
-      showNotice("Booking restored", "Your in-progress booking details were restored after the page interruption. Please review the date and availability before continuing.", "ok");
-    }
-  }
-
-  restoreDynamicDraft(draft);
-  setTimeout(finishRestore, 8000);
+  // Deliberate user action required; no automatic restoration of stale state.
+  showNotice("Continue your package choices?",
+    "Only anonymous package, add-on, size and service-town choices were kept in this browser tab. Dates, slots, prices, contact details and payment information were not saved. Choose Continue to recheck everything.", "ok");
+  const box=createNotice();
+  const resume=box.querySelector("[data-recovery-continue]");
+  if(resume)resume.hidden=false;
+  resume?.addEventListener("click",()=>{
+    resume.disabled=true;
+    resume.hidden=true;
+    // The canonical planner has already loaded its live catalog and availability.
+    restoreSimpleDraft(draft);
+    const observer=new MutationObserver(()=>{if(restoreDynamicDraft(draft))finish();});
+    let finished=false;
+    const finish=()=>{
+      if(finished)return;
+      finished=true;
+      observer.disconnect();
+      restoring=false;
+      safeSessionSet(DRAFT_KEY,JSON.stringify(captureDraft()));
+      showNotice("Choices restored — please review",
+        "Your package choices have been reapplied where still offered. Choose a new available date and slot; all prices, add-on rules and availability are checked again before payment.", "ok");
+    };
+    observer.observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:["class","disabled"]});
+    restoreDynamicDraft(draft);
+    // Do not wait indefinitely if a service/add-on has been removed from catalog.
+    setTimeout(finish,4000);
+  },{once:true});
 }
 
 function responseWithJson(response, data) {
@@ -387,6 +331,8 @@ export function wireBookingRecovery() {
   const path = normalizedPath();
   const params = new URLSearchParams(location.search);
 
+  // Purge pre-630 drafts that may contain customer name, address, plate and other private data.
+  safeSessionRemove(LEGACY_DRAFT_KEY);
   if (params.get("fresh") === "1") clearRecoveryState();
 
   if (["/complete", "/booking-confirmed"].includes(path)) {
@@ -398,7 +344,9 @@ export function wireBookingRecovery() {
 
   if (path === "/book") {
     if (bookingIdFromAnyContext()) {
-      showNotice("Payment return detected", "Your in-progress booking is still available in this browser tab. The planner will restore it and safely resume the same recent booking hold when possible.", "warn");
+      showNotice("Payment return detected", "Please review your booking and current availability in the planner. No previous appointment slot is assumed available.", "warn");
+    } else if(readDraft()) {
+      showNotice("Saved package choices", "A small anonymous draft is available in your booking planner below. Continue or discard it there; prices and dates will be checked again.", "ok");
     }
     return;
   }
