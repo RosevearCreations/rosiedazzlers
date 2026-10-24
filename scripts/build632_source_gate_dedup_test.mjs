@@ -16,7 +16,7 @@ for(const label of ["source checks suite A","source checks suite B","source chec
   assert.match(workflow,new RegExp("^\\s+name:\\s*"+label+"\\s*$","m"),"Protect check "+label);
 for(const job of ["source-gate-partition-a","source-gate-partition-b","source-gate-partition-c","source-gate-partition-d"])
   assert.match(workflow,new RegExp("^  "+job+":","m"),"Protect job "+job);
-const aggregate=workflow.match(/^  source-gate:\s*\n([\s\S]*?)(?=\n  [\w-]+:\s*\n|$)/m)?.[1]||"";
+const aggregate=workflow.split(/^  source-gate:\s*$/m)[1]||"";
 assert.ok(aggregate.length>0,"Required aggregate must remain present");
 for(const job of ["source-gate-partition-a","source-gate-partition-b","source-gate-partition-c","source-gate-partition-d"])
   assert.ok(aggregate.includes(job),"Aggregate must depend on "+job);
