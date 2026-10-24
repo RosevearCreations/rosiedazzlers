@@ -86,7 +86,7 @@ if re.search(r"/rest/v1/bookings[^\n]+method\s*:\s*[\"'](?:POST|PATCH|DELETE|PUT
 if any(token in endpoint for token in ["wrangler pages deploy", "git push --force"]):
     fail("checkout recovery endpoint contains a prohibited release mutation primitive")
 
-for needle in ["/assets/booking-recovery.js?v=20260911build380", "wireBookingRecovery", "canonical booking and checkout remain usable"]:
+for needle in ["/assets/booking-recovery.js?v=20261024build630", "wireBookingRecovery", "canonical booking and checkout remain usable"]:
     if needle not in policy_hook:
         fail(f"site policy hook missing booking-recovery wiring: {needle}")
 for needle in [
