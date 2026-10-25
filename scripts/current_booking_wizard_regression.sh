@@ -19,3 +19,6 @@ node scripts/build650_booking_readiness_test.mjs
 
 # Build 651 gift selection links, checkout tab activation and accessibility.
 node scripts/build651_gift_choice_test.mjs
+
+# Build 652 gallery comparison controls, filtering and public publication boundaries.
+node scripts/build652_gallery_browse_test.mjs

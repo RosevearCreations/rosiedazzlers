@@ -1,0 +1,22 @@
+/* Build 652 — gallery browse, comparison controls and truthful empty states */
+.gallery-filter-tools{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:14px 0 4px}
+.gallery-filter-tools p{margin:0}
+.gallery-filter-scope{font-size:.9rem;margin:6px 0 0}
+.gallery-sample-badge{border:1px solid rgba(251,191,36,.5);color:#ffdf8b;background:rgba(245,158,11,.12)}
+.gallery-approved-badge{border:1px solid rgba(133,204,178,.45)}
+.compare-stage{isolation:isolate}
+.compare-stage .compare-media-fallback{position:absolute;inset:0;z-index:1}
+.compare-stage .compare-before{z-index:2}
+.compare-handle{z-index:3;pointer-events:none}
+.compare-side-label{position:absolute;bottom:10px;z-index:4;pointer-events:none;padding:3px 9px;border-radius:999px;font-size:.8rem;font-weight:800;color:#fff;background:rgba(4,11,22,.86)}
+.before-label{left:10px}.after-label{right:10px}
+.compare-range-label{display:block;margin-top:12px;font-weight:700}
+.compare-range{accent-color:#e8bb62;min-height:30px;cursor:ew-resize}
+.compare-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.compare-controls .btn{min-width:90px;min-height:40px}
+.compare-controls output{margin-left:auto;font-variant-numeric:tabular-nums;color:#ead09b;font-weight:700}
+.compare-range:focus-visible,.compare-controls .btn:focus-visible,#galleryResetFilters:focus-visible{outline:3px solid #f3ce76;outline-offset:3px}
+.gallery-empty-state{padding:18px}
+.managed-media-unavailable{display:grid;place-items:center;min-height:190px;padding:18px;text-align:center;color:#f2dba2;background:rgba(24,32,48,.92)}
+#comparisonSection[hidden],#managedGallerySection[hidden],#managedGalleryStatus[hidden]{display:none!important}
+@media(max-width:650px){.compare-card{padding:12px}.compare-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.compare-controls .btn{min-width:0}.compare-controls output{grid-column:1/-1;text-align:center;margin:0}.gallery-filter-tools{align-items:stretch}.gallery-filter-tools #galleryResetFilters{width:100%}.compare-side-label{bottom:8px}}

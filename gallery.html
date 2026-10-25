@@ -6,6 +6,7 @@
   <meta name="description" content="See approved Rosie Dazzlers detailing photos from Oxford and Norfolk Counties: before-and-after results, service evidence, efficient workflows, and techniques." />
   <link rel="canonical" href="https://rosiedazzlers.ca/gallery" />
   <link rel="stylesheet" href="/assets/site.css?v=20260813build259" />
+  <link rel="stylesheet" href="/assets/build652-gallery-browse.css?v=build652" />
   <style>
     .compare-grid{display:grid;gap:18px}.compare-card{padding:18px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
     .compare-stage{position:relative;aspect-ratio:16/10;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.04)}
@@ -20,52 +21,156 @@
   </style>
 </head><body data-build175="gallery-proof-filter-privacy" data-build177="privacy-proof-badges">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a><button id="navToggle" class="btn small ghost nav-toggle" type="button" aria-expanded="false">Menu</button><div id="navLinks" class="nav-links"></div><a class="btn primary" href="/book">Book now</a></div></header>
-<main class="container"><section class="section"><div class="hero"><div><div class="badge">Detailing Photo Gallery</div><h1>Detailing results, evidence, and techniques</h1><p>See privacy-approved before-and-after results plus evidence, efficient workflow, and technique photos from Rosie Dazzlers. Customer media stays hidden until consent and privacy checks are complete.</p><div class="gallery-filters"><label>Service proof<select id="serviceFilter"><option value="all">All services</option></select></label><label>Town proof<select id="townFilter"><option value="all">All towns</option></select></label><label>Photo type<select id="contentTypeFilter"><option value="all">All managed photos</option><option value="before-after">Before &amp; after</option><option value="evidence">Evidence</option><option value="technique">Technique</option><option value="efficiency">Efficiency</option></select></label></div><p class="privacy-note" id="privacyNote">Loading privacy rule…</p></div></div></section><section class="section"><div id="galleryList" class="compare-grid"><div class="panel">Loading gallery…</div></div></section><section class="section panel" id="managedGallerySection" hidden><div class="section-head"><div><h2 style="margin:0">More approved Rosie Dazzlers proof</h2><p class="muted" style="margin:6px 0 0">Photo Studio assignments for before/after sets, evidence, technique, and efficiency.</p></div></div><div id="managedGalleryList" class="managed-gallery-grid"></div></section></main><footer class="footer container" data-footer></footer>
+<main class="container"><section class="section"><div class="hero"><div><div class="badge">Detailing Photo Gallery</div><h1>Detailing results, evidence, and techniques</h1><p>See privacy-approved before-and-after results plus evidence, efficient workflow, and technique photos from Rosie Dazzlers. Customer media stays hidden until consent and privacy checks are complete.</p><div class="gallery-filters"><label>Service proof<select id="serviceFilter"><option value="all">All services</option></select></label><label>Town proof<select id="townFilter"><option value="all">All towns</option></select></label><label>Photo type<select id="contentTypeFilter"><option value="all">All photo types</option><option value="before-after">Before &amp; after</option><option value="evidence">Evidence</option><option value="technique">Technique</option><option value="efficiency">Efficiency</option></select></label></div><div class="gallery-filter-tools"><p id="galleryResultsStatus" class="muted" role="status" aria-live="polite">Loading approved gallery entries…</p><button type="button" class="btn ghost small" id="galleryResetFilters">Reset filters</button></div><p class="muted gallery-filter-scope">Service and town filters apply to published comparisons. Photo type filters both comparisons and Photo Studio assignments.</p><p class="privacy-note" id="privacyNote">Loading gallery publication details…</p></div></div></section><section class="section" id="comparisonSection"><div id="galleryList" class="compare-grid"><div class="panel">Loading gallery…</div></div></section><section class="section panel" id="managedGallerySection" hidden><div class="section-head"><div><h2 style="margin:0">More approved Rosie Dazzlers proof</h2><p class="muted" style="margin:6px 0 0">Photo Studio assignments for before/after sets, evidence, technique, and efficiency.</p></div></div><div id="managedGalleryList" class="managed-gallery-grid"></div></section><div id="managedGalleryStatus" class="panel gallery-empty-state" role="status" hidden></div></main><footer class="footer container" data-footer></footer>
 <script src="/assets/chrome.js"></script>
 <script>
 (function(){
-  const host=document.querySelector('#galleryList');
-  const serviceFilter=document.querySelector('#serviceFilter');
-  const townFilter=document.querySelector('#townFilter');
-  const privacyNote=document.querySelector('#privacyNote');
-  function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-  function optionHtml(row){return `<option value="${esc(row.value)}">${esc(row.label)}</option>`;}
-  function mediaFallback(label){return `<div class="compare-media-fallback"><div><strong>${esc(label)} image unavailable</strong><span>Check the media URL or re-upload the approved photo in App Management.</span></div></div>`;}
-  function mediaTag(item, kindKey, urlKey, fallbackKey, cssClass, label){
-    const kind=String(item[kindKey]||'image').toLowerCase()==='video'?'video':'image';
-    const url=String(item[urlKey]||'').trim();
-    const fallback=String(item[fallbackKey]||'').trim();
-    if(!url) return mediaFallback(label);
-    if(kind==='video') return `<video class="${cssClass}" src="${esc(url)}" controls preload="metadata"></video>`;
-    return `<img class="${cssClass}" src="${esc(url)}" alt="${esc(label)} ${esc(item.service||'detailing')}" data-fallback-src="${esc(fallback)}" onerror="window.RDGalleryImageFallback&&window.RDGalleryImageFallback(this,'${esc(label)}')">`;
-  }
-  window.RDGalleryImageFallback=function(img,label){
-    const fallback=img.getAttribute('data-fallback-src')||'';
-    if(fallback && img.src.indexOf(fallback)===-1){ img.src=fallback; img.removeAttribute('data-fallback-src'); return; }
-    const wrap=document.createElement('div');
-    wrap.className='compare-media-fallback '+(img.className||'');
-    wrap.innerHTML='<div><strong>'+esc(label||'Gallery')+' image unavailable</strong><span>Media URL could not load. Use App Management to repair the approved before/after photo.</span></div>';
-    img.replaceWith(wrap);
+  const host = document.querySelector('#galleryList');
+  const comparisonSection = document.querySelector('#comparisonSection');
+  const serviceFilter = document.querySelector('#serviceFilter');
+  const townFilter = document.querySelector('#townFilter');
+  const typeFilter = document.querySelector('#contentTypeFilter');
+  const privacyNote = document.querySelector('#privacyNote');
+  const resultsStatus = document.querySelector('#galleryResultsStatus');
+  const resetFilters = document.querySelector('#galleryResetFilters');
+  const initial = new URLSearchParams(location.search);
+  const filters = {
+    service: initial.get('service') || 'all',
+    town: initial.get('town') || 'all',
+    type: initial.get('type') || 'all'
   };
-  async function loadGallery(){
-    const params=new URLSearchParams();
-    if(serviceFilter.value && serviceFilter.value!=='all') params.set('service',serviceFilter.value);
-    if(townFilter.value && townFilter.value!=='all') params.set('town',townFilter.value);
-    host.innerHTML='<div class="panel">Loading gallery…</div>';
-    const res=await fetch('/api/before_after_gallery_public?'+params.toString(),{cache:'no-store'});
-    const data=await res.json().catch(()=>({items:[]}));
-    const selectedService=serviceFilter.value||'all'; const selectedTown=townFilter.value||'all';
-    if(Array.isArray(data.available_services)){ serviceFilter.innerHTML='<option value="all">All services</option>'+data.available_services.map(optionHtml).join(''); serviceFilter.value=selectedService; }
-    if(Array.isArray(data.available_towns)){ townFilter.innerHTML='<option value="all">All towns</option>'+data.available_towns.map(optionHtml).join(''); townFilter.value=selectedTown; }
-    privacyNote.textContent=(data.privacy_rule||'Only approved public media is shown.')+(data.blocked_count?` ${data.blocked_count} private/pending item(s) blocked from public reuse.`:'');
-    const items=Array.isArray(data.items)?data.items:[];
-    if(!items.length){ host.innerHTML='<div class="panel">No approved gallery comparisons match this filter yet.</div>'; return; }
-    host.innerHTML=items.map((item,idx)=>`<article class="compare-card"><div class="section-head"><div><h2 style="margin:0">${esc(item.title||'Detail result')}</h2><p class="muted" style="margin:6px 0 0">${esc(item.location||'Oxford / Norfolk Counties')} • ${esc(item.service||'Mobile detailing')}</p></div><span class="badge">${esc(item.consent_status || 'Approved public')}</span><span class="badge">${esc(item.media_privacy_status || 'privacy checked')}</span></div><div class="compare-stage" data-stage="${idx}" style="--split:50%">${mediaTag(item,'after_kind','after_url','fallback_after_url','compare-after','After')}${mediaTag(item,'before_kind','before_url','fallback_before_url','compare-before','Before')}<div class="compare-handle"></div></div><input class="compare-range" type="range" min="0" max="100" value="50" data-range="${idx}" /><p class="muted">${esc(item.note||'')}</p></article>`).join('');
-    document.querySelectorAll('[data-range]').forEach(r=>r.addEventListener('input',()=>{ const stage=document.querySelector(`[data-stage="${r.dataset.range}"]`); if(stage) stage.style.setProperty('--split', `${r.value}%`); }));
+  const validTypes = new Set(['all', 'before-after', 'evidence', 'technique', 'efficiency']);
+  if (!validTypes.has(filters.type)) filters.type = 'all';
+  typeFilter.value = filters.type;
+  let galleryRows = [];
+  let generation = 0;
+
+  function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\'':'&#39;'}[m]));}
+  function optionHtml(row){return `<option value="${esc(row.value)}">${esc(row.label)}</option>`;}
+  function mediaFallback(label, cssClass=''){
+    return `<div class="compare-media-fallback ${esc(cssClass)}"><div><strong>${esc(label)} image unavailable</strong><span>This approved media cannot be displayed right now.</span></div></div>`;
   }
-  serviceFilter.addEventListener('change',()=>loadGallery().catch(()=>{host.innerHTML='<div class="panel">Could not load the gallery right now.</div>';}));
-  townFilter.addEventListener('change',()=>loadGallery().catch(()=>{host.innerHTML='<div class="panel">Could not load the gallery right now.</div>';}));
-  loadGallery().catch(()=>{host.innerHTML='<div class="panel">Could not load the gallery right now.</div>';});
+  function mediaTag(item, kindKey, urlKey, fallbackKey, cssClass, label){
+    const kind = String(item[kindKey]||'image').toLowerCase()==='video' ? 'video' : 'image';
+    const url = String(item[urlKey]||'').trim();
+    const fallback = String(item[fallbackKey]||'').trim();
+    if(!url) return mediaFallback(label, cssClass);
+    if(kind==='video') return `<video class="${cssClass}" src="${esc(url)}" controls preload="metadata" aria-label="${esc(label)} detailing video"></video>`;
+    return `<img class="${cssClass}" src="${esc(url)}" alt="${esc(label)} ${esc(item.service||'detailing')}" loading="lazy" decoding="async" data-gallery-side="${label}" data-fallback-src="${esc(fallback)}">`;
+  }
+  host.addEventListener('error', event => {
+    const img = event.target;
+    if (!(img instanceof HTMLImageElement) || !img.dataset.gallerySide) return;
+    const fallback = img.dataset.fallbackSrc || '';
+    if (fallback && !img.dataset.fallbackTried && img.getAttribute('src') !== fallback) {
+      img.dataset.fallbackTried = 'true';
+      img.src = fallback;
+      return;
+    }
+    img.outerHTML = mediaFallback(img.dataset.gallerySide, img.classList.contains('compare-before') ? 'compare-before' : 'compare-after');
+  }, true);
+
+  function syncAddress(){
+    const url = new URL(location.href);
+    for (const key of ['service','town','type']) {
+      if (filters[key] && filters[key] !== 'all') url.searchParams.set(key, filters[key]);
+      else url.searchParams.delete(key);
+    }
+    history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }
+  function updateVisibleSections(){
+    const showComparisons = filters.type === 'all' || filters.type === 'before-after';
+    comparisonSection.hidden = !showComparisons;
+    const count = galleryRows.length;
+    resultsStatus.textContent = showComparisons
+      ? `${count} published comparison${count===1?'':'s'} match ${filters.service==='all'&&filters.town==='all'?'the current gallery':'these filters'}.`
+      : `Showing ${filters.type} Photo Studio entries below, when approved images are available.`;
+  }
+  function updateComparison(range){
+    const card = range.closest('.compare-card');
+    const split = Number(range.value);
+    card?.querySelector('.compare-stage')?.style.setProperty('--split', split + '%');
+    const output = card?.querySelector('output');
+    if(output) output.textContent = split + '% before';
+    range.setAttribute('aria-valuetext', split + '% of the before image visible');
+  }
+  host.addEventListener('input', event => {
+    if(event.target.matches('.compare-range')) updateComparison(event.target);
+  });
+  host.addEventListener('click', event => {
+    const button = event.target.closest('[data-compare-split]');
+    if(!button) return;
+    const range = button.closest('.compare-card')?.querySelector('.compare-range');
+    if(!range) return;
+    range.value = button.dataset.compareSplit;
+    updateComparison(range);
+  });
+
+  function renderRows(){
+    if(!galleryRows.length){
+      host.innerHTML = '<div class="panel gallery-empty-state">No published comparisons match these filters. Try another service or town, or reset the filters.</div>';
+    } else {
+      host.innerHTML = galleryRows.map((item,idx)=>{
+        const title = item.title || 'Detail result';
+        const sample = item.proof_kind === 'sample' || item.consent_status === 'sample';
+        const status = sample ? 'Sample · not customer work' : 'Published, consent checked';
+        return `<article class="compare-card"><div class="section-head"><div><h2 style="margin:0">${esc(title)}</h2><p class="muted" style="margin:6px 0 0">${esc(item.location||'Oxford / Norfolk Counties')} • ${esc(item.service||'Mobile detailing')}</p></div><span class="badge ${sample?'gallery-sample-badge':'gallery-approved-badge'}">${status}</span></div><div class="compare-stage" style="--split:50%">${mediaTag(item,'after_kind','after_url','fallback_after_url','compare-after','After')}${mediaTag(item,'before_kind','before_url','fallback_before_url','compare-before','Before')}<div class="compare-handle" aria-hidden="true"></div><span class="compare-side-label before-label" aria-hidden="true">Before</span><span class="compare-side-label after-label" aria-hidden="true">After</span></div><label class="compare-range-label" for="compareRange${idx}">Drag to compare before and after</label><input id="compareRange${idx}" class="compare-range" type="range" min="0" max="100" value="50" aria-label="Reveal before photo: ${esc(title)}" aria-valuetext="50% of the before image visible"/><div class="compare-controls"><button type="button" class="btn ghost small" data-compare-split="100">Before</button><button type="button" class="btn ghost small" data-compare-split="50">50/50</button><button type="button" class="btn ghost small" data-compare-split="0">After</button><output for="compareRange${idx}">50% before</output></div><p class="muted">${esc(item.note||'')}</p></article>`;
+      }).join('');
+    }
+    updateVisibleSections();
+  }
+  function showError(){
+    host.innerHTML = '<div class="panel gallery-empty-state"><p>Could not load published comparisons right now. No private photos have been substituted.</p><button type="button" class="btn ghost" id="galleryRetry">Try again</button></div>';
+    host.querySelector('#galleryRetry')?.addEventListener('click', () => loadGallery().catch(showError));
+    galleryRows = [];
+    privacyNote.textContent = 'Only explicitly published and privacy-approved media can be displayed.';
+    updateVisibleSections();
+    resultsStatus.textContent = 'Published comparisons temporarily unavailable.';
+  }
+  async function loadGallery(){
+    const requestId = ++generation;
+    const params = new URLSearchParams();
+    if(filters.service !== 'all') params.set('service', filters.service);
+    if(filters.town !== 'all') params.set('town', filters.town);
+    host.innerHTML = '<div class="panel">Loading approved gallery comparisons…</div>';
+    const res = await fetch('/api/before_after_gallery_public?' + params.toString(), {cache:'no-store'});
+    if(!res.ok) throw new Error('Gallery temporarily unavailable');
+    const data = await res.json();
+    if(!data || data.ok !== true) throw new Error('Invalid gallery response');
+    if(requestId !== generation) return;
+    let changed = false;
+    for (const [key, element, choices] of [
+      ['service', serviceFilter, data.available_services],
+      ['town', townFilter, data.available_towns]
+    ]) {
+      if(!Array.isArray(choices)) continue;
+      element.innerHTML = '<option value="all">All '+(key==='service'?'services':'towns')+'</option>' + choices.map(optionHtml).join('');
+      if(filters[key] !== 'all' && !choices.some(row => row.value === filters[key])) {
+        filters[key] = 'all';
+        changed = true;
+      }
+      element.value = filters[key];
+    }
+    if(changed){syncAddress();return loadGallery();}
+    galleryRows = Array.isArray(data.items) ? data.items : [];
+    const sampleCount = galleryRows.filter(item => item.proof_kind==='sample' || item.consent_status==='sample').length;
+    privacyNote.textContent = 'Only explicitly published, consent-checked and privacy-approved entries appear here.'
+      + (sampleCount || data.fallback_used ? ' Sample placeholders are demonstrations, not actual customer results.' : '')
+      + (data.blocked_count ? ` ${data.blocked_count} private or unpublished item(s) remain hidden.` : '');
+    renderRows();
+  }
+  serviceFilter.addEventListener('change', () => {filters.service=serviceFilter.value||'all';syncAddress();loadGallery().catch(showError);});
+  townFilter.addEventListener('change', () => {filters.town=townFilter.value||'all';syncAddress();loadGallery().catch(showError);});
+  typeFilter.addEventListener('change', () => {filters.type=validTypes.has(typeFilter.value)?typeFilter.value:'all';syncAddress();updateVisibleSections();});
+  resetFilters.addEventListener('click', () => {
+    filters.service='all'; filters.town='all'; filters.type='all';
+    serviceFilter.value='all'; townFilter.value='all'; typeFilter.value='all';
+    typeFilter.dispatchEvent(new Event('change'));
+    syncAddress();
+    loadGallery().catch(showError);
+  });
+  updateVisibleSections();
+  loadGallery().catch(showError);
 })();
 </script>
 
@@ -74,9 +179,11 @@ import { loadWebsiteImageManifest, managedGalleryContent } from "/assets/website
 const managedSection=document.getElementById('managedGallerySection');
 const managedHost=document.getElementById('managedGalleryList');
 const typeFilter=document.getElementById('contentTypeFilter');
+const managedStatus=document.getElementById('managedGalleryStatus');
 const esc2=(v)=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const pretty=(v)=>String(v||'').replace(/[-_]+/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 let managedData={pairs:[],singles:[]};
+let managedLoaded=false;
 function managedRows(){
   const type=typeFilter?.value||'all';
   const rows=[];
@@ -87,7 +194,16 @@ function managedRows(){
 function renderManaged(){
   const rows=managedRows();
   managedSection.hidden=rows.length===0;
-  if(!rows.length){managedHost.innerHTML='';return;}
+  const type=typeFilter?.value||'all';
+  managedStatus.hidden = rows.length > 0 || type === 'all' || type === 'before-after';
+  if(!rows.length){
+    managedHost.innerHTML='';
+    managedStatus.textContent=managedLoaded
+      ? 'No approved '+pretty(type)+' Photo Studio images are assigned for public display yet.'
+      : 'Photo Studio images could not be loaded. Please try again later.';
+    return;
+  }
+  managedStatus.hidden=true;
   managedHost.innerHTML=rows.map(row=>{
     if(row.kind==='before-after'){
       const p=row.pair; const label=p.scope==='gallery'?`Gallery Before & After · Set ${p.set}`:`${pretty(p.slug)} · Before & After Set ${p.set}`;
@@ -97,7 +213,20 @@ function renderManaged(){
     return `<article class="managed-gallery-card"><img src="${esc2(item.url)}" alt="${esc2(item.alt_text||`Rosie Dazzlers ${row.kind} photo`)}" loading="lazy" decoding="async" style="object-position:${esc2(item.focal_point||'center')}"><div class="managed-gallery-card-body"><h3>${esc2(item.title||item.target_label||`Detailing ${row.kind}`)}</h3>${item.caption?`<p class="muted">${esc2(item.caption)}</p>`:''}<span class="badge gallery-type-badge">${esc2(row.kind)}</span></div></article>`;
   }).join('');
 }
-try{managedData=managedGalleryContent(await loadWebsiteImageManifest());renderManaged();}catch{}
+managedHost.addEventListener('error', event => {
+  const img=event.target;
+  if(!(img instanceof HTMLImageElement)) return;
+  const fallback=document.createElement('div');
+  fallback.className='managed-media-unavailable';
+  fallback.textContent='Approved image temporarily unavailable.';
+  img.replaceWith(fallback);
+}, true);
+try{
+  const manifest=await loadWebsiteImageManifest();
+  managedData=managedGalleryContent(manifest);
+  managedLoaded=Boolean(manifest?.ok);
+}catch{managedLoaded=false;}
+renderManaged();
 typeFilter?.addEventListener('change',renderManaged);
 </script>
 <!-- Historical Build 258 image module: /assets/website-images.js?v=20260813build258 -->
