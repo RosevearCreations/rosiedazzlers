@@ -9,6 +9,7 @@
   <meta property="og:title" content="Contact Rosie Dazzlers | Book or Ask About Detailing" />
   <meta property="og:description" content="Contact Rosie Dazzlers for mobile auto detailing questions, service area details, or booking help in Norfolk and Oxford Counties." />
   <link rel="stylesheet" href="/assets/site.css?v=20260422seo2" />
+  <link rel="stylesheet" href="/assets/build654-contact-faq.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -145,6 +146,48 @@
       </div>
     </div>
 
+    <section class="section panel contact-prep" aria-labelledby="contactPrepHeading">
+      <div class="badges"><span class="badge">Email preparation</span><span class="badge">No account required</span></div>
+      <h2 id="contactPrepHeading">Prepare a detailing enquiry</h2>
+      <p class="kicker">Choose the details that will help us respond. This opens a draft in your own email app; nothing is sent or stored on this website.</p>
+      <form id="contactPrepForm" class="contact-prep-form">
+        <div class="contact-prep-fields">
+          <label>What can we help with?
+            <select id="contactPrepTopic" name="topic">
+              <option value="general">General question</option>
+              <option value="booking">Booking or availability</option>
+              <option value="photo">Photo estimate</option>
+              <option value="addons">Packages or add-ons</option>
+              <option value="maintenance">Maintenance or fleet service</option>
+            </select>
+          </label>
+          <label>Vehicle size (if known)
+            <select id="contactPrepSize" name="size">
+              <option value="unknown">Not sure yet</option>
+              <option value="small">Small</option>
+              <option value="mid">Mid-size</option>
+              <option value="oversize">Oversize</option>
+            </select>
+          </label>
+          <label>Your town or area (optional)
+            <input id="contactPrepTown" name="town" autocomplete="address-level2" maxlength="70" placeholder="e.g. Tillsonburg" />
+          </label>
+          <label>Question or vehicle concerns (optional)
+            <textarea id="contactPrepMessage" name="message" rows="3" maxlength="800" placeholder="Tell us about the vehicle, timing, or detailing concern."></textarea>
+          </label>
+        </div>
+        <div class="contact-prep-footer">
+          <p id="contactPrepSummary" class="kicker" aria-live="polite">General question · Vehicle size unknown</p>
+          <p id="contactPrepCount" class="kicker">0 of 800 characters</p>
+          <div class="contact-prep-actions">
+            <a id="contactPrepDraft" class="btn primary" href="mailto:info@rosiedazzlers.ca?subject=Rosie%20Dazzlers%20enquiry">Open email draft</a>
+            <button class="btn ghost" type="reset">Clear details</button>
+          </div>
+        </div>
+      </form>
+      <p class="kicker">Your email app lets you review the draft before sending. For photos, attach them in your email app and avoid showing private paperwork, addresses, or license plates.</p>
+    </section>
+
     <div class="section contact-grid">
       <div class="panel">
         <h2 style="margin-top:0;">Direct contact</h2>
@@ -245,6 +288,12 @@
       </div>
     </div>
 
+    <section class="section panel" data-build172="faq-contact-support">
+      <h2>Common questions before contacting us</h2>
+      <p class="muted">The FAQ answers common service-area, site-access, deposit, photo-estimate, privacy, gift-card, fleet, and maintenance questions.</p>
+      <div class="hero-actions" style="margin-top:12px"><a class="btn primary" href="/faq">Open FAQ</a><a class="btn ghost" href="/book">Book online</a></div>
+    </section>
+
     <!-- Footer injected by chrome.js -->
     <div class="footer" data-footer></div>
   </div>
@@ -255,12 +304,7 @@
   </script>
 
 
-  <section class="section panel" data-build172="faq-contact-support">
-    <h2>Common questions before contacting us</h2>
-    <p class="muted">The FAQ now answers the most common service-area, driveway, water, power, deposit, photo-estimate, privacy, gift-card, fleet, and maintenance questions.</p>
-    <div class="hero-actions" style="margin-top:12px"><a class="btn primary" href="/faq">Open FAQ</a><a class="btn ghost" href="/book">Book online</a></div>
-  </section>
-
+  <script src="/assets/build654-contact-faq.js" defer></script>
   <script type="module" src="/assets/chrome.js?v=20260701build216"></script>
 </body>
 </html>
