@@ -61,6 +61,7 @@
   </style>
   <link rel="stylesheet" href="/assets/booking-service-comparison-v629.css?v=1" />
   <link rel="stylesheet" href="/assets/build649-booking-discovery.css?v=build649" />
+  <link rel="stylesheet" href="/assets/build650-booking-guidance.css?v=build650" />
 </head>
 <body>
   <div class="nav">
@@ -99,6 +100,7 @@
         <label class="size-field" for="vehicleSize"><span>Vehicle size</span><select id="vehicleSize"><option value="">Show all package prices</option><option value="small">Small — car / compact</option><option value="mid">Mid-sized — crossover / SUV</option><option value="oversize">Oversized — large SUV / van / truck</option></select></label>
         <div class="notice compact mini" id="priceHelp">Choose a size to highlight the price that applies. The booking planner verifies the vehicle details before checkout.</div>
       </div>
+      <details class="booking-help-650"><summary><span class="help-signal-650" aria-hidden="true">ⓘ</span> How are package prices calculated?</summary><div class="booking-help-650__body">The highlighted amount comes from the current service catalogue for the vehicle size you select. A larger vehicle, unusual condition, add-on, taxes or quote-required work may change the final total. The booking planner confirms pricing and availability before any payment.</div></details>
       <div class="booking-discovery-649" aria-label="Find the right detailing package">
         <div class="booking-discovery-649__head"><div><h3>Find a service that fits</h3><p class="muted">Search or narrow the service cards below. Filters are guidance only; they do not change your selected package or booking.</p></div><button class="btn ghost small" id="resetPackageFilters649" type="button">Show all services</button></div>
         <div class="booking-discovery-649__inputs">
@@ -124,6 +126,7 @@
         <div><h2 id="addonsHeading" style="margin:0">2. Add specialty work only when you need it</h2><p class="muted" style="margin:5px 0 0">Add-ons are filtered by the selected base package. Tap or click anywhere on an available card to add or remove it. Quote-required work stays clearly marked instead of pretending every condition has one fixed price.</p></div>
         <button class="btn ghost" id="clearAddonsBtn" type="button">Clear add-ons</button>
       </div>
+      <details class="booking-help-650"><summary><span class="help-signal-650" aria-hidden="true">ⓘ</span> When should we request a photo review?</summary><div class="booking-help-650__body">Heavy salt, pet hair, odours, difficult stains, paint correction and coatings may require inspection or a condition-based quote. An estimated package total does not include a final price for quote-required extras. <a href="/contact">Contact us</a> if you need help choosing.</div></details>
       <div class="addon-discovery-649"><label for="addonSearch649">Find an add-on<input id="addonSearch649" type="search" placeholder="Search pet hair, odour, coating…" autocomplete="off" /></label><button class="btn ghost small" type="button" id="resetAddonFilter649">Show all add-ons</button><span id="addonFilterStatus649" class="mini muted" role="status" aria-live="polite">Loading add-ons…</span></div>
       <div id="addonGrid" class="addon-grid" aria-live="polite"></div>
     </section>
@@ -145,6 +148,18 @@
         <div class="selection-line"><span>Deposit</span><strong id="summaryDeposit">—</strong></div>
         <div class="mini muted" data-build427-estimate-note>Fixed catalogue items are revalidated in the booking planner. Quote-required items are excluded from this fixed subtotal until reviewed.</div>
         <div class="hr" style="margin:3px 0"></div>
+        <div class="booking-readiness-650" aria-labelledby="bookingReadinessHeading650">
+          <h3 id="bookingReadinessHeading650">Ready for the next step? <span class="help-signal-650" aria-hidden="true">ⓘ</span></h3>
+          <ol class="booking-readiness-650__steps">
+            <li id="readinessSize650" data-state="needed">Choose vehicle size</li>
+            <li id="readinessPackage650" data-state="needed">Choose a detailing package</li>
+            <li id="readinessExtras650" data-state="review">Review optional add-ons and condition quotes</li>
+            <li id="readinessAvailability650" data-state="pending">Confirm date, service area and deposit in the booking planner</li>
+          </ol>
+          <p id="readinessStatus650" class="mini" role="status" aria-live="polite">Choose a vehicle size and package to prepare your booking.</p>
+          <a id="readinessNext650" class="btn ghost small" href="#services">Choose size &amp; service</a>
+          <details class="booking-help-650 booking-help-650--aside"><summary><span class="help-signal-650" aria-hidden="true">ⓘ</span> Estimate, deposit &amp; winter service help</summary><div class="booking-help-650__body">Package amounts are estimates until verified in the planner. The deposit shown is not charged by choosing a service. A time is only reserved when the booking process confirms it. Outdoor work may be restricted in cold weather or unsafe site conditions; contact us for suitability before booking.</div></details>
+        </div>
         <div class="mini muted" id="plannerProgress">Planner: ready to start</div>
         <button class="btn primary" id="applyToPlannerBtn" type="button">Apply choices & start booking</button>
         <a class="btn ghost" href="/contact">Need help first?</a>
@@ -360,6 +375,29 @@
       }));
       filterAddons649();
     }
+    // Build 650: informational progress only; booking and payment authority remain in the planner.
+    function renderReadiness650(){
+      const sizeReady=!!state.size;
+      const packageReady=!!packageRow();
+      const quoted=selectedAddonRows().some(row=>row.quote_required===true);
+      const started=!!state.plannerTouched;
+      qs("#readinessSize650").dataset.state=sizeReady?"ready":"needed";
+      qs("#readinessPackage650").dataset.state=packageReady?"ready":"needed";
+      qs("#readinessExtras650").dataset.state=quoted?"quote":"review";
+      qs("#readinessAvailability650").dataset.state=started?"in-progress":"pending";
+      const status=qs("#readinessStatus650");
+      const next=qs("#readinessNext650");
+      if(!sizeReady||!packageReady){
+        status.textContent="Choose "+(!sizeReady&&!packageReady?"vehicle size and a service":!sizeReady?"vehicle size":"a service")+" to prepare your booking. No time is reserved.";
+        next.textContent="Choose size & service";next.href="#services";
+      }else{
+        status.textContent=quoted
+          ?"Your service choice is ready. Some extras need a condition quote; review the booking planner and confirm details before payment."
+          :"Your service choice is ready. Continue in the booking planner to confirm availability, requirements and deposit.";
+        next.textContent="Continue to availability";next.href="#booking";
+      }
+    }
+
     function renderSummary() {
       const pkg=packageRow(); const t=totals(); const addons=selectedAddonRows();
       qs("#summarySize").textContent = state.size ? ({small:"Small",mid:"Mid-sized",oversize:"Oversized"}[state.size]||state.size) : "Choose size";
@@ -367,6 +405,7 @@
       qs("#summaryAddons").textContent = addons.length ? addons.map((row)=>row.name).join(", ") : "None";
       qs("#summarySubtotal").textContent = t.subtotal ? `${money(t.subtotal)}${t.quoteOnly?" + quoted extras":""}` : (pkg ? "Choose size for total" : "Package required");
       qs("#summaryDeposit").textContent = pkg ? money(t.deposit) : "—";
+      renderReadiness650();
     }
     function cleanPlannerChrome(frame) {
       try {
@@ -400,6 +439,7 @@
         state.plannerState=event.data.state||null; const s=state.plannerState||{};
         state.plannerTouched = state.plannerTouched || !!(s.selected_date||s.service_area||s.vehicle_label||Number(s.current_step||1)>1);
         qs("#plannerProgress").textContent = `Planner: ${s.current_step_title||"Step 1"}${s.selected_date?` · ${s.selected_date}`:""}${s.service_area?` · ${s.service_area}`:""}`;
+        renderReadiness650();
       }
     });
 
