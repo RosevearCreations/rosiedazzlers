@@ -1,0 +1,51 @@
+/* Build 647 — customer-facing responsive layout repair.
+   Applied after Standard; scoped to existing customer surfaces.
+   No booking, pricing, inventory or gift-card business behavior changes. */
+:where(.container,.unified-shell,.gift-card-options,.grid2,.panel,.card){min-width:0}
+:where(.unified-shell,.gift-card-options,[data-build291="maintenance-retention-intake"]) :is(h1,h2,h3){overflow-wrap:break-word;text-wrap:balance}
+.unified-shell .unified-hero > *, .unified-shell .choice-toolbar > *, .unified-shell .booking-layout > *{min-width:0}
+.unified-shell .unified-hero h1{font-size:clamp(1.85rem,4vw,3.2rem);line-height:1.15;max-width:21ch}
+.unified-shell .journey span{max-width:100%;white-space:normal}
+.unified-shell .package-card{min-width:0;overflow:visible}
+.unified-shell .package-card h3{font-size:clamp(1rem,1.45vw,1.2rem);line-height:1.25;overflow-wrap:anywhere}
+.unified-shell .price-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.unified-shell .price-chip{min-width:0;overflow-wrap:anywhere}
+.unified-shell .price-chip strong{font-variant-numeric:tabular-nums;font-size:clamp(.82rem,1.25vw,1rem);line-height:1.3}
+.unified-shell .addon-card{min-width:0;align-items:flex-start}
+.unified-shell .addon-card .addon-copy{min-width:0;flex:1 1 auto;overflow-wrap:anywhere}
+.unified-shell .addon-card .addon-meta{line-height:1.4}
+.unified-shell .selection-line{flex-wrap:wrap}
+.unified-shell .selection-line strong{text-align:left;overflow-wrap:anywhere}
+.unified-shell .planner-frame{max-width:100%}
+.gift-card-options .gift-option-card{min-width:0;display:flex;flex-direction:column;gap:12px}
+.gift-card-options .gift-option-card h3{margin:0;line-height:1.3}
+.gift-card-options .gift-option-card p{margin:0;flex-grow:1}
+.gift-card-options .gift-option-card .btn{align-self:stretch;max-width:100%;white-space:normal;text-align:center}
+.gift-card-options .gift-card-preview-art{min-width:0;overflow-wrap:anywhere;gap:8px;background:linear-gradient(135deg,#5b4822,#14191d);border-color:rgba(222,192,109,.45)}
+.gift-card-options .gift-card-preview-art span{color:#f2e9d1}
+[data-build291="maintenance-retention-intake"] .visual-placeholder-card{min-height:150px;display:flex;flex-direction:column;justify-content:center;gap:8px;border-radius:14px;overflow-wrap:anywhere}
+[data-build291="maintenance-retention-intake"] .summary .line{align-items:start;flex-wrap:wrap}
+[data-build291="maintenance-retention-intake"] .summary .line strong{max-width:100%;text-align:left;overflow-wrap:anywhere}
+[data-build291="maintenance-retention-intake"] .form-grid > .field{min-width:0}
+[data-build291="maintenance-retention-intake"] :is(input,select,textarea){max-width:100%;min-width:0}
+@media(max-width:980px){
+  .unified-shell .unified-hero,.unified-shell .booking-layout{grid-template-columns:minmax(0,1fr)}
+  .unified-shell .choice-toolbar{grid-template-columns:minmax(0,1fr)}
+  .unified-shell .addon-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .gift-card-options.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .unified-shell .package-grid,.unified-shell .addon-grid,.gift-card-options.grid3{grid-template-columns:minmax(0,1fr)}
+  .unified-shell .price-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .unified-shell .package-card,.unified-shell .addon-card{padding:12px}
+  .unified-shell .selection-line{display:grid;grid-template-columns:minmax(0,1fr)}
+  .unified-shell .journey{gap:6px}
+  .unified-shell .journey span{font-size:.83rem}
+  .gift-card-options .gift-option-card .btn{width:100%}
+  [data-build291="maintenance-retention-intake"] .form-grid{grid-template-columns:minmax(0,1fr)}
+  [data-build291="maintenance-retention-intake"] .cta-row > :is(.btn,button){width:100%}
+}
+@media(max-width:380px){
+  .unified-shell .price-grid{grid-template-columns:minmax(0,1fr)}
+  .unified-shell .price-chip{display:flex;align-items:center;justify-content:space-between;gap:8px}
+}
