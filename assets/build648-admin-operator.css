@@ -1,0 +1,37 @@
+/* Build 648 — Operator navigation and readable Standard admin surfaces. */
+body[data-page="admin"] .container{max-width:1440px;min-width:0}
+body[data-page="admin"] .panel,body[data-page="admin"] .card{min-width:0}
+.admin-command-panel{border:1px solid rgba(205,165,88,.4)!important;background:linear-gradient(140deg,rgba(194,153,76,.10),rgba(15,21,32,.92))!important}
+.admin-command-heading{display:flex;justify-content:space-between;align-items:start;gap:18px;flex-wrap:wrap}
+.admin-command-heading h2{margin:10px 0 6px;font-size:clamp(1.3rem,2.6vw,1.9rem)}
+.admin-command-heading p{margin:0}
+.admin-quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.admin-quick-actions .btn{min-height:42px;display:inline-flex;align-items:center;justify-content:center}
+.admin-tool-controls{display:grid;grid-template-columns:minmax(0,2fr) minmax(175px,1fr) auto;gap:12px;align-items:end}
+.admin-tool-controls label{display:grid;gap:7px;font-weight:700;color:#f3e8cf;min-width:0}
+.admin-tool-controls :is(input,select){min-width:0;width:100%;min-height:44px;box-sizing:border-box;border:1px solid rgba(224,198,145,.45);border-radius:10px;background:#151d2a;color:#fff;padding:10px 12px;font:inherit}
+.admin-tool-controls :is(input,select):focus-visible,.admin-quick-actions a:focus-visible,.admin-diagnostics summary:focus-visible{outline:3px solid #eac77b;outline-offset:2px}
+.admin-tool-count{margin:12px 0 0}
+#adminWorkspaceCards{grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:16px;align-items:stretch}
+#adminWorkspaceCards>.card{display:flex;flex-direction:column;gap:10px;overflow-wrap:anywhere}
+#adminWorkspaceCards>.card[hidden]{display:none!important}
+#adminWorkspaceCards>.card .hr{margin-top:auto}
+#adminWorkspaceCards>.card .btn{white-space:normal;text-align:center}
+.admin-diagnostics>summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;padding:5px 0}
+.admin-diagnostics>summary::-webkit-details-marker{display:none}
+.admin-diagnostics>summary strong{display:block;font-size:1.2rem;color:#f6d994}
+.admin-diagnostics>summary small{display:block;color:#cbd5e1;font-size:.9rem;margin-top:5px;line-height:1.45}
+.admin-diagnostics[open]>summary{border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:14px;margin-bottom:18px}
+.admin-diagnostics-body{min-width:0}
+.admin-diagnostics-body .warning-panel{overflow-wrap:anywhere}
+.admin-topbar>.actorcard{min-width:min(100%,280px);max-width:100%;overflow-wrap:anywhere}
+body.admin-staff-login{background:radial-gradient(circle at top,rgba(198,157,78,.14),transparent 48%),linear-gradient(180deg,#11151d,#1b2028);color:#f9fafb}
+body.admin-staff-login .login-card{background:linear-gradient(155deg,#1a222c,#101720);border:1px solid rgba(221,182,105,.48);box-shadow:0 20px 55px rgba(0,0,0,.45)}
+body.admin-staff-login .brand-kicker{color:#e5bb68}
+body.admin-staff-login .field input{background:#111923;color:#fff;border-color:rgba(222,190,130,.44);min-height:46px}
+body.admin-staff-login .field input:focus-visible{outline:3px solid rgba(235,196,116,.65);outline-offset:2px}
+body.admin-staff-login .btn-primary{background:linear-gradient(135deg,#ead09a,#b58a41);color:#141414;border:1px solid #eed7a7}
+body.admin-staff-login .admin-return-link{color:#f0d9a8;text-decoration:underline}
+@media(max-width:800px){.admin-tool-controls{grid-template-columns:1fr 1fr}.admin-tool-controls>button{grid-column:1/-1;justify-self:start}body[data-page="admin"] .admin-topbar{flex-direction:column}}
+@media(max-width:540px){.admin-tool-controls{grid-template-columns:1fr}.admin-tool-controls>button{grid-column:auto;width:100%}.admin-quick-actions{display:grid;grid-template-columns:1fr 1fr}.admin-quick-actions .btn{width:100%;min-width:0}.admin-command-panel{padding:16px!important}body.admin-staff-login{padding:12px}body.admin-staff-login .login-card{padding:20px}#adminWorkspaceCards{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){body.admin-staff-login .btn{transition:none}}
