@@ -1,0 +1,18 @@
+/* Build 651 — scoped gift choice and checkout navigation, Standard theme */
+.gift-amount-quick-links{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.gift-option-card .gift-amount-quick-links .btn{margin-top:0}
+.gift-guide-options .card{display:flex;flex-direction:column;gap:8px;min-width:0}
+.gift-guide-options .card h3{margin:0}
+.gift-guide-options .card .btn{align-self:flex-start;margin-top:auto}
+.gift-guide-note{margin-top:12px}
+.gift-choice-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.gift-choice-tabs [role="tab"]{min-height:44px;white-space:normal}
+.gift-choice-tabs [role="tab"]:focus-visible,.gift-guide a:focus-visible,.gift-amount-quick-links a:focus-visible{outline:3px solid #f4c465;outline-offset:3px}
+.gift-choice-context{min-height:1.5em;margin:10px 0 0}
+#dollarPane[hidden],#servicePane[hidden],#lookupPane[hidden]{display:none!important}
+@media(max-width:600px){
+  .gift-choice-tabs{display:grid;grid-template-columns:1fr}
+  .gift-choice-tabs [role="tab"]{width:100%;text-align:center}
+  .gift-guide-options .card .btn{width:100%;text-align:center}
+  .gift-amount-quick-links .btn{flex:1 1 70px;text-align:center}
+}
