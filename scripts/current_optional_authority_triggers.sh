@@ -8,3 +8,4 @@ node scripts/build635_optional_authority_cohort_c_test.mjs
 node scripts/build636_optional_authority_cohort_d_test.mjs
 node scripts/build637_optional_authority_cohort_e_test.mjs
 node scripts/build638_optional_authority_cohort_f_test.mjs
+node scripts/build639_optional_authority_cohort_g_test.mjs
