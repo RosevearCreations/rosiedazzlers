@@ -6,7 +6,7 @@
   <title>Admin Dashboard | Rosie Dazzlers</title>
   <meta name="description" content="Rosie Dazzlers admin dashboard." />
   <meta name="robots" content="noindex,nofollow" />
-  <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/site.css?v=build648-admin" />
   <style>
     .shell-status{margin-bottom:16px;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.05);color:#e5e7eb}
     .shell-status[data-state="error"]{background:rgba(220,38,38,.12);border-color:rgba(248,113,113,.25);color:#fecaca}
@@ -19,6 +19,8 @@
     .summary-list{display:grid;gap:10px}.summary-item{padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
     .muted{color:#94a3b8}.warning-panel{border-radius:16px;border:1px solid rgba(251,191,36,.28);background:rgba(245,158,11,.10);padding:14px;margin-top:14px}.warning-panel[data-state="ok"]{border-color:rgba(74,222,128,.28);background:rgba(22,163,74,.10)}.warning-row{padding:10px;border-radius:12px;background:rgba(15,23,42,.35);border:1px solid rgba(255,255,255,.06);margin-top:8px}
   </style>
+  <link rel="stylesheet" href="/assets/build648-admin-operator.css?v=build648" />
+  <script src="/assets/build648-admin-operator.js?v=build648" defer></script>
 </head>
 <body data-page="admin" data-build214="security-task-orchestration" data-build211="production-reliability" data-build210="connected-live-workflow" data-build209="live-detail-interaction" data-build208="connected-workflow-command-center" data-build206="value-added-operations-foundations" data-build205="sanity-check-value-roadmap" data-build204="gallery-media-resilience" data-build203="desktop-mobile-visual-polish-dashboard" data-build202="incident-marketing-dashboard" data-build200="advanced-json-panel-dashboard" data-build185="next-twenty-dashboard-warnings" data-build184="twenty-step-operations" data-build183="webhook-warning-dashboard" data-build192="editable-settings-diagnostics" data-build195="seo-proof-fallback-report-dashboard" data-build197="dashboard-self-healing-diagnostics" data-build201="friendly-editor-validation-dashboard">
   <header class="nav">
@@ -89,6 +91,26 @@
         </div>
       </section>
 
+      <section class="section" aria-label="Operator shortcuts" data-build648="operator-navigation">
+        <div class="panel admin-command-panel">
+          <div class="admin-command-heading"><div><div class="badge">Operator workspace</div><h2>What do we need to do?</h2><p class="muted">Jump directly to customer work, or find any admin tool below.</p></div><a class="btn ghost small" href="/admin-startup-guide.html">ⓘ Admin help</a></div>
+          <nav class="admin-quick-actions" aria-label="Common tasks">
+            <a class="btn primary" href="/admin-today.html">Today's queue</a>
+            <a class="btn ghost" href="/admin-booking.html">Bookings</a>
+            <a class="btn ghost" href="/admin-leads.html">Leads &amp; quotes</a>
+            <a class="btn ghost" href="/admin-inventory-manager.html">Inventory</a>
+            <a class="btn ghost" href="/admin-photo-studio.html">Photo Studio</a>
+            <a class="btn ghost" href="/admin-payments.html">Payments</a>
+          </nav>
+          <div class="admin-tool-controls">
+            <label for="adminToolSearch">Find an admin tool<input id="adminToolSearch" type="search" placeholder="Search bookings, photos, staff…" autocomplete="off" aria-controls="adminWorkspaceCards" /></label>
+            <label for="adminToolCategory">Workspace<select id="adminToolCategory" aria-controls="adminWorkspaceCards"><option value="all">All workspaces</option><option value="customers">Customers &amp; bookings</option><option value="operations">Operations &amp; staff</option><option value="media">Media &amp; website</option><option value="finance">Payments &amp; finances</option><option value="systems">Systems &amp; reporting</option></select></label>
+            <button class="btn ghost small" id="adminToolClear" type="button">Clear filters</button>
+          </div>
+          <p class="muted admin-tool-count" id="adminToolCount" role="status" aria-live="polite">Tools will appear below once we sign in.</p>
+        </div>
+      </section>
+
       <section class="section">
         <div class="kpi-grid" id="dashboardKpis">
           <div class="kpi-box"><div class="muted">Loading live stats…</div><strong>—</strong></div>
@@ -97,6 +119,7 @@
 
       <section class="section">
         <div class="panel">
+          <details id="adminDiagnostics" class="admin-diagnostics"><summary><span><strong>Diagnostics &amp; advanced operations</strong><small>Expand for payment, pricing, media, reliability and technical evidence.</small></span><span aria-hidden="true">⌄</span></summary><div class="admin-diagnostics-body">
           <h2 style="margin-top:0">Payment webhook warnings</h2>
           <div id="paymentWebhookWarnings" class="warning-panel" data-state="loading">Loading payment webhook warning summary…</div>
           <h2 style="margin-top:18px">Build 185 operations warnings</h2>
@@ -142,11 +165,12 @@
             <div class="warning-row"><strong>Site Settings emergency JSON</strong><div class="muted">Only for full-domain recovery or fallback sync after using the friendly row/card editors.</div></div>
             <div style="margin-top:10px"><a class="btn ghost small" href="/admin-app.html">Open App Management</a> <a class="btn ghost small" href="/admin-site-settings.html">Open Site Settings</a></div>
           </div>
+          </div></details>
         </div>
       </section>
 
-      <section class="section">
-        <div class="grid cards">
+      <section class="section" aria-label="Admin tools">
+        <div class="grid cards" id="adminWorkspaceCards">
           <article class="card">
             <h3>Bookings</h3>
             <p>Review bookings, update statuses, assign staff, and access progress tokens.</p>
