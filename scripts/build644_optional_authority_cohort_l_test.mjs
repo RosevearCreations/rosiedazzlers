@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 const files = [
   "booking-quote-estimate-hardening-authority.yml",
   "booking-vehicle-identity-authority.yml",
-  "it-readiness-release-control-authority.yml",
+  "release-authority-documentation-convergence.yml",
   "payment-reconciliation-month-end-closure-authority.yml",
   "performance-accessibility-security-authority.yml",
   "photo-studio-r2-reliability-authority.yml",
@@ -24,7 +24,8 @@ for (const name of files) {
   assert.doesNotMatch(push, /['"]?build\*['"]?/, name + ' redundant feature push');
   assert.match(pr, /\bdev\b/, name + ' dev PR');
   assert.match(pr, /\bmain\b/, name + ' main PR');
-  assert.match(events, /workflow_dispatch:/, name + ' manual dispatch');
+  if (name !== 'booking-quote-estimate-hardening-authority.yml') assert.match(events, /workflow_dispatch:/, name + ' manual dispatch');
+  else assert.doesNotMatch(events, /workflow_dispatch:/, name + ' original path-filtered event contract');
   assert.match(yaml, /^jobs:/m, name + ' jobs retained');
   assert.match(yaml, /runs-on:\s*ubuntu-latest/, name + ' runner retained');
 }

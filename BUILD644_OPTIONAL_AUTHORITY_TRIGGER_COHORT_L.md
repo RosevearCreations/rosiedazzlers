@@ -2,7 +2,7 @@
 
 ## Scope
 
-Continue Builds 633–643 with seven historical booking quote/vehicle, I.T. readiness, payment month-end, performance, photo-studio reliability and repository cleanup authority workflows. Remove only the broad `build*` feature push selector under `on.push.branches`. Exact workflow identities and trigger invariants are checked by `scripts/build644_optional_authority_cohort_l_test.mjs`.
+Continue Builds 633–643 with seven historical booking quote/vehicle, release documentation convergence, payment month-end, performance, photo-studio reliability and repository cleanup authority workflows. Remove only the broad `build*` feature push selector under `on.push.branches`. Exact workflow identities and trigger invariants are checked by `scripts/build644_optional_authority_cohort_l_test.mjs`.
 
 Protected `dev`/`main` pushes, PR validation, manual dispatch, jobs, runners, permissions, and existing path filters are preserved.
 
