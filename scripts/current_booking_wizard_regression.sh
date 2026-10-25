@@ -25,3 +25,6 @@ node scripts/build652_gallery_browse_test.mjs
 
 # Build 653 maintenance-interest form, readiness and accessible confirmation.
 node scripts/build653_maintenance_interest_test.mjs
+
+# Build 654 contact email-draft preparation and FAQ search usability.
+node scripts/build654_contact_faq_test.mjs

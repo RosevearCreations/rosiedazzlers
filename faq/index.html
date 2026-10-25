@@ -10,6 +10,7 @@
   <meta property="og:description" content="Common questions about mobile detailing, pricing, deposits, photo estimates, service areas, gift cards, fleet work, and privacy review." />
   <meta name="robots" content="index,follow" />
   <link rel="stylesheet" href="/assets/site.css?v=20260813build259" />
+  <link rel="stylesheet" href="/assets/build654-contact-faq.css" />
   <script type="application/ld+json" data-build172 data-build173="access-help-admin-content"="faqpage">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where does Rosie Dazzlers provide mobile auto detailing?","acceptedAnswer":{"@type":"Answer","text":"Rosie Dazzlers serves Oxford County and Norfolk County, Ontario, with strongest public pages for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Norwich, Otterville, Waterford, Vittoria, Port Rowan, Turkey Point, Zorra, Thamesford, and Embro. Final availability still depends on schedule, driveway access, travel time, and weather."}},{"@type":"Question","name":"Do we need a driveway, water, and power?","acceptedAnswer":{"@type":"Answer","text":"Yes. The standard mobile setup assumes a safe driveway or private parking area, customer-provided water, and customer-provided power. If water or power is not available, staff must review options before confirming the job because timing, equipment, and pricing may change."}},{"@type":"Question","name":"How far ahead can customers book?","acceptedAnswer":{"@type":"Answer","text":"The booking flow is designed around the live availability window shown on the website. Weather, blocked days, service length, and one-vehicle-per-day planning can affect what is available."}},{"@type":"Question","name":"Why does final pricing depend on vehicle condition?","acceptedAnswer":{"@type":"Answer","text":"Vehicle size, pet hair, salt buildup, staining, odour, heavy soil, work-truck use, paint condition, and add-ons can change the time and products needed. The site uses quote-safe language so customers understand that the final plan may need review before work starts."}},{"@type":"Question","name":"Should customers book directly or send photos first?","acceptedAnswer":{"@type":"Answer","text":"Book directly when the package is clear. Send photos or links first when the vehicle has heavy pet hair, odour, salt, staining, paint correction questions, ceramic coating questions, work-truck buildup, or fleet/maintenance needs."}},{"@type":"Question","name":"Are deposits required?","acceptedAnswer":{"@type":"Answer","text":"Deposits are used to reserve booking times. Cancellation or rescheduling rules are covered in the site terms and booking flow so staff time and travel planning are protected."}},{"@type":"Question","name":"What is the difference between a standard interior detail and heavy interior work?","acceptedAnswer":{"@type":"Answer","text":"A standard interior detail is for normal use and maintenance-level cleanup. Heavy interior work can include pet hair, salt, odour, staining, spills, work-truck buildup, or extra extraction time, and may require add-ons or a photo estimate."}},{"@type":"Question","name":"Do ceramic coating, paint correction, and sealants need inspection?","acceptedAnswer":{"@type":"Answer","text":"Yes. Paint condition, previous waxes or coatings, scratches, oxidation, and customer expectations should be reviewed before promising a result. The website uses dedicated pages for ceramic coating, paint correction, graphene finish, clay treatment, and paint sealant so customers can choose the right path."}},{"@type":"Question","name":"Can gift cards be used toward add-ons?","acceptedAnswer":{"@type":"Answer","text":"Gift cards can usually be used toward eligible detailing services and add-ons, but final use depends on the booking, vehicle condition, and staff review."}},{"@type":"Question","name":"Do fleet or maintenance plans need a custom quote?","acceptedAnswer":{"@type":"Answer","text":"Yes. Fleet and maintenance pricing depends on vehicle count, cadence, parking logistics, job location, vehicle condition, water/power access, and whether the first visit should be a paid test detail."}},{"@type":"Question","name":"Can customers upload photos or videos for an estimate?","acceptedAnswer":{"@type":"Answer","text":"The quote-first path supports pasted photo/share links, and the direct upload foundation is available when the public upload environment variables and storage bucket are enabled. Staff review privacy status before any media is used publicly."}},{"@type":"Question","name":"Will customer photos be posted online?","acceptedAnswer":{"@type":"Answer","text":"Photos or videos should not be used publicly until staff confirm customer consent, privacy review, and any needed blur/crop work for plates, faces, addresses, or private information."}}]}</script>
   <script type="application/ld+json" data-build172 data-build173="access-help-admin-content"="breadcrumb">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://rosiedazzlers.ca/"},{"@type":"ListItem","position":2,"name":"FAQ","item":"https://rosiedazzlers.ca/faq"}]}</script>
   <!-- Historical stylesheet token: /assets/site.css?v=20260524build172 -->
@@ -43,6 +44,10 @@
         <form class="faq-search" role="search" aria-label="Filter FAQ questions">
           <label for="faqSearch">Search questions</label>
           <input id="faqSearch" type="search" placeholder="Try pet hair, deposit, water, fleet…" autocomplete="off" />
+          <div class="faq-search-status">
+            <p id="faqResultsStatus" aria-live="polite" role="status">Showing all 12 questions</p>
+            <button class="btn ghost small" id="faqClearSearch" type="button" hidden>Clear search</button>
+          </div>
         </form>
       </aside>
     </section>
@@ -56,6 +61,12 @@
         <article class="service-link-card"><img class="faq-theme-card-photo" src="/assets/themes/standard/images/workflow-photo.webp" loading="lazy" decoding="async" width="1456" height="1022" alt="Car care planning materials and a detailing schedule" /><h3>Help articles</h3><p class="muted">Learn about pet hair, salt, paint care, coatings, and getting ready.</p><a class="btn ghost small" href="/blog">Open Help</a></article>
         <article class="service-link-card"><img class="faq-theme-card-photo" src="/assets/themes/standard/images/local-proof-photo.webp" loading="lazy" decoding="async" width="1456" height="1022" alt="A polished vehicle photographed outdoors in golden evening light" /><h3>Our work</h3><p class="muted">Browse gallery photos, before-and-after updates, and recent work.</p><a class="btn ghost small" href="/gallery">Open gallery</a></article>
       </div>
+    </section>
+
+    <section class="section panel faq-empty" id="faqEmptyState" hidden aria-live="polite">
+      <h2>No matching questions</h2>
+      <p>Try a shorter search term, or <a href="/contact">contact us directly</a>.</p>
+      <button class="btn ghost" id="faqResetEmpty" type="button">Show all questions</button>
     </section>
 
     <section class="section panel" data-faq-section>
@@ -82,7 +93,7 @@
           </button>
           <div class="faq-answer" hidden>
             <p>The booking flow is designed around the live availability window shown on the website. Weather, blocked days, service length, and one-vehicle-per-day planning can affect what is available.</p>
-            <a class="btn ghost small" href="/pricing#booking-planner">See live availability</a>
+            <a class="btn ghost small" href="/book#booking">See live availability</a>
           </div>
         </article></div>
     </section><section class="section panel" data-faq-section>
@@ -182,51 +193,7 @@
   <script>
     window.ROSIE_STATIC_FAQS = [{"category":"Booking and service area","question":"Where does Rosie Dazzlers provide mobile auto detailing?","answer":"Rosie Dazzlers serves Oxford County and Norfolk County, Ontario, with strongest public pages for Tillsonburg, Woodstock, Ingersoll, Simcoe, Delhi, Port Dover, Norwich, Otterville, Waterford, Vittoria, Port Rowan, Turkey Point, Zorra, Thamesford, and Embro. Final availability still depends on schedule, driveway access, travel time, and weather.","cta_label":"Check booking availability","cta_href":"/book"},{"category":"Booking and service area","question":"Do we need a driveway, water, and power?","answer":"Yes. The standard mobile setup assumes a safe driveway or private parking area, customer-provided water, and customer-provided power. If water or power is not available, staff must review options before confirming the job because timing, equipment, and pricing may change.","cta_label":"Read service details","cta_href":"/services"},{"category":"Booking and service area","question":"How far ahead can customers book?","answer":"The booking flow is designed around the live availability window shown on the website. Weather, blocked days, service length, and one-vehicle-per-day planning can affect what is available.","cta_label":"See live availability","cta_href":"/pricing#booking-planner"},{"category":"Pricing and quotes","question":"Why does final pricing depend on vehicle condition?","answer":"Vehicle size, pet hair, salt buildup, staining, odour, heavy soil, work-truck use, paint condition, and add-ons can change the time and products needed. The site uses quote-safe language so customers understand that the final plan may need review before work starts.","cta_label":"View pricing","cta_href":"/pricing"},{"category":"Pricing and quotes","question":"Should customers book directly or send photos first?","answer":"Book directly when the package is clear. Send photos or links first when the vehicle has heavy pet hair, odour, salt, staining, paint correction questions, ceramic coating questions, work-truck buildup, or fleet/maintenance needs.","cta_label":"Send photos for estimate","cta_href":"/book?estimate=photos"},{"category":"Pricing and quotes","question":"Are deposits required?","answer":"Deposits are used to reserve booking times. Cancellation or rescheduling rules are covered in the site terms and booking flow so staff time and travel planning are protected.","cta_label":"Read terms","cta_href":"/terms"},{"category":"Services and add-ons","question":"What is the difference between a standard interior detail and heavy interior work?","answer":"A standard interior detail is for normal use and maintenance-level cleanup. Heavy interior work can include pet hair, salt, odour, staining, spills, work-truck buildup, or extra extraction time, and may require add-ons or a photo estimate.","cta_label":"Compare services","cta_href":"/services"},{"category":"Services and add-ons","question":"Do ceramic coating, paint correction, and sealants need inspection?","answer":"Yes. Paint condition, previous waxes or coatings, scratches, oxidation, and customer expectations should be reviewed before promising a result. The website uses dedicated pages for ceramic coating, paint correction, graphene finish, clay treatment, and paint sealant so customers can choose the right path.","cta_label":"Open ceramic coating page","cta_href":"/ceramic-coating"},{"category":"Services and add-ons","question":"Can gift cards be used toward add-ons?","answer":"Gift cards can usually be used toward eligible detailing services and add-ons, but final use depends on the booking, vehicle condition, and staff review.","cta_label":"View gift cards","cta_href":"/gift-cards"},{"category":"Fleet and maintenance","question":"Do fleet or maintenance plans need a custom quote?","answer":"Yes. Fleet and maintenance pricing depends on vehicle count, cadence, parking logistics, job location, vehicle condition, water/power access, and whether the first visit should be a paid test detail.","cta_label":"Request fleet quote","cta_href":"/fleet"},{"category":"Photos, privacy, and proof","question":"Can customers upload photos or videos for an estimate?","answer":"The quote-first path supports pasted photo/share links, and the direct upload foundation is available when the public upload environment variables and storage bucket are enabled. Staff review privacy status before any media is used publicly.","cta_label":"Start quote-first booking","cta_href":"/book?estimate=photos"},{"category":"Photos, privacy, and proof","question":"Will customer photos be posted online?","answer":"Photos or videos should not be used publicly until staff confirm customer consent, privacy review, and any needed blur/crop work for plates, faces, addresses, or private information.","cta_label":"Read privacy policy","cta_href":"/privacy"}];
   </script>
-  <script>
-    (function(){
-      function bindFaqCards(){
-        document.querySelectorAll('[data-faq-card]').forEach(function(card){
-          var button = card.querySelector('.faq-question');
-          var answer = card.querySelector('.faq-answer');
-          if(!button || !answer || button.dataset.bound === '1') return;
-          button.dataset.bound = '1';
-          button.addEventListener('click', function(){
-            var open = button.getAttribute('aria-expanded') === 'true';
-            button.setAttribute('aria-expanded', String(!open));
-            answer.hidden = open;
-            var icon = button.querySelector('span[aria-hidden="true"]');
-            if(icon) icon.textContent = open ? '+' : '–';
-          });
-        });
-      }
-      function initSearch(){
-        var input = document.getElementById('faqSearch');
-        if(!input) return;
-        input.addEventListener('input', function(){
-          var q = input.value.trim().toLowerCase();
-          document.querySelectorAll('[data-faq-card]').forEach(function(card){
-            var text = card.textContent.toLowerCase();
-            card.hidden = q && text.indexOf(q) === -1;
-          });
-          document.querySelectorAll('[data-faq-section]').forEach(function(section){
-            var visible = Array.prototype.some.call(section.querySelectorAll('[data-faq-card]'), function(card){ return !card.hidden; });
-            section.hidden = !visible;
-          });
-        });
-      }
-      async function hydrateFaqsFromApi(){
-        try{
-          var res = await fetch('/api/public_faqs', { cache:'no-store' });
-          var data = await res.json().catch(function(){ return null; });
-          if(!res.ok || !data || !data.ok || !Array.isArray(data.items) || !data.items.length) return;
-          // Build 172 keeps the static HTML visible for SEO and no-JS users. API hydration is a smoke test/future CMS bridge.
-          document.documentElement.dataset.faqSource = data.source || 'api';
-        }catch(e){}
-      }
-      document.addEventListener('DOMContentLoaded', function(){ bindFaqCards(); initSearch(); hydrateFaqsFromApi(); });
-      if(document.readyState !== 'loading'){ bindFaqCards(); initSearch(); hydrateFaqsFromApi(); }
-    })();
-  </script>
+  <script src="/assets/build654-contact-faq.js" defer></script>
 
   <!-- FAQ navigation cards are Standard theme artwork, never auto-matched R2 promotional media. -->
   <script src="/assets/chrome.js?v=20260701build216" defer></script>

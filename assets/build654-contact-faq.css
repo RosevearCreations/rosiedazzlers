@@ -1,0 +1,34 @@
+/* Build 654 — scoped Standard-theme contact / FAQ usability. */
+.contact-prep{min-width:0}
+.contact-prep h2{margin:12px 0 8px}
+.contact-prep-form{display:grid;gap:16px;margin:16px 0}
+.contact-prep-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.contact-prep-fields label{display:flex;flex-direction:column;gap:8px;font-weight:700;min-width:0}
+.contact-prep-fields input,.contact-prep-fields select,.contact-prep-fields textarea{
+  display:block;width:100%;min-width:0;box-sizing:border-box;min-height:44px;
+  padding:11px 12px;color:var(--text,#f8fafc);background:rgba(15,23,42,.88);
+  border:1px solid rgba(255,255,255,.25);border-radius:12px;font:inherit;
+}
+.contact-prep-fields textarea{min-height:110px;resize:vertical}
+.contact-prep-fields label:last-child{grid-column:1/-1}
+.contact-prep-footer{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.contact-prep-footer p{margin:0}
+.contact-prep-actions{display:flex;gap:10px;flex-wrap:wrap;width:100%}
+.contact-prep-actions .btn{min-height:44px}
+.faq-search-status{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.faq-search-status p{margin:0;color:var(--muted,#cbd5e1);font-size:.94rem}
+.faq-search-status [hidden],.faq-empty[hidden]{display:none!important}
+.faq-empty a{text-decoration:underline;text-underline-offset:3px}
+.contact-prep-fields :is(input,select,textarea):focus-visible,
+.contact-prep-actions :is(a,button):focus-visible,
+.faq-search-status button:focus-visible,.faq-empty button:focus-visible{
+  outline:3px solid var(--gold,#d4af37);outline-offset:3px
+}
+@media(max-width:700px){
+  .contact-prep-fields{grid-template-columns:1fr}
+  .contact-prep-actions>*{flex:1 1 200px;text-align:center}
+}
+@media(max-width:380px){
+  .contact-prep-actions{flex-direction:column}
+  .contact-prep-actions>*{width:100%}
+}
