@@ -1,0 +1,16 @@
+/* Build 649: discover live booking catalog entries without changing authoritative checkout. */
+.booking-discovery-649{display:grid;gap:12px;margin-top:16px;padding:16px;border:1px solid rgba(215,181,108,.4);border-radius:16px;background:linear-gradient(145deg,rgba(218,180,102,.10),rgba(16,23,33,.55))}
+.booking-discovery-649__head{display:flex;align-items:start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.booking-discovery-649__head h3{margin:0 0 5px;font-size:1.2rem;color:#f5d999}
+.booking-discovery-649__head p{margin:0;font-size:.92rem}
+.booking-discovery-649__inputs{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,.65fr);gap:12px}
+.booking-discovery-649__inputs label,.addon-discovery-649 label{display:grid;gap:6px;font-weight:700;min-width:0}
+.booking-discovery-649__inputs :is(input,select),.addon-discovery-649 input{font:inherit;color:#fff;background:#17212c;border:1px solid rgba(211,181,121,.5);border-radius:11px;padding:10px 12px;min-height:44px;width:100%;box-sizing:border-box}
+.booking-discovery-649__inputs :is(input,select):focus-visible,.addon-discovery-649 input:focus-visible{outline:3px solid rgba(237,201,132,.82);outline-offset:2px}
+#packageFilterStatus649{margin:0;font-size:.9rem}
+.package-grid>.package-card[hidden]{display:none!important}
+.addon-discovery-649{margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;align-items:end}
+.addon-discovery-649 #addonFilterStatus649{grid-column:1/-1}
+.addon-grid>.addon-card[hidden]{display:none!important}
+@media(max-width:720px){.booking-discovery-649__inputs,.addon-discovery-649{grid-template-columns:1fr}.addon-discovery-649 button{justify-self:start}.booking-discovery-649{padding:14px}}
+@media(max-width:420px){.booking-discovery-649__head>button,.addon-discovery-649 button{width:100%}}
