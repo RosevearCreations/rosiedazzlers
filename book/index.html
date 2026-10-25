@@ -60,6 +60,7 @@
     @media(max-width:720px){.choice-toolbar,.package-grid,.addon-grid{grid-template-columns:1fr}.price-grid{grid-template-columns:repeat(3,1fr)}.planner-frame{height:1720px}.planner-shell{min-height:1400px}}
   </style>
   <link rel="stylesheet" href="/assets/booking-service-comparison-v629.css?v=1" />
+  <link rel="stylesheet" href="/assets/build649-booking-discovery.css?v=build649" />
 </head>
 <body>
   <div class="nav">
@@ -98,6 +99,14 @@
         <label class="size-field" for="vehicleSize"><span>Vehicle size</span><select id="vehicleSize"><option value="">Show all package prices</option><option value="small">Small — car / compact</option><option value="mid">Mid-sized — crossover / SUV</option><option value="oversize">Oversized — large SUV / van / truck</option></select></label>
         <div class="notice compact mini" id="priceHelp">Choose a size to highlight the price that applies. The booking planner verifies the vehicle details before checkout.</div>
       </div>
+      <div class="booking-discovery-649" aria-label="Find the right detailing package">
+        <div class="booking-discovery-649__head"><div><h3>Find a service that fits</h3><p class="muted">Search or narrow the service cards below. Filters are guidance only; they do not change your selected package or booking.</p></div><button class="btn ghost small" id="resetPackageFilters649" type="button">Show all services</button></div>
+        <div class="booking-discovery-649__inputs">
+          <label for="packageSearch649">Search services<input type="search" id="packageSearch649" placeholder="Try interior, complete, wash…" autocomplete="off" /></label>
+          <label for="packageGoal649">Main cleaning goal<select id="packageGoal649"><option value="all">All cleaning goals</option><option value="interior">Inside the vehicle</option><option value="exterior">Outside the vehicle</option><option value="complete">Both inside and outside</option><option value="upkeep">Light upkeep / wash</option></select></label>
+        </div>
+        <p id="packageFilterStatus649" class="muted" role="status" aria-live="polite">Loading available packages…</p>
+      </div>
       <div id="packageGrid" class="package-grid" aria-live="polite"></div>
       <section class="service-compare-629" id="packageCompare629" aria-labelledby="packageCompare629Heading">
         <h3 id="packageCompare629Heading">Compare detailing packages side by side <span aria-hidden="true">ⓘ</span></h3>
@@ -115,6 +124,7 @@
         <div><h2 id="addonsHeading" style="margin:0">2. Add specialty work only when you need it</h2><p class="muted" style="margin:5px 0 0">Add-ons are filtered by the selected base package. Tap or click anywhere on an available card to add or remove it. Quote-required work stays clearly marked instead of pretending every condition has one fixed price.</p></div>
         <button class="btn ghost" id="clearAddonsBtn" type="button">Clear add-ons</button>
       </div>
+      <div class="addon-discovery-649"><label for="addonSearch649">Find an add-on<input id="addonSearch649" type="search" placeholder="Search pet hair, odour, coating…" autocomplete="off" /></label><button class="btn ghost small" type="button" id="resetAddonFilter649">Show all add-ons</button><span id="addonFilterStatus649" class="mini muted" role="status" aria-live="polite">Loading add-ons…</span></div>
       <div id="addonGrid" class="addon-grid" aria-live="polite"></div>
     </section>
 
@@ -210,6 +220,45 @@
       history.replaceState(null,"",`${location.pathname}${next.toString()?`?${next}`:""}${location.hash}`);
     }
 
+    // Build 649 discovery operates on the existing authoritative catalog, never on price or planner state.
+    function filterPackages649(){
+      const query=qs("#packageSearch649").value.trim().toLocaleLowerCase();
+      const goal=qs("#packageGoal649").value;
+      const patterns={interior:/interior|inside|cabin|upholstery/i,exterior:/exterior|outside|paint|wash|body/i,complete:/complete|full|inside.and.out|both/i,upkeep:/wash|maintenance|upkeep|premium/i};
+      let visible=0,all=0;
+      qsa("[data-package-card]").forEach(card=>{
+        all++;
+        const row=(state.catalog?.packages||[]).find(pkg=>pkg.code===card.dataset.packageCard);
+        const haystack=[row?.name,row?.display_alias,row?.best_for,row?.subtitle,row?.customer_goal].filter(Boolean).join(" ");
+        const matchesQuery=!query||haystack.toLocaleLowerCase().includes(query);
+        const matchesGoal=goal==="all"||patterns[goal]?.test(haystack);
+        card.hidden=!(matchesQuery&&matchesGoal);
+        if(!card.hidden)visible++;
+      });
+      qs("#packageFilterStatus649").textContent=`${visible} of ${all} packages shown.`+(visible?"":" No matches; clear filters to see all choices.");
+    }
+    function filterAddons649(){
+      const query=qs("#addonSearch649").value.trim().toLocaleLowerCase();
+      let visible=0,all=0;
+      qsa("[data-addon-card]").forEach(card=>{
+        all++;
+        const row=(state.catalog?.addons||[]).find(addon=>addon.code===card.dataset.addonCard);
+        const haystack=[row?.name,row?.category,row?.type,row?.requirement_note].filter(Boolean).join(" ");
+        card.hidden=!!query&&!haystack.toLocaleLowerCase().includes(query);
+        if(!card.hidden)visible++;
+      });
+      qs("#addonFilterStatus649").textContent=`${visible} of ${all} add-ons shown.`+(visible?"":" Try another search.");
+    }
+    qs("#packageSearch649").addEventListener("input",filterPackages649);
+    qs("#packageGoal649").addEventListener("change",filterPackages649);
+    qs("#resetPackageFilters649").addEventListener("click",()=>{
+      qs("#packageSearch649").value="";qs("#packageGoal649").value="all";filterPackages649();qs("#packageSearch649").focus();
+    });
+    qs("#addonSearch649").addEventListener("input",filterAddons649);
+    qs("#resetAddonFilter649").addEventListener("click",()=>{
+      qs("#addonSearch649").value="";filterAddons649();qs("#addonSearch649").focus();
+    });
+
     function renderPackageComparison629(){
       const packages=state.catalog?.packages || [];
       if(!state.compareInitialized){
@@ -264,6 +313,7 @@
         '</tr></thead><tbody>'+rows+'</tbody></table>';
       holder.querySelectorAll("[data-compare-choose]").forEach(button=>button.addEventListener("click",()=>{
         const code=button.dataset.compareChoose;
+        qs("#packageSearch649").value="";qs("#packageGoal649").value="all";filterPackages649();
         const card=qsa("[data-choose-package]").find(item=>item.dataset.choosePackage===code);
         if(card){card.click();qs("#booking").scrollIntoView({behavior:"smooth",block:"start"});}
       }));
@@ -288,6 +338,7 @@
         analytics("unified_service_pick",{package_code:state.packageCode,vehicle_size:state.size||null});
       }));
       renderPackageComparison629();
+      filterPackages649();
     }
     function setAddonSelection(code, selected) {
       const addon=(state.catalog?.addons||[]).find((row)=>row.code===code);
@@ -307,6 +358,7 @@
         const code=card.dataset.addonCard||"";
         setAddonSelection(code,!state.addons.has(code));
       }));
+      filterAddons649();
     }
     function renderSummary() {
       const pkg=packageRow(); const t=totals(); const addons=selectedAddonRows();
