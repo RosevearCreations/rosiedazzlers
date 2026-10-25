@@ -10,3 +10,6 @@ node scripts/build629_package_comparison_test.mjs
 node scripts/build630_booking_draft_safe_return_test.mjs
 node scripts/build631_final_review_validation_test.mjs
 node scripts/build647_public_layout_test.mjs
+
+# Build 649 live-catalog discovery and booking state preservation.
+node scripts/build649_booking_discovery_test.mjs
