@@ -2,7 +2,7 @@ name: Photo Studio R2 Reliability Authority
 
 on:
   push:
-    branches: [main, dev, 'build*']
+    branches: [main, dev]
     paths:
       - 'functions/api/_lib/photo-library.js'
       - 'functions/api/_lib/photo-studio-safety.js'

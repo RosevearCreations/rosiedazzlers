@@ -2,7 +2,7 @@ name: Booking Quote Estimate Hardening Authority
 
 on:
   push:
-    branches: [main, dev, 'build*']
+    branches: [main, dev]
     paths:
       - 'functions/api/_lib/commercial-continuity.js'
       - 'functions/api/_lib/quote-booking-authority.js'
