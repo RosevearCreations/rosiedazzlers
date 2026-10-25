@@ -13,3 +13,4 @@ node scripts/build640_optional_authority_cohort_h_test.mjs
 node scripts/build641_optional_authority_cohort_i_test.mjs
 node scripts/build642_optional_authority_cohort_j_test.mjs
 node scripts/build643_optional_authority_cohort_k_test.mjs
+node scripts/build644_optional_authority_cohort_l_test.mjs
