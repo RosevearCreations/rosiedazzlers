@@ -13,3 +13,6 @@ node scripts/build647_public_layout_test.mjs
 
 # Build 649 live-catalog discovery and booking state preservation.
 node scripts/build649_booking_discovery_test.mjs
+
+# Build 650 selection-readiness and contextual help regression.
+node scripts/build650_booking_readiness_test.mjs
