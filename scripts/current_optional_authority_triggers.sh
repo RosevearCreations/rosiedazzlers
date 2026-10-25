@@ -15,3 +15,4 @@ node scripts/build642_optional_authority_cohort_j_test.mjs
 node scripts/build643_optional_authority_cohort_k_test.mjs
 node scripts/build644_optional_authority_cohort_l_test.mjs
 node scripts/build645_optional_authority_local_seo_test.mjs
+node scripts/build646_optional_authority_inventory_test.mjs
