@@ -16,3 +16,6 @@ node scripts/build649_booking_discovery_test.mjs
 
 # Build 650 selection-readiness and contextual help regression.
 node scripts/build650_booking_readiness_test.mjs
+
+# Build 651 gift selection links, checkout tab activation and accessibility.
+node scripts/build651_gift_choice_test.mjs

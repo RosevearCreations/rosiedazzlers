@@ -9,6 +9,7 @@
   <meta property="og:title" content="Gift Certificates | Rosie Dazzlers Mobile Detailing" />
   <meta property="og:description" content="Buy Rosie Dazzlers gift certificates for mobile detailing packages or dollar-value gifts in Norfolk and Oxford Counties, with scheduled e-gift delivery and printable certificate options." />
   <link rel="stylesheet" href="/assets/site.css?v=20260309b" />
+  <link rel="stylesheet" href="/assets/build651-gift-choice.css?v=build651" />
   <style>
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
@@ -64,14 +65,15 @@
       <div class="panel">
         <h2 style="margin-top:0">Choose gift type</h2>
 
-        <div class="tabs">
-          <button class="btn tab primary" id="tabDollar" type="button">Dollar Gift</button>
-          <button class="btn tab ghost" id="tabService" type="button">Service Gift</button>
-          <button class="btn tab ghost" id="tabLookup" type="button">Lookup / Receipt</button>
+        <div class="tabs gift-choice-tabs" id="giftChoiceTabs" role="tablist" aria-label="Gift certificate options">
+          <button class="btn tab primary" id="tabDollar" type="button" role="tab" aria-controls="dollarPane" aria-selected="true" tabindex="0">Dollar Gift</button>
+          <button class="btn tab ghost" id="tabService" type="button" role="tab" aria-controls="servicePane" aria-selected="false" tabindex="-1">Service Gift</button>
+          <button class="btn tab ghost" id="tabLookup" type="button" role="tab" aria-controls="lookupPane" aria-selected="false" tabindex="-1">Lookup / Receipt</button>
         </div>
+        <p class="mini gift-choice-context" id="giftChoiceContext" role="status" aria-live="polite">Choose a dollar gift when the recipient should decide how to use it.</p>
 
         <!-- DOLLAR GIFT -->
-        <div id="dollarPane" style="margin-top:14px">
+        <div id="dollarPane" role="tabpanel" aria-labelledby="tabDollar" style="margin-top:14px">
           <h3 style="margin:0 0 8px">Dollar Amount Gift</h3>
           <p class="muted">Pick an amount and enter recipient info. This gift deducts from any booking.</p>
 
@@ -129,7 +131,7 @@
         </div>
 
         <!-- SERVICE GIFT -->
-        <div id="servicePane" class="hidden" style="margin-top:14px">
+        <div id="servicePane" class="hidden" role="tabpanel" aria-labelledby="tabService" style="margin-top:14px">
           <h3 style="margin:0 0 8px">Service Gift</h3>
           <p class="muted">This covers a specific package + vehicle size (recommended for best match).</p>
 
@@ -221,7 +223,7 @@
         </div>
 
         <!-- LOOKUP -->
-        <div id="lookupPane" class="hidden" style="margin-top:14px">
+        <div id="lookupPane" class="hidden" role="tabpanel" aria-labelledby="tabLookup" style="margin-top:14px">
           <h3 style="margin:0 0 8px">Lookup a Gift Receipt</h3>
           <p class="muted">If you just purchased, paste your Stripe session_id and your email to view the gift code.</p>
 
@@ -296,29 +298,63 @@
       }
     }
 
-    function setTab(which){
-      const dollar = qs("#dollarPane");
-      const service = qs("#servicePane");
-      const lookup = qs("#lookupPane");
-      const tD = qs("#tabDollar");
-      const tS = qs("#tabService");
-      const tL = qs("#tabLookup");
-
-      dollar.classList.toggle("hidden", which !== "dollar");
-      service.classList.toggle("hidden", which !== "service");
-      lookup.classList.toggle("hidden", which !== "lookup");
-
-      tD.classList.toggle("primary", which === "dollar");
-      tD.classList.toggle("ghost", which !== "dollar");
-      tS.classList.toggle("primary", which === "service");
-      tS.classList.toggle("ghost", which !== "service");
-      tL.classList.toggle("primary", which === "lookup");
-      tL.classList.toggle("ghost", which !== "lookup");
+    // Gift selection is presentation-only: checkout prices and SKUs remain server-authoritative.
+    const giftTabs = [
+      { key: "dollar", hash: "#dollarPane", tab: "#tabDollar", pane: "#dollarPane", help: "Choose a dollar gift when the recipient should decide how to use it." },
+      { key: "service", hash: "#servicePane", tab: "#tabService", pane: "#servicePane", help: "Choose a service gift when the package and vehicle size are known." },
+      { key: "lookup", hash: "#lookupPane", tab: "#tabLookup", pane: "#lookupPane", help: "Already purchased? Look up a receipt using its session ID and purchase email." }
+    ];
+    function setTab(which, updateHash = true){
+      const choice = giftTabs.find(item => item.key === which) || giftTabs[0];
+      giftTabs.forEach(item => {
+        const active = item.key === choice.key;
+        const button = qs(item.tab);
+        const panel = qs(item.pane);
+        panel.classList.toggle("hidden", !active);
+        panel.hidden = !active;
+        button.classList.toggle("primary", active);
+        button.classList.toggle("ghost", !active);
+        button.setAttribute("aria-selected", String(active));
+        button.tabIndex = active ? 0 : -1;
+      });
+      qs("#giftChoiceContext").textContent = choice.help;
+      if (updateHash && location.hash !== choice.hash) {
+        history.replaceState(null, "", location.pathname + location.search + choice.hash);
+      }
     }
+    function syncTabFromLocation(){
+      // A successful Stripe return always opens receipt lookup, even with an old URL hash.
+      const params = new URLSearchParams(location.search);
+      if (params.get("gift") === "success" && params.get("session_id")) {
+        setTab("lookup", false);
+        return;
+      }
+      const selected = giftTabs.find(item => item.hash === location.hash);
+      setTab(selected ? selected.key : "dollar", false);
+    }
+    giftTabs.forEach((item, index) => {
+      const button = qs(item.tab);
+      button.addEventListener("click", () => setTab(item.key));
+      button.addEventListener("keydown", (event) => {
+        let next = index;
+        if (event.key === "ArrowRight") next = (index + 1) % giftTabs.length;
+        else if (event.key === "ArrowLeft") next = (index - 1 + giftTabs.length) % giftTabs.length;
+        else if (event.key === "Home") next = 0;
+        else if (event.key === "End") next = giftTabs.length - 1;
+        else return;
+        event.preventDefault();
+        setTab(giftTabs[next].key);
+        qs(giftTabs[next].tab).focus();
+      });
+    });
+    window.addEventListener("hashchange", syncTabFromLocation);
+    syncTabFromLocation();
 
-    qs("#tabDollar").addEventListener("click", ()=>setTab("dollar"));
-    qs("#tabService").addEventListener("click", ()=>setTab("service"));
-    qs("#tabLookup").addEventListener("click", ()=>setTab("lookup"));
+    // Only prefills values already offered by the checkout's own catalog.
+    const requestedAmount = new URLSearchParams(location.search).get("amount");
+    if (requestedAmount && [...qs("#dollarSku").options].some(option => option.value === requestedAmount)) {
+      qs("#dollarSku").value = requestedAmount;
+    }
 
     function formatDeliveryDate(value){
       if (!value) return 'Send now / automated delivery';
