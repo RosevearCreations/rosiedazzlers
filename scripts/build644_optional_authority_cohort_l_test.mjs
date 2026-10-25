@@ -24,7 +24,7 @@ for (const name of files) {
   assert.doesNotMatch(push, /['"]?build\*['"]?/, name + ' redundant feature push');
   assert.match(pr, /\bdev\b/, name + ' dev PR');
   assert.match(pr, /\bmain\b/, name + ' main PR');
-  if (name !== 'booking-quote-estimate-hardening-authority.yml') assert.match(events, /workflow_dispatch:/, name + ' manual dispatch');
+  if (!['booking-quote-estimate-hardening-authority.yml', 'photo-studio-r2-reliability-authority.yml'].includes(name)) assert.match(events, /workflow_dispatch:/, name + ' manual dispatch');
   else assert.doesNotMatch(events, /workflow_dispatch:/, name + ' original path-filtered event contract');
   assert.match(yaml, /^jobs:/m, name + ' jobs retained');
   assert.match(yaml, /runs-on:\s*ubuntu-latest/, name + ' runner retained');
