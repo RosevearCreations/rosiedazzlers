@@ -1,7 +1,7 @@
 name: Build 493 — Staff & Mobile Remediation Outcome Evidence Authority
 on:
   push:
-    branches: [dev, main, 'build*']
+    branches: [dev, main]
   pull_request:
     branches: [dev, main]
   workflow_dispatch:
