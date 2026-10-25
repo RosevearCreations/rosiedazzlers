@@ -1,0 +1,33 @@
+/* Build 653 — accessible maintenance-interest intake, Standard theme */
+#membershipInterestForm{display:grid;gap:14px;min-width:0}
+#membershipInterestForm .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#membershipInterestForm .field{display:grid;gap:6px;min-width:0}
+#membershipInterestForm label{display:block;font-weight:700;color:#f8fafc}
+#membershipInterestForm input,#membershipInterestForm select,#membershipInterestForm textarea{
+  display:block;width:100%;max-width:100%;min-width:0;box-sizing:border-box;
+  padding:12px 13px;min-height:44px;border-radius:12px;
+  background:#111c2d;color:#f8fafc;border:1px solid #6e8198;
+  font:inherit;line-height:1.45
+}
+#membershipInterestForm textarea{resize:vertical;min-height:112px}
+#membershipInterestForm input:focus-visible,#membershipInterestForm select:focus-visible,
+#membershipInterestForm textarea:focus-visible,#membershipInterestForm button:focus-visible{
+  outline:3px solid #e6b95f;outline-offset:2px;border-color:#f2cf7b
+}
+#membershipInterestForm input:invalid:not(:placeholder-shown){border-color:#e8a4a4}
+#membershipInterestForm .cta-row{display:flex;flex-wrap:wrap;gap:10px}
+#membershipInterestForm .cta-row button,#membershipInterestForm .cta-row a{min-height:44px}
+#membershipInterestForm button[disabled]{opacity:.7;cursor:not-allowed}
+.interest-selection-summary{padding:14px 16px;border:1px solid rgba(233,191,107,.36);
+  border-radius:14px;background:linear-gradient(135deg,rgba(212,164,74,.14),rgba(20,32,48,.88))}
+.interest-selection-summary strong{color:#ffe1a5}
+.interest-selection-summary p{margin:8px 0 0}
+#miPreferenceSummary{font-weight:700;font-variant-numeric:tabular-nums}
+#miNotesCount{text-align:right}
+.maintenance-hero-image{display:block;width:100%;max-height:420px;aspect-ratio:16/7;object-fit:cover}
+@media(max-width:760px){
+  #membershipInterestForm .form-grid{grid-template-columns:1fr}
+  #membershipInterestForm .cta-row{display:grid;grid-template-columns:1fr}
+  #membershipInterestForm .cta-row>*{width:100%;text-align:center}
+  .interest-selection-summary{padding:12px}
+}
