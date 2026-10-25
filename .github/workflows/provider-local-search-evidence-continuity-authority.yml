@@ -1,7 +1,7 @@
 name: Provider & Local Search Evidence Continuity Authority
 on:
   push:
-    branches: [dev, main, 'build*']
+    branches: [dev, main]
   pull_request:
     branches: [dev, main]
   workflow_dispatch:
