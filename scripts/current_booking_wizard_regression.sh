@@ -22,3 +22,6 @@ node scripts/build651_gift_choice_test.mjs
 
 # Build 652 gallery comparison controls, filtering and public publication boundaries.
 node scripts/build652_gallery_browse_test.mjs
+
+# Build 653 maintenance-interest form, readiness and accessible confirmation.
+node scripts/build653_maintenance_interest_test.mjs
