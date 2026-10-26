@@ -211,6 +211,19 @@
         <div class="status" id="giftRedemptionBalanceReviewResult" role="status" aria-live="polite">Owner-controlled wording audit only. No balance checks, redemption transactions, booking changes or messages are sent.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftReceiptConfirmationTitle" data-build670-gift-receipt-confirmation-review>
+      <div class="panel">
+        <div class="badge">Build 670 · read-only</div>
+        <h2 id="giftReceiptConfirmationTitle">Gift receipt, certificate and confirmation mobile readability audit</h2>
+        <p>Compare purchase receipt lookup, gift certificate wording and booking confirmation copy. Identify misleading payment/appointment claims, stale remaining-value explanations, mismatched document variants and unclear deposit labels. This audit does not open customer receipts or change any transaction.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="giftReceiptConfirmationReviewBtn">Check gift receipt guidance</button>
+          <a class="btn ghost" href="/gifts">Review receipt lookup</a>
+          <a class="btn ghost" href="/gift-certificate-print">Review certificate</a>
+        </div>
+        <div class="status" id="giftReceiptConfirmationReviewResult" role="status" aria-live="polite">Staff-only, owner-controlled copy audit. No codes, customer records, payments or messages are fetched or modified.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -266,6 +279,7 @@
   <script src="/assets/admin-cancellation-refund-copy-review-v667.js?v=20261026build667" defer></script>
   <script src="/assets/admin-gift-credit-terms-review-v668.js?v=20261026build668" defer></script>
   <script src="/assets/admin-gift-redemption-balance-copy-review-v669.js?v=20261026build669" defer></script>
+  <script src="/assets/admin-gift-receipt-confirmation-review-v670.js?v=20261026build670" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");

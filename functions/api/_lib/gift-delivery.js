@@ -156,7 +156,7 @@ function buildGiftDeliveryPayload(gift, origin, settings, info) {
   const sender = info.sender_name || "Someone who cares about a clean ride";
   const valueLabel = gift.type === "service"
     ? `${gift.package_code || "Service gift"}${gift.vehicle_size ? ` · ${gift.vehicle_size}` : ""}`
-    : formatCad(gift.remaining_cents || gift.face_value_cents || 0);
+    : formatCad(gift.remaining_cents ?? gift.face_value_cents ?? 0);
   const bookingUrl = buildGiftBookingUrl(origin, gift);
   const printUrl = `${origin}/gift-certificate-print?code=${encodeURIComponent(gift.code || "")}`;
   const subject = `Your Rosie Dazzlers e-gift is ready`;
