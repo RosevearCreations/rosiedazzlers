@@ -486,7 +486,7 @@
         slot_labels: { AM: 'AM half day', PM: 'PM half day', FULL: 'Full day' },
         public_requirements: [
           'Driveway required',
-          'Customer provides power and water or additional fees may apply',
+          'Rosie supplies standard detailing water and power; suitable work area required',
           'One vehicle per day unless half-day jobs are confirmed'
         ],
         travel_pricing: { urban: 0, township: 0, hamlet: 10, coastal: 20, rural: 20, out_of_zone: 50, notes: '' },
@@ -494,7 +494,7 @@
       },
       public_requirements: [
         'Driveway required',
-        'Customer provides power and water or additional fees may apply',
+        'Rosie supplies standard detailing water and power; suitable work area required',
         'One vehicle per day unless half-day jobs are confirmed'
       ]
     };
