@@ -77,7 +77,9 @@ assert.match(read('order-confirmation/index.html'), /id="preparationChecklist"/)
 assert.match(read('order-confirmation/index.html'), /esc\(item\)/, 'Checklist must escape customer document output');
 const processor = read('functions/api/notifications_process.js');
 assert.match(processor, /loadCustomerCommunicationDispatchGate/);
-assert.ok(processor.indexOf('loadCustomerCommunicationDispatchGate({ env, event: item })') < processor.indexOf('dispatchNotificationThroughProvider(env, guardAppointmentNotificationForDispatch(item))'), 'Guard must not bypass consent gate');
+assert.ok(processor.indexOf('loadCustomerCommunicationDispatchGate({ env, event: item })') < processor.indexOf('dispatchNotificationThroughProvider(env, item)'), 'Guard must not bypass consent gate');
+const providerDispatcher = read('functions/api/_lib/provider-dispatch.js');
+assert.ok(providerDispatcher.indexOf('guardAppointmentNotificationForDispatch(event)') < providerDispatcher.indexOf('const channel ='), 'Shared provider must guard copy before preparing any actual email/SMS payload');
 assert.match(read('assets/build399-customer-communication-self-service.js'), /Rosie brings standard detailing water and power/);
 
 const settings = read('admin-site-settings.html');
