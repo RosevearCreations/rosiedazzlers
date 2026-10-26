@@ -125,6 +125,18 @@
         <div class="status" id="postServiceMobileCopyReviewResult" role="status" aria-live="polite">Run this owner-controlled, read-only review. Any changes to managed templates require explicit owner action.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="rebookingSeasonalCopyTitle" data-build663-rebooking-review>
+      <div class="panel">
+        <div class="badge">Build 663 · read-only</div>
+        <h2 id="rebookingSeasonalCopyTitle">Rebooking and seasonal maintenance reminder copy audit</h2>
+        <p>Check reminder templates for unsupported winter availability, incorrect water/power requirements, automatic booking promises or unauthorized recurring contact claims. No reminder is sent or scheduled by this check.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="rebookingSeasonalCopyReviewBtn">Check rebooking and seasonal message sources</button>
+          <a class="btn ghost" href="/admin-notifications.html">Review notification consent and delivery</a>
+        </div>
+        <div class="status" id="rebookingSeasonalCopyReviewResult" role="status" aria-live="polite">Owner review is required before changing any managed templates or enabling outreach.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -173,6 +185,7 @@
   <script src="/assets/admin-appointment-preparation-mobile-setup-review-v660.js?v=20261026build660" defer></script>
   <script src="/assets/admin-quote-deposit-mobile-copy-review-v661.js?v=20261026build661" defer></script>
   <script src="/assets/admin-post-service-copy-review-v662.js?v=20261026build662" defer></script>
+  <script src="/assets/admin-rebooking-seasonal-copy-review-v663.js?v=20261026build663" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
