@@ -42,3 +42,4 @@ node scripts/build661_quote_deposit_mobile_copy_test.mjs
 node scripts/build662_post_service_mobile_copy_test.mjs
 node scripts/build663_rebooking_seasonal_copy_test.mjs
 node scripts/build664_service_completion_faq_test.mjs
+node scripts/build665_feedback_recovery_copy_test.mjs

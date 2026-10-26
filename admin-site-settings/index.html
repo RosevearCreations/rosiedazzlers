@@ -149,6 +149,18 @@
         <div class="status" id="serviceCompletionFaqReviewResult" role="status" aria-live="polite">Owner review is required before changing managed customer-care text.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="feedbackRecoveryCopyTitle" data-build665-feedback-recovery-review>
+      <div class="panel">
+        <div class="badge">Build 665 · read-only</div>
+        <h2 id="feedbackRecoveryCopyTitle">Customer feedback and service-recovery message audit</h2>
+        <p>Review feedback and complaint-response wording for unsupported refunds, guaranteed resolutions, review suppression or unapproved recurring contact. This check does not contact customers, approve refunds or close incidents.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="feedbackRecoveryCopyReviewBtn">Check feedback/recovery message sources</button>
+          <a class="btn ghost" href="/admin-incident-reports.html">Review incidents separately</a>
+        </div>
+        <div class="status" id="feedbackRecoveryCopyReviewResult" role="status" aria-live="polite">Run the read-only review before editing any managed customer-care messages.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -199,6 +211,7 @@
   <script src="/assets/admin-post-service-copy-review-v662.js?v=20261026build662" defer></script>
   <script src="/assets/admin-rebooking-seasonal-copy-review-v663.js?v=20261026build663" defer></script>
   <script src="/assets/admin-service-completion-faq-review-v664.js?v=20261026build664" defer></script>
+  <script src="/assets/admin-feedback-recovery-copy-review-v665.js?v=20261026build665" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
