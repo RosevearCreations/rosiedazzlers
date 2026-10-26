@@ -44,6 +44,10 @@
         <h2 style="margin-top:0">Included service</h2>
         <div id="serviceRows"></div>
       </section>
+      <section class="doc-card" style="margin-top:16px" aria-labelledby="preparationTitle">
+        <h2 id="preparationTitle" style="margin-top:0">Before we arrive</h2>
+        <ul id="preparationChecklist" style="padding-left:20px"></ul>
+      </section>
       <div class="doc-actions">
         <button class="btn primary" type="button" onclick="window.print()">Print confirmation</button>
         <a id="invoiceLink" class="btn ghost" href="#">Open invoice / summary</a>
@@ -87,6 +91,8 @@
       ].map(([l,v])=>`<div class="doc-row"><span>${esc(l)}</span><strong>${esc(v)}</strong></div>`).join('');
       const included=Array.isArray(d.package?.included_services)?d.package.included_services:[];
       qs('#serviceRows').innerHTML=included.length?included.map((row)=>`<div class="doc-row"><span>${esc(row.name||'Service item')}</span><strong>${esc(row.optional_condition_note||'Included')}</strong></div>`).join(''):'<div class="doc-row"><span>Included services</span><strong>See package summary</strong></div>';
+      const prep=Array.isArray(d.preparation_checklist)?d.preparation_checklist:[];
+      qs('#preparationChecklist').innerHTML=prep.map((item)=>`<li>${esc(item)}</li>`).join('');
     }
     boot().catch((err)=>{qs('#docStatus').className='notice bad'; qs('#docStatus').textContent=err?.message||'Could not load booking confirmation.';});
   </script>
