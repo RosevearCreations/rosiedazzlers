@@ -6,7 +6,7 @@ const COPY_TYPE = "gift_scheduled_delivery_purchaser_copy_email";
 
 function safeStatus(value) {
   const s = String(value || "").trim().toLowerCase();
-  return ["queued", "sent", "failed", "cancelled", "pending"].includes(s) ? s : "unknown";
+  return ["queued", "sent", "failed", "cancelled", "pending", "processing", "review_required"].includes(s) ? s : "unknown";
 }
 
 function eventView(row, target, now) {

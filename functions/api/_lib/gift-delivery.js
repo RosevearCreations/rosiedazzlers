@@ -51,7 +51,7 @@ export function isGiftDueForDelivery(gift, settings, now = new Date()) {
   if (!settings?.enabled || settings?.automation_enabled === false) return { due: false, reason: "automation_disabled", info };
   if (!String(gift?.recipient_email || "").trim()) return { due: false, reason: "missing_recipient", info };
   if (info.delivery_status === "sent" || info.sent_at) return { due: false, reason: "already_sent", info };
-  if (info.delivery_status === "queued" && info.notification_event_id) return { due: false, reason: "already_queued", info };
+  if (info.delivery_status !== "pending") return { due: false, reason: "delivery_state_requires_owner_review", info };
   if (settings.manual_review === true && !info.approved_at) return { due: false, reason: "awaiting_review", info };
 
   const timeZone = settings.timezone_label || GIFT_DELIVERY_DEFAULTS.timezone_label;
@@ -76,6 +76,12 @@ export async function processGiftDeliveryRow(env, gift, settings, options = {}) 
   const due = isGiftDueForDelivery(gift, settings, options.now || new Date());
   if (!due.due) return { ok: false, skipped: true, reason: due.reason, gift_id: gift.id };
 
+  // Atomic PostgREST claim: only one request may move pending -> processing.
+  // Unknown/legacy state and incomplete claims must remain held, never resent.
+  const claimed = await claimGiftDelivery(env, gift, due.info);
+  if (!claimed) return { ok: false, skipped: true, reason: "already_claimed_or_state_changed", gift_id: gift.id };
+  let context = claimed;
+
   const basePayload = buildGiftDeliveryPayload(gift, origin, settings, due.info);
   const results = [];
 
@@ -97,18 +103,33 @@ export async function processGiftDeliveryRow(env, gift, settings, options = {}) 
   });
 
   if (!recipientEvent.ok) {
-    await updateGiftDeliveryContext(env, gift.id, due.info.purchase_context, {
+    await updateGiftDeliveryContext(env, gift.id, context, {
       delivery_status: "failed",
       last_error: recipientEvent.error || "Could not queue gift delivery."
     });
     return { ok: false, gift_id: gift.id, error: recipientEvent.error || "Could not queue gift delivery." };
   }
 
+  context = await updateGiftDeliveryContext(env, gift.id, context, {
+    delivery_status: "processing",
+    notification_event_id: recipientEvent.event.id,
+    queued_at: recipientEvent.event.created_at || new Date().toISOString()
+  });
+
   const recipientDispatch = await deliverNotificationEvent(env, recipientEvent.event);
   results.push({ target: "recipient", ...recipientDispatch, notification_event_id: recipientEvent.event.id });
 
+  context = await updateGiftDeliveryContext(env, gift.id, context, {
+    delivery_status: recipientDispatch.ok ? "sent" : "failed",
+    recipient_provider_status: recipientDispatch.ok ? "accepted" : "failed",
+    sent_at: recipientDispatch.ok ? new Date().toISOString() : null,
+    last_error: recipientDispatch.error || null
+  });
+  // A failed recipient send must not produce a misleading purchaser "delivered" copy.
+  if (!recipientDispatch.ok) return { ok: false, gift_id: gift.id, results };
+
   let copyResult = null;
-  if (settings.send_copy_to_purchaser !== false && gift.purchaser_email && gift.purchaser_email !== gift.recipient_email) {
+  if (settings.send_copy_to_purchaser !== false && gift.purchaser_email && gift.purchaser_email.toLowerCase() !== gift.recipient_email.toLowerCase()) {
     const copyPayload = buildGiftPurchaserCopyPayload(gift, origin, settings, due.info);
     const purchaserEvent = await createNotificationEvent(env, {
       event_type: "gift_scheduled_delivery_purchaser_copy_email",
@@ -127,26 +148,30 @@ export async function processGiftDeliveryRow(env, gift, settings, options = {}) 
       body_html: copyPayload.body_html
     });
     if (purchaserEvent.ok) {
+      context = await updateGiftDeliveryContext(env, gift.id, context, {
+        copy_notification_event_id: purchaserEvent.event.id,
+        purchaser_copy_status: "processing"
+      });
       copyResult = await deliverNotificationEvent(env, purchaserEvent.event);
       results.push({ target: "purchaser", ...copyResult, notification_event_id: purchaserEvent.event.id });
-      due.info.copy_notification_event_id = purchaserEvent.event.id;
+      context = await updateGiftDeliveryContext(env, gift.id, context, {
+        purchaser_copy_status: copyResult.ok ? "accepted" : "failed",
+        last_copy_error: copyResult.error || null
+      });
+    } else {
+      context = await updateGiftDeliveryContext(env, gift.id, context, {
+        purchaser_copy_status: "failed",
+        last_copy_error: purchaserEvent.error || "Could not queue purchaser copy."
+      });
     }
   }
 
-  const failed = results.find((row) => row.ok === false);
-  await updateGiftDeliveryContext(env, gift.id, due.info.purchase_context, {
-    delivery_status: failed ? "failed" : "sent",
-    queued_at: recipientEvent.event.created_at || new Date().toISOString(),
-    sent_at: failed ? null : new Date().toISOString(),
-    notification_event_id: recipientEvent.event.id,
-    copy_notification_event_id: due.info.copy_notification_event_id || null,
-    last_error: failed ? failed.error || "Gift delivery failed." : null
-  });
-
   return {
-    ok: !failed,
+    ok: true,
     gift_id: gift.id,
     gift_code: gift.code,
+    recipient_provider_status: "accepted",
+    purchaser_copy_status: copyResult ? (copyResult.ok ? "accepted" : "failed") : "not_submitted",
     results
   };
 }
@@ -163,7 +188,7 @@ function buildGiftDeliveryPayload(gift, origin, settings, info) {
   const body_text = [
     `Hi ${recipient},`,
     "",
-    `${sender} sent you a Rosie Dazzlers e-gift${gift.delivery_date ? ` for ${gift.delivery_date}` : ""}.`,
+    `${sender} sent you a Rosie Dazzlers e-gift${info.delivery_date ? ` for ${info.delivery_date}` : ""}.`,
     `Gift code: ${gift.code}`,
     `Gift type/value: ${valueLabel}`,
     info.gift_message ? `Message: ${info.gift_message}` : null,
@@ -176,7 +201,7 @@ function buildGiftDeliveryPayload(gift, origin, settings, info) {
   const body_html = `
     <h1>Your Rosie Dazzlers e-gift is ready</h1>
     <p>Hi ${escapeHtml(recipient)},</p>
-    <p><strong>${escapeHtml(sender)}</strong> sent you a Rosie Dazzlers e-gift${gift.delivery_date ? ` for <strong>${escapeHtml(gift.delivery_date)}</strong>` : ""}.</p>
+    <p><strong>${escapeHtml(sender)}</strong> sent you a Rosie Dazzlers e-gift${info.delivery_date ? ` for <strong>${escapeHtml(info.delivery_date)}</strong>` : ""}.</p>
     <p><strong>Gift code:</strong> ${escapeHtml(gift.code || "")}</p>
     <p><strong>Gift type/value:</strong> ${escapeHtml(valueLabel)}</p>
     ${info.gift_message ? `<p><strong>Message:</strong> ${escapeHtml(info.gift_message)}</p>` : ""}
@@ -207,19 +232,19 @@ function buildGiftPurchaserCopyPayload(gift, origin, settings, info) {
   const recipient = gift.recipient_name || gift.recipient_email || "your recipient";
   const bookingUrl = buildGiftBookingUrl(origin, gift);
   const printUrl = `${origin}/gift-certificate-print?code=${encodeURIComponent(gift.code || "")}`;
-  const subject = `Your Rosie Dazzlers e-gift has been delivered`;
+  const subject = `Your Rosie Dazzlers e-gift was sent`;
   const body_text = [
     `Hi ${info.sender_name || "there"},`,
     "",
-    `Your Rosie Dazzlers gift for ${recipient} has been delivered${gift.delivery_date ? ` on ${gift.delivery_date}` : ""}.`,
+    `Your Rosie Dazzlers gift for ${recipient} was accepted by our email provider${info.delivery_date ? ` on ${info.delivery_date}` : ""}. Inbox delivery is not confirmed.`,
     `Gift code: ${gift.code}`,
     `Recipient booking link: ${bookingUrl}`,
     `Printable certificate: ${printUrl}`
   ].join("\n");
   const body_html = `
-    <h1>Your Rosie Dazzlers e-gift has been delivered</h1>
+    <h1>Your Rosie Dazzlers e-gift was sent</h1>
     <p>Hi ${escapeHtml(info.sender_name || "there")},</p>
-    <p>Your Rosie Dazzlers gift for <strong>${escapeHtml(recipient)}</strong> has been delivered${gift.delivery_date ? ` on <strong>${escapeHtml(gift.delivery_date)}</strong>` : ""}.</p>
+    <p>Your Rosie Dazzlers gift for <strong>${escapeHtml(recipient)}</strong> was accepted by our email provider${info.delivery_date ? ` on <strong>${escapeHtml(info.delivery_date)}</strong>` : ""}. Inbox delivery is not confirmed.</p>
     <p><strong>Gift code:</strong> ${escapeHtml(gift.code || "")}</p>
     <p><a href="${bookingUrl}">Recipient booking link</a><br><a href="${printUrl}">Printable certificate</a></p>
   `;
@@ -288,11 +313,15 @@ async function deliverNotificationEvent(env, event) {
         next_attempt_at: new Date(Date.now() + 15 * 60000).toISOString(),
         updated_at: new Date().toISOString()
       };
-  await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events?id=eq.${encodeURIComponent(event.id)}`, {
+  const persisted = await fetch(`${env.SUPABASE_URL}/rest/v1/notification_events?id=eq.${encodeURIComponent(event.id)}`, {
     method: "PATCH",
-    headers: { ...serviceHeaders(env), Prefer: "return=minimal" },
+    headers: { ...serviceHeaders(env), Prefer: "return=representation" },
     body: JSON.stringify(patch)
-  }).catch(() => null);
+  });
+  const persistedRows = await persisted.json().catch(() => null);
+  if (!persisted.ok || !Array.isArray(persistedRows) || persistedRows.length !== 1) {
+    throw new Error("Gift provider outcome could not be persisted; owner reconciliation required before retry.");
+  }
   return { ok: dispatch.ok, error: dispatch.error || null };
 }
 
@@ -302,11 +331,35 @@ export async function updateGiftDeliveryContext(env, giftId, purchaseContext, pa
     ...(nextContext.gift_delivery && typeof nextContext.gift_delivery === "object" ? nextContext.gift_delivery : {}),
     ...patch
   };
-  await fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?id=eq.${encodeURIComponent(giftId)}`, {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?id=eq.${encodeURIComponent(giftId)}`, {
     method: "PATCH",
-    headers: { ...serviceHeaders(env), Prefer: "return=minimal" },
+    headers: { ...serviceHeaders(env), Prefer: "return=representation" },
     body: JSON.stringify({ purchase_context: nextContext })
-  }).catch(() => null);
+  });
+  const rows = await res.json().catch(() => null);
+  if (!res.ok || !Array.isArray(rows) || rows.length !== 1) {
+    throw new Error("Gift delivery state could not be persisted; owner reconciliation required before retry.");
+  }
+  return nextContext;
+}
+
+async function claimGiftDelivery(env, gift, info) {
+  const claimContext = JSON.parse(JSON.stringify(info.purchase_context));
+  claimContext.gift_delivery = { ...claimContext.gift_delivery, delivery_status: "processing", claimed_at: new Date().toISOString() };
+  const query = new URLSearchParams({
+    id: `eq.${gift.id}`,
+    status: "eq.active",
+    "purchase_context->gift_delivery->>delivery_status": "eq.pending"
+  });
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?${query}`, {
+    method: "PATCH",
+    headers: { ...serviceHeaders(env), Prefer: "return=representation" },
+    body: JSON.stringify({ purchase_context: claimContext })
+  });
+  if (!res.ok) throw new Error("Unable to claim gift delivery; dispatch held for review.");
+  const rows = await res.json().catch(() => null);
+  if (!Array.isArray(rows)) throw new Error("Gift claim response unverified; dispatch held for review.");
+  return rows.length === 1 ? claimContext : null;
 }
 
 function zonedDateParts(date, timeZone) {

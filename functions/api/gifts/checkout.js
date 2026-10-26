@@ -24,6 +24,10 @@ export async function onRequestPost({ request, env }) {
     const delivery_date = asString(body?.delivery_date);
     const gift_message = asString(body?.message);
 
+    if (delivery_date && !isValidGiftDeliveryDate(delivery_date)) {
+      return json({ version: VERSION, error: "Invalid gift delivery date. Use YYYY-MM-DD." }, 400);
+    }
+
     if (!purchaser_email) return json({ version: VERSION, error: "Missing purchaser_email" }, 400);
     if (!recipient_email) return json({ version: VERSION, error: "Missing recipient_email" }, 400);
 
@@ -201,6 +205,12 @@ export async function onRequestPost({ request, env }) {
   } catch (e) {
     return json({ version: VERSION, error: "Server error", details: String(e) }, 500);
   }
+}
+
+function isValidGiftDeliveryDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const date = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
 }
 
 /* ---------------- Helpers ---------------- */
