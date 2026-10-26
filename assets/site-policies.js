@@ -11,6 +11,14 @@
   };
   const state = { loaded: false, policies: { ...FALLBACK_POLICIES } };
 
+  function publicMobileSetupNote(managedCopy) {
+    const text = String(managedCopy || '').trim();
+    const legacy = /\b(?:customers?|you)\b.{0,18}\b(?:must\s+|need\s+to\s+|required\s+to\s+|should\s+)?(?:provide|provides|supply|supplies|bring)\b\s+(?:(?:their|own|the|a|an|working|outdoor|household|available|sufficient)\s+){0,4}(?:(?:access\s+to|a\s+supply\s+of)\s+)?(?:water|power|electricity|hose)\b/i.test(text)
+      || /\bcustomer[- ]supplied\s+(?:water|power|electricity)\b/i.test(text)
+      || /\bif\s+(?:water|power|hose)(?:\s*\/\s*(?:water|power))?.{0,32}\b(?:unavailable|not available)\b.{0,45}\b(?:additional|extra)\s+(?:charges?|fees?)\b/i.test(text);
+    return !text || legacy ? FALLBACK_POLICIES.water_power : text;
+  }
+
   async function loadPolicies() {
     if (state.loaded) return state.policies;
     state.loaded = true;
@@ -19,6 +27,8 @@
       const data = await res.json().catch(() => null);
       const policies = data?.settings?.site_policies?.value?.policies || data?.settings?.site_policies?.value || {};
       state.policies = { ...FALLBACK_POLICIES, ...(policies && typeof policies === 'object' ? policies : {}) };
+      // Public rendering guard only; the persisted record is never edited.
+      state.policies.water_power = publicMobileSetupNote(state.policies.water_power);
     } catch {}
     return state.policies;
   }
