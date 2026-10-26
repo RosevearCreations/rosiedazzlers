@@ -8,6 +8,7 @@ import {
   PUBLIC_MOBILE_SETUP_COPY
 } from '../functions/api/_lib/mobile-setup-policy.js';
 import { onRequestGet, onRequestPost } from '../functions/api/admin/mobile_setup_policy_review.js';
+import { onRequest as rewritePage } from '../functions/_middleware.js';
 
 const read = (name) => readFileSync(new URL('../' + name, import.meta.url), 'utf8');
 const legacy = 'Driveway required · customer provides power + water, or additional charges may apply.';
@@ -58,6 +59,21 @@ assert.match(settingsHtml, /\/assets\/admin-mobile-setup-review-v656\.js/);
 const adminUi = read('assets/admin-mobile-setup-review-v656.js');
 assert.match(adminUi, /\/api\/admin\/mobile_setup_policy_review/);
 assert.doesNotMatch(adminUi, /method:\s*['"]POST['"]|\/api\/admin\/editable_site_settings_sync/);
+
+// Verify a fresh document points to fresh script cache keys, including a
+// booking route where runtime policy copy is applied after load.
+for (const path of ['/contact', '/faq', '/book']) {
+  const source = `<html><head></head><body><script type="module" src="/assets/chrome.js?v=20260701build216"></script><script defer src="/assets/site-policies.js?v=20261024build630"></script></body></html>`;
+  const response = await rewritePage({
+    request: new Request(`https://rosiedazzlers.ca${path}`),
+    next: async () => new Response(source, { headers: { 'content-type': 'text/html; charset=utf-8' } })
+  });
+  const html = await response.text();
+  assert.match(html, /\/assets\/chrome\.js\?v=20261025build656/);
+  assert.match(html, /\/assets\/site-policies\.js\?v=20261025build656/);
+  assert.doesNotMatch(html, /chrome\.js\?v=20260701build216/);
+  assert.equal(response.headers.get('cache-control'), 'no-cache');
+}
 
 const originalFetch = globalThis.fetch;
 let requests = [];
