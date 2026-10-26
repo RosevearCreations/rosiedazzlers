@@ -28,10 +28,6 @@ const EDITOR_EXCLUDED_PATHS = new Set([
 ]);
 
 const ACCESSIBILITY_STYLESHEET = '<link rel="stylesheet" href="/assets/build376-accessibility.css?v=376" data-build376="accessibility-baseline" />';
-// Build 656: existing public HTML transforms also rotate shared script cache
-// keys. Old browser-cached chrome.js/site-policies.js otherwise continue to
-// display a stale DB policy even after Cloudflare has deployed the correction.
-const MOBILE_SETUP_SCRIPT_VERSION = "20261025build656";
 
 const PACKAGE_GUIDE = `
 <div class="photo-estimate-guide" data-build272="package-scope-before-price" style="margin-top:12px">
@@ -85,13 +81,6 @@ export async function onRequest(context) {
   if (!contentType.includes("text/html")) return hardenResponse(request, response);
 
   let html = await response.text();
-
-  // Keep the rewriter limited to script src attributes on routes already
-  // transformed by this middleware. Do not change booking data or legal copy.
-  html = html.replace(
-    /(<script\b[^>]*\bsrc=["'])\/assets\/(chrome|site-policies)\.js(?:\?[^"']*)?(["'][^>]*>)/gi,
-    (_, start, name, end) => `${start}/assets/${name}.js?v=${MOBILE_SETUP_SCRIPT_VERSION}${end}`
-  );
 
   if (applyLegacyClarity) {
     html = html
