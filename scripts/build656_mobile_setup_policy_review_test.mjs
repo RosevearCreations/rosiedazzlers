@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import vm from 'node:vm';
 import {
   classifyMobileSetupCopy,
@@ -8,7 +8,6 @@ import {
   PUBLIC_MOBILE_SETUP_COPY
 } from '../functions/api/_lib/mobile-setup-policy.js';
 import { onRequestGet, onRequestPost } from '../functions/api/admin/mobile_setup_policy_review.js';
-import { onRequest as rewritePage } from '../functions/_middleware.js';
 
 const read = (name) => readFileSync(new URL('../' + name, import.meta.url), 'utf8');
 const legacy = 'Driveway required · customer provides power + water, or additional charges may apply.';
@@ -60,19 +59,29 @@ const adminUi = read('assets/admin-mobile-setup-review-v656.js');
 assert.match(adminUi, /\/api\/admin\/mobile_setup_policy_review/);
 assert.doesNotMatch(adminUi, /method:\s*['"]POST['"]|\/api\/admin\/editable_site_settings_sync/);
 
-// Verify a fresh document points to fresh script cache keys, including a
-// booking route where runtime policy copy is applied after load.
-for (const path of ['/contact', '/faq', '/book']) {
-  const source = `<html><head></head><body><script type="module" src="/assets/chrome.js?v=20260701build216"></script><script defer src="/assets/site-policies.js?v=20261024build630"></script></body></html>`;
-  const response = await rewritePage({
-    request: new Request(`https://rosiedazzlers.ca${path}`),
-    next: async () => new Response(source, { headers: { 'content-type': 'text/html; charset=utf-8' } })
-  });
-  const html = await response.text();
-  assert.match(html, /\/assets\/chrome\.js\?v=20261025build656/);
-  assert.match(html, /\/assets\/site-policies\.js\?v=20261025build656/);
-  assert.doesNotMatch(html, /chrome\.js\?v=20260701build216/);
-  assert.equal(response.headers.get('cache-control'), 'no-cache');
+// Public HTML is a Pages static asset, not processed by API-only Functions
+// middleware. Every static reference must carry the fresh browser cache key.
+const repositoryRoot = new URL('../', import.meta.url);
+let versionedScripts = 0;
+function verifyStaticScriptVersions(dir = '') {
+  for (const entry of readdirSync(new URL(dir || '.', repositoryRoot), { withFileTypes: true })) {
+    if (entry.name.startsWith('.') || ['node_modules', 'dist', 'coverage'].includes(entry.name)) continue;
+    const relative = `${dir}${entry.name}`;
+    if (entry.isDirectory()) {
+      verifyStaticScriptVersions(`${relative}/`);
+    } else if (entry.isFile() && entry.name.endsWith('.html')) {
+      const html = read(relative);
+      for (const match of html.matchAll(/src="(\/assets\/(?:chrome|site-policies)\.js[^\"]*)"/g)) {
+        assert.match(match[1], /\?v=20261025build656$/, `${relative} has stale script URL: ${match[1]}`);
+        versionedScripts += 1;
+      }
+    }
+  }
+}
+verifyStaticScriptVersions();
+assert.ok(versionedScripts > 150, 'Expected to cover all public and admin HTML entrypoints');
+for (const route of ['index.html', 'contact.html', 'contact/index.html', 'faq.html', 'book.html', 'terms.html']) {
+  assert.match(read(route), /\/assets\/chrome\.js\?v=20261025build656/);
 }
 
 const originalFetch = globalThis.fetch;
