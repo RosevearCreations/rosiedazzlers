@@ -22,6 +22,10 @@ database record.
   Waiver. There is no background polling or automatic correction.
 - The protected review reports missing/fallback data sources as requiring
   owner review, never as proof of a healthy production database.
+- The existing public HTML response middleware refreshes the shared
+  `chrome.js` and `site-policies.js` script version for transformed public
+  routes. This invalidates old browser script cache keys without changing
+  customer data, and the versioned URLs are covered by a runtime test.
 
 ## Holds
 
