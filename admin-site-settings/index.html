@@ -237,6 +237,22 @@
         <div class="status" id="giftDeliveryFailureReviewResult" role="status" aria-live="polite">Staff-only read-only audit. No gift codes, recipient details, delivery records or messages are fetched or modified.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftRetryEvidenceTitle" data-build672-gift-retry-evidence>
+      <div class="panel">
+        <div class="badge">Build 672 · staff-only · read-only</div>
+        <h2 id="giftRetryEvidenceTitle">Gift delivery retry evidence and recipient/copy reconciliation</h2>
+        <p>Look up one gift by its internal UUID from the authorized customer record. Compare the recipient email event with the separate purchaser-copy event and the gift's saved status. This check reports attempts, waiting periods, mismatches and duplicate-send risk without retrieving addresses or email bodies. A review candidate is not authorization to resend.</p>
+        <label for="giftRetryEvidenceId">Gift certificate ID (UUID)</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <input id="giftRetryEvidenceId" type="text" maxlength="36" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="00000000-0000-0000-0000-000000000000" aria-describedby="giftRetryEvidenceHint" style="flex:1 1 320px;min-width:0" />
+          <button class="btn ghost" type="button" id="giftRetryEvidenceReviewBtn">Review delivery evidence</button>
+          <a class="btn ghost" href="/admin-customers.html">Find a customer gift</a>
+          <a class="btn ghost" href="/admin-notifications.html">Review notification details</a>
+        </div>
+        <p class="muted" id="giftRetryEvidenceHint">Enter the internal gift ID only; never paste gift codes, email addresses or payment references here. Neither this screen nor the report sends messages.</p>
+        <div class="status" id="giftRetryEvidenceReviewResult" role="status" aria-live="polite">No lookup performed. Recipient and purchaser-copy outcomes are checked separately, with a hold for missing or ambiguous evidence.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -294,6 +310,7 @@
   <script src="/assets/admin-gift-redemption-balance-copy-review-v669.js?v=20261026build669" defer></script>
   <script src="/assets/admin-gift-receipt-confirmation-review-v670.js?v=20261026build670" defer></script>
   <script src="/assets/admin-gift-delivery-failure-review-v671.js?v=20261026build671" defer></script>
+  <script src="/assets/admin-gift-delivery-retry-evidence-v672.js?v=20261026build672" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
