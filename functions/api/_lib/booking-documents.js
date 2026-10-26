@@ -3,6 +3,10 @@
 
 import { serviceHeaders } from "./staff-auth.js";
 import { loadPricingCatalog } from "./pricing-catalog.js";
+import {
+  APPOINTMENT_PREPARATION_CHECKLIST,
+  reconcileAppointmentMessageText
+} from "./appointment-preparation-660.js";
 
 const COMPANY = {
   name: "Rosie Dazzlers",
@@ -76,7 +80,9 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       `Deposit due / paid: ${formatMoney(payload.summary.deposit_cents)}`,
       `Estimated total: ${formatMoney(payload.summary.effective_total_cents)}`,
       `Order confirmation: ${payload.documents.confirmation_url}`,
-      `Invoice / summary: ${payload.documents.invoice_url}`
+      `Invoice / summary: ${payload.documents.invoice_url}`,
+      "Before we arrive:",
+      ...APPOINTMENT_PREPARATION_CHECKLIST.map((item) => `- ${item}`)
     ].join("\n");
 
     const bodyHtml = `
@@ -91,6 +97,8 @@ export async function queueOrderConfirmationNotification(env, bookingId, source 
       <p><strong>Deposit due / paid:</strong> ${escapeHtml(formatMoney(payload.summary.deposit_cents))}</p>
       <p><strong>Estimated total:</strong> ${escapeHtml(formatMoney(payload.summary.effective_total_cents))}</p>
       <p><a href="${payload.documents.confirmation_url}">Open order confirmation</a><br><a href="${payload.documents.invoice_url}">Open invoice / summary</a></p>
+      <h2>Before we arrive</h2>
+      <ul>${APPOINTMENT_PREPARATION_CHECKLIST.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
     `;
 
     const row = {
@@ -244,12 +252,16 @@ async function buildPayload(env, booking) {
         : null,
       gift_certificate_url: `${origin}/gift-certificate-print`
     },
+    preparation_checklist: [...APPOINTMENT_PREPARATION_CHECKLIST],
     rendered_templates: {}
   };
 
+  const appointmentConfirmation = renderDocumentTemplate(templates.templates?.appointment_confirmation || templates.appointment_confirmation, payload);
+  appointmentConfirmation.subject = reconcileAppointmentMessageText(appointmentConfirmation.subject);
+  appointmentConfirmation.body = reconcileAppointmentMessageText(appointmentConfirmation.body);
   payload.rendered_templates = {
     invoice: renderDocumentTemplate(templates.templates?.invoice || templates.invoice, payload),
-    appointment_confirmation: renderDocumentTemplate(templates.templates?.appointment_confirmation || templates.appointment_confirmation, payload)
+    appointment_confirmation: appointmentConfirmation
   };
 
   return payload;

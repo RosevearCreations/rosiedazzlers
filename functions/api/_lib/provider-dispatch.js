@@ -1,6 +1,11 @@
 import { loadRecoverySettings } from "./app-settings.js";
+import { guardAppointmentNotificationForDispatch } from "./appointment-preparation-660.js";
 
 export async function dispatchNotificationThroughProvider(env, event, options = {}) {
+  // On queued sends, the caller has already enforced customer consent and
+  // lifecycle gates. Guard copy only; never alter the source event or delivery
+  // eligibility. This also keeps manual provider previews wording-safe.
+  event = guardAppointmentNotificationForDispatch(event);
   const channel = String(event.channel || "").trim().toLowerCase();
   const payload = {
     id: event.id || null,
