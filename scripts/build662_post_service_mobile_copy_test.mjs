@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { AFTERCARE_PREVIEW, REVIEW_PREVIEW, postServiceRisks, auditPostServiceFields } from '../functions/api/_lib/post-service-copy-662.js';
+
+const read = (path) => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
+assert.deepEqual(postServiceRisks(AFTERCARE_PREVIEW), []);
+assert.deepEqual(postServiceRisks(REVIEW_PREVIEW), []);
+assert.deepEqual(postServiceRisks('Customer must provide water.'), ['customer_supplied_utilities']);
+assert.deepEqual(postServiceRisks('Get a free gift for a five-star review.'), ['review_incentive_or_pressure']);
+assert.deepEqual(postServiceRisks('All coatings are cured immediately.'), ['universal_aftercare_claim']);
+assert.deepEqual(postServiceRisks('Your review will be automatically published.'), ['guaranteed_review_publication']);
+assert.deepEqual(postServiceRisks('Please follow the product-specific curing time.'), []);
+const sample = { templates: { aftercare_email: { body: 'Customer must provide water.' }, review_request: { body: 'Get a discount for a five-star rating.' }, appointment_reminder: { body: 'Customer must provide water.' }, quote: { body: 'Get a free gift for a review.' } } };
+assert.equal(auditPostServiceFields(sample, 'document_templates').length, 2);
+assert.equal(auditPostServiceFields({ body: 'Customer must provide water.' }, 'app_management_settings.aftercare_templates').length, 1);
+assert.equal(auditPostServiceFields({ templates: { review_request: { body: 'Email jane@example.com at https://example.com/review. Your review will be published.' } } }, 'document_templates')[0].excerpt.includes('jane@example.com'), false);
+assert.equal(auditPostServiceFields(JSON.parse(read('data/document_templates.json')), 'data/document_templates.json').length, 0);
+assert.equal(read('admin-site-settings.html'), read('admin-site-settings/index.html'));
+assert.match(read('admin-site-settings.html'), /postServiceMobileCopyReviewBtn/);
+assert.match(read('assets/admin-post-service-copy-review-v662.js'), /\/api\/admin\/post_service_mobile_copy_review/);
+assert.match(read('functions/api/admin/post_service_mobile_copy_review.js'), /requireStaffAccess/);
+assert.doesNotMatch(read('functions/api/admin/post_service_mobile_copy_review.js'), /onRequestPut|onRequestPatch|dispatchNotificationThroughProvider/);
+assert.match(read('functions/api/_lib/review-request-eligibility.js'), /bookingHasCompletionEvidence/);
+assert.match(read('functions/api/_lib/review-request-dispatch.js'), /review_request_not_dispatchable/);
+console.log('Build 662 post-service copy scoping, owner review, redaction and consent-safe boundary: PASS');

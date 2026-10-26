@@ -113,6 +113,18 @@
         <div class="status" id="quoteDepositMobileCopyReviewResult" role="status" aria-live="polite">Run this owner-controlled audit to identify source copy needing review. SMS follow-up is draft-only; opt-in and STOP/HELP controls remain unchanged.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="postServiceMobileCopyTitle" data-build662-post-service-copy-review>
+      <div class="panel">
+        <div class="badge">Build 662 · read-only</div>
+        <h2 id="postServiceMobileCopyTitle">Post-service thank-you, aftercare and review message audit</h2>
+        <p>Check bundled and owner-managed follow-up templates for inaccurate utility demands, guaranteed aftercare claims or pressured reviews. No outreach is scheduled or sent. Completion, review eligibility, consent and opt-outs remain unchanged.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="postServiceMobileCopyReviewBtn">Check post-service message sources</button>
+          <a class="btn ghost" href="/admin-notifications.html">Review notification delivery</a>
+        </div>
+        <div class="status" id="postServiceMobileCopyReviewResult" role="status" aria-live="polite">Run this owner-controlled, read-only review. Any changes to managed templates require explicit owner action.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -160,6 +172,7 @@
   <script src="/assets/admin-service-area-mobile-setup-review-v659.js?v=20261026build659" defer></script>
   <script src="/assets/admin-appointment-preparation-mobile-setup-review-v660.js?v=20261026build660" defer></script>
   <script src="/assets/admin-quote-deposit-mobile-copy-review-v661.js?v=20261026build661" defer></script>
+  <script src="/assets/admin-post-service-copy-review-v662.js?v=20261026build662" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
