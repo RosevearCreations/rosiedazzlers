@@ -198,6 +198,19 @@
         <div class="status" id="giftCreditTermsReviewResult" role="status" aria-live="polite">Run the owner-controlled audit. Issued gifts, expiry dates, stored value, refunds and customer delivery stay unchanged.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftRedemptionBalanceTitle" data-build669-gift-redemption-balance-review>
+      <div class="panel">
+        <div class="badge">Build 669 · read-only</div>
+        <h2 id="giftRedemptionBalanceTitle">Gift redemption and remaining-balance mobile guidance audit</h2>
+        <p>Review where customers enter a gift code, how service-gift eligibility works, how final checkout applies gift value toward a deposit, and where customers can check remaining value. The estimate and final checkout currently apply gift values differently; this audit flags the mismatch without touching funds or issued gifts.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="giftRedemptionBalanceReviewBtn">Check gift redemption guidance</button>
+          <a class="btn ghost" href="/gifts">Read gift instructions</a>
+          <a class="btn ghost" href="/my-account">Read account guidance</a>
+        </div>
+        <div class="status" id="giftRedemptionBalanceReviewResult" role="status" aria-live="polite">Owner-controlled wording audit only. No balance checks, redemption transactions, booking changes or messages are sent.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -252,6 +265,7 @@
   <script src="/assets/admin-warranty-claim-copy-review-v666.js?v=20261026build666" defer></script>
   <script src="/assets/admin-cancellation-refund-copy-review-v667.js?v=20261026build667" defer></script>
   <script src="/assets/admin-gift-credit-terms-review-v668.js?v=20261026build668" defer></script>
+  <script src="/assets/admin-gift-redemption-balance-copy-review-v669.js?v=20261026build669" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
