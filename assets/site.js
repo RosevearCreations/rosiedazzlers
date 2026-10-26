@@ -180,7 +180,7 @@ export function setFooter() {
   el.innerHTML = `
     <div><strong>Rosie Dazzlers Mobile Auto Detailing</strong> — ${CONTACT.serviceArea}</div>
     <div>Phone: <a href="tel:${CONTACT.phone}">${CONTACT.phone}</a> · Email: <a href="mailto:${CONTACT.email}">${CONTACT.email}</a></div>
-    <div class="kicker">Driveway required · customer provides power + water (or additional charges may apply).</div>
+    <div class="kicker">Safe work area required · Rosie brings standard detailing water and power; local restrictions still apply.</div>
   `;
 }
 
