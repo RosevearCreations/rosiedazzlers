@@ -22,6 +22,8 @@ Run `node scripts/build673_gift_delivery_idempotency_test.mjs` and `node scripts
 
 After applying the database migration, separately verify unique indexes, grants, an all-or-nothing synthetic transaction **rolled back** without customer data changes, and real Stripe sandbox signed events before accepting provider end-to-end fulfilment. Production acceptance additionally requires the exact `main` commit, Cloudflare deployment health, and database migration/readiness evidence. This build does not run live charges or send real customer emails as a side effect of testing.
 
+On 2026-10-26, the additive migration was applied to the connected Rosie Dazzlers Supabase project (migration history `20261026233754`). Read-only checks confirmed that the RPC, event table, receipt table and per-session/line unique index exist. `anon` and `authenticated` cannot invoke the RPC; `service_role` can. A synthetic *database transaction deliberately aborted after passing* issuance → identical replay → conflicting-payload hold assertions. The subsequent check found **zero retained certificates, receipts and webhook events** for that canary. This is database transaction evidence, not a real Stripe charge, webhook delivery or customer email acceptance. The new tables intentionally have RLS enabled with no public policies.
+
 ## Next expected
 
 Build 675 — Gift Issuance Recovery Decision Ledger, Paid-Session Cross-Check & Customer-Safe Exception Closeout.

@@ -160,7 +160,7 @@ globalThis.fetch = async (input, init = {}) => {
   if (url.pathname.endsWith('/gift_certificates') && method === 'GET')
     return Response.json(inserted.map((x) => ({ ...x, id: giftId })));
   if (url.pathname.endsWith('/gift_products'))
-    return Response.json([{ sku: 'GIFT-100', type: 'fixed_value', currency: 'CAD', face_value_cents: 10000, is_active: true }]);
+    return Response.json([{ sku: 'GIFT-100', type: 'value', currency: 'CAD', face_value_cents: 10000, is_active: true }]);
   if (url.pathname.endsWith('/app_management_settings')) return Response.json([]);
   throw new Error(`Unexpected signed webhook request ${method} ${url}`);
 };

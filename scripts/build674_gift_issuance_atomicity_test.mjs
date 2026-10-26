@@ -40,7 +40,7 @@ globalThis.fetch = async (input, init = {}) => {
   const url = new URL(input);
   assert.equal(url.host, 'database.example.test');
   if (url.pathname.endsWith('/gift_products')) return Response.json([
-    { sku: 'GIFT-100', type: 'fixed_value', currency: 'CAD', face_value_cents: 10000, is_active: true }
+    { sku: 'GIFT-100', type: 'value', currency: 'CAD', face_value_cents: 10000, is_active: true }
   ]);
   if (url.pathname.endsWith('/rpc/issue_gift_certificates_atomic')) {
     rpcCalls += 1;
