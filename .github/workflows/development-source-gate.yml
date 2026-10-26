@@ -78,6 +78,10 @@ jobs:
           node scripts/quote_first_guidance_613_test.mjs
           node scripts/quote_first_handoff_615_test.mjs
 
+      - name: Validate atomic gift issuance and replay recovery hold
+        run: |
+          bash scripts/current_gift_issuance_regression.sh
+
       - name: Check current JavaScript syntax
         run: |
           node --check assets/admin-shell.js

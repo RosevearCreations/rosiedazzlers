@@ -135,12 +135,12 @@ await runDispatchScenario({ failPersist: true });
 
 // Signed webhook issues persisted metadata without dispatch when send date is in the future.
 const session = {
-  id: 'cs_test_build673', created: Math.floor(Date.now() / 1000), metadata: {
+  id: 'cs_test_build673', created: Math.floor(Date.now() / 1000), payment_status: 'paid', metadata: {
     ...metadata, cart: 'GIFT-100:1:', purchaser_email: 'buyer@example.test',
     recipient_email: 'recipient@example.test', recipient_name: 'Recipient', delivery_date: '2026-12-01'
   }
 };
-const payload = JSON.stringify({ type: 'checkout.session.completed', data: { object: session } });
+const payload = JSON.stringify({ id: 'evt_build673', type: 'checkout.session.completed', data: { object: session } });
 const stamp = Math.floor(Date.now() / 1000);
 const signer = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.STRIPE_WEBHOOK_SECRET_GIFTS),
   { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
@@ -150,15 +150,17 @@ let inserted = [];
 globalThis.fetch = async (input, init = {}) => {
   const url = new URL(input);
   const method = init.method || 'GET';
-  if (url.pathname.endsWith('/gift_certificates') && method === 'GET' && url.searchParams.get('select') === 'id') return Response.json([]);
-  if (url.pathname.endsWith('/gift_certificates') && method === 'POST') {
-    inserted = JSON.parse(init.body);
-    return new Response(null, { status: 201 });
+  if (url.pathname.endsWith('/rpc/issue_gift_certificates_atomic') && method === 'POST') {
+    const params = JSON.parse(init.body);
+    assert.equal(params.p_session_id, session.id);
+    assert.equal(params.p_event_id, 'evt_build673');
+    inserted = params.p_rows;
+    return Response.json({ outcome: 'issued', issued_count: inserted.length });
   }
   if (url.pathname.endsWith('/gift_certificates') && method === 'GET')
     return Response.json(inserted.map((x) => ({ ...x, id: giftId })));
   if (url.pathname.endsWith('/gift_products'))
-    return Response.json([{ sku: 'GIFT-100', type: 'fixed_value', currency: 'CAD', face_value_cents: 10000, is_active: true }]);
+    return Response.json([{ sku: 'GIFT-100', type: 'value', currency: 'CAD', face_value_cents: 10000, is_active: true }]);
   if (url.pathname.endsWith('/app_management_settings')) return Response.json([]);
   throw new Error(`Unexpected signed webhook request ${method} ${url}`);
 };

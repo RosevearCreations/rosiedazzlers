@@ -253,6 +253,21 @@
         <div class="status" id="giftRetryEvidenceReviewResult" role="status" aria-live="polite">No lookup performed. Recipient and purchaser-copy outcomes are checked separately, with a hold for missing or ambiguous evidence.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftIssuanceTitle" data-build674-gift-issuance-recovery>
+      <div class="panel">
+        <div class="badge">Build 674 · staff-only · read-only</div>
+        <h2 id="giftIssuanceTitle">Gift issuance, webhook replay and owner recovery hold</h2>
+        <p>Look up a paid Stripe Checkout session from the authorized payment record. Compare certificate issuance counts, the atomic receipt and repeated webhook events. Any missing or conflicting evidence remains on hold; this screen does not create replacements, replay webhooks, change balances, refund or resend emails.</p>
+        <label for="giftIssuanceSessionId">Stripe Checkout session ID</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <input id="giftIssuanceSessionId" type="text" maxlength="240" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="cs_test_… or cs_live_…" aria-describedby="giftIssuanceHint" style="flex:1 1 320px;min-width:0" />
+          <button class="btn ghost" type="button" id="giftIssuanceReviewBtn">Review issuance evidence</button>
+          <a class="btn ghost" href="/admin-notifications.html">Compare delivery events</a>
+        </div>
+        <p class="muted" id="giftIssuanceHint">Use the internal payment reference only. Never paste card details, webhook signatures, raw payloads or customer messages.</p>
+        <div class="status" id="giftIssuanceReviewResult" role="status" aria-live="polite">No lookup performed. Uncertain or legacy issuance requires owner reconciliation before any action.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -311,6 +326,7 @@
   <script src="/assets/admin-gift-receipt-confirmation-review-v670.js?v=20261026build670" defer></script>
   <script src="/assets/admin-gift-delivery-failure-review-v671.js?v=20261026build671" defer></script>
   <script src="/assets/admin-gift-delivery-retry-evidence-v672.js?v=20261026build672" defer></script>
+  <script src="/assets/admin-gift-issuance-recovery-v674.js?v=20261026build674" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");

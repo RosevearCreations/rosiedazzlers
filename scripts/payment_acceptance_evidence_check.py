@@ -105,7 +105,9 @@ if "PAYPAL_" in api:
 if "table-wrap" not in page or "td::before" not in page or "min-height:44px" not in page:
     errors.append("payment acceptance page is missing mobile/tablet interaction safeguards")
 
-migrations = list(ROOT.glob("**/*319*.sql"))
+# Retained Build 319 was migration-free. Match the actual build marker,
+# never an unrelated future migration timestamp containing digits "319".
+migrations = [p for p in ROOT.rglob("*.sql") if re.search(r"(?:^|_)build319(?:_|\.)", p.name, re.I)]
 if migrations:
     errors.append("Build 319 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
 

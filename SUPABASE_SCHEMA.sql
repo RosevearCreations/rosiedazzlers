@@ -1023,6 +1023,11 @@ alter table if exists public.membership_interest_requests add column if not exis
 alter table if exists public.membership_interest_requests add column if not exists next_reminder_at timestamptz null;
 create index if not exists membership_interest_requests_next_reminder_at_idx on public.membership_interest_requests (next_reminder_at);
 -- Gift delivery automation reuses purchase_context JSON on gift_certificates and notification_events for the send audit trail.
+-- Build 674 adds checkout_line_number, gift_issuance_receipts,
+-- gift_issuance_webhook_events and the service-role-only
+-- issue_gift_certificates_atomic RPC. Canonical executable DDL is the additive
+-- supabase/migrations/20261026231937_build674_gift_issuance_atomic_replay_hold.sql;
+-- do not manually re-run it through this older baseline schema file.
 
 
 -- 2026-04-20 pass29: Move recurring maintenance reminders to customer-history timing.

@@ -3,7 +3,8 @@ import { buildGiftPurchaseContext } from "../_lib/gift-delivery-state-673.js";
 
 // /functions/api/gifts/webhook.js
 // Stripe webhook -> Supabase fulfilment for Gift Certificate purchases
-// UPDATED: sets expires_at = purchase date + 1 year, stores gift delivery metadata, and can auto-dispatch due e-gifts.
+// Build 674: paid, verified Stripe events enter one database transaction per
+// checkout session. Replays and ambiguous legacy sessions cannot issue twice.
 
 export async function onRequestPost({ request, env }) {
   const STRIPE_WEBHOOK_SECRET = env.STRIPE_WEBHOOK_SECRET_GIFTS;
@@ -29,21 +30,23 @@ export async function onRequestPost({ request, env }) {
     return json({ error: "Invalid JSON" }, 400);
   }
 
-  if (event?.type !== "checkout.session.completed") {
+  if (!["checkout.session.completed", "checkout.session.async_payment_succeeded"].includes(event?.type)) {
     return json({ ok: true, ignored: event?.type || "unknown" }, 200);
   }
 
   const session = event?.data?.object;
-  if (!session?.id) return json({ error: "Missing session id" }, 400);
+  if (!session?.id || !event?.id) return json({ error: "Missing verified event or session id" }, 400);
 
   // Only process gift sessions created by our gift checkout endpoint
   if (session?.metadata?.purpose !== "gift") {
     return json({ ok: true, ignored: "not a gift session" }, 200);
   }
 
-  // Idempotency: if we already issued certs for this session, do nothing
-  const exists = await supaExistsGiftForSession(SUPABASE_URL, SERVICE_KEY, session.id);
-  if (exists) return json({ ok: true, idempotent: true }, 200);
+  // A completed Checkout session may still be unpaid for delayed methods.
+  // Never issue a redeemable gift before the provider confirms payment.
+  if (session.payment_status !== "paid") {
+    return json({ ok: true, issued: 0, awaiting_confirmed_payment: true }, 200);
+  }
 
   const cartStr = String(session?.metadata?.cart || "").trim();
   if (!cartStr) return json({ error: "Missing cart metadata" }, 400);
@@ -78,7 +81,8 @@ export async function onRequestPost({ request, env }) {
 
   // Stripe session.created is unix seconds
   const createdUnix = Number(session?.created);
-  const createdAt = Number.isFinite(createdUnix) ? new Date(createdUnix * 1000) : new Date();
+  if (!Number.isSafeInteger(createdUnix) || createdUnix <= 0) return json({ error: "Missing Stripe creation timestamp" }, 400);
+  const createdAt = new Date(createdUnix * 1000);
   const expiresAt = new Date(createdAt.getTime());
   expiresAt.setFullYear(expiresAt.getFullYear() + 1); // + 1 year
 
@@ -108,6 +112,7 @@ export async function onRequestPost({ request, env }) {
 
       certRows.push({
         code: generateGiftCode(),
+        checkout_line_number: certRows.length + 1,
         sku: p.sku,
         type,
         currency,
@@ -136,7 +141,39 @@ export async function onRequestPost({ request, env }) {
     }
   }
 
-  await supaInsertGiftCertificates(SUPABASE_URL, SERVICE_KEY, certRows);
+  if (certRows.length > 100) return json({ error: "Gift checkout item limit exceeded" }, 400);
+  // Exclude generated codes from the stable fingerprint: parallel workers
+  // generate different random codes for the *same* paid checkout intent.
+  const payloadDigest = await sha256Hex(JSON.stringify(certRows.map(({ code, ...item }) => item)));
+  let issuance;
+  try {
+    issuance = await supaIssueGiftCertificatesAtomic(SUPABASE_URL, SERVICE_KEY, {
+      p_session_id: session.id,
+      p_event_id: event.id,
+      p_event_type: event.type,
+      p_payload_digest: payloadDigest,
+      p_rows: certRows
+    });
+  } catch (error) {
+    console.error("Gift issuance transaction unavailable; owner reconciliation hold required", {
+      event_id: event.id, session_id: session.id, reason: error?.message || "unknown"
+    });
+    return json({ ok: false, issued: 0, owner_recovery_hold: true,
+      error: "Gift issuance could not be verified atomically. Check the issuance receipt before attempting owner recovery." }, 503);
+  }
+  if (issuance.outcome === "hold") {
+    return json({ ok: true, issued: 0, owner_recovery_hold: true,
+      hold_reason: issuance.hold_reason || "prior_recovery_hold",
+      session_id: session.id, event_id: event.id }, 200);
+  }
+  if (issuance.outcome === "replayed") {
+    return json({ ok: true, issued: 0, idempotent: true,
+      replay_evidence_recorded: true, session_id: session.id }, 200);
+  }
+  if (issuance.outcome !== "issued" || issuance.issued_count !== certRows.length) {
+    return json({ ok: false, issued: 0, owner_recovery_hold: true,
+      error: "Unrecognized certificate issuance receipt" }, 503);
+  }
 
   let delivery_results = [];
   try {
@@ -150,7 +187,8 @@ export async function onRequestPost({ request, env }) {
 
   return json({
     ok: true,
-    issued: certRows.length,
+    issued: issuance.issued_count,
+    replay_evidence_recorded: true,
     session_id: session.id,
     expires_at: expiresAt.toISOString(),
     delivery_results
@@ -245,20 +283,29 @@ function timingSafeEqual(a, b) {
 }
 
 /* ----------------- Supabase helpers ----------------- */
-async function supaExistsGiftForSession(SUPABASE_URL, SERVICE_KEY, sessionId) {
-  const url = `${SUPABASE_URL}/rest/v1/gift_certificates?select=id&stripe_session_id=eq.${encodeURIComponent(
-    sessionId
-  )}&limit=1`;
+async function supaIssueGiftCertificatesAtomic(SUPABASE_URL, SERVICE_KEY, params) {
+  const url = `${SUPABASE_URL}/rest/v1/rpc/issue_gift_certificates_atomic`;
   const res = await fetch(url, {
+    method: "POST",
     headers: {
       apikey: SERVICE_KEY,
       Authorization: `Bearer ${SERVICE_KEY}`,
+      "Content-Type": "application/json",
       Accept: "application/json",
     },
+    body: JSON.stringify(params),
   });
-  if (!res.ok) throw new Error("Gift issuance idempotency check unavailable; webhook fulfilment held.");
+  if (!res.ok) throw new Error(`Atomic issuance RPC HTTP ${res.status}`);
   const data = await res.json();
-  return Array.isArray(data) && data.length > 0;
+  if (!data || !["issued", "replayed", "hold"].includes(data.outcome)) {
+    throw new Error("Atomic issuance RPC returned an invalid receipt");
+  }
+  return data;
+}
+
+async function sha256Hex(value) {
+  const bytes = new TextEncoder().encode(value);
+  return bufToHex(await crypto.subtle.digest("SHA-256", bytes));
 }
 
 async function supaGetGiftProducts(SUPABASE_URL, SERVICE_KEY, skus) {
@@ -297,26 +344,6 @@ async function supaGetGiftCertificatesBySession(SUPABASE_URL, SERVICE_KEY, sessi
   if (!res.ok) return [];
   const data = await res.json().catch(() => []);
   return Array.isArray(data) ? data : [];
-}
-
-async function supaInsertGiftCertificates(SUPABASE_URL, SERVICE_KEY, rows) {
-  const url = `${SUPABASE_URL}/rest/v1/gift_certificates`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: {
-      apikey: SERVICE_KEY,
-      Authorization: `Bearer ${SERVICE_KEY}`,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Prefer: "return=minimal",
-    },
-    body: JSON.stringify(rows),
-  });
-
-  if (!res.ok) {
-    const txt = await res.text();
-    throw new Error(`Supabase insert gift_certificates failed: ${res.status} ${txt}`);
-  }
 }
 
 function json(obj, status = 200) {
