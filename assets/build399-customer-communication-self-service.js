@@ -17,7 +17,7 @@
       <p class="muted">Your confirmed booking and messages from Rosie Dazzlers remain the scheduling authority. These links do not silently change or cancel an appointment.</p>
     </div>
     <div class="customer-care__grid">
-      <article><strong>Prepare for the visit</strong><p>Remove personal valuables, provide safe driveway access, and tell us about access, water, power, pets, stains, damage, or fragile areas.</p><a href="/contact?topic=booking-preparation">Ask a preparation question</a></article>
+      <article><strong>Prepare for the visit</strong><p>Remove personal valuables, arrange safe vehicle and work-area access, and tell us about pets, stains, damage, fragile areas, building rules or local water-use and runoff restrictions. Rosie brings standard detailing water and power.</p><a href="/contact?topic=booking-preparation">Ask a preparation question</a></article>
       <article><strong>Check appointment status</strong><p>Use the booking activity below and any secure progress link we sent. A browser screen is not proof of a schedule change.</p><a href="#bookingHistory">View booking activity</a></article>
       <article><strong>Reschedule or cancel</strong><p>Contact us for review. Availability, notice, deposit, weather, and cancellation policies still apply; submitting a request does not approve it.</p><a href="/contact?topic=booking-change">Request a booking review</a></article>
       <article><strong>Aftercare and concerns</strong><p>Follow the service-specific care directions we provide. Contact us promptly if something needs review and include the booking date and vehicle.</p><a href="/contact?topic=aftercare">Ask about aftercare</a></article>
