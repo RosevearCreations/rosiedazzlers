@@ -48,6 +48,19 @@
         <div class="status" id="mobileSetupReviewResult" role="status" aria-live="polite">Run the check to see stored-source status. Terms and Waiver still require separate owner approval.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="townMobileSetupTitle" data-build657-town-mobile-setup-review>
+      <div class="panel">
+        <div class="badge">Build 657 · read-only</div>
+        <h2 id="townMobileSetupTitle">Town landing-page setup copy audit</h2>
+        <p>Review bundled and database-managed town-page wording for outdated customer-supplied water or power assumptions. The public landing API guards known conflicts, while local water-use, runoff and safe-site rules remain in effect. No records are changed by this check.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="townMobileSetupReviewBtn">Check town copy sources</button>
+          <button class="btn ghost" type="button" id="townLandingEditorBtn">Review landing-page editor</button>
+          <a class="btn ghost" href="/admin-water-rules.html">Review local water rules</a>
+        </div>
+        <div class="status" id="townMobileSetupReviewResult" role="status" aria-live="polite">Run the check to identify town pages and source fields requiring owner reconciliation.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -90,6 +103,7 @@
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-menu.js"></script>
   <script src="/assets/admin-mobile-setup-review-v656.js" defer></script>
+  <script src="/assets/admin-town-mobile-setup-review-v657.js?v=20261025build657" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");

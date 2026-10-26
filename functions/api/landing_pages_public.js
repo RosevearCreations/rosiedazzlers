@@ -1,13 +1,17 @@
 import { serviceHeaders } from "./_lib/staff-auth.js";
-import fallbackPricingCatalog from "./data/rosie_services_pricing_and_packages.json";
-import fallbackProductCatalog from "./data/rosie_products_catalog.json";
-import fallbackWaterRestrictionRules from "../../data/water_restriction_rules.json";
-import fallbackLandingPagesContent from "./data/landing_pages_content.json";
+import fallbackPricingCatalog from "./data/rosie_services_pricing_and_packages.json" with { type: "json" };
+import fallbackProductCatalog from "./data/rosie_products_catalog.json" with { type: "json" };
+import fallbackWaterRestrictionRules from "../../data/water_restriction_rules.json" with { type: "json" };
+import fallbackLandingPagesContent from "./data/landing_pages_content.json" with { type: "json" };
 import {
   applyWaterRestrictionRulesToLandingPages,
   loadEditableWaterRestrictionRules,
   normalizeWaterRestrictionPayload
 } from "./_lib/water-restrictions.js";
+import {
+  hasTownMobileSetupConflict,
+  TOWN_SAFE_SETUP_COPY
+} from "./_lib/town-mobile-setup.js";
 
 const DEFAULT_LANDING_PAGES = fallbackLandingPagesContent.default_pages || { pages: {} };
 
@@ -285,7 +289,8 @@ function isLocationPage(page) {
 
 function hasCustomerUtilityAssumption(value) {
   const text = String(value || "").trim();
-  return Boolean(text) && LOCATION_UTILITY_ASSUMPTION_PATTERNS.some((pattern) => pattern.test(text));
+  return Boolean(text) && (hasTownMobileSetupConflict(text)
+    || LOCATION_UTILITY_ASSUMPTION_PATTERNS.some((pattern) => pattern.test(text)));
 }
 
 function removeCustomerUtilityAssumptions(value) {
@@ -333,6 +338,18 @@ function normalizeLocationServiceModel(page) {
   }
   if (hasCustomerUtilityAssumption(out.meta_description)) {
     out.meta_description = `${out.name} mobile auto detailing with self-contained operating water and power, package guidance, condition-aware scope, and online booking.`;
+  }
+  // Build 657: managed town FAQ answers and notes need the same public guard
+  // as list copy. Keep the underlying source record unchanged for owner review.
+  out.faq = (Array.isArray(out.faq) ? out.faq : []).map((item) => ({
+    ...item,
+    q: hasCustomerUtilityAssumption(item.q)
+      ? "What should we know about mobile setup and local water-use rules?"
+      : item.q,
+    a: hasCustomerUtilityAssumption(item.a) ? TOWN_SAFE_SETUP_COPY : item.a
+  }));
+  if (hasCustomerUtilityAssumption(out.water_restriction_note)) {
+    out.water_restriction_note = "Confirm current local water-use, runoff and drainage rules against the linked official municipal or county sources before exterior detailing.";
   }
   return out;
 }
