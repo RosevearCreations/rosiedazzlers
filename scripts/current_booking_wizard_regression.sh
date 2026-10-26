@@ -31,3 +31,6 @@ node scripts/build654_contact_faq_test.mjs
 
 # Build 655 mobile water/power public copy consistency and owner policy boundary.
 node scripts/build655_mobile_setup_copy_test.mjs
+
+# Build 656 managed policy drift guard, protected read-only owner review.
+node scripts/build656_mobile_setup_policy_review_test.mjs

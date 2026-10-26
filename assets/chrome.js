@@ -461,7 +461,10 @@ function setFooter() {
   const email = contact.email || business.contact?.public_email || "info@rosiedazzlers.ca";
   const backup = contact.backup_email || business.contact?.backup_email || "rosiedazzlers@gmail.com";
   const phone = contact.phone || business.contact?.public_phone || "226-752-7613";
-  const setupNote = policies.water_power || "Safe work area required · Rosie brings standard detailing water and power; local restrictions still apply.";
+  // Build 656: a legacy managed value must not reinstate the old
+  // customer-supplied utilities claim in public marketing chrome. Keep the
+  // source record intact for the protected owner policy review.
+  const setupNote = publicMobileSetupNote(policies.water_power);
   const depositNote = policies.deposit || "Deposits secure booking times. Cancellation fees may apply.";
 
   el.innerHTML = `
@@ -507,6 +510,15 @@ function setFooter() {
       </div>
     </div>
   `;
+}
+
+function publicMobileSetupNote(managedCopy) {
+  const fallback = "Safe work area required · Rosie brings standard detailing water and power; local restrictions still apply.";
+  const text = String(managedCopy || "").trim();
+  const legacy = /\b(?:customers?|you)\b.{0,18}\b(?:must\s+|need\s+to\s+|required\s+to\s+|should\s+)?(?:provide|provides|supply|supplies|bring)\b\s+(?:(?:their|own|the|a|an|working|outdoor|household|available|sufficient)\s+){0,4}(?:(?:access\s+to|a\s+supply\s+of)\s+)?(?:water|power|electricity|hose)\b/i.test(text)
+    || /\bcustomer[- ]supplied\s+(?:water|power|electricity)\b/i.test(text)
+    || /\bif\s+(?:water|power|hose)(?:\s*\/\s*(?:water|power))?.{0,32}\b(?:unavailable|not available)\b.{0,45}\b(?:additional|extra)\s+(?:charges?|fees?)\b/i.test(text);
+  return !text || legacy ? fallback : text;
 }
 
 function escapeHtml(value) {
