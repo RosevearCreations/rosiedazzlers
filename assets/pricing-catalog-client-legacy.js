@@ -24,7 +24,7 @@ export const DEFAULT_BOOKING_RULES = {
   },
   public_requirements: [
     "Driveway required",
-    "Customer provides power and water or additional fees may apply",
+    "Rosie supplies standard detailing water and power; suitable work area required",
     "One vehicle per day unless half-day jobs are confirmed"
   ]
 };

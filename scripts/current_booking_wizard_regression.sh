@@ -28,3 +28,6 @@ node scripts/build653_maintenance_interest_test.mjs
 
 # Build 654 contact email-draft preparation and FAQ search usability.
 node scripts/build654_contact_faq_test.mjs
+
+# Build 655 mobile water/power public copy consistency and owner policy boundary.
+node scripts/build655_mobile_setup_copy_test.mjs

@@ -461,7 +461,7 @@ function setFooter() {
   const email = contact.email || business.contact?.public_email || "info@rosiedazzlers.ca";
   const backup = contact.backup_email || business.contact?.backup_email || "rosiedazzlers@gmail.com";
   const phone = contact.phone || business.contact?.public_phone || "226-752-7613";
-  const setupNote = policies.water_power || "Driveway required · customer provides power + water, or additional charges may apply.";
+  const setupNote = policies.water_power || "Safe work area required · Rosie brings standard detailing water and power; local restrictions still apply.";
   const depositNote = policies.deposit || "Deposits secure booking times. Cancellation fees may apply.";
 
   el.innerHTML = `
