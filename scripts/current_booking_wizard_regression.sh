@@ -36,3 +36,4 @@ node scripts/build655_mobile_setup_copy_test.mjs
 node scripts/build656_mobile_setup_policy_review_test.mjs
 node scripts/build657_town_mobile_setup_reconciliation_test.mjs
 node scripts/build658_service_addon_mobile_setup_review_test.mjs
+node scripts/build659_service_area_mobile_setup_reconciliation_test.mjs

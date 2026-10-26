@@ -74,6 +74,19 @@
         <div class="status" id="serviceAddonMobileSetupReviewResult" role="status" aria-live="polite">Run a read-only check to see source fields requiring owner reconciliation. Contractual terms remain on hold for owner approval.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="serviceAreaMobileSetupTitle" data-build659-service-area-mobile-setup-review>
+      <div class="panel">
+        <div class="badge">Build 659 · read-only</div>
+        <h2 id="serviceAreaMobileSetupTitle">Service-area access-rule source audit</h2>
+        <p>Inspect bundled service-area and pricing-catalog rules alongside their separately managed database sources. The public API guards old customer hose/power requirements, but this review never changes stored area settings, legal terms or municipal water rules.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="serviceAreaMobileSetupReviewBtn">Check access-rule sources</button>
+          <a class="btn ghost" href="/admin-app.html">Review service-area editor</a>
+          <a class="btn ghost" href="/admin-water-rules.html">Review local water rules</a>
+        </div>
+        <div class="status" id="serviceAreaMobileSetupReviewResult" role="status" aria-live="polite">Run the read-only check to see whether any managed access-rule rows still need owner reconciliation.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -118,6 +131,7 @@
   <script src="/assets/admin-mobile-setup-review-v656.js" defer></script>
   <script src="/assets/admin-town-mobile-setup-review-v657.js?v=20261025build657" defer></script>
   <script src="/assets/admin-service-addon-mobile-setup-review-v658.js?v=20261025build658" defer></script>
+  <script src="/assets/admin-service-area-mobile-setup-review-v659.js?v=20261026build659" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
