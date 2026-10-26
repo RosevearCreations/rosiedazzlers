@@ -39,3 +39,7 @@ node scripts/build658_service_addon_mobile_setup_review_test.mjs
 node scripts/build659_service_area_mobile_setup_reconciliation_test.mjs
 node scripts/build660_appointment_preparation_mobile_setup_test.mjs
 node scripts/build661_quote_deposit_mobile_copy_test.mjs
+node scripts/build662_post_service_mobile_copy_test.mjs
+node scripts/build663_rebooking_seasonal_copy_test.mjs
+node scripts/build664_service_completion_faq_test.mjs
+node scripts/build665_feedback_recovery_copy_test.mjs
