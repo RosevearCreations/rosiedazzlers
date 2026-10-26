@@ -161,6 +161,18 @@
         <div class="status" id="feedbackRecoveryCopyReviewResult" role="status" aria-live="polite">Run the read-only review before editing any managed customer-care messages.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="warrantyClaimCopyTitle" data-build666-warranty-claim-review>
+      <div class="panel">
+        <div class="badge">Build 666 · read-only</div>
+        <h2 id="warrantyClaimCopyTitle">Warranty, guarantee and claim-safe message audit</h2>
+        <p>Review customer-facing warranty and claim wording for unqualified guarantees, automatic payouts, unsupported coverage or consumer-rights exclusions. Findings require owner/legal review; this tool cannot approve or deny a claim.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="warrantyClaimCopyReviewBtn">Check warranty and claim message sources</button>
+          <a class="btn ghost" href="/admin-incident-reports.html">Review incidents separately</a>
+        </div>
+        <div class="status" id="warrantyClaimCopyReviewResult" role="status" aria-live="polite">Run the owner-controlled audit. Terms, Waiver, refund decisions and customer outreach remain untouched.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -212,6 +224,7 @@
   <script src="/assets/admin-rebooking-seasonal-copy-review-v663.js?v=20261026build663" defer></script>
   <script src="/assets/admin-service-completion-faq-review-v664.js?v=20261026build664" defer></script>
   <script src="/assets/admin-feedback-recovery-copy-review-v665.js?v=20261026build665" defer></script>
+  <script src="/assets/admin-warranty-claim-copy-review-v666.js?v=20261026build666" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
