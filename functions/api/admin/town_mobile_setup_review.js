@@ -1,6 +1,6 @@
 // Build 657 — protected, GET-only reconciliation of bundled and managed town
 // copy. The report never writes to Supabase or alters public/legal authority.
-import fallbackContent from "../../../data/landing_pages_content.json" with { type: "json" };
+import fallbackContent from "../../../data/landing_pages_content.json";
 import { requireStaffAccess, serviceHeaders, json } from "../_lib/staff-auth.js";
 import {
   auditTownLandingPage,
