@@ -4,6 +4,7 @@ import { dispatchNotificationThroughProvider } from "./_lib/provider-dispatch.js
 import { loadEditableSetting } from "../_lib/editable-settings.js";
 import { resolveCurrentQuotePrice } from "../_lib/quote-booking-authority.js";
 import { hashStructuredQuoteTerms, normalizeAddonCodes } from "../_lib/quote-booking-terms.js";
+import { QUOTE_NEXT_STEPS_COPY, reconcileQuoteIntroCopy } from "../_lib/quote-deposit-mobile-copy-661.js";
 
 const DRAFT_SELECT = [
   "id", "lead_id", "booking_id", "title", "status", "body", "pricing_note", "internal_note", "customer_name", "customer_email",
@@ -70,8 +71,8 @@ export async function onRequestPost({ request, env }) {
     const rawToken = makeToken();
     const tokenHash = await sha256Hex(rawToken);
     const acceptanceUrl = `${origin}/quote-response.html?draft_id=${encodeURIComponent(draft.id)}&token=${encodeURIComponent(rawToken)}`;
-    const subject = cleanText(body.subject || template.subject || draft.title || "Your Rosie Dazzlers quote") || "Your Rosie Dazzlers quote";
-    const message = cleanText(body.message || template.body || "Please review the quote details below. Use the secure response link to accept or decline so we can keep your request moving.");
+    const subject = reconcileQuoteIntroCopy(cleanText(body.subject || template.subject || draft.title || "Your Rosie Dazzlers quote")) || "Your Rosie Dazzlers quote";
+    const message = reconcileQuoteIntroCopy(cleanText(body.message || template.body || "Please review the quote details below. Use the secure response link to accept or decline so we can keep your request moving."));
     const bodyText = buildQuoteEmailText({ draft, message, acceptanceUrl, terms, current });
     const bodyHtml = buildQuoteEmailHtml({ draft, message, acceptanceUrl, terms, current });
 
@@ -146,14 +147,14 @@ async function patchDraft(env, id, patch) {
 }
 function buildQuoteEmailText({ draft, message, acceptanceUrl, terms, current }) {
   return [
-    `Hi ${draft.customer_name || "there"},`, "", message, "", "Quote/proposal details:", draft.body || "Quote details are attached in your Rosie Dazzlers request.",
+    `Hi ${draft.customer_name || "there"},`, "", message, "", QUOTE_NEXT_STEPS_COPY, "", "Quote/proposal details:", draft.body || "Quote details are attached in your Rosie Dazzlers request.",
     draft.pricing_note ? `\nPricing note:\n${draft.pricing_note}` : "", "",
     `Structured price: ${money(current.total_cents)} • Deposit: ${money(current.deposit_cents)}`,
     `Quote valid until: ${terms.expires_at}`, "", `Review/respond here: ${acceptanceUrl}`, "", "Thank you,", "Rosie Dazzlers Mobile Auto Detailing"
   ].filter(Boolean).join("\n");
 }
 function buildQuoteEmailHtml({ draft, message, acceptanceUrl, terms, current }) {
-  return `<p>Hi ${escapeHtml(draft.customer_name || "there")},</p><p>${escapeHtml(message)}</p><h2>Quote/proposal details</h2><pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(draft.body || "Quote details are attached in your Rosie Dazzlers request.")}</pre>${draft.pricing_note ? `<h3>Pricing note</h3><pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(draft.pricing_note)}</pre>` : ""}<p><strong>Structured price:</strong> ${escapeHtml(money(current.total_cents))}<br><strong>Deposit:</strong> ${escapeHtml(money(current.deposit_cents))}<br><strong>Valid until:</strong> ${escapeHtml(terms.expires_at)}</p><p><a href="${escapeHtml(acceptanceUrl)}">Review, accept, or decline this quote</a></p><p>Thank you,<br>Rosie Dazzlers Mobile Auto Detailing</p>`;
+  return `<p>Hi ${escapeHtml(draft.customer_name || "there")},</p><p>${escapeHtml(message)}</p><p>${escapeHtml(QUOTE_NEXT_STEPS_COPY)}</p><h2>Quote/proposal details</h2><pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(draft.body || "Quote details are attached in your Rosie Dazzlers request.")}</pre>${draft.pricing_note ? `<h3>Pricing note</h3><pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(draft.pricing_note)}</pre>` : ""}<p><strong>Structured price:</strong> ${escapeHtml(money(current.total_cents))}<br><strong>Deposit:</strong> ${escapeHtml(money(current.deposit_cents))}<br><strong>Valid until:</strong> ${escapeHtml(terms.expires_at)}</p><p><a href="${escapeHtml(acceptanceUrl)}">Review, accept, or decline this quote</a></p><p>Thank you,<br>Rosie Dazzlers Mobile Auto Detailing</p>`;
 }
 async function loadDocumentTemplate(env, key) { const loaded = await loadEditableSetting(env, "document_templates", { headers: serviceHeaders(env) }).catch(() => null); const template = loaded?.value?.templates?.[key] || {}; return template && typeof template === "object" ? template : {}; }
 function normalizeFutureIso(value) { const text = cleanText(value); if (!text) return null; const parsed = Date.parse(text); return Number.isFinite(parsed) && parsed > Date.now() ? new Date(parsed).toISOString() : null; }
