@@ -9,6 +9,7 @@ import {
   enrichServiceAreaRowsWithWaterRules,
   loadEditableWaterRestrictionRules
 } from "./_lib/water-restrictions.js";
+import { guardPublicServiceAreaAccessRows } from "./_lib/service-area-mobile-setup.js";
 
 export async function onRequestGet({ env }) {
   try {
@@ -23,10 +24,10 @@ export async function onRequestGet({ env }) {
       ...servicePayload,
       water_rule_source_status: waterPayload.source_status,
       water_rule_updated_at: waterPayload.updated_at || null,
-      service_areas: enrichServiceAreaRowsWithWaterRules(
+      service_areas: guardPublicServiceAreaAccessRows(enrichServiceAreaRowsWithWaterRules(
         servicePayload.service_areas,
         waterPayload
-      )
+      ))
     }));
   } catch (error) {
     const fallbackRows = normalizeRows(fallbackServiceAreaRules?.service_areas || []);
@@ -39,7 +40,7 @@ export async function onRequestGet({ env }) {
       ok: true,
       source_status: "bundled_json_fallback",
       water_rule_source_status: waterPayload?.source_status || "bundled_json_fallback",
-      service_areas: enrichServiceAreaRowsWithWaterRules(fallbackRows, waterPayload),
+      service_areas: guardPublicServiceAreaAccessRows(enrichServiceAreaRowsWithWaterRules(fallbackRows, waterPayload)),
       warning: error?.message || "Could not load DB service-area rules; bundled JSON fallback returned."
     }));
   }
