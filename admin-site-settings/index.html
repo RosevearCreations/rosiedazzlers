@@ -185,6 +185,19 @@
         <div class="status" id="cancellationRefundCopyReviewResult" role="status" aria-live="polite">Run the owner-controlled review. Policy approval, refunds, customer outreach and booked time slots remain unchanged.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftCreditTermsTitle" data-build668-gift-credit-terms-review>
+      <div class="panel">
+        <div class="badge">Build 668 · read-only</div>
+        <h2 id="giftCreditTermsTitle">Gift card, voucher and store credit terms audit</h2>
+        <p>Review mobile gift wording for expiry and redemption restrictions, nonrefundability, value-reducing fees, and mixed dollar-value versus specific-service gift terms. Findings require owner/legal review; this check cannot change balances or issue credits.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="giftCreditTermsReviewBtn">Check gift and credit terms</button>
+          <a class="btn ghost" href="/gifts">Read gift choices</a>
+          <a class="btn ghost" href="/terms">Read public Terms</a>
+        </div>
+        <div class="status" id="giftCreditTermsReviewResult" role="status" aria-live="polite">Run the owner-controlled audit. Issued gifts, expiry dates, stored value, refunds and customer delivery stay unchanged.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -238,6 +251,7 @@
   <script src="/assets/admin-feedback-recovery-copy-review-v665.js?v=20261026build665" defer></script>
   <script src="/assets/admin-warranty-claim-copy-review-v666.js?v=20261026build666" defer></script>
   <script src="/assets/admin-cancellation-refund-copy-review-v667.js?v=20261026build667" defer></script>
+  <script src="/assets/admin-gift-credit-terms-review-v668.js?v=20261026build668" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
