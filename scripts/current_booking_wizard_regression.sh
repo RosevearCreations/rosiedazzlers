@@ -45,3 +45,4 @@ node scripts/build664_service_completion_faq_test.mjs
 node scripts/build665_feedback_recovery_copy_test.mjs
 node scripts/build666_warranty_claim_copy_test.mjs
 node scripts/build667_cancellation_reschedule_refund_copy_test.mjs
+node scripts/build668_gift_voucher_store_credit_copy_test.mjs
