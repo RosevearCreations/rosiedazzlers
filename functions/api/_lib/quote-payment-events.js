@@ -9,6 +9,7 @@ import {
   findQuoteDepositPaymentRequest
 } from "./quote-deposit-payments.js";
 import { loadEditableSetting } from "./editable-settings.js";
+import { reconcileDepositReceiptIntroCopy } from "./quote-deposit-mobile-copy-661.js";
 
 const WEBHOOK_EVENT_SELECT = [
   "id", "provider", "provider_event_id", "provider_event_type", "quote_deposit_payment_request_id", "booking_id",
@@ -97,9 +98,9 @@ export async function queueQuoteDepositReceiptEmail(env, paymentRequest, details
     const amountCents = moneyToCents(details.paidAmountCents || paymentRequest.paid_amount_cents || paymentRequest.amount_cents || 0);
     const paymentUrl = cleanText(paymentRequest.public_payment_url || paymentRequest.checkout_url || "");
     const template = await loadDocumentTemplate(env, "deposit_receipt");
-    const subject = cleanText(template.subject || `Rosie Dazzlers deposit receipt — ${formatMoney(amountCents)}`);
+    const subject = reconcileDepositReceiptIntroCopy(cleanText(template.subject || `Rosie Dazzlers deposit receipt — ${formatMoney(amountCents)}`));
     const bodyText = [
-      cleanText(template.body || "Thank you. We received your Rosie Dazzlers quote deposit."),
+      reconcileDepositReceiptIntroCopy(cleanText(template.body || "Thank you. We received your Rosie Dazzlers quote deposit.")),
       `Amount paid: ${formatMoney(amountCents)}`,
       `Payment method: ${cleanText(details.provider || paymentRequest.provider || paymentRequest.payment_method || "payment")}`,
       `Reference: ${cleanText(details.paymentReference || paymentRequest.payment_reference || paymentRequest.external_checkout_id || paymentRequest.id)}`,
