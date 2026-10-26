@@ -12,6 +12,10 @@ import {
   hasTownMobileSetupConflict,
   TOWN_SAFE_SETUP_COPY
 } from "./_lib/town-mobile-setup.js";
+import {
+  hasServiceAddonMobileSetupConflict,
+  SERVICE_ADDON_SAFE_SETUP_COPY
+} from "./_lib/service-addon-mobile-setup.js";
 
 const DEFAULT_LANDING_PAGES = fallbackLandingPagesContent.default_pages || { pages: {} };
 
@@ -354,11 +358,39 @@ function normalizeLocationServiceModel(page) {
   return out;
 }
 
+function normalizeServiceAddonMobileSetup(page) {
+  if (isLocationPage(page) || !["addon", "service"].includes(String(page?.type || "").toLowerCase())) return page;
+  const out = { ...page };
+  const listFields = [
+    "reasons_page_exists", "process", "equipment", "highlights", "things_to_know",
+    "scope_includes", "scope_excludes", "customer_prep", "aftercare", "quote_triggers"
+  ];
+  for (const field of listFields) {
+    out[field] = normalizeStringArray(out[field]).filter((item) => !hasServiceAddonMobileSetupConflict(item));
+  }
+  out.customer_prep = appendUnique(out.customer_prep, SERVICE_ADDON_SAFE_SETUP_COPY);
+  if (hasServiceAddonMobileSetupConflict(out.hero_intro)) {
+    out.hero_intro = `${out.name} detailing guidance, condition-based preparation and safe mobile-service booking with Rosie-supplied standard water and power.`;
+  }
+  if (hasServiceAddonMobileSetupConflict(out.meta_description)) {
+    out.meta_description = `${out.name} service guidance for Oxford and Norfolk County with Rosie-supplied standard detailing water and power.`;
+  }
+  out.faq = (Array.isArray(out.faq) ? out.faq : []).map((item) => ({
+    ...item,
+    q: hasServiceAddonMobileSetupConflict(item.q) ? "What mobile setup is needed for this service?" : item.q,
+    a: hasServiceAddonMobileSetupConflict(item.a) ? SERVICE_ADDON_SAFE_SETUP_COPY : item.a
+  }));
+  if (hasServiceAddonMobileSetupConflict(out.water_restriction_note)) {
+    out.water_restriction_note = "Check current municipal water-use, runoff and drainage rules against official sources before exterior service.";
+  }
+  return out;
+}
+
 function finalizeLandingPages(payload) {
   const raw = cloneLandingPages(payload);
   const pages = raw.pages && typeof raw.pages === "object" ? raw.pages : {};
   for (const [slug, page] of Object.entries(pages)) {
-    pages[slug] = normalizeLocationServiceModel(normalizePage({ ...page, slug }));
+    pages[slug] = normalizeServiceAddonMobileSetup(normalizeLocationServiceModel(normalizePage({ ...page, slug })));
   }
   raw.pages = pages;
   return raw;

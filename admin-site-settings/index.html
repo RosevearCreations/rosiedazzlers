@@ -61,6 +61,19 @@
         <div class="status" id="townMobileSetupReviewResult" role="status" aria-live="polite">Run the check to identify town pages and source fields requiring owner reconciliation.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="serviceAddonMobileSetupTitle" data-build658-service-addon-mobile-setup-review>
+      <div class="panel">
+        <div class="badge">Build 658 · read-only</div>
+        <h2 id="serviceAddonMobileSetupTitle">Service and add-on landing-page setup audit</h2>
+        <p>Check bundled and database-managed service and add-on landing copy for outdated customer-provided water or power requirements. Rosie brings standard detailing water and power; safe site access, municipal runoff, weather and water-use rules still apply. This check never writes or publishes a setting.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="serviceAddonMobileSetupReviewBtn">Check service/add-on copy</button>
+          <button class="btn ghost" type="button" id="serviceAddonLandingEditorBtn">Review landing-page editor</button>
+          <a class="btn ghost" href="/admin-water-rules.html">Review local water rules</a>
+        </div>
+        <div class="status" id="serviceAddonMobileSetupReviewResult" role="status" aria-live="polite">Run a read-only check to see source fields requiring owner reconciliation. Contractual terms remain on hold for owner approval.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -104,6 +117,7 @@
   <script src="/assets/admin-menu.js"></script>
   <script src="/assets/admin-mobile-setup-review-v656.js" defer></script>
   <script src="/assets/admin-town-mobile-setup-review-v657.js?v=20261025build657" defer></script>
+  <script src="/assets/admin-service-addon-mobile-setup-review-v658.js?v=20261025build658" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
