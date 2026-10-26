@@ -11,8 +11,8 @@
     },
     {
       "category": "Booking and service area",
-      "question": "Do we need a driveway, water, and power?",
-      "answer": "Yes. The standard mobile setup assumes a safe driveway or private parking area, customer-provided water, and customer-provided power. If water or power is not available, staff must review options before confirming the job because timing, equipment, and pricing may change.",
+      "question": "Do we need a driveway or to supply water and power?",
+      "answer": "Please provide a safe, private or otherwise permitted work area. Rosie brings standard detailing water and power. Tell us about unusual building access, parking, runoff or local water-use restrictions before the appointment so we can review the setup.",
       "cta_label": "Read service details",
       "cta_href": "/services"
     },
@@ -21,7 +21,7 @@
       "question": "How far ahead can customers book?",
       "answer": "The booking flow is designed around the live availability window shown on the website. Weather, blocked days, service length, and one-vehicle-per-day planning can affect what is available.",
       "cta_label": "See live availability",
-      "cta_href": "/pricing#booking-planner"
+      "cta_href": "/book#booking"
     },
     {
       "category": "Pricing and quotes",
