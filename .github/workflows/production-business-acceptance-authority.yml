@@ -45,6 +45,9 @@ jobs:
 
       - name: Validate Production authority syntax
         run: |
+          node --check functions/api/gifts/webhook.js
+          node --check functions/api/admin/gift_issuance_recovery_review.js
+          node scripts/build674_gift_issuance_atomicity_test.mjs
           python -m py_compile scripts/production_business_acceptance_check.py
           python -m py_compile scripts/service_economics_seasonal_capacity_reliability_trend_continuity_check.py
           node --check scripts/service_economics_seasonal_capacity_reliability_trend_continuity_test.mjs
