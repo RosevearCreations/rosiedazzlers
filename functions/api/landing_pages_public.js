@@ -1,8 +1,8 @@
 import { serviceHeaders } from "./_lib/staff-auth.js";
-import fallbackPricingCatalog from "./data/rosie_services_pricing_and_packages.json" with { type: "json" };
-import fallbackProductCatalog from "./data/rosie_products_catalog.json" with { type: "json" };
-import fallbackWaterRestrictionRules from "../../data/water_restriction_rules.json" with { type: "json" };
-import fallbackLandingPagesContent from "./data/landing_pages_content.json" with { type: "json" };
+import fallbackPricingCatalog from "./data/rosie_services_pricing_and_packages.json";
+import fallbackProductCatalog from "./data/rosie_products_catalog.json";
+import fallbackWaterRestrictionRules from "../../data/water_restriction_rules.json";
+import fallbackLandingPagesContent from "./data/landing_pages_content.json";
 import {
   applyWaterRestrictionRulesToLandingPages,
   loadEditableWaterRestrictionRules,

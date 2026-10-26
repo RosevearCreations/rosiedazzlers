@@ -6,8 +6,22 @@ import {
   hasTownMobileSetupConflict,
   TOWN_SAFE_SETUP_COPY
 } from '../functions/api/_lib/town-mobile-setup.js';
-import { onRequestGet as getPublicLanding } from '../functions/api/landing_pages_public.js';
-import { onRequestGet as getTownReview, onRequestPost as postTownReview } from '../functions/api/admin/town_mobile_setup_review.js';
+
+// Cloudflare's Pages build accepts unannotated JSON imports. Node 24 requires
+// attributes: adapt those imports in memory for tests only, never deployed code.
+async function importCloudflareFunction(path) {
+  const sourceUrl = new URL('../' + path, import.meta.url);
+  let source = readFileSync(sourceUrl, 'utf8');
+  source = source.replace(/from\s+(["'])([^"']+)(\1);/g, (match, quote, specifier) => {
+    if (!specifier.startsWith('.')) return match;
+    const absolute = new URL(specifier, sourceUrl).href;
+    return `from "${absolute}"${specifier.endsWith('.json') ? ' with { type: "json" }' : ''};`;
+  });
+  return import(`data:text/javascript;base64,${Buffer.from(source).toString('base64')}`);
+}
+
+const { onRequestGet: getPublicLanding } = await importCloudflareFunction('functions/api/landing_pages_public.js');
+const { onRequestGet: getTownReview, onRequestPost: postTownReview } = await importCloudflareFunction('functions/api/admin/town_mobile_setup_review.js');
 
 const read = (path) => readFileSync(new URL('../' + path, import.meta.url), 'utf8');
 const source = JSON.parse(read('data/landing_pages_content.json'));
