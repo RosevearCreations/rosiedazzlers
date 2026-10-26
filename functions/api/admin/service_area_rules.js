@@ -10,6 +10,7 @@ import {
   enrichServiceAreaRowsWithWaterRules,
   loadEditableWaterRestrictionRules
 } from "../_lib/water-restrictions.js";
+import { auditServiceAreaAccessRows } from "../_lib/service-area-mobile-setup.js";
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -68,6 +69,14 @@ export async function onRequestPost({ request, env }) {
   const serviceAreas = normalizeRows(body.service_areas || body.items || []);
   if (!serviceAreas.length) {
     return withCors(json({ ok: false, error: "No valid service-area rows supplied." }, 400));
+  }
+  const copyConflicts = auditServiceAreaAccessRows(serviceAreas);
+  if (copyConflicts.length) {
+    return withCors(json({
+      ok: false,
+      error: "Some access rules still request customer water or power. Review and correct them before saving; no records were changed.",
+      findings: copyConflicts
+    }, 422));
   }
 
   try {
