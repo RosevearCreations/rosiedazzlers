@@ -1,4 +1,5 @@
 import { loadGiftDeliverySettings, processGiftDeliveryRow } from "../_lib/gift-delivery.js";
+import { buildGiftPurchaseContext } from "../_lib/gift-delivery-state-673.js";
 
 // /functions/api/gifts/webhook.js
 // Stripe webhook -> Supabase fulfilment for Gift Certificate purchases
@@ -58,7 +59,6 @@ export async function onRequestPost({ request, env }) {
   const recipient_name = String(session?.metadata?.recipient_name || "").trim();
 
   // Capture vehicle intake fields from metadata (present only for service gift purchases)
-  const purchase_context = {};
   const vehicle = {
     year: String(session?.metadata?.vehicle_year || "").trim(),
     make: String(session?.metadata?.vehicle_make || "").trim(),
@@ -67,9 +67,7 @@ export async function onRequestPost({ request, env }) {
     declared_size: String(session?.metadata?.vehicle_declared_size || "").trim(),
     photo_url: String(session?.metadata?.vehicle_photo_url || "").trim(),
   };
-  const hasVehicle =
-    vehicle.year || vehicle.make || vehicle.model || vehicle.body_style || vehicle.declared_size || vehicle.photo_url;
-  if (hasVehicle) purchase_context.vehicle = vehicle;
+  const purchase_context = buildGiftPurchaseContext(session.metadata, vehicle);
 
   const cartItems = parseCart(cartStr);
   if (!cartItems.length) return json({ error: "Cart metadata invalid/empty" }, 400);
@@ -133,7 +131,7 @@ export async function onRequestPost({ request, env }) {
         expires_at: expiresAt.toISOString(),
 
         // store intake details
-        purchase_context: purchase_context,
+        purchase_context: structuredClone(purchase_context),
       });
     }
   }
@@ -258,7 +256,7 @@ async function supaExistsGiftForSession(SUPABASE_URL, SERVICE_KEY, sessionId) {
       Accept: "application/json",
     },
   });
-  if (!res.ok) return false;
+  if (!res.ok) throw new Error("Gift issuance idempotency check unavailable; webhook fulfilment held.");
   const data = await res.json();
   return Array.isArray(data) && data.length > 0;
 }

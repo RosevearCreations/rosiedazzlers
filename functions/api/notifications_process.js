@@ -8,6 +8,7 @@ import {
   reconcileReviewRequestSent
 } from "./_lib/review-request-dispatch.js";
 import { loadCustomerCommunicationDispatchGate } from "./_lib/customer-communication-consent.js";
+import { isGiftNotificationEvent } from "./_lib/gift-delivery-state-673.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -41,6 +42,12 @@ export async function onRequestPost(context) {
     const results = [];
 
     for (const item of rows) {
+      // Gift event/provider state must first be reconciled with the certificate.
+      // Never let the generic retry worker duplicate an uncertain gift send.
+      if (isGiftNotificationEvent(item)) {
+        results.push({ id: item.id, ok: false, status: "held", reason: "gift_delivery_requires_owner_provider_reconciliation" });
+        continue;
+      }
       const consentGate = await loadCustomerCommunicationDispatchGate({ env, event: item });
       if (consentGate.applies && !consentGate.decision.dispatch) {
         const cancelledAt = new Date().toISOString();

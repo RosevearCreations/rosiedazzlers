@@ -83,13 +83,14 @@ export function deliveryGuidanceGaps(path, raw) {
   return (CHECKLIST[path] || []).filter(([, regex]) => !regex.test(copy)).map(([code, , note]) => ({ code, note }));
 }
 
-// These are source-review findings, not claims about any actual customer or provider event.
+// Historical Build 671 baseline findings, not current runtime defect claims or
+// evidence of any actual customer/provider event. Build 673 addressed four paths.
 export const DELIVERY_RUNTIME_FINDINGS = [
   { code: "provider_accepted_not_inbox_confirmed", source: "functions/api/_lib/gift-delivery.js", note: "The gift status 'sent' is written after provider dispatch returns ok; no recipient inbox or bounce confirmation is checked. Avoid saying 'delivered' to the purchaser." },
-  { code: "purchaser_copy_failure_blurs_recipient_result", source: "functions/api/_lib/gift-delivery.js", note: "A purchaser-copy send failure can set the shared gift delivery_status to 'failed' even after the recipient event was sent. Review both event IDs individually before retry." },
-  { code: "retry_event_does_not_reconcile_gift_context", source: "functions/api/notifications_process.js", note: "Notification retry updates the event but does not update gift purchase_context delivery_status; a gift may still read 'failed' after successful event retry." },
-  { code: "scheduled_date_template_context_mismatch", source: "functions/api/_lib/gift-delivery.js", note: "Email payload copy refers to gift.delivery_date, while scheduling reads purchase_context.gift_delivery.delivery_date. Owner should verify the displayed date." },
-  { code: "resend_duplicate_risk", source: "functions/api/gifts/scheduled_delivery_process.js", note: "A failed gift with an existing event ID may be picked up again by the scheduled processor, which creates a new event. Staff must review existing recipient event status before attempting a resend." }
+  { code: "purchaser_copy_failure_blurs_recipient_result", resolved_in_build: 673, source: "functions/api/_lib/gift-delivery.js", note: "Build 671 historical gap: purchaser-copy failure blurred recipient state. Build 673 records distinct provider outcomes and preserves recipient acceptance." },
+  { code: "retry_event_does_not_reconcile_gift_context", resolved_in_build: 673, source: "functions/api/notifications_process.js", note: "Build 671 historical gap: generic notification retries could leave gift context stale. Build 673 holds gift events from generic retry; staff must reconcile existing provider evidence." },
+  { code: "scheduled_date_template_context_mismatch", resolved_in_build: 673, source: "functions/api/_lib/gift-delivery.js", note: "Build 671 historical gap: message template referenced the wrong date source. Build 673 reads the persisted gift_delivery date." },
+  { code: "resend_duplicate_risk", resolved_in_build: 673, source: "functions/api/gifts/scheduled_delivery_process.js", note: "Build 671 historical gap: repeat scheduled scans could create new events for failed gifts. Build 673 requires an atomic pending-state claim; other states are held." }
 ];
 
 export const DELIVERY_STATUS_GUIDANCE = [
