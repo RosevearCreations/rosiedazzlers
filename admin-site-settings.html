@@ -224,6 +224,19 @@
         <div class="status" id="giftReceiptConfirmationReviewResult" role="status" aria-live="polite">Staff-only, owner-controlled copy audit. No codes, customer records, payments or messages are fetched or modified.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftDeliveryFailureTitle" data-build671-gift-delivery-failure-review>
+      <div class="panel">
+        <div class="badge">Build 671 · read-only</div>
+        <h2 id="giftDeliveryFailureTitle">Gift delivery, failed email and owner-safe resend mobile guidance audit</h2>
+        <p>Review how customers understand preferred send dates, queued versus provider-accepted messages, failed delivery and the route to staff help. Compare public copy against non-customer managed settings and known code-level delivery/retry issues. This check cannot resend messages, expose gift codes or change a balance.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="giftDeliveryFailureReviewBtn">Check gift delivery guidance</button>
+          <a class="btn ghost" href="/gifts">Read public delivery help</a>
+          <a class="btn ghost" href="/admin-notifications.html">Review notifications separately</a>
+        </div>
+        <div class="status" id="giftDeliveryFailureReviewResult" role="status" aria-live="polite">Staff-only read-only audit. No gift codes, recipient details, delivery records or messages are fetched or modified.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -280,6 +293,7 @@
   <script src="/assets/admin-gift-credit-terms-review-v668.js?v=20261026build668" defer></script>
   <script src="/assets/admin-gift-redemption-balance-copy-review-v669.js?v=20261026build669" defer></script>
   <script src="/assets/admin-gift-receipt-confirmation-review-v670.js?v=20261026build670" defer></script>
+  <script src="/assets/admin-gift-delivery-failure-review-v671.js?v=20261026build671" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");

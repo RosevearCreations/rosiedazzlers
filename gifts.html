@@ -59,6 +59,12 @@
       <div class="notice warn" style="margin-top:12px">
         <strong>Important:</strong> Gift certificates are valid for <strong>1 year</strong> from purchase and are <strong>non-refundable</strong>.
       </div>
+      <section class="notice" aria-labelledby="giftDeliveryHelpTitle" style="margin-top:12px">
+        <h2 id="giftDeliveryHelpTitle" style="font-size:1.08rem;margin:0 0 8px">E-gift delivery and missing email</h2>
+        <p style="margin:0 0 8px">The preferred send date is a request, not guaranteed inbox delivery. A gift may be waiting for its date or staff review, queued for email, accepted by the email provider (sent), or failed. “Sent” does not confirm the recipient received it.</p>
+        <p style="margin:0 0 8px">If a gift email has not arrived, ask the recipient to check spam/junk and <a href="/contact">contact Rosie Dazzlers for help</a> with the purchase reference. Don't share your gift code publicly.</p>
+        <p style="margin:0">For a resend or retry, staff review the recipient and purchaser-copy notification records first, to avoid sending duplicates. Contact our team to review a failed delivery; no automatic replacement gift or refund is created.</p>
+      </section>
     </div>
 
     <div class="section grid2">
@@ -119,7 +125,7 @@
           <div class="gift-preview" id="dollarPreview">
             <div class="line"><span>Recipient</span><strong id="dollarPreviewName">—</strong></div>
             <div class="line"><span>From</span><strong id="dollarPreviewSender">Rosie Dazzlers gift purchaser</strong></div>
-            <div class="line"><span>Preferred send date</span><strong id="dollarPreviewDate">Send now / automated delivery</strong></div>
+            <div class="line"><span>Preferred send date</span><strong id="dollarPreviewDate">Next eligible send window, subject to review</strong></div>
             <div class="muted mini" id="dollarPreviewMessage">Your gift message preview will appear here.</div>
           </div>
 
@@ -184,14 +190,14 @@
               <input id="sMessage" type="text" placeholder="Enjoy your detail!" />
             </div>
             <div class="notice" style="align-self:end">
-              Scheduled e-gift delivery can now be automated from the stored delivery date when office settings allow it.
+              E-gift sending is scheduled using your preferred date when office settings allow it. An email accepted by our provider is not proof of inbox delivery.
             </div>
           </div>
 
           <div class="gift-preview" id="servicePreview">
             <div class="line"><span>Recipient</span><strong id="servicePreviewName">—</strong></div>
             <div class="line"><span>From</span><strong id="servicePreviewSender">Rosie Dazzlers gift purchaser</strong></div>
-            <div class="line"><span>Preferred send date</span><strong id="servicePreviewDate">Send now / automated delivery</strong></div>
+            <div class="line"><span>Preferred send date</span><strong id="servicePreviewDate">Next eligible send window, subject to review</strong></div>
             <div class="muted mini" id="servicePreviewMessage">Your gift message preview will appear here.</div>
           </div>
 
@@ -357,7 +363,7 @@
     }
 
     function formatDeliveryDate(value){
-      if (!value) return 'Send now / automated delivery';
+      if (!value) return 'Next eligible send window, subject to review';
       const dt = new Date(`${value}T12:00:00`);
       return Number.isNaN(dt.getTime()) ? value : dt.toLocaleDateString('en-CA', { month:'short', day:'numeric', year:'numeric' });
     }
