@@ -8,6 +8,7 @@ import {
   reconcileReviewRequestSent
 } from "./_lib/review-request-dispatch.js";
 import { loadCustomerCommunicationDispatchGate } from "./_lib/customer-communication-consent.js";
+import { guardAppointmentNotificationForDispatch } from "./_lib/appointment-preparation-660.js";
 
 export async function onRequestOptions() { return new Response("", { status: 204, headers: corsHeaders() }); }
 
@@ -119,7 +120,9 @@ export async function onRequestPost(context) {
         continue;
       }
 
-      const dispatch = await dispatchNotificationThroughProvider(env, item);
+      // Appointment-only wording guard runs after consent and eligibility gates.
+      // It does not mutate stored messages or change dispatch eligibility.
+      const dispatch = await dispatchNotificationThroughProvider(env, guardAppointmentNotificationForDispatch(item));
 
       if (dispatch.ok) {
         const deliveredAt = new Date().toISOString();

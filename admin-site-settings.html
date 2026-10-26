@@ -87,6 +87,19 @@
         <div class="status" id="serviceAreaMobileSetupReviewResult" role="status" aria-live="polite">Run the read-only check to see whether any managed access-rule rows still need owner reconciliation.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="appointmentPreparationMobileSetupTitle" data-build660-appointment-preparation-review>
+      <div class="panel">
+        <div class="badge">Build 660 · read-only</div>
+        <h2 id="appointmentPreparationMobileSetupTitle">Appointment email, SMS and preparation checklist audit</h2>
+        <p>Review appointment confirmation and reminder text from bundled and separately managed template sources. Existing messages receive a narrow water/power wording safeguard after consent checks; this audit never sends SMS, rewrites stored templates, or edits terms and waivers.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+          <button class="btn ghost" type="button" id="appointmentPreparationMobileSetupReviewBtn">Check appointment message sources</button>
+          <a class="btn ghost" href="/admin-notifications.html">Review notification delivery</a>
+          <a class="btn ghost" href="/blog/prepare-for-mobile-detailing">Public preparation guidance</a>
+        </div>
+        <div class="status" id="appointmentPreparationMobileSetupReviewResult" role="status" aria-live="polite">Run the read-only check to identify managed appointment copy requiring explicit owner review. SMS remains preview-only until separately enabled.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -132,6 +145,7 @@
   <script src="/assets/admin-town-mobile-setup-review-v657.js?v=20261025build657" defer></script>
   <script src="/assets/admin-service-addon-mobile-setup-review-v658.js?v=20261025build658" defer></script>
   <script src="/assets/admin-service-area-mobile-setup-review-v659.js?v=20261026build659" defer></script>
+  <script src="/assets/admin-appointment-preparation-mobile-setup-review-v660.js?v=20261026build660" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
