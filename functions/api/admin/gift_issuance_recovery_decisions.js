@@ -52,7 +52,7 @@ async function stripeGet(env, path) {
   return res.json();
 }
 
-async function providerCrossCheck(env, sessionId) {
+export async function providerCrossCheck(env, sessionId) {
   const checkedAt = new Date().toISOString();
   const unavailable = { check: 'unavailable', payment_status: 'unknown', session_status: 'unknown',
     livemode: null, expected_count: null, amount_cents: null, payment_intent: null, currency: null,
@@ -97,7 +97,7 @@ async function providerCrossCheck(env, sessionId) {
   }
 }
 
-async function sha256(data) {
+export async function sha256(data) {
   const bytes = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(JSON.stringify(data)));
   return [...new Uint8Array(bytes)].map((x) => x.toString(16).padStart(2, '0')).join('');
 }

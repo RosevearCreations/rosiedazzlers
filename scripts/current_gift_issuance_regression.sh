@@ -18,3 +18,6 @@ node scripts/build677_gift_review_followup_test.mjs
 node --check functions/api/admin/gift_recheck_closeout.js
 node --check assets/admin-gift-recheck-closeout-v678.js
 node scripts/build678_gift_recheck_closeout_test.mjs
+node --check functions/api/admin/gift_closeout_audit.js
+node --check assets/admin-gift-closeout-audit-v679.js
+node scripts/build679_gift_closeout_audit_test.mjs
