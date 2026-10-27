@@ -1188,7 +1188,10 @@ jobs:
 
   production-exact-sha:
     name: Verify exact Production deployment
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Protected GitHub-token PR merges may suppress downstream push workflows.
+    # A manual dispatch of the existing read-only exact-SHA verifier is safe,
+    # but only when selecting protected main. All other refs remain excluded.
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: business-path-authority
     runs-on: ubuntu-latest
     timeout-minutes: 10
