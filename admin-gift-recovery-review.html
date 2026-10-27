@@ -104,10 +104,37 @@
       <button id="review677Record" type="button" class="btn">Record owner evidence (no delivery)</button>
       <div id="review677Result" class="status" role="status" aria-live="polite">No Build 677 action recorded. Sign in as owner and refresh to inspect the ledger.</div>
     </div></section>
+    <section class="section" id="review678OwnerRecheck"><div class="panel review676-stack">
+      <div class="badge">Build 678 · owner-only independent recheck</div>
+      <h2>Recurrence recheck, fresh handoff and no-dispatch closeout</h2>
+      <p>After a Build 677 recurrence follow-up requests another independent review, the owner may assign a <strong>different</strong> active reviewer. That reviewer signs in using the independent review controls above. The owner may then acknowledge refreshed evidence and close the internal follow-up. None of these actions sends a gift or contacts a customer.</p>
+      <button id="review678Refresh" type="button" class="btn ghost">Refresh recurrence and recheck evidence</button>
+      <label for="review678Case">Review case
+        <select id="review678Case"><option value="">Refresh first</option></select>
+      </label>
+      <p class="status" id="review678Guide">Select a case with a current recheck request.</p>
+      <label for="review678Action">Owner action
+        <select id="review678Action">
+          <option value="recheck_assigned">Assign a different independent reviewer</option>
+          <option value="handoff_refreshed">Verify refreshed internal handoff evidence</option>
+          <option value="owner_closeout_recorded">Close internal recurrence follow-up (NO dispatch)</option>
+        </select>
+      </label>
+      <label for="review678Reviewer" id="review678ReviewerRow">Different active reviewer
+        <select id="review678Reviewer"><option value="">Refresh first</option></select>
+      </label>
+      <label for="review678Due" id="review678DueRow">New deadline (within 14 days)
+        <input id="review678Due" type="datetime-local" required />
+      </label>
+      <label><span><input id="review678Ack" type="checkbox" /> I understand that even a refreshed handoff or closed follow-up does not issue or deliver anything to a customer.</span></label>
+      <button id="review678Record" type="button" class="btn" disabled>Record verified owner evidence (NO dispatch)</button>
+      <div id="review678Result" class="status" role="status" aria-live="polite">No Build 678 action recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-gift-independent-review-v676.js?v=20261026build676" defer></script>
   <script src="/assets/admin-gift-review-followup-v677.js?v=20261026build677" defer></script>
+  <script src="/assets/admin-gift-recheck-closeout-v678.js?v=20261027build678" defer></script>
 </body>
 </html>

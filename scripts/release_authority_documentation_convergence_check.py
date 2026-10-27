@@ -160,7 +160,7 @@ require(production_workflow, [
     "- dev",
     "- main",
     "production-exact-sha:",
-    "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
+    "if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'",
     "CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}",
     "CONFIGURED_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
     "TARGET_SHA: ${{ github.sha }}",
