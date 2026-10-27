@@ -123,8 +123,12 @@ if not main_block:
 if "grid-template-columns:1fr" not in page or "min-height:44px" not in page:
     errors.append("Production readiness page is missing mobile/touch safeguards")
 
-# Build 323 is source-only.
-migrations = list(ROOT.glob("**/*323*.sql"))
+# Build 323 is source-only. Match the release identifier, not incidental
+# digits in a later migration's date/time prefix (such as 20261027131323).
+migrations = [
+    path for path in ROOT.glob("**/*.sql")
+    if re.search(r"(?:^|_)build323(?:_|$)", path.stem, re.IGNORECASE)
+]
 if migrations:
     errors.append("Build 323 must not introduce a schema migration: " + ", ".join(str(p.relative_to(ROOT)) for p in migrations))
 

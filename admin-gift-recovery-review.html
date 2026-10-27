@@ -130,11 +130,32 @@
       <button id="review678Record" type="button" class="btn" disabled>Record verified owner evidence (NO dispatch)</button>
       <div id="review678Result" class="status" role="status" aria-live="polite">No Build 678 action recorded.</div>
     </div></section>
+    <section class="section" id="review679CloseoutAudit"><div class="panel review676-stack">
+      <div class="badge">Build 679 · independent customer-safe audit</div>
+      <h2>Closeout recurrence watch and evidence freshness renewal</h2>
+      <p>After owner closeout, watch for new recurrence and age out earlier evidence. The owner assigns a <strong>separate active auditor</strong>, renews read-only Stripe and certificate proof, and then the independently signed-in auditor records their finding. Only afterward can the owner acknowledge it. A changed payment, issuance, delivery or recurrence state stays on HOLD.</p>
+      <p><strong>No delivery authority:</strong> these audit buttons do not create, resend, redeem, refund or contact any customer. Independent audit evidence expires after two hours and must be renewed.</p>
+      <button id="review679Refresh" type="button" class="btn ghost">Refresh watch, recurrence and evidence age</button>
+      <label for="review679Case">Auditable closeout case
+        <select id="review679Case"><option value="">Refresh your authorized cases</option></select>
+      </label>
+      <p class="status" id="review679Guide">Select a case with completed owner closeout.</p>
+      <label for="review679Action">Audit evidence action
+        <select id="review679Action"><option value="">Refresh your authorized role first</option></select>
+      </label>
+      <label for="review679Auditor" id="review679AuditorRow">Separate independent auditor
+        <select id="review679Auditor"><option value="">Refresh current staff first</option></select>
+      </label>
+      <label><span><input id="review679Ack" type="checkbox" /> I acknowledge this is internal audit evidence only and authorizes no customer email, SMS, delivery, refund, payment or gift change.</span></label>
+      <button id="review679Record" type="button" class="btn" disabled>Record customer-safe audit evidence</button>
+      <div id="review679Result" class="status" role="status" aria-live="polite">No Build 679 audit action recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-gift-independent-review-v676.js?v=20261026build676" defer></script>
   <script src="/assets/admin-gift-review-followup-v677.js?v=20261026build677" defer></script>
   <script src="/assets/admin-gift-recheck-closeout-v678.js?v=20261027build678" defer></script>
+  <script src="/assets/admin-gift-closeout-audit-v679.js?v=20261027build679" defer></script>
 </body>
 </html>
