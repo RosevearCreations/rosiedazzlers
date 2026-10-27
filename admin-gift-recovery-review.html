@@ -201,6 +201,23 @@
       <button id="review682Record" type="button" class="btn" disabled>Record no-dispatch follow-up evidence</button>
       <div id="review682Result" class="status" role="status" aria-live="polite">No Build 682 follow-up action recorded.</div>
     </div></section>
+    <section class="section" id="review683HoldRenewal"><div class="panel review676-stack">
+      <div class="badge">Build 683 · independent renewal, recurrence reassessment and owner HOLD audit</div>
+      <h2>Refresh Build 682 follow-up proof and preserve customer HOLD continuity</h2>
+      <p>Monitor a linked Build 682 owner follow-up closure as evidence reaches 60 minutes, expires at two hours or becomes overdue at 24 and 48 hours. Reopened recurrence and changed source are flagged. The owner may request a new internal renewal; a <strong>different active signed-in auditor</strong> must recheck paid Stripe and unchanged certificate, receipt and delivery evidence. The owner may then acknowledge continuing HOLD without releasing a customer.</p>
+      <p><strong>No direct connections to other companies or databases:</strong> this internal record emits no Rosevear gateway event, email, SMS, gift issuance, resend, refund, charge, balance change or delivery. A changed source or missing reviewer remains held.</p>
+      <button id="review683Refresh" type="button" class="btn ghost">Refresh renewal and recurrence age</button>
+      <label for="review683Case">Authorized signed follow-up closure
+        <select id="review683Case"><option value="">Refresh first</option></select>
+      </label>
+      <p class="status" id="review683Guide" role="status" aria-live="polite">Choose an eligible Build 682 follow-up.</p>
+      <label for="review683Action">Role-limited renewal and HOLD continuity action
+        <select id="review683Action"><option value="">Refresh your authorized role</option></select>
+      </label>
+      <label><span><input id="review683Ack" type="checkbox" /> We acknowledge the customer HOLD remains in place regardless of the renewal result. No customer send, Stripe mutation or cross-business transfer is authorized.</span></label>
+      <button id="review683Record" type="button" class="btn" disabled>Record internal HOLD renewal evidence only</button>
+      <div id="review683Result" class="status" role="status" aria-live="polite">No Build 683 renewal action recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -211,5 +228,6 @@
   <script src="/assets/admin-gift-audit-alerts-v680.js?v=20261027build680" defer></script>
   <script src="/assets/admin-gift-hold-continuity-v681.js?v=20261027build681" defer></script>
   <script src="/assets/admin-gift-hold-followup-v682.js?v=20261027build682" defer></script>
+  <script src="/assets/admin-gift-hold-renewal-v683.js?v=20261027build683" defer></script>
 </body>
 </html>
