@@ -184,6 +184,23 @@
       <button id="review681Record" type="button" class="btn" disabled>Record customer-safe continuity evidence</button>
       <div id="review681Result" class="status" role="status" aria-live="polite">No Build 681 continuity event recorded.</div>
     </div></section>
+    <section class="section" id="review682HoldFollowup"><div class="panel review676-stack">
+      <div class="badge">Build 682 · independent recheck aging and recurrence monitoring</div>
+      <h2>Owner HOLD exception follow-up and closure continuity</h2>
+      <p>Monitor the Build 681 independent outcome and owner closure as proof approaches 60 minutes, expires after two hours or becomes overdue at 24 and 48 hours. A new recurrence or superseded source retains HOLD. The owner can record an internal follow-up; a <strong>different signed-in independent auditor</strong> must verify fresh read-only paid and gift evidence before the owner can record follow-up closure.</p>
+      <p><strong>Customer-safe:</strong> neither independent recheck nor owner closure releases HOLD or issues, resends, redeems, charges, refunds, emails, texts or delivers any gift certificate. Reopened cases and changed evidence cannot close.</p>
+      <button id="review682Refresh" type="button" class="btn ghost">Refresh independent outcome age and recurrence</button>
+      <label for="review682Case">Authorized gift recovery outcome
+        <select id="review682Case"><option value="">Refresh first</option></select>
+      </label>
+      <p class="status" id="review682Guide" role="status" aria-live="polite">Choose a source-linked held case.</p>
+      <label for="review682Action">Role-limited owner HOLD follow-up
+        <select id="review682Action"><option value="">Refresh your signed-in role</option></select>
+      </label>
+      <label><span><input id="review682Ack" type="checkbox" /> We acknowledge that even verified independent follow-up and internal closure do not release customer HOLD or authorize a send.</span></label>
+      <button id="review682Record" type="button" class="btn" disabled>Record no-dispatch follow-up evidence</button>
+      <div id="review682Result" class="status" role="status" aria-live="polite">No Build 682 follow-up action recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -193,5 +210,6 @@
   <script src="/assets/admin-gift-closeout-audit-v679.js?v=20261027build679" defer></script>
   <script src="/assets/admin-gift-audit-alerts-v680.js?v=20261027build680" defer></script>
   <script src="/assets/admin-gift-hold-continuity-v681.js?v=20261027build681" defer></script>
+  <script src="/assets/admin-gift-hold-followup-v682.js?v=20261027build682" defer></script>
 </body>
 </html>

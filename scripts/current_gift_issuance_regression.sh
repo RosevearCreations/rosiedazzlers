@@ -27,3 +27,6 @@ node scripts/build680_gift_audit_alerts_test.mjs
 node --check functions/api/admin/gift_hold_continuity.js
 node --check assets/admin-gift-hold-continuity-v681.js
 node scripts/build681_gift_hold_continuity_test.mjs
+node --check functions/api/admin/gift_hold_followup.js
+node --check assets/admin-gift-hold-followup-v682.js
+node scripts/build682_gift_hold_followup_test.mjs
