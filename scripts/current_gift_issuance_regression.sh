@@ -36,3 +36,6 @@ node scripts/build683_gift_hold_renewal_test.mjs
 node --check functions/api/admin/gift_verified_release.js
 node --check assets/admin-gift-verified-release-v684.js
 node scripts/build684_gift_verified_release_test.mjs
+node --check functions/api/admin/gift_manual_delivery_handoff.js
+node --check assets/admin-gift-manual-handoff-v685.js
+node scripts/build685_gift_manual_handoff_test.mjs
