@@ -218,6 +218,20 @@
       <button id="review683Record" type="button" class="btn" disabled>Record internal HOLD renewal evidence only</button>
       <div id="review683Result" class="status" role="status" aria-live="polite">No Build 683 renewal action recorded.</div>
     </div></section>
+    <section class="section" id="review684VerifiedRelease"><div class="panel review676-stack">
+      <div class="badge">Build 684 · individual verified gift release</div>
+      <h2>Remove the recovery HOLD after independent verification</h2>
+      <p>For a single certificate, a signed-in owner can record a verified release after the separate auditor's current paid, issuance and delivery review. Each release is checked again against Stripe and database evidence. A new recurrence, earlier send attempt, expired evidence or already-released certificate prevents another release.</p>
+      <p><strong>Release is not delivery.</strong> It records an owner decision for a separate manual delivery review. This screen never resends, emails, texts, charges, refunds, creates replacement certificates or changes balances.</p>
+      <button id="review684Refresh" type="button" class="btn ghost">Check one session and its certificates</button>
+      <label for="review684Certificate">Verified certificate (selected checkout line)
+        <select id="review684Certificate"><option value="">Enter the session ID above and refresh</option></select>
+      </label>
+      <p class="status" id="review684Guide" role="status" aria-live="polite">No verified certificate selected.</p>
+      <label><span><input id="review684Ack" type="checkbox" /> We approve releasing only this certificate for manual delivery review. We have checked that it has not already been sent or queued, and we understand this action will not send anything.</span></label>
+      <button id="review684Record" type="button" class="btn" disabled>Release this verified certificate (NO SEND)</button>
+      <div id="review684Result" class="status" role="status" aria-live="polite">No Build 684 owner release recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -229,5 +243,6 @@
   <script src="/assets/admin-gift-hold-continuity-v681.js?v=20261027build681" defer></script>
   <script src="/assets/admin-gift-hold-followup-v682.js?v=20261027build682" defer></script>
   <script src="/assets/admin-gift-hold-renewal-v683.js?v=20261027build683" defer></script>
+  <script src="/assets/admin-gift-verified-release-v684.js?v=20261027build684" defer></script>
 </body>
 </html>
