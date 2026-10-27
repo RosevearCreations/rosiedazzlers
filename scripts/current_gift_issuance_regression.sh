@@ -15,3 +15,6 @@ node scripts/build674_gift_issuance_atomicity_test.mjs
 node scripts/build675_gift_recovery_decision_test.mjs
 node scripts/build676_gift_independent_review_test.mjs
 node scripts/build677_gift_review_followup_test.mjs
+node --check functions/api/admin/gift_recheck_closeout.js
+node --check assets/admin-gift-recheck-closeout-v678.js
+node scripts/build678_gift_recheck_closeout_test.mjs
