@@ -81,9 +81,33 @@
       <h2>Case status and overdue evidence</h2>
       <div class="status" id="review676Result" data-state="error" role="status" aria-live="polite">Sign in with a staff account, then refresh cases. No decision or customer action has occurred.</div>
     </div></section>
+    <section class="section" id="review677OwnerFollowup"><div class="panel review676-stack">
+      <div class="badge">Build 677 · signed-in owner evidence</div>
+      <h2>Overdue escalation, handoff receipt and recurrence</h2>
+      <p>Only a signed-in owner staff account can use these controls. An overdue case can be escalated; a ready handoff receipt is an internal acknowledgment, <strong>never permission to send</strong>. A recurring issue stays on hold until a separately recorded follow-up.</p>
+      <button id="review677Refresh" type="button" class="btn ghost">Refresh follow-up ledger</button>
+      <label for="review677Case">Review case
+        <select id="review677Case"><option value="">Refresh the ledger first</option></select>
+      </label>
+      <label for="review677Action">Owner evidence action
+        <select id="review677Action">
+          <option value="overdue_escalated">Escalate overdue independent reviewer</option>
+          <option value="handoff_receipt_confirmed">Confirm safe internal handoff receipt</option>
+          <option value="recurrence_opened">Open recurring exception / follow-up hold</option>
+          <option value="recurrence_followup_recorded">Record recurrence follow-up result</option>
+        </select>
+      </label>
+      <label for="review677Reason">Structured reason
+        <select id="review677Reason"><option value="reviewer_overdue">Reviewer overdue</option></select>
+      </label>
+      <label><span><input id="review677Ack" type="checkbox" /> I acknowledge that this records evidence only; no gift, payment, customer message or delivery will be sent.</span></label>
+      <button id="review677Record" type="button" class="btn">Record owner evidence (no delivery)</button>
+      <div id="review677Result" class="status" role="status" aria-live="polite">No Build 677 action recorded. Sign in as owner and refresh to inspect the ledger.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-gift-independent-review-v676.js?v=20261026build676" defer></script>
+  <script src="/assets/admin-gift-review-followup-v677.js?v=20261026build677" defer></script>
 </body>
 </html>
