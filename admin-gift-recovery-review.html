@@ -167,6 +167,23 @@
       <button id="review680Record" type="button" class="btn" disabled>Record internal HOLD evidence only</button>
       <div id="review680Result" class="status" role="status" aria-live="polite">No Build 680 alert action recorded.</div>
     </div></section>
+    <section class="section" id="review681HoldContinuity"><div class="panel review676-stack">
+      <div class="badge">Build 681 · customer-safe HOLD escalation continuity</div>
+      <h2>HOLD escalation outcomes and independent evidence recheck</h2>
+      <p>After Build 680 owner reconciliation, the owner may open an additional internal HOLD escalation or respond to expired proof, recurrence or a superseded closeout. An assigned <strong>different signed-in auditor</strong> separately checks fresh read-only Stripe payment, certificate lines and delivery receipts. The owner then records a source-linked continuity closure only if the independent result is current.</p>
+      <p><strong>Every outcome retains the customer HOLD.</strong> Reopened cases or new recurrences cannot be closed. These controls do not issue, resend, redeem, refund, charge, email, text or deliver gift certificates.</p>
+      <button id="review681Refresh" type="button" class="btn ghost">Refresh independent evidence and HOLD age</button>
+      <label for="review681Case">Signed Build 680 recovery case
+        <select id="review681Case"><option value="">Refresh first</option></select>
+      </label>
+      <p id="review681Guide" class="status" role="status" aria-live="polite">Choose an eligible reconciled case.</p>
+      <label for="review681Action">Role-limited continuity outcome
+        <select id="review681Action"><option value="">Refresh your authorized role</option></select>
+      </label>
+      <label><span><input id="review681Ack" type="checkbox" /> We acknowledge that even completed independent recheck and owner continuity do not release the customer HOLD or authorize delivery.</span></label>
+      <button id="review681Record" type="button" class="btn" disabled>Record customer-safe continuity evidence</button>
+      <div id="review681Result" class="status" role="status" aria-live="polite">No Build 681 continuity event recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -175,5 +192,6 @@
   <script src="/assets/admin-gift-recheck-closeout-v678.js?v=20261027build678" defer></script>
   <script src="/assets/admin-gift-closeout-audit-v679.js?v=20261027build679" defer></script>
   <script src="/assets/admin-gift-audit-alerts-v680.js?v=20261027build680" defer></script>
+  <script src="/assets/admin-gift-hold-continuity-v681.js?v=20261027build681" defer></script>
 </body>
 </html>
