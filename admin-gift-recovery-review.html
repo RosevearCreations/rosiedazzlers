@@ -150,6 +150,23 @@
       <button id="review679Record" type="button" class="btn" disabled>Record customer-safe audit evidence</button>
       <div id="review679Result" class="status" role="status" aria-live="polite">No Build 679 audit action recorded.</div>
     </div></section>
+    <section class="section" id="review680AuditAlerts"><div class="panel review676-stack">
+      <div class="badge">Build 680 · internal recurrence alerts and HOLD reconciliation</div>
+      <h2>Gift closeout alerts, evidence renewal age and separate auditor follow-up</h2>
+      <p>Monitor expired two-hour audit proof, 24-hour overdue evidence and renewed recurrence. The owner records an internal HOLD alert and requests renewal. A <strong>separate signed-in auditor</strong> must complete a new Build 679 audit before attesting here; the owner then records a no-dispatch HOLD reconciliation after acknowledging that audit. This does not release any customer delivery.</p>
+      <p><strong>Customer-safe:</strong> these are on-screen internal warnings and immutable receipts—not email/SMS notifications, gift transfers, retries or Stripe payments. An unavailable independent reviewer, changed payment or reopened case remains on HOLD.</p>
+      <button id="review680Refresh" type="button" class="btn ghost">Refresh alerts and aging status</button>
+      <label for="review680Case">Current authorized gift case
+        <select id="review680Case"><option value="">Refresh first</option></select>
+      </label>
+      <p id="review680Guide" class="status" role="status" aria-live="polite">Current hold and renewal guidance will appear here.</p>
+      <label for="review680Action">Role-limited alert reconciliation action
+        <select id="review680Action"><option value="">Refresh your authorized role</option></select>
+      </label>
+      <label><span><input id="review680Ack" type="checkbox" /> We acknowledge that the customer HOLD remains in force; no certificate, refund, charge, email, SMS or delivery is authorized.</span></label>
+      <button id="review680Record" type="button" class="btn" disabled>Record internal HOLD evidence only</button>
+      <div id="review680Result" class="status" role="status" aria-live="polite">No Build 680 alert action recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -157,5 +174,6 @@
   <script src="/assets/admin-gift-review-followup-v677.js?v=20261026build677" defer></script>
   <script src="/assets/admin-gift-recheck-closeout-v678.js?v=20261027build678" defer></script>
   <script src="/assets/admin-gift-closeout-audit-v679.js?v=20261027build679" defer></script>
+  <script src="/assets/admin-gift-audit-alerts-v680.js?v=20261027build680" defer></script>
 </body>
 </html>

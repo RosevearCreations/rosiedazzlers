@@ -21,3 +21,6 @@ node scripts/build678_gift_recheck_closeout_test.mjs
 node --check functions/api/admin/gift_closeout_audit.js
 node --check assets/admin-gift-closeout-audit-v679.js
 node scripts/build679_gift_closeout_audit_test.mjs
+node --check functions/api/admin/gift_audit_alerts.js
+node --check assets/admin-gift-audit-alerts-v680.js
+node scripts/build680_gift_audit_alerts_test.mjs
