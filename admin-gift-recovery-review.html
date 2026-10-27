@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Independent Gift Recovery Review | Rosie Dazzlers</title>
+  <link rel="stylesheet" href="/assets/site.css" />
+  <style>
+    .review676-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+    .review676-stack{display:grid;gap:10px}
+    .review676-stack label{display:grid;gap:5px}
+    .review676-stack select,.review676-stack input{width:100%;min-height:42px;border-radius:10px;border:1px solid #64748b;background:#0f172a;color:#fff;padding:8px}
+    .review676-stack input[type=checkbox]{width:auto;min-height:0;margin-right:6px}
+    .review676-stack button{width:fit-content;max-width:100%;white-space:normal}
+    .status{margin-top:12px;padding:12px;overflow-wrap:anywhere;background:rgba(255,255,255,.08);border-radius:12px}
+    .status[data-state=error]{color:#fecaca}.status[data-state=ok]{color:#bbf7d0}
+    @media(max-width:600px){.review676-stack button{width:100%}}
+  </style>
+</head>
+<body data-page="admin-gift-recovery-review" data-build676="independent-review">
+  <header class="nav"><div class="nav-inner">
+    <a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo" /><strong>Rosie Dazzlers</strong></a>
+    <nav class="nav-links"><a href="/admin.html">Dashboard</a><a href="/admin-site-settings.html">Owner settings</a><a href="/admin-notifications.html">Notifications</a></nav>
+  </div></header>
+  <main class="container">
+    <section class="section"><div class="panel">
+      <div class="badge">Build 676 · signed-in staff · independent evidence</div>
+      <h1>Independent gift recovery review</h1>
+      <p>Owners assign a different active staff member to a Build 675 decision. Reviewers see only their assignments. Overdue decisions and evidence older than 24 hours require renewed scrutiny.</p>
+      <p><strong>Important:</strong> A ready handoff means the owner may review scheduled delivery separately. It never sends an email, retries a delivery, issues a gift, changes a balance or processes a refund.</p>
+      <div class="review676-stack">
+        <label for="review676Session">Checkout session ID (optional for assigned reviewers)
+          <input id="review676Session" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="240" placeholder="cs_test_… or cs_live_…" />
+        </label>
+        <button id="review676Refresh" type="button" class="btn ghost">Refresh cases and evidence aging</button>
+      </div>
+    </div></section>
+    <div class="review676-grid">
+      <section class="section" id="review676OwnerControls" hidden><div class="panel review676-stack">
+        <h2>Owner assignment</h2>
+        <p>Enter the session ID above and refresh to select its latest saved owner decision. The reviewer must differ from its author and from the assigning owner.</p>
+        <label for="review676Decision">Owner decision
+          <select id="review676Decision"><option value="">Refresh a session first</option></select>
+        </label>
+        <label for="review676Reviewer">Active independent reviewer
+          <select id="review676Reviewer"><option value="">Select a reviewer</option></select>
+        </label>
+        <label for="review676Due">Reviewer due date and time (within 14 days)
+          <input id="review676Due" type="datetime-local" required />
+        </label>
+        <button id="review676Assign" type="button" class="btn">Assign or independently reassign</button>
+      </div></section>
+      <section class="section"><div class="panel review676-stack">
+        <h2>Assigned reviewer decision</h2>
+        <label for="review676Case">Your assigned case
+          <select id="review676Case"><option value="">Refresh assigned cases first</option></select>
+        </label>
+        <label for="review676Outcome">Review outcome
+          <select id="review676Outcome">
+            <option value="hold_missing_evidence">Hold — missing or contradictory evidence</option>
+            <option value="hold_delivery_check">Hold — delivery needs owner review</option>
+            <option value="recheck_required">Hold — refresh aged decision evidence</option>
+            <option value="handoff_review_ready">Ready for owner delivery review (NO send)</option>
+          </select>
+        </label>
+        <label for="review676Reason">Structured reason
+          <select id="review676Reason">
+            <option value="unresolved_hold">Unresolved evidence hold</option>
+            <option value="evidence_stale">Evidence older than 24 hours</option>
+            <option value="delivery_attention">Recipient or copy delivery requires attention</option>
+            <option value="independent_verified">Independently verified and consistent</option>
+            <option value="other_reviewer_review">Other independent review</option>
+          </select>
+        </label>
+        <label><span><input id="review676Ack" type="checkbox" /> I understand that a ready handoff does not dispatch or retry any message and requires separate owner delivery approval.</span></label>
+        <button id="review676Save" type="button" class="btn">Record signed-in reviewer outcome</button>
+      </div></section>
+    </div>
+    <section class="section"><div class="panel">
+      <h2>Case status and overdue evidence</h2>
+      <div class="status" id="review676Result" data-state="error" role="status" aria-live="polite">Sign in with a staff account, then refresh cases. No decision or customer action has occurred.</div>
+    </div></section>
+  </main>
+  <script src="/assets/chrome.js?v=20261025build656"></script>
+  <script src="/assets/admin-auth.js"></script>
+  <script src="/assets/admin-gift-independent-review-v676.js?v=20261026build676" defer></script>
+</body>
+</html>
