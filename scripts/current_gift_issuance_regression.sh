@@ -33,3 +33,6 @@ node scripts/build682_gift_hold_followup_test.mjs
 node --check functions/api/admin/gift_hold_renewal.js
 node --check assets/admin-gift-hold-renewal-v683.js
 node scripts/build683_gift_hold_renewal_test.mjs
+node --check functions/api/admin/gift_verified_release.js
+node --check assets/admin-gift-verified-release-v684.js
+node scripts/build684_gift_verified_release_test.mjs
