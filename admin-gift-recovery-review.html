@@ -232,6 +232,22 @@
       <button id="review684Record" type="button" class="btn" disabled>Release this verified certificate (NO SEND)</button>
       <div id="review684Result" class="status" role="status" aria-live="polite">No Build 684 owner release recorded.</div>
     </div></section>
+    <section class="section" id="review685ManualHandoff"><div class="panel review676-stack">
+      <div class="badge">Build 685 · release receipt validation and manual handoff</div>
+      <h2>Validate a verified gift release before manual-delivery handoff</h2>
+      <p>The owner reviews one Build 684 release receipt, current paid Stripe proof, intact gift issuance receipt and unsent delivery state. An expired or superseded release, reopened recurrence, prior send or duplicate handoff stops this operation. The server verifies everything again at recording time.</p>
+      <p><strong>A handoff is not delivery.</strong> This step creates an internal, immutable owner handoff receipt. It never sends or queues email/SMS, resends, charges, refunds, redeems, changes balances or shares data with other businesses. A separate operator delivery action needs fresh approval and checks.</p>
+      <button id="review685Refresh" type="button" class="btn ghost">Validate one session's release receipts</button>
+      <label for="review685Certificate">Released certificate (checkout line)
+        <select id="review685Certificate"><option value="">Enter the session ID above and validate</option></select>
+      </label>
+      <p id="review685Guide" class="status" role="status" aria-live="polite">No release receipt selected.</p>
+      <label><span><input id="review685Ack" type="checkbox" /> We approve an internal handoff for only this exact verified gift release.</span></label>
+      <label><span><input id="review685NoPrior" type="checkbox" /> We verified there was no previous delivery, queue or resend attempt for this certificate.</span></label>
+      <label><span><input id="review685NoSend" type="checkbox" /> We understand this does not send, queue or charge anything; delivery requires separate approval.</span></label>
+      <button id="review685Record" type="button" class="btn" disabled>Record one manual handoff (NO SEND)</button>
+      <div id="review685Result" class="status" role="status" aria-live="polite">No Build 685 handoff recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -244,5 +260,6 @@
   <script src="/assets/admin-gift-hold-followup-v682.js?v=20261027build682" defer></script>
   <script src="/assets/admin-gift-hold-renewal-v683.js?v=20261027build683" defer></script>
   <script src="/assets/admin-gift-verified-release-v684.js?v=20261027build684" defer></script>
+  <script src="/assets/admin-gift-manual-handoff-v685.js?v=20261027build685" defer></script>
 </body>
 </html>
