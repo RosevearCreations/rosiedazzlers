@@ -1,5 +1,7 @@
 // Full B681→B684 owner/auditor/gift fixture. All writes roll back on purpose.
 import {readFileSync} from 'node:fs';
+import {pathToFileURL} from 'node:url';
+export function build684RollbackCanary(){
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const source681=read('supabase/migrations/20261027150001_build681_hold_continuity_rollback_canary.sql');
 const script682=read('scripts/build682_hold_followup_canary.mjs');
@@ -91,4 +93,7 @@ source=source.replace('  v_result jsonb;','  v_result jsonb;\n  v_release_cert u
 if(!source.includes('Build 684 release improperly mutated external state')||
    !source.includes('BUILD681_EXPECTED_ROLLBACK')||source.split(marker).length!==2)
   throw Error('Build 684 release rollback fixture is incomplete.');
-process.stdout.write(source);
+return source;
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
+  process.stdout.write(build684RollbackCanary());
