@@ -268,6 +268,36 @@
         <div class="status" id="giftIssuanceReviewResult" role="status" aria-live="polite">No lookup performed. Uncertain or legacy issuance requires owner reconciliation before any action.</div>
       </div>
     </section>
+    <section class="section" aria-labelledby="giftDecisionTitle" data-build675-gift-owner-decisions>
+      <div class="panel">
+        <div class="badge">Build 675 · owner-only · provider GET + append-only decisions</div>
+        <h2 id="giftDecisionTitle">Paid gift cross-check and customer-safe exception decisions</h2>
+        <p>Use the Checkout session ID in the issuance review above. Check Stripe's paid session and its line counts before recording an owner decision. A saved decision is evidence only: it never sends email, refunds, changes a gift balance or creates another certificate.</p>
+        <button class="btn ghost" id="giftDecisionCheckBtn" type="button">Cross-check Stripe and decision ledger</button>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px">
+          <label for="giftDecisionAction">Owner disposition</label>
+          <select id="giftDecisionAction">
+            <option value="maintain_hold">Keep recovery hold</option>
+            <option value="escalate_review">Escalate for independent review</option>
+            <option value="close_verified_no_action">Close verified issuance (no customer action)</option>
+          </select>
+          <label for="giftDecisionReason">Reason</label>
+          <select id="giftDecisionReason">
+            <option value="conflicting_evidence">Conflicting evidence</option>
+            <option value="missing_issuance">Missing issuance</option>
+            <option value="provider_pending">Provider not paid</option>
+            <option value="provider_unavailable">Provider unavailable</option>
+            <option value="delivery_needs_review">Delivery needs separate review</option>
+            <option value="verified_no_duplicate">Verified, no duplicate action required</option>
+            <option value="other_owner_review">Other owner review</option>
+          </select>
+        </div>
+        <label style="display:block;margin-top:12px"><input id="giftDecisionConfirm" type="checkbox" /> I understand that closeout records issuance evidence only; no gift will be resent or refunded, and delivery needs separate verification.</label>
+        <button class="btn" id="giftDecisionSaveBtn" type="button">Record owner decision after fresh checks</button>
+        <p class="muted">Closeout is refused when Stripe is unpaid/unavailable, certificates disagree, any webhook is held, or any certificate has unresolved delivery state. Never enter customer details in reason fields.</p>
+        <div class="status" id="giftDecisionResult" role="status" aria-live="polite">No Stripe cross-check or decision has been performed.</div>
+      </div>
+    </section>
     <section class="section settings-grid">
       <aside class="panel">
         <h2 style="margin-top:0">Editable domains</h2>
@@ -327,6 +357,7 @@
   <script src="/assets/admin-gift-delivery-failure-review-v671.js?v=20261026build671" defer></script>
   <script src="/assets/admin-gift-delivery-retry-evidence-v672.js?v=20261026build672" defer></script>
   <script src="/assets/admin-gift-issuance-recovery-v674.js?v=20261026build674" defer></script>
+  <script src="/assets/admin-gift-issuance-decisions-v675.js?v=20261026build675" defer></script>
   <script>
     const state = { settings: {}, currentKey: "", permissions: domainPermissionMap(), fieldResults: [] };
     const listEl = document.getElementById("settingList");
