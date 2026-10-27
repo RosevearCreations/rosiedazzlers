@@ -493,7 +493,7 @@ workflow = require(WORKFLOW, [
     "Validate HOLD inventory & authority cleanup",
     "Validate rollback and hardening authorities",
     "production-exact-sha:",
-    "if: github.event_name == 'push' && github.ref == 'refs/heads/main'",
+    "if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'",
     "bash scripts/cloudflare_pages_production_acceptance.sh",
     "ROSIEDAZZLERS_TOKEN",
     "CLOUDFLARE_ACCOUNT_ID",
