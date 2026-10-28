@@ -33,6 +33,16 @@ Comms Hub bundle and independently acquired operator pin registry remain a separ
 six-source review. This source repo has not published a `ql246-source-proof.json`; all
 original nonproduction evidence, signer pins and authority remain **PENDING / HOLD**.
 
+**Build 695 / QL-249 local object retest readiness:** a trusted operator can use the
+read-only `scripts/ql249_rosie_local_git_proof_review.mjs` helper *after* a genuine
+proof-bearing commit exists. It checks two distinct local Git commit objects, source
+ancestry, a proof-file-only diff, exact raw bytes SHA-256 and the independently pinned
+Ed25519 source signature. A local Git match cannot attest independently authenticated
+GitHub origin or CI, AI Data Platform consumer acceptance, or any original gateway
+denial/audit receipt. The source proof still does **not** exist in this repo; the
+readiness test uses only synthetic short-lived test fixtures. This does not authorize
+GitHub/gateway network tests, key creation or read-only pilot access.
+
 | Required item | Current state | Action outside this source build |
 | --- | --- | --- |
 | Immutable Git SHA | Source repository revision available after the release; not a signed proof | Operator pins exact immutable commit and its green GitHub CI run |
