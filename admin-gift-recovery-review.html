@@ -472,6 +472,78 @@
       <button id="review691QL245Record" type="button" class="btn" disabled>Owner: record an unsigned QL-245 HOLD inventory</button>
       <div id="review691QL245Result" class="status" role="status" aria-live="polite">No Build 691 QL-245 inventory recorded.</div>
     </div></section>
+    <section class="section" id="review692Discrepancy"><div class="panel review676-stack">
+      <div class="badge">Build 692 · independent discrepancy aging and fifth reviewer evidence-only watch</div>
+      <h2>Review contradictory gift-delivery evidence — without resending</h2>
+      <p>Only a previously reopened certificate with a fourth independent reviewer reporting <strong>conflicting or unconfirmed evidence</strong> and a later owner HOLD is eligible. The original owner assigns a fifth different reviewer. A fifth review and owner acknowledgment do <strong>not</strong> confirm delivery or authorize a second send.</p>
+      <button id="review692Refresh" type="button" class="btn ghost">Refresh unresolved discrepancies and 24-hour alerts</button>
+      <label for="review692Certificate">Exact conflicting gift certificate
+        <select id="review692Certificate"><option value="">Enter checkout session above, then refresh</option></select>
+      </label>
+      <p id="review692Guide" class="status" role="status" aria-live="polite">No independently verified fourth-review discrepancy selected.</p>
+      <label for="review692Kind">Internal evidence action
+        <select id="review692Kind">
+          <option value="owner_discrepancy_watch_opened">Owner — assign a distinct fifth independent reviewer</option>
+          <option value="independent_discrepancy_reassessed">Fifth reviewer — reassess the discrepancy</option>
+          <option value="owner_no_resend_hold_ack">Owner — acknowledge continuing no-resend HOLD</option>
+        </select>
+      </label>
+      <label for="review692Reviewer">Independent reviewer (must not be any earlier participant)
+        <select id="review692Reviewer"><option value="">Select eligible reviewer</option></select>
+      </label>
+      <label for="review692Decision">Structured internal outcome
+        <select id="review692Decision"><option value="">Choose outcome</option></select>
+      </label>
+      <label for="review692Source">Observed source of evidence
+        <select id="review692Source"><option value="">Choose source</option></select>
+      </label>
+      <label for="review692Reference">Nonpersonal evidence ID (uppercase letters, numbers, hyphen, underscore)
+        <input id="review692Reference" maxlength="64" autocomplete="off" spellcheck="false" placeholder="DISCREPANCY-692-REVIEW" />
+      </label>
+      <label for="review692Observed">When the evidence was observed
+        <input id="review692Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review692ConfirmFourth" type="checkbox" /> We checked the fourth independent review and original no-resend HOLD for this exact certificate.</span></label>
+      <label><span><input id="review692ConfirmFifth" type="checkbox" /> The fifth reviewer is distinct from the owner and every earlier reviewer/operator.</span></label>
+      <label><span><input id="review692NoResend" type="checkbox" /> Record evidence only; no gift resend, issuance, payment, email, SMS or customer change.</span></label>
+      <button id="review692Record" type="button" class="btn" disabled>Record discrepancy evidence (NO SEND)</button>
+      <div id="review692Result" class="status" role="status" aria-live="polite">No Build 692 discrepancy watch recorded.</div>
+    </div></section>
+    <section class="section" id="review692QL246"><div class="panel review676-stack">
+      <div class="badge">Build 692 · QL-245/QL-246 original receipt intake · nonproduction only</div>
+      <h2>Six-app source-proof readiness — DISCONNECTED</h2>
+      <p>The QL-246 handoff requests 24 canonical fields, genuine original GET/denial receipts, a fresh operator challenge, an app-specific Ed25519 signature and an independently authenticated public-key fingerprint. <strong>Do not enter a secret, signature, challenge nonce, phone number, or personal data here.</strong> This screen records a reference for later independent verification, not a successful connection.</p>
+      <button id="review692QL246Refresh" type="button" class="btn ghost">Review missing original receipts and signature gates</button>
+      <p id="review692QL246Guide" class="status" role="status" aria-live="polite">All QL-246 original proof gates pending.</p>
+      <label for="review692QL246Kind">Original source evidence type
+        <select id="review692QL246Kind">
+          <option value="health">Original nonproduction health GET receipt</option>
+          <option value="capabilities">Original nonproduction capabilities GET receipt</option>
+          <option value="gateway_audit">Original gateway audit receipt</option>
+          <option value="registered_key">Original registered source key reference</option>
+          <option value="source_challenge">Operator challenge ID (not nonce)</option>
+          <option value="source_proof">Signed source proof record reference</option>
+          <option value="independent_pin">Separately authenticated public pin reference</option>
+        </select>
+      </label>
+      <label for="review692QL246Original">Original nonsecret receipt or challenge ID (must start with np-)
+        <input id="review692QL246Original" maxlength="123" autocomplete="off" spellcheck="false" placeholder="np-original-receipt-id" />
+      </label>
+      <label for="review692QL246Reference">Internal evidence reference (uppercase, nonpersonal)
+        <input id="review692QL246Reference" maxlength="64" autocomplete="off" spellcheck="false" placeholder="QL246-ROSIE-SOURCE" />
+      </label>
+      <label for="review692QL246Revision">Optional independently verified 40-character Git commit SHA
+        <input id="review692QL246Revision" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Leave blank if unknown" />
+      </label>
+      <label for="review692QL246Observed">When source reference was inspected
+        <input id="review692QL246Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review692QL246Unverified" type="checkbox" /> This reference is UNVERIFIED until the independent operator retrieves and checks original evidence and pins.</span></label>
+      <label><span><input id="review692QL246NoPilot" type="checkbox" /> No owner authorization, live connection, external dispatch or pilot is granted.</span></label>
+      <label><span><input id="review692QL246NoGateway" type="checkbox" /> Saving this metadata makes no gateway call and does not prove seven denials.</span></label>
+      <button id="review692QL246Record" type="button" class="btn" disabled>Stage original reference for independent review (UNVERIFIED)</button>
+      <div id="review692QL246Result" class="status" role="status" aria-live="polite">No Build 692 original receipt candidate recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -493,5 +565,7 @@
   <script src="/assets/admin-integration-v1-owner-readiness-v690.js?v=20261028build690" defer></script>
   <script src="/assets/admin-gift-reopened-exception-v691.js?v=20261028build691" defer></script>
   <script src="/assets/admin-integration-v1-ql245-handoff-v691.js?v=20261028build691" defer></script>
+  <script src="/assets/admin-gift-discrepancy-watch-v692.js?v=20261028build692" defer></script>
+  <script src="/assets/admin-integration-v1-original-intake-v692.js?v=20261028build692" defer></script>
 </body>
 </html>
