@@ -61,3 +61,9 @@ node --check assets/admin-gift-closure-recurrence-v690.js
 node --check assets/admin-integration-v1-owner-readiness-v690.js
 node scripts/build690_gift_recurrence_test.mjs
 node scripts/build690_integration_owner_readiness_test.mjs
+node --check functions/api/admin/gift_delivery_reopened_exception.js
+node --check assets/admin-gift-reopened-exception-v691.js
+node --check functions/api/admin/integration_v1_ql245_witness_handoff.js
+node --check assets/admin-integration-v1-ql245-handoff-v691.js
+node scripts/build691_gift_reopened_exception_test.mjs
+node scripts/build691_ql245_unsigned_handoff_test.mjs
