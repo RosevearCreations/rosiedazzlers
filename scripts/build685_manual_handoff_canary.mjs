@@ -1,5 +1,7 @@
 // Composed 681→685 full-fixture SQL; synthetic mutations live only inside a rollback.
 import {build684RollbackCanary} from './build684_verified_release_canary.mjs';
+import {pathToFileURL} from 'node:url';
+export function build685RollbackCanary(){
 const source684=build684RollbackCanary();
 const insertBefore=`    begin
       perform public.record_gift_verified_release(
@@ -89,4 +91,7 @@ const sql=source684.replace(insertBefore,insertion+insertBefore)
     '     or exists(select 1 from public.gift_issuance_manual_delivery_handoffs where case_id=v_case)');
 if(!sql.includes('Build 685 internal handoff mutated a customer/provider')||
    !sql.includes('BUILD681_EXPECTED_ROLLBACK'))throw Error('Build 685 incomplete rollback fixture');
-process.stdout.write(sql);
+return sql;
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
+  process.stdout.write(build685RollbackCanary());

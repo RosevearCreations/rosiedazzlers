@@ -248,6 +248,27 @@
       <button id="review685Record" type="button" class="btn" disabled>Record one manual handoff (NO SEND)</button>
       <div id="review685Result" class="status" role="status" aria-live="polite">No Build 685 handoff recorded.</div>
     </div></section>
+    <section class="section" id="review686OperatorAuthorization"><div class="panel review676-stack">
+      <div class="badge">Build 686 · manual gift operator authorization</div>
+      <h2>Approve one operator for final manual-send preparation</h2>
+      <p>After the verified Build 684 release and Build 685 handoff, an owner can assign a <strong>different active detailing operator</strong> for one certificate. A fresh read-only Stripe check, matching issuance and handoff evidence, unchanged unsent delivery status, and recurrence check must all pass again. The assignment expires in 15 minutes and cannot be duplicated.</p>
+      <p><strong>Authorization is not a send.</strong> No customer message, queue, retry, email, SMS, charge, refund, redemption, gift balance mutation or cross-business event occurs here. Even an assigned operator still needs a separate final delivery-specific approval and verification step.</p>
+      <button id="review686Refresh" type="button" class="btn ghost">Check operator send-readiness for this session</button>
+      <label for="review686Certificate">Verified manual handoff certificate (checkout line)
+        <select id="review686Certificate"><option value="">Enter the session above and check</option></select>
+      </label>
+      <p id="review686Guide" class="status" role="status" aria-live="polite">No validated operator assignment selected.</p>
+      <div id="review686OwnerControls">
+        <label for="review686Operator">Separate active operator to prepare this gift
+          <select id="review686Operator"><option value="">Refresh eligible staff</option></select>
+        </label>
+        <label><span><input id="review686Ack" type="checkbox" /> We authorize preparation for this exact certificate and this operator only.</span></label>
+        <label><span><input id="review686NoPrior" type="checkbox" /> We checked that no delivery, resend or queued email/SMS attempt occurred.</span></label>
+        <label><span><input id="review686NoSend" type="checkbox" /> We understand this is preparation only. It does not send or charge and expires after 15 minutes.</span></label>
+        <button id="review686Record" type="button" class="btn" disabled>Authorize operator preparation (NO SEND)</button>
+      </div>
+      <div id="review686Result" class="status" role="status" aria-live="polite">No Build 686 operator authorization recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -261,5 +282,6 @@
   <script src="/assets/admin-gift-hold-renewal-v683.js?v=20261027build683" defer></script>
   <script src="/assets/admin-gift-verified-release-v684.js?v=20261027build684" defer></script>
   <script src="/assets/admin-gift-manual-handoff-v685.js?v=20261027build685" defer></script>
+  <script src="/assets/admin-gift-operator-authorization-v686.js?v=20261027build686" defer></script>
 </body>
 </html>
