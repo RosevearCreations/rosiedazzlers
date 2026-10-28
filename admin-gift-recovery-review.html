@@ -417,6 +417,61 @@
       <button id="review690IntegrationRecord" type="button" class="btn" disabled>Owner: record nonproduction HOLD audit only</button>
       <div id="review690IntegrationResult" class="status" role="status" aria-live="polite">No Build 690 owner checklist recorded.</div>
     </div></section>
+    <section class="section" id="review691Reopened"><div class="panel review676-stack">
+      <div class="badge">Build 691 · independent reopened exception and no-resend HOLD continuity</div>
+      <h2>Reopen genuine delivery recurrence for another independent check</h2>
+      <p>Only a Build 690 independently observed <strong>recurrence or missing evidence</strong> can be reopened. The original owner assigns a <strong>fourth different reviewer</strong>, who checks aging and fresh evidence separately. The owner may then acknowledge the continuing manual HOLD; this is never a gift resend or proof that delivery was fixed.</p>
+      <button id="review691Refresh" type="button" class="btn ghost">Refresh unresolved recurrence and reassessment aging</button>
+      <label for="review691Certificate">Exact unresolved certificate and one-time delivery attempt
+        <select id="review691Certificate"><option value="">Enter checkout session above, then refresh</option></select>
+      </label>
+      <p id="review691Guide" class="status" role="status" aria-live="polite">No verified recurrence selected.</p>
+      <label for="review691Kind">Manual evidence action
+        <select id="review691Kind">
+          <option value="owner_exception_reopened">Owner — reopen for fourth independent reviewer</option>
+          <option value="independent_aging_reassessed">Fourth reviewer — reassess aging and source evidence</option>
+          <option value="owner_hold_continuity_ack">Owner — acknowledge continuing no-resend HOLD</option>
+        </select>
+      </label>
+      <label for="review691Reviewer">Fourth reviewer (must differ from all earlier participants)
+        <select id="review691Reviewer"><option value="">Select eligible staff</option></select>
+      </label>
+      <label for="review691Decision">Structured outcome
+        <select id="review691Decision"><option value="">Select an action</option></select>
+      </label>
+      <label for="review691Source">Evidence source
+        <select id="review691Source"><option value="">Select an action</option></select>
+      </label>
+      <label for="review691Reference">Nonpersonal evidence reference (6–64 uppercase letters, numbers, hyphen or underscore)
+        <input id="review691Reference" maxlength="64" autocomplete="off" spellcheck="false" placeholder="REOPEN-691-CASE" />
+      </label>
+      <label for="review691Observed">When the evidence was observed
+        <input id="review691Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review691Exact" type="checkbox" /> We verified the exact independent B690 recurrence and consumed gift-delivery attempt.</span></label>
+      <label><span><input id="review691Fourth" type="checkbox" /> A separate fourth reviewer genuinely reassesses this evidence; an owner acknowledgment does not resolve it.</span></label>
+      <label><span><input id="review691NoResend" type="checkbox" /> This action is append-only and internal: no email, SMS, resend, charge, reissue or balance change.</span></label>
+      <button id="review691Record" type="button" class="btn" disabled>Record reopened exception evidence (NO SEND)</button>
+      <div id="review691Result" class="status" role="status" aria-live="polite">No Build 691 reopening evidence recorded.</div>
+    </div></section>
+    <section class="section" id="review691QL245"><div class="panel review676-stack">
+      <div class="badge">Build 691 · QL-245 six-app handoff · unsigned proof inventory</div>
+      <h2>Rosie Dazzlers nonproduction witness handoff — DISCONNECTED</h2>
+      <p>QL-245 requires source and gateway-signed GET receipts, seven actually observed denial tests, separately authenticated Ed25519 public-key pins, an independent witness and separate future owner authorization. <strong>None is created by clicking below.</strong> The public source preview remains UNSIGNED and cannot pass the six-app offline verifier until genuine proof exists.</p>
+      <button id="review691QL245Refresh" type="button" class="btn ghost">Review 22 source fields and seven missing denials</button>
+      <p id="review691QL245Guide" class="status" role="status" aria-live="polite">Source: code readiness only. Gateway/owner authorization: NOT VERIFIED.</p>
+      <label for="review691QL245Reference">Owner source-evidence reference (nonpersonal uppercase identifier)
+        <input id="review691QL245Reference" maxlength="64" spellcheck="false" autocomplete="off" placeholder="QL245-ROSIE-PENDING" />
+      </label>
+      <label for="review691QL245Observed">When the code-readiness inventory was checked
+        <input id="review691QL245Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review691QL245NoSignatures" type="checkbox" /> We do not have an independently verified source signer/pin or signed source and gateway receipts.</span></label>
+      <label><span><input id="review691QL245NoDenials" type="checkbox" /> All seven external denial outcomes are UNVERIFIED; synthetic tests are not gateway evidence.</span></label>
+      <label><span><input id="review691QL245NoPilot" type="checkbox" /> No authenticated owner pilot approval, gateway connection or rollback witness is present. All integrations remain disconnected.</span></label>
+      <button id="review691QL245Record" type="button" class="btn" disabled>Owner: record an unsigned QL-245 HOLD inventory</button>
+      <div id="review691QL245Result" class="status" role="status" aria-live="polite">No Build 691 QL-245 inventory recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -436,5 +491,7 @@
   <script src="/assets/admin-gift-delivery-followup-v689.js?v=20261027build689" defer></script>
   <script src="/assets/admin-gift-closure-recurrence-v690.js?v=20261028build690" defer></script>
   <script src="/assets/admin-integration-v1-owner-readiness-v690.js?v=20261028build690" defer></script>
+  <script src="/assets/admin-gift-reopened-exception-v691.js?v=20261028build691" defer></script>
+  <script src="/assets/admin-integration-v1-ql245-handoff-v691.js?v=20261028build691" defer></script>
 </body>
 </html>
