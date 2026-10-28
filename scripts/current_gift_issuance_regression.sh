@@ -55,3 +55,9 @@ node --check functions/api/integration/v1/health.js
 node --check functions/api/integration/v1/capabilities.js
 node scripts/build689_delivery_followup_test.mjs
 node scripts/build689_integration_v1_test.mjs
+node --check functions/api/admin/gift_delivery_closure_recurrence.js
+node --check functions/api/admin/integration_v1_owner_readiness.js
+node --check assets/admin-gift-closure-recurrence-v690.js
+node --check assets/admin-integration-v1-owner-readiness-v690.js
+node scripts/build690_gift_recurrence_test.mjs
+node scripts/build690_integration_owner_readiness_test.mjs
