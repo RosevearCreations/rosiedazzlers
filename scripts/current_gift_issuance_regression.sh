@@ -42,3 +42,6 @@ node scripts/build685_gift_manual_handoff_test.mjs
 node --check functions/api/admin/gift_operator_authorization.js
 node --check assets/admin-gift-operator-authorization-v686.js
 node scripts/build686_gift_operator_authorization_test.mjs
+node --check functions/api/admin/gift_one_time_dispatch.js
+node --check assets/admin-gift-one-time-dispatch-v687.js
+node scripts/build687_one_time_dispatch_test.mjs

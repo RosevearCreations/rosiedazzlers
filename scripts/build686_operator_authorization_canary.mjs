@@ -1,5 +1,7 @@
 // Synthetic full Build 681→686 rollback fixture. This never persists gift/send data.
 import {build685RollbackCanary} from './build685_manual_handoff_canary.mjs';
+import {pathToFileURL} from 'node:url';
+export function build686RollbackCanary(){
 const source685=build685RollbackCanary();
 const marker=`    begin
       perform public.record_gift_manual_delivery_handoff(
@@ -100,4 +102,7 @@ const sql=source685.replace(marker,insertion+marker)
     '     or exists(select 1 from public.gift_issuance_delivery_operator_authorizations where case_id=v_case)');
 if(!sql.includes('Build 686 operator authorization mutated customer/provider')||
    !sql.includes('BUILD681_EXPECTED_ROLLBACK'))throw Error('Build 686 incomplete rollback fixture');
-process.stdout.write(sql);
+return sql;
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href)
+  process.stdout.write(build686RollbackCanary());
