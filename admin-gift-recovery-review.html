@@ -593,6 +593,32 @@
       <button id="review693QL246Verify" type="button" class="btn" disabled>Check pinned public signature (NO GATEWAY)</button>
       <div id="review693QL246Result" class="status" role="status" aria-live="polite">No original-source signature has been verified.</div>
     </div></section>
+    <section class="section" id="review694SixthAging"><div class="panel review676-stack">
+      <div class="badge">Build 694 · sixth-witness HOLD aging · read-only</div>
+      <h2>Review unresolved sixth-witness risk without another send</h2>
+      <p>This view reads the existing immutable fifth-reviewer and sixth-witness events. It flags a 24-hour witness follow-up, 48-hour owner HOLD acknowledgment and expired 14-day witness window. It creates no seventh reviewer, resends, customer contact or new evidence record. An acknowledged watch is <strong>not</strong> verified delivery.</p>
+      <button id="review694AgingRefresh" type="button" class="btn ghost">Review exact checkout's internal HOLD aging</button>
+      <div id="review694AgingResult" class="status" role="status" aria-live="polite">Enter the checkout session above to inspect the read-only watch.</div>
+      <div id="review694AgingCases" class="review676-stack"></div>
+    </div></section>
+    <section class="section" id="review694QL248"><div class="panel review676-stack">
+      <div class="badge">Build 694 · proposed QL-248 two-SHA clarification · DISCONNECTED</div>
+      <h2>Separate the tested source SHA from the proof-bearing commit SHA</h2>
+      <p>The signed QL-246 <code>source_revision</code> should identify the earlier tested code, while the later Git commit containing the public proof is recorded separately. The offline check requires independently configured GitHub revision, raw JSON digest, source CI run, Ed25519 SPKI pin and operator challenge. <strong>AI Data Platform consumer agreement is still pending.</strong> Never paste private keys, HMAC secrets, customer records, raw challenge nonces or tokens.</p>
+      <button id="review694QL248Refresh" type="button" class="btn ghost">Review two-SHA pin and consumer-agreement readiness</button>
+      <p id="review694QL248Guide" class="status" role="status" aria-live="polite">Original source and independent pin evidence remain PENDING.</p>
+      <label for="review694SourceRevision">Earlier audited source commit (40 lowercase hexadecimal characters)
+        <input id="review694SourceRevision" maxlength="40" autocomplete="off" spellcheck="false" placeholder="sourceRevisionSha" />
+      </label>
+      <label for="review694ProofCommit">Later public proof-bearing Git commit (different 40-character SHA)
+        <input id="review694ProofCommit" maxlength="40" autocomplete="off" spellcheck="false" placeholder="proofCommitSha" />
+      </label>
+      <label for="review694RawProofBase64">Base64 of <strong>exact raw nonsecret public</strong> QL-246 JSON file bytes
+        <textarea id="review694RawProofBase64" rows="4" spellcheck="false" autocomplete="off" placeholder="Public rawProofBase64 only; no private credentials"></textarea>
+      </label>
+      <button id="review694QL248Verify" type="button" class="btn" disabled>Run offline two-SHA preflight (NO GATEWAY)</button>
+      <div id="review694QL248Result" class="status" role="status" aria-live="polite">No proof-commit bytes verified; no connection or pilot authorized.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -618,5 +644,7 @@
   <script src="/assets/admin-integration-v1-original-intake-v692.js?v=20261028build692" defer></script>
   <script src="/assets/admin-gift-fifth-recurrence-v693.js?v=20261028build693" defer></script>
   <script src="/assets/admin-integration-v1-ql246-pinned-v693.js?v=20261028build693" defer></script>
+  <script src="/assets/admin-gift-sixth-aging-v694.js?v=20261028build694" defer></script>
+  <script src="/assets/admin-integration-v1-ql248-two-sha-v694.js?v=20261028build694" defer></script>
 </body>
 </html>

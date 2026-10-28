@@ -80,3 +80,10 @@ node --check functions/api/admin/integration_v1_ql246_signature_readiness.js
 node --check assets/admin-integration-v1-ql246-pinned-v693.js
 node scripts/build693_fifth_recurrence_test.mjs
 node scripts/build693_ql246_pinned_signature_test.mjs
+node --check functions/api/admin/gift_sixth_witness_hold_aging.js
+node --check functions/api/_lib/rosevear-integration-ql248.js
+node --check functions/api/admin/integration_v1_ql248_proof_commit_readiness.js
+node --check assets/admin-gift-sixth-aging-v694.js
+node --check assets/admin-integration-v1-ql248-two-sha-v694.js
+node scripts/build694_sixth_aging_test.mjs
+node scripts/build694_ql248_two_sha_test.mjs
