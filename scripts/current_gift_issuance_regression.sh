@@ -67,3 +67,10 @@ node --check functions/api/admin/integration_v1_ql245_witness_handoff.js
 node --check assets/admin-integration-v1-ql245-handoff-v691.js
 node scripts/build691_gift_reopened_exception_test.mjs
 node scripts/build691_ql245_unsigned_handoff_test.mjs
+node --check functions/api/admin/gift_delivery_discrepancy_watch.js
+node --check assets/admin-gift-discrepancy-watch-v692.js
+node --check functions/api/_lib/rosevear-integration-ql246.js
+node --check functions/api/admin/integration_v1_original_receipt_intake.js
+node --check assets/admin-integration-v1-original-intake-v692.js
+node scripts/build692_discrepancy_watch_test.mjs
+node scripts/build692_ql246_source_intake_test.mjs
