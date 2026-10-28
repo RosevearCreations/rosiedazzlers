@@ -45,3 +45,6 @@ node scripts/build686_gift_operator_authorization_test.mjs
 node --check functions/api/admin/gift_one_time_dispatch.js
 node --check assets/admin-gift-one-time-dispatch-v687.js
 node scripts/build687_one_time_dispatch_test.mjs
+node --check functions/api/admin/gift_delivery_outcome_review.js
+node --check assets/admin-gift-delivery-outcome-v688.js
+node scripts/build688_delivery_outcome_test.mjs
