@@ -61,3 +61,44 @@ export function checkQl246ProofShape(envelope,now=Date.now()){
     return {ok:false,reason:'Unsigned, expired or scope-invalid QL246 packet'};
   return {ok:true,reason:'Shape only. Verify Ed25519 signature AND independently pinned SPKI before acceptance.'};
 }
+
+// Public metadata ONLY. All expectations, especially fingerprint and challenge, must
+// originate from a separately authenticated operator channel, never from the packet.
+// Cryptographic success is not a witnessed denial, gateway test, tenant approval or pilot.
+export async function verifyQl246PinnedSignature(envelope,expectations,now=Date.now()){
+  const fail=reason=>({ok:false,reason,original_evidence_verified:false,
+    connection_state:'DISCONNECTED',owner_authorization:'NOT_GIVEN'});
+  const shape=checkQl246ProofShape(envelope,now);
+  if(!shape.ok)return fail(shape.reason);
+  if(!expectations||!Object.hasOwn(expectations,'expectedTenantId')||
+    !/^[0-9a-f]{64}$/.test(String(expectations.pinnedSpkiSha256||''))||
+    !/^[0-9a-f]{40}$/.test(String(expectations.expectedRevision||''))||
+    !/^https:\/\/github\.com\/RosevearCreations\/rosiedazzlers\/actions\/runs\/[0-9]+$/.test(String(expectations.expectedCiRunUrl||''))||
+    !/^np-[A-Za-z0-9_-]+$/.test(String(expectations.expectedChallengeId||''))||
+    !/^[0-9a-f]{64}$/.test(String(expectations.expectedChallengeSha256||'')))
+    return fail('Out-of-band SPKI pin, commit, CI, tenant and challenge are not provisioned');
+  const p=envelope.payload;
+  if(p.source_revision!==expectations.expectedRevision||
+    p.ci_run_url!==expectations.expectedCiRunUrl||
+    p.tenant_id!==expectations.expectedTenantId||
+    p.challenge_id!==expectations.expectedChallengeId||
+    p.challenge_sha256!==expectations.expectedChallengeSha256)
+    return fail('Source identity, immutable CI, tenant or challenge differs from separately verified pinning');
+  const pem=envelope.publicKeyPem;
+  if(!/^-----BEGIN PUBLIC KEY-----\r?\n(?:[A-Za-z0-9+/=]{1,64}\r?\n)+-----END PUBLIC KEY-----\r?\n?$/.test(pem))
+    return fail('Invalid public SPKI PEM');
+  try{
+    const bytes=Uint8Array.from(atob(pem.replace(/-----[^-]+-----|\s/g,'')),c=>c.charCodeAt(0));
+    const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',bytes));
+    const fingerprint=Array.from(digest,b=>b.toString(16).padStart(2,'0')).join('');
+    if(fingerprint!==expectations.pinnedSpkiSha256)return fail('Public key differs from separately pinned SPKI SHA-256');
+    const publicKey=await crypto.subtle.importKey('spki',bytes,{name:'Ed25519'},false,['verify']);
+    const encoded=envelope.signature.replace(/-/g,'+').replace(/_/g,'/');
+    const signature=Uint8Array.from(atob(encoded+'=='),c=>c.charCodeAt(0));
+    const message=new TextEncoder().encode(canonicalQl246Payload(p));
+    if(!await crypto.subtle.verify('Ed25519',publicKey,signature,message))
+      return fail('Detached Ed25519 signature invalid');
+    return {ok:true,reason:'Public signature and separately pinned identity match; original observations still require independent witness.',
+      original_evidence_verified:false,connection_state:'DISCONNECTED',owner_authorization:'NOT_GIVEN'};
+  }catch{return fail('Invalid Ed25519 public key, signature or canonical bytes');}
+}
