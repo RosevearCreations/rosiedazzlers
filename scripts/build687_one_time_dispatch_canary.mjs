@@ -144,4 +144,6 @@ const sql=source.replace(marker,insert+marker)
     '\n     or exists(select 1 from public.gift_issuance_one_time_dispatch_receipts where attempt_id=\'68700000-0000-4000-8000-000000000099\'::uuid)');
 if(!sql.includes('Build 687 duplicate provider slot allowed')||
    !sql.includes('BUILD681_EXPECTED_ROLLBACK'))throw Error('Incomplete Build 687 rollback fixture');
-process.stdout.write(sql);
+export function build687RollbackCanary(){return sql;}
+if(process.argv[1]&&import.meta.url===new URL(`file://${process.argv[1]}`).href)
+  process.stdout.write(sql);

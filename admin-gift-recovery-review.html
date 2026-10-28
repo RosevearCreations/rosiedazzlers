@@ -290,6 +290,40 @@
       <button id="review687Dispatch" type="button" class="btn" disabled>Assigned operator: SEND this one gift email ONCE</button>
       <div id="review687Result" class="status" role="status" aria-live="polite">No Build 687 dispatch receipt.</div>
     </div></section>
+    <section class="section" id="review688DeliveryOutcome"><div class="panel review676-stack">
+      <div class="badge">Build 688 · owner-only provider outcome and recipient confirmation</div>
+      <h2>Investigate one-time gift delivery without resending</h2>
+      <p>The provider may have accepted or rejected the single email, or its result may be unknown. <strong>Provider accepted does not mean the recipient received it.</strong> The owner can record one matching provider-result triage, followed by separately verified recipient confirmation or an exception escalation. Neither review sends or retries anything.</p>
+      <button id="review688Refresh" type="button" class="btn ghost">Read one-time provider and review receipts</button>
+      <label for="review688Certificate">Certificate with a one-time dispatch attempt
+        <select id="review688Certificate"><option value="">Enter checkout session above; refresh</option></select>
+      </label>
+      <p id="review688Guide" class="status" role="status" aria-live="polite">Choose a certificate after refreshing.</p>
+      <label for="review688Kind">Owner evidence action
+        <select id="review688Kind">
+          <option value="owner_provider_outcome_triage">Triage provider outcome (required first)</option>
+          <option value="owner_recipient_confirmation">Record explicit recipient acknowledgment (not provider acceptance)</option>
+          <option value="owner_no_resend_escalation">Escalate missing/conflicting evidence without resending</option>
+        </select>
+      </label>
+      <label for="review688Decision">Structured outcome or reason
+        <select id="review688Decision"><option value="">Select and refresh a dispatched certificate</option></select>
+      </label>
+      <label for="review688Source">Evidence source
+        <select id="review688Source"><option value="">Choose evidence action first</option></select>
+      </label>
+      <label for="review688Reference">External/internal receipt reference (6–64 uppercase letters, digits, underscore or hyphen; no name, email or phone)
+        <input id="review688Reference" maxlength="64" spellcheck="false" autocomplete="off" placeholder="PROVIDER-CASE-12345" />
+      </label>
+      <label for="review688Observed">When this evidence was actually observed (within 30 days)
+        <input id="review688Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review688Exact" type="checkbox" /> We independently verified the exact gift, checkout and original one-time attempt.</span></label>
+      <label><span><input id="review688Evidence" type="checkbox" /> We genuinely observed this source. Recipient confirmation means a real recipient explicitly acknowledged receiving this gift; a provider-accepted response alone never qualifies.</span></label>
+      <label><span><input id="review688NoResend" type="checkbox" /> We understand this saves audit evidence only: NO resend, email, SMS, duplicate charge, reissue or gift-balance change.</span></label>
+      <button id="review688Record" type="button" class="btn" disabled>Record one owner evidence decision (NO SEND)</button>
+      <div id="review688Result" class="status" role="status" aria-live="polite">No owner delivery outcome review recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -305,5 +339,6 @@
   <script src="/assets/admin-gift-manual-handoff-v685.js?v=20261027build685" defer></script>
   <script src="/assets/admin-gift-operator-authorization-v686.js?v=20261027build686" defer></script>
   <script src="/assets/admin-gift-one-time-dispatch-v687.js?v=20261027build687" defer></script>
+  <script src="/assets/admin-gift-delivery-outcome-v688.js?v=20261027build688" defer></script>
 </body>
 </html>
