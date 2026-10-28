@@ -269,6 +269,27 @@
       </div>
       <div id="review686Result" class="status" role="status" aria-live="polite">No Build 686 operator authorization recorded.</div>
     </div></section>
+    <section class="section" id="review687OneTimeDispatch"><div class="panel review676-stack">
+      <div class="badge">Build 687 · owner-approved, one-time manual gift email</div>
+      <h2>Owner approves once; assigned operator sends once</h2>
+      <p>Only after the Build 684 release, Build 685 handoff and unexpired Build 686 operator assignment may an owner approve one recipient email for one certificate. The designated <strong>different</strong> operator must act within five minutes. Both steps recheck paid Stripe evidence. Scheduled future delivery dates, prior notifications, reopened cases and changed receipts stop the send.</p>
+      <p><strong>Irreversible one-time attempt:</strong> The server reserves the certificate and notification before contacting the provider. If its reply is lost or uncertain, we stop for owner reconciliation. No automatic resend, purchaser copy, SMS, replacement gift, duplicate charge or balance change is allowed. <strong>Provider accepted</strong> does not mean the email reached an inbox.</p>
+      <button id="review687Refresh" type="button" class="btn ghost">Review one session and one-time receipts</button>
+      <label for="review687Certificate">Certificate (checkout line)
+        <select id="review687Certificate"><option value="">Enter the session above and refresh</option></select>
+      </label>
+      <p id="review687Guide" class="status" role="status" aria-live="polite">No gift selected.</p>
+      <div id="review687OwnerGroup">
+        <label><span><input id="review687AckRecipient" type="checkbox" /> We checked the exact certificate and its masked recipient address in our purchase record.</span></label>
+        <label><span><input id="review687AckNoPrior" type="checkbox" /> We independently checked that no send, queue, failure, duplicate or recurrence exists for this gift.</span></label>
+        <label><span><input id="review687AckOwner" type="checkbox" /> We authorize only one email to this gift recipient. The assigned operator must separately confirm the irreversible send.</span></label>
+        <button id="review687Approve" type="button" class="btn" disabled>Owner: approve this one-time email (NO SEND YET)</button>
+      </div>
+      <label><span><input id="review687AckFinalRecipient" type="checkbox" /> As the assigned operator, we checked the recipient and certificate again immediately before dispatch.</span></label>
+      <label><span><input id="review687AckIrreversible" type="checkbox" /> We understand clicking Send makes a real provider request and can never be repeated automatically, even if the result is unknown.</span></label>
+      <button id="review687Dispatch" type="button" class="btn" disabled>Assigned operator: SEND this one gift email ONCE</button>
+      <div id="review687Result" class="status" role="status" aria-live="polite">No Build 687 dispatch receipt.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -283,5 +304,6 @@
   <script src="/assets/admin-gift-verified-release-v684.js?v=20261027build684" defer></script>
   <script src="/assets/admin-gift-manual-handoff-v685.js?v=20261027build685" defer></script>
   <script src="/assets/admin-gift-operator-authorization-v686.js?v=20261027build686" defer></script>
+  <script src="/assets/admin-gift-one-time-dispatch-v687.js?v=20261027build687" defer></script>
 </body>
 </html>
