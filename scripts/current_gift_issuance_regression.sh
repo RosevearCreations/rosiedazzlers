@@ -48,3 +48,10 @@ node scripts/build687_one_time_dispatch_test.mjs
 node --check functions/api/admin/gift_delivery_outcome_review.js
 node --check assets/admin-gift-delivery-outcome-v688.js
 node scripts/build688_delivery_outcome_test.mjs
+node --check functions/api/admin/gift_delivery_followup.js
+node --check assets/admin-gift-delivery-followup-v689.js
+node --check functions/api/_lib/rosevear-integration-v1.js
+node --check functions/api/integration/v1/health.js
+node --check functions/api/integration/v1/capabilities.js
+node scripts/build689_delivery_followup_test.mjs
+node scripts/build689_integration_v1_test.mjs
