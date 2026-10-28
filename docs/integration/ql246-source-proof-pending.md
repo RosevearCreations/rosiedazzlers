@@ -16,9 +16,27 @@ No pin, key, challenge, original witness or external test has been provisioned b
 Cryptographic verification of a synthetic fixture is never a source-of-truth receipt and does
 not advance any row below from PENDING.
 
+**Build 694 / QL-248 proposed proof-commit amendment:** The earlier audited/tested Git
+`source_revision` in a signed payload **must not** be conflated with the later Git
+`proofCommitSha` of the commit containing that signed proof file. A commit cannot contain
+its own immutable SHA without creating a self-reference. The precise raw public JSON file
+bytes fetched from the later proof-bearing Git commit must have a separately pinned
+`proofSha256`, and its public signing key must have an independently authenticated DER
+SPKI fingerprint. The CI URL identifies the **earlier audited source revision**. Both SHAs,
+the raw digest, SPKI pin, source CI and fresh challenge must be separately authenticated.
+This clarification is **PROPOSED** until the AI Data Platform consumer explicitly agrees.
+
+Build 694 adds an owner-only, offline two-SHA checker scoped to Rosie public metadata. A
+cryptographic match confirms neither immutable GitHub origin nor real denial receipts,
+durable audit, revocation, authenticated owner identity, or consumer adoption. The six-app
+Comms Hub bundle and independently acquired operator pin registry remain a separate
+six-source review. This source repo has not published a `ql246-source-proof.json`; all
+original nonproduction evidence, signer pins and authority remain **PENDING / HOLD**.
+
 | Required item | Current state | Action outside this source build |
 | --- | --- | --- |
 | Immutable Git SHA | Source repository revision available after the release; not a signed proof | Operator pins exact immutable commit and its green GitHub CI run |
+| Separate proof-bearing Git SHA and raw public JSON SHA-256 | PENDING; QL-248 clarification proposed | AI Data Platform consumer agrees to source/proof SHA separation; operator independently pins proof commit, raw file hash and confirms source-to-proof diff |
 | App-specific Ed25519 key | PENDING | Trusted local app operator generates and privately stores a new key; no cross-app key sharing |
 | Independent SPKI SHA-256 pin | PENDING | Operator sends DER-SPKI hash through a distinct authenticated route |
 | Fresh `np-...` challenge and nonce SHA-256 | PENDING | Independent operator issues challenge securely, signs canonical 24 fields within one hour |
