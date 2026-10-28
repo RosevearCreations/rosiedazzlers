@@ -87,3 +87,8 @@ node --check assets/admin-gift-sixth-aging-v694.js
 node --check assets/admin-integration-v1-ql248-two-sha-v694.js
 node scripts/build694_sixth_aging_test.mjs
 node scripts/build694_ql248_two_sha_test.mjs
+node --check functions/api/admin/gift_owner_hold_triage_queue.js
+node --check assets/admin-gift-owner-hold-queue-v695.js
+node --check scripts/ql249_rosie_local_git_proof_review.mjs
+node scripts/build695_owner_hold_queue_test.mjs
+node scripts/build695_ql249_local_git_review_test.mjs
