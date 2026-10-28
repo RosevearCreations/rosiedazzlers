@@ -176,7 +176,7 @@ export async function processGiftDeliveryRow(env, gift, settings, options = {}) 
   };
 }
 
-function buildGiftDeliveryPayload(gift, origin, settings, info) {
+export function buildGiftDeliveryPayload(gift, origin, settings, info) {
   const recipient = gift.recipient_name || gift.recipient_email || "Gift recipient";
   const sender = info.sender_name || "Someone who cares about a clean ride";
   const valueLabel = gift.type === "service"
