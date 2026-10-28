@@ -362,6 +362,61 @@
       <button id="review689Record" type="button" class="btn" disabled>Record independent gift follow-up (NO SEND)</button>
       <div id="review689Result" class="status" role="status" aria-live="polite">No Build 689 follow-up recorded.</div>
     </div></section>
+    <section class="section" id="review690Recurrence"><div class="panel review676-stack">
+      <div class="badge">Build 690 · independent closure recurrence and no-resend aging</div>
+      <h2>Watch a closed gift without sending it again</h2>
+      <p>After a verified Build 689 no-resend closure, the owner assigns a <strong>third, different reviewer</strong>. That person checks whether the delivery exception has recurred. A 24-hour aging alert stays internal; an owner can acknowledge it after independent evidence. None of these decisions changes the gift or sends a second email.</p>
+      <button id="review690Refresh" type="button" class="btn ghost">Refresh closure watches and aging alerts</button>
+      <label for="review690Certificate">Closed gift certificate
+        <select id="review690Certificate"><option value="">Enter the checkout session above and refresh</option></select>
+      </label>
+      <p id="review690Guide" class="status" role="status" aria-live="polite">No closed certificate selected.</p>
+      <label for="review690Kind">Internal evidence action
+        <select id="review690Kind">
+          <option value="owner_watch_opened">Owner — assign third independent reviewer</option>
+          <option value="independent_recurrence_audited">Assigned reviewer — audit recurrence</option>
+          <option value="owner_no_resend_alert_ack">Owner — acknowledge no-resend aging alert</option>
+        </select>
+      </label>
+      <label for="review690Reviewer">Independent reviewer (different from the owner, delivery operator and first rechecker)
+        <select id="review690Reviewer"><option value="">Select an eligible reviewer</option></select>
+      </label>
+      <label for="review690Decision">Structured review outcome
+        <select id="review690Decision"><option value="">Choose review action</option></select>
+      </label>
+      <label for="review690Source">Genuine evidence source
+        <select id="review690Source"><option value="">Choose review action</option></select>
+      </label>
+      <label for="review690Reference">Non-personal source reference, uppercase letters and digits (6–64 characters)
+        <input id="review690Reference" maxlength="64" spellcheck="false" autocomplete="off" placeholder="RECURRENCE-690-A" />
+      </label>
+      <label for="review690Observed">When the evidence was actually observed
+        <input id="review690Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review690Exact" type="checkbox" /> We verified the exact closed certificate and consumed one-time delivery attempt.</span></label>
+      <label><span><input id="review690Independent" type="checkbox" /> We personally verified this source and the separate reviewer; we will not treat a provider acceptance as recipient proof.</span></label>
+      <label><span><input id="review690NoResend" type="checkbox" /> This is internal evidence only. No resend, email, SMS, reissue or duplicate charge is authorized.</span></label>
+      <button id="review690Record" type="button" class="btn" disabled>Record closure watch (NO SEND)</button>
+      <div id="review690Result" class="status" role="status" aria-live="polite">No Build 690 recurrence watch recorded.</div>
+    </div></section>
+    <section class="section" id="review690Integration"><div class="panel review676-stack">
+      <div class="badge">Build 690 · owner-only nonproduction Integration v1 review</div>
+      <h2>Review QL-243 connection prerequisites — HOLD</h2>
+      <p>Review only whether local nonproduction settings appear configured. No keys or secrets are displayed; this <strong>cannot prove a gateway connection, cross-company tenant isolation or a witnessed test</strong>. Production and all customer actions remain disabled. The audit can only record HOLD.</p>
+      <button id="review690IntegrationRefresh" type="button" class="btn ghost">Check local configuration and prior HOLD receipts</button>
+      <p id="review690IntegrationGuide" class="status" role="status" aria-live="polite">Connection: HOLD. No independent gateway audit.</p>
+      <label for="review690IntegrationReference">Owner evidence reference (non-personal, uppercase, 6–64 characters)
+        <input id="review690IntegrationReference" maxlength="64" spellcheck="false" autocomplete="off" placeholder="QL243-OWNER-690" />
+      </label>
+      <label for="review690IntegrationObserved">When we reviewed nonproduction readiness
+        <input id="review690IntegrationObserved" type="datetime-local" />
+      </label>
+      <label><span><input id="review690NoLive" type="checkbox" /> We did not enable a production link or connect customers or businesses.</span></label>
+      <label><span><input id="review690NoGateway" type="checkbox" /> We have no verified gateway or independent witness receipt; local flags do not constitute that proof.</span></label>
+      <label><span><input id="review690NoPilot" type="checkbox" /> This audit does not authorize any pilot or dispatch. Integration remains HOLD.</span></label>
+      <button id="review690IntegrationRecord" type="button" class="btn" disabled>Owner: record nonproduction HOLD audit only</button>
+      <div id="review690IntegrationResult" class="status" role="status" aria-live="polite">No Build 690 owner checklist recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -379,5 +434,7 @@
   <script src="/assets/admin-gift-one-time-dispatch-v687.js?v=20261027build687" defer></script>
   <script src="/assets/admin-gift-delivery-outcome-v688.js?v=20261027build688" defer></script>
   <script src="/assets/admin-gift-delivery-followup-v689.js?v=20261027build689" defer></script>
+  <script src="/assets/admin-gift-closure-recurrence-v690.js?v=20261028build690" defer></script>
+  <script src="/assets/admin-integration-v1-owner-readiness-v690.js?v=20261028build690" defer></script>
 </body>
 </html>
