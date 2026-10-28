@@ -324,6 +324,44 @@
       <button id="review688Record" type="button" class="btn" disabled>Record one owner evidence decision (NO SEND)</button>
       <div id="review688Result" class="status" role="status" aria-live="polite">No owner delivery outcome review recorded.</div>
     </div></section>
+    <section class="section" id="review689Followup"><div class="panel review676-stack">
+      <div class="badge">Build 689 · independent recipient evidence and owner no-resend closure</div>
+      <h2>Review aging and close a gift-delivery exception safely</h2>
+      <p>Owner: assign an independent staff reviewer after the Build 688 provider triage. Reviewer: check genuine recipient evidence separately. Owner: close the internal follow-up only when the independent evidence agrees with the original gift record. Evidence older than 24 hours, conflicting outcomes, different checkout details or repeated decisions keep the case open.</p>
+      <p><strong>No-resend boundary:</strong> Closing an internal audit never sends, retries, charges, refunds, changes a certificate balance or authorizes another gift email. The original one-time send slot stays used.</p>
+      <button id="review689Refresh" type="button" class="btn ghost">Refresh owner/reviewer evidence and follow-up aging</button>
+      <label for="review689Certificate">Exact certificate and original delivery attempt
+        <select id="review689Certificate"><option value="">Enter checkout session above, then refresh</option></select>
+      </label>
+      <p id="review689Guide" class="status" role="status" aria-live="polite">No independently reviewed case selected.</p>
+      <label for="review689Kind">Follow-up action
+        <select id="review689Kind">
+          <option value="owner_followup_assignment">Owner — assign independent reviewer</option>
+          <option value="independent_recipient_recheck">Assigned reviewer — record recipient-evidence check</option>
+          <option value="owner_no_resend_closeout">Owner — close no-resend internal follow-up</option>
+        </select>
+      </label>
+      <label for="review689Reviewer">Independent reviewer (must differ from owner and original operator)
+        <select id="review689Reviewer"><option value="">Select an eligible reviewer</option></select>
+      </label>
+      <label for="review689Decision">Structured outcome
+        <select id="review689Decision"><option value="">Choose a follow-up action</option></select>
+      </label>
+      <label for="review689Source">Evidence source
+        <select id="review689Source"><option value="">Choose an action</option></select>
+      </label>
+      <label for="review689Reference">Non-personal source reference (6–64 uppercase letters, digits, underscore or hyphen)
+        <input id="review689Reference" maxlength="64" spellcheck="false" autocomplete="off" placeholder="OWNER-REVIEW-689" />
+      </label>
+      <label for="review689Observed">When evidence was observed (within 30 days)
+        <input id="review689Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review689Exact" type="checkbox" /> We verified this exact certificate and original irreversible delivery attempt.</span></label>
+      <label><span><input id="review689Genuine" type="checkbox" /> We personally verified the stated independent evidence. A provider receipt is not proof of recipient acknowledgment.</span></label>
+      <label><span><input id="review689NoResend" type="checkbox" /> We understand this records only an append-only audit decision, with no resend, email, SMS or charge.</span></label>
+      <button id="review689Record" type="button" class="btn" disabled>Record independent gift follow-up (NO SEND)</button>
+      <div id="review689Result" class="status" role="status" aria-live="polite">No Build 689 follow-up recorded.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -340,5 +378,6 @@
   <script src="/assets/admin-gift-operator-authorization-v686.js?v=20261027build686" defer></script>
   <script src="/assets/admin-gift-one-time-dispatch-v687.js?v=20261027build687" defer></script>
   <script src="/assets/admin-gift-delivery-outcome-v688.js?v=20261027build688" defer></script>
+  <script src="/assets/admin-gift-delivery-followup-v689.js?v=20261027build689" defer></script>
 </body>
 </html>
