@@ -65,3 +65,7 @@ This is consistent with the October 28 six-app handoff; Rosie cannot verify five
 
 Next QL-246 operation is an independent **nonproduction-only** evidence collection under a
 separate, explicit owner approval. This code release does not authorize that operation.
+
+## Release ancestry reconciliation
+
+The previously green Build 692 `main` ancestry is merged into the Build 693 `dev` history without modifying any Build 692 or Build 693 application files. The reconciled tree was byte-for-byte identical to the tested Build 693 tree. The final promotion still requires new exact-commit GitHub source, Cloudflare Development and Production checks; prior success does not transfer between commit SHAs.
