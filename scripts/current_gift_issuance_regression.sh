@@ -74,3 +74,9 @@ node --check functions/api/admin/integration_v1_original_receipt_intake.js
 node --check assets/admin-integration-v1-original-intake-v692.js
 node scripts/build692_discrepancy_watch_test.mjs
 node scripts/build692_ql246_source_intake_test.mjs
+node --check functions/api/admin/gift_fifth_recurrence_closure_watch.js
+node --check assets/admin-gift-fifth-recurrence-v693.js
+node --check functions/api/admin/integration_v1_ql246_signature_readiness.js
+node --check assets/admin-integration-v1-ql246-pinned-v693.js
+node scripts/build693_fifth_recurrence_test.mjs
+node scripts/build693_ql246_pinned_signature_test.mjs

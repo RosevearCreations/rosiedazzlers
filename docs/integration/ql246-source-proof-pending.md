@@ -10,6 +10,12 @@
 
 This document is the **required exception report**, not `ql246-source-proof.json`. It does not assert a real operator challenge, Ed25519 signer or gateway test. No signed source proof may be published until every requirement below is independently verified.
 
+**Build 693 readiness:** the admin-only public-envelope checker can verify Ed25519 canonical bytes
+against separately configured SPKI SHA-256, immutable commit/CI and challenge expectations.
+No pin, key, challenge, original witness or external test has been provisioned by this build.
+Cryptographic verification of a synthetic fixture is never a source-of-truth receipt and does
+not advance any row below from PENDING.
+
 | Required item | Current state | Action outside this source build |
 | --- | --- | --- |
 | Immutable Git SHA | Source repository revision available after the release; not a signed proof | Operator pins exact immutable commit and its green GitHub CI run |

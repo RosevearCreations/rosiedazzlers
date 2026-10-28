@@ -544,6 +544,55 @@
       <button id="review692QL246Record" type="button" class="btn" disabled>Stage original reference for independent review (UNVERIFIED)</button>
       <div id="review692QL246Result" class="status" role="status" aria-live="polite">No Build 692 original receipt candidate recorded.</div>
     </div></section>
+    <section class="section" id="review693FifthRecurrence"><div class="panel review676-stack">
+      <div class="badge">Build 693 · fifth-reviewer discrepancy recurrence closure WATCH · no resend</div>
+      <h2>Independently watch unresolved fifth-reviewer evidence</h2>
+      <p>Only after a fifth independent reassessment and the original owner's continuing HOLD acknowledgment may the owner assign a <strong>sixth distinct witness</strong>. The witness may report unresolved recurrence risk; the owner may acknowledge continuing HOLD. This does not close delivery, authorize customer contact, or reset the original one-time send.</p>
+      <button id="review693Refresh" type="button" class="btn ghost">Refresh fifth-reviewer cases and 24-hour risk alerts</button>
+      <label for="review693Certificate">Exact gift certificate
+        <select id="review693Certificate"><option value="">Enter checkout session above and refresh</option></select>
+      </label>
+      <p id="review693Guide" class="status" role="status" aria-live="polite">No fifth-reviewer HOLD case selected.</p>
+      <label for="review693Kind">Internal risk-watch action
+        <select id="review693Kind">
+          <option value="owner_fifth_recurrence_watch_opened">Owner — assign independent sixth witness</option>
+          <option value="independent_closure_risk_checked">Sixth witness — record unresolved closure risk</option>
+          <option value="owner_continued_hold_ack">Owner — acknowledge continuing manual HOLD</option>
+        </select>
+      </label>
+      <label for="review693Reviewer">Independent sixth witness
+        <select id="review693Reviewer"><option value="">Choose eligible witness</option></select>
+      </label>
+      <label for="review693Decision">Structured unresolved risk outcome
+        <select id="review693Decision"></select>
+      </label>
+      <label for="review693Source">Evidence source
+        <select id="review693Source"></select>
+      </label>
+      <label for="review693Reference">Nonpersonal evidence ID
+        <input id="review693Reference" maxlength="64" autocomplete="off" spellcheck="false" placeholder="FIFTH-693-RECURRENCE" />
+      </label>
+      <label for="review693Observed">Evidence observation time
+        <input id="review693Observed" type="datetime-local" />
+      </label>
+      <label><span><input id="review693FifthHold" type="checkbox" /> Exact fifth review and subsequent original-owner no-resend HOLD were checked.</span></label>
+      <label><span><input id="review693SixthIndependent" type="checkbox" /> Sixth witness is distinct from the owner, operator and all prior reviewers.</span></label>
+      <label><span><input id="review693NoResend" type="checkbox" /> Internal evidence only; no recipient message, gift resend, refund, payment or gateway contact.</span></label>
+      <button id="review693Record" type="button" class="btn" disabled>Record immutable fifth recurrence WATCH (NO SEND)</button>
+      <div id="review693Result" class="status" role="status" aria-live="polite">No Build 693 watch recorded.</div>
+    </div></section>
+    <section class="section" id="review693QL246"><div class="panel review676-stack">
+      <div class="badge">Build 693 · QL-246 original source signature and out-of-band SPKI pin</div>
+      <h2>Public source signature verification readiness — DISCONNECTED</h2>
+      <p>The server must first receive the independently authenticated SPKI SHA-256 pin, exact immutable GitHub revision/CI run and fresh nonproduction challenge through approved configuration. Paste <strong>only a public signed envelope</strong>, never a private key, token, raw nonce, customer record or secret. Even a valid signature is not proof that the seven denial tests occurred, or authorization for a connection.</p>
+      <button id="review693QL246Refresh" type="button" class="btn ghost">Check independently pinned verifier readiness</button>
+      <p id="review693QL246Guide" class="status" role="status" aria-live="polite">Trust pin and original-source witness pending.</p>
+      <label for="review693QL246Envelope">Public JSON envelope (24-field payload, publicKeyPem and detached signature only)
+        <textarea id="review693QL246Envelope" rows="5" spellcheck="false" autocomplete="off" placeholder="Only nonsecret publicly publishable QL-246 JSON"></textarea>
+      </label>
+      <button id="review693QL246Verify" type="button" class="btn" disabled>Check pinned public signature (NO GATEWAY)</button>
+      <div id="review693QL246Result" class="status" role="status" aria-live="polite">No original-source signature has been verified.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -567,5 +616,7 @@
   <script src="/assets/admin-integration-v1-ql245-handoff-v691.js?v=20261028build691" defer></script>
   <script src="/assets/admin-gift-discrepancy-watch-v692.js?v=20261028build692" defer></script>
   <script src="/assets/admin-integration-v1-original-intake-v692.js?v=20261028build692" defer></script>
+  <script src="/assets/admin-gift-fifth-recurrence-v693.js?v=20261028build693" defer></script>
+  <script src="/assets/admin-integration-v1-ql246-pinned-v693.js?v=20261028build693" defer></script>
 </body>
 </html>
