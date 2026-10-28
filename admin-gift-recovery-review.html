@@ -619,6 +619,19 @@
       <button id="review694QL248Verify" type="button" class="btn" disabled>Run offline two-SHA preflight (NO GATEWAY)</button>
       <div id="review694QL248Result" class="status" role="status" aria-live="polite">No proof-commit bytes verified; no connection or pilot authorized.</div>
     </div></section>
+    <section class="section" id="review695OwnerQueue"><div class="panel review676-stack">
+      <div class="badge">Build 695 · owner-only recent gift HOLD triage · read-only</div>
+      <h2>Prioritize unresolved fifth-review and sixth-witness HOLD follow-ups</h2>
+      <p>Signed-in owners can inspect the latest <strong>up to 100 unresolved fifth-review events</strong>, sorted by missing owner HOLD evidence, overdue owner acknowledgment, expired witness window and follow-up aging. The queue may be incomplete at the limit; use the full immutable audit for older cases. No seventh reviewer, customer contact, resend, refund, payment or provider call is triggered.</p>
+      <button id="review695QueueRefresh" type="button" class="btn ghost">Load recent owner HOLD triage (read-only)</button>
+      <div id="review695QueueResult" class="status" role="status" aria-live="polite">No case list loaded. Owner session required.</div>
+      <div id="review695QueueList" class="review676-stack"></div>
+    </div></section>
+    <section class="section" id="review695QL249"><div class="panel review676-stack">
+      <div class="badge">Build 695 · QL-249 local Git proof-origin readiness · HELD</div>
+      <h2>Inspect a future public proof-bearing Git commit without claiming GitHub attestation</h2>
+      <p>An authorized operator can run <code>scripts/ql249_rosie_local_git_proof_review.mjs</code> on their trusted local repository with independently confirmed nonsecret source/proof SHAs, proof digest, public SPKI, CI URL and challenge pins. It checks local commit ancestry, a proof-only diff, exact raw JSON bytes and the existing QL-248 public signature. It does <strong>not</strong> fetch or attest GitHub origin, witness seven denial receipts, agree on behalf of AI Data Platform, or approve a pilot. No QL-246 original proof has been published; connection remains <strong>DISCONNECTED / HOLD</strong>.</p>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -646,5 +659,6 @@
   <script src="/assets/admin-integration-v1-ql246-pinned-v693.js?v=20261028build693" defer></script>
   <script src="/assets/admin-gift-sixth-aging-v694.js?v=20261028build694" defer></script>
   <script src="/assets/admin-integration-v1-ql248-two-sha-v694.js?v=20261028build694" defer></script>
+  <script src="/assets/admin-gift-owner-hold-queue-v695.js?v=20261028build695" defer></script>
 </body>
 </html>
