@@ -122,3 +122,11 @@ node --check functions/api/admin/integration_v1_ql254_original_proof_watch.js
 node --check assets/admin-integration-v1-ql254-public-v700.js
 node scripts/build700_gift_hold_provenance_test.mjs
 node scripts/build700_ql254_original_proof_watch_test.mjs
+node --check functions/api/admin/integration_v1_ql256_config_inventory.js
+node --check assets/admin-integration-v1-ql256-config-v701.js
+node --check scripts/ql256_rosie_signer_custody.mjs
+node --check assets/admin-gift-hold-witness-aging-v701.js
+node --check assets/admin-gift-hold-witness-aging-ui-v701.js
+node scripts/build701_ql256_signer_custody_test.mjs
+node scripts/build701_ql256_config_inventory_test.mjs
+node scripts/build701_gift_witness_aging_test.mjs

@@ -716,6 +716,23 @@
       <button id="review700QL254Recheck" type="button" class="btn">Recheck original public GitHub proof (GET-only)</button>
       <div id="review700QL254Result" class="status" role="status" aria-live="polite">Not checked this session. Genuine proof/witness and separate TEST-only owner decision NOT_AVAILABLE. All integrations DISCONNECTED / HELD.</div>
     </div></section>
+    <section class="section" id="review701GiftWitnessAging"><div class="panel review676-stack">
+      <div class="badge">Build 701 · Gift HOLD independent witness exception aging · local only</div>
+      <h2>Age an unresolved witness request without releasing any gift</h2>
+      <p>Select a prior <strong>Build 700 non-secret provenance review request</strong> from this computer. We calculate elapsed time and signal a private witness follow-up or fresh capture when a sample gets old. Original reviewer identity, delivery, closure and historical recurrence are <strong>not proved</strong> by local files. Files never leave this browser or enter persistent storage.</p>
+      <label for="review701GiftFile">Local Build 700 non-secret provenance review JSON</label>
+      <input id="review701GiftFile" type="file" accept=".json,application/json">
+      <button id="review701GiftReview" type="button" class="btn ghost">Age outstanding witness exception</button>
+      <div id="review701GiftResult" class="status" role="status" aria-live="polite">No external witness verified. Manual HOLD and no-resend remain in force.</div>
+    </div></section>
+    <section class="section" id="review701QL256"><div class="panel review676-stack">
+      <div class="badge">Build 701 · QL-255/256 real signer and runtime binding inventory · HELD</div>
+      <h2>Check which environment bindings exist (without showing their values)</h2>
+      <p>This signed-owner-only check reports only expected binding <strong>names</strong> and whether each has a valid-looking value on the currently running Pages environment. Secret values, public signing pins, key IDs and private URLs are never returned. A configured value is not an independently authenticated signing-key custodian, original proof or owner TEST approval.</p>
+      <p>To provision a <strong>real</strong> app-specific Ed25519 signing key, use <code>scripts/ql256_rosie_signer_custody.mjs</code> only on a trusted, persistent, privately controlled computer. Do not place private signing material in GitHub, a Pages public asset, an uploaded browser file or a chat. Separate human custody and witness verification are required before a genuine proof-only commit B.</p>
+      <button id="review701QL256Inspect" type="button" class="btn">Inspect server binding names/presence</button>
+      <div id="review701QL256Result" class="status" role="status" aria-live="polite" style="white-space:pre-wrap">Not inspected. SIGNER_STATUS_UNKNOWN. Owner TEST approval NOT_GIVEN; source proof and integration HELD.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -753,5 +770,7 @@
   <script src="/assets/admin-integration-v1-ql253-public-v699.js?v=20261029build699" defer></script>
   <script type="module" src="/assets/admin-gift-hold-provenance-ui-v700.js?v=20261029build700"></script>
   <script src="/assets/admin-integration-v1-ql254-public-v700.js?v=20261029build700" defer></script>
+  <script type="module" src="/assets/admin-gift-hold-witness-aging-ui-v701.js?v=20261029build701"></script>
+  <script src="/assets/admin-integration-v1-ql256-config-v701.js?v=20261029build701" defer></script>
 </body>
 </html>
