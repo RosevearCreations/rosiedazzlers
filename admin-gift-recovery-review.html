@@ -649,6 +649,23 @@
       <button id="review696QL249Verify" type="button" class="btn" disabled>Inspect exact public GitHub proof (NO GATEWAY)</button>
       <div id="review696QL249Result" class="status" role="status" aria-live="polite">No origin response verified; connection DISCONNECTED.</div>
     </div></section>
+    <section class="section" id="review697Outcome"><div class="panel review676-stack">
+      <div class="badge">Build 697 · Gift HOLD escalation outcome audit · read-only</div>
+      <h2>Reconcile recorded HOLD outcomes without closing gift cases</h2>
+      <p>Classify the existing latest-100 signed-owner escalation runbooks into missing, overdue, expired, acknowledged-but-unresolved and monitoring outcomes. A recorded owner acknowledgment is <strong>not</strong> delivery proof or a release decision. There are no gift, payment, customer, provider or gateway writes, and a truncated sample is not a complete historical audit.</p>
+      <button id="review697OutcomeRefresh" type="button" class="btn ghost">Audit recent HOLD outcomes (read-only)</button>
+      <div id="review697OutcomeResult" class="status" role="status" aria-live="polite">No recent HOLD outcome audit loaded.</div>
+      <div id="review697OutcomeCases" class="review676-stack"></div>
+    </div></section>
+    <section class="section" id="review697QL250"><div class="panel review676-stack">
+      <div class="badge">Build 697 · QL-250 / QL-252 source, CI and custody reconciliation · HELD</div>
+      <h2>Recheck the public proof blocker and private custody gaps</h2>
+      <p>QL-252 reported HTTP 404 for all six apps' immutable QL-246 proof paths. This owner-only, explicit public GitHub check looks only at our <code>main</code> and the fixed Rosie proof path, then compares public CI/head metadata <em>if</em> a candidate exists. Public GitHub success is <strong>not</strong> an independently authenticated signer, a QL-250 nonce, a distinct QL-251 witness, original gateway denial receipts or owner TEST-only approval. No gateway, booking, gift, payment or customer request occurs.</p>
+      <button id="review697QL250Refresh" type="button" class="btn ghost">Inspect private evidence readiness (no network)</button>
+      <div id="review697QL250Status" class="status" role="status" aria-live="polite">Private custody, witness and owner TEST decision not verified.</div>
+      <button id="review697QL250Recheck" type="button" class="btn">Recheck public proof on GitHub only</button>
+      <div id="review697QL250Result" class="status" role="status" aria-live="polite">Public proof not rechecked in this session; connection remains DISCONNECTED / HOLD.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -679,5 +696,7 @@
   <script src="/assets/admin-gift-owner-hold-queue-v695.js?v=20261028build695" defer></script>
   <script src="/assets/admin-gift-hold-escalation-v696.js?v=20261029build696" defer></script>
   <script src="/assets/admin-integration-v1-ql249-origin-v696.js?v=20261029build696" defer></script>
+  <script src="/assets/admin-gift-hold-outcome-audit-v697.js?v=20261029build697" defer></script>
+  <script src="/assets/admin-integration-v1-ql250-custody-v697.js?v=20261029build697" defer></script>
 </body>
 </html>

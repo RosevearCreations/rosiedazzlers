@@ -99,3 +99,9 @@ node --check functions/api/admin/integration_v1_ql249_github_origin_intake.js
 node --check assets/admin-integration-v1-ql249-origin-v696.js
 node scripts/build696_gift_hold_escalation_test.mjs
 node scripts/build696_ql249_github_origin_test.mjs
+node --check functions/api/admin/gift_hold_escalation_outcome_audit.js
+node --check assets/admin-gift-hold-outcome-audit-v697.js
+node --check functions/api/admin/integration_v1_ql250_custody_reconciliation.js
+node --check assets/admin-integration-v1-ql250-custody-v697.js
+node scripts/build697_gift_hold_outcome_audit_test.mjs
+node scripts/build697_ql250_custody_reconciliation_test.mjs
