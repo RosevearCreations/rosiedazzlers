@@ -10,6 +10,23 @@
 
 This document is the **required exception report**, not `ql246-source-proof.json`. It does not assert a real operator challenge, Ed25519 signer or gateway test. No signed source proof may be published until every requirement below is independently verified.
 
+**Build 697 / QL-252 blocker recheck:** public GitHub at Build 696's exact `main` SHA
+`901b01e9c01cbbeac190ae9793b0b5aa29a7c4dd` returned **HTTP 404** for
+`docs/integration/ql246-source-proof.json`. The QL-252 six-app action sheet confirms
+that ordinary GREEN source CI and deployment do not publish this immutable file.
+The Build 697 owner-only API can explicitly recheck public GitHub `main` and this
+fixed path (and public source CI/head metadata only if a candidate appears).
+No signer identity, QL-250 private 5-minute nonce custody response, QL-251 distinct
+witness signature, out-of-band receipt, approved private owner TEST-only window,
+seven genuine gateway denials or original gateway receipt exists in this source.
+Do not turn a candidate receipt ID into verified custody, or `negative_tests: true`
+into a claim that seven original gateway denial cases ran. The existing strict
+QL-246 `negative_tests` contract requires seven `true` flags; it cannot be populated
+with invented outcomes. A real independently held signer and truthful source data
+must be supplied by an authenticated custodian before publishing the exact file.
+Until then, the source/proof return is **404 / NOT_AVAILABLE**, connection is
+**DISCONNECTED / HELD** and owner test approval remains **NOT_GIVEN**.
+
 **Build 693 readiness:** the admin-only public-envelope checker can verify Ed25519 canonical bytes
 against separately configured SPKI SHA-256, immutable commit/CI and challenge expectations.
 No pin, key, challenge, original witness or external test has been provisioned by this build.
