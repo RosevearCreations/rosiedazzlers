@@ -162,6 +162,8 @@
         </div>
         <div class="mini muted" id="plannerProgress">Planner: ready to start</div>
         <button class="btn primary" id="applyToPlannerBtn" type="button">Apply choices & start booking</button>
+        <a class="btn ghost" id="requestQuoteBtn703" href="/contact?source=booking_quote#contactPrepHeading" aria-describedby="quoteHandoffStatus703">Request a reviewed quote first</a>
+        <p class="mini muted" id="quoteHandoffStatus703" role="status" aria-live="polite">Prefer a written quote? We'll carry your selected package and extras into an email draft for you to review and send. No deposit or booking is created.</p>
         <a class="btn ghost" href="/contact">Need help first?</a>
       </aside>
     </section>
@@ -182,6 +184,7 @@
     import { loadPricingCatalogClient, money, escapeHtml, packageImageForSize, packagePrice, addonPrimaryImage, chartUrl } from "/assets/pricing-catalog-client-legacy.js?v=20260904build336";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
     import { buildServiceComparison629, PACKAGE_COMPARE_LIMIT_629 } from "/assets/booking-service-comparison-v629.js?v=1";
+    import { buildQuoteHandoffHref703 } from "/assets/booking-quote-handoff-v703.mjs?v=1";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const params = new URLSearchParams(location.search);
@@ -392,7 +395,7 @@
         next.textContent="Choose size & service";next.href="#services";
       }else{
         status.textContent=quoted
-          ?"Your service choice is ready. Some extras need a condition quote; review the booking planner and confirm details before payment."
+          ?"Some extras need a condition quote. Request a reviewed quote first, or use the planner knowing quoted extras are not priced by the displayed deposit."
           :"Your service choice is ready. Continue in the booking planner to confirm availability, requirements and deposit.";
         next.textContent="Continue to availability";next.href="#booking";
       }
@@ -405,6 +408,15 @@
       qs("#summaryAddons").textContent = addons.length ? addons.map((row)=>row.name).join(", ") : "None";
       qs("#summarySubtotal").textContent = t.subtotal ? `${money(t.subtotal)}${t.quoteOnly?" + quoted extras":""}` : (pkg ? "Choose size for total" : "Package required");
       qs("#summaryDeposit").textContent = pkg ? money(t.deposit) : "—";
+      qs("#requestQuoteBtn703").href = buildQuoteHandoffHref703({
+        size: state.size,
+        service: pkg?.name || "",
+        addons: addons.map((row) => row.name),
+        inspection: t.quoteOnly
+      });
+      qs("#quoteHandoffStatus703").textContent = t.quoteOnly
+        ? "Some extras require an inspection quote. This link carries your choices into a draft email. Review and send it to ask staff for pricing before paying any deposit; no booking is created."
+        : "Want written pricing first? This link carries your service choices into a draft email. You must review and send it yourself; no booking or deposit is created.";
       renderReadiness650();
     }
     function cleanPlannerChrome(frame) {

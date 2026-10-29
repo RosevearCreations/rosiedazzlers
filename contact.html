@@ -150,6 +150,7 @@
       <div class="badges"><span class="badge">Email preparation</span><span class="badge">No account required</span></div>
       <h2 id="contactPrepHeading">Prepare a detailing enquiry</h2>
       <p class="kicker">Choose the details that will help us respond. This opens a draft in your own email app; nothing is sent or stored on this website.</p>
+      <p class="notice" id="quoteHandoffStatus703" role="status" aria-live="polite" hidden></p>
       <form id="contactPrepForm" class="contact-prep-form">
         <div class="contact-prep-fields">
           <label>What can we help with?
@@ -305,6 +306,12 @@
 
 
   <script src="/assets/build654-contact-faq.js" defer></script>
+  <script type="module">
+    import { hydrateContactQuoteHandoff703 } from "/assets/booking-quote-handoff-v703.mjs?v=1";
+    const hydrate = () => hydrateContactQuoteHandoff703(document, location.search);
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", hydrate, { once: true });
+    else hydrate();
+  </script>
   <script type="module" src="/assets/chrome.js?v=20261025build656"></script>
 </body>
 </html>
