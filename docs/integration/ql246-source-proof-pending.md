@@ -43,6 +43,19 @@ denial/audit receipt. The source proof still does **not** exist in this repo; th
 readiness test uses only synthetic short-lived test fixtures. This does not authorize
 GitHub/gateway network tests, key creation or read-only pilot access.
 
+**Build 696 / QL-249 public GitHub metadata intake:** the new signed-owner-only
+`integration_v1_ql249_github_origin_intake` preflight can make at most three public,
+read-only, tightly allowlisted GitHub API GETs **only after** separately authenticated
+source/proof SHAs, exact public JSON digest, public SPKI, matching source CI URL and
+fresh nonproduction challenge are configured. It compares the proof commit's immediate
+source parent, a one-file proof-only diff, Git blob identity and pinned QL-246 Ed25519
+signature. No such real proof or pins are available now, so no GitHub request should
+be triggered by normal production use. A possible future positive result remains
+**PUBLIC_GITHUB_API_AND_PINNED_SIGNATURE_MATCH_ONLY**: it is not independent out-of-band
+operator attestation, AI Data Platform consumer agreement, original gateway receipts,
+seven nonproduction denial observations, durable audit or pilot owner authorization.
+No signing keys, HMAC credentials, customer details or source proof file are added.
+
 | Required item | Current state | Action outside this source build |
 | --- | --- | --- |
 | Immutable Git SHA | Source repository revision available after the release; not a signed proof | Operator pins exact immutable commit and its green GitHub CI run |
