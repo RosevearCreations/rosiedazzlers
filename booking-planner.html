@@ -495,15 +495,15 @@
       <div class="step-head">
         <div>
           <h2>Step 4 — Review vehicle, requirements, and notes</h2>
-          <p class="muted">Confirm setup needs before you continue to payment.</p>
+          <p class="muted">Confirm safe site access and vehicle notes before payment. Rosie brings its own water and power for standard detailing.</p>
         </div>
       </div>
       <div id="reviewVehicleBox" class="summary-box" style="margin-top:12px"></div>
 
       <div class="requirements-grid" style="margin-top:16px">
         <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway and safe access required</strong><br><span data-policy-copy="driveway_access">We need safe working space at the vehicle.</span></span></label>
-        <label><input id="ack_power_water" type="checkbox" /><span><strong>Power / water access acknowledged</strong><br><span data-policy-copy="water_power">Extra fees can apply if either is unavailable.</span></span></label>
-        <label><input id="need_mobile_water_power" type="checkbox" /><span><strong>Quote bringing water/power</strong><br><span data-policy-copy="water_power">Check this if the site may not have hose or power access; staff will confirm extra setup fees.</span></span></label>
+        <label hidden><input id="ack_power_water" type="checkbox" checked disabled /><span><strong>Rosie brings its own water and power</strong><br><span>Included for standard detailing; a safe work area is still required.</span></span></label>
+        <label hidden><input id="need_mobile_water_power" type="checkbox" /><span><strong>Legacy water/power quote option</strong><br><span>Not required for standard detailing.</span></span></label>
         <label><input id="ack_bylaw" type="checkbox" /><span><strong>Environmental / bylaw responsibility acknowledged</strong><br><span data-policy-copy="driveway_access">Customer confirms safe access and any local bylaw requirements.</span></span></label>
         <label><input id="ack_cancellation" type="checkbox" /><span><strong>Deposit and weather rescheduling policy acknowledged</strong><br><span data-policy-copy="cancellation">Unsafe weather or site conditions can require rescheduling.</span></span></label>
       </div>
@@ -2071,7 +2071,7 @@
         ["Time", state.selectedSlotChoice || "Not chosen"],
         ["Service area", qs("#service_area").value || "Not chosen"],
         ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
-        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
+        ["Water/power setup", "Rosie brings standard detailing water and power"],
         ["Vehicle", [qs("#veh_year").value, qs("#veh_make").value, qs("#veh_model").value, qs("#veh_color").value].filter(Boolean).join(" · ") || "Vehicle details incomplete"],
         ["Mileage", qs('#veh_mileage').value ? `${qs('#veh_mileage').value} km` : 'Optional / not entered'],
         ["Vehicle size", selectedSize() || "Not chosen"],
@@ -2089,7 +2089,7 @@
         ["Time", state.selectedSlotChoice || "Not chosen"],
         ["Service area", qs("#service_area").value || "Not chosen"],
         ["County / local rules", area?.county ? `${area.county}${area.municipality ? " · " + area.municipality : ""}` : "Pending zone selection"],
-        ["Water/power setup", qs("#need_mobile_water_power")?.checked ? "Quote staff-supplied water/power setup" : "Customer provides water and power"],
+        ["Water/power setup", "Rosie brings standard detailing water and power"],
         ["Package", pkg ? `${pkg.name} (${selectedSize() || "size pending"})` : "Not chosen"],
         ["Add-ons", selectedAddons().length ? selectedAddons().map((addon) => addon.name).join(", ") : "None"],
         ["Estimated subtotal", totals.subtotal ? money(totals.subtotal) : "Package required"],
