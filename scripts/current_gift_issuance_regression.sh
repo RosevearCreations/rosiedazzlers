@@ -92,3 +92,10 @@ node --check assets/admin-gift-owner-hold-queue-v695.js
 node --check scripts/ql249_rosie_local_git_proof_review.mjs
 node scripts/build695_owner_hold_queue_test.mjs
 node scripts/build695_ql249_local_git_review_test.mjs
+node --check functions/api/admin/gift_owner_hold_escalation_runbook.js
+node --check assets/admin-gift-hold-escalation-v696.js
+node --check functions/api/_lib/rosevear-integration-ql249-github.js
+node --check functions/api/admin/integration_v1_ql249_github_origin_intake.js
+node --check assets/admin-integration-v1-ql249-origin-v696.js
+node scripts/build696_gift_hold_escalation_test.mjs
+node scripts/build696_ql249_github_origin_test.mjs
