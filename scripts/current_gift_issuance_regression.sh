@@ -110,3 +110,9 @@ node --check assets/admin-gift-hold-recurrence-followup-v698.js
 node --check scripts/ql252_rosie_authentic_proof_preflight.mjs
 node scripts/build698_gift_hold_recurrence_followup_test.mjs
 node scripts/build698_ql252_authentic_proof_preflight_test.mjs
+node --check assets/admin-gift-hold-snapshot-compare-v699.js
+node --check assets/admin-gift-hold-snapshot-ui-v699.js
+node --check functions/api/admin/integration_v1_ql253_public_ci_continuity.js
+node --check assets/admin-integration-v1-ql253-public-v699.js
+node scripts/build699_gift_hold_snapshot_comparison_test.mjs
+node scripts/build699_ql253_public_ci_continuity_test.mjs
