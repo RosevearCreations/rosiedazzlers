@@ -698,6 +698,24 @@
       <button id="review699QL253Recheck" type="button" class="btn">Recheck QL-253 GitHub source/proof (public GET only)</button>
       <div id="review699QL253Result" class="status" role="status" aria-live="polite">Not checked this session. Registry, independent witness and TEST-only owner decision NOT_AVAILABLE; connection DISCONNECTED / HOLD.</div>
     </div></section>
+    <section class="section" id="review700GiftProvenance"><div class="panel review676-stack">
+      <div class="badge">Build 700 · Gift HOLD snapshot provenance review · local only</div>
+      <h2>Inspect source freshness, integrity and missing independent custody</h2>
+      <p>Review a previously downloaded Build 699 pseudonymous snapshot <strong>in this browser only</strong>. The inspection checks its internal digest, bounded latest-100 sample, capture time and freshness, then optionally exports a non-secret request packet for independent human review. <strong>Matching hashes do not establish authentic capture or verified history.</strong> A stale, missing or changed gift case is never a delivery, closure or resend approval. The snapshot is not uploaded or saved to browser storage.</p>
+      <label for="review700GiftFile">Local Build 699 snapshot JSON</label>
+      <input id="review700GiftFile" type="file" accept=".json,application/json">
+      <button id="review700GiftReview" type="button" class="btn ghost">Review snapshot provenance locally</button>
+      <button id="review700GiftDownload" type="button" class="btn ghost" disabled>Download non-secret review request</button>
+      <div id="review700GiftResult" class="status" role="status" aria-live="polite">Original source provenance and independent witness NOT_VERIFIED. Gift HOLD/no-resend continues.</div>
+    </div></section>
+    <section class="section" id="review700QL254"><div class="panel review676-stack">
+      <div class="badge">Build 700 · QL-254 original signed proof retrieval watch · HELD</div>
+      <h2>Check immutable raw public GitHub proof and proof-commit ancestry</h2>
+      <p>Our explicit owner-only watch retrieves only public GitHub source metadata and the exact immutable raw QL-246 path. An absent file remains HTTP 404. If a file appears, its raw digest, proof-only A→B ancestry and exact source CI can be checked as an <strong>UNTRUSTED candidate</strong>; no public JSON or shared GitHub identity substitutes for independently authenticated Ed25519 signer custody, a separate witness registry, owner TEST-only authorization or original gateway receipts.</p>
+      <p>The Rosevear AI Hub 24/7 Windows mini-server is a private architecture candidate only. This build does not install any daemon, open inbound ports, read vault/cameras, run gateway GETs or request household network access.</p>
+      <button id="review700QL254Recheck" type="button" class="btn">Recheck original public GitHub proof (GET-only)</button>
+      <div id="review700QL254Result" class="status" role="status" aria-live="polite">Not checked this session. Genuine proof/witness and separate TEST-only owner decision NOT_AVAILABLE. All integrations DISCONNECTED / HELD.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -733,5 +751,7 @@
   <script src="/assets/admin-gift-hold-recurrence-followup-v698.js?v=20261029build698" defer></script>
   <script type="module" src="/assets/admin-gift-hold-snapshot-ui-v699.js?v=20261029build699"></script>
   <script src="/assets/admin-integration-v1-ql253-public-v699.js?v=20261029build699" defer></script>
+  <script type="module" src="/assets/admin-gift-hold-provenance-ui-v700.js?v=20261029build700"></script>
+  <script src="/assets/admin-integration-v1-ql254-public-v700.js?v=20261029build700" defer></script>
 </body>
 </html>
