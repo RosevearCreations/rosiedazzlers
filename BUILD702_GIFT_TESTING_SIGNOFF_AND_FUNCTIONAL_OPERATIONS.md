@@ -45,3 +45,9 @@
 `connection_state: DISCONNECTED`
 
 **Next functional priority:** Booking reliability, service selection, quote-first customer handoff and staff usability. Do not restart gift test cycles without a new owner request.
+
+## Development deployment recovery note
+
+The first Build 702 `dev` push passed its source gate but Cloudflare's deployment failed at **initialize**, before cloning or building application code. The sanitized provider diagnostic was `Failed: unable to submit build job` (29 October 2026; initial deployment ID `dceb36e9-53ed-46f6-8397-27c74d97c29b`). This evidence is an infrastructure submission failure, not a successful deploy and not a source-test failure.
+
+This documentation amendment is being promoted through the normal protected `dev` PR workflow to request a fresh Cloudflare Pages deployment for the same functional Build 702 code. The retry does not change customer bookings, Gift delivery, keys, integration endpoints, or any secret configuration. The new exact `dev` SHA must pass source checks **and** Cloudflare Development Acceptance before production promotion.
