@@ -20,12 +20,23 @@ No signer identity, QL-250 private 5-minute nonce custody response, QL-251 disti
 witness signature, out-of-band receipt, approved private owner TEST-only window,
 seven genuine gateway denials or original gateway receipt exists in this source.
 Do not turn a candidate receipt ID into verified custody, or `negative_tests: true`
-into a claim that seven original gateway denial cases ran. The existing strict
-QL-246 `negative_tests` contract requires seven `true` flags; it cannot be populated
-with invented outcomes. A real independently held signer and truthful source data
+into a claim that seven original gateway denial cases ran. The strict QL-246
+`negative_tests` contract lists seven required scenario flags; those flags are
+configuration metadata only, **not** observed test outcomes or gateway receipts.
+No original denial outcome may be inferred from them. A real independently held signer and truthful source data
 must be supplied by an authenticated custodian before publishing the exact file.
 Until then, the source/proof return is **404 / NOT_AVAILABLE**, connection is
 **DISCONNECTED / HELD** and owner test approval remains **NOT_GIVEN**.
+
+**Build 698 / authentic-proof preflight:** the read-only CLI
+`scripts/ql252_rosie_authentic_proof_preflight.mjs` accepts a *custodian-supplied*
+public JSON file plus independently authenticated source SHA, exact source CI,
+raw digest, public SPKI pin and fresh challenge metadata. It validates the
+canonical Ed25519 signature without generating any key, writing a proof commit
+or making network/gateway calls. Even success only proves a local digest/signature
+match, not real custodian origin, distinct witness, public immutable B ancestry,
+seven actual gateway denials, owner approval or a connection. No genuine proof
+file is available to run this check against, so the publication blocker remains.
 
 **Build 693 readiness:** the admin-only public-envelope checker can verify Ed25519 canonical bytes
 against separately configured SPKI SHA-256, immutable commit/CI and challenge expectations.
