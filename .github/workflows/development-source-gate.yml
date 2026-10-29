@@ -78,12 +78,6 @@ jobs:
           node scripts/quote_first_guidance_613_test.mjs
           node scripts/quote_first_handoff_615_test.mjs
 
-      - name: Validate Build 703 customer quote handoff and staff workflow
-        run: |
-          node --check assets/booking-quote-handoff-v703.mjs
-          node --check assets/admin-quotes-v298.js
-          node scripts/build703_quote_handoff_test.mjs
-
       - name: Validate atomic gift issuance and replay recovery hold
         run: |
           bash scripts/current_gift_issuance_regression.sh

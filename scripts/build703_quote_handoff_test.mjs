@@ -65,6 +65,7 @@ assert.match(read("contact.html"), /hydrateContactQuoteHandoff703/);
 assert.match(read("admin-quotes.html"), /id="newWebsiteQuoteBtn703"/);
 assert.match(read("assets/admin-quotes-v298.js"), /status:'requested',probability:0,source_channel:'website_booking_quote_email'/);
 assert.match(read("admin-gift-recovery-review.html"), /Gift testing paused/);
-assert.match(read(".github/workflows/development-source-gate.yml"), /build703_quote_handoff_test\.mjs/);
+assert.match(read("scripts/current_booking_wizard_regression.sh"), /build703_quote_handoff_test\.mjs/);
+assert.match(read(".github/workflows/development-source-gate.yml"), /current_booking_wizard_regression\.sh/);
 
 console.log("Build 703 quote handoff PASS: safe selection-only URL, contact prefill, staff unsaved workflow, canonical routes, Gift pause");

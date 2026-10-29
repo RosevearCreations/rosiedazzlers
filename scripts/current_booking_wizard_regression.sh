@@ -50,3 +50,6 @@ node scripts/build669_gift_redemption_balance_mobile_copy_test.mjs
 node scripts/build670_gift_receipt_certificate_confirmation_test.mjs
 node scripts/build671_gift_delivery_failure_resend_test.mjs
 node scripts/build672_gift_delivery_retry_evidence_test.mjs
+
+# Current booking-to-quote handoff and authenticated staff editor boundary.
+node scripts/build703_quote_handoff_test.mjs
