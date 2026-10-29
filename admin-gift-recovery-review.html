@@ -632,6 +632,23 @@
       <h2>Inspect a future public proof-bearing Git commit without claiming GitHub attestation</h2>
       <p>An authorized operator can run <code>scripts/ql249_rosie_local_git_proof_review.mjs</code> on their trusted local repository with independently confirmed nonsecret source/proof SHAs, proof digest, public SPKI, CI URL and challenge pins. It checks local commit ancestry, a proof-only diff, exact raw JSON bytes and the existing QL-248 public signature. It does <strong>not</strong> fetch or attest GitHub origin, witness seven denial receipts, agree on behalf of AI Data Platform, or approve a pilot. No QL-246 original proof has been published; connection remains <strong>DISCONNECTED / HOLD</strong>.</p>
     </div></section>
+    <section class="section" id="review696Escalation"><div class="panel review676-stack">
+      <div class="badge">Build 696 · owner HOLD escalation runbook · no automatic actions</div>
+      <h2>Review overdue gift HOLD escalation guidance</h2>
+      <p>This owner-only runbook reads the same latest 100 unresolved fifth-review cases as Build 695, ranks urgency, and explains what to verify manually in the existing exact-checkout workflow. It does not write events, start another reviewer cycle, extend expired authority, contact a recipient or resend anything. A truncated recent queue is <strong>not</strong> a complete case audit.</p>
+      <button id="review696EscalationRefresh" type="button" class="btn ghost">Load internal escalation checklist (read-only)</button>
+      <div id="review696EscalationResult" class="status" role="status" aria-live="polite">No runbook loaded. Signed-in owner required.</div>
+      <div id="review696EscalationCases" class="review676-stack"></div>
+    </div></section>
+    <section class="section" id="review696QL249"><div class="panel review676-stack">
+      <div class="badge">Build 696 · QL-249 public GitHub origin metadata intake · HELD</div>
+      <h2>Read-only comparison of future GitHub source and proof commits</h2>
+      <p>Using the two SHAs entered in Build 694 above, a signed-in owner may request exact <strong>public GitHub API</strong> commit, proof-only diff and raw file-byte checks only after separate public proof SHA-256, SPKI, source CI and challenge pins have been authenticated and configured. No private key, personal record, token, gateway or customer endpoint is contacted. A cryptographic match proves <strong>public GitHub response consistency only</strong>; independent operator attestation, AI Data Platform agreement, seven real gateway denials, audit evidence and pilot authorization remain PENDING. No signed original source proof currently exists.</p>
+      <button id="review696QL249Refresh" type="button" class="btn ghost">Check independent public pin readiness</button>
+      <div id="review696QL249Guide" class="status" role="status" aria-live="polite">Public GitHub origin evidence and independent pins PENDING.</div>
+      <button id="review696QL249Verify" type="button" class="btn" disabled>Inspect exact public GitHub proof (NO GATEWAY)</button>
+      <div id="review696QL249Result" class="status" role="status" aria-live="polite">No origin response verified; connection DISCONNECTED.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -660,5 +677,7 @@
   <script src="/assets/admin-gift-sixth-aging-v694.js?v=20261028build694" defer></script>
   <script src="/assets/admin-integration-v1-ql248-two-sha-v694.js?v=20261028build694" defer></script>
   <script src="/assets/admin-gift-owner-hold-queue-v695.js?v=20261028build695" defer></script>
+  <script src="/assets/admin-gift-hold-escalation-v696.js?v=20261029build696" defer></script>
+  <script src="/assets/admin-integration-v1-ql249-origin-v696.js?v=20261029build696" defer></script>
 </body>
 </html>
