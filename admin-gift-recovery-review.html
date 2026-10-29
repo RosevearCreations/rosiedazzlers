@@ -680,6 +680,24 @@
       <p>The genuine QL-246 JSON is still not published. An independently authenticated custodian must supply the exact public signed payload, raw SHA-256 and separately trusted public key/challenge pins. The new <code>scripts/ql252_rosie_authentic_proof_preflight.mjs</code> performs a <strong>local read-only</strong> digest and pinned Ed25519 signature check; it never creates a signing key, proof commit, denial receipt or owner approval. After independent custody/witness verification, create distinct source A and proof B commits and recheck public GitHub immutable B. Keep the original nonproduction GET trial and all customer actions disabled until a separately authenticated, time-bounded owner decision.</p>
       <p>Current public proof: <strong>HTTP 404 / NOT_AVAILABLE</strong>. Custody: <strong>NOT_AVAILABLE</strong>. Owner TEST decision: <strong>NOT_GIVEN</strong>. Integration: <strong>DISCONNECTED / HOLD</strong>. The Build 697 public GitHub recheck above remains available without gateway requests.</p>
     </div></section>
+    <section class="section" id="review699Snapshot"><div class="panel review676-stack">
+      <div class="badge">Build 699 · Gift HOLD comparison readiness · owner-only / local files</div>
+      <h2>Compare two bounded HOLD snapshots without claiming closure</h2>
+      <p>Capture our latest owner-only HOLD state as a pseudonymous JSON file, then compare it locally with an older file we previously saved. The comparison checks its own file digest and highlights changed, newly visible or missing-in-sample records. <strong>The downloaded files are not independently signed history. A missing case is not a resolved case, and a changed case is not independently confirmed recurrence.</strong> Files stay in this browser; no upload, persistent browser storage, gift resend or customer contact.</p>
+      <button id="review699Capture" type="button" class="btn ghost">Capture current HOLD snapshot (read-only)</button>
+      <button id="review699Download" type="button" class="btn ghost" disabled>Download pseudonymous snapshot locally</button>
+      <label for="review699PreviousFile">Previously saved owner snapshot JSON (local only)</label>
+      <input id="review699PreviousFile" type="file" accept=".json,application/json">
+      <button id="review699Compare" type="button" class="btn ghost">Compare with previous local snapshot</button>
+      <div id="review699SnapshotResult" class="status" role="status" aria-live="polite">No owner snapshot captured. Manual HOLD/no-resend remains active.</div>
+    </div></section>
+    <section class="section" id="review699QL253"><div class="panel review676-stack">
+      <div class="badge">Build 699 · QL-253 immutable proof/CI continuity · HELD</div>
+      <h2>Recheck exact public main SHA, matching source CI and proof path</h2>
+      <p>Only fixed GitHub public metadata is requested: the current <code>main</code>, an exact-head GREEN source run and the original signed <code>docs/integration/ql246-source-proof.json</code>. No proof commit B can be claimed until the independently authenticated custodian actually publishes it and separate registry/witness provenance is verified. A successful application build never authorizes an integration GET. The Windows AI Hub server remains private and untouched.</p>
+      <button id="review699QL253Recheck" type="button" class="btn">Recheck QL-253 GitHub source/proof (public GET only)</button>
+      <div id="review699QL253Result" class="status" role="status" aria-live="polite">Not checked this session. Registry, independent witness and TEST-only owner decision NOT_AVAILABLE; connection DISCONNECTED / HOLD.</div>
+    </div></section>
   </main>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script src="/assets/admin-auth.js"></script>
@@ -713,5 +731,7 @@
   <script src="/assets/admin-gift-hold-outcome-audit-v697.js?v=20261029build697" defer></script>
   <script src="/assets/admin-integration-v1-ql250-custody-v697.js?v=20261029build697" defer></script>
   <script src="/assets/admin-gift-hold-recurrence-followup-v698.js?v=20261029build698" defer></script>
+  <script type="module" src="/assets/admin-gift-hold-snapshot-ui-v699.js?v=20261029build699"></script>
+  <script src="/assets/admin-integration-v1-ql253-public-v699.js?v=20261029build699" defer></script>
 </body>
 </html>
