@@ -53,3 +53,4 @@ node scripts/build672_gift_delivery_retry_evidence_test.mjs
 
 # Current booking-to-quote handoff and authenticated staff editor boundary.
 node scripts/build703_quote_handoff_test.mjs
+node scripts/build704_quote_followup_test.mjs
