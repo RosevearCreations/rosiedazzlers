@@ -105,3 +105,8 @@ node --check functions/api/admin/integration_v1_ql250_custody_reconciliation.js
 node --check assets/admin-integration-v1-ql250-custody-v697.js
 node scripts/build697_gift_hold_outcome_audit_test.mjs
 node scripts/build697_ql250_custody_reconciliation_test.mjs
+node --check functions/api/admin/gift_hold_recurrence_followup.js
+node --check assets/admin-gift-hold-recurrence-followup-v698.js
+node --check scripts/ql252_rosie_authentic_proof_preflight.mjs
+node scripts/build698_gift_hold_recurrence_followup_test.mjs
+node scripts/build698_ql252_authentic_proof_preflight_test.mjs
