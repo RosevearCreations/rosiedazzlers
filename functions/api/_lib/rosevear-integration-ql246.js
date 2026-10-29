@@ -38,8 +38,10 @@ export function checkQl246ProofShape(envelope,now=Date.now()){
   const p=envelope.payload;
   try{canonicalQl246Payload(p);}catch{return {ok:false,reason:'Payload schema mismatch'};}
   const tests=p.negative_tests;
+  // These flags describe REQUIRED negative-test scenarios, never observed gateway outcomes.
+  // Original execution, audit and seven denial receipts must be checked separately.
   if(!tests||Object.keys(tests).length!==7||QL246_DENIAL_KEYS.some(k=>tests[k]!==true))
-    return {ok:false,reason:'Seven original denial receipts remain unverified'};
+    return {ok:false,reason:'Required seven negative-test scenario metadata incomplete; no execution receipts implied'};
   if(p.schema_version!=='rosevear.integration.v1'||p.source_system!=='rosiedazzlers'||
     p.repository!=='RosevearCreations/rosiedazzlers'||p.business_id!=='rosiedazzlers'||
     p.tenant_id!==null||p.environment!=='nonproduction'||
