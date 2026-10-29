@@ -116,3 +116,9 @@ node --check functions/api/admin/integration_v1_ql253_public_ci_continuity.js
 node --check assets/admin-integration-v1-ql253-public-v699.js
 node scripts/build699_gift_hold_snapshot_comparison_test.mjs
 node scripts/build699_ql253_public_ci_continuity_test.mjs
+node --check assets/admin-gift-hold-provenance-v700.js
+node --check assets/admin-gift-hold-provenance-ui-v700.js
+node --check functions/api/admin/integration_v1_ql254_original_proof_watch.js
+node --check assets/admin-integration-v1-ql254-public-v700.js
+node scripts/build700_gift_hold_provenance_test.mjs
+node scripts/build700_ql254_original_proof_watch_test.mjs
