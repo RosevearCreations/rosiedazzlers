@@ -7,6 +7,7 @@ export function quoteAttention704(row, now = new Date()) {
   if (row?.booking_id) return 'linked';
   if (CLOSED_STATES.has(status)) return 'closed';
   if (status === 'accepted') return 'ready_to_book';
+  if (row?.follow_up_stage === 'staff_follow_up_completed') return 'completed';
   if (OPEN_STATES.has(status) && row?.next_follow_up_at) {
     const due = new Date(row.next_follow_up_at);
     if (Number.isFinite(due.getTime()) && due.getTime() <= now.getTime()) return 'due';
@@ -16,7 +17,7 @@ export function quoteAttention704(row, now = new Date()) {
 }
 
 export function summarizeQuoteInbox704(rows, now = new Date()) {
-  const counts = { all: 0, due: 0, review: 0, ready_to_book: 0, linked: 0, closed: 0, scheduled: 0, unscheduled: 0 };
+  const counts = { all: 0, due: 0, review: 0, ready_to_book: 0, linked: 0, closed: 0, scheduled: 0, unscheduled: 0, completed: 0 };
   for (const row of rows || []) {
     counts.all++;
     counts[quoteAttention704(row, now)]++;
@@ -24,12 +25,14 @@ export function summarizeQuoteInbox704(rows, now = new Date()) {
   return counts;
 }
 
-const ATTENTION_ORDER = { due: 0, ready_to_book: 1, review: 2, unscheduled: 3, scheduled: 4, linked: 5, closed: 6 };
+const ATTENTION_ORDER = { due: 0, ready_to_book: 1, review: 2, unscheduled: 3, scheduled: 4, completed: 5, linked: 6, closed: 7 };
 export function filterQuoteInbox704(rows, { filter = 'all', search = '', now = new Date() } = {}) {
   const term = String(search).trim().toLocaleLowerCase('en-CA').slice(0, 120);
   return (rows || []).filter(row => {
     const bucket = quoteAttention704(row, now);
-    if (filter !== 'all' && bucket !== filter) return false;
+    if (filter === 'completed_follow_up') {
+      if (row?.follow_up_stage !== 'staff_follow_up_completed') return false;
+    } else if (filter !== 'all' && bucket !== filter) return false;
     if (!term) return true;
     return ['quote_number', 'customer_name', 'town', 'service_label', 'follow_up_stage', 'status']
       .some(field => String(row?.[field] || '').toLocaleLowerCase('en-CA').includes(term));
