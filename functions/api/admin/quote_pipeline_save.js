@@ -1,4 +1,5 @@
 import { requireStaffAccess, serviceHeaders, json, isUuid } from "../_lib/staff-auth.js";
+import { onRequestGet as verifyBookingGet706 } from './quote_booking_verify.js';
 
 export async function onRequestPost({ request, env }) {
   const body = await request.json().catch(()=>({}));
@@ -9,6 +10,28 @@ export async function onRequestPost({ request, env }) {
     if(id && !isUuid(id)) return json({ok:false,error:"Valid quote id is required."},400);
     const patch = cleanPatch(body);
     if(!patch.customer_name && !patch.service_label && !id) return json({ok:false,error:"Enter at least a customer or service before creating a quote."},400);
+    // A newly supplied booking ID must be verified against real source records.
+    // An unchanged existing link can still be edited without reauthorizing a new link.
+    if(patch.booking_id){
+      if(!id)return json({ok:false,error:'Save the accepted quote before linking a booking.'},409);
+      const priorRes=await fetch(`${env.SUPABASE_URL}/rest/v1/quote_pipeline_items?select=${encodeURIComponent('id,booking_id,customer_name,status,accepted_amount_cents')}&id=eq.${encodeURIComponent(id)}&limit=1`,{headers:serviceHeaders(env)});
+      if(!priorRes.ok)return json({ok:false,error:'Could not verify existing quote. Booking link was not saved.'},502);
+      const priorRows=await priorRes.json().catch(()=>null);
+      if(!Array.isArray(priorRows)||!priorRows[0])return json({ok:false,error:'Saved quote not found. Booking link was not saved.'},404);
+      const prior=priorRows[0];
+      if(prior.booking_id!==patch.booking_id){
+        if(patch.status!==prior.status||patch.customer_name!==prior.customer_name||
+          patch.accepted_amount_cents!==prior.accepted_amount_cents)
+          return json({ok:false,error:'Save changes to the quote before linking a booking.'},409);
+        const verifyUrl=new URL('/api/admin/quote_booking_verify',request.url);
+        verifyUrl.searchParams.set('quote_id',id);
+        verifyUrl.searchParams.set('booking_id',patch.booking_id);
+        const verifiedRes=await verifyBookingGet706({request:new Request(verifyUrl,{headers:request.headers}),env});
+        const verification=await verifiedRes.json().catch(()=>({}));
+        if(!verifiedRes.ok||!verification.verified)
+          return json({ok:false,error:verification.error||'Real booking verification failed. Nothing was linked.'},409);
+      }
+    }
     patch.updated_at=new Date().toISOString();
     let url=`${env.SUPABASE_URL}/rest/v1/quote_pipeline_items`;
     let method="POST";

@@ -55,3 +55,4 @@ node scripts/build672_gift_delivery_retry_evidence_test.mjs
 node scripts/build703_quote_handoff_test.mjs
 node scripts/build704_quote_followup_test.mjs
 node scripts/build705_ql261_test.mjs
+node scripts/build706_quote_booking_verification_test.mjs
