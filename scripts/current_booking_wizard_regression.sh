@@ -57,3 +57,4 @@ node scripts/build704_quote_followup_test.mjs
 node scripts/build705_ql261_test.mjs
 node scripts/build706_quote_booking_verification_test.mjs
 node scripts/build707_quote_reconciliation_test.mjs
+node scripts/build708_customer_handoff_test.mjs

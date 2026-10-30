@@ -24,6 +24,8 @@ import {
   let bookingVerificationMessage706 = 'Enter a real booking ID and select Verify existing booking.';
   let reconciliation707 = null;
   let reconciliationQuote707 = '';
+  let handoff708 = null;
+  let handoffQuote708 = '';
 
   function verificationMatches706() {
     return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
@@ -77,7 +79,13 @@ import {
     const ready707 = Boolean(reconciliation707?.notification_ready &&
       reconciliationQuote707 === selected?.id && !editorDirty &&
       reconciliation707.booking_id === selected?.booking_id && verified);
-    $('#qCopyConfirmation706').disabled = !preview.readyToCopy || !ready707;
+    const ready708 = Boolean(handoff708?.ready_to_copy && handoffQuote708 === selected?.id &&
+      handoff708.booking_id === selected?.booking_id && !editorDirty);
+    $('#qCopyConfirmation706').disabled = !preview.readyToCopy || !ready707 || !ready708;
+    $('#qHandoffPrepare708').disabled = !handoff708?.ready_to_prepare || !ready707 ||
+      handoffQuote708 !== selected?.id || editorDirty;
+    $('#qHandoffFollowup708').disabled = !handoff708?.change_followup_needed ||
+      handoffQuote708 !== selected?.id || editorDirty;
     $('#qReconcileRecord707').disabled = !reconciliation707?.ready_to_record || editorDirty ||
       reconciliationQuote707 !== selected?.id;
     $('#qBookingVerifyStatus706').textContent = verified ?
@@ -113,6 +121,10 @@ import {
     bookingVerificationMessage706 = 'Enter a real booking ID and select Verify existing booking.';
     reconciliation707 = null;
     reconciliationQuote707 = '';
+    handoff708 = null;
+    handoffQuote708 = '';
+    $('#qHandoffStatus708').textContent = 'Select and save a quote, then check the live customer permission.';
+    $('#qHandoffHistory708').textContent = 'No handoff or change follow-up checked yet.';
     $('#qReconcileStatus707').textContent = 'Select a saved quote, then check the live booking link.';
     $('#qReconcileHistory707').textContent = 'No live confirmation history checked yet.';
     $('#qId').value = row.id || '';
@@ -171,6 +183,10 @@ import {
     editorDirty = true;
     reconciliation707 = null;
     reconciliationQuote707 = '';
+    handoff708 = null;
+    handoffQuote708 = '';
+    $('#qHandoffStatus708').textContent = 'Unsaved edits. Save, recheck confirmation and permission.';
+    $('#qHandoffHistory708').textContent = 'History must be refreshed after saving.';
     $('#qReconcileStatus707').textContent = 'Unsaved quote changes. Save, then reconcile again.';
     $('#qReconcileHistory707').textContent = 'History must be refreshed after saving.';
     // Any changed booking/customer/amount/status field makes a prior readback stale.
@@ -244,18 +260,39 @@ import {
   $('#qCopyConfirmation706').addEventListener('click', async () => {
     if (!verificationMatches706() || editorDirty || selected?.booking_id !== verifiedBooking706?.id ||
       verifiedBooking706?.status !== 'confirmed' || !reconciliation707?.notification_ready ||
-      reconciliationQuote707 !== selected?.id)
-      return show('Verify the saved booking and its current staff confirmation history first.',true);
+      reconciliationQuote707 !== selected?.id || !handoff708?.ready_to_copy ||
+      handoffQuote708 !== selected?.id)
+      return show('Verify the booking, current staff history and explicit customer permission first.',true);
     try {
-      await navigator.clipboard.writeText($('#qCustomerPreview706').value);
+      // Recheck consent and the actual saved source records at the moment staff copies.
+      const params=new URLSearchParams({quote_id:selected.id,booking_id:selected.booking_id});
+      const [handoffRes,reviewRes,bookingRes]=await Promise.all([
+        fetch(`/api/admin/quote_customer_handoff?quote_id=${encodeURIComponent(selected.id)}`,{credentials:'include',cache:'no-store'}),
+        fetch(`/api/admin/quote_booking_reconcile?quote_id=${encodeURIComponent(selected.id)}`,{credentials:'include',cache:'no-store'}),
+        fetch(`/api/admin/quote_booking_verify?${params}`,{credentials:'include',cache:'no-store'})
+      ]);
+      const [handoffNow,reviewNow,bookingNow]=await Promise.all([
+        handoffRes.json().catch(()=>({})),reviewRes.json().catch(()=>({})),bookingRes.json().catch(()=>({}))
+      ]);
+      if(!handoffRes.ok||!reviewRes.ok||!bookingRes.ok||!handoffNow.ready_to_copy||
+          handoffNow.quote_updated_at!==selected.updated_at||!reviewNow.notification_ready||
+          !bookingNow.verified||bookingNow.booking?.status!=='confirmed'||
+          handoffNow.booking_id!==selected.booking_id||bookingNow.booking?.id!==selected.booking_id || editorDirty)
+        throw new Error('Live consent or booking details changed. Refresh the quote, verify and prepare a new handoff before copying.');
+      const fresh=customerConfirmationPreview706(selected,bookingNow.booking,{verified:true,linked:true});
+      if(!fresh.readyToCopy)throw new Error('The customer draft no longer matches the confirmed booking.');
+      await navigator.clipboard.writeText(fresh.text);
       show('Customer draft copied. Review privately before sending; no message was sent here.');
-    } catch { show('Clipboard unavailable. Copy the read-only preview manually.',true); }
+    } catch(error) { show(error.message||'Clipboard unavailable. Recheck permission before manually copying.',true); }
   });
   async function reconcile707() {
     if (!selected?.id || editorDirty) return show('Save the quote before checking its live booking history.',true);
     const expectedId=selected.id;
     reconciliation707=null;
     reconciliationQuote707='';
+    handoff708=null;
+    handoffQuote708='';
+    $('#qHandoffStatus708').textContent='Recheck customer permission after staff reconciliation.';
     $('#qReconcileStatus707').textContent='Checking saved quote, booking and staff events…';
     updateBookingReview();
     try {
@@ -301,6 +338,68 @@ import {
       if(selected?.id===quoteId&&!editorDirty)await reconcile707();
     }catch(error){show(error.message||'Staff confirmation unavailable.',true);await reconcile707();}
   });
+  async function inspectHandoff708(){
+    if(!selected?.id||editorDirty)return show('Save the quote before checking current communication permission.',true);
+    const expectedId=selected.id;
+    handoff708=null;
+    handoffQuote708='';
+    $('#qHandoffStatus708').textContent='Checking linked customer profile, consent and handoff events…';
+    updateBookingReview();
+    try{
+      const response=await fetch(`/api/admin/quote_customer_handoff?quote_id=${encodeURIComponent(expectedId)}`,{
+        credentials:'include',cache:'no-store'});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Customer permission review unavailable.');
+      if(selected?.id!==expectedId||editorDirty)return;
+      handoff708=data;
+      handoffQuote708=expectedId;
+      $('#qHandoffStatus708').textContent=data.ready_to_copy ?
+        `Current ${data.channel} handoff prepared (staff-only); no customer message sent. Verify booking again to copy.` :
+        `Handoff blocked or pending: ${(data.issues||[]).join(' ')||'Explicit staff preparation required.'}`;
+      const handoffs=Array.isArray(data.handoff_history)?data.handoff_history:[];
+      const changes=Array.isArray(data.followup_history)?data.followup_history:[];
+      $('#qHandoffHistory708').textContent=[
+        `Prepared handoffs: ${handoffs.length}`,
+        ...handoffs.slice(0,8).map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · prepared, not sent`),
+        `Booking-change follow-ups: ${changes.length}`,
+        ...changes.slice(0,8).map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · review logged, not sent`)
+      ].join('\n');
+      updateBookingReview();
+    }catch(error){
+      $('#qHandoffStatus708').textContent=error.message||'Permission source unavailable; handoff blocked.';
+      $('#qHandoffHistory708').textContent='No verified consent or handoff history available.';
+      updateBookingReview();
+      show('Could not verify current communication consent. No customer message was sent.',true);
+    }
+  }
+  $('#qHandoffCheck708').addEventListener('click',inspectHandoff708);
+  async function recordHandoff708(action){
+    if(!selected?.id||editorDirty||handoffQuote708!==selected.id||
+       handoff708?.booking_id!==selected.booking_id||
+       (action==='prepare_handoff'&&!handoff708?.ready_to_prepare)||
+       (action==='log_change_followup'&&!handoff708?.change_followup_needed))
+      return show('Recheck the live quote, booking and permission before recording a staff action.',true);
+    const message=action==='prepare_handoff' ?
+      'Have we verified this customer’s current consent, channel and confirmed booking? This prepares a staff-only handoff record, not an email or SMS.' :
+      'Have we reviewed the changed booking and identified a follow-up task? This records the internal follow-up only; no customer message is sent.';
+    if(!window.confirm(message))return;
+    const quoteId=selected.id,bookingId=selected.booking_id;
+    handoff708=null;
+    updateBookingReview();
+    try{
+      const response=await fetch('/api/admin/quote_customer_handoff',{
+        method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({quote_id:quoteId,booking_id:bookingId,action,
+          acknowledge_actual_staff_action:true})
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Could not record staff handoff.');
+      show('Staff record saved; customer not contacted. Rechecking current permission and history…');
+      if(selected?.id===quoteId&&!editorDirty)await inspectHandoff708();
+    }catch(error){show(error.message||'Staff record failed; nothing sent.',true);await inspectHandoff708();}
+  }
+  $('#qHandoffPrepare708').addEventListener('click',()=>recordHandoff708('prepare_handoff'));
+  $('#qHandoffFollowup708').addEventListener('click',()=>recordHandoff708('log_change_followup'));
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
     load().then(() => show('Quotes refreshed.')).catch(error => show(error.message, true));

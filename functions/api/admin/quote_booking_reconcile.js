@@ -1,8 +1,8 @@
 import {requireStaffAccess,serviceHeaders,json,isUuid} from '../_lib/staff-auth.js';
 import {reconcileQuoteBooking707,CONFIRMATION_EVENT707} from '../../../assets/quote-reconciliation-v707.mjs';
 
-const QUOTE_SELECT='id,quote_number,customer_name,status,accepted_amount_cents,booking_id,updated_at';
-const BOOKING_SELECT='id,customer_name,status,job_status,service_date,start_slot,package_code,vehicle_size,updated_at';
+const QUOTE_SELECT='id,quote_number,customer_id,customer_name,status,accepted_amount_cents,booking_id,updated_at';
+const BOOKING_SELECT='id,customer_profile_id,customer_email,customer_name,status,job_status,service_date,start_slot,package_code,vehicle_size,updated_at';
 const EVENT_SELECT='id,created_at,event_type,actor_name,event_note,payload';
 
 async function readRows(env,path){
@@ -13,7 +13,7 @@ async function readRows(env,path){
   return rows;
 }
 
-async function sourceState(env,quoteId){
+export async function sourceState(env,quoteId){
   const quotes=await readRows(env,`quote_pipeline_items?select=${encodeURIComponent(QUOTE_SELECT)}&id=eq.${quoteId}&limit=1`);
   const quote=quotes[0]||null;
   if(!quote)return {missing:true};
