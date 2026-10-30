@@ -28,6 +28,8 @@ import {
   let handoffQuote708 = '';
   let outcome709 = null;
   let outcomeQuote709 = '';
+  let resolution710 = null;
+  let resolutionQuote710 = '';
 
   function verificationMatches706() {
     return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
@@ -93,6 +95,16 @@ import {
     $('#qOutcomeRecord709').disabled = !outcome709?.can_record_followup ||
       (reportsContact709 && !outcome709?.can_record_contact_outcome) ||
       outcomeQuote709 !== selected?.id || outcome709?.booking_id !== selected?.booking_id || editorDirty;
+    const reason710 = $('#qResolutionReason710').value;
+    const closureAllowed710 = reason710 === 'no_contact_required' ? resolution710?.can_close_no_contact :
+      reason710 === 'contact_not_permitted' ? resolution710?.can_close_opt_out : resolution710?.can_close_reply;
+    const currentReview710 = resolution710 && resolutionQuote710 === selected?.id &&
+      resolution710.booking_id === selected?.booking_id && !editorDirty;
+    const note710 = $('#qResolutionNote710').value.trim();
+    $('#qResolutionClose710').disabled = !currentReview710 || !closureAllowed710 ||
+      note710.length < 12 || note710.length > 300;
+    $('#qResolutionReopen710').disabled = !currentReview710 || !resolution710.can_reopen ||
+      note710.length < 12 || note710.length > 300;
     $('#qReconcileRecord707').disabled = !reconciliation707?.ready_to_record || editorDirty ||
       reconciliationQuote707 !== selected?.id;
     $('#qBookingVerifyStatus706').textContent = verified ?
@@ -132,8 +144,14 @@ import {
     handoffQuote708 = '';
     outcome709 = null;
     outcomeQuote709 = '';
+    resolution710 = null;
+    resolutionQuote710 = '';
     $('#qOutcomeStatus709').textContent = 'Check the current consent, booking and staff outcome history.';
     $('#qOutcomeHistory709').textContent = 'No communication outcome checked yet.';
+    $('#qResolutionStatus710').textContent = 'Select a saved quote and refresh the live follow-up review.';
+    $('#qConsentAudit710').textContent = 'No audit readback yet.';
+    $('#qResolutionHistory710').textContent = 'No closure history checked yet.';
+    $('#qResolutionNote710').value = '';
     $('#qHandoffStatus708').textContent = 'Select and save a quote, then check the live customer permission.';
     $('#qHandoffHistory708').textContent = 'No handoff or change follow-up checked yet.';
     $('#qReconcileStatus707').textContent = 'Select a saved quote, then check the live booking link.';
@@ -465,6 +483,8 @@ import {
     const quoteId=selected.id;
     const snapshot=outcome709;
     outcome709=null;
+    resolution710=null;
+    $('#qResolutionStatus710').textContent='Staff outcome may have changed closure eligibility. Refresh the Build 710 audit.';
     updateBookingReview();
     try{
       const response=await fetch('/api/admin/quote_communication_outcome',{
@@ -479,6 +499,80 @@ import {
     }catch(error){show(error.message||'Staff record failed. No message sent.',true);}
     if(selected?.id===quoteId&&!editorDirty)await inspectOutcome709();
   });
+  $('#qResolutionReason710').addEventListener('change',updateBookingReview);
+  $('#qResolutionNote710').addEventListener('input',updateBookingReview);
+  async function inspectResolution710(){
+    if(!selected?.id||editorDirty)return show('Save the quote before checking current follow-up resolution.',true);
+    const quoteId=selected.id;
+    resolution710=null;
+    resolutionQuote710='';
+    $('#qResolutionStatus710').textContent='Rechecking saved booking, consent history and staff closure records…';
+    updateBookingReview();
+    try{
+      const response=await fetch(`/api/admin/quote_followup_resolution?quote_id=${encodeURIComponent(quoteId)}`,{
+        credentials:'include',cache:'no-store'});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Could not read current follow-up audit.');
+      if(selected?.id!==quoteId||editorDirty)return;
+      resolution710=data;
+      resolutionQuote710=quoteId;
+      $('#qResolutionStatus710').textContent=[
+        data.closure_current?'CLOSED by a current staff-only decision.':'OPEN: a current closure is not on record.',
+        data.requires_followup?'Staff follow-up requires review.':'No unresolved follow-up on the current readback.',
+        data.current_consent_allowed?'Live consent currently permits the prepared channel.':
+          'Live permission blocks contact. Do not attempt customer contact.',
+        ...(data.consent_alerts||[])
+      ].join(' ');
+      $('#qConsentAudit710').textContent=(data.consent_audit||[]).length?
+        data.consent_audit.slice(0,20).map(e=>
+          `${e.is_live?'LIVE NOW':asReadable(e.created_at)} · ${e.actor_name||'Staff'} · ${e.channel}\n  ${e.changes.join('; ')||'No snapshot-marker changes detected'}`
+        ).join('\n'):
+        'No retained staff snapshot. Only live consent is authoritative.';
+      $('#qResolutionHistory710').textContent=(data.history||[]).length?
+        data.history.slice(0,15).map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · ${e.action}${e.reason?' ('+e.reason.replaceAll('_',' ')+')':''}${e.current?' · current':' · historical'}`).join('\n'):
+        'No reviewed follow-up closure or reopening is on record.';
+      updateBookingReview();
+    }catch(error){
+      $('#qResolutionStatus710').textContent=error.message||'Live follow-up source unavailable. Closure blocked.';
+      $('#qConsentAudit710').textContent='Consent history unavailable. Do not infer permission.';
+      $('#qResolutionHistory710').textContent='Closure history unavailable; no action should be assumed.';
+      updateBookingReview();
+    }
+  }
+  $('#qResolutionCheck710').addEventListener('click',inspectResolution710);
+  async function recordResolution710(action){
+    if(!selected?.id||editorDirty||resolutionQuote710!==selected.id||
+      resolution710?.booking_id!==selected.booking_id)
+      return show('Refresh the live follow-up audit before recording a staff decision.',true);
+    const reason=action==='close'?$('#qResolutionReason710').value:'';
+    const note=$('#qResolutionNote710').value.trim();
+    const allowed=action==='reopen'?resolution710.can_reopen:
+      reason==='no_contact_required'?resolution710.can_close_no_contact:
+      reason==='contact_not_permitted'?resolution710.can_close_opt_out:resolution710.can_close_reply;
+    if(!allowed||note.length<12||note.length>300)
+      return show('A permitted decision and a 12–300 character review rationale are required.',true);
+    if(!window.confirm(`Have we actually reviewed the ${action==='close'?'closure':'reopening'} reason? `+
+      'This saves an internal event only. No email, SMS or booking update occurs, and delivery is NOT verified.'))return;
+    const quoteId=selected.id,snapshot=resolution710;
+    resolution710=null;
+    updateBookingReview();
+    try{
+      const response=await fetch('/api/admin/quote_followup_resolution',{
+        method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({quote_id:quoteId,booking_id:snapshot.booking_id,action,reason,note,
+          expected_marker:snapshot.marker,
+          expected_latest_outcome_event_id:snapshot.latest_outcome_event_id,
+          expected_latest_resolution_event_id:snapshot.latest_resolution_event_id,
+          acknowledge_staff_review:true})
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Staff decision could not be saved.');
+      show('Staff-only follow-up decision recorded. No message sent; provider delivery remains unverified.');
+    }catch(error){show(error.message||'Follow-up review not saved. No message sent.',true);}
+    if(selected?.id===quoteId&&!editorDirty)await inspectResolution710();
+  }
+  $('#qResolutionClose710').addEventListener('click',()=>recordResolution710('close'));
+  $('#qResolutionReopen710').addEventListener('click',()=>recordResolution710('reopen'));
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
     load().then(() => show('Quotes refreshed.')).catch(error => show(error.message, true));
