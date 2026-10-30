@@ -1,6 +1,7 @@
 import {
   quoteAttention704, summarizeQuoteInbox704, filterQuoteInbox704,
-  bookingReview704, localFollowUp704, isUuid704
+  bookingReview704, localFollowUp704, isUuid704,
+  BOOKING_CONVERSION_CHECKS705, bookingConversionReadiness705
 } from './quote-followup-v704.mjs';
 
 (() => {
@@ -42,8 +43,15 @@ import {
       ? {ready:false,message:'Save the quote changes before reviewing booking conversion.'}
       : bookingReview704(selected);
     $('#bookingReview704').textContent = review.message;
+    const checked = Object.fromEntries(BOOKING_CONVERSION_CHECKS705.map(key => [
+      key, $('#qBookingCheck705_' + key).checked
+    ]));
+    const checklist = bookingConversionReadiness705(selected, checked);
+    $('#bookingConversionStatus705').textContent = editorDirty
+      ? 'Save the quote edits before checking booking readiness.'
+      : checklist.reason;
     const link = $('#bookingLink');
-    link.hidden = !review.ready && !selected?.booking_id;
+    link.hidden = !checklist.ready && !selected?.booking_id;
     link.textContent = selected?.booking_id ? 'Review linked booking' : 'Open booking dashboard';
   }
   function render() {
@@ -88,6 +96,7 @@ import {
     $('#editorTitle').textContent = row.id
       ? `Editing ${row.quote_number || row.customer_name || 'quote'}` : 'New quote';
     editorDirty = false;
+    for (const key of BOOKING_CONVERSION_CHECKS705) $('#qBookingCheck705_' + key).checked = false;
     updateBookingReview();
     render();
   }
@@ -108,6 +117,9 @@ import {
   }
   $('#quoteSearch704').addEventListener('input', render);
   $('#quoteFilter704').addEventListener('change', render);
+  for (const key of BOOKING_CONVERSION_CHECKS705) {
+    $('#qBookingCheck705_' + key).addEventListener('change', updateBookingReview);
+  }
   $('#quoteList').addEventListener('click', event => {
     const button = event.target.closest('[data-id]');
     if (!button) return;

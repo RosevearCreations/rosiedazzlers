@@ -62,3 +62,15 @@ export function localFollowUp704(now = new Date(), days = 1) {
 }
 
 export const isUuid704 = value => /^[a-f0-9]{8}-[a-f0-9]{4}-[1-8][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i.test(String(value || '').trim());
+
+// Build 705: ephemeral staff review checklist, not consent, booking or payment authority.
+export const BOOKING_CONVERSION_CHECKS705 = Object.freeze([
+  'scope','vehicle','capacity','site','terms'
+]);
+export function bookingConversionReadiness705(quote, checked = {}) {
+  const basic = bookingReview704(quote);
+  const missing = BOOKING_CONVERSION_CHECKS705.filter(key => checked[key] !== true);
+  return {ready:basic.ready && missing.length === 0,missing,
+    reason:basic.ready ? (missing.length ? 'Complete the manual readiness checks before opening the booking handoff.' :
+      'Staff checklist completed in this browser only. Confirm the real booking separately; no appointment, message or payment was created.') : basic.message};
+}
