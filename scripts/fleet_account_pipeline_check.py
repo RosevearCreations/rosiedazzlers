@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from pathlib import Path
+import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -94,9 +95,11 @@ for token in (
     if token not in page:
         errors.append(f'fleet workbench missing quote handoff/help contract: {token}')
 
-for token in ('requestedQuoteId', 'rows.find(r=>r.id===requestedQuoteId)', 'fill(requested)'):
+for token in ('requestedQuoteId', 'fill(requested)'):
     if token not in quote_ui:
         errors.append(f'quote dashboard missing exact handoff selection contract: {token}')
+if not re.search(r'\brows\.find\s*\(\s*([A-Za-z_$][\w$]*)\s*=>\s*\1\.id\s*===\s*requestedQuoteId\s*\)', quote_ui):
+    errors.append('quote dashboard missing exact handoff selection contract: rows.find(row => row.id === requestedQuoteId)')
 
 # This slice deliberately reuses existing tables; no new schema authority is needed.
 sql_candidates = list(ROOT.glob('**/*335*.sql'))
