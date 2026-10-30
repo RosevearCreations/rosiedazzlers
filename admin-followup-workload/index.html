@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Follow-Up Workload Command | Rosie Dazzlers</title>
+  <meta name="description" content="Protected staff follow-up workload and management exception review." />
+  <link rel="stylesheet" href="/assets/site.css?v=20261030build713" />
+  <link rel="stylesheet" href="/assets/admin-command-surface-v712.css?v=20261030build713" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v713.css?v=20261030build713" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build713" defer></script>
+</head>
+<body data-page="admin-followup-workload" data-command712="workload">
+  <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers · Management</strong></a><nav class="nav-links" aria-label="Management shortcuts"><a href="/admin.html">Dashboard</a><a href="/admin-quotes.html">Quote Pipeline</a><a href="/admin-staff.html">Staff</a><a href="/admin-analytics.html">Statistics</a></nav></div></header>
+  <main class="container">
+    <div data-admin-shell-status class="shell-status" hidden></div>
+    <div data-admin-shell-loading class="section"><div class="panel">Authenticating management workspace…</div></div>
+    <div data-admin-shell-ready hidden>
+      <section class="section">
+        <div class="admin-topbar"><div><span class="badge">Build 713 · Management &amp; staff ownership</span>
+          <h1>Follow-Up Workload Command</h1>
+          <p>Current saved-quote workload, overdue ownership and staff-only exception review. All counts come from the protected queue; selected exceptions require live verification.</p>
+          <div class="rd-workload-actions"><button class="btn primary" id="workloadRefresh713" type="button">Refresh workload evidence</button><a class="btn ghost" href="/admin-quotes.html">Open Quote Pipeline</a></div>
+        </div></div>
+      </section>
+      <section class="section" aria-label="Live workload overview">
+        <div class="rd-workload-kpis" id="workloadKpis713" aria-live="polite">
+          <article class="kpi-box"><span>Active saved quotes</span><strong>—</strong></article>
+          <article class="kpi-box"><span>Overdue tasks</span><strong>—</strong></article>
+          <article class="kpi-box"><span>Critical (3+ days)</span><strong>—</strong></article>
+          <article class="kpi-box"><span>Queue exceptions</span><strong>—</strong></article>
+        </div>
+        <p class="rd-workload-source" id="workloadSource713" role="status" aria-live="polite">No source data loaded. Nothing is assumed clear or approved.</p>
+      </section>
+      <section class="section rd-workload-grid">
+        <article class="panel" aria-labelledby="staffWorkloadTitle713"><h2 id="staffWorkloadTitle713">Staff workload distribution</h2>
+          <p class="muted">Group totals reflect recorded owners whose event marker matches the saved quote, not verified live staff availability. An unassigned or stale owner is shown separately.</p>
+          <div class="rd-workload-table-wrap"><table><thead><tr><th>Owner</th><th>Assigned</th><th>Overdue</th><th>Critical</th><th>Exceptions</th></tr></thead>
+            <tbody id="staffWorkloadRows713"><tr><td colspan="5">Refresh to load actual staff assignments.</td></tr></tbody></table></div>
+          <div id="workloadBars713" class="rd-workload-bars" aria-label="Staff workload comparison from current records"></div>
+        </article>
+        <article class="panel" aria-labelledby="auditExceptionTitle713"><h2 id="auditExceptionTitle713">Audit exceptions requiring attention</h2>
+          <p class="muted">Queue flags are triage indicators only; select an exception for live quote, booking, assignment and consent verification.</p>
+          <label class="rd-workload-filter" for="workloadFilter713">Show exception severity<select id="workloadFilter713"><option value="all">All flagged cases</option><option value="critical">Critical overdue</option><option value="overdue">Other overdue</option></select></label>
+          <div id="workloadExceptions713" class="rd-workload-exceptions" aria-live="polite">No queue readback yet.</div>
+        </article>
+      </section>
+      <section class="section"><article class="panel rd-workload-review" aria-labelledby="workloadReviewTitle713">
+        <h2 id="workloadReviewTitle713">Live management exception review</h2>
+        <p class="muted">Review an actual flagged quote. Only an admin or senior detailer can record an internal exception assessment. The assessment does not resolve the task, close an audit, send a message or grant consent.</p>
+        <p id="workloadDetailStatus713" class="rd-workload-source" role="status" aria-live="polite">Choose a flagged quote to check the live source.</p>
+        <div class="rd-workload-actions"><label for="workloadExceptionCode713">Current exception<select id="workloadExceptionCode713" disabled><option value="">Select a live case first</option></select></label>
+          <a id="workloadQuoteLink713" class="btn ghost" href="/admin-quotes.html">Open quote for staff action</a></div>
+        <label for="workloadReviewNote713">Actual management review note (12–300 characters, no customer contact details)</label>
+        <textarea id="workloadReviewNote713" rows="3" maxlength="300" placeholder="Explain the actual finding and the next internal staff action." disabled></textarea>
+        <div class="rd-workload-actions"><button id="workloadReviewSave713" class="btn primary" type="button" disabled>Record manager exception review</button><button id="workloadDetailRefresh713" class="btn ghost" type="button" disabled>Recheck selected quote</button></div>
+        <h3>Manager assessment history</h3><pre id="workloadReviewHistory713" class="rd-workload-history">No live review checked.</pre>
+      </article></section>
+    </div>
+  </main>
+  <footer class="footer container" data-footer></footer>
+  <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+  <script src="/assets/chrome.js?v=20261025build656"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build713"></script>
+</body>
+</html>
