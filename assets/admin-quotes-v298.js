@@ -26,6 +26,8 @@ import {
   let reconciliationQuote707 = '';
   let handoff708 = null;
   let handoffQuote708 = '';
+  let outcome709 = null;
+  let outcomeQuote709 = '';
 
   function verificationMatches706() {
     return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
@@ -86,6 +88,11 @@ import {
       handoffQuote708 !== selected?.id || editorDirty;
     $('#qHandoffFollowup708').disabled = !handoff708?.change_followup_needed ||
       handoffQuote708 !== selected?.id || editorDirty;
+    const reportsContact709 = ['manual_attempt_failed','manual_attempt_reported_unverified',
+      'customer_replied_staff_reported'].includes($('#qOutcomeType709').value);
+    $('#qOutcomeRecord709').disabled = !outcome709?.can_record_followup ||
+      (reportsContact709 && !outcome709?.can_record_contact_outcome) ||
+      outcomeQuote709 !== selected?.id || outcome709?.booking_id !== selected?.booking_id || editorDirty;
     $('#qReconcileRecord707').disabled = !reconciliation707?.ready_to_record || editorDirty ||
       reconciliationQuote707 !== selected?.id;
     $('#qBookingVerifyStatus706').textContent = verified ?
@@ -123,6 +130,10 @@ import {
     reconciliationQuote707 = '';
     handoff708 = null;
     handoffQuote708 = '';
+    outcome709 = null;
+    outcomeQuote709 = '';
+    $('#qOutcomeStatus709').textContent = 'Check the current consent, booking and staff outcome history.';
+    $('#qOutcomeHistory709').textContent = 'No communication outcome checked yet.';
     $('#qHandoffStatus708').textContent = 'Select and save a quote, then check the live customer permission.';
     $('#qHandoffHistory708').textContent = 'No handoff or change follow-up checked yet.';
     $('#qReconcileStatus707').textContent = 'Select a saved quote, then check the live booking link.';
@@ -185,6 +196,10 @@ import {
     reconciliationQuote707 = '';
     handoff708 = null;
     handoffQuote708 = '';
+    outcome709 = null;
+    outcomeQuote709 = '';
+    $('#qOutcomeStatus709').textContent = 'Quote edited; save and recheck current consent before reporting an outcome.';
+    $('#qOutcomeHistory709').textContent = 'History must be refreshed after saving.';
     $('#qHandoffStatus708').textContent = 'Unsaved edits. Save, recheck confirmation and permission.';
     $('#qHandoffHistory708').textContent = 'History must be refreshed after saving.';
     $('#qReconcileStatus707').textContent = 'Unsaved quote changes. Save, then reconcile again.';
@@ -292,6 +307,9 @@ import {
     reconciliationQuote707='';
     handoff708=null;
     handoffQuote708='';
+    outcome709=null;
+    outcomeQuote709='';
+    $('#qOutcomeStatus709').textContent='Staff confirmation changed. Refresh current communication review.';
     $('#qHandoffStatus708').textContent='Recheck customer permission after staff reconciliation.';
     $('#qReconcileStatus707').textContent='Checking saved quote, booking and staff events…';
     updateBookingReview();
@@ -365,6 +383,7 @@ import {
         ...changes.slice(0,8).map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · review logged, not sent`)
       ].join('\n');
       updateBookingReview();
+      await inspectOutcome709();
     }catch(error){
       $('#qHandoffStatus708').textContent=error.message||'Permission source unavailable; handoff blocked.';
       $('#qHandoffHistory708').textContent='No verified consent or handoff history available.';
@@ -400,6 +419,66 @@ import {
   }
   $('#qHandoffPrepare708').addEventListener('click',()=>recordHandoff708('prepare_handoff'));
   $('#qHandoffFollowup708').addEventListener('click',()=>recordHandoff708('log_change_followup'));
+  $('#qOutcomeType709').addEventListener('change',updateBookingReview);
+  async function inspectOutcome709(){
+    if(!selected?.id||editorDirty)return show('Save the quote before refreshing staff communication outcomes.',true);
+    const quoteId=selected.id;
+    outcome709=null;
+    outcomeQuote709='';
+    $('#qOutcomeStatus709').textContent='Checking live customer consent and staff-reported outcome history…';
+    updateBookingReview();
+    try{
+      const response=await fetch(`/api/admin/quote_communication_outcome?quote_id=${encodeURIComponent(quoteId)}`,{
+        credentials:'include',cache:'no-store'});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Cannot read communication audit.');
+      if(selected?.id!==quoteId||editorDirty)return;
+      outcome709=data;
+      outcomeQuote709=quoteId;
+      $('#qOutcomeStatus709').textContent=[
+        data.consent_alerts?.length?'CONSENT / HANDOFF ALERT: '+data.consent_alerts.join(' '):'No detected consent drift from recorded handoff.',
+        data.requires_followup?'Staff follow-up remains needed.':'No open follow-up detected from current staff records.',
+        data.can_record_contact_outcome?'Current consent and prepared handoff permit a staff outcome report.':
+          'New contact attempts cannot be recorded as eligible until consent and handoff are current.'
+      ].join(' ');
+      $('#qOutcomeHistory709').textContent=(data.history||[]).length?
+        data.history.slice(0,12).map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · ${e.status.replaceAll('_',' ')}${e.current?' · current':' · historical'} (staff report, delivery unverified)`).join('\n'):
+        'No manual communication outcomes recorded. No customer was contacted by this panel.';
+      updateBookingReview();
+    }catch(error){
+      $('#qOutcomeStatus709').textContent=error.message||'Live consent check failed. Actions blocked.';
+      $('#qOutcomeHistory709').textContent='Outcome history unavailable. Do not infer delivery or consent.';
+      updateBookingReview();
+    }
+  }
+  $('#qOutcomeCheck709').addEventListener('click',inspectOutcome709);
+  $('#qOutcomeRecord709').addEventListener('click',async()=>{
+    if(!selected?.id||editorDirty||outcomeQuote709!==selected.id||
+      outcome709?.booking_id!==selected.booking_id)return show('Refresh live communication state first.',true);
+    const status=$('#qOutcomeType709').value;
+    const reportsContact=['manual_attempt_failed','manual_attempt_reported_unverified',
+      'customer_replied_staff_reported'].includes(status);
+    if(!outcome709?.can_record_followup||(reportsContact&&!outcome709?.can_record_contact_outcome))
+      return show('Current booking, consent or staff handoff blocks a contact report.',true);
+    if(!window.confirm(`Are we recording an ACTUAL staff-observed outcome (${status.replaceAll('_',' ')})? `+
+      'This is unverified staff history, NOT proof of provider delivery. No email or SMS will be sent.'))return;
+    const quoteId=selected.id;
+    const snapshot=outcome709;
+    outcome709=null;
+    updateBookingReview();
+    try{
+      const response=await fetch('/api/admin/quote_communication_outcome',{
+        method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({quote_id:quoteId,booking_id:snapshot.booking_id,status,
+          expected_marker:snapshot.marker,expected_handoff_event_id:snapshot.handoff_event_id,
+          acknowledge_staff_report:true})
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Staff report could not be saved.');
+      show('Staff-only outcome saved. No customer message was sent; delivery remains unverified.');
+    }catch(error){show(error.message||'Staff record failed. No message sent.',true);}
+    if(selected?.id===quoteId&&!editorDirty)await inspectOutcome709();
+  });
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
     load().then(() => show('Quotes refreshed.')).catch(error => show(error.message, true));

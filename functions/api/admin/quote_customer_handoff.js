@@ -10,7 +10,7 @@ async function readRows(env,path){
   if(!Array.isArray(rows))throw new Error('Invalid customer permission source response.');
   return rows;
 }
-async function loadState(env,quoteId){
+export async function loadState708(env,quoteId){
   const source=await sourceState(env,quoteId);
   if(source.missing) return null;
   const reconcile=reconcileQuoteBooking707(source.quote,source.booking,source.others,source.events);
@@ -49,7 +49,7 @@ export async function onRequestGet({request,env}){
   const access=await authorization(request,env,{});
   if(!access.ok)return access.response;
   try{
-    const state=await loadState(env,quoteId);
+    const state=await loadState708(env,quoteId);
     return state?json(publicState(state)):json({ok:false,error:'Saved quote not found.'},404);
   }catch{return json({ok:false,error:'Live customer permission review unavailable. Handoff blocked.'},503);}
 }
@@ -65,7 +65,7 @@ export async function onRequestPost({request,env}){
   const access=await authorization(request,env,body,bookingId);
   if(!access.ok)return access.response;
   try{
-    const state=await loadState(env,quoteId);
+    const state=await loadState708(env,quoteId);
     if(!state||state.source.quote?.booking_id!==bookingId || state.source.booking?.id!==bookingId)
       return json({ok:false,error:'Saved quote and live linked booking do not match.'},409);
     const review=state.review;
@@ -90,7 +90,7 @@ export async function onRequestPost({request,env}){
     const saved=await savedRes.json().catch(()=>[]);
     if(!Array.isArray(saved)||!saved[0]?.id)
       return json({ok:false,error:'Staff event readback failed. Recheck before using a draft.'},502);
-    const refreshed=await loadState(env,quoteId);
+    const refreshed=await loadState708(env,quoteId);
     return json({...publicState(refreshed),recorded:true,recorded_event_id:saved[0].id});
   }catch{return json({ok:false,error:'Could not complete current staff handoff review. No message sent.'},503);}
 }
