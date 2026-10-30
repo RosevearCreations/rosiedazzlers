@@ -51,7 +51,16 @@
         </div>
       </section>
 
-      <section class="section"><div id="pageNotice" class="notice" data-admin-shell-status>Loading I.T. catalogue…</div></section>
+      <section class="card" data-comms-connection="rosiedazzlers" data-mode="nonproduction-only" data-signer="not-verified" data-owner-test="not-given" aria-labelledby="ql265CommsTitle" style="margin:18px 0;padding:18px;border:2px solid #a78bfa;border-radius:14px">
+  <h2 id="ql265CommsTitle">Rosevear Comms Hub · Connection &amp; I.T.</h2>
+  <p><strong>DISCONNECTED / HOLD.</strong> This application is one of six sources coordinated by Rosevear Comms Hub. No live calling, SMS, bookings, Etsy posts, payments, dispatch or cross-tenant access is enabled.</p>
+  <p><strong>Source:</strong> <code>RosevearCreations/rosiedazzlers</code> · <strong>proof:</strong> <code>docs/integration/ql246-source-proof.json</code> (original signed proof B has not been verified).</p>
+  <ol><li>Privately approve and authenticate a persistent signer-key custodian, a different nonce witness, and a separate reviewer; independently pin the public SPKI.</li><li>Verify an isolated nonproduction tenant, separate credentials and read-only health/capabilities contract.</li><li>Receive independently authenticated, explicit owner TEST-only authorization before any real network request.</li><li>Only then schedule at most two positive and seven denial-only GETs per source within fifteen minutes, with stop/rollback.</li></ol>
+  <button class="btn" type="button" data-comms-local-test>Run LOCAL connection-interface self-test (no network)</button>
+  <p>Local green means that this screen reports its hold honestly. It does <strong>not</strong> connect to Comms Hub or verify the private signer.</p>
+  <pre data-comms-local-result role="status" aria-live="polite" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:320px;overflow:auto">Not run. External connection remains HOLD.</pre>
+</section>
+<section class="section"><div id="pageNotice" class="notice" data-admin-shell-status>Loading I.T. catalogue…</div></section>
 
       <section class="section">
         <div class="panel">
@@ -144,5 +153,5 @@
       window.AdminPageInit.init({pageKey:'admin-integrations',onReady:async()=>{q('#refreshButton').addEventListener('click',()=>load().catch((err)=>setNotice(err.message,'error')));await load();},onError:(err)=>setNotice(err?.message||'Could not initialize I.T. Connections.','error')});
     })();
   </script>
-</body>
+<script src="/assets/ql265-comms-connection.js" defer></script></body>
 </html>
