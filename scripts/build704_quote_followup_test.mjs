@@ -20,7 +20,7 @@ assert.deepEqual(rows.map(row => quoteAttention704(row,now)), [
   'review','scheduled','due','ready_to_book','linked','closed','unscheduled'
 ]);
 assert.deepEqual(summarizeQuoteInbox704(rows,now), {
-  all:7,due:1,review:1,ready_to_book:1,linked:1,closed:1,scheduled:1,unscheduled:1
+  all:7,due:1,review:1,ready_to_book:1,linked:1,closed:1,scheduled:1,unscheduled:1,completed:0
 });
 assert.deepEqual(filterQuoteInbox704(rows,{now}).map(row=>row.id), [
   'overdue','accepted','review','missing','future','booked','closed'

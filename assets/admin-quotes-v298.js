@@ -3,6 +3,10 @@ import {
   bookingReview704, localFollowUp704, isUuid704,
   BOOKING_CONVERSION_CHECKS705, bookingConversionReadiness705
 } from './quote-followup-v704.mjs';
+import {
+  FOLLOW_UP_COMPLETED_STAGE706, completedFollowUps706, quoteBookingEligibility706,
+  customerConfirmationPreview706
+} from './quote-booking-v706.mjs';
 
 (() => {
   const $ = selector => document.querySelector(selector);
@@ -15,6 +19,17 @@ import {
   let selected = null;
   let editorDirty = false;
   let requestedQuoteId = new URLSearchParams(location.search).get('quote_id') || '';
+  let verifiedBooking706 = null;
+  let verifiedQuoteId706 = '';
+  let bookingVerificationMessage706 = 'Enter a real booking ID and select Verify existing booking.';
+
+  function verificationMatches706() {
+    return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
+      verifiedBooking706?.id === $('#qBooking').value.trim() &&
+      $('#qCustomer').value.trim() === String(selected.customer_name || '').trim() &&
+      $('#qStatus').value === selected.status &&
+      Math.round(Number($('#qAccepted').value) * 100) === Number(selected.accepted_amount_cents));
+  }
 
   function show(message, bad = false) {
     const box = $('#quoteStatus');
@@ -53,6 +68,14 @@ import {
     const link = $('#bookingLink');
     link.hidden = !checklist.ready && !selected?.booking_id;
     link.textContent = selected?.booking_id ? 'Review linked booking' : 'Open booking dashboard';
+    const verified = verificationMatches706();
+    const linked = verified && !editorDirty && selected?.booking_id === verifiedBooking706?.id;
+    const preview = customerConfirmationPreview706(selected,verified ? verifiedBooking706 : null,{verified,linked});
+    $('#qCustomerPreview706').value = preview.text;
+    $('#qCopyConfirmation706').disabled = !preview.readyToCopy;
+    $('#qBookingVerifyStatus706').textContent = verified ?
+      `${bookingVerificationMessage706} ${linked ? 'The saved link matches.' : 'Save the quote link, then verify again for the customer draft.'}` :
+      bookingVerificationMessage706;
   }
   function render() {
     const filter = $('#quoteFilter704').value;
@@ -61,7 +84,7 @@ import {
     const counts = summarizeQuoteInbox704(rows);
     $('#quoteCount').textContent = `Showing ${visible.length} of ${rows.length} quote(s)`;
     $('#quoteSummary704').textContent =
-      `Due: ${counts.due} · Scope review: ${counts.review} · Accepted/unlinked: ${counts.ready_to_book} · Scheduled: ${counts.scheduled} · Linked: ${counts.linked}`;
+      `Due: ${counts.due} · Scope review: ${counts.review} · Accepted/unlinked: ${counts.ready_to_book} · Scheduled: ${counts.scheduled} · Linked: ${counts.linked} · Follow-ups completed: ${completedFollowUps706(rows)}`;
     $('#quoteList').innerHTML = visible.length ? visible.map(row => {
       const bucket = quoteAttention704(row);
       return `<button class="quote-row ${selected?.id === row.id ? 'selected' : ''}" type="button" data-id="${esc(row.id)}">
@@ -78,6 +101,9 @@ import {
   }
   function fill(row = {}) {
     selected = row.id ? row : null;
+    verifiedBooking706 = null;
+    verifiedQuoteId706 = '';
+    bookingVerificationMessage706 = 'Enter a real booking ID and select Verify existing booking.';
     $('#qId').value = row.id || '';
     $('#qNumber').value = row.quote_number || '';
     $('#qStatus').value = row.status || 'draft';
@@ -115,6 +141,7 @@ import {
     if (selected) fill(selected);
     else render();
   }
+  $('#quoteFilter704').add(new Option('Follow-up completed', 'completed_follow_up'));
   $('#quoteSearch704').addEventListener('input', render);
   $('#quoteFilter704').addEventListener('change', render);
   for (const key of BOOKING_CONVERSION_CHECKS705) {
@@ -131,6 +158,12 @@ import {
   });
   $('#quoteForm').addEventListener('input', () => {
     editorDirty = true;
+    // Any changed booking/customer/amount/status field makes a prior readback stale.
+    if (!verificationMatches706()) {
+      verifiedBooking706 = null;
+      verifiedQuoteId706 = '';
+      bookingVerificationMessage706 = 'Quote details changed. Verify the saved quote and booking again.';
+    }
     updateBookingReview();
   });
   $('#newQuoteBtn').addEventListener('click', () => {
@@ -152,6 +185,55 @@ import {
     updateBookingReview();
     show('Tomorrow at 9:00 AM is entered but not saved. Review and choose Save quote.');
   });
+  $('#qFollowComplete706').addEventListener('click', () => {
+    if (!selected?.id) return show('Save the quote before completing a follow-up.',true);
+    if (!window.confirm('Has this customer follow-up actually been completed? This only prepares an unsaved staff status change.')) return;
+    $('#qFollowStage').value = FOLLOW_UP_COMPLETED_STAGE706;
+    $('#qNextFollow').value = '';
+    editorDirty = true;
+    updateBookingReview();
+    show('Follow-up completion prepared (unsaved). Select Save quote to record it; no customer message was sent.');
+  });
+  $('#qBookingVerify706').addEventListener('click', async () => {
+    const id = $('#qBooking').value.trim();
+    const eligibility = quoteBookingEligibility706(selected);
+    if (!eligibility.ready) return show(eligibility.reason,true);
+    if (!isUuid704(id)) return show('Enter a valid existing booking UUID before verification.',true);
+    if ($('#qCustomer').value.trim() !== String(selected.customer_name||'').trim() ||
+        $('#qStatus').value !== selected.status ||
+        Math.round(Number($('#qAccepted').value)*100) !== Number(selected.accepted_amount_cents))
+      return show('Save customer name, quote status and accepted amount before booking verification.',true);
+    verifiedBooking706 = null;
+    verifiedQuoteId706 = '';
+    bookingVerificationMessage706 = 'Checking the live booking and quote records…';
+    updateBookingReview();
+    try {
+      const params = new URLSearchParams({quote_id:selected.id,booking_id:id});
+      const response = await fetch(`/api/admin/quote_booking_verify?${params}`,{credentials:'include',cache:'no-store'});
+      const data = await response.json().catch(()=>({}));
+      if (!response.ok || !data.ok || !data.verified || data.booking?.id !== id)
+        throw new Error(data.error || 'The booking could not be verified.');
+      // Reject a response to an old selection if staff switched quotes during the request.
+      if (selected?.id !== data.quote_id || $('#qBooking').value.trim() !== id) return;
+      verifiedBooking706 = data.booking;
+      verifiedQuoteId706 = data.quote_id;
+      bookingVerificationMessage706 = `Verified existing booking ${id}.`;
+      updateBookingReview();
+      show('Read-only booking verification passed. A new link is not saved until Save quote.');
+    } catch(error) {
+      bookingVerificationMessage706 = error.message || 'Booking verification failed.';
+      updateBookingReview();
+      show(bookingVerificationMessage706,true);
+    }
+  });
+  $('#qCopyConfirmation706').addEventListener('click', async () => {
+    if (!verificationMatches706() || editorDirty || selected?.booking_id !== verifiedBooking706?.id ||
+      verifiedBooking706?.status !== 'confirmed') return show('Verify a saved, confirmed booking first.',true);
+    try {
+      await navigator.clipboard.writeText($('#qCustomerPreview706').value);
+      show('Customer draft copied. Review privately before sending; no message was sent here.');
+    } catch { show('Clipboard unavailable. Copy the read-only preview manually.',true); }
+  });
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
     load().then(() => show('Quotes refreshed.')).catch(error => show(error.message, true));
@@ -161,6 +243,11 @@ import {
     const rawBookingId = $('#qBooking').value.trim();
     if (rawBookingId && !isUuid704(rawBookingId)) {
       show('The booking ID must be a valid UUID from an existing booking. No changes were saved.', true);
+      $('#qBooking').focus();
+      return;
+    }
+    if (rawBookingId && rawBookingId !== String(selected?.booking_id || '') && !verificationMatches706()) {
+      show('Verify this real booking against the saved accepted quote before linking it. No changes were saved.',true);
       $('#qBooking').focus();
       return;
     }
