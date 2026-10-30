@@ -1,0 +1,27 @@
+{
+  "release": "ql258-six-app-owner-custody-checklist-public-source-recheck-held-v1",
+  "system": "rosiedazzlers",
+  "repository": "rosiedazzlers",
+  "publicGitHubSnapshot": {
+    "observed": "29 October 2026",
+    "mainSha": "69afa528d28ee1df3ad200cc5da0cf4a3c2acbf9",
+    "requiredPath": "docs/integration/ql246-source-proof.json",
+    "httpStatusAtObservedSha": 404
+  },
+  "ownerReportedUnverifiedProgress": {
+    "privateCustodian": "NOT_REPORTED",
+    "independentWitness": "NOT_REPORTED",
+    "independentReviewer": "NOT_REPORTED",
+    "privateHost": "NOT_REPORTED",
+    "signerPresence": "NOT_REPORTED",
+    "outOfBandPin": "NOT_REPORTED",
+    "tenantIsolation": "NOT_APPLICABLE"
+  },
+  "independentCustodyAuthenticated": false,
+  "sourceProofAccepted": false,
+  "ownerTestAuthorization": "NOT_GIVEN",
+  "authenticatedGatewayGets": 0,
+  "connection": "DISCONNECTED",
+  "livePilotHolds": 12,
+  "disposition": "OWNER_SELF_REPORT_ONLY_NOT_SECURITY_EVIDENCE_HELD"
+}
