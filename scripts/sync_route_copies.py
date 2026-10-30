@@ -29,6 +29,7 @@ ROUTE_COPY_PAGES = [
     "admin-marketing.html",
     "admin-sanity.html",
     "admin-quotes.html",
+    "admin-followup-workload.html",
     "admin-growth.html",
     "admin-gallery.html",
     "admin-customers.html",
