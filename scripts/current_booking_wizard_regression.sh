@@ -58,3 +58,4 @@ node scripts/build705_ql261_test.mjs
 node scripts/build706_quote_booking_verification_test.mjs
 node scripts/build707_quote_reconciliation_test.mjs
 node scripts/build708_customer_handoff_test.mjs
+node scripts/build709_communication_outcome_test.mjs
