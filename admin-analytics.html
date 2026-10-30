@@ -194,6 +194,8 @@
       .shell { padding: 16px; }
     }
   </style>
+  <link rel="stylesheet" href="/assets/admin-command-surface-v712.css?v=20261030build712" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build712" defer></script>
 </head>
 <body data-build262="cpu-stabilization" data-build176="conversion-funnel-dashboard" data-build177="local-seo-proof-report" data-build179="local-proof-tasking" data-build194="analytics-registry-quick-add">
   <main class="shell">
@@ -246,6 +248,7 @@
 
         <article class="card card--half">
           <h2>Daily traffic</h2>
+          <div id="daily-traffic-chart712" class="rd-trend-chart" role="img" aria-label="Daily page views from the current analytics report">Refresh to view actual daily page views.</div>
           <div id="daily-traffic" class="list"></div>
         </article>
 
@@ -531,6 +534,31 @@
         );
       }
 
+      function renderDailyChart712(rows) {
+        const chart = document.getElementById('daily-traffic-chart712');
+        if (!chart) return;
+        chart.replaceChildren();
+        const points = (Array.isArray(rows) ? rows : []).slice(-14).map(row => ({
+          label: String(row.label || row.period_key || 'Day'),
+          value: Math.max(0, Number(row.page_views) || 0)
+        }));
+        if (!points.length) { chart.textContent = 'No daily traffic records in this selected window.'; return; }
+        const max = Math.max(1, ...points.map(point => point.value));
+        const bars = document.createElement('div');
+        bars.className = 'rd-trend-bars';
+        for (const point of points) {
+          const bar = document.createElement('span');
+          bar.className = 'rd-trend-bar';
+          bar.style.height = `${Math.max(4, point.value / max * 100)}%`;
+          bar.title = `${point.label}: ${point.value} page views`;
+          bar.setAttribute('aria-label', bar.title);
+          bars.append(bar);
+        }
+        const text = document.createElement('small');
+        text.textContent = `${points.length} observed day(s) · Highest daily page views: ${max} · Recorded source only`;
+        chart.append(bars, text);
+      }
+
       async function load() {
         const days = Number(els.days.value || 30);
         const [analyticsRes, abandonedRes, conversionRes, localSeoRes, proofTasksRes, registryWarningsRes] = await Promise.all([
@@ -607,6 +635,7 @@
           <div class="box"><div class="muted">Avg. Engage</div><strong>${Number(analytics.summary?.avg_engagement_seconds || 0)}s</strong></div>`;
 
         renderTrafficList(els.daily, analytics.reports?.daily || [], "No daily traffic data yet.");
+        renderDailyChart712(analytics.reports?.daily || []);
         renderTrafficList(els.weekly, analytics.reports?.weekly || [], "No weekly traffic data yet.");
         renderTrafficList(els.monthly, analytics.reports?.monthly || [], "No monthly traffic data yet.");
         renderTrafficList(els.yearly, analytics.reports?.yearly || [], "No yearly traffic data yet.");

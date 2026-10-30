@@ -33,6 +33,8 @@ import {
   let queue711 = null;
   let assignment711 = null;
   let assignmentQuote711 = '';
+  let escalation712 = null;
+  let escalationQuote712 = '';
 
   function verificationMatches706() {
     return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
@@ -113,6 +115,17 @@ import {
     $('#qAssign711').disabled = !assignmentCurrent711 || !assignment711.can_assign || !$('#qAssignee711').value;
     $('#qUnassign711').disabled = !assignmentCurrent711 || !assignment711.can_unassign;
     $('#qConsentRecheck711').disabled = !assignmentCurrent711 || !assignment711.can_recheck;
+    const currentEscalation712 = escalation712 && escalationQuote712 === selected?.id &&
+      escalation712.booking_id === selected?.booking_id && !editorDirty;
+    const note712 = $('#qEscalationNote712').value.trim();
+    const noteReady712 = note712.length >= 12 && note712.length <= 300;
+    $('#qEscalate712').disabled = !currentEscalation712 || !escalation712.can_escalate || !noteReady712;
+    $('#qOwnerReview712').disabled = !currentEscalation712 || !escalation712.can_review_owner ||
+      !escalation712.manager_review_allowed || !noteReady712;
+    $('#qAuditClose712').disabled = !currentEscalation712 || !escalation712.can_close_audit ||
+      !escalation712.manager_review_allowed || !noteReady712;
+    $('#qAuditReopen712').disabled = !currentEscalation712 || !escalation712.can_reopen_audit ||
+      !escalation712.manager_review_allowed || !noteReady712;
     $('#qReconcileRecord707').disabled = !reconciliation707?.ready_to_record || editorDirty ||
       reconciliationQuote707 !== selected?.id;
     $('#qBookingVerifyStatus706').textContent = verified ?
@@ -170,6 +183,11 @@ import {
     resolutionQuote710 = '';
     assignment711 = null;
     assignmentQuote711 = '';
+    escalation712 = null;
+    escalationQuote712 = '';
+    $('#qEscalationNote712').value = '';
+    $('#qEscalationStatus712').textContent = 'Select a linked quote to inspect its overdue review and current audit.';
+    $('#qEscalationHistory712').textContent = 'No live escalation audit checked yet.';
     $('#qAssignee711').value = '';
     $('#qAssignmentStatus711').textContent = 'Refresh this linked quote for current assignment and consent checks.';
     $('#qAssignmentHistory711').textContent = 'No assignment history checked yet.';
@@ -204,7 +222,7 @@ import {
     for (const key of BOOKING_CONVERSION_CHECKS705) $('#qBookingCheck705_' + key).checked = false;
     updateBookingReview();
     render();
-    if(selected?.booking_id)void inspectAssignment711();
+    if(selected?.booking_id){void inspectAssignment711();void inspectEscalation712();}
   }
   async function load() {
     const response = await fetch('/api/admin/quote_pipeline_list', {credentials:'include',cache:'no-store'});
@@ -246,6 +264,9 @@ import {
     outcomeQuote709 = '';
     assignment711 = null;
     assignmentQuote711 = '';
+    escalation712 = null;
+    escalationQuote712 = '';
+    $('#qEscalationStatus712').textContent = 'Unsaved quote changes; save and refresh the escalation audit.';
     $('#qAssignmentStatus711').textContent = 'Unsaved quote changes. Save and recheck the live staff assignment.';
     $('#qOutcomeStatus709').textContent = 'Quote edited; save and recheck current consent before reporting an outcome.';
     $('#qOutcomeHistory709').textContent = 'History must be refreshed after saving.';
@@ -701,11 +722,83 @@ import {
       if(!response.ok||!result.ok)throw Error(result.error||'Staff action could not be saved.');
       show('Internal staff review saved. No customer contact was made.');
     }catch(error){show(error.message||'No staff action confirmed.',true);}
-    if(selected?.id===quoteId&&!editorDirty){await inspectAssignment711();await inspectQueue711();}
+    if(selected?.id===quoteId&&!editorDirty){await inspectAssignment711();await inspectEscalation712();await inspectQueue711();}
   }
   $('#qAssign711').addEventListener('click',()=>recordAssignment711('assign'));
   $('#qUnassign711').addEventListener('click',()=>recordAssignment711('unassign'));
   $('#qConsentRecheck711').addEventListener('click',()=>recordAssignment711('recheck_consent'));
+  async function inspectEscalation712(){
+    if(!selected?.id||!selected.booking_id||editorDirty)return;
+    const quoteId=selected.id;
+    escalation712=null;
+    escalationQuote712='';
+    $('#qEscalationStatus712').textContent='Checking overdue date, assignment, consent and management review…';
+    updateBookingReview();
+    try{
+      const res=await fetch(`/api/admin/quote_followup_escalation?quote_id=${encodeURIComponent(quoteId)}`,{
+        credentials:'include',cache:'no-store'});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok||!data.ok)throw Error(data.error||'Could not load the live escalation audit.');
+      if(selected?.id!==quoteId||editorDirty)return;
+      escalation712=data;
+      escalationQuote712=quoteId;
+      $('#qEscalationStatus712').textContent=[
+        data.overdue?`Overdue by ${data.overdue_days} day(s).`:'Not currently overdue.',
+        data.assigned_staff_name?`Staff owner: ${data.assigned_staff_name}.`:'No assigned staff owner.',
+        data.assignment_current?'Current assignment verified.':'Assignment is stale or missing.',
+        data.recheck_current?'Current live consent recheck recorded.':'Record a fresh consent recheck before escalation.',
+        data.escalation_active?'Escalation is active.':'No current active escalation.',
+        data.owner_review_current?'Management ownership review recorded.':'Management review pending.',
+        data.audit_closed?'Internal consent audit closed.':'Internal consent audit not closed.',
+        data.consent_allowed?'Live contact permission currently exists.':'No live customer-contact permission.',
+        data.manager_review_allowed?'Manager review controls are available for this account.':
+          'Admin/senior detailer approval is required for manager actions.'
+      ].join(' ');
+      $('#qEscalationHistory712').textContent=(data.history||[]).length?
+        data.history.map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · ${e.action.replaceAll('_',' ')} · ${e.note||'No note'}`).join('\n'):
+        'No escalation or internal audit event has been saved.';
+      updateBookingReview();
+    }catch(error){
+      $('#qEscalationStatus712').textContent=error.message||'Live escalation audit unavailable; actions blocked.';
+      $('#qEscalationHistory712').textContent='No live audit readback. Nothing can be assumed closed.';
+      updateBookingReview();
+    }
+  }
+  $('#qEscalationRefresh712').addEventListener('click',inspectEscalation712);
+  $('#qEscalationNote712').addEventListener('input',updateBookingReview);
+  async function recordEscalation712(action){
+    if(!escalation712||escalationQuote712!==selected?.id||editorDirty||
+      escalation712.booking_id!==selected?.booking_id)
+      return show('Refresh the selected quote and current escalation audit first.',true);
+    const note=$('#qEscalationNote712').value.trim();
+    const allowed=action==='escalate'?escalation712.can_escalate:action==='review_owner'?escalation712.can_review_owner:
+      action==='close_audit'?escalation712.can_close_audit:escalation712.can_reopen_audit;
+    if(!allowed||note.length<12||note.length>300)return show('Current audit state and a 12–300 character review note are required.',true);
+    if(!window.confirm('Record this actual internal staff decision? No email/SMS is sent, no customer is contacted, and consent is not granted.'))return;
+    const snapshot=escalation712,quoteId=selected.id;
+    escalation712=null;
+    updateBookingReview();
+    try{
+      const res=await fetch('/api/admin/quote_followup_escalation',{method:'POST',credentials:'include',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({quote_id:quoteId,
+          booking_id:snapshot.booking_id,action,note,expected_marker:snapshot.marker,
+          expected_latest_outcome_event_id:snapshot.latest_outcome_event_id,
+          expected_latest_resolution_event_id:snapshot.latest_resolution_event_id,
+          expected_latest_assignment_event_id:snapshot.latest_assignment_event_id,
+          expected_latest_consent_recheck_event_id:snapshot.latest_consent_recheck_event_id,
+          expected_latest_escalation_event_id:snapshot.latest_escalation_event_id,
+          acknowledge_internal_review:true})});
+      const data=await res.json().catch(()=>({}));
+      if(!res.ok||!data.ok)throw Error(data.error||'Internal audit action could not be saved.');
+      $('#qEscalationNote712').value='';
+      show('Internal audit history recorded. No customer contact occurred.');
+    }catch(error){show(error.message||'No audit action confirmed.',true);}
+    if(selected?.id===quoteId&&!editorDirty)await inspectEscalation712();
+  }
+  $('#qEscalate712').addEventListener('click',()=>recordEscalation712('escalate'));
+  $('#qOwnerReview712').addEventListener('click',()=>recordEscalation712('review_owner'));
+  $('#qAuditClose712').addEventListener('click',()=>recordEscalation712('close_audit'));
+  $('#qAuditReopen712').addEventListener('click',()=>recordEscalation712('reopen_audit'));
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
     load().then(() => show('Quotes refreshed.')).catch(error => show(error.message, true));
