@@ -22,6 +22,8 @@ import {
   let verifiedBooking706 = null;
   let verifiedQuoteId706 = '';
   let bookingVerificationMessage706 = 'Enter a real booking ID and select Verify existing booking.';
+  let reconciliation707 = null;
+  let reconciliationQuote707 = '';
 
   function verificationMatches706() {
     return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
@@ -72,7 +74,12 @@ import {
     const linked = verified && !editorDirty && selected?.booking_id === verifiedBooking706?.id;
     const preview = customerConfirmationPreview706(selected,verified ? verifiedBooking706 : null,{verified,linked});
     $('#qCustomerPreview706').value = preview.text;
-    $('#qCopyConfirmation706').disabled = !preview.readyToCopy;
+    const ready707 = Boolean(reconciliation707?.notification_ready &&
+      reconciliationQuote707 === selected?.id && !editorDirty &&
+      reconciliation707.booking_id === selected?.booking_id && verified);
+    $('#qCopyConfirmation706').disabled = !preview.readyToCopy || !ready707;
+    $('#qReconcileRecord707').disabled = !reconciliation707?.ready_to_record || editorDirty ||
+      reconciliationQuote707 !== selected?.id;
     $('#qBookingVerifyStatus706').textContent = verified ?
       `${bookingVerificationMessage706} ${linked ? 'The saved link matches.' : 'Save the quote link, then verify again for the customer draft.'}` :
       bookingVerificationMessage706;
@@ -104,6 +111,10 @@ import {
     verifiedBooking706 = null;
     verifiedQuoteId706 = '';
     bookingVerificationMessage706 = 'Enter a real booking ID and select Verify existing booking.';
+    reconciliation707 = null;
+    reconciliationQuote707 = '';
+    $('#qReconcileStatus707').textContent = 'Select a saved quote, then check the live booking link.';
+    $('#qReconcileHistory707').textContent = 'No live confirmation history checked yet.';
     $('#qId').value = row.id || '';
     $('#qNumber').value = row.quote_number || '';
     $('#qStatus').value = row.status || 'draft';
@@ -158,6 +169,10 @@ import {
   });
   $('#quoteForm').addEventListener('input', () => {
     editorDirty = true;
+    reconciliation707 = null;
+    reconciliationQuote707 = '';
+    $('#qReconcileStatus707').textContent = 'Unsaved quote changes. Save, then reconcile again.';
+    $('#qReconcileHistory707').textContent = 'History must be refreshed after saving.';
     // Any changed booking/customer/amount/status field makes a prior readback stale.
     if (!verificationMatches706()) {
       verifiedBooking706 = null;
@@ -228,11 +243,63 @@ import {
   });
   $('#qCopyConfirmation706').addEventListener('click', async () => {
     if (!verificationMatches706() || editorDirty || selected?.booking_id !== verifiedBooking706?.id ||
-      verifiedBooking706?.status !== 'confirmed') return show('Verify a saved, confirmed booking first.',true);
+      verifiedBooking706?.status !== 'confirmed' || !reconciliation707?.notification_ready ||
+      reconciliationQuote707 !== selected?.id)
+      return show('Verify the saved booking and its current staff confirmation history first.',true);
     try {
       await navigator.clipboard.writeText($('#qCustomerPreview706').value);
       show('Customer draft copied. Review privately before sending; no message was sent here.');
     } catch { show('Clipboard unavailable. Copy the read-only preview manually.',true); }
+  });
+  async function reconcile707() {
+    if (!selected?.id || editorDirty) return show('Save the quote before checking its live booking history.',true);
+    const expectedId=selected.id;
+    reconciliation707=null;
+    reconciliationQuote707='';
+    $('#qReconcileStatus707').textContent='Checking saved quote, booking and staff events…';
+    updateBookingReview();
+    try {
+      const response=await fetch(`/api/admin/quote_booking_reconcile?quote_id=${encodeURIComponent(expectedId)}`,{
+        credentials:'include',cache:'no-store'});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Live reconciliation failed.');
+      if(selected?.id!==expectedId || editorDirty)return;
+      reconciliation707=data;
+      reconciliationQuote707=expectedId;
+      $('#qReconcileStatus707').textContent=data.notification_ready ?
+        'Staff confirmation is current. Verify the booking again above to unlock the customer draft.' :
+        `Not ready for customer notification: ${(data.issues||[]).join(' ') || 'Staff review required.'}`;
+      const history=Array.isArray(data.history)?data.history:[];
+      $('#qReconcileHistory707').textContent=history.length ? history.map(event=>
+        `${new Date(event.created_at).toLocaleString('en-CA')} · ${event.actor_name || 'Staff'}${event.current?' · CURRENT':' · historical'}`
+      ).join('\n') : 'No staff confirmation events recorded for this quote and booking.';
+      updateBookingReview();
+    } catch(error) {
+      $('#qReconcileStatus707').textContent=error.message||'Live reconciliation unavailable.';
+      $('#qReconcileHistory707').textContent='No verified history available.';
+      updateBookingReview();
+      show('Reconciliation failed. No notification is ready.',true);
+    }
+  }
+  $('#qReconcileCheck707').addEventListener('click',reconcile707);
+  $('#qReconcileRecord707').addEventListener('click',async () => {
+    if(!selected?.id||editorDirty||!reconciliation707?.ready_to_record||
+       reconciliationQuote707!==selected.id||reconciliation707.booking_id!==selected.booking_id)
+      return show('First reconcile the saved quote and confirmed booking.',true);
+    if(!window.confirm('Have we actually reviewed this confirmed booking, accepted quote, date, vehicle, service, site and customer terms? This records a staff history event only. No customer notification will be sent.'))return;
+    const quoteId=selected.id,bookingId=selected.booking_id;
+    reconciliation707=null;
+    updateBookingReview();
+    try {
+      const response=await fetch('/api/admin/quote_booking_reconcile',{
+        method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({quote_id:quoteId,booking_id:bookingId,confirm_actual_review:true})
+      });
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw new Error(data.error||'Staff history could not be recorded.');
+      show('Staff confirmation recorded. No customer message was sent. Checking current readiness…');
+      if(selected?.id===quoteId&&!editorDirty)await reconcile707();
+    }catch(error){show(error.message||'Staff confirmation unavailable.',true);await reconcile707();}
   });
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
