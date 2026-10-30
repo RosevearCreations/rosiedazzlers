@@ -30,6 +30,9 @@ import {
   let outcomeQuote709 = '';
   let resolution710 = null;
   let resolutionQuote710 = '';
+  let queue711 = null;
+  let assignment711 = null;
+  let assignmentQuote711 = '';
 
   function verificationMatches706() {
     return Boolean(selected?.id && verifiedQuoteId706 === selected.id &&
@@ -105,6 +108,11 @@ import {
       note710.length < 12 || note710.length > 300;
     $('#qResolutionReopen710').disabled = !currentReview710 || !resolution710.can_reopen ||
       note710.length < 12 || note710.length > 300;
+    const assignmentCurrent711 = assignment711 && assignmentQuote711 === selected?.id &&
+      assignment711.booking_id === selected?.booking_id && !editorDirty;
+    $('#qAssign711').disabled = !assignmentCurrent711 || !assignment711.can_assign || !$('#qAssignee711').value;
+    $('#qUnassign711').disabled = !assignmentCurrent711 || !assignment711.can_unassign;
+    $('#qConsentRecheck711').disabled = !assignmentCurrent711 || !assignment711.can_recheck;
     $('#qReconcileRecord707').disabled = !reconciliation707?.ready_to_record || editorDirty ||
       reconciliationQuote707 !== selected?.id;
     $('#qBookingVerifyStatus706').textContent = verified ?
@@ -132,6 +140,20 @@ import {
       .map(row => `<div class="summary-item"><strong>${esc(row.customer_name || row.quote_number || 'Quote')}</strong>
         <div class="muted">${esc(row.status)} · ${money(row.quoted_amount_cents)} · ${esc(row.follow_up_stage || 'No follow-up stage')}</div>
       </div>`).join('') || '<div class="summary-item muted">No pipeline rows.</div>';
+    renderAging711();
+  }
+  function renderAging711(){
+    if(!queue711)return;
+    const count=queue711.summary||{};
+    $('#qAgingSummary711').textContent=`${count.total||0} open quotes · ${count.overdue||0} overdue (${count.critical||0} aged 3+ days) · ${count.unassigned||0} without a staff owner. `+
+      'Queue overview is NOT a live consent verification.'+
+      (queue711.historical_records_may_be_truncated?' Historical records are limited; inspect the selected case.':'');
+    $('#qAgingQueue711').innerHTML=(queue711.items||[]).slice(0,30).map(item=>
+      `<button class="quote-row ${selected?.id===item.quote_id?'selected':''}" type="button" data-quote-id="${esc(item.quote_id)}">
+      <strong>${esc(item.quote_number)} · ${esc(item.bucket.replaceAll('_',' '))}</strong>
+      <span>Age: ${item.age_days} day(s) · Due: ${esc(asReadable(item.due_at))}</span>
+      <span>${esc(item.assigned_staff_name||'Unassigned')} · ${item.booking_id?'Select for live consent recheck':'No linked booking'}</span>
+      </button>`).join('')||'<p class="muted">No open saved quotes in the current limited queue.</p>';
   }
   function fill(row = {}) {
     selected = row.id ? row : null;
@@ -146,6 +168,11 @@ import {
     outcomeQuote709 = '';
     resolution710 = null;
     resolutionQuote710 = '';
+    assignment711 = null;
+    assignmentQuote711 = '';
+    $('#qAssignee711').value = '';
+    $('#qAssignmentStatus711').textContent = 'Refresh this linked quote for current assignment and consent checks.';
+    $('#qAssignmentHistory711').textContent = 'No assignment history checked yet.';
     $('#qOutcomeStatus709').textContent = 'Check the current consent, booking and staff outcome history.';
     $('#qOutcomeHistory709').textContent = 'No communication outcome checked yet.';
     $('#qResolutionStatus710').textContent = 'Select a saved quote and refresh the live follow-up review.';
@@ -177,6 +204,7 @@ import {
     for (const key of BOOKING_CONVERSION_CHECKS705) $('#qBookingCheck705_' + key).checked = false;
     updateBookingReview();
     render();
+    if(selected?.booking_id)void inspectAssignment711();
   }
   async function load() {
     const response = await fetch('/api/admin/quote_pipeline_list', {credentials:'include',cache:'no-store'});
@@ -216,6 +244,9 @@ import {
     handoffQuote708 = '';
     outcome709 = null;
     outcomeQuote709 = '';
+    assignment711 = null;
+    assignmentQuote711 = '';
+    $('#qAssignmentStatus711').textContent = 'Unsaved quote changes. Save and recheck the live staff assignment.';
     $('#qOutcomeStatus709').textContent = 'Quote edited; save and recheck current consent before reporting an outcome.';
     $('#qOutcomeHistory709').textContent = 'History must be refreshed after saving.';
     $('#qHandoffStatus708').textContent = 'Unsaved edits. Save, recheck confirmation and permission.';
@@ -573,6 +604,108 @@ import {
   }
   $('#qResolutionClose710').addEventListener('click',()=>recordResolution710('close'));
   $('#qResolutionReopen710').addEventListener('click',()=>recordResolution710('reopen'));
+  async function inspectQueue711(){
+    $('#qAgingSummary711').textContent='Loading current saved quote ages and staff assignment events…';
+    try{
+      const response=await fetch('/api/admin/quote_followup_queue',{credentials:'include',cache:'no-store'});
+      const data=await response.json().catch(()=>({}));
+      if(!response.ok||!data.ok)throw Error(data.error||'Could not load the staff follow-up queue.');
+      queue711=data;
+      renderAging711();
+    }catch(error){
+      queue711=null;
+      $('#qAgingSummary711').textContent=error.message||'Queue unavailable. No consent status can be inferred.';
+      $('#qAgingQueue711').textContent='Refresh failed; do not assume work was assigned or consent was checked.';
+    }
+  }
+  $('#qAgingRefresh711').addEventListener('click',inspectQueue711);
+  $('#qAgingQueue711').addEventListener('click',event=>{
+    const button=event.target.closest('[data-quote-id]');
+    if(!button||!beforeDiscard())return;
+    const row=rows.find(r=>r.id===button.dataset.quoteId);
+    if(row){fill(row);show('Selected saved quote for live follow-up review.');}
+    else show('Quote is no longer in the current pipeline. Refresh before acting.',true);
+  });
+  async function inspectAssignment711(){
+    if(!selected?.id||editorDirty)return;
+    const quoteId=selected.id;
+    assignment711=null;
+    assignmentQuote711='';
+    $('#qAssignmentStatus711').textContent='Checking current booking, customer permission and staff assignments…';
+    updateBookingReview();
+    try{
+      const [detailResponse,staffResponse]=await Promise.all([
+        fetch(`/api/admin/quote_followup_queue?quote_id=${encodeURIComponent(quoteId)}`,{
+          credentials:'include',cache:'no-store'}),
+        fetch('/api/admin/staff_assignable_list',{method:'POST',credentials:'include',
+          headers:{'Content-Type':'application/json'},body:JSON.stringify({include_admins:true})})
+      ]);
+      const data=await detailResponse.json().catch(()=>({}));
+      if(!detailResponse.ok||!data.ok)throw Error(data.error||'Could not verify live staff assignment.');
+      const staff=await staffResponse.json().catch(()=>({}));
+      if(selected?.id!==quoteId||editorDirty)return;
+      assignment711=data;
+      assignmentQuote711=quoteId;
+      const select=$('#qAssignee711');
+      const available=staffResponse.ok&&staff.ok?staff.staff_users.filter(p=>p.is_active&&
+        (p.can_manage_bookings||p.role_code==='admin')):[];
+      select.replaceChildren(new Option('Choose active booking-authorized staff',''));
+      for(const person of available)select.add(new Option(`${person.full_name||'Staff'} · ${person.role_code}`,person.id));
+      select.value=available.some(p=>p.id===data.assigned_staff_user_id)?data.assigned_staff_user_id:'';
+      $('#qAssignmentStatus711').textContent=[
+        data.closure_current?'Current follow-up is closed; assigning is blocked.':'Follow-up remains a staff-only task.',
+        data.assigned_staff_name?'Owner: '+data.assigned_staff_name+'.':'No staff owner assigned.',
+        data.assignment_current?'Assignment snapshot is current.':'Assignment requires a live recheck.',
+        data.recheck_current?'A staff consent recheck is current.':'A new live consent recheck is needed.',
+        data.current_consent_allowed?'Live opt-in currently permits the prepared channel.':
+          'Current consent does not permit customer contact.',
+        ...data.consent_alerts
+      ].join(' ');
+      $('#qAssignmentHistory711').textContent=(data.history||[]).length?
+        data.history.slice(0,15).map(e=>`${asReadable(e.created_at)} · ${e.actor_name||'Staff'} · ${e.action.replaceAll('_',' ')}${e.assigned_staff_name?' · '+e.assigned_staff_name:''}`).join('\n'):
+        'No assignment or consent recheck event exists yet.';
+      if(!staffResponse.ok)$('#qAssignmentStatus711').textContent+=' Staff directory unavailable; reassignment disabled.';
+      updateBookingReview();
+    }catch(error){
+      $('#qAssignmentStatus711').textContent=error.message||'Live assignment source unavailable. Actions blocked.';
+      $('#qAssignmentHistory711').textContent='No source readback. Do not assume permission or assignment.';
+      updateBookingReview();
+    }
+  }
+  $('#qAssignee711').addEventListener('change',updateBookingReview);
+  async function recordAssignment711(action){
+    if(!selected?.id||editorDirty||assignmentQuote711!==selected.id||
+      assignment711?.booking_id!==selected.booking_id)
+      return show('Refresh the live staff assignment before recording an action.',true);
+    const id=$('#qAssignee711').value;
+    const allowed=action==='assign'?assignment711.can_assign&&id:
+      action==='unassign'?assignment711.can_unassign:assignment711.can_recheck;
+    if(!allowed)return show('The current linked booking or staff assignment does not permit this action.',true);
+    if(!window.confirm(`Have we actually reviewed this ${action.replaceAll('_',' ')} action? `+
+      'Only a staff event is recorded. No email, SMS, booking change or delivery proof occurs.'))return;
+    const snapshot=assignment711,quoteId=selected.id;
+    assignment711=null;
+    updateBookingReview();
+    try{
+      const response=await fetch('/api/admin/quote_followup_queue',{
+        method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({quote_id:quoteId,booking_id:snapshot.booking_id,action,
+          assigned_staff_user_id:action==='assign'?id:null,
+          expected_marker:snapshot.marker,
+          expected_latest_outcome_event_id:snapshot.latest_outcome_event_id,
+          expected_latest_resolution_event_id:snapshot.latest_resolution_event_id,
+          expected_latest_assignment_event_id:snapshot.latest_assignment_event_id,
+          acknowledge_staff_action:true})
+      });
+      const result=await response.json().catch(()=>({}));
+      if(!response.ok||!result.ok)throw Error(result.error||'Staff action could not be saved.');
+      show('Internal staff review saved. No customer contact was made.');
+    }catch(error){show(error.message||'No staff action confirmed.',true);}
+    if(selected?.id===quoteId&&!editorDirty){await inspectAssignment711();await inspectQueue711();}
+  }
+  $('#qAssign711').addEventListener('click',()=>recordAssignment711('assign'));
+  $('#qUnassign711').addEventListener('click',()=>recordAssignment711('unassign'));
+  $('#qConsentRecheck711').addEventListener('click',()=>recordAssignment711('recheck_consent'));
   $('#refreshQuotes').addEventListener('click', () => {
     if (!beforeDiscard()) return;
     load().then(() => show('Quotes refreshed.')).catch(error => show(error.message, true));
@@ -621,6 +754,7 @@ import {
   window.AdminShell.boot({pageKey:'admin-quotes',onReady:async () => {
     try {
       await load();
+      await inspectQueue711();
       if (!selected) fill({status:'draft',probability:25});
     } catch (error) { show(error.message, true); }
   }});
