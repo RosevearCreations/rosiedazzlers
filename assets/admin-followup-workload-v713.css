@@ -1,0 +1,30 @@
+/* Source-backed Build 713 command workspace. Readable empty and failure states are mandatory. */
+body[data-command712="workload"] .admin-topbar{min-height:230px;align-items:center}
+body[data-command712="workload"] .rd-workload-actions{display:flex;gap:10px;align-items:end;flex-wrap:wrap;margin:12px 0}
+body[data-command712="workload"] .rd-workload-actions label{display:grid;gap:7px;min-width:min(320px,100%)}
+body[data-command712="workload"] .rd-workload-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+body[data-command712="workload"] .rd-workload-kpis .kpi-box{background:#0a2237;border:1px solid #35546f;border-left:4px solid #e1b95b;border-radius:13px}
+body[data-command712="workload"] .rd-workload-kpis .kpi-box strong{display:block;font-size:clamp(1.5rem,3vw,2.25rem);line-height:1.25;color:#fff}
+body[data-command712="workload"] .rd-workload-kpis .kpi-box span{font-size:.89rem;color:#c2d7e6}
+body[data-command712="workload"] .rd-workload-source{padding:12px 14px;border:1px solid #416581;background:#0a2339;border-radius:11px;color:#d1e4ee;margin:12px 0 4px}
+body[data-command712="workload"] .rd-workload-source[data-state="error"]{border-color:#dc7484;color:#ffe0e6}
+body[data-command712="workload"] .rd-workload-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:14px}
+body[data-command712="workload"] .rd-workload-grid .panel{min-width:0}
+body[data-command712="workload"] .rd-workload-table-wrap{overflow-x:auto}
+body[data-command712="workload"] table{width:100%;border-collapse:collapse;font-size:.9rem}
+body[data-command712="workload"] th,body[data-command712="workload"] td{padding:10px 8px;text-align:left;border-bottom:1px solid #2b4a64;white-space:nowrap}
+body[data-command712="workload"] td:first-child{white-space:normal}
+body[data-command712="workload"] .rd-workload-filter{display:grid;gap:8px;max-width:280px;margin-bottom:12px}
+body[data-command712="workload"] .rd-workload-exceptions{display:grid;gap:8px;max-height:430px;overflow:auto}
+body[data-command712="workload"] .rd-workload-case{width:100%;display:grid;gap:5px;text-align:left;color:#e9f5ff;background:#0a243b;border:1px solid #355c78;border-radius:11px;padding:12px;cursor:pointer}
+body[data-command712="workload"] .rd-workload-case[aria-pressed="true"]{border-color:#f2c76c;box-shadow:inset 3px 0 #f2c76c}
+body[data-command712="workload"] .rd-workload-case small{color:#bed4e5;overflow-wrap:anywhere}
+body[data-command712="workload"] .rd-workload-case:focus-visible{outline:3px solid #f6d374;outline-offset:2px}
+body[data-command712="workload"] .rd-workload-bars{display:grid;gap:10px;margin-top:16px}
+body[data-command712="workload"] .rd-workload-bar-row{display:grid;gap:8px;grid-template-columns:minmax(90px,180px) 1fr 36px;align-items:center;font-size:.82rem}
+body[data-command712="workload"] .rd-workload-bar-track{height:12px;background:#152f48;border-radius:7px;overflow:hidden}
+body[data-command712="workload"] .rd-workload-bar-fill{height:100%;background:linear-gradient(90deg,#e1b95b,#52c6e7);border-radius:7px}
+body[data-command712="workload"] .rd-workload-review textarea{display:block;width:100%;max-width:100%;margin:9px 0 12px}
+body[data-command712="workload"] .rd-workload-history{white-space:pre-wrap;overflow-wrap:anywhere;max-height:240px;overflow:auto;padding:12px;border:1px solid #31536d;border-radius:11px;color:#c6dfed;background:#061b2c}
+@media(max-width:1040px){body[data-command712="workload"] .rd-workload-grid{grid-template-columns:1fr}}
+@media(max-width:700px){body[data-command712="workload"] .rd-workload-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-command712="workload"] .rd-workload-bar-row{grid-template-columns:90px 1fr 28px}body[data-command712="workload"] .rd-workload-actions .btn{width:100%;min-height:44px}}
