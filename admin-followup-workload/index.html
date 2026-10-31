@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v726.css?v=20261031build726" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v727.css?v=20261031build727" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v728.css?v=20261031build728" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v729.css?v=20261031build729" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -208,6 +209,15 @@
                                 <label class="rd-v715-override"><input id="witnessExceptionNotApproved728" type="checkbox" /> No external witness disposition, human identity verification, custody approval or Proof-B authorization is established.</label>
                                 <button id="witnessExceptionReview728" class="btn ghost" type="button">Sign unresolved witness exception (HELD)</button>
                                 <p id="witnessExceptionStatus728" class="rd-v714-status" role="status" aria-live="polite">Requires an independently pinned exception reviewer and signed Build 727/726/725 receipts.</p>
+                                <details class="rd-v729-panel"><summary>ⓘ Build 729 · Witness exception continuity</summary>
+                                  <p class="muted">Compare two original signed Build 728 witness exception snapshots against the same signed Build 727 audit. This only traces local decisions; no human identity or independent resolution is verified.</p>
+                                  <label for="witnessContinuityBefore729">Earlier signed Build 728 exception<input id="witnessContinuityBefore729" type="file" accept="application/json,.json" /></label>
+                                  <label for="witnessContinuityAfter729">Later signed Build 728 exception<input id="witnessContinuityAfter729" type="file" accept="application/json,.json" /></label>
+                                  <label for="witnessContinuityNote729">Continuity note (20–300 characters)<textarea id="witnessContinuityNote729" rows="2" maxlength="300"></textarea></label>
+                                  <label class="rd-v715-override"><input id="witnessContinuityLocal729" type="checkbox" /> Both snapshots represent local review only; no genuine witness disposition, identity acceptance or outside contact is established.</label>
+                                  <button id="witnessContinuityReview729" class="btn ghost" type="button">Sign witness continuity review (HELD)</button>
+                                  <p id="witnessContinuityStatus729" class="rd-v714-status" role="status" aria-live="polite">Requires two chronological original signed Build 728 receipts, signed Build 727 audit and the same independent reviewer.</p>
+                                </details>
                               </details>
                             </details>
                           </details>
@@ -352,6 +362,15 @@
                                 <label class="rd-v715-override"><input id="ledgerAgingLocalOnly728" type="checkbox" /> This uses local receipt age only; no actual delivery, independent challenge, SQL execution or external approval occurred.</label>
                                 <button id="ledgerAgingReview728" class="btn ghost" type="button">Sign owner follow-up aging (HELD)</button>
                                 <p id="ledgerAgingStatus728" class="rd-v714-status" role="status" aria-live="polite">Original owner session and signed Build 727/726/725 receipts required.</p>
+                                <details class="rd-v729-panel"><summary>ⓘ Build 729 · Owner local aging delta</summary>
+                                  <p class="muted">Compare two signed Build 728 aging snapshots for the same original queue and window. The displayed change is local receipt age—not a delivered message or verified outside reply.</p>
+                                  <label for="ledgerDeltaBefore729">Earlier signed Build 728 owner aging<input id="ledgerDeltaBefore729" type="file" accept="application/json,.json" /></label>
+                                  <label for="ledgerDeltaAfter729">Later signed Build 728 owner aging<input id="ledgerDeltaAfter729" type="file" accept="application/json,.json" /></label>
+                                  <label for="ledgerDeltaNote729">Owner delta note (20–300 characters)<textarea id="ledgerDeltaNote729" rows="2" maxlength="300"></textarea></label>
+                                  <label class="rd-v715-override"><input id="ledgerDeltaLocal729" type="checkbox" /> These are local receipt age snapshots only; no external delivery, independent challenge or execution occurred.</label>
+                                  <button id="ledgerDeltaReview729" class="btn ghost" type="button">Sign local aging delta (HELD)</button>
+                                  <p id="ledgerDeltaStatus729" class="rd-v714-status" role="status" aria-live="polite">Requires two chronological original signed Build 728 snapshots, the signed Build 727 queue and original owner session.</p>
+                                </details>
                               </details>
                             </details>
                           </details>
@@ -412,6 +431,15 @@
                                 <label class="rd-v715-override"><input id="trialGapNoVerification728" type="checkbox" /> No original artifact, external approval, disposable-environment verification, SQL or backup-purge test occurred.</label>
                                 <button id="trialGapReview728" class="btn ghost" type="button">Sign unresolved evidence gaps (HELD)</button>
                                 <p id="trialGapStatus728" class="rd-v714-status" role="status" aria-live="polite">Original signed Build 727/726/725 lineage and independent evidence gap reviewer required.</p>
+                                <details class="rd-v729-panel"><summary>ⓘ Build 729 · Nonproduction evidence gap drift</summary>
+                                  <p class="muted">Compare two signed Build 728 gap reviews anchored to the same signed Build 727 source. All external provenance, environment, authorization and backup observations remain unresolved.</p>
+                                  <label for="trialDriftBefore729">Earlier signed Build 728 gap review<input id="trialDriftBefore729" type="file" accept="application/json,.json" /></label>
+                                  <label for="trialDriftAfter729">Later signed Build 728 gap review<input id="trialDriftAfter729" type="file" accept="application/json,.json" /></label>
+                                  <label for="trialDriftNote729">Gap comparison note (20–300 characters)<textarea id="trialDriftNote729" rows="2" maxlength="300"></textarea></label>
+                                  <label class="rd-v715-override"><input id="trialDriftLocal729" type="checkbox" /> No original artifact, custodian approval, database/SQL activity, backup access or deletion was verified or performed.</label>
+                                  <button id="trialDriftReview729" class="btn ghost" type="button">Sign local gap drift (HELD)</button>
+                                  <p id="trialDriftStatus729" class="rd-v714-status" role="status" aria-live="polite">Requires two chronological original signed Build 728 gap receipts, signed Build 727 source and assigned independent reviewer.</p>
+                                </details>
                               </details>
                             </details>
                           </details>
