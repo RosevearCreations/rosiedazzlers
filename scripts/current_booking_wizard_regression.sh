@@ -74,3 +74,4 @@ node scripts/build721_source_history_rotation_security_test.mjs
 node scripts/build722_ledger_dry_run_provenance_retention_test.mjs
 node scripts/build723_nonprod_witness_identity_expiry_test.mjs
 node scripts/build724_handoff_reference_purge_test.mjs
+node scripts/build725_handoff_reconciliation_aging_readiness_test.mjs
