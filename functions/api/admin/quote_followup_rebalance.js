@@ -30,6 +30,8 @@ import {reconcilePrivateOwnerHandoff725,witnessConflictAging725,
   nonproductionRetentionReadiness725} from '../../../assets/quote-followup-reconciliation-v725.mjs';
 import {ownerHandoffExceptionFollowup726,witnessConflictPriorityQueue726,
   nonproductionTrialEvidenceGuardrails726} from '../../../assets/quote-followup-exceptions-v726.mjs';
+import {ownerExceptionEvidenceFollowup727,witnessPriorityDispositionAudit727,
+  trialSourceProvenanceRecheck727} from '../../../assets/quote-followup-audit-v727.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -265,12 +267,49 @@ export async function onRequestPost({request,env}){
     'review_retention_backup_purge_trial','reconcile_private_owner_handoff',
     'review_witness_conflict_aging','review_nonproduction_retention_readiness',
     'followup_owner_handoff_exception','review_witness_conflict_priority',
-    'review_nonproduction_trial_evidence_intake'].includes(action)){
+    'review_nonproduction_trial_evidence_intake',
+    'followup_owner_exception_evidence','audit_witness_priority_disposition',
+    'recheck_trial_source_provenance'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['followup_owner_exception_evidence','audit_witness_priority_disposition',
+      'recheck_trial_source_provenance'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      const sources=action==='followup_owner_exception_evidence'?[
+        ['signed_exception','rosie_owner_handoff_exception_followup',726],
+        ['signed_reconciliation','rosie_private_owner_handoff_receipt_reconciliation',725],
+        ['signed_handoff','rosie_owner_nonproduction_authorization_handoff',724]]:
+        action==='audit_witness_priority_disposition'?[
+          ['signed_priority','rosie_witness_conflict_priority_queue',726],
+          ['signed_aging','rosie_witness_reference_conflict_aging',725],
+          ['signed_reference','rosie_witness_reference_conflict_review',724]]:[
+          ['signed_intake','rosie_nonproduction_trial_evidence_intake_guardrails',726],
+          ['signed_readiness','rosie_nonproduction_retention_trial_readiness_review',725],
+          ['signed_handoff','rosie_owner_nonproduction_authorization_handoff',724]];
+      const verified=await Promise.all(sources.map(async ([field,kind,build])=>
+        [field,await verify(body[field],kind,build)]));
+      const failed=verified.find(([,result])=>!result.ok);
+      if(failed)return json({ok:false,status:'HELD',build:727,error:failed[1].reason},409);
+      const inputs=Object.fromEntries(verified);
+      const receipt=action==='followup_owner_exception_evidence'?
+        ownerExceptionEvidenceFollowup727(inputs.signed_exception,
+          inputs.signed_reconciliation,inputs.signed_handoff,access.actor,env,body):
+        action==='audit_witness_priority_disposition'?
+          witnessPriorityDispositionAudit727(inputs.signed_priority,inputs.signed_aging,
+            inputs.signed_reference,access.actor,env,body):
+          trialSourceProvenanceRecheck727(inputs.signed_intake,inputs.signed_readiness,
+            inputs.signed_handoff,access.actor,env,body);
+      if(!receipt)return json({ok:false,status:'HELD',build:727,
+        error:'Original signed evidence lineage, independent reviewer/owner roles and explicit no-approval status are required.'},409);
+      try{return json({ok:true,build:727,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env)});}
+      catch{return json({ok:false,build:727,
+        error:'Current server signer could not sign the Build 727 local audit receipt.'},503);}
+    }
     if(['followup_owner_handoff_exception','review_witness_conflict_priority',
       'review_nonproduction_trial_evidence_intake'].includes(action)){
       const audit=await signerCustodyAudit717(env);
