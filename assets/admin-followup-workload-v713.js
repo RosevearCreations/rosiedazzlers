@@ -1186,6 +1186,136 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('recoveryImport730').addEventListener('change',()=>void importRecovery730());
   $('recoverySign730').addEventListener('click',()=>void signRecovery730());
   $('recoveryClear730').addEventListener('click',clearRecovery730);
+  // Build 731: preserve every existing action by MOVING its exact DOM node,
+  // with IDs, file inputs and handlers, into shallow advanced disclosure lanes.
+  // When scripting is unavailable the original nested markup remains usable.
+  function simplifyEvidencePanels731(){
+    const selectors=Array.from({length:7},(_,i)=>`details.rd-v${723+i}-panel`).join(',');
+    const panels=[...document.querySelectorAll(selectors)];
+    let moved=0;
+    for(const panel of panels){
+      const id=panel.querySelector(':scope > label input[id], :scope > label select[id]')?.id||'';
+      const scope=id.startsWith('witness')?'Witness':
+        id.startsWith('trial')||id==='ledgerDryRunReceipt723'||
+        id==='ledgerExpiryReceipt724'?'Nonproduction':
+        id.startsWith('ledger')?'Owner':null;
+      if(scope){$(`advanced${scope}Items731`).appendChild(panel);moved++;}
+    }
+    const recovery=document.querySelector('.rd-v730-workbench');
+    if(recovery)$('advancedRecoveryItems731').appendChild(recovery);
+    return moved;
+  }
+  const originalPanelCount731=simplifyEvidencePanels731();
+  let verifiedOverview731=[],overviewVerifiedAt731=null;
+  const overviewStatus731=(message,error=false)=>
+    actionStatus714('overviewStatus731',message,error);
+  const overviewAgeNames731={under24:'Under 24h',
+    '24h':'24–71h','72h':'72–167h','168h':'168h+'};
+  const overviewVisible731=()=>verifiedOverview731.filter(item=>
+    ($('overviewScope731').value==='all'||item.scope===$('overviewScope731').value)&&
+    ($('overviewAging731').value==='all'||item.age_band===$('overviewAging731').value));
+  function addOverviewText731(parent,tag,value,className){
+    const node=document.createElement(tag);
+    if(className)node.className=className;
+    node.textContent=value;parent.appendChild(node);return node;
+  }
+  function renderOverview731(){
+    for(const scope of ['owner','witness','nonproduction']){
+      const scoped=verifiedOverview731.filter(item=>item.scope===scope);
+      const cap=scope[0].toUpperCase()+scope.slice(1);
+      $(`overview${cap}Count731`).textContent=scoped.length?
+        `${scoped.length} original signature${scoped.length===1?'':'s'} verified`:
+        'No verified receipts';
+      const rank=scoped.length?Math.max(...scoped.map(item=>item.age_rank)):-1;
+      const sample=scoped.find(item=>item.age_rank===rank);
+      $(`overview${cap}Priority731`).textContent=sample?
+        `Oldest local priority: ${overviewAgeNames731[sample.age_band]}`:
+        'Local priority: unknown';
+    }
+    const target=$('overviewResults731');target.replaceChildren();
+    const visible=overviewVisible731();
+    if(!verifiedOverview731.length){
+      addOverviewText731(target,'p','No server-verified originals in this device session. External evidence is HELD.','muted');
+    }else if(!visible.length){
+      addOverviewText731(target,'p','No verified receipts match these filters. Clear a filter to review the original evidence.','muted');
+    }
+    for(const item of visible){
+      const card=document.createElement('article');card.className='rd-v731-result';
+      const header=document.createElement('div');header.className='rd-v731-result-head';
+      addOverviewText731(header,'strong',`${item.scope.toUpperCase()} · Build ${item.build}`);
+      const badge=addOverviewText731(header,'span',item.age_label,'rd-v731-age');
+      badge.dataset.rank=String(item.age_rank);
+      card.appendChild(header);
+      addOverviewText731(card,'h3',item.label);
+      addOverviewText731(card,'p',`Signed local status: ${item.status}`);
+      addOverviewText731(card,'p',`Reviewed: ${item.reviewed_at} · Receipt age at verification: ${item.age_hours}h`);
+      if(item.recorded_local_queue_age_hours!==null){
+        addOverviewText731(card,'p',`Historical recorded local queue age: ${item.recorded_local_queue_age_hours}h`+
+          (item.recorded_local_review_window_hours===null?'':
+          ` · review window: ${item.recorded_local_review_window_hours}h`));
+      }
+      if(item.unresolved_gap_codes.length)
+        addOverviewText731(card,'p',`Unresolved gaps: ${item.unresolved_gap_codes.join(', ')}`);
+      addOverviewText731(card,'p',`Still needed: ${item.outstanding_action}`);
+      const hashes=document.createElement('details');
+      addOverviewText731(hashes,'summary',`Signed receipt SHA-256 and ${Object.keys(item.source_hashes).length} source hashes`);
+      addOverviewText731(hashes,'code',`receipt_sha256: ${item.receipt_sha256}\n`+
+        Object.entries(item.source_hashes).map(([key,value])=>`${key}: ${value}`).join('\n'));
+      card.appendChild(hashes);target.appendChild(card);
+    }
+    $('overviewExport731').disabled=!verifiedOverview731.length||!visible.length;
+  }
+  async function verifyOverview731(){
+    const button=$('overviewVerify731');button.disabled=true;
+    verifiedOverview731=[];overviewVerifiedAt731=null;renderOverview731();
+    try{
+      const files=[...$('overviewFiles731').files||[]];
+      if(!files.length||files.length>24||files.some(file=>file.size>32000)||
+        files.reduce((sum,file)=>sum+file.size,0)>480000)
+        throw Error('Select 1–24 original signed JSON files, maximum 32 KB each and 480 KB total.');
+      overviewStatus731('Verifying each original signature against the current server signer and assigned Admin session…');
+      const signed=await Promise.all(files.map(async file=>{
+        try{return JSON.parse(await file.text());}
+        catch{throw Error('An original file contains invalid JSON. Nothing was accepted.');}
+      }));
+      const result=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'review_owner_evidence_overview',signed_receipts:signed})});
+      verifiedOverview731=result.items;overviewVerifiedAt731=result.verified_at;
+      renderOverview731();
+      overviewStatus731(`${verifiedOverview731.length} original signed receipts verified. `+
+        `Priorities are local receipt age only; external approvals, identity, delivery, SQL and backups remain HELD.`);
+    }catch(error){renderOverview731();overviewStatus731(error.message||'Original evidence verification HELD.',true);}
+    finally{button.disabled=false;}
+  }
+  function exportOverview731(){
+    const items=overviewVisible731();if(!overviewVerifiedAt731||!items.length)return;
+    download716({build:731,kind:'rosie_verified_local_evidence_overview',
+      verified_at:overviewVerifiedAt731,exported_at:new Date().toISOString(),
+      scope_filter:$('overviewScope731').value,aging_filter:$('overviewAging731').value,
+      original_signed_receipts_verified:true,items,
+      external_evidence_approved:false,proof_b_authorized:false,
+      message_sent:false,database_written:false},
+    'rosie-build731-filtered-original-evidence-held-overview.json');
+    overviewStatus731('Filtered verification overview downloaded locally with the original receipt and source hashes. No external approval or write occurred.');
+  }
+  $('overviewFiles731').addEventListener('change',()=>{
+    verifiedOverview731=[];overviewVerifiedAt731=null;renderOverview731();
+    overviewStatus731('New original files selected. Verify signatures before relying on any status or priority.');
+  });
+  $('overviewScope731').addEventListener('change',renderOverview731);
+  $('overviewAging731').addEventListener('change',renderOverview731);
+  $('overviewVerify731').addEventListener('click',()=>void verifyOverview731());
+  $('overviewExport731').addEventListener('click',exportOverview731);
+  document.querySelectorAll('[data-advanced-scope731]').forEach(button=>
+    button.addEventListener('click',()=>{
+      const details=$(`advanced${button.dataset.advancedScope731[0].toUpperCase()+
+        button.dataset.advancedScope731.slice(1)}731`);
+      details.open=true;details.scrollIntoView({behavior:'smooth',block:'start'});
+      details.querySelector('summary').focus({preventScroll:true});
+    }));
+  if(originalPanelCount731!==21)
+    overviewStatus731('Some original advanced workflows could not be grouped automatically; inspect the original section below.',true);
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{

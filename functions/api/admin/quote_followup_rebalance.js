@@ -38,6 +38,8 @@ import {ownerAgingDelta729,witnessExceptionContinuity729,
   nonproductionGapDrift729} from '../../../assets/quote-followup-comparison-v729.mjs';
 import {RECOVERY_SCOPES730,recoverLocalComparison730} from
   '../../../assets/quote-followup-recovery-v730.mjs';
+import {EVIDENCE_KINDS731,overviewEvidenceItem731} from
+  '../../../assets/quote-followup-overview-v731.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -278,12 +280,49 @@ export async function onRequestPost({request,env}){
     'recheck_trial_source_provenance','review_owner_followup_aging',
     'review_witness_audit_exception','track_nonproduction_provenance_gaps',
     'compare_owner_aging_delta','compare_witness_exception_continuity',
-    'compare_nonproduction_gap_drift','recover_local_comparison_summary'].includes(action)){
+    'compare_nonproduction_gap_drift','recover_local_comparison_summary',
+    'review_owner_evidence_overview'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(action==='review_owner_evidence_overview'){
+      const files=body.signed_receipts;
+      if(!Array.isArray(files)||files.length<1||files.length>24||
+        JSON.stringify(files).length>512000)return json({ok:false,build:731,status:'HELD',
+        error:'Select 1–24 bounded original signed evidence receipts.'},400);
+      const audit=await signerCustodyAudit717(env),items=[];
+      for(const envelope of files){
+        let expected;
+        try{
+          if(typeof envelope?.receipt_base64!=='string'||
+            envelope.receipt_base64.length>24000)throw Error('Invalid envelope');
+          const decoded=JSON.parse(atob(envelope.receipt_base64));
+          expected=Object.hasOwn(EVIDENCE_KINDS731,decoded?.kind)?
+            EVIDENCE_KINDS731[decoded.kind]:null;
+          if(!expected||decoded.build!==expected.build)throw Error('Unknown evidence type');
+        }catch{return json({ok:false,build:731,status:'HELD',
+          error:'Unrecognized original signed Build 723–730 evidence file.'},409);}
+        const verified=await verifyScopedSignedReceipt722(envelope,expected.kind,
+          expected.build,env,audit);
+        if(!verified.ok)return json({ok:false,build:731,status:'HELD',
+          error:verified.reason},409);
+        const item=overviewEvidenceItem731(verified);
+        if(!item)return json({ok:false,build:731,status:'HELD',
+          error:'Signed evidence conflicts with safe local-only review boundaries.'},409);
+        if(items.some(previous=>previous.receipt_sha256===item.receipt_sha256))
+          return json({ok:false,build:731,status:'HELD',
+            error:'Duplicate original evidence receipt selected.'},409);
+        items.push(item);
+      }
+      items.sort((a,b)=>b.age_rank-a.age_rank||
+        b.reviewed_at.localeCompare(a.reviewed_at)||a.kind.localeCompare(b.kind));
+      return json({ok:true,build:731,scope:'VERIFIED_LOCAL_RECEIPTS_ONLY',
+        verified_at:new Date().toISOString(),items,
+        external_evidence_approved:false,proof_b_authorized:false,
+        message_sent:false,database_written:false});
+    }
     if(action==='recover_local_comparison_summary'){
       const scope=Object.hasOwn(RECOVERY_SCOPES730,body.scope)?
         RECOVERY_SCOPES730[body.scope]:null;
