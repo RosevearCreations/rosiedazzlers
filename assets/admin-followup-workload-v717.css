@@ -1,0 +1,9 @@
+/* Build 717 · actual source-led command controls, responsive cross-device proof. */
+body[data-command712="workload"] .rd-v717-roster{border-left:4px solid #d6ad4f;padding-left:12px}
+body[data-command712="workload"] .rd-v717-cross-device{border-color:#b68b3d}
+body[data-command712="workload"] #deviceDesktop717,
+body[data-command712="workload"] #deviceMobile717,
+body[data-command712="workload"] #crossDeviceNote717{width:100%;max-width:100%;box-sizing:border-box;min-height:44px;background:#0a263d;color:#eef8ff;border:1px solid #45657b;border-radius:9px;padding:10px}
+body[data-command712="workload"] :is(#deviceDesktop717,#deviceMobile717,#crossDeviceNote717,#crossDeviceExport717,#signerCustodyAudit717,#unverifiedShift717):focus-visible{outline:3px solid #f7d879;outline-offset:3px}
+body[data-command712="workload"] :is(#crossDeviceStatus717,#signerCustodyStatus717){overflow-wrap:anywhere;white-space:normal}
+@media(max-width:700px){body[data-command712="workload"] :is(#crossDeviceExport717,#signerCustodyAudit717){display:block;width:100%;min-height:44px}body[data-command712="workload"] .rd-v717-cross-device{padding:12px}}

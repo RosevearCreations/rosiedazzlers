@@ -128,7 +128,8 @@ try{
   const current=await response.json();
   response=await onRequestPost({request:post(markers(current)),env});
   assert.equal(response.status,409,'No unstated capacity override is permitted');
-  response=await onRequestPost({request:post({...markers(current),acknowledge_capacity_override:true}),env});
+  response=await onRequestPost({request:post({...markers(current),acknowledge_capacity_override:true,
+    acknowledge_unverified_shift:true}),env});
   assert.equal(response.status,200,'Documented explicit manager capacity override permitted');
   assert.equal(posted.length,1);
   response=await onRequestGet({request:get(`?quote_id=${quoteId}`),env});
