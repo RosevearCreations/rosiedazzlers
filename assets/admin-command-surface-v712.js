@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 721 command workspaces · Source-drift private history design, receipt-specific pinned retired-signer exceptions and separate owner-ledger security review. No simulated statistics or background polling; no automatic messages, unapproved evidence storage or fictitious approvals.';
+  note.textContent='Build 722 command workspaces · Rollback-only private ledger SQL review, exact rotation-witness provenance and owner retention reconciliation. No simulated statistics or background polling; no automatic messages, unapproved evidence storage, SQL execution, fictitious acceptances or external approvals.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',

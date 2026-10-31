@@ -20,6 +20,8 @@ import {verifySignedEvidence720,providerDriftComparison720,recoverCustodyDisposi
   ownerLedgerApprovalGate720} from '../../../assets/quote-followup-recovery-v720.mjs';
 import {sourceHistoryDesign721,rotatedCustodyException721,ownerLedgerSecurityReview721} from
   '../../../assets/quote-followup-governance-v721.mjs';
+import {verifyScopedSignedReceipt722,privateLedgerDryRun722,rotationWitnessProvenance722,
+  ownerRetentionReconciliation722} from '../../../assets/quote-followup-ledger-v722.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -247,12 +249,47 @@ export async function onRequestPost({request,env}){
   if(['verify_export_custody_witness','review_owner_devices','review_export_custody_disposition',
     'decide_owner_device_retention','compare_provider_binding','recover_custody_disposition',
     'review_owner_ledger_gate','review_source_history_design',
-    'recover_rotated_custody_exception','review_owner_ledger_security'].includes(action)){
+    'recover_rotated_custody_exception','review_owner_ledger_security',
+    'prepare_private_ledger_dry_run','verify_rotation_witness_provenance',
+    'reconcile_owner_retention'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['prepare_private_ledger_dry_run','verify_rotation_witness_provenance',
+      'reconcile_owner_retention'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      let receipt;
+      if(action==='verify_rotation_witness_provenance'){
+        if(body.acknowledge_no_external_identity!==true)return json({ok:false,
+          error:'Acknowledge no human identity or external custody approval is being asserted.',build:722},409);
+        const signed=await verify(body.signed_exception,
+          'rosie_rotated_custody_receipt_exception',721);
+        if(!signed.ok)return json({ok:false,error:signed.reason,build:722},409);
+        const checked=await rotatedCustodyException721(body.previous_signed_evidence,
+          body.rotation_witness_envelope,access.actor,env,audit);
+        if(!checked.ok)return json({ok:false,error:checked.reason,build:722},409);
+        receipt=rotationWitnessProvenance722(signed,checked,access.actor,env,body);
+      }else{
+        const gate=await verify(body.signed_gate,
+          'rosie_owner_evidence_ledger_approval_gate',720);
+        const security=await verify(body.signed_security,
+          'rosie_owner_evidence_ledger_security_review',721);
+        if(!gate.ok||!security.ok)return json({ok:false,
+          error:!gate.ok?gate.reason:security.reason,build:722},409);
+        receipt=action==='prepare_private_ledger_dry_run'?
+          privateLedgerDryRun722(security,gate,access.actor,env,body):
+          ownerRetentionReconciliation722(gate,security,access.actor,env,body);
+      }
+      if(!receipt)return json({ok:false,
+        error:'Original signed receipts, exact lineage, configured independent role and bounded no-storage decision are required.',
+        status:'HELD',build:722},409);
+      try{return json({ok:true,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env),build:722});}
+      catch{return json({ok:false,error:'The current internal signer could not sign this held Build 722 review.',build:722},503);}
+    }
     if(action==='recover_rotated_custody_exception'){
       if(body.acknowledge_not_approval!==true)return json({ok:false,
         error:'Confirm this old-key exception is not a new custody, witness, owner or Proof-B approval.',build:721},409);
