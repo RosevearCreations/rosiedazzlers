@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 727 command workspaces · Owner exception follow-up queue, witness priority disposition audit and trial source provenance recheck. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, backup deletion, background messages, fictitious acceptance or external approval.';
+  note.textContent='Build 728 command workspaces · Owner follow-up aging review, independent witness audit exception review and nonproduction provenance evidence gaps. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, backup deletion, background messages, fictitious acceptance or external approval.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',
