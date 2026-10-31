@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v724.css?v=20261031build724" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v725.css?v=20261031build725" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v726.css?v=20261031build726" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v727.css?v=20261031build727" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -190,6 +191,15 @@
                             <label class="rd-v715-override"><input id="witnessPriorityLocalOnly726" type="checkbox" /> This priority is calculated from signed local evidence only; human identity and custody remain unverified.</label>
                             <button id="witnessPriorityReview726" class="btn ghost" type="button">Sign local witness priority (HELD)</button>
                             <p id="witnessPriorityStatus726" class="rd-v714-status" role="status" aria-live="polite">Requires an independently assigned priority reviewer and original signed Build 725/724/723 receipts.</p>
+                            <details class="rd-v727-panel"><summary>ⓘ Build 727 · Witness priority disposition audit</summary>
+                              <p class="muted">A separate auditor checks the signed Build 726 priority and its original 725/724 lineage. This cannot establish external witness identity or custody disposition.</p>
+                              <label for="witnessPriorityReceipt727">Original signed Build 726 priority<input id="witnessPriorityReceipt727" type="file" accept="application/json,.json" /></label>
+                              <label for="witnessAuditDecision727">Audit decision<select id="witnessAuditDecision727"><option value="flag_missing_independent_disposition">Flag missing independent disposition (HELD)</option><option value="defer_audit">Defer audit</option><option value="reject_audit">Reject</option></select></label>
+                              <label for="witnessAuditNote727">Auditor note (20–300 characters)<textarea id="witnessAuditNote727" rows="2" maxlength="300"></textarea></label>
+                              <label class="rd-v715-override"><input id="witnessAuditNoDisposition727" type="checkbox" /> No authentic human identity verification, external disposition or custody authorization is established.</label>
+                              <button id="witnessAuditReview727" class="btn ghost" type="button">Sign local disposition audit (HELD)</button>
+                              <p id="witnessAuditStatus727" class="rd-v714-status" role="status" aria-live="polite">An independently pinned auditor and original signed 726/725/724 sources are required.</p>
+                            </details>
                           </details>
                         </details>
                       </details>
@@ -314,6 +324,16 @@
                             <label class="rd-v715-override"><input id="ledgerHandoffNoDelivery726" type="checkbox" /> Nothing is sent or accepted as independent evidence, and no SQL is executed.</label>
                             <button id="ledgerHandoffException726" class="btn ghost" type="button">Sign owner exception follow-up (HELD)</button>
                             <p id="ledgerHandoffExceptionStatus726" class="rd-v714-status" role="status" aria-live="polite">Requires the original owner session and signed Build 725/724/723 receipt chain.</p>
+                            <details class="rd-v727-panel"><summary>ⓘ Build 727 · Owner exception follow-up queue</summary>
+                              <p class="muted">The original owner reviews elapsed time since the signed 726 local exception. The output is one signed follow-up item, not an external message, delivery receipt or scheduled queue.</p>
+                              <label for="ledgerExceptionReceipt727">Original signed Build 726 owner exception<input id="ledgerExceptionReceipt727" type="file" accept="application/json,.json" /></label>
+                              <label for="ledgerExceptionWindow727">Local follow-up window<select id="ledgerExceptionWindow727"><option value="24">24 hours</option><option value="72" selected>72 hours</option><option value="168">7 days</option></select></label>
+                              <label for="ledgerExceptionDecision727">Follow-up disposition<select id="ledgerExceptionDecision727"><option value="flag_authentic_receipt_missing">Flag authentic receipt still missing (HELD)</option><option value="defer_exception">Defer</option><option value="reject_exception">Reject</option></select></label>
+                              <label for="ledgerExceptionNote727">Owner note (20–300 characters)<textarea id="ledgerExceptionNote727" rows="2" maxlength="300"></textarea></label>
+                              <label class="rd-v715-override"><input id="ledgerExceptionNoReceipt727" type="checkbox" /> No independent delivery or approval has occurred, and no message or SQL is sent.</label>
+                              <button id="ledgerExceptionReview727" class="btn ghost" type="button">Sign local follow-up item (HELD)</button>
+                              <p id="ledgerExceptionStatus727" class="rd-v714-status" role="status" aria-live="polite">Requires original owner and signed Build 726/725/724 lineage.</p>
+                            </details>
                           </details>
                         </details>
                       </details>
@@ -354,6 +374,17 @@
                             <label class="rd-v715-override"><input id="trialEvidenceMetadataOnly726" type="checkbox" /> This is metadata only, with no external approval, document upload, SQL test, deletion or backup access.</label>
                             <button id="trialEvidenceReview726" class="btn ghost" type="button">Sign unverified intake reference (HELD)</button>
                             <p id="trialEvidenceStatus726" class="rd-v714-status" role="status" aria-live="polite">Original signed source chain and a separate nonproduction intake reviewer are required.</p>
+                            <details class="rd-v727-panel"><summary>ⓘ Build 727 · Trial source provenance recheck</summary>
+                              <p class="muted">A separate reviewer compares a re-entered non-personal source ID and SHA-256 to the original signed 726 metadata. A match is <strong>not</strong> external provenance, document validation or trial authorization.</p>
+                              <label for="trialIntakeReceipt727">Original signed Build 726 intake<input id="trialIntakeReceipt727" type="file" accept="application/json,.json" /></label>
+                              <label for="trialObservedRef727">Observed non-personal source reference ID<input id="trialObservedRef727" type="text" maxlength="80" autocomplete="off" spellcheck="false" /></label>
+                              <label for="trialObservedHash727">Observed source SHA-256 (64 lowercase hex characters)<input id="trialObservedHash727" type="text" maxlength="64" autocomplete="off" spellcheck="false" /></label>
+                              <label for="trialProvenanceDecision727">Recheck decision<select id="trialProvenanceDecision727"><option value="compare_local_metadata">Compare local metadata (HELD)</option><option value="quarantine">Quarantine reference</option><option value="reject">Reject</option></select></label>
+                              <label for="trialProvenanceNote727">Separate reviewer note (20–300 characters)<textarea id="trialProvenanceNote727" rows="2" maxlength="300"></textarea></label>
+                              <label class="rd-v715-override"><input id="trialNoExternalProvenance727" type="checkbox" /> This only compares unverified references; no external source, real document, backup or database was inspected.</label>
+                              <button id="trialProvenanceReview727" class="btn ghost" type="button">Sign local provenance recheck (HELD)</button>
+                              <p id="trialProvenanceStatus727" class="rd-v714-status" role="status" aria-live="polite">Requires an independently assigned source reviewer and original signed 726/725/724 receipts.</p>
+                            </details>
                           </details>
                         </details>
                       </details>
@@ -370,6 +401,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build726"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build727"></script>
 </body>
 </html>

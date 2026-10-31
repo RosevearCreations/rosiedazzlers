@@ -159,3 +159,7 @@ assert.match(read('assets/admin-followup-workload-v726.css'),/:focus-visible/);
 assert.match(read('scripts/current_booking_wizard_regression.sh'),
   /build726_owner_exception_priority_trial_intake_test\.mjs/);
 console.log('Build 726 PASS: owner exception follow-up, independently scoped local witness priority, metadata-only trial intake, no writes, no external approval');
+// Disposable signed fixtures for successor on-demand audit tests, never external evidence.
+export const fixtureFor727={...f,priorityReviewer,intakeReviewer,env,
+  reconciled,oldConflict,overdue,readiness,followup,priority,intake,
+  ownerPolicy,priorityPolicy,intakePolicy};
