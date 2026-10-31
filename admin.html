@@ -21,6 +21,7 @@
   </style>
   <link rel="stylesheet" href="/assets/build648-admin-operator.css?v=build648" />
   <link rel="stylesheet" href="/assets/admin-command-surface-v712.css?v=20261030build712" />
+  <link rel="stylesheet" href="/assets/admin-command-centre-v732.css?v=20261031build732" />
   <script src="/assets/build648-admin-operator.js?v=build648" defer></script>
   <script src="/assets/admin-command-surface-v712.js?v=20261030build712" defer></script>
 </head>
@@ -91,6 +92,17 @@
             </div>
           </section>
         </div>
+      </section>
+
+      <section class="section" aria-label="Modern Admin command centre" data-build732="command-centre-wrapper">
+        <section class="ac732" aria-labelledby="adminCommandTitle732" data-build732="modern-admin-command-centre">
+          <div class="ac732-header">
+            <div><span class="ac732-kicker">Build 732 · Admin Command Centre</span><h2 id="adminCommandTitle732">Your workspaces, at a glance</h2><p>Source-backed signals with direct, role-checked drilldowns. A dash means the value has not been verified, not zero.</p></div>
+            <div class="ac732-controls"><label for="adminCommandFilter732">Show cards<select id="adminCommandFilter732" aria-controls="adminCommandCards732"><option value="all">All workspaces</option><option value="attention">Needs attention</option><option value="unverified">Unverified or partial</option></select></label><button id="adminCommandRefresh732" type="button">Refresh reports</button></div>
+          </div>
+          <div id="adminCommandCards732" class="ac732-grid" aria-label="Role-available workspaces"></div>
+          <p id="adminCommandStatus732" class="ac732-view-status" role="status" aria-live="polite">Loading allowed workspaces…</p>
+        </section>
       </section>
 
       <section class="section" aria-label="Operator shortcuts" data-build648="operator-navigation">
@@ -494,6 +506,7 @@
 
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-shell.js"></script>
+  <script src="/assets/admin-command-centre-v732.js?v=20261031build732"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script>
     (function () {
@@ -519,6 +532,9 @@
       };
       function esc(v){return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
       function setShellStatus(message,type){document.querySelectorAll('[data-admin-shell-status]').forEach((node)=>{node.hidden=!message;node.textContent=message||'';node.dataset.state=type||'';});}
+      function publishCommandSource(kind, payload){
+        window.dispatchEvent(new CustomEvent('rosie:dashboard-source-732', {detail:{kind,payload,receivedAt:new Date().toISOString()}}));
+      }
       function renderKpis(summary){
         els.kpis.innerHTML = `
           <div class="kpi-box"><div class="muted">Live online</div><strong>${Number(summary.live_online_sessions||0)}</strong></div>
@@ -538,6 +554,7 @@
         const res = await fetch('/api/admin/payment_webhook_warnings_summary', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ limit: 80 })});
         const data = await res.json().catch(()=>null);
         if(!res.ok) throw new Error((data && data.error) || 'Could not load payment webhook warnings.');
+        publishCommandSource('payments', data);
         if(!data || !data.table_ready){ els.paymentWarnings.dataset.state='warn'; els.paymentWarnings.innerHTML = `<strong>Webhook warnings unavailable.</strong><div class="muted">${esc((data&&data.warning)||'Apply Build 182 SQL before warnings are available.')}</div>`; return; }
         els.paymentWarnings.dataset.state = data.warning_count ? 'warn' : 'ok';
         const rows = (data.warnings||[]).slice(0,3).map((r)=>`<div class="warning-row"><strong>${esc(r.provider)} · ${esc(r.provider_event_type)}</strong><div class="muted">${esc(r.status)} / replay ${esc(r.replay_status||'not_replayed')} · ${esc(r.created_at||'')}</div>${r.last_error?`<div class="muted">${esc(r.last_error)}</div>`:''}</div>`).join('');
@@ -650,6 +667,10 @@
         try { await fn(); }
         catch (err) { console.warn('Dashboard card failed:', name, err); setShellStatus(`${name}: ${err?.message || 'Could not load card.'}`, 'error'); }
       }
+      async function guardedCommandSource(name, kind, fn){
+        try { await fn(); }
+        catch (err) { publishCommandSource(kind, null); console.warn('Command source unavailable:', name, err); }
+      }
 
 
       async function loadResponsiveVisualDiagnostics(){
@@ -718,6 +739,7 @@
         const res = await fetch('/api/admin/workflow_command_center_report', { credentials:'include', cache:'no-store' });
         const data = await res.json().catch(()=>null);
         if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load workflow command center report.');
+        publishCommandSource('workflow', data);
         const m = data.metrics || {};
         const items = (data.attention_items || []).slice(0,5).map((item)=>`<div class="warning-row"><strong>${esc(item.label || 'Workflow item')}</strong><div class="muted">${esc(item.detail || '')}</div></div>`).join('');
         els.workflowCommand.dataset.state = (Number(m.quote_followups_due||0) || data.fallback_active) ? 'warn' : 'ok';
@@ -732,6 +754,7 @@
         const res = await fetch('/api/admin/production_reliability_report', { credentials:'include', cache:'no-store' });
         const data = await res.json().catch(()=>null);
         if(!res.ok || !data?.ok) throw new Error(data?.error || 'Could not load production reliability report.');
+        publishCommandSource('reliability', data);
         const c = data.counts || {};
         const risk = Number(c.notification_failed||0)+Number(c.payment_links_missing||0)+Number(c.upload_sessions_needing_review||0)+Number(c.retention_due||0)+Number(c.unresolved_incidents||0);
         els.productionReliability.dataset.state = risk ? 'warn' : 'ok';
@@ -743,6 +766,7 @@
         const res=await fetch('/api/admin/today_needs_attention_report',{credentials:'include',cache:'no-store'});
         const data=await res.json().catch(()=>null);
         if(!res.ok||!data?.ok) throw new Error(data?.error||'Could not load Today Needs Attention.');
+        publishCommandSource('today', data);
         const c=data.counts||{};els.todayAttention.dataset.state=Number(c.urgent||0)?'warn':'ok';
         els.todayAttention.innerHTML=`<strong>${Number(c.urgent||0)?`${Number(c.urgent)} urgent item(s) need attention`:'No urgent owner tasks are open'}</strong><div class="muted">Total ${Number(c.total||0)} · urgent ${Number(c.urgent||0)} · high ${Number(c.high||0)} · normal ${Number(c.normal||0)}</div>${(data.items||[]).slice(0,4).map(x=>`<div class="warning-row"><strong>${esc(x.title)}</strong><div class="muted">${esc(x.detail)}</div></div>`).join('')}<div style="margin-top:10px"><a class="btn ghost small" href="/admin-today.html">Open prioritized queue</a></div>`;
       }
@@ -763,11 +787,38 @@
         const res = await fetch('/api/admin/analytics_overview', { method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ days: 14 })});
         const data = await res.json().catch(()=>null);
         if(!res.ok) throw new Error((data && data.error) || 'Could not load dashboard analytics.');
+        publishCommandSource('analytics', {ok:true,summary:data?.summary,generated_at:data?.generated_at});
         renderKpis(data.summary || {});
         renderList(els.live, (data.live_online_sessions||[]).slice(0,5), (r)=>`<strong>${esc(r.country || 'Unknown')}</strong><div class="muted">${esc((r.path||[]).join(' → '))}</div><div class="muted">Seen: ${esc(r.ended_at || '')}</div>`, 'No live visitors right now.');
         renderList(els.daily, (data.daily_traffic||[]).slice(-7).reverse(), (r)=>`<strong>${esc(r.day)}</strong><div class="muted">${Number(r.page_views||0)} page views • ${Number(r.unique_visitors||0)} visitors • ${Number(r.abandoned_sessions||0)} abandoned</div>`, 'No daily traffic summary yet.');
       }
-      window.AdminShell.boot({ pageKey: 'admin', onReady: async ()=>{ await Promise.allSettled([guardedLoad('Dashboard analytics', loadDashboardAnalytics), guardedLoad('Payment webhook warnings', loadPaymentWebhookWarnings), guardedLoad('Operations warnings', loadBuild185OpsWarnings), guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics), guardedLoad('Fallback settings report', loadFallbackSettingsReport), guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics), guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics), guardedLoad('Pricing parity owner review', loadPricingSourceParity614), guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics), guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics), guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics), guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics), guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics), guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics), guardedLoad('Workflow command diagnostics', loadWorkflowCommandDiagnostics), guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics), guardedLoad('Today Needs Attention diagnostics', loadTodayAttentionDiagnostics), guardedLoad('Production reliability diagnostics', loadProductionReliabilityDiagnostics)]); } });
+      window.AdminShell.boot({ pageKey: 'admin', onReady: async ({actor,auth})=>{
+        window.RosieAdminCommand732.mount({actor,auth});
+        const commandReports = () => Promise.allSettled([
+          guardedCommandSource('Dashboard analytics','analytics',loadDashboardAnalytics),
+          guardedCommandSource('Payment webhook warnings','payments',loadPaymentWebhookWarnings),
+          guardedCommandSource('Workflow command diagnostics','workflow',loadWorkflowCommandDiagnostics),
+          guardedCommandSource('Today Needs Attention diagnostics','today',loadTodayAttentionDiagnostics),
+          guardedCommandSource('Production reliability diagnostics','reliability',loadProductionReliabilityDiagnostics)
+        ]);
+        window.addEventListener('rosie:command-refresh-732',(event)=>{ commandReports().finally(()=>event.detail?.done?.()); });
+        await Promise.allSettled([
+          commandReports(),
+          guardedLoad('Operations warnings', loadBuild185OpsWarnings),
+          guardedLoad('Editable settings diagnostics', loadEditableSettingsDiagnostics),
+          guardedLoad('Fallback settings report', loadFallbackSettingsReport),
+          guardedLoad('Local SEO proof diagnostics', loadLocalSeoProofDiagnostics),
+          guardedLoad('Pricing catalog diagnostics', loadPricingCatalogDiagnostics),
+          guardedLoad('Pricing parity owner review', loadPricingSourceParity614),
+          guardedLoad('Route-copy parity diagnostics', loadRouteCopyDiagnostics),
+          guardedLoad('Desktop/mobile visual diagnostics', loadResponsiveVisualDiagnostics),
+          guardedLoad('Gallery image health diagnostics', loadGalleryImageHealthDiagnostics),
+          guardedLoad('Current sanity diagnostics', loadValueAddedSanityDiagnostics),
+          guardedLoad('Markdown docs diagnostics', loadMarkdownDocsDiagnostics),
+          guardedLoad('Visual placeholder diagnostics', loadVisualPlaceholderDiagnostics),
+          guardedLoad('Live detail interaction diagnostics', loadLiveInteractionDiagnostics)
+        ]);
+      } });
     })();
   </script>
 </body>
