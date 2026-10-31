@@ -828,6 +828,53 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         review_note:$('ledgerOwnerNote722').value.trim()},
       'rosie-build722-owner-retention-reconciliation-held-signed.json');
   }
+  async function reviewSignedScope723(buttonId,statusId,action,files,values,filename){
+    $(buttonId).disabled=true;
+    actionStatus714(statusId,'Checking unchanged signed evidence and separately authorized review identity…');
+    try{
+      const records=await Promise.all(files.map(async ([name,id])=>[name,await readEvidenceFile720(id)]));
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action,...Object.fromEntries(records),...values})});
+      download716(data.signed_receipt,filename);
+      const expiry=data.receipt.illustrative_expiry_utc?
+        ` Illustrative UTC expiry: ${data.receipt.illustrative_expiry_utc}.`:'';
+      actionStatus714(statusId,`${data.receipt.status}.${expiry} `+
+        'Receipt downloaded locally; no database execution, retention job or external approval occurred.');
+    }catch(error){actionStatus714(statusId,error.message||'Independent authorization is still HELD.',true);}
+    finally{$(buttonId).disabled=false;}
+  }
+  async function reviewExecutionChecklist723(){
+    await reviewSignedScope723('ledgerExecutionReview723','ledgerExecutionStatus723',
+      'review_nonproduction_execution_checklist',[
+        ['signed_dry_run','ledgerDryRunReceipt723']],{
+        project_ref:$('ledgerNonprodProject723').value.trim(),
+        decision:$('ledgerExecutionDecision723').value,
+        review_note:$('ledgerExecutionNote723').value.trim(),
+        confirm_sql_sha256_reviewed:$('ledgerSqlReviewed723').checked,
+        confirm_no_execution:$('ledgerNoSqlExecution723').checked},
+      'rosie-build723-nonproduction-execution-checklist-held-signed.json');
+  }
+  async function reviewWitnessIdentity723(){
+    await reviewSignedScope723('witnessIdentityReview723','witnessIdentityStatus723',
+      'review_external_witness_identity',[
+        ['signed_provenance','witnessIdentityProvenance723'],
+        ['signed_exception','rotationExceptionFile722']],{
+        decision:$('witnessIdentityDecision723').value,
+        review_note:$('witnessIdentityNote723').value.trim(),
+        acknowledge_no_identity_acceptance:$('witnessNoIdentity723').checked},
+      'rosie-build723-independent-witness-identity-disposition-held-signed.json');
+  }
+  async function verifyExpiry723(){
+    await reviewSignedScope723('ledgerExpiryVerify723','ledgerExpiryStatus723',
+      'verify_owner_retention_expiry',[
+        ['signed_reconciliation','ledgerOwnerDecisionFile723'],
+        ['signed_gate','ledgerSecurityFile721'],
+        ['signed_security','ledgerSecurityReceipt722']],{
+        review_note:$('ledgerExpiryNote723').value.trim(),
+        acknowledge_no_rows_or_purge_execution:$('ledgerNoRows723').checked},
+      'rosie-build723-owner-retention-expiry-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -863,6 +910,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('custodyRecovery720').addEventListener('click',()=>void recoverCustody720());
   $('rotationRecover721').addEventListener('click',()=>void recoverRotatedCustody721());
   $('rotationProvenance722').addEventListener('click',()=>void verifyRotationProvenance722());
+  $('witnessIdentityReview723').addEventListener('click',()=>void reviewWitnessIdentity723());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -884,6 +932,8 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ledgerSecurityReview721').addEventListener('click',()=>void reviewLedgerSecurity721());
   $('ledgerDryRun722').addEventListener('click',()=>void prepareLedgerDryRun722());
   $('ledgerReconcile722').addEventListener('click',()=>void reconcileRetention722());
+  $('ledgerExecutionReview723').addEventListener('click',()=>void reviewExecutionChecklist723());
+  $('ledgerExpiryVerify723').addEventListener('click',()=>void verifyExpiry723());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();

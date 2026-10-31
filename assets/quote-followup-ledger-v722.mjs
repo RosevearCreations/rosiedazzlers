@@ -31,7 +31,7 @@ export async function verifyScopedSignedReceipt722(envelope,kind,build,env,audit
   provider=globalThis.crypto,now=new Date()){
   const fail=reason=>({ok:false,reason,status:'HELD',receipt_found_on_server:false});
   if(!audit?.server_signature_test_passed||!sha.test(audit.public_key_sha256||'')||
-    ![720,721].includes(build)||!envelope||envelope.signature_algorithm!=='Ed25519'||
+    ![720,721,722].includes(build)||!envelope||envelope.signature_algorithm!=='Ed25519'||
     !/^[A-Za-z0-9+/]{1,24000}={0,2}$/.test(envelope.receipt_base64||'')||
     !/^[A-Za-z0-9+/]{1,200}={0,2}$/.test(envelope.signature_base64||''))
     return fail('An original scoped current-key signed receipt and live signer audit are required.');
