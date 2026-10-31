@@ -1,0 +1,11 @@
+/* Build 719 — compact, accessible production evidence review drawers. */
+.rd-v719-details{margin-top:1rem;padding:.9rem 1rem;border:1px solid rgba(188,149,65,.4);border-radius:14px;background:linear-gradient(132deg,rgba(35,39,44,.72),rgba(17,20,24,.9));color:#f7f5ee}
+.rd-v719-details>summary{cursor:pointer;list-style-position:outside;padding:.15rem .35rem;font-weight:700;color:#e9c774;line-height:1.45}
+.rd-v719-details[open]>summary{margin-bottom:.85rem}
+.rd-v719-details>label{display:block;margin-top:.75rem;line-height:1.4}
+.rd-v719-details>label:not(.rd-v715-override)>input,.rd-v719-details>label>select,.rd-v719-details>label>textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;margin-top:.4rem;background:#141a20;border:1px solid #75808a;border-radius:9px;color:#fff;padding:.7rem;min-height:42px;font:inherit}
+.rd-v719-details .btn{max-width:100%;white-space:normal;line-height:1.35;margin:.7rem 0 .3rem}
+.rd-v719-details .rd-v714-status{overflow-wrap:anywhere;word-break:normal}
+.rd-v719-details :is(summary,button,input,select,textarea):focus-visible{outline:3px solid #f7c95b;outline-offset:3px}
+@media(max-width:660px){.rd-v719-details{padding:.7rem}.rd-v719-details .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.rd-v719-details *{scroll-behavior:auto!important;transition:none!important}}

@@ -58,6 +58,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
       key=currentAvailabilityKey716();
     availability716=null;shiftRoster717=null;availabilityKey716='';lastTrial718=null;
     $('shiftTrialExport718').disabled=true;
+    actionStatus714('shiftBindingStatus719','Source selection changed. Recheck the actual configured origin and account.');
     $('capacityOverride715').checked=false;$('unverifiedShift717').checked=false;
     setDetailControls();
     if(!target||!planned||!selected?.manager_review_allowed)return;
@@ -122,6 +123,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     capStatus.dataset.state=decision?.hard_hold||decision?.requires_manager_override?'error':'ready';
     $('plannedFollowup716').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('shiftTrial718').disabled=!mayWrite||!target||!plannedIso716();
+    $('shiftBinding719').disabled=!mayWrite||!target||!plannedIso716();
     const availabilityStatus=$('availabilityStatus716');
     availabilityStatus.textContent=!target||!plannedIso716()?
       'Choose an active staff member and future follow-up time. This will check recorded absences, not shift hours.':
@@ -234,6 +236,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     availability716=null;availabilityKey716='';
     shiftRoster717=null;lastTrial718=null;
     $('shiftTrialExport718').disabled=true;$('unverifiedShift717').checked=false;
+    actionStatus714('shiftBindingStatus719','Quote or assignment changed. Run a fresh bound-source readback.');
     actionStatus714('rebalanceActionStatus714','Checking active assignment and current staff source…');
     actionStatus714('resolutionActionStatus714','Checking real evidence after the original review…');
     $('resolutionHistory714').textContent='Verifying audit history…';
@@ -414,7 +417,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         {credentials:'include',cache:'no-store'});
       if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||`Export failed (${response.status})`);}
       const blob=await response.blob(),url=URL.createObjectURL(blob),link=document.createElement('a');
-      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build718-${mode}.json`;
+      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build719-${mode}.json`;
       document.body.append(link);link.click();link.remove();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
       actionStatus714('resolutionActionStatus714',mode==='signed'?
@@ -464,6 +467,27 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('shiftTrialStatus718',error.message||'Provider trial failed; no verified shift.',true);}
     finally{setDetailControls();}
   }
+  async function verifyProviderBinding719(){
+    const target=$('rebalanceTarget714').value,planned=plannedIso716(),key=currentAvailabilityKey716();
+    if(!target||!planned)return;
+    $('shiftBinding719').disabled=true;
+    actionStatus714('shiftBindingStatus719','Checking live approved shift, protected absence blocks, pinned origin and returned provider account…');
+    try{
+      const data=await api(`/api/admin/quote_followup_rebalance?audit=provider_binding&staff_user_id=${encodeURIComponent(target)}`+
+        `&planned_followup_at=${encodeURIComponent(planned)}`);
+      if(key!==currentAvailabilityKey716())return;
+      const binding=data.provider_binding;
+      actionStatus714('shiftBindingStatus719',`${binding.status}. `+
+        `GET completed: ${binding.source_get_completed?'YES':'NO'}; `+
+        `origin pin: ${binding.origin_pin_match?'MATCH':'NOT VERIFIED'}; `+
+        `account pin: ${binding.account_pin_match?'MATCH':'NOT VERIFIED'}; `+
+        `provider revision: ${binding.source_revision||'none'}. `+
+        'This is a live operator-configured binding check, not independent provider certification.',
+        !binding.live_source_bound);
+      download716(binding,'rosie-build719-provider-binding-readback.json');
+    }catch(error){actionStatus714('shiftBindingStatus719',error.message||'Provider binding could not be checked. HOLD.',true);}
+    finally{setDetailControls();}
+  }
   async function verifyWitness718(){
     const file=$('witnessFile718').files?.[0];
     if(!file||file.size>32000){actionStatus714('witnessStatus718','Select an actual witness JSON envelope under 32 KB.',true);return;}
@@ -481,6 +505,25 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
       download716(data.receipt,'rosie-build718-verified-witness-signature-intake.json');
     }catch(error){actionStatus714('witnessStatus718',error.message||'No verified witness receipt was produced.',true);}
     finally{$('witnessVerify718').disabled=false;}
+  }
+  async function reviewCustodyDisposition719(){
+    const file=$('witnessFile718').files?.[0];
+    if(!file||file.size>32000){actionStatus714('custodyReviewStatus719','Choose the actual signed witness JSON first.',true);return;}
+    $('custodyReview719').disabled=true;
+    actionStatus714('custodyReviewStatus719','Revalidating the signed witness and separately pinned reviewer role…');
+    try{
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'review_export_custody_disposition',witness_envelope:JSON.parse(await file.text()),
+          custody_decision:$('custodyDisposition719').value,
+          independent_evidence_reference:$('custodyReference719').value.trim(),
+          review_note:$('custodyNote719').value.trim(),
+          acknowledge_not_proof_b:$('custodyScopeAck719').checked})});
+      download716(data.signed_receipt,'rosie-build719-internal-custody-disposition-signed.json');
+      actionStatus714('custodyReviewStatus719',`${data.receipt.status}. Named reviewer, pinned staff roles and original signature verified. `+
+        'The internally signed decision was downloaded, NOT retained by the server; Proof-B and human independence remain unproven.');
+    }catch(error){actionStatus714('custodyReviewStatus719',error.message||'Witness disposition remains HELD.',true);}
+    finally{$('custodyReview719').disabled=false;}
   }
   function updateRemediation716(){
     $('feedbackClose716').disabled=!unresolvedFeedback716||!$('feedbackRetest716').checked||
@@ -540,6 +583,8 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
       $('crossDeviceNote717').value);
     $('crossDeviceExport717').disabled=!review;
     $('serverOwnerReview718').disabled=!review||!$('serverOwnerAck718').checked;
+    $('ownerRetention719').disabled=!review||!$('serverOwnerAck718').checked||
+      !$('ownerMinimizationAck719').checked;
     if(review)actionStatus714('crossDeviceStatus717',
       'Two separate accepted local feedback files passed checks for owner identity, dates and source hashes. Actual device testing is SELF-ATTESTED, not independently witnessed.');
     else if(!$('crossDeviceStatus717').dataset.state||$('crossDeviceStatus717').dataset.state!=='error')
@@ -575,6 +620,32 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('serverOwnerStatus718',error.message||'Owner device review failed; closure remains pending.',true);}
     finally{updateCrossDevice717();}
   }
+  async function decideOwnerRetention719(){
+    updateCrossDevice717();
+    if($('ownerRetention719').disabled)return;
+    if(!window.confirm('Confirm these are genuine original, desktop and mobile files? The server will return a hash-only retention decision, but will NOT store them or mark physical device acceptance complete.'))return;
+    $('ownerRetention719').disabled=true;
+    actionStatus714('ownerRetentionStatus719','Reviewing actual receipt hashes, named administrator and privacy-safe retention policy…');
+    try{
+      const fileText=async id=>{const file=$(id).files?.[0];
+        if(!file||file.size>100000)throw Error('A source file is missing or larger than 100 KB.');return file.text();};
+      const [original,desktop,mobile]=await Promise.all(['feedbackOriginal716','deviceDesktop717','deviceMobile717'].map(fileText));
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'decide_owner_device_retention',original_feedback_json:original,
+          desktop_feedback_json:desktop,mobile_feedback_json:mobile,
+          remediation_note:$('crossDeviceNote717').value.trim(),
+          explicit_owner_retest_confirmed:$('serverOwnerAck718').checked,
+          retention_choice:$('ownerRetentionChoice719').value,
+          acknowledge_data_minimization:$('ownerMinimizationAck719').checked})});
+      download716(data.signed_receipt||data.receipt,'rosie-build719-owner-retention-decision-'+
+        (data.signed_receipt?'signed':'unsigned')+'.json');
+      actionStatus714('ownerRetentionStatus719',`${data.receipt.decision}. ${data.receipt.reason} `+
+        'Downloaded hash-only decision. No original files, hashes or approval were persisted; physical devices are not independently proven.',
+        data.receipt.decision!=='DOWNLOAD_ONLY_NO_SERVER_RETENTION');
+    }catch(error){actionStatus714('ownerRetentionStatus719',error.message||'Owner evidence retention remains HELD.',true);}
+    finally{updateCrossDevice717();}
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -590,6 +661,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('rebalanceTarget714').addEventListener('change',()=>void refreshAvailability716());
   $('plannedFollowup716').addEventListener('change',()=>void refreshAvailability716());
   $('shiftTrial718').addEventListener('click',()=>void trialShiftProvider718());
+  $('shiftBinding719').addEventListener('click',()=>void verifyProviderBinding719());
   $('shiftTrialExport718').addEventListener('click',()=>lastTrial718&&download716(lastTrial718,'rosie-build718-real-shift-provider-trial.json'));
   $('capacityOverride715').addEventListener('change',setDetailControls);
   $('unverifiedShift717').addEventListener('change',setDetailControls);
@@ -601,6 +673,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('resolutionExport715').addEventListener('click',()=>void exportEvidence715());
   $('signerCustodyAudit717').addEventListener('click',()=>void inspectSignerCustody717());
   $('witnessVerify718').addEventListener('click',()=>void verifyWitness718());
+  $('custodyReview719').addEventListener('click',()=>void reviewCustodyDisposition719());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -616,6 +689,8 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('crossDeviceExport717').addEventListener('click',exportCrossDevice717);
   $('serverOwnerAck718').addEventListener('change',updateCrossDevice717);
   $('serverOwnerReview718').addEventListener('click',()=>void serverOwnerReview718());
+  $('ownerMinimizationAck719').addEventListener('change',updateCrossDevice717);
+  $('ownerRetention719').addEventListener('click',()=>void decideOwnerRetention719());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
