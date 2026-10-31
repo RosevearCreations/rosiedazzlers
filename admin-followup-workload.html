@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="robots" content="noindex,nofollow" />
   <title>Staff Capacity &amp; Evidence Command | Rosie Dazzlers</title>
-  <meta name="description" content="Protected management staff workload, rebalancing, exception evidence and owner acceptance workspace." />
+  <meta name="description" content="Protected management staff workload, availability, signed evidence options and owner feedback remediation workspace." />
   <link rel="stylesheet" href="/assets/site.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-command-surface-v712.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v713.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v714.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v715.css?v=20261030build715" />
-  <script src="/assets/admin-command-surface-v712.js?v=20261030build715" defer></script>
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v716.css?v=20261030build716" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build716" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers · Management</strong></a><nav class="nav-links" aria-label="Management shortcuts"><a href="/admin.html">Dashboard</a><a href="/admin-quotes.html">Quote Pipeline</a><a href="/admin-staff.html">Staff</a><a href="/admin-analytics.html">Statistics</a></nav></div></header>
@@ -20,7 +21,7 @@
     <div data-admin-shell-loading class="section"><div class="panel">Authenticating management workspace…</div></div>
     <div data-admin-shell-ready hidden>
       <section class="section">
-        <div class="admin-topbar"><div><span class="badge">Build 715 · Staff capacity, evidence export &amp; owner feedback</span>
+        <div class="admin-topbar"><div><span class="badge">Build 716 · Staff availability, optional signing &amp; owner remediation</span>
           <h1>Follow-Up Workload Command</h1>
           <p>Rebalance actual staff assignments, inspect overdue exceptions and record source-linked internal resolution evidence. The dashboard shows real protected records, never fictional statistics.</p>
           <div class="rd-workload-actions"><button class="btn primary" id="workloadRefresh713" type="button">Refresh workload evidence</button><a class="btn ghost" href="/admin-quotes.html">Open Quote Pipeline</a></div>
@@ -68,6 +69,8 @@
           <p class="muted">Compare bounded assignment counts, then deliberately select a currently authorized staff member. A saved reassignment invalidates the previous consent recheck; the new owner must recheck it before customer contact.</p>
           <p id="rebalanceRosterStatus714" class="rd-v714-status" role="status">Staff roster not yet checked.</p>
           <label for="rebalanceTarget714">Assign selected quote to<select id="rebalanceTarget714" disabled><option value="">Select a quote and staff member</option></select></label>
+          <label for="plannedFollowup716">Planned internal follow-up time (required for checking staff absence blocks)<input id="plannedFollowup716" type="datetime-local" disabled /></label>
+          <p id="availabilityStatus716" class="rd-v714-status" role="status" aria-live="polite">Select a real staff member and planned time. An absence-block check does not verify a working shift.</p>
           <p id="capacityStatus715" class="rd-v714-status" role="status" aria-live="polite">Capacity guardrails are awaiting live roster evidence. Quote counts do not verify shift availability.</p>
           <label class="rd-v715-override"><input type="checkbox" id="capacityOverride715" disabled/> Manager capacity override: I reviewed the flagged queue threshold and the actual staff schedule.</label>
           <label for="rebalanceNote714">Reason for this actual reassignment (12–300 characters)</label>
@@ -82,6 +85,7 @@
           <label for="resolutionNote714">Evidence review note (12–300 characters)</label>
           <textarea id="resolutionNote714" rows="3" maxlength="300" placeholder="State which real internal source event remedied the exception and what remains open." disabled></textarea>
           <button id="resolutionSave714" class="btn primary" type="button" disabled>Record verified resolution evidence</button>
+          <label for="resolutionExportMode716">Evidence receipt option<select id="resolutionExportMode716"><option value="unsigned">Unsigned source-linked JSON</option><option value="signed">Server-signed Ed25519 envelope (only if configured)</option></select></label>
           <button id="resolutionExport715" class="btn ghost" type="button" disabled>Export protected resolution evidence (JSON)</button>
           <p id="resolutionActionStatus714" class="rd-v714-status" role="status" aria-live="polite">No verified remedy selected.</p>
           <h3>Resolution evidence history</h3><pre id="resolutionHistory714" class="rd-workload-history">No verified evidence receipts loaded.</pre>
@@ -104,12 +108,21 @@
           <button class="btn ghost" id="ownerReceipt714" type="submit" disabled>Download local owner feedback receipt</button>
         </form>
         <p class="rd-v714-status" id="ownerAcceptanceStatus714" role="status" aria-live="polite">Awaiting an actual owner walkthrough. No acceptance receipt has been made.</p>
+        <div class="rd-v716-remediation">
+          <h3>Owner feedback remediation</h3>
+          <p class="muted">Select a previously downloaded Build 715/716 unresolved owner feedback JSON. Review the original finding, correct the issue and personally retest the live screen before making a new local closure receipt. This never creates a server approval.</p>
+          <label for="feedbackOriginal716">Original unresolved owner feedback JSON<input id="feedbackOriginal716" type="file" accept="application/json,.json" /></label>
+          <p id="feedbackImportStatus716" class="rd-v714-status" role="status" aria-live="polite">No unresolved feedback loaded.</p>
+          <label for="feedbackRemedy716">Actual fix and retest observation (20–300 characters)<textarea id="feedbackRemedy716" rows="3" maxlength="300" placeholder="Explain what was corrected and tested on the actual live device."></textarea></label>
+          <label class="rd-v715-override"><input type="checkbox" id="feedbackRetest716" /> I personally retested all five acceptance checks above after the fix.</label>
+          <button id="feedbackClose716" class="btn ghost" type="button" disabled>Download linked owner remediation receipt</button>
+        </div>
       </article></section>
     </div>
   </main>
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build715"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build716"></script>
 </body>
 </html>

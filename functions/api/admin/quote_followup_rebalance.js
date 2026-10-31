@@ -5,6 +5,10 @@ import {RESOLUTION_EVIDENCE_EVENT714,resolutionProof714,evidenceCurrent714} from
   '../../../assets/quote-followup-rebalance-v714.mjs';
 import {capacitySnapshot715,capacityDecision715,CAPACITY_POLICY715} from
   '../../../assets/quote-followup-capacity-v715.mjs';
+import {plannedWindow716,availabilityDecision716,AVAILABILITY_BLOCK_LIMIT716} from
+  '../../../assets/quote-followup-availability-v716.mjs';
+import {signEvidenceReceipt716,signingReady716} from
+  '../../../assets/quote-followup-signature-v716.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -30,6 +34,15 @@ async function capacityRead715(env){
       `&event_type=eq.${FOLLOWUP_EVENT711}&order=created_at.desc,id.desc&limit=800`)
   ]);
   return capacitySnapshot715(quotes,events);
+}
+async function availabilityRead716(env,staffId,plannedAt){
+  const window=plannedWindow716(plannedAt);
+  if(!window)return null;
+  const blocks=await rows(env,`staff_availability_blocks?select=${encodeURIComponent('id,staff_user_id,start_at,end_at,availability_type,updated_at')}`+
+    `&staff_user_id=eq.${staffId}&start_at=lt.${encodeURIComponent(window.end_at)}`+
+    `&end_at=gt.${encodeURIComponent(window.start_at)}&order=start_at.asc&limit=${AVAILABILITY_BLOCK_LIMIT716}`);
+  return availabilityDecision716(blocks,staffId,window,
+    {truncated:blocks.length>=AVAILABILITY_BLOCK_LIMIT716});
 }
 function evidenceEvents(record){
   return record.events714||[];
@@ -68,7 +81,7 @@ function publicDetail714(record,actor){
       exception_code:e.payload.exception_code,proof_kind:e.payload.proof_kind,
       note:e.payload.note})),
     event_history_may_be_truncated:record.eventLimitReached||record.evidenceLimitReached,
-    owner_acceptance_recorded_on_server:false,owner_acceptance_pending:true,build:715};
+    owner_acceptance_recorded_on_server:false,owner_acceptance_pending:true,build:716};
 }
 function fresh(record,body){
   const f=record.review.followup,marker=f.resolution.marker;
@@ -90,9 +103,12 @@ async function appendEvent(env,event){
 }
 export async function onRequestGet({request,env}){
   const search=new URL(request.url).searchParams,id=search.get('quote_id')||'',
-    exporting=search.get('export')==='evidence';
+    exporting=search.get('export')==='evidence',staffId=search.get('staff_user_id')||'',
+    plannedAt=search.get('planned_followup_at')||'',signed=search.get('receipt')==='signed';
   if(exporting&&!id)return json({ok:false,error:'Select a saved quote before exporting internal evidence.'},400);
   if(id&&!isUuid(id))return json({ok:false,error:'A valid saved quote ID is required.'},400);
+  if(staffId&&(!isUuid(staffId)||!plannedWindow716(plannedAt)))
+    return json({ok:false,error:'Select an eligible staff member and a future follow-up time within 30 days.'},400);
   const access=await authorize(request,env,{});
   if(!access.ok)return access.response;
   if(!isManager(access.actor))return json({ok:false,error:'Management access required.'},403);
@@ -103,7 +119,7 @@ export async function onRequestGet({request,env}){
         if(record.eventLimitReached||record.evidenceLimitReached)
           return json({ok:false,error:'Evidence history reached its safe read limit; export refused.'},409);
         const detail=publicDetail714(record,access.actor),receipt={
-          type:'rosie_internal_followup_resolution_evidence',schema:1,build:715,
+          type:'rosie_internal_followup_resolution_evidence',schema:1,build:716,
           exported_at:new Date().toISOString(),quote_id:detail.quote_id,
           booking_id:detail.booking_id,quote_number:detail.quote_number,
           source_marker:detail.marker,latest_evidence_event_id:detail.latest_resolution_evidence_event_id,
@@ -111,14 +127,28 @@ export async function onRequestGet({request,env}){
           evidence_events:detail.evidence_history,
           metadata:{role_restricted:true,readback_limit:100,
             customer_contacted:false,grants_consent:false,closes_audit:false,
-            cryptographically_signed:false,live_consent_grant_verified:false,
+            cryptographically_signed:signed,live_consent_grant_verified:false,
             source_data_only:true}};
-        return new Response(JSON.stringify(receipt,null,2),{status:200,headers:{
+        if(signed&&!signingReady716(env))return json({ok:false,
+          error:'Signed export option is unavailable: a real server Ed25519 signing key and signer ID must be configured.'},503);
+        let exportBody=receipt;
+        if(signed){try{exportBody=await signEvidenceReceipt716(receipt,env);}
+          catch{return json({ok:false,error:'Server export signing failed; no signed receipt was produced.'},503);}}
+        return new Response(JSON.stringify(exportBody,null,2),{status:200,headers:{
           'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store',
-          'Content-Disposition':`attachment; filename="rosie-evidence-${id.slice(0,8)}-build715.json"`,
+          'Content-Disposition':`attachment; filename="rosie-evidence-${id.slice(0,8)}-build716-${signed?'signed':'unsigned'}.json"`,
           'X-Content-Type-Options':'nosniff'}});
       }
       return json(publicDetail714(record,access.actor));}
+    if(staffId){
+      const eligible=await rows(env,`staff_users?select=${encodeURIComponent('id,role_code,is_active,can_manage_bookings')}`+
+        `&id=eq.${staffId}&is_active=eq.true&limit=1`),staff=eligible[0];
+      if(!staff||!['admin','senior_detailer','detailer'].includes(staff.role_code)||
+        (staff.role_code!=='admin'&&staff.can_manage_bookings!==true))
+        return json({ok:false,error:'Selected staff member is no longer eligible.'},409);
+      const availability=await availabilityRead716(env,staffId,plannedAt);
+      return json({ok:true,availability,build:716});
+    }
     const roster=await rows(env,`staff_users?select=${encodeURIComponent('id,full_name,role_code,is_active,can_manage_bookings')}`+
       `&is_active=eq.true&order=full_name.asc&limit=100`);
     const capacity=await capacityRead715(env);
@@ -131,7 +161,9 @@ export async function onRequestGet({request,env}){
       capacity_verified:false,capacity_policy:CAPACITY_POLICY715,
       capacity_source_truncated:capacity.source_truncated||roster.length===100,
       capacity_by_staff:capacity.by_staff,
-      requires_selected_live_review:true,build:715});
+      export_signing_available:signingReady716(env),
+      availability_source:'staff_availability_blocks',availability_is_shift_roster:false,
+      requires_selected_live_review:true,build:716});
   }catch{return json({ok:false,error:'Active staff source unavailable. No reassignment offered.'},503);}
 }
 export async function onRequestPost({request,env}){
@@ -143,7 +175,8 @@ export async function onRequestPost({request,env}){
     !body.expected_marker||typeof body.expected_marker!=='object'||Array.isArray(body.expected_marker)||
     !sourceIds.every(key=>Object.hasOwn(body,key))||
     body.acknowledge_manager_review!==true||note.length<12||note.length>300||
-    (action==='rebalance_owner'&&!isUuid(body.target_staff_user_id))||
+    (action==='rebalance_owner'&&(!isUuid(body.target_staff_user_id)||
+      !plannedWindow716(body.planned_followup_at)))||
     (action==='verify_exception_resolution'&&!EXCEPTION_CODES713.includes(code)))
     return json({ok:false,error:'Valid quote, booking, manager acknowledgement, note and exact live source markers are required.'},400);
   if(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(note)||/\+?\d[\d().\-\s]{7,}\d/.test(note))
@@ -175,9 +208,12 @@ export async function onRequestPost({request,env}){
         (record.review.overdue_days>=3?'critical':'overdue'):'scheduled';
       const decision=capacityDecision715(capacity,target.id,bucket);
       if(decision.hard_hold)return json({ok:false,error:'Queue capacity source reached its safe limit; reassignment blocked pending an independent full review.',capacity:decision},409);
-      if(decision.requires_manager_override&&
+      const availability=await availabilityRead716(env,target.id,body.planned_followup_at);
+      if(!availability||availability.hard_hold)return json({ok:false,
+        error:'A recorded staff absence or an incomplete availability source blocks this planned follow-up window.',availability},409);
+      if((decision.requires_manager_override||availability.requires_manager_override)&&
         !(body.acknowledge_capacity_override===true&&note.length>=20))
-        return json({ok:false,error:'Projected workload exceeds a conservative queue threshold. Explicit management capacity override and a detailed note are required.',capacity:decision},409);
+        return json({ok:false,error:'Queue threshold or a light-duty staff block requires explicit management override and a detailed note.',capacity:decision,availability},409);
       event={booking_id:bookingId,event_type:FOLLOWUP_EVENT711,actor_name:actor,
         event_note:'Manager staff workload rebalance only; consent recheck is required after reassignment.',
         payload:{quote_id:quoteId,booking_id:bookingId,action:'assign',marker,
@@ -188,10 +224,15 @@ export async function onRequestPost({request,env}){
           rebalance_note:note,rebalance_by_manager:true,staff_only:true,
           queue_capacity_projected:decision.projected,
           queue_capacity_exceeded:decision.exceeded,
-          queue_capacity_override:decision.requires_manager_override,
+          queue_capacity_override:decision.requires_manager_override||availability.requires_manager_override,
+          planned_followup_at:availability.window.start_at,
+          availability_source:'staff_availability_blocks',
+          availability_block_check_completed:availability.recorded_block_check_completed,
+          availability_light_duty_count:availability.light_duty_count,
+          availability_conflicting_absence_count:availability.conflicting_absence_count,
           hours_or_shift_verified:false,
           customer_notified_by_this_action:false,provider_delivery_verified:false,
-          grants_consent:false,build:715}};
+          grants_consent:false,build:716}};
     }else{
       const original=latestReview(record,code),proof=resolutionProof714(code,record.review,original);
       if(!original||!proof)return json({ok:false,error:'No original manager review and actual subsequent live remedy found for this exception.'},409);
