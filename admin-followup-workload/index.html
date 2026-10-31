@@ -13,7 +13,8 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v715.css?v=20261030build715" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v716.css?v=20261030build716" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v717.css?v=20261030build717" />
-  <script src="/assets/admin-command-surface-v712.js?v=20261030build717" defer></script>
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v718.css?v=20261030build718" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build718" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers · Management</strong></a><nav class="nav-links" aria-label="Management shortcuts"><a href="/admin.html">Dashboard</a><a href="/admin-quotes.html">Quote Pipeline</a><a href="/admin-staff.html">Staff</a><a href="/admin-analytics.html">Statistics</a></nav></div></header>
@@ -22,7 +23,7 @@
     <div data-admin-shell-loading class="section"><div class="panel">Authenticating management workspace…</div></div>
     <div data-admin-shell-ready hidden>
       <section class="section">
-        <div class="admin-topbar"><div><span class="badge">Build 717 · Staff shift roster, signer custody &amp; cross-device review</span>
+        <div class="admin-topbar"><div><span class="badge">Build 718 · Verified provider trial, custody witness intake &amp; actual device review</span>
           <h1>Follow-Up Workload Command</h1>
           <p>Rebalance actual staff assignments, inspect overdue exceptions and record source-linked internal resolution evidence. The dashboard shows real protected records, never fictional statistics.</p>
           <div class="rd-workload-actions"><button class="btn primary" id="workloadRefresh713" type="button">Refresh workload evidence</button><a class="btn ghost" href="/admin-quotes.html">Open Quote Pipeline</a></div>
@@ -73,6 +74,8 @@
           <label for="plannedFollowup716">Planned internal follow-up time (staff absence and approved shift roster check)<input id="plannedFollowup716" type="datetime-local" disabled /></label>
           <p id="availabilityStatus716" class="rd-v714-status" role="status" aria-live="polite">Select a real staff member and planned time. An absence-block check does not verify a working shift.</p>
           <p id="shiftRosterStatus717" class="rd-v714-status rd-v717-roster" role="status" aria-live="polite">Approved shift roster has not been checked. A missing source never means a verified shift.</p>
+          <div class="rd-v718-action-row"><button id="shiftTrial718" type="button" class="btn ghost" disabled>Run real shift provider GET trial</button><button id="shiftTrialExport718" type="button" class="btn ghost" disabled>Download trial result</button></div>
+          <p id="shiftTrialStatus718" class="rd-v714-status" role="status" aria-live="polite">ⓘ Requires a configured live HTTPS provider. A missing provider or failed request is not a connection success.</p>
           <label class="rd-v715-override"><input id="unverifiedShift717" type="checkbox" disabled/> Manager acknowledgement: no authoritative shift source is configured. I checked the staff schedule separately and accept that this event will be recorded as shift UNVERIFIED.</label>
           <p id="capacityStatus715" class="rd-v714-status" role="status" aria-live="polite">Capacity guardrails are awaiting live roster evidence. Quote counts do not verify shift availability.</p>
           <label class="rd-v715-override"><input type="checkbox" id="capacityOverride715" disabled/> Manager capacity override: I reviewed the flagged queue threshold and the actual staff schedule.</label>
@@ -92,6 +95,12 @@
           <button id="resolutionExport715" class="btn ghost" type="button" disabled>Export protected resolution evidence (JSON)</button>
           <button id="signerCustodyAudit717" class="btn ghost" type="button">Audit actual server signer (no secret export)</button>
           <p id="signerCustodyStatus717" class="rd-v714-status" role="status" aria-live="polite">No server signer custody readback. Independent custody/witness remains unverified.</p>
+          <div class="rd-v718-intake"><h3>Independent export-key witness intake</h3>
+            <p class="muted">ⓘ Upload an actual Ed25519-signed witness envelope. The server checks it against a separately pinned witness public key and current export signer fingerprint. Without a configured independent key and real evidence, verification stays HOLD. This does not authorize Proof-B.</p>
+            <label for="witnessFile718">Original signed witness JSON<input id="witnessFile718" type="file" accept="application/json,.json"/></label>
+            <button id="witnessVerify718" class="btn ghost" type="button">Verify actual witness signature</button>
+            <p id="witnessStatus718" class="rd-v714-status" role="status" aria-live="polite">No verified independent witness envelope supplied.</p>
+          </div>
           <p id="resolutionActionStatus714" class="rd-v714-status" role="status" aria-live="polite">No verified remedy selected.</p>
           <h3>Resolution evidence history</h3><pre id="resolutionHistory714" class="rd-workload-history">No verified evidence receipts loaded.</pre>
         </article>
@@ -130,6 +139,12 @@
           <label for="crossDeviceNote717">Actual remediation and device comparison (20–300 characters)<textarea id="crossDeviceNote717" rows="3" maxlength="300" placeholder="What changed, which real desktop and mobile browsers were retested, and what we observed."></textarea></label>
           <p id="crossDeviceStatus717" class="rd-v714-status" role="status" aria-live="polite">Awaiting genuine desktop and mobile owner evidence files.</p>
           <button id="crossDeviceExport717" class="btn ghost" type="button" disabled>Download linked cross-device review (local JSON)</button>
+          <div class="rd-v718-intake"><h3>Owner device acceptance server review</h3>
+            <p class="muted">ⓘ After genuine desktop and mobile retesting, an authenticated administrator can have the protected server recheck both uploaded receipt files, their original unresolved source and the current remediation note. This issues a download only; it cannot prove the physical devices or create a permanent server approval.</p>
+            <label class="rd-v715-override"><input type="checkbox" id="serverOwnerAck718"/> I personally tested both devices after the fix and confirm the uploaded files are the actual outcomes.</label>
+            <button id="serverOwnerReview718" class="btn primary" type="button" disabled>Server-review owner device evidence</button>
+            <p id="serverOwnerStatus718" class="rd-v714-status" role="status" aria-live="polite">Owner device acceptance remains pending until actual files are submitted and reviewed.</p>
+          </div>
         </div>
       </article></section>
     </div>
@@ -137,6 +152,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build717"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build718"></script>
 </body>
 </html>

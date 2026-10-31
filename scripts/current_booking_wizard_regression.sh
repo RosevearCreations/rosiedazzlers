@@ -67,3 +67,4 @@ node scripts/build714_rebalance_resolution_owner_acceptance_test.mjs
 node scripts/build715_capacity_export_feedback_test.mjs
 node scripts/build716_availability_signature_owner_remediation_test.mjs
 node scripts/build717_shift_roster_custody_crossdevice_test.mjs
+node scripts/build718_provider_witness_owner_trial_test.mjs
