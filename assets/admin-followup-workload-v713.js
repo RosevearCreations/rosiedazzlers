@@ -875,6 +875,41 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         acknowledge_no_rows_or_purge_execution:$('ledgerNoRows723').checked},
       'rosie-build723-owner-retention-expiry-held-signed.json');
   }
+  async function prepareOwnerHandoff724(){
+    await reviewSignedScope723('ledgerOwnerHandoff724','ledgerOwnerHandoffStatus724',
+      'prepare_owner_nonproduction_handoff',[
+        ['signed_checklist','ledgerChecklistReceipt724'],
+        ['signed_dry_run','ledgerDryRunReceipt723'],
+        ['signed_gate','ledgerSecurityFile721']],{
+        decision:$('ledgerOwnerHandoffDecision724').value,
+        review_note:$('ledgerOwnerHandoffNote724').value.trim(),
+        acknowledge_private_transfer_only:$('ledgerHandoffPrivate724').checked},
+      'rosie-build724-private-owner-handoff-held-signed.json');
+  }
+  async function reviewWitnessReference724(){
+    await reviewSignedScope723('witnessReferenceReview724','witnessReferenceStatus724',
+      'review_witness_reference_conflict',[
+        ['signed_identity','witnessIdentityReceipt724'],
+        ['signed_provenance','witnessIdentityProvenance723'],
+        ['signed_exception','rotationExceptionFile722']],{
+        observed_witness_id:$('witnessReferenceId724').value.trim(),
+        observed_witness_payload_sha256:$('witnessReferenceHash724').value.trim(),
+        decision:$('witnessReferenceDecision724').value,
+        review_note:$('witnessReferenceNote724').value.trim(),
+        acknowledge_reference_is_not_identity:$('witnessReferenceNoIdentity724').checked},
+      'rosie-build724-witness-reference-conflict-held-signed.json');
+  }
+  async function reviewPurgeTrial724(){
+    await reviewSignedScope723('ledgerPurgeReview724','ledgerPurgeStatus724',
+      'review_retention_backup_purge_trial',[
+        ['signed_expiry','ledgerExpiryReceipt724'],
+        ['signed_reconciliation','ledgerOwnerDecisionFile723']],{
+        backup_scope:$('ledgerBackupScope724').value,
+        decision:$('ledgerPurgeDecision724').value,
+        review_note:$('ledgerPurgeNote724').value.trim(),
+        acknowledge_no_live_purge_or_backup_access:$('ledgerNoPurge724').checked},
+      'rosie-build724-retention-backup-trial-prerequisites-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -911,6 +946,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('rotationRecover721').addEventListener('click',()=>void recoverRotatedCustody721());
   $('rotationProvenance722').addEventListener('click',()=>void verifyRotationProvenance722());
   $('witnessIdentityReview723').addEventListener('click',()=>void reviewWitnessIdentity723());
+  $('witnessReferenceReview724').addEventListener('click',()=>void reviewWitnessReference724());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -934,6 +970,8 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ledgerReconcile722').addEventListener('click',()=>void reconcileRetention722());
   $('ledgerExecutionReview723').addEventListener('click',()=>void reviewExecutionChecklist723());
   $('ledgerExpiryVerify723').addEventListener('click',()=>void verifyExpiry723());
+  $('ledgerOwnerHandoff724').addEventListener('click',()=>void prepareOwnerHandoff724());
+  $('ledgerPurgeReview724').addEventListener('click',()=>void reviewPurgeTrial724());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
