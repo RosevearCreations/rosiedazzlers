@@ -30,7 +30,7 @@ export async function verifySignedEvidence720(envelope,expectedKind,env,audit,
     if(!await cryptoProvider.subtle.verify('Ed25519',key,sig,bytes))
       return fail('The original signature is invalid.');
     const receipt=JSON.parse(new TextDecoder().decode(bytes));
-    const stamp=receipt.checked_at||receipt.decided_at||receipt.decision_at;
+    const stamp=receipt.checked_at||receipt.decided_at||receipt.decision_at||receipt.reviewed_at;
     if(receipt.kind!==expectedKind||!validTime(stamp,now)||receipt.proof_b_authorized!==false||
       receipt.build<719||receipt.build>720)
       return fail('The signed receipt kind, scope, age or version is not acceptable.');

@@ -127,6 +127,8 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     $('sourceBaseline720').disabled=!mayWrite||!target||!plannedIso716();
     $('sourceDrift720').disabled=!mayWrite||!target||!plannedIso716()||
       !$('previousBinding720').files?.length;
+    $('historyDesign721').disabled=!mayWrite||!target||!plannedIso716()||
+      !$('previousBinding720').files?.length;
     const availabilityStatus=$('availabilityStatus716');
     availabilityStatus.textContent=!target||!plannedIso716()?
       'Choose an active staff member and future follow-up time. This will check recorded absences, not shift hours.':
@@ -530,6 +532,26 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('sourceDriftStatus720',error.message||'Signed-baseline drift comparison is HELD.',true);}
     finally{setDetailControls();}
   }
+  async function reviewSourceHistory721(){
+    const staff=$('rebalanceTarget714').value,planned=plannedIso716(),key=currentAvailabilityKey716();
+    $('historyDesign721').disabled=true;
+    actionStatus714('historyDesignStatus721','Checking original signature and live source before reviewing the proposed private history design…');
+    try{
+      const signed=await readEvidenceFile720('previousBinding720');
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'review_source_history_design',signed_evidence:signed,
+          staff_user_id:staff,planned_followup_at:planned,
+          retention_days:Number($('historyRetention721').value),
+          review_note:$('historyNote721').value.trim(),
+          acknowledge_no_storage:$('historyNoStorage721').checked})});
+      if(key!==currentAvailabilityKey716())return;
+      download716(data.signed_receipt,'rosie-build721-source-drift-private-history-design-held-signed.json');
+      actionStatus714('historyDesignStatus721',`${data.receipt.status}. Exact-source review downloaded. `+
+        'No table, history row, automatic monitoring or customer message was created.');
+    }catch(error){actionStatus714('historyDesignStatus721',error.message||'Drift history design review is HELD.',true);}
+    finally{setDetailControls();}
+  }
   async function verifyWitness718(){
     const file=$('witnessFile718').files?.[0];
     if(!file||file.size>32000){actionStatus714('witnessStatus718','Select an actual witness JSON envelope under 32 KB.',true);return;}
@@ -580,6 +602,23 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         'No second signing, database record, independent human validation or Proof-B authorization was created.');
     }catch(error){actionStatus714('custodyRecoveryStatus720',error.message||'Original custody receipt recovery is HELD.',true);}
     finally{$('custodyRecovery720').disabled=false;}
+  }
+  async function recoverRotatedCustody721(){
+    $('rotationRecover721').disabled=true;
+    actionStatus714('rotationRecoveryStatus721','Verifying the pinned retired public key and genuine separate receipt-specific rotation witness…');
+    try{
+      if(!$('rotationNotApproval721').checked)throw Error('Acknowledge that exception recovery is not a custody approval.');
+      const [original,witness]=await Promise.all([
+        readEvidenceFile720('oldCustodyReceipt721'),readEvidenceFile720('rotationWitness721')]);
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'recover_rotated_custody_exception',previous_signed_evidence:original,
+          rotation_witness_envelope:witness,acknowledge_not_approval:$('rotationNotApproval721').checked})});
+      download716(data.signed_receipt,'rosie-build721-old-key-custody-exception-held-signed.json');
+      actionStatus714('rotationRecoveryStatus721',`${data.receipt.status}. Both pinned signatures verified; `+
+        'old signer custody, live human identity and Proof-B still require genuine separate approval.');
+    }catch(error){actionStatus714('rotationRecoveryStatus721',error.message||'Rotated-key recovery remains HELD.',true);}
+    finally{$('rotationRecover721').disabled=false;}
   }
   function updateRemediation716(){
     $('feedbackClose716').disabled=!unresolvedFeedback716||!$('feedbackRetest716').checked||
@@ -721,6 +760,24 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('ledgerReviewStatus720',error.message||'The owner ledger approval gate remains HELD.',true);}
     finally{$('ledgerReview720').disabled=false;}
   }
+  async function reviewLedgerSecurity721(){
+    $('ledgerSecurityReview721').disabled=true;
+    actionStatus714('ledgerSecurityStatus721','Validating the original signed gate, the separate security reviewer and inactive private schema…');
+    try{
+      const signed=await readEvidenceFile720('ledgerSecurityFile721');
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'review_owner_ledger_security',signed_evidence:signed,
+          review_decision:$('ledgerSecurityDisposition721').value,
+          review_note:$('ledgerSecurityNote721').value.trim(),
+          acknowledge_no_activation:$('ledgerSecurityNoActivation721').checked})});
+      download716(data.signed_receipt,'rosie-build721-owner-ledger-security-review-held-signed.json');
+      actionStatus714('ledgerSecurityStatus721',`${data.receipt.status}. Scoped security review was downloaded. `+
+        'No ledger rows, schema, RLS authorization or owner-device acceptance were created.',
+        data.receipt.status!=='OWNER_LEDGER_SECURITY_PROPOSAL_REJECTED');
+    }catch(error){actionStatus714('ledgerSecurityStatus721',error.message||'Owner-ledger security review remains HELD.',true);}
+    finally{$('ledgerSecurityReview721').disabled=false;}
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -740,6 +797,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('sourceBaseline720').addEventListener('click',()=>void captureProviderBaseline720());
   $('previousBinding720').addEventListener('change',setDetailControls);
   $('sourceDrift720').addEventListener('click',()=>void compareProviderDrift720());
+  $('historyDesign721').addEventListener('click',()=>void reviewSourceHistory721());
   $('shiftTrialExport718').addEventListener('click',()=>lastTrial718&&download716(lastTrial718,'rosie-build718-real-shift-provider-trial.json'));
   $('capacityOverride715').addEventListener('change',setDetailControls);
   $('unverifiedShift717').addEventListener('change',setDetailControls);
@@ -753,6 +811,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('witnessVerify718').addEventListener('click',()=>void verifyWitness718());
   $('custodyReview719').addEventListener('click',()=>void reviewCustodyDisposition719());
   $('custodyRecovery720').addEventListener('click',()=>void recoverCustody720());
+  $('rotationRecover721').addEventListener('click',()=>void recoverRotatedCustody721());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -771,6 +830,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ownerMinimizationAck719').addEventListener('change',updateCrossDevice717);
   $('ownerRetention719').addEventListener('click',()=>void decideOwnerRetention719());
   $('ledgerReview720').addEventListener('click',()=>void reviewLedgerGate720());
+  $('ledgerSecurityReview721').addEventListener('click',()=>void reviewLedgerSecurity721());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
