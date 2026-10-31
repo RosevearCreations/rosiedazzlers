@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 718 command workspaces · Real shift-source GET trial, independent signer witness intake and protected owner-device receipt review. No simulated statistics or background polling; no automatic messages, consent grants or fictitious approvals.';
+  note.textContent='Build 719 command workspaces · Live shift-provider account/origin pin checks, distinct reviewer custody disposition and explicit owner-evidence retention decisions. No simulated statistics or background polling; no automatic messages, consent grants or fictitious approvals.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',
