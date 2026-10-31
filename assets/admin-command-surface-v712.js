@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 722 command workspaces · Rollback-only private ledger SQL review, exact rotation-witness provenance and owner retention reconciliation. No simulated statistics or background polling; no automatic messages, unapproved evidence storage, SQL execution, fictitious acceptances or external approvals.';
+  note.textContent='Build 723 command workspaces · Private ledger nonproduction authorization checklist, separate witness identity disposition and owner retention expiry preview. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, background messages, fictitious acceptance or external approval.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',

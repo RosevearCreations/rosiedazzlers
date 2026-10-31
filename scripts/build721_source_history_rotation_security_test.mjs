@@ -104,8 +104,10 @@ assert.equal(exception.new_key_reissued_old_receipt,false);
 assert.equal(exception.proof_b_authorized,false);
 const deny=async(a,b,actor={id:reviewer,role_code:'admin'},config=env)=>
   (await rotatedCustodyException721(a,b,actor,config,audit,webcrypto,now)).ok;
-assert.equal(await deny({...signedOld,signature_base64:'A'+signedOld.signature_base64.slice(1)},witnessEnvelope),false);
-assert.equal(await deny(signedOld,{...witnessEnvelope,signature_base64:'B'+witnessEnvelope.signature_base64.slice(1)}),false);
+assert.equal(await deny({...signedOld,signature_base64:
+  (signedOld.signature_base64[0]==='A'?'B':'A')+signedOld.signature_base64.slice(1)},witnessEnvelope),false);
+assert.equal(await deny(signedOld,{...witnessEnvelope,signature_base64:
+  (witnessEnvelope.signature_base64[0]==='B'?'A':'B')+witnessEnvelope.signature_base64.slice(1)}),false);
 assert.equal(await deny(signedOld,witnessEnvelope,{id:owner,role_code:'admin'}),false);
 assert.equal(await deny(signedOld,witnessEnvelope,undefined,
   {...env,ROSIE_FOLLOWUP_EXPORT_PREVIOUS_ED25519_PUBLIC_JWK:undefined}),false);
