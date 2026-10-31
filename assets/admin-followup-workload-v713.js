@@ -1,5 +1,6 @@
 import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
 import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
+import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-feedback-v716.mjs';
 (() => {
   const $=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -13,7 +14,11 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
     current_escalation_audit:'Current escalation audit event'};
   const readable=v=>{const d=new Date(v);return v&&!Number.isNaN(d.getTime())?
     d.toLocaleString('en-CA',{dateStyle:'medium',timeStyle:'short'}):'Unknown';};
-  let queue=null,roster=null,selected=null,selectedQuoteId='';
+  let queue=null,roster=null,selected=null,selectedQuoteId='',availability716=null,
+    availabilityKey716='',unresolvedFeedback716=null;
+  const plannedIso716=()=>{const value=$('plannedFollowup716').value;
+    if(!value)return '';const d=new Date(value);return Number.isFinite(d.getTime())?d.toISOString():'';};
+  const currentAvailabilityKey716=()=>`${$('rebalanceTarget714').value}|${plannedIso716()}`;
   async function api(url,options={}){
     const response=await fetch(url,{credentials:'include',cache:'no-store',...options});
     const data=await response.json().catch(()=>({}));
@@ -45,6 +50,23 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       (roster.capacity_source_truncated?'WARNING: source limit reached; assignment blocked.':''):
       'Active staff roster unavailable. No reassignment can be recorded.',!roster);
     setDetailControls();
+  }
+  async function refreshAvailability716(){
+    const target=$('rebalanceTarget714').value,planned=plannedIso716(),
+      key=currentAvailabilityKey716();
+    availability716=null;availabilityKey716='';$('capacityOverride715').checked=false;
+    setDetailControls();
+    if(!target||!planned||!selected?.manager_review_allowed)return;
+    actionStatus714('availabilityStatus716','Checking the live staff availability block source for this one-hour window…');
+    try{
+      const data=await api(`/api/admin/quote_followup_rebalance?staff_user_id=${encodeURIComponent(target)}`+
+        `&planned_followup_at=${encodeURIComponent(planned)}`);
+      if(key!==currentAvailabilityKey716())return;
+      availability716=data.availability;availabilityKey716=key;
+      setDetailControls();
+    }catch(error){if(key!==currentAvailabilityKey716())return;
+      actionStatus714('availabilityStatus716',error.message||'Availability source unavailable. Assignment is blocked.',true);
+      setDetailControls();}
   }
   function renderResolution714(){
     const select=$('resolutionCode714'),prior=select.value;
@@ -79,7 +101,9 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
     const bucket=selected?.overdue?(selected.overdue_days>=3?'critical':'overdue'):'scheduled';
     const decision=target&&roster?capacityDecision715({by_staff:roster.capacity_by_staff||[],
       source_truncated:roster.capacity_source_truncated===true},target,bucket):null;
-    const overridable=Boolean(decision?.requires_manager_override)&&mayWrite;
+    const validAvailability=availability716&&availabilityKey716===currentAvailabilityKey716();
+    const availability=validAvailability?availability716:null;
+    const overridable=Boolean(decision?.requires_manager_override||availability?.requires_manager_override)&&mayWrite;
     $('capacityOverride715').disabled=!overridable;
     if(!overridable)$('capacityOverride715').checked=false;
     const capStatus=$('capacityStatus715');
@@ -90,12 +114,22 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       (decision.requires_manager_override?`Threshold exceeded (${decision.exceeded.join(', ')}). Document the real schedule check and explicitly acknowledge override; 20+ characters required.`:
       'Within advisory queue thresholds. Actual staff availability is still not verified.');
     capStatus.dataset.state=decision?.hard_hold||decision?.requires_manager_override?'error':'ready';
+    $('plannedFollowup716').disabled=!mayWrite||!selected?.can_rebalance||!roster;
+    const availabilityStatus=$('availabilityStatus716');
+    availabilityStatus.textContent=!target||!plannedIso716()?
+      'Choose an active staff member and future follow-up time. This will check recorded absences, not shift hours.':
+      !availability?'No current staff absence-block readback for this selection. Reassignment is paused.':
+      availability.hard_hold?`HOLD: ${availability.conflicting_absence_count} conflicting absence block(s) or an incomplete source. Choose another time or staff member.`:
+      availability.requires_manager_override?'Light-duty block overlaps this hour. Manager must document and acknowledge the actual work suitability. Shift hours remain unverified.':
+      'No recorded absence blocks overlap this one-hour window. This is NOT verification of a working shift or available hours.';
+    availabilityStatus.dataset.state=!availability||availability.hard_hold||availability.requires_manager_override?'error':'ready';
     $('rebalanceTarget714').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('rebalanceNote714').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('rebalanceSave714').disabled=!mayWrite||!selected?.can_rebalance||
       !roster?.eligible_staff?.some(x=>x.id===target)||
-      !decision||decision.hard_hold||
-      (decision.requires_manager_override&&(!$('capacityOverride715').checked||reason.length<20))||
+      !decision||decision.hard_hold||!availability||availability.hard_hold||
+      ((decision.requires_manager_override||availability.requires_manager_override)&&
+        (!$('capacityOverride715').checked||reason.length<20))||
       (selected.assignment_current&&target===selected.assigned_staff_user_id)||
       reason.length<12||reason.length>300;
     const code714=$('resolutionCode714').value,evidenceNote=$('resolutionNote714').value.trim(),
@@ -153,7 +187,13 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       renderStaff();renderCases();renderAnyQuote714();
       try{roster=await api('/api/admin/quote_followup_rebalance');}
       catch(error){roster=null;actionStatus714('rebalanceRosterStatus714',error.message,true);}
+      const signedOption=$('resolutionExportMode716').querySelector('option[value="signed"]');
+      signedOption.disabled=!roster?.export_signing_available;
+      if(signedOption.disabled)$('resolutionExportMode716').value='unsigned';
       renderRoster714();
+      actionStatus714('resolutionActionStatus714',roster?.export_signing_available?
+        'Optional server Ed25519 signing is configured; verify its key custody separately.':
+        'Signed export is not configured. Unsigned source-linked JSON remains available.');
     }catch(error){
       queue=null;roster=null;
       $('workloadKpis713').querySelectorAll('strong').forEach(el=>{el.textContent='—';});
@@ -171,6 +211,7 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
     $('workloadReviewHistory713').textContent='Live review being checked…';
     $('rebalanceNote714').value='';$('resolutionNote714').value='';
     $('capacityOverride715').checked=false;
+    availability716=null;availabilityKey716='';
     actionStatus714('rebalanceActionStatus714','Checking active assignment and current staff source…');
     actionStatus714('resolutionActionStatus714','Checking real evidence after the original review…');
     $('resolutionHistory714').textContent='Verifying audit history…';
@@ -261,7 +302,7 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       'rebalanceActionStatus714':'resolutionActionStatus714',snapshot=selected,
       target=$('rebalanceTarget714').value,code=$('resolutionCode714').value,
       note=$(rebalance?'rebalanceNote714':'resolutionNote714').value.trim(),
-      capacityOverride=$('capacityOverride715').checked;
+      capacityOverride=$('capacityOverride715').checked,plannedFollowup=plannedIso716();
     if(note.length<12||note.length>300||
       (rebalance&&!roster?.eligible_staff?.some(s=>s.id===target))||
       (!rebalance&&!snapshot.resolution_readiness?.some(p=>p.exception_code===code&&!p.verified)))return;
@@ -269,7 +310,9 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       const bucket=snapshot.overdue?(snapshot.overdue_days>=3?'critical':'overdue'):'scheduled';
       const capacity=capacityDecision715({by_staff:roster.capacity_by_staff||[],
         source_truncated:roster.capacity_source_truncated===true},target,bucket);
-      if(capacity.hard_hold||capacity.requires_manager_override&&
+      const available=availabilityKey716===currentAvailabilityKey716()?availability716:null;
+      if(capacity.hard_hold||!available||available.hard_hold||
+        (capacity.requires_manager_override||available.requires_manager_override)&&
         (!capacityOverride||note.length<20))return;
     }
     const message=rebalance?
@@ -284,6 +327,7 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       const result=await api('/api/admin/quote_followup_rebalance',{method:'POST',
         headers:{'Content-Type':'application/json'},body:JSON.stringify({...expected714(snapshot),
           action,note,...(rebalance?{target_staff_user_id:target,
+            planned_followup_at:plannedFollowup,
             acknowledge_capacity_override:capacityOverride}:{exception_code:code})})});
       outcome=result.already_current?'The same verified action was already current; nothing new was appended.':
         rebalance?'Assignment saved. The new owner must record a fresh internal consent recheck. No customer message sent.':
@@ -304,12 +348,13 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
       !$('ownerName714').value.trim()||!$('ownerNote714').value.trim();
     $('ownerReceipt714').textContent=outcome==='needs_changes'?
       'Download unresolved owner feedback':'Download local owner feedback receipt';
+    updateRemediation716();
   }
   function downloadOwnerReceipt714(event){
     event.preventDefault();updateOwnerReceipt714();
     if($('ownerReceipt714').disabled)return;
     const timestamp=new Date().toISOString(),receipt={
-      app:'Rosie Dazzlers',build:715,receipt_kind:'owner_self_attested_local_visual_review',
+      app:'Rosie Dazzlers',build:716,receipt_kind:'owner_self_attested_local_visual_review',
       generated_at:timestamp,owner_name:$('ownerName714').value.trim(),
       device_findings_note:$('ownerNote714').value.trim(),
       feedback_disposition:$('ownerDisposition715').value,
@@ -322,7 +367,7 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
     const url=URL.createObjectURL(new Blob([JSON.stringify(receipt,null,2)],
       {type:'application/json'}));
     const link=document.createElement('a');link.href=url;
-    link.download=`rosie-build715-owner-feedback-${timestamp.slice(0,10)}.json`;
+    link.download=`rosie-build716-owner-feedback-${timestamp.slice(0,10)}.json`;
     document.body.append(link);link.click();link.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
     actionStatus714('ownerAcceptanceStatus714',
@@ -333,19 +378,61 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
   async function exportEvidence715(){
     const quoteId=selectedQuoteId;
     if(!quoteId||selected?.manager_review_allowed!==true||selected.event_history_may_be_truncated)return;
+    const mode=$('resolutionExportMode716').value;
     $('resolutionExport715').disabled=true;
     actionStatus714('resolutionActionStatus714','Exporting current protected, source-linked internal evidence…');
     try{
-      const response=await fetch(`/api/admin/quote_followup_rebalance?quote_id=${encodeURIComponent(quoteId)}&export=evidence`,
+      const response=await fetch(`/api/admin/quote_followup_rebalance?quote_id=${encodeURIComponent(quoteId)}&export=evidence`+
+        `&receipt=${encodeURIComponent(mode)}`,
         {credentials:'include',cache:'no-store'});
       if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||`Export failed (${response.status})`);}
       const blob=await response.blob(),url=URL.createObjectURL(blob),link=document.createElement('a');
-      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build715.json`;
+      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build716-${mode}.json`;
       document.body.append(link);link.click();link.remove();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
-      actionStatus714('resolutionActionStatus714','Source-linked evidence downloaded locally. It is unsigned and does not close the audit or grant consent.');
+      actionStatus714('resolutionActionStatus714',mode==='signed'?
+        'Server-signed Ed25519 export downloaded. This is not independently witnessed signer custody, audit closure or consent.':
+        'Unsigned source-linked evidence downloaded locally. It does not close the audit or grant consent.');
     }catch(error){actionStatus714('resolutionActionStatus714',error.message||'Export unavailable.',true);}
     finally{setDetailControls();}
+  }
+  const download716=(body,filename)=>{const url=URL.createObjectURL(new Blob([JSON.stringify(body,null,2)],
+    {type:'application/json'})),link=document.createElement('a');link.href=url;link.download=filename;
+    document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  function updateRemediation716(){
+    $('feedbackClose716').disabled=!unresolvedFeedback716||!$('feedbackRetest716').checked||
+      $('ownerDisposition715').value!=='accepted'||
+      !ownerCheckIds.every(id=>$(id).checked)||
+      !$('ownerName714').value.trim()||
+      $('feedbackRemedy716').value.trim().length<20||$('feedbackRemedy716').value.trim().length>300;
+  }
+  async function importFeedback716(){
+    unresolvedFeedback716=null;updateRemediation716();
+    const file=$('feedbackOriginal716').files?.[0];
+    if(!file){actionStatus714('feedbackImportStatus716','No unresolved feedback loaded.');return;}
+    if(file.size>100000){actionStatus714('feedbackImportStatus716','Feedback file exceeds the 100 KB safety limit.',true);return;}
+    try{
+      const content=await file.text(),original=unresolvedOwnerFeedback716(JSON.parse(content));
+      if(!original)throw Error('Only a genuine unresolved Build 715/716 local owner feedback receipt can be linked.');
+      const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(content));
+      const hash=[...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('');
+      unresolvedFeedback716={original,hash};
+      actionStatus714('feedbackImportStatus716',
+        `Unresolved Build ${original.build} feedback loaded (${readable(original.generated_at)}): ${original.findings}. `+
+        'Retest the real screen after applying a fix; this local file has no server approval.');
+    }catch(error){actionStatus714('feedbackImportStatus716',error.message||'Invalid local owner feedback.',true);}
+    updateRemediation716();
+  }
+  function closeFeedback716(){
+    updateRemediation716();if($('feedbackClose716').disabled)return;
+    const checks=Object.fromEntries(ownerCheckIds.map(id=>[id,$(id).checked]));
+    const receipt=remediationReceipt716(unresolvedFeedback716.hash,unresolvedFeedback716.original,
+      $('ownerName714').value,$('feedbackRemedy716').value,checks,new Date().toISOString());
+    if(!receipt)return;
+    if(!window.confirm('Confirm these issues were actually fixed and all five acceptance checks personally retested? This makes only a local owner-signed-off file, not a server approval.'))return;
+    download716(receipt,`rosie-build716-owner-remediation-${receipt.generated_at.slice(0,10)}.json`);
+    actionStatus714('feedbackImportStatus716',
+      'Linked remediation file downloaded locally. Keep both receipts; no server acceptance, independent witness or audit closure was recorded.');
   }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
@@ -359,7 +446,8 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
   $('workloadExceptionCode713').addEventListener('change',setDetailControls);
   $('workloadReviewNote713').addEventListener('input',setDetailControls);
   $('workloadReviewSave713').addEventListener('click',()=>void recordReview());
-  $('rebalanceTarget714').addEventListener('change',()=>{$('capacityOverride715').checked=false;setDetailControls();});
+  $('rebalanceTarget714').addEventListener('change',()=>void refreshAvailability716());
+  $('plannedFollowup716').addEventListener('change',()=>void refreshAvailability716());
   $('capacityOverride715').addEventListener('change',setDetailControls);
   $('rebalanceNote714').addEventListener('input',setDetailControls);
   $('rebalanceSave714').addEventListener('click',()=>void managerAction714('rebalance_owner'));
@@ -372,6 +460,10 @@ import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
   $('ownerDisposition715').addEventListener('change',updateOwnerReceipt714);
   $('ownerAcceptanceForm714').addEventListener('submit',downloadOwnerReceipt714);
+  $('feedbackOriginal716').addEventListener('change',()=>void importFeedback716());
+  $('feedbackRemedy716').addEventListener('input',updateRemediation716);
+  $('feedbackRetest716').addEventListener('change',updateRemediation716);
+  $('feedbackClose716').addEventListener('click',closeFeedback716);
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
