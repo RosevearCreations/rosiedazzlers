@@ -1018,6 +1018,41 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         acknowledge_metadata_is_not_external_provenance:$('trialNoExternalProvenance727').checked},
       'rosie-build727-trial-source-local-provenance-recheck-held-signed.json');
   }
+  async function reviewOwnerAging728(){
+    await reviewSignedScope723('ledgerAgingReview728','ledgerAgingStatus728',
+      'review_owner_followup_aging',[
+        ['signed_queue','ledgerQueueReceipt728'],
+        ['signed_exception','ledgerExceptionReceipt727'],
+        ['signed_reconciliation','ledgerHandoffReconcileReceipt726']],{
+        review_window_hours:Number($('ledgerAgingWindow728').value),
+        decision:$('ledgerAgingDecision728').value,
+        review_note:$('ledgerAgingNote728').value.trim(),
+        acknowledge_local_receipt_age_only:$('ledgerAgingLocalOnly728').checked},
+      'rosie-build728-owner-followup-aging-held-signed.json');
+  }
+  async function reviewWitnessException728(){
+    await reviewSignedScope723('witnessExceptionReview728','witnessExceptionStatus728',
+      'review_witness_audit_exception',[
+        ['signed_audit','witnessAuditReceipt728'],
+        ['signed_priority','witnessPriorityReceipt727'],
+        ['signed_aging','witnessAgingReceipt726']],{
+        decision:$('witnessExceptionDecision728').value,
+        review_note:$('witnessExceptionNote728').value.trim(),
+        acknowledge_no_original_external_witness_resolution:
+          $('witnessExceptionNotApproved728').checked},
+      'rosie-build728-witness-audit-exception-held-signed.json');
+  }
+  async function reviewTrialGaps728(){
+    await reviewSignedScope723('trialGapReview728','trialGapStatus728',
+      'track_nonproduction_provenance_gaps',[
+        ['signed_recheck','trialRecheckReceipt728'],
+        ['signed_intake','trialIntakeReceipt727'],
+        ['signed_readiness','trialReadinessReceipt726']],{
+        decision:$('trialGapDecision728').value,
+        review_note:$('trialGapNote728').value.trim(),
+        acknowledge_gaps_not_live_verification:$('trialGapNoVerification728').checked},
+      'rosie-build728-nonprod-provenance-gaps-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -1058,6 +1093,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('witnessAgingReview725').addEventListener('click',()=>void reviewWitnessAging725());
   $('witnessPriorityReview726').addEventListener('click',()=>void reviewWitnessPriority726());
   $('witnessAuditReview727').addEventListener('click',()=>void auditWitnessPriority727());
+  $('witnessExceptionReview728').addEventListener('click',()=>void reviewWitnessException728());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -1086,9 +1122,11 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ledgerHandoffReconcile725').addEventListener('click',()=>void reconcileOwnerHandoff725());
   $('ledgerHandoffException726').addEventListener('click',()=>void followupOwnerException726());
   $('ledgerExceptionReview727').addEventListener('click',()=>void followupOwnerException727());
+  $('ledgerAgingReview728').addEventListener('click',()=>void reviewOwnerAging728());
   $('trialReadinessReview725').addEventListener('click',()=>void reviewTrialReadiness725());
   $('trialEvidenceReview726').addEventListener('click',()=>void reviewTrialEvidence726());
   $('trialProvenanceReview727').addEventListener('click',()=>void recheckTrialProvenance727());
+  $('trialGapReview728').addEventListener('click',()=>void reviewTrialGaps728());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();

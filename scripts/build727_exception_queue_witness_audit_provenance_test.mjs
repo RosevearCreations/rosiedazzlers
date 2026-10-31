@@ -154,3 +154,7 @@ assert.match(read('assets/admin-followup-workload-v727.css'),/:focus-visible/);
 assert.match(read('scripts/current_booking_wizard_regression.sh'),
   /build727_exception_queue_witness_audit_provenance_test\.mjs/);
 console.log('Build 727 PASS: signed original owner exception follow-up, separate witness priority audit, nonproduction local provenance drift quarantine, zero writes and external approvals');
+// Synthetic signed-lineage fixtures for Build 728. No genuine external proof.
+export const fixtureFor728={...f,auditor,provenance,env,
+  signedException,signedPriority,signedIntake,exception,audit,recheck,
+  ownerPolicy,auditPolicy,provenancePolicy};

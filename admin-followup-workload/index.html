@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v725.css?v=20261031build725" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v726.css?v=20261031build726" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v727.css?v=20261031build727" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v728.css?v=20261031build728" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -199,6 +200,15 @@
                               <label class="rd-v715-override"><input id="witnessAuditNoDisposition727" type="checkbox" /> No authentic human identity verification, external disposition or custody authorization is established.</label>
                               <button id="witnessAuditReview727" class="btn ghost" type="button">Sign local disposition audit (HELD)</button>
                               <p id="witnessAuditStatus727" class="rd-v714-status" role="status" aria-live="polite">An independently pinned auditor and original signed 726/725/724 sources are required.</p>
+                              <details class="rd-v728-panel"><summary>ⓘ Build 728 · Independent witness audit exception review</summary>
+                                <p class="muted">A separate reviewer tracks the missing genuine external resolution. This local receipt cannot clear the identity or custody gate.</p>
+                                <label for="witnessAuditReceipt728">Original signed Build 727 witness audit<input id="witnessAuditReceipt728" type="file" accept="application/json,.json" /></label>
+                                <label for="witnessExceptionDecision728">Exception decision<select id="witnessExceptionDecision728"><option value="flag_external_resolution_missing">Flag independent resolution missing (HELD)</option><option value="defer_exception">Defer</option><option value="reject_exception">Reject</option></select></label>
+                                <label for="witnessExceptionNote728">Separate reviewer note (20–300 characters)<textarea id="witnessExceptionNote728" rows="2" maxlength="300"></textarea></label>
+                                <label class="rd-v715-override"><input id="witnessExceptionNotApproved728" type="checkbox" /> No external witness disposition, human identity verification, custody approval or Proof-B authorization is established.</label>
+                                <button id="witnessExceptionReview728" class="btn ghost" type="button">Sign unresolved witness exception (HELD)</button>
+                                <p id="witnessExceptionStatus728" class="rd-v714-status" role="status" aria-live="polite">Requires an independently pinned exception reviewer and signed Build 727/726/725 receipts.</p>
+                              </details>
                             </details>
                           </details>
                         </details>
@@ -333,6 +343,16 @@
                               <label class="rd-v715-override"><input id="ledgerExceptionNoReceipt727" type="checkbox" /> No independent delivery or approval has occurred, and no message or SQL is sent.</label>
                               <button id="ledgerExceptionReview727" class="btn ghost" type="button">Sign local follow-up item (HELD)</button>
                               <p id="ledgerExceptionStatus727" class="rd-v714-status" role="status" aria-live="polite">Requires original owner and signed Build 726/725/724 lineage.</p>
+                              <details class="rd-v728-panel"><summary>ⓘ Build 728 · Owner follow-up aging review</summary>
+                                <p class="muted">Track time since the signed 727 local follow-up item, not external delivery. This only creates one local receipt; no notifications are sent.</p>
+                                <label for="ledgerQueueReceipt728">Original signed Build 727 owner follow-up<input id="ledgerQueueReceipt728" type="file" accept="application/json,.json" /></label>
+                                <label for="ledgerAgingWindow728">Local review window<select id="ledgerAgingWindow728"><option value="24">24 hours</option><option value="72" selected>72 hours</option><option value="168">7 days</option></select></label>
+                                <label for="ledgerAgingDecision728">Owner disposition<select id="ledgerAgingDecision728"><option value="flag_aged_external_receipt_gap">Flag missing authenticated receipt (HELD)</option><option value="defer_aging">Defer</option><option value="reject_aging">Reject</option></select></label>
+                                <label for="ledgerAgingNote728">Owner note (20–300 characters)<textarea id="ledgerAgingNote728" rows="2" maxlength="300"></textarea></label>
+                                <label class="rd-v715-override"><input id="ledgerAgingLocalOnly728" type="checkbox" /> This uses local receipt age only; no actual delivery, independent challenge, SQL execution or external approval occurred.</label>
+                                <button id="ledgerAgingReview728" class="btn ghost" type="button">Sign owner follow-up aging (HELD)</button>
+                                <p id="ledgerAgingStatus728" class="rd-v714-status" role="status" aria-live="polite">Original owner session and signed Build 727/726/725 receipts required.</p>
+                              </details>
                             </details>
                           </details>
                         </details>
@@ -384,6 +404,15 @@
                               <label class="rd-v715-override"><input id="trialNoExternalProvenance727" type="checkbox" /> This only compares unverified references; no external source, real document, backup or database was inspected.</label>
                               <button id="trialProvenanceReview727" class="btn ghost" type="button">Sign local provenance recheck (HELD)</button>
                               <p id="trialProvenanceStatus727" class="rd-v714-status" role="status" aria-live="polite">Requires an independently assigned source reviewer and original signed 726/725/724 receipts.</p>
+                              <details class="rd-v728-panel"><summary>ⓘ Build 728 · Nonproduction provenance evidence gaps</summary>
+                                <p class="muted">A separate reviewer records which genuine approvals and live observations remain missing. Even if source metadata matches, independent provenance has not been verified.</p>
+                                <label for="trialRecheckReceipt728">Original signed Build 727 provenance recheck<input id="trialRecheckReceipt728" type="file" accept="application/json,.json" /></label>
+                                <label for="trialGapDecision728">Evidence gap disposition<select id="trialGapDecision728"><option value="request_original_provenance">Flag missing original external evidence (HELD)</option><option value="quarantine_gaps">Quarantine</option><option value="reject_gaps">Reject</option></select></label>
+                                <label for="trialGapNote728">Separate reviewer note (20–300 characters)<textarea id="trialGapNote728" rows="2" maxlength="300"></textarea></label>
+                                <label class="rd-v715-override"><input id="trialGapNoVerification728" type="checkbox" /> No original artifact, external approval, disposable-environment verification, SQL or backup-purge test occurred.</label>
+                                <button id="trialGapReview728" class="btn ghost" type="button">Sign unresolved evidence gaps (HELD)</button>
+                                <p id="trialGapStatus728" class="rd-v714-status" role="status" aria-live="polite">Original signed Build 727/726/725 lineage and independent evidence gap reviewer required.</p>
+                              </details>
                             </details>
                           </details>
                         </details>
@@ -401,6 +430,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build727"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build728"></script>
 </body>
 </html>
