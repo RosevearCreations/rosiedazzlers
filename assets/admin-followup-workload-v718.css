@@ -1,0 +1,10 @@
+/* Build 718: actual source trial/witness/owner intake, Rosie Standard surfaces. */
+body[data-command712="workload"] .rd-v718-intake{margin-top:18px;padding:16px;border:1px solid #987d42;border-radius:13px;background:linear-gradient(135deg,#102d41,#091b2b)}
+body[data-command712="workload"] .rd-v718-intake h3{margin:0 0 10px;color:#f0d58f}
+body[data-command712="workload"] .rd-v718-intake label{display:block;margin:12px 0}
+body[data-command712="workload"] .rd-v718-intake .rd-v715-override{display:flex;align-items:flex-start;gap:10px}
+body[data-command712="workload"] #witnessFile718{width:100%;max-width:100%;min-height:44px;box-sizing:border-box;padding:10px;background:#0b2437;border:1px solid #6d8191;border-radius:9px;color:#eff9ff}
+body[data-command712="workload"] .rd-v718-action-row{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+body[data-command712="workload"] :is(#witnessFile718,#witnessVerify718,#serverOwnerAck718,#serverOwnerReview718,#shiftTrial718,#shiftTrialExport718):focus-visible{outline:3px solid #f7d879;outline-offset:3px}
+body[data-command712="workload"] :is(#shiftTrialStatus718,#witnessStatus718,#serverOwnerStatus718){overflow-wrap:anywhere;white-space:normal}
+@media(max-width:700px){body[data-command712="workload"] .rd-v718-intake{padding:12px}body[data-command712="workload"] .rd-v718-action-row{display:grid;grid-template-columns:1fr}body[data-command712="workload"] :is(#witnessVerify718,#serverOwnerReview718){width:100%;min-height:44px}}
