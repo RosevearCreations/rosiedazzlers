@@ -1,0 +1,11 @@
+/* Build 715 extends the actual protected command surface with visible safety states. */
+body[data-command712="workload"] .rd-v715-override{display:flex;gap:10px;align-items:flex-start;border:1px solid #6e613d;background:#29291e;padding:11px 13px;border-radius:10px;color:#ffe3a0}
+body[data-command712="workload"] .rd-v715-override input{width:20px;height:20px;flex:0 0 20px;accent-color:#dbb45e}
+body[data-command712="workload"] .rd-v715-override input:disabled{opacity:.7}
+body[data-command712="workload"] #capacityStatus715[data-state="error"]{color:#ffdfba;border-color:#dca256;background:#2b211b}
+body[data-command712="workload"] #resolutionExport715{margin-top:7px}
+body[data-command712="workload"] #ownerDisposition715{width:100%;max-width:100%;min-height:44px;background:#0a263d;color:#eef8ff;border:1px solid #45657b;border-radius:9px;padding:9px}
+body[data-command712="workload"] #ownerDisposition715:focus-visible,
+body[data-command712="workload"] #capacityOverride715:focus-visible,
+body[data-command712="workload"] #resolutionExport715:focus-visible{outline:3px solid #f7d879;outline-offset:3px}
+@media(max-width:700px){body[data-command712="workload"] #resolutionExport715{width:100%;min-height:44px}}
