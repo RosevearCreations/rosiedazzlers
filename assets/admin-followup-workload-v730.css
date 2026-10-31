@@ -1,0 +1,11 @@
+.rd-v730-workbench .panel{border-top:4px solid #276b76}
+.rd-v730-workbench .rd-v730-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+.rd-v730-workbench label{display:block;margin:.7rem 0;font-weight:600}
+.rd-v730-workbench input[type=file],.rd-v730-workbench select,.rd-v730-workbench textarea{display:block;width:100%;max-width:100%;margin-top:.35rem}
+.rd-v730-workbench .rd-v730-ack{display:flex;gap:.6rem;align-items:flex-start;font-weight:400;line-height:1.5}
+.rd-v730-workbench .rd-v730-ack input{flex-shrink:0;margin-top:.35rem}
+.rd-v730-actions{display:flex;align-items:center;flex-wrap:wrap;gap:.8rem;margin:1rem 0}
+.rd-v730-import{border:1px solid currentColor;border-radius:.4rem;padding:.45rem .7rem;max-width:100%;font-size:.88rem}
+.rd-v730-workbench .rd-v730-timeline{padding:1rem;border:1px solid #abc9cf;border-radius:.4rem;white-space:pre-wrap;overflow-wrap:anywhere;max-height:32rem;overflow:auto;font-size:.87rem;line-height:1.5}
+.rd-v730-workbench :is(button,input,select,textarea):focus-visible{outline:3px solid #167a93;outline-offset:3px}
+@media(max-width:650px){.rd-v730-workbench .rd-v730-fields{grid-template-columns:1fr}.rd-v730-actions{align-items:stretch;flex-direction:column}.rd-v730-actions>*{width:100%}}
