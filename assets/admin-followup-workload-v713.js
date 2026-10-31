@@ -124,6 +124,9 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     $('plannedFollowup716').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('shiftTrial718').disabled=!mayWrite||!target||!plannedIso716();
     $('shiftBinding719').disabled=!mayWrite||!target||!plannedIso716();
+    $('sourceBaseline720').disabled=!mayWrite||!target||!plannedIso716();
+    $('sourceDrift720').disabled=!mayWrite||!target||!plannedIso716()||
+      !$('previousBinding720').files?.length;
     const availabilityStatus=$('availabilityStatus716');
     availabilityStatus.textContent=!target||!plannedIso716()?
       'Choose an active staff member and future follow-up time. This will check recorded absences, not shift hours.':
@@ -417,7 +420,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         {credentials:'include',cache:'no-store'});
       if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||`Export failed (${response.status})`);}
       const blob=await response.blob(),url=URL.createObjectURL(blob),link=document.createElement('a');
-      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build719-${mode}.json`;
+      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build720-${mode}.json`;
       document.body.append(link);link.click();link.remove();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
       actionStatus714('resolutionActionStatus714',mode==='signed'?
@@ -488,6 +491,45 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('shiftBindingStatus719',error.message||'Provider binding could not be checked. HOLD.',true);}
     finally{setDetailControls();}
   }
+  async function readEvidenceFile720(id){
+    const file=$(id).files?.[0];
+    if(!file||file.size>32000)throw Error('Select the original signed JSON file (maximum 32 KB).');
+    try{return JSON.parse(await file.text());}
+    catch{throw Error('The selected evidence file is not valid JSON.');}
+  }
+  async function captureProviderBaseline720(){
+    const staff=$('rebalanceTarget714').value,planned=plannedIso716(),key=currentAvailabilityKey716();
+    if(!staff||!planned)return;
+    $('sourceBaseline720').disabled=true;
+    actionStatus714('sourceDriftStatus720','Reading the exact live provider, validating pins and signing a new bounded baseline…');
+    try{
+      const data=await api(`/api/admin/quote_followup_rebalance?audit=provider_binding&receipt=signed`+
+        `&staff_user_id=${encodeURIComponent(staff)}&planned_followup_at=${encodeURIComponent(planned)}`);
+      if(key!==currentAvailabilityKey716())return;
+      download716(data.signed_provider_binding,'rosie-build720-provider-binding-signed-baseline.json');
+      actionStatus714('sourceDriftStatus720','A fresh, exact-key server-signed provider baseline was downloaded. Preserve the original file for a later same-staff/same-hour readback. No periodic monitoring is active.');
+    }catch(error){actionStatus714('sourceDriftStatus720',error.message||'Source could not be signed; baseline HOLD.',true);}
+    finally{setDetailControls();}
+  }
+  async function compareProviderDrift720(){
+    const staff=$('rebalanceTarget714').value,planned=plannedIso716(),key=currentAvailabilityKey716();
+    $('sourceDrift720').disabled=true;
+    actionStatus714('sourceDriftStatus720','Verifying the original signed baseline and fetching actual current source data…');
+    try{
+      const signed=await readEvidenceFile720('previousBinding720');
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'compare_provider_binding',signed_evidence:signed,staff_user_id:staff,
+          planned_followup_at:planned})});
+      if(key!==currentAvailabilityKey716())return;
+      const result=data.receipt;
+      download716(result,'rosie-build720-source-drift-manual-alert.json');
+      actionStatus714('sourceDriftStatus720',`${result.status} · alert level: ${result.alert_level}. `+
+        'Original signature and current live source were checked. The result was downloaded; no automatic alerts or customer communication occurred.',
+        result.alert_level!=='none');
+    }catch(error){actionStatus714('sourceDriftStatus720',error.message||'Signed-baseline drift comparison is HELD.',true);}
+    finally{setDetailControls();}
+  }
   async function verifyWitness718(){
     const file=$('witnessFile718').files?.[0];
     if(!file||file.size>32000){actionStatus714('witnessStatus718','Select an actual witness JSON envelope under 32 KB.',true);return;}
@@ -524,6 +566,20 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         'The internally signed decision was downloaded, NOT retained by the server; Proof-B and human independence remain unproven.');
     }catch(error){actionStatus714('custodyReviewStatus719',error.message||'Witness disposition remains HELD.',true);}
     finally{$('custodyReview719').disabled=false;}
+  }
+  async function recoverCustody720(){
+    $('custodyRecovery720').disabled=true;
+    actionStatus714('custodyRecoveryStatus720','Verifying the original internal signature, current signing key and pinned reviewer…');
+    try{
+      const signed=await readEvidenceFile720('custodyRecoveryFile720');
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'recover_custody_disposition',signed_evidence:signed})});
+      download716(data.receipt,'rosie-build720-recovered-custody-reviewer-receipt.json');
+      actionStatus714('custodyRecoveryStatus720',`${data.receipt.status}. The original exact-key reviewer receipt was recovered. `+
+        'No second signing, database record, independent human validation or Proof-B authorization was created.');
+    }catch(error){actionStatus714('custodyRecoveryStatus720',error.message||'Original custody receipt recovery is HELD.',true);}
+    finally{$('custodyRecovery720').disabled=false;}
   }
   function updateRemediation716(){
     $('feedbackClose716').disabled=!unresolvedFeedback716||!$('feedbackRetest716').checked||
@@ -646,6 +702,25 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('ownerRetentionStatus719',error.message||'Owner evidence retention remains HELD.',true);}
     finally{updateCrossDevice717();}
   }
+  async function reviewLedgerGate720(){
+    $('ledgerReview720').disabled=true;
+    actionStatus714('ledgerReviewStatus720','Checking the genuine signed owner request and distinct ledger-reviewer authority…');
+    try{
+      const signed=await readEvidenceFile720('ledgerRequestFile720');
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'review_owner_ledger_gate',signed_evidence:signed,
+          review_decision:$('ledgerDisposition720').value,
+          retention_days:Number($('ledgerRetentionDays720').value),evidence_mode:'hashes_only',
+          review_note:$('ledgerReviewNote720').value.trim(),
+          acknowledge_not_activated:$('ledgerInactiveAck720').checked})});
+      download716(data.signed_receipt,'rosie-build720-owner-hash-ledger-gate-signed.json');
+      actionStatus714('ledgerReviewStatus720',`${data.receipt.status}. Signed independent-role review exported; `+
+        'no schema migration, hash retention, approval persistence, device certification or ledger activation occurred.',
+        data.receipt.status!=='LEDGER_REQUEST_REJECTED');
+    }catch(error){actionStatus714('ledgerReviewStatus720',error.message||'The owner ledger approval gate remains HELD.',true);}
+    finally{$('ledgerReview720').disabled=false;}
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -662,6 +737,9 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('plannedFollowup716').addEventListener('change',()=>void refreshAvailability716());
   $('shiftTrial718').addEventListener('click',()=>void trialShiftProvider718());
   $('shiftBinding719').addEventListener('click',()=>void verifyProviderBinding719());
+  $('sourceBaseline720').addEventListener('click',()=>void captureProviderBaseline720());
+  $('previousBinding720').addEventListener('change',setDetailControls);
+  $('sourceDrift720').addEventListener('click',()=>void compareProviderDrift720());
   $('shiftTrialExport718').addEventListener('click',()=>lastTrial718&&download716(lastTrial718,'rosie-build718-real-shift-provider-trial.json'));
   $('capacityOverride715').addEventListener('change',setDetailControls);
   $('unverifiedShift717').addEventListener('change',setDetailControls);
@@ -674,6 +752,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('signerCustodyAudit717').addEventListener('click',()=>void inspectSignerCustody717());
   $('witnessVerify718').addEventListener('click',()=>void verifyWitness718());
   $('custodyReview719').addEventListener('click',()=>void reviewCustodyDisposition719());
+  $('custodyRecovery720').addEventListener('click',()=>void recoverCustody720());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -691,6 +770,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('serverOwnerReview718').addEventListener('click',()=>void serverOwnerReview718());
   $('ownerMinimizationAck719').addEventListener('change',updateCrossDevice717);
   $('ownerRetention719').addEventListener('click',()=>void decideOwnerRetention719());
+  $('ledgerReview720').addEventListener('click',()=>void reviewLedgerGate720());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();

@@ -69,3 +69,4 @@ node scripts/build716_availability_signature_owner_remediation_test.mjs
 node scripts/build717_shift_roster_custody_crossdevice_test.mjs
 node scripts/build718_provider_witness_owner_trial_test.mjs
 node scripts/build719_provider_disposition_persistence_test.mjs
+node scripts/build720_source_drift_recovery_ledger_gate_test.mjs

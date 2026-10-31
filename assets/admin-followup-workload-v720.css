@@ -1,0 +1,10 @@
+/* Build 720 — nested owner-evidence recovery/alert workflows without adding another full-screen tab. */
+.rd-v720-workflow{margin-top:1rem;padding:1rem;border:1px solid rgba(206,208,213,.24);background:rgba(9,14,20,.5);border-radius:12px;min-width:0}
+.rd-v720-workflow h3{margin:.1rem 0 .55rem;font-size:1.06rem;color:#f2d18b}
+.rd-v720-workflow p{line-height:1.5;overflow-wrap:anywhere}
+.rd-v720-workflow>label{display:block;min-width:0;margin:.85rem 0}
+.rd-v720-workflow>label:not(.rd-v715-override)>:is(input,select,textarea){display:block;width:100%;box-sizing:border-box;margin-top:.4rem;min-height:42px;padding:.65rem;border:1px solid #7b828a;border-radius:9px;background:#151a20;color:#fff;font:inherit}
+.rd-v720-workflow .btn{max-width:100%;white-space:normal;line-height:1.45;margin:.3rem 0 .65rem}
+.rd-v720-workflow :is(button,input,select,textarea):focus-visible{outline:3px solid #f7c95b;outline-offset:3px}
+@media(max-width:680px){.rd-v720-workflow{padding:.7rem}.rd-v720-workflow .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.rd-v720-workflow *{animation:none!important;transition:none!important}}

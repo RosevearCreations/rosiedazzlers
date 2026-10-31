@@ -7,10 +7,12 @@ const hash=async(input,provider=globalThis.crypto)=>[...new Uint8Array(await pro
 export async function providerBindingDecision719(env,shift,availability,trial,provider=globalThis.crypto,now=new Date()){
   const base={kind:'rosie_shift_provider_production_binding_readback',build:719,
     checked_at:now.toISOString(),status:'HOLD',live_source_bound:false,
+    staff_user_id:trial?.staff_user_id||null,window:trial?.window||null,
     source_get_completed:trial?.provider_response_received===true,
     shift_source_approved:shift?.shift_schedule_verified===true,
     absence_blocks_clear:availability?.hard_hold===false&&availability?.requires_manager_override!==true,
     source_revision:shift?.source_revision||null,
+    source_generated_at:shift?.generated_at||null,
     source_payload_sha256:trial?.provider_payload_sha256||null,
     origin_pin_match:false,account_pin_match:false,
     independently_certified_provider:false,authorizes_reassignment:false,
