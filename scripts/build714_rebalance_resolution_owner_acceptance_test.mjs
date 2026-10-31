@@ -135,7 +135,7 @@ try{
     {...begin,action:'rebalance_owner',target_staff_user_id:spareId,note:'Reassign this overdue work after manager review.'}),env});
   assert.equal(response.status,409,'Original 713 manager review invalidates stale rebalancing snapshot');
   response=await post714({request:reqPost('quote_followup_rebalance',
-    {...fresh,action:'rebalance_owner',target_staff_user_id:spareId,note:'Reassign this overdue work after manager review.'}),env});
+    {...fresh,action:'rebalance_owner',target_staff_user_id:spareId,note:'Reassign this overdue work after manager review.',acknowledge_unverified_shift:true}),env});
   assert.equal(response.status,200);
   let result=await response.json();
   assert.equal(result.recorded,true);
@@ -144,7 +144,7 @@ try{
   assert.equal(result.requires_consent_recheck,true);
   assert.deepEqual(result.resolution_readiness.map(e=>e.exception_code),['overdue_without_owner']);
   response=await post714({request:reqPost('quote_followup_rebalance',
-    {...fresh,action:'rebalance_owner',target_staff_user_id:spareId,note:'Reassign this overdue work after manager review.'}),env});
+    {...fresh,action:'rebalance_owner',target_staff_user_id:spareId,note:'Reassign this overdue work after manager review.',acknowledge_unverified_shift:true}),env});
   assert.equal(response.status,409,'Reusing old assignment markers rejected');
   response=await get714({request:reqGet('quote_followup_rebalance',quoteId),env});
   current=await response.json();

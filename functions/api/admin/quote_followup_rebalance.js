@@ -7,8 +7,11 @@ import {capacitySnapshot715,capacityDecision715,CAPACITY_POLICY715} from
   '../../../assets/quote-followup-capacity-v715.mjs';
 import {plannedWindow716,availabilityDecision716,AVAILABILITY_BLOCK_LIMIT716} from
   '../../../assets/quote-followup-availability-v716.mjs';
-import {signEvidenceReceipt716,signingReady716} from
+import {signEvidenceReceipt716} from
   '../../../assets/quote-followup-signature-v716.mjs';
+import {shiftRosterDecision717,shiftRosterUnconfigured717} from
+  '../../../assets/quote-followup-roster-v717.mjs';
+import {signerCustodyAudit717} from '../../../assets/quote-followup-custody-v717.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -43,6 +46,26 @@ async function availabilityRead716(env,staffId,plannedAt){
     `&end_at=gt.${encodeURIComponent(window.start_at)}&order=start_at.asc&limit=${AVAILABILITY_BLOCK_LIMIT716}`);
   return availabilityDecision716(blocks,staffId,window,
     {truncated:blocks.length>=AVAILABILITY_BLOCK_LIMIT716});
+}
+async function shiftRosterRead717(env,staffId,window){
+  if(!env.ROSIE_STAFF_SHIFT_ROSTER_URL)return shiftRosterUnconfigured717(staffId,window);
+  // This source is set by the operator, NEVER by a browser request. Avoid
+  // internal network targets and do not forward the private bearer to a redirect.
+  const endpoint=new URL(env.ROSIE_STAFF_SHIFT_ROSTER_URL);
+  if(endpoint.protocol!=='https:'||endpoint.username||endpoint.password||endpoint.hash||
+    /^(localhost|127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|\[|0\.0\.0\.0)/i.test(endpoint.hostname))
+    throw Error('Invalid roster source configuration');
+  endpoint.searchParams.set('staff_user_id',staffId);
+  endpoint.searchParams.set('start_at',window.start_at);
+  endpoint.searchParams.set('end_at',window.end_at);
+  const headers={'Accept':'application/json'};
+  if(env.ROSIE_STAFF_SHIFT_ROSTER_BEARER)
+    headers.Authorization=`Bearer ${env.ROSIE_STAFF_SHIFT_ROSTER_BEARER}`;
+  const response=await fetch(endpoint,{method:'GET',headers,redirect:'error',
+    signal:AbortSignal.timeout(7000)});
+  if(!response.ok)throw Error('Shift roster source unavailable');
+  const payload=await response.json().catch(()=>null);
+  return shiftRosterDecision717(payload,staffId,window);
 }
 function evidenceEvents(record){
   return record.events714||[];
@@ -81,7 +104,7 @@ function publicDetail714(record,actor){
       exception_code:e.payload.exception_code,proof_kind:e.payload.proof_kind,
       note:e.payload.note})),
     event_history_may_be_truncated:record.eventLimitReached||record.evidenceLimitReached,
-    owner_acceptance_recorded_on_server:false,owner_acceptance_pending:true,build:716};
+    owner_acceptance_recorded_on_server:false,owner_acceptance_pending:true,build:717};
 }
 function fresh(record,body){
   const f=record.review.followup,marker=f.resolution.marker;
@@ -104,7 +127,8 @@ async function appendEvent(env,event){
 export async function onRequestGet({request,env}){
   const search=new URL(request.url).searchParams,id=search.get('quote_id')||'',
     exporting=search.get('export')==='evidence',staffId=search.get('staff_user_id')||'',
-    plannedAt=search.get('planned_followup_at')||'',signed=search.get('receipt')==='signed';
+    plannedAt=search.get('planned_followup_at')||'',signed=search.get('receipt')==='signed',
+    signerAudit=search.get('audit')==='signer';
   if(exporting&&!id)return json({ok:false,error:'Select a saved quote before exporting internal evidence.'},400);
   if(id&&!isUuid(id))return json({ok:false,error:'A valid saved quote ID is required.'},400);
   if(staffId&&(!isUuid(staffId)||!plannedWindow716(plannedAt)))
@@ -113,13 +137,14 @@ export async function onRequestGet({request,env}){
   if(!access.ok)return access.response;
   if(!isManager(access.actor))return json({ok:false,error:'Management access required.'},403);
   try{
+    if(signerAudit)return json({ok:true,build:717,audit:await signerCustodyAudit717(env)});
     if(id){const record=await liveDetail(env,id);
       if(!record)return json({ok:false,error:'Saved quote not found.'},404);
       if(exporting){
         if(record.eventLimitReached||record.evidenceLimitReached)
           return json({ok:false,error:'Evidence history reached its safe read limit; export refused.'},409);
         const detail=publicDetail714(record,access.actor),receipt={
-          type:'rosie_internal_followup_resolution_evidence',schema:1,build:716,
+          type:'rosie_internal_followup_resolution_evidence',schema:1,build:717,
           exported_at:new Date().toISOString(),quote_id:detail.quote_id,
           booking_id:detail.booking_id,quote_number:detail.quote_number,
           source_marker:detail.marker,latest_evidence_event_id:detail.latest_resolution_evidence_event_id,
@@ -129,14 +154,14 @@ export async function onRequestGet({request,env}){
             customer_contacted:false,grants_consent:false,closes_audit:false,
             cryptographically_signed:signed,live_consent_grant_verified:false,
             source_data_only:true}};
-        if(signed&&!signingReady716(env))return json({ok:false,
+        if(signed&&!(await signerCustodyAudit717(env)).signing_available)return json({ok:false,
           error:'Signed export option is unavailable: a real server Ed25519 signing key and signer ID must be configured.'},503);
         let exportBody=receipt;
         if(signed){try{exportBody=await signEvidenceReceipt716(receipt,env);}
           catch{return json({ok:false,error:'Server export signing failed; no signed receipt was produced.'},503);}}
         return new Response(JSON.stringify(exportBody,null,2),{status:200,headers:{
           'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store',
-          'Content-Disposition':`attachment; filename="rosie-evidence-${id.slice(0,8)}-build716-${signed?'signed':'unsigned'}.json"`,
+          'Content-Disposition':`attachment; filename="rosie-evidence-${id.slice(0,8)}-build717-${signed?'signed':'unsigned'}.json"`,
           'X-Content-Type-Options':'nosniff'}});
       }
       return json(publicDetail714(record,access.actor));}
@@ -147,11 +172,13 @@ export async function onRequestGet({request,env}){
         (staff.role_code!=='admin'&&staff.can_manage_bookings!==true))
         return json({ok:false,error:'Selected staff member is no longer eligible.'},409);
       const availability=await availabilityRead716(env,staffId,plannedAt);
-      return json({ok:true,availability,build:716});
+      const shift_roster=await shiftRosterRead717(env,staffId,availability.window);
+      return json({ok:true,availability,shift_roster,build:717});
     }
     const roster=await rows(env,`staff_users?select=${encodeURIComponent('id,full_name,role_code,is_active,can_manage_bookings')}`+
       `&is_active=eq.true&order=full_name.asc&limit=100`);
     const capacity=await capacityRead715(env);
+    const signerAuditResult=await signerCustodyAudit717(env);
     return json({ok:true,eligible_staff:roster.filter(s=>
       ['admin','senior_detailer','detailer'].includes(s.role_code)&&
       (s.role_code==='admin'||s.can_manage_bookings===true)).map(s=>({id:s.id,
@@ -161,9 +188,11 @@ export async function onRequestGet({request,env}){
       capacity_verified:false,capacity_policy:CAPACITY_POLICY715,
       capacity_source_truncated:capacity.source_truncated||roster.length===100,
       capacity_by_staff:capacity.by_staff,
-      export_signing_available:signingReady716(env),
+      export_signing_available:signerAuditResult.signing_available,
+      signer_custody_status:signerAuditResult.status,
+      shift_roster_source_configured:Boolean(env.ROSIE_STAFF_SHIFT_ROSTER_URL),
       availability_source:'staff_availability_blocks',availability_is_shift_roster:false,
-      requires_selected_live_review:true,build:716});
+      requires_selected_live_review:true,build:717});
   }catch{return json({ok:false,error:'Active staff source unavailable. No reassignment offered.'},503);}
 }
 export async function onRequestPost({request,env}){
@@ -211,6 +240,12 @@ export async function onRequestPost({request,env}){
       const availability=await availabilityRead716(env,target.id,body.planned_followup_at);
       if(!availability||availability.hard_hold)return json({ok:false,
         error:'A recorded staff absence or an incomplete availability source blocks this planned follow-up window.',availability},409);
+      const shift_roster=await shiftRosterRead717(env,target.id,availability.window);
+      if(shift_roster.hard_hold)return json({ok:false,
+        error:'The configured roster did not verify an approved working shift covering this hour.',shift_roster},409);
+      if(shift_roster.requires_manual_shift_acknowledgement&&
+        !(body.acknowledge_unverified_shift===true&&note.length>=20))
+        return json({ok:false,error:'No shift source is configured. Manager must explicitly acknowledge unverified hours with a detailed note.',shift_roster},409);
       if((decision.requires_manager_override||availability.requires_manager_override)&&
         !(body.acknowledge_capacity_override===true&&note.length>=20))
         return json({ok:false,error:'Queue threshold or a light-duty staff block requires explicit management override and a detailed note.',capacity:decision,availability},409);
@@ -230,9 +265,14 @@ export async function onRequestPost({request,env}){
           availability_block_check_completed:availability.recorded_block_check_completed,
           availability_light_duty_count:availability.light_duty_count,
           availability_conflicting_absence_count:availability.conflicting_absence_count,
-          hours_or_shift_verified:false,
+          hours_or_shift_verified:shift_roster.shift_schedule_verified,
+          shift_roster_source:shift_roster.source,
+          shift_roster_revision:shift_roster.source_revision||null,
+          verified_shift_ids:shift_roster.verified_shift_ids,
+          unverified_shift_manager_acknowledged:shift_roster.requires_manual_shift_acknowledgement&&
+            body.acknowledge_unverified_shift===true,
           customer_notified_by_this_action:false,provider_delivery_verified:false,
-          grants_consent:false,build:716}};
+          grants_consent:false,build:717}};
     }else{
       const original=latestReview(record,code),proof=resolutionProof714(code,record.review,original);
       if(!original||!proof)return json({ok:false,error:'No original manager review and actual subsequent live remedy found for this exception.'},409);
