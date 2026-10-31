@@ -1,0 +1,11 @@
+/* Build 729: accessible compact local comparison controls. */
+.rd-v729-panel{margin:1rem 0 0;padding:.8rem 1rem;
+  border:1px solid #557b91;border-radius:12px;background:rgba(9,39,59,.72);max-width:100%;}
+.rd-v729-panel>summary{cursor:pointer;font-weight:700;line-height:1.5;overflow-wrap:anywhere;}
+.rd-v729-panel[open]>summary{margin-bottom:.65rem;}
+.rd-v729-panel label{display:block;max-width:100%;margin:.65rem 0;overflow-wrap:anywhere;}
+.rd-v729-panel input[type=file],.rd-v729-panel textarea{width:100%;max-width:100%;}
+.rd-v729-panel button{max-width:100%;white-space:normal;}
+.rd-v729-panel :is(button,input,textarea,summary):focus-visible{
+  outline:3px solid #f4cd79;outline-offset:3px;}
+@media(max-width:620px){.rd-v729-panel{padding:.65rem;}}

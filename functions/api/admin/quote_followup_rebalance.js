@@ -34,6 +34,8 @@ import {ownerExceptionEvidenceFollowup727,witnessPriorityDispositionAudit727,
   trialSourceProvenanceRecheck727} from '../../../assets/quote-followup-audit-v727.mjs';
 import {ownerFollowupAgingReview728,witnessAuditExceptionReview728,
   nonproductionProvenanceGapTracking728} from '../../../assets/quote-followup-gaps-v728.mjs';
+import {ownerAgingDelta729,witnessExceptionContinuity729,
+  nonproductionGapDrift729} from '../../../assets/quote-followup-comparison-v729.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -272,12 +274,38 @@ export async function onRequestPost({request,env}){
     'review_nonproduction_trial_evidence_intake',
     'followup_owner_exception_evidence','audit_witness_priority_disposition',
     'recheck_trial_source_provenance','review_owner_followup_aging',
-    'review_witness_audit_exception','track_nonproduction_provenance_gaps'].includes(action)){
+    'review_witness_audit_exception','track_nonproduction_provenance_gaps',
+    'compare_owner_aging_delta','compare_witness_exception_continuity',
+    'compare_nonproduction_gap_drift'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['compare_owner_aging_delta','compare_witness_exception_continuity',
+      'compare_nonproduction_gap_drift'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      const scope=action==='compare_owner_aging_delta'?
+        ['rosie_owner_followup_aging_review','rosie_owner_exception_evidence_followup_queue',
+          ownerAgingDelta729]:action==='compare_witness_exception_continuity'?
+          ['rosie_witness_audit_exception_review','rosie_witness_priority_disposition_audit',
+            witnessExceptionContinuity729]:
+          ['rosie_nonproduction_provenance_evidence_gap_tracking',
+            'rosie_nonproduction_trial_source_provenance_recheck',nonproductionGapDrift729];
+      const verified=await Promise.all([
+        verify(body.signed_before,scope[0],728),verify(body.signed_after,scope[0],728),
+        verify(body.signed_source,scope[1],727)]);
+      const failed=verified.find(v=>!v.ok);
+      if(failed)return json({ok:false,status:'HELD',build:729,error:failed.reason},409);
+      const receipt=scope[2](...verified,access.actor,env,body);
+      if(!receipt)return json({ok:false,status:'HELD',build:729,
+        error:'Original signed 728 and 727 lineage, chronological snapshots, pinned reviewer and local-only acknowledgement required.'},409);
+      try{return json({ok:true,build:729,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env)});}
+      catch{return json({ok:false,build:729,
+        error:'Current server signer could not sign the Build 729 comparison.'},503);}
+    }
     if(['review_owner_followup_aging','review_witness_audit_exception',
       'track_nonproduction_provenance_gaps'].includes(action)){
       const audit=await signerCustodyAudit717(env);
