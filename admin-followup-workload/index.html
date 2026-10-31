@@ -4,13 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="robots" content="noindex,nofollow" />
-  <title>Workload &amp; Resolution Command | Rosie Dazzlers</title>
+  <title>Staff Capacity &amp; Evidence Command | Rosie Dazzlers</title>
   <meta name="description" content="Protected management staff workload, rebalancing, exception evidence and owner acceptance workspace." />
   <link rel="stylesheet" href="/assets/site.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-command-surface-v712.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v713.css?v=20261030build714" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v714.css?v=20261030build714" />
-  <script src="/assets/admin-command-surface-v712.js?v=20261030build714" defer></script>
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v715.css?v=20261030build715" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build715" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers · Management</strong></a><nav class="nav-links" aria-label="Management shortcuts"><a href="/admin.html">Dashboard</a><a href="/admin-quotes.html">Quote Pipeline</a><a href="/admin-staff.html">Staff</a><a href="/admin-analytics.html">Statistics</a></nav></div></header>
@@ -19,7 +20,7 @@
     <div data-admin-shell-loading class="section"><div class="panel">Authenticating management workspace…</div></div>
     <div data-admin-shell-ready hidden>
       <section class="section">
-        <div class="admin-topbar"><div><span class="badge">Build 714 · Staff workload and resolution evidence</span>
+        <div class="admin-topbar"><div><span class="badge">Build 715 · Staff capacity, evidence export &amp; owner feedback</span>
           <h1>Follow-Up Workload Command</h1>
           <p>Rebalance actual staff assignments, inspect overdue exceptions and record source-linked internal resolution evidence. The dashboard shows real protected records, never fictional statistics.</p>
           <div class="rd-workload-actions"><button class="btn primary" id="workloadRefresh713" type="button">Refresh workload evidence</button><a class="btn ghost" href="/admin-quotes.html">Open Quote Pipeline</a></div>
@@ -67,6 +68,8 @@
           <p class="muted">Compare bounded assignment counts, then deliberately select a currently authorized staff member. A saved reassignment invalidates the previous consent recheck; the new owner must recheck it before customer contact.</p>
           <p id="rebalanceRosterStatus714" class="rd-v714-status" role="status">Staff roster not yet checked.</p>
           <label for="rebalanceTarget714">Assign selected quote to<select id="rebalanceTarget714" disabled><option value="">Select a quote and staff member</option></select></label>
+          <p id="capacityStatus715" class="rd-v714-status" role="status" aria-live="polite">Capacity guardrails are awaiting live roster evidence. Quote counts do not verify shift availability.</p>
+          <label class="rd-v715-override"><input type="checkbox" id="capacityOverride715" disabled/> Manager capacity override: I reviewed the flagged queue threshold and the actual staff schedule.</label>
           <label for="rebalanceNote714">Reason for this actual reassignment (12–300 characters)</label>
           <textarea id="rebalanceNote714" rows="3" maxlength="300" placeholder="Explain current workload pressures, the new owner and next internal follow-up." disabled></textarea>
           <button id="rebalanceSave714" class="btn primary" type="button" disabled>Confirm staff reassignment</button>
@@ -79,6 +82,7 @@
           <label for="resolutionNote714">Evidence review note (12–300 characters)</label>
           <textarea id="resolutionNote714" rows="3" maxlength="300" placeholder="State which real internal source event remedied the exception and what remains open." disabled></textarea>
           <button id="resolutionSave714" class="btn primary" type="button" disabled>Record verified resolution evidence</button>
+          <button id="resolutionExport715" class="btn ghost" type="button" disabled>Export protected resolution evidence (JSON)</button>
           <p id="resolutionActionStatus714" class="rd-v714-status" role="status" aria-live="polite">No verified remedy selected.</p>
           <h3>Resolution evidence history</h3><pre id="resolutionHistory714" class="rd-workload-history">No verified evidence receipts loaded.</pre>
         </article>
@@ -94,7 +98,10 @@
           <label><input type="checkbox" id="acceptNoSend714"/> No customer messages, audit closure or consent grants were triggered by these actions.</label>
           <div class="rd-v714-owner-fields"><label for="ownerName714">Owner name<input id="ownerName714" maxlength="120" placeholder="Name of the person actually testing" required/></label>
           <label for="ownerNote714">Device / findings note<input id="ownerNote714" maxlength="300" placeholder="Desktop, phone, browser and any observed issues" required/></label></div>
-          <button class="btn ghost" id="ownerReceipt714" type="submit" disabled>Download owner acceptance receipt</button>
+          <label for="ownerDisposition715">Real owner feedback outcome
+            <select id="ownerDisposition715"><option value="">Choose after actually testing</option><option value="accepted">Accepted as observed on the tested devices</option><option value="needs_changes">Issues found — keep owner feedback open</option></select>
+          </label>
+          <button class="btn ghost" id="ownerReceipt714" type="submit" disabled>Download local owner feedback receipt</button>
         </form>
         <p class="rd-v714-status" id="ownerAcceptanceStatus714" role="status" aria-live="polite">Awaiting an actual owner walkthrough. No acceptance receipt has been made.</p>
       </article></section>
@@ -103,6 +110,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build714"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build715"></script>
 </body>
 </html>
