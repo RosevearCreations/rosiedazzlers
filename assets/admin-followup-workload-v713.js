@@ -1053,6 +1053,36 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         acknowledge_gaps_not_live_verification:$('trialGapNoVerification728').checked},
       'rosie-build728-nonprod-provenance-gaps-held-signed.json');
   }
+  async function compareOwnerAging729(){
+    await reviewSignedScope723('ledgerDeltaReview729','ledgerDeltaStatus729',
+      'compare_owner_aging_delta',[
+        ['signed_before','ledgerDeltaBefore729'],
+        ['signed_after','ledgerDeltaAfter729'],
+        ['signed_source','ledgerQueueReceipt728']],{
+        review_note:$('ledgerDeltaNote729').value.trim(),
+        acknowledge_local_comparison_only:$('ledgerDeltaLocal729').checked},
+      'rosie-build729-owner-local-aging-delta-held-signed.json');
+  }
+  async function compareWitnessContinuity729(){
+    await reviewSignedScope723('witnessContinuityReview729','witnessContinuityStatus729',
+      'compare_witness_exception_continuity',[
+        ['signed_before','witnessContinuityBefore729'],
+        ['signed_after','witnessContinuityAfter729'],
+        ['signed_source','witnessAuditReceipt728']],{
+        review_note:$('witnessContinuityNote729').value.trim(),
+        acknowledge_local_comparison_only:$('witnessContinuityLocal729').checked},
+      'rosie-build729-witness-exception-continuity-held-signed.json');
+  }
+  async function compareTrialGapDrift729(){
+    await reviewSignedScope723('trialDriftReview729','trialDriftStatus729',
+      'compare_nonproduction_gap_drift',[
+        ['signed_before','trialDriftBefore729'],
+        ['signed_after','trialDriftAfter729'],
+        ['signed_source','trialRecheckReceipt728']],{
+        review_note:$('trialDriftNote729').value.trim(),
+        acknowledge_local_comparison_only:$('trialDriftLocal729').checked},
+      'rosie-build729-nonproduction-evidence-gap-drift-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -1094,6 +1124,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('witnessPriorityReview726').addEventListener('click',()=>void reviewWitnessPriority726());
   $('witnessAuditReview727').addEventListener('click',()=>void auditWitnessPriority727());
   $('witnessExceptionReview728').addEventListener('click',()=>void reviewWitnessException728());
+  $('witnessContinuityReview729').addEventListener('click',()=>void compareWitnessContinuity729());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -1123,10 +1154,12 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ledgerHandoffException726').addEventListener('click',()=>void followupOwnerException726());
   $('ledgerExceptionReview727').addEventListener('click',()=>void followupOwnerException727());
   $('ledgerAgingReview728').addEventListener('click',()=>void reviewOwnerAging728());
+  $('ledgerDeltaReview729').addEventListener('click',()=>void compareOwnerAging729());
   $('trialReadinessReview725').addEventListener('click',()=>void reviewTrialReadiness725());
   $('trialEvidenceReview726').addEventListener('click',()=>void reviewTrialEvidence726());
   $('trialProvenanceReview727').addEventListener('click',()=>void recheckTrialProvenance727());
   $('trialGapReview728').addEventListener('click',()=>void reviewTrialGaps728());
+  $('trialDriftReview729').addEventListener('click',()=>void compareTrialGapDrift729());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
