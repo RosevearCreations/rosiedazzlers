@@ -133,3 +133,5 @@ assert.match(html,/admin-followup-workload-v729\.css/);
 assert.match(read('assets/admin-followup-workload-v729.css'),/:focus-visible/);
 assert.match(read('scripts/current_booking_wizard_regression.sh'),/build729_signed_comparison_continuity_test\.mjs/);
 console.log('Build 729 PASS: chronological signed comparisons, reviewer separation, unchanged ancestry, zero external approvals or writes');
+export const fixtureFor730={f,env,at,witnessId,gapId,owner,witness,gap,
+  oa,ob,wa,wb,ga,gb,queue,audit,recheck,ownerA,ownerB,witnessA,witnessB,gapA,gapB};
