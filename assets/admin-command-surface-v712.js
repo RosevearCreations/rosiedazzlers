@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 723 command workspaces · Private ledger nonproduction authorization checklist, separate witness identity disposition and owner retention expiry preview. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, background messages, fictitious acceptance or external approval.';
+  note.textContent='Build 724 command workspaces · Owner-controlled nonproduction handoff, independent witness reference conflict review and retention/backup purge trial prerequisites. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, backup deletion, background messages, fictitious acceptance or external approval.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',
