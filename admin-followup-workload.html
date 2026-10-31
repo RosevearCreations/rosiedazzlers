@@ -14,7 +14,8 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v716.css?v=20261030build716" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v717.css?v=20261030build717" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v718.css?v=20261030build718" />
-  <script src="/assets/admin-command-surface-v712.js?v=20261030build718" defer></script>
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v719.css?v=20261030build719" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build719" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers · Management</strong></a><nav class="nav-links" aria-label="Management shortcuts"><a href="/admin.html">Dashboard</a><a href="/admin-quotes.html">Quote Pipeline</a><a href="/admin-staff.html">Staff</a><a href="/admin-analytics.html">Statistics</a></nav></div></header>
@@ -76,6 +77,11 @@
           <p id="shiftRosterStatus717" class="rd-v714-status rd-v717-roster" role="status" aria-live="polite">Approved shift roster has not been checked. A missing source never means a verified shift.</p>
           <div class="rd-v718-action-row"><button id="shiftTrial718" type="button" class="btn ghost" disabled>Run real shift provider GET trial</button><button id="shiftTrialExport718" type="button" class="btn ghost" disabled>Download trial result</button></div>
           <p id="shiftTrialStatus718" class="rd-v714-status" role="status" aria-live="polite">ⓘ Requires a configured live HTTPS provider. A missing provider or failed request is not a connection success.</p>
+          <details class="rd-v719-details"><summary>ⓘ Production shift-provider origin and account binding</summary>
+            <p class="muted">A successful roster GET alone is not proof that it belongs to our intended provider account. This check additionally requires a separate pinned HTTPS origin and a matching account reference inside the actual provider response. No credentials are shown.</p>
+            <button id="shiftBinding719" type="button" class="btn ghost" disabled>Verify actual source account binding</button>
+            <p id="shiftBindingStatus719" class="rd-v714-status" role="status" aria-live="polite">Provider origin and account binding not yet verified.</p>
+          </details>
           <label class="rd-v715-override"><input id="unverifiedShift717" type="checkbox" disabled/> Manager acknowledgement: no authoritative shift source is configured. I checked the staff schedule separately and accept that this event will be recorded as shift UNVERIFIED.</label>
           <p id="capacityStatus715" class="rd-v714-status" role="status" aria-live="polite">Capacity guardrails are awaiting live roster evidence. Quote counts do not verify shift availability.</p>
           <label class="rd-v715-override"><input type="checkbox" id="capacityOverride715" disabled/> Manager capacity override: I reviewed the flagged queue threshold and the actual staff schedule.</label>
@@ -100,6 +106,15 @@
             <label for="witnessFile718">Original signed witness JSON<input id="witnessFile718" type="file" accept="application/json,.json"/></label>
             <button id="witnessVerify718" class="btn ghost" type="button">Verify actual witness signature</button>
             <p id="witnessStatus718" class="rd-v714-status" role="status" aria-live="polite">No verified independent witness envelope supplied.</p>
+            <details class="rd-v719-details"><summary>ⓘ Separate reviewer custody disposition</summary>
+              <p class="muted">Only a signed-in administrator whose staff ID matches the separately pinned reviewer may disposition the exact witness file. An originating signer cannot approve their own custody. This review is for our internal export key only; Proof-B remains HELD.</p>
+              <label for="custodyDisposition719">Actual custody review decision<select id="custodyDisposition719"><option value="">Choose after actual independent review</option><option value="accept_for_internal_export_only">Accept signed witness for internal export only</option><option value="return_for_independent_followup">Return witness for independent follow-up</option></select></label>
+              <label for="custodyReference719">External reviewer evidence reference (8–120 characters)<input id="custodyReference719" maxlength="120" placeholder="Reference from the genuine independent reviewer"/></label>
+              <label for="custodyNote719">Actual independent review findings (20–300 characters)<textarea id="custodyNote719" rows="2" maxlength="300" placeholder="What was actually verified; any outstanding custody concerns"></textarea></label>
+              <label class="rd-v715-override"><input id="custodyScopeAck719" type="checkbox"/> I confirm this disposition does not authorize Proof-B or a six-app connection.</label>
+              <button id="custodyReview719" class="btn primary" type="button">Verify and sign scoped reviewer disposition</button>
+              <p id="custodyReviewStatus719" class="rd-v714-status" role="status" aria-live="polite">No independent reviewer disposition has been verified.</p>
+            </details>
           </div>
           <p id="resolutionActionStatus714" class="rd-v714-status" role="status" aria-live="polite">No verified remedy selected.</p>
           <h3>Resolution evidence history</h3><pre id="resolutionHistory714" class="rd-workload-history">No verified evidence receipts loaded.</pre>
@@ -144,6 +159,13 @@
             <label class="rd-v715-override"><input type="checkbox" id="serverOwnerAck718"/> I personally tested both devices after the fix and confirm the uploaded files are the actual outcomes.</label>
             <button id="serverOwnerReview718" class="btn primary" type="button" disabled>Server-review owner device evidence</button>
             <p id="serverOwnerStatus718" class="rd-v714-status" role="status" aria-live="polite">Owner device acceptance remains pending until actual files are submitted and reviewed.</p>
+            <details class="rd-v719-details"><summary>ⓘ Owner evidence retention decision</summary>
+              <p class="muted">A real named administrator may choose a local export of the actual receipt hashes or request future protected server retention. Without an approved private ledger, retention policy and second-person review, the server must refuse to claim durable acceptance.</p>
+              <label for="ownerRetentionChoice719">How should we handle the owner evidence?<select id="ownerRetentionChoice719"><option value="download_only">Download signed hash-only decision; do not store files</option><option value="request_protected_hash_ledger">Request private hash-only ledger (HOLD pending approval)</option></select></label>
+              <label class="rd-v715-override"><input id="ownerMinimizationAck719" type="checkbox"/> We understand no raw files or hashes will be retained on the server by this review.</label>
+              <button id="ownerRetention719" class="btn ghost" type="button" disabled>Review retention decision for actual device files</button>
+              <p id="ownerRetentionStatus719" class="rd-v714-status" role="status" aria-live="polite">No authenticated owner retention decision issued.</p>
+            </details>
           </div>
         </div>
       </article></section>
@@ -152,6 +174,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build718"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build719"></script>
 </body>
 </html>
