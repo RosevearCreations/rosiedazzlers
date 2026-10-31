@@ -26,6 +26,8 @@ import {nonproductionExecutionChecklist723,witnessIdentityDisposition723,
   ownerRetentionExpiry723} from '../../../assets/quote-followup-authorization-v723.mjs';
 import {ownerAuthorizationHandoff724,witnessReferenceConflict724,
   retentionBackupPurgeTrial724} from '../../../assets/quote-followup-handoff-v724.mjs';
+import {reconcilePrivateOwnerHandoff725,witnessConflictAging725,
+  nonproductionRetentionReadiness725} from '../../../assets/quote-followup-reconciliation-v725.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -258,12 +260,50 @@ export async function onRequestPost({request,env}){
     'reconcile_owner_retention','review_nonproduction_execution_checklist',
     'review_external_witness_identity','verify_owner_retention_expiry',
     'prepare_owner_nonproduction_handoff','review_witness_reference_conflict',
-    'review_retention_backup_purge_trial'].includes(action)){
+    'review_retention_backup_purge_trial','reconcile_private_owner_handoff',
+    'review_witness_conflict_aging','review_nonproduction_retention_readiness'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['reconcile_private_owner_handoff','review_witness_conflict_aging',
+      'review_nonproduction_retention_readiness'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      const sources=action==='reconcile_private_owner_handoff'?[
+        ['signed_handoff','rosie_owner_nonproduction_authorization_handoff',724],
+        ['signed_checklist','rosie_nonproduction_ledger_execution_authorization_checklist',723],
+        ['signed_dry_run','rosie_private_ledger_schema_dry_run_review',722],
+        ['signed_gate','rosie_owner_evidence_ledger_approval_gate',720]]:
+        action==='review_witness_conflict_aging'?[
+          ['signed_reference','rosie_witness_reference_conflict_review',724],
+          ['signed_identity','rosie_independent_witness_identity_disposition',723],
+          ['signed_provenance','rosie_rotation_witness_provenance_intake',722]]:[
+          ['signed_handoff','rosie_owner_nonproduction_authorization_handoff',724],
+          ['signed_purge','rosie_retention_backup_purge_trial_preconditions',724],
+          ['signed_expiry','rosie_owner_retention_expiry_policy_verification',723],
+          ['signed_reconciliation','rosie_owner_ledger_retention_reconciliation',722]];
+      const verified=await Promise.all(sources.map(async ([field,kind,build])=>
+        [field,await verify(body[field],kind,build)]));
+      const failed=verified.find(([,result])=>!result.ok);
+      if(failed)return json({ok:false,status:'HELD',build:725,error:failed[1].reason},409);
+      const inputs=Object.fromEntries(verified);
+      const receipt=action==='reconcile_private_owner_handoff'?
+        reconcilePrivateOwnerHandoff725(inputs.signed_handoff,inputs.signed_checklist,
+          inputs.signed_dry_run,inputs.signed_gate,access.actor,env,body):
+        action==='review_witness_conflict_aging'?
+          witnessConflictAging725(inputs.signed_reference,inputs.signed_identity,
+            inputs.signed_provenance,access.actor,env,body):
+          nonproductionRetentionReadiness725(inputs.signed_handoff,inputs.signed_purge,
+            inputs.signed_expiry,inputs.signed_reconciliation,access.actor,env,body);
+      if(!receipt)return json({ok:false,status:'HELD',build:725,
+        error:'Original signed lineage, correct independent/owner role and explicit no-approval review are required.'},409);
+      try{return json({ok:true,build:725,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env)});}
+      catch{return json({ok:false,build:725,
+        error:'Live signer cannot sign the Build 725 held reconciliation receipt.'},503);}
+    }
     if(['prepare_owner_nonproduction_handoff','review_witness_reference_conflict',
       'review_retention_backup_purge_trial'].includes(action)){
       const audit=await signerCustodyAudit717(env);

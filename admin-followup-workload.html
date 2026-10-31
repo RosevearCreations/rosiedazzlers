@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v722.css?v=20261031build722" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v723.css?v=20261031build723" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v724.css?v=20261031build724" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v725.css?v=20261031build725" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -171,6 +172,16 @@
                         <label class="rd-v715-override"><input id="witnessReferenceNoIdentity724" type="checkbox" /> No identity, appointment, custody or Proof-B approval is established.</label>
                         <button id="witnessReferenceReview724" class="btn ghost" type="button">Sign reference comparison (HELD)</button>
                         <p id="witnessReferenceStatus724" class="rd-v714-status" role="status" aria-live="polite">A separate pinned reviewer and all three signed receipts are required.</p>
+                        <details class="rd-v725-panel"><summary>ⓘ Build 725 · Witness conflict aging</summary>
+                          <p class="muted">Track age from the <strong>local signed reference review</strong>, not the date of a real-world identity incident. A separate aging reviewer is required; no messages or custody approvals are sent.</p>
+                          <label for="witnessReferenceReceipt725">Original signed Build 724 reference comparison<input id="witnessReferenceReceipt725" type="file" accept="application/json,.json" /></label>
+                          <label for="witnessAgingWindow725">Local review window<select id="witnessAgingWindow725"><option value="24">24 hours</option><option value="72" selected>72 hours</option><option value="168">7 days</option></select></label>
+                          <label for="witnessAgingDecision725">Aging disposition<select id="witnessAgingDecision725"><option value="request_external_resolution">Flag for independent external resolution (HELD)</option><option value="defer_followup">Defer review</option><option value="reject_reference_evidence">Reject reference evidence</option></select></label>
+                          <label for="witnessAgingNote725">Review note (20–300 characters)<textarea id="witnessAgingNote725" rows="2" maxlength="300"></textarea></label>
+                          <label class="rd-v715-override"><input id="witnessAgingNotIdentity725" type="checkbox" /> The measured age applies only to the local receipt, not verified human identity or custody acceptance.</label>
+                          <button id="witnessAgingReview725" class="btn ghost" type="button">Sign local conflict aging (HELD)</button>
+                          <p id="witnessAgingStatus725" class="rd-v714-status" role="status" aria-live="polite">Independent reviewer appointment and real external resolution remain pending.</p>
+                        </details>
                       </details>
                     </details>
                   </details>
@@ -277,6 +288,15 @@
                         <label class="rd-v715-override"><input id="ledgerHandoffPrivate724" type="checkbox" /> I will transfer evidence privately only after separate independent authorization; this action does not send or run anything.</label>
                         <button id="ledgerOwnerHandoff724" class="btn ghost" type="button">Prepare signed owner handoff (HELD)</button>
                         <p id="ledgerOwnerHandoffStatus724" class="rd-v714-status" role="status" aria-live="polite">Signed owner gate, dry-run and execution checklist must match.</p>
+                        <details class="rd-v725-panel"><summary>ⓘ Build 725 · Owner handoff receipt reconciliation</summary>
+                          <p class="muted">As the original owner, verify the signed Build 724 handoff against unchanged Build 723/722/720 sources. This produces a local signed reconciliation, <strong>not</strong> an external delivery receipt.</p>
+                          <label for="ledgerOwnerHandoffReceipt725">Original signed Build 724 owner handoff<input id="ledgerOwnerHandoffReceipt725" type="file" accept="application/json,.json" /></label>
+                          <label for="ledgerHandoffReconcileDecision725">Owner decision<select id="ledgerHandoffReconcileDecision725"><option value="reconcile_private_handoff">Reconcile signed chain (HELD)</option><option value="defer_reconciliation">Defer reconciliation</option><option value="reject_reconciliation">Reject reconciliation</option></select></label>
+                          <label for="ledgerHandoffReconcileNote725">Owner note (20–300 characters)<textarea id="ledgerHandoffReconcileNote725" rows="2" maxlength="300"></textarea></label>
+                          <label class="rd-v715-override"><input id="ledgerNoDelivery725" type="checkbox" /> No actual handoff delivery, independent approval, SQL or database access is confirmed.</label>
+                          <button id="ledgerHandoffReconcile725" class="btn ghost" type="button">Sign owner handoff reconciliation (HELD)</button>
+                          <p id="ledgerHandoffReconcileStatus725" class="rd-v714-status" role="status" aria-live="polite">Original owner account and all signed source receipts are required.</p>
+                        </details>
                       </details>
                     </details>
                     <details class="rd-v723-panel"><summary>ⓘ Build 723 · Owner retention expiry verification</summary>
@@ -295,6 +315,16 @@
                         <label class="rd-v715-override"><input id="ledgerNoPurge724" type="checkbox" /> This cannot execute a purge, restore a backup, authorize SQL or establish retention compliance.</label>
                         <button id="ledgerPurgeReview724" class="btn ghost" type="button">Sign trial prerequisites (HELD)</button>
                         <p id="ledgerPurgeStatus724" class="rd-v714-status" role="status" aria-live="polite">Live backup retention and purge evidence are not available.</p>
+                        <details class="rd-v725-panel"><summary>ⓘ Build 725 · Nonproduction retention trial readiness</summary>
+                          <p class="muted">A separately pinned trial reviewer compares signed owner handoff, backup planning, expiry and retention receipts. The result lists missing real-world approvals and live test evidence; it cannot mark the trial approved.</p>
+                          <label for="trialHandoffReceipt725">Original signed Build 724 owner handoff<input id="trialHandoffReceipt725" type="file" accept="application/json,.json" /></label>
+                          <label for="trialPurgeReceipt725">Original signed Build 724 backup trial prerequisites<input id="trialPurgeReceipt725" type="file" accept="application/json,.json" /></label>
+                          <label for="trialReadinessDecision725">Readiness disposition<select id="trialReadinessDecision725"><option value="request_independent_readiness_review">Document gaps for independent review (HELD)</option><option value="defer_readiness">Defer</option><option value="reject_readiness">Reject trial planning</option></select></label>
+                          <label for="trialReadinessNote725">Separate reviewer findings (20–300 characters)<textarea id="trialReadinessNote725" rows="2" maxlength="300"></textarea></label>
+                          <label class="rd-v715-override"><input id="trialNoLiveApproval725" type="checkbox" /> No external authorization, nonproduction SQL test, row expiry or backup purge has occurred.</label>
+                          <button id="trialReadinessReview725" class="btn ghost" type="button">Sign trial readiness gaps (HELD)</button>
+                          <p id="trialReadinessStatus725" class="rd-v714-status" role="status" aria-live="polite">Independent authorization and disposable-project evidence are still missing.</p>
+                        </details>
                       </details>
                     </details>
                   </details>
@@ -309,6 +339,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build724"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build725"></script>
 </body>
 </html>
