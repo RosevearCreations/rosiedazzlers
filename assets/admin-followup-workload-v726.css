@@ -1,0 +1,14 @@
+/* Build 726 nested evidence review, visually distinct and closed by default. */
+.rd-v726-panel{margin:1rem 0 0;padding:.85rem 1rem;border:1px solid #b89a54;
+  border-radius:.8rem;background:rgba(15,23,42,.07);}
+.rd-v726-panel>summary{cursor:pointer;font-weight:700;line-height:1.5;
+  color:inherit;max-width:100%;overflow-wrap:anywhere;}
+.rd-v726-panel[open]>summary{margin-bottom:.65rem;}
+.rd-v726-panel label{display:block;max-width:100%;margin:.65rem 0;overflow-wrap:anywhere;}
+.rd-v726-panel input:not([type=checkbox]),.rd-v726-panel select,.rd-v726-panel textarea{
+  display:block;width:100%;max-width:100%;box-sizing:border-box;margin-top:.3rem;}
+.rd-v726-panel input[type=file]{font-size:.9rem;}
+.rd-v726-panel button{max-width:100%;white-space:normal;}
+.rd-v726-panel :is(button,input,select,textarea,summary):focus-visible{
+  outline:3px solid #b58a29;outline-offset:3px;}
+@media(max-width:620px){.rd-v726-panel{padding:.65rem;}}

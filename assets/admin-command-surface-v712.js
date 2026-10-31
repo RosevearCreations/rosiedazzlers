@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 725 command workspaces · Owner handoff receipt reconciliation, local witness conflict aging and nonproduction retention trial readiness gaps. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, backup deletion, background messages, fictitious acceptance or external approval.';
+  note.textContent='Build 726 command workspaces · Owner handoff exception follow-up, local witness priority queue and nonproduction trial source-reference intake guardrails. No simulated statistics or background polling; no unapproved evidence storage, SQL execution, backup deletion, background messages, fictitious acceptance or external approval.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',

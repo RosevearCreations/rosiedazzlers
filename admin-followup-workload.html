@@ -21,6 +21,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v723.css?v=20261031build723" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v724.css?v=20261031build724" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v725.css?v=20261031build725" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v726.css?v=20261031build726" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -181,6 +182,15 @@
                           <label class="rd-v715-override"><input id="witnessAgingNotIdentity725" type="checkbox" /> The measured age applies only to the local receipt, not verified human identity or custody acceptance.</label>
                           <button id="witnessAgingReview725" class="btn ghost" type="button">Sign local conflict aging (HELD)</button>
                           <p id="witnessAgingStatus725" class="rd-v714-status" role="status" aria-live="polite">Independent reviewer appointment and real external resolution remain pending.</p>
+                          <details class="rd-v726-panel"><summary>ⓘ Build 726 · Witness conflict priority queue</summary>
+                            <p class="muted">One signed local priority item, ranked from the original Build 725 aging receipt. No background queue, independent identity verification or external message.</p>
+                            <label for="witnessAgingReceipt726">Original signed Build 725 witness aging<input id="witnessAgingReceipt726" type="file" accept="application/json,.json" /></label>
+                            <label for="witnessPriorityDecision726">Priority decision<select id="witnessPriorityDecision726"><option value="request_independent_priority_review">Flag for independent review (HELD)</option><option value="defer_priority">Defer</option><option value="reject_priority">Reject</option></select></label>
+                            <label for="witnessPriorityNote726">Separate reviewer note (20–300 characters)<textarea id="witnessPriorityNote726" rows="2" maxlength="300"></textarea></label>
+                            <label class="rd-v715-override"><input id="witnessPriorityLocalOnly726" type="checkbox" /> This priority is calculated from signed local evidence only; human identity and custody remain unverified.</label>
+                            <button id="witnessPriorityReview726" class="btn ghost" type="button">Sign local witness priority (HELD)</button>
+                            <p id="witnessPriorityStatus726" class="rd-v714-status" role="status" aria-live="polite">Requires an independently assigned priority reviewer and original signed Build 725/724/723 receipts.</p>
+                          </details>
                         </details>
                       </details>
                     </details>
@@ -296,6 +306,15 @@
                           <label class="rd-v715-override"><input id="ledgerNoDelivery725" type="checkbox" /> No actual handoff delivery, independent approval, SQL or database access is confirmed.</label>
                           <button id="ledgerHandoffReconcile725" class="btn ghost" type="button">Sign owner handoff reconciliation (HELD)</button>
                           <p id="ledgerHandoffReconcileStatus725" class="rd-v714-status" role="status" aria-live="polite">Original owner account and all signed source receipts are required.</p>
+                          <details class="rd-v726-panel"><summary>ⓘ Build 726 · Owner handoff exception follow-up</summary>
+                            <p class="muted">The original owner can flag missing authenticated external delivery and reviewer acceptance. A signed local exception <strong>is not</strong> a delivery receipt or approval.</p>
+                            <label for="ledgerHandoffReconcileReceipt726">Original signed Build 725 owner reconciliation<input id="ledgerHandoffReconcileReceipt726" type="file" accept="application/json,.json" /></label>
+                            <label for="ledgerHandoffExceptionDecision726">Owner disposition<select id="ledgerHandoffExceptionDecision726"><option value="request_external_handoff_receipt">Request authentic external receipt follow-up (HELD)</option><option value="defer_followup">Defer</option><option value="reject_handoff_exception">Reject</option></select></label>
+                            <label for="ledgerHandoffExceptionNote726">Owner follow-up note (20–300 characters)<textarea id="ledgerHandoffExceptionNote726" rows="2" maxlength="300"></textarea></label>
+                            <label class="rd-v715-override"><input id="ledgerHandoffNoDelivery726" type="checkbox" /> Nothing is sent or accepted as independent evidence, and no SQL is executed.</label>
+                            <button id="ledgerHandoffException726" class="btn ghost" type="button">Sign owner exception follow-up (HELD)</button>
+                            <p id="ledgerHandoffExceptionStatus726" class="rd-v714-status" role="status" aria-live="polite">Requires the original owner session and signed Build 725/724/723 receipt chain.</p>
+                          </details>
                         </details>
                       </details>
                     </details>
@@ -324,6 +343,18 @@
                           <label class="rd-v715-override"><input id="trialNoLiveApproval725" type="checkbox" /> No external authorization, nonproduction SQL test, row expiry or backup purge has occurred.</label>
                           <button id="trialReadinessReview725" class="btn ghost" type="button">Sign trial readiness gaps (HELD)</button>
                           <p id="trialReadinessStatus725" class="rd-v714-status" role="status" aria-live="polite">Independent authorization and disposable-project evidence are still missing.</p>
+                          <details class="rd-v726-panel"><summary>ⓘ Build 726 · Nonproduction trial evidence intake guardrails</summary>
+                            <p class="muted">Record only a <strong>non-personal source reference and SHA-256</strong>. This does not upload, independently authenticate or approve the underlying document. No live database or backup is touched.</p>
+                            <label for="trialReadinessReceipt726">Original signed Build 725 trial readiness<input id="trialReadinessReceipt726" type="file" accept="application/json,.json" /></label>
+                            <label for="trialEvidenceType726">Source type<select id="trialEvidenceType726"><option value="disposable_project_authorization">Disposable project authorization</option><option value="rls_grants_review">RLS and grants review</option><option value="backup_retention_inventory">Backup retention inventory</option><option value="rollback_restore_witness">Rollback and restore witness</option><option value="purge_observation">Purge observation</option></select></label>
+                            <label for="trialEvidenceRef726">Non-personal source reference ID (6–80 characters)<input id="trialEvidenceRef726" type="text" maxlength="80" autocomplete="off" spellcheck="false" placeholder="approval-review-20261031" /></label>
+                            <label for="trialEvidenceHash726">Unverified source SHA-256 (64 lowercase hex characters)<input id="trialEvidenceHash726" type="text" maxlength="64" autocomplete="off" spellcheck="false" /></label>
+                            <label for="trialEvidenceDecision726">Intake decision<select id="trialEvidenceDecision726"><option value="request_independent_provenance">Request independent provenance (HELD)</option><option value="quarantine">Quarantine reference</option><option value="reject">Reject reference</option></select></label>
+                            <label for="trialEvidenceNote726">Independent intake note (20–300 characters)<textarea id="trialEvidenceNote726" rows="2" maxlength="300"></textarea></label>
+                            <label class="rd-v715-override"><input id="trialEvidenceMetadataOnly726" type="checkbox" /> This is metadata only, with no external approval, document upload, SQL test, deletion or backup access.</label>
+                            <button id="trialEvidenceReview726" class="btn ghost" type="button">Sign unverified intake reference (HELD)</button>
+                            <p id="trialEvidenceStatus726" class="rd-v714-status" role="status" aria-live="polite">Original signed source chain and a separate nonproduction intake reviewer are required.</p>
+                          </details>
                         </details>
                       </details>
                     </details>
@@ -339,6 +370,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build725"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build726"></script>
 </body>
 </html>
