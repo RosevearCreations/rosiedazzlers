@@ -1,0 +1,10 @@
+/* Build 721 adds review-only panels inside the existing responsive workflows. */
+.rd-v721-review{margin-top:.85rem;border:1px solid rgba(239,202,127,.33);border-radius:11px;padding:.85rem;background:rgba(16,24,29,.6);min-width:0}
+.rd-v721-review h3{margin:0 0 .45rem;font-size:1.02rem;color:#f5dfaa}
+.rd-v721-review p{overflow-wrap:anywhere;line-height:1.5}
+.rd-v721-review>label{display:block;margin:.75rem 0;max-width:100%}
+.rd-v721-review>label:not(.rd-v715-override)>:is(input,select,textarea){display:block;box-sizing:border-box;width:100%;max-width:100%;margin-top:.35rem;min-height:44px;padding:.65rem;border-radius:9px;border:1px solid #90969f;background:#111a21;color:#fff;font:inherit}
+.rd-v721-review>.btn{margin:.35rem 0 .6rem;max-width:100%;white-space:normal;line-height:1.4}
+.rd-v721-review :is(button,input,select,textarea):focus-visible{outline:3px solid #f7cf68;outline-offset:3px}
+@media(max-width:680px){.rd-v721-review{padding:.65rem}.rd-v721-review>.btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.rd-v721-review *{animation:none!important;transition:none!important}}
