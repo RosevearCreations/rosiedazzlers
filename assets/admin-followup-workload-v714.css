@@ -1,0 +1,36 @@
+/* Build 714 extends the live Rosie command surface, not a screenshot/mockup. */
+body[data-command712="workload"] .rd-workload-v714 .panel,
+body[data-command712="workload"] .rd-v714-owner{background:linear-gradient(145deg,#082137,#061727 78%);border:1px solid #36566e;border-radius:15px;box-shadow:0 12px 26px #0005;color:#eaf4fb}
+body[data-command712="workload"] .rd-v714-heading{display:flex;gap:13px;align-items:center;margin-bottom:13px}
+body[data-command712="workload"] .rd-v714-heading h2{margin:0;font-size:clamp(1.2rem,2vw,1.7rem)}
+body[data-command712="workload"] .rd-v714-kicker{display:block;color:#f5cb72;font-size:.74rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px}
+body[data-command712="workload"] .rd-v714-emblem{display:grid;place-items:center;flex:0 0 48px;height:48px;border:1px solid #dbac50;background:linear-gradient(135deg,#3c3131,#174262);color:#ffe1a1;border-radius:13px;font-size:1.7rem}
+body[data-command712="workload"] .rd-v714-action{display:grid;align-content:start;gap:8px;min-width:0}
+body[data-command712="workload"] .rd-v714-action label{display:grid;gap:7px;font-size:.92rem;font-weight:650}
+body[data-command712="workload"] .rd-v714-action select,
+body[data-command712="workload"] .rd-v714-action textarea,
+body[data-command712="workload"] .rd-v714-owner input[type="text"],
+body[data-command712="workload"] .rd-v714-owner input:not([type]){width:100%;max-width:100%;min-height:43px;background:#0a263d;color:#eef8ff;border:1px solid #45657b;border-radius:9px;padding:10px;font-size:1rem}
+body[data-command712="workload"] .rd-v714-action textarea{min-height:90px}
+body[data-command712="workload"] .rd-v714-action select:disabled,
+body[data-command712="workload"] .rd-v714-action textarea:disabled{opacity:.65;cursor:not-allowed}
+body[data-command712="workload"] .rd-v714-action .btn{justify-self:start;margin-top:4px}
+body[data-command712="workload"] .rd-v714-status{padding:10px 12px;border:1px solid #365a76;background:#092238;border-radius:10px;color:#c9deef;line-height:1.45;overflow-wrap:anywhere}
+body[data-command712="workload"] .rd-v714-status[data-state="error"]{border-color:#df7787;color:#ffe2e7}
+body[data-command712="workload"] .rd-v714-owner{padding:clamp(16px,2.6vw,27px)}
+body[data-command712="workload"] .rd-v714-quote-picker{display:grid;gap:8px;margin-top:14px;max-width:660px;font-weight:650}
+body[data-command712="workload"] .rd-v714-quote-picker select{width:100%;min-height:45px;border:1px solid #52728a;border-radius:10px;background:#0a263d;color:#eef8ff;padding:9px 12px}
+body[data-command712="workload"] .rd-v714-quote-picker select:focus-visible{outline:3px solid #f7d879;outline-offset:3px}
+body[data-command712="workload"] .rd-v714-checklist{display:grid;gap:12px}
+body[data-command712="workload"] .rd-v714-checklist>label{display:flex;gap:12px;align-items:start;padding:11px 13px;border-radius:10px;background:#0a253c;border:1px solid #2e526e}
+body[data-command712="workload"] .rd-v714-checklist input[type="checkbox"]{width:19px;height:19px;flex:0 0 19px;accent-color:#e6b85d;margin-top:2px}
+body[data-command712="workload"] .rd-v714-owner-fields{display:grid;grid-template-columns:1fr 2fr;gap:12px}
+body[data-command712="workload"] .rd-v714-owner-fields label{display:grid;gap:7px}
+body[data-command712="workload"] .rd-v714-checklist .btn{justify-self:start}
+body[data-command712="workload"] .rd-v714-checklist input:focus-visible,
+body[data-command712="workload"] .rd-v714-checklist select:focus-visible,
+body[data-command712="workload"] .rd-v714-action textarea:focus-visible,
+body[data-command712="workload"] .rd-v714-action select:focus-visible,
+body[data-command712="workload"] .rd-v714-action button:focus-visible{outline:3px solid #f7d879;outline-offset:3px}
+@media(max-width:860px){body[data-command712="workload"] .rd-v714-owner-fields{grid-template-columns:1fr}}
+@media(max-width:700px){body[data-command712="workload"] .rd-v714-action .btn,body[data-command712="workload"] .rd-v714-checklist .btn{width:100%;min-height:44px}body[data-command712="workload"] .rd-v714-heading{align-items:start}}

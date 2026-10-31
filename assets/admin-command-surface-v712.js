@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 713 command workspaces · Data comes from protected sources. Refresh or run the relevant check to verify current status. No simulated statistics or background polling.';
+  note.textContent='Build 714 command workspaces · Data comes from protected sources. Refresh or run the relevant check to verify current status. No simulated statistics or background polling.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',
