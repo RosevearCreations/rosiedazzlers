@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v719.css?v=20261030build719" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v720.css?v=20261030build720" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v721.css?v=20261030build721" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v722.css?v=20261031build722" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -143,6 +144,14 @@
                   <label class="rd-v715-override"><input id="rotationNotApproval721" type="checkbox"/> I understand this exception does not trust an unpinned key, restore data, verify a person or authorize Proof-B.</label>
                   <button id="rotationRecover721" class="btn ghost" type="button">Verify pinned old key and rotation witness</button>
                   <p id="rotationRecoveryStatus721" class="rd-v714-status" role="status" aria-live="polite">No independent receipt-specific rotation witness supplied.</p>
+                  <details class="rd-v722-panel"><summary>ⓘ Build 722 · Independent rotation-witness provenance</summary>
+                    <p class="muted">Use the unchanged, current-key signed Build 721 exception together with the original retired-key receipt and separate signed witness above. We will recheck both cryptographic lineages. Human independence and external custody acceptance are still HELD.</p>
+                    <label for="rotationExceptionFile722">Original signed Build 721 rotation-exception receipt<input id="rotationExceptionFile722" type="file" accept="application/json,.json" /></label>
+                    <label for="rotationProvenanceNote722">Provenance observations (20–300 characters)<textarea id="rotationProvenanceNote722" rows="2" maxlength="300"></textarea></label>
+                    <label class="rd-v715-override"><input id="rotationNoIdentity722" type="checkbox"/> A valid signature does not verify the witness's human identity or give external custody approval.</label>
+                    <button id="rotationProvenance722" class="btn ghost" type="button">Recheck witness provenance and download HELD receipt</button>
+                    <p id="rotationProvenanceStatus722" class="rd-v714-status" role="status" aria-live="polite">Original evidence and pinned witness still required.</p>
+                  </details>
                 </div>
               </div>
             </details>
@@ -213,6 +222,22 @@
                   <label class="rd-v715-override"><input id="ledgerSecurityNoActivation721" type="checkbox"/> I acknowledge that this review cannot create tables, store hashes, establish human identity or activate the owner ledger.</label>
                   <button id="ledgerSecurityReview721" class="btn ghost" type="button">Sign protected security-review disposition</button>
                   <p id="ledgerSecurityStatus721" class="rd-v714-status" role="status" aria-live="polite">Security design verification remains pending, and the ledger is inactive.</p>
+                  <details class="rd-v722-panel"><summary>ⓘ Build 722 · Private ledger dry-run and owner retention reconciliation</summary>
+                    <p class="muted">Upload the unchanged signed Build 720 gate above and the signed Build 721 separate security review below. The schema dry-run produces a review of a <strong>rollback-only SQL script</strong>; it does not execute SQL, inspect live RLS or create tables. An independently approved nonproduction test is required before any database execution.</p>
+                    <label for="ledgerSecurityReceipt722">Original signed Build 721 security-review receipt<input id="ledgerSecurityReceipt722" type="file" accept="application/json,.json" /></label>
+                    <label for="ledgerDryRunNote722">Schema review notes (20–300 characters)<textarea id="ledgerDryRunNote722" rows="2" maxlength="300"></textarea></label>
+                    <label class="rd-v715-override"><input id="ledgerRollbackOnly722" type="checkbox"/> I understand no SQL is executed or migrated, and no storage or approval is activated.</label>
+                    <button id="ledgerDryRun722" type="button" class="btn ghost">Sign rollback-only schema dry-run plan (HELD)</button>
+                    <p id="ledgerDryRunStatus722" class="rd-v714-status" role="status" aria-live="polite">Private ledger migration, SQL execution and RLS review remain unapproved.</p>
+                    <div class="rd-v722-retention"><h4>Actual owner retention decision (separate owner sign-in)</h4>
+                      <label for="ledgerRetentionDecision722">Owner decision<select id="ledgerRetentionDecision722"><option value="hold_for_external_approval">Keep request under independent review (HELD)</option><option value="request_shorter_retention">Request a shorter maximum retention (HELD)</option><option value="reject_storage">Reject private storage</option></select></label>
+                      <label for="ledgerRetentionWindow722">Maximum requested retention<select id="ledgerRetentionWindow722"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select></label>
+                      <label for="ledgerOwnerNote722">Owner decision note (20–300 characters)<textarea id="ledgerOwnerNote722" rows="2" maxlength="300"></textarea></label>
+                      <label class="rd-v715-override"><input id="ledgerNoStorage722" type="checkbox"/> This decision does not activate the ledger, approve backups, retain hashes or authorize cross-app access.</label>
+                      <button id="ledgerReconcile722" type="button" class="btn ghost">Reconcile signed owner decision (HELD)</button>
+                      <p id="ledgerReconcileStatus722" class="rd-v714-status" role="status" aria-live="polite">Original signed gate, separate security review and owner identity must match.</p>
+                    </div>
+                  </details>
                 </div>
               </div>
             </details>
@@ -224,6 +249,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build721"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build722"></script>
 </body>
 </html>

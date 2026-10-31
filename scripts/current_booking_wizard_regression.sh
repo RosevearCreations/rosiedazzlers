@@ -71,3 +71,4 @@ node scripts/build718_provider_witness_owner_trial_test.mjs
 node scripts/build719_provider_disposition_persistence_test.mjs
 node scripts/build720_source_drift_recovery_ledger_gate_test.mjs
 node scripts/build721_source_history_rotation_security_test.mjs
+node scripts/build722_ledger_dry_run_provenance_retention_test.mjs

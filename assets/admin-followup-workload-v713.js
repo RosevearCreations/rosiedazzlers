@@ -620,6 +620,25 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('rotationRecoveryStatus721',error.message||'Rotated-key recovery remains HELD.',true);}
     finally{$('rotationRecover721').disabled=false;}
   }
+  async function verifyRotationProvenance722(){
+    $('rotationProvenance722').disabled=true;
+    actionStatus714('rotationProvenanceStatus722','Revalidating all original signatures against pinned retired, current and witness public keys…');
+    try{
+      const [exception,old,witness]=await Promise.all([
+        readEvidenceFile720('rotationExceptionFile722'),readEvidenceFile720('oldCustodyReceipt721'),
+        readEvidenceFile720('rotationWitness721')]);
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'verify_rotation_witness_provenance',signed_exception:exception,
+          previous_signed_evidence:old,rotation_witness_envelope:witness,
+          acknowledge_no_external_identity:$('rotationNoIdentity722').checked,
+          review_note:$('rotationProvenanceNote722').value.trim()})});
+      download716(data.signed_receipt,'rosie-build722-rotation-witness-provenance-held-signed.json');
+      actionStatus714('rotationProvenanceStatus722',`${data.receipt.status}. Exact signatures and witness hashes match. `+
+        'External human custody acceptance remains HELD.');
+    }catch(error){actionStatus714('rotationProvenanceStatus722',error.message||'Witness provenance remains HELD.',true);}
+    finally{$('rotationProvenance722').disabled=false;}
+  }
   function updateRemediation716(){
     $('feedbackClose716').disabled=!unresolvedFeedback716||!$('feedbackRetest716').checked||
       $('ownerDisposition715').value!=='accepted'||
@@ -778,6 +797,37 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
     }catch(error){actionStatus714('ledgerSecurityStatus721',error.message||'Owner-ledger security review remains HELD.',true);}
     finally{$('ledgerSecurityReview721').disabled=false;}
   }
+  async function build722LedgerAction(action,buttonId,statusId,body,filename){
+    $(buttonId).disabled=true;
+    actionStatus714(statusId,'Verifying both original signed receipts, exact reviewer lineage and inactive-ledger limits…');
+    try{
+      const [gate,security]=await Promise.all([
+        readEvidenceFile720('ledgerSecurityFile721'),readEvidenceFile720('ledgerSecurityReceipt722')]);
+      const data=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action,signed_gate:gate,signed_security:security,...body})});
+      download716(data.signed_receipt,filename);
+      actionStatus714(statusId,`${data.receipt.status}. Signed local review downloaded. `+
+        'No SQL was executed, no hash or original file was stored, and no outside approval was invented.');
+    }catch(error){actionStatus714(statusId,error.message||'Private ledger review remains HELD.',true);}
+    finally{$(buttonId).disabled=false;}
+  }
+  async function prepareLedgerDryRun722(){
+    await build722LedgerAction('prepare_private_ledger_dry_run','ledgerDryRun722',
+      'ledgerDryRunStatus722',{
+        acknowledge_rollback_only:$('ledgerRollbackOnly722').checked,
+        review_note:$('ledgerDryRunNote722').value.trim()},
+      'rosie-build722-private-ledger-rollback-dry-run-held-signed.json');
+  }
+  async function reconcileRetention722(){
+    await build722LedgerAction('reconcile_owner_retention','ledgerReconcile722',
+      'ledgerReconcileStatus722',{
+        decision:$('ledgerRetentionDecision722').value,
+        retention_days:Number($('ledgerRetentionWindow722').value),
+        acknowledge_no_storage:$('ledgerNoStorage722').checked,
+        review_note:$('ledgerOwnerNote722').value.trim()},
+      'rosie-build722-owner-retention-reconciliation-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -812,6 +862,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('custodyReview719').addEventListener('click',()=>void reviewCustodyDisposition719());
   $('custodyRecovery720').addEventListener('click',()=>void recoverCustody720());
   $('rotationRecover721').addEventListener('click',()=>void recoverRotatedCustody721());
+  $('rotationProvenance722').addEventListener('click',()=>void verifyRotationProvenance722());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -831,6 +882,8 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ownerRetention719').addEventListener('click',()=>void decideOwnerRetention719());
   $('ledgerReview720').addEventListener('click',()=>void reviewLedgerGate720());
   $('ledgerSecurityReview721').addEventListener('click',()=>void reviewLedgerSecurity721());
+  $('ledgerDryRun722').addEventListener('click',()=>void prepareLedgerDryRun722());
+  $('ledgerReconcile722').addEventListener('click',()=>void reconcileRetention722());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
