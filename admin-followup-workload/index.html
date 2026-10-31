@@ -15,7 +15,8 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v717.css?v=20261030build717" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v718.css?v=20261030build718" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v719.css?v=20261030build719" />
-  <script src="/assets/admin-command-surface-v712.js?v=20261030build719" defer></script>
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v720.css?v=20261030build720" />
+  <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
   <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers · Management</strong></a><nav class="nav-links" aria-label="Management shortcuts"><a href="/admin.html">Dashboard</a><a href="/admin-quotes.html">Quote Pipeline</a><a href="/admin-staff.html">Staff</a><a href="/admin-analytics.html">Statistics</a></nav></div></header>
@@ -81,6 +82,13 @@
             <p class="muted">A successful roster GET alone is not proof that it belongs to our intended provider account. This check additionally requires a separate pinned HTTPS origin and a matching account reference inside the actual provider response. No credentials are shown.</p>
             <button id="shiftBinding719" type="button" class="btn ghost" disabled>Verify actual source account binding</button>
             <p id="shiftBindingStatus719" class="rd-v714-status" role="status" aria-live="polite">Provider origin and account binding not yet verified.</p>
+            <div class="rd-v720-workflow"><h3>Freshness and source drift alert (manual)</h3>
+              <p class="muted">ⓘ Download an original server-signed baseline after a successful live pin check. Later import that unchanged signed file to compare the same staff and hour against a new provider GET. A revision change requests review; a pin change is critical. No background alerts or outbound messages are sent.</p>
+              <button id="sourceBaseline720" class="btn ghost" type="button" disabled>Download signed current provider baseline</button>
+              <label for="previousBinding720">Previous original signed provider baseline JSON<input id="previousBinding720" type="file" accept="application/json,.json" /></label>
+              <button id="sourceDrift720" class="btn ghost" type="button" disabled>Compare actual source and issue local drift alert</button>
+              <p id="sourceDriftStatus720" class="rd-v714-status" role="status" aria-live="polite">No earlier original signed baseline has been compared.</p>
+            </div>
           </details>
           <label class="rd-v715-override"><input id="unverifiedShift717" type="checkbox" disabled/> Manager acknowledgement: no authoritative shift source is configured. I checked the staff schedule separately and accept that this event will be recorded as shift UNVERIFIED.</label>
           <p id="capacityStatus715" class="rd-v714-status" role="status" aria-live="polite">Capacity guardrails are awaiting live roster evidence. Quote counts do not verify shift availability.</p>
@@ -114,6 +122,12 @@
               <label class="rd-v715-override"><input id="custodyScopeAck719" type="checkbox"/> I confirm this disposition does not authorize Proof-B or a six-app connection.</label>
               <button id="custodyReview719" class="btn primary" type="button">Verify and sign scoped reviewer disposition</button>
               <p id="custodyReviewStatus719" class="rd-v714-status" role="status" aria-live="polite">No independent reviewer disposition has been verified.</p>
+              <div class="rd-v720-workflow"><h3>Recover original signed reviewer receipt</h3>
+                <p class="muted">ⓘ Choose the actual server-signed Build 719 reviewer disposition. Recovery verifies its original signature against the current internal signer and the separately pinned reviewer. Key changes, tampering and missing files stay HOLD; no re-signing or historical database record is invented.</p>
+                <label for="custodyRecoveryFile720">Original signed disposition JSON<input id="custodyRecoveryFile720" type="file" accept="application/json,.json" /></label>
+                <button id="custodyRecovery720" class="btn ghost" type="button">Verify and recover reviewer receipt</button>
+                <p id="custodyRecoveryStatus720" class="rd-v714-status" role="status" aria-live="polite">No original disposition receipt supplied.</p>
+              </div>
             </details>
           </div>
           <p id="resolutionActionStatus714" class="rd-v714-status" role="status" aria-live="polite">No verified remedy selected.</p>
@@ -165,6 +179,16 @@
               <label class="rd-v715-override"><input id="ownerMinimizationAck719" type="checkbox"/> We understand no raw files or hashes will be retained on the server by this review.</label>
               <button id="ownerRetention719" class="btn ghost" type="button" disabled>Review retention decision for actual device files</button>
               <p id="ownerRetentionStatus719" class="rd-v714-status" role="status" aria-live="polite">No authenticated owner retention decision issued.</p>
+              <div class="rd-v720-workflow"><h3>Protected hash-ledger approval gate</h3>
+                <p class="muted">ⓘ A *different*, signed-in reviewer may inspect an actual signed Build 719 owner ledger request and issue a scope-limited approval-gate receipt. This does not create a table, save hashes or activate retention.</p>
+                <label for="ledgerRequestFile720">Original signed owner ledger-request JSON<input id="ledgerRequestFile720" type="file" accept="application/json,.json" /></label>
+                <label for="ledgerDisposition720">Ledger proposal disposition<select id="ledgerDisposition720"><option value="request_schema_security_review">Request private schema/RLS security review (HOLD)</option><option value="reject_ledger_request">Reject this ledger request</option></select></label>
+                <label for="ledgerRetentionDays720">Proposed maximum hash retention (days)<select id="ledgerRetentionDays720"><option value="7">7 days</option><option value="30" selected>30 days</option><option value="90">90 days</option></select></label>
+                <label for="ledgerReviewNote720">Independent reviewer findings (20–300 characters)<textarea id="ledgerReviewNote720" rows="2" maxlength="300" placeholder="Why this limited, private evidence proposal is approved for review or rejected"></textarea></label>
+                <label class="rd-v715-override"><input id="ledgerInactiveAck720" type="checkbox"/> I acknowledge there is no approved ledger, stored receipt or live retention activation.</label>
+                <button id="ledgerReview720" class="btn ghost" type="button">Review gate and download signed disposition</button>
+                <p id="ledgerReviewStatus720" class="rd-v714-status" role="status" aria-live="polite">Ledger schema, retention and independent approval remain on HOLD.</p>
+              </div>
             </details>
           </div>
         </div>
@@ -174,6 +198,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build719"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261030build720"></script>
 </body>
 </html>

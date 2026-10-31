@@ -16,6 +16,8 @@ import {shiftConnectionTrial718,verifyCustodyWitness718,evaluateOwnerDevices718}
   '../../../assets/quote-followup-intake-v718.mjs';
 import {providerBindingDecision719,custodyDispositionDecision719,ownerPersistenceDecision719} from
   '../../../assets/quote-followup-disposition-v719.mjs';
+import {verifySignedEvidence720,providerDriftComparison720,recoverCustodyDisposition720,
+  ownerLedgerApprovalGate720} from '../../../assets/quote-followup-recovery-v720.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -79,6 +81,20 @@ async function shiftRosterRead717(env,staffId,window){
     provider_payload_sha256:[...new Uint8Array(digest)]
       .map(v=>v.toString(16).padStart(2,'0')).join('')};
 }
+async function providerBindingRead720(env,staffId,plannedAt){
+  const eligible=await rows(env,`staff_users?select=${encodeURIComponent('id,role_code,is_active,can_manage_bookings')}`+
+    `&id=eq.${staffId}&is_active=eq.true&limit=1`),staff=eligible[0];
+  if(!staff||!['admin','senior_detailer','detailer'].includes(staff.role_code)||
+    (staff.role_code!=='admin'&&staff.can_manage_bookings!==true))
+    throw Error('STAFF_NOT_ELIGIBLE');
+  const availability=await availabilityRead716(env,staffId,plannedAt);
+  const shift=await shiftRosterRead717(env,staffId,availability.window);
+  const trial=shiftConnectionTrial718(shift,availability,staffId,
+    availability.window,Boolean(env.ROSIE_STAFF_SHIFT_ROSTER_URL));
+  const binding=await providerBindingDecision719(env,shift,availability,trial);
+  const {provider_source_account_ref:_privateProviderAccount,...publicShiftRoster}=shift;
+  return {availability,shift_roster:publicShiftRoster,trial,provider_binding:binding};
+}
 function evidenceEvents(record){
   return record.events714||[];
 }
@@ -116,7 +132,7 @@ function publicDetail714(record,actor){
       exception_code:e.payload.exception_code,proof_kind:e.payload.proof_kind,
       note:e.payload.note})),
     event_history_may_be_truncated:record.eventLimitReached||record.evidenceLimitReached,
-    owner_acceptance_recorded_on_server:false,owner_acceptance_pending:true,build:719};
+    owner_acceptance_recorded_on_server:false,owner_acceptance_pending:true,build:720};
 }
 function fresh(record,body){
   const f=record.review.followup,marker=f.resolution.marker;
@@ -158,7 +174,7 @@ export async function onRequestGet({request,env}){
         if(record.eventLimitReached||record.evidenceLimitReached)
           return json({ok:false,error:'Evidence history reached its safe read limit; export refused.'},409);
         const detail=publicDetail714(record,access.actor),receipt={
-          type:'rosie_internal_followup_resolution_evidence',schema:1,build:719,
+          type:'rosie_internal_followup_resolution_evidence',schema:1,build:720,
           exported_at:new Date().toISOString(),quote_id:detail.quote_id,
           booking_id:detail.booking_id,quote_number:detail.quote_number,
           source_marker:detail.marker,latest_evidence_event_id:detail.latest_resolution_evidence_event_id,
@@ -175,27 +191,30 @@ export async function onRequestGet({request,env}){
           catch{return json({ok:false,error:'Server export signing failed; no signed receipt was produced.'},503);}}
         return new Response(JSON.stringify(exportBody,null,2),{status:200,headers:{
           'Content-Type':'application/json; charset=utf-8','Cache-Control':'private, no-store',
-          'Content-Disposition':`attachment; filename="rosie-evidence-${id.slice(0,8)}-build719-${signed?'signed':'unsigned'}.json"`,
+          'Content-Disposition':`attachment; filename="rosie-evidence-${id.slice(0,8)}-build720-${signed?'signed':'unsigned'}.json"`,
           'X-Content-Type-Options':'nosniff'}});
       }
       return json(publicDetail714(record,access.actor));}
     if(staffId){
-      const eligible=await rows(env,`staff_users?select=${encodeURIComponent('id,role_code,is_active,can_manage_bookings')}`+
-        `&id=eq.${staffId}&is_active=eq.true&limit=1`),staff=eligible[0];
-      if(!staff||!['admin','senior_detailer','detailer'].includes(staff.role_code)||
-        (staff.role_code!=='admin'&&staff.can_manage_bookings!==true))
-        return json({ok:false,error:'Selected staff member is no longer eligible.'},409);
-      const availability=await availabilityRead716(env,staffId,plannedAt);
-      let shift_roster;
-      try{shift_roster=await shiftRosterRead717(env,staffId,availability.window);}
-      catch{return json({ok:false,error:'Configured shift provider connection failed; no verified hours or trial success recorded.',
-        trial_status:'SOURCE_UNAVAILABLE',binding_status:'SOURCE_UNAVAILABLE',build:719},503);}
-      const trial=shiftConnectionTrial718(shift_roster,availability,staffId,
-        availability.window,Boolean(env.ROSIE_STAFF_SHIFT_ROSTER_URL));
-      const binding=await providerBindingDecision719(env,shift_roster,availability,trial);
-      const {provider_source_account_ref:_privateProviderAccount,...publicShiftRoster}=shift_roster;
-      return json({ok:true,availability,shift_roster:publicShiftRoster,
-        ...(shiftTrial?{trial}:{}),...(shiftTrial||bindingAudit?{provider_binding:binding}:{}),build:719});
+      let source;
+      try{source=await providerBindingRead720(env,staffId,plannedAt);}
+      catch(error){return json({ok:false,error:error.message==='STAFF_NOT_ELIGIBLE'?
+        'Selected staff member is no longer eligible.':'Configured source is unavailable; no successful provider binding claimed.',
+        trial_status:'SOURCE_UNAVAILABLE',binding_status:'SOURCE_UNAVAILABLE',build:720},
+        error.message==='STAFF_NOT_ELIGIBLE'?409:503);}
+      if(bindingAudit&&signed){
+        if(access.auth_mode!=='session'||access.actor?.role_code!=='admin'||!isUuid(access.actor?.id))
+          return json({ok:false,error:'A signed-in administrator is required to issue a signed source baseline.',build:720},403);
+        if(!source.provider_binding.live_source_bound)
+          return json({ok:false,error:'A live fully bound shift source is required before signing any baseline.',
+            provider_binding:source.provider_binding,build:720},409);
+        try{return json({ok:true,...source,
+          signed_provider_binding:await signEvidenceReceipt716(source.provider_binding,env),build:720});}
+        catch{return json({ok:false,error:'The configured export signer could not sign the real provider baseline.',build:720},503);}
+      }
+      return json({ok:true,availability:source.availability,shift_roster:source.shift_roster,
+        ...(shiftTrial?{trial:source.trial}:{}),
+        ...(shiftTrial||bindingAudit?{provider_binding:source.provider_binding}:{}),build:720});
     }
     const roster=await rows(env,`staff_users?select=${encodeURIComponent('id,full_name,role_code,is_active,can_manage_bookings')}`+
       `&is_active=eq.true&order=full_name.asc&limit=100`);
@@ -214,20 +233,51 @@ export async function onRequestGet({request,env}){
       signer_custody_status:signerAuditResult.status,
       shift_roster_source_configured:Boolean(env.ROSIE_STAFF_SHIFT_ROSTER_URL),
       availability_source:'staff_availability_blocks',availability_is_shift_roster:false,
-      requires_selected_live_review:true,build:719});
+      requires_selected_live_review:true,build:720});
   }catch{return json({ok:false,error:'Active staff source unavailable. No reassignment offered.'},503);}
 }
 export async function onRequestPost({request,env}){
+  if(Number(request.headers.get('content-length')||0)>130000)
+    return json({ok:false,error:'Evidence request exceeds the protected 130 KB limit.'},413);
   const body=await request.json().catch(()=>({}));
   const quoteId=clean(body.quote_id),bookingId=clean(body.booking_id),note=clean(body.note),
     action=clean(body.action),code=clean(body.exception_code);
   if(['verify_export_custody_witness','review_owner_devices','review_export_custody_disposition',
-    'decide_owner_device_retention'].includes(action)){
+    'decide_owner_device_retention','compare_provider_binding','recover_custody_disposition',
+    'review_owner_ledger_gate'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['compare_provider_binding','recover_custody_disposition','review_owner_ledger_gate'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const expectedKind=action==='compare_provider_binding'?'rosie_shift_provider_production_binding_readback':
+        action==='recover_custody_disposition'?'rosie_internal_export_custody_review_disposition':
+        'rosie_owner_device_evidence_retention_decision';
+      const original=await verifySignedEvidence720(body.signed_evidence,expectedKind,env,audit);
+      if(!original.ok)return json({ok:false,error:original.reason,status:'HOLD',build:720},409);
+      if(action==='compare_provider_binding'){
+        if(!isUuid(body.staff_user_id)||!plannedWindow716(body.planned_followup_at))
+          return json({ok:false,error:'Select a valid staff member and future time for a new actual source GET.',build:720},400);
+        let current;
+        try{current=await providerBindingRead720(env,body.staff_user_id,body.planned_followup_at);}
+        catch{return json({ok:false,error:'Fresh provider or staff source unavailable. Baseline was not compared to a successful live GET.',
+          drift_status:'CURRENT_PROVIDER_SOURCE_UNAVAILABLE',build:720},503);}
+        const comparison=providerDriftComparison720(original.receipt,current.provider_binding);
+        return json({ok:true,receipt:comparison,build:720});
+      }
+      if(action==='recover_custody_disposition'){
+        const recovered=recoverCustodyDisposition720(original,access.actor,env);
+        return recovered?json({ok:true,receipt:recovered,build:720}):
+          json({ok:false,error:'The original signed receipt does not match the separately designated current reviewer or current custody scope.',build:720},409);
+      }
+      const review=ownerLedgerApprovalGate720(original,access.actor,env,body);
+      if(!review)return json({ok:false,error:'A genuine signed ledger request, a distinct pinned reviewer, bounded retention and explicit inactive-ledger acknowledgement are required.',build:720},409);
+      try{return json({ok:true,receipt:review,
+        signed_receipt:await signEvidenceReceipt716(review,env),build:720});}
+      catch{return json({ok:false,error:'The live server signer could not sign the ledger approval-gate receipt.',build:720},503);}
+    }
     if(action==='verify_export_custody_witness'){
       const audit=await signerCustodyAudit717(env);
       const result=await verifyCustodyWitness718(body.witness_envelope,env,audit);
