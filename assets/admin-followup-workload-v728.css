@@ -1,0 +1,14 @@
+/* Build 728: compact, keyboard accessible exception and gap review. */
+.rd-v728-panel{margin:1rem 0 0;padding:.85rem 1rem;
+  border:1px solid #9b8659;border-radius:.8rem;background:rgba(89,72,41,.08);}
+.rd-v728-panel>summary{cursor:pointer;font-weight:700;line-height:1.5;
+  color:inherit;max-width:100%;overflow-wrap:anywhere;}
+.rd-v728-panel[open]>summary{margin-bottom:.7rem;}
+.rd-v728-panel label{display:block;max-width:100%;margin:.65rem 0;overflow-wrap:anywhere;}
+.rd-v728-panel input:not([type=checkbox]),.rd-v728-panel select,.rd-v728-panel textarea{
+  display:block;width:100%;max-width:100%;box-sizing:border-box;margin-top:.3rem;}
+.rd-v728-panel input[type=file]{font-size:.9rem;}
+.rd-v728-panel button{max-width:100%;white-space:normal;}
+.rd-v728-panel :is(button,input,select,textarea,summary):focus-visible{
+  outline:3px solid #bd8c25;outline-offset:3px;}
+@media(max-width:620px){.rd-v728-panel{padding:.65rem;}}
