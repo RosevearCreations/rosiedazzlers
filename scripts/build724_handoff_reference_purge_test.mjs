@@ -5,6 +5,7 @@ import {resolve} from 'node:path';
 import {signEvidenceReceipt716} from '../assets/quote-followup-signature-v716.mjs';
 import {signerCustodyAudit717} from '../assets/quote-followup-custody-v717.mjs';
 import {verifyScopedSignedReceipt722} from '../assets/quote-followup-ledger-v722.mjs';
+import {NONPRODUCTION_LEDGER_SQL723} from '../assets/quote-followup-authorization-v723.mjs';
 import {ownerAuthorizationHandoff724,witnessReferenceConflict724,
   retentionBackupPurgeTrial724} from '../assets/quote-followup-handoff-v724.mjs';
 import {onRequestPost} from '../functions/api/admin/quote_followup_rebalance.js';
@@ -59,7 +60,7 @@ const checklist=await verify({kind:'rosie_nonproduction_ledger_execution_authori
   signed_security_review_sha256:dry.receipt.signed_security_review_sha256,
   nonproduction_project_ref:env.ROSIE_LEDGER_NONPROD_PROJECT_REF,
   sql_artifact:{script:'docs/schema/build722_private_ledger_rollback_dry_run.sql',
-    sha256:digest('rollback plan'),transaction_end:'ROLLBACK'},
+    sha256:NONPRODUCTION_LEDGER_SQL723.sha256,transaction_end:'ROLLBACK'},
   checklist:{sql_execution_approved:false},connected_to_database:false,sql_executed:false,
   ledger_activated:false,proof_b_authorized:false},
   'rosie_nonproduction_ledger_execution_authorization_checklist',723);
@@ -234,3 +235,8 @@ assert.match(read('assets/admin-followup-workload-v724.css'),/:focus-visible/);
 assert.match(read('scripts/current_booking_wizard_regression.sh'),
   /build724_handoff_reference_purge_test\.mjs/);
 console.log('Build 724 PASS: original signed chains, owner handoff, independent witness conflict, retention/backup trial review, zero writes or approvals');
+// Reusable disposable fixtures for successor security regressions; no real owner evidence.
+export const fixtureFor725={now,owner,execution,security,identity,reference,rotation,
+  custody,signer,env,audit,sign,verify,actor,note,digest,gate,dry,checklist,
+  exception,provenance,identityReceipt,referencePolicy,match,reconciliation,expiry,
+  packet,purge};

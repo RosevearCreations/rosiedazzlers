@@ -1,0 +1,10 @@
+/* Build 725: review-only nested controls, compact and keyboard accessible. */
+.rd-v725-panel{margin-block:.85rem;padding:.8rem;border:1px solid rgba(131,151,167,.4);border-radius:12px;background:rgba(65,89,109,.045)}
+.rd-v725-panel summary{font-weight:700;line-height:1.45;cursor:pointer}
+.rd-v725-panel[open] summary{margin-bottom:.65rem}
+.rd-v725-panel label{display:block;margin-block:.5rem;max-width:100%;overflow-wrap:anywhere}
+.rd-v725-panel input[type=file],.rd-v725-panel select,.rd-v725-panel textarea{display:block;margin-top:.3rem;box-sizing:border-box;width:100%;max-width:100%}
+.rd-v725-panel .rd-v715-override input{display:inline-block;width:auto;vertical-align:middle}
+.rd-v725-panel :is(summary,input,select,textarea,button):focus-visible{outline:3px solid #ad8729;outline-offset:3px}
+.rd-v725-panel .rd-v714-status{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:680px){.rd-v725-panel{padding:.6rem}.rd-v725-panel button{max-width:100%;white-space:normal}}
