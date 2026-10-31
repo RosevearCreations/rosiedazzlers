@@ -36,6 +36,8 @@ import {ownerFollowupAgingReview728,witnessAuditExceptionReview728,
   nonproductionProvenanceGapTracking728} from '../../../assets/quote-followup-gaps-v728.mjs';
 import {ownerAgingDelta729,witnessExceptionContinuity729,
   nonproductionGapDrift729} from '../../../assets/quote-followup-comparison-v729.mjs';
+import {RECOVERY_SCOPES730,recoverLocalComparison730} from
+  '../../../assets/quote-followup-recovery-v730.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -276,12 +278,35 @@ export async function onRequestPost({request,env}){
     'recheck_trial_source_provenance','review_owner_followup_aging',
     'review_witness_audit_exception','track_nonproduction_provenance_gaps',
     'compare_owner_aging_delta','compare_witness_exception_continuity',
-    'compare_nonproduction_gap_drift'].includes(action)){
+    'compare_nonproduction_gap_drift','recover_local_comparison_summary'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(action==='recover_local_comparison_summary'){
+      const scope=Object.hasOwn(RECOVERY_SCOPES730,body.scope)?
+        RECOVERY_SCOPES730[body.scope]:null;
+      if(!scope)return json({ok:false,build:730,status:'HELD',
+        error:'Select a recognized local comparison scope.'},400);
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      const [comparison,before,after,source]=await Promise.all([
+        verify(body.signed_comparison,scope.comparison,729),
+        verify(body.signed_before,scope.snapshot,728),
+        verify(body.signed_after,scope.snapshot,728),
+        verify(body.signed_source,scope.source,727)]);
+      const failed=[comparison,before,after,source].find(v=>!v.ok);
+      if(failed)return json({ok:false,build:730,status:'HELD',error:failed.reason},409);
+      const receipt=recoverLocalComparison730(body.scope,comparison,before,after,
+        source,access.actor,env,body);
+      if(!receipt)return json({ok:false,build:730,status:'HELD',
+        error:'Verified 729/728/727 chronology, complete ancestry, pinned reviewer and local-only consent are required.'},409);
+      try{return json({ok:true,build:730,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env)});}
+      catch{return json({ok:false,build:730,
+        error:'Current server signer could not sign the Build 730 review summary.'},503);}
+    }
     if(['compare_owner_aging_delta','compare_witness_exception_continuity',
       'compare_nonproduction_gap_drift'].includes(action)){
       const audit=await signerCustodyAudit717(env);

@@ -1083,6 +1083,109 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         acknowledge_local_comparison_only:$('trialDriftLocal729').checked},
       'rosie-build729-nonproduction-evidence-gap-drift-held-signed.json');
   }
+  // Build 730: in-memory recovery only. The downloaded bundle belongs to the
+  // operator; imports older than 24 hours are refused, and no browser storage is used.
+  const recoveryFiles730={signed_comparison:'recoveryComparison730',
+    signed_before:'recoveryBefore730',signed_after:'recoveryAfter730',
+    signed_source:'recoverySource730'};
+  const recoveryScopes730=['owner','witness','nonproduction'];
+  let importedRecovery730=null;
+  const recoveryStatus730=(message,error=false)=>
+    actionStatus714('recoveryStatus730',message,error);
+  const recoveryFresh730=bundle=>{
+    const created=Date.parse(bundle?.created_at||'');
+    return bundle?.schema===1&&bundle.build===730&&
+      recoveryScopes730.includes(bundle.scope)&&Number.isFinite(created)&&
+      created<=Date.now()+300000&&Date.now()-created<=24*3600000&&
+      Object.keys(recoveryFiles730).every(key=>{
+        const entry=bundle[key];return entry&&typeof entry==='object'&&
+          entry.signature_algorithm==='Ed25519'&&
+          typeof entry.receipt_base64==='string'&&
+          typeof entry.signature_base64==='string';
+      });
+  };
+  function clearRecovery730(){
+    importedRecovery730=null;
+    for(const id of Object.values(recoveryFiles730))$(id).value='';
+    $('recoveryImport730').value='';
+    $('recoveryNote730').value='';
+    $('recoveryLocalOnly730').checked=false;
+    $('recoveryTimeline730').textContent='No server-verified comparison yet. External evidence remains HELD.';
+    recoveryStatus730('Device session cleared. Previously downloaded files are controlled by you; delete them separately if no longer needed.');
+  }
+  async function recoveryBundle730(){
+    if(importedRecovery730){
+      if(!recoveryFresh730(importedRecovery730))throw Error('The local recovery bundle has expired. Select the four originals again.');
+      return {...importedRecovery730,review_note:$('recoveryNote730').value.trim()};
+    }
+    const entries=await Promise.all(Object.entries(recoveryFiles730)
+      .map(async ([field,id])=>[field,await readEvidenceFile720(id)]));
+    return {schema:1,build:730,scope:$('recoveryScope730').value,
+      created_at:new Date().toISOString(),...Object.fromEntries(entries),
+      review_note:$('recoveryNote730').value.trim()};
+  }
+  async function exportRecovery730(){
+    try{
+      if(!$('recoveryLocalOnly730').checked)throw Error('Acknowledge local-only recovery first.');
+      const bundle=await recoveryBundle730();
+      if(bundle.review_note.length<20||bundle.review_note.length>300)
+        throw Error('Describe your independent local review in 20–300 characters.');
+      download716(bundle,`rosie-build730-${bundle.scope}-local-recovery-unverified.json`);
+      recoveryStatus730('Device-local bundle downloaded. Import permitted for 24 hours from creation; the files are not yet authenticated and the bundle grants no approval.');
+    }catch(error){recoveryStatus730(error.message||'Local export HELD.',true);}
+  }
+  async function importRecovery730(){
+    const file=$('recoveryImport730').files?.[0];
+    try{
+      if(!file||file.size>140000)throw Error('Choose a local recovery JSON file under 140 KB.');
+      const bundle=JSON.parse(await file.text());
+      if(!recoveryFresh730(bundle))throw Error('Recovery bundle is invalid or more than 24 hours old.');
+      importedRecovery730=bundle;
+      $('recoveryScope730').value=bundle.scope;
+      for(const id of Object.values(recoveryFiles730))$(id).value='';
+      $('recoveryNote730').value=String(bundle.review_note||'').slice(0,300);
+      $('recoveryTimeline730').textContent='Imported sources have NOT been verified. Select the acknowledgement and request a fresh server check.';
+      recoveryStatus730('Local bundle loaded into this page only. Original signatures and matching ancestry remain unverified.');
+    }catch(error){importedRecovery730=null;
+      recoveryStatus730(error.message||'Recovery bundle import failed.',true);}
+  }
+  async function signRecovery730(){
+    const button=$('recoverySign730');button.disabled=true;
+    try{
+      if(!$('recoveryLocalOnly730').checked)throw Error('Local-only acknowledgement is required.');
+      const bundle=await recoveryBundle730();
+      if(bundle.scope!==$('recoveryScope730').value)
+        throw Error('Recovery scope changed; select the matching original sources.');
+      recoveryStatus730('Checking four original Ed25519 signatures, chronology, reviewer roles and exact ancestry…');
+      const response=await api('/api/admin/quote_followup_rebalance',{method:'POST',
+        headers:{'Content-Type':'application/json'},body:JSON.stringify({
+          action:'recover_local_comparison_summary',scope:bundle.scope,
+          signed_comparison:bundle.signed_comparison,
+          signed_before:bundle.signed_before,signed_after:bundle.signed_after,
+          signed_source:bundle.signed_source,review_note:bundle.review_note,
+          acknowledge_local_recovery_only:true})});
+      const receipt=response.receipt;
+      const lines=[`SIGNED REVIEW SUMMARY: ${receipt.status}`,
+        `Scope: ${bundle.scope} | Reviewed: ${receipt.reviewed_at}`,
+        `Original source: ${receipt.signed_source_sha256}`,
+        `Signed comparison: ${receipt.signed_comparison_sha256}`,
+        ...receipt.timeline.map(item=>`${item.at} · ${item.stage}\n  ${item.decision} · ${item.status}`),
+        ...(bundle.scope==='owner'?[`Owner local queue age: ${receipt.previous_local_age_hours} → ${receipt.current_local_age_hours} hours; window ${receipt.local_review_window_hours} hours`]:[]),
+        ...(bundle.scope==='witness'?[`Witness priority: ${receipt.local_priority}; decision changed: ${receipt.decision_changed}`]:[]),
+        ...(bundle.scope==='nonproduction'?[`UNRESOLVED: ${receipt.unresolved_gap_codes.join(', ')}`]:[]),
+        'External receipts, real witness identity, independent authorization, SQL, backups and Proof-B: NOT VERIFIED / HELD'];
+      $('recoveryTimeline730').textContent=lines.join('\n');
+      download716(response.signed_receipt,`rosie-build730-${bundle.scope}-held-signed-summary.json`);
+      recoveryStatus730('Four signatures and local ancestry verified; a new HELD-only summary was signed and downloaded. No message, database, backup or external approval was changed.');
+    }catch(error){$('recoveryTimeline730').textContent='No server-verified timeline. Evidence remains HELD.';
+      recoveryStatus730(error.message||'Unable to sign local recovery summary.',true);}
+    finally{button.disabled=false;}
+  }
+  $('recoveryScope730').addEventListener('change',clearRecovery730);
+  $('recoveryExport730').addEventListener('click',()=>void exportRecovery730());
+  $('recoveryImport730').addEventListener('change',()=>void importRecovery730());
+  $('recoverySign730').addEventListener('click',()=>void signRecovery730());
+  $('recoveryClear730').addEventListener('click',clearRecovery730);
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{

@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v727.css?v=20261031build727" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v728.css?v=20261031build728" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v729.css?v=20261031build729" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v730.css?v=20261031build730" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -454,10 +455,38 @@
         </div>
       </article></section>
     </div>
+    <section class="section rd-v730-workbench" aria-labelledby="recoveryTitle730">
+      <article class="panel">
+        <h2 id="recoveryTitle730">Build 730 · Signed comparison recovery &amp; evidence timeline</h2>
+        <p class="muted">Recover one local Build 729 comparison with its exact signed Build 728 before/after reviews and Build 727 source. This creates an expiring, device-local review bundle or a fresh server-signed <strong>HELD</strong> summary; it cannot approve an external witness, message anyone, or touch a database or backup.</p>
+        <div class="rd-v730-fields">
+          <label for="recoveryScope730">Review type<select id="recoveryScope730">
+            <option value="owner">Owner aging and comparison recovery</option>
+            <option value="witness">Witness exception follow-up timeline</option>
+            <option value="nonproduction">Nonproduction evidence gap summary</option>
+          </select></label>
+          <label for="recoveryComparison730">Original signed Build 729 comparison<input id="recoveryComparison730" type="file" accept="application/json,.json" /></label>
+          <label for="recoveryBefore730">Earlier signed Build 728 review<input id="recoveryBefore730" type="file" accept="application/json,.json" /></label>
+          <label for="recoveryAfter730">Later signed Build 728 review<input id="recoveryAfter730" type="file" accept="application/json,.json" /></label>
+          <label for="recoverySource730">Matching signed Build 727 source<input id="recoverySource730" type="file" accept="application/json,.json" /></label>
+        </div>
+        <label for="recoveryNote730">New independent review note (20–300 characters)<textarea id="recoveryNote730" rows="3" maxlength="300" placeholder="Describe what the original comparisons show and which independent evidence is still missing."></textarea></label>
+        <label class="rd-v730-ack"><input id="recoveryLocalOnly730" type="checkbox" /> I understand recovery is local and expires after 24 hours; imported files are not independent proof, and external approvals, SQL, backup operations, and messaging remain HELD.</label>
+        <div class="rd-v730-actions">
+          <button id="recoveryExport730" class="btn ghost" type="button">Download local recovery bundle</button>
+          <label for="recoveryImport730" class="rd-v730-import">Import existing recovery bundle<input id="recoveryImport730" type="file" accept="application/json,.json" /></label>
+          <button id="recoverySign730" class="btn" type="button">Verify originals &amp; sign HELD summary</button>
+          <button id="recoveryClear730" class="btn ghost" type="button">Clear device session</button>
+        </div>
+        <p id="recoveryStatus730" class="rd-v714-status" role="status" aria-live="polite">Select four original signed files, or import a recovery bundle younger than 24 hours.</p>
+        <h3>Verified local timeline &amp; unresolved gaps</h3>
+        <pre id="recoveryTimeline730" class="rd-v730-timeline" aria-live="polite">No server-verified comparison yet. External evidence remains HELD.</pre>
+      </article>
+    </section>
   </main>
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build728"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build730"></script>
 </body>
 </html>
