@@ -19,11 +19,12 @@ async function rows(env,path){
   if(!Array.isArray(data))throw Error('Invalid follow-up source readback.');
   return data;
 }
-async function selectedDetail(env,id){
+export async function selectedDetail(env,id,additionalEventTypes=[]){
   const state=await loadState708(env,id);
   if(!state)return null;
   const bookingId=state.source.booking?.id;
-  const types=[OUTCOME_EVENT709,RESOLUTION_EVENT710,FOLLOWUP_EVENT711,ESCALATION_EVENT712,EXCEPTION_REVIEW_EVENT713].join(',');
+  const types=[OUTCOME_EVENT709,RESOLUTION_EVENT710,FOLLOWUP_EVENT711,
+    ESCALATION_EVENT712,EXCEPTION_REVIEW_EVENT713,...additionalEventTypes].join(',');
   const [events,quoteDates]=await Promise.all([
     isUuid(bookingId)?rows(env,`booking_events?select=${select}&booking_id=eq.${bookingId}&event_type=in.(${types})&order=created_at.desc,id.desc&limit=250`):[],
     rows(env,`quote_pipeline_items?select=id,next_follow_up_at&id=eq.${id}&limit=1`)
@@ -33,7 +34,7 @@ async function selectedDetail(env,id){
     e.payload?.quote_id===id&&e.payload?.booking_id===bookingId);
   return {state,review,reviewEvents,eventLimitReached:events.length===250};
 }
-function publicDetail(record,actor){
+export function publicDetail(record,actor){
   const {state,review,reviewEvents}=record;
   const f=review.followup;
   const exceptions=liveExceptions713(review);

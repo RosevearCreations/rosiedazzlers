@@ -63,3 +63,4 @@ node scripts/build710_followup_resolution_test.mjs
 node scripts/build711_followup_queue_test.mjs
 node scripts/build712_escalation_command_test.mjs
 node scripts/build713_workload_visual_acceptance_test.mjs
+node scripts/build714_rebalance_resolution_owner_acceptance_test.mjs
