@@ -1,0 +1,10 @@
+/* Build 724: deliberately nested advanced review panels, no additional public navigation. */
+.rd-v724-panel{margin-block:1rem;padding:.95rem 1rem;border:1px solid rgba(190,158,85,.36);border-radius:14px;background:rgba(17,23,30,.035)}
+.rd-v724-panel summary{cursor:pointer;font-weight:700;line-height:1.5;color:inherit}
+.rd-v724-panel[open] summary{margin-bottom:.8rem}
+.rd-v724-panel label{display:block;max-width:100%;margin-block:.55rem;overflow-wrap:anywhere}
+.rd-v724-panel input[type=file],.rd-v724-panel input[type=text],.rd-v724-panel select,.rd-v724-panel textarea{display:block;width:100%;max-width:100%;box-sizing:border-box;margin-top:.35rem}
+.rd-v724-panel input:focus-visible,.rd-v724-panel select:focus-visible,.rd-v724-panel textarea:focus-visible,.rd-v724-panel button:focus-visible,.rd-v724-panel summary:focus-visible{outline:3px solid #ad8729;outline-offset:3px}
+.rd-v724-panel .rd-v715-override input{display:inline-block;width:auto;vertical-align:middle}
+.rd-v724-panel .rd-v714-status{white-space:normal;overflow-wrap:anywhere}
+@media(max-width:680px){.rd-v724-panel{padding:.7rem}.rd-v724-panel .btn{max-width:100%;white-space:normal}}

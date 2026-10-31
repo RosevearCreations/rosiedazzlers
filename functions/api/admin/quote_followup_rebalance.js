@@ -24,6 +24,8 @@ import {verifyScopedSignedReceipt722,privateLedgerDryRun722,rotationWitnessProve
   ownerRetentionReconciliation722} from '../../../assets/quote-followup-ledger-v722.mjs';
 import {nonproductionExecutionChecklist723,witnessIdentityDisposition723,
   ownerRetentionExpiry723} from '../../../assets/quote-followup-authorization-v723.mjs';
+import {ownerAuthorizationHandoff724,witnessReferenceConflict724,
+  retentionBackupPurgeTrial724} from '../../../assets/quote-followup-handoff-v724.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -254,12 +256,55 @@ export async function onRequestPost({request,env}){
     'recover_rotated_custody_exception','review_owner_ledger_security',
     'prepare_private_ledger_dry_run','verify_rotation_witness_provenance',
     'reconcile_owner_retention','review_nonproduction_execution_checklist',
-    'review_external_witness_identity','verify_owner_retention_expiry'].includes(action)){
+    'review_external_witness_identity','verify_owner_retention_expiry',
+    'prepare_owner_nonproduction_handoff','review_witness_reference_conflict',
+    'review_retention_backup_purge_trial'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['prepare_owner_nonproduction_handoff','review_witness_reference_conflict',
+      'review_retention_backup_purge_trial'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      let receipt;
+      if(action==='prepare_owner_nonproduction_handoff'){
+        const checklist=await verify(body.signed_checklist,
+          'rosie_nonproduction_ledger_execution_authorization_checklist',723);
+        const dry=await verify(body.signed_dry_run,
+          'rosie_private_ledger_schema_dry_run_review',722);
+        const gate=await verify(body.signed_gate,
+          'rosie_owner_evidence_ledger_approval_gate',720);
+        if(!checklist.ok||!dry.ok||!gate.ok)return json({ok:false,build:724,
+          error:!checklist.ok?checklist.reason:!dry.ok?dry.reason:gate.reason},409);
+        receipt=ownerAuthorizationHandoff724(checklist,dry,gate,access.actor,env,body);
+      }else if(action==='review_witness_reference_conflict'){
+        const identity=await verify(body.signed_identity,
+          'rosie_independent_witness_identity_disposition',723);
+        const provenance=await verify(body.signed_provenance,
+          'rosie_rotation_witness_provenance_intake',722);
+        const exception=await verify(body.signed_exception,
+          'rosie_rotated_custody_receipt_exception',721);
+        if(!identity.ok||!provenance.ok||!exception.ok)return json({ok:false,build:724,
+          error:!identity.ok?identity.reason:!provenance.ok?provenance.reason:exception.reason},409);
+        receipt=witnessReferenceConflict724(identity,provenance,exception,access.actor,env,body);
+      }else{
+        const expiry=await verify(body.signed_expiry,
+          'rosie_owner_retention_expiry_policy_verification',723);
+        const reconciliation=await verify(body.signed_reconciliation,
+          'rosie_owner_ledger_retention_reconciliation',722);
+        if(!expiry.ok||!reconciliation.ok)return json({ok:false,build:724,
+          error:!expiry.ok?expiry.reason:reconciliation.reason},409);
+        receipt=retentionBackupPurgeTrial724(expiry,reconciliation,access.actor,body);
+      }
+      if(!receipt)return json({ok:false,status:'HELD',build:724,
+        error:'Unchanged signed lineage, genuine assigned reviewer/owner, and no-execution safeguards are required.'},409);
+      try{return json({ok:true,build:724,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env)});}
+      catch{return json({ok:false,build:724,
+        error:'Current server signer could not sign the Build 724 review-only receipt.'},503);}
+    }
     if(['review_nonproduction_execution_checklist','review_external_witness_identity',
       'verify_owner_retention_expiry'].includes(action)){
       const audit=await signerCustodyAudit717(env);

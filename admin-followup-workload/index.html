@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v721.css?v=20261030build721" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v722.css?v=20261031build722" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v723.css?v=20261031build723" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v724.css?v=20261031build724" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -160,6 +161,17 @@
                       <label class="rd-v715-override"><input id="witnessNoIdentity723" type="checkbox"/> I understand this does not establish a person's identity, approve custody, or authorize Proof-B.</label>
                       <button id="witnessIdentityReview723" class="btn ghost" type="button">Sign identity disposition (HELD)</button>
                       <p id="witnessIdentityStatus723" class="rd-v714-status" role="status" aria-live="polite">Original signatures and a separate identity-reviewer account are required.</p>
+                      <details class="rd-v724-panel"><summary>ⓘ Build 724 · Witness reference conflict review</summary>
+                        <p class="muted">A separately assigned reference reviewer compares a witness reference and payload SHA-256 with the signed originals. Matching references <strong>do not establish human identity</strong>. Do not enter names or identity documents.</p>
+                        <label for="witnessIdentityReceipt724">Original signed Build 723 witness identity disposition<input id="witnessIdentityReceipt724" type="file" accept="application/json,.json" /></label>
+                        <label for="witnessReferenceId724">Observed non-personal witness reference ID<input id="witnessReferenceId724" type="text" maxlength="80" autocomplete="off" spellcheck="false" /></label>
+                        <label for="witnessReferenceHash724">Observed witness payload SHA-256<input id="witnessReferenceHash724" type="text" maxlength="64" autocomplete="off" spellcheck="false" /></label>
+                        <label for="witnessReferenceDecision724">Reference review disposition<select id="witnessReferenceDecision724"><option value="compare_reference">Compare and flag mismatches (HELD)</option><option value="defer_reference">Defer review</option><option value="reject_reference">Reject reference</option></select></label>
+                        <label for="witnessReferenceNote724">Reference observations (20–300 characters)<textarea id="witnessReferenceNote724" rows="2" maxlength="300"></textarea></label>
+                        <label class="rd-v715-override"><input id="witnessReferenceNoIdentity724" type="checkbox" /> No identity, appointment, custody or Proof-B approval is established.</label>
+                        <button id="witnessReferenceReview724" class="btn ghost" type="button">Sign reference comparison (HELD)</button>
+                        <p id="witnessReferenceStatus724" class="rd-v714-status" role="status" aria-live="polite">A separate pinned reviewer and all three signed receipts are required.</p>
+                      </details>
                     </details>
                   </details>
                 </div>
@@ -257,6 +269,15 @@
                       <label class="rd-v715-override"><input id="ledgerNoSqlExecution723" type="checkbox"/> No SQL will run, and no approval, data migration or storage is issued by this action.</label>
                       <button id="ledgerExecutionReview723" type="button" class="btn ghost">Sign nonproduction checklist (HELD)</button>
                       <p id="ledgerExecutionStatus723" class="rd-v714-status" role="status" aria-live="polite">No independently authorized nonproduction database execution.</p>
+                      <details class="rd-v724-panel"><summary>ⓘ Build 724 · Private owner authorization handoff</summary>
+                        <p class="muted">The original owner can prepare a downloadable packet from signed Build 723/722/720 evidence. It is <strong>not sent anywhere</strong> and does not authorize connecting to a nonproduction database.</p>
+                        <label for="ledgerChecklistReceipt724">Original signed Build 723 execution checklist<input id="ledgerChecklistReceipt724" type="file" accept="application/json,.json" /></label>
+                        <label for="ledgerOwnerHandoffDecision724">Owner handoff decision<select id="ledgerOwnerHandoffDecision724"><option value="prepare_private_owner_handoff">Prepare private owner packet (HELD)</option><option value="defer_owner_handoff">Defer packet</option><option value="reject_owner_handoff">Reject handoff</option></select></label>
+                        <label for="ledgerOwnerHandoffNote724">Owner handoff note (20–300 characters)<textarea id="ledgerOwnerHandoffNote724" rows="2" maxlength="300"></textarea></label>
+                        <label class="rd-v715-override"><input id="ledgerHandoffPrivate724" type="checkbox" /> I will transfer evidence privately only after separate independent authorization; this action does not send or run anything.</label>
+                        <button id="ledgerOwnerHandoff724" class="btn ghost" type="button">Prepare signed owner handoff (HELD)</button>
+                        <p id="ledgerOwnerHandoffStatus724" class="rd-v714-status" role="status" aria-live="polite">Signed owner gate, dry-run and execution checklist must match.</p>
+                      </details>
                     </details>
                     <details class="rd-v723-panel"><summary>ⓘ Build 723 · Owner retention expiry verification</summary>
                       <p class="muted">As the original owner, supply the signed Build 722 retention decision and the original signed gate and security review selected above. The result calculates a <strong>hypothetical UTC expiry</strong>, not the expiry of a real stored row. No retention or backup-purge job runs.</p>
@@ -265,6 +286,16 @@
                       <label class="rd-v715-override"><input id="ledgerNoRows723" type="checkbox"/> No real rows, timestamps, jobs, or backup purges have been checked or changed.</label>
                       <button id="ledgerExpiryVerify723" type="button" class="btn ghost">Verify signed expiry policy (HELD)</button>
                       <p id="ledgerExpiryStatus723" class="rd-v714-status" role="status" aria-live="polite">Actual private evidence storage and expiry enforcement remain inactive.</p>
+                      <details class="rd-v724-panel"><summary>ⓘ Build 724 · Retention and backup-purge trial prerequisites</summary>
+                        <p class="muted">Inspect the signed expiry preview and retention reconciliation. Backup classification is owner-declared <strong>only</strong>; no provider inventory, restore test, row or backup is accessed or deleted.</p>
+                        <label for="ledgerExpiryReceipt724">Original signed Build 723 expiry policy<input id="ledgerExpiryReceipt724" type="file" accept="application/json,.json" /></label>
+                        <label for="ledgerBackupScope724">Backup scope not yet verified<select id="ledgerBackupScope724"><option value="unverified">Unknown / unverified</option><option value="provider_managed">Provider-managed (unverified)</option><option value="application_controlled">Application-controlled (unverified)</option></select></label>
+                        <label for="ledgerPurgeDecision724">Trial disposition<select id="ledgerPurgeDecision724"><option value="request_independent_trial">Request independent trial planning (HELD)</option><option value="defer_trial">Defer trial</option><option value="reject_trial">Reject trial</option></select></label>
+                        <label for="ledgerPurgeNote724">Trial prerequisites note (20–300 characters)<textarea id="ledgerPurgeNote724" rows="2" maxlength="300"></textarea></label>
+                        <label class="rd-v715-override"><input id="ledgerNoPurge724" type="checkbox" /> This cannot execute a purge, restore a backup, authorize SQL or establish retention compliance.</label>
+                        <button id="ledgerPurgeReview724" class="btn ghost" type="button">Sign trial prerequisites (HELD)</button>
+                        <p id="ledgerPurgeStatus724" class="rd-v714-status" role="status" aria-live="polite">Live backup retention and purge evidence are not available.</p>
+                      </details>
                     </details>
                   </details>
                 </div>
@@ -278,6 +309,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build723"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build724"></script>
 </body>
 </html>
