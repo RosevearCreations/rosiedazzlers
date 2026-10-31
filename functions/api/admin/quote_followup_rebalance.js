@@ -22,6 +22,8 @@ import {sourceHistoryDesign721,rotatedCustodyException721,ownerLedgerSecurityRev
   '../../../assets/quote-followup-governance-v721.mjs';
 import {verifyScopedSignedReceipt722,privateLedgerDryRun722,rotationWitnessProvenance722,
   ownerRetentionReconciliation722} from '../../../assets/quote-followup-ledger-v722.mjs';
+import {nonproductionExecutionChecklist723,witnessIdentityDisposition723,
+  ownerRetentionExpiry723} from '../../../assets/quote-followup-authorization-v723.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -251,12 +253,50 @@ export async function onRequestPost({request,env}){
     'review_owner_ledger_gate','review_source_history_design',
     'recover_rotated_custody_exception','review_owner_ledger_security',
     'prepare_private_ledger_dry_run','verify_rotation_witness_provenance',
-    'reconcile_owner_retention'].includes(action)){
+    'reconcile_owner_retention','review_nonproduction_execution_checklist',
+    'review_external_witness_identity','verify_owner_retention_expiry'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(['review_nonproduction_execution_checklist','review_external_witness_identity',
+      'verify_owner_retention_expiry'].includes(action)){
+      const audit=await signerCustodyAudit717(env);
+      const verify=(envelope,kind,build)=>verifyScopedSignedReceipt722(envelope,kind,build,env,audit);
+      let receipt;
+      if(action==='review_nonproduction_execution_checklist'){
+        const original=await verify(body.signed_dry_run,
+          'rosie_private_ledger_schema_dry_run_review',722);
+        if(!original.ok)return json({ok:false,error:original.reason,build:723},409);
+        receipt=nonproductionExecutionChecklist723(original,access.actor,env,body);
+      }else if(action==='review_external_witness_identity'){
+        const provenance=await verify(body.signed_provenance,
+          'rosie_rotation_witness_provenance_intake',722);
+        const exception=await verify(body.signed_exception,
+          'rosie_rotated_custody_receipt_exception',721);
+        if(!provenance.ok||!exception.ok)return json({ok:false,
+          error:!provenance.ok?provenance.reason:exception.reason,build:723},409);
+        receipt=witnessIdentityDisposition723(provenance,exception,access.actor,env,body);
+      }else{
+        const reconciliation=await verify(body.signed_reconciliation,
+          'rosie_owner_ledger_retention_reconciliation',722);
+        const gate=await verify(body.signed_gate,
+          'rosie_owner_evidence_ledger_approval_gate',720);
+        const security=await verify(body.signed_security,
+          'rosie_owner_evidence_ledger_security_review',721);
+        if(!reconciliation.ok||!gate.ok||!security.ok)return json({ok:false,
+          error:!reconciliation.ok?reconciliation.reason:!gate.ok?gate.reason:security.reason,
+          build:723},409);
+        receipt=ownerRetentionExpiry723(reconciliation,gate,security,access.actor,env,body);
+      }
+      if(!receipt)return json({ok:false,status:'HELD',build:723,
+        error:'A current signed evidence chain, separately pinned reviewer identity, approved scope and no-activation acknowledgement are required.'},409);
+      try{return json({ok:true,receipt,
+        signed_receipt:await signEvidenceReceipt716(receipt,env),build:723});}
+      catch{return json({ok:false,build:723,
+        error:'Current server signer cannot issue a held Build 723 verification receipt.'},503);}
+    }
     if(['prepare_private_ledger_dry_run','verify_rotation_witness_provenance',
       'reconcile_owner_retention'].includes(action)){
       const audit=await signerCustodyAudit717(env);

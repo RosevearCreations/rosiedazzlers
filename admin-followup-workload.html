@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v720.css?v=20261030build720" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v721.css?v=20261030build721" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v722.css?v=20261031build722" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v723.css?v=20261031build723" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -151,6 +152,15 @@
                     <label class="rd-v715-override"><input id="rotationNoIdentity722" type="checkbox"/> A valid signature does not verify the witness's human identity or give external custody approval.</label>
                     <button id="rotationProvenance722" class="btn ghost" type="button">Recheck witness provenance and download HELD receipt</button>
                     <p id="rotationProvenanceStatus722" class="rd-v714-status" role="status" aria-live="polite">Original evidence and pinned witness still required.</p>
+                    <details class="rd-v723-panel"><summary>ⓘ Build 723 · External witness identity disposition</summary>
+                      <p class="muted">A <strong>separately pinned identity reviewer</strong> compares the original signed Build 722 provenance with its Build 721 exception (selected above). We can request, defer or reject identity review, but a cryptographic signature alone cannot approve an external human witness.</p>
+                      <label for="witnessIdentityProvenance723">Original signed Build 722 provenance receipt<input id="witnessIdentityProvenance723" type="file" accept="application/json,.json" /></label>
+                      <label for="witnessIdentityDecision723">Identity disposition<select id="witnessIdentityDecision723"><option value="request_external_identity_review">Request independent human identity review (HELD)</option><option value="defer_external_identity_review">Defer external identity review</option><option value="reject_witness_identity_evidence">Reject submitted identity evidence</option></select></label>
+                      <label for="witnessIdentityNote723">Independent review note (20–300 characters)<textarea id="witnessIdentityNote723" rows="2" maxlength="300"></textarea></label>
+                      <label class="rd-v715-override"><input id="witnessNoIdentity723" type="checkbox"/> I understand this does not establish a person's identity, approve custody, or authorize Proof-B.</label>
+                      <button id="witnessIdentityReview723" class="btn ghost" type="button">Sign identity disposition (HELD)</button>
+                      <p id="witnessIdentityStatus723" class="rd-v714-status" role="status" aria-live="polite">Original signatures and a separate identity-reviewer account are required.</p>
+                    </details>
                   </details>
                 </div>
               </div>
@@ -237,6 +247,25 @@
                       <button id="ledgerReconcile722" type="button" class="btn ghost">Reconcile signed owner decision (HELD)</button>
                       <p id="ledgerReconcileStatus722" class="rd-v714-status" role="status" aria-live="polite">Original signed gate, separate security review and owner identity must match.</p>
                     </div>
+                    <details class="rd-v723-panel"><summary>ⓘ Build 723 · Nonproduction execution authorization checklist</summary>
+                      <p class="muted">This review identifies the exact rollback SQL and a separately pinned <strong>nonproduction</strong> project. It never executes SQL, approves a database connection, or creates a migration. An independent real-world authorization and disposable project verification are still required.</p>
+                      <label for="ledgerDryRunReceipt723">Original signed Build 722 dry-run review<input id="ledgerDryRunReceipt723" type="file" accept="application/json,.json" /></label>
+                      <label for="ledgerNonprodProject723">Operator-confirmed, separately configured nonproduction project reference<input id="ledgerNonprodProject723" type="text" maxlength="40" spellcheck="false" autocomplete="off" placeholder="Exact configured nonproduction project ref" /></label>
+                      <label for="ledgerExecutionDecision723">Review disposition<select id="ledgerExecutionDecision723"><option value="request_independent_nonproduction_approval">Request independent authorization (HELD)</option><option value="reject_nonproduction_execution">Reject this execution proposal</option></select></label>
+                      <label for="ledgerExecutionNote723">Checklist findings (20–300 characters)<textarea id="ledgerExecutionNote723" rows="2" maxlength="300"></textarea></label>
+                      <label class="rd-v715-override"><input id="ledgerSqlReviewed723" type="checkbox"/> I checked the published rollback-only SQL fingerprint.</label>
+                      <label class="rd-v715-override"><input id="ledgerNoSqlExecution723" type="checkbox"/> No SQL will run, and no approval, data migration or storage is issued by this action.</label>
+                      <button id="ledgerExecutionReview723" type="button" class="btn ghost">Sign nonproduction checklist (HELD)</button>
+                      <p id="ledgerExecutionStatus723" class="rd-v714-status" role="status" aria-live="polite">No independently authorized nonproduction database execution.</p>
+                    </details>
+                    <details class="rd-v723-panel"><summary>ⓘ Build 723 · Owner retention expiry verification</summary>
+                      <p class="muted">As the original owner, supply the signed Build 722 retention decision and the original signed gate and security review selected above. The result calculates a <strong>hypothetical UTC expiry</strong>, not the expiry of a real stored row. No retention or backup-purge job runs.</p>
+                      <label for="ledgerOwnerDecisionFile723">Original signed Build 722 owner retention reconciliation<input id="ledgerOwnerDecisionFile723" type="file" accept="application/json,.json" /></label>
+                      <label for="ledgerExpiryNote723">Expiry review note (20–300 characters)<textarea id="ledgerExpiryNote723" rows="2" maxlength="300"></textarea></label>
+                      <label class="rd-v715-override"><input id="ledgerNoRows723" type="checkbox"/> No real rows, timestamps, jobs, or backup purges have been checked or changed.</label>
+                      <button id="ledgerExpiryVerify723" type="button" class="btn ghost">Verify signed expiry policy (HELD)</button>
+                      <p id="ledgerExpiryStatus723" class="rd-v714-status" role="status" aria-live="polite">Actual private evidence storage and expiry enforcement remain inactive.</p>
+                    </details>
                   </details>
                 </div>
               </div>
@@ -249,6 +278,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build722"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build723"></script>
 </body>
 </html>
