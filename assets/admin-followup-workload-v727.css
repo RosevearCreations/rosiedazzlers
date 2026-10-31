@@ -1,0 +1,14 @@
+/* Build 727: focused, collapsible local follow-up and provenance review. */
+.rd-v727-panel{margin:1rem 0 0;padding:.85rem 1rem;
+  border:1px solid #8496a5;border-radius:.8rem;background:rgba(46,75,100,.08);}
+.rd-v727-panel>summary{cursor:pointer;font-weight:700;line-height:1.5;
+  color:inherit;max-width:100%;overflow-wrap:anywhere;}
+.rd-v727-panel[open]>summary{margin-bottom:.7rem;}
+.rd-v727-panel label{display:block;max-width:100%;margin:.65rem 0;overflow-wrap:anywhere;}
+.rd-v727-panel input:not([type=checkbox]),.rd-v727-panel select,.rd-v727-panel textarea{
+  display:block;width:100%;max-width:100%;box-sizing:border-box;margin-top:.3rem;}
+.rd-v727-panel input[type=file]{font-size:.9rem;}
+.rd-v727-panel button{max-width:100%;white-space:normal;}
+.rd-v727-panel :is(button,input,select,textarea,summary):focus-visible{
+  outline:3px solid #bf912d;outline-offset:3px;}
+@media(max-width:620px){.rd-v727-panel{padding:.65rem;}}

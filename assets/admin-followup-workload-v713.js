@@ -982,6 +982,42 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         acknowledge_unverified_metadata_only:$('trialEvidenceMetadataOnly726').checked},
       'rosie-build726-nonproduction-trial-unverified-source-held-signed.json');
   }
+  async function followupOwnerException727(){
+    await reviewSignedScope723('ledgerExceptionReview727','ledgerExceptionStatus727',
+      'followup_owner_exception_evidence',[
+        ['signed_exception','ledgerExceptionReceipt727'],
+        ['signed_reconciliation','ledgerHandoffReconcileReceipt726'],
+        ['signed_handoff','ledgerOwnerHandoffReceipt725']],{
+        local_response_window_hours:Number($('ledgerExceptionWindow727').value),
+        decision:$('ledgerExceptionDecision727').value,
+        review_note:$('ledgerExceptionNote727').value.trim(),
+        acknowledge_no_external_receipt_or_delivery:$('ledgerExceptionNoReceipt727').checked},
+      'rosie-build727-owner-exception-followup-local-held-signed.json');
+  }
+  async function auditWitnessPriority727(){
+    await reviewSignedScope723('witnessAuditReview727','witnessAuditStatus727',
+      'audit_witness_priority_disposition',[
+        ['signed_priority','witnessPriorityReceipt727'],
+        ['signed_aging','witnessAgingReceipt726'],
+        ['signed_reference','witnessReferenceReceipt725']],{
+        decision:$('witnessAuditDecision727').value,
+        review_note:$('witnessAuditNote727').value.trim(),
+        acknowledge_no_real_witness_disposition:$('witnessAuditNoDisposition727').checked},
+      'rosie-build727-witness-priority-disposition-audit-held-signed.json');
+  }
+  async function recheckTrialProvenance727(){
+    await reviewSignedScope723('trialProvenanceReview727','trialProvenanceStatus727',
+      'recheck_trial_source_provenance',[
+        ['signed_intake','trialIntakeReceipt727'],
+        ['signed_readiness','trialReadinessReceipt726'],
+        ['signed_handoff','trialHandoffReceipt725']],{
+        observed_source_reference_id:$('trialObservedRef727').value.trim(),
+        observed_source_sha256:$('trialObservedHash727').value.trim(),
+        decision:$('trialProvenanceDecision727').value,
+        review_note:$('trialProvenanceNote727').value.trim(),
+        acknowledge_metadata_is_not_external_provenance:$('trialNoExternalProvenance727').checked},
+      'rosie-build727-trial-source-local-provenance-recheck-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -1021,6 +1057,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('witnessReferenceReview724').addEventListener('click',()=>void reviewWitnessReference724());
   $('witnessAgingReview725').addEventListener('click',()=>void reviewWitnessAging725());
   $('witnessPriorityReview726').addEventListener('click',()=>void reviewWitnessPriority726());
+  $('witnessAuditReview727').addEventListener('click',()=>void auditWitnessPriority727());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -1048,8 +1085,10 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ledgerPurgeReview724').addEventListener('click',()=>void reviewPurgeTrial724());
   $('ledgerHandoffReconcile725').addEventListener('click',()=>void reconcileOwnerHandoff725());
   $('ledgerHandoffException726').addEventListener('click',()=>void followupOwnerException726());
+  $('ledgerExceptionReview727').addEventListener('click',()=>void followupOwnerException727());
   $('trialReadinessReview725').addEventListener('click',()=>void reviewTrialReadiness725());
   $('trialEvidenceReview726').addEventListener('click',()=>void reviewTrialEvidence726());
+  $('trialProvenanceReview727').addEventListener('click',()=>void recheckTrialProvenance727());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();

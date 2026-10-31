@@ -76,3 +76,4 @@ node scripts/build723_nonprod_witness_identity_expiry_test.mjs
 node scripts/build724_handoff_reference_purge_test.mjs
 node scripts/build725_handoff_reconciliation_aging_readiness_test.mjs
 node scripts/build726_owner_exception_priority_trial_intake_test.mjs
+node scripts/build727_exception_queue_witness_audit_provenance_test.mjs
