@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 720 command workspaces · On-demand signed provider baselines and drift alerts, exact-key reviewer receipt recovery and a separately protected owner-evidence ledger approval gate. No simulated statistics or background polling; no automatic messages, unapproved evidence storage or fictitious approvals.';
+  note.textContent='Build 721 command workspaces · Source-drift private history design, receipt-specific pinned retired-signer exceptions and separate owner-ledger security review. No simulated statistics or background polling; no automatic messages, unapproved evidence storage or fictitious approvals.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',

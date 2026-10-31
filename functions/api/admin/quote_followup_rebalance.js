@@ -18,6 +18,8 @@ import {providerBindingDecision719,custodyDispositionDecision719,ownerPersistenc
   '../../../assets/quote-followup-disposition-v719.mjs';
 import {verifySignedEvidence720,providerDriftComparison720,recoverCustodyDisposition720,
   ownerLedgerApprovalGate720} from '../../../assets/quote-followup-recovery-v720.mjs';
+import {sourceHistoryDesign721,rotatedCustodyException721,ownerLedgerSecurityReview721} from
+  '../../../assets/quote-followup-governance-v721.mjs';
 import {selectedDetail,publicDetail} from './quote_followup_workload.js';
 
 const clean=value=>String(value??'').trim();
@@ -244,12 +246,43 @@ export async function onRequestPost({request,env}){
     action=clean(body.action),code=clean(body.exception_code);
   if(['verify_export_custody_witness','review_owner_devices','review_export_custody_disposition',
     'decide_owner_device_retention','compare_provider_binding','recover_custody_disposition',
-    'review_owner_ledger_gate'].includes(action)){
+    'review_owner_ledger_gate','review_source_history_design',
+    'recover_rotated_custody_exception','review_owner_ledger_security'].includes(action)){
     const access=await authorize(request,env,body);
     if(!access.ok)return access.response;
     if(access.actor?.role_code!=='admin')return json({ok:false,error:'Owner administrator access is required to review witness or device evidence.'},403);
     if(access.auth_mode!=='session'||!isUuid(access.actor?.id))return json({ok:false,
       error:'A signed-in administrator with a verified staff identity is required for evidence intake. Legacy password and bridge identity cannot record owner acceptance.'},403);
+    if(action==='recover_rotated_custody_exception'){
+      if(body.acknowledge_not_approval!==true)return json({ok:false,
+        error:'Confirm this old-key exception is not a new custody, witness, owner or Proof-B approval.',build:721},409);
+      const audit=await signerCustodyAudit717(env);
+      const exception=await rotatedCustodyException721(body.previous_signed_evidence,
+        body.rotation_witness_envelope,access.actor,env,audit);
+      if(!exception.ok)return json({ok:false,error:exception.reason,status:exception.status,build:721},409);
+      try{return json({ok:true,receipt:exception,
+        signed_receipt:await signEvidenceReceipt716(exception,env),build:721});}
+      catch{return json({ok:false,error:'Current signer could not sign the bounded rotation-exception receipt.',build:721},503);}
+    }
+    if(['review_source_history_design','review_owner_ledger_security'].includes(action)){
+      const audit=await signerCustodyAudit717(env),expectedKind=action==='review_source_history_design'?
+        'rosie_shift_provider_production_binding_readback':'rosie_owner_evidence_ledger_approval_gate';
+      const verified=await verifySignedEvidence720(body.signed_evidence,expectedKind,env,audit);
+      if(!verified.ok)return json({ok:false,error:verified.reason,status:'HOLD',build:721},409);
+      let receipt;
+      if(action==='review_source_history_design'){
+        if(!isUuid(body.staff_user_id)||!plannedWindow716(body.planned_followup_at))
+          return json({ok:false,error:'Select actual staff and an eligible planned hour for a fresh provider comparison.',build:721},400);
+        let current;
+        try{current=await providerBindingRead720(env,body.staff_user_id,body.planned_followup_at);}
+        catch{return json({ok:false,error:'Cannot review history design without a real current provider source GET.',build:721},503);}
+        const comparison=providerDriftComparison720(verified.receipt,current.provider_binding);
+        receipt=sourceHistoryDesign721(verified,comparison,access.actor,body);
+      }else receipt=ownerLedgerSecurityReview721(verified,access.actor,env,body);
+      if(!receipt)return json({ok:false,error:'A genuine scoped source receipt, distinct authorized review role and explicit no-storage decision are required.',build:721},409);
+      try{return json({ok:true,receipt,signed_receipt:await signEvidenceReceipt716(receipt,env),build:721});}
+      catch{return json({ok:false,error:'Current signer cannot issue the protected design-review receipt.',build:721},503);}
+    }
     if(['compare_provider_binding','recover_custody_disposition','review_owner_ledger_gate'].includes(action)){
       const audit=await signerCustodyAudit717(env);
       const expectedKind=action==='compare_provider_binding'?'rosie_shift_provider_production_binding_readback':
