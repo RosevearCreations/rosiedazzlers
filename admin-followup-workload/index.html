@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="/assets/admin-followup-workload-v728.css?v=20261031build728" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v729.css?v=20261031build729" />
   <link rel="stylesheet" href="/assets/admin-followup-workload-v730.css?v=20261031build730" />
+  <link rel="stylesheet" href="/assets/admin-followup-workload-v731.css?v=20261031build731" />
   <script src="/assets/admin-command-surface-v712.js?v=20261030build720" defer></script>
 </head>
 <body data-page="admin-followup-workload" data-command712="workload">
@@ -40,6 +41,27 @@
           <p>Rebalance actual staff assignments, inspect overdue exceptions and record source-linked internal resolution evidence. The dashboard shows real protected records, never fictional statistics.</p>
           <div class="rd-workload-actions"><button class="btn primary" id="workloadRefresh713" type="button">Refresh workload evidence</button><a class="btn ghost" href="/admin-quotes.html">Open Quote Pipeline</a></div>
         </div></div>
+      </section>
+      <section class="section rd-v731-workbench" aria-labelledby="overviewTitle731">
+        <article class="panel">
+          <h2 id="overviewTitle731">Owner evidence overview <span class="rd-v731-build">Build 731</span></h2>
+          <p class="muted">One clear starting point for the original Build 723–730 evidence. Load only original signed JSON files to display authenticated local review statuses, source hashes and aging priorities. This never establishes external delivery, identity, custody or Proof-B approval.</p>
+          <div class="rd-v731-cards" aria-label="Evidence review lanes">
+            <article class="rd-v731-card"><span class="rd-v731-scope">Owner handoff &amp; aging</span><strong id="overviewOwnerCount731">No verified receipts</strong><p id="overviewOwnerPriority731">Local priority: unknown</p><span class="rd-v731-held">External receipt HELD</span><button type="button" class="btn ghost" data-advanced-scope731="owner">Open owner actions</button></article>
+            <article class="rd-v731-card"><span class="rd-v731-scope">Witness exceptions</span><strong id="overviewWitnessCount731">No verified receipts</strong><p id="overviewWitnessPriority731">Local priority: unknown</p><span class="rd-v731-held">Independent identity HELD</span><button type="button" class="btn ghost" data-advanced-scope731="witness">Open witness actions</button></article>
+            <article class="rd-v731-card"><span class="rd-v731-scope">Nonproduction evidence</span><strong id="overviewNonproductionCount731">No verified receipts</strong><p id="overviewNonproductionPriority731">Local priority: unknown</p><span class="rd-v731-held">Original provenance HELD</span><button type="button" class="btn ghost" data-advanced-scope731="nonproduction">Open evidence actions</button></article>
+          </div>
+          <div class="rd-v731-controls">
+            <label for="overviewFiles731">Original signed Build 723–730 receipts (up to 24)<input id="overviewFiles731" type="file" accept="application/json,.json" multiple /></label>
+            <button id="overviewVerify731" class="btn" type="button">Verify selected evidence</button>
+            <label for="overviewScope731">Review lane<select id="overviewScope731"><option value="all">All lanes</option><option value="owner">Owner</option><option value="witness">Witness</option><option value="nonproduction">Nonproduction</option></select></label>
+            <label for="overviewAging731">Local receipt age<select id="overviewAging731"><option value="all">All aging priorities</option><option value="under24">Under 24h</option><option value="24h">24–71h</option><option value="72h">72–167h</option><option value="168h">168h or more</option></select></label>
+            <button id="overviewExport731" class="btn ghost" type="button" disabled>Export filtered verified review</button>
+          </div>
+          <p id="overviewStatus731" class="rd-v714-status" role="status" aria-live="polite">No original signatures verified. Every external evidence requirement remains HELD.</p>
+          <div id="overviewResults731" class="rd-v731-results" aria-live="polite"><p class="muted">Select original signed files and verify them to see actual local review priorities. Nothing is assumed complete.</p></div>
+          <p class="muted rd-v731-legend"><strong>24h / 72h / 168h:</strong> elapsed age of the <em>signed local review receipt</em> only. If a receipt contains a separately recorded queue age, it is shown as a distinct historical observation, not as a real-world delivery clock.</p>
+        </article>
       </section>
       <section class="section" aria-label="Live workload overview">
         <div class="rd-workload-kpis" id="workloadKpis713" aria-live="polite">
@@ -77,6 +99,14 @@
         <div class="rd-workload-actions"><button id="workloadReviewSave713" class="btn primary" type="button" disabled>Record manager exception review</button><button id="workloadDetailRefresh713" class="btn ghost" type="button" disabled>Recheck selected quote</button></div>
         <h3>Manager assessment history</h3><pre id="workloadReviewHistory713" class="rd-workload-history">No live review checked.</pre>
       </article></section>
+      <section class="section rd-v731-advanced" id="advancedEvidence731" aria-label="Advanced original evidence workflows">
+        <h2>Advanced evidence workflows</h2>
+        <p class="muted">Every original review action is retained below, now one level deep rather than nested through eight builds. Expand only the lane you need. Each action still requires its original signed files and separately assigned reviewer.</p>
+        <details id="advancedOwner731"><summary>ⓘ Owner handoff, expiry, aging and comparison actions (Build 723–729)</summary><div id="advancedOwnerItems731" class="rd-v731-advanced-items"></div></details>
+        <details id="advancedWitness731"><summary>ⓘ Witness identity, exception and follow-up actions (Build 723–729)</summary><div id="advancedWitnessItems731" class="rd-v731-advanced-items"></div></details>
+        <details id="advancedNonproduction731"><summary>ⓘ Nonproduction approval, backup and provenance actions (Build 723–729)</summary><div id="advancedNonproductionItems731" class="rd-v731-advanced-items"></div></details>
+        <details id="advancedRecovery731"><summary>ⓘ Build 730 · Signed comparison recovery and evidence timeline</summary><div id="advancedRecoveryItems731"></div></details>
+      </section>
       <section class="section rd-workload-grid rd-workload-v714" aria-label="Management actions">
         <article class="panel rd-v714-action" aria-labelledby="rebalanceTitle714">
           <div class="rd-v714-heading"><span class="rd-v714-emblem" aria-hidden="true">↔</span><div><span class="rd-v714-kicker">Management · active staff only</span><h2 id="rebalanceTitle714">Rebalance Staff Ownership</h2></div></div>
@@ -487,6 +517,6 @@
   <footer class="footer container" data-footer></footer>
   <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
-  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build730"></script>
+  <script type="module" src="/assets/admin-followup-workload-v713.js?v=20261031build731"></script>
 </body>
 </html>
