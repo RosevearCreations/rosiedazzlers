@@ -1,0 +1,12 @@
+/* Advanced Build 722 owner/reviewer controls remain collapsed until needed. */
+.rd-v722-panel{margin-top:.85rem;padding:.75rem;border:1px solid rgba(231,191,98,.5);border-radius:12px;background:rgba(10,18,26,.72);min-width:0}
+.rd-v722-panel>summary{cursor:pointer;color:#ffe3a0;font-weight:700;line-height:1.55;padding:.25rem 0}
+.rd-v722-panel p{overflow-wrap:anywhere;line-height:1.55}
+.rd-v722-panel label{display:block;margin:.8rem 0;max-width:100%;overflow-wrap:anywhere}
+.rd-v722-panel label:not(.rd-v715-override)>:is(input,select,textarea){box-sizing:border-box;display:block;width:100%;min-height:44px;max-width:100%;margin-top:.3rem;padding:.65rem;border-radius:9px;border:1px solid #9fa7b1;background:#101c25;color:#fff;font:inherit}
+.rd-v722-panel .btn{max-width:100%;white-space:normal;line-height:1.45;margin:.35rem 0 .6rem}
+.rd-v722-panel .rd-v722-retention{margin-top:1rem;border-top:1px solid rgba(231,191,98,.32);padding-top:.5rem}
+.rd-v722-panel h4{color:#ffe3a0;margin:.35rem 0}
+.rd-v722-panel :is(button,input,textarea,select,summary):focus-visible{outline:3px solid #f9ce6d;outline-offset:3px}
+@media(max-width:680px){.rd-v722-panel{padding:.6rem}.rd-v722-panel .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.rd-v722-panel *{animation:none!important;transition:none!important}}
