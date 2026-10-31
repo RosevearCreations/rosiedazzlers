@@ -1,4 +1,5 @@
 import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
+import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
 (() => {
   const $=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -35,12 +36,13 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     select.replaceChildren(new Option('Select an active booking staff member',''));
     const members=staffBalance714(roster?.eligible_staff||[],queue?.staff||[]);
     for(const staff of members){
-      select.add(new Option(`${staff.staff_name} · ${staff.assigned_sample} in current queue sample`,staff.staff_user_id));
+      const actual=roster?.capacity_by_staff?.find(s=>s.staff_user_id===staff.staff_user_id);
+      select.add(new Option(`${staff.staff_name} · ${actual?.assigned||0} currently counted`,staff.staff_user_id));
     }
     if(members.some(x=>x.staff_user_id===prior))select.value=prior;
     actionStatus714('rebalanceRosterStatus714',roster?
-      `${members.length} active booking-authorized staff member(s). Counts are from a limited quote sample, not verified availability or individual capacity. `+
-      (roster.roster_may_be_truncated?'WARNING: roster source limit reached.':''):
+      `${members.length} active booking-authorized staff member(s). Guardrails count bounded open follow-up assignments, NOT verified hours or shifts. `+
+      (roster.capacity_source_truncated?'WARNING: source limit reached; assignment blocked.':''):
       'Active staff roster unavailable. No reassignment can be recorded.',!roster);
     setDetailControls();
   }
@@ -74,10 +76,26 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     const mayWrite=selected?.manager_review_allowed===true&&
       !selected.event_history_may_be_truncated;
     const target=$('rebalanceTarget714').value,reason=$('rebalanceNote714').value.trim();
+    const bucket=selected?.overdue?(selected.overdue_days>=3?'critical':'overdue'):'scheduled';
+    const decision=target&&roster?capacityDecision715({by_staff:roster.capacity_by_staff||[],
+      source_truncated:roster.capacity_source_truncated===true},target,bucket):null;
+    const overridable=Boolean(decision?.requires_manager_override)&&mayWrite;
+    $('capacityOverride715').disabled=!overridable;
+    if(!overridable)$('capacityOverride715').checked=false;
+    const capStatus=$('capacityStatus715');
+    capStatus.textContent=!roster?'No verified capacity source. Reassignment is unavailable.':
+      !target?'Select a staff member to check the projected bounded follow-up queue against the advisory thresholds. Hours and shifts remain unverified.':
+      decision.hard_hold?'SOURCE LIMIT REACHED: reassignment is blocked until a full independent capacity review.':
+      `Projected: ${decision.projected.assigned}/6 assigned, ${decision.projected.overdue}/3 overdue, ${decision.projected.critical}/2 critical. `+
+      (decision.requires_manager_override?`Threshold exceeded (${decision.exceeded.join(', ')}). Document the real schedule check and explicitly acknowledge override; 20+ characters required.`:
+      'Within advisory queue thresholds. Actual staff availability is still not verified.');
+    capStatus.dataset.state=decision?.hard_hold||decision?.requires_manager_override?'error':'ready';
     $('rebalanceTarget714').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('rebalanceNote714').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('rebalanceSave714').disabled=!mayWrite||!selected?.can_rebalance||
       !roster?.eligible_staff?.some(x=>x.id===target)||
+      !decision||decision.hard_hold||
+      (decision.requires_manager_override&&(!$('capacityOverride715').checked||reason.length<20))||
       (selected.assignment_current&&target===selected.assigned_staff_user_id)||
       reason.length<12||reason.length>300;
     const code714=$('resolutionCode714').value,evidenceNote=$('resolutionNote714').value.trim(),
@@ -86,6 +104,8 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     $('resolutionNote714').disabled=!mayWrite||!proof||proof.verified;
     $('resolutionSave714').disabled=!mayWrite||!proof||proof.verified||
       evidenceNote.length<12||evidenceNote.length>300;
+    $('resolutionExport715').disabled=!selected?.manager_review_allowed||
+      selected.event_history_may_be_truncated;
   }
   function renderStaff(){
     const groups=queue?.staff||[];
@@ -150,6 +170,7 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     $('workloadExceptionCode713').replaceChildren(new Option('Checking current source…',''));
     $('workloadReviewHistory713').textContent='Live review being checked…';
     $('rebalanceNote714').value='';$('resolutionNote714').value='';
+    $('capacityOverride715').checked=false;
     actionStatus714('rebalanceActionStatus714','Checking active assignment and current staff source…');
     actionStatus714('resolutionActionStatus714','Checking real evidence after the original review…');
     $('resolutionHistory714').textContent='Verifying audit history…';
@@ -239,10 +260,18 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     const rebalance=action==='rebalance_owner',statusId=rebalance?
       'rebalanceActionStatus714':'resolutionActionStatus714',snapshot=selected,
       target=$('rebalanceTarget714').value,code=$('resolutionCode714').value,
-      note=$(rebalance?'rebalanceNote714':'resolutionNote714').value.trim();
+      note=$(rebalance?'rebalanceNote714':'resolutionNote714').value.trim(),
+      capacityOverride=$('capacityOverride715').checked;
     if(note.length<12||note.length>300||
       (rebalance&&!roster?.eligible_staff?.some(s=>s.id===target))||
       (!rebalance&&!snapshot.resolution_readiness?.some(p=>p.exception_code===code&&!p.verified)))return;
+    if(rebalance){
+      const bucket=snapshot.overdue?(snapshot.overdue_days>=3?'critical':'overdue'):'scheduled';
+      const capacity=capacityDecision715({by_staff:roster.capacity_by_staff||[],
+        source_truncated:roster.capacity_source_truncated===true},target,bucket);
+      if(capacity.hard_hold||capacity.requires_manager_override&&
+        (!capacityOverride||note.length<20))return;
+    }
     const message=rebalance?
       'Confirm a REAL internal reassignment to the selected active staff member? This invalidates the previous consent recheck and does not notify the customer.':
       'Confirm this actual newer internal remedy event as evidence? It does not close an escalation audit or authorize customer contact.';
@@ -254,7 +283,8 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     try{
       const result=await api('/api/admin/quote_followup_rebalance',{method:'POST',
         headers:{'Content-Type':'application/json'},body:JSON.stringify({...expected714(snapshot),
-          action,note,...(rebalance?{target_staff_user_id:target}:{exception_code:code})})});
+          action,note,...(rebalance?{target_staff_user_id:target,
+            acknowledge_capacity_override:capacityOverride}:{exception_code:code})})});
       outcome=result.already_current?'The same verified action was already current; nothing new was appended.':
         rebalance?'Assignment saved. The new owner must record a fresh internal consent recheck. No customer message sent.':
           'Resolution evidence receipt saved. The related audit stays separate and is not automatically closed.';
@@ -268,16 +298,23 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
   const ownerCheckIds=['acceptDesktop714','acceptMobile714','acceptRoles714',
     'acceptEvidence714','acceptNoSend714'];
   function updateOwnerReceipt714(){
-    $('ownerReceipt714').disabled=!ownerCheckIds.every(id=>$(id).checked)||
+    const outcome=$('ownerDisposition715').value;
+    const checksComplete=ownerCheckIds.every(id=>$(id).checked);
+    $('ownerReceipt714').disabled=!outcome||(outcome==='accepted'&&!checksComplete)||
       !$('ownerName714').value.trim()||!$('ownerNote714').value.trim();
+    $('ownerReceipt714').textContent=outcome==='needs_changes'?
+      'Download unresolved owner feedback':'Download local owner feedback receipt';
   }
   function downloadOwnerReceipt714(event){
     event.preventDefault();updateOwnerReceipt714();
     if($('ownerReceipt714').disabled)return;
     const timestamp=new Date().toISOString(),receipt={
-      app:'Rosie Dazzlers',build:714,receipt_kind:'owner_self_attested_local_visual_review',
+      app:'Rosie Dazzlers',build:715,receipt_kind:'owner_self_attested_local_visual_review',
       generated_at:timestamp,owner_name:$('ownerName714').value.trim(),
       device_findings_note:$('ownerNote714').value.trim(),
+      feedback_disposition:$('ownerDisposition715').value,
+      feedback_closed_locally:$('ownerDisposition715').value==='accepted',
+      feedback_requires_changes:$('ownerDisposition715').value==='needs_changes',
       checked:Object.fromEntries(ownerCheckIds.map(id=>[id,$(id).checked])),
       page:'admin-followup-workload.html',server_acceptance_recorded:false,
       production_deployment_independently_verified_by_this_receipt:false,
@@ -285,11 +322,30 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
     const url=URL.createObjectURL(new Blob([JSON.stringify(receipt,null,2)],
       {type:'application/json'}));
     const link=document.createElement('a');link.href=url;
-    link.download=`rosie-build714-owner-acceptance-${timestamp.slice(0,10)}.json`;
+    link.download=`rosie-build715-owner-feedback-${timestamp.slice(0,10)}.json`;
     document.body.append(link);link.click();link.remove();
     setTimeout(()=>URL.revokeObjectURL(url),1000);
     actionStatus714('ownerAcceptanceStatus714',
-      'Self-attested checklist downloaded on this device. Keep it as actual owner evidence; the app has not recorded a server approval.');
+      $('ownerDisposition715').value==='needs_changes'?
+      'Unresolved owner feedback downloaded; changes remain open. No server approval was recorded.':
+      'Locally accepted owner checklist downloaded. Server approval and production verification are still NOT recorded.');
+  }
+  async function exportEvidence715(){
+    const quoteId=selectedQuoteId;
+    if(!quoteId||selected?.manager_review_allowed!==true||selected.event_history_may_be_truncated)return;
+    $('resolutionExport715').disabled=true;
+    actionStatus714('resolutionActionStatus714','Exporting current protected, source-linked internal evidence…');
+    try{
+      const response=await fetch(`/api/admin/quote_followup_rebalance?quote_id=${encodeURIComponent(quoteId)}&export=evidence`,
+        {credentials:'include',cache:'no-store'});
+      if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||`Export failed (${response.status})`);}
+      const blob=await response.blob(),url=URL.createObjectURL(blob),link=document.createElement('a');
+      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build715.json`;
+      document.body.append(link);link.click();link.remove();
+      setTimeout(()=>URL.revokeObjectURL(url),1000);
+      actionStatus714('resolutionActionStatus714','Source-linked evidence downloaded locally. It is unsigned and does not close the audit or grant consent.');
+    }catch(error){actionStatus714('resolutionActionStatus714',error.message||'Export unavailable.',true);}
+    finally{setDetailControls();}
   }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
@@ -303,15 +359,18 @@ import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
   $('workloadExceptionCode713').addEventListener('change',setDetailControls);
   $('workloadReviewNote713').addEventListener('input',setDetailControls);
   $('workloadReviewSave713').addEventListener('click',()=>void recordReview());
-  $('rebalanceTarget714').addEventListener('change',setDetailControls);
+  $('rebalanceTarget714').addEventListener('change',()=>{$('capacityOverride715').checked=false;setDetailControls();});
+  $('capacityOverride715').addEventListener('change',setDetailControls);
   $('rebalanceNote714').addEventListener('input',setDetailControls);
   $('rebalanceSave714').addEventListener('click',()=>void managerAction714('rebalance_owner'));
   $('resolutionCode714').addEventListener('change',setDetailControls);
   $('resolutionNote714').addEventListener('input',setDetailControls);
   $('resolutionSave714').addEventListener('click',()=>void managerAction714('verify_exception_resolution'));
+  $('resolutionExport715').addEventListener('click',()=>void exportEvidence715());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
+  $('ownerDisposition715').addEventListener('change',updateOwnerReceipt714);
   $('ownerAcceptanceForm714').addEventListener('submit',downloadOwnerReceipt714);
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
