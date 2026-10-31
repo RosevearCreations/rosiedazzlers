@@ -44,6 +44,7 @@ const reqGet=(path,id='',headers=manager)=>new Request(`${root}${path}${id?`?quo
 const reqPost=(path,body,headers=manager)=>new Request(`${root}${path}`,{method:'POST',
   headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify(body)});
 const markers=(data)=>({quote_id:quoteId,booking_id:bookingId,expected_marker:data.marker,
+  planned_followup_at:new Date(Date.now()+7*86400000).toISOString(),
   expected_latest_outcome_event_id:data.latest_outcome_event_id,
   expected_latest_resolution_event_id:data.latest_resolution_event_id,
   expected_latest_assignment_event_id:data.latest_assignment_event_id,
@@ -75,6 +76,7 @@ globalThis.fetch=async(input,options={})=>{
     const eligible=staff.filter(s=>s.is_active&&(!id||s.id===id));
     return Response.json(eligible);
   }
+  if(u.pathname.endsWith('/staff_availability_blocks'))return Response.json([]);
   if(u.pathname.endsWith('/booking_events')){
     const type=u.searchParams.get('event_type')||'';
     if(type===`eq.${CONFIRMATION_EVENT707}`)return Response.json(events.filter(e=>e.event_type===CONFIRMATION_EVENT707));

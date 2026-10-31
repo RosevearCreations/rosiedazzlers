@@ -43,7 +43,7 @@
   }
   const note=document.createElement('p');
   note.className='rd-command-note';
-  note.textContent='Build 715 command workspaces · Protected source-backed status, conservative staff follow-up queue guardrails and owner-check evidence. No simulated statistics or background polling; no automatic consent grants.';
+  note.textContent='Build 716 command workspaces · Protected staff absence-block checks, conservative queue guardrails, optional signed export and real owner feedback remediation. No simulated statistics or background polling; no automatic consent grants.';
   target.prepend(note);
   target.prepend(nav);
   const headings={management:'Management command',workload:'Staff follow-up workload',operations:'Daily operations',statistics:'Statistical overview',

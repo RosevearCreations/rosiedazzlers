@@ -1,0 +1,16 @@
+/* Live Build 716 command controls; Rosie Standard charcoal/gold with accessible focus. */
+body[data-command712="workload"] #plannedFollowup716,
+body[data-command712="workload"] #resolutionExportMode716,
+body[data-command712="workload"] #feedbackOriginal716,
+body[data-command712="workload"] #feedbackRemedy716{width:100%;max-width:100%;min-height:44px;box-sizing:border-box;background:#0a263d;color:#eef8ff;border:1px solid #45657b;border-radius:9px;padding:10px}
+body[data-command712="workload"] .rd-v716-remediation{margin-top:18px;padding:16px;border:1px solid #496078;border-radius:14px;background:linear-gradient(135deg,#07182d,#122a35)}
+body[data-command712="workload"] .rd-v716-remediation h3{margin-top:0;color:#f3dfa2}
+body[data-command712="workload"] .rd-v716-remediation label{display:block;margin:12px 0}
+body[data-command712="workload"] .rd-v716-remediation .rd-v715-override{display:flex}
+body[data-command712="workload"] #plannedFollowup716:focus-visible,
+body[data-command712="workload"] #resolutionExportMode716:focus-visible,
+body[data-command712="workload"] #feedbackOriginal716:focus-visible,
+body[data-command712="workload"] #feedbackRemedy716:focus-visible,
+body[data-command712="workload"] #feedbackRetest716:focus-visible,
+body[data-command712="workload"] #feedbackClose716:focus-visible{outline:3px solid #f7d879;outline-offset:3px}
+@media(max-width:700px){body[data-command712="workload"] .rd-v716-remediation{padding:12px}body[data-command712="workload"] #feedbackClose716{width:100%;min-height:44px}}

@@ -65,3 +65,4 @@ node scripts/build712_escalation_command_test.mjs
 node scripts/build713_workload_visual_acceptance_test.mjs
 node scripts/build714_rebalance_resolution_owner_acceptance_test.mjs
 node scripts/build715_capacity_export_feedback_test.mjs
+node scripts/build716_availability_signature_owner_remediation_test.mjs

@@ -47,6 +47,7 @@ const get=(query='',headers=manager)=>new Request(`${root}${query}`,{headers});
 const post=body=>new Request(root,{method:'POST',headers:{...manager,'Content-Type':'application/json'},
   body:JSON.stringify(body)});
 const markers=data=>({quote_id:quoteId,booking_id:bookingId,expected_marker:data.marker,
+  planned_followup_at:new Date(Date.now()+7*86400000).toISOString(),
   expected_latest_outcome_event_id:data.latest_outcome_event_id,
   expected_latest_resolution_event_id:data.latest_resolution_event_id,
   expected_latest_assignment_event_id:data.latest_assignment_event_id,
@@ -88,6 +89,7 @@ globalThis.fetch=async(input,options={})=>{
     const id=url.searchParams.get('id')?.replace('eq.','');
     return Response.json(staff.filter(s=>!id||s.id===id));
   }
+  if(url.pathname.endsWith('/staff_availability_blocks'))return Response.json([]);
   if(url.pathname.endsWith('/bookings'))return Response.json([booking]);
   if(url.pathname.endsWith('/customer_profiles'))return Response.json([profile]);
   if(url.pathname.endsWith('/booking_events')){
@@ -118,7 +120,7 @@ try{
   assert.match(response.headers.get('content-disposition'),/attachment; filename="rosie-evidence-/);
   assert.equal(response.headers.get('cache-control'),'private, no-store');
   const evidence=await response.json();
-  assert.equal(evidence.build,715);
+  assert.ok(evidence.build>=715,'Build 715 evidence export remains available in later releases');
   assert.equal(evidence.metadata.cryptographically_signed,false);
   assert.equal(evidence.metadata.closes_audit,false);
   assert.doesNotMatch(JSON.stringify(evidence),/person@example\.test|5195550198/);
