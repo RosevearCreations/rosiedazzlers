@@ -946,6 +946,42 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
         acknowledge_no_live_trial_or_external_approval:$('trialNoLiveApproval725').checked},
       'rosie-build725-nonproduction-retention-readiness-gaps-held-signed.json');
   }
+  async function followupOwnerException726(){
+    await reviewSignedScope723('ledgerHandoffException726','ledgerHandoffExceptionStatus726',
+      'followup_owner_handoff_exception',[
+        ['signed_reconciliation','ledgerHandoffReconcileReceipt726'],
+        ['signed_handoff','ledgerOwnerHandoffReceipt725'],
+        ['signed_checklist','ledgerChecklistReceipt724']],{
+        decision:$('ledgerHandoffExceptionDecision726').value,
+        review_note:$('ledgerHandoffExceptionNote726').value.trim(),
+        acknowledge_no_authenticated_external_delivery:$('ledgerHandoffNoDelivery726').checked},
+      'rosie-build726-owner-external-handoff-exception-held-signed.json');
+  }
+  async function reviewWitnessPriority726(){
+    await reviewSignedScope723('witnessPriorityReview726','witnessPriorityStatus726',
+      'review_witness_conflict_priority',[
+        ['signed_aging','witnessAgingReceipt726'],
+        ['signed_reference','witnessReferenceReceipt725'],
+        ['signed_identity','witnessIdentityReceipt724']],{
+        decision:$('witnessPriorityDecision726').value,
+        review_note:$('witnessPriorityNote726').value.trim(),
+        acknowledge_local_priority_only:$('witnessPriorityLocalOnly726').checked},
+      'rosie-build726-witness-local-priority-held-signed.json');
+  }
+  async function reviewTrialEvidence726(){
+    await reviewSignedScope723('trialEvidenceReview726','trialEvidenceStatus726',
+      'review_nonproduction_trial_evidence_intake',[
+        ['signed_readiness','trialReadinessReceipt726'],
+        ['signed_purge','trialPurgeReceipt725'],
+        ['signed_handoff','trialHandoffReceipt725']],{
+        source_type:$('trialEvidenceType726').value,
+        source_reference_id:$('trialEvidenceRef726').value.trim(),
+        source_sha256:$('trialEvidenceHash726').value.trim(),
+        decision:$('trialEvidenceDecision726').value,
+        review_note:$('trialEvidenceNote726').value.trim(),
+        acknowledge_unverified_metadata_only:$('trialEvidenceMetadataOnly726').checked},
+      'rosie-build726-nonproduction-trial-unverified-source-held-signed.json');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -984,6 +1020,7 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('witnessIdentityReview723').addEventListener('click',()=>void reviewWitnessIdentity723());
   $('witnessReferenceReview724').addEventListener('click',()=>void reviewWitnessReference724());
   $('witnessAgingReview725').addEventListener('click',()=>void reviewWitnessAging725());
+  $('witnessPriorityReview726').addEventListener('click',()=>void reviewWitnessPriority726());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -1010,7 +1047,9 @@ import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-cros
   $('ledgerOwnerHandoff724').addEventListener('click',()=>void prepareOwnerHandoff724());
   $('ledgerPurgeReview724').addEventListener('click',()=>void reviewPurgeTrial724());
   $('ledgerHandoffReconcile725').addEventListener('click',()=>void reconcileOwnerHandoff725());
+  $('ledgerHandoffException726').addEventListener('click',()=>void followupOwnerException726());
   $('trialReadinessReview725').addEventListener('click',()=>void reviewTrialReadiness725());
+  $('trialEvidenceReview726').addEventListener('click',()=>void reviewTrialEvidence726());
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();

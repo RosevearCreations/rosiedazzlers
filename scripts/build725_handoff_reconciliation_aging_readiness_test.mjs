@@ -166,3 +166,7 @@ assert.match(read('assets/admin-followup-workload-v725.css'),/:focus-visible/);
 assert.match(read('scripts/current_booking_wizard_regression.sh'),
   /build725_handoff_reconciliation_aging_readiness_test\.mjs/);
 console.log('Build 725 PASS: owner signed handoff lineage, local witness-aging conflict windows, independent retention readiness, zero writes or external approvals');
+// Synthetic signed-lineage fixtures for Build 726; not external real-world evidence.
+export const fixtureFor726={...f,aging,trial,env,handoff,reference,purge,
+  ownerPolicy,reconciled,agingPolicy,freshMatch,conflict,overdue,
+  readinessPolicy,readiness};
