@@ -1,6 +1,7 @@
 import {staffBalance714} from './quote-followup-rebalance-v714.mjs';
 import {capacityDecision715} from './quote-followup-capacity-v715.mjs';
 import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-feedback-v716.mjs';
+import {acceptedDeviceReceipt717,crossDeviceReceipt717} from './quote-owner-crossdevice-v717.mjs';
 (() => {
   const $=id=>document.getElementById(id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -15,7 +16,8 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
   const readable=v=>{const d=new Date(v);return v&&!Number.isNaN(d.getTime())?
     d.toLocaleString('en-CA',{dateStyle:'medium',timeStyle:'short'}):'Unknown';};
   let queue=null,roster=null,selected=null,selectedQuoteId='',availability716=null,
-    availabilityKey716='',unresolvedFeedback716=null;
+    availabilityKey716='',unresolvedFeedback716=null,shiftRoster717=null,
+    desktopReceipt717=null,mobileReceipt717=null;
   const plannedIso716=()=>{const value=$('plannedFollowup716').value;
     if(!value)return '';const d=new Date(value);return Number.isFinite(d.getTime())?d.toISOString():'';};
   const currentAvailabilityKey716=()=>`${$('rebalanceTarget714').value}|${plannedIso716()}`;
@@ -54,7 +56,8 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
   async function refreshAvailability716(){
     const target=$('rebalanceTarget714').value,planned=plannedIso716(),
       key=currentAvailabilityKey716();
-    availability716=null;availabilityKey716='';$('capacityOverride715').checked=false;
+    availability716=null;shiftRoster717=null;availabilityKey716='';
+    $('capacityOverride715').checked=false;$('unverifiedShift717').checked=false;
     setDetailControls();
     if(!target||!planned||!selected?.manager_review_allowed)return;
     actionStatus714('availabilityStatus716','Checking the live staff availability block source for this one-hour window…');
@@ -63,6 +66,7 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
         `&planned_followup_at=${encodeURIComponent(planned)}`);
       if(key!==currentAvailabilityKey716())return;
       availability716=data.availability;availabilityKey716=key;
+      shiftRoster717=data.shift_roster;
       setDetailControls();
     }catch(error){if(key!==currentAvailabilityKey716())return;
       actionStatus714('availabilityStatus716',error.message||'Availability source unavailable. Assignment is blocked.',true);
@@ -103,6 +107,7 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
       source_truncated:roster.capacity_source_truncated===true},target,bucket):null;
     const validAvailability=availability716&&availabilityKey716===currentAvailabilityKey716();
     const availability=validAvailability?availability716:null;
+    const shift=validAvailability?shiftRoster717:null;
     const overridable=Boolean(decision?.requires_manager_override||availability?.requires_manager_override)&&mayWrite;
     $('capacityOverride715').disabled=!overridable;
     if(!overridable)$('capacityOverride715').checked=false;
@@ -123,11 +128,21 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
       availability.requires_manager_override?'Light-duty block overlaps this hour. Manager must document and acknowledge the actual work suitability. Shift hours remain unverified.':
       'No recorded absence blocks overlap this one-hour window. This is NOT verification of a working shift or available hours.';
     availabilityStatus.dataset.state=!availability||availability.hard_hold||availability.requires_manager_override?'error':'ready';
+    const shiftLabel=$('shiftRosterStatus717');
+    shiftLabel.textContent=!shift?'No current shift-roster readback. Verify staff and time first.':
+      shift.shift_schedule_verified?`VERIFIED: approved roster shift(s) ${shift.verified_shift_ids.join(', ')} cover the entire hour; revision ${shift.source_revision}.`:
+      shift.requires_manual_shift_acknowledgement?'UNVERIFIED: no shift feed configured. A manager may proceed only with explicit acknowledgement and a documented, independently checked schedule.':
+      `HOLD: ${shift.reason||'Roster source failed to confirm this shift.'}`;
+    shiftLabel.dataset.state=shift?.shift_schedule_verified?'ready':'error';
+    $('unverifiedShift717').disabled=!mayWrite||!shift?.requires_manual_shift_acknowledgement;
+    if($('unverifiedShift717').disabled)$('unverifiedShift717').checked=false;
     $('rebalanceTarget714').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('rebalanceNote714').disabled=!mayWrite||!selected?.can_rebalance||!roster;
     $('rebalanceSave714').disabled=!mayWrite||!selected?.can_rebalance||
       !roster?.eligible_staff?.some(x=>x.id===target)||
-      !decision||decision.hard_hold||!availability||availability.hard_hold||
+      !decision||decision.hard_hold||!availability||availability.hard_hold||!shift||shift.hard_hold||
+      (shift.requires_manual_shift_acknowledgement&&
+        (!$('unverifiedShift717').checked||reason.length<20))||
       ((decision.requires_manager_override||availability.requires_manager_override)&&
         (!$('capacityOverride715').checked||reason.length<20))||
       (selected.assignment_current&&target===selected.assigned_staff_user_id)||
@@ -191,6 +206,9 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
       signedOption.disabled=!roster?.export_signing_available;
       if(signedOption.disabled)$('resolutionExportMode716').value='unsigned';
       renderRoster714();
+      actionStatus714('signerCustodyStatus717',
+        `Signer custody: ${roster.signer_custody_status||'unavailable'}; `+
+        'an independent custodian or witness has NOT been verified by the application.');
       actionStatus714('resolutionActionStatus714',roster?.export_signing_available?
         'Optional server Ed25519 signing is configured; verify its key custody separately.':
         'Signed export is not configured. Unsigned source-linked JSON remains available.');
@@ -212,6 +230,7 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
     $('rebalanceNote714').value='';$('resolutionNote714').value='';
     $('capacityOverride715').checked=false;
     availability716=null;availabilityKey716='';
+    shiftRoster717=null;$('unverifiedShift717').checked=false;
     actionStatus714('rebalanceActionStatus714','Checking active assignment and current staff source…');
     actionStatus714('resolutionActionStatus714','Checking real evidence after the original review…');
     $('resolutionHistory714').textContent='Verifying audit history…';
@@ -311,7 +330,11 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
       const capacity=capacityDecision715({by_staff:roster.capacity_by_staff||[],
         source_truncated:roster.capacity_source_truncated===true},target,bucket);
       const available=availabilityKey716===currentAvailabilityKey716()?availability716:null;
+      const shift=availabilityKey716===currentAvailabilityKey716()?shiftRoster717:null;
       if(capacity.hard_hold||!available||available.hard_hold||
+        !shift||shift.hard_hold||
+        (shift.requires_manual_shift_acknowledgement&&
+          (!$('unverifiedShift717').checked||note.length<20))||
         (capacity.requires_manager_override||available.requires_manager_override)&&
         (!capacityOverride||note.length<20))return;
     }
@@ -328,7 +351,8 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
         headers:{'Content-Type':'application/json'},body:JSON.stringify({...expected714(snapshot),
           action,note,...(rebalance?{target_staff_user_id:target,
             planned_followup_at:plannedFollowup,
-            acknowledge_capacity_override:capacityOverride}:{exception_code:code})})});
+            acknowledge_capacity_override:capacityOverride,
+            acknowledge_unverified_shift:$('unverifiedShift717').checked}:{exception_code:code})})});
       outcome=result.already_current?'The same verified action was already current; nothing new was appended.':
         rebalance?'Assignment saved. The new owner must record a fresh internal consent recheck. No customer message sent.':
           'Resolution evidence receipt saved. The related audit stays separate and is not automatically closed.';
@@ -387,7 +411,7 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
         {credentials:'include',cache:'no-store'});
       if(!response.ok){const err=await response.json().catch(()=>({}));throw Error(err.error||`Export failed (${response.status})`);}
       const blob=await response.blob(),url=URL.createObjectURL(blob),link=document.createElement('a');
-      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build716-${mode}.json`;
+      link.href=url;link.download=`rosie-evidence-${quoteId.slice(0,8)}-build717-${mode}.json`;
       document.body.append(link);link.click();link.remove();
       setTimeout(()=>URL.revokeObjectURL(url),1000);
       actionStatus714('resolutionActionStatus714',mode==='signed'?
@@ -399,6 +423,23 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
   const download716=(body,filename)=>{const url=URL.createObjectURL(new Blob([JSON.stringify(body,null,2)],
     {type:'application/json'})),link=document.createElement('a');link.href=url;link.download=filename;
     document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  async function inspectSignerCustody717(){
+    $('signerCustodyAudit717').disabled=true;
+    actionStatus714('signerCustodyStatus717','Running live server signing-key self-test and custody boundary audit…');
+    try{
+      const data=await api('/api/admin/quote_followup_rebalance?audit=signer');
+      const a=data.audit;
+      actionStatus714('signerCustodyStatus717',
+        `Status: ${a.status}. Signer: ${a.signer_id||'unconfigured'}. `+
+        `Public key SHA-256: ${a.public_key_sha256||'none'}. `+
+        `Server self-test: ${a.server_signature_test_passed?'PASS':'NOT AVAILABLE'}. `+
+        'Independent custody/witness: NOT VERIFIED. Proof-B: NOT AUTHORIZED.');
+      if(window.confirm('Download this real, non-secret server signer audit JSON? It does not attest independent custody.'))
+        download716({app:'Rosie Dazzlers',build:717,checked_at:new Date().toISOString(),
+          audit:a,independent_witness_receipt_verified:false},'rosie-build717-server-signer-custody-audit.json');
+    }catch(error){actionStatus714('signerCustodyStatus717',error.message||'Custody audit unavailable.',true);}
+    finally{$('signerCustodyAudit717').disabled=false;}
+  }
   function updateRemediation716(){
     $('feedbackClose716').disabled=!unresolvedFeedback716||!$('feedbackRetest716').checked||
       $('ownerDisposition715').value!=='accepted'||
@@ -417,6 +458,7 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
       const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(content));
       const hash=[...new Uint8Array(digest)].map(v=>v.toString(16).padStart(2,'0')).join('');
       unresolvedFeedback716={original,hash};
+      desktopReceipt717=null;mobileReceipt717=null;updateCrossDevice717();
       actionStatus714('feedbackImportStatus716',
         `Unresolved Build ${original.build} feedback loaded (${readable(original.generated_at)}): ${original.findings}. `+
         'Retest the real screen after applying a fix; this local file has no server approval.');
@@ -434,6 +476,42 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
     actionStatus714('feedbackImportStatus716',
       'Linked remediation file downloaded locally. Keep both receipts; no server acceptance, independent witness or audit closure was recorded.');
   }
+  async function importDevice717(kind){
+    const file=$(kind==='desktop'?'deviceDesktop717':'deviceMobile717').files?.[0];
+    if(kind==='desktop')desktopReceipt717=null;else mobileReceipt717=null;
+    if(file){
+      try{
+        if(file.size>100000)throw Error('Receipt exceeds 100 KB.');
+        const raw=await file.text(),receipt=JSON.parse(raw);
+        if(!acceptedDeviceReceipt717(receipt,kind))throw Error('Only an actual accepted owner feedback receipt with five completed checks is valid.');
+        const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(raw));
+        const hash=[...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('');
+        if(kind==='desktop')desktopReceipt717={receipt,hash};
+        else mobileReceipt717={receipt,hash};
+      }catch(error){actionStatus714('crossDeviceStatus717',`${kind}: ${error.message}`,true);}
+    }
+    updateCrossDevice717();
+  }
+  function updateCrossDevice717(){
+    const review=unresolvedFeedback716&&crossDeviceReceipt717(unresolvedFeedback716.hash,
+      unresolvedFeedback716.original,desktopReceipt717,mobileReceipt717,
+      $('crossDeviceNote717').value);
+    $('crossDeviceExport717').disabled=!review;
+    if(review)actionStatus714('crossDeviceStatus717',
+      'Two separate accepted local feedback files passed checks for owner identity, dates and source hashes. Actual device testing is SELF-ATTESTED, not independently witnessed.');
+    else if(!$('crossDeviceStatus717').dataset.state||$('crossDeviceStatus717').dataset.state!=='error')
+      actionStatus714('crossDeviceStatus717',
+        'Load original unresolved feedback, two different accepted desktop/mobile receipts, and a 20+ character actual remediation observation.');
+  }
+  function exportCrossDevice717(){
+    const result=unresolvedFeedback716&&crossDeviceReceipt717(unresolvedFeedback716.hash,
+      unresolvedFeedback716.original,desktopReceipt717,mobileReceipt717,
+      $('crossDeviceNote717').value);
+    if(!result||!window.confirm('Confirm these two separate accepted receipt files reflect your genuine desktop and mobile retests? This records only local, self-attested evidence.'))return;
+    download716(result,`rosie-build717-cross-device-review-${result.generated_at.slice(0,10)}.json`);
+    actionStatus714('crossDeviceStatus717',
+      'Linked cross-device review downloaded. Preserve all three source files; this is not an independent witness or server acceptance.');
+  }
   $('workloadRefresh713').addEventListener('click',refreshQueue);
   $('workloadFilter713').addEventListener('change',renderCases);
   $('workloadExceptions713').addEventListener('click',event=>{
@@ -449,12 +527,14 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
   $('rebalanceTarget714').addEventListener('change',()=>void refreshAvailability716());
   $('plannedFollowup716').addEventListener('change',()=>void refreshAvailability716());
   $('capacityOverride715').addEventListener('change',setDetailControls);
+  $('unverifiedShift717').addEventListener('change',setDetailControls);
   $('rebalanceNote714').addEventListener('input',setDetailControls);
   $('rebalanceSave714').addEventListener('click',()=>void managerAction714('rebalance_owner'));
   $('resolutionCode714').addEventListener('change',setDetailControls);
   $('resolutionNote714').addEventListener('input',setDetailControls);
   $('resolutionSave714').addEventListener('click',()=>void managerAction714('verify_exception_resolution'));
   $('resolutionExport715').addEventListener('click',()=>void exportEvidence715());
+  $('signerCustodyAudit717').addEventListener('click',()=>void inspectSignerCustody717());
   for(const id of ownerCheckIds)$(id).addEventListener('change',updateOwnerReceipt714);
   $('ownerName714').addEventListener('input',updateOwnerReceipt714);
   $('ownerNote714').addEventListener('input',updateOwnerReceipt714);
@@ -464,6 +544,10 @@ import {unresolvedOwnerFeedback716,remediationReceipt716} from './quote-owner-fe
   $('feedbackRemedy716').addEventListener('input',updateRemediation716);
   $('feedbackRetest716').addEventListener('change',updateRemediation716);
   $('feedbackClose716').addEventListener('click',closeFeedback716);
+  $('deviceDesktop717').addEventListener('change',()=>void importDevice717('desktop'));
+  $('deviceMobile717').addEventListener('change',()=>void importDevice717('mobile'));
+  $('crossDeviceNote717').addEventListener('input',updateCrossDevice717);
+  $('crossDeviceExport717').addEventListener('click',exportCrossDevice717);
   $('workloadDetailRefresh713').addEventListener('click',()=>selectedQuoteId&&void inspectQuote(selectedQuoteId));
   window.AdminShell.boot({pageKey:'admin-followup-workload',onReady:refreshQueue});
 })();
