@@ -271,7 +271,9 @@
               <li>Select a town or zone to load parking, noise, runoff, and access reminders.</li>
             </ul>
             <div id="serviceAreaLinks" class="service-area-links"></div>
+            <p class="mini muted" style="margin:8px 0 0">Water-use and runoff requirements depend on the municipality, property, and date. County links are official starting points, not a blanket exemption; staff confirm restrictions before dispatch.</p>
           </div>
+          <div id="winterDateNotice739" class="notice warn mini" role="status" style="margin-top:8px;display:none"></div>
         </div>
       </div>
 
@@ -521,6 +523,51 @@
       </div>
       <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
 
+      <div class="photo-estimate-guide" id="workabilityGuide739" style="margin-top:16px">
+        <strong>Winter and worksite readiness check</strong>
+        <p class="mini muted" style="margin:6px 0 12px">Rosie supplies the normal detailing water and power. Please confirm a safe work area, weather and water/runoff conditions. November–March dates need a staff winter-capability review even if a calendar slot appears open. Indoor service is never assumed.</p>
+        <div class="grid2">
+          <div>
+            <label for="worksite_access_739">Where may Rosie work?</label>
+            <select id="worksite_access_739" required>
+              <option value="">Choose site access…</option>
+              <option value="private_safe">Safe, permitted private driveway/work area</option>
+              <option value="shared_or_street">Street, shared/condo property, or approval needed</option>
+              <option value="unsure">Unsure — request staff review</option>
+            </select>
+          </div>
+          <div>
+            <label for="worksite_surface_739">Ground and vehicle access</label>
+            <select id="worksite_surface_739" required>
+              <option value="">Choose surface condition…</option>
+              <option value="clear_level">Clear, stable, reasonably level, unobstructed</option>
+              <option value="unsafe">Icy, steep, slippery, blocked, or unsafe</option>
+              <option value="unsure">Unsure — request staff review</option>
+            </select>
+          </div>
+          <div>
+            <label for="worksite_weather_739">Expected worksite weather</label>
+            <select id="worksite_weather_739" required>
+              <option value="">Choose forecast/conditions…</option>
+              <option value="suitable">Currently suitable, with no known cold, frost or storm risk</option>
+              <option value="hazard">Cold/freezing, snow/ice, high wind or precipitation risk</option>
+              <option value="unsure">Too early to tell / unsure — review needed</option>
+            </select>
+          </div>
+          <div>
+            <label for="worksite_runoff_739">Water use, runoff and property rules</label>
+            <select id="worksite_runoff_739" required>
+              <option value="">Choose local compliance status…</option>
+              <option value="compliant">I can meet applicable local/site water and runoff rules</option>
+              <option value="restricted">Restriction or building/HOA permission issue</option>
+              <option value="unsure">Unsure — ask Rosie to check before booking</option>
+            </select>
+          </div>
+        </div>
+        <div id="workabilityStatus739" class="notice warn mini" role="status" aria-live="polite" style="margin-top:12px">Choose the worksite conditions above. Staff confirm local rules and changes in weather before dispatch.</div>
+        <a class="btn ghost small" href="/contact" id="workabilityReviewLink739" style="margin-top:10px;display:inline-flex">Ask Rosie about winter, access or a quote</a>
+      </div>
+
       <div class="requirements-grid" style="margin-top:16px">
         <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway and safe access required</strong><br><span data-policy-copy="driveway_access">We need safe working space at the vehicle.</span></span></label>
         <label hidden><input id="ack_power_water" type="checkbox" checked disabled /><span><strong>Rosie brings its own water and power</strong><br><span>Included for standard detailing; a safe work area is still required.</span></span></label>
@@ -649,6 +696,7 @@
       chartUrl
     } from "/assets/pricing-catalog-client.js?v=20261101build735";
     import { addonGuidance736 } from "/assets/service-addon-guidance-v736.js?v=20261101build736";
+    import { evaluateWorkability739 } from "/assets/winter-workability-v739.js?v=20261101build739";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
@@ -1499,11 +1547,58 @@
       return findServiceArea(state.pricing || {}, value) || findCountyFallbackForTypedArea(value) || null;
     }
 
+    function workabilityAnswers739() {
+      return {
+        access: qs("#worksite_access_739")?.value || "",
+        surface: qs("#worksite_surface_739")?.value || "",
+        weather: qs("#worksite_weather_739")?.value || "",
+        runoff: qs("#worksite_runoff_739")?.value || ""
+      };
+    }
+
+    function currentWorkability739() {
+      const value = String(qs("#service_area")?.value || "").trim();
+      const exact = findServiceArea(state.pricing || {}, value);
+      return evaluateWorkability739({
+        serviceDate: selectedDate(),
+        serviceArea: value,
+        county: exact?.county,
+        areaVerified: Boolean(exact) && exact.travel_tier !== "quote_required",
+        worksite: workabilityAnswers739()
+      });
+    }
+
+    function renderWorkability739() {
+      const verdict = currentWorkability739();
+      const notice = qs("#winterDateNotice739");
+      if (notice) {
+        notice.style.display = verdict.seasonReview ? "block" : "none";
+        notice.textContent = verdict.seasonReview
+          ? "Cold-season planning only: November–March dates require Rosie to verify the specific service, weather and site before any reservation or payment. A calendar slot is not winter authorization."
+          : "";
+      }
+      const status = qs("#workabilityStatus739");
+      if (!status) return verdict;
+      const answered = Object.values(workabilityAnswers739()).every(Boolean);
+      if (!answered) {
+        status.className = "notice warn mini";
+        status.textContent = "Complete all four worksite questions. Hazardous or uncertain conditions require staff review; no payment will be taken in this flow until eligibility is clear.";
+      } else if (verdict.canAutomaticallyReserve) {
+        status.className = "notice mini";
+        status.textContent = "No immediate site concern reported. Rosie will still recheck weather, water/runoff restrictions, address and safe access before dispatch. This is not a guarantee of conditions.";
+      } else {
+        status.className = "notice warn mini";
+        status.textContent = `Staff review required before reservation/payment: ${verdict.issues.join(" ")} Please contact Rosie with your service, date and location.`;
+      }
+      return verdict;
+    }
+
     function updateServiceAreaNote() {
       const field = qs("#service_area");
       const note = qs("#serviceAreaNote");
       const rules = qs("#serviceAreaRules");
       const links = qs("#serviceAreaLinks");
+      renderWorkability739();
       if (!field || !note || !rules || !links) return;
 
       const typedServiceArea = String(field.value || "").trim();
@@ -1935,6 +2030,7 @@
         state.availabilityOffset = Math.floor(diff / windowDays) * windowDays;
       }
       analyticsTrack("booking_date_pick", { service_date: picked, source:"native_picker" });
+      renderWorkability739();
       await refreshAvailability();
       await loadAvailabilityWindow();
     });
@@ -2186,6 +2282,10 @@
         if (!qs("#ack_driveway").checked || !qs("#ack_power_water").checked || !qs("#ack_bylaw").checked || !qs("#ack_cancellation").checked) {
           return showFieldError(4, "Please confirm all requirements and policy acknowledgements before moving on.");
         }
+        const workability = renderWorkability739();
+        if (!workability.canAutomaticallyReserve) {
+          return showFieldError(4, "Staff must review this winter date, service area, weather or site conditions before a reservation or deposit. Please use the contact link in the Winter and worksite readiness check above.");
+        }
         return true;
       }
 
@@ -2299,6 +2399,7 @@
         media_consent_preference: qs("input[name='media_consent_preference']:checked")?.value || state.mediaConsentPreference || "estimate_only",
         ack_driveway: true,
         ack_power_water: true,
+        workability_739: workabilityAnswers739(),
         need_mobile_water_power_quote: qs("#need_mobile_water_power")?.checked === true,
         ack_bylaw: true,
         ack_cancellation: true
@@ -2371,6 +2472,9 @@
     qs("#service_area").addEventListener("focus", () => showServiceAreaPicker(!qs("#service_area").value.trim()));
     qs("#city")?.addEventListener("input", () => updateAddressAreaWarning());
     qs("#postal_code")?.addEventListener("input", () => updateAddressAreaWarning());
+    ["#worksite_access_739", "#worksite_surface_739", "#worksite_weather_739", "#worksite_runoff_739"].forEach((selector) => {
+      qs(selector)?.addEventListener("change", () => { renderWorkability739(); renderFinalSummary(); });
+    });
     qs("#need_mobile_water_power")?.addEventListener("change", () => {
       renderReviewVehicle();
       renderFinalSummary();

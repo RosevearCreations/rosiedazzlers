@@ -88,3 +88,4 @@ node scripts/build735_canonical_pricing_starting_at_test.mjs
 node scripts/build736_service_addon_comparison_quote_guidance_test.mjs
 node --experimental-vm-modules scripts/build737_full_wizard_recovery_test.mjs
 node scripts/build738_availability_capacity_manual_exceptions_test.mjs
+node scripts/build739_winter_workability_service_area_test.mjs
