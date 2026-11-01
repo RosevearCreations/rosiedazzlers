@@ -1,0 +1,40 @@
+/* Build 733 — Standard theme: accessible personal Admin workspace navigation. */
+.ac733-toolbar{border:1px solid rgba(220,183,118,.4);border-radius:18px;background:linear-gradient(140deg,#172539,#101b2b);padding:18px;color:#f8fafc;display:grid;gap:13px}
+.ac733-intro{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.ac733-intro h2{font-size:1.2rem;margin:4px 0}.ac733-intro p{color:#c8d3e0;font-size:.85rem;margin:0;max-width:62ch}
+.ac733-choices,.ac733-actions{display:flex;gap:9px;flex-wrap:wrap;align-items:end}
+.ac733-choices label{display:grid;gap:4px;font-size:.79rem;font-weight:750;color:#ead8b6;min-width:155px;flex:1}
+.ac733-choices :is(select,input){width:100%;min-width:0;min-height:44px;padding:10px 11px;border:1px solid #8090a6;border-radius:10px;background:#203047;color:#fff;font:inherit;font-size:.9rem}
+.ac733-actions button,.ac733-main-action{border:1px solid #b99a6e;border-radius:10px;min-height:44px;padding:9px 13px;background:#283b53;color:#fff;font:inherit;font-size:.85rem;font-weight:750;cursor:pointer}
+.ac733-actions button:hover,.ac733-main-action:hover{background:#3b536d}
+.ac733-actions button[aria-pressed="true"]{background:#65471d;border-color:#edca82}
+.ac733-hint{color:#b8c7da;font-size:.77rem;margin:0;line-height:1.5}
+.ac733-view-status{margin:0;font-size:.78rem;color:#e6c995;line-height:1.5;min-height:1.2em}
+.ac733-favorite,.ac733-help-trigger{background:#273850;border:1px solid #8193ab;border-radius:9px;color:#f8e1b8;cursor:pointer;font-size:1.05rem;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;line-height:1}
+.ac733-favorite[aria-pressed="true"]{color:#ffce70;background:#463a28;border-color:#eac58d}
+.ac733-help-trigger{font-size:1.2rem;font-weight:800;color:#d9e7f6}
+.ac733-help-body{border-left:3px solid #e5bd7d;padding:9px 12px;color:#f0daba;background:rgba(10,20,35,.5);border-radius:8px;font-size:.82rem;line-height:1.5;margin:2px 0}
+.ac733-help-body[hidden]{display:none}
+.ac733-order-actions{display:flex;gap:6px}
+.ac733-order-actions button{width:44px;height:44px;border-radius:9px;border:1px solid #75869d;background:#273850;color:#fff;font-size:1rem;cursor:pointer}
+.ac733-favorite:focus-visible,.ac733-help-trigger:focus-visible,.ac733-order-actions button:focus-visible,.ac733-actions button:focus-visible,.ac733-choices :is(input,select):focus-visible,.ac733-main-action:focus-visible{outline:3px solid #f9d58d;outline-offset:3px}
+.ac733-compact.ac732-grid .ac732-card{padding:12px;gap:7px}.ac733-compact.ac732-grid .ac732-card .ac732-description{min-height:0}
+.ac733-compact#adminWorkspaceCards > .card{padding:12px}
+#adminWorkspaceCards .ac733-favorite{margin:4px 6px 8px 0}
+#adminWorkspaceCards .ac733-help-trigger{margin-top:8px}
+.ac733-dialog{background:#101c2e;color:#fff;border:1px solid #c4a16d;border-radius:18px;padding:20px;width:min(620px,calc(100vw - 24px));max-height:88dvh;overflow:auto;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.ac733-dialog::backdrop{background:rgba(3,9,20,.78)}
+.ac733-dialog h2{margin:0 0 8px;font-size:1.35rem}
+.ac733-dialog p,.ac733-dialog li{color:#cad8e6;line-height:1.5}
+.ac733-dialog input{width:100%;min-height:48px;margin:10px 0;padding:11px 14px;border:1px solid #8da4be;border-radius:10px;background:#20334d;color:#fff;font:inherit}
+.ac733-dialog :is(input,button,a):focus-visible{outline:3px solid #f6d18b;outline-offset:3px}
+.ac733-dialog-header{display:flex;justify-content:space-between;align-items:start;gap:12px}
+.ac733-dialog-header button{min-height:44px;min-width:44px;border-radius:8px;background:#293b54;color:#fff;border:1px solid #899db6;cursor:pointer}
+.ac733-results{display:grid;gap:5px;max-height:50dvh;overflow-y:auto;padding:3px}
+.ac733-result{display:grid;gap:3px;color:#eff5fb;text-decoration:none;padding:12px 14px;border:1px solid rgba(201,217,234,.24);border-radius:10px;background:#1c2f49;font-weight:750}
+.ac733-result small{font-size:.73rem;font-weight:400;color:#b7cce0;overflow-wrap:anywhere}
+.ac733-result[aria-selected="true"],.ac733-result:hover{background:#4c3b25;border-color:#edcb92}
+.ac733-empty{padding:14px;background:#20334d;border-radius:10px}
+.ac733-shortcut-list{padding-left:20px}
+@media(max-width:720px){.ac733-toolbar{padding:14px}.ac733-choices label{min-width:100%}.ac733-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.ac733-actions button{width:100%}.ac733-dialog{padding:14px}}
+@media(max-width:370px){.ac733-actions{grid-template-columns:1fr}}

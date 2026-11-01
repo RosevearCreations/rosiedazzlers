@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="/assets/build648-admin-operator.css?v=build648" />
   <link rel="stylesheet" href="/assets/admin-command-surface-v712.css?v=20261030build712" />
   <link rel="stylesheet" href="/assets/admin-command-centre-v732.css?v=20261031build732" />
+  <link rel="stylesheet" href="/assets/admin-navigation-v733.css?v=20261101build733" />
   <script src="/assets/build648-admin-operator.js?v=build648" defer></script>
   <script src="/assets/admin-command-surface-v712.js?v=20261030build712" defer></script>
 </head>
@@ -108,6 +109,17 @@
       <section class="section" aria-label="Operator shortcuts" data-build648="operator-navigation">
         <div class="panel admin-command-panel">
           <div class="admin-command-heading"><div><div class="badge">Operator workspace</div><h2>What do we need to do?</h2><p class="muted">Jump directly to customer work, or find any admin tool below.</p></div><a class="btn ghost small" href="/admin-startup-guide.html">ⓘ Admin help</a></div>
+          <section class="ac733-toolbar" id="adminNavigation733" aria-label="Personal Admin navigation and saved views" data-build733="navigation-saved-views">
+            <div class="ac733-intro"><div><span class="ac732-kicker">Build 733 · Personal workspace</span><h2>Find tools. Save your layout.</h2><p>Search authorized Admin routes, favorite workspaces, and save named local card arrangements. No customer data is saved.</p></div><div class="ac733-actions"><button id="adminOpenPalette733" type="button" class="ac733-main-action" aria-haspopup="dialog">⌕ Find a workspace · Ctrl/⌘ K</button><button id="adminOpenHelp733" type="button" aria-haspopup="dialog">ⓘ Shortcuts &amp; help</button></div></div>
+            <div class="ac733-choices">
+              <label for="adminProfileSelect733">Saved view<select id="adminProfileSelect733"><option value="">Choose a saved view</option></select></label>
+              <label for="adminProfileName733">View name<input id="adminProfileName733" type="text" maxlength="36" autocomplete="off" placeholder="e.g. Morning review" /></label>
+              <label for="adminDensity733">Card spacing<select id="adminDensity733"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
+            </div>
+            <div class="ac733-actions"><button id="adminFavoritesOnly733" type="button" aria-pressed="false">☆ All tools</button><button id="adminSaveProfile733" type="button">Save named view</button><button id="adminResetView733" type="button">Reset view</button><button id="adminDeleteProfile733" type="button">Delete saved view</button><button id="adminExportViews733" type="button">Export saved views</button></div>
+            <p class="ac733-hint">Tip: use ☆ to favorite cards, ↑/↓ to rearrange the six command cards, Ctrl/⌘ K to search, ? for help, and Alt+Shift+F for favorites. Saved names and layouts stay on this browser only.</p>
+            <p id="adminNavigationStatus733" class="ac733-view-status" role="status" aria-live="polite">Waiting for the staff session…</p>
+          </section>
           <nav class="admin-quick-actions" aria-label="Common tasks">
             <a class="btn primary" href="/admin-today.html">Today's queue</a>
             <a class="btn ghost" href="/admin-booking.html">Bookings</a>
@@ -504,9 +516,21 @@
 
   <footer class="footer container" data-footer></footer>
 
+  <dialog class="ac733-dialog" id="adminPalette733" aria-labelledby="adminPaletteTitle733">
+    <div class="ac733-dialog-header"><div><h2 id="adminPaletteTitle733">Find an Admin workspace</h2><p>Authorized routes only. Select a result to open its existing workspace.</p></div><button type="button" data-close-dialog733 aria-label="Close workspace search">×</button></div>
+    <label for="adminPaletteSearch733">Search tools and destinations</label><input id="adminPaletteSearch733" type="search" autocomplete="off" aria-controls="adminPaletteResults733" aria-activedescendant="" aria-autocomplete="list" />
+    <div id="adminPaletteResults733" class="ac733-results" role="listbox" aria-label="Matching authorized workspaces"></div>
+  </dialog>
+  <dialog class="ac733-dialog" id="adminHelp733" aria-labelledby="adminHelpTitle733">
+    <div class="ac733-dialog-header"><h2 id="adminHelpTitle733">Admin keyboard and card help</h2><button type="button" data-close-dialog733 aria-label="Close keyboard help">×</button></div>
+    <ul class="ac733-shortcut-list"><li><strong>Ctrl/⌘ K</strong> — find an authorized Admin tool</li><li><strong>↑ / ↓, Enter</strong> — choose a search result</li><li><strong>Escape</strong> — close the search or help dialog</li><li><strong>?</strong> — open this help outside text fields</li><li><strong>Alt+Shift+F</strong> — toggle favorite-only workspaces</li><li><strong>Tab / Shift+Tab</strong> — navigate controls and card actions</li></ul>
+    <p>Use each card’s ⓘ button for source guidance. Favorites and named layouts are stored only for this staff account on this browser; free-text searches and business reports are never saved. Reset clears the current layout; Delete removes one named view; Export downloads saved layouts as JSON. All destinations retain server-side role and data permissions.</p>
+  </dialog>
+
   <script src="/assets/admin-auth.js"></script>
   <script src="/assets/admin-shell.js"></script>
   <script src="/assets/admin-command-centre-v732.js?v=20261031build732"></script>
+  <script src="/assets/admin-navigation-v733.js?v=20261101build733"></script>
   <script src="/assets/chrome.js?v=20261025build656"></script>
   <script>
     (function () {
@@ -794,6 +818,7 @@
       }
       window.AdminShell.boot({ pageKey: 'admin', onReady: async ({actor,auth})=>{
         window.RosieAdminCommand732.mount({actor,auth});
+        window.RosieAdminNavigation733.mount({actor,auth});
         const commandReports = () => Promise.allSettled([
           guardedCommandSource('Dashboard analytics','analytics',loadDashboardAnalytics),
           guardedCommandSource('Payment webhook warnings','payments',loadPaymentWebhookWarnings),
