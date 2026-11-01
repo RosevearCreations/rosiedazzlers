@@ -3,7 +3,7 @@
 export const BOOKING_WIZARD_UI_VERSION_627 = "rosie-booking-wizard-ui.v1";
 export const BOOKING_WIZARD_STEPS_627 = Object.freeze([
   "Date, area & vehicle","Choose your service","Optional add-ons",
-  "Requirements & review","Contact details & deposit"
+  "Address & waiver","Payment & review"
 ]);
 export function wizardStepPresentation627(step, total = 5) {
   const length=Number.isInteger(total)&&total>0?total:5;

@@ -2,6 +2,7 @@
 // Session state stays in this browser tab only. Server pricing, availability, booking, and payment rules remain authoritative.
 
 import { sanitizedBookingChoices630, parseBookingChoices630, BOOKING_DRAFT_FIELDS_630 } from "./booking-draft-policy-v630.js";
+import { CHECKOUT_UNCERTAIN_KEY_737 } from "./booking-journey-v737.js";
 
 const LEGACY_DRAFT_KEY = "rd_booking_draft_v380";
 const DRAFT_KEY = "rd_booking_draft_v630";
@@ -29,7 +30,7 @@ function safeSessionRemove(key) {
 }
 
 function clearRecoveryState() {
-  [DRAFT_KEY, LEGACY_DRAFT_KEY, REQUEST_KEY, PAYMENT_KEY, CANCEL_KEY].forEach(safeSessionRemove);
+  [DRAFT_KEY, LEGACY_DRAFT_KEY, REQUEST_KEY, PAYMENT_KEY, CANCEL_KEY, CHECKOUT_UNCERTAIN_KEY_737].forEach(safeSessionRemove);
 }
 
 function parseJson(text, fallback = null) {
@@ -263,26 +264,36 @@ function installCheckoutRecoveryFetch() {
 
     let body = parseJson(init?.body, null);
     if (!body || typeof body !== "object") return originalFetch(input, init);
+    if (safeSessionGet(CHECKOUT_UNCERTAIN_KEY_737)) {
+      throw new Error("A previous checkout outcome is uncertain. Do not submit another booking until Rosie Dazzlers checks the payment status.");
+    }
     body = { ...body, client_request_id: requestId() };
     const recoveryInit = { ...init, body: JSON.stringify(body) };
 
     let response;
     try {
       response = await originalFetch("/api/checkout_recovery", recoveryInit);
-    } catch (firstError) {
-      await sleep(500);
-      try {
-        response = await originalFetch("/api/checkout_recovery", recoveryInit);
-      } catch {
-        throw firstError;
-      }
+    } catch {
+      // A lost response does not prove the server failed. Never automatically
+      // repeat a request that may already have created a provider session.
+      safeSessionSet(CHECKOUT_UNCERTAIN_KEY_737, "1");
+      throw new Error("The checkout response was lost. Please check for a payment email and contact Rosie Dazzlers before trying another booking.");
     }
 
     let data = await response.clone().json().catch(() => null);
     if (response.status === 409 && data?.recovery_state === "pending_session_attach") {
       await sleep(Math.min(1200, Math.max(400, Number(data.retry_after_seconds || 1) * 1000)));
-      response = await originalFetch("/api/checkout_recovery", recoveryInit);
+      try {
+        response = await originalFetch("/api/checkout_recovery", recoveryInit);
+      } catch {
+        safeSessionSet(CHECKOUT_UNCERTAIN_KEY_737, "1");
+        throw new Error("The payment-session recovery response was lost. Contact Rosie Dazzlers before trying again.");
+      }
       data = await response.clone().json().catch(() => null);
+    }
+
+    if (response.status >= 500 || (response.ok && !data)) {
+      safeSessionSet(CHECKOUT_UNCERTAIN_KEY_737, "1");
     }
 
     if (response.status === 409) {
@@ -292,6 +303,7 @@ function installCheckoutRecoveryFetch() {
     }
 
     if (response.ok && data?.ok) {
+      safeSessionRemove(CHECKOUT_UNCERTAIN_KEY_737);
       const normalized = { ...data };
       if (!normalized.checkout_url && normalized.approve_url) normalized.checkout_url = normalized.approve_url;
       if (!normalized.checkout_url && normalized.mode === "gift_only_confirm" && normalized.booking_id) {
@@ -356,6 +368,9 @@ export function wireBookingRecovery() {
 
   if (path !== "/booking-planner") return;
 
+  if (safeSessionGet(CHECKOUT_UNCERTAIN_KEY_737)) {
+    showNotice("Checkout status needs verification", "A previous payment setup may have reached the server. To avoid a duplicate booking, check your email and contact Rosie Dazzlers before another attempt.", "warn");
+  }
   installCheckoutRecoveryFetch();
   installConflictUX();
   installDraftPersistence();
