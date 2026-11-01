@@ -72,7 +72,12 @@ function verifyStaticScriptVersions(dir = '') {
     } else if (entry.isFile() && entry.name.endsWith('.html')) {
       const html = read(relative);
       for (const match of html.matchAll(/src="(\/assets\/(?:chrome|site-policies)\.js[^\"]*)"/g)) {
-        assert.match(match[1], /\?v=20261025build656$/, `${relative} has stale script URL: ${match[1]}`);
+        // Chrome still uses its Build 656 cache key. Build 736's booking routes
+        // intentionally load a newer site-policies.js to refresh rich add-on cards.
+        const expected = match[1].startsWith('/assets/chrome.js')
+          ? /\?v=20261025build656$/
+          : /\?v=(?:20261025build656|20261101build736)$/;
+        assert.match(match[1], expected, `${relative} has stale script URL: ${match[1]}`);
         versionedScripts += 1;
       }
     }

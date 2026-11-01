@@ -179,6 +179,7 @@
   <link rel="stylesheet" href="/assets/booking-wizard-v627.css?v=1" />
   <link rel="stylesheet" href="/assets/booking-context-help-v628.css?v=1" />
   <link rel="stylesheet" href="/assets/booking-final-review-v631.css?v=1" />
+  <link rel="stylesheet" href="/assets/service-addon-guidance-v736.css?v=20261101build736" />
 </head>
 <body>
   <div class="nav">
@@ -645,6 +646,7 @@
       packagePrice as sharedPackagePrice,
       chartUrl
     } from "/assets/pricing-catalog-client.js?v=20261101build735";
+    import { addonGuidance736 } from "/assets/service-addon-guidance-v736.js?v=20261101build736";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
@@ -1972,16 +1974,16 @@
     }
 
     function addonDisplayPrice(addon) {
-      const sizeKey = String(state.vehicle_size || "mid").toLowerCase();
+      const sizeKey = String(state.vehicle_size || "").toLowerCase();
       const prices = addon?.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
-      const raw = prices[sizeKey] ?? prices.mid ?? prices.small ?? addon?.price_cad;
+      const raw = ["small","mid","oversize"].includes(sizeKey) ? (prices[sizeKey] ?? addon?.price_cad) : addon?.price_cad;
       const amount = Number(raw);
       if (addon?.quote_required === true) {
         return Number.isFinite(amount) && amount > 0
           ? `Starting at: ${money(amount)} · condition assessed`
           : "Condition quote";
       }
-      return Number.isFinite(amount) && amount > 0 ? `Starting at: ${money(amount)}` : "Ask for price";
+      return Number.isFinite(amount) && amount > 0 ? `Starting at: ${money(amount)}` : "Choose size for starting price";
     }
 
     function renderAddons() {
@@ -1993,6 +1995,10 @@
         const src = addon.image_url || addonPrimaryImage(addon.code);
         const fallback = addon.image_fallback_url || addonFallbackImage(addon.code);
         const allowed = addonAllowedForPackage(addon, packageCode);
+        const guidance = addonGuidance736(addon, selectedSize());
+        const addonSizes = guidance.has_size_tiers
+          ? `<span class="addon-sizes-736" aria-label="Vehicle-size starting prices">${guidance.tiers.map(tier=>`<span class="addon-sizes-736__tier ${guidance.selected_size===tier.size?"is-current":""}"><span>${escapeHtml(tier.label)}</span><strong>${tier.cents==null?"Confirm price":`Starting at: ${money(tier.cents/100)}`}</strong></span>`).join("")}</span>`
+          : `<span class="addon-quote-736">${guidance.base_cents==null?"No fixed amount published":`Starting at: ${money(guidance.base_cents/100)}`}</span>`;
         const noteParts = [];
         if (Array.isArray(addon.notes) && addon.notes.length) noteParts.push((addon.notes || []).join(" • "));
         if (!allowed) noteParts.push(addonRequirementText(addon));
@@ -2001,6 +2007,8 @@
           <strong>${escapeHtml(addon.name)}</strong>
           <span class="muted mini">${escapeHtml(addon.category || "")}${addon.type ? ` · ${escapeHtml(addon.type)}` : ""}</span>
           <span class="tag ${addon.quote_required ? "warn" : (allowed ? "ok" : "warn")}">${escapeHtml(addonDisplayPrice(addon))}</span>
+          ${addonSizes}
+          ${guidance.quote_required?`<span class="addon-quote-736"><strong>Quote required · photo or condition assessment.</strong> ${escapeHtml(guidance.guidance)}${guidance.assessment_basis?`<span class="addon-quote-736__basis">Assessment factors: ${escapeHtml(guidance.assessment_basis)}</span>`:""}</span>`:""}
           <span class="muted mini">${escapeHtml(noteParts.join(" • "))}</span>
         </button>`;
       }).join("");
@@ -2353,7 +2361,7 @@
   <script type="module" src="/assets/booking-wizard-v627.js?v=1"></script>
   <script type="module" src="/assets/booking-context-help-v628.js?v=1"></script>
   <script type="module" src="/assets/chrome.js?v=20261025build656"></script>
-  <script src="/assets/site-policies.js?v=20261025build656" defer></script>
+  <script src="/assets/site-policies.js?v=20261101build736" defer></script>
   <script src="/assets/booking-hours.js" defer></script>
 </body>
 </html>
