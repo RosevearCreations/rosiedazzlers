@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync } from 'node:fs';
 
 const faq = readFileSync('faq.html','utf8');
 const faqFolder = readFileSync('faq/index.html','utf8');
@@ -72,6 +72,26 @@ assert.match(visual,/@media \(max-width: 480px\)/);
 assert.ok(!visual.includes('object-fit: cover'),'Build 734 guide art must not crop');
 assert.ok(!/url\(\s*['"]?https?:/.test(visual),'No new external artwork URLs');
 assert.ok(!/display:\s*none\s*!important/.test(visual),'Do not permanently hide mobile navigation');
+
+// A versioned import in site.css is not enough when old HTML URLs keep a
+// long-lived cached entry sheet. All actual stylesheet links must move together.
+let styledPages = 0;
+function checkSiteStylesheetUrls(dir = '.') {
+  for(const entry of readdirSync(dir,{withFileTypes:true})) {
+    const path = `${dir}/${entry.name}`;
+    if(entry.isDirectory()) {
+      if(!['.git','node_modules','.wrangler','.cache'].includes(entry.name)) checkSiteStylesheetUrls(path);
+    } else if(entry.isFile() && entry.name.endsWith('.html')) {
+      const markup = readFileSync(path,'utf8');
+      for(const match of markup.matchAll(/<link\b[^>]*href="\/assets\/site\.css\?v=([^"]+)"[^>]*>/g)) {
+        styledPages++;
+        assert.equal(match[1],'20261101build734',`Fresh Standard stylesheet cache key required in ${path}`);
+      }
+    }
+  }
+}
+checkSiteStylesheetUrls();
+assert.ok(styledPages >= 150,`Expected the shared live stylesheet in the mirrored public/Admin routes, found ${styledPages}`);
 assert.match(login,/loginForm/);
 assert.match(login,/signupForm/);
 assert.match(admin,/pageKey: 'admin'/);

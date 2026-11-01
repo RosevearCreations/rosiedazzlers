@@ -18,7 +18,7 @@ const pages=['book/index.html','gift-cards/index.html','gift-cards.html','mainte
 for (const page of pages) {
   const html=read(page);
   assert.match(html, /<meta name="viewport"/, page + ' viewport');
-  assert.match(html, /\/assets\/site\.css\?v=build647-responsive/, page + ' current stylesheet');
+  assert.match(html, /\/assets\/site\.css\?v=[a-zA-Z0-9-]+/, page + ' versioned shared stylesheet');
   assert.equal((html.match(/<h1\b/g)||[]).length, 1, page+' single H1');
 }
 const book=read('book/index.html');
