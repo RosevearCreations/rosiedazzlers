@@ -1,0 +1,84 @@
+/* Build 734 — targeted Standard visual repairs. No theme selection, proof-media or account behavior changes. */
+
+/* Static first paint uses exactly the approved wordmark while shared Chrome
+   finishes resolving the data-logo src. Keep the accessible alt for readers,
+   but do not visibly flash a broken-image label during that short interval. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .brand img[data-logo] {
+  background: url("/assets/themes/standard/images/cropgold.png") center / contain no-repeat;
+  color: transparent;
+  font-size: 0;
+}
+
+/* The base .btn display declaration follows .nav-toggle and accidentally displays
+   the mobile toggle alongside the full desktop menu. Keep it mobile-only. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav .nav-toggle {
+  display: none;
+}
+
+@media (min-width: 881px) {
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav-inner {
+    max-width: 1440px;
+    gap: 10px;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav-links {
+    gap: 4px 6px;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav-links a {
+    padding: 7px 8px;
+    white-space: nowrap;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav-inner > .btn.primary {
+    min-height: 44px;
+    padding: 10px 12px;
+    white-space: nowrap;
+  }
+}
+
+/* Preserve keyboard-operable mobile navigation at the original breakpoint. */
+@media (max-width: 880px) {
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav .nav-toggle {
+    display: inline-flex !important;
+    min-width: 44px;
+    min-height: 44px;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .nav-inner > .btn.primary {
+    white-space: normal;
+  }
+}
+
+/* FAQ illustrations are four independently authored Standard images (one 16:9
+   and three 4:3). Contain avoids cutting off subjects at a forced 16:10 crop. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) .faq-access-paths .faq-theme-card-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: contain;
+  object-position: center;
+  background: #10171b;
+}
+
+/* Authenticated Admin: avoid a 280px actor-card minimum breaking narrow devices;
+   let long source paths wrap inside the existing diagnostics and command cards. */
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body[data-page="admin"] .actorcard {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body[data-page="admin"] :is(.admin-command-panel,.ac732-card,.ac733-toolbar,.admin-diagnostics-body) {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+:is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body[data-page="admin"] :is(.admin-tool-controls,.ac733-choices,.ac733-actions) > * {
+  min-width: 0;
+}
+
+@media (max-width: 480px) {
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body[data-page="login"] .login-card,
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body[data-page="admin"] .actorcard {
+    padding-inline: 16px;
+  }
+  :is(:root:not([data-rosie-theme]), :root[data-rosie-theme="standard"]) body[data-page="login"] .login-heading h1 {
+    overflow-wrap: anywhere;
+    font-size: clamp(1.7rem, 8vw, 2.3rem);
+  }
+}
