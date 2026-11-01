@@ -247,8 +247,13 @@ export async function onRequestPost({ request, env }) {
       media_privacy_status: mediaConsentPreference === "public_after_review" ? "needs_review" : "not_needed"
     };
 
-    const capacity = await checkCheckoutCapacity738({ supa, env, pricing, body });
-    if (!capacity.ok) return corsJson({ error: capacity.error, reason: capacity.reason || null }, capacity.status);
+    const bookingConflict = await checkCheckoutCapacity738({ supa, env, pricing, body });
+    if (!bookingConflict.ok) {
+      // Retain the established winter/checkout 409 API contract while the
+      // underlying check now includes dates, blocks, holds and lead time.
+      if (bookingConflict.status === 409) return corsJson({ error: "Selected slot not available" }, 409);
+      return corsJson({ error: bookingConflict.error, reason: bookingConflict.reason || null }, bookingConflict.status);
+    }
 
     const insertBooking = await insertBookingWithOptionalFields(supa, bookingPayload);
     if (!insertBooking.ok) {
