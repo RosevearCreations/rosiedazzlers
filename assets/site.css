@@ -7,3 +7,6 @@
 
 /* Build 647 customer-page layout fixes; preserved Standard theme tokens. */
 @import url("/assets/build647-public-responsive.css?v=build647");
+
+/* Build 734: repaired Standard navigation, FAQ art and narrow Admin/login overflow. */
+@import url("/assets/build734-standard-visual-repair.css?v=20261101build734");
