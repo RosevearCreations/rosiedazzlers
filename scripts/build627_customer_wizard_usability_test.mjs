@@ -9,7 +9,7 @@ assert.deepEqual([1,2,3,4,5].map(n=>wizardStepPresentation627(n).percent),[20,40
 assert.equal(wizardStepPresentation627(-10).current,1);
 assert.equal(wizardStepPresentation627(100).current,5);
 assert.equal(wizardStepPresentation627("bad").current,1);
-assert.equal(wizardStepPresentation627(4).name,"Requirements & review");
+assert.equal(wizardStepPresentation627(4).name,"Address & waiver");
 assert.equal(initBookingWizard627(null),false,"absent document must not cause failure");
 const read=p=>readFileSync(new URL(p,import.meta.url),"utf8");
 const page=read("../booking-planner.html");

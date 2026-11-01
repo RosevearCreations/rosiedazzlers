@@ -219,7 +219,7 @@
       <nav class="wizard-nav" id="wizardNav" aria-label="Booking wizard steps" style="margin-top:14px"></nav>
       <details class="booking-wizard-627__help">
         <summary><span class="booking-wizard-627__info" aria-hidden="true">i</span> How does this booking work?</summary>
-        <p>Start with your preferred date, service area and vehicle. Next choose the detailing package and optional treatments. Review location requirements before entering contact details and continuing to payment.</p>
+        <p>Start with your preferred date, service area and vehicle. Next choose the detailing package and optional treatments. Enter the service address and acknowledge site requirements, then review contact details and continue to payment.</p>
         <p>The availability display does not itself reserve a spot. The server rechecks the date, vehicle size and current price when you submit. Extra restoration, contamination or specialty work may require an estimate instead of a fixed price.</p>
         <p><strong>Payment:</strong> You review your booking and deposit before continuing to your payment provider. A booking is confirmed only after the required payment or other approved confirmation completes.</p>
         <p><a href="/booking-eligibility-preview.html">Not sure about vehicle size? Open the optional vehicle and service fit check.</a> It does not create an appointment or collect a deposit.</p>
@@ -495,11 +495,30 @@
     <section class="section panel wizard-card wizard-step" data-step="4" hidden>
       <div class="step-head">
         <div>
-          <h2>Step 4 — Review vehicle, requirements, and notes</h2>
-          <p class="muted">Confirm safe site access and vehicle notes before payment. Rosie brings its own water and power for standard detailing.</p>
+          <h2>Step 4 — Service address, waiver, and requirements</h2>
+          <p class="muted">Confirm the work location, safe site access and vehicle notes. Rosie brings its own water and power for standard detailing.</p>
         </div>
       </div>
       <div id="reviewVehicleBox" class="summary-box" style="margin-top:12px"></div>
+
+      <div class="grid2" style="margin-top:16px">
+        <div>
+          <label for="address_line1">Service address</label>
+          <input id="address_line1" type="text" autocomplete="street-address" placeholder="123 Main St" required />
+        </div>
+        <div>
+          <label for="city">City</label>
+          <input id="city" type="text" list="city_options" autocomplete="address-level2" placeholder="Town or municipality" />
+          <datalist id="city_options"></datalist>
+        </div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div>
+          <label for="postal_code">Postal code</label>
+          <input id="postal_code" type="text" autocomplete="postal-code" placeholder="N0E 1W0" />
+        </div>
+      </div>
+      <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
 
       <div class="requirements-grid" style="margin-top:16px">
         <label><input id="ack_driveway" type="checkbox" /><span><strong>Driveway and safe access required</strong><br><span data-policy-copy="driveway_access">We need safe working space at the vehicle.</span></span></label>
@@ -556,8 +575,8 @@
     <section class="section panel wizard-card wizard-step" data-step="5" hidden>
       <div class="step-head">
         <div>
-          <h2>Step 5 — Contact details, summary, and pay</h2>
-          <p class="muted">Finalize your booking and continue to deposit payment.</p>
+          <h2>Step 5 — Payment and booking review</h2>
+          <p class="muted">Enter your contact details, review the full estimate and continue to deposit payment.</p>
         </div>
       </div>
 
@@ -572,29 +591,10 @@
         </div>
       </div>
 
-      <div class="grid2" style="margin-top:12px">
-        <div>
-          <label for="customer_phone">Phone</label>
-          <input id="customer_phone" type="tel" placeholder="(555) 555-5555" />
-        </div>
-        <div>
-          <label for="address_line1">Service address</label>
-          <input id="address_line1" type="text" placeholder="123 Main St" required />
-        </div>
+      <div style="margin-top:12px">
+        <label for="customer_phone">Phone (optional)</label>
+        <input id="customer_phone" type="tel" autocomplete="tel" placeholder="(555) 555-5555" />
       </div>
-
-      <div class="grid2" style="margin-top:12px">
-        <div>
-          <label for="city">City</label>
-          <input id="city" type="text" list="city_options" autocomplete="address-level2" placeholder="Town or municipality" />
-          <datalist id="city_options"></datalist>
-        </div>
-        <div>
-          <label for="postal_code">Postal code</label>
-          <input id="postal_code" type="text" placeholder="N0E 1W0" />
-        </div>
-      </div>
-      <div id="addressAreaWarning" class="notice mini" style="display:none;margin-top:10px"></div>
 
       <div class="hr"></div>
       <div class="booking-final-review-631" aria-labelledby="finalReviewHeading631">
@@ -604,7 +604,7 @@
           <button type="button" data-631-edit-step="1" aria-label="Edit date, vehicle and service area">Edit date &amp; vehicle</button>
           <button type="button" data-631-edit-step="2" aria-label="Edit main cleaning package">Edit package</button>
           <button type="button" data-631-edit-step="3" aria-label="Edit optional add-ons">Edit add-ons</button>
-          <button type="button" data-631-edit-step="4" aria-label="Review site and policy requirements">Review requirements</button>
+          <button type="button" data-631-edit-step="4" aria-label="Edit service address and policy acknowledgements">Edit address &amp; waiver</button>
         </div>
         <div id="finalSummary" class="summary-box" role="region" aria-label="Current non-binding booking estimate"></div>
         <p id="finalReviewDisclosure631" class="booking-final-review-631__notice" role="status" aria-live="polite">Estimated amount only. A slot is not held by this review.</p>
@@ -632,6 +632,7 @@
 
   <script type="module">
     import { validateFinalReviewContact631, finalReviewDisclosure631 } from "/assets/booking-final-review-v631.js?v=1";
+    import { createCheckoutAttemptGuard737, validateBookingAddress737, validateBookingChoices737, CHECKOUT_UNCERTAIN_KEY_737 } from "/assets/booking-journey-v737.js?v=20261101build737";
     import {
       loadPricingCatalogClient,
       fetchJsonStrict,
@@ -664,8 +665,8 @@
       { title:"Step 1", subtitle:"Date & vehicle" },
       { title:"Step 2", subtitle:"Main service" },
       { title:"Step 3", subtitle:"Add-ons" },
-      { title:"Step 4", subtitle:"Verify & requirements" },
-      { title:"Step 5", subtitle:"Review & pay" }
+      { title:"Step 4", subtitle:"Address & waiver" },
+      { title:"Step 5", subtitle:"Payment & review" }
     ];
 
     const state = {
@@ -1167,6 +1168,9 @@
         el.setAttribute("role", "alert");
         el.setAttribute("aria-live", "assertive");
         el.setAttribute("tabindex", "-1");
+        if (msg && state.currentStep === step) {
+          try { el.focus({ preventScroll: true }); } catch { el.focus(); }
+        }
       }
       return false;
     }
@@ -1552,6 +1556,18 @@
       renderFinalSummary();
     }
 
+    let stepAdvanceInFlight737 = false;
+    async function advanceWizardStep737(fromStep, targetStep) {
+      if (stepAdvanceInFlight737 || checkoutGuard737.phase !== "idle" || state.currentStep !== fromStep || targetStep !== fromStep + 1) return;
+      stepAdvanceInFlight737 = true;
+      try {
+        const ok = await validateStep(fromStep);
+        if (ok && state.currentStep === fromStep) gotoStep(targetStep);
+      } finally {
+        stepAdvanceInFlight737 = false;
+      }
+    }
+
     function renderWizardNav() {
       const nav = qs("#wizardNav");
       nav.innerHTML = steps.map((step, idx) => {
@@ -1561,10 +1577,10 @@
 
       qsa("[data-step-nav]").forEach((btn) => {
         btn.addEventListener("click", async () => {
+          if (checkoutGuard737.phase !== "idle") return;
           const target = Number(btn.getAttribute("data-step-nav"));
           if (target <= state.currentStep) return gotoStep(target);
-          const ok = await validateStep(state.currentStep);
-          if (ok) gotoStep(target);
+          await advanceWizardStep737(state.currentStep, target);
         });
       });
 
@@ -1590,16 +1606,16 @@
       postEmbedState();
     }
 
-    qs("#prevStepBtn").addEventListener("click", () => gotoStep(state.currentStep - 1));
+    qs("#prevStepBtn").addEventListener("click", () => {
+      if (checkoutGuard737.phase === "idle") gotoStep(state.currentStep - 1);
+    });
     qs("#nextStepBtn").addEventListener("click", async () => {
-      const ok = await validateStep(state.currentStep);
-      if (ok) gotoStep(state.currentStep + 1);
+      await advanceWizardStep737(state.currentStep, state.currentStep + 1);
     });
     qsa("[data-inline-next-step]").forEach((button) => {
       button.addEventListener("click", async () => {
         const fromStep = Number(button.getAttribute("data-inline-next-step") || state.currentStep || 1);
-        const ok = await validateStep(fromStep);
-        if (ok) gotoStep(fromStep + 1);
+        await advanceWizardStep737(fromStep, fromStep + 1);
       });
     });
 
@@ -1777,9 +1793,9 @@
     ["change", "blur"].forEach((evt) => qs("#veh_model").addEventListener(evt, () => onVehicleModelCommit()));
     ["#veh_body", "#veh_category", "#vehicle_size"].forEach((selector) => qs(selector).addEventListener("change", updateSizeHint));
 
-    async function fetchAvailability(date) {
+    async function fetchAvailability(date, { fresh = false } = {}) {
       if (!date) return null;
-      if (state.availabilityCache.has(date)) return state.availabilityCache.get(date);
+      if (!fresh && state.availabilityCache.has(date)) return state.availabilityCache.get(date);
       try {
         const res = await fetch(`/api/availability?date=${encodeURIComponent(date)}`, { cache:"no-store" });
         const out = await res.json().catch(() => null);
@@ -1787,7 +1803,7 @@
         state.availabilityCache.set(date, out);
         return out;
       } catch {
-        state.availabilityCache.set(date, null);
+        state.availabilityCache.delete(date);
         return null;
       }
     }
@@ -1836,6 +1852,7 @@
         btn.addEventListener("click", async () => {
           if (btn.disabled) return;
           qs("#service_date").value = btn.getAttribute("data-date-pill");
+          state.selectedSlotChoice = "";
           analyticsTrack("booking_date_pick", { service_date: qs("#service_date").value });
           await refreshAvailability();
           await loadAvailabilityWindow();
@@ -1850,21 +1867,34 @@
 
     async function refreshAvailability() {
       const date = selectedDate();
-      if (!date) return;
+      if (!date) {
+        state.selectedSlotChoice = "";
+        qsa("[data-slot]").forEach(btn => { btn.disabled = true; btn.classList.remove("active"); });
+        return false;
+      }
 
-      const out = await fetchAvailability(date);
+      // A calendar strip is a snapshot; every step advance and checkout needs a
+      // fresh server response before the customer can retain this slot choice.
+      const out = await fetchAvailability(date, { fresh: true });
+      if (date !== selectedDate()) return false;
       if (!out?.ok) {
-        qs("#availabilityNote").textContent = out?.error || "Could not load availability.";
-        return;
+        state.selectedSlotChoice = "";
+        qsa("[data-slot]").forEach(btn => { btn.disabled = true; btn.classList.remove("active"); });
+        qs("#availabilityNote").textContent = "Current availability could not be confirmed. Please reconnect and choose a slot again.";
+        renderReviewVehicle();
+        renderFinalSummary();
+        return false;
       }
 
       const businessHours = out.business_hours || {};
       const hoursClosed = out.business_hours_conflict === true || businessHours.is_closed === true;
       const map = {
-        AM: !hoursClosed && !!out.AM,
-        PM: !hoursClosed && !!out.PM,
-        FULL: !hoursClosed && !!out.AM && !!out.PM
+        AM: !hoursClosed && !out.blocked && !!out.AM,
+        PM: !hoursClosed && !out.blocked && !!out.PM,
+        FULL: !hoursClosed && !out.blocked && !!out.AM && !!out.PM
       };
+      const noLongerOpen = Boolean(state.selectedSlotChoice && !map[state.selectedSlotChoice]);
+      if (noLongerOpen) state.selectedSlotChoice = "";
 
       qsa("[data-slot]").forEach((btn) => {
         const slot = btn.getAttribute("data-slot");
@@ -1876,15 +1906,12 @@
       });
 
       const hoursNote = hoursClosed ? ` • Business hours/holiday warning: ${businessHours.reason || businessHours.hours_label || out.reason || "closed"}` : (businessHours.hours_label ? ` • Hours: ${businessHours.hours_label}` : "");
-      qs("#availabilityNote").textContent = `Availability for ${date}: AM ${map.AM ? "open" : "booked/closed"}, PM ${map.PM ? "open" : "booked/closed"}${out.blocked ? ` • ${out.reason || "blocked"}` : ""}${hoursNote}.`;
-
-      if (!map[state.selectedSlotChoice]) {
-        state.selectedSlotChoice = map.AM ? "AM" : map.PM ? "PM" : "";
-      }
+      qs("#availabilityNote").textContent = `Availability for ${date}: AM ${map.AM ? "open" : "booked/closed"}, PM ${map.PM ? "open" : "booked/closed"}${out.blocked ? ` • ${out.reason || "blocked"}` : ""}${hoursNote}.${noLongerOpen ? " Your prior slot is no longer open; choose another available time." : ""}`;
 
       qsa("[data-slot]").forEach((btn) => btn.classList.toggle("active", btn.getAttribute("data-slot") === state.selectedSlotChoice));
       renderReviewVehicle();
       renderFinalSummary();
+      return Boolean(state.selectedSlotChoice && map[state.selectedSlotChoice]);
     }
 
     qsa("[data-slot]").forEach((btn) => {
@@ -1899,6 +1926,7 @@
     });
 
     qs("#service_date").addEventListener("change", async () => {
+      state.selectedSlotChoice = "";
       const picked = selectedDate() || null;
       if (picked) {
         const diff = Math.max(0, Math.floor((new Date(`${picked}T12:00:00`) - startOfLocalDay()) / 86400000));
@@ -2130,19 +2158,30 @@
         if (!state.selectedSlotChoice) return showFieldError(1, "Choose an available time slot.");
         if (!qs("#veh_year").value || !qs("#veh_make").value || !qs("#veh_model").value) return showFieldError(1, "Choose the vehicle year, make, and model.");
         if (!selectedSize()) return showFieldError(1, "Choose the vehicle size.");
+        if (!await refreshAvailability()) return showFieldError(1, "That time could not be confirmed against current availability. Choose an open slot again.");
         return true;
       }
 
       if (step === 2) {
         if (!state.selectedPackageCode) return showFieldError(2, "Choose a main service package.");
+        const choice = validateBookingChoices737(state.pricing, state.selectedPackageCode, selectedSize(), []);
+        if (!choice.ok) return showFieldError(choice.step, choice.reason);
         return true;
       }
 
       if (step === 3) {
+        const choice = validateBookingChoices737(state.pricing, state.selectedPackageCode, selectedSize(), Array.from(state.addons));
+        if (!choice.ok) return showFieldError(choice.step, choice.reason);
         return true;
       }
 
       if (step === 4) {
+        const address = validateBookingAddress737({ address:qs("#address_line1").value, postal:qs("#postal_code").value });
+        for (const id of ["address_line1", "postal_code"]) qs("#" + id)?.removeAttribute("aria-invalid");
+        if (!address.ok) {
+          qs("#" + address.field)?.setAttribute("aria-invalid", "true");
+          return showFieldError(4, address.message);
+        }
         if (!qs("#ack_driveway").checked || !qs("#ack_power_water").checked || !qs("#ack_bylaw").checked || !qs("#ack_cancellation").checked) {
           return showFieldError(4, "Please confirm all requirements and policy acknowledgements before moving on.");
         }
@@ -2168,6 +2207,7 @@
     }
 
     qsa("[data-631-edit-step]").forEach(btn=>btn.addEventListener("click",()=>{
+      if (checkoutGuard737.phase !== "idle") return;
       const step=Number(btn.getAttribute("data-631-edit-step"));
       if(Number.isInteger(step)&&step>=1&&step<=4){
         gotoStep(step);
@@ -2185,10 +2225,25 @@
       });
     }
 
+    let uncertainCheckout737 = false;
+    try { uncertainCheckout737 = sessionStorage.getItem(CHECKOUT_UNCERTAIN_KEY_737) === "1"; } catch {}
+    const checkoutGuard737 = createCheckoutAttemptGuard737(uncertainCheckout737);
+    if (uncertainCheckout737) {
+      qs("#checkoutBtn").disabled = true;
+      qs("#checkoutBtn").textContent = "Contact us before another payment attempt";
+    }
+
     qs("#checkoutBtn").addEventListener("click", async () => {
+      if (!checkoutGuard737.begin()) return;
+      const btn = qs("#checkoutBtn");
+      btn.disabled = true;
+      btn.textContent = "Checking booking details…";
       for (let i = 1; i <= 5; i++) {
         const ok = await validateStep(i);
         if (!ok) {
+          checkoutGuard737.releaseForCorrection();
+          btn.disabled = false;
+          btn.textContent = "Book and pay deposit";
           gotoStep(i);
           return;
         }
@@ -2248,9 +2303,8 @@
         ack_cancellation: true
       };
 
-      const btn = qs("#checkoutBtn");
-      btn.disabled = true;
       btn.textContent = "Preparing payment…";
+      checkoutGuard737.markSubmitted();
       analyticsTrack("checkout_started", {
         package_code: state.selectedPackageCode,
         service_area: qs("#service_area").value || null,
@@ -2265,16 +2319,35 @@
           body: JSON.stringify(payload)
         });
         const out = await res.json().catch(() => null);
-        if (!res.ok || !out?.ok || !out?.checkout_url) throw new Error(out?.error || "Checkout failed.");
+        if (!res.ok || !out?.ok || !out?.checkout_url) {
+          const failure = new Error(out?.error || "Checkout could not be verified.");
+          // A definite input rejection can be corrected. A missing redirect,
+          // server error, or uncertain payment-session state must not replay.
+          failure.safeToCorrect = [400, 422].includes(res.status) ||
+            (res.status === 409 && out?.recovery_state === "stale_availability");
+          throw failure;
+        }
+        checkoutGuard737.markRedirect();
         analyticsTrack("checkout_redirect", { booking_id: out.booking_id || null, provider:"stripe" });
         location.href = out.checkout_url;
       } catch (err) {
         analyticsTrack("checkout_error", { message: err?.message || "Checkout failed." });
+        const needsManualReview = err?.safeToCorrect !== true;
         showStatus((err?.message || "Checkout could not be completed.") +
-          " No confirmation has been made by this form. Review your details and availability before retrying.", "bad");
+          (needsManualReview
+            ? " No confirmation has been made by this form. The request may already have reached payment setup; do not submit another booking. Check your email and contact Rosie Dazzlers to verify the status."
+            : " No confirmation has been made by this form. Review your details and availability before retrying."), "bad");
         try{qs("#bookingStatus")?.focus({preventScroll:true});}catch{qs("#bookingStatus")?.focus();}
-        btn.disabled = false;
-        btn.textContent = "Book and pay deposit";
+        if (needsManualReview) {
+          checkoutGuard737.markUncertain();
+          try { sessionStorage.setItem(CHECKOUT_UNCERTAIN_KEY_737, "1"); } catch {}
+          btn.disabled = true;
+          btn.textContent = "Contact us before another payment attempt";
+        } else {
+          checkoutGuard737.releaseForCorrection();
+          btn.disabled = false;
+          btn.textContent = "Book and pay deposit";
+        }
       }
     });
 
@@ -2358,10 +2431,10 @@
     }
   </script>
 
-  <script type="module" src="/assets/booking-wizard-v627.js?v=1"></script>
-  <script type="module" src="/assets/booking-context-help-v628.js?v=1"></script>
+  <script type="module" src="/assets/booking-wizard-v627.js?v=20261101build737"></script>
+  <script type="module" src="/assets/booking-context-help-v628.js?v=20261101build737"></script>
   <script type="module" src="/assets/chrome.js?v=20261025build656"></script>
-  <script src="/assets/site-policies.js?v=20261101build736" defer></script>
+  <script src="/assets/site-policies.js?v=20261101build737" defer></script>
   <script src="/assets/booking-hours.js" defer></script>
 </body>
 </html>
