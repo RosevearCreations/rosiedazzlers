@@ -9,6 +9,7 @@ import { loadEditableSetting } from "./_lib/editable-settings.js";
 import { serviceHeaders } from "./_lib/staff-auth.js";
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { buildCapacityCalendarIntelligence, resolveTravelContext } from "./_lib/capacity-calendar-intelligence.js";
+import { evaluateCapacity738 } from "./_lib/booking-capacity-v738.js";
 
 export async function onRequestOptions() {
   return new Response(null, { status: 204, headers: corsHeaders() });
@@ -51,6 +52,7 @@ export async function onRequestGet({ request, env }) {
     const businessHours = await loadBusinessHoursStatus(env, date);
     const holidayClosed = businessHours?.is_closed === true;
     const travelContext = await loadRequestedTravelContext(env, requestedServiceArea);
+    const minimumLeadDays = await loadMinimumLeadDays738(env);
 
     // ---- 1) Full-day block? ----
     const dayBlock = await supaGet(
@@ -63,6 +65,8 @@ export async function onRequestGet({ request, env }) {
 
     if (Array.isArray(dayBlock.data) && dayBlock.data.length > 0) {
       const reason = dayBlock.data[0]?.reason ?? "Blocked";
+      const capacity = evaluateCapacity738({ date, dateBlocks: dayBlock.data, businessHours, minimumLeadDays,
+        requestedStartSlot, requestedDurationSlots });
       return json({
         ok: true,
         date,
@@ -72,6 +76,7 @@ export async function onRequestGet({ request, env }) {
         PM: false,
         business_hours: businessHours,
         business_hours_conflict: holidayClosed,
+        capacity_reconciliation_738: capacity,
         capacity_intelligence: buildCapacityCalendarIntelligence({
           AM: false,
           PM: false,
@@ -85,10 +90,6 @@ export async function onRequestGet({ request, env }) {
       });
     }
 
-    // Start as open unless editable hours/holiday settings say closed.
-    let AM = !holidayClosed;
-    let PM = !holidayClosed;
-
     // ---- 2) Slot blocks ----
     const slotBlocks = await supaGet(
       `/rest/v1/slot_blocks?select=blocked_date,slot,reason&blocked_date=eq.${encodeURIComponent(date)}`
@@ -99,31 +100,22 @@ export async function onRequestGet({ request, env }) {
     }
 
     const slots = Array.isArray(slotBlocks.data) ? slotBlocks.data : [];
-    for (const s of slots) {
-      const slot = String(s.slot || "").toUpperCase();
-      if (slot === "AM") AM = false;
-      if (slot === "PM") PM = false;
-    }
 
     // ---- 3) Bookings reserve slots ----
     const bookings = await supaGet(
-      `/rest/v1/bookings?select=status,start_slot,duration_slots&service_date=eq.${encodeURIComponent(date)}&status=in.(pending,confirmed)`
+      `/rest/v1/bookings?select=id,status,job_status,start_slot,duration_slots&service_date=eq.${encodeURIComponent(date)}&status=in.(pending,confirmed)`
     );
 
     if (!bookings.ok) {
       return json({ ok: false, error: "Supabase error (bookings)", details: bookings }, 502);
     }
 
-    for (const b of (bookings.data || [])) {
-      const dur = Number(b.duration_slots);
-      const start = String(b.start_slot || "").toUpperCase();
+    const capacity = evaluateCapacity738({ date, bookings: bookings.data, slotBlocks: slots, businessHours,
+      minimumLeadDays, requestedStartSlot, requestedDurationSlots });
+    const { AM, PM } = capacity;
 
-      if (dur === 2) { AM = false; PM = false; break; }
-      if (dur === 1 && start === "AM") AM = false;
-      if (dur === 1 && start === "PM") PM = false;
-    }
-
-    const reason = holidayClosed ? (businessHours?.reason || businessHours?.hours_label || "Closed by business-hours settings") : null;
+    const reason = holidayClosed ? (businessHours?.reason || businessHours?.hours_label || "Closed by business-hours settings")
+      : capacity.reasons.includes("lead_time_not_met") ? "Minimum booking lead time not met" : null;
     return json({
       ok: true,
       date,
@@ -133,6 +125,7 @@ export async function onRequestGet({ request, env }) {
       PM,
       business_hours: businessHours,
       business_hours_conflict: holidayClosed,
+      capacity_reconciliation_738: capacity,
       capacity_intelligence: buildCapacityCalendarIntelligence({
         AM,
         PM,
@@ -163,7 +156,14 @@ async function loadRequestedTravelContext(env, requestedServiceArea) {
   }
 }
 
-async function loadBusinessHoursStatus(env, dateText) {
+async function loadMinimumLeadDays738(env) {
+  try {
+    const catalog = await loadPricingCatalog(env);
+    return catalog?.booking_rules?.minimum_lead_days ?? 0;
+  } catch { return 0; }
+}
+
+export async function loadBusinessHoursStatus(env, dateText) {
   const fallback = {
     date: dateText,
     day: dayKeyForDate(dateText),

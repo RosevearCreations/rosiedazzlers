@@ -7,6 +7,8 @@
 import { loadPricingCatalog } from "./_lib/pricing-catalog.js";
 import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib/booking-location.js";
 import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
+import { evaluateCapacity738 } from "./_lib/booking-capacity-v738.js";
+import { loadBusinessHoursStatus } from "./availability.js";
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -121,37 +123,8 @@ export async function onRequestPost({ request, env }) {
       return { ok: res.ok, status: res.status, data: text ? safeJson(text) : null, raw: text };
     };
 
-    const blk = await supa("GET", `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${encodeURIComponent(body.service_date)}`);
-    if (!blk.ok) return corsJson({ error: "Supabase error (date_blocks)", details: blk.raw }, 500);
-    if (Array.isArray(blk.data) && blk.data.length) return corsJson({ error: "Date is blocked", reason: blk.data[0]?.reason ?? "Blocked" }, 409);
-
-    const slotBlocks = await supa("GET", `/rest/v1/slot_blocks?select=blocked_date,slot,reason&blocked_date=eq.${encodeURIComponent(body.service_date)}`);
-    if (!slotBlocks.ok) return corsJson({ error: "Supabase error (slot_blocks)", details: slotBlocks.raw }, 500);
-    let slotAM = true, slotPM = true;
-    for (const s of Array.isArray(slotBlocks.data) ? slotBlocks.data : []) {
-      const slot = String(s.slot || "").toUpperCase();
-      if (slot === "AM") slotAM = false;
-      if (slot === "PM") slotPM = false;
-    }
-    if (Number(body.duration_slots) === 2 && (!slotAM || !slotPM)) return corsJson({ error: "Selected slot not available" }, 409);
-    if (Number(body.duration_slots) === 1 && String(body.start_slot) === "AM" && !slotAM) return corsJson({ error: "Selected slot not available" }, 409);
-    if (Number(body.duration_slots) === 1 && String(body.start_slot) === "PM" && !slotPM) return corsJson({ error: "Selected slot not available" }, 409);
-
-    const HOLD_MINUTES = Number(pricing?.booking_rules?.hold_minutes || 30) || 30;
-    const holdSince = new Date(Date.now() - HOLD_MINUTES * 60 * 1000).toISOString();
-    const bookingConflict = await supa(
-      "GET",
-      `/rest/v1/bookings?select=id,status,service_date,start_slot,duration_slots,created_at&service_date=eq.${encodeURIComponent(body.service_date)}` +
-      `&or=(status.eq.confirmed,and(status.eq.pending,created_at.gte.${encodeURIComponent(holdSince)}))`
-    );
-    if (!bookingConflict.ok) return corsJson({ error: "Supabase error (bookings)", details: bookingConflict.raw }, 500);
-    const conflicts = Array.isArray(bookingConflict.data) ? bookingConflict.data : [];
-    const requestedSlots = Number(body.duration_slots) === 2 ? ["AM","PM"] : [String(body.start_slot)];
-    const isBlocked = conflicts.some((row) => {
-      const existing = Number(row.duration_slots) === 2 ? ["AM","PM"] : [String(row.start_slot)];
-      return existing.some((slot) => requestedSlots.includes(slot));
-    });
-    if (isBlocked) return corsJson({ error: "Selected slot not available" }, 409);
+    // Fresh check is performed immediately before the insert below. A DB
+    // advisory-lock trigger is the final authority for concurrent requests.
 
     let promoApplied = null;
     const promoCodeRaw = String(body.promo_code || "").trim();
@@ -249,7 +222,9 @@ export async function onRequestPost({ request, env }) {
       postal_code: body.postal_code || null,
       notes: notes.join(" ") || null,
       status: payableDepositCents === 0 ? "confirmed" : "pending",
-      job_status: payableDepositCents === 0 ? "confirmed" : "intake",
+      // Database job state is distinct from payment status: only scheduled,
+      // in_progress, completed and cancelled are valid job_status values.
+      job_status: "scheduled",
       price_total_cents: totalCents,
       deposit_cents: depositCents,
       payment_provider: payableDepositCents === 0 ? "gift" : String(body.payment_provider || "stripe").trim().toLowerCase(),
@@ -272,8 +247,16 @@ export async function onRequestPost({ request, env }) {
       media_privacy_status: mediaConsentPreference === "public_after_review" ? "needs_review" : "not_needed"
     };
 
+    const capacity = await checkCheckoutCapacity738({ supa, env, pricing, body });
+    if (!capacity.ok) return corsJson({ error: capacity.error, reason: capacity.reason || null }, capacity.status);
+
     const insertBooking = await insertBookingWithOptionalFields(supa, bookingPayload);
-    if (!insertBooking.ok) return corsJson({ error: "Could not create booking.", details: insertBooking.raw }, 500);
+    if (!insertBooking.ok) {
+      if (insertBooking.status === 409 || insertBooking.data?.code === "23505") {
+        return corsJson({ error: "Selected date or slot was just reserved. Please check availability again.", reason: "one_car_capacity_conflict" }, 409);
+      }
+      return corsJson({ error: "Could not create booking.", details: insertBooking.raw }, 500);
+    }
     const booking = Array.isArray(insertBooking.data) ? insertBooking.data[0] || null : null;
     if (!booking?.id) return corsJson({ error: "Booking could not be created." }, 500);
 
@@ -305,6 +288,26 @@ export async function onRequestPost({ request, env }) {
   } catch (err) {
     return corsJson({ error: err && err.message ? err.message : "Unexpected server error." }, 500);
   }
+}
+
+async function checkCheckoutCapacity738({ supa, env, pricing, body }) {
+  const date = String(body.service_date);
+  const q = encodeURIComponent(date);
+  const [dates, slots, bookings, hours] = await Promise.all([
+    supa("GET", `/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${q}`),
+    supa("GET", `/rest/v1/slot_blocks?select=slot,reason&blocked_date=eq.${q}`),
+    supa("GET", `/rest/v1/bookings?select=id,status,job_status,start_slot,duration_slots&service_date=eq.${q}&status=in.(pending,confirmed)`),
+    loadBusinessHoursStatus(env, date)
+  ]);
+  if (!dates.ok || !slots.ok || !bookings.ok) return { ok: false, status: 503, error: "Availability could not be verified. Please try again." };
+  const review = evaluateCapacity738({ date, dateBlocks: dates.data, slotBlocks: slots.data,
+    bookings: bookings.data, businessHours: hours,
+    minimumLeadDays: pricing?.booking_rules?.minimum_lead_days ?? 0,
+    requestedStartSlot: body.start_slot, requestedDurationSlots: body.duration_slots });
+  if (!review.ok || review.requested_fit !== true) {
+    return { ok: false, status: 409, error: "Selected date or slot is no longer available.", reason: review.reasons?.join(", ") || "capacity_unavailable" };
+  }
+  return { ok: true };
 }
 
 function buildConditionFlagRows(labels, codes) {

@@ -204,6 +204,11 @@
             <span class="calendar-legend-chip is-partial">AM / PM blocked</span>
             <span id="blockApiHealth" class="block-api-health" data-state="loading">Schedule API loading</span>
           </div>
+          <div class="panel" style="margin-top:12px">
+            <label for="ownerExceptionReason738"><strong>Owner scheduling exception review</strong></label>
+            <p class="kicker">Unblocking a date or AM/PM slot requires an authenticated admin session and an auditable reason of at least 20 characters. Existing booking holds cannot be overridden. Check staff coverage and travel before releasing a block.</p>
+            <textarea id="ownerExceptionReason738" rows="2" minlength="20" maxlength="2000" placeholder="Why is this blocked time safe to release? Include staff coverage, travel and owner decision."></textarea>
+          </div>
           <div class="block-calendar-summary" aria-label="Current month block summary">
             <div class="block-calendar-stat"><strong id="monthOpenCount">—</strong><span>available dates</span></div>
             <div class="block-calendar-stat"><strong id="monthClosedCount">—</strong><span>full blocked dates</span></div>
@@ -295,6 +300,12 @@
       const result = await runtime.requestJson(url, { method: "POST", body: body || {}, password: password || undefined });
       if (!result.ok) throw new Error(runtime.normalizeError(result, `Request failed for ${url}`));
       return result.data || {};
+    }
+
+    function ownerReleaseReason738() {
+      const reason = String(document.querySelector('#ownerExceptionReason738')?.value || '').trim();
+      if (reason.length < 20) throw new Error('Owner scheduling exception requires a reason of at least 20 characters.');
+      return reason;
     }
 
     function startOfMonth(input) {
@@ -487,7 +498,8 @@
           try {
             setNotice("Removing date block…");
             await apiPost("/api/admin/unblock_date", currentPassword, {
-              blocked_date: btn.getAttribute("data-unblock-date")
+              blocked_date: btn.getAttribute("data-unblock-date"),
+              override_reason: ownerReleaseReason738()
             });
             await refreshBlocks();
             setNotice("Date block removed.", "ok");
@@ -530,7 +542,8 @@
             setNotice("Removing slot block…");
             await apiPost("/api/admin/unblock_slot", currentPassword, {
               blocked_date: btn.getAttribute("data-unblock-slot-date"),
-              slot: btn.getAttribute("data-unblock-slot-value")
+              slot: btn.getAttribute("data-unblock-slot-value"),
+              override_reason: ownerReleaseReason738()
             });
             await refreshBlocks();
             setNotice("Slot block removed.", "ok");
@@ -694,8 +707,8 @@
             await withBusy(button,'Saving…',async()=>{
               if (action === 'block_date') await apiPost('/api/admin/block_date', currentPassword, { blocked_date:selectedDate, reason:document.querySelector('#blockDateReason').value.trim() });
               if (action === 'block_am' || action === 'block_pm') await apiPost('/api/admin/block_slot', currentPassword, { blocked_date:selectedDate, slot:action.endsWith('am')?'AM':'PM', reason:document.querySelector('#blockSlotReason').value.trim() });
-              if (action === 'unblock_date') await apiPost('/api/admin/unblock_date', currentPassword, { blocked_date:selectedDate });
-              if (action === 'unblock_am' || action === 'unblock_pm') await apiPost('/api/admin/unblock_slot', currentPassword, { blocked_date:selectedDate, slot:action.endsWith('am')?'AM':'PM' });
+              if (action === 'unblock_date') await apiPost('/api/admin/unblock_date', currentPassword, { blocked_date:selectedDate, override_reason:ownerReleaseReason738() });
+              if (action === 'unblock_am' || action === 'unblock_pm') await apiPost('/api/admin/unblock_slot', currentPassword, { blocked_date:selectedDate, slot:action.endsWith('am')?'AM':'PM', override_reason:ownerReleaseReason738() });
               await refreshBlocks();
             });
             setNotice(`Updated ${formatLongDate(selectedDate)}.`, 'ok');

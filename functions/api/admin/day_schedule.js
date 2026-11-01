@@ -23,6 +23,7 @@ import {
   methodNotAllowed,
   cleanText
 } from "../_lib/staff-auth.js";
+import { occupiedSlots738, isActiveBookingHold738 } from "../_lib/booking-capacity-v738.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -126,6 +127,7 @@ export async function onRequestPost(context) {
           id: row.id,
           service_date: row.service_date || null,
           start_slot: normalizeSlot(row.start_slot) || row.start_slot || null,
+          duration_slots: Number(row.duration_slots) || 2,
           status: row.status || null,
           job_status: row.job_status || null,
           customer_name: row.customer_name || null,
@@ -180,7 +182,7 @@ function buildSlotBlocksUrl(env, service_date) {
 function buildBookingsUrl(env, service_date) {
   return (
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-    `?select=id,service_date,start_slot,status,job_status,customer_name,customer_email,customer_phone,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,created_at` +
+    `?select=id,service_date,start_slot,duration_slots,status,job_status,customer_name,customer_email,customer_phone,package_code,vehicle_size,assigned_to,assigned_staff_user_id,assigned_staff_email,assigned_staff_name,progress_enabled,created_at` +
     `&service_date=eq.${encodeURIComponent(service_date)}` +
     `&order=created_at.desc`
   );
@@ -204,11 +206,11 @@ function summarizeSlots(slotBlocks, bookings) {
     blockMap.set(slot, current);
   }
 
-  const activeBookings = bookings.filter((row) => !isCancelled(row.status, row.job_status));
+  const activeBookings = bookings.filter(isActiveBookingHold738);
 
-  const amBookings = activeBookings.filter((row) => bookingUsesSlot(row.start_slot, "AM"));
-  const pmBookings = activeBookings.filter((row) => bookingUsesSlot(row.start_slot, "PM"));
-  const fullDayBookings = activeBookings.filter((row) => normalizeSlot(row.start_slot) === "FULL");
+  const amBookings = activeBookings.filter((row) => occupiedSlots738(row).includes("AM"));
+  const pmBookings = activeBookings.filter((row) => occupiedSlots738(row).includes("PM"));
+  const fullDayBookings = activeBookings.filter((row) => occupiedSlots738(row).length === 2);
 
   return {
     AM: {
@@ -245,7 +247,7 @@ function summarizeSlots(slotBlocks, bookings) {
         amBookings.length === 0 &&
         pmBookings.length === 0,
       bookings: activeBookings
-        .filter((row) => bookingUsesSlot(row.start_slot, "AM") || bookingUsesSlot(row.start_slot, "PM"))
+        .filter((row) => occupiedSlots738(row).length > 0)
         .map(slimBooking)
     }
   };
@@ -255,6 +257,7 @@ function slimBooking(row) {
   return {
     id: row.id,
     start_slot: normalizeSlot(row.start_slot) || row.start_slot || null,
+    duration_slots: Number(row.duration_slots) || 2,
     status: row.status || null,
     job_status: row.job_status || null,
     customer_name: row.customer_name || null,
