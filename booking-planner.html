@@ -644,7 +644,7 @@
       packageImageForSize as sharedPackageImageForSize,
       packagePrice as sharedPackagePrice,
       chartUrl
-    } from "/assets/pricing-catalog-client.js?v=20260412pass12";
+    } from "/assets/pricing-catalog-client.js?v=20261101build735";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
 
     const DATA_FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
@@ -1933,7 +1933,7 @@
           ${pkg.display_alias ? `<span class="package-alias">${escapeHtml(pkg.display_alias)}</span>` : ""}
           <span class="muted package-note">${escapeHtml(pkg.best_for || pkg.subtitle || "")}</span>
           ${pkg.customer_goal ? `<span class="tag warn">${escapeHtml(pkg.customer_goal)}</span>` : ""}
-          <span class="tag ok">${price != null ? money(price) : "Choose size first"}</span>
+          <span class="tag ok">${price != null && Number(price) > 0 ? `Starting at: ${money(price)}` : (size ? "Confirm price" : "Choose size first")}</span>
           <span class="muted mini">Deposit ${money(pkg.deposit_cad || 0)}</span>
         </button>`;
       }).join("");
@@ -1978,10 +1978,10 @@
       const amount = Number(raw);
       if (addon?.quote_required === true) {
         return Number.isFinite(amount) && amount > 0
-          ? `From ${money(amount)} · condition assessed`
+          ? `Starting at: ${money(amount)} · condition assessed`
           : "Condition quote";
       }
-      return Number.isFinite(amount) && amount > 0 ? `From ${money(amount)}` : "Ask for price";
+      return Number.isFinite(amount) && amount > 0 ? `Starting at: ${money(amount)}` : "Ask for price";
     }
 
     function renderAddons() {

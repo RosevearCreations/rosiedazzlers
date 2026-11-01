@@ -84,3 +84,4 @@ node scripts/build731_owner_evidence_workbench_test.mjs
 node scripts/build732_modern_admin_command_cards_test.mjs
 node scripts/build733_admin_navigation_saved_views_test.mjs
 node scripts/build734_standard_theme_visual_repair_test.mjs
+node scripts/build735_canonical_pricing_starting_at_test.mjs

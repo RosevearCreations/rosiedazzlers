@@ -107,12 +107,12 @@ function addonFallbackForCode(code) {
 
 function addonDisplay(addon, size) {
   if (addon.quote_required === true) {
-    if (addon.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
-    if (addon.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
+    if (addon.prices_cad?.[size] != null) return `Starting at: ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon.price_cad != null) return `Starting at: ${money(addon.price_cad)} · Quote required`;
     return "Quote required";
   }
-  if (addon.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon.price_cad != null) return money(addon.price_cad);
+  if (addon.prices_cad?.[size] != null) return `Starting at: ${money(addon.prices_cad[size])}`;
+  if (addon.price_cad != null) return `Starting at: ${money(addon.price_cad)}`;
   return "Quote required";
 }
 
@@ -303,7 +303,7 @@ function renderMainPackages(cardsEl, data, size) {
       ${mediaHtml}
       <h3>${pkg.name}</h3>
       <p>${pkg.subtitle || ""}</p>
-      <div class="price">${money(price)} <span class="kicker">(${size.toUpperCase()})</span></div>
+      <div class="price">${price > 0 ? `Starting at: ${money(price)}` : "Confirm price"} <span class="kicker">(${size.toUpperCase()})</span></div>
       <div class="kicker">Deposit: ${money(deposit)}</div>
       <div class="hr"></div>
       <ul class="list">${included}</ul>

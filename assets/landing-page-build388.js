@@ -191,13 +191,13 @@ function addonPriceSummary(addon) {
   if (hasPositiveMoney(sizeMap.oversize)) parts.push(`Oversize ${money(sizeMap.oversize)}`);
 
   if (addon.quote_required === true) {
-    if (parts.length) return `From ${parts.join(" • ")} • Quote required`;
-    if (hasPositiveMoney(addon.price_cad)) return `From ${money(addon.price_cad)} • Quote required`;
+    if (parts.length) return `Starting at: ${parts.join(" • ")} • Quote required`;
+    if (hasPositiveMoney(addon.price_cad)) return `Starting at: ${money(addon.price_cad)} • Quote required`;
     return "Quote required after inspection";
   }
 
-  if (parts.length) return parts.join(" • ");
-  if (hasPositiveMoney(addon.price_cad)) return `Starting at ${money(addon.price_cad)}`;
+  if (parts.length) return `Starting at: ${parts.join(" • ")}`;
+  if (hasPositiveMoney(addon.price_cad)) return `Starting at: ${money(addon.price_cad)}`;
   return "";
 }
 

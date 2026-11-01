@@ -426,12 +426,12 @@ export function buildLivePricingChartSvg(catalog) {
   }));
   return renderSvgTableChart({
     title: 'Vehicle Price Chart',
-    subtitle: 'Generated live from the current Rosie Dazzlers pricing catalog.',
+    subtitle: 'Generated live from the current catalog. All package amounts are starting prices; deposits are exact.',
     columns: [
       { index: 0, label: 'Package', width: 2.4 },
-      { index: 1, label: 'Small', width: 1.05 },
-      { index: 2, label: 'Mid-sized', width: 1.15 },
-      { index: 3, label: 'Oversize / exotic', width: 1.35 },
+      { index: 1, label: 'Small · Starting at:', width: 1.05 },
+      { index: 2, label: 'Mid-sized · Starting at:', width: 1.15 },
+      { index: 3, label: 'Oversize · Starting at:', width: 1.35 },
       { index: 4, label: 'Deposit', width: 1.05 }
     ],
     rows,
@@ -618,13 +618,13 @@ export function applyJsonLdScript(scriptId, payload) {
 
 export function addonDisplay(addon, size) {
   if (addon?.quote_required === true) {
-    if (addon?.prices_cad?.[size] != null) return `From ${money(addon.prices_cad[size])} · Quote required`;
-    if (addon?.price_cad != null) return `From ${money(addon.price_cad)} · Quote required`;
+    if (addon?.prices_cad?.[size] != null) return `Starting at: ${money(addon.prices_cad[size])} · Quote required`;
+    if (addon?.price_cad != null) return `Starting at: ${money(addon.price_cad)} · Quote required`;
     return "Quote required";
   }
-  if (addon?.prices_cad?.[size] != null) return money(addon.prices_cad[size]);
-  if (addon?.price_cad != null) return `From ${money(addon.price_cad)}`;
-  return "$—";
+  if (addon?.prices_cad?.[size] != null) return `Starting at: ${money(addon.prices_cad[size])}`;
+  if (addon?.price_cad != null) return `Starting at: ${money(addon.price_cad)}`;
+  return "Confirm price";
 }
 
 export function bookingRules(catalog) {

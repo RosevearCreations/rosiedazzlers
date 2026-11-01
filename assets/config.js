@@ -26,8 +26,8 @@ export function assetUrl(folder, filename) {
   return `${ASSETS_BASE}/${folder}/${encodeURIComponent(filename)}`.replaceAll("%2F", "/");
 }
 
-// Must match backend pricing keys in functions/api/checkout.js
-// Values are cents (CAD) from your current pricing chart.
+// Legacy client reference only; checkout reads the canonical server catalog.
+// Keep this unused shadow map in parity with the already approved size tiers.
 export const PRICING = {
   premium_wash: {
     label: "Premium Wash",
@@ -39,9 +39,9 @@ export const PRICING = {
   basic_detail: {
     label: "Basic Detail",
     subtitle: "Basic interior clean",
-    small: 11500,
-    mid: 13500,
-    oversize: 17000,
+    small: 22900,
+    mid: 26900,
+    oversize: 30900,
   },
   complete_detail: {
     label: "Complete Detail",
