@@ -6,7 +6,8 @@ import {
   addonPrimaryImage,
   addonFallbackImage,
   escapeHtml
-} from "/assets/pricing-catalog-client-legacy.js?v=20260904build336";
+} from "/assets/pricing-catalog-client-legacy.js?v=20261101build735";
+import { addonGuidance736 } from "/assets/service-addon-guidance-v736.js?v=20261101build736";
 
 const GUIDE_ROUTES = Object.freeze({
   full_clay_treatment: "/full-clay-treatment",
@@ -54,11 +55,13 @@ function injectStyles() {
     .addon-rich-media:hover img,.addon-rich-media:focus-visible img{transform:scale(1.025)}
     .addon-rich-media:focus-visible,.addon-rich-title:focus-visible,.addon-rich-guide:focus-visible{outline:3px solid rgba(221,177,100,.95);outline-offset:2px}
     .addon-rich-body{display:flex;flex:1;flex-direction:column;gap:10px;padding:13px 14px 14px}
-    .addon-rich-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+    .addon-rich-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;min-width:0}
     .addon-rich-title{color:inherit;text-decoration:none;font-weight:800;font-size:1.05rem;line-height:1.25}
     .addon-rich-title:hover{text-decoration:underline;text-underline-offset:3px}
-    .addon-rich-price{flex:0 0 auto;font-weight:850;white-space:nowrap;color:#fff}
+    .addon-rich-price{flex:0 1 auto;min-width:0;font-weight:850;white-space:normal;overflow-wrap:anywhere;color:#fff;font-size:.9rem;line-height:1.45}
     .addon-rich-summary{margin:0;color:rgba(234,242,255,.78);font-size:.91rem;line-height:1.42}
+    .addon-rich-prices{display:grid;gap:6px;min-width:0}
+    .addon-rich-prices .addon-sizes-736{margin:0}
     .addon-rich-facts{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto}
     .addon-rich-chip{display:inline-flex;align-items:center;min-height:28px;padding:4px 8px;border:1px solid rgba(255,255,255,.12);border-radius:999px;background:rgba(255,255,255,.04);color:rgba(234,242,255,.78);font-size:.78rem;line-height:1.2}
     .addon-rich-chip.quote{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.08)}
@@ -124,6 +127,7 @@ function enhanceButton(button) {
   const checked = button.getAttribute("aria-pressed") === "true" || button.classList.contains("active");
   const disabled = button.disabled;
   const meta = currentButtonMeta(button);
+  const guidance = addonGuidance736(addon, String(document.querySelector("#vehicleSize")?.value || ""));
   const note = disabled && meta.note && meta.note.toLowerCase() !== String(addon.category || "").toLowerCase()
     ? meta.note
     : "";
@@ -143,7 +147,13 @@ function enhanceButton(button) {
 
   const body = document.createElement("div");
   body.className = "addon-rich-body";
-  const quoteChip = addon.quote_required ? `<span class="addon-rich-chip quote">Photo / condition quote</span>` : "";
+  const quoteChip = guidance.quote_required ? `<span class="addon-rich-chip quote">Quote required · assessment</span>` : "";
+  const amount = cents => cents == null ? "Confirm price" : `Starting at: $${(cents/100).toFixed(2)}`;
+  const tierMarkup = guidance.has_size_tiers
+    ? `<div class="addon-sizes-736" aria-label="Vehicle-size starting prices">${guidance.tiers.map(tier=>
+      `<span class="addon-sizes-736__tier ${guidance.selected_size===tier.size?"is-current":""}"><span>${escapeHtml(tier.label)}</span><strong>${escapeHtml(amount(tier.cents))}</strong></span>`
+    ).join("")}</div>`
+    : `<p class="addon-quote-736">${guidance.base_cents != null ? escapeHtml(amount(guidance.base_cents)) : "No fixed amount published; contact us for a quote."}</p>`;
   const duration = String(addon.duration_label || "Time varies by condition").trim();
   const category = String(addon.category || addon.type || "Specialty service").trim();
   body.innerHTML = `
@@ -152,6 +162,10 @@ function enhanceButton(button) {
       <span class="addon-rich-price">${escapeHtml(meta.price)}</span>
     </div>
     <p class="addon-rich-summary">${escapeHtml(summaryFor(addon))}</p>
+    <div class="addon-rich-prices">${tierMarkup}
+      ${guidance.quote_required ? `<p class="addon-quote-736"><strong>Individual quote before approval.</strong> ${escapeHtml(guidance.guidance)}${guidance.assessment_basis?`<span class="addon-quote-736__basis">Assessment factors: ${escapeHtml(guidance.assessment_basis)}</span>`:""}</p>`
+        : `<p class="addon-quote-736">${escapeHtml(guidance.guidance)}</p>`}
+    </div>
     <div class="addon-rich-facts">
       <span class="addon-rich-chip">${escapeHtml(category)}</span>
       <span class="addon-rich-chip">${escapeHtml(duration)}</span>
@@ -163,7 +177,7 @@ function enhanceButton(button) {
 
   const actions = body.querySelector(".addon-rich-actions");
   button.classList.add("addon-rich-select");
-  button.innerHTML = `<span class="addon-indicator" aria-hidden="true">${checked ? "✓" : "+"}</span><span>${disabled ? "Choose compatible package" : checked ? "Added to booking" : "Add to booking"}</span>`;
+  button.innerHTML = `<span class="addon-indicator" aria-hidden="true">${checked ? "✓" : "+"}</span><span>${disabled ? "Choose compatible package" : checked ? (guidance.quote_required ? "Quote review selected" : "Added to booking") : (guidance.quote_required ? "Add for quote review" : "Add to booking")}</span>`;
   button.setAttribute("aria-label", `${checked ? "Remove" : "Add"} ${addon.name}${disabled ? " — choose a compatible package first" : ""}`);
 
   const guide = document.createElement("a");
