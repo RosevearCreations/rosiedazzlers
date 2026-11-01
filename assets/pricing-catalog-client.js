@@ -2,8 +2,8 @@
 // The original pricing catalogue implementation is retained verbatim in pricing-catalog-client-legacy.js.
 // This wrapper keeps that API stable while converging public booking presentation on the retained Rosie rule:
 // Rosie brings standard detailing water and power; customers provide a safe/private work area.
-import * as legacy from "./pricing-catalog-client-legacy.js";
-export * from "./pricing-catalog-client-legacy.js";
+import * as legacy from "./pricing-catalog-client-legacy.js?v=20261101build735";
+export * from "./pricing-catalog-client-legacy.js?v=20261101build735";
 
 const ROSIE_PUBLIC_REQUIREMENTS = Object.freeze([
   "Driveway/private work area preferred",
