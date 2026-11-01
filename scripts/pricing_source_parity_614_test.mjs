@@ -57,6 +57,7 @@ const routeHtml = readFileSync(new URL("../admin/index.html", import.meta.url), 
 assert.equal(rootHtml, routeHtml, "admin route mirrors must remain identical");
 assert.match(rootHtml, /pricingSourceParity614/);
 assert.match(rootHtml, /loadPricingSourceParity614/);
-assert.match(rootHtml, /OWNER PRICE REVIEW REQUIRED/);
+assert.match(rootHtml, /SOURCE VERIFICATION \/ PRICE EXCEPTION REVIEW/);
+assert.match(rootHtml, /Existing owner-approved Basic Detail schedule/);
 assert.match(rootHtml, /guardedLoad\('Pricing parity owner review'/);
 console.log("Build 614 read-only pricing source, public/checkout mismatch and owner hold: PASS");

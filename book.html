@@ -36,6 +36,7 @@
     .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:auto}
     .price-chip{display:grid;gap:2px;padding:7px;border-radius:12px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.035);text-align:center}
     .price-chip span{font-size:.72rem;color:rgba(234,242,255,.62)}.price-chip strong{font-size:.9rem}
+    .price-chip .price-start{font-size:.68rem;color:rgba(234,242,255,.78);font-weight:700}
     .price-chip.current{border-color:rgba(77,119,255,.65);background:rgba(77,119,255,.18)}
     .addon-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
     .addon-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
@@ -93,7 +94,7 @@
 
     <section class="panel" id="services" aria-labelledby="servicesHeading">
       <div class="section-heading">
-        <div><h2 id="servicesHeading">1. Choose vehicle size, service and live price</h2><p class="muted">The cards use the same live pricing catalogue as checkout. There is no separate pricing table to keep in sync.</p></div>
+        <div><h2 id="servicesHeading">1. Choose vehicle size, service and starting price</h2><p class="muted">Every service card shows a starting price for each of the three vehicle sizes, sourced from the same live catalogue as checkout.</p></div>
         <button class="btn ghost" id="sizeChartBtn" type="button">Vehicle size guide</button>
       </div>
       <div class="choice-toolbar" style="margin-top:14px">
@@ -110,6 +111,7 @@
         <p id="packageFilterStatus649" class="muted" role="status" aria-live="polite">Loading available packages…</p>
       </div>
       <div id="packageGrid" class="package-grid" aria-live="polite"></div>
+      <p class="muted mini">“Starting at:” prices are in CAD before HST. Add-ons and condition-specific work may be extra; the planner checks the exact scope, availability and deposit before payment.</p>
       <section class="service-compare-629" id="packageCompare629" aria-labelledby="packageCompare629Heading">
         <h3 id="packageCompare629Heading">Compare detailing packages side by side <span aria-hidden="true">ⓘ</span></h3>
         <p>Choose up to three services to compare their included work and current catalog prices. Prices follow the vehicle size you choose above; ask for an estimate when a vehicle needs inspection.</p>
@@ -181,7 +183,7 @@
   </div>
 
   <script type="module">
-    import { loadPricingCatalogClient, money, escapeHtml, packageImageForSize, packagePrice, addonPrimaryImage, chartUrl } from "/assets/pricing-catalog-client-legacy.js?v=20260904build336";
+    import { loadPricingCatalogClient, money, escapeHtml, packageImageForSize, packagePrice, addonPrimaryImage, chartUrl } from "/assets/pricing-catalog-client-legacy.js?v=20261101build735";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
     import { buildServiceComparison629, PACKAGE_COMPARE_LIMIT_629 } from "/assets/booking-service-comparison-v629.js?v=1";
     import { buildQuoteHandoffHref703 } from "/assets/booking-quote-handoff-v703.mjs?v=1";
@@ -202,8 +204,8 @@
       const prices = addon?.prices_cad && typeof addon.prices_cad === "object" ? addon.prices_cad : {};
       const raw = state.size ? prices[state.size] : (prices.mid ?? prices.small ?? addon?.price_cad);
       const amount = Number(raw);
-      if (addon?.quote_required === true) return Number.isFinite(amount) && amount > 0 ? `From ${money(amount)} · quote` : "Condition quote";
-      return Number.isFinite(amount) && amount > 0 ? money(amount) : "Ask for price";
+      if (addon?.quote_required === true) return Number.isFinite(amount) && amount > 0 ? `Starting at: ${money(amount)} · quote required` : "Condition quote";
+      return Number.isFinite(amount) && amount > 0 ? `Starting at: ${money(amount)}` : "Ask for price";
     }
     function selectedAddonRows() { return (state.catalog?.addons || []).filter((row) => state.addons.has(row.code)); }
     function totals() {
@@ -304,7 +306,7 @@
       const status=qs("#packageCompareStatus629");
       status.textContent=cols.length
         ? cols.length+" of "+PACKAGE_COMPARE_LIMIT_629+" packages selected. "+
-          (state.size?"Showing prices for "+(state.size==="mid"?"medium":state.size)+" vehicles.":"Choose a vehicle size above to compare exact package prices.")
+          (state.size?"Showing starting prices for "+(state.size==="mid"?"medium":state.size)+" vehicles.":"Choose a vehicle size above to compare package starting prices.")
         : "Select one or more packages above to begin comparing.";
       const holder=qs("#packageCompareTable629");
       if(!cols.length){holder.replaceChildren();return;}
@@ -313,7 +315,7 @@
       const n=(value)=>value==null?'Confirm with staff':money(value/100);
       const h=(value)=>escapeHtml(value || "See current package details");
       let rows='';
-      rows+=row("Package price",cols.map(col=>state.size?n(col.price_cents):"Choose vehicle size"));
+      rows+=row("Package starting price",cols.map(col=>state.size?(col.price_cents!=null?`Starting at: ${n(col.price_cents)}`:"Confirm price"):"Choose vehicle size"));
       rows+=row("Deposit",cols.map(col=>n(col.deposit_cents)));
       rows+=row("Best for",cols.map(col=>h(col.best_for)));
       rows+=row("Customer goal",cols.map(col=>h(col.goal)));
@@ -345,7 +347,7 @@
         return `<article class="package-card ${state.packageCode===pkg.code?"active":""}" data-package-card="${escapeHtml(pkg.code)}">
           <img src="${escapeHtml(image)}" alt="${escapeHtml(pkg.name)} mobile detailing package" loading="lazy" />
           <h3>${escapeHtml(pkg.name)}</h3>${pkg.display_alias?`<span class="tag">${escapeHtml(pkg.display_alias)}</span>`:""}<p>${escapeHtml(subtitle)}</p>
-          <div class="price-grid">${sizes.map(([key,label])=>`<div class="price-chip ${state.size===key?"current":""}"><span>${label}</span><strong>${money(packagePrice(pkg,key)||0)}</strong></div>`).join("")}</div>
+          <div class="price-grid">${sizes.map(([key,label])=>{const price=Number(packagePrice(pkg,key));return `<div class="price-chip ${state.size===key?"current":""}"><span>${label}</span>${Number.isFinite(price)&&price>0?`<span class="price-start">Starting at:</span><strong>${money(price)}</strong>`:'<strong>Confirm price</strong>'}</div>`;}).join("")}</div>
           <div class="row"><button class="btn ${state.packageCode===pkg.code?"primary":"ghost"} small" type="button" data-choose-package="${escapeHtml(pkg.code)}">${state.packageCode===pkg.code?"Selected":"Choose this service"}</button><span class="mini muted">Deposit ${money(pkg.deposit_cad||0)}</span></div>
         </article>`;
       }).join("");

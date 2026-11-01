@@ -2,6 +2,9 @@
 import { applyCommercialAccuracy } from "./commercial-accuracy.js";
 
 const SIZES = ["small", "mid", "oversize"];
+// Build 624 already established these three owner-approved Basic Detail tiers.
+// Reconciliation is read-only: never treat this reference as a DB write command.
+export const OWNER_BASIC_DETAIL_SCHEDULE_735 = Object.freeze({ small: 229, mid: 269, oversize: 309 });
 const PACKAGE_FIELDS = ["name", "deposit_cad", ...SIZES.map((size) => `prices_cad.${size}`)];
 const ADDON_FIELDS = ["name", "quote_required", ...SIZES.map((size) => `prices_cad.${size}`)];
 
@@ -43,6 +46,18 @@ export function buildPricingSourceParity614({ bundled, appManagement = null, che
     ...compareGroup("packages", PACKAGE_FIELDS, bundled?.packages, hasDbRow ? appManagement.packages : null, checkoutCatalog.packages, publicCatalog.packages, hasDbRow),
     ...compareGroup("addons", ADDON_FIELDS, bundled?.addons, hasDbRow ? appManagement.addons : null, checkoutCatalog.addons, publicCatalog.addons, hasDbRow)
   ];
+  const basicSources = {
+    bundled: rowIndex(bundled?.packages).get("basic_detail"),
+    app_management: hasDbRow ? rowIndex(appManagement?.packages).get("basic_detail") : null,
+    checkout: rowIndex(checkoutCatalog.packages).get("basic_detail"),
+    public_api: rowIndex(publicCatalog.packages).get("basic_detail")
+  };
+  const basicRows = SIZES.map((size) => {
+    const approved_cad = OWNER_BASIC_DETAIL_SCHEDULE_735[size];
+    const values = Object.fromEntries(Object.entries(basicSources).map(([source,row]) => [source, source === "app_management" && !hasDbRow ? null : (row?.prices_cad?.[size] ?? null)]));
+    const differences = Object.entries(values).filter(([source,amount]) => (source !== "app_management" || hasDbRow) && !Object.is(amount,approved_cad)).map(([source]) => source);
+    return { size, approved_cad, ...values, differences, status: differences.length ? "review_required" : hasDbRow ? "verified" : "db_unverified" };
+  });
   const publicCheckoutCount = findings.filter((item) => item.differences.includes("public_vs_checkout")).length;
   return {
     ok: true,
@@ -57,6 +72,14 @@ export function buildPricingSourceParity614({ bundled, appManagement = null, che
       app_management: "Stored pricing_catalog row (not the public override)",
       checkout: "Server checkout/quote-to-booking catalog before public override",
       public_api: "Expected public API projection after source-owned commercial accuracy override"
+    },
+    owner_basic_detail_735: {
+      approval: "existing_owner_approved_build624",
+      currency: "CAD",
+      starting_price_label: "Starting at:",
+      rows: basicRows,
+      all_sources_verified: hasDbRow && basicRows.every((row) => row.status === "verified"),
+      rule: "Read-only comparison; unchanged owner-approved tiers do not request reapproval. Discrepancies require a separate explicit owner decision before any price change."
     },
     summary: {
       package_count: checkoutCatalog.packages.length,
