@@ -82,3 +82,4 @@ node scripts/build729_signed_comparison_continuity_test.mjs
 node scripts/build730_owner_recovery_timeline_gaps_test.mjs
 node scripts/build731_owner_evidence_workbench_test.mjs
 node scripts/build732_modern_admin_command_cards_test.mjs
+node scripts/build733_admin_navigation_saved_views_test.mjs
