@@ -114,7 +114,8 @@
       cards.forEach(card => {
         const state = states.get(card.source);
         const selected = filter ? filter.value : 'all';
-        const show = selected === 'all' || (selected === 'attention' && (state?.status === 'attention' || state?.status === 'partial')) || (selected === 'unverified' && (!state || state.status === 'unverified' || state.status === 'partial'));
+        const matchesStatus = selected === 'all' || (selected === 'attention' && (state?.status === 'attention' || state?.status === 'partial')) || (selected === 'unverified' && (!state || state.status === 'unverified' || state.status === 'partial'));
+        const show = matchesStatus && rendered.get(card.id).article.dataset.favoriteHidden733 !== 'true';
         rendered.get(card.id).article.hidden = !show;
         if (show) visible++;
       });

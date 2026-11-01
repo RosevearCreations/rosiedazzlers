@@ -26,13 +26,17 @@
       for(const card of cards){
         const matchesText=!query||card.textContent.toLocaleLowerCase().includes(query);
         const matchesGroup=group==='all'||card.dataset.workspace===group;
-        card.hidden=!(matchesText&&matchesGroup);
+        const navigator=window.RosieAdminNavigation733;
+        const href=[...card.querySelectorAll('a[href]')].map(link=>link.getAttribute('href')).find(value=>navigator?.isFavorite?.(value))||null;
+        const matchesFavorites=!navigator?.favoritesOnly||Boolean(href);
+        card.hidden=!(matchesText&&matchesGroup&&matchesFavorites);
         if(!card.hidden)shown++;
       }
       count.textContent=`${shown} of ${cards.length} tools shown.`+(shown?'':' Try another search or clear filters.');
     }
     search.addEventListener('input',filter);
     category.addEventListener('change',filter);
+    window.addEventListener('rosie:admin-filter-733',filter);
     clear.addEventListener('click',()=>{search.value='';category.value='all';filter();search.focus()});
     filter();
   }
