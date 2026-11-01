@@ -35,6 +35,7 @@ import {
   cleanText,
   isUuid
 } from "../_lib/staff-auth.js";
+import { occupiedSlots738, isActiveBookingHold738 } from "../_lib/booking-capacity-v738.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -111,10 +112,11 @@ export async function onRequestPost(context) {
     const bookings = Array.isArray(bookingRows) ? bookingRows : [];
 
     const isDateClosed = dateBlocks.length > 0;
-    const isSlotBlocked = slotBlocks.length > 0;
+    const isSlotBlocked = slotBlocks.some(row => start_slot === "FULL" || normalizeSlot(row.slot) === start_slot);
 
-    const activeBookings = bookings.filter((row) => !isCancelled(row.status, row.job_status));
-    const slotBookings = activeBookings.filter((row) => bookingUsesSlot(row.start_slot, start_slot));
+    const activeBookings = bookings.filter(isActiveBookingHold738);
+    const slotBookings = activeBookings.filter((row) =>
+      (start_slot === "FULL" ? ["AM", "PM"] : [start_slot]).some(slot => occupiedSlots738(row).includes(slot)));
 
     const reasons = [];
     if (isDateClosed) reasons.push("Date is closed.");
@@ -176,19 +178,18 @@ function buildDateBlockUrl(env, service_date) {
   );
 }
 
-function buildSlotBlockUrl(env, service_date, start_slot) {
+function buildSlotBlockUrl(env, service_date) {
   return (
     `${env.SUPABASE_URL}/rest/v1/slot_blocks` +
     `?select=id,blocked_date,slot,reason` +
-    `&blocked_date=eq.${encodeURIComponent(service_date)}` +
-    `&slot=eq.${encodeURIComponent(start_slot)}`
+    `&blocked_date=eq.${encodeURIComponent(service_date)}`
   );
 }
 
 function buildBookingsUrl(env, service_date, exclude_booking_id) {
   let url =
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-    `?select=id,service_date,start_slot,status,job_status,customer_name,assigned_to` +
+    `?select=id,service_date,start_slot,duration_slots,status,job_status,customer_name,assigned_to` +
     `&service_date=eq.${encodeURIComponent(service_date)}` +
     `&order=created_at.desc`;
 

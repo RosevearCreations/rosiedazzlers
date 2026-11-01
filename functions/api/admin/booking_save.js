@@ -47,6 +47,8 @@ import {
   toBoolean
 } from "../_lib/staff-auth.js";
 import { loadEditableSetting } from "../_lib/editable-settings.js";
+import { evaluateCapacity738, isActiveBookingHold738 } from "../_lib/booking-capacity-v738.js";
+import { loadPricingCatalog } from "../_lib/pricing-catalog.js";
 
 export async function onRequestOptions() {
   return new Response("", {
@@ -82,6 +84,10 @@ export async function onRequestPost(context) {
 
     const payload = normalized.payload;
     const businessHoursWarning = await buildBusinessHoursWarning(env, headers, payload.service_date, payload.start_slot);
+    if (businessHoursWarning?.ok === false) {
+      return withCors(json({ error: "Date is closed in owner business-hours policy. Update the approved hours/closure policy before scheduling.",
+        business_hours_warning: businessHoursWarning, capacity_override: false }, 409));
+    }
 
     const resolvedAssignment = await resolveAssignment(env, headers, {
       assigned_staff_user_id: payload.assigned_staff_user_id,
@@ -100,6 +106,13 @@ export async function onRequestPost(context) {
       if (!existing.ok) {
         return withCors(existing.response);
       }
+      const duration = payload.duration_slots == null ? Number(existing.row.duration_slots) || 2 : payload.duration_slots;
+      const changesCapacity = existing.row.service_date !== payload.service_date || existing.row.start_slot !== payload.start_slot ||
+        Number(existing.row.duration_slots) !== duration || existing.row.status !== payload.status || existing.row.job_status !== payload.job_status;
+      if (changesCapacity && isActiveBookingHold738(payload)) {
+        const fit = await checkAdminCapacity738(env, headers, { ...payload, duration_slots: duration }, payload.id);
+        if (!fit.ok) return withCors(json({ error: fit.error, reason: fit.reason }, fit.status));
+      }
 
       const patch = {
         customer_name: payload.customer_name,
@@ -107,6 +120,7 @@ export async function onRequestPost(context) {
         customer_phone: payload.customer_phone,
         service_date: payload.service_date,
         start_slot: payload.start_slot,
+        ...(payload.duration_slots != null ? { duration_slots: payload.duration_slots } : {}),
         package_code: payload.package_code,
         vehicle_size: payload.vehicle_size,
         status: payload.status,
@@ -137,7 +151,7 @@ export async function onRequestPost(context) {
 
       if (!res.ok) {
         const text = await res.text();
-        return withCors(json({ error: `Could not update booking. ${text}` }, 500));
+        return withCors(json({ error: res.status === 409 ? "One-car capacity conflict; choose another AM/PM slot." : `Could not update booking. ${text}` }, res.status === 409 ? 409 : 500));
       }
 
       const rows = await res.json().catch(() => []);
@@ -155,12 +169,16 @@ export async function onRequestPost(context) {
       );
     }
 
+    if (payload.duration_slots == null && payload.start_slot === "PM") {
+      return withCors(json({ error: "Set duration_slots=1 to create a PM half-day booking." }, 400));
+    }
     const createPayload = {
       customer_name: payload.customer_name,
       customer_email: payload.customer_email,
       customer_phone: payload.customer_phone,
       service_date: payload.service_date,
       start_slot: payload.start_slot,
+      duration_slots: payload.duration_slots == null ? 2 : payload.duration_slots,
       package_code: payload.package_code,
       vehicle_size: payload.vehicle_size,
       status: payload.status,
@@ -179,6 +197,10 @@ export async function onRequestPost(context) {
     if (payload.progress_enabled) {
       createPayload.progress_token = crypto.randomUUID();
     }
+    if (isActiveBookingHold738(createPayload)) {
+      const fit = await checkAdminCapacity738(env, headers, createPayload);
+      if (!fit.ok) return withCors(json({ error: fit.error, reason: fit.reason }, fit.status));
+    }
 
     const res = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings`, {
       method: "POST",
@@ -191,7 +213,7 @@ export async function onRequestPost(context) {
 
     if (!res.ok) {
       const text = await res.text();
-      return withCors(json({ error: `Could not create booking. ${text}` }, 500));
+      return withCors(json({ error: res.status === 409 ? "One-car capacity conflict; choose another AM/PM slot." : `Could not create booking. ${text}` }, res.status === 409 ? 409 : 500));
     }
 
     const rows = await res.json().catch(() => []);
@@ -230,6 +252,7 @@ function normalizeBookingPayload(body) {
   const customer_phone = cleanPhone(body.customer_phone);
   const service_date = cleanDate(body.service_date);
   const start_slot = cleanSlotCode(body.start_slot);
+  const duration_slots = body.duration_slots == null || body.duration_slots === "" ? null : Number(body.duration_slots);
   const package_code = cleanCode(body.package_code);
   const vehicle_size = cleanCode(body.vehicle_size);
   const status = cleanCode(body.status) || "pending";
@@ -267,6 +290,12 @@ function normalizeBookingPayload(body) {
   if (!start_slot) {
     return { ok: false, error: "Valid start_slot is required." };
   }
+  if (duration_slots != null && ![1, 2].includes(duration_slots)) {
+    return { ok: false, error: "duration_slots must be 1 (half-day) or 2 (full-day)." };
+  }
+  if (duration_slots === 2 && start_slot !== "AM") {
+    return { ok: false, error: "Full-day bookings must start in AM." };
+  }
 
   if (assigned_staff_user_id && !isUuid(assigned_staff_user_id)) {
     return { ok: false, error: "Invalid assigned_staff_user_id." };
@@ -301,6 +330,7 @@ function normalizeBookingPayload(body) {
       customer_phone,
       service_date,
       start_slot,
+      duration_slots,
       package_code,
       vehicle_size,
       status,
@@ -320,7 +350,7 @@ function normalizeBookingPayload(body) {
 async function findBookingById(env, headers, id) {
   const res = await fetch(
     `${env.SUPABASE_URL}/rest/v1/bookings` +
-      `?select=id` +
+      `?select=id,service_date,start_slot,duration_slots,status,job_status` +
       `&id=eq.${encodeURIComponent(id)}` +
       `&limit=1`,
     { headers }
@@ -345,6 +375,31 @@ async function findBookingById(env, headers, id) {
   }
 
   return { ok: true, row };
+}
+
+async function checkAdminCapacity738(env, headers, booking, excludeBookingId = null) {
+  const date = booking.service_date;
+  const q = encodeURIComponent(date);
+  try {
+    const [dayRes, slotRes, bookingRes, catalog] = await Promise.all([
+      fetch(`${env.SUPABASE_URL}/rest/v1/date_blocks?select=blocked_date,reason&blocked_date=eq.${q}`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/slot_blocks?select=slot,reason&blocked_date=eq.${q}`, { headers }),
+      fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,status,job_status,start_slot,duration_slots&service_date=eq.${q}&status=in.(pending,confirmed)`, { headers }),
+      loadPricingCatalog(env)
+    ]);
+    if (!dayRes.ok || !slotRes.ok || !bookingRes.ok) return { ok: false, status: 503, error: "Could not verify live schedule." };
+    const [dateBlocks, slotBlocks, bookings] = await Promise.all([dayRes.json(), slotRes.json(), bookingRes.json()]);
+    const review = evaluateCapacity738({ date, dateBlocks, slotBlocks, bookings,
+      minimumLeadDays: catalog?.booking_rules?.minimum_lead_days ?? 0,
+      requestedStartSlot: booking.start_slot, requestedDurationSlots: booking.duration_slots,
+      excludeBookingId });
+    return review.requested_fit === true ? { ok: true } : {
+      ok: false, status: 409, error: "Booking capacity or owner scheduling blocks prohibit this time.",
+      reason: review.reasons.join(", ") || "slot_unavailable"
+    };
+  } catch {
+    return { ok: false, status: 503, error: "Could not verify live schedule." };
+  }
 }
 
 
@@ -607,9 +662,10 @@ function cleanDate(value) {
 }
 
 function cleanSlotCode(value) {
-  const s = cleanText(value);
-  if (!s) return null;
-  return /^[a-z0-9_-]{1,50}$/i.test(s) ? s : null;
+  const s = cleanText(value).toUpperCase();
+  if (["AM", "MORNING"].includes(s)) return "AM";
+  if (["PM", "AFTERNOON"].includes(s)) return "PM";
+  return null;
 }
 
 function cleanCode(value) {
