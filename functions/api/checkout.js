@@ -9,6 +9,7 @@ import { resolveTrustedBookingLocation, buildTrustedLocationPatch } from "./_lib
 import { resolveCheckoutCustomerIdentity } from "./_lib/checkout-customer-identity.js";
 import { evaluateCapacity738 } from "./_lib/booking-capacity-v738.js";
 import { loadBusinessHoursStatus } from "./availability.js";
+import { evaluateWorkability739 } from "../../assets/winter-workability-v739.js";
 
 export async function onRequestOptions() {
   return corsResponse("", 204);
@@ -46,11 +47,6 @@ export async function onRequestPost({ request, env }) {
     if (!vModel) return corsJson({ error: "Missing vehicle.model" }, 400);
 
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) return corsJson({ error: "Server not configured (Supabase env vars missing)" }, 500);
-
-    const customerIdentity = await resolveCheckoutCustomerIdentity({ request, env, body });
-    if (!customerIdentity.ok) {
-      return corsJson({ error: customerIdentity.error, reason: customerIdentity.reason }, customerIdentity.status || 400);
-    }
 
     const pricing = await loadPricingCatalog(env);
     const serviceAreaRaw = String(body.service_area || "").trim();
@@ -100,6 +96,33 @@ export async function onRequestPost({ request, env }) {
       addonsChosen.push(item);
       if (item.quote_required || cents == null) quoteAddonsChosen.push(item.label);
       else addonsTotalCents += cents;
+    }
+
+    // Build 739: the booking calendar is capacity planning, not winter/site
+    // authorization. Fail closed before customer creation, booking inserts,
+    // gift redemption, or payment provider calls. Never trust browser county
+    // metadata or claim that an unverified winter package is automatically safe.
+    const workability739 = evaluateWorkability739({
+      serviceDate: body.service_date,
+      serviceArea: serviceAreaRaw,
+      county: serviceAreaMeta?.county,
+      areaVerified: Boolean(serviceAreaMeta) && serviceAreaMeta.travel_tier !== "quote_required",
+      worksite: body.workability_739
+    });
+    if (!workability739.canAutomaticallyReserve) {
+      return corsJson({
+        error: "Staff review is needed before a date, deposit, or winter/site visit can be confirmed. Please contact Rosie Dazzlers with your chosen service and address.",
+        review_state: workability739.status,
+        review_reasons: workability739.issues,
+        next_step: "/contact",
+        payment_attempted: false,
+        booking_created: false
+      }, 422);
+    }
+
+    const customerIdentity = await resolveCheckoutCustomerIdentity({ request, env, body });
+    if (!customerIdentity.ok) {
+      return corsJson({ error: customerIdentity.error, reason: customerIdentity.reason }, customerIdentity.status || 400);
     }
 
     let totalCents = Math.round(baseCad * 100) + addonsTotalCents;
@@ -190,6 +213,7 @@ export async function onRequestPost({ request, env }) {
     if (photoEstimateLinks.length) notes.push(`Photo estimate links: ${photoEstimateLinks.join(" | ")}`);
     const mediaConsentPreference = normalizeMediaConsentPreference(body.media_consent_preference);
     notes.push(`Media/photo consent preference: ${mediaConsentPreference}`);
+    notes.push("Build 739 worksite check: customer stated safe private work area, clear surface, currently suitable weather, and local water/runoff compliance. Staff must reconfirm before dispatch; no year-round capability or bylaw waiver is implied.");
 
     const requestedReviewStatus = String(body.vehicle_size_review_status || "").trim();
     const vehicleSizeReviewStatus = requestedReviewStatus === "needs_review" ? "needs_review" : "verified";
