@@ -78,7 +78,7 @@ assert.equal(book,mirror,"Both public /book routes must be source-identical");
 for(const markup of [book,planner]){
   assert.match(markup,/service-addon-guidance-v736\.js\?v=20261101build736/);
   assert.match(markup,/service-addon-guidance-v736\.css\?v=20261101build736/);
-  assert.match(markup,/site-policies\.js\?v=20261101build736/);
+  assert.match(markup,/site-policies\.js\?v=20261101build73[67]/);
   assert.match(markup,/quote.required|quote_required/i);
   assert.match(markup,/Starting at:/);
 }

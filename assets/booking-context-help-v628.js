@@ -30,8 +30,8 @@ export const BOOKING_STEP_HELP_628 = Object.freeze([
     ]
   },
   {
-    step:4,title:"Safety and service requirements",
-    description:"Read and confirm the practical conditions for mobile detailing at your location.",
+    step:4,title:"Service address and safety waiver",
+    description:"Enter the detailing address, then read and confirm the practical conditions for mobile detailing at your location.",
     tips:[
       "Rosie normally brings water and power; the job still needs safe access and suitable working space.",
       "Water-use bylaws, driveway or parking access, weather and site restrictions may require a staff decision.",
@@ -56,7 +56,7 @@ export const BOOKING_FIELD_HELP_628 = Object.freeze([
   {step:3,id:"gift_code",text:"Optional. Gift balances and eligible redemption amounts are confirmed by the server."},
   {step:3,id:"promo_code",text:"Optional. Promotion eligibility is checked at checkout; displayed prices may change."},
   {step:5,id:"customer_email",text:"Use an email you can access for booking and payment confirmation."},
-  {step:5,id:"address_line1",text:"Enter the location where the vehicle can be safely detailed; staff may confirm site access."}
+  {step:4,id:"address_line1",text:"Enter the location where the vehicle can be safely detailed; staff may confirm site access."}
 ]);
 export function validateBookingHelpPlan628(steps=BOOKING_STEP_HELP_628,fields=BOOKING_FIELD_HELP_628) {
   if(!Array.isArray(steps)||steps.length!==5) return {ok:false,code:"STEPS_MISSING"};
