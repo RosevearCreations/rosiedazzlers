@@ -85,7 +85,7 @@
   async function wireBookingSpecialtyCards() {
     if (!isBookingPage()) return;
     try {
-      const module = await import('/assets/booking-specialty-cards.js?v=20260904build338');
+      const module = await import('/assets/booking-specialty-cards.js?v=20261101build736');
       await module.wireBookingSpecialtyCards?.(document);
     } catch (error) { console.warn('Rich specialty-card enhancement unavailable; base booking controls remain usable.', error); }
   }

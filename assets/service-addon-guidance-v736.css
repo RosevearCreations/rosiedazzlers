@@ -1,0 +1,19 @@
+/* Build 736 — compact catalogue-sourced package scope and accessible size/quote cards. */
+.package-scope-736{margin:1px 0 5px;border:1px solid rgba(221,177,100,.27);border-radius:11px;padding:9px;background:rgba(12,19,30,.42);min-width:0}
+.package-scope-736 summary{cursor:pointer;font-weight:750;color:#f3d69d;line-height:1.4}
+.package-scope-736 summary:focus-visible{outline:3px solid #f8dfae;outline-offset:3px}
+.package-scope-736__label{font-weight:750;margin:10px 0 4px;color:#eef4ff;font-size:.86rem}
+.package-scope-736__list{margin:0 0 6px;padding-left:20px;color:#dce6f7;font-size:.85rem;line-height:1.45}
+.package-scope-736__list li{margin:2px 0;overflow-wrap:anywhere}
+.package-scope-736__note{font-size:.8rem;color:#d4dcf0;line-height:1.4;margin:7px 0 0}
+.addon-sizes-736{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;width:100%;margin-top:6px}
+.addon-sizes-736__tier{min-width:0;border:1px solid rgba(221,177,100,.3);background:rgba(15,24,40,.5);border-radius:9px;padding:6px 4px;text-align:center;overflow-wrap:anywhere;font-size:.74rem;line-height:1.4}
+.addon-sizes-736__tier strong,.addon-sizes-736__tier span{display:block}
+.addon-sizes-736__tier strong{color:#fff;font-size:.85rem}
+.addon-sizes-736__tier.is-current{border-color:#e6b86e;background:rgba(214,171,102,.19)}
+.addon-quote-736{display:block;padding:8px 9px;background:rgba(221,177,100,.09);border-left:3px solid #e4b76e;border-radius:7px;font-size:.82rem;line-height:1.42;overflow-wrap:anywhere}
+.addon-quote-736 strong{color:#f9dcaa}
+.addon-quote-736__basis{display:block;margin-top:4px;color:#e0e9f9}
+.service-compare-629__table tr[data-size-736="true"] th{color:#f6d69c}
+@media(max-width:720px){.package-scope-736{padding:8px}.addon-sizes-736{gap:4px}.addon-sizes-736__tier{font-size:.68rem;padding:5px 3px}.addon-sizes-736__tier strong{font-size:.77rem}}
+@media(max-width:340px){.addon-sizes-736{grid-template-columns:1fr}.addon-sizes-736__tier{display:flex;gap:6px;align-items:center;justify-content:space-between}}
