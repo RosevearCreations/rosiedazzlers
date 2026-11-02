@@ -132,6 +132,7 @@ assert.ok(delivery.indexOf("const frozen = await patchDraft(") < delivery.indexO
 assert.match(delivery,/acceptance_status=eq\.awaiting_response/);
 
 const leads = read("../admin-leads.html");
+assert.equal(leads,read("../admin-leads/index.html"),"Admin Leads canonical and directory routes must have exact parity");
 assert.match(leads,/data-approval-preview-740/);
 assert.match(leads,/data-approval-summary-740/);
 assert.match(leads,/quote_booking_approval_preview/);

@@ -13,6 +13,7 @@
 ## Workbench and continuity
 
 1. The protected Admin Leads quote card now offers **Review acceptance & deposit readiness**, replacing the old prompt-driven **Create deposit request** action. It loads a staff-authorized, read-only preview: delivery/response/acceptance history, accepted package/size/add-ons, verified total and deposit assumption, status of existing provider requests and next staff follow-up.
+   Both `/admin-leads.html` and `/admin-leads/` serve the same reviewed interface; the exact-copy route parity gate is retained.
 2. Staff sees a clear HELD label, “live activation OFF / charge OFF”, and the reason when an accepted scope cannot be verified. Readiness is not appointment confirmation and the preview does not send a customer message, create a booking, consume one-car capacity, create payment sessions or write to Supabase.
 3. `quote_booking_approval_preview` requires `manage_bookings` and independently reads the quote and associated payment rows. Unavailable sources return 503. No public endpoints expose customer acceptance history or privileged metadata.
 4. `quote_proposal_drafts_save` prevents staff from marking a quote accepted or rewriting a customer-accepted draft; the update has an atomic PostgREST condition to protect against a customer acceptance arriving during a save. Staff notes and follow-up remain separate actions.
