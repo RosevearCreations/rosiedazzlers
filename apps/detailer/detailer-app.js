@@ -20,6 +20,66 @@
   let readinessRequest=0;
   let workspaceLoading=false;
   let fieldGate={jobId:null,loaded:false,canStart:false,canComplete:false};
+  let shift748={jobId:null,loaded:false,summary:null,receipt:null,pending:null,busy:false,message:'Load the assigned job clock before recording a punch.'};
+  const shiftPendingKey748=id=>`rosie:shift-punch-v748:${id}`;
+  function storeShiftPending748(){try{if(shift748.pending)sessionStorage.setItem(shiftPendingKey748(shift748.jobId),JSON.stringify(shift748.pending));else sessionStorage.removeItem(shiftPendingKey748(shift748.jobId));}catch{}}
+  function restoreShiftPending748(id){try{return JSON.parse(sessionStorage.getItem(shiftPendingKey748(id))||'null');}catch{return null;}}
+  function resetShift748(jobId){shift748={jobId,loaded:false,summary:null,receipt:null,pending:jobId?restoreShiftPending748(jobId):null,busy:false,message:'Load the current job clock before recording any shift event.'};renderShift748();}
+  function renderShift748(){
+    const node=$('shift748Status');if(!node)return;
+    const safe=!!selected&&continuityVerified()&&shift748.loaded&&shift748.jobId===String(selected.id)&&!shift748.busy;
+    const summary=shift748.summary;
+    node.textContent=shift748.message;node.className=`notice ${safe?'ok':'warn'}`;
+    const num=value=>Number(value||0).toFixed(1);
+    $('shift748Summary').innerHTML=summary?`<strong>Shift state:</strong> ${esc(summary.state)} · ${summary.shift_count} recorded shift(s)<br>Service ${num(summary.totals?.work_minutes)} min · Travel ${num(summary.totals?.travel_minutes)} min · Breaks ${num(summary.totals?.break_minutes)} min · Total clocked ${num(summary.totals?.shift_minutes)} min<br><strong>Candidate work + travel:</strong> ${num(summary.paid_candidate_minutes)} min <em>(not payroll approved)</em>${(summary.issues||[]).length?`<div class="notice warn">${summary.issues.map(esc).join(' · ')}</div>`:''}`:'No verified clock source loaded.';
+    document.querySelectorAll('[data-shift-punch]').forEach(button=>{button.disabled=!safe||!!shift748.pending||!(summary?.next_actions||[]).includes(button.dataset.shiftPunch);});
+    $('shift748Reload').disabled=!selected||shift748.busy||!continuityVerified();
+    $('shift748Retry').disabled=!safe||!shift748.pending||shift748.pending.expected_revision!==summary?.revision;
+    const receipt=shift748.receipt||{},alreadySubmitted=receipt.submission?.revision===summary?.revision;
+    $('shift748Submit').disabled=!safe||!!shift748.pending||!summary?.ready_to_submit||alreadySubmitted;
+    $('shift748Receipt').textContent=receipt.submission?`Submitted ${new Date(receipt.submission.created_at).toLocaleString('en-CA')}. ${receipt.review?`Independent review: ${receipt.review.decision} — ${receipt.review.note}`:'Operations review pending.'} No payroll was posted.`:'No submitted shift reconciliation yet; clock punches and payroll are separate.';
+  }
+  async function loadShift748(){
+    const id=String(selected?.id||'');if(!id||!continuityVerified())return;
+    shift748.busy=true;shift748.message='Reading this staff member’s current shift events and reconciliation receipts…';renderShift748();
+    try{
+      const result=await api.requestJson('/api/detailer/shift_v748',{method:'POST',body:JSON.stringify({action:'load',booking_id:id})});
+      if(String(selected?.id||'')!==id)return;
+      shift748.summary=result.summary;shift748.receipt=result.receipt;shift748.loaded=true;
+      if(shift748.pending&&result.summary?.timeline?.some(item=>item.id===shift748.pending.operation_id)){shift748.pending=null;storeShiftPending748();}
+      shift748.message=shift748.pending?'A punch had an uncertain outcome. Inspect the source list, then manually retry the SAME operation only if the revision is unchanged.':
+        'Clock history loaded and reconciled. Only the next valid punch is enabled.';
+    }catch(error){shift748.loaded=false;shift748.message=`Clock unavailable: ${error.message}. No automatic retry; reload when the source is available.`;}
+    finally{shift748.busy=false;renderShift748();}
+  }
+  async function punchShift748(punch,{retry=false}={}){
+    if(!selected||!continuityVerified()||!shift748.loaded||shift748.busy)return;
+    const summary=shift748.summary;
+    if(!summary)return;
+    if(retry){if(!shift748.pending||shift748.pending.punch!==punch||shift748.pending.expected_revision!==summary.revision)return;}
+    else{
+      if(shift748.pending||!summary.next_actions.includes(punch))return;
+      shift748.pending={operation_id:crypto.randomUUID(),punch,expected_revision:summary.revision};storeShiftPending748();
+    }
+    const pending={...shift748.pending},id=String(selected.id);
+    shift748.busy=true;shift748.message=`Recording ${punch.replaceAll('_',' ')}…`;renderShift748();
+    try{
+      const result=await api.requestJson('/api/detailer/shift_v748',{method:'POST',body:JSON.stringify({action:'punch',booking_id:id,punch,operation_id:pending.operation_id,expected_revision:pending.expected_revision,note:$('shift748Note').value.trim()})});
+      if(String(selected?.id||'')!==id)return;
+      shift748.summary=result.summary;shift748.receipt=result.receipt||shift748.receipt;shift748.loaded=true;shift748.pending=null;storeShiftPending748();$('shift748Note').value='';
+      shift748.message=result.already_saved?'Original punch was already present. Confirmed without duplicating it.':`${punch.replaceAll('_',' ')} saved on the authoritative job clock. No payroll posted.`;
+    }catch(error){shift748.message=`${error.message} Reload to reconcile before using the same-operation manual retry. Do not create another punch.`;shift748.loaded=false;}
+    finally{shift748.busy=false;renderShift748();}
+  }
+  async function submitShift748(){
+    if(!selected||!continuityVerified()||!shift748.loaded||!shift748.summary?.ready_to_submit||shift748.pending||shift748.busy)return;
+    const id=String(selected.id),expected_revision=shift748.summary.revision;
+    if(!confirm('Submit this closed shift for independent Operations review? This does not add pay, post payroll, or approve missed punches.'))return;
+    shift748.busy=true;shift748.message='Submitting exact shift source revision for review…';renderShift748();
+    try{await api.requestJson('/api/detailer/shift_v748',{method:'POST',body:JSON.stringify({action:'submit',booking_id:id,expected_revision})});shift748.message='Shift submitted for independent review; payroll remains separate.';}
+    catch(error){shift748.message=`Submission unconfirmed: ${error.message}. Reload the audit before trying again.`;}
+    finally{shift748.busy=false;await loadShift748();}
+  }
 
   function continuityVerified(){return !reconciliationRequired && navigator.onLine!==false && document.body.dataset.build745Sync==='verified';}
   function continuityState(verified,message){
@@ -29,6 +89,7 @@
     if(node){node.className=`notice ${verified?'ok':'warn'}`;node.textContent=message||(
       verified?'Assignment and job revision verified.':'Snapshot only. Reconnect and manually refresh before any action.');}
     liveModule?.setVisibility?.(verified&&!document.hidden);
+    renderShift748();
     updateActionButtons();
   }
 
@@ -121,6 +182,7 @@
   function renderSelected(){
     $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Area: ${esc(selected.service_area_municipality||selected.city||selected.service_area||'Confirm with office')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}<br><strong>Staff instructions:</strong> ${esc(selected.notes||'No additional service notes recorded.')}${continuityVerified()?'':'<div class="notice warn">Read-only last-seen snapshot; current assignment and instructions must be reverified.</div>'}${renderReadinessCard()}`:'Choose an assigned job.';
     updateActionButtons();
+    renderShift748();
     renderRuntime();
   }
   function chooseSuggested(){return policy.chooseActive(jobs)||null;}
@@ -145,8 +207,9 @@
   }
   function selectJob(id){
     selected=jobs.find((job)=>String(job.id)===String(id))||null;
+    resetShift748(String(selected?.id||''));
     fieldGate={jobId:String(selected?.id||''),loaded:false,canStart:false,canComplete:false};
-    renderJobs();renderSelected();void loadSelectedReadiness();
+    renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();
   }
   function resolveDeepLink(){
     if(deepLinkHandled||!requestedJobId)return null;
@@ -173,8 +236,9 @@
       const next=resolveDeepLink()||(keep&&jobs.find((job)=>String(job.id)===String(keep)))||chooseSuggested();
       fieldGate={jobId:String(next?.id||''),loaded:false,canStart:false,canComplete:false};
       selected=next;
+      resetShift748(String(next?.id||''));
       continuityState(true,'Live session and canonical assignments checked. No offline changes were replayed.');
-      renderJobs();renderSelected();void loadSelectedReadiness();
+      renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();
       const message=mobile745?.reconciliationMessage745({wasOffline:wasDisconnected,assignmentGone:!!oldId&&!jobs.some(job=>String(job.id)===oldId),stageChanged:!!oldId&&!!selected&&String(selected.id)===oldId&&jobStage(selected)!==oldStage})||'Current assignment verified.';
       if(manual||wasDisconnected||message.includes('no longer'))status(message,!!oldId&&!jobs.some(job=>String(job.id)===oldId)?'warn':'ok');
       wasDisconnected=false;
@@ -248,6 +312,10 @@
     globalScope.addEventListener('offline',()=>{continuityEpoch++;wasDisconnected=true;continuityState(false,'Device offline. Last-seen jobs are read-only; no writes, background retry or replay.');renderJobs();renderSelected();status('Offline: reconnect, then manually refresh assigned jobs to verify changes.','warn');});
     globalScope.addEventListener('online',()=>{continuityEpoch++;wasDisconnected=true;continuityState(false,'Connection returned. Press Refresh assigned jobs to recheck assignment and stage; nothing runs automatically.');renderJobs();renderSelected();status('Connection restored. Review and refresh before any action.','warn');});
     document.querySelectorAll('[data-job-action]').forEach((button)=>button.addEventListener('click',()=>runAction(button.dataset.jobAction)));
+    document.querySelectorAll('[data-shift-punch]').forEach(button=>button.addEventListener('click',()=>punchShift748(button.dataset.shiftPunch)));
+    $('shift748Reload').addEventListener('click',()=>loadShift748());
+    $('shift748Retry').addEventListener('click',()=>shift748.pending&&punchShift748(shift748.pending.punch,{retry:true}));
+    $('shift748Submit').addEventListener('click',submitShift748);
     document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden&&continuityVerified());});
   }
   async function boot(){
