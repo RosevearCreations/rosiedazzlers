@@ -33,6 +33,9 @@ export async function onRequestPost({request,env}){
   const desiredStatus=String(body.source_status||'');
   if(!['active','needs_review','archived'].includes(expectedStatus)||!['active','needs_review','archived'].includes(desiredStatus))return json({ok:false,build:BUILD,code:'source_status_required',recovery:'review_saved_version',error:'A verified prior and desired publication status is required. Review the saved photo before retrying.'},428);
   if(expectedStatus!=='active'&&desiredStatus==='active'&&(!body.publication_approval||!safeText(body.license_notes,600)))return json({ok:false,build:BUILD,code:'public_use_approval_required',error:'Before publishing a review-held photo, explicitly confirm verified public-use rights/consent and enter a non-private license/consent note.'},409);
+  const activating=expectedStatus!=='active'&&desiredStatus==='active';
+  if(activating&&(!['clear','redacted_copy_verified'].includes(body.privacy_classification)||body.authentic_original_verified!==true))
+    return json({ok:false,build:747,code:'media_privacy_review_required',error:'Verify faces, number plates, addresses, any redacted copy, and the authentic R2 original/Before–After provenance before making a held image Active.'},409);
   try{
     const decorative=body.decorative===true;
     const altText=safeText(body.alt_text,300);
@@ -47,7 +50,7 @@ export async function onRequestPost({request,env}){
       focal_point:['center','top','bottom','left','right','top-left','top-right','bottom-left','bottom-right'].includes(String(body.focal_point||''))?String(body.focal_point):'center',
       decorative,
       attribution:safeText(body.attribution,300)||null,
-      license_notes:safeText(body.license_notes,600)||null,
+      license_notes:activating?safeText(`Privacy v747: ${body.privacy_classification}; original provenance verified. ${safeText(body.license_notes,490)}`,600):safeText(body.license_notes,600)||null,
       source_status:desiredStatus,
       updated_at:new Date().toISOString(),
       updated_by:access.actor?.email||'staff'
