@@ -95,3 +95,4 @@ node scripts/build743_consent_notification_reconciliation_test.mjs
 node scripts/build744_customer_followup_consent_test.mjs
 node scripts/build745_detailer_mobile_offline_continuity_test.mjs
 node scripts/build746_onsite_setup_test.mjs
+node scripts/build747_photo_r2_consent_test.mjs

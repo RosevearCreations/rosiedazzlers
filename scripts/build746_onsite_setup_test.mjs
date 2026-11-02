@@ -106,6 +106,7 @@ try{
   const source=readFileSync(new URL('../apps/detailer/live-job-module.js',import.meta.url),'utf8');
   for(const token of ['onsite746Form','onsite746Consent','onsite746BagAck','onsite746Missing','expected_intake_updated_at','No automatic replay'])
     assert.ok(source.includes(token),`Mobile form missing ${token}`);
-  assert.doesNotMatch(source,/localStorage|sessionStorage|indexedDB|setInterval\s*\(/,'No persisted private checklist or background edits');
+  assert.doesNotMatch(source,/localStorage|indexedDB|setInterval\s*\(/,'No persisted private checklist or background edits');
+  assert.match(source,/rosie:private-capture-v747:/,'Only upload-session metadata may survive a refresh for deliberate recovery');
   console.log('Build 746 PASS: session and origin, assignment, onsite audit/revision, photo consent, bag policy, readiness, start gate and failed-audit recovery.');
 }finally{globalThis.fetch=originalFetch;}
