@@ -3,11 +3,17 @@
 // Checkout session when STRIPE_SECRET_KEY is configured. Manual request mode
 // remains available so the workflow does not break before provider setup.
 import { requireStaffAccess, json, serviceHeaders, cleanText, cleanEmail, isUuid, methodNotAllowed } from "../_lib/staff-auth.js";
+import { validateStructuredQuoteTerms, hashStructuredQuoteTerms, compareAcceptedTermsToCurrentPrice } from "../_lib/quote-booking-terms.js";
+import { resolveCurrentQuotePrice } from "../_lib/quote-booking-authority.js";
+
+// Build 740: No signed owner/provider activation authority has been supplied.
+// All quote deposit creation is held; use the read-only acceptance preview.
+const QUOTE_DEPOSIT_PROVIDER_AUTHORIZATION_740 = "HELD";
 
 const QUOTE_SELECT = [
   "id", "lead_id", "booking_id", "title", "status", "body", "pricing_note", "internal_note",
   "customer_name", "customer_email", "acceptance_status", "accepted_at", "delivery_status",
-  "final_booking_id", "latest_deposit_payment_request_id"
+  "final_booking_id", "latest_deposit_payment_request_id", "accepted_terms", "accepted_terms_hash", "structured_terms_hash"
 ].join(",");
 
 const CONVERSION_SELECT = [
@@ -20,6 +26,15 @@ export async function onRequestPost({ request, env }) {
     const access = await requireStaffAccess({ request, env, body, capability: "manage_bookings", allowLegacyAdminFallback: true });
     if (!access.ok) return withCors(access.response);
 
+    if (QUOTE_DEPOSIT_PROVIDER_AUTHORIZATION_740 === "HELD") {
+      return withCors(json({
+        ok:false, code:"QUOTE_DEPOSIT_PROVIDER_AUTHORIZATION_HELD", provider_authorization:"HELD",
+        error:"Quote deposit creation and live payment-provider activation are on owner hold. Review the accepted terms and payment history first; no payment request or charge was created.",
+        next_step:"/api/admin/quote_booking_approval_preview", payment_request_created:false,
+        provider_session_created:false, charged:false
+      },409));
+    }
+
     if (!hasSupabaseConfig(env)) {
       return withCors(json({ ok: false, error: "Supabase service configuration is missing.", migration_hint: "Apply Build 180 SQL and confirm Supabase service-role env vars." }, 500));
     }
@@ -31,14 +46,24 @@ export async function onRequestPost({ request, env }) {
     if (!draft) return withCors(json({ ok: false, error: "Quote/proposal draft was not found." }, 404));
 
     const acceptance = String(draft.acceptance_status || "").toLowerCase();
-    if (!body.allow_unaccepted && acceptance !== "accepted") {
-      return withCors(json({ ok: false, error: "Quote must be accepted before requesting a deposit. Use allow_unaccepted only for staff-tested exceptions.", acceptance_status: draft.acceptance_status || null }, 409));
+    if (acceptance !== "accepted" || !draft.accepted_at) return withCors(json({ ok:false, error:"Recorded customer acceptance is required before a deposit request.", acceptance_status:draft.acceptance_status || null },409));
+    const checkedTerms = validateStructuredQuoteTerms(draft.accepted_terms);
+    if (!checkedTerms.ok) return withCors(json({ok:false,code:checkedTerms.code,error:checkedTerms.error},409));
+    const exactHash = await hashStructuredQuoteTerms(checkedTerms.terms);
+    if (!draft.accepted_terms_hash || exactHash !== draft.accepted_terms_hash || draft.accepted_terms_hash !== draft.structured_terms_hash) {
+      return withCors(json({ok:false,code:"QUOTE_ACCEPTED_TERMS_CONFLICT",error:"Accepted quote scope no longer matches the delivered snapshot."},409));
     }
+    const currentPrice = await resolveCurrentQuotePrice(env, checkedTerms.terms);
+    const comparison = compareAcceptedTermsToCurrentPrice(checkedTerms.terms, currentPrice);
+    if (!comparison.ok) return withCors(json({ok:false,code:comparison.code,error:comparison.error},409));
 
     const conversion = await findConversionDraft(env, draft.id).catch(() => null);
     const proposedBooking = conversion?.proposed_booking && typeof conversion.proposed_booking === "object" ? conversion.proposed_booking : {};
     const bookingId = cleanText(body.booking_id || draft.booking_id || conversion?.converted_booking_id || proposedBooking.booking_id);
-    const amountCents = moneyToCents(body.amount_cents ?? body.deposit_cents ?? body.deposit_amount ?? conversion?.final_deposit_cents ?? proposedBooking.deposit_cents ?? proposedBooking.deposit_amount);
+    const amountCents = checkedTerms.terms.deposit_cents;
+    if ([body.amount_cents, body.deposit_cents, body.deposit_amount].some((candidate)=>candidate != null && candidate !== "")) {
+      return withCors(json({ok:false,code:"QUOTE_DEPOSIT_AMOUNT_OVERRIDE_NOT_ALLOWED",error:"Deposit must come from the unchanged customer-accepted terms. Do not type a replacement amount."},409));
+    }
     if (!(amountCents > 0)) return withCors(json({ ok: false, error: "Deposit amount must be greater than zero." }, 400));
 
     const provider = normalizeProvider(body.provider || (env.STRIPE_SECRET_KEY ? "stripe" : (hasPayPalConfig(env) ? "paypal" : "manual")));
@@ -167,7 +192,6 @@ async function createStripeCheckoutSession({ env, request, paymentRequest, draft
   form.set("mode", "payment");
   form.set("success_url", successUrl.toString());
   form.set("cancel_url", cancelUrl.toString());
-  form.set("payment_method_types[0]", "card");
   form.set("line_items[0][price_data][currency]", "cad");
   form.set("line_items[0][price_data][product_data][name]", `${draft.title || "Rosie Dazzlers quote"} deposit`);
   form.set("line_items[0][price_data][unit_amount]", String(amountCents));
@@ -178,7 +202,7 @@ async function createStripeCheckoutSession({ env, request, paymentRequest, draft
   form.set("metadata[payment_provider]", "stripe");
   form.set("metadata[purpose]", "quote_deposit");
 
-  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded" }, body: form.toString() });
+  const res = await fetch("https://api.stripe.com/v1/checkout/sessions", { method: "POST", headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, "Content-Type": "application/x-www-form-urlencoded", "Idempotency-Key": `rosie-quote-deposit-${paymentRequest.id}` }, body: form.toString() });
   const text = await res.text();
   const data = safeJson(text);
   if (!res.ok || !data?.id || !data?.url) throw new Error(`Stripe error creating quote deposit checkout. ${text}`);
@@ -237,7 +261,6 @@ async function getPayPalAccessToken(env) {
 function paypalBase(env) { return String(env.PAYPAL_API_BASE || "").trim() || "https://api-m.paypal.com"; }
 function hasPayPalConfig(env) { return !!(env?.PAYPAL_CLIENT_ID && (env?.PAYPAL_CLIENT_SECRET || env?.PAYPAL_SECRET)); }
 function normalizeProvider(value) { const text = String(value || "manual").trim().toLowerCase(); return text === "stripe" || text === "paypal" ? text : "manual"; }
-function moneyToCents(value) { if (value === null || value === undefined || value === "") return 0; const raw = Number(value); if (!Number.isFinite(raw) || raw < 0) return 0; return Math.round(raw > 9999 ? raw : raw * 100); }
 function siteOrigin(request, env) { const configured = cleanText(env?.SITE_ORIGIN || env?.PUBLIC_SITE_ORIGIN); if (configured) return configured.replace(/\/+$/, ""); const url = new URL(request.url); return `${url.protocol}//${url.host}`; }
 function makeToken() { const bytes = new Uint8Array(32); crypto.getRandomValues(bytes); return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join(""); }
 async function sha256Hex(value) { const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(value || ""))); return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join(""); }

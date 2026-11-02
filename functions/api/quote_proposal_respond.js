@@ -9,7 +9,7 @@ export async function onRequestPost({ request, env }) {
     const draftId = cleanText(body.draft_id || body.id);
     const token = cleanText(body.token);
     const action = normalizeAction(body.action);
-    const note = cleanText(body.note || body.customer_response_note || "").slice(0, 2000);
+    const note = (cleanText(body.note || body.customer_response_note || "") || "").slice(0, 2000);
     if (!draftId || !isUuid(draftId)) return fail("QUOTE_ID_REQUIRED", "A valid quote draft id is required.", 400);
     if (!token) return fail("QUOTE_RESPONSE_TOKEN_REQUIRED", "Response token is required.", 400);
     if (!action) return fail("QUOTE_RESPONSE_ACTION_REQUIRED", "Choose accepted or declined.", 400);
@@ -24,20 +24,22 @@ export async function onRequestPost({ request, env }) {
 
     const now = new Date().toISOString();
     if (action === "accepted") {
+      if (existing.acceptance_status === "declined") return fail("QUOTE_ALREADY_DECLINED", "A declined quote needs a new proposal before it can be accepted.", 409);
+      // An exact repeat of an already accepted response is a read-only replay,
+      // even when the original offer has since expired. It never creates a
+      // second acceptance, booking, message, deposit or provider session.
+      if (existing.acceptance_status === "accepted" && existing.accepted_terms && existing.accepted_terms_hash) {
+        const acceptedHash = await hashStructuredQuoteTerms(existing.accepted_terms);
+        if (acceptedHash === existing.accepted_terms_hash && existing.accepted_terms_hash === existing.structured_terms_hash) {
+          return withCors(json({ok:true,code:"QUOTE_ALREADY_ACCEPTED",replay:true,action:"accepted",draft:publicDraft(existing),commercial_continuity:acceptedQuoteContinuity(),message:"This quote was already accepted. Acceptance is not a booking confirmation."}));
+        }
+        return fail("QUOTE_ACCEPTED_TERMS_CONFLICT", "This quote already has a different accepted commercial snapshot. Ask Rosie Dazzlers to review it before booking.", 409);
+      }
       const checked = validateStructuredQuoteTerms(existing.structured_terms);
       if (!checked.ok) return fail(checked.code, checked.error, checked.code === "QUOTE_EXPIRED" ? 410 : 409);
       if (!existing.structured_terms_hash) return fail("QUOTE_STRUCTURED_TERMS_REQUIRED", "This quote is missing its structured terms hash. Ask Rosie Dazzlers to resend the quote.", 409);
       const actualHash = await hashStructuredQuoteTerms(checked.terms);
       if (actualHash !== existing.structured_terms_hash) return fail("QUOTE_TERMS_HASH_MISMATCH", "This quote's structured terms no longer match the delivered version. Ask Rosie Dazzlers to resend it.", 409);
-
-      if (existing.acceptance_status === "accepted" && existing.accepted_terms && existing.accepted_terms_hash) {
-        const acceptedCheck = validateStructuredQuoteTerms(existing.accepted_terms);
-        const acceptedHash = acceptedCheck.ok ? await hashStructuredQuoteTerms(acceptedCheck.terms) : "";
-        if (acceptedCheck.ok && acceptedHash === existing.accepted_terms_hash && existing.accepted_terms_hash === existing.structured_terms_hash) {
-          return withCors(json({ ok: true, code: "QUOTE_ALREADY_ACCEPTED", replay: true, action: "accepted", draft: publicDraft(existing), commercial_continuity: acceptedQuoteContinuity(), message: "This quote was already accepted. Acceptance is not a booking confirmation." }));
-        }
-        return fail("QUOTE_ACCEPTED_TERMS_CONFLICT", "This quote already has a different accepted commercial snapshot. Ask Rosie Dazzlers to review it before booking.", 409);
-      }
 
       const patch = {
         acceptance_status: "accepted",
@@ -51,7 +53,15 @@ export async function onRequestPost({ request, env }) {
         accepted_terms_at: now,
         updated_at: now
       };
-      const updated = await patchDraft(env, draftId, patch);
+      const updated = await patchDraft(env, draftId, patch, "accept_once");
+      if (!updated) {
+        const latest = await loadDraft(env, draftId);
+        const latestTerms = latest?.accepted_terms && await hashStructuredQuoteTerms(latest.accepted_terms);
+        if (latest?.acceptance_status === "accepted" && latestTerms === latest.accepted_terms_hash && latestTerms === existing.structured_terms_hash) {
+          return withCors(json({ok:true,code:"QUOTE_ALREADY_ACCEPTED",replay:true,action:"accepted",draft:publicDraft(latest),commercial_continuity:acceptedQuoteContinuity(),message:"This quote was already accepted. Acceptance is not a booking confirmation."}));
+        }
+        return fail("QUOTE_ACCEPTED_TERMS_CONFLICT", "Another response changed this quote. Ask Rosie Dazzlers to review the accepted scope.", 409);
+      }
       return withCors(json({ ok: true, code: "QUOTE_ACCEPTED", replay: false, action: "accepted", draft: publicDraft(updated), commercial_continuity: acceptedQuoteContinuity(), message: "Thank you. Your quote has been accepted. Availability, deposit/payment and final appointment confirmation are verified separately." }));
     }
 
@@ -73,7 +83,8 @@ export async function onRequestPost({ request, env }) {
       accepted_terms_hash: null,
       accepted_terms_at: null,
       updated_at: now
-    });
+    }, "decline_unless_accepted");
+    if (!updated) return fail("QUOTE_RESPONSE_CONFLICT", "This quote was changed by another response. Reload before trying again.", 409);
     return withCors(json({ ok: true, code: "QUOTE_DECLINED", replay: false, action: "declined", draft: publicDraft(updated), message: "Thank you. Your quote response has been marked declined." }));
   } catch (err) {
     return fail("QUOTE_RESPONSE_SAVE_FAILED", err?.message || "Could not save quote response.", 500);
@@ -94,13 +105,18 @@ async function loadDraft(env, id) {
   if (!res.ok) throw new Error(extractSupabaseError(data, text, "Could not load quote/proposal."));
   return Array.isArray(data) ? data[0] || null : null;
 }
-async function patchDraft(env, id, patch) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { ...serviceHeaders(env), Prefer: "return=representation" }, body: JSON.stringify(patch) });
+async function patchDraft(env, id, patch, guard = "") {
+  const predicate = guard === "accept_once"
+    ? "&accepted_terms_hash=is.null&or=(acceptance_status.is.null,acceptance_status.neq.accepted)"
+    : guard === "decline_unless_accepted"
+      ? "&or=(acceptance_status.is.null,acceptance_status.neq.accepted)"
+      : "";
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}${predicate}`, { method: "PATCH", headers: { ...serviceHeaders(env), Prefer: "return=representation" }, body: JSON.stringify(patch) });
   const text = await res.text(); const data = safeJson(text);
   if (!res.ok) throw new Error(extractSupabaseError(data, text, "Could not update quote/proposal response."));
   return Array.isArray(data) ? data[0] || null : data;
 }
-function normalizeAction(value) { const v = cleanText(value).toLowerCase(); if (["accept", "accepted", "approve", "approved"].includes(v)) return "accepted"; if (["decline", "declined", "reject", "rejected"].includes(v)) return "declined"; return ""; }
+function normalizeAction(value) { const v = (cleanText(value) || "").toLowerCase(); if (["accept", "accepted", "approve", "approved"].includes(v)) return "accepted"; if (["decline", "declined", "reject", "rejected"].includes(v)) return "declined"; return ""; }
 function publicDraft(draft) { return draft ? { id: draft.id, title: draft.title || null, customer_name: draft.customer_name || null, acceptance_status: draft.acceptance_status || null, accepted_at: draft.accepted_at || null, declined_at: draft.declined_at || null, terms_expires_at: draft.terms_expires_at || draft.structured_terms?.expires_at || null } : null; }
 async function sha256Hex(value) { const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(String(value || ""))); return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join(""); }
 function fail(code, error, status, extra = {}) { return withCors(json({ ok: false, code, error, ...extra }, status)); }

@@ -26,6 +26,9 @@ export async function onRequestPost({ request, env }) {
     if (!draftId || !isUuid(draftId)) return fail("QUOTE_ID_REQUIRED", "draft_id must be a valid UUID.", 400);
     const draft = await loadDraft(env, draftId);
     if (!draft) return fail("QUOTE_NOT_FOUND", "Quote/proposal draft was not found.", 404);
+    if (draft.acceptance_status === "accepted" || draft.status === "accepted") {
+      return fail("QUOTE_ACCEPTED_SCOPE_LOCKED", "This quote has been accepted. Create revised terms and obtain new customer confirmation; do not re-deliver or overwrite the accepted snapshot.", 409);
+    }
 
     const conversion = await loadReviewedConversion(env, draft.id);
     if (!conversion) return fail("QUOTE_STRUCTURED_TERMS_REQUIRED", "Create and review a Conversion Queue draft for this quote before delivery.", 409);
@@ -80,11 +83,10 @@ export async function onRequestPost({ request, env }) {
       event_type: "quote_proposal_delivery", channel: "email", recipient_email: recipient, subject, body_text: bodyText, body_html: bodyHtml,
       payload: { quote_proposal_draft_id: draft.id, lead_id: draft.lead_id || null, booking_id: draft.booking_id || null, acceptance_url: acceptanceUrl, terms_expires_at: expiresAt, build: 362 }
     };
-    const dispatch = body.preview_only === true ? { ok: false, preview_only: true, error: "Preview only; no email attempted." } : await dispatchNotificationThroughProvider(env, event, {});
     const now = new Date().toISOString();
-    const patch = {
-      status: dispatch.ok ? "sent" : (draft.status === "draft" ? "ready_to_send" : draft.status || "ready_to_send"),
-      delivery_status: dispatch.ok ? "sent" : "prepared",
+    const frozenTermsPatch = {
+      status: draft.status === "draft" ? "ready_to_send" : draft.status || "ready_to_send",
+      delivery_status: "prepared",
       delivery_to_email: recipient,
       delivery_subject: subject,
       delivery_message: message,
@@ -101,12 +103,25 @@ export async function onRequestPost({ request, env }) {
       accepted_at: null,
       declined_at: null,
       responded_at: null,
-      delivered_at: dispatch.ok ? now : null,
-      sent_at: dispatch.ok ? now : draft.sent_at || null,
+      delivered_at: null,
+      sent_at: draft.sent_at || null,
       updated_at: now
     };
-    if (access.actor?.id && isUuid(access.actor.id)) patch.updated_by_staff_user_id = access.actor.id;
-    const updated = await patchDraft(env, draft.id, patch);
+    if (access.actor?.id && isUuid(access.actor.id)) frozenTermsPatch.updated_by_staff_user_id = access.actor.id;
+    // Freeze the delivery token and structured terms BEFORE contacting a
+    // provider. The atomic filter refuses accepted or concurrently changed
+    // drafts, so no accepted snapshot is cleared by a late delivery request.
+    const frozen = await patchDraft(env, draft.id, frozenTermsPatch, draft.updated_at);
+    if (!frozen) return fail("QUOTE_DELIVERY_CONFLICT", "The quote changed or was accepted while preparing delivery. Reload before sending; no customer email was attempted.", 409);
+    const dispatch = body.preview_only === true ? { ok:false, preview_only:true, error:"Preview only; no email attempted." } : await dispatchNotificationThroughProvider(env, event, {});
+    const deliveryPatch = {
+      status: dispatch.ok ? "sent" : frozenTermsPatch.status,
+      delivery_status: dispatch.ok ? "sent" : "prepared",
+      delivered_at: dispatch.ok ? new Date().toISOString() : null,
+      sent_at: dispatch.ok ? new Date().toISOString() : draft.sent_at || null,
+      updated_at: new Date().toISOString()
+    };
+    const updated = await patchDeliveryStatus(env, draft.id, deliveryPatch) || await loadDraft(env, draft.id);
 
     return withCors(json({
       ok: true,
@@ -139,11 +154,18 @@ async function loadReviewedConversion(env, quoteId) {
   if (!res.ok) throw new Error(extractSupabaseError(data, text, "Could not load quote conversion review."));
   return Array.isArray(data) ? data[0] || null : null;
 }
-async function patchDraft(env, id, patch) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { ...serviceHeaders(env), Prefer: "return=representation" }, body: JSON.stringify(patch) });
+async function patchDraft(env, id, patch, expectedUpdatedAt = null) {
+  const versionFilter = expectedUpdatedAt ? `&updated_at=eq.${encodeURIComponent(expectedUpdatedAt)}` : "";
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}&status=neq.accepted&or=(acceptance_status.is.null,acceptance_status.neq.accepted)${versionFilter}`, { method: "PATCH", headers: { ...serviceHeaders(env), Prefer: "return=representation" }, body: JSON.stringify(patch) });
   const text = await res.text(); const data = safeJson(text);
   if (!res.ok) throw new Error(extractSupabaseError(data, text, "Could not update quote/proposal delivery tracking."));
   return Array.isArray(data) ? data[0] || null : data;
+}
+async function patchDeliveryStatus(env, id, patch) {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}&acceptance_status=eq.awaiting_response`, {method:"PATCH",headers:{...serviceHeaders(env),Prefer:"return=representation"},body:JSON.stringify(patch)});
+  const text=await res.text();const data=safeJson(text);
+  if(!res.ok)throw new Error(extractSupabaseError(data,text,"Could not update delivery status."));
+  return Array.isArray(data)?data[0]||null:data;
 }
 function buildQuoteEmailText({ draft, message, acceptanceUrl, terms, current }) {
   return [

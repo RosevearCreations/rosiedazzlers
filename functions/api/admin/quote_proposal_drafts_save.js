@@ -31,13 +31,26 @@ export async function onRequestPost({ request, env }) {
     if (!payload.title || !payload.body) {
       return withCors(json({ ok: false, error: "Quote draft title and body are required." }, 400));
     }
+    if (payload.status === "accepted") {
+      return withCors(json({ok:false,code:"CUSTOMER_ACCEPTANCE_REQUIRED",error:"Staff cannot mark a quote as customer-accepted in the editor. Use the customer response link and immutable accepted terms."},409));
+    }
 
     const id = cleanText(body.id);
     if (id && !isUuid(id)) return withCors(json({ ok: false, error: "Invalid quote draft id." }, 400));
 
-    const result = id
-      ? await updateDraft(env, id, payload)
-      : await createDraft(env, payload);
+    if (id) {
+      const existing = await loadExistingDraftState(env, id);
+      if (!existing) return withCors(json({ok:false,code:"QUOTE_NOT_FOUND",error:"Quote draft no longer exists."},404));
+      if (existing.acceptance_status === "accepted" || existing.status === "accepted") {
+        return withCors(json({
+          ok:false,code:"QUOTE_ACCEPTED_SCOPE_LOCKED",
+          error:"This quote was accepted. Its delivered service, terms and customer details cannot be edited. Prepare revised terms for a fresh customer confirmation; use follow-up tools for staff notes."
+        },409));
+      }
+    }
+
+    const result = id ? await updateDraft(env, id, payload) : await createDraft(env, payload);
+    if (id && !result) return withCors(json({ok:false,code:"QUOTE_ACCEPTED_SCOPE_LOCKED",error:"The quote changed during save. Reload and check customer acceptance before editing."},409));
 
     return withCors(json({
       ok: true,
@@ -82,7 +95,9 @@ async function createDraft(env, payload) {
 }
 
 async function updateDraft(env, id, payload) {
-  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}`, {
+  // Atomic PostgREST filter protects the accepted state even if a customer
+  // accepts the quote between our read and this PATCH.
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?id=eq.${encodeURIComponent(id)}&status=neq.accepted&or=(acceptance_status.is.null,acceptance_status.neq.accepted)`, {
     method: "PATCH",
     headers: {
       ...serviceHeaders(env),
@@ -92,6 +107,13 @@ async function updateDraft(env, id, payload) {
     body: JSON.stringify(payload)
   });
   return parseWriteResponse(res, "Could not update quote/proposal draft.");
+}
+
+async function loadExistingDraftState(env, id) {
+  const res = await fetch(`${env.SUPABASE_URL}/rest/v1/quote_proposal_drafts?select=id,status,acceptance_status&id=eq.${encodeURIComponent(id)}&limit=1`, {headers:serviceHeaders(env)});
+  if (!res.ok) throw new Error("Could not verify current quote acceptance before saving.");
+  const rows = await res.json();
+  return Array.isArray(rows) ? rows[0] || null : null;
 }
 
 async function parseWriteResponse(res, fallback) {
