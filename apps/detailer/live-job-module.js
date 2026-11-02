@@ -5,7 +5,7 @@ const fmt=(v)=>{try{return v?new Date(v).toLocaleString('en-CA'):'';}catch{retur
 const FIELD_PREFIX={checklist:'[FIELD CHECKLIST]',products:'[PRODUCT USAGE]',addons:'[APPROVED ADD-ONS]',completion:'[COMPLETION EVIDENCE]'};
 
 export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
-  let currentJob=job,currentPolicy=policy,feed={updates:[],media:[],proof_media_status:{stage_counts:{}}},uploadXhr=null,lastFile=null,visible=true;
+  let currentJob=job,currentPolicy=policy,feed={updates:[],media:[],proof_media_status:{stage_counts:{}}},uploadXhr=null,lastFile=null,visible=true,pendingCapture747=null;
   let lastFieldSignature='',onsite746={loaded:false,intake:null,assessment:null,receipt:null};
   host.innerHTML=`
     <section class="panel stack" data-live-module="build383">
@@ -98,11 +98,14 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
       <div class="hr"></div>
       <div class="stack">
         <div class="job-actions"><button class="btn ghost" id="prepareBeforePhoto2" type="button">Before photo</button><button class="btn ghost" id="prepareAfterPhoto" type="button">After photo</button></div>
+        <p class="mini"><strong>Build 747 · original before/after evidence.</strong> Staff captures remain private, even when the message audience above is Customer. Original file only; no automatic crop, thumbnail, gallery or marketing export. Record public-use permission and redaction separately in the approved Photo Studio workflow.</p>
         <label>Photo or video<input id="liveMediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,video/mp4,video/quicktime" capture="environment"/></label>
         <label>Caption<input id="liveMediaCaption" maxlength="240" placeholder="Example: Driver seat after extraction"/></label>
+        <label class="check-row"><input type="checkbox" id="capture747Reviewed"/> I checked the original for faces, number plates, addresses and other private identifiers.</label>
+        <label>Privacy review result<select id="capture747Privacy"><option value="">Select after inspection</option><option value="clear">No identifying details visible</option><option value="sensitive_private">Identifying details present — keep private; redaction needed before any public use</option></select></label>
         <label>Retention<select id="liveMediaRetention"><option value="standard_365_days">Job + 365 days</option><option value="temporary_90_days">Job + 90 days</option><option value="permanent_proof">Permanent evidence</option></select></label>
         <div id="livePreview" class="idle-panel"><span class="mini">Choose a file to preview locally. No upload occurs until you press Upload.</span></div>
-        <div class="job-actions"><button class="btn primary" id="uploadLiveMedia" type="button">Upload media</button><button class="btn ghost" id="cancelLiveUpload" type="button" disabled>Cancel upload</button><button class="btn ghost" id="retryLiveUpload" type="button" disabled>Retry manually</button></div>
+        <div class="job-actions"><button class="btn primary" id="uploadLiveMedia" type="button">Upload private original</button><button class="btn ghost" id="cancelLiveUpload" type="button" disabled>Cancel upload</button><button class="btn ghost" id="retryLiveUpload" type="button" disabled>Retry manually</button><button class="btn ghost" id="inspect747Upload" type="button">Inspect / recover pending upload</button></div>
         <div class="mini" id="liveUploadStatus">Direct storage upload is event-driven. Rosie only requests a signed upload URL and then saves the completed media record.</div>
       </div>
 
@@ -299,33 +302,72 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     q('liveAudience').value='internal';
     q('liveMediaCaption').placeholder=photoStage==='arrival'?'Example: Driver-side condition before service':'Example: Driver-side result after service';
     q('liveMediaFile').focus();
-    q('liveUploadStatus').textContent=photoStage==='arrival'?'Before-photo mode selected. Choose a file, review it locally, then upload.':'After-photo mode selected. Choose a file, review it locally, then upload.';
+    q('liveUploadStatus').textContent=photoStage==='arrival'?'Before-photo mode. Private consent + original privacy review required.':'After-photo mode. Private consent + original privacy review required.';
   }
   function preview(){const file=q('liveMediaFile').files?.[0],box=q('livePreview');if(!file){box.innerHTML='<span class="mini">Choose a file to preview locally. No upload occurs until you press Upload.</span>';return;}const url=URL.createObjectURL(file);box.innerHTML=file.type.startsWith('video/')?`<video controls preload="metadata" style="width:100%;max-height:280px" src="${url}"></video>`:`<img style="width:100%;max-height:280px;object-fit:contain" src="${url}" alt="Selected local preview">`;}
   function directPut(url,file){return new Promise((resolve,reject)=>{const xhr=new XMLHttpRequest();uploadXhr=xhr;xhr.open('PUT',url,true);xhr.setRequestHeader('Content-Type',file.type||'application/octet-stream');xhr.upload.onprogress=(e)=>{if(e.lengthComputable)q('liveUploadStatus').textContent=`Uploading directly to storage… ${Math.round(e.loaded/e.total*100)}%`;};xhr.onload=()=>xhr.status>=200&&xhr.status<300?resolve():reject(new Error(`Direct storage upload failed (${xhr.status}).`));xhr.onerror=()=>reject(new Error('Direct storage upload failed.'));xhr.onabort=()=>reject(new Error('Upload cancelled.'));xhr.send(file);});}
   async function videoDuration(file){if(!file.type.startsWith('video/'))return null;return new Promise((resolve)=>{const video=document.createElement('video'),url=URL.createObjectURL(file);video.preload='metadata';video.onloadedmetadata=()=>{const d=Number(video.duration||0)||null;URL.revokeObjectURL(url);resolve(d);};video.onerror=()=>{URL.revokeObjectURL(url);resolve(null);};video.src=url;});}
+  const captureKey747=()=>`rosie:private-capture-v747:${currentJob.id}`;
+  const savePending747=()=>{if(pendingCapture747)sessionStorage.setItem(captureKey747(),JSON.stringify(pendingCapture747));else sessionStorage.removeItem(captureKey747());};
+  function restorePending747(){try{pendingCapture747=JSON.parse(sessionStorage.getItem(captureKey747())||'null');}catch{pendingCapture747=null;}if(pendingCapture747)q('liveUploadStatus').textContent=`Unresolved original ${pendingCapture747.filename}. Inspect the session before another upload; no automatic replay.`;}
+  async function originalHash747(file){if(file.type.startsWith('video/'))return null;const bytes=await crypto.subtle.digest('SHA-256',await file.arrayBuffer());return Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');}
+  async function matchingOriginal747(pending){const file=lastFile||q('liveMediaFile').files?.[0];if(!file||file.name!==pending.filename||file.size!==pending.file_size_bytes)return false;return !pending.original_sha256||(await originalHash747(file))===pending.original_sha256;}
+  function finishCapture747(out,pending){
+    if(out.media&&!feed.media.some(row=>row.id===out.media.id)){feed.media.unshift(out.media);const key=pending.stage;if(['arrival','pre_existing','during','final'].includes(key)){feed.proof_media_status=feed.proof_media_status||{};feed.proof_media_status.stage_counts=feed.proof_media_status.stage_counts||{};feed.proof_media_status.stage_counts[key]=Number(feed.proof_media_status.stage_counts[key]||0)+1;}}
+    pendingCapture747=null;savePending747();lastFile=null;q('liveMediaFile').value='';q('liveMediaCaption').value='';preview();renderFeed();q('retryLiveUpload').disabled=true;
+    q('liveUploadStatus').textContent='Private original confirmed. No thumbnail or public gallery/marketing permission was created.';
+  }
+  async function commit747(pending){
+    if(!await matchingOriginal747(pending))throw new Error('Re-select and review the exact original file (same name, size and SHA-256) before manual recovery.');
+    q('liveUploadStatus').textContent='Registering verified private original…';
+    const out=await api.requestJson('/api/detailer/media_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,kind:pending.kind,caption:pending.caption,audience:'internal',stage:pending.stage,customer_action_required:false,storage_bucket:pending.bucket,storage_path:pending.path,content_type:pending.content_type,file_size_bytes:pending.file_size_bytes,duration_seconds:pending.duration_seconds,retention_policy:pending.retention_policy,upload_session_id:pending.upload_session_id,original_sha256:pending.original_sha256,privacy_review:pending.privacy_review})});
+    finishCapture747(out,pending);
+  }
+  async function inspect747(){
+    if(!pendingCapture747)return void(q('liveUploadStatus').textContent='No local pending session. Select the job where the upload was started; completed photos can be checked in its feed.');
+    try{
+      const out=await api.requestJson('/api/detailer/media_recovery_v747',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:pendingCapture747.upload_session_id,action:'inspect'})});
+      if(out.state==='media_saved'){pendingCapture747=null;savePending747();lastFile=null;q('retryLiveUpload').disabled=true;q('liveUploadStatus').textContent='Server confirms original was saved once. Refresh the job feed to see it.';return;}
+      pendingCapture747.recovery_state=out.state;pendingCapture747.session_status=out.session_status;savePending747();
+      q('retryLiveUpload').disabled=!['uploaded_unregistered','file_missing'].includes(out.state);
+      q('liveUploadStatus').textContent=`${out.state}: ${out.action_hint} ${out.session_status==='committing'?'A stuck commit must age at least 3 minutes before explicit reopen.':''}`;
+    }catch(error){q('retryLiveUpload').disabled=true;q('liveUploadStatus').textContent=`Inspection unavailable: ${error.message}. Do not create a second upload.`;}
+  }
+  async function retry747(){
+    if(!pendingCapture747)return lastFile&&upload(lastFile);
+    if(pendingCapture747.recovery_state==='file_missing'){pendingCapture747=null;savePending747();return lastFile&&upload(lastFile);}
+    if(pendingCapture747.recovery_state!=='uploaded_unregistered')return void(q('liveUploadStatus').textContent='Inspect first. Uncertain uploads must not be duplicated.');
+    try{
+      if(pendingCapture747.session_status==='committing'){
+        await api.requestJson('/api/detailer/media_recovery_v747',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:pendingCapture747.upload_session_id,action:'reopen'})});
+      }
+      await commit747(pendingCapture747);
+    }catch(error){q('retryLiveUpload').disabled=true;q('liveUploadStatus').textContent=`Manual recovery not confirmed: ${error.message}. Inspect again before retrying.`;}
+  }
   async function upload(fileOverride=null){
     if(!isUsable())return;
-    if(['arrival','pre_existing'].includes(stage())&&
-      (!onsite746.loaded||onsite746.receipt?.photo_consent!=='internal_job_evidence'||audience()!=='internal')){
-      q('liveUploadStatus').textContent='Before-service photos require a saved, current private-photo consent receipt and Staff only visibility. Review onsite consent first.';
+    if(pendingCapture747){q('liveUploadStatus').textContent='There is an unresolved upload. Inspect or recover it before creating another signed upload.';return;}
+    if(!onsite746.loaded||onsite746.receipt?.photo_consent!=='internal_job_evidence'){
+      q('liveUploadStatus').textContent='Current, explicit private-job-photo permission is required for every capture. Reload onsite setup.';
       return;
     }
+    if(!q('capture747Reviewed').checked||!q('capture747Privacy').value){q('liveUploadStatus').textContent='Inspect the original for faces, plates and addresses, then classify its privacy status.';return;}
+    if(!['arrival','pre_existing','during','final','issue','general'].includes(stage())){q('liveUploadStatus').textContent='Select a before, during, after, issue or general capture stage.';return;}
     const file=fileOverride||q('liveMediaFile').files?.[0];if(!file)return;lastFile=file;q('uploadLiveMedia').disabled=true;q('cancelLiveUpload').disabled=false;q('retryLiveUpload').disabled=true;let signed=null;
     try{
       if(!navigator.onLine)throw new Error('Offline. Reconnect, then use Retry manually.');
       const mediaKind=file.type.startsWith('video/')?'video':'image',duration=await videoDuration(file);
+      const hash=await originalHash747(file),privacy={faces_plates_addresses_checked:true,finding:q('capture747Privacy').value};
       q('liveUploadStatus').textContent='Requesting one signed storage upload…';
-      signed=await api.requestJson('/api/detailer/media_upload_url',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,filename:file.name,content_type:file.type||'application/octet-stream',file_size_bytes:file.size,media_kind:mediaKind,duration_seconds:duration,retention_policy:q('liveMediaRetention').value,visibility:audience()==='customer'?'customer':'internal'})});
+      signed=await api.requestJson('/api/detailer/media_upload_url',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,filename:file.name,content_type:file.type||'application/octet-stream',file_size_bytes:file.size,media_kind:mediaKind,duration_seconds:duration,retention_policy:q('liveMediaRetention').value,visibility:'internal',stage:stage(),privacy_review:privacy})});
+      pendingCapture747={upload_session_id:signed.upload_session_id,bucket:signed.bucket,path:signed.path,filename:file.name,content_type:file.type,file_size_bytes:file.size,kind:mediaKind==='image'?'photo':'video',duration_seconds:duration,retention_policy:q('liveMediaRetention').value,stage:stage(),caption:q('liveMediaCaption').value.trim()||file.name,original_sha256:hash,privacy_review:privacy,recovery_state:'needs_inspect'};savePending747();
       if(signed.upload_session_id)await api.requestJson('/api/detailer/media_upload_session',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:signed.upload_session_id,action:'uploading'})});
       await directPut(signed.upload_url,file);
-      q('liveUploadStatus').textContent='Saving completed media record…';
-      const out=await api.requestJson('/api/detailer/media_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,kind:mediaKind==='image'?'photo':'video',caption:q('liveMediaCaption').value.trim()||file.name,audience:audience(),stage:stage(),customer_action_required:q('liveActionRequired').checked,storage_bucket:signed.bucket,storage_path:signed.path,content_type:file.type,file_size_bytes:file.size,duration_seconds:duration,retention_policy:q('liveMediaRetention').value,upload_session_id:signed.upload_session_id})});
-      if(out.media){feed.media=Array.isArray(feed.media)?feed.media:[];feed.media.unshift(out.media);const key=stage();if(['arrival','pre_existing','during','final'].includes(key)){feed.proof_media_status=feed.proof_media_status||{};feed.proof_media_status.stage_counts=feed.proof_media_status.stage_counts||{};feed.proof_media_status.stage_counts[key]=Number(feed.proof_media_status.stage_counts[key]||0)+1;}}
-      q('liveMediaFile').value='';q('liveMediaCaption').value='';preview();renderFeed();q('liveUploadStatus').textContent='Media saved. No feed reload or background sync was required.';lastFile=null;
+      pendingCapture747.recovery_state='uploaded_unregistered';savePending747();
+      await commit747(pendingCapture747);
     }catch(error){
-      if(signed?.upload_session_id){try{await api.requestJson('/api/detailer/media_upload_session',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:signed.upload_session_id,action:String(error.message).includes('cancel')?'cancelled':'failed',error:String(error.message||'upload failed').slice(0,300)})});}catch{}}
-      q('liveUploadStatus').textContent=error.ambiguousMutation?`${error.message} Verify job media before retrying.`:(error.message||'Upload failed.');q('retryLiveUpload').disabled=!lastFile;
+      q('liveUploadStatus').textContent=pendingCapture747?`${error.message||'Upload unconfirmed.'} Inspect the pending session before any retry; the original may already exist.`:(error.message||'Upload failed before a session was created.');
+      q('retryLiveUpload').disabled=!!pendingCapture747||!lastFile;
     }finally{uploadXhr=null;q('cancelLiveUpload').disabled=true;setControls();}
   }
   async function enableProgress(){
@@ -340,7 +382,8 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   q('postLiveNote').addEventListener('click',postNote);
   q('liveMediaFile').addEventListener('change',preview);
   q('uploadLiveMedia').addEventListener('click',()=>upload());
-  q('retryLiveUpload').addEventListener('click',()=>lastFile&&upload(lastFile));
+  q('retryLiveUpload').addEventListener('click',retry747);
+  q('inspect747Upload').addEventListener('click',inspect747);
   q('cancelLiveUpload').addEventListener('click',()=>uploadXhr?.abort());
   q('enableLiveProgress').addEventListener('click',enableProgress);
   q('copyLiveProgress').addEventListener('click',copyProgress);
@@ -366,6 +409,7 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   q('prepareBeforePhoto2').addEventListener('click',()=>preparePhoto('arrival'));
   q('prepareAfterPhoto').addEventListener('click',()=>preparePhoto('final'));
   q('prepareAfterPhoto2').addEventListener('click',()=>preparePhoto('final'));
+  restorePending747();
   setControls();
   await loadFeed();
   await loadOnsite746();
@@ -374,7 +418,7 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     setJob(nextJob,nextPolicy){
       const oldId=String(currentJob?.id||''),newId=String(nextJob?.id||oldId);
       currentJob=nextJob||currentJob;currentPolicy=nextPolicy||currentPolicy;setControls();
-      if(newId&&newId!==oldId){feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};onsite746={loaded:false,intake:null,assessment:null,receipt:null};lastFieldSignature='';q('liveFeed').innerHTML='<div class="notice">Loading selected job field evidence once…</div>';void loadFeed();void loadOnsite746();}
+      if(newId&&newId!==oldId){feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};onsite746={loaded:false,intake:null,assessment:null,receipt:null};pendingCapture747=null;lastFile=null;lastFieldSignature='';q('liveMediaFile').value='';restorePending747();q('liveFeed').innerHTML='<div class="notice">Loading selected job field evidence once…</div>';void loadFeed();void loadOnsite746();}
       else renderFieldWorkflow();
     },
     getFieldState(){return calculateFieldState();},

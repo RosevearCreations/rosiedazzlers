@@ -101,7 +101,9 @@ try{
     assert.equal(new URL(url).searchParams.get('source_status'),'eq.needs_review');
     return json([{...existing,source_status:'active',updated_at:'2026-10-23T10:11:13.000Z'}]);
   };
-  const approved=await approve({...input,publication_approval:true});assert.equal(approved.status,200);
+  const missingPrivacy=await approve({...input,publication_approval:true});assert.equal(missingPrivacy.status,409);
+  assert.equal((await missingPrivacy.json()).code,'media_privacy_review_required');
+  const approved=await approve({...input,publication_approval:true,privacy_classification:'clear',authentic_original_verified:true});assert.equal(approved.status,200);
 
   const page=fs.readFileSync('admin-photo-studio.html','utf8');
   assert.equal(page,fs.readFileSync('admin-photo-studio/index.html','utf8'));

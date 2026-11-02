@@ -1,4 +1,5 @@
 import { requireStaffAccess, json, methodNotAllowed, cleanText, isUuid } from "../_lib/staff-auth.js";
+import { capturePolicy747, verifyCaptureConsent747 } from '../_lib/media-capture-v747.js';
 
 export async function onRequestOptions() {
   return new Response("", { status: 204, headers: corsHeaders() });
@@ -6,6 +7,7 @@ export async function onRequestOptions() {
 
 export async function onRequestPost(context) {
   const { request, env } = context;
+  const capture747=context.detailerCapture747===true;
   try {
     if (!env.SUPABASE_URL || !env.SUPABASE_SERVICE_ROLE_KEY) {
       return withCors(json({ error: "Server not configured (Supabase env vars missing)" }, 500));
@@ -18,8 +20,12 @@ export async function onRequestPost(context) {
     const file_size_bytes = Number(body.file_size_bytes || 0);
     const customer_visible = body.customer_visible === true || String(body.visibility || "").trim().toLowerCase() === "customer";
     const media_kind = normalizeMediaKind(body.media_kind, content_type);
+    if(capture747&&['arrival','pre_existing','final'].includes(String(body.stage||''))&&media_kind!=='image')return withCors(json({error:'Before/After evidence must be an original photo. Use During for video updates.'},409));
     const duration_seconds = Number(body.duration_seconds || 0);
     const retention_policy = normalizeRetention(body.retention_policy);
+    const policy=capture747?capturePolicy747(body):null;
+    if(capture747&&!policy.ok)return withCors(json({error:policy.error,code:'private_capture_required'},409));
+    if(capture747&&(!file_size_bytes||!Number.isSafeInteger(file_size_bytes)||file_size_bytes<1))return withCors(json({error:'The original file size must be known before signing.'},400));
     const max_duration_seconds = Number(env.JOB_MEDIA_MAX_VIDEO_SECONDS || 120);
     if (media_kind === 'video' && duration_seconds > 0 && duration_seconds > max_duration_seconds) {
       return withCors(json({ error: `Video is longer than the ${max_duration_seconds}-second limit.`, max_duration_seconds }, 400));
@@ -37,13 +43,19 @@ export async function onRequestPost(context) {
       }
     }
 
-    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: true });
+    const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId: booking_id, allowLegacyAdminFallback: !capture747 });
     if (!access.ok) return withCors(access.response);
+    let captureConsent=null;
+    if(capture747){
+      if(access.auth_mode!=='session'||request.headers.get('origin')!==new URL(request.url).origin)return withCors(json({error:'A same-origin signed-in staff session is required.'},403));
+      captureConsent=await verifyCaptureConsent747(env,booking_id);
+      if(!captureConsent.ok)return withCors(json({error:'Current private-job-photo consent was not verified. Reload onsite intake before trying again.',code:'consent_stale'},409));
+    }
 
     const bucket = String(env.JOB_MEDIA_BUCKET || "job-media").trim() || "job-media";
     const safeName = sanitizeFilename(filename);
     const stamp = new Date().toISOString().replaceAll(":", "").replaceAll(".", "");
-    const path = `jobs/${booking_id}/${stamp}_${safeName}`;
+    const path = capture747?`jobs/${booking_id}/v747/${policy.stage}/${stamp}_${crypto.randomUUID()}_${safeName}`:`jobs/${booking_id}/${stamp}_${safeName}`;
 
     const signRes = await fetch(`${env.SUPABASE_URL}/storage/v1/object/upload/sign/${encodeURIComponent(bucket)}/${encodePath(path)}`, {
       method: "POST",
@@ -63,7 +75,10 @@ export async function onRequestPost(context) {
 
     const upload_url = signedURL.startsWith("http") ? signedURL : `${env.SUPABASE_URL}/storage/v1${signedURL}`;
     const upload_session_id = crypto.randomUUID();
-    await createUploadSession({ env, id: upload_session_id, booking_id, filename: safeName, content_type, file_size_bytes, media_kind, bucket, path, retention_policy, actor: access.actor }).catch(() => null);
+    if(capture747){
+      try{await createUploadSession({ env, id: upload_session_id, booking_id, filename: safeName, content_type, file_size_bytes, media_kind, bucket, path, retention_policy, actor: access.actor });}
+      catch{return withCors(json({error:'Upload tracking could not be saved. No file was uploaded; retry signing deliberately.',code:'session_unavailable'},503));}
+    }else await createUploadSession({ env, id: upload_session_id, booking_id, filename: safeName, content_type, file_size_bytes, media_kind, bucket, path, retention_policy, actor: access.actor }).catch(() => null);
 
     const public_url = customer_visible
       ? `${env.JOB_MEDIA_PUBLIC_BASE || `${env.SUPABASE_URL}/storage/v1/object/public`}/${encodeURIComponent(bucket)}/${encodePath(path)}`
@@ -79,6 +94,7 @@ export async function onRequestPost(context) {
       customer_visible,
       media_kind,
       upload_session_id,
+      ...(capture747?{private_capture:true,consent_receipt_id:captureConsent.receipt_id,original_path:path,thumbnail_path:null,public_use_allowed:false}:{}),
       retention_policy,
       max_duration_seconds,
       compression_guidance: media_kind === 'video' ? 'For faster mobile uploads, use MP4/H.264 at 1080p or lower. The browser will not silently alter the original evidence file.' : 'Use JPEG or WebP when practical for faster mobile uploads.',
