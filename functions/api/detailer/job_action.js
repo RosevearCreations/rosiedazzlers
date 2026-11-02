@@ -6,6 +6,7 @@ import { syncCompletedBookingVehicleHistory } from "../_lib/customer-vehicle-ser
 import { allowedMobileTransition745, mobileStage745 } from '../../../assets/detailer-mobile-dayboard-v745.mjs';
 import { canWorkMobileBooking745 } from '../_lib/detailer-mobile-scope-v745.js';
 import { loadOnsiteGate746 } from '../_lib/onsite-setup-v746.js';
+import { qualitySnapshot749 } from '../_lib/quality-store-v749.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -64,6 +65,14 @@ export async function onRequestPost(context) {
         Boolean(row.media_url||(row.storage_bucket&&row.storage_path))&&Date.parse(row.created_at||'')>=consentTime);
       if(Number(proof.stage_counts?.arrival||0)<1||!consentedPhoto||!checklist)
         return json({ok:false,error:'A private arrival photo after recorded customer photo consent, plus a saved staff checklist, are required before Start.',code:'before_service_evidence_required'},409);
+    }
+    if(action==='complete'){
+      let quality;
+      try{quality=(await qualitySnapshot749(env,bookingId)).summary;}catch{
+        return json({ok:false,error:'Quality receipts cannot be verified. Completion is held; reload the source.',code:'quality_source_unavailable'},503);
+      }
+      if(!quality.approved||quality.revision!==String(body.expected_quality_revision||''))
+        return json({ok:false,error:'Independent quality acceptance on the exact current pre/post revision is required before completing the job.',code:'quality_acceptance_required',quality_status:quality.status},409);
     }
   }
 

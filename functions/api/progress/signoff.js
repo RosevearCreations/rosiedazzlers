@@ -1,3 +1,5 @@
+import {qualitySnapshot749} from '../_lib/quality-store-v749.js';
+
 export async function onRequestPost(context) {
   const { request, env } = context;
 
@@ -18,8 +20,10 @@ export async function onRequestPost(context) {
     const signature_data_url = String(body.signature_data_url || "").trim() || null;
 
     if (!token) return json({ error: "Missing token." }, 400);
-    if (!signer_name) return json({ error: "Missing signer name." }, 400);
-    if (!signer_email) return json({ error: "Missing signer email." }, 400);
+    if (!signer_name || signer_name.length>120) return json({ error: "A valid customer name is required." }, 400);
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(signer_email)||signer_email.length>254) return json({ error: "A valid customer email is required." }, 400);
+    if(notes.length>1200)return json({error:'Signoff note is too long.'},400);
+    if(signature_data_url&&(signature_data_url.length>400000||!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(signature_data_url)))return json({error:'The drawing must be a bounded PNG signature from the customer.'},400);
 
     const headers = {
       apikey: env.SUPABASE_SERVICE_ROLE_KEY,
@@ -29,7 +33,7 @@ export async function onRequestPost(context) {
 
     const bookingUrl =
       `${env.SUPABASE_URL}/rest/v1/bookings` +
-      `?select=id,status,job_status,progress_enabled,progress_token` +
+      `?select=id,status,job_status,current_workflow_stage,progress_enabled,progress_token` +
       `&progress_token=eq.${encodeURIComponent(token)}` +
       `&limit=1`;
 
@@ -50,8 +54,24 @@ export async function onRequestPost(context) {
       return json({ error: "Progress signoff is not enabled for this booking." }, 403);
     }
 
+    // A customer acts using their own private progress token. Staff QC receipts never
+    // stand in for a customer signature. Legacy already-completed jobs remain readable.
+    let quality;
+    try { quality=(await qualitySnapshot749(env,booking.id)).summary; }
+    catch { return json({error:'Quality acceptance could not be verified. Please contact Rosie Dazzlers before signing.'},503); }
+    const stage=String(booking.current_workflow_stage||booking.job_status||booking.status||'').toLowerCase();
+    if(!quality.approved&&(quality.started||!['awaiting_payment','completed'].includes(stage)))
+      return json({error:'Final quality inspection and independent review are not yet complete. Please wait for Rosie Dazzlers to finish the handoff.'},409);
+    if(quality.started&&(!quality.approved||body.acknowledgement_749!==true||!signature_data_url))
+      return json({error:'Customer or owner acknowledgement and their own drawn signature are required after independent quality acceptance.'},409);
+
     const bookingId = booking.id;
     const user_agent = request.headers.get("user-agent") || "";
+    const existingRes=await fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs?select=id&booking_id=eq.${bookingId}&signer_type=eq.customer&limit=1`,{headers});
+    if(!existingRes.ok)return json({error:'Could not check existing customer signoff. No duplicate was sent.'},503);
+    const already=await existingRes.json().catch(()=>[]);
+    if(!Array.isArray(already))return json({error:'Customer signoff readback unavailable.'},503);
+    if(already.length)return json({error:'Customer signoff is already recorded. Reload your booking before continuing.'},409);
 
     const insertRes = await fetch(`${env.SUPABASE_URL}/rest/v1/job_signoffs`, {
       method: "POST",

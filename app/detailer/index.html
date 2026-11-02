@@ -74,6 +74,23 @@
           <div class="job-actions"><button class="btn ghost" type="button" id="shift748Reload">Reload / reconcile clock</button><button class="btn ghost" type="button" id="shift748Retry" disabled>Retry same punch manually</button><button class="btn primary" type="button" id="shift748Submit" disabled>Submit closed shift for review</button></div>
           <div class="mini" id="shift748Receipt">Clock punches are not approved payroll entries. Operations must review any gaps or exceptions.</div>
         </article>
+        <article class="panel stack" id="quality749Panel" aria-label="Build 749 detail quality control">
+          <h2 style="margin:0">Build 749 · Detail quality &amp; handoff</h2>
+          <p class="mini">Record each pre/post quality check against the assigned job, with real private before/after photos. Missing steps and claims stay on hold. This is <strong>not</strong> a customer signature; the vehicle owner signs separately on their own customer progress link.</p>
+          <div class="notice warn" id="quality749Status" role="status" aria-live="polite">Select an assigned job to load quality evidence.</div>
+          <div class="mini" id="quality749Summary">No quality record loaded.</div>
+          <label>Inspection phase<select id="quality749Phase"><option value="before">Before work</option><option value="after">After work</option></select></label>
+          <label>Check item<select id="quality749Item"><option value="existing_condition">Existing condition documented</option><option value="agreed_scope">Agreed service scope</option><option value="worksite_safety">Safe work area</option></select></label>
+          <label>Result<select id="quality749Result"><option value="pass">Pass — checked</option><option value="needs_rework">Needs rework / attention</option><option value="not_applicable">Not applicable (reason required)</option></select></label>
+          <label>Factual check / rework note<textarea id="quality749Note" maxlength="350" rows="2" placeholder="Describe what we actually observed; do not put customer identifiers here."></textarea></label>
+          <div class="job-actions"><button class="btn ghost" type="button" id="quality749Save" disabled>Save checked item</button><button class="btn ghost" type="button" id="quality749Reload">Reload / reconcile</button><button class="btn ghost" type="button" id="quality749Retry" disabled>Retry same operation</button></div>
+          <h3 style="margin:0">Private exception / rework handoff</h3>
+          <label>Concern<select id="quality749IssueType"><option value="missing_step">Missed quality step</option><option value="rework">Rework needed</option><option value="damage_concern">Damage concern — claim hold</option><option value="customer_dispute">Customer dispute — owner review</option><option value="other">Other exception</option></select></label>
+          <label>Factual exception description<textarea id="quality749IssueNote" maxlength="650" rows="3" placeholder="What was observed and what needs independent review?"></textarea></label>
+          <label>Optional private job-photo ID<input id="quality749Evidence" maxlength="36" placeholder="Linked job-media UUID; not a public URL"></label>
+          <div class="job-actions"><button class="btn ghost" id="quality749Raise" type="button" disabled>Raise private exception</button><button class="btn primary" id="quality749Submit" type="button" disabled>Submit complete QC for manager review</button></div>
+          <div class="mini">Completion is held until Operations independently accepts the current QC revision. No claim, refund, marketing permission, payment or customer notice is created here.</div>
+        </article>
       </aside>
 
       <section class="stack">
@@ -97,7 +114,7 @@
   <script src="/assets/app-core/refresh-leader.js?v=20260829build271"></script>
   <script src="/assets/app-core/install-client.js?v=20260829build271"></script>
   <script src="/assets/app-core/module-navigation.js?v=20260829build271"></script>
-  <script src="/apps/detailer/detailer-app.js?v=20261102build748"></script>
+  <script src="/apps/detailer/detailer-app.js?v=20261102build749"></script>
   <script src="/assets/build400-detailer-mobile-qol.js?v=20260914build400"></script>
   <script src="/assets/build432-staff-workflow-refinement.js?v=20260919build432"></script>
 </body>

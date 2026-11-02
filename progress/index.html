@@ -85,6 +85,7 @@
     <section class="section">
       <div class="panel">
         <h2>Completion signoff</h2>
+        <div class="notice" id="quality749Customer">Final quality verification will appear when the booking loads. Only the customer or authorized vehicle owner can sign.</div>
         <form id="signoffForm" class="form">
           <label>
             Your name
@@ -106,6 +107,7 @@
             Notes (optional)
             <textarea id="signoffNotes" name="signoffNotes" rows="4" placeholder="Optional note about your service or completion."></textarea>
           </label>
+          <label class="check-row"><input id="quality749CustomerAck" type="checkbox" required /> I am the customer or authorized vehicle owner, and I have reviewed the completed service. I understand that this signature is my own action, not a staff quality check.</label>
 
           <div>
             <button id="signoffBtn" class="btn primary" type="submit" disabled>Submit signoff</button>
@@ -443,10 +445,15 @@
 
       const signoffs = Array.isArray(data.signoffs) ? data.signoffs : [];
       hasSignoff = signoffs.length > 0;
+      const quality=data.quality_handoff_v749||{};
+      const stage=String(data.booking?.current_workflow_stage||data.booking?.job_status||'').toLowerCase();
+      const legacyCompleted=!quality.ready_for_signoff&&quality.status==='not_started'&&['awaiting_payment','completed'].includes(stage);
+      const reviewReady=quality.ready_for_signoff===true||legacyCompleted;
+      document.querySelector('#quality749Customer').textContent=quality.ready_for_signoff?'Independent final quality review accepted. If you are satisfied, you may sign personally below.':legacyCompleted?'This previously completed job follows the existing completion signoff process. Please review it before signing.':'Rosie Dazzlers is still reviewing the final quality evidence or a concern. Customer signoff is on hold until the handoff is ready.';
 
       if (!signoffs.length) {
         wrap.innerHTML = "No signoff recorded yet.";
-        btn.disabled = false;
+        btn.disabled = !reviewReady;
         return;
       }
 
@@ -590,6 +597,14 @@
         setNotice("Your email is required.", "bad");
         return;
       }
+      if (!document.querySelector('#quality749CustomerAck')?.checked) {
+        setNotice('Please confirm that you are the customer or authorized vehicle owner and have reviewed the service.', 'bad');
+        return;
+      }
+      if (!signHasInk) {
+        setNotice('Please draw your own signature before submitting.', 'bad');
+        return;
+      }
 
       try {
         btn.disabled = true;
@@ -605,7 +620,9 @@
             token: currentToken,
             signer_name,
             signer_email,
-            notes
+            notes,
+            signature_data_url:signCanvas.toDataURL('image/png'),
+            acknowledgement_749:true
           })
         });
 
