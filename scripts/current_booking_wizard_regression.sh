@@ -90,3 +90,4 @@ node --experimental-vm-modules scripts/build737_full_wizard_recovery_test.mjs
 node scripts/build738_availability_capacity_manual_exceptions_test.mjs
 node scripts/build739_winter_workability_service_area_test.mjs
 node scripts/build740_quote_booking_approval_deposit_readiness_test.mjs
+node scripts/build742_account_history_change_requests_test.mjs
