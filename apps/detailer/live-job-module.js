@@ -83,7 +83,7 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     </section>`;
 
   const q=(id)=>host.querySelector(`#${id}`);
-  function isUsable(){return visible&&currentPolicy?.selected_job_open===true;}
+  function isUsable(){return visible&&currentPolicy?.selected_job_open===true&&document.body.dataset.build745Sync==='verified'&&navigator.onLine!==false;}
   function setControls(){
     const enabled=isUsable();
     q('liveMediaState').textContent=enabled?'ON':'SUSPENDED';

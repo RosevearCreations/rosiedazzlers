@@ -25,6 +25,8 @@
     return true;
   }
   function detailer(){
+    const ephemeral745=doc.body.dataset.build745==='manual-offline-reconciliation';
+    let lastJobInTab745='';
     const jobsList=doc.getElementById('jobsList');
     const nextLabel=doc.getElementById('workflowNextLabel');
     const nextButton=doc.getElementById('workflowNextAction');
@@ -48,7 +50,7 @@
         : 'Browser reports online. The server remains authoritative for every job action.';
     }
     function updateResume(){
-      const remembered=sessionGet('detailer:last-job');
+      const remembered=ephemeral745?lastJobInTab745:sessionGet('detailer:last-job');
       const candidate=remembered?jobsList.querySelector('[data-job-id="'+CSS.escape(remembered)+'"]'):null;
       resumeButton.disabled=!candidate;
       resumeButton.dataset.jobId=candidate?remembered:'';
@@ -56,7 +58,7 @@
     }
     function updateNext(){
       const selected=selectedButton();
-      if(selected&&selected.dataset.jobId)sessionSet('detailer:last-job',selected.dataset.jobId);
+      if(selected&&selected.dataset.jobId){if(ephemeral745)lastJobInTab745=selected.dataset.jobId;else sessionSet('detailer:last-job',selected.dataset.jobId);}
       const available=actionOrder.map((action)=>({action,button:currentActionButton(action)})).find((entry)=>entry.button&&!entry.button.disabled);
       if(!selected){
         nextLabel.textContent='Choose an assigned job to see the next available action.';
@@ -103,7 +105,7 @@
 
     jobsList.addEventListener('click',(event)=>{
       const button=event.target.closest('[data-job-id]');
-      if(button&&button.dataset.jobId)sessionSet('detailer:last-job',button.dataset.jobId);
+      if(button&&button.dataset.jobId){if(ephemeral745)lastJobInTab745=button.dataset.jobId;else sessionSet('detailer:last-job',button.dataset.jobId);}
     });
 
     const observer=new MutationObserver(updateNext);
