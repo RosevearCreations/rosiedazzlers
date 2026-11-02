@@ -128,7 +128,9 @@ try {
   for(const snippet of ['scope=mobile_v745','expected_updated_at','client_v745:true','reconciliationRequired','addEventListener(\'offline\'','addEventListener(\'online\'','continuityEpoch','wasDisconnected'])
     assert.ok(client.includes(snippet),`Offline safety missing ${snippet}`);
   assert.ok(live.includes("document.body.dataset.build745Sync==='verified'"),'Field evidence must be disabled until reverified');
-  assert.doesNotMatch(client,/localStorage|sessionStorage|indexedDB|SyncManager|setInterval\s*\(/i,'No persisted private snapshots or auto replay');
+  assert.doesNotMatch(client,/localStorage|indexedDB|SyncManager|setInterval\s*\(/i,'No persisted private snapshots or auto replay');
+  assert.match(client,/rosie:shift-punch-v748:/,'Only a clock-operation UUID/revision is kept for deliberate idempotent recovery');
+  assert.match(client,/shift748\.pending=\{operation_id:crypto\.randomUUID\(\),punch,expected_revision:/,'No private job snapshot or note is persisted with the clock operation');
   assert.ok(build400.includes('tabTimers745')&&build400.includes('if(ephemeral745)return tabTimers745.get'),'Build 400 cosmetic timer is not job-keyed persistent storage on Build 745');
   assert.ok(build432.includes('lastJobInTab745')&&build432.includes('ephemeral745?lastJobInTab745'),'Build 432 last viewed job stays in volatile tab memory');
   assert.ok(worker.includes('/api/'),'API cache exclusion contract retained');

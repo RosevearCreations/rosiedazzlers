@@ -55,6 +55,25 @@
           </div>
           <div class="mini">Build 383 evidence gates remain authoritative. Start requires current audited onsite setup, customer acknowledgements, an arrival photo and the saved staff checklist. Unresolved site exceptions stay held. Complete retains the field-evidence sequence. Server rules are authoritative. The device-only timer remains a cosmetic convenience, not payroll evidence.</div>
         </article>
+        <article class="panel stack" id="shift748Panel" aria-label="Build 748 staff time and shift reconciliation">
+          <h2 style="margin:0">Build 748 · Staff time, travel & breaks</h2>
+          <p class="mini">Source-backed clock punches for this assigned job. No automatic time tracking, wage calculation, location logging or payroll posting. Review and submit a closed shift to Operations; independent approval is separate.</p>
+          <div class="notice warn" id="shift748Status" role="status" aria-live="polite">Select an assigned job, then load its current time record.</div>
+          <div id="shift748Summary" class="mini">No shift loaded.</div>
+          <label>Optional punch note (do not enter customer or medical details)<input id="shift748Note" maxlength="240" placeholder="Example: Travel delayed by weather"></label>
+          <div class="job-actions" id="shift748Actions">
+            <button class="btn ghost" type="button" data-shift-punch="clock_in">Clock in</button>
+            <button class="btn ghost" type="button" data-shift-punch="travel_start">Travel start</button>
+            <button class="btn ghost" type="button" data-shift-punch="travel_stop">Travel stop</button>
+            <button class="btn ghost" type="button" data-shift-punch="work_start">Service start</button>
+            <button class="btn ghost" type="button" data-shift-punch="break_start">Break start</button>
+            <button class="btn ghost" type="button" data-shift-punch="break_stop">Break end</button>
+            <button class="btn ghost" type="button" data-shift-punch="work_stop">Service stop</button>
+            <button class="btn ghost" type="button" data-shift-punch="clock_out">Clock out</button>
+          </div>
+          <div class="job-actions"><button class="btn ghost" type="button" id="shift748Reload">Reload / reconcile clock</button><button class="btn ghost" type="button" id="shift748Retry" disabled>Retry same punch manually</button><button class="btn primary" type="button" id="shift748Submit" disabled>Submit closed shift for review</button></div>
+          <div class="mini" id="shift748Receipt">Clock punches are not approved payroll entries. Operations must review any gaps or exceptions.</div>
+        </article>
       </aside>
 
       <section class="stack">
@@ -78,7 +97,7 @@
   <script src="/assets/app-core/refresh-leader.js?v=20260829build271"></script>
   <script src="/assets/app-core/install-client.js?v=20260829build271"></script>
   <script src="/assets/app-core/module-navigation.js?v=20260829build271"></script>
-  <script src="/apps/detailer/detailer-app.js?v=20261102build746"></script>
+  <script src="/apps/detailer/detailer-app.js?v=20261102build748"></script>
   <script src="/assets/build400-detailer-mobile-qol.js?v=20260914build400"></script>
   <script src="/assets/build432-staff-workflow-refinement.js?v=20260919build432"></script>
 </body>

@@ -77,6 +77,20 @@
 
       <section class="section metrics" id="metricGrid"></section>
 
+      <section class="section panel stack" aria-label="Build 748 independent shift reconciliation">
+        <div class="badge">Build 748 · Source-linked shift reconciliation</div>
+        <h2 style="margin:0">Review staff clock, travel & break evidence</h2>
+        <p class="mini">Review the original job time events, missing punches, and the exact submitted revision. A decision is an audit receipt only: it does not add wages, pay travel, or post a payroll journal. Resolve disputes and approved pay separately through the authorized payroll process.</p>
+        <div class="toolbar"><button class="btn ghost" id="shift748QueueRefresh" type="button">Load submitted shifts</button><span class="mini" id="shift748QueueStatus" role="status" aria-live="polite">No submitted shifts loaded.</span></div>
+        <div class="table-lite" id="shift748Queue">Use Load submitted shifts for current review handoffs.</div>
+        <div id="shift748ReviewPanel" class="stack" hidden>
+          <h3 style="margin:0">Selected source comparison</h3>
+          <div class="notice" id="shift748ReviewSummary">Select a submitted shift for verification.</div>
+          <label>Independent reviewer note (required, minimum 12 characters)<textarea id="shift748ReviewNote" rows="2" maxlength="500" placeholder="Source evidence reviewed; record remaining concerns or reason for correction"></textarea></label>
+          <div class="toolbar"><button class="btn primary" id="shift748Accept" type="button" disabled>Accept source reconciliation</button><button class="btn ghost" id="shift748Correction" type="button" disabled>Return for correction</button></div>
+        </div>
+      </section>
+
       <section class="section split">
         <div class="panel stack">
           <div>
@@ -236,6 +250,42 @@
       const out = await apiPost('/api/admin/staff_availability_list', { start_date: byId('startDate').value, end_date: byId('endDate').value });
       renderAvailabilityBlocks(out.availability_blocks || []);
     }
+    let shift748Queue=[],shift748Selected=null,shift748Source=null,shift748Busy=false;
+    function shift748Status(message){byId('shift748QueueStatus').textContent=message;}
+    function shift748ReviewRender(){
+      const box=byId('shift748ReviewPanel');box.hidden=!shift748Selected;
+      if(!shift748Selected)return;
+      const summary=shift748Source?.summary||{},receipt=shift748Source?.receipt||{},match=receipt.submission?.revision===summary.revision;
+      const valid=match&&summary.ready_to_submit===true&&!receipt.review;
+      const num=value=>Number(value||0).toFixed(1);
+      byId('shift748ReviewSummary').innerHTML=shift748Source?`<strong>Booking:</strong> ${esc(shift748Selected.booking_id)} · <strong>Staff:</strong> ${esc(shift748Selected.actor_name)}<br><strong>Source:</strong> ${esc(summary.event_count)} original punches · shift ${num(summary.totals?.shift_minutes)} min · service ${num(summary.totals?.work_minutes)} min · travel ${num(summary.totals?.travel_minutes)} min · breaks ${num(summary.totals?.break_minutes)} min<br><strong>Candidate work + travel:</strong> ${num(summary.paid_candidate_minutes)} min (not paid). <strong>Revision:</strong> ${match?'Matches submitted':'Changed since submission'}${summary.issues?.length?`<br><strong>Review issues:</strong> ${esc(summary.issues.join('; '))}`:''}${receipt.review?`<br>Previously reviewed: ${esc(receipt.review.decision)}`:''}`:'Source not loaded.';
+      byId('shift748Accept').disabled=shift748Busy||!valid;
+      byId('shift748Correction').disabled=shift748Busy||!receipt.submission||!!receipt.review;
+    }
+    async function loadShift748Queue(){
+      shift748Status('Loading source-linked shift submissions…');
+      const out=await apiPost('/api/admin/shift_review_v748',{action:'queue'});
+      shift748Queue=out.queue||[];
+      byId('shift748Queue').innerHTML=shift748Queue.length?shift748Queue.map((item,index)=>`<div class="table-lite__row"><span>${esc(item.actor_name||'Staff')} · ${esc(item.booking_id)}<div class="mini">${esc(item.created_at||'')} · ${Number(item.paid_candidate_minutes||0).toFixed(1)} min candidate · ${item.reviewed?'Reviewed':'Pending'}</div></span><button class="btn ghost small" type="button" data-shift-review="${index}">Inspect</button></div>`).join(''):'<div class="mini">No shift submissions in the recent audit window.</div>';
+      byId('shift748Queue').querySelectorAll('[data-shift-review]').forEach(button=>button.addEventListener('click',()=>inspectShift748(shift748Queue[Number(button.dataset.shiftReview)])));
+      shift748Status(`${shift748Queue.length} recent submission(s). Nothing approved or posted.`);
+    }
+    async function inspectShift748(item){
+      if(!item)return;
+      shift748Selected=item;shift748Source=null;byId('shift748ReviewNote').value='';shift748ReviewRender();
+      try{shift748Source=await apiPost('/api/admin/shift_review_v748',{action:'load',booking_id:item.booking_id,staff_user_id:item.staff_user_id});shift748ReviewRender();shift748Status('Original clock events loaded; review the source against the submitted revision.');}
+      catch(error){shift748Status(`Review unavailable: ${error.message}. Nothing was approved.`);}
+    }
+    async function decideShift748(decision){
+      const item=shift748Selected,source=shift748Source;if(!item||!source||shift748Busy)return;
+      const note=byId('shift748ReviewNote').value.trim();if(note.length<12){shift748Status('Write a clear independent review note of at least 12 characters.');return;}
+      if(!confirm(`${decision==='accepted'?'Accept':'Return for correction'} this shift source? No payroll entry or payment will be created.`))return;
+      shift748Busy=true;shift748ReviewRender();
+      try{await apiPost('/api/admin/shift_review_v748',{action:'review',booking_id:item.booking_id,staff_user_id:item.staff_user_id,submission_id:source.receipt.submission.id,
+        expected_revision:source.summary.revision,decision,note});shift748Status('Independent audit receipt saved; payroll unchanged.');await inspectShift748(item);await loadShift748Queue();}
+      catch(error){shift748Status(`Review outcome uncertain: ${error.message}. Reload the source before retrying.`);}
+      finally{shift748Busy=false;shift748ReviewRender();}
+    }
     function currentRunBody(status, postToAccounting) {
       return {
         start_date: byId('startDate').value,
@@ -258,6 +308,9 @@
       byId('postPayrollBtn').addEventListener('click', async ()=>{ try { notice('Posting payroll run…'); const out = await apiPost('/api/admin/payroll_run_save', currentRunBody('posted', true)); const warning = out.accounting_post?.warning ? ` ${out.accounting_post.warning}` : ''; notice(`Payroll run posted.${warning}`, out.accounting_post?.warning ? '' : 'ok'); } catch (err) { notice(err?.message || 'Could not post payroll run.', 'error'); } });
       byId('saveAvailBtn').addEventListener('click', async ()=>{ try { notice('Saving availability block…'); await apiPost('/api/admin/staff_availability_save', { staff_user_id: byId('availStaff').value, availability_type: byId('availType').value, start_at: byId('availStart').value, end_at: byId('availEnd').value, note: byId('availNote').value.trim() || null }); await loadAvailability(); await loadSummary(); notice('Availability block saved.', 'ok'); } catch (err) { notice(err?.message || 'Could not save availability block.', 'error'); } });
       byId('refreshAvailBtn').addEventListener('click', async ()=>{ try { await loadAvailability(); notice('Availability blocks reloaded.', 'ok'); } catch (err) { notice(err?.message || 'Could not reload availability blocks.', 'error'); } });
+      byId('shift748QueueRefresh').addEventListener('click',()=>loadShift748Queue().catch(error=>shift748Status(error.message||'Queue unavailable.')));
+      byId('shift748Accept').addEventListener('click',()=>decideShift748('accepted'));
+      byId('shift748Correction').addEventListener('click',()=>decideShift748('needs_correction'));
 
       await window.AdminPageInit.init({
         pageKey: 'admin-payroll',
