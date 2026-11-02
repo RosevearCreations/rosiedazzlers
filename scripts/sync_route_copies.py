@@ -60,6 +60,7 @@ ROUTE_COPY_PAGES = [
     "progress.html",
     "final-balance-payment.html",
     "gift-certificate-print.html",
+    "gifts.html",
     "services.html",
     "pricing.html",
     "gift-cards.html",
