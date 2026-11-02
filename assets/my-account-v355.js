@@ -239,6 +239,12 @@ async function captureDashboardResponse(response, input) {
         const status = document.querySelector('#build742HistoryStatus');
         if (status) status.textContent = 'Could not load the account history module. Refresh to try again.';
       });
+    import('/assets/customer-notification-consent-v743.js?v=20261102build743')
+      .then((module) => module.loadCustomerCommunicationPreferences?.())
+      .catch(() => {
+        const status = document.querySelector('#build743PreferenceStatus');
+        if (status) status.textContent = 'Could not load communication preferences. Refresh to try again.';
+      });
     import('/assets/my-account-v382.js')
       .then((module) => module.loadCustomerRetentionView?.())
       .catch(() => {});
