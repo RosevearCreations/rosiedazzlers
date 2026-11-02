@@ -6,7 +6,7 @@ const FIELD_PREFIX={checklist:'[FIELD CHECKLIST]',products:'[PRODUCT USAGE]',add
 
 export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   let currentJob=job,currentPolicy=policy,feed={updates:[],media:[],proof_media_status:{stage_counts:{}}},uploadXhr=null,lastFile=null,visible=true;
-  let lastFieldSignature='';
+  let lastFieldSignature='',onsite746={loaded:false,intake:null,assessment:null,receipt:null};
   host.innerHTML=`
     <section class="panel stack" data-live-module="build383">
       <div class="job-actions" style="justify-content:space-between"><div><span class="badge">Build 383 field workflow</span><h2 style="margin:8px 0 0">Field evidence, scope control & customer handoff</h2></div><button class="btn ghost" id="liveRefreshFeed" type="button">Refresh feed</button></div>
@@ -16,6 +16,48 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
         <div class="job-actions" style="justify-content:space-between"><div><strong>Field workflow readiness</strong><div class="mini">Arrival/readiness and keys/access remain server-authoritative. Before-service and completion evidence below are booking-scoped.</div></div><span class="badge" id="fieldOverallState">CHECKING</span></div>
         <div class="runtime-strip" id="fieldWorkflowStatus"></div>
         <div class="notice" id="fieldGateMessage">Load the job feed to calculate field readiness.</div>
+      </section>
+
+      <section class="panel stack" aria-label="Onsite setup and pre-damage inspection" id="onsite746Panel">
+        <h3 style="margin:0">Build 746 · Onsite setup & customer property</h3>
+        <p class="mini" style="margin:0">Complete after arrival, before Start. These are staff-recorded observations and customer acknowledgements, not a customer signature. Rosie normally brings water and power; confirm the source actually available and safe today. No fee is charged here.</p>
+        <div class="notice warn" id="onsite746Status" role="status" aria-live="polite">Load this assigned job's current onsite intake before editing.</div>
+        <div id="onsite746Missing" class="mini"></div>
+        <div class="job-actions"><button class="btn ghost" id="onsite746Reload" type="button">Reload onsite evidence</button><span class="mini" id="onsite746Revision"></span></div>
+        <form id="onsite746Form" class="stack" autocomplete="off">
+          <fieldset class="stack" style="min-width:0"><legend><strong>Arrival, workspace & utilities</strong></legend>
+            <label class="check-row"><input data-onsite-check="vehicle_accessible_and_safe" type="checkbox">Safe, permitted work area and vehicle access inspected</label>
+            <label class="check-row"><input data-onsite-check="keys_collected" type="checkbox">Keys or vehicle access received</label>
+            <label class="check-row"><input data-onsite-check="water_hookup_located" type="checkbox">Usable water source located (Rosie or approved site source)</label>
+            <label class="check-row"><input data-onsite-check="water_tested" type="checkbox">Water source tested</label>
+            <label class="check-row"><input data-onsite-check="power_hookup_located" type="checkbox">Usable power source located (Rosie or approved site source)</label>
+            <label class="check-row"><input data-onsite-check="power_tested" type="checkbox">Power source tested safely</label>
+            <label class="check-row"><input data-onsite-check="owner_present_for_visual_inspection" type="checkbox">Customer present for visual inspection (leave unchecked if absent)</label>
+            <label>Weather, access or site exceptions<textarea id="onsite746Weather" rows="2" maxlength="1500" placeholder="Record hazards or say None observed"></textarea></label>
+          </fieldset>
+          <fieldset class="stack" style="min-width:0"><legend><strong>Pre-existing damage, valuables & private photos</strong></legend>
+            <label>Existing damage/condition notes (write None observed if none)<textarea id="onsite746Damage" rows="3" maxlength="1500"></textarea></label>
+            <label>Valuables seen<select id="onsite746Valuables"><option value="">Select after checking</option><option value="false">None seen</option><option value="true">Yes — handling recorded</option></select></label>
+            <label>Valuables handling / exceptions<textarea id="onsite746ValuablesNotes" rows="2" maxlength="1500" placeholder="Do not put money values or sensitive details in customer-visible notes"></textarea></label>
+            <label>Customer permission for private job-evidence photos<select id="onsite746Consent" required><option value="not_recorded">Not recorded / awaiting decision</option><option value="internal_job_evidence">Customer explicitly agreed to private evidence</option><option value="declined">Customer declined — hold for owner review</option></select></label>
+            <p class="mini">Use the existing <strong>Before photo</strong> control below for arrival and damage evidence. Photos remain internal by default; this permission never authorizes public gallery or marketing use.</p>
+          </fieldset>
+          <fieldset class="stack" style="min-width:0"><legend><strong>Garbage bag policy & acknowledgement</strong></legend>
+            <p class="mini" style="margin:0">One medium white Glad bag is included. Each additional bag may cost $5, subject to customer/owner review. This form does not approve or collect payment.</p>
+            <label>Bag estimate<select id="onsite746Bags"><option value="">Review before selecting</option><option value="1 medium white Glad bag or less">One bag or less (included)</option><option value="More than 1 medium white Glad bag">More than one bag</option></select></label>
+            <label>Additional bags beyond the first<input id="onsite746ExtraCount" type="number" min="0" max="25" step="1" value="0" required></label>
+            <label>Extra-bag review notes<textarea id="onsite746ExtraNotes" rows="2" maxlength="1500" placeholder="Required when there are additional bags"></textarea></label>
+            <label class="check-row"><input id="onsite746BagAck" type="checkbox">Customer acknowledged possible $5 per additional bag (only tick after actual discussion)</label>
+            <div class="mini" id="onsite746ChargePreview">Potential additional charge: $0.00 — not billed</div>
+          </fieldset>
+          <fieldset class="stack" style="min-width:0"><legend><strong>Customer acknowledgements before Start</strong></legend>
+            <label class="check-row"><input data-onsite-check="inspection_acknowledged" type="checkbox">Customer acknowledged pre-work inspection</label>
+            <label class="check-row"><input data-onsite-check="existing_condition_acknowledged" type="checkbox">Customer acknowledged existing conditions/notes</label>
+            <label class="check-row"><input data-onsite-check="keys_handed_over_acknowledged" type="checkbox">Customer acknowledged key/access handoff</label>
+            <label>Customer discussion, outstanding exceptions or approver notes<textarea id="onsite746OwnerNotes" rows="3" maxlength="1500" placeholder="Record who needs to review, not a fabricated approval"></textarea></label>
+          </fieldset>
+          <button class="btn primary" id="onsite746Save" type="submit">Save onsite review · no charge or message</button>
+        </form>
       </section>
 
       <div class="runtime-strip"><div class="runtime-card"><span class="mini">Photo/video capture</span><strong id="liveMediaState">ON</strong></div><div class="runtime-card"><span class="mini">Customer progress</span><strong id="liveProgressState">${currentJob.progress_enabled?'ON':'OFF'}</strong></div><div class="runtime-card"><span class="mini">Background polling</span><strong>OFF</strong></div></div>
@@ -94,27 +136,108 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     q('finalBalanceLink').href=handoff;
     q('finalBalanceLink').setAttribute('aria-disabled',enabled?'false':'true');
     q('copyFinalBalance').disabled=!enabled;
+    q('onsite746Reload').disabled=!enabled;
+    const canEdit=enabled&&String(currentJob?.current_workflow_stage||'').toLowerCase()==='arrived'&&onsite746.loaded;
+    q('onsite746Save').disabled=!canEdit;
+    [...q('onsite746Form').elements].forEach(element=>{if(element!==q('onsite746Save'))element.disabled=!canEdit;});
   }
   function stage(){return q('liveStage').value;}
   function audience(){return q('liveAudience').value;}
+  function setOnsiteStatus(message,tone='warn'){
+    const node=q('onsite746Status');node.className=`notice ${tone}`;node.textContent=message;
+  }
+  function fillOnsite746(intake,receipt){
+    const data=intake||{};
+    host.querySelectorAll('[data-onsite-check]').forEach(input=>{input.checked=data[input.dataset.onsiteCheck]===true;});
+    q('onsite746Weather').value=data.site_weather_notes||'';
+    q('onsite746Damage').value=data.existing_damage_notes||'';
+    q('onsite746Valuables').value=data.valuables_present==null?'':String(data.valuables_present);
+    q('onsite746ValuablesNotes').value=data.valuables_notes||'';
+    q('onsite746Consent').value=receipt?.photo_consent||'not_recorded';
+    q('onsite746Bags').value=data.garbage_bag_estimate||'';
+    q('onsite746ExtraCount').value=data.extra_bag_count??0;
+    q('onsite746ExtraNotes').value=data.extra_charge_notes||'';
+    q('onsite746BagAck').checked=receipt?.extra_bag_fee_acknowledged===true;
+    q('onsite746OwnerNotes').value=data.owner_notes||'';
+    renderBagPreview746();
+  }
+  function renderBagPreview746(){
+    const count=Number(q('onsite746ExtraCount').value);
+    q('onsite746ChargePreview').textContent=`Potential extra-bag charge: ${Number.isInteger(count)&&count>=0&&count<=25?new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD'}).format(count*5):'Invalid count'} — NOT billed or approved here.`;
+  }
+  function renderOnsite746(){
+    const state=onsite746,assessment=state.assessment;
+    q('onsite746Revision').textContent=state.intake?.updated_at?`Intake revised ${fmt(state.intake.updated_at)}`:'No intake saved yet';
+    q('onsite746Missing').innerHTML=assessment?.missing?.length?`<strong>To resolve before Start:</strong><ul>${assessment.missing.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:'No outstanding onsite checklist items.';
+    if(state.loaded)setOnsiteStatus(assessment?.ready?'Onsite review recorded. Take an arrival photo and save the service checklist before Start.':'Onsite review held. Save or correct the items below; exceptions need customer/owner follow-up.',assessment?.ready?'ok':'warn');
+    renderFieldWorkflow();setControls();
+  }
+  async function loadOnsite746({manual=false}={}){
+    const jobId=String(currentJob?.id||'');
+    q('onsite746Panel').hidden=String(currentJob?.current_workflow_stage||'').toLowerCase()!=='arrived';
+    if(q('onsite746Panel').hidden||!isUsable())return;
+    onsite746={loaded:false,intake:null,assessment:null,receipt:null};
+    setControls();setOnsiteStatus('Checking the current onsite record and audit receipt…');
+    try{
+      const result=await api.requestJson('/api/detailer/onsite_setup_v746',{method:'POST',body:JSON.stringify({booking_id:jobId,action:'load'})});
+      if(String(currentJob?.id||'')!==jobId)return;
+      if(String(result.booking_revision||'')!==String(currentJob?.updated_at||''))throw new Error('The job changed since the mobile board was loaded. Refresh assigned jobs first.');
+      onsite746={loaded:true,intake:result.intake||null,assessment:result.assessment||null,receipt:result.receipt||null};
+      fillOnsite746(onsite746.intake,onsite746.receipt);
+      renderOnsite746();
+    }catch(error){
+      if(String(currentJob?.id||'')!==jobId)return;
+      onsite746={loaded:false,intake:null,assessment:null,receipt:null};
+      setOnsiteStatus(`${error.message||'Onsite review unavailable.'} ${manual?'No change sent.':'Manually reload after resolving the issue.'}`,'bad');
+      renderFieldWorkflow();setControls();
+    }
+  }
+  async function saveOnsite746(event){
+    event.preventDefault();
+    if(!isUsable()||!onsite746.loaded||String(currentJob?.current_workflow_stage||'')!=='arrived')return;
+    const checks=Object.fromEntries([...host.querySelectorAll('[data-onsite-check]')].map(input=>[input.dataset.onsiteCheck,input.checked]));
+    const rawValuables=q('onsite746Valuables').value;
+    const body={booking_id:currentJob.id,action:'save',expected_stage:'arrived',expected_booking_updated_at:currentJob.updated_at,
+      expected_intake_updated_at:onsite746.intake?.updated_at||null,...checks,
+      existing_damage_notes:q('onsite746Damage').value.trim(),valuables_present:rawValuables===''?null:rawValuables==='true',
+      valuables_notes:q('onsite746ValuablesNotes').value.trim(),photo_consent:q('onsite746Consent').value,
+      garbage_bag_estimate:q('onsite746Bags').value,extra_bag_count:Number(q('onsite746ExtraCount').value),
+      extra_charge_notes:q('onsite746ExtraNotes').value.trim(),extra_bag_fee_acknowledged:q('onsite746BagAck').checked,
+      owner_notes:q('onsite746OwnerNotes').value.trim(),site_weather_notes:q('onsite746Weather').value.trim()};
+    onsite746.loaded=false;setControls();setOnsiteStatus('Saving current intake and its booking audit receipt…');
+    try{
+      const out=await api.requestJson('/api/detailer/onsite_setup_v746',{method:'POST',body:JSON.stringify(body)});
+      if(String(currentJob?.id||'')!==String(body.booking_id))return;
+      onsite746={loaded:true,intake:out.intake,assessment:out.assessment,receipt:out.receipt};
+      renderOnsite746();
+      setOnsiteStatus(out.message||'Onsite review saved.',out.assessment?.ready?'ok':'warn');
+    }catch(error){
+      onsite746={loaded:false,intake:null,assessment:null,receipt:null};
+      setOnsiteStatus(`${error.message||'Save outcome unconfirmed.'} Manually reload onsite evidence before attempting another save. No automatic replay.`, 'bad');
+      renderFieldWorkflow();setControls();
+    }
+  }
   function hasFieldRecord(prefix){return (Array.isArray(feed.updates)?feed.updates:[]).some((x)=>String(x.note||'').includes(prefix));}
   function calculateFieldState(){
     const counts=feed?.proof_media_status?.stage_counts||feed?.proof_media_status?.counts||{};
-    const beforePhoto=Number(counts.arrival||0)>0||Number(counts.pre_existing||0)>0;
+    const beforePhoto=Number(counts.arrival||0)>0;
     const afterPhoto=Number(counts.final||0)>0;
     const checklist=hasFieldRecord(FIELD_PREFIX.checklist);
     const addons=hasFieldRecord(FIELD_PREFIX.addons);
     const products=hasFieldRecord(FIELD_PREFIX.products);
     const completion=hasFieldRecord(FIELD_PREFIX.completion);
-    return {jobId:String(currentJob?.id||''),loaded:true,beforePhoto,checklist,addons,products,completion,afterPhoto,canStart:beforePhoto&&checklist,canComplete:beforePhoto&&checklist&&addons&&products&&completion&&afterPhoto};
+    const onsiteReady=onsite746.loaded&&onsite746.dirty!==true&&onsite746.assessment?.ready===true;
+    return {jobId:String(currentJob?.id||''),loaded:true,beforePhoto,checklist,onsiteReady,
+      setupRevision:onsiteReady?onsite746.assessment.revision:null,addons,products,completion,afterPhoto,
+      canStart:beforePhoto&&checklist&&onsiteReady,canComplete:beforePhoto&&checklist&&addons&&products&&completion&&afterPhoto};
   }
   function renderFieldWorkflow(){
     const state=calculateFieldState();
-    const entries=[['Before photo',state.beforePhoto],['Checklist',state.checklist],['Approved add-ons',state.addons],['Product usage',state.products],['Completion evidence',state.completion],['After photo',state.afterPhoto]];
+    const entries=[['Onsite setup',state.onsiteReady],['Before photo',state.beforePhoto],['Checklist',state.checklist],['Approved add-ons',state.addons],['Product usage',state.products],['Completion evidence',state.completion],['After photo',state.afterPhoto]];
     q('fieldWorkflowStatus').innerHTML=entries.map(([label,ok])=>`<div class="runtime-card"><span class="mini">${esc(label)}</span><strong>${ok?'DONE':'OPEN'}</strong></div>`).join('');
     q('fieldOverallState').textContent=state.canComplete?'READY TO HAND OFF':state.canStart?'IN PROGRESS':'PRE-SERVICE OPEN';
     q('fieldGateMessage').className=`notice ${state.canComplete?'ok':state.canStart?'':'warn'}`.trim();
-    q('fieldGateMessage').innerHTML=state.canComplete?'<strong>Field evidence complete.</strong> The job may proceed to customer/final-balance handoff and the normal server-authoritative completion action.':state.canStart?'<strong>Start evidence complete.</strong> Continue the approved work, then finish product/add-on records, completion evidence and after photos before completing the job.':'<strong>Before-service gate open.</strong> Save the service checklist and at least one arrival/pre-service photo before starting the job.';
+    q('fieldGateMessage').innerHTML=state.canComplete?'<strong>Field evidence complete.</strong> The job may proceed to customer/final-balance handoff and the normal server-authoritative completion action.':state.canStart?'<strong>Start evidence complete.</strong> Continue the approved work, then finish product/add-on records, completion evidence and after photos before completing the job.':'<strong>Before-service gate open.</strong> Save onsite acknowledgements, the service checklist, and an arrival photo before starting the job.';
     const signature=JSON.stringify(state);
     if(signature!==lastFieldSignature){lastFieldSignature=signature;onFieldState?.(state);}
     return state;
@@ -183,6 +306,11 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   async function videoDuration(file){if(!file.type.startsWith('video/'))return null;return new Promise((resolve)=>{const video=document.createElement('video'),url=URL.createObjectURL(file);video.preload='metadata';video.onloadedmetadata=()=>{const d=Number(video.duration||0)||null;URL.revokeObjectURL(url);resolve(d);};video.onerror=()=>{URL.revokeObjectURL(url);resolve(null);};video.src=url;});}
   async function upload(fileOverride=null){
     if(!isUsable())return;
+    if(['arrival','pre_existing'].includes(stage())&&
+      (!onsite746.loaded||onsite746.receipt?.photo_consent!=='internal_job_evidence'||audience()!=='internal')){
+      q('liveUploadStatus').textContent='Before-service photos require a saved, current private-photo consent receipt and Staff only visibility. Review onsite consent first.';
+      return;
+    }
     const file=fileOverride||q('liveMediaFile').files?.[0];if(!file)return;lastFile=file;q('uploadLiveMedia').disabled=true;q('cancelLiveUpload').disabled=false;q('retryLiveUpload').disabled=true;let signed=null;
     try{
       if(!navigator.onLine)throw new Error('Offline. Reconnect, then use Retry manually.');
@@ -221,18 +349,32 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   q('saveFieldAddons').addEventListener('click',()=>saveFieldRecord('addons',q('fieldAddons').value));
   q('saveFieldProducts').addEventListener('click',()=>saveFieldRecord('products',q('fieldProducts').value));
   q('saveFieldCompletion').addEventListener('click',()=>saveFieldRecord('completion',q('fieldCompletion').value));
+  q('onsite746Reload').addEventListener('click',()=>loadOnsite746({manual:true}));
+  q('onsite746Form').addEventListener('submit',saveOnsite746);
+  q('onsite746Form').addEventListener('input',()=>{
+    if(!onsite746.loaded)return;
+    onsite746.dirty=true;setOnsiteStatus('Unsaved onsite changes. Save and verify them before Start.','warn');
+    renderFieldWorkflow();
+  });
+  q('onsite746Form').addEventListener('change',()=>{
+    if(!onsite746.loaded)return;
+    onsite746.dirty=true;setOnsiteStatus('Unsaved onsite changes. Save and verify them before Start.','warn');
+    renderFieldWorkflow();
+  });
+  q('onsite746ExtraCount').addEventListener('input',renderBagPreview746);
   q('prepareBeforePhoto').addEventListener('click',()=>preparePhoto('arrival'));
   q('prepareBeforePhoto2').addEventListener('click',()=>preparePhoto('arrival'));
   q('prepareAfterPhoto').addEventListener('click',()=>preparePhoto('final'));
   q('prepareAfterPhoto2').addEventListener('click',()=>preparePhoto('final'));
   setControls();
   await loadFeed();
+  await loadOnsite746();
 
   return {
     setJob(nextJob,nextPolicy){
       const oldId=String(currentJob?.id||''),newId=String(nextJob?.id||oldId);
       currentJob=nextJob||currentJob;currentPolicy=nextPolicy||currentPolicy;setControls();
-      if(newId&&newId!==oldId){feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};lastFieldSignature='';q('liveFeed').innerHTML='<div class="notice">Loading selected job field evidence once…</div>';void loadFeed();}
+      if(newId&&newId!==oldId){feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};onsite746={loaded:false,intake:null,assessment:null,receipt:null};lastFieldSignature='';q('liveFeed').innerHTML='<div class="notice">Loading selected job field evidence once…</div>';void loadFeed();void loadOnsite746();}
       else renderFieldWorkflow();
     },
     getFieldState(){return calculateFieldState();},

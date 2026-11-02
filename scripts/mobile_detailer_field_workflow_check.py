@@ -41,9 +41,9 @@ elif int(active_build_match.group(1)) < 383:
 
 require(shell, [
     "Build 383 field workflow",
-    "Start requires before-photo + checklist evidence",
-    "Complete requires the full field-evidence sequence",
-    "/apps/detailer/detailer-app.js?v=20261102build745",
+    "Start requires current audited onsite setup",
+    "Complete retains the field-evidence sequence",
+    "/apps/detailer/detailer-app.js?v=20261102build746",
 ], "Detailer shell")
 
 require(app, [
@@ -53,7 +53,7 @@ require(app, [
     "fieldGate.canComplete",
     "Before-service evidence is incomplete.",
     "Completion is blocked until",
-    "/apps/detailer/live-job-module.js?v=20261102build745",
+    "/apps/detailer/live-job-module.js?v=20261102build746",
     "onFieldState",
 ], "Detailer app")
 
