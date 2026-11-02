@@ -54,7 +54,7 @@
       <h1 style="margin:12px 0 8px">Gift Certificates</h1>
       <p class="kicker">
         Buy a gift certificate for a friend or family member. Service gifts cover a specific package + size.
-        Dollar gifts deduct from any booking total, and you can now collect recipient name plus a preferred send date for scheduled e-gift delivery.
+        Dollar gifts can contribute toward an eligible booking deposit, with any remaining value retained. Gift plus separate online payment requires staff review before application.
       </p>
       <div class="notice warn" style="margin-top:12px">
         <strong>Important:</strong> Gift certificates are valid for <strong>1 year</strong> from purchase and are <strong>non-refundable</strong>.
@@ -65,6 +65,7 @@
         <p style="margin:0 0 8px">If a gift email has not arrived, ask the recipient to check spam/junk and <a href="/contact">contact Rosie Dazzlers for help</a> with the purchase reference. Don't share your gift code publicly.</p>
         <p style="margin:0">For a resend or retry, staff review the recipient and purchaser-copy notification records first, to avoid sending duplicates. Contact our team to review a failed delivery; no automatic replacement gift or refund is created.</p>
       </section>
+      <p class="mini">Gift balances are checked against recorded redemptions. If the ledger and displayed balance disagree, stop and request owner review; no second gift issue or automatic charge is justified by a checkout return screen.</p>
     </div>
 
     <div class="section grid2">
@@ -77,21 +78,17 @@
           <button class="btn tab ghost" id="tabLookup" type="button" role="tab" aria-controls="lookupPane" aria-selected="false" tabindex="-1">Lookup / Receipt</button>
         </div>
         <p class="mini gift-choice-context" id="giftChoiceContext" role="status" aria-live="polite">Choose a dollar gift when the recipient should decide how to use it.</p>
+        <p class="mini" id="giftCatalogStatus" role="status" aria-live="polite">Checking available certificates and prices…</p>
 
         <!-- DOLLAR GIFT -->
         <div id="dollarPane" role="tabpanel" aria-labelledby="tabDollar" style="margin-top:14px">
           <h3 style="margin:0 0 8px">Dollar Amount Gift</h3>
-          <p class="muted">Pick an amount and enter recipient info. This gift deducts from any booking.</p>
+          <p class="muted">Pick a certificate value and enter recipient info. The available balance can cover an eligible deposit, with any unused value retained; mixed gift and card payments need staff review.</p>
 
           <div class="grid2">
             <div>
               <label for="dollarSku">Gift amount <span class="req">*</span></label>
-              <select id="dollarSku">
-                <option value="">Select…</option>
-                <option value="GIFT-100">$100</option>
-                <option value="GIFT-200">$200</option>
-                <option value="GIFT-300">$300</option>
-              </select>
+              <select id="dollarSku"><option value="">Loading gift catalog…</option></select>
             </div>
             <div>
               <label for="dPurchEmail">Purchaser email <span class="req">*</span></label>
@@ -130,7 +127,7 @@
           </div>
 
           <div class="row" style="align-items:flex-end;margin-top:12px">
-            <button class="btn primary" id="buyDollarBtn" type="button">Buy Dollar Gift</button>
+            <button class="btn primary" id="buyDollarBtn" type="button" disabled>Continue to secure Dollar Gift checkout</button>
           </div>
 
           <div id="dollarStatus" class="notice" style="display:none;margin-top:12px"></div>
@@ -139,7 +136,7 @@
         <!-- SERVICE GIFT -->
         <div id="servicePane" class="hidden" role="tabpanel" aria-labelledby="tabService" style="margin-top:14px">
           <h3 style="margin:0 0 8px">Service Gift</h3>
-          <p class="muted">This covers a specific package + vehicle size (recommended for best match).</p>
+          <p class="muted">Choose the service and size; the recipient will confirm the vehicle, address and available appointment later. Checkout prices come from the live gift catalog.</p>
 
           <div class="grid2">
             <div>
@@ -160,6 +157,7 @@
               </div>
             </div>
           </div>
+          <p class="mini" id="serviceGiftPrice" aria-live="polite">Choose a package and size to see its current certificate price.</p>
 
           <div class="grid2" style="margin-top:10px">
             <div>
@@ -222,7 +220,7 @@
           </div>
 
           <div class="row" style="margin-top:12px">
-            <button class="btn primary" id="buyServiceBtn" type="button">Buy Service Gift</button>
+            <button class="btn primary" id="buyServiceBtn" type="button" disabled>Continue to secure Service Gift checkout</button>
           </div>
 
           <div id="serviceStatus" class="notice" style="display:none;margin-top:12px"></div>
@@ -285,7 +283,10 @@
 
   <script type="module">
     import { loadGrowthSettings } from "/assets/growth-settings.js";
-    const DATA_URL = "/data/rosie_services_pricing_and_packages.json?v=20260309b";
+    import { readGiftCheckoutDraft, prepareGiftCheckoutIntent, clearGiftCheckoutDraft } from '/assets/gift-draft-recovery-v741.js';
+    const recoveredGiftDraft = readGiftCheckoutDraft(sessionStorage);
+    let liveGiftProducts = [];
+    let catalogReady = false;
 
     const qs = (s) => document.querySelector(s);
     const show = (el, msg, kind="") => {
@@ -356,11 +357,7 @@
     window.addEventListener("hashchange", syncTabFromLocation);
     syncTabFromLocation();
 
-    // Only prefills values already offered by the checkout's own catalog.
-    const requestedAmount = new URLSearchParams(location.search).get("amount");
-    if (requestedAmount && [...qs("#dollarSku").options].some(option => option.value === requestedAmount)) {
-      qs("#dollarSku").value = requestedAmount;
-    }
+    const requestedAmount = new URLSearchParams(location.search).get('amount');
 
     function formatDeliveryDate(value){
       if (!value) return 'Next eligible send window, subject to review';
@@ -418,21 +415,76 @@
 
     ['#dRecipName','#dSenderName','#dDeliveryDate','#dMessage'].forEach((selector)=>qs(selector).addEventListener('input', ()=>updateGiftPreview('dollar')));
     ['#sRecipName','#sSenderName','#sDeliveryDate','#sMessage'].forEach((selector)=>qs(selector).addEventListener('input', ()=>updateGiftPreview('service')));
-    ['#sPackage','#sSize'].forEach((selector)=>qs(selector).addEventListener('change', updateServiceGiftPlanner));
+    function selectedServiceProduct(){
+      const sku = `SVC-${qs('#sPackage').value}-${qs('#sSize').value}`;
+      return liveGiftProducts.find(p => p.type === 'service' && p.sku === sku) || null;
+    }
+    function updateServiceGiftPrice(){
+      const product = selectedServiceProduct();
+      qs('#serviceGiftPrice').textContent = product
+        ? `Starting at: ${cad(product.sale_price_cents)} for this certificate and size · face value: ${cad(product.face_value_cents)}. Final service work may require a separate quote.`
+        : 'Choose an available package and size to see its current certificate price.';
+      qs('#buyServiceBtn').disabled = !catalogReady || !product;
+    }
+    function cad(cents){return new Intl.NumberFormat('en-CA', {style:'currency',currency:'CAD'}).format(cents/100);}
+    ['#sPackage','#sSize'].forEach((selector)=>qs(selector).addEventListener('change', ()=>{
+      updateServiceGiftPlanner();
+      updateServiceGiftPrice();
+    }));
     updateGiftPreview('dollar');
     updateGiftPreview('service');
     updateServiceGiftPlanner();
 
-    // Load packages into service gift selector
-    let data = null;
+    // Live gift-products, not the generic service list, owns sellable SKUs and
+    // service-size combinations. Missing or inactive options cannot checkout.
     try {
-      data = await fetchJsonStrict(DATA_URL);
-      const pkgs = data.packages || [];
-      qs("#sPackage").innerHTML = `<option value="">Select…</option>` + pkgs.map(p =>
-        `<option value="${p.code}">${p.name} — ${p.subtitle || ""}</option>`
-      ).join("");
-    } catch (e) {
-      qs("#sPackage").innerHTML = `<option value="">(Could not load packages)</option>`;
+      const response = await fetchJsonStrict('/api/gifts/catalog');
+      if (!response.ok || !Array.isArray(response.products)) throw new Error('No verified catalog available.');
+      liveGiftProducts = response.products;
+      const dollar = liveGiftProducts.filter(p => p.type === 'value');
+      const service = liveGiftProducts.filter(p => p.type === 'service');
+      if (!dollar.length || !service.length) throw new Error('Gift options are temporarily incomplete.');
+      const packageNames = new Map();
+      for (const product of service) {
+        if (!packageNames.has(product.package_code)) {
+          packageNames.set(product.package_code, product.name.split(' — ')[0]);
+        }
+      }
+      const amountSelect = qs('#dollarSku');
+      amountSelect.replaceChildren(new Option('Select…', ''), ...dollar.map(p => new Option(`${cad(p.sale_price_cents)} gift`, p.sku)));
+      const packageSelect = qs('#sPackage');
+      packageSelect.replaceChildren(new Option('Select…', ''), ...[...packageNames].map(([code,name]) => new Option(name, code)));
+      if (requestedAmount && dollar.some(p => p.sku === requestedAmount)) amountSelect.value = requestedAmount;
+      catalogReady = true;
+      qs('#giftCatalogStatus').textContent = `${dollar.length} dollar options and ${service.length} service-size options verified from the current gift catalog.`;
+      qs('#buyDollarBtn').disabled = false;
+      updateServiceGiftPrice();
+    } catch {
+      qs('#dollarSku').replaceChildren(new Option('Gift catalog unavailable', ''));
+      qs('#sPackage').replaceChildren(new Option('Gift catalog unavailable', ''));
+      qs('#giftCatalogStatus').textContent = 'Gift checkout is temporarily unavailable. Please contact Rosie Dazzlers; no payment has been requested.';
+    }
+
+    // Recover a canceled or interrupted checkout in this tab without saving
+    // payment details, a secret gift code, or an unverified "paid" flag.
+    if (recoveredGiftDraft && catalogReady) {
+      const mapping = recoveredGiftDraft.kind === 'service'
+        ? { purchaser_email:'#sPurchEmail', recipient_email:'#sRecipEmail',recipient_name:'#sRecipName',sender_name:'#sSenderName',delivery_date:'#sDeliveryDate',message:'#sMessage' }
+        : { purchaser_email:'#dPurchEmail', recipient_email:'#dRecipEmail',recipient_name:'#dRecipName',sender_name:'#dSenderName',delivery_date:'#dDeliveryDate',message:'#dMessage' };
+      const payload = recoveredGiftDraft.payload;
+      for (const [key,selector] of Object.entries(mapping)) qs(selector).value = payload[key] || '';
+      if (recoveredGiftDraft.kind === 'service') {
+        const selected = liveGiftProducts.find(p => p.sku === payload.items?.[0]?.sku);
+        if (selected) {
+          qs('#sPackage').value = selected.package_code;
+          qs('#sSize').value = selected.vehicle_size;
+          updateServiceGiftPlanner(); updateServiceGiftPrice(); updateGiftPreview('service');
+          if (!location.search.includes('gift=success')) setTab('service', false);
+        }
+      } else if (liveGiftProducts.some(p => p.sku === payload.items?.[0]?.sku)) {
+        qs('#dollarSku').value = payload.items[0].sku;
+        updateGiftPreview('dollar');
+      }
     }
 
     // Detect return from Stripe
@@ -442,10 +494,14 @@
     if (giftStatus === "success" && sid) {
       setTab("lookup");
       qs("#lkSession").value = sid;
+      qs('#lkEmail').value = recoveredGiftDraft?.payload?.purchaser_email || '';
       show(qs("#lookupStatus"),
-        `<strong>Purchase complete.</strong><br>Paste the purchase email and click Lookup to reveal the gift code.`,
-        "ok"
+        'Stripe checkout returned. A certificate is available only after payment verification and issuance. Use the purchase email and Lookup to check its status; contact Rosie Dazzlers if it is still pending.',
+        'warn'
       );
+    } else if (giftStatus === 'cancel') {
+      show(qs(recoveredGiftDraft?.kind === 'service' ? '#serviceStatus' : '#dollarStatus'),
+        'Checkout was canceled. Your draft has been restored in this tab. No new checkout is started until you choose to retry.', 'warn');
     }
 
     async function postJson(url, payload){
@@ -458,6 +514,25 @@
       return { ok: res.ok, status: res.status, out };
     }
 
+    async function beginGiftCheckout(kind, button, status, payload){
+      if (!catalogReady || button.disabled) return;
+      button.disabled = true;
+      show(status, 'Preparing secure checkout. Please wait; repeated clicks will not create another session.');
+      try {
+        const requestBody = prepareGiftCheckoutIntent(sessionStorage, kind, payload, () => crypto.randomUUID());
+        const r = await postJson('/api/gifts/checkout', requestBody);
+        if (!r.ok || !r.out?.ok || !/^https:\/\/checkout\.stripe\.com\//.test(r.out.checkout_url || '')) {
+          show(status, `Checkout is not ready: ${escapeHtml(r.out?.error || 'Please retry the same saved draft.')}`, 'bad');
+          return;
+        }
+        location.assign(r.out.checkout_url);
+      } catch {
+        show(status, 'Connection interrupted. The draft and its checkout reference are saved in this tab. Check your connection, then retry this same selection.', 'warn');
+      } finally {
+        button.disabled = !catalogReady || (kind === 'service' && !selectedServiceProduct());
+      }
+    }
+
     // Dollar gift purchase
     qs("#buyDollarBtn").addEventListener("click", async () => {
       const sku = qs("#dollarSku").value;
@@ -468,11 +543,10 @@
       const delivery_date = (qs("#dDeliveryDate").value || "").trim();
       const message = (qs("#dMessage").value || "").trim();
 
+      if (!catalogReady || !liveGiftProducts.some(p => p.type === 'value' && p.sku === sku)) return show(qs('#dollarStatus'), 'That gift amount is not active in the current catalog.', 'bad');
       if (!sku) return show(qs("#dollarStatus"), "Pick a gift amount.", "bad");
       if (!purchaser_email.includes("@")) return show(qs("#dollarStatus"), "Enter purchaser email.", "bad");
       if (!recipient_email.includes("@")) return show(qs("#dollarStatus"), "Enter recipient email.", "bad");
-
-      show(qs("#dollarStatus"), "Creating Stripe checkout…");
 
       const payload = {
         items: [{ sku, qty: 1 }],
@@ -484,18 +558,14 @@
         message: message || null,
       };
 
-      const r = await postJson("/api/gifts/checkout", payload);
-      if (!r.ok || !r.out?.ok || !r.out.checkout_url) {
-        return show(qs("#dollarStatus"), `Checkout error: ${escapeHtml(r.out?.error || "Unknown error")}`, "bad");
-      }
-
-      location.href = r.out.checkout_url;
+      await beginGiftCheckout('dollar', qs('#buyDollarBtn'), qs('#dollarStatus'), payload);
     });
 
     // Service gift purchase
     qs("#buyServiceBtn").addEventListener("click", async () => {
       const package_code = qs("#sPackage").value;
       const vehicle_size = qs("#sSize").value;
+      const serviceProduct = selectedServiceProduct();
       const purchaser_email = (qs("#sPurchEmail").value || "").trim();
       const recipient_email = (qs("#sRecipEmail").value || "").trim();
       const recipient_name = (qs("#sRecipName").value || "").trim();
@@ -505,13 +575,12 @@
 
       if (!package_code) return show(qs("#serviceStatus"), "Pick a package.", "bad");
       if (!vehicle_size) return show(qs("#serviceStatus"), "Pick a vehicle size.", "bad");
+      if (!serviceProduct) return show(qs('#serviceStatus'), 'This package and size are not available in the current gift catalog.', 'bad');
       if (!purchaser_email.includes("@")) return show(qs("#serviceStatus"), "Enter purchaser email.", "bad");
       if (!recipient_email.includes("@")) return show(qs("#serviceStatus"), "Enter recipient email.", "bad");
 
-      show(qs("#serviceStatus"), "Creating Stripe checkout…");
-
       const payload = {
-        items: [{ sku: `SERVICE-${package_code}-${vehicle_size}`, qty: 1 }],
+        items: [{ sku: serviceProduct.sku, qty: 1 }],
         purchaser_email,
         recipient_email,
         recipient_name: recipient_name || null,
@@ -520,12 +589,7 @@
         message: message || null,
       };
 
-      const r = await postJson("/api/gifts/checkout", payload);
-      if (!r.ok || !r.out?.ok || !r.out.checkout_url) {
-        return show(qs("#serviceStatus"), `Checkout error: ${escapeHtml(r.out?.error || "Unknown error")}`, "bad");
-      }
-
-      location.href = r.out.checkout_url;
+      await beginGiftCheckout('service', qs('#buyServiceBtn'), qs('#serviceStatus'), payload);
     });
 
     // Receipt lookup
@@ -551,7 +615,11 @@
           <div class="notice ok" style="margin-top:10px">
             <div><strong>Gift code:</strong> <span class="mono">${escapeHtml(g.code)}</span></div>
             <div><strong>Type:</strong> ${escapeHtml(g.type)}</div>
+            <div><strong>Original value:</strong> ${escapeHtml(g.face_value)}</div>
+            <div><strong>Recorded use:</strong> ${escapeHtml(g.used)}</div>
             <div><strong>Remaining:</strong> ${escapeHtml(g.remaining)}</div>
+            <div><strong>Balance review:</strong> ${g.balance_evidence === 'reconciled' ? 'Redemption ledger matches current balance' : 'Staff review needed before relying on this balance'}</div>
+            <div><strong>Delivery:</strong> Check with staff or the email provider; a send attempt is not inbox receipt.</div>
             <div><strong>Expires:</strong> ${escapeHtml(g.expires_at)}</div>
             <div style="margin-top:8px"><a class="btn ghost" href="/gift-certificate-print.html?session_id=${encodeURIComponent(session_id)}&email=${encodeURIComponent(email)}" target="_blank" rel="noopener">Open printable gift certificate</a></div>
           </div>
@@ -559,6 +627,7 @@
       }).join("");
 
       show(qs("#lookupStatus"), html, "ok");
+      clearGiftCheckoutDraft(sessionStorage);
     });
 
 

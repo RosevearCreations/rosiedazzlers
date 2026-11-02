@@ -193,6 +193,17 @@ export async function onRequestPost({ request, env }) {
     const payableDepositCents = Math.max(0, depositCents - giftRedeemedCents);
     const remainingTotalAfterGiftAndDeposit = Math.max(0, totalCents - giftRedeemedCents - payableDepositCents);
 
+    // Build 741: mixed gift + provider payment formerly *claimed* an applied
+    // credit without a verified settlement-time redemption. Hold the mixed
+    // path for manual owner reconciliation, before creating any booking/charge.
+    if (gift && (giftRedeemedCents <= 0 || payableDepositCents > 0)) {
+      return corsJson({
+        error: 'This certificate needs staff balance review for a partial gift and payment combination. No gift credit or payment was taken. Please contact Rosie Dazzlers.',
+        owner_recovery_hold: true,
+        reason: 'mixed_gift_provider_settlement_not_atomic'
+      }, 409);
+    }
+
     const notes = [];
     if (promoApplied) notes.push(`Promo ${promoApplied.code} applied for ${(promoApplied.discount_cents/100).toFixed(2)} CAD.`);
     if (giftCode) notes.push(`Gift code provided: ${giftCode}`);
@@ -245,7 +256,9 @@ export async function onRequestPost({ request, env }) {
       city: body.city || null,
       postal_code: body.postal_code || null,
       notes: notes.join(" ") || null,
-      status: payableDepositCents === 0 ? "confirmed" : "pending",
+      // A gift-covered booking is pending until the single atomic redemption
+      // and the matching booking status update both succeed.
+      status: payableDepositCents === 0 && !gift ? "confirmed" : "pending",
       // Database job state is distinct from payment status: only scheduled,
       // in_progress, completed and cancelled are valid job_status values.
       job_status: "scheduled",
@@ -290,7 +303,23 @@ export async function onRequestPost({ request, env }) {
     if (!booking?.id) return corsJson({ error: "Booking could not be created." }, 500);
 
     if (payableDepositCents === 0) {
-      await applyGiftRedemption({ env, bookingId: booking.id, gift, amountCents: giftRedeemedCents, note: `Applied automatically during gift-covered booking checkout.` });
+      if (gift) {
+        try {
+          await applyGiftRedemption({ env, bookingId: booking.id, gift, amountCents: giftRedeemedCents });
+          const confirm = await supa('PATCH', `/rest/v1/bookings?id=eq.${encodeURIComponent(booking.id)}`, { status: 'confirmed' });
+          if (!confirm.ok || !Array.isArray(confirm.data) ||
+              !confirm.data.some(row => row.id === booking.id && row.status === 'confirmed')) {
+            throw new Error('Gift booking confirmation update failed');
+          }
+        } catch (error) {
+          console.error('Gift booked but redemption/confirmation needs owner review', { booking_id: booking.id, reason: error?.message || 'unknown' });
+          return corsJson({
+            error: 'Gift balance or booking confirmation could not be verified. No further payment was requested. Staff must review before retrying.',
+            owner_recovery_hold: true,
+            booking_id: booking.id
+          }, 503);
+        }
+      }
       return corsJson({
         ok: true,
         mode: "gift_only_confirm",
@@ -502,17 +531,27 @@ async function createPayPalOrder({ env, request, booking, body, payableDepositCe
   return data;
 }
 
-async function applyGiftRedemption({ env, bookingId, gift, amountCents, note }) {
-  if (!gift?.id || !amountCents) return;
+async function applyGiftRedemption({ env, bookingId, gift, amountCents }) {
+  if (!gift?.id || !Number.isSafeInteger(amountCents) || amountCents <= 0) {
+    throw new Error('Gift redemption request missing verified amount/certificate');
+  }
   const headers = {
     apikey: env.SUPABASE_SERVICE_ROLE_KEY,
     Authorization: `Bearer ${env.SUPABASE_SERVICE_ROLE_KEY}`,
     "Content-Type": "application/json",
     Prefer: "return=representation"
   };
-  await fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificate_redemptions`, { method: "POST", headers, body: JSON.stringify([{ gift_certificate_id: gift.id, booking_id: bookingId, amount_cents: amountCents, notes: note || null }]) });
-  const nextRemaining = Math.max(0, Number(gift.remaining_cents || 0) - amountCents);
-  await fetch(`${env.SUPABASE_URL}/rest/v1/gift_certificates?id=eq.${encodeURIComponent(gift.id)}`, { method: "PATCH", headers, body: JSON.stringify({ remaining_cents: nextRemaining, redeemed_at: nextRemaining === 0 ? new Date().toISOString() : null }) });
+  const result = await fetch(`${env.SUPABASE_URL}/rest/v1/rpc/redeem_gift_certificate_booking_v741`, {
+    method: 'POST', headers,
+    body: JSON.stringify({ p_gift_certificate_id: gift.id, p_booking_id: bookingId, p_amount_cents: amountCents })
+  });
+  if (!result.ok) throw new Error(`Atomic gift redemption unavailable: HTTP ${result.status}`);
+  const receipt = await result.json().catch(() => null);
+  if (!['redeemed','replayed'].includes(receipt?.outcome) || receipt.amount_cents !== amountCents ||
+      !Number.isSafeInteger(receipt.remaining_cents) || receipt.remaining_cents < 0) {
+    throw new Error('Atomic gift redemption returned an unverified receipt');
+  }
+  return receipt;
 }
 
 function paypalBase(env) { return String(env.PAYPAL_API_BASE || "").trim() || "https://api-m.paypal.com"; }

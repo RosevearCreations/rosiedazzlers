@@ -7,7 +7,7 @@
 // - Normalizes origin to avoid double slashes.
 // - Adds "version" into ALL responses so we can confirm the deployed file.
 
-const VERSION = "gifts_checkout_v7_sender_name_and_booking_preview";
+const VERSION = "gifts_checkout_v741_catalog_safe_retry";
 
 export async function onRequestPost({ request, env }) {
   try {
@@ -15,7 +15,14 @@ export async function onRequestPost({ request, env }) {
 
     // ---- 1) Validate input ----
     const items = Array.isArray(body?.items) ? body.items : [];
-    if (!items.length) return json({ version: VERSION, error: "Missing items[]" }, 400);
+    if (!items.length || items.length > 20) return json({ version: VERSION, error: "Choose 1 to 20 gift items." }, 400);
+
+    // A retry must reuse the same intent id. Stripe rejects different payloads
+    // under the same key; the browser only rotates it when the draft changes.
+    const checkoutRequestId = asString(body?.checkout_request_id);
+    if (checkoutRequestId && !/^[a-f\d]{8}-[a-f\d]{4}-[1-8][a-f\d]{3}-[89ab][a-f\d]{3}-[a-f\d]{12}$/i.test(checkoutRequestId)) {
+      return json({ version: VERSION, error: "Invalid checkout request reference." }, 400);
+    }
 
     const purchaser_email = asString(body?.purchaser_email);
     const recipient_email = asString(body?.recipient_email);
@@ -28,8 +35,9 @@ export async function onRequestPost({ request, env }) {
       return json({ version: VERSION, error: "Invalid gift delivery date. Use YYYY-MM-DD." }, 400);
     }
 
-    if (!purchaser_email) return json({ version: VERSION, error: "Missing purchaser_email" }, 400);
-    if (!recipient_email) return json({ version: VERSION, error: "Missing recipient_email" }, 400);
+    if (!looksLikeEmail(purchaser_email) || !looksLikeEmail(recipient_email)) {
+      return json({ version: VERSION, error: "A valid purchaser and recipient email are required." }, 400);
+    }
 
     const vehicle = body?.vehicle && typeof body.vehicle === "object" ? body.vehicle : null;
 
@@ -58,8 +66,9 @@ export async function onRequestPost({ request, env }) {
 
     const hasServiceGift = products.some((p) => p.type === "service");
 
-    // ---- 3b) Vehicle requirements for SERVICE gifts ----
-    // Photo is OPTIONAL now.
+    // A service certificate purchases a package and *size*, not an appointment.
+    // The recipient supplies full vehicle details during booking; a purchaser
+    // may provide them now, but must not be required to know another car's VIN.
     let vYear = "", vMake = "", vModel = "", vBody = "", vSize = "", vPhoto = "";
     if (hasServiceGift) {
       vYear = asString(vehicle?.year);
@@ -69,47 +78,33 @@ export async function onRequestPost({ request, env }) {
       vSize = asString(vehicle?.declared_size);
       vPhoto = asString(vehicle?.photo_url); // optional
 
-      const missing = [];
-      if (!vYear) missing.push("vehicle.year");
-      if (!vMake) missing.push("vehicle.make");
-      if (!vModel) missing.push("vehicle.model");
-      if (!vBody) missing.push("vehicle.body_style");
-      if (!vSize) missing.push("vehicle.declared_size");
-
-      if (missing.length) {
-        return json(
-          {
-            version: VERSION,
-            error: "Missing vehicle info for service gift purchase",
-            missing_fields: missing,
-            required: [
-              "vehicle.year",
-              "vehicle.make",
-              "vehicle.model",
-              "vehicle.body_style",
-              "vehicle.declared_size",
-            ],
-            optional: ["vehicle.photo_url"],
-          },
-          400
-        );
-      }
+      if (vSize && !['small', 'mid', 'oversize'].includes(vSize)) return json({ version: VERSION, error: 'Invalid vehicle size.' }, 400);
     }
 
     // ---- 4) Build Stripe line items ----
     const cartCompact = []; // sku:qty:amount(optional)
     const lineItems = [];
 
+    const usedSkus = new Set();
+    let totalQty = 0;
     for (const reqItem of items) {
       const sku = asString(reqItem?.sku);
-      const qty = toInt(reqItem?.qty, 1);
-      if (!sku || qty < 1 || qty > 25) {
+      const qty = Number(reqItem?.qty ?? 1);
+      if (!sku || !Number.isSafeInteger(qty) || qty < 1 || qty > 25 || usedSkus.has(sku)) {
         return json({ version: VERSION, error: `Invalid qty for sku ${sku}` }, 400);
       }
+      usedSkus.add(sku);
+      totalQty += qty;
+      if (totalQty > 100) return json({ version: VERSION, error: 'Gift quantity exceeds 100.' }, 400);
 
       const p = bySku.get(sku);
       if (!p) return json({ version: VERSION, error: `Unknown SKU: ${sku}` }, 400);
       if (p.is_active !== true) return json({ version: VERSION, error: `SKU not active: ${sku}` }, 400);
+      if (p.currency !== 'CAD') return json({ version: VERSION, error: `Unsupported currency for ${sku}` }, 400);
+      if (p.type === 'service' && (sku !== `SVC-${p.package_code}-${p.vehicle_size}` ||
+          (vSize && vSize !== p.vehicle_size))) {
+        return json({ version: VERSION, error: `Service gift package or size does not match catalog: ${sku}` }, 400);
+      }
 
       let unitAmount = Number(p.sale_price_cents);
 
@@ -121,7 +116,7 @@ export async function onRequestPost({ request, env }) {
         unitAmount = amt;
       }
 
-      if (!Number.isFinite(unitAmount) || unitAmount < 0) {
+      if (!Number.isSafeInteger(unitAmount) || unitAmount <= 0) {
         return json({ version: VERSION, error: `Invalid price for ${sku}` }, 400);
       }
 
@@ -147,6 +142,9 @@ export async function onRequestPost({ request, env }) {
     form.set("success_url", successUrl);
     form.set("cancel_url", cancelUrl);
     form.set("customer_email", purchaser_email);
+    // With current Stripe APIs this identifies the checkout surface without
+    // activating any additional payment method or fulfillment path.
+    form.set('integration_identifier', `rosie-gift-${checkoutRequestId ? idLetters(checkoutRequestId) : randomLetters(8)}`);
 
     // Metadata for webhook fulfilment
     form.set("metadata[purpose]", "gift");
@@ -160,11 +158,11 @@ export async function onRequestPost({ request, env }) {
 
     // Vehicle metadata (photo optional)
     if (hasServiceGift) {
-      form.set("metadata[vehicle_year]", vYear);
-      form.set("metadata[vehicle_make]", vMake);
-      form.set("metadata[vehicle_model]", vModel);
-      form.set("metadata[vehicle_body_style]", vBody);
-      form.set("metadata[vehicle_declared_size]", vSize);
+      if (vYear) form.set("metadata[vehicle_year]", vYear);
+      if (vMake) form.set("metadata[vehicle_make]", vMake);
+      if (vModel) form.set("metadata[vehicle_model]", vModel);
+      if (vBody) form.set("metadata[vehicle_body_style]", vBody);
+      if (vSize) form.set("metadata[vehicle_declared_size]", vSize);
       if (vPhoto) form.set("metadata[vehicle_photo_url]", vPhoto.slice(0, 480));
     }
 
@@ -182,7 +180,7 @@ export async function onRequestPost({ request, env }) {
       headers: {
         Authorization: `Bearer ${STRIPE_KEY}`,
         "Content-Type": "application/x-www-form-urlencoded",
-        "Idempotency-Key": `gift_checkout_${crypto.randomUUID()}`,
+        "Idempotency-Key": `gift_checkout_v741_${checkoutRequestId || crypto.randomUUID()}`,
       },
       body: form.toString(),
     });
@@ -191,7 +189,11 @@ export async function onRequestPost({ request, env }) {
     const stripe = safeJsonText(stripeText);
 
     if (!stripeRes.ok) {
-      return json({ version: VERSION, error: "Stripe error creating session", stripe }, 502);
+      return json({ version: VERSION, error: 'Could not open secure checkout. Your gift draft is safe to retry.' }, 502);
+    }
+
+    if (!stripe.id || !/^https:\/\/checkout\.stripe\.com\//.test(String(stripe.url || ''))) {
+      return json({ version: VERSION, error: 'Checkout provider returned an incomplete session. Retry with the same draft.' }, 502);
     }
 
     return json({
@@ -203,7 +205,8 @@ export async function onRequestPost({ request, env }) {
     });
 
   } catch (e) {
-    return json({ version: VERSION, error: "Server error", details: String(e) }, 500);
+    console.error('Gift checkout failed before verified redirect', e?.message || 'unknown');
+    return json({ version: VERSION, error: 'Could not prepare secure checkout. Your gift draft is safe to retry.' }, 503);
   }
 }
 
@@ -257,6 +260,21 @@ function toInt(v, fallback) {
   const n = Number(v);
   if (!Number.isFinite(n)) return fallback;
   return Math.floor(n);
+}
+
+function looksLikeEmail(value) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) && value.length <= 254;
+}
+
+function randomLetters(length) {
+  const chars = 'abcdefghijklmnopqrstuvwxyz';
+  const data = crypto.getRandomValues(new Uint8Array(length));
+  return [...data].map(n => chars[n % chars.length]).join('');
+}
+
+function idLetters(uuid) {
+  const hex = uuid.replaceAll('-', '').slice(0, 8).toLowerCase();
+  return [...hex].map(ch => 'abcdefghijklmnopqrstuvwxyz'[parseInt(ch, 16)]).join('');
 }
 
 function json(obj, status = 200) {

@@ -10,7 +10,7 @@ assert.match(landing, /href="\/gifts#servicePane"/);
 assert.match(landing, /href="\/gifts#dollarPane"/);
 for (const amount of ['100', '200', '300']) {
   assert.match(landing, new RegExp('href="/gifts\\?amount=GIFT-' + amount + '#dollarPane"'));
-  assert.match(checkout, new RegExp('<option value="GIFT-' + amount + '">'));
+  assert.match(checkout, /\/api\/gifts\/catalog/, 'Live gift catalog, not hard-coded amounts, must own options');
 }
 for (const [tab, pane] of [['Dollar','dollar'], ['Service','service'], ['Lookup','lookup']]) {
   assert.match(checkout, new RegExp('id="tab' + tab + '"[^>]*role="tab"[^>]*aria-controls="' + pane + 'Pane"'));
@@ -19,11 +19,12 @@ for (const [tab, pane] of [['Dollar','dollar'], ['Service','service'], ['Lookup'
 assert.match(checkout, /window\.addEventListener\("hashchange", syncTabFromLocation\)/);
 assert.match(checkout, /syncTabFromLocation\(\);/);
 assert.match(checkout, /params\.get\("gift"\) === "success"/);
-assert.match(checkout, /\.some\(option => option\.value === requestedAmount\)/);
+assert.match(checkout, /dollar\.some\(p => p\.sku === requestedAmount\)/);
 assert.match(checkout, /event\.key === "ArrowRight"/);
 assert.match(checkout, /event\.key === "Home"/);
 assert.match(checkout, /setAttribute\("aria-selected", String\(active\)\)/);
-assert.match(checkout, /postJson\("\/api\/gifts\/checkout", payload\)/);
+assert.match(checkout, /beginGiftCheckout\('dollar'/);
+assert.match(checkout, /beginGiftCheckout\('service'/);
 assert.match(checkout, /postJson\("\/api\/gifts\/receipt", \{ session_id, email \}\)/);
 assert.match(css, /focus-visible/);
 assert.match(css, /max-width:600px/);

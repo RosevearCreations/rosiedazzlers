@@ -2,6 +2,11 @@
 set -euo pipefail
 
 node --check functions/api/gifts/webhook.js
+node --check functions/api/gifts/catalog.js
+node --check functions/api/gifts/checkout.js
+node --check functions/api/gifts/receipt.js
+node --check assets/gift-draft-recovery-v741.js
+node scripts/build741_gift_catalog_checkout_recovery_test.mjs
 node --check functions/api/admin/gift_issuance_recovery_review.js
 node --check assets/admin-gift-issuance-recovery-v674.js
 node --check functions/api/admin/gift_issuance_recovery_decisions.js

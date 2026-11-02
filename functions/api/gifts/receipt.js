@@ -48,6 +48,11 @@ export async function onRequestPost({ request, env }) {
       return corsJson({ error: "No gift certificates found for that session/email" }, 404);
     }
 
+    // Compare the persisted balance with its redemption rows. Neither a
+    // success-page redirect nor a missing ledger is proof of a paid or fully
+    // redeemed certificate; disagreeing evidence stays in owner review.
+    const ledger = await supaGiftRedemptionLedger(SUPABASE_URL, SERVICE_KEY, rows.map(r => r.id));
+
     return corsJson({
       ok: true,
       session_id,
@@ -62,7 +67,13 @@ export async function onRequestPost({ request, env }) {
 
         face_value_cents: r.face_value_cents,
         remaining_cents: r.remaining_cents,
+        face_value: formatCad(r.face_value_cents),
         remaining: formatCad(r.remaining_cents),
+        used: formatCad(Math.max(0, Number(r.face_value_cents) - Number(r.remaining_cents))),
+        balance_evidence: ledger !== null && Number(r.face_value_cents) - Number(r.remaining_cents) === (ledger.get(r.id) || 0)
+          ? 'reconciled' : 'owner_review_required',
+        redemption_state: r.status,
+        delivery_state: 'staff_or_provider_verification_required',
 
         expires_at: r.expires_at,
         purchaser_email: r.purchaser_email ?? null,
@@ -128,7 +139,7 @@ async function supaFindGiftCertsForSession(SUPABASE_URL, SERVICE_KEY, sessionId,
 
   const url =
     `${SUPABASE_URL}/rest/v1/gift_certificates` +
-    `?select=code,sku,type,currency,package_code,vehicle_size,face_value_cents,remaining_cents,expires_at,purchaser_email,recipient_email,recipient_name` +
+    `?select=id,code,sku,type,status,currency,package_code,vehicle_size,face_value_cents,remaining_cents,expires_at,purchaser_email,recipient_email,recipient_name` +
     `&stripe_session_id=eq.${encodeURIComponent(sessionId)}` +
     `&or=${or}` +
     `&order=created_at.asc`;
@@ -149,4 +160,22 @@ async function supaFindGiftCertsForSession(SUPABASE_URL, SERVICE_KEY, sessionId,
 
   const data = await res.json();
   return Array.isArray(data) ? data : [];
+}
+
+async function supaGiftRedemptionLedger(supabaseUrl, key, ids) {
+  try {
+    const list = ids.map(id => `"${String(id).replaceAll('"','')}"`).join(',');
+    const result = await fetch(`${supabaseUrl}/rest/v1/gift_certificate_redemptions?select=gift_certificate_id,amount_cents&gift_certificate_id=in.(${encodeURIComponent(list)})`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}`, Accept: 'application/json' }
+    });
+    if (!result.ok) return null;
+    const rows = await result.json();
+    if (!Array.isArray(rows)) return null;
+    const ledger = new Map();
+    for (const row of rows) {
+      if (!Number.isSafeInteger(row.amount_cents) || row.amount_cents <= 0) return null;
+      ledger.set(row.gift_certificate_id, (ledger.get(row.gift_certificate_id) || 0) + row.amount_cents);
+    }
+    return ledger;
+  } catch { return null; }
 }
