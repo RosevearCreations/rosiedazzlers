@@ -6,6 +6,7 @@
   <title>Rosie Dazzlers — Notifications</title>
   <meta name="robots" content="noindex,nofollow" />
   <link rel="stylesheet" href="/assets/site.css" />
+  <link rel="stylesheet" href="/assets/notification-consent-v743.css?v=20261102build743" />
   <style>
     body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),linear-gradient(180deg,#0f172a 0%,#111827 100%);color:#f8fafc}
     .shell{max-width:1320px;margin:0 auto;padding:24px}.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:20px}
@@ -32,7 +33,37 @@
         <aside class="span-4"><div data-admin-menu-mount></div></aside>
         <section class="span-8">
           <div class="status" data-admin-shell-status></div>
+          <article class="card build743-admin-review" data-build743-notification-review>
+            <div class="badge">Build 743 · Preview only</div>
+            <h2>Consent-safe notification &amp; handoff review</h2>
+            <p class="muted">Read current service versus marketing consent, see email/SMS status and provider-evidence gaps, and record a manual phone or contact outcome. <strong>This panel never sends, retries or places a call.</strong> A status marked sent is not proof of delivery.</p>
+            <p id="build743AdminStatus" class="notice" role="status" aria-live="polite">Loading staff previews…</p>
+            <div class="form-grid two-col"><label for="build743ExactCustomer">Exact customer profile ID (optional)
+              <input id="build743ExactCustomer" type="text" maxlength="36" autocomplete="off" placeholder="Paste the canonical account ID" />
+            </label><div class="actions"><button id="build743LoadExactCustomer" type="button" class="btn secondary">Review exact account</button></div></div>
+            <label for="build743AdminCustomer">Account for channel review</label>
+            <select id="build743AdminCustomer"><option value="">Choose a customer with notification history</option></select>
+            <div id="build743AdminConsentCards" class="build743-channel-grid"><p class="muted">Select a customer to see channel consent.</p></div>
+            <h3>Notification source &amp; receipt readback</h3>
+            <div id="build743AdminNotifications" class="build743-list"><p class="muted">No account selected.</p></div>
+            <h3>Staff-reported handoff timeline</h3>
+            <div id="build743AdminHandoffs" class="build743-list"><p class="muted">No account selected.</p></div>
+            <form id="build743HandoffForm" class="form" aria-busy="false">
+              <h3>Record an outcome (staff assertion only)</h3>
+              <p class="muted">Record only what was actually observed. Manual phone calls are never placed by this form. An attempted contact requires fresh purpose/channel consent.</p>
+              <div class="form-grid two-col">
+                <label for="build743HandoffChannel">Channel<select id="build743HandoffChannel" required><option value="phone">Phone (manual)</option><option value="email">Email (existing notification)</option><option value="sms">SMS (existing notification)</option></select></label>
+                <label for="build743HandoffPurpose">Purpose<select id="build743HandoffPurpose" required><option value="service">Service</option><option value="marketing">Marketing</option></select></label>
+                <label for="build743HandoffEvent">Existing notification<select id="build743HandoffEvent"><option value="">Manual phone handoff (no notification)</option></select></label>
+                <label for="build743HandoffOutcome">Observed outcome<select id="build743HandoffOutcome" required><option value="planned_not_contacted">Planned — no contact attempted</option><option value="blocked_by_preference">Held by preference — no contact</option><option value="attempted_no_answer">Attempted — no answer</option><option value="voicemail_left">Staff reports voicemail left</option><option value="customer_contacted">Staff reports customer contacted</option><option value="followup_requested">Staff reports follow-up requested</option></select></label>
+              </div>
+              <label for="build743HandoffNote">Brief staff-only context (optional, max 240 characters)<textarea id="build743HandoffNote" maxlength="240" rows="2" placeholder="No payment details or sensitive personal notes"></textarea></label>
+              <button id="build743HandoffSave" type="submit" class="btn secondary" disabled>Record staff-reported outcome</button>
+              <p id="build743HandoffStatus" class="notice" role="status" aria-live="polite">No call or message will be sent.</p>
+            </form>
+          </article>
           <article class="card">
+            <p class="muted"><strong>Legacy dispatch queue below:</strong> Retry actions are separate from the Build 743 preview and can invoke the configured notification provider. Use only with independent staff authorization and current customer consent.</p>
             <div class="actions" style="margin-bottom:16px">
               <label>Filter <select id="statusFilter"><option value="">All</option><option value="queued">Queued</option><option value="sent">Sent</option><option value="failed">Failed</option></select></label>
               <button class="btn" id="refreshBtn" type="button">Refresh</button>
@@ -55,7 +86,7 @@
       const rows = document.getElementById('rows'); const filter=document.getElementById('statusFilter'); const refreshBtn=document.getElementById('refreshBtn'); const retryVisibleBtn=document.getElementById('retryVisibleBtn'); let currentRows=[];
       function setShellStatus(message, type) { const node = document.querySelector('[data-admin-shell-status]'); if (!node) return; node.textContent = message || ''; node.dataset.state = type || ''; }
       function escapeHtml(v){return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
-      async function process(ids, action='retry'){ const res=await fetch('/api/admin/notifications_process',{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ids, action })}); const out=await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not process notifications.'); return out; }
+      async function process(ids, action='retry'){ if(!window.confirm('This is a LIVE legacy retry and may contact customers through the configured provider. Confirm current consent and separate authorization. Continue?')) throw new Error('Live retry cancelled; no message sent.'); const res=await fetch('/api/admin/notifications_process',{ method:'POST', credentials:'include', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ ids, action })}); const out=await res.json().catch(()=>null); if(!res.ok) throw new Error(out?.error || 'Could not process notifications.'); return out; }
       async function loadRows() {
         setShellStatus('', ''); rows.innerHTML = '<tr><td colspan="9" class="muted">Loading…</td></tr>';
         try {
@@ -74,7 +105,7 @@
       }
       refreshBtn.addEventListener('click', loadRows); filter.addEventListener('change', loadRows);
       retryVisibleBtn.addEventListener('click', async ()=>{ try{ const ids=currentRows.filter(r=>['queued','failed'].includes(String(r.status||'queued'))).map(r=>r.id); if(!ids.length) return setShellStatus('No queued or failed notifications in current view.','success'); const out=await process(ids,'retry'); setShellStatus(`Processed ${out.processed} notification(s).`,'success'); await loadRows(); }catch(err){ setShellStatus(err?.message || 'Could not retry notifications.','error'); } });
-      window.AdminPageInit.init({ pageKey: 'admin-notifications', onReady: async function () { await loadRows(); } });
+      window.AdminPageInit.init({ pageKey: 'admin-notifications', onReady: async function () { await loadRows(); await import('/assets/admin-notification-preview-v743.js?v=20261102build743').then(module=>module.loadStaffNotificationPreview?.()).catch(()=>setShellStatus('Notification preview unavailable; legacy queue remains separate.','error')); } });
     })();
   </script>
 </body>

@@ -1,0 +1,19 @@
+/* Build 743: small-screen-first, Standard-theme consent & outcome preview cards. */
+.build743-channel-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
+.build743-group{min-width:0;margin:0;padding:16px;border:1px solid rgba(128,128,128,.30);border-radius:18px;background:rgba(128,128,128,.035)}
+.build743-group legend{font-weight:800;padding:0 8px}
+.build743-group h3{margin:0 0 10px}
+.build743-group label{display:flex;align-items:center;gap:12px;margin:12px 0;line-height:1.5}
+.build743-group label input{width:20px;height:20px;flex:none}
+.build743-list{display:grid;gap:10px}
+.build743-entry{padding:12px;border:1px solid rgba(128,128,128,.20);border-radius:14px;overflow-wrap:anywhere}
+.build743-entry h4{margin:4px 0 6px}
+.build743-entry p{margin:4px 0;line-height:1.5}
+.build743-entry .build743-meta{font-size:.87rem;opacity:.86}
+.build743-readback{margin-top:20px}
+.build743-admin-review{margin:16px 0}
+.build743-admin-review select,.build743-admin-review input,.build743-admin-review textarea{width:100%;max-width:100%;min-height:42px}
+.build743-admin-review button{min-height:44px}
+.build743-admin-review fieldset{min-width:0}
+.build743-admin-review [hidden]{display:none!important}
+@media(max-width:760px){.build743-channel-grid{grid-template-columns:1fr}.build743-group{padding:12px}}
