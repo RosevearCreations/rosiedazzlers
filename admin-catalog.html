@@ -316,18 +316,21 @@
     </section>
 
     <section class="panel stack">
-      <h2 style="margin:0">Record products used on a detail</h2>
+      <h2 style="margin:0">Build 750 · Consumables & job-cost trail</h2>
       <form id="usageForm" class="stack">
         <div class="grid3">
-          <label>Booking ID<input id="usageBookingId" placeholder="Booking UUID" /></label>
+          <label>Booking ID<input id="usageBookingId" placeholder="Booking UUID" autocomplete="off" required /></label>
           <label>Inventory item<select id="usageItemKey"><option value="">Select inventory item</option></select></label>
-          <label>Quantity used<input id="usageQty" type="number" step="0.0001" min="0.0001" value="1" /></label>
+          <label>Amount used (usage units)<input id="usageQty" type="number" step="any" min="0.0001" value="1" required /></label>
         </div>
         <div class="notice" id="usageEstimate" role="status" aria-live="polite">Choose an inventory item to preview the usage conversion and estimated job cost.</div>
         <label>Usage note<textarea id="usageNote" rows="3" placeholder="Optional note for the detail record"></textarea></label>
-        <div class="row"><button class="btn primary" type="submit">Record products used</button><button class="btn ghost" id="usageResetBtn" type="button">Clear</button></div>
-        <div class="mini">This posts an audited job-use movement and reduces stock atomically. Quantity is entered in the configured usage unit; stock and job cost are converted to stock units. Repeating the same action will not debit twice.</div>
+        <div class="row"><button class="btn primary" id="usagePreviewBtn" type="submit">Preview stock & cost · no deduction</button><button class="btn" id="usageConfirmBtn" type="button" disabled>Confirm exact deduction</button><button class="btn ghost" id="usageResetBtn" type="button">Clear</button></div>
+        <div class="notice" id="usageDecision" role="status" aria-live="polite">A confirmed preview is required before stock changes. If a response is uncertain, check the booking history before starting another action.</div>
+        <div class="mini">Enter a partial amount in usage units (for example, 125 mL of a 1,000 mL bottle = 0.125 bottle). Preview validates live stock and booking. Confirmation debits through the atomic ledger exactly once per action. Recorded unit cost is retained even if the catalog cost later changes. Reversals and accounting gaps are shown for review.</div>
       </form>
+      <div class="row"><button class="btn ghost" id="usageHistoryBtn" type="button">Read booking cost trail</button><strong id="usageHistoryTotal" aria-live="polite">No booking selected</strong></div>
+      <div class="table-wrap"><table class="table-compact"><thead><tr><th>Posted / status</th><th>Consumable · stock used</th><th>Recorded job cost</th><th>Evidence / accounting</th></tr></thead><tbody id="usageHistoryBody"><tr><td colspan="4">Enter a booking ID to read its posting trail.</td></tr></tbody></table></div>
     </section>
   </section>
 
