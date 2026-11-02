@@ -5,6 +5,7 @@ import { queueCustomerLiveAlert } from "../_lib/live-interaction-alerts.js";
 import { syncCompletedBookingVehicleHistory } from "../_lib/customer-vehicle-service-history.js";
 import { allowedMobileTransition745, mobileStage745 } from '../../../assets/detailer-mobile-dayboard-v745.mjs';
 import { canWorkMobileBooking745 } from '../_lib/detailer-mobile-scope-v745.js';
+import { loadOnsiteGate746 } from '../_lib/onsite-setup-v746.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -39,6 +40,31 @@ export async function onRequestPost(context) {
       return json({ok:false,error:'This job is no longer assigned to you.',code:'mobile_assignment_changed'},403);
     if (String(current.updated_at||'')!==expectedUpdatedAt || mobileStage745(current)!==expectedStage || !allowedMobileTransition745(mobileStage745(current),action))
       return json({ok:false,error:'The job changed since your last review. Refresh assigned jobs; nothing was replayed.',code:'mobile_stale_revision'},409);
+    if(action==='start'){
+      let gate;
+      try{gate=await loadOnsiteGate746(env,bookingId);}catch{
+        return json({ok:false,error:'Current onsite readiness could not be verified. Start is held.',code:'onsite_verification_unavailable'},503);
+      }
+      if(!gate.assessment.ready || !gate.assessment.revision ||
+        gate.assessment.revision!==String(body.expected_intake_updated_at||''))
+        return json({ok:false,error:'Onsite setup is incomplete or changed. Reload and review the customer acknowledgements before Start.',
+          code:'onsite_setup_required',missing:gate.assessment.missing},409);
+      const [proof,notesRes,mediaRes]=await Promise.all([
+        loadProofOfWorkStatus({env,bookingId}),
+        fetch(`${env.SUPABASE_URL}/rest/v1/job_updates?select=note,visibility&booking_id=eq.${encodeURIComponent(bookingId)}&order=created_at.desc&limit=250`,{headers:serviceHeaders(env)}),
+        fetch(`${env.SUPABASE_URL}/rest/v1/job_media?select=stage,visibility,review_status,thread_status,created_at,media_url,storage_bucket,storage_path&booking_id=eq.${encodeURIComponent(bookingId)}&stage=eq.arrival&order=created_at.desc&limit=100`,{headers:serviceHeaders(env)})
+      ]);
+      if(!notesRes.ok || !mediaRes.ok || proof.warning)return json({ok:false,error:'Before-service media/checklist could not be verified.',code:'before_service_unavailable'},503);
+      const [notes,media]=await Promise.all([notesRes.json().catch(()=>[]),mediaRes.json().catch(()=>[])]);
+      const checklist=Array.isArray(notes)&&notes.some(row=>String(row.note||'').startsWith('[FIELD CHECKLIST]')&&row.visibility==='internal');
+      const consentTime=Date.parse(gate.receipt?.created_at||'');
+      const consentedPhoto=Number.isFinite(consentTime)&&Array.isArray(media)&&media.some(row=>
+        row.stage==='arrival'&&row.visibility==='internal'&&row.review_status!=='rejected'&&
+        !['hidden','removed'].includes(row.thread_status)&&
+        Boolean(row.media_url||(row.storage_bucket&&row.storage_path))&&Date.parse(row.created_at||'')>=consentTime);
+      if(Number(proof.stage_counts?.arrival||0)<1||!consentedPhoto||!checklist)
+        return json({ok:false,error:'A private arrival photo after recorded customer photo consent, plus a saved staff checklist, are required before Start.',code:'before_service_evidence_required'},409);
+    }
   }
 
   const now = new Date().toISOString();

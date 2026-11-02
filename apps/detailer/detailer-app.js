@@ -112,7 +112,7 @@
       let enabled=!!selected&&allowed.has(action)&&continuityVerified();
       let reason='';
       if(!continuityVerified())reason='Disconnected or stale. Refresh assigned jobs after reconnecting; actions will not replay.';
-      if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){enabled=false;reason='Before-service photo and saved service checklist are required before Start job.';}
+      if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){enabled=false;reason='Audited onsite review, customer acknowledgements, arrival photo and saved checklist are required before Start job.';}
       if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){enabled=false;reason='Complete all Build 383 field evidence, including after photos, before completing the job.';}
       button.disabled=!enabled;
       button.title=reason;
@@ -193,10 +193,11 @@
     if(!selected.updated_at){continuityState(false,'Job revision unavailable. Refresh to reverify before any change.');status('The current job revision is missing; no action was sent.','warn');return;}
     if(!allowedActions().allowed.has(action)){status('Action unavailable at the current job stage. No change sent.','warn');return;}
     const stage=jobStage(selected),gateCurrent=fieldGate.jobId===String(selected.id)&&fieldGate.loaded===true;
-    if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){status('Before-service evidence is incomplete. Save the service checklist and at least one before photo before starting.','warn');return;}
+    if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){status('Before-service evidence is incomplete. Save the onsite review, customer acknowledgements, staff checklist and an arrival photo.','warn');return;}
     if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){status('Completion is blocked until approved-scope, product-use and completion records plus after photos are saved.','warn');return;}
     const reason=$('workflowReason').value.trim();
     const body={booking_id:selected.id,action,reason,client_v745:true,expected_stage:jobStage(selected),expected_updated_at:selected.updated_at};
+    if(action==='start')body.expected_intake_updated_at=fieldGate.setupRevision;
     if(action==='arrive'&&navigator.geolocation){
       try{const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:60000}));body.arrived_latitude=pos.coords.latitude;body.arrived_longitude=pos.coords.longitude;}catch{status('Arrival will continue without device geolocation.','warn');}
     }
@@ -221,7 +222,7 @@
     if(!currentPolicy?.may_load_live_module||!selected)return;
     $('liveJobHost').dataset.loaded='loading';
     try{
-      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20261102build745');
+      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20261102build746');
       if(!continuityVerified()||!currentPolicy?.may_load_live_module)return;
       if(!liveModule){
         liveModule=await mod.mount({host:$('liveJobHost'),job:selected,policy:currentPolicy,api,onJobPatch:(patch)=>{selected={...selected,...patch};const idx=jobs.findIndex((j)=>String(j.id)===String(selected.id));if(idx>=0)jobs[idx]=selected;renderJobs();renderSelected();},onFieldState:(next)=>{fieldGate=next||fieldGate;updateActionButtons();}});
