@@ -92,3 +92,4 @@ node scripts/build739_winter_workability_service_area_test.mjs
 node scripts/build740_quote_booking_approval_deposit_readiness_test.mjs
 node scripts/build742_account_history_change_requests_test.mjs
 node scripts/build743_consent_notification_reconciliation_test.mjs
+node scripts/build744_customer_followup_consent_test.mjs
