@@ -43,7 +43,7 @@ require(shell, [
     "Build 383 field workflow",
     "Start requires before-photo + checklist evidence",
     "Complete requires the full field-evidence sequence",
-    "/apps/detailer/detailer-app.js?v=20260911build383",
+    "/apps/detailer/detailer-app.js?v=20261102build745",
 ], "Detailer shell")
 
 require(app, [
@@ -53,7 +53,7 @@ require(app, [
     "fieldGate.canComplete",
     "Before-service evidence is incomplete.",
     "Completion is blocked until",
-    "/apps/detailer/live-job-module.js?v=20260911build383",
+    "/apps/detailer/live-job-module.js?v=20261102build745",
     "onFieldState",
 ], "Detailer app")
 

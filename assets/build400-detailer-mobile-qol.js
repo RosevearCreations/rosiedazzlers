@@ -44,11 +44,16 @@
 
   function selectedJobId(){return String(jobsList?.querySelector('[data-job-id][aria-current="true"]')?.dataset?.jobId||'unselected');}
   function timerKey(){return `rosie:b400:field-timer:${selectedJobId()}`;}
+  // Build 745 keeps the cosmetic timer in tab memory; never persist a job-keyed
+  // offline timer alongside a private assigned-job view.
+  const ephemeral745=document.body.dataset.build745==='manual-offline-reconciliation';
+  const tabTimers745=new Map();
   function readTimer(){
+    if(ephemeral745)return tabTimers745.get(timerKey())||{running:false,startedAt:0,elapsed:0};
     try{return JSON.parse(sessionStorage.getItem(timerKey())||'null')||{running:false,startedAt:0,elapsed:0};}
     catch{return {running:false,startedAt:0,elapsed:0};}
   }
-  function writeTimer(value){try{sessionStorage.setItem(timerKey(),JSON.stringify(value));}catch{}}
+  function writeTimer(value){if(ephemeral745){tabTimers745.set(timerKey(),value);return;}try{sessionStorage.setItem(timerKey(),JSON.stringify(value));}catch{}}
   function timerElapsed(state){return Math.max(0,Number(state.elapsed||0)+(state.running?Date.now()-Number(state.startedAt||Date.now()):0));}
   function format(ms){const total=Math.floor(ms/1000),m=Math.floor(total/60),s=total%60;return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;}
   let frame=0;

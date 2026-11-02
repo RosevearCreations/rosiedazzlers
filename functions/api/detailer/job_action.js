@@ -3,6 +3,8 @@ import { compareAgainstTrustedLocation } from "../_lib/booking-location.js";
 import { loadProofOfWorkStatus, saveProofOfWorkStatus } from "../_lib/proof-of-work.js";
 import { queueCustomerLiveAlert } from "../_lib/live-interaction-alerts.js";
 import { syncCompletedBookingVehicleHistory } from "../_lib/customer-vehicle-service-history.js";
+import { allowedMobileTransition745, mobileStage745 } from '../../../assets/detailer-mobile-dayboard-v745.mjs';
+import { canWorkMobileBooking745 } from '../_lib/detailer-mobile-scope-v745.js';
 
 export async function onRequestPost(context) {
   const { request, env } = context;
@@ -11,11 +13,33 @@ export async function onRequestPost(context) {
   const access = await requireStaffAccess({ request, env, body, capability: "work_booking", bookingId, allowLegacyAdminFallback: false });
   if (!access.ok) return access.response;
   const actor = access.actor;
+  const mobile745 = body.client_v745 === true;
+  if (mobile745 && access.auth_mode !== 'session') return json({ok:false,error:'Mobile changes require a current signed-in staff session.'},401);
+  if (mobile745 && request.headers.get('origin') !== new URL(request.url).origin)
+    return json({ok:false,error:'Mobile changes must originate from the signed-in Rosie Dazzlers app.'},403);
   const action = cleanText(body.action);
   const reason = cleanText(body.reason);
   const arrived_latitude = toCoord(body.arrived_latitude);
   const arrived_longitude = toCoord(body.arrived_longitude);
   if (!bookingId || !action) return json({ error: "booking_id and action are required." }, 400);
+
+  let expectedUpdatedAt = null;
+  if (mobile745) {
+    expectedUpdatedAt=String(body.expected_updated_at||'').trim();
+    const expectedStage=String(body.expected_stage||'').trim().toLowerCase();
+    if (!expectedUpdatedAt || !Number.isFinite(Date.parse(expectedUpdatedAt)) || !expectedStage || !allowedMobileTransition745(expectedStage,action))
+      return json({ok:false,error:'Reopen this job and review the current stage before an action.',code:'mobile_revision_required'},409);
+    const read=await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?select=id,updated_at,current_workflow_stage,job_status,status,assigned_staff_user_id,assigned_staff_email&id=eq.${encodeURIComponent(bookingId)}&limit=1`,
+      {headers:serviceHeaders(env)});
+    if (!read.ok) return json({ok:false,error:'Cannot verify current job revision. No action taken.'},503);
+    const rows=await read.json().catch(()=>[]);
+    const current=Array.isArray(rows)?rows[0]:null;
+    if (!current) return json({ok:false,error:'Booking no longer available.'},404);
+    if (!await canWorkMobileBooking745({env,actor,booking:current}))
+      return json({ok:false,error:'This job is no longer assigned to you.',code:'mobile_assignment_changed'},403);
+    if (String(current.updated_at||'')!==expectedUpdatedAt || mobileStage745(current)!==expectedStage || !allowedMobileTransition745(mobileStage745(current),action))
+      return json({ok:false,error:'The job changed since your last review. Refresh assigned jobs; nothing was replayed.',code:'mobile_stale_revision'},409);
+  }
 
   const now = new Date().toISOString();
   const patch = { updated_at: now };
@@ -136,10 +160,12 @@ export async function onRequestPost(context) {
       return json({ error: 'Unsupported action.' }, 400);
   }
 
-  const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}`, { method:'PATCH', headers:{...serviceHeaders(env), Prefer:'return=representation'}, body: JSON.stringify(patch) });
+  const conditional=mobile745?`&updated_at=eq.${encodeURIComponent(expectedUpdatedAt)}`:'';
+  const bookingRes = await fetch(`${env.SUPABASE_URL}/rest/v1/bookings?id=eq.${encodeURIComponent(bookingId)}${conditional}`, { method:'PATCH', headers:{...serviceHeaders(env), Prefer:'return=representation'}, body: JSON.stringify(patch) });
   if (!bookingRes.ok) return json({ error: `Could not update booking workflow. ${await bookingRes.text()}` }, 500);
   const rows = await bookingRes.json().catch(()=>[]);
   const updatedBooking = Array.isArray(rows) ? rows[0] || null : null;
+  if (mobile745 && !updatedBooking) return json({ok:false,error:'Concurrent job change detected. Refresh; no action was recorded.',code:'mobile_race_lost'},409);
 
   let vehicleServiceHistorySync = null;
   if (action === 'complete' && updatedBooking) {
