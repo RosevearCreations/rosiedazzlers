@@ -21,6 +21,66 @@
   let workspaceLoading=false;
   let fieldGate={jobId:null,loaded:false,canStart:false,canComplete:false};
   let shift748={jobId:null,loaded:false,summary:null,receipt:null,pending:null,busy:false,message:'Load the assigned job clock before recording a punch.'};
+  let quality749={jobId:null,loaded:false,summary:null,pending:null,busy:false,message:'Load the assigned job quality source.'};
+  const QC_ITEMS749={before:[['existing_condition','Existing condition documented'],['agreed_scope','Agreed service scope'],['worksite_safety','Safe work area']],after:[['exterior_finish','Exterior finish'],['interior_finish','Interior finish'],['final_walkaround','Final customer handoff walkaround']]};
+  function resetQuality749(jobId){quality749={jobId,loaded:false,summary:null,pending:null,busy:false,message:'Load current quality checks and original media evidence.'};renderQuality749();}
+  function renderQuality749(){
+    const node=$('quality749Status');if(!node)return;
+    const ready=!!selected&&continuityVerified()&&quality749.loaded&&quality749.jobId===String(selected.id)&&!quality749.busy;
+    const s=quality749.summary;
+    node.textContent=quality749.message;node.className=`notice ${ready?'ok':'warn'}`;
+    const checks=s?.checks||{};
+    $('quality749Summary').innerHTML=s?`<strong>Status:</strong> ${esc(s.status)} · Before photo ${s.photos?.before?'verified':'missing'} · After photo ${s.photos?.after?'verified':'missing'}<br>`+
+      Object.entries(QC_ITEMS749).map(([phase,items])=>`<strong>${phase==='before'?'Before':'After'}:</strong> ${items.map(([key,name])=>`${esc(name)} (${esc(checks[phase]?.[key]?.result||'missing')})`).join(' · ')}`).join('<br>')+
+      `<br><strong>Open exceptions:</strong> ${s.open_issue_count} · ${esc(s.missing?.join(', ')||'No missing items')}`+
+      (s.issues?.length?`<div class="notice warn">${s.issues.map(x=>`${esc(x.kind)} ${esc(x.id)} — ${x.resolved?'rework verified':'ON HOLD'}`).join('<br>')}</div>`:'')+
+      (s.review?`<div class="mini">Manager decision: ${esc(s.review.decision)} — ${esc(s.review.note)}. This is not a customer sign-off.</div>`:''):'No quality source loaded.';
+    $('quality749Save').disabled=!ready||!!quality749.pending||!!s?.approved;
+    $('quality749Raise').disabled=!ready||!!quality749.pending;
+    $('quality749Submit').disabled=!ready||!!quality749.pending||!s?.source_ready||s?.submitted?.revision===s?.revision;
+    $('quality749Retry').disabled=!ready||!quality749.pending||quality749.pending.expected_revision!==s?.revision;
+    $('quality749Reload').disabled=!selected||!continuityVerified()||quality749.busy;
+    updateActionButtons();
+  }
+  function quality749PhaseOptions(){
+    const phase=$('quality749Phase').value;
+    $('quality749Item').innerHTML=(QC_ITEMS749[phase]||[]).map(([id,label])=>`<option value="${esc(id)}">${esc(label)}</option>`).join('');
+  }
+  async function loadQuality749(){
+    const id=String(selected?.id||'');if(!id||!continuityVerified())return;
+    quality749.busy=true;quality749.message='Reading original check, exception, media and manager review receipts…';renderQuality749();
+    try{
+      const out=await api.requestJson('/api/detailer/quality_v749',{method:'POST',body:JSON.stringify({action:'load',booking_id:id})});
+      if(String(selected?.id||'')!==id)return;
+      quality749.summary=out.summary;quality749.loaded=true;
+      if(quality749.pending&&out.summary?.receipt_ids?.includes(quality749.pending.operation_id))quality749.pending=null;
+      quality749.message=quality749.pending?'A quality operation had an uncertain outcome. Inspect the source, then retry the SAME operation manually only if the revision still matches.':'Original quality source loaded. Check each pre/post item before submitting.';
+    }catch(error){quality749.loaded=false;quality749.message=`Quality source unavailable: ${error.message}. No action was replayed.`;}
+    finally{quality749.busy=false;renderQuality749();}
+  }
+  async function sendQuality749(action,payload,{retry=false}={}){
+    if(!selected||!continuityVerified()||!quality749.loaded||quality749.busy)return;
+    const id=String(selected.id),s=quality749.summary;
+    if(!retry){if(quality749.pending)return;quality749.pending={operation_id:crypto.randomUUID(),action,payload,expected_revision:s.revision};}
+    const pending=quality749.pending;
+    if(!pending||pending.expected_revision!==s.revision)return;
+    quality749.busy=true;quality749.message=`Saving ${pending.action} with the original operation ID…`;renderQuality749();
+    try{
+      const out=await api.requestJson('/api/detailer/quality_v749',{method:'POST',body:JSON.stringify({booking_id:id,action:pending.action,...pending.payload,operation_id:pending.operation_id,expected_revision:pending.expected_revision})});
+      if(String(selected?.id||'')!==id)return;
+      quality749.summary=out.summary;quality749.loaded=true;quality749.pending=null;
+      quality749.message=out.already_saved?'The original quality receipt is confirmed; no duplicate saved.':'Saved to the private booking quality history. No customer notice or sign-off sent.';
+    }catch(error){quality749.loaded=false;quality749.message=`${error.message} Reload and reconcile before any manual retry; do not create another operation.`;}
+    finally{quality749.busy=false;renderQuality749();}
+  }
+  async function submitQuality749(){
+    const s=quality749.summary;if(!selected||!continuityVerified()||!quality749.loaded||quality749.busy||!s?.source_ready||quality749.pending)return;
+    if(!confirm('Submit the private, source-linked pre/post quality packet for independent manager review? This does not sign for the customer, send a notification or close a claim.'))return;
+    quality749.busy=true;renderQuality749();
+    try{await api.requestJson('/api/detailer/quality_v749',{method:'POST',body:JSON.stringify({booking_id:selected.id,action:'submit',expected_revision:s.revision})});quality749.message='Submitted for independent manager review.';}
+    catch(error){quality749.message=`Submission unconfirmed: ${error.message}. Reload before any retry.`;}
+    finally{quality749.busy=false;await loadQuality749();}
+  }
   const shiftPendingKey748=id=>`rosie:shift-punch-v748:${id}`;
   function storeShiftPending748(){try{if(shift748.pending)sessionStorage.setItem(shiftPendingKey748(shift748.jobId),JSON.stringify(shift748.pending));else sessionStorage.removeItem(shiftPendingKey748(shift748.jobId));}catch{}}
   function restoreShiftPending748(id){try{return JSON.parse(sessionStorage.getItem(shiftPendingKey748(id))||'null');}catch{return null;}}
@@ -90,6 +150,7 @@
       verified?'Assignment and job revision verified.':'Snapshot only. Reconnect and manually refresh before any action.');}
     liveModule?.setVisibility?.(verified&&!document.hidden);
     renderShift748();
+    renderQuality749();
     updateActionButtons();
   }
 
@@ -175,6 +236,7 @@
       if(!continuityVerified())reason='Disconnected or stale. Refresh assigned jobs after reconnecting; actions will not replay.';
       if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){enabled=false;reason='Audited onsite review, customer acknowledgements, arrival photo and saved checklist are required before Start job.';}
       if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){enabled=false;reason='Complete all Build 383 field evidence, including after photos, before completing the job.';}
+      if(action==='complete'&&['detailing','paused'].includes(stage)&&(!quality749.loaded||quality749.jobId!==String(selected.id)||quality749.summary?.approved!==true)){enabled=false;reason='Independent Build 749 quality review must accept the current complete pre/post evidence before job completion.';}
       button.disabled=!enabled;
       button.title=reason;
     });
@@ -183,6 +245,7 @@
     $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Area: ${esc(selected.service_area_municipality||selected.city||selected.service_area||'Confirm with office')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}<br><strong>Staff instructions:</strong> ${esc(selected.notes||'No additional service notes recorded.')}${continuityVerified()?'':'<div class="notice warn">Read-only last-seen snapshot; current assignment and instructions must be reverified.</div>'}${renderReadinessCard()}`:'Choose an assigned job.';
     updateActionButtons();
     renderShift748();
+    renderQuality749();
     renderRuntime();
   }
   function chooseSuggested(){return policy.chooseActive(jobs)||null;}
@@ -208,8 +271,9 @@
   function selectJob(id){
     selected=jobs.find((job)=>String(job.id)===String(id))||null;
     resetShift748(String(selected?.id||''));
+    resetQuality749(String(selected?.id||''));
     fieldGate={jobId:String(selected?.id||''),loaded:false,canStart:false,canComplete:false};
-    renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();
+    renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();void loadQuality749();
   }
   function resolveDeepLink(){
     if(deepLinkHandled||!requestedJobId)return null;
@@ -237,8 +301,9 @@
       fieldGate={jobId:String(next?.id||''),loaded:false,canStart:false,canComplete:false};
       selected=next;
       resetShift748(String(next?.id||''));
+      resetQuality749(String(next?.id||''));
       continuityState(true,'Live session and canonical assignments checked. No offline changes were replayed.');
-      renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();
+      renderJobs();renderSelected();void loadSelectedReadiness();void loadShift748();void loadQuality749();
       const message=mobile745?.reconciliationMessage745({wasOffline:wasDisconnected,assignmentGone:!!oldId&&!jobs.some(job=>String(job.id)===oldId),stageChanged:!!oldId&&!!selected&&String(selected.id)===oldId&&jobStage(selected)!==oldStage})||'Current assignment verified.';
       if(manual||wasDisconnected||message.includes('no longer'))status(message,!!oldId&&!jobs.some(job=>String(job.id)===oldId)?'warn':'ok');
       wasDisconnected=false;
@@ -259,9 +324,11 @@
     const stage=jobStage(selected),gateCurrent=fieldGate.jobId===String(selected.id)&&fieldGate.loaded===true;
     if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){status('Before-service evidence is incomplete. Save the onsite review, customer acknowledgements, staff checklist and an arrival photo.','warn');return;}
     if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){status('Completion is blocked until approved-scope, product-use and completion records plus after photos are saved.','warn');return;}
+    if(action==='complete'&&['detailing','paused'].includes(stage)&&(!quality749.loaded||quality749.summary?.approved!==true)){status('Complete QC, resolve exceptions and wait for independent Operations acceptance before completing this job.','warn');return;}
     const reason=$('workflowReason').value.trim();
     const body={booking_id:selected.id,action,reason,client_v745:true,expected_stage:jobStage(selected),expected_updated_at:selected.updated_at};
     if(action==='start')body.expected_intake_updated_at=fieldGate.setupRevision;
+    if(action==='complete')body.expected_quality_revision=quality749.summary?.revision||'';
     if(action==='arrive'&&navigator.geolocation){
       try{const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:60000}));body.arrived_latitude=pos.coords.latitude;body.arrived_longitude=pos.coords.longitude;}catch{status('Arrival will continue without device geolocation.','warn');}
     }
@@ -316,6 +383,12 @@
     $('shift748Reload').addEventListener('click',()=>loadShift748());
     $('shift748Retry').addEventListener('click',()=>shift748.pending&&punchShift748(shift748.pending.punch,{retry:true}));
     $('shift748Submit').addEventListener('click',submitShift748);
+    $('quality749Phase').addEventListener('change',quality749PhaseOptions);
+    $('quality749Reload').addEventListener('click',loadQuality749);
+    $('quality749Save').addEventListener('click',()=>sendQuality749('check',{phase:$('quality749Phase').value,item:$('quality749Item').value,result:$('quality749Result').value,note:$('quality749Note').value.trim()}));
+    $('quality749Raise').addEventListener('click',()=>sendQuality749('issue',{kind:$('quality749IssueType').value,note:$('quality749IssueNote').value.trim(),evidence_id:$('quality749Evidence').value.trim()}));
+    $('quality749Retry').addEventListener('click',()=>quality749.pending&&sendQuality749(quality749.pending.action,quality749.pending.payload,{retry:true}));
+    $('quality749Submit').addEventListener('click',submitQuality749);
     document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden&&continuityVerified());});
   }
   async function boot(){

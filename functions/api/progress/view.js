@@ -1,6 +1,7 @@
 import { hydrateMediaRows, publicWorkflowEvents, schemaLooksLegacy } from "../_lib/job-live-feed.js";
 import { deriveFinancialLifecycle, emptyFinanceSummary, summarizeFinance } from "../_lib/financial-lifecycle.js";
 import { publicPaymentView } from "../_lib/final-balance-links.js";
+import {qualitySnapshot749} from '../_lib/quality-store-v749.js';
 
 export async function onRequestGet(context) {
   const { request, env } = context;
@@ -19,6 +20,13 @@ export async function onRequestGet(context) {
     if (booking.progress_enabled === false) return json({ error: "Progress viewing is not enabled for this booking." }, 403);
 
     const bookingId = booking.id;
+    // Only the broad status is customer-visible. No internal QC notes, private media,
+    // claim findings, staff identities, or exception text leave this endpoint.
+    let qualityCustomer={status:'unavailable',ready_for_signoff:false};
+    try{
+      const qc=(await qualitySnapshot749(env,bookingId)).summary;
+      qualityCustomer={status:qc.approved?'accepted':qc.started?'awaiting_independent_review':'not_started',ready_for_signoff:qc.approved,customer_signature_recorded:false};
+    }catch{}
     const [updatesResult, mediaResult, signoffsRes, checklistRes, usageRes, eventsRes, incidentsRes, summaryRes, paymentLinksRes] = await Promise.all([
       fetchAdaptive(env, headers, "job_updates", bookingId,
         "id,created_at,created_by,note,visibility,thread_status,stage,source_channel,review_status,customer_action_required,customer_visible_at,recommendation_title,recommendation_amount_cents,recommendation_status,customer_decision,customer_decision_note,customer_decision_at,customer_acknowledgement_name,customer_acknowledged_at,customer_acknowledgement_version,linked_payment_request_id",
@@ -114,6 +122,7 @@ export async function onRequestGet(context) {
       completed_job_summary: completedJobSummary,
       financial_lifecycle: financialLifecycle,
       payment_links: paymentLinks,
+      quality_handoff_v749:qualityCustomer,
       unread_count: unreadCount,
       incident_report_notice: incidentsRes.ok ? null : "Incident report sharing is not available yet.",
       enhanced_live_feed: !updatesResult.legacy && !mediaResult.legacy,

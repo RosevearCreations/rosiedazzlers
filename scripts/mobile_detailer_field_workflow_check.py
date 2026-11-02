@@ -43,7 +43,7 @@ require(shell, [
     "Build 383 field workflow",
     "Start requires current audited onsite setup",
     "Complete retains the field-evidence sequence",
-    "/apps/detailer/detailer-app.js?v=20261102build748",
+    "/apps/detailer/detailer-app.js?v=20261102build749",
 ], "Detailer shell")
 
 require(app, [
