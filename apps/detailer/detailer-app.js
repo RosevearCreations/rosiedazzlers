@@ -15,10 +15,22 @@
   const requestedJobId=String(new URLSearchParams(location.search).get('job')||'').trim();
   const requestedMessages=location.hash==='#liveJobHost';
   let actor=null,jobs=[],selected=null,liveModule=null,currentPolicy=null,deepLinkHandled=false;
+  let mobile745=null,boardFilter='all',reconciliationRequired=true,wasDisconnected=false,continuityEpoch=0;
   let readiness={jobId:null,state:'idle',intake:null,error:''};
   let readinessRequest=0;
   let workspaceLoading=false;
   let fieldGate={jobId:null,loaded:false,canStart:false,canComplete:false};
+
+  function continuityVerified(){return !reconciliationRequired && navigator.onLine!==false && document.body.dataset.build745Sync==='verified';}
+  function continuityState(verified,message){
+    reconciliationRequired=!verified;
+    document.body.dataset.build745Sync=verified?'verified':'review_required';
+    const node=$('build745ContinuityStatus');
+    if(node){node.className=`notice ${verified?'ok':'warn'}`;node.textContent=message||(
+      verified?'Assignment and job revision verified.':'Snapshot only. Reconnect and manually refresh before any action.');}
+    liveModule?.setVisibility?.(verified&&!document.hidden);
+    updateActionButtons();
+  }
 
   function status(message,type=''){
     const box=$('appStatus');
@@ -74,34 +86,32 @@
     $('runtimeMode').className=`mode-${currentPolicy.mode}`;
     $('monitorState').textContent='OFF';
     $('runtimeReason').textContent=currentPolicy.mode==='idle'?'No assigned/open job. All live-job logic is asleep.':currentPolicy.mode==='ready'?'Assigned work exists, but no job is open. No live monitoring is running.':'An open job is selected. Live tools are available on demand; no polling interval is running.';
-    if(currentPolicy.may_load_live_module) ensureLiveModule(); else sleepLiveModule();
+    if(currentPolicy.may_load_live_module&&continuityVerified()) ensureLiveModule(); else sleepLiveModule();
   }
   function renderJobs(){
     $('jobCount').textContent=`${jobs.length} job${jobs.length===1?'':'s'}`;
     const host=$('jobsList');
-    if(!jobs.length){host.innerHTML='<div class="idle-panel"><strong>No current assigned work.</strong><p class="mini">The Detailer App is idle. It will not monitor progress, photos, inventory, or live customer status in the background.</p></div>';return;}
-    host.innerHTML=jobs.map((job)=>`<button class="panel job-button" type="button" data-job-id="${esc(job.id)}" aria-current="${selected?.id===job.id?'true':'false'}"><strong>${esc(job.customer_name||'Customer')}</strong><span class="mini">${esc(job.service_date||'')} · ${esc(job.start_slot||'')} · ${esc(job.package_code||'')}</span><span class="mini">Stage: ${esc(jobStage(job))}</span></button>`).join('');
+    if(!jobs.length){const count=$('build745VisibleCount');if(count)count.textContent='0 shown · schedule order, not route navigation';host.innerHTML='<div class="idle-panel"><strong>No current assigned work.</strong><p class="mini">The Detailer App is idle. It will not monitor progress, photos, inventory, or live customer status in the background.</p></div>';return;}
+    const board=mobile745?.mobileBoardGroups745(jobs,{filter:boardFilter})||{groups:[{date:'',label:'Assigned jobs',jobs}],total:jobs.length};
+    const count=$('build745VisibleCount');if(count)count.textContent=`${board.total} shown · schedule order, not route navigation`;
+    host.innerHTML=board.groups.length?board.groups.map(group=>
+      `<section class="build745-day" aria-label="${esc(group.label)}"><h3 class="build745-day-label">${esc(group.label)} · ${group.jobs.length} job${group.jobs.length===1?'':'s'}</h3>`+
+      group.jobs.map((job)=>`<button class="panel job-button" type="button" data-job-id="${esc(job.id)}" data-service-date="${esc(job.service_date)}" aria-current="${selected?.id===job.id?'true':'false'}"><strong>${esc(job.customer_name||'Customer')}</strong><span class="mini">${esc(job.start_slot||'Time to confirm')} · ${esc(job.package_code||'Detailing')} · ${esc(job.service_area_municipality||job.city||job.service_area||'Area to verify')}</span><span class="mini">Stage: ${esc(jobStage(job))}${continuityVerified()?'':' · STALE SNAPSHOT — read only'}</span></button>`).join('')+'</section>'
+    ).join(''):'<div class="idle-panel"><strong>No assigned jobs in this view.</strong><p class="mini">Change the day filter or refresh your authorized jobs. No bookings were changed.</p></div>';
     host.querySelectorAll('[data-job-id]').forEach((button)=>button.addEventListener('click',()=>selectJob(button.dataset.jobId)));
   }
   function allowedActions(){
-    const stage=jobStage(selected),allowed=new Set();
-    if(selected){
-      if(['pending','scheduled',''].includes(stage)){allowed.add('accept');allowed.add('decline');}
-      if(['accepted','scheduled'].includes(stage)){allowed.add('dispatch');allowed.add('decline');}
-      if(stage==='dispatched')allowed.add('arrive');
-      if(stage==='arrived')allowed.add('start');
-      if(stage==='detailing'){allowed.add('pause');allowed.add('complete');}
-      if(stage==='paused'){allowed.add('resume');allowed.add('complete');}
-    }
-    return {stage,allowed};
+    const stage=jobStage(selected);
+    return {stage,allowed:new Set(selected?mobile745?.MOBILE_STAGE_ACTIONS745[stage]||[]:[])};
   }
   function updateActionButtons(){
     const {stage,allowed}=allowedActions();
     const gateCurrent=selected&&fieldGate.jobId===String(selected.id)&&fieldGate.loaded===true;
     document.querySelectorAll('[data-job-action]').forEach((button)=>{
       const action=button.dataset.jobAction;
-      let enabled=!!selected&&allowed.has(action);
+      let enabled=!!selected&&allowed.has(action)&&continuityVerified();
       let reason='';
+      if(!continuityVerified())reason='Disconnected or stale. Refresh assigned jobs after reconnecting; actions will not replay.';
       if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){enabled=false;reason='Before-service photo and saved service checklist are required before Start job.';}
       if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){enabled=false;reason='Complete all Build 383 field evidence, including after photos, before completing the job.';}
       button.disabled=!enabled;
@@ -109,7 +119,7 @@
     });
   }
   function renderSelected(){
-    $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}${renderReadinessCard()}`:'Choose an assigned job.';
+    $('jobSummary').innerHTML=selected?`<strong>${esc(selected.customer_name||'Customer')}</strong><br>${esc(selected.service_date||'')} · ${esc(selected.start_slot||'')} · ${esc(selected.package_code||'')}<br>Area: ${esc(selected.service_area_municipality||selected.city||selected.service_area||'Confirm with office')}<br>Stage: ${esc(jobStage(selected))}<br>Progress: ${selected.progress_enabled?'enabled':'not enabled'}<br><strong>Staff instructions:</strong> ${esc(selected.notes||'No additional service notes recorded.')}${continuityVerified()?'':'<div class="notice warn">Read-only last-seen snapshot; current assignment and instructions must be reverified.</div>'}${renderReadinessCard()}`:'Choose an assigned job.';
     updateActionButtons();
     renderRuntime();
   }
@@ -119,6 +129,7 @@
     const jobId=String(job?.id||'').trim();
     const requestId=++readinessRequest;
     if(!jobId){readiness={jobId:null,state:'idle',intake:null,error:''};renderSelected();return;}
+    if(!continuityVerified()){readiness={jobId,state:'error',intake:null,error:'Offline or awaiting manual reconciliation. No intake was queried.'};renderSelected();return;}
     readiness={jobId,state:'loading',intake:null,error:''};
     renderSelected();
     try{
@@ -146,32 +157,46 @@
   }
   async function loadWorkspace({manual=false}={}){
     if(workspaceLoading)return;
+    if(navigator.onLine===false){wasDisconnected=true;continuityState(false,'Offline: last-seen assigned jobs remain visible in this tab only. Nothing can be sent or replayed.');status('Offline. Reconnect and tap Refresh assigned jobs; no request was queued.','warn');renderJobs();renderSelected();return;}
     setWorkspaceBusy(true);
+    continuityState(false,'Verifying current staff session, assignments and job revisions. Actions are held.');
+    const startedEpoch=continuityEpoch;
     if(manual)status('Refreshing assigned jobs…');
     try{
-      const out=await api.requestJson('/api/detailer/jobs?scope=workspace');
+      const oldId=String(selected?.id||'');
+      const oldStage=selected?jobStage(selected):null;
+      const out=await api.requestJson('/api/detailer/jobs?scope=mobile_v745');
+      if(startedEpoch!==continuityEpoch||navigator.onLine===false)throw new Error('Connection changed during refresh. Manually refresh again to reconcile current jobs.');
+      if(out.workspace?.session_verified!==true||out.workspace?.canonical_assignment_only!==true)throw new Error('Mobile assignment verification was not confirmed.');
       actor=out.actor||actor;jobs=Array.isArray(out.jobs)?out.jobs:[];
-      const keep=selected?.id;
+      const keep=oldId;
       const next=resolveDeepLink()||(keep&&jobs.find((job)=>String(job.id)===String(keep)))||chooseSuggested();
-      if(String(next?.id||'')!==String(selected?.id||''))fieldGate={jobId:String(next?.id||''),loaded:false,canStart:false,canComplete:false};
+      fieldGate={jobId:String(next?.id||''),loaded:false,canStart:false,canComplete:false};
       selected=next;
+      continuityState(true,'Live session and canonical assignments checked. No offline changes were replayed.');
       renderJobs();renderSelected();void loadSelectedReadiness();
-      if(out.workspace?.bounded===true&&manual)status(`Assigned jobs refreshed. ${jobs.length} bounded workspace job(s) loaded.`,'ok');
-      else if(manual)status('Assigned jobs refreshed.','ok');
+      const message=mobile745?.reconciliationMessage745({wasOffline:wasDisconnected,assignmentGone:!!oldId&&!jobs.some(job=>String(job.id)===oldId),stageChanged:!!oldId&&!!selected&&String(selected.id)===oldId&&jobStage(selected)!==oldStage})||'Current assignment verified.';
+      if(manual||wasDisconnected||message.includes('no longer'))status(message,!!oldId&&!jobs.some(job=>String(job.id)===oldId)?'warn':'ok');
+      wasDisconnected=false;
     }catch(error){
-      status(error.message||'Could not load assigned jobs.','bad');
-      $('jobsList').innerHTML='<div class="notice bad">Assigned jobs could not be loaded. No automatic retry was started. Use Refresh assigned jobs to retry manually.</div>';
+      continuityState(false,'Could not verify the current assignment. Last-seen data is read-only. Manually retry after reconnecting.');
+      status(error.message||'Could not load assigned jobs. No automatic retry was started.','bad');
+      if(jobs.length){renderJobs();renderSelected();}
+      else $('jobsList').innerHTML='<div class="notice bad">Assigned jobs could not be loaded. No automatic retry was started. Use Refresh assigned jobs to retry manually.</div>';
     }finally{
       setWorkspaceBusy(false);
     }
   }
   async function runAction(action){
     if(!selected)return;
+    if(!continuityVerified()){status('No change sent. Reconnect, refresh assigned jobs and review the current job first.','warn');return;}
+    if(!selected.updated_at){continuityState(false,'Job revision unavailable. Refresh to reverify before any change.');status('The current job revision is missing; no action was sent.','warn');return;}
+    if(!allowedActions().allowed.has(action)){status('Action unavailable at the current job stage. No change sent.','warn');return;}
     const stage=jobStage(selected),gateCurrent=fieldGate.jobId===String(selected.id)&&fieldGate.loaded===true;
     if(action==='start'&&stage==='arrived'&&(!gateCurrent||fieldGate.canStart!==true)){status('Before-service evidence is incomplete. Save the service checklist and at least one before photo before starting.','warn');return;}
     if(action==='complete'&&['detailing','paused'].includes(stage)&&(!gateCurrent||fieldGate.canComplete!==true)){status('Completion is blocked until approved-scope, product-use and completion records plus after photos are saved.','warn');return;}
     const reason=$('workflowReason').value.trim();
-    const body={booking_id:selected.id,action,reason};
+    const body={booking_id:selected.id,action,reason,client_v745:true,expected_stage:jobStage(selected),expected_updated_at:selected.updated_at};
     if(action==='arrive'&&navigator.geolocation){
       try{const pos=await new Promise((resolve,reject)=>navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:12000,maximumAge:60000}));body.arrived_latitude=pos.coords.latitude;body.arrived_longitude=pos.coords.longitude;}catch{status('Arrival will continue without device geolocation.','warn');}
     }
@@ -188,6 +213,7 @@
       liveModule?.setJob?.(selected,currentPolicy);
       status(`Job updated: ${action}. Local state was updated from the authoritative response; no follow-up polling was started.`,'ok');
     }catch(error){
+      continuityState(false,'Job action outcome needs reconciliation. Refresh assigned jobs before any retry.');
       status(error.ambiguousMutation?`${error.message} Do not repeat the action until you verify the current job state.`:(error.message||'Could not update job.'),'bad');
     }finally{renderSelected();}
   }
@@ -195,7 +221,8 @@
     if(!currentPolicy?.may_load_live_module||!selected)return;
     $('liveJobHost').dataset.loaded='loading';
     try{
-      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20260911build383');
+      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20261102build745');
+      if(!continuityVerified()||!currentPolicy?.may_load_live_module)return;
       if(!liveModule){
         liveModule=await mod.mount({host:$('liveJobHost'),job:selected,policy:currentPolicy,api,onJobPatch:(patch)=>{selected={...selected,...patch};const idx=jobs.findIndex((j)=>String(j.id)===String(selected.id));if(idx>=0)jobs[idx]=selected;renderJobs();renderSelected();},onFieldState:(next)=>{fieldGate=next||fieldGate;updateActionButtons();}});
       }else liveModule.setJob?.(selected,currentPolicy);
@@ -212,11 +239,20 @@
   }
   function bind(){
     $('refreshJobs').addEventListener('click',()=>loadWorkspace({manual:true}));$('mobileRefreshJobs').addEventListener('click',()=>loadWorkspace({manual:true}));
+    document.querySelectorAll('[data-build745-filter]').forEach(button=>button.addEventListener('click',()=>{
+      boardFilter=button.dataset.build745Filter;
+      document.querySelectorAll('[data-build745-filter]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));
+      renderJobs();
+    }));
+    globalScope.addEventListener('offline',()=>{continuityEpoch++;wasDisconnected=true;continuityState(false,'Device offline. Last-seen jobs are read-only; no writes, background retry or replay.');renderJobs();renderSelected();status('Offline: reconnect, then manually refresh assigned jobs to verify changes.','warn');});
+    globalScope.addEventListener('online',()=>{continuityEpoch++;wasDisconnected=true;continuityState(false,'Connection returned. Press Refresh assigned jobs to recheck assignment and stage; nothing runs automatically.');renderJobs();renderSelected();status('Connection restored. Review and refresh before any action.','warn');});
     document.querySelectorAll('[data-job-action]').forEach((button)=>button.addEventListener('click',()=>runAction(button.dataset.jobAction)));
-    document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden);});
+    document.addEventListener('visibilitychange',()=>{renderRuntime();liveModule?.setVisibility?.(!document.hidden&&continuityVerified());});
   }
   async function boot(){
     if(!api||!policy||!loader||!resolver)throw new Error('Build 271 app-core did not load.');
+    mobile745=await import('/assets/detailer-mobile-dayboard-v745.mjs?v=20261102build745');
+    continuityState(false,'Waiting for staff session and assignment verification.');
     bind();
     await globalScope.AdminShell.boot({pageKey:'app-detailer',onReady:async({actor:currentActor})=>{
       actor=currentActor||null;
