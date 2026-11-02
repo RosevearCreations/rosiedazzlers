@@ -164,7 +164,7 @@ client_dashboard = require(CLIENT_DASHBOARD, [
 my_account_page = require(MY_ACCOUNT_PAGE, [
     'Booking activity & completed service history',
     'Completed work is shown separately from the canonical customer service-history record',
-    '/assets/my-account-v355.js?v=20261102build742',
+    '/assets/my-account-v355.js?v=20261102build743',
 ], "Build 355 My Account page")
 
 my_account_history = require(MY_ACCOUNT_HISTORY, [

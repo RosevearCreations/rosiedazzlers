@@ -2,6 +2,8 @@ import {
   hasActivePushSubscription,
   loadCustomerNotificationProfile
 } from "./notification-hooks.js";
+import { loadLatestPreference743 } from './customer-notification-preferences-v743.js';
+import { classifyPurpose743, evaluateConsent743 } from '../../../assets/notification-consent-preview-v743.mjs';
 
 const CUSTOMER_CHANNELS = new Set(["email", "sms", "push"]);
 
@@ -87,10 +89,28 @@ export async function loadCustomerCommunicationDispatchGate({ env, event }) {
     ? await hasActivePushSubscription({ env, owner_type: "customer", owner_id: profile.id })
     : false;
 
+  let decision = evaluateCustomerCommunicationConsent({ profile, event, pushActive });
+  if (channel === 'email' || channel === 'sms') {
+    try {
+      const preference = await loadLatestPreference743({ env, profileId: event.customer_profile_id });
+      const consent743 = evaluateConsent743({
+        profile, preference, channel, purpose: classifyPurpose743(event),
+        recipientEmail: event.recipient_email, recipientPhone: event.recipient_phone
+      });
+      if (!consent743.allowed) decision = {
+        applies: true, dispatch: false, reason: `build743_${consent743.reason}`,
+        channel, consent_owner: 'customer_profile', inferred_consent: false
+      };
+    } catch {
+      decision = { applies: true, dispatch: false, reason: 'build743_preference_authority_unavailable',
+        channel, consent_owner: 'customer_profile', inferred_consent: false };
+    }
+  }
+
   return {
     applies: true,
     profile,
-    decision: evaluateCustomerCommunicationConsent({ profile, event, pushActive })
+    decision
   };
 }
 
