@@ -245,6 +245,12 @@ async function captureDashboardResponse(response, input) {
         const status = document.querySelector('#build743PreferenceStatus');
         if (status) status.textContent = 'Could not load communication preferences. Refresh to try again.';
       });
+    import('/assets/customer-followup-workbench-v744.js?v=20261102build744')
+      .then((module) => module.loadCustomerFollowupWorkbench744?.())
+      .catch(() => {
+        const status = document.querySelector('#build744Status');
+        if (status) status.textContent = 'Could not load customer follow-up options. Refresh to try again.';
+      });
     import('/assets/my-account-v382.js')
       .then((module) => module.loadCustomerRetentionView?.())
       .catch(() => {});
