@@ -3,7 +3,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>My Account | Rosie Dazzlers</title>
   <link rel="canonical" href="https://www.rosiedazzlers.ca/my-account" />
-  <meta name="description" content="Review your Rosie Dazzlers bookings, completed service history, garage information, gift certificates, and customer account details in one place." /><link rel="stylesheet" href="/assets/site.css" />
+  <meta name="description" content="Review your Rosie Dazzlers bookings, quotes, payment summaries, gift certificates, maintenance interest and self-service change requests in one account." /><link rel="stylesheet" href="/assets/site.css" /><link rel="stylesheet" href="/assets/my-account-history-v742.css?v=20261102build742" />
   <style>
     .garage-visual{display:grid;gap:14px}.garage-shell{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding:18px;border-radius:22px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(15,23,42,.92),rgba(17,24,39,.92));position:relative;overflow:hidden}.garage-shell::before{content:"";position:absolute;left:14px;right:14px;top:12px;height:8px;border-radius:999px;background:linear-gradient(90deg,rgba(148,163,184,.18),rgba(255,255,255,.04),rgba(148,163,184,.18))}.garage-bay{position:relative;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:34px 14px 14px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));min-height:240px;min-width:0;overflow:hidden}.garage-bay.has-photo{background-size:cover;background-position:center}.garage-bay.has-photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,17,31,.10),rgba(8,17,31,.72));pointer-events:none}.garage-bay > *{position:relative;z-index:1}.garage-bay::before{content:attr(data-bay);position:absolute;left:14px;top:10px;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:#93c5fd}.garage-bay.empty{display:grid;place-items:center;color:#94a3b8;background:rgba(255,255,255,.025)}.garage-bay h3,.garage-bay .garage-kicker,.garage-field strong{overflow-wrap:anywhere;word-break:break-word}.garage-bay h3{margin:0 0 6px}.garage-bay .garage-kicker{color:#cbd5e1;font-size:.9rem}.vehicle-media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:12px}.vehicle-media-card{padding:12px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08)}.vehicle-media-thumb,.vehicle-media-video{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:12px;background:rgba(255,255,255,.04)}.vehicle-media-meta{display:grid;gap:4px;margin-top:10px}.upload-guidance{padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);margin-top:12px}.upload-guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}.upload-guide-card{padding:12px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}.upload-guide-card img{width:100%;aspect-ratio:16/10;object-fit:contain;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}.upload-guide-card strong{display:block;margin-top:10px}.upload-guidance ul{margin:8px 0 0 18px;padding:0}.score-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.10);background:rgba(255,255,255,.04);font-size:.85rem}.score-badge.good{border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.12)}.score-badge.warn{border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.12)}.score-badge.bad{border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.12)}.upload-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}.garage-badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.fleet-note{margin-top:10px}.vehicle-card{display:none}.garage-field{display:flex;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.08)}.garage-field:last-child{border-bottom:0;padding-bottom:0}.garage-field strong{text-align:right}.garage-empty{padding:14px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}.maintenance-panel{display:grid;gap:12px}.maintenance-offer{padding:14px;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}.maintenance-offer h3{margin:0 0 8px}.maintenance-offer .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.maintenance-offer .badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.maintenance-offer .badge{background:rgba(124,58,237,.18);border-color:rgba(124,58,237,.35)}@media (max-width:980px){.garage-shell{grid-template-columns:1fr}.garage-field{flex-direction:column}.garage-field strong{text-align:left}}
   </style>
@@ -62,6 +62,48 @@
 
     <div class="panel"><h2>Booking activity & completed service history</h2><p class="muted">Current and upcoming bookings keep progress access. Completed work is shown separately from the canonical customer service-history record linked to your saved vehicle when available.</p><div id="bookingHistory" class="grid"></div></div>
   </div></section>
+
+  <section id="build742History" class="section" data-build742-account-history>
+    <div class="panel">
+      <div class="section-head"><div><div class="badge">Build 742 · Self-service</div><h2>Account history &amp; change requests</h2><p class="muted">A signed-in view of your booking, quote marked sent, recorded payment, gift and maintenance activity. Your private information is not shared with other accounts.</p></div></div>
+      <nav id="build742Overview" class="build742-overview" aria-label="Account history sections"></nav>
+      <p id="build742HistoryStatus" class="notice" role="status" aria-live="polite">Waiting for your account session…</p>
+      <div class="build742-history-grid">
+        <div id="build742QuotesPanel" class="build742-group"><h3>Quotes marked sent</h3><div id="build742Quotes" class="build742-list"><p class="muted">Loading quotes…</p></div></div>
+        <div class="build742-group"><h3>Paid receipts</h3><div id="build742Receipts" class="build742-list"><p class="muted">Loading payment history…</p></div></div>
+        <div class="build742-group"><h3>Maintenance interest</h3><div id="build742Maintenance" class="build742-list"><p class="muted">Loading maintenance interests…</p></div></div>
+        <div class="build742-group"><h3>Cancellation &amp; reschedule requests</h3><div id="build742RequestHistory" class="build742-list"><p class="muted">Loading change requests…</p></div></div>
+      </div>
+      <div class="build742-request-panel">
+        <h3>Ask Rosie to change an appointment</h3>
+        <p class="muted">This sends a request for human review. <strong>Your existing appointment stays unchanged</strong> until Rosie confirms a change. This form does not cancel, reschedule, charge, refund or send a message automatically.</p>
+        <form id="build742RequestForm" class="form" aria-busy="false">
+          <div class="form-grid two-col">
+            <label for="build742Booking">Your booking
+              <select id="build742Booking" required><option value="">Loading eligible bookings…</option></select>
+            </label>
+            <label for="build742RequestType">Request type
+              <select id="build742RequestType" required><option value="reschedule">Request a different date</option><option value="cancel">Request cancellation</option></select>
+            </label>
+          </div>
+          <div id="build742RescheduleFields" class="form-grid two-col">
+            <label for="build742NewDate">Preferred new date (not confirmed)
+              <input id="build742NewDate" type="date" required />
+            </label>
+            <label for="build742NewSlot">Preferred time (optional)
+              <input id="build742NewSlot" type="text" maxlength="80" placeholder="e.g. Morning; subject to availability" />
+            </label>
+          </div>
+          <label for="build742Reason">Reason or instructions for Rosie
+            <textarea id="build742Reason" required minlength="8" maxlength="1000" rows="3" placeholder="Tell Rosie what you need and any scheduling constraints. Please do not enter payment information."></textarea>
+          </label>
+          <p id="build742NoBooking" class="muted" hidden>No open booking is currently eligible for a change request. <a href="/contact">Contact Rosie</a> for other situations.</p>
+          <div class="actions"><button id="build742RequestSubmit" class="btn primary" type="submit">Send request for review</button></div>
+          <p id="build742RequestStatus" class="notice" role="status" aria-live="polite" aria-atomic="true">Requests are private to your signed-in account.</p>
+        </form>
+      </div>
+    </div>
+  </section>
 
   <section class="section" data-build295-account-source-authority><div class="panel maintenance-panel"><div class="section-head"><div><h2>Maintenance interest</h2><p class="muted">If repeat detailing may be useful, tell Rosie your preferred timing. We review the request against current vehicle condition, service scope and availability before any booking decision.</p><p class="muted">This does not create a fixed cadence, price, discount, priority, appointment, subscription or recurring billing.</p></div><a class="btn ghost" href="/maintenance-plan">Open maintenance interest</a></div><div id="maintenanceConversion" class="grid"></div></div></section>
 
