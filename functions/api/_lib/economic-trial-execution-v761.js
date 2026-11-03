@@ -138,8 +138,12 @@ export async function verifyOperator761({env,record,handoff,readback,now=Date.no
   return hold(p.execution_result==='SUCCEEDED_NONPRODUCTION'?'SIGNED_NONPROD_OPERATOR_SUCCESS_CLAIM':'SIGNED_NONPROD_OPERATOR_FAILURE_CLAIM',
     'Authentic operator claim checked; this application neither observed nor ran the SQL.',
     {signature_authenticated:true,receipt_sha256:await sha256Receipt754(canonicalBytes),
-      execution_id:p.execution_id,execution_result:p.execution_result,executed_at:p.executed_at,
-      observed_at:p.observed_at,external_execution_only:true});
+      trial_id:p.trial_id,execution_id:p.execution_id,execution_result:p.execution_result,
+      handoff_receipt_sha256:p.handoff_receipt_sha256,
+      migration_artifact_sha256:p.migration_artifact_sha256,
+      rollback_artifact_sha256:p.rollback_artifact_sha256,
+      backup_snapshot_sha256:p.backup_snapshot_sha256,
+      executed_at:p.executed_at,observed_at:p.observed_at,external_execution_only:true});
 }
 export async function verifyOutcome761({env,record,handoff,operator,readback,now=Date.now()}={}){
   if(readback?.status!=='SIGNED_OUTCOME_READBACK')return hold(readback?.status||'HOLD_OUTCOME_RECEIPT_MISSING',
