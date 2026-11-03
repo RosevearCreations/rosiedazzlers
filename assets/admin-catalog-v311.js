@@ -1,6 +1,6 @@
 (function(){
   const qs=(s)=>document.querySelector(s);
-  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[], usageActionId=crypto.randomUUID(), editorTargetKey=null, editorSnapshot=null, supplierMetaState={};
+  let actor=null, inventory=[], movements=[], lowStock=[], savedInventoryItems=[], bundledFallbackItems=[], mediaLibraryRows=[], importPreviewRows=[], amazonMatchRows=[], imagePickerRows=[], imageHealthRows=[], usagePreview750=null, usagePending750=false, editorTargetKey=null, editorSnapshot=null, supplierMetaState={};
   const inventorySelection=new Set();
   const optionStorageKey='rosie_inventory_dropdown_options_v2';
   function esc(v){ return String(v==null?'':v).replace(/[&<>"']/g,(m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
@@ -239,7 +239,7 @@
   }
   function fillUsageItems(){
     const options='<option value="">Select inventory item</option>'+inventory.map((item)=>`<option value="${esc(item.item_key)}">${esc(item.name)} (${esc(item.item_type||'')})</option>`).join('');
-    const usageSel=qs('#usageItemKey'); if(usageSel) usageSel.innerHTML=options;
+    const usageSel=qs('#usageItemKey'); if(usageSel) usageSel.innerHTML='<option value="">Select consumable</option>'+inventory.filter(item=>item.item_type==='consumable'&&item.is_active!==false).map(item=>`<option value="${esc(item.item_key)}">${esc(item.name)} · ${esc(item.usage_unit||item.stock_unit||item.unit_label||'unit')}</option>`).join('');
     const quickSel=qs('#quickStockItem'); if(quickSel) quickSel.innerHTML=options;
     renderUsageEstimate();
   }
@@ -252,7 +252,54 @@
     const stock=used/conversion,rounded=Math.round(stock*1000)/1000;
     if(!(used>0)||!(conversion>0)||!Number.isFinite(stock)||rounded<=0||Math.abs(stock-rounded)>1e-9){box.textContent=`Enter a positive ${usageUnit} amount that converts exactly to 0.001 ${stockUnit}.`;return;}
     const cost=Number(item.cost_cents||0)*rounded/100;
-    box.textContent=`${used} ${usageUnit} = ${rounded} ${stockUnit} to debit · ${item.qty_on_hand} ${stockUnit} on hand · Estimated job cost: ${Number.isFinite(cost)&&cost>0?cost.toLocaleString('en-CA',{style:'currency',currency:'CAD'}):'cost unavailable'}.`;
+    const insufficient=Number(item.qty_on_hand)<rounded;
+    box.textContent=`${used} ${usageUnit} = ${rounded} ${stockUnit} to debit · ${item.qty_on_hand} ${stockUnit} on hand · ${insufficient?'Insufficient stock · ':''}Estimated job cost: ${item.cost_cents!=null&&Number.isFinite(cost)?cost.toLocaleString('en-CA',{style:'currency',currency:'CAD'}):'unavailable; review cost evidence'}. This is an estimate; use the verified preview before posting.`;
+  }
+
+  function usageInput750(){return {booking_id:qs('#usageBookingId').value.trim(),item_key:qs('#usageItemKey').value,qty_used:Number(qs('#usageQty').value),note:qs('#usageNote').value.trim()};}
+  function invalidateUsage750(message='Inputs changed. Run a fresh no-deduction preview before confirming.'){
+    usagePreview750=null;qs('#usageConfirmBtn').disabled=true;qs('#usageDecision').textContent=message;
+  }
+  function setUsageBusy750(busy){usagePending750=busy;qs('#usagePreviewBtn').disabled=busy;qs('#usageConfirmBtn').disabled=busy||!usagePreview750;qs('#usageHistoryBtn').disabled=busy;}
+  const money750=(cents)=>cents==null?'Cost unavailable':(Number(cents)/100).toLocaleString('en-CA',{style:'currency',currency:'CAD'});
+  async function loadUsageHistory750(){
+    const bookingId=qs('#usageBookingId').value.trim(),body=qs('#usageHistoryBody'),total=qs('#usageHistoryTotal');
+    if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(bookingId)){total.textContent='Enter a valid booking ID.';body.innerHTML='<tr><td colspan="4">Booking UUID required.</td></tr>';return;}
+    body.innerHTML='<tr><td colspan="4">Reading booking posting evidence…</td></tr>';
+    try{
+      const x=await postJson('/api/admin/catalog_consumables_v750',{action:'history',booking_id:bookingId});
+      if(!x.ok||!x.out?.ok)throw Error(x.out?.error||'Could not read cost trail.');
+      const trace=x.out.trace||{},entries=trace.entries||[];
+      total.textContent=`Net recorded material cost: ${money750(trace.net_material_cost_cents)}${trace.missing_cost_lines?' · missing cost review':''}${trace.accounting_review_batches?' · accounting review required':''}`;
+      body.innerHTML=entries.length?entries.flatMap((batch)=>batch.lines.map((line)=>`<tr><td>${esc(new Date(batch.posted_at).toLocaleString('en-CA'))}<br><strong>${esc(batch.status)}</strong>${batch.reversal_reason?`<div class="mini">Reversal: ${esc(batch.reversal_reason)}</div>`:''}</td><td>${esc(line.item_name||line.item_key)}<br>${esc(line.stock_quantity)} ${esc(line.stock_unit||'units')}</td><td>${esc(money750(line.net_cost_cents))}${batch.status==='reversed'?'<br><span class="mini">Reversed to zero</span>':''}</td><td><span class="mini">Movement ${esc(line.movement_id||'unavailable')}<br>Batch ${esc(batch.batch_id)}<br>Accounting: ${esc(batch.accounting_status||'review')}<br>Recorded cost/unit: ${esc(money750(line.cost_per_stock_unit_cents))}</span></td></tr>`)).join(''):'<tr><td colspan="4">No atomic booking consumable postings recorded.</td></tr>';
+    }catch(err){total.textContent='Cost trail unavailable';body.innerHTML=`<tr><td colspan="4">${esc(err.message||'Evidence unavailable; try again.')}</td></tr>`;}
+  }
+
+  async function previewUsage750(){
+    if(usagePending750)return;
+    invalidateUsage750('Checking live stock, booking and the exact fractional cost; no deduction is being made.');
+    const payload=usageInput750(),signature=JSON.stringify(payload);setUsageBusy750(true);
+    try{
+      const x=await postJson('/api/admin/catalog_consumables_v750',{action:'preview',...payload});
+      if(signature!==JSON.stringify(usageInput750())){invalidateUsage750('Inputs changed during preview; repeat the preview.');return;}
+      if(!x.ok||!x.out?.ok)throw Error(x.out?.error||'Preview unavailable.');
+      const p=x.out.preview;usagePreview750={receipt:x.out.receipt,operation_id:x.out.operation_id,booking_id:payload.booking_id,item_key:payload.item_key};
+      qs('#usageDecision').textContent=`Verified: ${p.usageQuantity} ${p.usageUnit} deducts ${p.stockQuantity} ${p.stockUnit}; ${p.stock_before} → ${p.stock_after} in stock; ${money750(p.estimatedCostCad==null?null:Math.round(p.estimatedCostCad*100))} estimated material cost. ${p.costing_status==='review'?'Cost unavailable: requires review. ':''}Expires in 10 minutes. Confirm once to post.`;
+    }catch(err){invalidateUsage750(`Preview failed — ${err.message||'inventory unavailable'}. No stock deducted.`);}
+    finally{setUsageBusy750(false);}
+  }
+
+  async function confirmUsage750(){
+    if(usagePending750||!usagePreview750)return;
+    const pending={...usagePreview750};setUsageBusy750(true);qs('#usageDecision').textContent='Posting one atomic stock transaction. If interrupted, read booking history before retrying this same action.';
+    try{
+      const x=await postJson('/api/admin/catalog_consumables_v750',{action:'commit',...pending});
+      if(!x.ok||!x.out?.ok){if(x.out?.code==='stock_or_cost_changed'||x.out?.code==='preview_mismatch')invalidateUsage750(x.out.error);throw Error(x.out?.error||'Posting outcome not confirmed.');}
+      invalidateUsage750(`Posted batch ${x.out.batch_id}${x.out.idempotent_replay?' (already recorded; no second deduction)':''}. ${x.out.posting_drift_review?'Stock or cost changed during commit; compare recorded ledger against preview. ':''}${x.out.accounting_review_required?'Operations review required.':'Cost and accounting posted.'} Choose another preview for the next use.`);
+      show(`Build 750: consumable usage ${x.out.idempotent_replay?'reconciled':'recorded'}; see the booking cost trail.`,x.out.accounting_review_required?'bad':'ok');
+      await Promise.all([loadInventory(),loadLowStock(),loadMovements(),loadUsageHistory750()]);
+    }catch(err){qs('#usageDecision').textContent=`Posting uncertain or blocked: ${err.message||'network unavailable'}. Do not start a new action. Read the booking history and retry only the same confirmation if necessary.`;}
+    finally{setUsageBusy750(false);}
   }
 
   function itemQualityScore(item){
@@ -702,7 +749,10 @@
   setInventoryOptionsEditor(currentInventoryOptions());
   qs('#saveInventoryOptionsBtn')?.addEventListener('click', async ()=>{ const value=readInventoryOptionsEditor(); localStorage.setItem(optionStorageKey, JSON.stringify(value)); setInventoryOptionsEditor(value); renderInventoryDatalists(); const saved=await saveSharedInventoryOptions(value).catch(()=>null); show(saved?.ok && saved?.out?.ok ? 'Inventory dropdown suggestions saved to shared app settings and this browser.' : 'Inventory dropdown suggestions saved in this browser. Shared save was not available.', saved?.ok && saved?.out?.ok ? 'ok' : 'bad'); });
   qs('#resetInventoryOptionsBtn')?.addEventListener('click', ()=>{ localStorage.removeItem(optionStorageKey); setInventoryOptionsEditor(inventoryOptionDefaults()); renderInventoryDatalists(); show('Inventory dropdown suggestions reset to detailing defaults.', 'ok'); });
-  qs('#reloadBtn').addEventListener('click', loadInventory); qs('#publishReadinessFilter')?.addEventListener('change', renderInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value=''; });
+  qs('#reloadBtn').addEventListener('click', loadInventory); qs('#publishReadinessFilter')?.addEventListener('change', renderInventory); qs('#reloadOrdersBtn').addEventListener('click', loadOrders); qs('#reloadMovesBtn').addEventListener('click', loadMovements); qs('#reloadLowBtn').addEventListener('click', loadLowStock); qs('#itemType').addEventListener('change', renderInventory); qs('#invSearch').addEventListener('input', renderInventory); qs('#invSort').addEventListener('change', renderInventory); qs('#moveSearch').addEventListener('input', renderMovements); qs('#moveType').addEventListener('change', renderMovements); qs('#orderStatus').addEventListener('change', loadOrders); qs('#newItemBtn').addEventListener('click', ()=>fillForm(null)); qs('#clearFormBtn').addEventListener('click', ()=>fillForm(null)); qs('#usageResetBtn').addEventListener('click', ()=>{ if(usagePending750)return;qs('#usageBookingId').value=''; qs('#usageItemKey').value=''; qs('#usageQty').value='1'; qs('#usageNote').value='';invalidateUsage750('Cleared; no deduction made.');renderUsageEstimate(); });
+  ['#usageBookingId','#usageItemKey','#usageQty','#usageNote'].forEach((selector)=>qs(selector)?.addEventListener('input',()=>{if(!usagePending750)invalidateUsage750();renderUsageEstimate();}));
+  qs('#usageHistoryBtn')?.addEventListener('click',loadUsageHistory750);
+  qs('#usageConfirmBtn')?.addEventListener('click',confirmUsage750);
   
 
   async function importSupplierLinkPreview(){
@@ -778,6 +828,6 @@
     if(!x.ok||!x.out?.ok){const r=x.out?.publish_readiness;const detail=r?.blockers?.length?` ${r.blockers.join(' ')}`:'';return show(((x.out&&x.out.error)||'Could not save inventory item.')+detail,'bad');}
     const saved=x.out.item||payload;show(editorTargetKey?`Existing inventory item ${editorTargetKey} updated.`:'New inventory item saved.','ok');fillForm(saved,{targetKey:saved.item_key});await loadInventory();loadLowStock();
   });
-  qs('#usageForm').addEventListener('submit', async(e)=>{ e.preventDefault(); const button=e.submitter||qs('#usageForm button[type="submit"]'); if(button)button.disabled=true; const payload={ booking_id: qs('#usageBookingId').value.trim(), item_key: qs('#usageItemKey').value, qty_used: Number(qs('#usageQty').value||0), note: qs('#usageNote').value.trim(), client_action_id: usageActionId }; try{ const x=await postJson('/api/admin/catalog_usage_add', payload); if(!x.ok||!x.out?.ok) return show((x.out&&x.out.error)||'Could not record usage. Retry uses the same transaction key to prevent a duplicate deduction.','bad'); usageActionId=crypto.randomUUID(); show('Inventory usage recorded.','ok'); qs('#usageQty').value='1'; qs('#usageNote').value=''; loadInventory(); loadLowStock(); loadMovements(); } finally { if(button)button.disabled=false; } });
+  qs('#usageForm').addEventListener('submit',async(e)=>{e.preventDefault();await previewUsage750();});
   window.AdminShell.boot({ pageKey:'admin-catalog', onReady: async ({actor:current}) => { actor=current||null; const box=qs('#actorBox'); if(actor){ box.style.display='block'; box.textContent=`Signed in as ${actor.full_name || actor.email || 'staff'} (${actor.role_code || 'staff'})`; } await loadSharedInventoryOptions(); fillForm(null); await loadInventory(); const requested=new URLSearchParams(location.search).get('item'); if(requested){const item=inventory.find((x)=>String(x.item_key)===String(requested)); if(item){fillForm(item,{targetKey:item.item_key});qs('#supplierLinkHeading')?.scrollIntoView({behavior:'smooth',block:'start'});show(`Loaded ${item.name||item.item_key} for supplier-link repair. Paste or review its Amazon link before saving changes.`,'ok');}else show(`Inventory item ${requested} was not found in the current live/fallback list.`,'bad');} loadMovements(); loadLowStock(); loadOrders(); } });
 })();
