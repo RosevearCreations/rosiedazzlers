@@ -43,22 +43,29 @@ export async function onRequestPost({request,env}){
     !body.owner_explicit_closure_authorization)
     return fail('Four exact identifiers and three authentic owner-signed decisions required.');
   const record=Object.fromEntries(ids.map(k=>[k,body[k]]));
-  // Fetch and independently authenticate all historical receipts again. Browser
-  // exports from Build 765 have no authority here; signed owner JSON only.
-  const prior=await reviewSignedClosureReadiness765({env,record,
+  return json((await reviewSignedFinal766({env,record,
     owner_postchange_decision:body.owner_postchange_decision,
-    owner_closure_readiness_decision:body.owner_closure_readiness_decision});
-  let owner=null,ledger=null,disposition=null;
-  owner=await verifyOwnerAuthorization766({env,record,prior,
-    envelope:body.owner_explicit_closure_authorization});
+    owner_closure_readiness_decision:body.owner_closure_readiness_decision,
+    owner_explicit_closure_authorization:body.owner_explicit_closure_authorization})).summary);
+}
+// Reusable only after each caller performs its own session, origin and body checks.
+// Each invocation re-fetches the original independently signed outside-source chain.
+export async function reviewSignedFinal766({env,record,owner_postchange_decision,
+  owner_closure_readiness_decision,owner_explicit_closure_authorization,now=Date.now()}={}){
+  const prior=await reviewSignedClosureReadiness765({env,record,
+    owner_postchange_decision,owner_closure_readiness_decision,now});
+  const owner=await verifyOwnerAuthorization766({env,record,prior,
+    envelope:owner_explicit_closure_authorization,now});
+  let ledger=null,disposition=null;
   if(owner.signature_authenticated){
     ledger=await verifyLedger766({env,record,prior,owner,
-      readback:await readReceipt766(env,'ledger',record,prior,owner)});
+      readback:await readReceipt766(env,'ledger',record,prior,owner),now});
     if(ledger.signature_authenticated)
       disposition=await verifyDisposition766({env,record,prior,owner,ledger,
-        readback:await readReceipt766(env,'disposition',record,prior,owner,ledger)});
+        readback:await readReceipt766(env,'disposition',record,prior,owner,ledger),now});
   }
-  return json(await reconcileFinal766({prior,owner,ledger,disposition}));
+  return {prior,owner,ledger,disposition,
+    summary:await reconcileFinal766({prior,owner,ledger,disposition})};
 }
 const readonly=()=>fail('Build 766 only checks external owner and independent custody/disposition claims. No SQL, ledger write, closure or notification endpoint exists.',405);
 export async function onRequestPut(){return readonly();}
