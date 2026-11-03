@@ -299,4 +299,5 @@ assert.match(read('docs/build764_external_execution_standby_postchange_review.md
 console.log('Build 764 PASS: historical 19-signer gate, external execution and rollback standby outcomes, owner HOLD, exact hashes/time, private API, no database action or closure.');
 // The Build 765 test reuses these independently signed simulated historical
 // receipts, never production data or a claimed real migration.
-export {env,keys,record,now,sign,archive,execution,standby,reconciliation,owner,signedOwner};
+export {env,keys,record,now,sign,archive,execution,standby,reconciliation,owner,
+  signedArchive,signedExecution,signedStandby,signedReconciliation,signedOwner};
