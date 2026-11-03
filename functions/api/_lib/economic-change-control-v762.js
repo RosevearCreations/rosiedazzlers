@@ -213,6 +213,7 @@ export async function verifyChangeControl762({env,record,prior,rollback,owner,re
     'A separate reviewer signed a production change design; it is not an execution permit.',
     {signature_authenticated:true,receipt_sha256:await sha256Receipt754(transcript),
       change_ticket_id:p.change_ticket_id,window_start:p.window_start,window_end:p.window_end,
+      observed_at:p.observed_at,expires_at:p.expires_at,
       production_project_ref:p.production_project_ref,design_review_only:true,
       production_execution_authorized:false});
 }
@@ -237,6 +238,15 @@ export async function reconcileChangeControl762({prior,rollback,owner,change,rev
   const ready=blockers.length===2;
   const result={ok:true,build:762,read_only:true,
     nonprod_target:prior?.nonprod_target||null,build761_trial_status:prior?.trial_review_status||'HOLD_NONPROD_TRIAL_EVIDENCE',
+    trial_evidence_binding:prior?.operator_receipt?.signature_authenticated?{
+      trial_id:prior.operator_receipt.trial_id,
+      build761_packet_sha256:prior.packet_sha256,
+      operator_receipt_sha256:prior.operator_receipt.receipt_sha256,
+      outcome_receipt_sha256:prior?.independent_trial_witness?.receipt_sha256||null,
+      migration_artifact_sha256:prior.operator_receipt.migration_artifact_sha256,
+      rollback_artifact_sha256:prior.operator_receipt.rollback_artifact_sha256,
+      backup_snapshot_sha256:prior.operator_receipt.backup_snapshot_sha256
+    }:null,
     rollback_disposition_review:rollback||null,owner_trial_signoff:owner||null,change_control_review:change||null,
     change_control_status:ready?'READY_FOR_SEPARATE_PRODUCTION_CHANGE_AUTHORIZATION':'HOLD_PRODUCTION_CHANGE_CONTROL_PREFLIGHT',
     production_execution_authorized:false,production_migration_executed:false,
