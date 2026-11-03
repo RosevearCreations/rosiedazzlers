@@ -218,7 +218,8 @@ export async function verifyOwnerTrial760({env,record,prior,identity,isolation,r
     'Owner signed a scoped handoff for operator review, not SQL execution or business closure.',
     {signature_authenticated:true,receipt_sha256:await sha256Receipt754(transcript),trial_id:p.trial_id,
       migration_artifact_sha256:p.migration_artifact_sha256,rollback_artifact_sha256:p.rollback_artifact_sha256,
-      backup_snapshot_sha256:p.backup_snapshot_sha256,trial_execution_authorized:false});
+      backup_snapshot_sha256:p.backup_snapshot_sha256,issued_at:p.issued_at,expires_at:p.expires_at,
+      trial_execution_authorized:false});
 }
 export async function reconcileNonprodTrial760({prior,identity,isolation,rollback,owner,reviewed_at=new Date().toISOString()}={}){
   const blockers=[];

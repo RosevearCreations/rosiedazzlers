@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Nonproduction Operator Receipt &amp; Trial Reconciliation | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.review761{display:grid;gap:20px;padding:26px 0 80px;color:#eaf2f8}
+.review761 h1,.review761 h2{color:#f8d38a}
+.review761 .panel{background:#192d3e;border:1px solid #638397;border-radius:18px;padding:24px;box-shadow:0 8px 24px #07111b35}
+.review761 .hero{background:linear-gradient(112deg,#101b29,#224f62 60%,#604825);border-color:#dcbb7b}
+.review761 .muted{color:#d1dfeb}
+.review761 .entry{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px}
+.review761 label{display:grid;gap:7px}
+.review761 input,.review761 textarea{box-sizing:border-box;width:100%;border:1px solid #9bb7c8;border-radius:9px;padding:10px;background:white;color:#192934;font:inherit}
+.review761 textarea{height:126px;font:12px/1.45 ui-monospace,monospace}
+.review761 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.review761 .stat{background:#28465a;border:1px solid #607e93;border-radius:11px;padding:15px}
+.review761 .stat strong{display:block;color:#ffdc91;margin-bottom:7px}
+.review761 .notice{background:#334c5e;padding:15px;border-left:4px solid #f7cc78;border-radius:8px}
+.review761 .scroll{overflow:auto}.review761 table{width:100%;min-width:530px;border-collapse:collapse}
+.review761 th,.review761 td{text-align:left;padding:10px;border-bottom:1px solid #5a7486}
+.review761 th{color:#f4d692}.review761 pre{background:#0b1b29;padding:15px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.review761 :focus-visible{outline:3px solid #ffd68b;outline-offset:3px}
+@media(max-width:600px){.review761 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build761="nonproduction-operator-trial-evidence-review">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo"><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container review761">
+<section class="panel hero"><span class="badge">Build 761 · External operator receipts / production HOLD</span>
+<h1>Nonproduction Migration Operator Execution Receipt, Trial Evidence Reconciliation &amp; Rollback Exception Review</h1>
+<p class="muted">Review an externally executed isolated trial using two independently signed reports: the operator execution receipt and a post-trial witness review. We revalidate the entire Build 760 handoff first. <strong>This screen cannot authorize or execute SQL, rollbacks or customer messaging.</strong></p>
+<p class="notice" id="config761" role="status" aria-live="polite">Checking owner access…</p>
+<a class="btn ghost" href="/admin-economic-nonprod-v760.html">Build 760 · Owner trial handoff</a>
+<a class="btn ghost" href="/admin-economic-enforcement-v759.html">Build 759 · DBA and security review</a></section>
+<section class="panel"><h2>1 · Revalidate original evidence</h2>
+<p class="muted">Import the original eight JSON documents. They stay in this browser and are reviewed transiently by the private endpoint. The operator and independent outcome receipts come only from configured server-side HTTPS providers. Do not enter SQL, credentials, customer exports or secrets.</p>
+<form id="form761"><div class="entry"><label>Period<input id="period761" type="month" required></label>
+<label>Booking UUID<input id="booking761" maxlength="36" placeholder="00000000-0000-0000-0000-000000000000" required></label></div>
+<div class="entry">
+<label>Original source record JSON<input id="fileRecord761" type="file" accept=".json,application/json"><textarea id="record761" required spellcheck="false"></textarea></label>
+<label>Source-witness receipt JSON<input id="fileSource761" type="file" accept=".json,application/json"><textarea id="source761" required spellcheck="false"></textarea></label>
+<label>Owner receipt JSON<input id="fileOwner761" type="file" accept=".json,application/json"><textarea id="owner761" required spellcheck="false"></textarea></label>
+<label>History manifest JSON<input id="fileHistory761" type="file" accept=".json,application/json"><textarea id="history761" required spellcheck="false"></textarea></label>
+<label>Owner migration review JSON<input id="fileMigration761" type="file" accept=".json,application/json"><textarea id="migration761" required spellcheck="false"></textarea></label>
+<label>Independent DBA review JSON<input id="fileDba761" type="file" accept=".json,application/json"><textarea id="dba761" required spellcheck="false"></textarea></label>
+<label>Independent security review JSON<input id="fileSecurity761" type="file" accept=".json,application/json"><textarea id="security761" required spellcheck="false"></textarea></label>
+<label>Owner nonproduction handoff JSON<input id="fileTrial761" type="file" accept=".json,application/json"><textarea id="trial761" required spellcheck="false"></textarea></label>
+</div><p><button class="btn primary" id="verify761" type="submit">Verify external execution and rollback exceptions</button></p></form>
+<p id="status761" class="muted" role="status" aria-live="polite">No operator evidence verified.</p></section>
+<section class="panel"><h2>2 · Signed receipt review</h2><div class="stats">
+<div class="stat"><strong>Build 760 owner handoff</strong><span id="handoff761">HOLD — Not checked</span></div>
+<div class="stat"><strong>Isolated project</strong><span id="target761">HOLD — Not checked</span></div>
+<div class="stat"><strong>Operator execution receipt</strong><span id="operator761">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent trial witness</strong><span id="witness761">HOLD — Not checked</span></div>
+<div class="stat"><strong>Trial review</strong><span id="review761">HOLD — Not checked</span></div>
+<div class="stat"><strong>Production closure</strong><span>HOLD — Separate owner decision required</span></div></div>
+<p class="muted">A valid signature authenticates a claim, not physical SQL execution. A failed trial, any rollback, unexpected production write or customer message remains an exception requiring manual handling.</p></section>
+<section class="panel"><h2>3 · Blockers and unsigned review packet</h2><div class="scroll"><table><thead><tr><th>Condition</th><th>Next action</th></tr></thead>
+<tbody id="follow761"><tr><td colspan="2">Awaiting authentic reports.</td></tr></tbody></table></div>
+<p><button class="btn ghost" id="export761" type="button" disabled>Download unsigned review packet</button></p>
+<pre id="result761">HOLD — No external operator or independent trial evidence provided.</pre></section>
+<section class="panel"><h2>ⓘ Help and safety</h2>
+<details><summary>What additional server settings are needed?</summary><p>The operator origin <code>ROSIE_ECONOMIC_TRIAL_OPERATOR_BASE_URL</code> and distinct signer <code>ROSIE_ECONOMIC_TRIAL_OPERATOR_PUBLIC_KEY_B64</code> / <code>ROSIE_ECONOMIC_TRIAL_OPERATOR_KEY_ID</code>; and separate post-trial witness origin <code>ROSIE_ECONOMIC_TRIAL_RECONCILE_BASE_URL</code> with <code>ROSIE_ECONOMIC_TRIAL_RECONCILER_PUBLIC_KEY_B64</code> / <code>ROSIE_ECONOMIC_TRIAL_RECONCILER_KEY_ID</code>. All nine previous independently pinned keys and project settings remain required.</p></details>
+<details><summary>Can this page run the migration?</summary><p>No. Execution is a distinct, separately approved nonproduction operator workflow outside this site. These reports only reconcile claimed execution against original script hashes, target project, approval times and independent results.</p></details>
+<details><summary>What if a rollback occurred or evidence disagrees?</summary><p>The case stays HOLD; preserve the original operator and witness records, inspect exact rollback artifacts with the DBA/security reviewers, and require a new explicit owner disposition. No automatic retry, closure or production migration.</p></details></section>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-trial-execution-v761.js"></script></body></html>
