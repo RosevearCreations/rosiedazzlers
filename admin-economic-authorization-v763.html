@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Production Authorization Gate | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.gate763{display:grid;gap:20px;padding:28px 0 80px;color:#eaf2f8}
+.gate763 h1,.gate763 h2{color:#ffdf9b}
+.gate763 .panel{background:#152b3b;border:1px solid #68869a;border-radius:17px;padding:24px;box-shadow:0 8px 24px #07111b35}
+.gate763 .hero{background:linear-gradient(115deg,#101b2b,#1d4b56 62%,#634c2a);border-color:#dbbf81}
+.gate763 .muted{color:#d0deeb}
+.gate763 .entry,.gate763 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,295px),1fr));gap:14px}
+.gate763 label{display:grid;gap:7px}.gate763 input,.gate763 textarea{box-sizing:border-box;width:100%;border:1px solid #aac3d0;border-radius:9px;padding:10px;background:#fff;color:#182938;font:inherit}
+.gate763 textarea{height:120px;font:12px/1.45 ui-monospace,monospace}
+.gate763 .stat{background:#294656;border:1px solid #6a8797;border-radius:10px;padding:16px;overflow-wrap:anywhere}
+.gate763 .stat strong{display:block;color:#ffdc91;margin-bottom:8px}
+.gate763 .notice{background:#304c60;border-left:4px solid #f5ca78;border-radius:9px;padding:16px}
+.gate763 .scroll{overflow:auto}.gate763 table{width:100%;min-width:550px;border-collapse:collapse}
+.gate763 th,.gate763 td{text-align:left;padding:11px;border-bottom:1px solid #617a8a}
+.gate763 th{color:#ffdc91}.gate763 pre{background:#091b28;border-radius:10px;padding:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.gate763 :focus-visible{outline:3px solid #ffdc91;outline-offset:3px}
+@media(max-width:600px){.gate763 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build763="production-authorization-operator-witness">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo"><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container gate763">
+<section class="panel hero"><span class="badge">Build 763 · Independent authorization / manual operator gate</span>
+<h1>Independent Production Change Authorization Decision, Migration Operator Gate &amp; Controlled Rollback Witness Readiness</h1>
+<p class="muted">Verify separately signed DBA and security authorizations, the owner's exact change decision, an external operator's availability and an independent rollback witness. <strong>This is an evidence-only preflight: it cannot run SQL, grant production credentials, execute rollback, or close business exceptions.</strong></p>
+<p id="config763" class="notice" role="status" aria-live="polite">Checking signed-in owner access…</p>
+<a class="btn ghost" href="/admin-economic-change-v762.html">Build 762 change-control design review</a>
+<a class="btn ghost" href="/admin-economic-execution-v761.html">Build 761 operator evidence</a></section>
+<section class="panel"><h2>1 · Import the exact signed decision chain</h2>
+<p class="muted">Import all nine original Build 762 documents plus the new owner production decision. The four independent approvals are read from separate server-pinned HTTPS providers. Files remain transient; never upload SQL contents, live credentials, backup data or customer records beyond the original source attestation.</p>
+<form id="form763"><div class="entry"><label>Period<input id="period763" type="month" required></label>
+<label>Booking UUID<input id="booking763" maxlength="36" placeholder="00000000-0000-0000-0000-000000000000" required></label></div>
+<div class="entry">
+<label>Original source record JSON<input id="fileRecord763" type="file" accept=".json,application/json"><textarea id="record763" required spellcheck="false"></textarea></label>
+<label>Source-witness receipt JSON<input id="fileSource763" type="file" accept=".json,application/json"><textarea id="source763" required spellcheck="false"></textarea></label>
+<label>Owner source receipt JSON<input id="fileOwner763" type="file" accept=".json,application/json"><textarea id="owner763" required spellcheck="false"></textarea></label>
+<label>History manifest JSON<input id="fileHistory763" type="file" accept=".json,application/json"><textarea id="history763" required spellcheck="false"></textarea></label>
+<label>Owner migration review JSON<input id="fileMigration763" type="file" accept=".json,application/json"><textarea id="migration763" required spellcheck="false"></textarea></label>
+<label>Independent DBA review JSON<input id="fileDba763" type="file" accept=".json,application/json"><textarea id="dba763" required spellcheck="false"></textarea></label>
+<label>Independent security review JSON<input id="fileSecurity763" type="file" accept=".json,application/json"><textarea id="security763" required spellcheck="false"></textarea></label>
+<label>Build 760 owner trial handoff JSON<input id="fileTrial763" type="file" accept=".json,application/json"><textarea id="trial763" required spellcheck="false"></textarea></label>
+<label>Build 762 owner trial sign-off JSON<input id="fileSignoff763" type="file" accept=".json,application/json"><textarea id="signoff763" required spellcheck="false"></textarea></label>
+<label>Build 763 owner production decision JSON<input id="fileProduction763" type="file" accept=".json,application/json"><textarea id="production763" required spellcheck="false"></textarea></label>
+</div><p><button class="btn primary" type="submit" id="verify763">Verify manual change authorization gate</button></p></form>
+<p id="status763" class="muted" role="status" aria-live="polite">HOLD — No independent production authorization documents verified.</p></section>
+<section class="panel"><h2>2 · Independent gate readback</h2><div class="stats">
+<div class="stat"><strong>Build 762 source chain</strong><span id="prior763">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent DBA authorization</strong><span id="dbaStatus763">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent security authorization</strong><span id="securityStatus763">HOLD — Not checked</span></div>
+<div class="stat"><strong>Owner production decision</strong><span id="ownerStatus763">HOLD — Not checked</span></div>
+<div class="stat"><strong>External migration operator</strong><span id="operatorStatus763">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent rollback witness</strong><span id="rollbackStatus763">HOLD — Not checked</span></div>
+<div class="stat"><strong>App production SQL / rollback</strong><span>DISABLED — Never executed by this site</span></div></div>
+<p class="muted">A signed statement authenticates the statement's claimed source and scope; it does not prove actual external database activity. Manual change management must recheck all time-bound approvals and prevent replay before an external operator acts.</p></section>
+<section class="panel"><h2>3 · Blocking conditions and unsigned handoff record</h2>
+<div class="scroll"><table><thead><tr><th>Condition</th><th>Required next action</th></tr></thead><tbody id="follow763"><tr><td colspan="2">Awaiting authentic external authorization and witness evidence.</td></tr></tbody></table></div>
+<p><button class="btn ghost" id="export763" type="button" disabled>Download unsigned operator gate review</button></p>
+<pre id="result763">HOLD — Production migration has not been executed.</pre></section>
+<section class="panel"><h2>ⓘ Help and safety</h2>
+<details><summary>Who must sign?</summary><p>Original thirteen distinct Build 762 signers remain mandatory. A new independent DBA authorizer, security authorizer, production operator and rollback-witness readiness signer must have four additional distinct public signing keys and four mutually separate HTTPS provider origins. The owner signs the tenth document with the already pinned owner key under a new production-decision domain.</p></details>
+<details><summary>Does “ready for external manual recheck” permit SQL?</summary><p>No. It means the exact ticket, project, artifacts, operator readiness and rollback witness claims agree. An authorized human change manager must revalidate expiry, one-time use, the actual backup, the approved window, credential scope and two-person protocol outside this site.</p></details>
+<details><summary>What if any authority signs HOLD?</summary><p>The hold is authenticated and surfaced. No operator/witness progression or incident closure is permitted; a separate signed decision and manual review would be required.</p></details></section>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-production-authorization-v763.js"></script></body></html>
