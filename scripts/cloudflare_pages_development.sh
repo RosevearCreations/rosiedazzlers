@@ -110,6 +110,28 @@ fetch_exact_by_id() {
   EXACT_USES_FUNCTIONS=$(jq -r 'if .result.uses_functions == true then "true" elif .result.uses_functions == false then "false" else "unknown" end' "$TMP_DIR/exact.json")
 }
 
+report_failed_development_build() {
+  # Read-only troubleshooting for an exact, terminal Development failure. Do not
+  # dump the entire Cloudflare response (which can include deployment settings).
+  local log_code
+  [[ -n "${EXACT_ID:-}" && -n "${CF_ACCOUNT_ID:-}" ]] || return 0
+  log_code=$(curl --silent --show-error --output "$TMP_DIR/failed-build-logs.json" --write-out '%{http_code}' \
+    --header "Authorization: Bearer ${CLOUDFLARE_API_TOKEN}" \
+    "https://api.cloudflare.com/client/v4/accounts/${CF_ACCOUNT_ID}/pages/projects/${CF_PROJECT_NAME}/deployments/${EXACT_ID}/history/logs" || true)
+  if [[ "$log_code" != "200" ]] || ! jq -e '.success == true' "$TMP_DIR/failed-build-logs.json" >/dev/null 2>&1; then
+    note "Development failure diagnostics: Cloudflare history unavailable (HTTP ${log_code}); use the exact deployment dashboard."
+    return 0
+  fi
+  local log_count
+  log_count=$(jq -r '.result.total // (.result.data | length) // 0' "$TMP_DIR/failed-build-logs.json")
+  note "Development failure diagnostics: ${log_count} Cloudflare build-log records. Relevant excerpts:"
+  jq -r '
+    [.result.data[]? | (.message // .text // .line // "") | select(type == "string")
+      | select(test("error|failed|could not|unable to|exceeded|exception"; "i"))]
+    | .[-12:][] | gsub("[\\r\\n]"; " ") | .[0:350]
+  ' "$TMP_DIR/failed-build-logs.json" || true
+}
+
 validate_exact_identity() {
   [[ "$EXACT_SHA" == "$TARGET_SHA" ]] || fail "Exact deployment SHA mismatch: ${EXACT_SHA:-missing}." 14
   [[ "$EXACT_BRANCH" == "$CF_DEV_BRANCH" ]] || fail "Exact deployment branch mismatch: ${EXACT_BRANCH:-missing}." 15
@@ -127,7 +149,7 @@ wait_for_exact_detail_success() {
     note "Exact deployment detail metadata ${deployment_id}: ${EXACT_STATUS:-unknown} (consistency attempt ${attempt}/${attempts})."
     case "$EXACT_STATUS" in
       success) ready=true; break ;;
-      failure|failed|canceled|cancelled) fail "Exact Development deployment detail reached terminal status ${EXACT_STATUS}." 45 ;;
+      failure|failed|canceled|cancelled) report_failed_development_build; fail "Exact Development deployment detail reached terminal status ${EXACT_STATUS}." 45 ;;
     esac
     [[ "$attempt" -ge "$attempts" ]] || sleep "$sleep_seconds"
   done
@@ -144,7 +166,7 @@ wait_for_exact_success() {
       note "Exact dev deployment ${EXACT_ID}: ${EXACT_STATUS:-unknown} (attempt ${attempt}/${attempts})."
       case "$EXACT_STATUS" in
         success) ready=true; break ;;
-        failure|failed|canceled|cancelled) fail "Exact Development deployment ${EXACT_ID} reached terminal status ${EXACT_STATUS}." 18 ;;
+        failure|failed|canceled|cancelled) report_failed_development_build; fail "Exact Development deployment ${EXACT_ID} reached terminal status ${EXACT_STATUS}." 18 ;;
       esac
     else
       note "Exact dev SHA is not visible in Cloudflare Pages yet (attempt ${attempt}/${attempts})."
