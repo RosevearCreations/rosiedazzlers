@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Owner Trial Sign-Off &amp; Production Change Preflight | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.change762{display:grid;gap:20px;padding:26px 0 80px;color:#eaf2f8}
+.change762 h1,.change762 h2{color:#f8d38a}
+.change762 .panel{background:#192d3e;border:1px solid #638397;border-radius:18px;padding:24px;box-shadow:0 8px 24px #07111b35}
+.change762 .hero{background:linear-gradient(112deg,#101b29,#224f62 60%,#604825);border-color:#dcbb7b}
+.change762 .muted{color:#d1dfeb}
+.change762 .entry{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:14px}
+.change762 label{display:grid;gap:7px}.change762 input,.change762 textarea{box-sizing:border-box;width:100%;border:1px solid #9bb7c8;border-radius:9px;padding:10px;background:#fff;color:#192934;font:inherit}
+.change762 textarea{height:124px;font:12px/1.45 ui-monospace,monospace}
+.change762 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:12px}
+.change762 .stat{background:#28465a;border:1px solid #607e93;border-radius:11px;padding:15px}
+.change762 .stat strong{display:block;color:#ffdc91;margin-bottom:7px}
+.change762 .notice{background:#334c5e;padding:15px;border-left:4px solid #f7cc78;border-radius:8px}
+.change762 .scroll{overflow:auto}.change762 table{width:100%;min-width:530px;border-collapse:collapse}
+.change762 th,.change762 td{text-align:left;padding:10px;border-bottom:1px solid #5a7486}
+.change762 th{color:#f4d692}.change762 pre{background:#0b1b29;padding:15px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.change762 :focus-visible{outline:3px solid #ffd68b;outline-offset:3px}
+@media(max-width:600px){.change762 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build762="owner-trial-signoff-production-change-preflight">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo"><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container change762">
+<section class="panel hero"><span class="badge">Build 762 · Owner sign-off / production SQL HOLD</span>
+<h1>Nonproduction Trial Owner Sign-Off, Rollback Exception Disposition &amp; Production Migration Change-Control Preflight</h1>
+<p class="muted">Revalidate the independent Build 761 operator and trial evidence, obtain a separately signed rollback disposition, authenticate the owner's decision, and inspect a production change-control <em>design</em> report. <strong>Readiness never grants permission to execute production SQL, close economic exceptions or notify customers.</strong></p>
+<p id="config762" class="notice" role="status" aria-live="polite">Checking private owner access…</p>
+<a class="btn ghost" href="/admin-economic-execution-v761.html">Build 761 operator receipt review</a>
+<a class="btn ghost" href="/admin-economic-nonprod-v760.html">Build 760 isolated trial handoff</a></section>
+<section class="panel"><h2>1 · Import signed source chain and owner decision</h2>
+<p class="muted">The eight original documents and fresh owner sign-off are reviewed transiently. The independent rollback and change-control receipts are fetched from separate pinned server-side HTTPS providers. Upload no SQL files, credentials, backup dumps or customer data.</p>
+<form id="form762"><div class="entry"><label>Period<input id="period762" type="month" required></label>
+<label>Booking UUID<input id="booking762" maxlength="36" placeholder="00000000-0000-0000-0000-000000000000" required></label></div>
+<div class="entry">
+<label>Original source record JSON<input id="fileRecord762" type="file" accept=".json,application/json"><textarea id="record762" required spellcheck="false"></textarea></label>
+<label>Source-witness receipt JSON<input id="fileSource762" type="file" accept=".json,application/json"><textarea id="source762" required spellcheck="false"></textarea></label>
+<label>Owner source receipt JSON<input id="fileOwner762" type="file" accept=".json,application/json"><textarea id="owner762" required spellcheck="false"></textarea></label>
+<label>History manifest JSON<input id="fileHistory762" type="file" accept=".json,application/json"><textarea id="history762" required spellcheck="false"></textarea></label>
+<label>Owner migration review JSON<input id="fileMigration762" type="file" accept=".json,application/json"><textarea id="migration762" required spellcheck="false"></textarea></label>
+<label>Independent DBA review JSON<input id="fileDba762" type="file" accept=".json,application/json"><textarea id="dba762" required spellcheck="false"></textarea></label>
+<label>Independent security review JSON<input id="fileSecurity762" type="file" accept=".json,application/json"><textarea id="security762" required spellcheck="false"></textarea></label>
+<label>Build 760 owner handoff JSON<input id="fileTrial762" type="file" accept=".json,application/json"><textarea id="trial762" required spellcheck="false"></textarea></label>
+<label>Build 762 owner trial sign-off JSON<input id="fileSignoff762" type="file" accept=".json,application/json"><textarea id="signoff762" required spellcheck="false"></textarea></label>
+</div><p><button class="btn primary" id="verify762" type="submit">Verify owner decision and production change-control preflight</button></p></form>
+<p id="status762" class="muted" role="status" aria-live="polite">No owner trial sign-off or independent change-control review verified.</p></section>
+<section class="panel"><h2>2 · Source-grounded decision gates</h2><div class="stats">
+<div class="stat"><strong>Build 761 trial evidence</strong><span id="prior762">HOLD — Not checked</span></div>
+<div class="stat"><strong>Isolated vs production project</strong><span id="target762">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent rollback disposition</strong><span id="rollback762">HOLD — Not checked</span></div>
+<div class="stat"><strong>Owner sign-off</strong><span id="ownerStatus762">HOLD — Not checked</span></div>
+<div class="stat"><strong>Production change-control design</strong><span id="change762">HOLD — Not checked</span></div>
+<div class="stat"><strong>Production execution / business closure</strong><span>HOLD — Separate authorization required</span></div></div>
+<p class="muted">A signature authenticates the external review statement. It cannot prove a real database operation occurred. Any rollback exception or owner HOLD stops the production change preflight.</p></section>
+<section class="panel"><h2>3 · Outstanding conditions and unsigned decision packet</h2>
+<div class="scroll"><table><thead><tr><th>Condition</th><th>Next owner action</th></tr></thead>
+<tbody id="follow762"><tr><td colspan="2">Awaiting authentic evidence.</td></tr></tbody></table></div>
+<p><button class="btn ghost" type="button" id="export762" disabled>Download unsigned change-control review</button></p>
+<pre id="result762">HOLD — No independent rollback review, owner sign-off or change-control evidence supplied.</pre></section>
+<section class="panel"><h2>ⓘ Help / safety</h2>
+<details><summary>What extra evidence is required?</summary><p>Server settings: <code>ROSIE_ECONOMIC_ROLLBACK_EXCEPTION_BASE_URL</code> and its separately pinned <code>ROSIE_ECONOMIC_ROLLBACK_EXCEPTION_PUBLIC_KEY_B64</code> / <code>ROSIE_ECONOMIC_ROLLBACK_EXCEPTION_KEY_ID</code>, plus <code>ROSIE_ECONOMIC_CHANGE_CONTROL_BASE_URL</code> and separate <code>ROSIE_ECONOMIC_CHANGE_CONTROL_PUBLIC_KEY_B64</code> / <code>ROSIE_ECONOMIC_CHANGE_CONTROL_KEY_ID</code>. All eleven earlier signers remain mandatory. The owner signs the new decision with the existing pinned owner key using a different signing domain.</p></details>
+<details><summary>What does “ready for separate authorization” mean?</summary><p>The external trial claims, rollback disposition, owner acceptance and independent change design agree on one isolated project and exact artifact hashes. Production migration still needs an explicit future DBA, security and owner change approval, a separately authorized operator and execution evidence.</p></details>
+<details><summary>What happens if a rollback was reported?</summary><p>The independent reviewer can attest that the rollback exception remains held. Owner sign-off records HOLD, never closes the incident. Follow a separately approved investigation and recovery process. There is no automatic replay, migration, storage change or customer notification here.</p></details></section>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-change-control-v762.js"></script></body></html>
