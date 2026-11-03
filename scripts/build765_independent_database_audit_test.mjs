@@ -213,3 +213,4 @@ assert.match(read('admin-economic-postchange-v764.html'),/admin-economic-databas
 assert.match(read('assets/economic-database-closure-v765.js'),/credentials:'same-origin'/);
 assert.match(read('docs/build765_independent_database_immutable_enforcement_owner_closure.md'),/read-only/i);
 console.log('Build 765 PASS: 21 independent signer roles, 12 fixed source origins, exact DB and audit hashes, owner HOLD, no database mutation or closure.');
+export {db,audit,closureOwner,signedDB,signedAudit,signedOwner,signedPostchangeOwner};

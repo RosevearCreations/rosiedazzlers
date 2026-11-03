@@ -43,42 +43,51 @@ export async function onRequestPost({request,env}){
     !body.owner_postchange_decision||!body.owner_closure_readiness_decision)
     return fail('Exact booking/source/ticket/request plus two authentic owner signed decisions required.');
   const record=Object.fromEntries(ids.map(k=>[k,body[k]]));
+  return json((await reviewSignedClosureReadiness765({env,record,
+    owner_postchange_decision:body.owner_postchange_decision,
+    owner_closure_readiness_decision:body.owner_closure_readiness_decision})).summary);
+}
+// Used by Build 766 after fresh session/auth/origin validation, never as an
+// unsigned packet-to-authority converter. All sources are re-fetched by server.
+export async function reviewSignedClosureReadiness765({env,record,owner_postchange_decision,
+  owner_closure_readiness_decision,now=Date.now()}={}){
   let archive=null,execution=null,standby=null,reconciliation=null,postchangeOwner=null,
     db=null,audit=null,owner=null;
   // Re-authenticate the entire historical execution chain. The browser can supply
   // two signed owner decisions, never unsigned DBA, operator or audit findings.
-  archive=await verifyArchive764({env,record,readback:await readReceipt764(env,'archive',record)});
+  archive=await verifyArchive764({env,record,readback:await readReceipt764(env,'archive',record),now});
   if(archive.signature_authenticated){
     execution=await verifyExecution764({env,record,archive,
-      readback:await readReceipt764(env,'execution',record,archive)});
+      readback:await readReceipt764(env,'execution',record,archive),now});
     if(execution.signature_authenticated){
       standby=await verifyStandby764({env,record,archive,execution,
         readback:await readReceipt764(env,'standby',record,archive,execution)});
       if(standby.signature_authenticated){
         reconciliation=await verifyReconciliation764({env,record,archive,execution,standby,
-          readback:await readReceipt764(env,'reconciliation',record,archive,execution,standby)});
+          readback:await readReceipt764(env,'reconciliation',record,archive,execution,standby),now});
         if(reconciliation.signature_authenticated){
           postchangeOwner=await verifyOwnerPostchange764({env,record,archive,execution,standby,
-            reconciliation,envelope:body.owner_postchange_decision});
+            reconciliation,envelope:owner_postchange_decision,now});
           if(postchangeOwner.signature_authenticated){
             db=await verifyDB765({env,record,archive,execution,standby,reconciliation,
               owner:postchangeOwner,readback:await readReceipt765(env,'db',record,archive,
-                execution,standby,reconciliation,postchangeOwner)});
+                execution,standby,reconciliation,postchangeOwner),now});
             if(db.signature_authenticated){
               audit=await verifyAudit765({env,record,archive,execution,standby,reconciliation,
                 owner:postchangeOwner,db,readback:await readReceipt765(env,'audit',record,
-                  archive,execution,standby,reconciliation,postchangeOwner,db)});
+                  archive,execution,standby,reconciliation,postchangeOwner,db),now});
               if(audit.signature_authenticated)
                 owner=await verifyOwner765({env,record,archive,owner:postchangeOwner,db,audit,
-                  envelope:body.owner_closure_readiness_decision});
+                  envelope:owner_closure_readiness_decision,now});
             }
           }
         }
       }
     }
   }
-  return json(await reconcileClosure765({archive,execution,standby,reconciliation,
-    postchangeOwner,db,audit,owner}));
+  return {archive,execution,standby,reconciliation,postchangeOwner,db,audit,owner,
+    summary:await reconcileClosure765({archive,execution,standby,reconciliation,
+      postchangeOwner,db,audit,owner})};
 }
 const readonly=()=>fail('Build 765 is strictly a read-only external evidence review. No SQL, grants, audit mutation, closure or notifications.',405);
 export async function onRequestPut(){return readonly();}
