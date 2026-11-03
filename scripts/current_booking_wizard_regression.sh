@@ -99,3 +99,4 @@ node scripts/build747_photo_r2_consent_test.mjs
 node scripts/build748_shift_time_reconciliation_test.mjs
 node scripts/build749_detail_quality_signoff_exception_test.mjs
 node scripts/build750_consumable_cost_trace_test.mjs
+node scripts/build751_margin_review_test.mjs
