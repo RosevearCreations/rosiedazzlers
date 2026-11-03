@@ -160,7 +160,7 @@ export async function reconcileClosure758({prior,retention,migration,reviewed_at
     hold.push({code:'OWNER_MIGRATION_REVIEW_NOT_AUTHENTICATED',action:'Obtain a separately signed owner request bound to the audit-plan hash and retention evidence.'});
   hold.push({code:'DBA_SECURITY_MIGRATION_AUTHORIZATION_MISSING',action:'Obtain distinct DBA/security approval, schema/RLS advisors, restore tests and explicit migration execution authorization.'});
   hold.push({code:'CLOSURE_EVIDENCE_PERSISTENCE_NOT_AUTHORIZED',action:'Only a separately authorized transaction may append a witnessed owner decision and recheck owning business records.'});
-  const result={ok:true,build:758,read_only:true,retention_review:retention||retentionHold('HOLD_RETENTION_NOT_RUN','No provider readback.'),
+  const result={ok:true,build:758,read_only:true,history_head_sha256:prior?.history_verification?.history_head_sha256||null,retention_review:retention||retentionHold('HOLD_RETENTION_NOT_RUN','No provider readback.'),
     owner_migration_review:migration||migrationHold('HOLD_OWNER_REVIEW_NOT_RUN','No owner review.'),
     audit_plan_sha256:await auditPlanHash758(),owner_audit_design_status:'DESIGN_ONLY_NOT_APPLIED',
     immutable_retention_verified:false,audit_migration_executed:false,audit_migration_authorized:false,
