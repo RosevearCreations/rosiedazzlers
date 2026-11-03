@@ -116,4 +116,3 @@ node scripts/build764_external_postchange_receipt_test.mjs
 node scripts/build765_independent_database_audit_test.mjs
 node scripts/build766_owner_final_disposition_test.mjs
 node scripts/build767_external_closure_readback_test.mjs
-

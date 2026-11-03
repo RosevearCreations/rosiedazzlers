@@ -73,4 +73,3 @@ export async function onRequestPatch(){return readonly();}
 export async function onRequestDelete(){return readonly();}
 export async function onRequestOptions(){return new Response('',{status:204,
   headers:{Allow:'GET,POST,OPTIONS','Cache-Control':'no-store'}});}
-
