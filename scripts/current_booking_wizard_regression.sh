@@ -109,3 +109,4 @@ node scripts/build757_economic_history_preflight_test.mjs
 node scripts/build758_independent_retention_test.mjs
 node scripts/build759_independent_enforcement_test.mjs
 node scripts/build760_nonprod_trial_test.mjs
+node scripts/build761_operator_trial_receipt_test.mjs
