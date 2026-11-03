@@ -103,3 +103,4 @@ node scripts/build751_margin_review_test.mjs
 node scripts/build752_economic_acceptance_test.mjs
 node scripts/build753_economic_retest_test.mjs
 node scripts/build754_owner_receipt_verify_test.mjs
+node scripts/build755_source_record_intake_test.mjs
