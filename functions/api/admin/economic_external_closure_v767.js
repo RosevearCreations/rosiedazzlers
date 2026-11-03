@@ -40,12 +40,20 @@ export async function onRequestPost({request,env}){
     !body.owner_explicit_closure_authorization)
     return fail('Four exact identifiers and three original owner signed decisions required.');
   const record=Object.fromEntries(ids.map(k=>[k,body[k]]));
+  return json((await reviewSignedExternal767({env,record,
+    owner_postchange_decision:body.owner_postchange_decision,
+    owner_closure_readiness_decision:body.owner_closure_readiness_decision,
+    owner_explicit_closure_authorization:body.owner_explicit_closure_authorization})).summary);
+}
+// Internal chained verification. Callers must independently authorize the session,
+// enforce same-origin and bound JSON before using this server-side readback.
+export async function reviewSignedExternal767({env,record,owner_postchange_decision,
+  owner_closure_readiness_decision,owner_explicit_closure_authorization}={}){
   // Directly reuse Build 766's independent validator with freshly fetched sources.
   // No caller-supplied Build 766 summary or unsigned packet is trusted.
   const chain=await reviewSignedFinal766({env,record,
-    owner_postchange_decision:body.owner_postchange_decision,
-    owner_closure_readiness_decision:body.owner_closure_readiness_decision,
-    owner_explicit_closure_authorization:body.owner_explicit_closure_authorization});
+    owner_postchange_decision,owner_closure_readiness_decision,
+    owner_explicit_closure_authorization});
   const prior={...chain.summary,verified_scope:{
     trial_id:chain.prior.archive?.trial_id||null,
     production_project_ref:chain.prior.archive?.production_project_ref||null,
@@ -60,7 +68,8 @@ export async function onRequestPost({request,env}){
       inspection=await verifyInspection767({env,record,prior,execution,
         readback:await readReceipt767(env,'inspection',record,prior,execution)});
   }
-  return json(await reconcile767({prior,execution,inspection}));
+  return {chain,prior,execution,inspection,
+    summary:await reconcile767({prior,execution,inspection})};
 }
 const readonly=()=>fail('Read-only independent source review only. No SQL, closure, source ledger writes, rollback or notification action.',405);
 export async function onRequestPut(){return readonly();}
