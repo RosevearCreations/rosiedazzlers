@@ -113,3 +113,4 @@ node scripts/build761_operator_trial_receipt_test.mjs
 node scripts/build762_owner_change_control_test.mjs
 node scripts/build763_production_authorization_test.mjs
 node scripts/build764_external_postchange_receipt_test.mjs
+node scripts/build765_independent_database_audit_test.mjs

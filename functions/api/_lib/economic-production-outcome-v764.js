@@ -221,6 +221,7 @@ export async function verifyExecution764({env,record,archive,readback,now=Date.n
     'External operator signed a migration outcome claim; this site did not execute or independently query production.',
     {signature_authenticated:true,receipt_sha256:await sha256Receipt754(transcript),
       clean_claim:success,migration_execution_id:p.migration_execution_id,
+      migration_version:p.migration_version,
       transaction_receipt_sha256:p.transaction_receipt_sha256,
       schema_before_sha256:p.schema_before_sha256,schema_after_sha256:p.schema_after_sha256,
       started_at:p.started_at,finished_at:p.finished_at,operator_id:p.operator_id,
