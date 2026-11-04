@@ -40,6 +40,11 @@ export async function onRequestPost({request,env}){
     !body.owner_postchange_decision||!body.owner_closure_readiness_decision||
     !body.owner_explicit_closure_authorization||!body.owner_postclosure_acceptance_decision)
     return reject('Exact scope and four original signed owner decisions are required.');
+  const {report}=await reviewHandoff769({env,body});
+  return json(report);
+}
+// Shared original-source re-fetch for Build 770 and later read-only reviews.
+export async function reviewHandoff769({env,body}){
   // Every request reconstructs all external source claims from Builds 764–768.
   // Never trust a client-supplied ready packet or unsigned external handoff data.
   const history=await reviewOriginalOwner768({env,body});
@@ -58,7 +63,8 @@ export async function onRequestPost({request,env}){
           readback:await readReceipt769(env,'retention',ctx,handoff,outcome)});
     }
   }
-  return json(await reconcile769({ctx,handoff,outcome,retention}));
+  return {report:await reconcile769({ctx,handoff,outcome,retention}),
+    ctx,handoff,outcome,retention};
 }
 const readOnly=()=>reject('Build 769 cannot write, close, reopen, accept, archive or notify.',405);
 export async function onRequestPut(){return readOnly();}
