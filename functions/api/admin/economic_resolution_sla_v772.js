@@ -43,6 +43,12 @@ export async function onRequestPost({request,env}){
   if(!body||typeof body!=='object'||Array.isArray(body)||
     ids.some(k=>typeof body[k]!=='string')||signed.some(k=>!body[k]))
     return reject('Exact case scope and six original signed owner decisions required.');
+  const {report}=await reviewResolutionSLA772({env,body});
+  return json(report);
+}
+// Re-read all original issuer attestations before later independent reviews.
+// No browser-supplied previous Build 772 result is ever accepted as proof.
+export async function reviewResolutionSLA772({env,body}={}){
   const history=await reviewFinalAttestation771({env,body});
   let owner=null,resolution=null,signoff=null,sla=null;
   if(history.owner?.signature_authenticated&&
@@ -63,7 +69,8 @@ export async function onRequestPost({request,env}){
       }
     }
   }
-  return json(await reconcile772({history,owner,resolution,signoff,sla}));
+  return {report:await reconcile772({history,owner,resolution,signoff,sla}),
+    history,owner,resolution,signoff,sla};
 }
 const readOnly=()=>reject('Build 772 is evidence-only. No original owner sign-off, case resolution, retention disposition, production SQL, audit append, archive or notification.',405);
 export async function onRequestPut(){return readOnly();}

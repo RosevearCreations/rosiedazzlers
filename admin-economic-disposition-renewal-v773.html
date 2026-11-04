@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>External Disposition &amp; Owner Renewal | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.resolution773{display:grid;gap:20px;padding:28px 0 80px;color:#f3f6fb}
+.resolution773 h1,.resolution773 h2{color:#ffe5b5}.resolution773 .muted{color:#d0dce5}
+.resolution773 .panel{background:#152b39;border:1px solid #859ead;border-radius:18px;padding:24px;box-shadow:0 11px 32px #0714204b}
+.resolution773 .hero{background:linear-gradient(110deg,#181d2d,#294b55 60%,#704b20);border-color:#d7b574}
+.resolution773 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:14px}
+.resolution773 label{display:grid;gap:7px}.resolution773 input,.resolution773 textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #bcd1da;border-radius:10px;background:#fff;color:#18303d;font:inherit}
+.resolution773 textarea{min-height:105px;font:12px/1.5 ui-monospace,monospace}
+.resolution773 .stat{background:#2c4b5d;border:1px solid #8ca9b8;border-radius:12px;padding:17px;overflow-wrap:anywhere}
+.resolution773 .stat strong{display:block;color:#ffe2aa;margin-bottom:7px}
+.resolution773 .notice{background:#3c5263;border-left:4px solid #f0cb87;padding:16px;border-radius:10px}
+.resolution773 .scroll{overflow:auto}.resolution773 table{width:100%;min-width:530px;border-collapse:collapse}
+.resolution773 th,.resolution773 td{text-align:left;padding:11px;border-bottom:1px solid #66879c;overflow-wrap:anywhere}
+.resolution773 th{color:#ffe4b1}.resolution773 pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#091926;border-radius:10px;padding:15px}
+.resolution773 details{padding:10px 0;border-bottom:1px solid #708594}.resolution773 :focus-visible{outline:3px solid #ffe1a5;outline-offset:3px}
+@media(max-width:600px){.resolution773 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build773="external-disposition-owner-renewal-retention-remediation">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo"><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container resolution773">
+<section class="panel hero"><span class="badge">Build 773 · Independent disposition, sign-off renewal and retention remediation / HOLD</span>
+<h1>Disposition, Owner Renewal &amp; Retention Remediation Review</h1>
+<p class="muted">Reconstruct the original signed evidence through Build 772. Verify a fresh owner disposition/renewal review and three distinct external issuer claims: dispute disposition, owner sign-off renewal and retention SLA remediation. <strong>Business acceptance, case closure, archival, SQL and notifications are never performed here.</strong></p>
+<p id="config773" class="notice" role="status" aria-live="polite">Checking original owner session and external issuer configuration…</p>
+<a class="btn ghost" href="/admin-economic-resolution-sla-v772.html">Back to Build 772 external resolution and SLA</a></section>
+<section class="panel"><h2>1 · Exact case and seven original signed owner envelopes</h2>
+<p class="muted">Select original signed JSON evidence from Builds 764, 765, 766, 768, 771 and 772, followed by a fresh Build 773 owner disposition/renewal request. Files are read locally; only authenticated source validation is sent to the server. Do not enter private keys or credentials.</p>
+<form id="form773"><div class="grid">
+<label>Booking UUID<input id="booking773" maxlength="36" required autocomplete="off" placeholder="00000000-0000-0000-0000-000000000000"></label>
+<label>Source record UUID<input id="source773" maxlength="36" required autocomplete="off" placeholder="00000000-0000-0000-0000-000000000000"></label>
+<label>Change ticket ID<input id="ticket773" maxlength="120" required autocomplete="off"></label>
+<label>Execution request ID<input id="request773" maxlength="120" required autocomplete="off"></label></div>
+<label>Build 764 signed post-change owner decision<input type="file" id="filePost773" accept=".json,application/json"><textarea id="postOwner773" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 765 signed closure-readiness decision<input type="file" id="fileReadiness773" accept=".json,application/json"><textarea id="readinessOwner773" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 766 signed authorization or HOLD<input type="file" id="fileAuthorization773" accept=".json,application/json"><textarea id="authorizationOwner773" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 768 signed post-closure owner review<input type="file" id="fileAcceptance773" accept=".json,application/json"><textarea id="acceptanceOwner773" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 771 signed final manual owner decision<input type="file" id="fileFinal773" accept=".json,application/json"><textarea id="finalOwner773" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 772 original-owner sign-off continuity request<input type="file" id="fileContinuity773" accept=".json,application/json"><textarea id="continuityOwner773" required spellcheck="false" placeholder="Fresh original-owner signed request or HOLD JSON envelope"></textarea></label>
+<label>Build 773 fresh original-owner disposition, renewal or retention HOLD request<input type="file" id="fileReview773" accept=".json,application/json"><textarea id="reviewOwner773" required spellcheck="false" placeholder="Fresh original-owner signed manual disposition, renewal or SLA HOLD JSON envelope"></textarea></label>
+<p><button class="btn primary" id="verify773" type="submit">Verify external disposition, sign-off renewal and SLA remediation</button></p></form>
+<p id="status773" class="muted" role="status" aria-live="polite">HOLD — Original sources not yet verified.</p></section>
+<section class="panel"><h2>2 · Independent original-source readback</h2><div class="grid">
+<div class="stat"><strong>Build 772 external resolution and SLA review</strong><span id="prior773">HOLD — Not checked</span></div>
+<div class="stat"><strong>Fresh original-owner disposition/renewal request</strong><span id="owner773">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent external disposition receipt</strong><span id="disposition773">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent owner renewal witness</strong><span id="renewal773">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent SLA remediation witness</strong><span id="remediation773">HOLD — Not checked</span></div>
+<div class="stat"><strong>Original business sign-off, case, remediation and SQL mutations</strong>DISABLED</div></div>
+<p class="muted">Forty-two different signing identities and thirty-three separately pinned original HTTPS issuer origins are required; a witness claim is never equivalent to actual owner business acceptance.</p></section>
+<section class="panel"><h2>3 · HOLD reasons and unsigned review packet</h2>
+<div class="scroll"><table><thead><tr><th>Condition</th><th>Required external follow-up</th></tr></thead><tbody id="follow773"><tr><td colspan="2">HOLD — No evidence authenticated.</td></tr></tbody></table></div>
+<p><button class="btn ghost" type="button" id="export773" disabled>Download unsigned disposition, renewal and remediation packet</button></p>
+<pre id="result773">HOLD — No final owner business sign-off or external resolution recorded.</pre></section>
+<section class="panel"><h2>ⓘ Help and safeguards</h2>
+<details><summary>Does a signed resolution receipt close an existing dispute?</summary><p>No. It authenticates an independent issuer's statement about the exact original dispute register. The real custodian and original owner must separately verify any change.</p></details>
+<details><summary>What does sign-off continuity mean?</summary><p>A new original-owner signed manual request is compared with the independent historical register and witnessed by a separate issuer. The site cannot sign off for the owner or alter production records.</p></details>
+<details><summary>How is retention SLA aging reviewed?</summary><p>The external witness signs age, critical count, policy digest and result. The original signed aging threshold limits the claim; an overdue or conflicting result stays HOLD for external escalation.</p></details></section>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-disposition-renewal-v773.js"></script></body></html>
