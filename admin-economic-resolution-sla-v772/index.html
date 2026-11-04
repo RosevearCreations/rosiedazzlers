@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>External Resolution &amp; Sign-Off Continuity | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.resolution772{display:grid;gap:20px;padding:28px 0 80px;color:#f3f6fb}
+.resolution772 h1,.resolution772 h2{color:#ffe5b5}.resolution772 .muted{color:#d0dce5}
+.resolution772 .panel{background:#152b39;border:1px solid #859ead;border-radius:18px;padding:24px;box-shadow:0 11px 32px #0714204b}
+.resolution772 .hero{background:linear-gradient(110deg,#181d2d,#294b55 60%,#704b20);border-color:#d7b574}
+.resolution772 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:14px}
+.resolution772 label{display:grid;gap:7px}.resolution772 input,.resolution772 textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #bcd1da;border-radius:10px;background:#fff;color:#18303d;font:inherit}
+.resolution772 textarea{min-height:105px;font:12px/1.5 ui-monospace,monospace}
+.resolution772 .stat{background:#2c4b5d;border:1px solid #8ca9b8;border-radius:12px;padding:17px;overflow-wrap:anywhere}
+.resolution772 .stat strong{display:block;color:#ffe2aa;margin-bottom:7px}
+.resolution772 .notice{background:#3c5263;border-left:4px solid #f0cb87;padding:16px;border-radius:10px}
+.resolution772 .scroll{overflow:auto}.resolution772 table{width:100%;min-width:530px;border-collapse:collapse}
+.resolution772 th,.resolution772 td{text-align:left;padding:11px;border-bottom:1px solid #66879c;overflow-wrap:anywhere}
+.resolution772 th{color:#ffe4b1}.resolution772 pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#091926;border-radius:10px;padding:15px}
+.resolution772 details{padding:10px 0;border-bottom:1px solid #708594}.resolution772 :focus-visible{outline:3px solid #ffe1a5;outline-offset:3px}
+@media(max-width:600px){.resolution772 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build772="external-resolution-owner-signoff-retention-sla">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo"><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container resolution772">
+<section class="panel hero"><span class="badge">Build 772 · Original-source external resolutions / HOLD until proven</span>
+<h1>External Resolution, Owner Sign-Off Continuity &amp; Retention SLA Review</h1>
+<p class="muted">Reconstruct the original signed evidence through Build 771. Verify a fresh owner continuity request and three distinct external issuer claims: handoff resolution, sign-off continuity and retention SLA. <strong>Business acceptance, case closure, archival, SQL and notifications are never performed here.</strong></p>
+<p id="config772" class="notice" role="status" aria-live="polite">Checking original owner session and external issuer configuration…</p>
+<a class="btn ghost" href="/admin-economic-final-owner-v771.html">Back to Build 771 final owner review</a></section>
+<section class="panel"><h2>1 · Exact case and six original signed owner envelopes</h2>
+<p class="muted">Select original signed JSON evidence from Builds 764, 765, 766, 768 and 771, followed by the new Build 772 original-owner continuity decision. Files are read locally; only authenticated source validation is sent to the server. Do not enter private keys or credentials.</p>
+<form id="form772"><div class="grid">
+<label>Booking UUID<input id="booking772" maxlength="36" required autocomplete="off" placeholder="00000000-0000-0000-0000-000000000000"></label>
+<label>Source record UUID<input id="source772" maxlength="36" required autocomplete="off" placeholder="00000000-0000-0000-0000-000000000000"></label>
+<label>Change ticket ID<input id="ticket772" maxlength="120" required autocomplete="off"></label>
+<label>Execution request ID<input id="request772" maxlength="120" required autocomplete="off"></label></div>
+<label>Build 764 signed post-change owner decision<input type="file" id="filePost772" accept=".json,application/json"><textarea id="postOwner772" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 765 signed closure-readiness decision<input type="file" id="fileReadiness772" accept=".json,application/json"><textarea id="readinessOwner772" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 766 signed authorization or HOLD<input type="file" id="fileAuthorization772" accept=".json,application/json"><textarea id="authorizationOwner772" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 768 signed post-closure owner review<input type="file" id="fileAcceptance772" accept=".json,application/json"><textarea id="acceptanceOwner772" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 771 signed final manual owner decision<input type="file" id="fileFinal772" accept=".json,application/json"><textarea id="finalOwner772" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 772 fresh original-owner sign-off continuity request<input type="file" id="fileContinuity772" accept=".json,application/json"><textarea id="continuityOwner772" required spellcheck="false" placeholder="Fresh original-owner signed request or HOLD JSON envelope"></textarea></label>
+<p><button class="btn primary" id="verify772" type="submit">Verify external resolution, owner continuity and retention SLA</button></p></form>
+<p id="status772" class="muted" role="status" aria-live="polite">HOLD — Original sources not yet verified.</p></section>
+<section class="panel"><h2>2 · Independent original-source readback</h2><div class="grid">
+<div class="stat"><strong>Build 771 final-owner review</strong><span id="prior772">HOLD — Not checked</span></div>
+<div class="stat"><strong>Fresh original-owner continuity request</strong><span id="owner772">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent external resolution receipt</strong><span id="resolution772">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent owner sign-off continuity witness</strong><span id="signoff772">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent retention SLA witness</strong><span id="sla772">HOLD — Not checked</span></div>
+<div class="stat"><strong>Original business sign-off, case, archive and SQL mutations</strong>DISABLED</div></div>
+<p class="muted">Thirty-nine different signing identities and thirty separately pinned original HTTPS issuer origins are required; a witness claim is never equivalent to actual owner business acceptance.</p></section>
+<section class="panel"><h2>3 · HOLD reasons and unsigned review packet</h2>
+<div class="scroll"><table><thead><tr><th>Condition</th><th>Required external follow-up</th></tr></thead><tbody id="follow772"><tr><td colspan="2">HOLD — No evidence authenticated.</td></tr></tbody></table></div>
+<p><button class="btn ghost" type="button" id="export772" disabled>Download unsigned resolution and SLA review packet</button></p>
+<pre id="result772">HOLD — No final owner business sign-off or external resolution recorded.</pre></section>
+<section class="panel"><h2>ⓘ Help and safeguards</h2>
+<details><summary>Does a signed resolution receipt close an existing dispute?</summary><p>No. It authenticates an independent issuer's statement about the exact original dispute register. The real custodian and original owner must separately verify any change.</p></details>
+<details><summary>What does sign-off continuity mean?</summary><p>A new original-owner signed manual request is compared with the independent historical register and witnessed by a separate issuer. The site cannot sign off for the owner or alter production records.</p></details>
+<details><summary>How is retention SLA aging reviewed?</summary><p>The external witness signs age, critical count, policy digest and result. The original signed aging threshold limits the claim; an overdue or conflicting result stays HOLD for external escalation.</p></details></section>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-resolution-sla-v772.js"></script></body></html>
