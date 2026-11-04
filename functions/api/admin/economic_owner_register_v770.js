@@ -40,6 +40,12 @@ export async function onRequestPost({request,env}){
     !body.owner_postchange_decision||!body.owner_closure_readiness_decision||
     !body.owner_explicit_closure_authorization||!body.owner_postclosure_acceptance_decision)
     return reject('Exact scope and four original signed owner envelopes required.');
+  const {report}=await reviewOwnerRegister770({env,body});
+  return json(report);
+}
+// Share the original independent readback chain without accepting a browser
+// supplied Build 770 result in any later evidence-review workflow.
+export async function reviewOwnerRegister770({env,body}){
   // No browser-controlled previous readiness claims; rebuild every original
   // signed Build 764–769 source and verifier claim before reading Build 770.
   const history=await reviewHandoff769({env,body});
@@ -57,7 +63,8 @@ export async function onRequestPost({request,env}){
           readback:await readReceipt770(env,'aging',history,register,ack)});
     }
   }
-  return json(await reconcile770({history,register,ack,aging}));
+  return {report:await reconcile770({history,register,ack,aging}),
+    history,register,ack,aging};
 }
 const readOnly=()=>reject('Build 770 is read-only. No case mutation, SQL, owner acceptance, audit write, archival or notification API.',405);
 export async function onRequestPut(){return readOnly();}

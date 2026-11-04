@@ -269,6 +269,7 @@ export async function verifyAging770({env,history,register,ack,readback,
     critical_exception_count:p?Number(p.critical_exception_count):null,
     oldest_open_exception_age_hours:p?age:null,
     source_alert_threshold_hours:p?Number(p.alert_after_hours):null,
+    exception_register_sha256:p?p.exception_register_sha256:null,
     aged_exception_claim:!!p&&Number(p.open_exception_count)>0&&
       age>=Number(p.alert_after_hours),
     retention_window_expired:!!p&&Date.parse(p.snapshot_at)>Date.parse(p.retained_through),
