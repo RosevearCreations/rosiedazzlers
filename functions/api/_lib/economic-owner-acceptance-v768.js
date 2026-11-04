@@ -4,7 +4,7 @@ import {sha256Receipt754} from './owner-receipt-verification-v754.js';
 const ID=/^[A-Za-z0-9][A-Za-z0-9._:/-]{5,119}$/;
 const UUID=/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i;
 const HASH=/^[a-f0-9]{64}$/i;
-const KEY_ROLES=[
+export const KEY_ROLES768=[
   'OWNER_RECEIPT','SOURCE_WITNESS','HISTORY_CUSTODIAN','RETENTION_PROVIDER',
   'STORAGE_AUDITOR','DBA_REVIEW','SECURITY_REVIEW','ISOLATION_AUDITOR',
   'ROLLBACK_WITNESS','TRIAL_OPERATOR','TRIAL_RECONCILER','ROLLBACK_EXCEPTION',
@@ -16,7 +16,7 @@ const KEY_ROLES=[
   'EXTERNAL_CLOSURE_OPERATOR_WITNESS','INDEPENDENT_POST_CLOSURE_INSPECTOR',
   'ORIGINAL_SOURCE_CUSTODY_RECONCILER','EXCEPTION_REOPEN_REVIEWER'
 ];
-const ORIGIN_ROLES=[
+export const ORIGIN_ROLES768=[
   'TRIAL_OPERATOR','TRIAL_RECONCILE','ROLLBACK_EXCEPTION','CHANGE_CONTROL',
   'PRODUCTION_DBA_AUTH','PRODUCTION_SECURITY_AUTH','PRODUCTION_OPERATOR_GATE',
   'PRODUCTION_ROLLBACK_READY','PRODUCTION_GATE_ARCHIVIST','PRODUCTION_OUTCOME_RECONCILER',
@@ -61,7 +61,7 @@ function decode(v,size){
 }
 function publicKey(env,role,id){
   const ids=new Set(),keys=new Set();let selected=null;
-  for(const prefix of KEY_ROLES){
+  for(const prefix of KEY_ROLES768){
     const key=decode(env?.[`ROSIE_ECONOMIC_${prefix}_PUBLIC_KEY_B64`],32);
     const keyId=env?.[`ROSIE_ECONOMIC_${prefix}_KEY_ID`];
     if(!key||typeof keyId!=='string'||!ID.test(keyId)||ids.has(keyId))return null;
@@ -72,7 +72,7 @@ function publicKey(env,role,id){
   return selected;
 }
 function origins(env){
-  try{const urls=ORIGIN_ROLES.map(role=>new URL(env?.[`ROSIE_ECONOMIC_${role}_BASE_URL`]));
+  try{const urls=ORIGIN_ROLES768.map(role=>new URL(env?.[`ROSIE_ECONOMIC_${role}_BASE_URL`]));
     if(urls.some(u=>u.protocol!=='https:'||u.username||u.password||u.port||
       u.search||u.hash||u.pathname!=='/'||!u.hostname.includes('.')||
       u.hostname==='localhost'||/^(?:\d{1,3}\.){3}\d{1,3}$/.test(u.hostname)||
@@ -164,7 +164,7 @@ export function receiptURL768(env,kind,record,prior,owner,custody){
   };
   if(!Object.hasOwn(routes,kind)||kind==='reopen'&&!custody?.signature_authenticated)return null;
   const urls=origins(env);if(!urls)return null;
-  const [role,path]=routes[kind];const url=new URL(path,urls[ORIGIN_ROLES.indexOf(role)]);
+  const [role,path]=routes[kind];const url=new URL(path,urls[ORIGIN_ROLES768.indexOf(role)]);
   const params={booking_id:record.booking_id,source_record_id:record.source_record_id,
     change_ticket_id:record.change_ticket_id,execution_request_id:record.execution_request_id,
     owner_decision_receipt_sha256:owner.receipt_sha256,
