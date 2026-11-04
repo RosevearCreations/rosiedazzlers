@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Independent Evidence Handoff & Retention | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/site.css"><style>
+.handoff769{display:grid;gap:20px;padding:28px 0 80px;color:#eef4f8}
+.handoff769 h1,.handoff769 h2{color:#ffdfa3}
+.handoff769 .panel{background:#182d3b;border:1px solid #829aaa;border-radius:18px;padding:24px;box-shadow:0 9px 26px #050b1240}
+.handoff769 .hero{background:linear-gradient(115deg,#141b29,#2f4b50 58%,#795721);border-color:#d9b878}
+.handoff769 .muted{color:#d4e4ed}.handoff769 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:14px}
+.handoff769 label{display:grid;gap:7px}.handoff769 input,.handoff769 textarea{box-sizing:border-box;width:100%;padding:11px;border:1px solid #bed1db;border-radius:9px;background:#fff;color:#17303e;font:inherit}
+.handoff769 textarea{min-height:116px;font:12px/1.5 ui-monospace,monospace}
+.handoff769 .stat{background:#304c5c;border:1px solid #7f9caf;border-radius:12px;padding:16px;overflow-wrap:anywhere}
+.handoff769 .stat strong{display:block;color:#ffe0a0;margin-bottom:7px}
+.handoff769 .notice{background:#34515e;border-left:4px solid #f0cb86;padding:16px;border-radius:9px}
+.handoff769 .scroll{overflow:auto}.handoff769 table{width:100%;min-width:520px;border-collapse:collapse}
+.handoff769 th,.handoff769 td{text-align:left;padding:11px;border-bottom:1px solid #638498;overflow-wrap:anywhere}
+.handoff769 th{color:#ffe1a5}.handoff769 pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0b1927;border-radius:10px;padding:15px}
+.handoff769 :focus-visible{outline:3px solid #ffe0a0;outline-offset:3px}
+@media(max-width:600px){.handoff769 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build769="owner-handoff-reopen-retention">
+<div class="nav"><div class="nav-inner"><a class="brand" href="/app/admin/"><img data-logo alt="Rosie Dazzlers logo"><strong>Rosie Dazzlers Administration</strong></a><div class="nav-links" id="navLinks"></div></div></div>
+<main class="container handoff769">
+<section class="panel hero"><span class="badge">Build 769 · Original-source independent handoff and retention / HOLD until verified</span>
+<h1>Owner Evidence Handoff, External Reopen Outcome &amp; Retention Continuity</h1>
+<p class="muted">Re-authenticate every independent Build 764–768 source, then fetch original signed handoff, case-register outcome and retention witness receipts. Signed claims support <strong>separate manual owner review</strong>; this website cannot accept a business closure, reopen a case or alter stored evidence.</p>
+<p id="config769" class="notice" role="status" aria-live="polite">Checking owner session and independently pinned sources…</p>
+<a class="btn ghost" href="/admin-economic-owner-v768.html">Build 768 owner custody and exception review</a></section>
+<section class="panel"><h2>1 · Exact case and original signed decisions</h2>
+<p class="muted">Use the same case IDs and four original owner-signed JSON envelopes from Builds 764–768. New independent issuer receipts are fetched server-side; do not paste unsigned summaries, private keys, credentials, SQL or production data exports.</p>
+<form id="form769"><div class="grid">
+<label>Booking UUID<input id="booking769" required maxlength="36" autocomplete="off"></label>
+<label>Source record UUID<input id="source769" required maxlength="36" autocomplete="off"></label>
+<label>Change ticket ID<input id="ticket769" required maxlength="120" autocomplete="off"></label>
+<label>Execution request ID<input id="request769" required maxlength="120" autocomplete="off"></label></div>
+<label>Original Build 764 post-change owner decision<input type="file" id="filePost769" accept=".json,application/json"><textarea id="postOwner769" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Original Build 765 closure-readiness owner decision<input type="file" id="fileReadiness769" accept=".json,application/json"><textarea id="readinessOwner769" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Original Build 766 explicit owner authorization or HOLD<input type="file" id="fileAuthorization769" accept=".json,application/json"><textarea id="authorizationOwner769" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Original Build 768 owner post-closure review or reopen request<input type="file" id="fileAcceptance769" accept=".json,application/json"><textarea id="acceptanceOwner769" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<p><button class="btn primary" type="submit" id="verify769">Verify original handoff, reopening outcome and retention</button></p></form>
+<p id="status769" class="muted" role="status" aria-live="polite">HOLD — Original sources have not been authenticated.</p></section>
+<section class="panel"><h2>2 · Independent evidence outcomes</h2><div class="grid">
+<div class="stat"><strong>Original owner decision</strong><span id="prior769">HOLD — Not checked</span></div>
+<div class="stat"><strong>Owner evidence handoff</strong><span id="handoff769">HOLD — Not checked</span></div>
+<div class="stat"><strong>External case reopening outcome</strong><span id="outcome769">HOLD — Not checked</span></div>
+<div class="stat"><strong>Original source retention continuity</strong><span id="retention769">HOLD — Not checked</span></div>
+<div class="stat"><strong>Production SQL, closure, reopen or notification by this site</strong>DISABLED</div></div>
+<p class="muted">Twenty-one distinct HTTPS sources and thirty distinct signing identities are required. A witnessed reopening claim does not itself prove an actual case change; the owner and operator must confirm externally.</p></section>
+<section class="panel"><h2>3 · Exceptions and unsigned handoff packet</h2>
+<div class="scroll"><table><thead><tr><th>Condition</th><th>Required independent follow-up</th></tr></thead><tbody id="follow769"><tr><td colspan="2">HOLD — No evidence authenticated.</td></tr></tbody></table></div>
+<p><button class="btn ghost" type="button" id="export769" disabled>Download unsigned owner review packet</button></p>
+<pre id="result769">HOLD — No owner acceptance, external case reopening or source storage change made.</pre></section>
+<section class="panel"><h2>ⓘ Help and safeguards</h2>
+<details><summary>How is evidence handed off?</summary><p>A distinct independent custodian signs an original delivery-manifest claim tied to the same owner decision, source custody, exception review and operator/audit receipts. The review cannot itself deliver records.</p></details>
+<details><summary>How do we know a case was reopened?</summary><p>An independent witness signs the original case-register before/after hashes, action and result. An owner-signed external reopening request must exist first. Confirm the actual register change manually with the original operator before treating it as fact.</p></details>
+<details><summary>Does a retention signature prove immutable storage?</summary><p>No. A separate witness signs original and retained manifest hashes, policy and retention time. Original storage must still be checked outside Rosie Dazzlers. Conflicts remain HOLD.</p></details></section>
+</main><script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-handoff-retention-v769.js"></script></body></html>
