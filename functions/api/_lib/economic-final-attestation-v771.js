@@ -266,7 +266,11 @@ export async function verifyDispute771({env,history,owner,attestation,readback,
   return {...r,clean_claim:r.signature_authenticated&&
     r.claim==='NO_UNRESOLVED_HANDOFF_DISPUTE_CLAIM',
     external_dispute_claim:r.signature_authenticated&&
-    r.claim==='EXTERNAL_HANDOFF_DISPUTE_REFERRED_CLAIM'};
+    r.claim==='EXTERNAL_HANDOFF_DISPUTE_REFERRED_CLAIM',
+    dispute_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.dispute_register_sha256:null,
+    dispute_case_id:r.signature_authenticated?
+      readback.envelope.payload.dispute_case_id:null};
 }
 export async function verifyEscalation771({env,history,owner,attestation,dispute,
   readback,now=Date.now()}={}){
@@ -296,6 +300,10 @@ export async function verifyEscalation771({env,history,owner,attestation,dispute
     r.claim==='NO_RETENTION_ESCALATION_REQUIRED_CLAIM',
     escalation_open_claim:r.signature_authenticated&&
     r.claim==='EXTERNAL_RETENTION_ESCALATION_OPEN_CLAIM',
+    current_escalation_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_escalation_register_sha256:null,
+    escalation_case_id:r.signature_authenticated?
+      readback.envelope.payload.escalation_case_id:null,
     unresolved_critical_count:r.signature_authenticated?
       Number(readback.envelope.payload.unresolved_critical_count):null,
     actual_retention_record_updated_by_app:false};
