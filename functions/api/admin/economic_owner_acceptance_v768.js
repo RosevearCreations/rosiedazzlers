@@ -42,6 +42,13 @@ export async function onRequestPost({request,env}){
     !body.owner_postchange_decision||!body.owner_closure_readiness_decision||
     !body.owner_explicit_closure_authorization||!body.owner_postclosure_acceptance_decision)
     return fail('Exact scope and four original owner-signed envelopes are required.');
+  const {report}=await reviewOriginalOwner768({env,body});
+  return json(report);
+}
+// Shared read-only authenticated source reconstruction for subsequent review builds.
+// Never accept a browser-provided historical report as original evidence.
+export async function reviewOriginalOwner768({env,body}){
+  const ids=['booking_id','source_record_id','change_ticket_id','execution_request_id'];
   const record=Object.fromEntries(ids.map(k=>[k,body[k]]));
   // Never trust browser-supplied Build 767 packets or external custody results.
   // Re-fetch all historical source claims and verify four owner signatures.
@@ -67,7 +74,7 @@ export async function onRequestPost({request,env}){
           readback:await readReceipt768(env,'reopen',record,prior,owner,custody)});
     }
   }
-  return json(await reconcile768({prior,owner,custody,reopen}));
+  return {report:await reconcile768({prior,owner,custody,reopen}),prior,record};
 }
 const readonly=()=>fail('Build 768 only reviews independent signed evidence. No SQL, source writes, acceptance, reopen, closure or notification API.',405);
 export async function onRequestPut(){return readonly();}

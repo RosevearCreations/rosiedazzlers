@@ -1,0 +1,24 @@
+# Rosie Dazzlers Build 769 — Independent Original Owner Acceptance Evidence Handoff, External Reopen Outcome Readback & Post-Closure Source Retention Continuity
+
+**Read-only original-issuer evidence review.** Code promotion GREEN is not a real owner's business acceptance, a case reopening, source storage retention, audit append or production SQL execution. No original issuer, signing private key or genuine receipt is shipped.
+
+## Exact source-first workflow
+
+1. Signed-in staff with `manage_staff` capability and a real session enter four exact booking/source/change/execution identifiers and provide **four original signed owner decisions** from Builds 764–768. The new Build 769 API reconstructs the full prior Build 764–768 signed operator, inspector, owner, DBA/audit, custody and exception chain afresh. No browser-provided summary is an original source.
+2. The independently pinned **owner handoff custodian** signs `HANDOFF_FIELDS769` with domain `rosie-independent-owner-evidence-handoff-v769:`. This binds the signed owner, custody, exception, operator and audit receipts, the transfer manifest, external destination and time. Claim: `EVIDENCE_DELIVERED_TO_INDEPENDENT_OWNER_CLAIM` or `HANDOFF_DISPUTED_HOLD`.
+3. A **different independent external reopen outcome witness** signs `OUTCOME_FIELDS769` with domain `rosie-external-reopen-outcome-readback-v769:`. A `NO_REOPEN_ACTION_CLAIM` is valid only for the previously signed owner manual-review decision with zero critical exceptions and **equal** previous/current case register hashes. An `EXTERNAL_CASE_REOPENED_CLAIM` requires the original owner's signed external reopen request, the previous independent reopen review's matching claim, and distinct before/after case-register hashes. Such a claim always remains **HOLD pending original external operator confirmation**, never becomes a website case change.
+4. A **third independent retention witness** signs `RETENTION_FIELDS769` with domain `rosie-postclosure-retention-continuity-v769:`. Its manifest must bind the independently signed handoff digest, original custody, outcome, owner and retention policy; a clean continuity claim requires matching source/retained manifest hashes and a valid future retention-through date. A signature is a witness claim, **not** proof of physically immutable storage.
+5. Owner review shows the three independent outcomes, exact follow-ups, and a downloadable **unsigned JSON packet**. All business action, owner acceptance, case mutation, storage archival, SQL and customer notification flags remain false. Original records and any actual owner decisions must be handled externally.
+
+## Security and availability
+
+- **Thirty distinct Ed25519 public keys/key IDs** across the full original history and three Build 769 witnesses; **21 distinct HTTPS-only pinned origins**. Each signer role has its own canonical signed payload domain, exact source/owner hash bindings and chronology (seven-day maximum age, five-minute future allowance).
+- New runtime configuration: `ROSIE_ECONOMIC_INDEPENDENT_OWNER_HANDOFF_CUSTODIAN_{PUBLIC_KEY_B64,KEY_ID,BASE_URL}`, `ROSIE_ECONOMIC_EXTERNAL_REOPEN_OUTCOME_WITNESS_{PUBLIC_KEY_B64,KEY_ID,BASE_URL}`, `ROSIE_ECONOMIC_POSTCLOSURE_RETENTION_WITNESS_{PUBLIC_KEY_B64,KEY_ID,BASE_URL}`. Each origin is a bare distinct independent HTTPS URL. The server fetches the original signed envelope from `/v1/economic-owner-evidence-handoff-v769`, `/v1/economic-external-reopen-outcome-v769` or `/v1/economic-postclosure-retention-v769`, respectively.
+- Original issuers must enforce access control, nonce/case replay protection, durable retention, cryptographic key custody, logging and DNS protection themselves. The website cannot independently prove the actual external storage implementation from a signed claim.
+- No secrets, token or private key are accepted or needed by the owner interface. Same-origin authenticated review has a 64 KB body limit. Provider GET uses no redirect and no cache, a 16 KB response cap and strict envelope shape. Methods PUT, PATCH and DELETE return 405; missing or contradictory evidence retains HOLD.
+
+## Acceptance and regression
+
+Run `node scripts/build769_handoff_outcome_retention_test.mjs` and `bash scripts/current_booking_wizard_regression.sh`. The focused suite checks independent identity/origin enforcement, hash mismatch, invalid signatures, stale chronology, no unauthenticated external requests, explicit owner reopen outcomes, unsigned export and mirrored routes. Production promotion also requires exact GitHub source/Cloudflare deployment and business acceptance gates.
+
+Related: [Build 768 original custody and reopening](build768_owner_source_custody_exception_reopening.md), [release branch workflow](../BRANCH_WORKFLOW_NOTE.md), [Cloudflare Web Crypto](https://developers.cloudflare.com/workers/runtime-apis/web-crypto/).
