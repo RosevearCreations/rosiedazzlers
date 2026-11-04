@@ -255,6 +255,10 @@ export async function verifyResolution772({env,history,owner,readback,now=Date.n
     r.claim==='INDEPENDENT_HANDOFF_RESOLUTION_VERIFIED_CLAIM',
     dispute_still_open_claim:r.signature_authenticated&&
     r.claim==='EXTERNAL_HANDOFF_RESOLUTION_OPEN_CLAIM',
+    current_resolution_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_resolution_register_sha256:null,
+    resolution_case_id:r.signature_authenticated?
+      readback.envelope.payload.resolution_case_id:null,
     external_dispute_closed_by_app:false};
 }
 export async function verifySignoff772({env,history,owner,resolution,readback,
@@ -279,6 +283,8 @@ export async function verifySignoff772({env,history,owner,resolution,readback,
       ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,continuity_witnessed:r.signature_authenticated&&
     r.claim==='ORIGINAL_OWNER_SIGNOFF_CONTINUITY_WITNESSED_CLAIM',
+    continuity_register_after_sha256:r.signature_authenticated?
+      readback.envelope.payload.continuity_register_after_sha256:null,
     original_owner_final_signoff_executed_by_app:false};
 }
 export async function verifySLA772({env,history,owner,resolution,signoff,readback,
@@ -319,6 +325,12 @@ export async function verifySLA772({env,history,owner,resolution,signoff,readbac
     r.claim==='WITHIN_ORIGINAL_RETENTION_SLA_CLAIM',
     sla_breach_claim:r.signature_authenticated&&
     r.claim==='RETENTION_SLA_BREACH_ESCALATED_CLAIM',
+    sla_policy_sha256:r.signature_authenticated?
+      readback.envelope.payload.sla_policy_sha256:null,
+    sla_case_id:r.signature_authenticated?
+      readback.envelope.payload.sla_case_id:null,
+    elapsed_hours:r.signature_authenticated?
+      Number(readback.envelope.payload.elapsed_hours):null,
     critical_exceptions_remaining:r.signature_authenticated?
       Number(readback.envelope.payload.critical_exceptions_remaining):null,
     retention_record_mutated_by_app:false};
