@@ -120,3 +120,4 @@ node scripts/build768_owner_custody_reopen_test.mjs
 node scripts/build769_handoff_outcome_retention_test.mjs
 node scripts/build770_owner_decision_ack_aging_test.mjs
 node scripts/build771_final_owner_dispute_escalation_test.mjs
+node scripts/build772_external_resolution_signoff_sla_test.mjs

@@ -44,24 +44,32 @@ export async function onRequestPost({request,env}){
   // Original signed history is fetched from server-pinned independent issuers,
   // never accepted from a browser-supplied Build 770 packet.
   const history=await reviewOwnerRegister770({env,body});
+  const {report}=await reviewFinalAttestation771({env,body,history});
+  return json(report);
+}
+// Revalidate the complete original Build 771 evidence chain for later
+// independent readbacks; never trust a browser-supplied predecessor packet.
+export async function reviewFinalAttestation771({env,body,history}={}){
+  const prior=history||await reviewOwnerRegister770({env,body});
   let owner=null,attestation=null,dispute=null,escalation=null;
-  if(history.register?.signature_authenticated&&history.ack?.signature_authenticated&&
-    history.aging?.signature_authenticated){
-    owner=await verifyOwner771({env,history,
+  if(prior.register?.signature_authenticated&&prior.ack?.signature_authenticated&&
+    prior.aging?.signature_authenticated){
+    owner=await verifyOwner771({env,history:prior,
       envelope:body.original_owner_final_manual_decision});
     if(owner.signature_authenticated){
-      attestation=await verifyAttest771({env,history,owner,
-        readback:await readReceipt771(env,'attest',history,owner)});
+      attestation=await verifyAttest771({env,history:prior,owner,
+        readback:await readReceipt771(env,'attest',prior,owner)});
       if(attestation.signature_authenticated){
-        dispute=await verifyDispute771({env,history,owner,attestation,
-          readback:await readReceipt771(env,'dispute',history,owner,attestation)});
+        dispute=await verifyDispute771({env,history:prior,owner,attestation,
+          readback:await readReceipt771(env,'dispute',prior,owner,attestation)});
         if(dispute.signature_authenticated)
-          escalation=await verifyEscalation771({env,history,owner,attestation,dispute,
-            readback:await readReceipt771(env,'escalation',history,owner,attestation,dispute)});
+          escalation=await verifyEscalation771({env,history:prior,owner,attestation,dispute,
+            readback:await readReceipt771(env,'escalation',prior,owner,attestation,dispute)});
       }
     }
   }
-  return json(await reconcile771({history,owner,attestation,dispute,escalation}));
+  return {report:await reconcile771({history:prior,owner,attestation,dispute,escalation}),
+    history:prior,owner,attestation,dispute,escalation};
 }
 const readOnly=()=>reject('Build 771 only authenticates external evidence. No production SQL, case reopening, business acceptance, audit append, archival or notification.',405);
 export async function onRequestPut(){return readOnly();}
