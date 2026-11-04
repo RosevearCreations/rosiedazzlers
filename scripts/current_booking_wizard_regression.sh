@@ -118,3 +118,4 @@ node scripts/build766_owner_final_disposition_test.mjs
 node scripts/build767_external_closure_readback_test.mjs
 node scripts/build768_owner_custody_reopen_test.mjs
 node scripts/build769_handoff_outcome_retention_test.mjs
+node scripts/build770_owner_decision_ack_aging_test.mjs

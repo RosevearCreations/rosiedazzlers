@@ -224,7 +224,9 @@ export async function verifyOutcome769({env,ctx,handoff,readback,now=Date.now()}
   return {...verified,no_reopen_claim:verified.signature_authenticated&&
     verified.claim==='NO_REOPEN_ACTION_CLAIM',
     external_reopen_claim:verified.signature_authenticated&&
-    verified.claim==='EXTERNAL_CASE_REOPENED_CLAIM'};
+    verified.claim==='EXTERNAL_CASE_REOPENED_CLAIM',
+    current_case_register_sha256:verified.signature_authenticated?
+      readback.envelope.payload.current_case_register_sha256:null};
 }
 export async function verifyRetention769({env,ctx,handoff,outcome,readback,now=Date.now()}={}){
   const verified=await verify({ctx,env,readback,kind:'retention',
@@ -245,7 +247,13 @@ export async function verifyRetention769({env,ctx,handoff,outcome,readback,now=D
       chronology(p.observed_at,outcome.signed_at,time)&&
       ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...verified,clean_claim:verified.signature_authenticated&&
-    verified.claim==='ORIGINAL_SOURCE_RETENTION_CONTINUITY_CLAIM'};
+    verified.claim==='ORIGINAL_SOURCE_RETENTION_CONTINUITY_CLAIM',
+    retained_source_manifest_sha256:verified.signature_authenticated?
+      readback.envelope.payload.retained_source_manifest_sha256:null,
+    retention_policy_sha256:verified.signature_authenticated?
+      readback.envelope.payload.retention_policy_sha256:null,
+    retained_through:verified.signature_authenticated?
+      readback.envelope.payload.retained_through:null};
 }
 export async function reconcile769({ctx,handoff,outcome,retention,
   reviewed_at=new Date().toISOString()}={}){
