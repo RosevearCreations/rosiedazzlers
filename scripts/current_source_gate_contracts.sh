@@ -18,3 +18,4 @@ node scripts/build670_gift_receipt_certificate_confirmation_test.mjs
 node scripts/build671_gift_delivery_failure_resend_test.mjs
 node scripts/build672_gift_delivery_retry_evidence_test.mjs
 node scripts/build673_gift_delivery_idempotency_test.mjs
+node --test scripts/ql336_owned_child_shell_test.mjs
