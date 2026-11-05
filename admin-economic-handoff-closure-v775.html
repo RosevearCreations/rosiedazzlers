@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Handoff Closure Decision | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/styles.css">
+<style>
+.handoff775{display:grid;gap:20px;padding:28px 0 80px;color:#f3f6fb}.handoff775 h1,.handoff775 h2{color:#ffe5b5}
+.handoff775 .muted{color:#d0dce5}.handoff775 .panel{background:#152b39;border:1px solid #859ead;border-radius:18px;padding:24px;box-shadow:0 11px 32px #0714204b}
+.handoff775 .hero{background:linear-gradient(110deg,#181d2d,#294b55 60%,#704b20);border-color:#d7b574}
+.handoff775 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:14px}
+.handoff775 label{display:grid;gap:7px}.handoff775 input,.handoff775 textarea{box-sizing:border-box;width:100%;padding:12px;border:1px solid #bcd1da;border-radius:10px;background:#fff;color:#18303d;font:inherit}
+.handoff775 textarea{min-height:98px;font:12px/1.5 ui-monospace,monospace}.handoff775 .stat{background:#2c4b5d;border:1px solid #8ca9b8;border-radius:12px;padding:17px;overflow-wrap:anywhere}
+.handoff775 .stat strong{display:block;color:#ffe2aa;margin-bottom:7px}.handoff775 .notice{background:#3c5263;border-left:4px solid #f0cb87;padding:16px;border-radius:10px}
+.handoff775 .scroll{overflow:auto}.handoff775 table{width:100%;min-width:530px;border-collapse:collapse}
+.handoff775 th,.handoff775 td{text-align:left;padding:11px;border-bottom:1px solid #66879c;overflow-wrap:anywhere}
+.handoff775 th{color:#ffe4b1}.handoff775 pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#091926;border-radius:10px;padding:15px}
+.handoff775 details{padding:10px 0;border-bottom:1px solid #708594}.handoff775 :focus-visible{outline:3px solid #ffe1a5;outline-offset:3px}
+@media(max-width:600px){.handoff775 .panel{padding:16px}}
+</style></head>
+<body data-page="admin-service-economics-commercial-capacity-review" data-build775="owner-renewal-handoff-dispute-aging-retention-closure">
+<main class="container handoff775">
+<section class="panel hero"><span class="badge">Build 775 · Independent handoff decision register, aging escalation &amp; source retention</span>
+<h1>Independent handoff closure decision register</h1>
+<p class="muted">Reverify all original signed evidence through Build 774, then authenticate a fresh owner closure-review request and three independent source statements: handoff decision register, dispute aging escalation, and source-retention continuity. <strong>Readiness is not executed owner sign-off, external handoff, dispute closure, SQL, retention deletion, archive mutation or notification.</strong></p>
+<p id="config775" class="notice" role="status" aria-live="polite">Checking owner session and independent issuer configuration…</p>
+<a class="btn ghost" href="/admin-economic-owner-handoff-aging-v774.html">Back to Build 774 owner handoff and closure readiness</a></section>
+<section class="panel"><h2>1 · Upload original signed evidence</h2>
+<p class="muted">Eight prior signed owner JSON envelopes from Builds 764, 765, 766, 768, 771, 772, 773 and 774, plus the fresh Build 775 manual closure-review request. No private key or password belongs in these fields. Source receipts are re-fetched server-side.</p>
+<form id="form775"><div class="grid">
+<label>Booking UUID<input id="booking775" maxlength="36" required autocomplete="off" placeholder="00000000-0000-0000-0000-000000000000"></label>
+<label>Source record UUID<input id="source775" maxlength="36" required autocomplete="off" placeholder="00000000-0000-0000-0000-000000000000"></label>
+<label>Change ticket ID<input id="ticket775" maxlength="120" required autocomplete="off"></label>
+<label>Execution request ID<input id="request775" maxlength="120" required autocomplete="off"></label></div>
+<label>Build 764 original post-change owner decision<input type="file" id="filePost775" accept=".json,application/json"><textarea id="postOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 765 closure-readiness owner decision<input type="file" id="fileReadiness775" accept=".json,application/json"><textarea id="readinessOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 766 explicit closure authorization or HOLD<input type="file" id="fileAuthorization775" accept=".json,application/json"><textarea id="authorizationOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 768 post-closure owner acceptance<input type="file" id="fileAcceptance775" accept=".json,application/json"><textarea id="acceptanceOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 771 original owner final decision<input type="file" id="fileFinal775" accept=".json,application/json"><textarea id="finalOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 772 original owner sign-off continuity<input type="file" id="fileContinuity775" accept=".json,application/json"><textarea id="continuityOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 773 original owner disposition/renewal review<input type="file" id="fileReview775" accept=".json,application/json"><textarea id="reviewOwner775" required spellcheck="false" placeholder="Original signed JSON envelope"></textarea></label>
+<label>Build 774 original-owner renewal handoff decision or HOLD<input type="file" id="fileHandoff775" accept=".json,application/json"><textarea id="handoffOwner775" required spellcheck="false" placeholder="Fresh original-owner signed manual handoff or HOLD"></textarea></label>
+<label>Build 775 fresh original-owner handoff closure review or HOLD<input type="file" id="fileClosure775" accept=".json,application/json"><textarea id="closureOwner775" required spellcheck="false" placeholder="Fresh original-owner signed manual closure review or HOLD"></textarea></label>
+<p><button class="btn primary" type="submit" id="verify775">Verify handoff decision register, dispute escalation and source retention</button></p></form>
+<p id="status775" class="muted" role="status" aria-live="polite">HOLD — Signed original sources not yet authenticated.</p></section>
+<section class="panel"><h2>2 · Independent evidence results</h2><div class="grid">
+<div class="stat"><strong>Build 774 predecessor source chain</strong><span id="prior775">HOLD — Not checked</span></div>
+<div class="stat"><strong>Fresh original-owner closure review</strong><span id="owner775">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent handoff decision register</strong><span id="decision775">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent dispute aging escalation</strong><span id="escalation775">HOLD — Not checked</span></div>
+<div class="stat"><strong>Independent source-retention continuity</strong><span id="retention775">HOLD — Not checked</span></div>
+</div></section>
+<section class="panel"><h2>3 · HOLD conditions and unsigned review packet</h2>
+<div class="scroll"><table><thead><tr><th>Condition</th><th>External follow-up required</th></tr></thead><tbody id="follow775"><tr><td colspan="2">HOLD — No evidence checked.</td></tr></tbody></table></div>
+<p><button class="btn ghost" id="export775" type="button" disabled>Download unsigned review packet</button></p>
+<pre id="result775">HOLD — Real original owner renewal and retention closure are not executed here.</pre></section>
+<section class="panel"><h2>ⓘ Help and safeguards</h2>
+<details><summary>Does a signed handoff decision register execute closure?</summary><p>No. No. The source signs an independent register claim. The real owner and custodian must separately execute any business closure.</p></details>
+<details><summary>When is dispute aging escalation required?</summary><p>The independent source signs elapsed hours, open disputes, the prior aging register and its source-derived alert threshold. Any unresolved, conflicting or overdue escalation remains HOLD.</p></details>
+<details><summary>Does a continuity witness prove original retention enforcement?</summary><p>No. It is an authenticated original-source history and retention-continuity claim with a bounded expiry. Actual storage enforcement and closure require independent original custodian and owner action.</p></details>
+</section></main>
+<script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/economic-handoff-closure-v775.js"></script></body></html>
