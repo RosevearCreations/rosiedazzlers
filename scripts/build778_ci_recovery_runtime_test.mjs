@@ -68,6 +68,14 @@ for(const [text,label] of [[gate,'source'],[business,'business']]){
 }
 for(const name of ['source checks suite A','source checks suite B','source checks suite C',
   'source checks suite D','source checks'])assert.ok(gate.includes('name: '+name));
+const nestedRecovery=read('.github/workflows/recovery-authenticated-device-manual-closure-outcome-continuity-authority.yml');
+assert.match(nestedRecovery,/ROSIE_CI_DEDUP_SUBCHECKS:\s*"1"/);
+assert.match(nestedRecovery,/PYTHONPATH:\s*\$\{\{ github.workspace \}\}\/scripts\/ci-source-cache/);
+const memo=read('scripts/ci-source-cache/sitecustomize.py');
+for(const boundary of ['GITHUB_ACTIONS','GITHUB_SHA','RUNNER_TEMP',
+  'returncode'])assert.ok(memo.includes(boundary));
+assert.match(memo,/result\.returncode == 0/);
+assert.match(memo,/return _ORIGINAL_RUN\(\*args, \*\*kwargs\)/);
 assert.match(gate,/needs:\s*\[source-gate-partition-a,\s*source-gate-partition-b,\s*source-gate-partition-c,\s*source-gate-partition-d\]/);
 for(const workflow of ['.github/workflows/cloudflare-development-acceptance.yml',
   '.github/workflows/release-health-monitor.yml',
