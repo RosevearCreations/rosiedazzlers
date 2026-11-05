@@ -2,8 +2,36 @@ name: Winter Booking Eligibility Customer Transparency Authority
 on:
   push:
     branches: [dev, main]
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*winter*'
+      - '**/*booking*'
+      - '**/*weather*'
+      - '**/*workability*'
+      - '.github/workflows/winter-booking-eligibility-customer-transparency-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+      - '!scripts/current_booking_wizard_regression.sh'
+
   pull_request:
     branches: [dev, main]
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*winter*'
+      - '**/*booking*'
+      - '**/*weather*'
+      - '**/*workability*'
+      - '.github/workflows/winter-booking-eligibility-customer-transparency-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+      - '!scripts/current_booking_wizard_regression.sh'
+
   workflow_dispatch:
 permissions:
   contents: read

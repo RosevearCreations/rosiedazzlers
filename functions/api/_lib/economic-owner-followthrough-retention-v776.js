@@ -292,6 +292,10 @@ export async function verifyCustody776({env,history,owner,followthrough,exceptio
     r.claim==='RETENTION_CUSTODY_RENEWAL_CURRENT_CLAIM',
     custody_expires_at:r.signature_authenticated?
       readback.envelope.payload.custody_expires_at:null,
+    retained_source_history_sha256:r.signature_authenticated?
+      readback.envelope.payload.retained_source_history_sha256:null,
+    current_custody_renewal_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_custody_renewal_register_sha256:null,
     critical_count:r.signature_authenticated?
       Number(readback.envelope.payload.critical_exceptions):null,
     source_retention_modified_by_app:false};

@@ -5,11 +5,38 @@ on:
     branches:
       - dev
       - main
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*provider*'
+      - '**/*payment*'
+      - '**/*refund*'
+      - '**/*delivery*'
+      - '**/*hold-decision*'
+      - '.github/workflows/provider-local-search-closure-evidence-freshness-review-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
 
   pull_request:
     branches:
       - dev
       - main
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*provider*'
+      - '**/*payment*'
+      - '**/*refund*'
+      - '**/*delivery*'
+      - '**/*hold-decision*'
+      - '.github/workflows/provider-local-search-closure-evidence-freshness-review-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   workflow_dispatch:
 
 permissions:
