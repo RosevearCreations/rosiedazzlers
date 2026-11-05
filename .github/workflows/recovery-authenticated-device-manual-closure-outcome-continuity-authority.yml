@@ -50,6 +50,12 @@ jobs:
   authority:
     name: recovery-authenticated-device-manual-closure-outcome-continuity
     runs-on: ubuntu-latest
+    # The Build 520 checker re-runs older successful recovery/device tests
+    # recursively. Reuse only successful, exact-SHA local source-test results.
+    # This cache is fail-closed; all distinct checks still execute.
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 10
     steps:
       - name: Checkout exact commit

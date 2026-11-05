@@ -36,6 +36,11 @@ intentionally trigger all 20 during this release.
 
 The protected `Current Source Gate` suite A-D + aggregate `source checks`
 continues to run unconditionally on every `dev` and `main` push and PR.
+The old Build 520 standalone recovery workflow was repeatedly invoking
+its own older recovery/device source tests in a nested subprocess tree.
+Its job now opts into the existing CI-only exact-SHA success memoization
+(`ROSIE_CI_DEDUP_SUBCHECKS=1`); every distinct check still executes, failures
+are never cached, and manual dispatch retains the full test coverage.
 The required suite B-D recovery tests remain unchanged, together with
 Production Business Acceptance, Cloudflare Development Acceptance,
 Release Health and exact-Production verification. This reduces duplicated
