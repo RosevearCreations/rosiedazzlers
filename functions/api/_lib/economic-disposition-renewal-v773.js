@@ -245,6 +245,8 @@ export async function verifyDisposition773({env,history,owner,readback,
       recent(p.observed_at,owner.signed_at,time)&&ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,clean_claim:r.signature_authenticated&&
     r.claim==='NO_OPEN_EXTERNAL_DISPUTE_CLAIM',
+    current_disposition_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_disposition_register_sha256:null,
     original_dispute_disposition_written_by_app:false};
 }
 export async function verifyRenewal773({env,history,owner,disposition,readback,
@@ -271,6 +273,8 @@ export async function verifyRenewal773({env,history,owner,disposition,readback,
       ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,renewal_current_claim:r.signature_authenticated&&
     r.claim==='ORIGINAL_OWNER_RENEWAL_CURRENT_CLAIM',
+    current_renewal_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_renewal_register_sha256:null,
     original_owner_signoff_renewed_by_app:false};
 }
 export async function verifyRemediation773({env,history,owner,disposition,renewal,
@@ -304,6 +308,8 @@ export async function verifyRemediation773({env,history,owner,disposition,renewa
       ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,clean_claim:r.signature_authenticated&&
     r.claim==='NO_OPEN_RETENTION_REMEDIATION_CLAIM',
+    current_remediation_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_remediation_register_sha256:null,
     remediation_referred_claim:r.signature_authenticated&&
     r.claim==='RETENTION_SLA_BREACH_REMEDIATION_REFERRED_CLAIM',
     critical_count:r.signature_authenticated?

@@ -43,6 +43,11 @@ export async function onRequestPost({request,env}){
   if(!body||typeof body!=='object'||Array.isArray(body)||
     ids.some(k=>typeof body[k]!=='string')||signed.some(k=>!body[k]))
     return reject('Exact case scope and seven original owner-signed envelopes required.');
+  return json((await reviewDispositionRenewal773({env,body})).report);
+}
+// Build 774 replays all Build 773 witnesses at their original sources. Never
+// trust a browser-submitted predecessor readiness flag or cached packet.
+export async function reviewDispositionRenewal773({env,body}){
   // The browser cannot assert a Build 772 readiness packet. Its original
   // issuer history is refetched and independently authenticated server-side.
   const history=await reviewResolutionSLA772({env,body});
@@ -64,7 +69,8 @@ export async function onRequestPost({request,env}){
       }
     }
   }
-  return json(await reconcile773({history,owner,disposition,renewal,remediation}));
+  return {report:await reconcile773({history,owner,disposition,renewal,remediation}),
+    history,owner,disposition,renewal,remediation};
 }
 const readOnly=()=>reject('Build 773 is original-source evidence review only. No real owner sign-off, case disposition, source retention, production SQL, archive, audit append or notification.',405);
 export async function onRequestPut(){return readOnly();}
