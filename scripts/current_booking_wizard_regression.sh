@@ -128,3 +128,5 @@ node scripts/build776_owner_followthrough_custody_test.mjs
 node scripts/build776_workflow_scope_test.mjs
 node scripts/build777_custody_expiry_test.mjs
 node scripts/build777_ci_scope_test.mjs
+node scripts/build778_renewal_followup_test.mjs
+node scripts/build778_ci_recovery_runtime_test.mjs

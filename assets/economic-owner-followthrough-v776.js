@@ -45,6 +45,7 @@ async function configuration(){
 el('form776').addEventListener('submit',async event=>{
   event.preventDefault();packet=null;recheckBody777=null;
   el('export776').disabled=true;el('expiry777').disabled=true;
+  el('renew778').disabled=true;
   let body;
   try{
     body={booking_id:el('booking776').value.trim(),
@@ -64,6 +65,7 @@ el('form776').addEventListener('submit',async event=>{
   }catch{status('HOLD — Ten original-owner signed JSON envelopes are required.');return;}
   recheckBody777=body;
   el('expiry777').disabled=false;
+  el('renew778').disabled=false;
   el('verify776').disabled=true;
   status('Rechecking original Build 775 chain and independent owner follow-through, aging exceptions and source custody…');
   try{
@@ -100,6 +102,22 @@ el('expiry777').addEventListener('click',async()=>{
   }catch(error){
     el('expiryStatus777').textContent=`HOLD — Custody expiry could not be independently rechecked: ${error.message}`;
   }finally{el('expiry777').disabled=false;}
+});
+el('renew778').addEventListener('click',async()=>{
+  if(!recheckBody777)return;
+  el('renew778').disabled=true;
+  el('renewStatus778').textContent='Reauthenticating all original signed owner and custodian sources, then reviewing renewal exceptions…';
+  try{
+    const response=await fetch('/api/admin/economic_retention_renewal_followup_v778',{
+      method:'POST',credentials:'same-origin',cache:'no-store',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(recheckBody777)});
+    const data=await response.json();
+    el('renewResult778').textContent=JSON.stringify(data,null,2);
+    el('renewStatus778').textContent=`${data.renewal_followup_status||'HOLD'} · ${data.blocking_count??'Unknown'} owner/custodian actions. No automatic renewal.`;
+  }catch(error){
+    el('renewStatus778').textContent=`HOLD — Original issuer follow-up unavailable: ${error.message}`;
+  }finally{el('renew778').disabled=false;}
 });
 el('export776').addEventListener('click',()=>{
   if(!packet)return;

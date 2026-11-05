@@ -59,6 +59,12 @@
 <p><button class="btn primary" id="expiry777" type="button" disabled>Recheck source custody expiry now</button></p>
 <p id="expiryStatus777" class="notice" role="status" aria-live="polite">HOLD — First provide the ten original signed owner envelopes above.</p>
 <pre id="expiryResult777">HOLD — No authentic source expiry verified.</pre></section>
+<section class="panel" id="custody-renewal-followup778"><span class="badge">Build 778 · Custody renewal exception follow-up</span>
+<h2>3b · Independent renewal follow-up</h2>
+<p class="muted">Reauthenticate the ten original owner envelopes and current independent custody receipts. See whether the signed source is current, approaching expiry, stale, expired or in conflict. The follow-up is <strong>read-only</strong>: no owner approval, custodian renewal, source deletion or Production database change occurs here.</p>
+<p><button class="btn primary" id="renew778" type="button" disabled>Review custody renewal exceptions now</button></p>
+<p id="renewStatus778" class="notice" role="status" aria-live="polite">HOLD — First provide original signed owner evidence.</p>
+<pre id="renewResult778">HOLD — Original issuer and custodian follow-up not yet checked.</pre></section>
 <section class="panel"><h2>4 · HOLD actions and unsigned evidence packet</h2>
 <div class="scroll"><table><thead><tr><th>Condition</th><th>Original issuer or custodian action</th></tr></thead><tbody id="follow776"><tr><td colspan="2">HOLD — No evidence checked.</td></tr></tbody></table></div>
 <p><button class="btn ghost" id="export776" type="button" disabled>Download unsigned review packet</button></p>
@@ -67,6 +73,7 @@
 <details><summary>Does an authenticated follow-through claim complete the original closure?</summary><p>No. An original owner and authorized custodian must separately decide and execute any real closure.</p></details>
 <details><summary>What is an aging exception?</summary><p>The independently signed current case age, original alert threshold and open exception count must agree with the predecessor record. Overdue, missing or conflicting evidence remains HOLD.</p></details>
 <details><summary>Does custody renewal modify stored source records?</summary><p>No. A signed custody renewal claim has a bounded expiry and links an unchanged original retained-source digest. Real database or storage controls remain outside this review.</p></details>
+<details><summary>What happens when Build 778 finds an expired or conflicting receipt?</summary><p>It keeps the case on HOLD and identifies the independent issuer, custodian and owner follow-up needed. It cannot extend an expiry or create an approval on their behalf.</p></details>
 </section></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script type="module" src="/assets/economic-owner-followthrough-v776.js"></script></body></html>
