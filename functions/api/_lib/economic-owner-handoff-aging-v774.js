@@ -211,6 +211,8 @@ export async function verifyHandoff774({env,history,owner,readback,now=Date.now(
       (p.handoff_result!=='OWNER_RENEWAL_HANDOFF_ACKNOWLEDGED_CLAIM'||owner.requests_handoff)&&
       recent(p.observed_at,owner.signed_at,time)&&ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,acknowledged_claim:r.signature_authenticated&&r.claim==='OWNER_RENEWAL_HANDOFF_ACKNOWLEDGED_CLAIM',
+    current_handoff_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_handoff_register_sha256:null,
     owner_handoff_executed_by_app:false};
 }
 export async function verifyAging774({env,history,owner,handoff,readback,now=Date.now()}={}){
@@ -234,6 +236,11 @@ export async function verifyAging774({env,history,owner,handoff,readback,now=Dat
         Number(p.age_hours)>Number(p.source_alert_threshold_hours)||Number(p.open_disputes)>0)&&
       recent(p.observed_at,handoff.signed_at,time)&&ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,clean_claim:r.signature_authenticated&&r.claim==='NO_OPEN_DISPUTE_AGING_CLAIM',
+    current_aging_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_aging_register_sha256:null,
+    observed_age_hours:r.signature_authenticated?Number(readback.envelope.payload.age_hours):null,
+    source_alert_threshold_hours:r.signature_authenticated?
+      Number(readback.envelope.payload.source_alert_threshold_hours):null,
     observed_open_disputes:r.signature_authenticated?Number(readback.envelope.payload.open_disputes):null,
     original_dispute_closed_by_app:false};
 }
@@ -258,6 +265,12 @@ export async function verifyClosure774({env,history,owner,handoff,aging,readback
         p.critical_retention_exceptions==='0'&&Date.parse(p.readiness_expires_at)>time)&&
       recent(p.observed_at,aging.signed_at,time)&&ID.test(p.witness_id)&&ID.test(p.key_id)});
   return {...r,ready_claim:r.signature_authenticated&&r.claim==='RETENTION_CLOSURE_WITNESS_READY_CLAIM',
+    current_retention_witness_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_retention_witness_register_sha256:null,
+    critical_retention_exceptions:r.signature_authenticated?
+      Number(readback.envelope.payload.critical_retention_exceptions):null,
+    readiness_expires_at:r.signature_authenticated?
+      readback.envelope.payload.readiness_expires_at:null,
     source_retention_closed_by_app:false};
 }
 export async function reconcile774({history,owner,handoff,aging,closure,reviewed_at=new Date().toISOString()}={}){
