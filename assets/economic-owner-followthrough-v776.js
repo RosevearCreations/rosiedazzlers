@@ -2,6 +2,7 @@ const el=id=>document.getElementById(id);
 const endpoint='/api/admin/economic_owner_followthrough_v776';
 let packet=null;
 let recheckBody777=null;
+let registerPacket779=null;
 const status=message=>{el('status776').textContent=message;};
 for(const [fileId,textId] of [
   ['filePost776','postOwner776'],['fileReadiness776','readinessOwner776'],
@@ -43,9 +44,12 @@ async function configuration(){
   }catch(error){el('config776').textContent=`HOLD — ${error.message}`;}
 }
 el('form776').addEventListener('submit',async event=>{
-  event.preventDefault();packet=null;recheckBody777=null;
+  event.preventDefault();packet=null;recheckBody777=null;registerPacket779=null;
   el('export776').disabled=true;el('expiry777').disabled=true;
   el('renew778').disabled=true;
+  el('register779').disabled=true;el('exportRegister779').disabled=true;
+  el('registerRows779').replaceChildren();
+  el('registerResult779').textContent='HOLD — Original signed source verification must be repeated.';
   let body;
   try{
     body={booking_id:el('booking776').value.trim(),
@@ -66,6 +70,7 @@ el('form776').addEventListener('submit',async event=>{
   recheckBody777=body;
   el('expiry777').disabled=false;
   el('renew778').disabled=false;
+  el('register779').disabled=false;
   el('verify776').disabled=true;
   status('Rechecking original Build 775 chain and independent owner follow-through, aging exceptions and source custody…');
   try{
@@ -118,6 +123,41 @@ el('renew778').addEventListener('click',async()=>{
   }catch(error){
     el('renewStatus778').textContent=`HOLD — Original issuer follow-up unavailable: ${error.message}`;
   }finally{el('renew778').disabled=false;}
+});
+el('register779').addEventListener('click',async()=>{
+  if(!recheckBody777)return;
+  registerPacket779=null;
+  el('register779').disabled=true;el('exportRegister779').disabled=true;
+  el('registerRows779').replaceChildren();
+  el('registerResult779').textContent='HOLD — Rechecking original signed source decision history.';
+  el('registerStatus779').textContent='Reauthenticating original owner, exception issuer and custodian history for a current read-only decision register…';
+  try{
+    const response=await fetch('/api/admin/economic_custody_exception_register_v779',{
+      method:'POST',credentials:'same-origin',cache:'no-store',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(recheckBody777)});
+    const data=await response.json();
+    el('registerResult779').textContent=JSON.stringify(data,null,2);
+    el('registerStatus779').textContent=`${data.custody_decision_register_status||'HOLD'} · ${data.decision_rows?.length??0} external decision rows · no automatic closure.`;
+    const tbody=el('registerRows779');tbody.replaceChildren();
+    for(const item of data.decision_rows||[]){
+      const tr=document.createElement('tr');
+      for(const value of [item.decision_key,item.issuer_role,item.status,item.action]){
+        const td=document.createElement('td');td.textContent=String(value??'—');tr.appendChild(td);
+      }tbody.appendChild(tr);
+    }
+    if(response.ok&&data.ok){registerPacket779=data;el('exportRegister779').disabled=false;}
+  }catch(error){
+    el('registerStatus779').textContent=`HOLD — Original independent decision register unavailable: ${error.message}`;
+  }finally{el('register779').disabled=false;}
+});
+el('exportRegister779').addEventListener('click',()=>{
+  if(!registerPacket779)return;
+  const url=URL.createObjectURL(new Blob([JSON.stringify(registerPacket779,null,2)],{
+    type:'application/json'}));
+  const a=document.createElement('a');a.href=url;
+  a.download='rosie-unsigned-independent-custody-exception-register-v779.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 el('export776').addEventListener('click',()=>{
   if(!packet)return;

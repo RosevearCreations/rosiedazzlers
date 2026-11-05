@@ -46,6 +46,11 @@ jobs:
   authority:
     name: recovery-authenticated-device-observation-execution-evidence
     runs-on: ubuntu-latest
+    # Build 779: exact-commit CI-only success memoization of repeated nested source tests.
+    # Distinct tests and all failures still execute; no result is trusted across SHAs.
+    env:
+      ROSIE_CI_DEDUP_SUBCHECKS: "1"
+      PYTHONPATH: ${{ github.workspace }}/scripts/ci-source-cache
     timeout-minutes: 15
     steps:
       - name: Checkout exact commit
