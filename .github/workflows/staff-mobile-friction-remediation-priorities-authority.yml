@@ -4,11 +4,34 @@ on:
     branches:
       - dev
       - main
+    # Build 779: optional domain authority; protected source gates remain unconditional.
+    paths:
+      - '**/*staff*'
+      - '**/*detailer*'
+      - '**/*mobile*'
+      - '.github/workflows/staff-mobile-friction-remediation-priorities-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
 
   pull_request:
     branches:
       - dev
       - main
+    # Build 779: optional domain authority; protected source gates remain unconditional.
+    paths:
+      - '**/*staff*'
+      - '**/*detailer*'
+      - '**/*mobile*'
+      - '.github/workflows/staff-mobile-friction-remediation-priorities-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   workflow_dispatch:
 permissions:
   contents: read
