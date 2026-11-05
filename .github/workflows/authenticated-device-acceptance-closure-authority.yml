@@ -5,10 +5,38 @@ on:
     branches:
       - dev
       - main
+    # Build 778: optional domain authority. Required aggregate source gate is unchanged.
+    paths:
+      - '**/*recovery*'
+      - '**/*backup*'
+      - '**/*restore*'
+      - '**/*authenticated-device*'
+      - '**/*device*'
+      - '.github/workflows/authenticated-device-acceptance-closure-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   pull_request:
     branches:
       - dev
       - main
+    # Build 778: optional domain authority. Required aggregate source gate is unchanged.
+    paths:
+      - '**/*recovery*'
+      - '**/*backup*'
+      - '**/*restore*'
+      - '**/*authenticated-device*'
+      - '**/*device*'
+      - '.github/workflows/authenticated-device-acceptance-closure-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   workflow_dispatch:
 
 permissions:
