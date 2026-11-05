@@ -42,6 +42,11 @@ export async function onRequestPost({request,env}){
   if(!body||typeof body!=='object'||Array.isArray(body)||
     ids.some(k=>typeof body[k]!=='string')||signed.some(k=>!body[k]))
     return reject('Exact original case scope and eight owner-signed envelopes required.');
+  return json((await reviewHandoffAging774({env,body})).report);
+}
+// Build 775 must replay the authentic original Build 774 signed chain, never
+// consume a client-authored readiness flag as proof.
+export async function reviewHandoffAging774({env,body}){
   // Re-read all prior external sources: no browser-supplied readiness packet.
   const history=await reviewDispositionRenewal773({env,body});
   let owner=null,handoff=null,aging=null,closure=null;
@@ -60,7 +65,8 @@ export async function onRequestPost({request,env}){
       }
     }
   }
-  return json(await reconcile774({history,owner,handoff,aging,closure}));
+  return {report:await reconcile774({history,owner,handoff,aging,closure}),
+    history,owner,handoff,aging,closure};
 }
 const readonly=()=>reject('Build 774 is original-source evidence review only. No original owner renewal, handoff, dispute disposition, retention, SQL, audit or notification changes.',405);
 export async function onRequestPut(){return readonly();}
