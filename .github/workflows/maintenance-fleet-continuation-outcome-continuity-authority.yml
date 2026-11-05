@@ -6,10 +6,34 @@ on:
       - dev
       - main
       - 'release*'
+    # Build 776: relevant domain changes only; manual dispatch remains available.
+    paths:
+      - '**/*fleet*'
+      - '**/*maintenance*'
+      - '**/*service-economics*'
+      - '.github/workflows/maintenance-fleet-continuation-outcome-continuity-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   pull_request:
     branches:
       - dev
       - main
+    # Build 776: relevant domain changes only; manual dispatch remains available.
+    paths:
+      - '**/*fleet*'
+      - '**/*maintenance*'
+      - '**/*service-economics*'
+      - '.github/workflows/maintenance-fleet-continuation-outcome-continuity-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   workflow_dispatch:
 
 permissions:
