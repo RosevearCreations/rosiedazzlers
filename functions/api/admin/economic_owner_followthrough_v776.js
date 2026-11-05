@@ -22,18 +22,7 @@ export async function onRequestGet({request,env}){
     owner_followthrough_status:'HOLD_OWNER_FOLLOWTHROUGH_AGING_OR_RETENTION_CUSTODY',
     original_owner_business_signoff_by_app:false,closure_allowed:false});
 }
-export async function onRequestPost({request,env}){
-  const denied=await protect(request,env);if(denied)return denied;
-  if(request.headers.get('origin')!==new URL(request.url).origin)
-    return reject('Same-origin original owner review only.',403);
-  if(!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''))
-    return reject('Signed JSON required.',415);
-  if(Number(request.headers.get('content-length')||0)>210000)
-    return reject('Signed original evidence exceeds 210 KB.',413);
-  let body;
-  try{const raw=await request.text();if(raw.length>210000)throw Error('large');
-    body=JSON.parse(raw);
-  }catch{return reject('Submit ten authentic original signed owner JSON envelopes.');}
+export async function reviewOwnerFollowthrough776({env,body}){
   const required=['booking_id','source_record_id','change_ticket_id','execution_request_id'];
   const envelopes=['owner_postchange_decision','owner_closure_readiness_decision',
     'owner_explicit_closure_authorization','owner_postclosure_acceptance_decision',
@@ -42,7 +31,9 @@ export async function onRequestPost({request,env}){
     'original_owner_handoff_closure_review','original_owner_followthrough_review'];
   if(!body||typeof body!=='object'||Array.isArray(body)||
     required.some(k=>typeof body[k]!=='string')||envelopes.some(k=>!body[k]))
-    return reject('Original scope and ten signed owner envelopes required.');
+    return {report:{ok:false,build:776,
+      owner_followthrough_status:'HOLD_OWNER_FOLLOWTHROUGH_AGING_OR_RETENTION_CUSTODY',
+      error:'Original scope and ten signed owner envelopes required.'}};
   // The server re-fetches each prior independent original issuer source.
   // A browser-supplied readiness label or fabricated success cannot authorize it.
   const history=await reviewHandoffClosure775({env,body});
@@ -63,7 +54,23 @@ export async function onRequestPost({request,env}){
       }
     }
   }
-  return json(await reconcile776({history,owner,followthrough,exception,custody}));
+  const report=await reconcile776({history,owner,followthrough,exception,custody});
+  return {report,history,owner,followthrough,exception,custody};
+}
+export async function onRequestPost({request,env}){
+  const denied=await protect(request,env);if(denied)return denied;
+  if(request.headers.get('origin')!==new URL(request.url).origin)
+    return reject('Same-origin original owner review only.',403);
+  if(!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''))
+    return reject('Signed JSON required.',415);
+  if(Number(request.headers.get('content-length')||0)>210000)
+    return reject('Signed original evidence exceeds 210 KB.',413);
+  let body;
+  try{const raw=await request.text();if(raw.length>210000)throw Error('large');
+    body=JSON.parse(raw);
+  }catch{return reject('Submit ten authentic original signed owner JSON envelopes.');}
+  const result=await reviewOwnerFollowthrough776({env,body});
+  return result.report?.ok?json(result.report):reject(result.report?.error||'Invalid original signed evidence.');
 }
 const readonly=()=>reject('Build 776 verifies original signed evidence only; it never signs off, closes disputes, renews custody, writes audit, deletes retention, sends notices or alters production data.',405);
 export async function onRequestPut(){return readonly();}

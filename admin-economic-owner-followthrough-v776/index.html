@@ -53,7 +53,13 @@
 <div class="stat"><strong>Independent aging exception disposition</strong><span id="exception776">HOLD — Not checked</span></div>
 <div class="stat"><strong>Independent retention custody renewal</strong><span id="custody776">HOLD — Not checked</span></div>
 </div></section>
-<section class="panel"><h2>3 · HOLD actions and unsigned evidence packet</h2>
+<section class="panel" id="custody-expiry777"><span class="badge">Build 777 · Independent retention custody expiry recheck</span>
+<h2>3 · Current source expiry &amp; renewal warning</h2>
+<p class="muted">After entering the original signed owner envelopes above, we can independently re-fetch all source witnesses and calculate the current time remaining on the original custody receipt. It is flagged for manual renewal review within 72 hours of expiry; stale, expired or conflicting evidence remains HOLD. <strong>This does not extend a witness or execute a custody renewal.</strong></p>
+<p><button class="btn primary" id="expiry777" type="button" disabled>Recheck source custody expiry now</button></p>
+<p id="expiryStatus777" class="notice" role="status" aria-live="polite">HOLD — First provide the ten original signed owner envelopes above.</p>
+<pre id="expiryResult777">HOLD — No authentic source expiry verified.</pre></section>
+<section class="panel"><h2>4 · HOLD actions and unsigned evidence packet</h2>
 <div class="scroll"><table><thead><tr><th>Condition</th><th>Original issuer or custodian action</th></tr></thead><tbody id="follow776"><tr><td colspan="2">HOLD — No evidence checked.</td></tr></tbody></table></div>
 <p><button class="btn ghost" id="export776" type="button" disabled>Download unsigned review packet</button></p>
 <pre id="result776">HOLD — External decisions and actual source retention remain independently controlled.</pre></section>

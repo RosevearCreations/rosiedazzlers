@@ -1,6 +1,7 @@
 const el=id=>document.getElementById(id);
 const endpoint='/api/admin/economic_owner_followthrough_v776';
 let packet=null;
+let recheckBody777=null;
 const status=message=>{el('status776').textContent=message;};
 for(const [fileId,textId] of [
   ['filePost776','postOwner776'],['fileReadiness776','readinessOwner776'],
@@ -42,7 +43,8 @@ async function configuration(){
   }catch(error){el('config776').textContent=`HOLD — ${error.message}`;}
 }
 el('form776').addEventListener('submit',async event=>{
-  event.preventDefault();packet=null;el('export776').disabled=true;
+  event.preventDefault();packet=null;recheckBody777=null;
+  el('export776').disabled=true;el('expiry777').disabled=true;
   let body;
   try{
     body={booking_id:el('booking776').value.trim(),
@@ -60,6 +62,8 @@ el('form776').addEventListener('submit',async event=>{
       original_owner_handoff_closure_review:JSON.parse(el('closureOwner776').value),
       original_owner_followthrough_review:JSON.parse(el('followOwner776').value)};
   }catch{status('HOLD — Ten original-owner signed JSON envelopes are required.');return;}
+  recheckBody777=body;
+  el('expiry777').disabled=false;
   el('verify776').disabled=true;
   status('Rechecking original Build 775 chain and independent owner follow-through, aging exceptions and source custody…');
   try{
@@ -80,6 +84,22 @@ el('form776').addEventListener('submit',async event=>{
     if(response.ok&&data.ok){packet=data;el('export776').disabled=false;}
   }catch(error){status(`HOLD — Original signed source verification unavailable: ${error.message}`);}
   finally{el('verify776').disabled=false;}
+});
+el('expiry777').addEventListener('click',async()=>{
+  if(!recheckBody777)return;
+  el('expiry777').disabled=true;
+  el('expiryStatus777').textContent='Re-fetching original signed custody sources and checking the current expiry at server time…';
+  try{
+    const response=await fetch('/api/admin/economic_retention_custody_expiry_v777',{
+      method:'POST',credentials:'same-origin',cache:'no-store',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(recheckBody777)});
+    const data=await response.json();
+    el('expiryResult777').textContent=JSON.stringify(data,null,2);
+    el('expiryStatus777').textContent=`${data.custody_expiry_status||'HOLD'} · ${data.remaining_hours??'Unknown'} hours remaining · ${data.blocking_count??'Unknown'} follow-ups.`;
+  }catch(error){
+    el('expiryStatus777').textContent=`HOLD — Custody expiry could not be independently rechecked: ${error.message}`;
+  }finally{el('expiry777').disabled=false;}
 });
 el('export776').addEventListener('click',()=>{
   if(!packet)return;
