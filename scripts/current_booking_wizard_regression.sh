@@ -122,3 +122,4 @@ node scripts/build770_owner_decision_ack_aging_test.mjs
 node scripts/build771_final_owner_dispute_escalation_test.mjs
 node scripts/build772_external_resolution_signoff_sla_test.mjs
 node scripts/build773_external_disposition_renewal_test.mjs
+node scripts/build774_owner_handoff_aging_test.mjs
