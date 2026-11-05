@@ -65,6 +65,13 @@
 <p><button class="btn primary" id="renew778" type="button" disabled>Review custody renewal exceptions now</button></p>
 <p id="renewStatus778" class="notice" role="status" aria-live="polite">HOLD — First provide original signed owner evidence.</p>
 <pre id="renewResult778">HOLD — Original issuer and custodian follow-up not yet checked.</pre></section>
+<section class="panel" id="custody-decision-register779"><span class="badge">Build 779 · Independent custody exception decision register</span>
+<h2>3c · Original issuer decision register</h2>
+<p class="muted">Generate a current, read-only register from original signed owner and independent custodian/exception sources. The rows show who must act and what remains on HOLD. <strong>No row is an actual signed owner decision, independent custodian renewal, dispute closure or stored audit entry.</strong></p>
+<p><button class="btn primary" id="register779" type="button" disabled>Recheck independent decision register</button> <button class="btn ghost" id="exportRegister779" type="button" disabled>Download unsigned register</button></p>
+<p id="registerStatus779" class="notice" role="status" aria-live="polite">HOLD — Provide the ten original signed owner envelopes first.</p>
+<div class="scroll"><table><thead><tr><th>Decision</th><th>Original issuer</th><th>Current status</th><th>Required manual action</th></tr></thead><tbody id="registerRows779"><tr><td colspan="4">HOLD — No original signed decision register reviewed.</td></tr></tbody></table></div>
+<pre id="registerResult779">HOLD — Original owner/custodian decisions remain external.</pre></section>
 <section class="panel"><h2>4 · HOLD actions and unsigned evidence packet</h2>
 <div class="scroll"><table><thead><tr><th>Condition</th><th>Original issuer or custodian action</th></tr></thead><tbody id="follow776"><tr><td colspan="2">HOLD — No evidence checked.</td></tr></tbody></table></div>
 <p><button class="btn ghost" id="export776" type="button" disabled>Download unsigned review packet</button></p>
@@ -74,6 +81,7 @@
 <details><summary>What is an aging exception?</summary><p>The independently signed current case age, original alert threshold and open exception count must agree with the predecessor record. Overdue, missing or conflicting evidence remains HOLD.</p></details>
 <details><summary>Does custody renewal modify stored source records?</summary><p>No. A signed custody renewal claim has a bounded expiry and links an unchanged original retained-source digest. Real database or storage controls remain outside this review.</p></details>
 <details><summary>What happens when Build 778 finds an expired or conflicting receipt?</summary><p>It keeps the case on HOLD and identifies the independent issuer, custodian and owner follow-up needed. It cannot extend an expiry or create an approval on their behalf.</p></details>
+<details><summary>Does the Build 779 register approve or save custody decisions?</summary><p>No. It displays three source-bound external decision requirements and offers an unsigned local download only. Actual original-owner authorization, custodian renewal, external dispute closure and audit retention stay with their independent issuers.</p></details>
 </section></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script type="module" src="/assets/economic-owner-followthrough-v776.js"></script></body></html>
