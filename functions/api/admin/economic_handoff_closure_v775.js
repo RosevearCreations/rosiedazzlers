@@ -22,18 +22,7 @@ export async function onRequestGet({request,env}){
     handoff_closure_decision_status:'HOLD_HANDOFF_DECISION_AGING_OR_RETENTION_CONTINUITY',
     original_owner_business_signoff_by_app:false,closure_allowed:false});
 }
-export async function onRequestPost({request,env}){
-  const denied=await protect(request,env);if(denied)return denied;
-  if(request.headers.get('origin')!==new URL(request.url).origin)
-    return reject('Same-origin original-owner evidence review only.',403);
-  if(!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''))
-    return reject('Signed JSON required.',415);
-  if(Number(request.headers.get('content-length')||0)>180000)
-    return reject('Original signed evidence exceeds 180 KB.',413);
-  let body;
-  try{const raw=await request.text();if(raw.length>180000)throw Error('large');
-    body=JSON.parse(raw);
-  }catch{return reject('Submit nine authentic original signed owner JSON envelopes.');}
+export async function reviewHandoffClosure775({env,body}){
   const ids=['booking_id','source_record_id','change_ticket_id','execution_request_id'];
   const signed=['owner_postchange_decision','owner_closure_readiness_decision',
     'owner_explicit_closure_authorization','owner_postclosure_acceptance_decision',
@@ -42,7 +31,9 @@ export async function onRequestPost({request,env}){
     'original_owner_handoff_closure_review'];
   if(!body||typeof body!=='object'||Array.isArray(body)||
     ids.some(k=>typeof body[k]!=='string')||signed.some(k=>!body[k]))
-    return reject('Exact original scope and nine owner-signed envelopes required.');
+    return {report:{ok:false,build:775,
+      handoff_closure_decision_status:'HOLD_HANDOFF_DECISION_AGING_OR_RETENTION_CONTINUITY',
+      error:'Exact original scope and nine owner-signed envelopes required.'}};
   // Every prior external Build 774 source is fetched again by the server; a
   // browser-provided readiness flag can never authorize the next claim.
   const history=await reviewHandoffAging774({env,body});
@@ -63,7 +54,23 @@ export async function onRequestPost({request,env}){
       }
     }
   }
-  return json(await reconcile775({history,owner,decision,escalation,retention}));
+  const report=await reconcile775({history,owner,decision,escalation,retention});
+  return {report,history,owner,decision,escalation,retention};
+}
+export async function onRequestPost({request,env}){
+  const denied=await protect(request,env);if(denied)return denied;
+  if(request.headers.get('origin')!==new URL(request.url).origin)
+    return reject('Same-origin original-owner evidence review only.',403);
+  if(!/^application\/json(?:\s*;|$)/i.test(request.headers.get('content-type')||''))
+    return reject('Signed JSON required.',415);
+  if(Number(request.headers.get('content-length')||0)>180000)
+    return reject('Original signed evidence exceeds 180 KB.',413);
+  let body;
+  try{const raw=await request.text();if(raw.length>180000)throw Error('large');
+    body=JSON.parse(raw);
+  }catch{return reject('Submit nine authentic original signed owner JSON envelopes.');}
+  const result=await reviewHandoffClosure775({env,body});
+  return result.report?.ok?json(result.report):reject(result.report?.error||'Invalid original signed owner evidence.');
 }
 const readonly=()=>reject('Build 775 is signed original-source review only: no owner sign-off, real handoff, dispute closure, retention change, SQL, archive, audit append or notification.',405);
 export async function onRequestPut(){return readonly();}
