@@ -286,6 +286,12 @@ export async function verifyRetention775({env,history,owner,decision,escalation,
   return {...r,preserved_claim:r.signature_authenticated&&
     r.claim==='SOURCE_RETENTION_CONTINUITY_PRESERVED_CLAIM',
     critical_count:r.signature_authenticated?Number(readback.envelope.payload.critical_exceptions):null,
+    retained_source_history_sha256:r.signature_authenticated?
+      readback.envelope.payload.retained_source_history_sha256:null,
+    current_retention_continuity_register_sha256:r.signature_authenticated?
+      readback.envelope.payload.current_retention_continuity_register_sha256:null,
+    witness_expires_at:r.signature_authenticated?
+      readback.envelope.payload.witness_expires_at:null,
     original_source_archival_or_deletion_by_app:false};
 }
 export async function reconcile775({history,owner,decision,escalation,retention,

@@ -124,3 +124,5 @@ node scripts/build772_external_resolution_signoff_sla_test.mjs
 node scripts/build773_external_disposition_renewal_test.mjs
 node scripts/build774_owner_handoff_aging_test.mjs
 node scripts/build775_handoff_decision_retention_test.mjs
+node scripts/build776_owner_followthrough_custody_test.mjs
+node scripts/build776_workflow_scope_test.mjs
