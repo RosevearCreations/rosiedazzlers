@@ -5,11 +5,36 @@ on:
     branches:
       - dev
       - main
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*seasonal-capability*'
+      - '**/*public-claim*'
+      - '**/*winter*'
+      - '**/*workability*'
+      - '.github/workflows/seasonal-capability-public-claim-outcome-freshness-review-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
 
   pull_request:
     branches:
       - dev
       - main
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*seasonal-capability*'
+      - '**/*public-claim*'
+      - '**/*winter*'
+      - '**/*workability*'
+      - '.github/workflows/seasonal-capability-public-claim-outcome-freshness-review-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   workflow_dispatch:
 
 permissions:

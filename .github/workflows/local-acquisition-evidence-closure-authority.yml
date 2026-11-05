@@ -6,10 +6,38 @@ on:
       - dev
       - main
       - 'build420-*'
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*local-acquisition*'
+      - '**/*local-search*'
+      - '**/*seo*'
+      - '**/*content-proof*'
+      - '**/*marketing*'
+      - '.github/workflows/local-acquisition-evidence-closure-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   pull_request:
     branches:
       - dev
       - main
+    # Build 777: optional domain authority; retain original job and manual dispatch.
+    paths:
+      - '**/*local-acquisition*'
+      - '**/*local-search*'
+      - '**/*seo*'
+      - '**/*content-proof*'
+      - '**/*marketing*'
+      - '.github/workflows/local-acquisition-evidence-closure-authority.yml'
+      - 'functions/api/_lib/staff-auth.js'
+      - 'functions/_middleware.js'
+      - 'scripts/release_check.py'
+      - 'scripts/ci-source-cache/**'
+      - 'assets/styles.css'
+
   workflow_dispatch:
 
 permissions:
