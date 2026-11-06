@@ -136,3 +136,4 @@ node scripts/build780_custody_witness_test.mjs
 node scripts/build780_ci_queue_budget_test.mjs
 node scripts/build781_comms_handshake_workbench_test.mjs
 node scripts/build782_comms_original_owner_review_test.mjs
+node scripts/build783_original_issuer_custody_provenance_test.mjs
