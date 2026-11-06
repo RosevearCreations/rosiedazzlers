@@ -36,13 +36,13 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: rosiedazzlers-service-economics-seasonal-capacity-reliability-decision-outcome-continuity-${{ github.ref }}-${{ github.sha }}
+  group: rosiedazzlers-service-economics-seasonal-capacity-reliability-decision-outcome-continuity-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   authority:
     name: service-economics-seasonal-capacity-reliability-decision-outcome-continuity
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4

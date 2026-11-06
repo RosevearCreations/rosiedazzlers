@@ -43,14 +43,14 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-recovery-authenticated-device-closure-integrity-${{ github.ref }}-${{ github.sha }}
+  group: rosiedazzlers-recovery-authenticated-device-closure-integrity-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   authority:
     name: recovery-authenticated-device-closure-evidence-integrity-review
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 8
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4

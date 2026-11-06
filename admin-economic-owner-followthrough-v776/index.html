@@ -72,6 +72,13 @@
 <p id="registerStatus779" class="notice" role="status" aria-live="polite">HOLD — Provide the ten original signed owner envelopes first.</p>
 <div class="scroll"><table><thead><tr><th>Decision</th><th>Original issuer</th><th>Current status</th><th>Required manual action</th></tr></thead><tbody id="registerRows779"><tr><td colspan="4">HOLD — No original signed decision register reviewed.</td></tr></tbody></table></div>
 <pre id="registerResult779">HOLD — Original owner/custodian decisions remain external.</pre></section>
+<section class="panel" id="custody-witness-reconciliation780"><span class="badge">Build 780 · Independent custody decision witness reconciliation</span>
+<h2>3d · Original decision witness follow-up</h2>
+<p class="muted">Recheck the original signed source chain, current custody and register together at one server time. A matching source chain is <strong>not</strong> a separately signed decision by the owner, custodian or exception issuer. All three real decisions remain outside this application.</p>
+<p><button class="btn primary" id="witness780" type="button" disabled>Reconcile independent witness requirements</button> <button class="btn ghost" id="exportWitness780" type="button" disabled>Download unsigned witness follow-up</button></p>
+<p id="witnessStatus780" class="notice" role="status" aria-live="polite">HOLD — Original signed owner evidence is required.</p>
+<div class="scroll"><table><thead><tr><th>Independent role</th><th>Register source state</th><th>Witness status</th><th>Manual follow-up</th></tr></thead><tbody id="witnessRows780"><tr><td colspan="4">HOLD — No independent decision witness reviewed.</td></tr></tbody></table></div>
+<pre id="witnessResult780">HOLD — No external original human signature verified.</pre></section>
 <section class="panel"><h2>4 · HOLD actions and unsigned evidence packet</h2>
 <div class="scroll"><table><thead><tr><th>Condition</th><th>Original issuer or custodian action</th></tr></thead><tbody id="follow776"><tr><td colspan="2">HOLD — No evidence checked.</td></tr></tbody></table></div>
 <p><button class="btn ghost" id="export776" type="button" disabled>Download unsigned review packet</button></p>
@@ -82,6 +89,7 @@
 <details><summary>Does custody renewal modify stored source records?</summary><p>No. A signed custody renewal claim has a bounded expiry and links an unchanged original retained-source digest. Real database or storage controls remain outside this review.</p></details>
 <details><summary>What happens when Build 778 finds an expired or conflicting receipt?</summary><p>It keeps the case on HOLD and identifies the independent issuer, custodian and owner follow-up needed. It cannot extend an expiry or create an approval on their behalf.</p></details>
 <details><summary>Does the Build 779 register approve or save custody decisions?</summary><p>No. It displays three source-bound external decision requirements and offers an unsigned local download only. Actual original-owner authorization, custodian renewal, external dispute closure and audit retention stay with their independent issuers.</p></details>
+<details><summary>What does the Build 780 witness reconciliation prove?</summary><p>It compares freshly reauthenticated source hashes and three required roles. It cannot independently authenticate human signatures, renew source custody, close disputes or change external audit custody. A matched source chain still requires separate decisions.</p></details>
 </section></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script type="module" src="/assets/economic-owner-followthrough-v776.js"></script></body></html>
