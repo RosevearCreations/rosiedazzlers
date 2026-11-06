@@ -15,6 +15,7 @@ on:
 permissions:
   contents: read
   checks: read
+  actions: read
   issues: write
 
 concurrency:
@@ -45,3 +46,8 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.ROSIEDAZZLERS_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: node scripts/release_health_monitor.mjs
+      - name: Enforce completed exact-main CI queue and runtime budgets
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/ci_queue_budget_v780.mjs --github --enforce

@@ -42,7 +42,7 @@ jobs:
   authority:
     name: service-economics-seasonal-capacity-reliability-decision-readiness
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
         with: { fetch-depth: 0 }

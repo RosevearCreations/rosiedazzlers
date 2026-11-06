@@ -132,3 +132,5 @@ node scripts/build778_renewal_followup_test.mjs
 node scripts/build778_ci_recovery_runtime_test.mjs
 node scripts/build779_custody_decision_register_test.mjs
 node scripts/build779_ci_queue_optimization_test.mjs
+node scripts/build780_custody_witness_test.mjs
+node scripts/build780_ci_queue_budget_test.mjs

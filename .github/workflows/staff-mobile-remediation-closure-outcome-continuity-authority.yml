@@ -40,14 +40,15 @@ permissions:
   contents: read
 
 concurrency:
-  group: rosiedazzlers-staff-mobile-remediation-closure-outcome-continuity-${{ github.ref }}-${{ github.sha }}
+  # Build 780: cancel superseded optional runs on this ref, including old SHAs.
+  group: rosiedazzlers-staff-mobile-remediation-closure-outcome-continuity-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   authority:
     name: staff-mobile-remediation-closure-outcome-continuity
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 12
     steps:
       - name: Checkout exact commit
         uses: actions/checkout@v4
