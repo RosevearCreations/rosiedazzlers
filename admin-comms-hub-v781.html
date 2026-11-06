@@ -20,7 +20,7 @@
 </style></head>
 <body data-page="admin-integrations" data-build781="comms-source-connection-test-hold">
 <main class="container comms781">
-<section class="panel hero"><span class="badge">Build 782 · original signer review, scoped broker readiness &amp; receipt witness</span>
+<section class="panel hero"><span class="badge">Build 783 · original issuer, decision continuity &amp; receipt provenance</span>
 <h1>Rosevear Comms Hub · Connection Verification</h1>
 <p>Building on Build 781 signed nonproduction handshake evidence, see what Rosie can actually prove about Comms Hub, inspect an owner-held <strong>nonsecret</strong> six-peer status readback locally, and prepare an <strong>unsigned</strong> authorization handoff. This workbench will not start a receiver, sign consent, contact a remote peer, or change a database.</p>
 <p class="hold" id="connection781">DISCONNECTED / HOLD</p>
@@ -71,8 +71,26 @@
 <li>Only an independent, already-authorized private broker may verify source Ed25519 responses, original denials and an immutable independent receipt.</li></ol>
 <div class="actions"><button class="btn primary" id="receiptReview782" type="button">Download unsigned nine-slot receipt review register</button></div>
 <p class="notice" id="receiptStatus782" role="status" aria-live="polite">DISCONNECTED / HOLD · No request was authorized, sent or verified.</p>
+</section>
+<section class="panel" aria-labelledby="attestationTitle783"><h2 id="attestationTitle783">6 · Independent issuer attestation and owner decision continuity</h2>
+<p>The original QL-346 signed Windows heartbeat is sensitive because it contains a private nonce and session identifier. <strong>Do not upload that heartbeat into this website.</strong> Verify it locally on the original trusted computer with the <a href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/build783_independent_issuer_owner_continuity_receipts.md" target="_blank" rel="noopener">Build 783 offline instructions</a>. The local checker prints only a nonsecret HOLD summary.</p>
+<p>For a cross-source comparison here, choose only three reviewed, <strong>sanitized</strong> readback files. No file is uploaded or saved; no private credentials, cookies, raw signatures, nonce, URL or personal data belong in them.</p>
+<div class="grid">
+<label>QL-346 nonsecret offline readiness summary (32 KB maximum)<input id="ql346File783" type="file" accept=".json,application/json"></label>
+<label>QL-347 nonauthorizing custody handoff summary (32 KB maximum)<input id="ql347File783" type="file" accept=".json,application/json"></label>
+<label>QL-353 redacted original-receipt count/state summary (32 KB maximum)<input id="ql353File783" type="file" accept=".json,application/json"></label>
+</div>
+<div class="actions"><button class="btn primary" id="inspect783" type="button">Reconcile original evidence and expiry locally</button><button class="btn ghost" id="download783" type="button">Download nonauthorizing provenance register</button></div>
+<p id="status783" class="notice" role="status" aria-live="polite">HOLD · First verify the fresh QL-345 public review signatures above; no QL-346/347/353 original readbacks are present.</p>
+<pre id="result783">No original issuer, custody or signed receipt report authenticated.</pre>
+<div class="grid"><div class="stat"><strong>Original issuer custody</strong>Separate out-of-band identity and original file review required</div>
+<div class="stat"><strong>Owner TEST enrollment</strong>QL-345 review signatures are not QL-340B enrollment consent</div>
+<div class="stat"><strong>Original device receipt</strong>Private QL-353 exact-one DB + Ed25519 witness not observed by this page</div>
+<div class="stat"><strong>Rosie source handshake</strong>Requires separate original signed source GET/denial receipts; not implied by a device receipt</div></div>
+<p class="muted">Original Comms Hub reference: <a href="https://github.com/RosevearCreations/rosevear-comms-hub/blob/main/docs/build-records/QL-353_ORIGINAL_OWNER_SESSION_AND_FIRST_SIGNED_TEST_RECEIPT.md" target="_blank" rel="noopener">QL-353 original Windows, owner-session and exact-one-receipt guide</a>.</p>
 </section></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script type="module" src="/assets/ql781-comms-workbench.js"></script>
 <script type="module" src="/assets/ql782-comms-owner-review.js"></script>
+<script type="module" src="/assets/ql783-comms-provenance-ui.js"></script>
 </body></html>
