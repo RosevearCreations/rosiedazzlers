@@ -20,7 +20,7 @@
 </style></head>
 <body data-page="admin-integrations" data-build781="comms-source-connection-test-hold">
 <main class="container comms781">
-<section class="panel hero"><span class="badge">Build 783 · original issuer, decision continuity &amp; receipt provenance</span>
+<section class="panel hero"><span class="badge">Build 784 · source-owned signed GET and broker TEST readiness</span>
 <h1>Rosevear Comms Hub · Connection Verification</h1>
 <p>Building on Build 781 signed nonproduction handshake evidence, see what Rosie can actually prove about Comms Hub, inspect an owner-held <strong>nonsecret</strong> six-peer status readback locally, and prepare an <strong>unsigned</strong> authorization handoff. This workbench will not start a receiver, sign consent, contact a remote peer, or change a database.</p>
 <p class="hold" id="connection781">DISCONNECTED / HOLD</p>
@@ -88,9 +88,25 @@
 <div class="stat"><strong>Original device receipt</strong>Private QL-353 exact-one DB + Ed25519 witness not observed by this page</div>
 <div class="stat"><strong>Rosie source handshake</strong>Requires separate original signed source GET/denial receipts; not implied by a device receipt</div></div>
 <p class="muted">Original Comms Hub reference: <a href="https://github.com/RosevearCreations/rosevear-comms-hub/blob/main/docs/build-records/QL-353_ORIGINAL_OWNER_SESSION_AND_FIRST_SIGNED_TEST_RECEIPT.md" target="_blank" rel="noopener">QL-353 original Windows, owner-session and exact-one-receipt guide</a>.</p>
+</section>
+<section class="panel" aria-labelledby="sourceTestTitle784"><h2 id="sourceTestTitle784">7 · Source-owned signed GET TEST readiness and owner renewal</h2>
+<p>Build 784 introduces a <strong>proposed Rosie source-level protocol</strong> for two short-lived, signed TEST-only GETs, a separately signed broker observation and <strong>two distinct expiring source/master owner approvals</strong>. This is a local cryptographic contract and negative-test harness, <strong>not</strong> an activated connection or a QL-354 device enrollment receipt.</p>
+<div class="grid"><div class="stat"><strong>Allowed signed GETs</strong><code>/api/integration/v1/shell/health</code><br><code>/api/integration/v1/shell/capabilities</code></div>
+<div class="stat"><strong>Source and child scope</strong><code>rosiedazzlers / rosie-dazzlers</code><br><code>TEST</code>, nonproduction audience; read-only only</div>
+<div class="stat"><strong>Signed GET expiry</strong>90 seconds maximum within a separate owner-approved 15-minute window</div>
+<div class="stat"><strong>Owner renewal</strong><span class="hold">NOT VERIFIED</span> · Ree/source and Jack/master must each independently sign the exact, renewed TEST-only decision</div></div>
+<p class="notice" role="status" aria-live="polite" id="status784">DISCONNECTED / HOLD · Original source GET signer custody, independent broker pin and genuine owner renewals not yet established.</p>
+<ol class="steps"><li>Keep the Rosie shell endpoints returning <strong>503 HOLD</strong> until verified original source custody and a separately authorized private TEST trial.</li>
+<li>Confirm four different Ed25519 roles and pins out of band: source GET, broker, Ree/source-owner, Jack/master-owner. Self-supplied pins cannot establish identity.</li>
+<li>Obtain original owner decisions for the <em>same</em> digest and a fresh 15-minute TEST-only window; stale or changed authorizations must be rejected.</li>
+<li>Require independently signed broker receipts that match the exact request digest, nonce digest, method, path, tenant and audience. Run both allowed reads plus all seven denial cases in the original authorized broker.</li>
+<li>Use the Node-only verifier and separate independent operator readback. An offline cryptographically valid candidate remains <strong>HOLD</strong> until its original custody and real authorization are verified.</li></ol>
+<div class="actions"><button class="btn primary" type="button" id="download784">Download unsigned source TEST renewal template</button><a class="btn ghost" href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/build784_source_signed_get_broker_owner_renewal.md" target="_blank" rel="noopener">Build 784 instructions and source verification</a></div>
+<p class="muted">The template is unsigned. No private key, nonce, customer information, database state or network connection is handled here. A synthetically signed local fixture passing tests is <em>not</em> an original source or broker receipt.</p>
 </section></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script type="module" src="/assets/ql781-comms-workbench.js"></script>
 <script type="module" src="/assets/ql782-comms-owner-review.js"></script>
 <script type="module" src="/assets/ql783-comms-provenance-ui.js"></script>
+<script type="module" src="/assets/ql784-comms-source-test-ui.js"></script>
 </body></html>
