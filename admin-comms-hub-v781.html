@@ -13,16 +13,16 @@
 .comms781 .hold{color:#ffdc91;font-weight:800}.comms781 .muted{color:#d0dce5}
 .comms781 pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;background:#0a1a26;border-radius:11px;max-height:340px;overflow:auto}
 .comms781 .steps{display:grid;gap:9px;padding-left:20px}.comms781 .steps li{padding:7px 0}
-.comms781 label{display:grid;gap:8px}.comms781 input[type=file]{padding:13px;background:#e9f2f6;color:#162d3c;border-radius:9px;max-width:100%}
+.comms781 label{display:grid;gap:8px}.comms781 input[type=file],.comms781 input[type=text]{padding:13px;background:#e9f2f6;color:#162d3c;border-radius:9px;max-width:100%}
 .comms781 .actions{display:flex;gap:10px;flex-wrap:wrap}.comms781 :focus-visible{outline:3px solid #ffe3a8;outline-offset:3px}
 .comms781 a{color:#b5dcff}.comms781 .btn{min-height:42px}
 @media(max-width:600px){.comms781 .panel{padding:16px}.comms781 .actions .btn{width:100%}}
 </style></head>
 <body data-page="admin-integrations" data-build781="comms-source-connection-test-hold">
 <main class="container comms781">
-<section class="panel hero"><span class="badge">Build 781 · Comms Hub signed nonproduction handshake evidence</span>
+<section class="panel hero"><span class="badge">Build 782 · original signer review, scoped broker readiness &amp; receipt witness</span>
 <h1>Rosevear Comms Hub · Connection Verification</h1>
-<p>See what Rosie can actually prove about Comms Hub, inspect an owner-held <strong>nonsecret</strong> six-peer status readback locally, and prepare an <strong>unsigned</strong> authorization handoff. This workbench will not start a receiver, sign consent, contact a remote peer, or change a database.</p>
+<p>Building on Build 781 signed nonproduction handshake evidence, see what Rosie can actually prove about Comms Hub, inspect an owner-held <strong>nonsecret</strong> six-peer status readback locally, and prepare an <strong>unsigned</strong> authorization handoff. This workbench will not start a receiver, sign consent, contact a remote peer, or change a database.</p>
 <p class="hold" id="connection781">DISCONNECTED / HOLD</p>
 <div class="actions"><a class="btn ghost" href="/admin-integrations.html">Back to I.T. Connections</a><a class="btn ghost" href="/admin.html">Admin dashboard</a></div></section>
 <section class="panel"><h2>1 · Source-owned connection facts</h2><p class="muted">The status check is a same-origin, authenticated admin read only. It does not call the broker or Windows receiver.</p>
@@ -44,7 +44,35 @@
 <p class="notice">Proposed future limit: two signed read-only GETs (health/capabilities), seven original denial tests and a maximum 15-minute controlled window. All actions remain NOT RUN without verified signer custody, independent child-isolation approval, private workload trust and separate original-owner signatures.</p>
 <ol class="steps"><li>Ree verifies the original Windows receiver-OFF evidence and source signer custody on her own computer.</li><li>Jack independently reviews the original issuer evidence and exact public request; private keys remain separate.</li><li>Independent reviewers resolve child migration, source Proof-B, broker pins, nonproduction isolation and genuine TEST-only decisions.</li><li>Only a separately approved private broker can attempt the bounded signed GET and capture immutable response/denial receipts.</li></ol>
 <p class="muted">Source references: <a href="https://github.com/RosevearCreations/rosevear-comms-hub/blob/main/docs/build-records/QL-344_INDEPENDENT_RECEIVER_OFF_AND_ISSUER_RECONCILIATION.md" target="_blank" rel="noopener">QL-344 receiver-OFF instructions</a> · <a href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/integration/ROSEVEAR_COMMS_QL264_CONNECTION_HANDOFF.md" target="_blank" rel="noopener">Rosie signed-source handoff</a></p>
+</section>
+<section class="panel" aria-labelledby="reviewTitle782"><h2 id="reviewTitle782">4 · Original signer &amp; separate-owner QL-345 public review</h2>
+<p>Use only the three <strong>public-only</strong> QL-345 JSON files and the two original Ed25519 SPKI fingerprints independently confirmed through a different trusted channel. All five inputs stay in this browser tab. Never import a private key, passphrase, customer record, credential, broker URL, or real signed GET receipt here.</p>
+<div class="grid">
+<label>Public QL-345 review challenge (JSON, 32 KB maximum)<input type="file" id="challenge782" accept=".json,application/json"></label>
+<label>Ree/source signed <strong>REVIEW-ONLY</strong> disposition (JSON, 32 KB maximum)<input type="file" id="source782" accept=".json,application/json"></label>
+<label>Jack/master signed <strong>REVIEW-ONLY</strong> disposition (JSON, 32 KB maximum)<input type="file" id="master782" accept=".json,application/json"></label>
+<label>Source signer public SPKI SHA-256 — independently supplied<input type="text" id="sourcePin782" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="64" placeholder="64 lowercase hexadecimal characters"></label>
+<label>Master signer public SPKI SHA-256 — independently supplied<input type="text" id="masterPin782" autocomplete="off" autocapitalize="off" spellcheck="false" maxlength="64" placeholder="64 lowercase hexadecimal characters"></label>
+</div>
+<div class="actions"><button class="btn primary" id="inspect782" type="button">Verify public review signatures locally</button></div>
+<p class="notice" role="status" aria-live="polite" id="reviewStatus782">HOLD · No original-owner review signatures or out-of-band pins inspected.</p>
+<pre id="reviewResult782">No local evidence selected.</pre>
+<p class="muted">A matching fingerprint checks only the <em>entered</em> value; it does not prove who originally communicated that fingerprint. Even valid, separate QL-345 signatures express review decisions, <strong>not enrollment authorization</strong>. An expired twenty-minute challenge must be renewed privately.</p>
+<p><a href="https://github.com/RosevearCreations/rosevear-comms-hub/blob/main/docs/build-records/QL-345_ORIGINAL_ISSUER_AND_SEPARATE_OWNER_TEST_PREFLIGHT.md" target="_blank" rel="noopener">QL-345 original-owner review instructions</a></p></section>
+<section class="panel" aria-labelledby="brokerTitle782"><h2 id="brokerTitle782">5 · Broker challenge readiness &amp; independent receipt witness</h2>
+<p>This register lists the two proposed source GETs and seven mandatory denial cases, all as <strong>NOT RECEIVED / NOT RUN</strong>. An unsigned register cannot attest an original source signer, independent broker, trusted public pin, database nonce, production isolation or owner consent.</p>
+<div class="grid"><div class="stat"><strong>Allowed future TEST GETs</strong>2 · read-only shell health / capabilities</div>
+<div class="stat"><strong>Required independent denials</strong>7 · authentication, credentials, tenant, audience, nonce and signer pin</div>
+<div class="stat"><strong>Maximum future scope</strong>9 GETs in 15 minutes · only if separately authorized</div>
+<div class="stat"><strong>Original source/broker receipts</strong><span class="hold">0 verified · HOLD</span></div></div>
+<ol class="steps"><li>Missing authentication, invalid credential and expired credential must each be denied.</li>
+<li>Wrong tenant and wrong app audience must each be denied.</li>
+<li>Replayed nonce and mismatched independently pinned source signer must each be denied.</li>
+<li>Only an independent, already-authorized private broker may verify source Ed25519 responses, original denials and an immutable independent receipt.</li></ol>
+<div class="actions"><button class="btn primary" id="receiptReview782" type="button">Download unsigned nine-slot receipt review register</button></div>
+<p class="notice" id="receiptStatus782" role="status" aria-live="polite">DISCONNECTED / HOLD · No request was authorized, sent or verified.</p>
 </section></main>
 <script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
 <script type="module" src="/assets/ql781-comms-workbench.js"></script>
+<script type="module" src="/assets/ql782-comms-owner-review.js"></script>
 </body></html>
