@@ -5,6 +5,7 @@ let review=null;
 const inputIds=['challenge782','source782','master782','sourcePin782','masterPin782'];
 for(const id of inputIds)el(id).addEventListener('change',()=>{
   review=null;
+  window.dispatchEvent(new CustomEvent('rosie:ql782-owner-review',{detail:null}));
   el('reviewStatus782').textContent='HOLD · Public review evidence has changed; recheck locally.';
   el('reviewResult782').textContent='Unverified after input change.';
 });
@@ -25,6 +26,7 @@ el('inspect782').addEventListener('click',async()=>{
       pinnedSourceSpki:el('sourcePin782').value.trim().toLowerCase(),
       pinnedMasterSpki:el('masterPin782').value.trim().toLowerCase()});
     el('reviewResult782').textContent=JSON.stringify(review,null,2);
+    window.dispatchEvent(new CustomEvent('rosie:ql782-owner-review',{detail:review}));
     el('reviewStatus782').textContent=review.ok?
       'SIGNATURE MECHANICS VALID · Entered public fingerprints match, but original issuer authentication, real owner identity, enrollment consent and all remote receipts remain HOLD.':
       `HOLD · ${review.state}. No original trust or TEST permission was established.`;
