@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>Comms Hub TEST Verification | Rosie Dazzlers</title>
+<link rel="stylesheet" href="/assets/styles.css">
+<style>
+.comms781{display:grid;gap:20px;padding:28px 0 80px;color:#f3f6fb}.comms781 h1,.comms781 h2{color:#ffe7b6}
+.comms781 .panel{background:#162c3c;border:1px solid #8ba0af;border-radius:18px;padding:23px;box-shadow:0 12px 32px #08121a60}
+.comms781 .hero{background:linear-gradient(110deg,#141b30,#23475b 58%,#654a22);border-color:#caa56b}
+.comms781 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,265px),1fr));gap:12px}
+.comms781 .stat{padding:15px;background:#254559;border:1px solid #7894a7;border-radius:12px;overflow-wrap:anywhere}
+.comms781 .stat strong{display:block;margin-bottom:7px;color:#ffde9b}
+.comms781 .notice{padding:14px;border-radius:12px;border-left:5px solid #e0b965;background:#354b5c}
+.comms781 .hold{color:#ffdc91;font-weight:800}.comms781 .muted{color:#d0dce5}
+.comms781 pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;background:#0a1a26;border-radius:11px;max-height:340px;overflow:auto}
+.comms781 .steps{display:grid;gap:9px;padding-left:20px}.comms781 .steps li{padding:7px 0}
+.comms781 label{display:grid;gap:8px}.comms781 input[type=file]{padding:13px;background:#e9f2f6;color:#162d3c;border-radius:9px;max-width:100%}
+.comms781 .actions{display:flex;gap:10px;flex-wrap:wrap}.comms781 :focus-visible{outline:3px solid #ffe3a8;outline-offset:3px}
+.comms781 a{color:#b5dcff}.comms781 .btn{min-height:42px}
+@media(max-width:600px){.comms781 .panel{padding:16px}.comms781 .actions .btn{width:100%}}
+</style></head>
+<body data-page="admin-integrations" data-build781="comms-source-connection-test-hold">
+<main class="container comms781">
+<section class="panel hero"><span class="badge">Build 781 · Comms Hub signed nonproduction handshake evidence</span>
+<h1>Rosevear Comms Hub · Connection Verification</h1>
+<p>See what Rosie can actually prove about Comms Hub, inspect an owner-held <strong>nonsecret</strong> six-peer status readback locally, and prepare an <strong>unsigned</strong> authorization handoff. This workbench will not start a receiver, sign consent, contact a remote peer, or change a database.</p>
+<p class="hold" id="connection781">DISCONNECTED / HOLD</p>
+<div class="actions"><a class="btn ghost" href="/admin-integrations.html">Back to I.T. Connections</a><a class="btn ghost" href="/admin.html">Admin dashboard</a></div></section>
+<section class="panel"><h2>1 · Source-owned connection facts</h2><p class="muted">The status check is a same-origin, authenticated admin read only. It does not call the broker or Windows receiver.</p>
+<div class="actions"><button class="btn primary" type="button" id="refresh781">Refresh Rosie source status</button></div>
+<p class="notice" id="status781" role="status" aria-live="polite">Checking original owner session and source status…</p>
+<div class="grid"><div class="stat"><strong>Source</strong><span>rosiedazzlers → first child rosie-dazzlers</span></div>
+<div class="stat"><strong>Shell GET endpoints</strong><span>/api/integration/v1/shell/health and /capabilities · expected 503 HOLD</span></div>
+<div class="stat"><strong>Remote signed TEST receipts</strong><span id="remote781">0 verified · not authorized</span></div>
+<div class="stat"><strong>Source release reference</strong><code id="revision781">Unverified</code></div></div>
+<h3>Independent prerequisite checklist</h3><ol class="steps" id="gates781"><li>Loading original-source HOLD gates…</li></ol></section>
+<section class="panel"><h2>2 · Import a nonsecret Comms Hub private readback (local only)</h2>
+<p>When Ree has an independently obtained <code>ql341-private-readback-*.json</code> file, choose it here. The file stays in this browser tab: no upload, database write or network request. This checks the six-peer HOLD <em>format</em>, not the authentic issuer signature or a connection.</p>
+<label for="readback781">Owner-held QL-341 readback JSON (maximum 64 KB)<input id="readback781" type="file" accept=".json,application/json"></label>
+<p id="readbackStatus781" class="notice" role="status" aria-live="polite">Not inspected. Peer identity and original issuer remain UNVERIFIED.</p>
+<pre id="readbackResult781">No local file selected.</pre></section>
+<section class="panel"><h2>3 · Prepare owner authorization handoff</h2>
+<p>Only after independent original-issuer review can Ree and Jack each decide whether to sign a separately prepared, expiring private TEST request. This download is an <strong>unsigned information packet only</strong>—it neither grants permission nor executes a handshake.</p>
+<div class="actions"><button class="btn primary" type="button" id="handoff781">Download unsigned TEST handoff</button></div>
+<p class="notice">Proposed future limit: two signed read-only GETs (health/capabilities), seven original denial tests and a maximum 15-minute controlled window. All actions remain NOT RUN without verified signer custody, independent child-isolation approval, private workload trust and separate original-owner signatures.</p>
+<ol class="steps"><li>Ree verifies the original Windows receiver-OFF evidence and source signer custody on her own computer.</li><li>Jack independently reviews the original issuer evidence and exact public request; private keys remain separate.</li><li>Independent reviewers resolve child migration, source Proof-B, broker pins, nonproduction isolation and genuine TEST-only decisions.</li><li>Only a separately approved private broker can attempt the bounded signed GET and capture immutable response/denial receipts.</li></ol>
+<p class="muted">Source references: <a href="https://github.com/RosevearCreations/rosevear-comms-hub/blob/main/docs/build-records/QL-344_INDEPENDENT_RECEIVER_OFF_AND_ISSUER_RECONCILIATION.md" target="_blank" rel="noopener">QL-344 receiver-OFF instructions</a> · <a href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/integration/ROSEVEAR_COMMS_QL264_CONNECTION_HANDOFF.md" target="_blank" rel="noopener">Rosie signed-source handoff</a></p>
+</section></main>
+<script src="/assets/admin-auth.js"></script><script src="/assets/admin-shell.js"></script>
+<script type="module" src="/assets/ql781-comms-workbench.js"></script>
+</body></html>
