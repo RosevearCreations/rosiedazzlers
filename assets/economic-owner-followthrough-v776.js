@@ -3,6 +3,7 @@ const endpoint='/api/admin/economic_owner_followthrough_v776';
 let packet=null;
 let recheckBody777=null;
 let registerPacket779=null;
+let witnessPacket780=null;
 const status=message=>{el('status776').textContent=message;};
 for(const [fileId,textId] of [
   ['filePost776','postOwner776'],['fileReadiness776','readinessOwner776'],
@@ -44,12 +45,15 @@ async function configuration(){
   }catch(error){el('config776').textContent=`HOLD — ${error.message}`;}
 }
 el('form776').addEventListener('submit',async event=>{
-  event.preventDefault();packet=null;recheckBody777=null;registerPacket779=null;
+  event.preventDefault();packet=null;recheckBody777=null;registerPacket779=null;witnessPacket780=null;
   el('export776').disabled=true;el('expiry777').disabled=true;
   el('renew778').disabled=true;
   el('register779').disabled=true;el('exportRegister779').disabled=true;
   el('registerRows779').replaceChildren();
   el('registerResult779').textContent='HOLD — Original signed source verification must be repeated.';
+  el('witness780').disabled=true;el('exportWitness780').disabled=true;
+  el('witnessRows780').replaceChildren();
+  el('witnessResult780').textContent='HOLD — Original signed source verification must be repeated.';
   let body;
   try{
     body={booking_id:el('booking776').value.trim(),
@@ -71,6 +75,7 @@ el('form776').addEventListener('submit',async event=>{
   el('expiry777').disabled=false;
   el('renew778').disabled=false;
   el('register779').disabled=false;
+  el('witness780').disabled=false;
   el('verify776').disabled=true;
   status('Rechecking original Build 775 chain and independent owner follow-through, aging exceptions and source custody…');
   try{
@@ -157,6 +162,40 @@ el('exportRegister779').addEventListener('click',()=>{
     type:'application/json'}));
   const a=document.createElement('a');a.href=url;
   a.download='rosie-unsigned-independent-custody-exception-register-v779.json';a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+});
+el('witness780').addEventListener('click',async()=>{
+  if(!recheckBody777)return;
+  witnessPacket780=null;el('witness780').disabled=true;el('exportWitness780').disabled=true;
+  el('witnessRows780').replaceChildren();
+  el('witnessResult780').textContent='HOLD — Rechecking the original signed source chain.';
+  el('witnessStatus780').textContent='Reauthenticating original owner, custodian and exception source reports for independent witness follow-up…';
+  try{
+    const response=await fetch('/api/admin/economic_custody_decision_witness_v780',{
+      method:'POST',credentials:'same-origin',cache:'no-store',
+      headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify(recheckBody777)});
+    const data=await response.json();
+    el('witnessResult780').textContent=JSON.stringify(data,null,2);
+    el('witnessStatus780').textContent=`${data.witness_reconciliation_status||'HOLD'} · ${data.witness_rows?.length??0} independent roles · no external human signatures inferred.`;
+    const tbody=el('witnessRows780');tbody.replaceChildren();
+    for(const item of data.witness_rows||[]){
+      const tr=document.createElement('tr');
+      for(const value of [item.role,item.source_status,item.independent_witness_status,item.required_action]){
+        const td=document.createElement('td');td.textContent=String(value??'—');tr.appendChild(td);
+      }tbody.appendChild(tr);
+    }
+    if(response.ok&&data.ok){witnessPacket780=data;el('exportWitness780').disabled=false;}
+  }catch(error){
+    el('witnessStatus780').textContent=`HOLD — Original source witness follow-up unavailable: ${error.message}`;
+  }finally{el('witness780').disabled=false;}
+});
+el('exportWitness780').addEventListener('click',()=>{
+  if(!witnessPacket780)return;
+  const url=URL.createObjectURL(new Blob([JSON.stringify(witnessPacket780,null,2)],{
+    type:'application/json'}));
+  const a=document.createElement('a');a.href=url;
+  a.download='rosie-unsigned-independent-custody-witness-reconciliation-v780.json';a.click();
   setTimeout(()=>URL.revokeObjectURL(url),1000);
 });
 el('export776').addEventListener('click',()=>{
