@@ -250,3 +250,9 @@ assert.match(readFileSync('scripts/current_booking_wizard_regression.sh','utf8')
   /build797_original_receipt_custody_decision_audit_test\.mjs/);
 console.log('Build 797 SYNTHETIC QL363 immutable custody, independent witness/owner signatures, '+
   'append-only audit and six-app HOLD PASS ('+(denied.length+4)+' negative cases; no real authority).');
+// Dependent Build 798 may reuse these EPHEMERAL SYNTHETIC test fixtures only.
+export {fixture as syntheticQl797Fixture,input as syntheticQl797Input,
+  keys as syntheticQl797Keys,signAs as syntheticQl797Sign,
+  at as syntheticQl797At,id as syntheticQl797OperationId,
+  fmt as syntheticQl797Fmt,sha as syntheticQl797Sha,
+  clone as syntheticQl797Clone,held as syntheticQl797Hold};
