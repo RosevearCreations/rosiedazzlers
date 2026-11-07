@@ -150,7 +150,7 @@ assert.match(win,/ql359-windows-supervised-test\.ps1/);
 for(const cmd of ['OwnerReview','CredentialReadback','StopWitness','ReceiptReview'])
   assert.match(win,new RegExp(cmd));
 assert.doesNotMatch(win,/Start-Service|Stop-Service|Set-ExecutionPolicy|New-NetFirewallRule|Set-NetFirewallRule|git\s+pull|service_role/i);
-assert.match(read('admin-comms-hub-v781.html'),/Build 792 · original QL-359/);
+assert.match(read('admin-comms-hub-v781.html'),/Build 792 · QL-359 original signed STOP/);
 assert.match(read('admin-integrations.html'),/Build 792/);
 assert.match(read('admin-catalog.html'),/Build 792/);
 assert.equal(read('admin-integrations.html'),read('admin-integrations/index.html'));
