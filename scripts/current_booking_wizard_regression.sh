@@ -141,3 +141,4 @@ node scripts/build784_source_get_broker_renewal_test.mjs
 node scripts/build785_original_custody_trial_receipts_test.mjs
 node scripts/build786_original_enrollment_acceptance_test.mjs
 node scripts/build787_supervised_source_get_test.mjs
+node scripts/build788_original_ql350_bridge_test.mjs
