@@ -281,3 +281,9 @@ assert.match(readFileSync('scripts/current_booking_wizard_regression.sh','utf8')
   /build796_original_ql363_signature_receipt_candidate_test\.mjs/);
 console.log('Build 796 SYNTHETIC original QL362 device, QL363 contract/receipt, retention and six-peer HOLD regression PASS ('+
   (negative.length+direct.length+4)+' negative cases; no live connection).');
+// Reusable SYNTHETIC fixtures for the dependent Build 797 audit-only test.
+export {fixture as syntheticQl796Fixture,base as syntheticQl796Input,
+  keys as syntheticKeys,signed as syntheticSign,sha as syntheticSha,
+  clone as syntheticClone,fmt as syntheticFmt,at as syntheticAt,
+  id as syntheticOperationId,held as syntheticHold,
+  receiptSha256 as syntheticReceiptSha256};
