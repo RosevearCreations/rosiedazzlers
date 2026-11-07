@@ -185,7 +185,7 @@ assert.match(ps,/da204096d362bf1b3f17c5dc243440fb7800f7e1/);
 assert.match(ps,/ql360-windows-evidence-export\.ps1/);
 assert.match(ps,/ShutdownReadback/);
 assert.doesNotMatch(ps,/Start-Service|Stop-Service|Set-ExecutionPolicy|New-NetFirewallRule|Set-NetFirewallRule|git\s+pull|ExportPostTest|StoreCredential|service_role/i);
-assert.match(read('admin-comms-hub-v781.html'),/Build 793 · original QL-360/);
+assert.match(read('admin-comms-hub-v781.html'),/Build 793 · original QL-360 receipt archive/);
 assert.match(read('admin-integrations.html'),/Build 793/);
 assert.match(read('admin-catalog.html'),/Build 793/);
 assert.equal(read('admin-integrations.html'),read('admin-integrations/index.html'));
