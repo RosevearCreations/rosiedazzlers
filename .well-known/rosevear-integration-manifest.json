@@ -5,7 +5,7 @@
   "source_app_id": "rosiedazzlers",
   "source_role": "business_shell",
   "repository": "RosevearCreations/rosiedazzlers",
-  "source_revision": "ql333-discovery-v1",
+  "source_revision": "83b03717b828ac70984a5f9279cd05d9f163faae",
   "issuer": "rosiedazzlers",
   "audience": "rosevear-master",
   "tenant_boundary": "owned_business_legacy",
