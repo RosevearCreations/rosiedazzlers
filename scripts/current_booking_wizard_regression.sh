@@ -145,3 +145,4 @@ node scripts/build788_original_ql350_bridge_test.mjs
 node scripts/build789_original_windows_get_witness_test.mjs
 node scripts/build790_original_ql357_rosie_first_receipt_test.mjs
 node scripts/build791_original_live_rosie_handoff_test.mjs
+node scripts/build792_original_supervised_first_get_test.mjs
