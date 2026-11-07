@@ -139,3 +139,4 @@ node scripts/build782_comms_original_owner_review_test.mjs
 node scripts/build783_original_issuer_custody_provenance_test.mjs
 node scripts/build784_source_get_broker_renewal_test.mjs
 node scripts/build785_original_custody_trial_receipts_test.mjs
+node scripts/build786_original_enrollment_acceptance_test.mjs
