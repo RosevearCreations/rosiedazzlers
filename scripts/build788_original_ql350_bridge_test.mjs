@@ -84,6 +84,7 @@ assert.equal(bridge.inspect().accepted,false);
 const good=await bridge.runOne(packet);
 assert.equal(good.accepted,true,good.state);
 assert.equal(good.originalBrokerReceiptSha256,roles.broker);
+assert.equal(good.originalOperationId,operationId);
 assert.equal(good.connected,false);
 assert.equal(good.connection,'DISCONNECTED / HOLD');
 assert.deepEqual(one.calls,{inspect:1,run:1,read:1,reserve:1,verify:1,claim:1});
