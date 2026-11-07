@@ -152,3 +152,5 @@ node scripts/build795_original_source_get_receipt_closure_test.mjs
 node scripts/build796_original_ql363_signature_receipt_candidate_test.mjs
 node scripts/build797_original_receipt_custody_decision_audit_test.mjs
 node scripts/build798_cross_custodian_provenance_owner_eligibility_test.mjs
+node --test scripts/ql364-source-health.test.mjs
+node scripts/build799_ql365d_rosie_attachment_test.mjs
