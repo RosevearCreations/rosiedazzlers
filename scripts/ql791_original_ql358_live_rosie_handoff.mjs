@@ -26,7 +26,7 @@ const POST=['schema','sourceId','tenantId','environment','method','path',
   'sourceConnected','connectionState'];
 const DEVICE='FIRST_AUTHENTIC_ORIGINAL_TEST_RECEIPT_RECONCILED_SIX_APPS_HELD';
 const LIVE='ONE_GENUINE_ROSIE_BROKER_GET_AND_INDEPENDENT_FIRST_RECEIPT_ACCEPTED_STILL_HELD';
-function originalSourceProof(v){
+export function originalSourceProof(v){
   const hexes=['originalDeviceEnrollmentSha256','originalRosieSourceEnrollmentSha256',
     'sourceSignerSpkiSha256','sourceOwnerDecisionSha256',
     'masterOwnerDecisionSha256','issuerSpkiSha256','witnessSpkiSha256'];
