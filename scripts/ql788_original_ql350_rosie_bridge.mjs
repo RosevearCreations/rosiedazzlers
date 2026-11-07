@@ -45,7 +45,7 @@ export function createOriginalQl350RosieBridge788({ql350,operatorSession,
         packet?.envelope?.path!==HEALTH||packet?.envelope?.method!=='GET')
         return held('DENY_NON_QL350_ROSIE_HEALTH_SCOPE');
       used=true;inProgress=true;
-      let confirmedReceiptSha256=null;
+      let confirmedReceiptSha256=null,confirmedOperationId=null;
       try{
         const deps={};
         for(const k of required.slice(0,7))deps[k]=(...a)=>originalTrust[k](...a);
@@ -103,6 +103,7 @@ export function createOriginalQl350RosieBridge788({ql350,operatorSession,
             original.httpStatus!==200||original.customerBytes!==0)
             throw Error('DENY_NONORIGINAL_OR_UNBOUND_SIGNED_BROKER_RECEIPT');
           confirmedReceiptSha256=result.receiptSha256;
+          confirmedOperationId=reserved.operationId;
           return {method:'GET',httpStatus:200,path:HEALTH,customerBytes:0,
             requestSha256,receipt:original.signedReceipt};
         };
@@ -121,7 +122,8 @@ export function createOriginalQl350RosieBridge788({ql350,operatorSession,
           privateGetAttempts:outcome.privateGetAttempts,
           ...(outcome.accepted===true?{
             requestSha256:outcome.signedGetRequestSha256,
-            originalBrokerReceiptSha256:outcome.brokerReceiptSha256}:{})});
+            originalBrokerReceiptSha256:outcome.brokerReceiptSha256,
+            originalOperationId:confirmedOperationId}:{})});
       }catch{return held('HOLD_ORIGINAL_QL350_OPERATOR_OR_RECEIPT_READBACK_FAILURE');}
       finally{inProgress=false;}
     }
