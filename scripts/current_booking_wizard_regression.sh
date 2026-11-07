@@ -148,3 +148,4 @@ node scripts/build791_original_live_rosie_handoff_test.mjs
 node scripts/build792_original_supervised_first_get_test.mjs
 node scripts/build793_original_field_receipt_transition_test.mjs
 node scripts/build794_source_grant_private_broker_test.mjs
+node scripts/build795_original_source_get_receipt_closure_test.mjs
