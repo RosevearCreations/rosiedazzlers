@@ -1,0 +1,12 @@
+/* Build 811: thumb-friendly customer and staff issue review surfaces. */
+.build811-issues{margin-block:20px}.build811-issues .section-head{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.build811-issues form{display:grid;gap:12px}.build811-issues label{display:grid;gap:7px;min-width:0;font-weight:600}
+.build811-issues input,.build811-issues select,.build811-issues textarea{box-sizing:border-box;width:100%;min-height:44px;padding:11px 12px;border:1px solid rgba(148,163,184,.4);border-radius:11px;background:#172336;color:#f8fafc;font:inherit}
+.build811-issues textarea{min-height:92px;resize:vertical}.build811-issues .form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px}
+.build811-issues .badge{display:inline-flex;padding:5px 10px;border:1px solid rgba(212,175,55,.35);border-radius:999px;background:rgba(212,175,55,.12)}
+.build811-issue{border:1px solid rgba(148,163,184,.23);border-radius:16px;padding:16px;background:rgba(15,23,42,.3);min-width:0;overflow-wrap:anywhere}
+.build811-issue h3,.build811-issue h4{margin:10px 0 7px}.build811-issue p{overflow-wrap:anywhere}
+.build811-history,.build811-review-grid{display:grid;gap:12px;margin-top:14px}
+.build811-staff-form{border-top:1px solid rgba(148,163,184,.2);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
+.build811-issues button,.build811-issues select{min-height:46px}.build811-issues button:disabled{opacity:.56;cursor:not-allowed}
+@media(max-width:600px){.build811-issues .section-head,.build811-issues .attention-toolbar{align-items:stretch;flex-direction:column}.build811-issues .btn{width:100%}.build811-issue{padding:13px}.build811-staff-form{grid-template-columns:1fr}}
