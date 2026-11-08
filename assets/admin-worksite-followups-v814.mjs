@@ -5,13 +5,16 @@ import { readViews818,saveView818,selectView818,removeView818,viewStorage818 } f
 import { outcome819,latestReturnedHandoff819,outcomeSummary819 } from './build819-followup-outcomes.mjs';
 import { COHORTS_820,trendSnapshot820,workloadSignals820,safeQueuePreview820 } from './build820-followup-trends.mjs';
 import { COMPARISON_MODES_821,compareSnapshots821,workloadExplanations821,readableReport821 } from './build821-followup-comparisons.mjs';
+import { readPresets822,savePreset822,selectPreset822,removePreset822,presetStorage822,EXCEPTIONS_822,drilldown822,exceptionCounts822,reportContinuity822 } from './build822-followup-review-continuity.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
 let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=false,canEscalate=false,ownership=[],ownershipEvents=[],ownershipCandidates=[],ownershipReady=false,canAssign=false,staffId=null,busy=false,loaded=false;
 let viewsActor=null,savedViews={views:[],activeId:''};
+let presetsActor=null,savedPresets822={presets:[],activeId:''},sourceLoadedAt822=null;
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
 function viewNotice(message){const el=$('build818ViewStatus');if(el)el.textContent=message;}
+function presetNotice822(message){const el=$('build822PresetStatus');if(el)el.textContent=message;}
 function ensureOutcomeSurface819(){
   const counts=$('build814StaffCounts');if(!counts||$('build819OutcomeSummary'))return;
   const section=document.createElement('section');section.className='build819-summary';section.setAttribute('aria-label','Follow-up outcomes for the filtered queue');
@@ -33,10 +36,10 @@ function ensureTrendSurface820(){
     <p id="build820SnapshotStatus" class="muted" role="status" aria-live="polite">Waiting for verified follow-up records.</p>`;
   counts.before(section);
 }
-function renderTrendSurface820(selection){
+function renderTrendSurface820(selection,available=true){
   const table=$('build820TrendRows'),workload=$('build820Workload'),preview=$('build820SafeExportPreview'),status=$('build820SnapshotStatus');
   if(!table||!workload||!preview||!status)return;
-  if(!loaded){table.textContent='';workload.textContent='Workload signals unavailable until the authorized queue loads.';preview.textContent='No authenticated queue snapshot available.';status.textContent='No verified source snapshot yet.';return;}
+  if(!loaded||!available){table.textContent='';workload.textContent='Workload signals unavailable until the selected, authorized sources can be verified.';preview.textContent='No verified queue snapshot available for this review.';status.textContent='No verified source snapshot for the selected exception.';return;}
   const now=Date.now(),snapshot=trendSnapshot820(selection,now);
   const signals=workloadSignals820(selection,{now,ownershipReady,owners:ownership,escalationReady,escalations});
   table.innerHTML=COHORTS_820.map(({key,label})=>{
@@ -59,6 +62,22 @@ function ensureComparisonSurface821(){
     <p id="build821ComparisonStatus" class="build821-comparison-status" role="status" aria-live="polite" tabindex="-1">Comparison available when the authorized queue loads.</p>
     <details class="build821-explanations"><summary>Explain workload thresholds and missing sources</summary><ul id="build821ThresholdList"></ul></details>
     <div class="build821-readable"><h4>Accessible plain-language report preview</h4><p class="muted">Selectable aggregate text only. No file is made and no private follow-up, note or booking details are included.</p><p id="build821ReadableReport" tabindex="0" aria-label="Read-only accessible aggregate report">Waiting for verified records.</p></div>`;
+  section.insertAdjacentHTML('beforeend',`<section class="build822-review" aria-labelledby="build822ReviewHeading"><h4 id="build822ReviewHeading">Saved comparisons and exception review</h4>
+    <fieldset class="build822-presets"><legend>Comparison presets (this tab and staff account only)</legend>
+      <label for="build822PresetName">Preset name — no customer information</label><input id="build822PresetName" type="text" minlength="2" maxlength="40" autocomplete="off" placeholder="Morning comparison" />
+      <button id="build822SavePreset" class="btn ghost" type="button" disabled>Save comparison settings</button>
+      <label for="build822PresetSelect">Saved comparison</label><select id="build822PresetSelect" disabled><option value="">Choose a saved comparison</option></select>
+      <button id="build822RemovePreset" class="btn ghost" type="button" disabled>Remove selected comparison</button>
+      <p class="muted" id="build822PresetStatus" role="status" aria-live="polite" tabindex="-1">Sign in to manage comparison presets.</p>
+    </fieldset>
+    <fieldset class="build822-exceptions"><legend>Source-verified exception drilldown</legend>
+      <label for="build822ExceptionSelect">Review category</label><select id="build822ExceptionSelect" aria-describedby="build822ExceptionStatus">${EXCEPTIONS_822.map(item=>`<option value="${esc(item.key)}">${esc(item.label)}</option>`).join('')}</select>
+      <button class="btn ghost" id="build822ClearException" type="button" disabled>Return to full filtered queue</button>
+      <p id="build822ExceptionStatus" role="status" aria-live="polite" tabindex="-1">Choose an exception after loading verified source records.</p>
+    </fieldset>
+    <p class="build822-continuity" id="build822ReportContinuity" role="status" aria-live="polite">Report context appears after authorized records load.</p>
+    <p class="muted">Presets remember only comparison mode, status and internal target for this browser tab. Search, customer records, review notes, exception results and report text are not saved. A returning preset re-queries the authorized queue; no historical report is inferred.</p>
+  </section>`);
   counts.before(section);
 }
 function renderComparisonSurface821(snapshotAndSignals){
@@ -73,6 +92,78 @@ function renderComparisonSurface821(snapshotAndSignals){
   status.textContent=`${comparison.leftLabel}: ${comparison.left.total}. ${comparison.rightLabel}: ${comparison.right.total}. ${comparison.guidance} No historic baseline was saved.`;
   thresholds.innerHTML=workloadExplanations821(signals).map(item=>`<li><strong>${esc(item.label)}: ${item.count===null?'Source unavailable':item.count}</strong><p>${esc(item.explanation)}</p></li>`).join('');
   report.textContent=readableReport821(comparison,signals);
+}
+function presetControls822(){
+  const select=$('build822PresetSelect');if(!select)return;
+  select.innerHTML='<option value="">Choose a saved comparison</option>'+savedPresets822.presets.map(p=>`<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+  select.value=savedPresets822.activeId;
+  const ready=!!staffId;
+  select.disabled=!ready||savedPresets822.presets.length===0;
+  $('build822SavePreset').disabled=!ready;
+  $('build822RemovePreset').disabled=!ready||!savedPresets822.activeId;
+}
+function hydratePresets822(){
+  if(presetsActor===staffId)return;
+  presetsActor=staffId;savedPresets822=readPresets822(presetStorage822(),staffId);
+  const selected=savedPresets822.presets.find(p=>p.id===savedPresets822.activeId);
+  if(selected){
+    $('build821ComparisonMode').value=selected.mode;
+    $('build814StaffFilter').value=selected.status;
+    $('build817ReviewTarget').value=selected.target;
+    $('build817StaffSearch').value='';
+    presetNotice822(`Restored “${selected.name}” settings. Search was cleared. The report will be freshly recalculated from authorized records.`);
+  }else presetNotice822(staffId?'Comparison presets stay in this browser tab for the current staff account. No queue data is saved.':'Sign in to manage comparison presets.');
+  presetControls822();
+}
+function clearPresetSelection822(){
+  if(!savedPresets822.activeId)return;
+  const data=selectPreset822(presetStorage822(),staffId,'');
+  savedPresets822=data||{...savedPresets822,activeId:''};
+  presetControls822();
+}
+function saveCurrentPreset822(){
+  if(!staffId)return;
+  const result=savePreset822(presetStorage822(),staffId,$('build822PresetName').value,{
+    mode:$('build821ComparisonMode').value,status:$('build814StaffFilter').value,target:$('build817ReviewTarget').value});
+  if(!result.ok){presetNotice822(result.reason);return;}
+  savedPresets822=result;presetControls822();
+  presetNotice822(`Saved “${result.preset.name}” comparison settings in this browser tab. Search and report results were not saved.`);
+}
+function applyPreset822(){
+  const id=$('build822PresetSelect').value,preset=savedPresets822.presets.find(p=>p.id===id);
+  if(!preset){clearPresetSelection822();return;}
+  const data=selectPreset822(presetStorage822(),staffId,id);
+  if(!data){presetNotice822('The preset could not be selected. Existing filters remain unchanged.');return;}
+  savedPresets822=data;presetControls822();
+  $('build821ComparisonMode').value=preset.mode;
+  $('build814StaffFilter').value=preset.status;
+  $('build817ReviewTarget').value=preset.target;
+  $('build817StaffSearch').value='';$('build822ExceptionSelect').value='all';
+  render();
+  presetNotice822(`Applied “${preset.name}”. The authorized report is recalculated. Search and exception drilldown were cleared.${!ownershipReady&&preset.target!=='all'?' Internal review target source is unavailable; those records cannot be verified.':''}`);
+  $('build822PresetStatus').focus?.({preventScroll:false});
+}
+function removeCurrentPreset822(){
+  const id=savedPresets822.activeId;if(!id)return;
+  const data=removePreset822(presetStorage822(),staffId,id);
+  if(!data){presetNotice822('The saved comparison could not be removed.');return;}
+  savedPresets822=data;presetControls822();presetNotice822('Comparison preset removed. Queue records, filters and report content were not changed.');
+}
+function exceptionContext822(){return {now:Date.now(),ownershipReady,owners:ownership,escalationReady,escalations};}
+function renderExceptionControls822(selection,result,context){
+  const select=$('build822ExceptionSelect');if(!select)return;
+  const counts=exceptionCounts822(selection,context),selected=select.value;
+  for(const option of Array.from(select.options)){
+    const item=counts.find(entry=>entry.key===option.value);
+    if(!item)continue;
+    option.disabled=item.count===null;
+    option.textContent=`${item.label} — ${item.count===null?'source unavailable':item.count+' shown'}`;
+  }
+  select.disabled=!loaded;
+  $('build822ClearException').disabled=!loaded||selected==='all';
+  $('build822ExceptionStatus').textContent=!loaded?'Exception review is unavailable until the authenticated queue loads.':
+    !result.ok?result.reason:
+    `${result.count} source-verified follow-ups match “${EXCEPTIONS_822.find(entry=>entry.key===selected)?.label||'current category'}” within the current bounded filters. The list and aggregate report reflect this drilldown. No customer message or review decision is made.`;
 }
 function viewControls818(){
   const select=$('build818SavedViews');if(!select)return;
@@ -198,15 +289,25 @@ function handoffFeedback819(id,action,readback){const status=$('build819HandoffS
 }
 function render(){const el=$('build814StaffList');if(!el)return;
   const filter=$('build814StaffFilter')?.value||'priority',query=$('build817StaffSearch')?.value||'',target=$('build817ReviewTarget')?.value||'all';
-  const selection=loaded?selectFollowups817(records,{status:filter,query,target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
+  const baseSelection=loaded?selectFollowups817(records,{status:filter,query,target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
+  const exceptionKey=$('build822ExceptionSelect')?.value||'all',exceptionContext=exceptionContext822();
+  const requestedException=drilldown822(baseSelection,exceptionKey,exceptionContext);
+  const ownerFilterUnavailable=!ownershipReady&&(filter==='unowned'||filter==='mine'||target!=='all');
+  const escalationFilterUnavailable=!escalationReady&&filter==='escalated';
+  const exception=ownerFilterUnavailable?{ok:false,reason:'Verified owner assignments are unavailable for the selected queue filter.',rows:[]}:
+    escalationFilterUnavailable?{ok:false,reason:'Verified supervisor escalation data is unavailable for the selected queue filter.',rows:[]}:requestedException;
+  const selection=exception.ok?exception.rows:[];
+  renderExceptionControls822(baseSelection,exception,exceptionContext);
   const targetSelect=$('build817ReviewTarget');if(targetSelect)targetSelect.disabled=!ownershipReady;
   const summary=$('build819OutcomeSummary');if(summary){
     if(!loaded)summary.textContent='Outcome summary unavailable until the authenticated follow-up queue loads.';
     else{const counts=outcomeSummary819(selection);summary.textContent=`Shown follow-ups (${counts.total}; latest 150 loaded maximum): ${counts.waiting} awaiting staff · ${counts.responded} waiting for customer decision · ${counts.needs_help} requesting more help · ${counts.confirmed} customer-confirmed answers · ${counts.review} needing source review. ${ownershipReady?'Owner source available.':'Owner source unavailable.'} ${escalationReady?'Supervisor source available.':'Supervisor source unavailable.'} No booking or issue closures are inferred.`;}
   }
-  renderComparisonSurface821(renderTrendSurface820(selection));
-  $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
+  renderComparisonSurface821(renderTrendSurface820(selection,exception.ok));
+  const context=$('build822ReportContinuity');if(context)context.textContent=reportContinuity822({loaded:loaded&&exception.ok,loadedAt:sourceLoadedAt822,mode:$('build821ComparisonMode')?.value,status:filter,target,exception:exceptionKey,shown:selection.length,sourceCount:records.length});
+  $('build814StaffCounts').textContent=loaded&&!exception.ok?`Selected exception review unavailable: ${exception.reason}`:loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
+  if(!exception.ok){el.innerHTML='<p class="notice bad">This exception view is paused because its verified source is unavailable. Choose another category or refresh the authenticated queue.</p>';return;}
   el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue" tabindex="-1" data-build819-followup="${esc(row.id)}">
     <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span>${row.status==='awaiting_staff'?`<span class="badge build816-priority-label">${ownershipReady?esc(priority816(row,ownershipFor(row.id),escalationReady?escalationByFollowup(row.id):null).label):'Ownership priority unavailable'}</span>`:''}<h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
     <p class="muted">${esc(row.issue_category||'Worksite report')} · Booking ${esc(row.booking_id||'Reference on file')} · ${esc(eventTimeToronto813(row.requested_at))}</p>
@@ -221,10 +322,10 @@ function render(){const el=$('build814StaffList');if(!el)return;
       <button class="btn primary" type="submit">Save response for customer account</button><p class="muted">Saves a response in My Account; does not email or text the customer.</p></form>`:''}
   </article>`).join(''):'<p class="muted">No follow-ups match this filter.</p>';
 }
-async function load(){if(busy)return;busy=true;loaded=false;escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
+async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=null;escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
   try{const response=await fetch('/api/admin/worksite_followups_v814',{credentials:'include',cache:'no-store'});const data=await response.json().catch(()=>null);
     if(!response.ok||!data?.ok||!Array.isArray(data.followups)||!Array.isArray(data.events))throw Error(data?.error||'Queue unavailable.');
-    records=data.followups;events=data.events;loaded=true;
+    records=data.followups;events=data.events;loaded=true;sourceLoadedAt822=Date.now();
     try{const e=await fetch('/api/admin/worksite_escalations_v815',{credentials:'include',cache:'no-store'});const d=await e.json().catch(()=>null);
       if(!e.ok||!d?.ok||!Array.isArray(d.escalations)||!Array.isArray(d.events))throw Error('Unavailable');
       escalations=d.escalations;escalationEvents=d.events;canEscalate=d.can_escalate===true;escalationReady=true;
@@ -233,8 +334,8 @@ async function load(){if(busy)return;busy=true;loaded=false;escalationReady=fals
       if(!o.ok||!d?.ok||!Array.isArray(d.ownership)||!Array.isArray(d.events)||!Array.isArray(d.candidates))throw Error('Unavailable');
       ownership=d.ownership;ownershipEvents=d.events;ownershipCandidates=d.candidates;canAssign=d.can_assign===true;staffId=d.current_staff_user_id;ownershipReady=true;
     }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
-    hydrateViews818();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);return true;
-  }catch(error){records=[];events=[];staffId=null;hydrateViews818();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
+    hydrateViews818();hydratePresets822();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);return true;
+  }catch(error){records=[];events=[];sourceLoadedAt822=null;staffId=null;hydrateViews818();hydratePresets822();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
   finally{busy=false;$('build814StaffRefresh').disabled=false;}
 }
 async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
@@ -274,9 +375,14 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
   }catch(error){notice(`${error.message||'Response not confirmed.'} Refresh the queue before trying again.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
 export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();ensureTrendSurface820();ensureComparisonSurface821();
-  $('build814StaffRefresh').addEventListener('click',async()=>{const success=await load();const feedback=$('build819HandoffStatus');if(feedback)feedback.textContent=success?'Follow-up queue refreshed; active search and triage filters are retained. No message was sent.':'Follow-up refresh unavailable; filters are retained. No action was recorded.';});$('build814StaffFilter').addEventListener('change',render);
-  $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',render);
-  $('build821ComparisonMode').addEventListener('change',()=>{render();$('build821ComparisonStatus').focus({preventScroll:false});});
+  $('build814StaffRefresh').addEventListener('click',async()=>{const success=await load();const feedback=$('build819HandoffStatus');if(feedback)feedback.textContent=success?'Follow-up queue refreshed; active search and triage filters are retained. No message was sent.':'Follow-up refresh unavailable; filters are retained. No action was recorded.';});$('build814StaffFilter').addEventListener('change',()=>{clearPresetSelection822();render();});
+  $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',()=>{clearPresetSelection822();render();});
+  $('build821ComparisonMode').addEventListener('change',()=>{clearPresetSelection822();render();$('build821ComparisonStatus').focus({preventScroll:false});});
+  $('build822SavePreset').addEventListener('click',saveCurrentPreset822);
+  $('build822PresetSelect').addEventListener('change',applyPreset822);
+  $('build822RemovePreset').addEventListener('click',removeCurrentPreset822);
+  $('build822ExceptionSelect').addEventListener('change',()=>{render();$('build822ExceptionStatus').focus({preventScroll:false});});
+  $('build822ClearException').addEventListener('click',()=>{$('build822ExceptionSelect').value='all';render();$('build822ExceptionStatus').focus({preventScroll:false});});
   $('build818SaveView').addEventListener('click',saveCurrentView818);
   $('build818SavedViews').addEventListener('change',applySavedView818);
   $('build818RemoveView').addEventListener('click',removeSavedView818);
