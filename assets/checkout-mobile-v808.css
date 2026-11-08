@@ -1,0 +1,8 @@
+.checkout-steps-808{margin:16px 0;padding:16px;border:1px solid rgba(77,119,255,.42);border-radius:16px;background:rgba(77,119,255,.08)}
+.checkout-steps-808 ol{margin:10px 0;padding-left:22px;display:grid;gap:7px}
+.checkout-steps-808 li{padding-left:2px}
+#checkoutProgress808{margin:10px 0 0;padding:10px 12px;background:rgba(10,18,34,.48);border-radius:10px;overflow-wrap:anywhere}
+.checkout-gift-808{display:grid;gap:10px;margin:12px 0}
+.checkout-gift-808[hidden]{display:none!important}
+.checkout-gift-808 a{width:max-content;max-width:100%}
+@media(max-width:640px){.checkout-steps-808{padding:12px}.checkout-gift-808 a,.wizard-step[data-step="5"] .wizard-actions .btn{width:100%;text-align:center;justify-content:center}.wizard-step[data-step="5"] .wizard-actions{display:grid;grid-template-columns:minmax(0,1fr)}}

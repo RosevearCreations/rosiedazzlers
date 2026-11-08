@@ -50,6 +50,7 @@ export function createCheckoutAttemptGuard737(uncertain = false) {
     },
     markUncertain() { phase = "requires_manual_review"; },
     markRedirect() { phase = "redirecting"; },
+    markCompleted() { if (phase !== "awaiting_response") return false; phase = "completed"; return true; },
     get phase() { return phase; }
   };
 }
