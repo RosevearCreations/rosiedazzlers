@@ -1,11 +1,13 @@
 // Build 383 — field-ready Detailer live-job workflow. Build 264 lazy/event-driven architecture retained.
 // Loaded only for Arrived/Detailing/Paused jobs. No setInterval, no background polling.
+import {fieldGuide805,proofCounts805} from '../../assets/detailer-job-guide-v805.mjs';
 const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const fmt=(v)=>{try{return v?new Date(v).toLocaleString('en-CA'):'';}catch{return String(v||'');}};
 const FIELD_PREFIX={checklist:'[FIELD CHECKLIST]',products:'[PRODUCT USAGE]',addons:'[APPROVED ADD-ONS]',completion:'[COMPLETION EVIDENCE]'};
 
 export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   let currentJob=job,currentPolicy=policy,feed={updates:[],media:[],proof_media_status:{stage_counts:{}}},uploadXhr=null,lastFile=null,visible=true,pendingCapture747=null;
+  let feedVerified805=false,feedLoading805=false,feedSequence805=0,previewUrl805=null;
   let lastFieldSignature='',onsite746={loaded:false,intake:null,assessment:null,receipt:null};
   host.innerHTML=`
     <section class="panel stack" data-live-module="build383">
@@ -18,7 +20,16 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
         <div class="notice" id="fieldGateMessage">Load the job feed to calculate field readiness.</div>
       </section>
 
-      <section class="panel stack" aria-label="Onsite setup and pre-damage inspection" id="onsite746Panel">
+      <section class="panel stack field-guide805" id="fieldGuide805" aria-labelledby="fieldGuide805Title">
+        <div class="job-actions" style="justify-content:space-between"><div><span class="badge">Build 805 · mobile job guide</span><h3 id="fieldGuide805Title" style="margin:7px 0">What's done, what's next</h3></div><strong id="fieldGuide805Count">Checking evidence…</strong></div>
+        <p class="mini" style="margin:0">Progress is calculated from this job's verified staff feed. These shortcuts never save, approve, send, or replay an action.</p>
+        <div id="fieldGuide805Steps" class="field-guide805-grid" role="list"></div>
+        <div id="fieldGuide805Message" class="notice warn" role="status" aria-live="polite">Refresh the assigned job and evidence to see current steps.</div>
+        <div class="job-actions"><button class="btn ghost" id="fieldGuide805Recheck" type="button">Recheck job evidence</button><button class="btn ghost" id="fieldGuide805Inspect" type="button">Inspect pending photo</button><button class="btn ghost" id="fieldGuide805Assignment" type="button">Refresh assigned jobs first</button></div>
+        <div class="field-guide805-pair" id="fieldGuide805Photos" aria-label="Private before and after photo status"></div>
+      </section>
+
+      <section class="panel stack" aria-label="Onsite setup and pre-damage inspection" id="onsite746Panel" tabindex="-1">
         <h3 style="margin:0">Build 746 · Onsite setup & customer property</h3>
         <p class="mini" style="margin:0">Complete after arrival, before Start. These are staff-recorded observations and customer acknowledgements, not a customer signature. Rosie normally brings water and power; confirm the source actually available and safe today. No fee is charged here.</p>
         <div class="notice warn" id="onsite746Status" role="status" aria-live="polite">Load this assigned job's current onsite intake before editing.</div>
@@ -70,7 +81,7 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
         <button class="btn ghost" id="prepareBeforePhoto" type="button">Prepare before-photo upload</button>
 
         <h3 style="margin:8px 0 0">4. Service checklist</h3>
-        <label class="check-row"><input type="checkbox" data-field-check="condition"/> Vehicle condition and pre-existing concerns reviewed</label>
+        <label class="check-row"><input type="checkbox" id="fieldCheckCondition805" data-field-check="condition"/> Vehicle condition and pre-existing concerns reviewed</label>
         <label class="check-row"><input type="checkbox" data-field-check="scope"/> Package/service scope confirmed</label>
         <label class="check-row"><input type="checkbox" data-field-check="hazards"/> Valuables, accessories, hazards and special instructions reviewed</label>
         <label class="check-row"><input type="checkbox" data-field-check="setup"/> Work area, keys/access and safe setup confirmed</label>
@@ -140,6 +151,8 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     q('finalBalanceLink').setAttribute('aria-disabled',enabled?'false':'true');
     q('copyFinalBalance').disabled=!enabled;
     q('onsite746Reload').disabled=!enabled;
+    q('fieldGuide805Recheck').disabled=!enabled||feedLoading805;
+    q('fieldGuide805Inspect').disabled=!enabled||!pendingCapture747;
     const canEdit=enabled&&String(currentJob?.current_workflow_stage||'').toLowerCase()==='arrived'&&onsite746.loaded;
     q('onsite746Save').disabled=!canEdit;
     [...q('onsite746Form').elements].forEach(element=>{if(element!==q('onsite746Save'))element.disabled=!canEdit;});
@@ -172,12 +185,17 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     const state=onsite746,assessment=state.assessment;
     q('onsite746Revision').textContent=state.intake?.updated_at?`Intake revised ${fmt(state.intake.updated_at)}`:'No intake saved yet';
     q('onsite746Missing').innerHTML=assessment?.missing?.length?`<strong>To resolve before Start:</strong><ul>${assessment.missing.map(item=>`<li>${esc(item)}</li>`).join('')}</ul>`:'No outstanding onsite checklist items.';
-    if(state.loaded)setOnsiteStatus(assessment?.ready?'Onsite review recorded. Take an arrival photo and save the service checklist before Start.':'Onsite review held. Save or correct the items below; exceptions need customer/owner follow-up.',assessment?.ready?'ok':'warn');
+    if(state.loaded){
+      const readonly=String(currentJob?.current_workflow_stage||'')!=='arrived';
+      setOnsiteStatus(readonly?'Original onsite evidence loaded read-only. Customer private-photo permission remains binding; no new consent or approval was inferred.':
+        assessment?.ready?'Onsite review recorded. Take an arrival photo and save the service checklist before Start.':
+        'Onsite review held. Save or correct the items below; exceptions need customer/owner follow-up.',readonly?'warn':assessment?.ready?'ok':'warn');
+    }
     renderFieldWorkflow();setControls();
   }
   async function loadOnsite746({manual=false}={}){
     const jobId=String(currentJob?.id||'');
-    q('onsite746Panel').hidden=String(currentJob?.current_workflow_stage||'').toLowerCase()!=='arrived';
+    q('onsite746Panel').hidden=!['arrived','detailing','paused'].includes(String(currentJob?.current_workflow_stage||'').toLowerCase());
     if(q('onsite746Panel').hidden||!isUsable())return;
     onsite746={loaded:false,intake:null,assessment:null,receipt:null};
     setControls();setOnsiteStatus('Checking the current onsite record and audit receipt…');
@@ -230,17 +248,30 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     const products=hasFieldRecord(FIELD_PREFIX.products);
     const completion=hasFieldRecord(FIELD_PREFIX.completion);
     const onsiteReady=onsite746.loaded&&onsite746.dirty!==true&&onsite746.assessment?.ready===true;
-    return {jobId:String(currentJob?.id||''),loaded:true,beforePhoto,checklist,onsiteReady,
+    const verified=feedVerified805&&isUsable();
+    return {jobId:String(currentJob?.id||''),loaded:verified,beforePhoto:verified&&beforePhoto,checklist:verified&&checklist,onsiteReady:verified&&onsiteReady,
       setupRevision:onsiteReady?onsite746.assessment.revision:null,addons,products,completion,afterPhoto,
-      canStart:beforePhoto&&checklist&&onsiteReady,canComplete:beforePhoto&&checklist&&addons&&products&&completion&&afterPhoto};
+      canStart:verified&&beforePhoto&&checklist&&onsiteReady,canComplete:verified&&beforePhoto&&checklist&&addons&&products&&completion&&afterPhoto};
+  }
+  function renderGuide805(state){
+    const guide=fieldGuide805({fieldState:state,stage:currentJob?.current_workflow_stage,
+      assignmentVerified:isUsable(),feedVerified:feedVerified805,online:navigator.onLine!==false,pendingUpload:pendingCapture747});
+    q('fieldGuide805Count').textContent=guide.current?`${guide.complete} of ${guide.total} recorded`:'Recheck required';
+    q('fieldGuide805Steps').innerHTML=guide.steps.map(step=>`<div class="field-guide805-step" role="listitem" data-status="${step.status}"><span><strong>${esc(step.label)}</strong><small>${step.status==='done'?'Recorded':step.status==='open'?'Action needed':step.status==='review'?'Review original job audit':'Not verified'}</small></span><button class="btn ghost small" type="button" data-guide805-target="${esc(step.target)}" ${guide.current?'':'disabled'}>Go to step</button></div>`).join('');
+    q('fieldGuide805Message').className=`notice ${guide.current&&!guide.pending?'':'warn'}`.trim();
+    q('fieldGuide805Message').textContent=guide.message;
+    const proof=proofCounts805(guide.current?feed.proof_media_status:null);
+    q('fieldGuide805Photos').innerHTML=[['Before','arrival','prepareBeforePhoto2',proof.before],['After','final','prepareAfterPhoto2',proof.after]].map(([label,stage,target,count])=>
+      `<div class="field-guide805-photo"><strong>${label} photos</strong><span>${guide.current?`${count} private original(s) recorded`:'Verification required'}</span><small>${stage==='arrival'?'Record condition and pre-existing damage.':'Capture final result from matching angles where practical.'}</small><button class="btn ghost small" type="button" data-guide805-target="${target}" ${guide.current?'':'disabled'}>Prepare ${label.toLowerCase()} capture</button></div>`).join('');
   }
   function renderFieldWorkflow(){
     const state=calculateFieldState();
     const entries=[['Onsite setup',state.onsiteReady],['Before photo',state.beforePhoto],['Checklist',state.checklist],['Approved add-ons',state.addons],['Product usage',state.products],['Completion evidence',state.completion],['After photo',state.afterPhoto]];
     q('fieldWorkflowStatus').innerHTML=entries.map(([label,ok])=>`<div class="runtime-card"><span class="mini">${esc(label)}</span><strong>${ok?'DONE':'OPEN'}</strong></div>`).join('');
-    q('fieldOverallState').textContent=state.canComplete?'READY TO HAND OFF':state.canStart?'IN PROGRESS':'PRE-SERVICE OPEN';
+    q('fieldOverallState').textContent=!state.loaded?'RECHECK REQUIRED':state.canComplete?'READY TO HAND OFF':state.canStart?'IN PROGRESS':'PRE-SERVICE OPEN';
     q('fieldGateMessage').className=`notice ${state.canComplete?'ok':state.canStart?'':'warn'}`.trim();
-    q('fieldGateMessage').innerHTML=state.canComplete?'<strong>Field evidence complete.</strong> The job may proceed to customer/final-balance handoff and the normal server-authoritative completion action.':state.canStart?'<strong>Start evidence complete.</strong> Continue the approved work, then finish product/add-on records, completion evidence and after photos before completing the job.':'<strong>Before-service gate open.</strong> Save onsite acknowledgements, the service checklist, and an arrival photo before starting the job.';
+    q('fieldGateMessage').innerHTML=!state.loaded?'<strong>Evidence not verified.</strong> Refresh the assigned job and recheck its private field feed before proceeding. No stale proof can unlock an action.':state.canComplete?'<strong>Field evidence complete.</strong> The job may proceed to customer/final-balance handoff and the normal server-authoritative completion action.':state.canStart?'<strong>Start evidence complete.</strong> Continue the approved work, then finish product/add-on records, completion evidence and after photos before completing the job.':'<strong>Before-service gate open.</strong> Save onsite acknowledgements, the service checklist, and an arrival photo before starting the job.';
+    renderGuide805(state);
     const signature=JSON.stringify(state);
     if(signature!==lastFieldSignature){lastFieldSignature=signature;onFieldState?.(state);}
     return state;
@@ -261,14 +292,42 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     renderFieldWorkflow();
   }
   async function loadFeed({manual=false}={}){
-    if(!currentJob||!isUsable())return;
+    if(!currentJob||!isUsable())return false;
+    const jobId=String(currentJob.id),revision=String(currentJob.updated_at||''),sequence=++feedSequence805;
+    feedVerified805=false;feedLoading805=true;renderFieldWorkflow();setControls();
     if(manual)q('liveFeed').innerHTML='<div class="notice">Refreshing feed…</div>';
-    try{feed=await api.requestJson('/api/detailer/live_feed',{method:'POST',body:JSON.stringify({booking_id:currentJob.id})});renderFeed();}
-    catch(error){q('liveFeed').innerHTML=`<div class="notice bad">${esc(error.message||'Could not load feed.')} No automatic retry was started.</div>`;onFieldState?.({jobId:String(currentJob?.id||''),loaded:false,canStart:false,canComplete:false,error:error.message||'feed unavailable'});}
+    try{
+      const result=await api.requestJson('/api/detailer/live_feed',{method:'POST',body:JSON.stringify({booking_id:jobId})});
+      if(sequence!==feedSequence805||String(currentJob?.id)!==jobId||String(currentJob?.updated_at||'')!==revision||!isUsable())return false;
+      feed=result;feedVerified805=true;renderFeed();return true;
+    }catch(error){
+      if(sequence!==feedSequence805||String(currentJob?.id)!==jobId)return false;
+      feedVerified805=false;feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};
+      q('liveFeed').innerHTML=`<div class="notice bad">${esc(error.message||'Could not load feed.')} No automatic retry was started.</div>`;
+      renderFieldWorkflow();return false;
+    }finally{if(sequence===feedSequence805){feedLoading805=false;setControls();}}
+  }
+  async function recheckEvidence805(){
+    if(!isUsable())return void(q('fieldGuide805Message').textContent='Refresh current assigned jobs first. Offline or unverified changes cannot be replayed.');
+    const read=await loadFeed({manual:true});
+    if(String(currentJob?.current_workflow_stage||'').toLowerCase()==='arrived' ||
+       ['detailing','paused'].includes(String(currentJob?.current_workflow_stage||'').toLowerCase()))await loadOnsite746({manual:true});
+    if(!read)q('fieldGuide805Message').textContent='Evidence read was not verified. No job action was unlocked. Refresh the assignment and try again manually.';
+  }
+  function goToStep805(targetId){
+    if(!isUsable())return;
+    const target=q(targetId);
+    if(!target||target.disabled)return;
+    if(targetId==='prepareBeforePhoto2'||targetId==='prepareAfterPhoto2')target.click();
+    target.scrollIntoView({block:'center',behavior:'smooth'});
+    target.focus({preventScroll:true});
   }
   async function postUpdate({note,noteStage='general',noteAudience='internal',customerActionRequired=false}){
-    const out=await api.requestJson('/api/detailer/job_note_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,note,audience:noteAudience,stage:noteStage,customer_action_required:customerActionRequired})});
-    if(out.update){feed.updates=Array.isArray(feed.updates)?feed.updates:[];feed.updates.unshift(out.update);}else await loadFeed();
+    const jobId=String(currentJob.id);
+    const out=await api.requestJson('/api/detailer/job_note_post',{method:'POST',body:JSON.stringify({booking_id:jobId,note,audience:noteAudience,stage:noteStage,customer_action_required:customerActionRequired})});
+    if(String(currentJob?.id)!==jobId)return out; // Never apply a prior job's receipt to the new selection.
+    if(out.update){feed.updates=Array.isArray(feed.updates)?feed.updates:[];feed.updates.unshift(out.update);}
+    else if(!await loadFeed())throw new Error('The save response did not contain a confirmed item. Recheck the staff feed before attempting another save.');
     renderFeed();
     return out;
   }
@@ -304,11 +363,27 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     q('liveMediaFile').focus();
     q('liveUploadStatus').textContent=photoStage==='arrival'?'Before-photo mode. Private consent + original privacy review required.':'After-photo mode. Private consent + original privacy review required.';
   }
-  function preview(){const file=q('liveMediaFile').files?.[0],box=q('livePreview');if(!file){box.innerHTML='<span class="mini">Choose a file to preview locally. No upload occurs until you press Upload.</span>';return;}const url=URL.createObjectURL(file);box.innerHTML=file.type.startsWith('video/')?`<video controls preload="metadata" style="width:100%;max-height:280px" src="${url}"></video>`:`<img style="width:100%;max-height:280px;object-fit:contain" src="${url}" alt="Selected local preview">`;}
+  function preview(){
+    if(previewUrl805){URL.revokeObjectURL(previewUrl805);previewUrl805=null;}
+    const file=q('liveMediaFile').files?.[0],box=q('livePreview');
+    if(!file){box.innerHTML='<span class="mini">Choose a file to preview locally. No upload occurs until you press Upload.</span>';return;}
+    previewUrl805=URL.createObjectURL(file);
+    box.innerHTML=file.type.startsWith('video/')?`<video controls preload="metadata" style="width:100%;max-height:280px" src="${previewUrl805}"></video>`:`<img style="width:100%;max-height:280px;object-fit:contain" src="${previewUrl805}" alt="Selected local preview">`;
+  }
   function directPut(url,file){return new Promise((resolve,reject)=>{const xhr=new XMLHttpRequest();uploadXhr=xhr;xhr.open('PUT',url,true);xhr.setRequestHeader('Content-Type',file.type||'application/octet-stream');xhr.upload.onprogress=(e)=>{if(e.lengthComputable)q('liveUploadStatus').textContent=`Uploading directly to storage… ${Math.round(e.loaded/e.total*100)}%`;};xhr.onload=()=>xhr.status>=200&&xhr.status<300?resolve():reject(new Error(`Direct storage upload failed (${xhr.status}).`));xhr.onerror=()=>reject(new Error('Direct storage upload failed.'));xhr.onabort=()=>reject(new Error('Upload cancelled.'));xhr.send(file);});}
   async function videoDuration(file){if(!file.type.startsWith('video/'))return null;return new Promise((resolve)=>{const video=document.createElement('video'),url=URL.createObjectURL(file);video.preload='metadata';video.onloadedmetadata=()=>{const d=Number(video.duration||0)||null;URL.revokeObjectURL(url);resolve(d);};video.onerror=()=>{URL.revokeObjectURL(url);resolve(null);};video.src=url;});}
   const captureKey747=()=>`rosie:private-capture-v747:${currentJob.id}`;
-  const savePending747=()=>{if(pendingCapture747)sessionStorage.setItem(captureKey747(),JSON.stringify(pendingCapture747));else sessionStorage.removeItem(captureKey747());};
+  function canRecoverPending805(){
+    try{const key='rosie:private-capture-storage-check-v805';sessionStorage.setItem(key,'1');sessionStorage.removeItem(key);return true;}
+    catch{return false;}
+  }
+  const savePending747=()=>{
+    try{if(pendingCapture747)sessionStorage.setItem(captureKey747(),JSON.stringify(pendingCapture747));else sessionStorage.removeItem(captureKey747());}
+    catch{
+      q('liveUploadStatus').textContent='Upload recovery storage unavailable. Keep this tab open and request Operations review before another capture.';
+      if(pendingCapture747)throw new Error('Private upload session could not be saved for recovery. No original file was transferred.');
+    }
+  };
   function restorePending747(){try{pendingCapture747=JSON.parse(sessionStorage.getItem(captureKey747())||'null');}catch{pendingCapture747=null;}if(pendingCapture747)q('liveUploadStatus').textContent=`Unresolved original ${pendingCapture747.filename}. Inspect the session before another upload; no automatic replay.`;}
   async function originalHash747(file){if(file.type.startsWith('video/'))return null;const bytes=await crypto.subtle.digest('SHA-256',await file.arrayBuffer());return Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('');}
   async function matchingOriginal747(pending){const file=lastFile||q('liveMediaFile').files?.[0];if(!file||file.name!==pending.filename||file.size!==pending.file_size_bytes)return false;return !pending.original_sha256||(await originalHash747(file))===pending.original_sha256;}
@@ -319,19 +394,24 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   }
   async function commit747(pending){
     if(!await matchingOriginal747(pending))throw new Error('Re-select and review the exact original file (same name, size and SHA-256) before manual recovery.');
+    const jobId=String(currentJob.id);
     q('liveUploadStatus').textContent='Registering verified private original…';
-    const out=await api.requestJson('/api/detailer/media_post',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,kind:pending.kind,caption:pending.caption,audience:'internal',stage:pending.stage,customer_action_required:false,storage_bucket:pending.bucket,storage_path:pending.path,content_type:pending.content_type,file_size_bytes:pending.file_size_bytes,duration_seconds:pending.duration_seconds,retention_policy:pending.retention_policy,upload_session_id:pending.upload_session_id,original_sha256:pending.original_sha256,privacy_review:pending.privacy_review})});
+    const out=await api.requestJson('/api/detailer/media_post',{method:'POST',body:JSON.stringify({booking_id:jobId,kind:pending.kind,caption:pending.caption,audience:'internal',stage:pending.stage,customer_action_required:false,storage_bucket:pending.bucket,storage_path:pending.path,content_type:pending.content_type,file_size_bytes:pending.file_size_bytes,duration_seconds:pending.duration_seconds,retention_policy:pending.retention_policy,upload_session_id:pending.upload_session_id,original_sha256:pending.original_sha256,privacy_review:pending.privacy_review})});
+    if(String(currentJob?.id)!==jobId)return; // Original job retains its pending session for inspection.
     finishCapture747(out,pending);
   }
   async function inspect747(){
     if(!pendingCapture747)return void(q('liveUploadStatus').textContent='No local pending session. Select the job where the upload was started; completed photos can be checked in its feed.');
+    const jobId=String(currentJob.id),sessionId=pendingCapture747.upload_session_id;
     try{
-      const out=await api.requestJson('/api/detailer/media_recovery_v747',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:pendingCapture747.upload_session_id,action:'inspect'})});
+      const out=await api.requestJson('/api/detailer/media_recovery_v747',{method:'POST',body:JSON.stringify({booking_id:jobId,upload_session_id:sessionId,action:'inspect'})});
+      if(String(currentJob?.id)!==jobId||pendingCapture747?.upload_session_id!==sessionId)return;
       if(out.state==='media_saved'){pendingCapture747=null;savePending747();lastFile=null;q('retryLiveUpload').disabled=true;q('liveUploadStatus').textContent='Server confirms original was saved once. Refresh the job feed to see it.';return;}
       pendingCapture747.recovery_state=out.state;pendingCapture747.session_status=out.session_status;savePending747();
       q('retryLiveUpload').disabled=!['uploaded_unregistered','file_missing'].includes(out.state);
       q('liveUploadStatus').textContent=`${out.state}: ${out.action_hint} ${out.session_status==='committing'?'A stuck commit must age at least 3 minutes before explicit reopen.':''}`;
     }catch(error){q('retryLiveUpload').disabled=true;q('liveUploadStatus').textContent=`Inspection unavailable: ${error.message}. Do not create a second upload.`;}
+    finally{renderFieldWorkflow();setControls();}
   }
   async function retry747(){
     if(!pendingCapture747)return lastFile&&upload(lastFile);
@@ -346,6 +426,7 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   }
   async function upload(fileOverride=null){
     if(!isUsable())return;
+    const captureJobId=String(currentJob.id);
     if(pendingCapture747){q('liveUploadStatus').textContent='There is an unresolved upload. Inspect or recover it before creating another signed upload.';return;}
     if(!onsite746.loaded||onsite746.receipt?.photo_consent!=='internal_job_evidence'){
       q('liveUploadStatus').textContent='Current, explicit private-job-photo permission is required for every capture. Reload onsite setup.';
@@ -353,22 +434,28 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
     }
     if(!q('capture747Reviewed').checked||!q('capture747Privacy').value){q('liveUploadStatus').textContent='Inspect the original for faces, plates and addresses, then classify its privacy status.';return;}
     if(!['arrival','pre_existing','during','final','issue','general'].includes(stage())){q('liveUploadStatus').textContent='Select a before, during, after, issue or general capture stage.';return;}
+    if(!canRecoverPending805()){q('liveUploadStatus').textContent='This browser cannot store the private recovery session. No upload started. Enable session storage or ask Operations for help.';return;}
     const file=fileOverride||q('liveMediaFile').files?.[0];if(!file)return;lastFile=file;q('uploadLiveMedia').disabled=true;q('cancelLiveUpload').disabled=false;q('retryLiveUpload').disabled=true;let signed=null;
     try{
       if(!navigator.onLine)throw new Error('Offline. Reconnect, then use Retry manually.');
       const mediaKind=file.type.startsWith('video/')?'video':'image',duration=await videoDuration(file);
       const hash=await originalHash747(file),privacy={faces_plates_addresses_checked:true,finding:q('capture747Privacy').value};
+      if(String(currentJob?.id)!==captureJobId)throw new Error('Selected job changed before the upload session was prepared.');
       q('liveUploadStatus').textContent='Requesting one signed storage upload…';
-      signed=await api.requestJson('/api/detailer/media_upload_url',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,filename:file.name,content_type:file.type||'application/octet-stream',file_size_bytes:file.size,media_kind:mediaKind,duration_seconds:duration,retention_policy:q('liveMediaRetention').value,visibility:'internal',stage:stage(),privacy_review:privacy})});
+      signed=await api.requestJson('/api/detailer/media_upload_url',{method:'POST',body:JSON.stringify({booking_id:captureJobId,filename:file.name,content_type:file.type||'application/octet-stream',file_size_bytes:file.size,media_kind:mediaKind,duration_seconds:duration,retention_policy:q('liveMediaRetention').value,visibility:'internal',stage:stage(),privacy_review:privacy})});
+      if(String(currentJob?.id)!==captureJobId)throw new Error('Selected job changed. The unused signed upload is not being sent.');
       pendingCapture747={upload_session_id:signed.upload_session_id,bucket:signed.bucket,path:signed.path,filename:file.name,content_type:file.type,file_size_bytes:file.size,kind:mediaKind==='image'?'photo':'video',duration_seconds:duration,retention_policy:q('liveMediaRetention').value,stage:stage(),caption:q('liveMediaCaption').value.trim()||file.name,original_sha256:hash,privacy_review:privacy,recovery_state:'needs_inspect'};savePending747();
-      if(signed.upload_session_id)await api.requestJson('/api/detailer/media_upload_session',{method:'POST',body:JSON.stringify({booking_id:currentJob.id,upload_session_id:signed.upload_session_id,action:'uploading'})});
+      if(signed.upload_session_id)await api.requestJson('/api/detailer/media_upload_session',{method:'POST',body:JSON.stringify({booking_id:captureJobId,upload_session_id:signed.upload_session_id,action:'uploading'})});
+      if(String(currentJob?.id)!==captureJobId)return;
       await directPut(signed.upload_url,file);
+      if(String(currentJob?.id)!==captureJobId)return;
       pendingCapture747.recovery_state='uploaded_unregistered';savePending747();
       await commit747(pendingCapture747);
     }catch(error){
+      if(String(currentJob?.id)!==captureJobId)return;
       q('liveUploadStatus').textContent=pendingCapture747?`${error.message||'Upload unconfirmed.'} Inspect the pending session before any retry; the original may already exist.`:(error.message||'Upload failed before a session was created.');
       q('retryLiveUpload').disabled=!!pendingCapture747||!lastFile;
-    }finally{uploadXhr=null;q('cancelLiveUpload').disabled=true;setControls();}
+    }finally{uploadXhr=null;q('cancelLiveUpload').disabled=true;renderFieldWorkflow();setControls();}
   }
   async function enableProgress(){
     if(!isUsable())return;
@@ -379,6 +466,15 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   async function copyFinalBalance(){if(!currentJob)return;const url=`${location.origin}/final-balance-payment.html?booking_id=${encodeURIComponent(currentJob.id)}`;try{await navigator.clipboard.writeText(url);q('liveUploadStatus').textContent='Customer final-balance handoff link copied. Payment state was not changed.';}catch{prompt('Copy customer final-balance link:',url);}}
 
   q('liveRefreshFeed').addEventListener('click',()=>loadFeed({manual:true}));
+  q('fieldGuide805Recheck').addEventListener('click',recheckEvidence805);
+  q('fieldGuide805Inspect').addEventListener('click',inspect747);
+  q('fieldGuide805Assignment').addEventListener('click',()=>{
+    const button=document.getElementById('refreshJobs');
+    if(button&&!button.disabled)button.click();
+    else q('fieldGuide805Message').textContent='Assigned-job refresh is unavailable. No action was queued.';
+  });
+  q('fieldGuide805Steps').addEventListener('click',event=>{const button=event.target.closest('[data-guide805-target]');if(button)goToStep805(button.dataset.guide805Target);});
+  q('fieldGuide805Photos').addEventListener('click',event=>{const button=event.target.closest('[data-guide805-target]');if(button)goToStep805(button.dataset.guide805Target);});
   q('postLiveNote').addEventListener('click',postNote);
   q('liveMediaFile').addEventListener('change',preview);
   q('uploadLiveMedia').addEventListener('click',()=>upload());
@@ -417,13 +513,25 @@ export async function mount({host,job,policy,api,onJobPatch,onFieldState}){
   return {
     setJob(nextJob,nextPolicy){
       const oldId=String(currentJob?.id||''),newId=String(nextJob?.id||oldId);
-      currentJob=nextJob||currentJob;currentPolicy=nextPolicy||currentPolicy;setControls();
-      if(newId&&newId!==oldId){feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};onsite746={loaded:false,intake:null,assessment:null,receipt:null};pendingCapture747=null;lastFile=null;lastFieldSignature='';q('liveMediaFile').value='';restorePending747();q('liveFeed').innerHTML='<div class="notice">Loading selected job field evidence once…</div>';void loadFeed();void loadOnsite746();}
-      else renderFieldWorkflow();
+      const oldRevision=String(currentJob?.updated_at||''),newRevision=String(nextJob?.updated_at||oldRevision);
+      const changed=newId!==oldId||newRevision!==oldRevision;
+      currentJob=nextJob||currentJob;currentPolicy=nextPolicy||currentPolicy;
+      if(changed){
+        feedSequence805++;feedVerified805=false;feedLoading805=false;
+        feed={updates:[],media:[],proof_media_status:{stage_counts:{}}};
+        onsite746={loaded:false,intake:null,assessment:null,receipt:null};lastFieldSignature='';
+        if(newId!==oldId){
+          // An unfinished original is recoverable only within its own booking.
+          uploadXhr?.abort();pendingCapture747=null;lastFile=null;q('liveMediaFile').value='';preview();restorePending747();
+        }
+        q('liveFeed').innerHTML='<div class="notice">Rechecking selected job evidence once…</div>';
+      }
+      setControls();renderFieldWorkflow();
+      if(isUsable()&&!feedVerified805&&!feedLoading805){void loadFeed();void loadOnsite746();}
     },
     getFieldState(){return calculateFieldState();},
-    setVisibility(nextVisible){visible=nextVisible!==false;setControls();},
-    suspend(){visible=false;setControls();},
-    resume(){visible=true;setControls();}
+    setVisibility(nextVisible){visible=nextVisible!==false;if(!visible)feedVerified805=false;setControls();renderFieldWorkflow();},
+    suspend(){visible=false;feedVerified805=false;setControls();renderFieldWorkflow();},
+    resume(){visible=true;setControls();renderFieldWorkflow();}
   };
 }
