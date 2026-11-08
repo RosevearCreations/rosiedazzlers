@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/assets/site.css" />
   <link rel="stylesheet" href="/assets/notification-consent-v743.css?v=20261102build743" />
   <link rel="stylesheet" href="/assets/customer-followup-v744.css?v=20261102build744" />
+  <link rel="stylesheet" href="/assets/customer-service-experience-v807.css?v=20261108build807" />
   <style>
     body{margin:0;min-height:100vh;background:radial-gradient(circle at top, rgba(255,255,255,.08), transparent 35%),linear-gradient(180deg,#0f172a 0%,#111827 100%);color:#f8fafc}
     .shell{max-width:1320px;margin:0 auto;padding:24px}.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin-bottom:20px}
@@ -69,6 +70,11 @@
             <p class="muted">Customer-initiated interests are not bookings, confirmed revenue, subscriptions, or permission to dispatch. We re-read current marketing consent, including freshness, for every account. No messages are sent from this panel.</p>
             <p id="build744StaffStatus" class="notice" role="status" aria-live="polite">Loading review queue…</p>
             <button id="build744StaffRefresh" type="button" class="btn secondary">Refresh consent &amp; interests</button>
+            <div data-build807="staff-followup-triage" aria-label="Customer follow-up review controls">
+              <div id="build807StaffCounts" class="build807-counts" aria-live="polite">Waiting for authorized follow-up records…</div>
+              <div class="build807-tools"><label for="build807StaffSearch">Find interest<input id="build807StaffSearch" type="search" autocomplete="off" placeholder="Masked customer or date" /></label><label for="build807StaffKind">Request type<select id="build807StaffKind"><option value="all">All types</option><option value="rebook">Rebooking</option><option value="maintenance">Maintenance</option><option value="seasonal">Seasonal</option></select></label><label for="build807StaffReview">Review status<select id="build807StaffReview"><option value="all">All statuses</option><option value="pending">Pending staff review</option><option value="handled">Other statuses</option></select></label><label for="build807StaffTriage">Consent check<select id="build807StaffTriage"><option value="all">All consent states</option><option value="consent_review">Needs fresh consent review</option><option value="staff_review">Current preference (not send approval)</option></select></label><button id="build807StaffClear" class="btn secondary" type="button">Clear filters</button></div>
+              <p class="muted" id="build807StaffVisible" role="status" aria-live="polite">Waiting for verified queue…</p>
+            </div>
             <div id="build744StaffQueue" class="build744-stack" style="margin-top:12px"><p class="muted">Loading customer interest…</p></div>
           </article>
           <article class="card">
@@ -114,7 +120,7 @@
       }
       refreshBtn.addEventListener('click', loadRows); filter.addEventListener('change', loadRows);
       retryVisibleBtn.addEventListener('click', async ()=>{ try{ const ids=currentRows.filter(r=>['queued','failed'].includes(String(r.status||'queued'))).map(r=>r.id); if(!ids.length) return setShellStatus('No queued or failed notifications in current view.','success'); const out=await process(ids,'retry'); setShellStatus(`Processed ${out.processed} notification(s).`,'success'); await loadRows(); }catch(err){ setShellStatus(err?.message || 'Could not retry notifications.','error'); } });
-      window.AdminPageInit.init({ pageKey: 'admin-notifications', onReady: async function () { await loadRows(); await import('/assets/admin-notification-preview-v743.js?v=20261102build743').then(module=>module.loadStaffNotificationPreview?.()).catch(()=>setShellStatus('Notification preview unavailable; legacy queue remains separate.','error')); await import('/assets/admin-customer-followup-review-v744.js?v=20261102build744').then(module=>{ module.loadStaffCustomerFollowup744?.(); document.getElementById('build744StaffRefresh')?.addEventListener('click',()=>module.loadStaffCustomerFollowup744?.()); }).catch(()=>setShellStatus('Staff follow-up review is unavailable; no contact initiated.','error')); } });
+      window.AdminPageInit.init({ pageKey: 'admin-notifications', onReady: async function () { await loadRows(); await import('/assets/admin-notification-preview-v743.js?v=20261102build743').then(module=>module.loadStaffNotificationPreview?.()).catch(()=>setShellStatus('Notification preview unavailable; legacy queue remains separate.','error')); await import('/assets/admin-customer-followup-review-v744.js?v=20261108build807').then(module=>{ module.loadStaffCustomerFollowup744?.(); document.getElementById('build744StaffRefresh')?.addEventListener('click',()=>module.loadStaffCustomerFollowup744?.()); }).catch(()=>setShellStatus('Staff follow-up review is unavailable; no contact initiated.','error')); } });
     })();
   </script>
 </body>
