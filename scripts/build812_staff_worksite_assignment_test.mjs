@@ -35,6 +35,7 @@ globalThis.fetch=async(url,options={})=>{
     return new Response(JSON.stringify(userId?staffRows.filter(row=>row.id===userId):staffRows));
   }
   if(path==='bookings')return new Response(JSON.stringify([{id:bid,service_date:serviceDate,status:'confirmed',job_status:'scheduled',detailing_completed_at:null}]));
+  if(path==='customer_worksite_issue_events_v813')return new Response(JSON.stringify([]));
   if(path==='customer_worksite_issues_v811'){
     if(method==='PATCH'){patches++;lastPatch={url,body:JSON.parse(options.body)};return new Response(JSON.stringify(patchResult?[{...issue(),...lastPatch.body}]:[]));}
     return new Response(JSON.stringify([issue()]));
@@ -118,7 +119,7 @@ assert.match(backend,/authenticat|staffAccess811/);
 assert.doesNotMatch(backend,/api\.stripe\.com|api-m\.paypal\.com|twilio|sendgrid|\.send\(/i);
 assert.equal(read('../my-account.html'),read('../my-account/index.html'));
 assert.equal(read('../admin-today.html'),read('../admin-today/index.html'));
-assert.match(read('../admin-today.html'),/build812/);
-assert.match(read('../assets/my-account-v355.js'),/20261108build812/);
+assert.match(read('../admin-today.html'),/build813/);
+assert.match(read('../assets/my-account-v355.js'),/20261108build813/);
 assert.match(read('./current_booking_wizard_regression.sh'),/build812_staff_worksite_assignment_test\.mjs/);
 console.log('Build 812 PASS: verified staff assignments, actual acknowledgements, Toronto arrival escalation, optimistic revision, customer privacy, safe closure and no automatic outbound or booking mutation.');

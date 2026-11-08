@@ -15,3 +15,7 @@
 .build812-ack{padding:10px;border-inline-start:3px solid #caa457;background:rgba(212,175,55,.08)}
 .build812-flag{padding:10px;border:1px solid #d4af37;border-radius:10px}
 @media(max-width:600px){.build812-actions button{width:100%}}
+.build813-timeline{margin-block:12px;padding:12px;border:1px solid rgba(148,163,184,.34);border-radius:12px;background:rgba(8,19,34,.28)}
+.build813-timeline summary{cursor:pointer;font-weight:650;min-height:38px;padding-block:8px}
+.build813-event-list{display:grid;gap:8px;margin:12px 0;padding-inline-start:22px}.build813-event-list li{line-height:1.5;overflow-wrap:anywhere}
+.build813-event-list time{color:#d6dbe5;font-variant-numeric:tabular-nums}.build813-followup{border-left:3px solid #d4af37;padding:10px 12px;background:rgba(212,175,55,.08);line-height:1.5}
