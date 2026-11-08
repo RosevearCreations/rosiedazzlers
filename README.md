@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 818 — Supervisor Follow-Up Saved Triage Views, Accessible Review Notes & Queue Continuity.** Contract: `docs/build818_supervisor_saved_triage_views_review_notes.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 819 — Supervisor Follow-Up Outcome Summaries, Review Closure Guidance & Accessible Handoff Feedback.** Contract: `docs/build819_supervisor_outcome_summaries_closure_handoff.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 
