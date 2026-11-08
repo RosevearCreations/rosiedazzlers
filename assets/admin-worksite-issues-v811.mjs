@@ -1,5 +1,5 @@
 // Build 811 — manual authorized operations queue. No customer messages are sent.
-import { ISSUE_CATEGORIES_811, ISSUE_LABELS_811 } from './customer-worksite-issues-v811.mjs?v=build813';
+import { ISSUE_CATEGORIES_811, ISSUE_LABELS_811 } from './customer-worksite-issues-v811.mjs?v=build814';
 import { staffTimelineMessage813, eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));

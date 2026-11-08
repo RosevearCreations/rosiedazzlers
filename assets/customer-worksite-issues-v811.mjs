@@ -1,6 +1,7 @@
 // Build 811 — customer-owned worksite concern intake and status. No outbound send.
 import { preparationCandidates810 } from './customer-visit-preparation-v810.mjs';
 import { customerTimelineMessage813, customerFollowUpAdvice813, eventTimeToronto813 } from './worksite-timeline-v813.mjs';
+import { clearCustomerWorksiteFollowups814, loadCustomerWorksiteFollowups814 } from './customer-worksite-followups-v814.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -61,6 +62,7 @@ async function fetchIssues811(epoch){const response=await fetch('/api/client/wor
   }catch{/* Keep the current issue status visible when history is temporarily unavailable. */}
   if(epoch!==fetchEpoch)return;
   issues=data.issues;timelineEvents=recent;timelineAvailable=available;loaded=true;renderHistory811();renderControls811();
+  void loadCustomerWorksiteFollowups814(issues);
   status(`${issues.length} worksite report${issues.length===1?'':'s'} on file.${available?' Recorded history is available.':' Activity timeline unavailable; current status is still visible.'} Contact Rosie directly about urgent safety concerns.`);
 }
 async function submit811(event){event.preventDefault();const form=$('build811Form');if(form.getAttribute('aria-busy')==='true')return;
@@ -90,6 +92,7 @@ function wire811(){if(wired||!$('build811Form'))return;wired=true;
   $('build811Refresh').addEventListener('click',async()=>{const epoch=fetchEpoch;loaded=false;renderControls811();status('Refreshing issue history…');try{await fetchIssues811(epoch);}catch(error){if(epoch===fetchEpoch){clearCustomerWorksiteIssues811();status(error.message||'Refresh unavailable.',true);}}});
 }
 export function clearCustomerWorksiteIssues811(){fetchEpoch++;accountId='';candidates=[];issues=[];timelineEvents=[];timelineAvailable=false;loaded=false;pendingKey=null;lastFingerprint=null;
+  clearCustomerWorksiteFollowups814();
   $('build811Form')?.reset();if($('build811Form'))$('build811Form').setAttribute('aria-busy','false');renderHistory811();renderControls811();status('Sign in to report an issue with your upcoming appointment.');}
 export async function loadCustomerWorksiteIssues811(dashboard,changeRequests=[]){if(typeof document==='undefined'||!$('build811Form'))return;
   const profile=String(dashboard?.customer?.id||'');
