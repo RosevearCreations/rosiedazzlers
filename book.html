@@ -65,6 +65,7 @@
   <link rel="stylesheet" href="/assets/build649-booking-discovery.css?v=build649" />
   <link rel="stylesheet" href="/assets/build650-booking-guidance.css?v=build650" />
   <link rel="stylesheet" href="/assets/ux-800-804.css?v=build804" />
+  <link rel="stylesheet" href="/assets/checkout-mobile-v808.css?v=build808" />
 </head>
 <body>
   <div class="nav">
@@ -77,6 +78,7 @@
   </div>
 
   <main class="container unified-shell">
+    <div id="paymentReturnNotice808" class="notice warn" role="status" aria-live="polite" hidden></div>
     <section class="panel unified-hero">
       <div>
         <span class="tag ok">Mobile detailing · Oxford & Norfolk</span>
@@ -186,6 +188,13 @@
   </div>
 
   <script type="module">
+    import { checkoutReturnMessage808 } from "/assets/checkout-mobile-v808.mjs?v=build808";
+    const paymentReturn808 = checkoutReturnMessage808(window.location.search);
+    if (paymentReturn808) {
+      const node = document.getElementById("paymentReturnNotice808");
+      node.textContent = paymentReturn808;
+      node.hidden = false;
+    }
     import { loadPricingCatalogClient, money, escapeHtml, packageImageForSize, packagePrice, addonPrimaryImage, chartUrl } from "/assets/pricing-catalog-client-legacy.js?v=20261101build735";
     import { bindImageWithCandidates } from "/assets/media-source-resolver.js?v=20260701build216";
     import { buildServiceComparison629, PACKAGE_COMPARE_LIMIT_629 } from "/assets/booking-service-comparison-v629.js?v=1";
