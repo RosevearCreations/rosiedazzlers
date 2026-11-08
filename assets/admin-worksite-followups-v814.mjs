@@ -118,6 +118,11 @@ function presetControls822(){
   select.disabled=!ready||savedPresets822.presets.length===0;
   $('build822SavePreset').disabled=!ready;
   $('build822RemovePreset').disabled=!ready||!savedPresets822.activeId;
+  const selected=savedPresets822.presets.find(p=>p.id===savedPresets822.activeId);
+  $('build823RenamePreset').disabled=!ready||!selected;
+  $('build823PresetRename').disabled=!ready||!selected;
+  $('build823PresetRename').value=selected?.name||'';
+  $('build823PresetDetails').textContent=selected?'Selected: '+selected.name+'. Comparison: '+selected.mode+'; status: '+selected.status+'; review target: '+selected.target+'.':'Select a saved preset to review its settings.';
 }
 function hydratePresets822(){
   if(presetsActor===staffId)return;
@@ -165,6 +170,15 @@ function removeCurrentPreset822(){
   const data=removePreset822(presetStorage822(),staffId,id);
   if(!data){presetNotice822('The saved comparison could not be removed.');return;}
   savedPresets822=data;presetControls822();presetNotice822('Comparison preset removed. Queue records, filters and report content were not changed.');
+}
+function renameCurrentPreset823(){
+  if(!staffId||!savedPresets822.activeId)return;
+  const result=renamePreset823(presetStorage822(),staffId,savedPresets822.activeId,$('build823PresetRename').value);
+  if(!result.ok){presetNotice822(result.reason);return;}
+  savedPresets822={presets:result.presets,activeId:result.activeId};
+  presetControls822();
+  presetNotice822('Comparison preset renamed. Its settings and current queue were not changed.');
+  $('build822PresetStatus').focus({preventScroll:false});
 }
 function exceptionContext822(){return {now:Date.now(),ownershipReady,owners:ownership,escalationReady,escalations};}
 function renderExceptionControls822(selection,result,context){
