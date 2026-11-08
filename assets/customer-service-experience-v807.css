@@ -1,0 +1,14 @@
+/* Build 807: accessible customer and staff history navigation. No user-data storage. */
+.build807-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:16px 0;align-items:end}
+.build807-tools label{display:grid;gap:5px;min-width:0;font-size:.9rem}
+.build807-tools :is(input,select,button){min-width:0;width:100%;min-height:44px}
+.build807-counts{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.build807-counts strong{display:block;font-size:1.2rem}
+.build807-counts span{display:block;padding:9px 13px;border:1px solid rgba(128,128,128,.26);border-radius:12px}
+.build807-flag{display:inline-block;padding:4px 9px;border:1px solid rgba(212,175,55,.35);border-radius:999px;font-size:.82rem}
+.build807-empty{padding:14px;border:1px dashed rgba(128,128,128,.35);border-radius:12px}
+.build807-staff-card{display:grid;gap:8px}
+.build807-staff-card[data-consent-review="true"]{border-left:4px solid #eab308;padding-left:12px}
+.build807-staff-card .build744-actions{margin-top:4px}
+.build807-tools :focus-visible,.build807-staff-card :focus-visible{outline:3px solid #d4af37;outline-offset:2px}
+@media(max-width:650px){.build807-tools{grid-template-columns:1fr}.build807-counts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
