@@ -369,8 +369,10 @@ function render(){const el=$('build814StaffList');if(!el)return;
     if(!loaded)summary.textContent='Outcome summary unavailable until the authenticated follow-up queue loads.';
     else{const counts=outcomeSummary819(selection);summary.textContent=`Shown follow-ups (${counts.total}; latest 150 loaded maximum): ${counts.waiting} awaiting staff · ${counts.responded} waiting for customer decision · ${counts.needs_help} requesting more help · ${counts.confirmed} customer-confirmed answers · ${counts.review} needing source review. ${ownershipReady?'Owner source available.':'Owner source unavailable.'} ${escalationReady?'Supervisor source available.':'Supervisor source unavailable.'} No booking or issue closures are inferred.`;}
   }
-  renderComparisonSurface821(renderTrendSurface820(selection,exception.ok));
-  const context=$('build822ReportContinuity');if(context)context.textContent=reportContinuity822({loaded:loaded&&exception.ok,loadedAt:sourceLoadedAt822,mode:$('build821ComparisonMode')?.value,status:filter,target,exception:exceptionKey,shown:selection.length,sourceCount:records.length});
+  const freshness823=renderSourceFreshness823();
+  renderComparisonSurface821(renderTrendSurface820(selection,exception.ok&&freshness823.allowReport));
+  renderReviewDraft823(!!staffId&&loaded&&exception.ok&&freshness823.allowReport,exceptionKey);
+  const context=$('build822ReportContinuity');if(context)context.textContent=reportContinuity822({loaded:loaded&&exception.ok&&freshness823.allowReport,loadedAt:sourceLoadedAt822,mode:$('build821ComparisonMode')?.value,status:filter,target,exception:exceptionKey,shown:selection.length,sourceCount:records.length});
   $('build814StaffCounts').textContent=loaded&&!exception.ok?`Selected exception review unavailable: ${exception.reason}`:loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
   if(!exception.ok){el.innerHTML='<p class="notice bad">This exception view is paused because its verified source is unavailable. Choose another category or refresh the authenticated queue.</p>';return;}
@@ -388,7 +390,7 @@ function render(){const el=$('build814StaffList');if(!el)return;
       <button class="btn primary" type="submit">Save response for customer account</button><p class="muted">Saves a response in My Account; does not email or text the customer.</p></form>`:''}
   </article>`).join(''):'<p class="muted">No follow-ups match this filter.</p>';
 }
-async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=null;escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
+async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=null;reviewDrafts823.clear();$('build823NoteText').value='';escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
   try{const response=await fetch('/api/admin/worksite_followups_v814',{credentials:'include',cache:'no-store'});const data=await response.json().catch(()=>null);
     if(!response.ok||!data?.ok||!Array.isArray(data.followups)||!Array.isArray(data.events))throw Error(data?.error||'Queue unavailable.');
     records=data.followups;events=data.events;loaded=true;sourceLoadedAt822=Date.now();
@@ -447,9 +449,15 @@ export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))retur
   $('build822SavePreset').addEventListener('click',saveCurrentPreset822);
   $('build822PresetSelect').addEventListener('change',applyPreset822);
   $('build822RemovePreset').addEventListener('click',removeCurrentPreset822);
-  $('build822ExceptionSelect').addEventListener('change',()=>{render();$('build822ExceptionStatus').focus({preventScroll:false});});
-  $('build822ClearException').addEventListener('click',()=>{$('build822ExceptionSelect').value='all';render();$('build822ExceptionStatus').focus({preventScroll:false});});
+   $('build823RenamePreset').addEventListener('click',renameCurrentPreset823);
+   $('build823SaveNote').addEventListener('click',saveCurrentReviewDraft823);
+   $('build823ClearNote').addEventListener('click',clearCurrentReviewDraft823);
+   $('build823RefreshNow').addEventListener('click',load);
+  $('build822ExceptionSelect').addEventListener('change',()=>{syncReviewDraftEditor823();render();$('build822ExceptionStatus').focus({preventScroll:false});});
+  $('build822ClearException').addEventListener('click',()=>{$('build822ExceptionSelect').value='all';syncReviewDraftEditor823();render();$('build822ExceptionStatus').focus({preventScroll:false});});
   $('build818SaveView').addEventListener('click',saveCurrentView818);
   $('build818SavedViews').addEventListener('change',applySavedView818);
   $('build818RemoveView').addEventListener('click',removeSavedView818);
-  $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
+  window.setInterval(()=>{if(loaded)render();},60000);
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&loaded)render();});
+   $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
