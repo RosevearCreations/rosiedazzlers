@@ -155,3 +155,4 @@ node scripts/build798_cross_custodian_provenance_owner_eligibility_test.mjs
 node --test scripts/ql364-source-health.test.mjs
 node scripts/build799_ql365d_rosie_attachment_test.mjs
 node scripts/build800_804_ux_test.mjs
+node scripts/build805_mobile_job_guide_test.mjs

@@ -23,7 +23,11 @@ export async function onRequestPost({request,env}){
     const bookings=await bookingRes.json().catch(()=>[]),booking=Array.isArray(bookings)?bookings[0]:null;
     if(!booking)return json({ok:false,error:'Job unavailable.'},404);
     if(!await canWorkMobileBooking745({env,actor:access.actor,booking}))return json({ok:false,error:'Job is not currently assigned to this staff member.'},403);
-    if(mobileStage745(booking)!=='arrived')return json({ok:false,error:'Onsite setup can only be edited after recorded arrival.'},409);
+    const stage=mobileStage745(booking);
+    // Build 805: staff must be able to reread the original private-photo consent
+    // after Start or Pause. Editing still requires the exact arrived revision below.
+    if(body.action==='save'&&stage!=='arrived')return json({ok:false,error:'Onsite setup can only be edited after recorded arrival and before Start.'},409);
+    if(body.action==='load'&&!['arrived','detailing','paused'].includes(stage))return json({ok:false,error:'Onsite review is available only for an open assigned job.'},409);
 
     const current=await loadOnsiteGate746(env,bookingId);
     if(body.action==='load')return json({ok:true,intake:current.intake,receipt:current.receipt?{

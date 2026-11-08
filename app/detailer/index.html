@@ -14,10 +14,12 @@
     .build745-continuity{border:1px solid #b45309;background:rgba(180,83,9,.1);border-radius:14px;padding:14px;font-weight:600}.build745-continuity.ok{border-color:#15803d;background:rgba(21,128,61,.1)}.build745-continuity.warn{border-color:#b45309;background:rgba(180,83,9,.1)}
     .build745-filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.build745-filters .btn{min-height:44px;padding:8px 13px;border-radius:100px}.build745-filters [aria-pressed="true"]{background:#164e63;color:#fff;border-color:#22d3ee}.build745-day{display:grid;gap:8px;margin:14px 0 20px}.build745-day-label{font-size:.95rem;letter-spacing:.01em;margin:0;padding:0 2px 7px;border-bottom:1px solid var(--border)}.build745-day .job-button{min-height:82px;cursor:pointer}.build745-day .job-button:focus-visible{outline:3px solid #22d3ee;outline-offset:2px}
     #onsite746Panel fieldset{border:1px solid var(--border);border-radius:14px;padding:12px;display:grid;gap:10px}#onsite746Panel legend{padding:0 6px}#onsite746Panel label{display:grid;gap:5px;min-width:0}#onsite746Panel .check-row{display:flex;gap:10px;align-items:flex-start}#onsite746Panel .check-row input{flex:none;width:20px;height:20px;margin-top:2px}#onsite746Panel textarea,#onsite746Panel select,#onsite746Panel input[type=number]{display:block;width:100%;max-width:100%;min-height:44px}#onsite746Panel :focus-visible{outline:3px solid #22d3ee;outline-offset:3px}#onsite746Missing ul{padding-left:22px;margin:8px 0}
+    .field-guide805{border-color:rgba(212,175,55,.6)}.field-guide805-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.field-guide805-step,.field-guide805-photo{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:11px;border:1px solid var(--border);border-radius:12px;min-width:0}.field-guide805-step span,.field-guide805-photo{min-width:0}.field-guide805-step small,.field-guide805-photo small{display:block;color:var(--muted);line-height:1.5}.field-guide805-step[data-status="done"]{border-color:#15803d}.field-guide805-step[data-status="open"]{border-color:#b45309}.field-guide805-step[data-status="recheck"]{border-style:dashed}.field-guide805 .btn{min-height:44px;white-space:normal}.field-guide805 :focus-visible{outline:3px solid #22d3ee;outline-offset:2px}.field-guide805-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field-guide805-photo{align-items:start;flex-direction:column}.field-guide805-photo span{font-weight:600}
+    @media(max-width:620px){.field-guide805-grid,.field-guide805-pair{grid-template-columns:1fr}.field-guide805-step{align-items:flex-start}.field-guide805-step .btn{flex-shrink:0}}
   </style>
 </head>
 <!-- Build 400 mobile QoL layer over the Build 383 field workflow; Build 264 lazy runtime architecture retained. -->
-<body data-page="app-detailer" data-app-module="detailer" data-build="400" data-build432="detailer-staff-workflow-refinement" data-build745="manual-offline-reconciliation" data-build746="audited-onsite-setup" data-build745-sync="review_required">
+<body data-page="app-detailer" data-app-module="detailer" data-build="400" data-build432="detailer-staff-workflow-refinement" data-build745="manual-offline-reconciliation" data-build746="audited-onsite-setup" data-build805="mobile-job-guide-and-proof-recovery" data-build745-sync="review_required">
   <main class="app-shell">
     <header class="app-head">
       <a class="app-brand" href="/app/"><img data-logo alt="Rosie Dazzlers logo"/><span><strong>Rosie Dazzlers</strong><br><span class="mini">Detailer Mobile App</span></span></a>
@@ -25,7 +27,7 @@
     </header>
 
     <section class="panel stack" aria-labelledby="detailer-title">
-      <div><span class="badge">Build 746 · onsite safety and customer property</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Your authorized jobs, grouped by service day and scheduled slot. After arrival, record safe setup, pre-existing damage, valuables and customer acknowledgements before starting. Schedule order is not a driving route.</p></div>
+      <div><span class="badge">Build 805 · mobile field guidance and private photo proof</span><h1 id="detailer-title" style="margin:8px 0 6px">Detailer Mobile App</h1><p style="margin:0">Your authorized jobs, grouped by service day and scheduled slot. After arrival, use the guided checklist, private before/after photo steps and explicit evidence recheck. Schedule order is not a driving route.</p></div>
       <div id="build745ContinuityStatus" class="build745-continuity warn" role="status" aria-live="polite" aria-atomic="true">Checking current assignment and connection. Workflow changes are held.</div>
       <p class="mini" style="margin:0">Offline: only the last-seen list in this open tab remains readable. No assigned-job snapshot, timer, or action queue is saved for offline use; there is no automatic replay. After reconnecting, manually refresh and review the latest assignment, stage and instructions before acting.</p>
       <div class="runtime-strip">
@@ -114,7 +116,7 @@
   <script src="/assets/app-core/refresh-leader.js?v=20260829build271"></script>
   <script src="/assets/app-core/install-client.js?v=20260829build271"></script>
   <script src="/assets/app-core/module-navigation.js?v=20260829build271"></script>
-  <script src="/apps/detailer/detailer-app.js?v=20261102build749"></script>
+  <script src="/apps/detailer/detailer-app.js?v=20261108build805"></script>
   <script src="/assets/build400-detailer-mobile-qol.js?v=20260914build400"></script>
   <script src="/assets/build432-staff-workflow-refinement.js?v=20260919build432"></script>
 </body>
