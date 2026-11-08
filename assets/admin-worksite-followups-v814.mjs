@@ -78,7 +78,22 @@ function ensureComparisonSurface821(){
       <p id="build822ExceptionStatus" role="status" aria-live="polite" tabindex="-1">Choose an exception after loading verified source records.</p>
     </fieldset>
     <p class="build822-continuity" id="build822ReportContinuity" role="status" aria-live="polite">Report context appears after authorized records load.</p>
-    <p class="muted">Presets remember only comparison mode, status and internal target for this browser tab. Search, customer records, review notes, exception results and report text are not saved. A returning preset re-queries the authorized queue; no historical report is inferred.</p>
+    <fieldset class="build823-preset-rename"><legend>Rename selected comparison preset</legend>
+<label for="build823PresetRename">New name (settings stay unchanged)</label><input id="build823PresetRename" type="text" minlength="2" maxlength="40" autocomplete="off" />
+<button id="build823RenamePreset" class="btn ghost" type="button" disabled>Rename selected preset</button>
+<p id="build823PresetDetails" role="status" aria-live="polite">Select a preset to see its settings.</p></fieldset>
+<fieldset class="build823-note-fieldset"><legend>Supervisor exception review draft — current page only</legend>
+<label for="build823NoteText">Internal review note for the selected exception category</label>
+<textarea id="build823NoteText" rows="3" maxlength="500" autocomplete="off" aria-describedby="build823NoteStatus" placeholder="Internal next step; avoid customer details."></textarea>
+<button id="build823SaveNote" class="btn ghost" type="button" disabled>Hold draft in this page</button>
+<button id="build823ClearNote" class="btn ghost" type="button" disabled>Clear draft</button>
+<p id="build823NoteStatus" role="status" aria-live="polite" tabindex="-1">No draft. Refresh or leaving this page clears the note.</p>
+<p id="build823NotePreview" class="build823-note-preview" aria-label="Internal unsaved draft preview"></p></fieldset>
+<section class="build823-freshness" aria-labelledby="build823FreshnessHeading">
+<h4 id="build823FreshnessHeading">Report source freshness</h4>
+<p id="build823FreshnessAlert" role="status" aria-live="polite" data-status="unavailable">Refresh to check source age.</p>
+<button id="build823RefreshNow" class="btn ghost" type="button">Refresh verified report source</button></section>
+<p class="muted">Presets remember only comparison mode, status and internal target for this browser tab. Search, customer records, review notes, exception results and report text are not saved. A returning preset re-queries the authorized queue; no historical report is inferred.</p>
   </section>`);
   counts.before(section);
 }
