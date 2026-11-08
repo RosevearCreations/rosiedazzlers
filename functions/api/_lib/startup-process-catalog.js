@@ -970,7 +970,10 @@ export const RETIRED_STARTUP_PROCESS_IDS_BUILD260 = new Set([
   'migration-240',
   'startup-single-interface',
   'media-derivatives',
-  'markdown-retirement'
+  'markdown-retirement',
+  // Verified current Production Build 815 superseded the old Build 260 deploy gate.
+  // Historical database evidence remains available for audit.
+  'deploy-260'
 ]);
 
 const STARTUP_PROCESS_BUILD260_ADDITIONS = [
@@ -1072,7 +1075,7 @@ const STARTUP_PROCESS_BUILD260_ADDITIONS = [
 
 export const STARTUP_PROCESS_CATALOG_BUILD260 = [
   ...STARTUP_PROCESS_CATALOG_BUILD246.filter((item)=>!RETIRED_STARTUP_PROCESS_IDS_BUILD260.has(String(item.id||item.process_key||''))),
-  ...STARTUP_PROCESS_BUILD260_ADDITIONS
+  ...STARTUP_PROCESS_BUILD260_ADDITIONS.filter((item)=>!RETIRED_STARTUP_PROCESS_IDS_BUILD260.has(String(item.id||item.process_key||'')))
 ].sort((a,b)=>Number(a.order||a.sort_order||9999)-Number(b.order||b.sort_order||9999));
 
-export const STARTUP_PROCESS_BUILD = 260;
+export const STARTUP_PROCESS_BUILD = 816;

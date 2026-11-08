@@ -139,7 +139,7 @@ const account=read('../my-account.html');
 assert.equal(account,read('../my-account/index.html'));
 assert.match(account,/data-build744-customer-followup/);
 assert.match(account,/id="build744AvailabilityCheck"/);
-assert.match(account,/my-account-v355.js\?v=20261108build815/,'Current account bundle must continue to load follow-up consent workbench');
+assert.match(account,/my-account-v355.js\?v=20261108build816/,'Current account bundle must continue to load follow-up consent workbench');
 const staffPage=read('../admin-notifications.html');
 assert.equal(staffPage,read('../admin-notifications/index.html'));
 assert.match(staffPage,/data-build744-followup-review/);

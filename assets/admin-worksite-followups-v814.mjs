@@ -3,11 +3,36 @@ import { eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 import { FOLLOWUP_LABELS_814,FOLLOWUP_KINDS_814 } from './customer-worksite-followups-v814.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
-let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=false,canEscalate=false,busy=false,loaded=false;
+const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
+let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=false,canEscalate=false,ownership=[],ownershipEvents=[],ownershipCandidates=[],ownershipReady=false,canAssign=false,staffId=null,busy=false,loaded=false;
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
 export function advisoryAging815(row,now=Date.now()){if(row.status!=='awaiting_staff')return null;const ms=Date.parse(row.requested_at);if(!Number.isFinite(ms)||ms>now)return {band:'unknown',label:'Age unavailable'};
   const hours=Math.floor((now-ms)/3600000);return {band:hours>=48?'overdue':hours>=24?'attention':'new',label:hours>=48?'Over 48 hours — supervisor review suggested':hours>=24?'Over 24 hours — review soon':'Newer than 24 hours'};}
 const escalationByFollowup=id=>escalations.find(e=>e.followup_id===id);
+const ownershipFor=id=>ownership.find(e=>e.followup_id===id);
+export function priority816(row,owner=null,escalation=null,now=Date.now()){
+  if(row.status!=='awaiting_staff')return {level:7,label:'Not waiting for staff'};
+  const band=advisoryAging815(row,now)?.band;
+  if(escalation&&escalation.status!=='cleared'&&!owner)return {level:0,label:'Escalated — no owner'};
+  if(band==='overdue'&&!owner)return {level:1,label:'Overdue — no owner'};
+  if(band==='overdue')return {level:2,label:'Overdue — owner assigned'};
+  if(escalation&&escalation.status!=='cleared')return {level:3,label:'Supervisor review — assigned'};
+  if(band==='attention'&&!owner)return {level:4,label:'24+ hours — no owner'};
+  if(band==='attention')return {level:5,label:'24+ hours — assigned'};
+  return {level:6,label:'Recent follow-up'};
+}
+function ownerControls(row){if(row.status!=='awaiting_staff'&&!ownershipFor(row.id))return '';
+  if(!ownershipReady)return '<p class="notice bad">Owner assignment source unavailable. Assignments are read-only until refresh.</p>';
+  const current=ownershipFor(row.id),person=ownershipCandidates.find(s=>s.id===current?.owner_staff_user_id);
+  const history=current?ownershipEvents.filter(e=>e.ownership_id===current.id).slice(0,12).reverse():[];
+  return `<section class="build816-owner" aria-label="Internal supervisor ownership"><p><strong>Review owner:</strong> ${esc(person?.name|| (current?'Assigned staff member':'Not assigned'))}${current?.review_due_at?` · Internal review target ${esc(eventTimeToronto813(current.review_due_at))}`:''}</p>
+    ${current?`<details class="build813-timeline"><summary>Recorded ownership history (${history.length}${history.length===12?'+':''})</summary>${history.length?`<ol class="build813-event-list">${history.map(e=>`<li>${esc(eventTimeToronto813(e.recorded_at))} · ${esc(e.event_kind.replaceAll('_',' '))} · Rev ${esc(e.ownership_revision)} · Staff ${esc(String(e.actor_staff_user_id||'').slice(0,8))}</li>`).join('')}</ol>`:'<p class="muted">No audit events returned.</p>'}</details>`:''}
+    ${canAssign&&row.status==='awaiting_staff'?`<form class="build816-owner-form" data-build816-owner="${esc(row.id)}"><label>Authorized owner<select name="owner" required><option value="">Choose a reviewer</option>${ownershipCandidates.map(s=>`<option value="${esc(s.id)}" ${current?.owner_staff_user_id===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>
+    <label>Internal review target (optional, within 30 days)<input type="datetime-local" name="reviewDue" value="${esc(localDateTimeValue(current?.review_due_at))}" /></label>
+    <label>Private assignment reason<textarea name="note" minlength="12" maxlength="600" rows="2" required placeholder="Explain what the owner should review and why">${esc(current?.private_note||'')}</textarea></label>
+    <button type="submit" class="btn ghost">${current?'Update assigned owner':'Assign an owner'}</button><p class="muted">Internal target only. No promised customer response time or automatic message.</p></form>`:''}
+  </section>`;
+}
 function supervisorHistory(record){if(!record)return '';const timeline=escalationEvents.filter(e=>e.escalation_id===record.id).slice(0,12).reverse();return `<details class="build813-timeline"><summary>Supervisor audit (${timeline.length}${timeline.length===12?'+':''})</summary><ol class="build813-event-list">${timeline.map(e=>`<li>${esc(eventTimeToronto813(e.recorded_at))} · Rev ${esc(e.escalation_revision)} · ${esc(e.event_kind.replaceAll('_',' '))} · Staff ${esc(String(e.actor_staff_user_id||'').slice(0,8))}</li>`).join('')}</ol></details>`;}
 function supervisorControls(row){if(!escalationReady)return '<p class="notice bad">Supervisor state could not be verified. Escalation controls are unavailable until refresh.</p>';
   const existing=escalationByFollowup(row.id);const age=advisoryAging815(row);const ageBadge=age?`<p class="build815-age build815-age-${esc(age.band)}">Advisory age: ${esc(age.label)}. These bands are not a promised service deadline.</p>`:'';
@@ -25,22 +50,24 @@ function audit(id){const history=events.filter(e=>e.followup_id===id).slice(0,12
     ${history.length?`<ol class="build813-event-list">${history.map(e=>`<li><time>${esc(eventTimeToronto813(e.recorded_at))}</time> · Rev ${esc(e.followup_revision)} · ${esc(e.event_kind.replaceAll('_',' '))}${e.actor_staff_user_id?` · Staff ${esc(e.actor_staff_user_id.slice(0,8))}`:''}</li>`).join('')}</ol>`:'<p class="muted">No recorded actions yet. History is not reconstructed.</p>'}
     <p class="muted">Actions are written by the database. Customers cannot see staff identity or the internal audit log.</p></details>`;}
 function render(){const el=$('build814StaffList');if(!el)return;
-  $('build814StaffCounts').textContent=loaded?`${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${escalations.filter(e=>e.status!=='cleared').length} open supervisor reviews · ${records.length} recent follow-ups${escalationReady?'':' · supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
+  $('build814StaffCounts').textContent=loaded?`${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'} · ${records.length} recent follow-ups.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
-  const filter=$('build814StaffFilter')?.value||'awaiting_staff';const selection=records.filter(r=>filter==='all'||r.status===filter||(filter==='aging'&&['attention','overdue'].includes(advisoryAging815(r)?.band))||(filter==='escalated'&&escalationByFollowup(r.id)?.status!=='cleared'&&!!escalationByFollowup(r.id)));
+  const filter=$('build814StaffFilter')?.value||'awaiting_staff';const selection=records.filter(r=>filter==='all'||r.status===filter||(filter==='priority'&&r.status==='awaiting_staff')||(filter==='unowned'&&ownershipReady&&r.status==='awaiting_staff'&&!ownershipFor(r.id))||(filter==='mine'&&ownershipReady&&ownershipFor(r.id)?.owner_staff_user_id===staffId)||(filter==='aging'&&['attention','overdue'].includes(advisoryAging815(r)?.band))||(filter==='escalated'&&escalationByFollowup(r.id)?.status!=='cleared'&&!!escalationByFollowup(r.id)))
+    .sort((a,b)=>priority816(a,ownershipFor(a.id),escalationByFollowup(a.id)).level-priority816(b,ownershipFor(b.id),escalationByFollowup(b.id)).level||Date.parse(a.requested_at)-Date.parse(b.requested_at));
   el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue">
-    <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span><h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
+    <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span>${row.status==='awaiting_staff'?`<span class="badge build816-priority-label">${esc(priority816(row,ownershipReady?ownershipFor(row.id):null,escalationReady?escalationByFollowup(row.id):null).label)}</span>`:''}<h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
     <p class="muted">${esc(row.issue_category||'Worksite report')} · Booking ${esc(row.booking_id||'Reference on file')} · ${esc(eventTimeToronto813(row.requested_at))}</p>
     <p><strong>Customer’s follow-up:</strong> ${esc(row.request_text)}</p>
     ${row.staff_response?`<p class="build814-response"><strong>Recorded response:</strong> ${esc(row.staff_response)} · ${esc(eventTimeToronto813(row.staff_responded_at))}</p>`:''}
     ${row.customer_decided_at?`<p><strong>Customer’s decision:</strong> ${esc(FOLLOWUP_LABELS_814[row.status])} · ${esc(eventTimeToronto813(row.customer_decided_at))}${row.customer_feedback?`<br>${esc(row.customer_feedback)}`:''}</p>`:''}
     ${supervisorControls(row)}
+    ${ownerControls(row)}
     ${audit(row.id)}
     ${row.status==='awaiting_staff'?`<form class="build814-staff-reply" data-build814-staff-reply="${esc(row.id)}" aria-busy="false"><label>Customer-visible response<textarea name="response" minlength="12" maxlength="1000" rows="3" required placeholder="Explain the answer and next step without internal staff notes"></textarea></label>
       <button class="btn primary" type="submit">Save response for customer account</button><p class="muted">Saves a response in My Account; does not email or text the customer.</p></form>`:''}
   </article>`).join(''):'<p class="muted">No follow-ups match this filter.</p>';
 }
-async function load(){if(busy)return;busy=true;loaded=false;escalationReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
+async function load(){if(busy)return;busy=true;loaded=false;escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
   try{const response=await fetch('/api/admin/worksite_followups_v814',{credentials:'include',cache:'no-store'});const data=await response.json().catch(()=>null);
     if(!response.ok||!data?.ok||!Array.isArray(data.followups)||!Array.isArray(data.events))throw Error(data?.error||'Queue unavailable.');
     records=data.followups;events=data.events;loaded=true;
@@ -48,9 +75,27 @@ async function load(){if(busy)return;busy=true;loaded=false;escalationReady=fals
       if(!e.ok||!d?.ok||!Array.isArray(d.escalations)||!Array.isArray(d.events))throw Error('Unavailable');
       escalations=d.escalations;escalationEvents=d.events;canEscalate=d.can_escalate===true;escalationReady=true;
     }catch{escalations=[];escalationEvents=[];canEscalate=false;escalationReady=false;}
-    render();notice(escalationReady?'Follow-up and supervisor queues loaded. No outbound message is sent.':'Follow-ups loaded; supervisor state is unavailable and escalation actions are disabled.',!escalationReady);
+    try{const o=await fetch('/api/admin/worksite_ownership_v816',{credentials:'include',cache:'no-store'});const d=await o.json().catch(()=>null);
+      if(!o.ok||!d?.ok||!Array.isArray(d.ownership)||!Array.isArray(d.events)||!Array.isArray(d.candidates))throw Error('Unavailable');
+      ownership=d.ownership;ownershipEvents=d.events;ownershipCandidates=d.candidates;canAssign=d.can_assign===true;staffId=d.current_staff_user_id;ownershipReady=true;
+    }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
+    render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);
   }catch(error){records=[];events=[];render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);}
   finally{busy=false;$('build814StaffRefresh').disabled=false;}
+}
+async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
+  if(busy||!ownershipReady||!canAssign||form.getAttribute('aria-busy')==='true')return;
+  const row=records.find(r=>r.id===form.dataset.build816Owner);if(!row||row.status!=='awaiting_staff')return;
+  const current=ownershipFor(row.id),owner=form.elements.namedItem('owner').value,note=form.elements.namedItem('note').value.trim(),localDue=form.elements.namedItem('reviewDue').value;
+  if(!ownershipCandidates.some(s=>s.id===owner)||note.length<12||note.length>600){notice('Choose an authorized staff member and enter a private 12–600 character note.',true);return;}
+  const parsedDue=localDue?new Date(localDue):null;
+  if(parsedDue&&!Number.isFinite(parsedDue.getTime())){notice('Enter a valid review date.',true);return;}
+  const reviewDue=parsedDue?parsedDue.toISOString():null;
+  if(!window.confirm('Save this internal ownership decision? No customer notification or appointment change occurs.'))return;
+  form.setAttribute('aria-busy','true');form.querySelector('button').disabled=true;notice('Saving assigned reviewer…');
+  try{const response=await fetch('/api/admin/worksite_ownership_v816',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({followup_id:row.id,owner_staff_user_id:owner,private_note:note,review_due_at:reviewDue,expected_revision:current?.workflow_revision??null})});
+    const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Error(data?.error||'Assignment not confirmed.');await load();notice('Supervisor owner recorded with an auditable decision. No message was sent.');
+  }catch(error){notice(`${error.message||'Owner not confirmed.'} Refresh before retrying.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
 async function escalate(event){const flag=event.target.closest?.('[data-build815-flag]'),form=flag||event.target.closest?.('[data-build815-decision]');if(!form)return;
   event.preventDefault();if(busy||!escalationReady||!canEscalate||form.getAttribute('aria-busy')==='true')return;
@@ -76,4 +121,4 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
 }
 export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;
   $('build814StaffRefresh').addEventListener('click',load);$('build814StaffFilter').addEventListener('change',render);
-  $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);load();}
+  $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
