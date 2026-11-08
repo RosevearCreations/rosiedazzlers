@@ -1,10 +1,11 @@
 // Build 811 — manual authorized operations queue. No customer messages are sent.
-import { ISSUE_CATEGORIES_811, ISSUE_LABELS_811 } from './customer-worksite-issues-v811.mjs';
+import { ISSUE_CATEGORIES_811, ISSUE_LABELS_811 } from './customer-worksite-issues-v811.mjs?v=build813';
+import { staffTimelineMessage813, eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 export const STATUS_ACTIONS_811=Object.freeze({pending_review:['reviewing','resolved','closed_no_action'],reviewing:['resolved','closed_no_action']});
 export function nextReviewStatuses811(status){return STATUS_ACTIONS_811[status]||[];}
-let issues=[],staffCandidates=[],loaded=false,busy=false,assignmentAllowed=false;
+let issues=[],auditEvents=[],staffCandidates=[],loaded=false,busy=false,assignmentAllowed=false;
 function notice(message,fail=false){const node=$('build811StaffStatus');if(node){node.className=fail?'notice bad':'notice';node.textContent=message;}}
 function filtered(){const filter=$('build811StaffFilter')?.value||'open';return issues.filter(row=>
   filter==='all'||(filter==='open'?['pending_review','reviewing'].includes(row.status):
@@ -13,6 +14,14 @@ function filtered(){const filter=$('build811StaffFilter')?.value||'open';return 
   .sort((a,b)=>{const priority={past_due:0,arrival_today:1,upcoming:2,unavailable:3,closed:4};
     return (priority[a.arrival_priority]??5)-(priority[b.arrival_priority]??5)||String(a.submitted_at).localeCompare(String(b.submitted_at));});}
 const staffName=id=>staffCandidates.find(s=>s.id===id)?.name||'Staff member no longer in the active review list';
+function staffAuditMarkup813(issueId){
+  const events=auditEvents.filter(row=>row.issue_id===issueId).slice(0,12).reverse();
+  return `<details class="build813-timeline"><summary>Recorded staff handoffs and review history (${events.length}${events.length===12?'+':''})</summary>
+    ${events.length?`<ol class="build813-event-list">${events.map(row=>`<li><time>${esc(eventTimeToronto813(row.recorded_at))}</time> · Rev ${esc(row.issue_revision)} · ${esc(staffTimelineMessage813(row,staffName))}</li>`).join('')}</ol>`:
+      '<p class="muted">No recorded changes since Build 813 began; earlier actions have not been backfilled.</p>'}
+    <p class="muted">The last 12 recorded steps are shown; staff changes are recorded by the database, not by browser claims.</p>
+  </details>`;
+}
 function actionPanel(row){if(!nextReviewStatuses811(row.status).length)return '';
   const due=['arrival_today','past_due'].includes(row.arrival_priority);
   return `<div class="build812-actions"><label>Assign this issue to an authorized reviewer
@@ -38,6 +47,7 @@ function render(){const list=$('build811StaffList');if(!list)return;
     <p><strong>Assigned reviewer:</strong> ${esc(row.assigned_staff_user_id?staffName(row.assigned_staff_user_id):'Unassigned')} · <strong>Arrival follow-up:</strong> ${esc(row.arrival_escalation_status||'none')}</p>
     ${row.private_note?`<p class="muted"><strong>Private staff note:</strong> ${esc(row.private_note)}</p>`:''}
     ${row.resolution?`<p><strong>Customer-visible answer:</strong> ${esc(row.resolution)}</p>`:''}
+    ${staffAuditMarkup813(row.id)}
     ${actionPanel(row)}
     ${nextReviewStatuses811(row.status).length?`<form data-build811-review="${esc(row.id)}" class="build811-staff-form" aria-busy="false">
       <label>Next review step<select name="status" required>${nextReviewStatuses811(row.status).map(x=>`<option value="${esc(x)}">${esc(ISSUE_LABELS_811[x])}</option>`).join('')}</select></label>
@@ -50,9 +60,9 @@ function render(){const list=$('build811StaffList');if(!list)return;
 async function load(){if(busy)return;busy=true;$('build811StaffRefresh').disabled=true;loaded=false;render();notice('Checking staff permission and loading worksite issues…');
   try{const response=await fetch('/api/admin/worksite_assignment_v812',{credentials:'include',cache:'no-store'});
     const data=await response.json().catch(()=>null);
-    if(!response.ok||!data?.ok||!Array.isArray(data.issues)||!Array.isArray(data.staff_candidates))throw Error(data?.error||'Could not load staff queue.');
-    issues=data.issues;staffCandidates=data.staff_candidates;assignmentAllowed=data.authority?.assignment_allowed===true;loaded=true;render();notice('Queue loaded. Acknowledgement and escalation are manual records; no customer message is sent.');
-  }catch(error){issues=[];staffCandidates=[];assignmentAllowed=false;render();notice(`${error.message||'Staff queue unavailable.'} Operations permissions and an authenticated staff session are required.`,true);}
+    if(!response.ok||!data?.ok||!Array.isArray(data.issues)||!Array.isArray(data.staff_candidates)||!Array.isArray(data.events))throw Error(data?.error||'Could not load staff queue.');
+    issues=data.issues;auditEvents=data.events;staffCandidates=data.staff_candidates;assignmentAllowed=data.authority?.assignment_allowed===true;loaded=true;render();notice('Queue and recorded handoff history loaded. No customer message is sent by review actions.');
+  }catch(error){issues=[];auditEvents=[];staffCandidates=[];assignmentAllowed=false;render();notice(`${error.message||'Staff queue unavailable.'} Operations permissions and an authenticated staff session are required.`,true);}
   finally{busy=false;$('build811StaffRefresh').disabled=false;}
 }
 async function submitReview(event){const form=event.target.closest?.('[data-build811-review]');if(!form)return;event.preventDefault();if(form.getAttribute('aria-busy')==='true')return;

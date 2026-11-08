@@ -58,7 +58,7 @@ for (const id of ['build809AppointmentStatus', 'build809AppointmentList', 'build
 assert.match(html, /customer-booking-self-service-v809\.css/);
 assert.match(html, /existing appointment stays unchanged/i);
 assert.match(html, /Contact Rosie for urgent changes/);
-assert.match(read('../assets/my-account-v355.js'), /my-account-history-v742\.js\?v=20261108build812/);
+assert.match(read('../assets/my-account-v355.js'), /my-account-history-v742\.js\?v=20261108build813/);
 assert.match(ui, /changeRequestChoices809\(accountBookings, accountRequests\)/);
 assert.match(ui, /previewRequest809\(\)/);
 assert.match(ui, /renderAppointments809\(\)/);

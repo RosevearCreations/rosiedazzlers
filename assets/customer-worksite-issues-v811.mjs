@@ -1,5 +1,6 @@
 // Build 811 — customer-owned worksite concern intake and status. No outbound send.
 import { preparationCandidates810 } from './customer-visit-preparation-v810.mjs';
+import { customerTimelineMessage813, customerFollowUpAdvice813, eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -23,13 +24,19 @@ export function issueDraft811(values,bookings,issues) {
   return {ok:true,message:'Your report will be saved for staff review. Your appointment and payment will not change automatically.'};
 }
 
-let accountId='',candidates=[],issues=[],loaded=false,wired=false,fetchEpoch=0,pendingKey=null,lastFingerprint=null;
+let accountId='',candidates=[],issues=[],timelineEvents=[],timelineAvailable=false,loaded=false,wired=false,fetchEpoch=0,pendingKey=null,lastFingerprint=null;
 function status(message,error=false){const el=$('build811CustomerStatus');if(el){el.className=error?'notice bad':'notice';el.textContent=message;}}
 export function acknowledgementText812(row){return row.staff_acknowledged_at?
   `A staff member acknowledged this report on ${String(row.staff_acknowledged_at).slice(0,10)}. This does not confirm worksite readiness or arrival time.`:
   'Report received by the system. Staff have not yet recorded an acknowledgement.';}
+function timelineMarkup813(issueId){
+  if(!timelineAvailable)return '<p class="muted" role="status">The recorded activity timeline is unavailable. Current report status is shown above; refresh later.</p>';
+  const events=timelineEvents.filter(row=>row.issue_id===issueId).slice(0,12).reverse();
+  if(!events.length)return '<p class="muted">No activity has been recorded since the timeline was introduced. Earlier staff actions have not been reconstructed.</p>';
+  return `<ol class="build813-event-list">${events.map(row=>`<li><time>${esc(eventTimeToronto813(row.recorded_at))}</time> · ${esc(customerTimelineMessage813(row))}</li>`).join('')}</ol><p class="muted">Showing up to 12 latest recorded steps, oldest to newest. Earlier history is not fabricated.</p>`;
+}
 function renderHistory811(){const el=$('build811CustomerHistory');if(!el)return;
-  el.innerHTML=loaded?(issues.length?issues.map(row=>`<article class="build811-issue"><span class="badge">${esc(ISSUE_LABELS_811[row.status]||'Staff review')}</span><h4>${esc(ISSUE_CATEGORIES_811[row.category]||'Worksite concern')}</h4><p><strong>Booking:</strong> ${esc(candidates.find(x=>x.id===row.booking_id)?.service_date||'Reference on file')} · Reported ${esc(String(row.submitted_at||'').slice(0,10))}</p><p>${esc(row.description||'')}</p><p class="build812-ack"><strong>Staff acknowledgement:</strong> ${esc(acknowledgementText812(row))}</p>${row.arrival_escalation_status==='flagged'?'<p class="build812-flag">Rosie has flagged this report for arrival-day follow-up. This is not a confirmed change to your appointment.</p>':''}${row.resolution?`<p><strong>Rosie’s update:</strong> ${esc(row.resolution)}</p>`:''}<p class="muted">Updates appear here after you refresh My Account. We have not sent a new message, changed payment, or changed the appointment.</p></article>`).join(''):'<p class="muted">No worksite issues linked to this account.</p>'):'<p class="muted">Sign in and load your account to see issue status.</p>';
+  el.innerHTML=loaded?(issues.length?issues.map(row=>`<article class="build811-issue"><span class="badge">${esc(ISSUE_LABELS_811[row.status]||'Staff review')}</span><h4>${esc(ISSUE_CATEGORIES_811[row.category]||'Worksite concern')}</h4><p><strong>Booking:</strong> ${esc(candidates.find(x=>x.id===row.booking_id)?.service_date||'Reference on file')} · Reported ${esc(String(row.submitted_at||'').slice(0,10))}</p><p>${esc(row.description||'')}</p><p class="build812-ack"><strong>Staff acknowledgement:</strong> ${esc(acknowledgementText812(row))}</p>${row.arrival_escalation_status==='flagged'?'<p class="build812-flag">Rosie has flagged this report for arrival-day follow-up. This is not a confirmed change to your appointment.</p>':''}${row.resolution?`<p><strong>Rosie’s update:</strong> ${esc(row.resolution)}</p>`:''}<details class="build813-timeline"><summary>Recorded issue activity</summary>${timelineMarkup813(row.id)}</details><p class="build813-followup"><strong>What we can do next:</strong> ${esc(customerFollowUpAdvice813(row.status))} <a href="/contact">Contact Rosie</a>.</p><p class="muted">Updates appear here after you refresh My Account. We have not sent a new message, changed payment, or changed the appointment.</p></article>`).join(''):'<p class="muted">No worksite issues linked to this account.</p>'):'<p class="muted">Sign in and load your account to see issue status.</p>';
 }
 function currentDraft811(){return {booking_id:$('build811Booking')?.value||'',category:$('build811Category')?.value||'',description:$('build811Description')?.value||''};}
 function renderControls811(){const select=$('build811Booking'),submit=$('build811Submit'),preview=$('build811Preview');if(!select||!submit||!preview)return;
@@ -46,7 +53,15 @@ async function fetchIssues811(epoch){const response=await fetch('/api/client/wor
   const data=await response.json().catch(()=>null);
   if(!response.ok||!data?.ok||!Array.isArray(data.issues))throw Error(data?.error||'Could not load your issue reports.');
   if(epoch!==fetchEpoch)return;
-  issues=data.issues;loaded=true;renderHistory811();renderControls811();status(`${issues.length} worksite report${issues.length===1?'':'s'} on file. Contact Rosie directly about urgent safety concerns.`);
+  let recent=[],available=false;
+  try{const t=await fetch('/api/client/worksite_timeline_v813',{credentials:'include',cache:'no-store'});
+    const result=await t.json().catch(()=>null);
+    if(!t.ok||!result?.ok||!Array.isArray(result.events))throw Error('Timeline unavailable');
+    recent=result.events;available=true;
+  }catch{/* Keep the current issue status visible when history is temporarily unavailable. */}
+  if(epoch!==fetchEpoch)return;
+  issues=data.issues;timelineEvents=recent;timelineAvailable=available;loaded=true;renderHistory811();renderControls811();
+  status(`${issues.length} worksite report${issues.length===1?'':'s'} on file.${available?' Recorded history is available.':' Activity timeline unavailable; current status is still visible.'} Contact Rosie directly about urgent safety concerns.`);
 }
 async function submit811(event){event.preventDefault();const form=$('build811Form');if(form.getAttribute('aria-busy')==='true')return;
   const body=currentDraft811(),decision=issueDraft811(body,candidates,issues);
@@ -74,12 +89,12 @@ function wire811(){if(wired||!$('build811Form'))return;wired=true;
   }
   $('build811Refresh').addEventListener('click',async()=>{const epoch=fetchEpoch;loaded=false;renderControls811();status('Refreshing issue history…');try{await fetchIssues811(epoch);}catch(error){if(epoch===fetchEpoch){clearCustomerWorksiteIssues811();status(error.message||'Refresh unavailable.',true);}}});
 }
-export function clearCustomerWorksiteIssues811(){fetchEpoch++;accountId='';candidates=[];issues=[];loaded=false;pendingKey=null;lastFingerprint=null;
+export function clearCustomerWorksiteIssues811(){fetchEpoch++;accountId='';candidates=[];issues=[];timelineEvents=[];timelineAvailable=false;loaded=false;pendingKey=null;lastFingerprint=null;
   $('build811Form')?.reset();if($('build811Form'))$('build811Form').setAttribute('aria-busy','false');renderHistory811();renderControls811();status('Sign in to report an issue with your upcoming appointment.');}
 export async function loadCustomerWorksiteIssues811(dashboard,changeRequests=[]){if(typeof document==='undefined'||!$('build811Form'))return;
   const profile=String(dashboard?.customer?.id||'');
   if(!dashboard?.ok||!dashboard?.authenticated||!UUID.test(profile)){clearCustomerWorksiteIssues811();return;}
-  if(profile!==accountId){issues=[];pendingKey=null;lastFingerprint=null;}
+  if(profile!==accountId){issues=[];timelineEvents=[];timelineAvailable=false;pendingKey=null;lastFingerprint=null;}
   accountId=profile;candidates=eligibleIssueBookings811(dashboard.bookings,changeRequests);loaded=false;
   const epoch=++fetchEpoch;wire811();renderHistory811();renderControls811();status('Loading your worksite report history…');
   try{await fetchIssues811(epoch);}catch(error){if(epoch===fetchEpoch){clearCustomerWorksiteIssues811();status(error.message||'Issue history unavailable. Nothing was sent.',true);}}

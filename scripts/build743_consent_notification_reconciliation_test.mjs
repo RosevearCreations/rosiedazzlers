@@ -216,7 +216,7 @@ assert.match(admin,/id="build743ExactCustomer"/);
 const account=read('../my-account.html');
 assert.equal(account,read('../my-account/index.html'),'Customer route mirrors equal');
 assert.match(account,/id="build743PreferenceForm"/);
-assert.match(account,/my-account-v355.js\?v=20261108build812/,'Current account bundle still loads Build 743 module');
+assert.match(account,/my-account-v355.js\?v=20261108build813/,'Current account bundle still loads Build 743 module');
 assert.match(account,/aria-live="polite"/);
 assert.match(read('../assets/my-account-v355.js'),/customer-notification-consent-v743/);
 const server=read('../functions/api/admin/notification_preview_v743.js');
