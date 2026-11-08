@@ -4,6 +4,7 @@ import { FOLLOWUP_LABELS_814,FOLLOWUP_KINDS_814 } from './customer-worksite-foll
 import { readViews818,saveView818,selectView818,removeView818,viewStorage818 } from './build818-followup-view-state.mjs';
 import { outcome819,latestReturnedHandoff819,outcomeSummary819 } from './build819-followup-outcomes.mjs';
 import { COHORTS_820,trendSnapshot820,workloadSignals820,safeQueuePreview820 } from './build820-followup-trends.mjs';
+import { COMPARISON_MODES_821,compareSnapshots821,workloadExplanations821,readableReport821 } from './build821-followup-comparisons.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
@@ -44,6 +45,34 @@ function renderTrendSurface820(selection){
   workload.textContent=`In this filtered view: ${signals.waiting} awaiting staff · ${signals.older48h} over 48 hours without response · ${signals.unknownAge} with missing/future request dates · ${signals.unowned===null?'unowned count unavailable (owner source missing)':signals.unowned+' without a verified assigned owner'} · ${signals.reviewPast===null?'internal review targets unavailable':signals.reviewPast+' passed internal review targets'} · ${signals.openEscalations===null?'open supervisor reviews unavailable':signals.openEscalations+' open supervisor reviews among waiting follow-ups'}. These are review indicators, not customer deadlines.`;
   preview.textContent=safeQueuePreview820(snapshot,signals);
   status.textContent=`Observed ${snapshot.totals.total} of ${records.length} loaded authorized follow-ups after current filters (latest 150 maximum). Snapshot recalculated locally; no historic baseline or customer export was created.`;
+  return {snapshot,signals};
+}
+function ensureComparisonSurface821(){
+  const counts=$('build814StaffCounts');if(!counts||$('build821ComparisonMode'))return;
+  const section=document.createElement('section');section.className='build821-comparison';section.setAttribute('aria-labelledby','build821ComparisonHeading');
+  section.innerHTML=`<h3 id="build821ComparisonHeading">Compare bounded follow-up cohorts</h3>
+    <fieldset class="build821-compare-controls"><legend>Choose the observed request groups</legend><label for="build821ComparisonMode">Comparison view</label>
+      <select id="build821ComparisonMode" aria-describedby="build821ComparisonScope">${COMPARISON_MODES_821.map(mode=>`<option value="${esc(mode.key)}">${esc(mode.label)}</option>`).join('')}</select>
+      <p id="build821ComparisonScope" class="muted">Comparison uses only the latest 150 authenticated, filtered records at most. Changes do not save or export customer data.</p></fieldset>
+    <div class="build821-comparison-scroll" role="region" aria-label="Accessible follow-up cohort comparison" tabindex="0"><table class="build821-comparison-table"><caption>Side-by-side observed outcomes</caption>
+      <thead><tr><th scope="col">Outcome</th><th id="build821LeftColumn" scope="col">First cohort</th><th id="build821RightColumn" scope="col">Second cohort</th><th scope="col">Difference if comparable</th></tr></thead><tbody id="build821ComparisonRows"></tbody></table></div>
+    <p id="build821ComparisonStatus" class="build821-comparison-status" role="status" aria-live="polite" tabindex="-1">Comparison available when the authorized queue loads.</p>
+    <details class="build821-explanations"><summary>Explain workload thresholds and missing sources</summary><ul id="build821ThresholdList"></ul></details>
+    <div class="build821-readable"><h4>Accessible plain-language report preview</h4><p class="muted">Selectable aggregate text only. No file is made and no private follow-up, note or booking details are included.</p><p id="build821ReadableReport" tabindex="0" aria-label="Read-only accessible aggregate report">Waiting for verified records.</p></div>`;
+  counts.before(section);
+}
+function renderComparisonSurface821(snapshotAndSignals){
+  const rows=$('build821ComparisonRows'),leftHeading=$('build821LeftColumn'),rightHeading=$('build821RightColumn'),status=$('build821ComparisonStatus'),thresholds=$('build821ThresholdList'),report=$('build821ReadableReport');
+  if(!rows||!leftHeading||!rightHeading||!status||!thresholds||!report)return;
+  if(!loaded||!snapshotAndSignals){rows.textContent='';thresholds.textContent='';status.textContent='No authenticated cohort comparison available.';report.textContent='The authorized queue must load before an aggregate report can be shown.';return;}
+  const {snapshot,signals}=snapshotAndSignals,comparison=compareSnapshots821(snapshot,$('build821ComparisonMode')?.value||'adjacent');
+  if(!comparison.ok){rows.textContent='';status.textContent=comparison.reason;report.textContent=readableReport821(comparison,signals);return;}
+  leftHeading.textContent=comparison.leftLabel;rightHeading.textContent=comparison.rightLabel;
+  rows.innerHTML=[['waiting','Awaiting staff'],['responded','Staff replied'],['needs_help','Needs more help'],['confirmed','Answer confirmed'],['review','Source review'],['total','Total observed']].map(([field,label])=>
+    `<tr><th scope="row">${esc(label)}</th><td>${comparison.left[field]}</td><td>${comparison.right[field]}</td><td>${comparison.difference===null?'Not comparable':comparison.left[field]-comparison.right[field]}</td></tr>`).join('');
+  status.textContent=`${comparison.leftLabel}: ${comparison.left.total}. ${comparison.rightLabel}: ${comparison.right.total}. ${comparison.guidance} No historic baseline was saved.`;
+  thresholds.innerHTML=workloadExplanations821(signals).map(item=>`<li><strong>${esc(item.label)}: ${item.count===null?'Source unavailable':item.count}</strong><p>${esc(item.explanation)}</p></li>`).join('');
+  report.textContent=readableReport821(comparison,signals);
 }
 function viewControls818(){
   const select=$('build818SavedViews');if(!select)return;
@@ -175,7 +204,7 @@ function render(){const el=$('build814StaffList');if(!el)return;
     if(!loaded)summary.textContent='Outcome summary unavailable until the authenticated follow-up queue loads.';
     else{const counts=outcomeSummary819(selection);summary.textContent=`Shown follow-ups (${counts.total}; latest 150 loaded maximum): ${counts.waiting} awaiting staff · ${counts.responded} waiting for customer decision · ${counts.needs_help} requesting more help · ${counts.confirmed} customer-confirmed answers · ${counts.review} needing source review. ${ownershipReady?'Owner source available.':'Owner source unavailable.'} ${escalationReady?'Supervisor source available.':'Supervisor source unavailable.'} No booking or issue closures are inferred.`;}
   }
-  renderTrendSurface820(selection);
+  renderComparisonSurface821(renderTrendSurface820(selection));
   $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
   el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue" tabindex="-1" data-build819-followup="${esc(row.id)}">
@@ -244,9 +273,10 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
     const readback=await load();handoffFeedback819(row.id,'Staff response accepted by source',readback);notice(readback?'Staff response recorded and available to the customer in My Account after refresh. No outbound message was sent.':'Staff response accepted, but queue readback is unavailable. Refresh to verify before further changes.',!readback);
   }catch(error){notice(`${error.message||'Response not confirmed.'} Refresh the queue before trying again.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
-export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();ensureTrendSurface820();
+export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();ensureTrendSurface820();ensureComparisonSurface821();
   $('build814StaffRefresh').addEventListener('click',async()=>{const success=await load();const feedback=$('build819HandoffStatus');if(feedback)feedback.textContent=success?'Follow-up queue refreshed; active search and triage filters are retained. No message was sent.':'Follow-up refresh unavailable; filters are retained. No action was recorded.';});$('build814StaffFilter').addEventListener('change',render);
   $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',render);
+  $('build821ComparisonMode').addEventListener('change',()=>{render();$('build821ComparisonStatus').focus({preventScroll:false});});
   $('build818SaveView').addEventListener('click',saveCurrentView818);
   $('build818SavedViews').addEventListener('change',applySavedView818);
   $('build818RemoveView').addEventListener('click',removeSavedView818);
