@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 820 — Supervisor Follow-Up Outcome Trend Snapshots, Review Workload Signals & Safe Queue Export Preview.** Contract: `docs/build820_followup_trends_workload_safe_export.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 821 — Supervisor Follow-Up Trend Comparison Controls, Workload Threshold Explanations & Safe Report Accessibility.** Contract: `docs/build821_followup_comparisons_thresholds_accessible_report.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 

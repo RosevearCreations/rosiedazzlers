@@ -42,9 +42,9 @@ for(const secret of ['CUSTOMER-SECRET','private customer message','secret review
 assert.doesNotMatch(read('../assets/build820-followup-trends.mjs'),/fetch\(|localStorage|sessionStorage|download\(|clipboard|booking_id|private_note|request_text|customer_feedback|actor_staff_user_id/i);
 assert.equal(read('../admin-today.html'),read('../admin-today/index.html'));
 const html=read('../admin-today.html');
-assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build820/);
-assert.match(html,/worksite-issues-v811\.css\?v=build820/);
-assert.match(html,/Build 820 · Read-only supervisor workload insights/);
+assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build(?:820|821)/);
+assert.match(html,/worksite-issues-v811\.css\?v=build(?:820|821)/);
+assert.match(html,/Build (?:820 · Read-only supervisor workload insights|821 · Accessible comparison and review guidance)/);
 const app=read('../assets/admin-worksite-followups-v814.mjs');
 for(const token of ['ensureTrendSurface820','renderTrendSurface820','build820TrendRows','build820Workload','build820SafeExportPreview','build820SnapshotStatus','trendSnapshot820','workloadSignals820','safeQueuePreview820'])assert.ok(app.includes(token),`Missing UI contract: ${token}`);
 assert.match(app,/preview\.textContent=safeQueuePreview820\(snapshot,signals\)/,'CSV must be inserted as inert text');
