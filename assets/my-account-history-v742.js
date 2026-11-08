@@ -1,6 +1,7 @@
 // Build 742: one customer-safe, mobile-first history and change-request workbench.
 // Reads authenticated snapshots. Submissions request review; they never change a booking.
 import { appointmentTimeline809, changeRequestChoices809, changeRequestPreview809, torontoToday809 } from './customer-booking-self-service-v809.mjs';
+import { clearCustomerVisitPreparation810, loadCustomerVisitPreparation810, preparationCandidates810 } from './customer-visit-preparation-v810.mjs';
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const money = (cents) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(Number(cents || 0) / 100);
@@ -96,6 +97,7 @@ function renderAppointments809() {
     return;
   }
   const appointments = appointmentTimeline809(accountBookings, accountRequests);
+  const preparable = new Set(preparationCandidates810(accountBookings, accountRequests).map(row => row.id));
   status.textContent = appointments.length ? `${appointments.length} appointment${appointments.length === 1 ? '' : 's'} found in your account. Changes remain subject to Rosie’s review.` : 'No appointments linked to this account yet.';
   list.innerHTML = appointments.map((item) => {
     const pending = item.request;
@@ -107,6 +109,7 @@ function renderAppointments809() {
       <p><strong>Recorded date:</strong> ${esc(date)}${item.start_slot ? ` · ${esc(item.start_slot)}` : ''}</p>
       <p class="muted">${pending ? 'A request is awaiting staff review. Your original booking remains unchanged until an update is confirmed.' : item.closed ? 'This appointment is closed. Contact Rosie if you need help.' : item.confirmed ? 'Confirmed on the current booking record; check your details before arrival.' : 'Check directly with Rosie before treating this as confirmed.'}</p>
       ${pending ? '<a href="#build742RequestHistory">View request status</a>' : item.can_request ? '<a href="#build742RequestForm">Request a change</a>' : '<a href="/contact">Contact Rosie</a>'}
+      ${preparable.has(item.id) ? `<a href="#build810Preparation" data-build810-select="${esc(item.id)}">Prepare for this visit</a>` : ''}
     </article>`;
   }).join('');
 }
@@ -166,6 +169,7 @@ async function refreshHistory(dashboard) {
   renderRequests(accountRequests);
   renderBookingOptions();
   renderAppointments809();
+  loadCustomerVisitPreparation810(dashboard, accountRequests);
   $('#build742HistoryStatus').textContent = 'History loaded from your signed-in account.';
 }
 
@@ -175,6 +179,7 @@ export async function loadCustomerAccountHistory(dashboard) {
   accountBookings = Array.isArray(dashboard?.bookings) ? dashboard.bookings : [];
   accountRequests = [];
   historyReady = false;
+  clearCustomerVisitPreparation810();
   renderBookingOptions();
   renderAppointments809();
   $('#build742HistoryStatus').textContent = 'Loading account history…';
@@ -184,6 +189,7 @@ export async function loadCustomerAccountHistory(dashboard) {
     historyReady = false;
     accountBookings = [];
     accountRequests = [];
+    clearCustomerVisitPreparation810();
     for (const id of ['build742Overview','build742Quotes','build742Receipts','build742Maintenance','build742RequestHistory']) {
       document.getElementById(id)?.replaceChildren();
     }
