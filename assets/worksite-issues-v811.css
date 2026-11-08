@@ -42,6 +42,12 @@
 .build818-view-controls button{flex:0 0 auto}.build818-view-controls p{flex-basis:100%;margin:0}
 .build818-review-note{margin-block:10px;border-inline-start:3px solid #d4af37;padding:8px 12px;background:rgba(212,175,55,.06)}
 .build818-review-note summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:700}.build818-review-note p{white-space:pre-wrap;overflow-wrap:anywhere}
+.build819-summary{margin-block:14px;padding:14px;border:1px solid rgba(212,175,55,.45);border-radius:12px;background:rgba(212,175,55,.06)}
+.build819-summary h3{margin:0 0 8px}.build819-summary p{margin:6px 0;line-height:1.5;overflow-wrap:anywhere}
+.build819-outcome{margin-block:12px;padding:12px;border-inline-start:4px solid #8ba7bc;background:rgba(148,163,184,.1);border-radius:8px}
+.build819-outcome h4{margin:0 0 8px}.build819-outcome p{margin:8px 0;overflow-wrap:anywhere}
+.build819-needs_help,.build819-review{border-inline-start-color:#d9ad4a}.build819-confirmed{border-inline-start-color:#6ba889}
+[data-build819-followup]:focus-visible,#build819HandoffStatus:focus-visible{outline:3px solid #d4af37;outline-offset:3px}
 @media(max-width:600px){.build818-view-controls{display:grid}.build818-view-controls button{width:100%}}
 @media(max-width:600px){.build816-owner-form button{width:100%}.build816-customer-timeline{padding-inline-start:18px}}
 @media(prefers-reduced-motion:reduce){.build816-owner *, .build816-customer-timeline *{animation:none!important;transition:none!important}}

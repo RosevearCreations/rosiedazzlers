@@ -169,3 +169,4 @@ node scripts/build815_worksite_followup_aging_escalation_test.mjs
 node scripts/build816_supervisor_followup_priority_it_truth_test.mjs
 node scripts/build817_followup_search_review_triage_test.mjs
 node scripts/build818_saved_triage_views_review_notes_test.mjs
+node scripts/build819_followup_outcome_handoff_test.mjs
