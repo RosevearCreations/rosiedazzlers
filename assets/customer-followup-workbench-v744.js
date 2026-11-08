@@ -1,32 +1,51 @@
 // Build 744 customer workbench: customer-initiated actions, no automatic outreach.
-import { seasonalGuidance744, torontoSeason744, availabilityReadback744 } from '/assets/customer-followup-v744.mjs';
+import { availabilityReadback744 } from '/assets/customer-followup-v744.mjs';
+import { historyProjection807,filterHistory807,rebookingPath807 } from '/assets/customer-service-experience-v807.mjs?v=20261108build807';
 
 const $=selector=>document.querySelector(selector);
 const esc=value=>String(value??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
 const validUuid=value=>/^[0-9a-f]{8}-[0-9a-f-]{27}$/i.test(String(value||''));
 const date=value=>String(value||'').slice(0,10)||'Date unknown';
 let history=[], interests=[], catalog=null, consent=null, lastKey=null, lastFingerprint=null;
+let historyView807=null,availabilitySequence807=0;
 
-function bookablePackage(code) {
-  const pkg=catalog?.packages?.find(row=>row?.code===code);
-  if(!pkg||pkg.active===false||pkg.enabled===false||pkg.bookable===false||/retired|inactive|disabled|archived|unavailable/i.test(`${pkg.status||''} ${pkg.lifecycle_status||''}`)) return null;
-  return ['small','mid','oversize'].some(size=>Number(pkg.prices_cad?.[size])>0)?pkg:null;
+function historyFilters807(){
+  return {search:$('#build807HistorySearch')?.value||'',year:$('#build807HistoryYear')?.value||'all',
+    service:$('#build807HistoryPackage')?.value||'all',repeatableOnly:$('#build807HistoryMode')?.value==='repeatable'};
+}
+
+function renderHistoryChoices807(){
+  if(!historyView807)return;
+  for(const [id,options] of [
+    ['build807HistoryYear',historyView807.years.map(year=>[year,year])],
+    ['build807HistoryPackage',historyView807.packages]
+  ]){
+    const node=$(`#${id}`),old=node?.value;
+    if(!node)continue;
+    node.innerHTML=`<option value="all">${id.includes('Year')?'All years':'All services'}</option>`+
+      options.map(([code,label])=>`<option value="${esc(code)}">${esc(label)}</option>`).join('');
+    if(options.some(([code])=>code===old))node.value=old;
+  }
 }
 
 function renderServices() {
   const host=$('#build744Services');if(!host)return;
-  const season=torontoSeason744();
-  host.innerHTML=history.length?history.slice(0,6).map(row=>{
-    const pkg=bookablePackage(row.package_code);
-    const idea=seasonalGuidance744({...row,job_status:'completed',detailing_completed_at:row.completed_at},season);
-    const rebook=pkg?`<a class="btn primary" href="/book?${new URLSearchParams({rebook_package:row.package_code,rebook_date:date(row.service_date)})}">Start a new booking</a>`:
-      '<span class="build744-muted">Current service not verified in the live catalog; choose from current services.</span>';
-    return `<article class="build744-card"><span class="badge">Completed ${esc(date(row.completed_at))}</span><h3>${esc(pkg?.name||row.package_code)}</h3>
-      <p class="build744-muted">Based on your actual completed service${row.service_area?` in ${esc(row.service_area)}`:''}. No old price, time, vehicle choice or deposit carries forward.</p>
-      <p><strong>${esc(idea?.label||'Seasonal review')}:</strong> ${esc(idea?.copy||'Ask Rosie about current workability.')}</p>
+  historyView807=historyProjection807(history,catalog);
+  const rows=filterHistory807(historyView807.entries,historyFilters807());
+  const {completed,repeatable}=historyView807.summary;
+  $('#build807HistoryCounts').innerHTML=`<span><strong>${rows.length} / ${completed}</strong>Showing completed services</span><span><strong>${repeatable}</strong>Current catalog matches</span>`;
+  host.innerHTML=rows.length?rows.map(row=>{
+    const path=rebookingPath807(row);
+    const rebook=path?`<a class="btn primary" href="${esc(path)}">Start a new booking</a>`:
+      '<span class="build744-muted">This prior service is not verified as currently bookable. Choose a current service instead.</span>';
+    return `<article class="build744-card"><span class="badge">Completed ${esc(row.completedDate)}</span><h3>${esc(row.packageName)}</h3>
+      <p class="build744-muted">Recorded service ${esc(row.serviceDate)}${row.serviceArea?` · ${esc(row.serviceArea)}`:''}. No old price, time, vehicle choice or deposit carries forward.</p>
+      <span class="build807-flag">${path?'Matched in current catalog':'Current catalog match unavailable'}</span>
+      <p><strong>${esc(row.recommendation?.label||'Optional service review')}:</strong> ${esc(row.recommendation?.copy||'Ask Rosie about current workability and service scope.')}</p>
       <div class="build744-actions">${rebook}<button type="button" class="btn ghost" data-build744-pick="${esc(row.id)}">Ask Rosie about follow-up</button></div>
     </article>`;
-  }).join(''):'<p class="muted">No completed service is linked to this signed-in account. Personalized rebooking and seasonal ideas will appear after a completed visit. <a href="/services">Explore current services</a>.</p>';
+  }).join(''):(completed?'<p class="build807-empty">No completed services match these filters. Clear the filters to review the available history.</p>':
+    '<p class="muted">No verified completed service is linked to this signed-in history snapshot. Personalized rebooking ideas appear after a completed visit. <a href="/services">Explore current services</a>.</p>');
 }
 
 function renderChoices() {
@@ -59,11 +78,15 @@ async function refresh() {
   const res=await fetch('/api/client/followup_interest_v744',{credentials:'include',cache:'no-store'});
   const data=await res.json().catch(()=>null);
   if(!res.ok||!data?.ok)throw new Error(data?.error||'Follow-up options unavailable.');
-  history=Array.isArray(data.completed_services)?data.completed_services:[];
-  interests=Array.isArray(data.interests)?data.interests:[];
+  if(!Array.isArray(data.completed_services)||!Array.isArray(data.interests))throw Error('Verified account history was not returned.');
+  history=data.completed_services;
+  interests=data.interests;
   consent=data.marketing_contact_readiness;
+  historyView807=historyProjection807(history,catalog);
+  renderHistoryChoices807();
   renderServices();renderChoices();renderConsent();renderInterests();
-  $('#build744Status').textContent='Suggestions use your completed services. Dates and service eligibility are checked separately; no automatic messages or bookings.';
+  $('#build744Status').className='notice ok';
+  $('#build744Status').textContent='Showing the latest verified completed-service history from your account (up to 12 records). Rebooking uses the live catalog and a new checkout. No automatic messages or bookings.';
 }
 
 async function loadCatalog() {
@@ -75,24 +98,31 @@ async function loadCatalog() {
 export async function loadCustomerFollowupWorkbench744() {
   if(typeof document==='undefined'||!$('#build744CustomerFollowup'))return;
   try {await Promise.all([loadCatalog().catch(()=>{catalog=null;}),refresh()]);renderServices();}
-  catch(error){$('#build744Status').className='notice bad';$('#build744Status').textContent=error?.message||'Cannot load follow-up choices.';}
+  catch(error){history=[];historyView807=null;interests=[];consent=null;
+    $('#build744Services').innerHTML='<p class="notice bad">Completed-service history could not be verified. No rebooking shortcuts are available.</p>';
+    $('#build744ServiceChoice').innerHTML='<option value="">History unavailable</option>';
+    $('#build744InterestSubmit').disabled=true;$('#build744AvailabilityCheck').disabled=true;
+    $('#build807HistoryCounts').textContent='History unavailable; refresh your account to retry.';
+    $('#build744Status').className='notice bad';$('#build744Status').textContent=error?.message||'Cannot load follow-up choices.';}
 }
 
 function selectedService() {return history.find(row=>row.id===$('#build744ServiceChoice').value)||null;}
-function clearAvailability() {$('#build744AvailabilityStatus').textContent='Choose a date and check live capacity. No availability is reserved.';}
+function clearAvailability() {availabilitySequence807++;$('#build744AvailabilityStatus').textContent='Choose a date and check live capacity. No availability is reserved.';}
 
 async function checkAvailability() {
   const service=selectedService();const requestedDate=$('#build744AvailabilityDate').value;
   const node=$('#build744AvailabilityStatus');
   if(!service||!/^\d{4}-\d{2}-\d{2}$/.test(requestedDate)){node.textContent='Choose a completed service and date first.';return;}
   if(!service.service_area){node.textContent='Previous service area is not verified. Choose your current town in the booking wizard instead.';return;}
+  const sequence=++availabilitySequence807;
   node.textContent='Checking current one-car capacity…';
   try {
     const url=`/api/availability?${new URLSearchParams({date:requestedDate,service_area:service.service_area})}`;
     const res=await fetch(url,{cache:'no-store'});
     const data=await res.json().catch(()=>null);
-    node.textContent=availabilityReadback744(res.ok?data:null,requestedDate).label;
-  } catch {node.textContent='Live availability could not be checked. Please verify in the booking wizard.';}
+    if(sequence===availabilitySequence807&&selectedService()?.id===service.id&&$('#build744AvailabilityDate').value===requestedDate)
+      node.textContent=availabilityReadback744(res.ok?data:null,requestedDate).label;
+  } catch {if(sequence===availabilitySequence807)node.textContent='Live availability could not be checked. Please verify in the booking wizard.';}
 }
 
 async function submitInterest(event) {
@@ -122,12 +152,20 @@ async function submitInterest(event) {
 }
 
 if(typeof document!=='undefined'){
+  for(const id of ['build807HistorySearch','build807HistoryYear','build807HistoryPackage','build807HistoryMode'])
+    $(`#${id}`)?.addEventListener(id==='build807HistorySearch'?'input':'change',renderServices);
+  $('#build807HistoryClear')?.addEventListener('click',()=>{
+    for(const id of ['build807HistorySearch','build807HistoryYear','build807HistoryPackage','build807HistoryMode'])
+      $(`#${id}`).value=id==='build807HistorySearch'?'':'all';
+    renderServices();
+  });
   $('#build744Services')?.addEventListener('click',event=>{
     const button=event.target.closest('[data-build744-pick]');if(!button)return;
     $('#build744ServiceChoice').value=button.dataset.build744Pick;
     $('#build744InterestKind').focus();clearAvailability();
   });
   $('#build744ServiceChoice')?.addEventListener('change',clearAvailability);
+  $('#build744AvailabilityDate')?.addEventListener('change',clearAvailability);
   $('#build744InterestKind')?.addEventListener('change',()=>{$('#build744CycleWrap').hidden=$('#build744InterestKind').value!=='maintenance';});
   $('#build744InterestForm')?.addEventListener('submit',submitInterest);
   $('#build744AvailabilityCheck')?.addEventListener('click',checkAvailability);
