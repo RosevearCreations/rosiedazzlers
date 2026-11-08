@@ -65,9 +65,11 @@ export async function onRequestGet({request,env}) {
     ]);
     const ids=[...new Set(issues.map(row=>row.booking_id).filter(id=>UUID.test(String(id))))];
     const bookings=ids.length?await rows(env,`bookings?select=id,service_date,status,job_status,detailing_completed_at&id=in.(${ids.join(',')})&limit=100`):[];
+    const timelineIds=issues.map(row=>row.id).filter(id=>UUID.test(String(id)));
+    const events=timelineIds.length?await rows(env,`customer_worksite_issue_events_v813?select=issue_id,issue_revision,event_kind,recorded_at,actor_staff_user_id,previous_status,current_status,previous_assignee,current_assignee,previous_escalation,current_escalation,customer_resolution_snapshot&issue_id=in.(${timelineIds.join(',')})&order=recorded_at.desc&limit=500`):[];
     const bookingMap=new Map(bookings.map(row=>[row.id,row]));
     const today=torontoToday812();
-    return json({ok:true,issues:issues.map(row=>staffIssue812(row,bookingMap,today)),staff_candidates:eligibleAssignees812(staff),
+    return json({ok:true,issues:issues.map(row=>staffIssue812(row,bookingMap,today)),events,staff_candidates:eligibleAssignees812(staff),
       today,authority:{session_verified:true,operations_review:true,assignment_allowed:hasActionAccess(access.actor,'operations.assignment.manage'),customer_contacted:false,booking_changed:false,automatic_escalation:false}});
   }catch{return json({ok:false,error:'Assignment queue is temporarily unavailable. No decision was recorded.'},503);}
 }
@@ -107,6 +109,7 @@ export async function onRequestPost({request,env}) {
     } else {
       if(issue.arrival_escalation_status!=='flagged')return json({ok:false,error:'Only a flagged arrival-day issue may be marked addressed.'},409);
       patch.arrival_escalation_status='addressed';
+      patch.arrival_escalation_addressed_at=now;patch.arrival_escalation_addressed_by_staff_user_id=access.actor.id;
     }
     const response=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_worksite_issues_v811?select=${SELECT}&id=eq.${encodeURIComponent(action.id)}&status=in.(pending_review,reviewing)&workflow_revision=eq.${action.revision}`,{
       method:'PATCH',headers:{...serviceHeaders(env),Prefer:'return=representation'},body:JSON.stringify(patch)});

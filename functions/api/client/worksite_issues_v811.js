@@ -87,7 +87,7 @@ export async function onRequestPost({request,env}) {
   }
 }
 
-async function customerIdentity811(request,env) {
+export async function customerIdentity811(request,env) {
   if (!env?.SUPABASE_URL || !env?.SUPABASE_SERVICE_ROLE_KEY) return null;
   const session = await getCurrentCustomerSession({env,request});
   const profileId = String(session?.customer_profile?.id || '').trim();
@@ -95,7 +95,7 @@ async function customerIdentity811(request,env) {
   return UUID.test(profileId) && email.includes('@') ? {profileId,email} : null;
 }
 
-async function loadRows(env,path) {
+export async function loadRows(env,path) {
   const response = await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`,{headers:serviceHeaders(env)});
   if (!response.ok) throw new Error('Source unavailable');
   const rows = await response.json();

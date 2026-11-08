@@ -163,3 +163,4 @@ node scripts/build809_customer_booking_self_service_test.mjs
 node scripts/build810_customer_visit_preparation_test.mjs
 node scripts/build811_customer_worksite_issues_test.mjs
 node scripts/build812_staff_worksite_assignment_test.mjs
+node scripts/build813_worksite_issue_timeline_test.mjs
