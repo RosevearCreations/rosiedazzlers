@@ -2,10 +2,17 @@
   "use strict";
 
   const BUILD = 381;
+  const DISPATCH_BUILD = 806;
   const LIST_ENDPOINT = "/api/admin/bookings";
+  const SCHEDULE_ENDPOINT = "/api/day_schedule";
   const FINANCE_ENDPOINT = "/api/admin/booking_finance";
   const $ = (id) => document.getElementById(id);
   let loading = false;
+  let dispatch806 = null;
+  let current806 = null;
+  let selectedDate806 = null;
+  let pendingRefresh806 = false;
+  let filters806 = {query:"",slot:"all",status:"all",staffId:"all",onlyExceptions:false,exceptionKind:"all"};
 
   function escapeHtml(value) {
     return String(value ?? "")
@@ -61,7 +68,16 @@
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({})
     });
-    return Array.isArray(data.bookings) ? data.bookings : [];
+    if(!Array.isArray(data.bookings))throw Error('Authorized booking details were not returned.');
+    return {bookings:data.bookings,crewWarning:data.crew_warning||null};
+  }
+
+  async function loadDaySchedule806(date) {
+    return requestJson(SCHEDULE_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({service_date:date})
+    });
   }
 
   async function loadFinance(bookingId) {
@@ -74,8 +90,9 @@
   }
 
   function assignmentState(booking) {
-    const name = booking.assigned_staff_name || booking.assigned_to || booking.assigned_staff_email || "";
-    return name ? { state: "good", text: name } : { state: "warn", text: "Unassigned" };
+    const people = dispatch806?.verifiedStaff806(booking).people||[];
+    return people.length ? {state:"good",text:people.map(person=>person.name).join(" · ")}
+      : {state:"warn",text:"No verified staff ID"};
   }
 
   function completionState(booking) {
@@ -126,7 +143,7 @@
     return `<span class="ops-state" data-state="${escapeHtml(state)}">${escapeHtml(text)}</span>`;
   }
 
-  function bookingCard(booking, finance) {
+  function bookingCard(booking, finance, exceptions = []) {
     const assignment = assignmentState(booking);
     const completion = completionState(booking);
     const readiness = readinessState(booking);
@@ -141,6 +158,7 @@
 
     return `<article class="ops-card" data-booking-id="${escapeHtml(id)}">
       <div class="ops-toolbar"><div><div class="badge">${escapeHtml(startLabel(booking.start_slot))}</div><h2>${escapeHtml(customer)}</h2><div class="muted">${escapeHtml(vehicle)}</div></div><div>${stateSpan(completion.state, completion.text)}</div></div>
+      ${exceptions.length?`<div class="dispatch806-badges" aria-label="Dispatch exceptions">${exceptions.map(item=>`<span class="badge">${escapeHtml(item.label)}</span>`).join("")}</div>`:'<div class="ops-note">No dispatch signals detected from the current booking and day-schedule sources. QC and customer approvals are reviewed separately.</div>'}
       <div class="ops-grid">
         <div class="ops-cell"><span class="ops-label">Readiness</span>${stateSpan(readiness.state, readiness.text)}</div>
         <div class="ops-cell"><span class="ops-label">Staff assignment</span>${stateSpan(assignment.state, assignment.text)}</div>
@@ -163,14 +181,72 @@
     </article>`;
   }
 
-  function renderKpis(bookings, finances) {
+  function renderKpis(bookings, finances, projection) {
     const completed = bookings.filter((booking) => completionState(booking).text === "Completed").length;
-    const unassigned = bookings.filter((booking) => assignmentState(booking).state !== "good").length;
     const knownBalances = bookings.map((booking, index) => financeState(booking, finances[index])).filter((row) => row.balance !== "Unknown");
     const owing = knownBalances.filter((row) => row.state !== "good").length;
     $("opsKpis").innerHTML = [
-      ["Appointments", bookings.length], ["Completed", completed], ["Unassigned", unassigned], ["Known balances owing", owing]
+      ["Appointments", bookings.length], ["Completed", completed], ["Unassigned IDs", projection.summary.unassigned],
+      ["Jobs needing attention", projection.summary.attentionJobs], ["Verified staff", projection.summary.staffAssigned],
+      ["Known balances owing", owing]
     ].map(([label, value]) => `<div class="ops-kpi"><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`).join("");
+  }
+
+  function renderWorkload806(projection) {
+    const host=$("opsWorkload806"),warning=$("opsWorkloadWarning806");
+    host.innerHTML=projection.staff.length?projection.staff.map(person=>{
+      const count=person.slotCounts;
+      const selected=filters806.staffId===person.id;
+      return `<div class="dispatch806-card" data-overlap="${person.overloaded}">
+        <strong>${escapeHtml(person.name)}</strong><span class="muted">${person.jobIds.length} job(s) · ${person.completed} completed / handoff</span>
+        <div class="dispatch806-badges"><span class="badge">AM ${count.AM}</span><span class="badge">PM ${count.PM}</span><span class="badge">Full day ${count.FULL}</span>${count.unknown?`<span class="badge">Unknown ${count.unknown}</span>`:""}</div>
+        ${person.overloaded?'<div class="dispatch806-warning">Possible overlapping assignments — review the canonical schedule.</div>':person.needsSlotReview?'<div class="ops-note">Unknown slot. Capacity cannot be certified.</div>':'<div class="ops-note">Recorded assignments only; not a route or payroll plan.</div>'}
+        <button class="btn ghost dispatch806-filter" type="button" data-ops-staff="${escapeHtml(person.id)}" aria-pressed="${selected}">${selected?'Showing this staff · clear':'Show assigned jobs'}</button>
+      </div>`;
+    }).join(""):'<div class="notice warn">No verified staff IDs on this date. Check assignments; a name alone does not prove an assignment.</div>';
+    const warnings=[...projection.warnings];
+    if(projection.summary.unassigned)warnings.push(`${projection.summary.unassigned} active job(s) lack a verified staff ID.`);
+    warning.hidden=!warnings.length;
+    warning.textContent=warnings.join(' ');
+    host.querySelectorAll('[data-ops-staff]').forEach(button=>button.addEventListener('click',()=>{
+      filters806.staffId=filters806.staffId===button.dataset.opsStaff?'all':button.dataset.opsStaff;
+      renderDispatch806();
+    }));
+  }
+
+  function renderExceptionQueue806(projection) {
+    const host=$("opsExceptions806");
+    const kind=filters806.exceptionKind;
+    const filtered=projection.exceptions.filter(item=>kind==='all'||item.kind===kind);
+    const groups=new Map();
+    for(const item of filtered){const group=groups.get(item.bookingId)||{customer:item.customer,bookingId:item.bookingId,items:[]};group.items.push(item);groups.set(item.bookingId,group);}
+    host.innerHTML=groups.size?[...groups.values()].map(group=>{
+      const kinds=new Set(group.items.map(item=>item.kind));
+      const resolution=kinds.has('assignment')?'/admin-assign?booking_id=':kinds.has('schedule')?'/admin-blocks.html?service_date=':'/admin-booking.html?booking_id=';
+      const resolveArg=kinds.has('schedule')?projection.date:group.bookingId;
+      return `<article class="dispatch806-exception"><div><strong>${escapeHtml(group.customer)}</strong><div class="dispatch806-badges">${group.items.map(item=>`<span class="badge">${escapeHtml(item.label)}</span>`).join('')}</div></div><div class="ops-actions"><a class="btn ghost small" href="/admin-booking.html?booking_id=${encodeURIComponent(group.bookingId)}">Review booking</a><a class="btn primary small" href="${resolution}${encodeURIComponent(resolveArg)}">Open authority</a></div></article>`;
+    }).join(''):'<div class="notice">No exceptions in this category from the currently verified dispatch sources. This does not certify photo, QC, payments or customer decisions.</div>';
+    document.querySelectorAll('[data-exception-kind]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.exceptionKind===kind)));
+  }
+
+  function renderDispatch806() {
+    if(!current806||!dispatch806)return;
+    const {projection,finances}=current806;
+    const rows=dispatch806.filterDispatch806(projection.rows,projection.exceptionsById,filters806);
+    $("opsList").innerHTML=rows.length?rows.map(row=>bookingCard(row,finances.get(String(row.id))||{ok:false,error:'Finance not loaded.'},projection.exceptionsById.get(String(row.id))||[])).join(""):
+      '<div class="panel ops-empty">No jobs match these filters. Clear filters to see the full verified day.</div>';
+    $("opsVisible806").textContent=`${rows.length} of ${projection.rows.length} shown · ${projection.summary.attentionJobs} job(s) need dispatch review`;
+    $("opsOnlyExceptions806").setAttribute('aria-pressed',String(filters806.onlyExceptions));
+    $("opsAllStaff806").setAttribute('aria-pressed',String(filters806.staffId==='all'));
+    renderWorkload806(projection);
+    renderExceptionQueue806(projection);
+  }
+
+  function updateFilters806() {
+    filters806.query=$("opsSearch806").value;
+    filters806.slot=$("opsSlot806").value;
+    filters806.status=$("opsStatus806").value;
+    renderDispatch806();
   }
 
   async function refresh() {
@@ -181,40 +257,74 @@
     $("opsRefresh").disabled = true;
     list.classList.add("ops-refreshing");
     status.className = "notice";
-    status.textContent = "Refreshing today’s canonical booking evidence…";
+    status.textContent = "Verifying the selected service date, slot blocks and authorized bookings…";
     try {
-      const today = localIsoDate();
-      $("opsDateLabel").textContent = new Intl.DateTimeFormat("en-CA", { dateStyle: "full" }).format(new Date());
-      const all = await loadBookings();
-      const bookings = all.filter((booking) => String(booking.service_date || "") === today)
-        .sort((a, b) => String(a.start_slot || "").localeCompare(String(b.start_slot || "")));
-      const finances = await Promise.all(bookings.map((booking) => loadFinance(booking.id)));
-      renderKpis(bookings, finances);
-      list.innerHTML = bookings.length
-        ? bookings.map((booking, index) => bookingCard(booking, finances[index])).join("")
-        : '<div class="panel ops-empty"><strong>No appointments are recorded for today.</strong><div class="ops-note">This is a read-only result from the canonical bookings authority.</div></div>';
-      const financeFailures = finances.filter((row) => !row.ok).length;
-      status.className = `notice ${financeFailures ? "warn" : "ok"}`;
-      status.textContent = financeFailures
-        ? `Loaded ${bookings.length} appointment(s); ${financeFailures} finance summary(s) are unavailable and are shown as Unknown.`
-        : `Loaded ${bookings.length} appointment(s) from the current booking authority.`;
+      const date=selectedDate806||localIsoDate();
+      $("opsDateLabel").textContent=`Service date: ${new Intl.DateTimeFormat("en-CA",{dateStyle:"full"}).format(new Date(`${date}T12:00:00`))}`;
+      if(!dispatch806)dispatch806=await import('/assets/admin-dispatch-v806.mjs?v=20261108build806');
+      const [schedule,detailResult]=await Promise.all([loadDaySchedule806(date),loadBookings()]);
+      const projection=dispatch806.buildDispatch806(schedule,detailResult.bookings,{crewWarning:detailResult.crewWarning});
+      const financeList=await Promise.all(projection.rows.map(row=>loadFinance(row.id)));
+      const finances=new Map(projection.rows.map((row,index)=>[String(row.id),financeList[index]]));
+      current806={projection,finances};
+      renderKpis(projection.rows,financeList,projection);
+      renderDispatch806();
+      const financeFailures=financeList.filter(row=>!row.ok).length;
+      const warnings=projection.warnings.length+financeFailures;
+      status.className=`notice ${warnings?'warn':'ok'}`;
+      status.textContent=`Verified ${projection.rows.length} booking(s) against the day schedule. ${projection.summary.attentionJobs} job(s) need dispatch review.`+
+        (financeFailures?` ${financeFailures} finance summary(s) unavailable; balances remain Unknown.`:'')+
+        (projection.warnings.length?' Some crew or blocked-day information needs review.':'');
     } catch (error) {
+      current806=null;
       status.className = "notice bad";
       status.textContent = error?.message || "Operations evidence could not load.";
-      list.innerHTML = '<div class="notice bad">The command centre could not load. Use the canonical Bookings, Needs Attention, Payments and Inventory screens; no operational state was inferred.</div>';
+      list.innerHTML = '<div class="notice bad">Dispatch sources could not be reconciled. No schedule, staff capacity or exception clearance is inferred. Use the existing authorized Booking, Blocks and Needs Attention screens.</div>';
       $("opsKpis").innerHTML = '<div class="ops-kpi"><span>State</span><strong>Unavailable</strong></div>';
+      $("opsWorkload806").innerHTML='<div class="notice bad">Workload unavailable until assignments are verified.</div>';
+      $("opsExceptions806").innerHTML='<div class="notice bad">Exception queue unavailable; review canonical booking and attention screens.</div>';
+      $("opsWorkloadWarning806").hidden=true;
+      $("opsVisible806").textContent='Unverified dispatch state';
     } finally {
       loading = false;
       $("opsRefresh").disabled = false;
       list.classList.remove("ops-refreshing");
+      if(pendingRefresh806){pendingRefresh806=false;void refresh();}
     }
   }
 
+  function refreshDate806(){
+    if(loading){pendingRefresh806=true;return;}
+    void refresh();
+  }
+
+  function shiftDate806(days){
+    const date=new Date(`${selectedDate806}T12:00:00`);
+    if(!Number.isFinite(date.getTime()))return;
+    date.setDate(date.getDate()+days);
+    selectedDate806=localIsoDate(date);
+    $("opsSelectedDate").value=selectedDate806;
+    refreshDate806();
+  }
+  selectedDate806=localIsoDate();
+  $("opsSelectedDate").value=selectedDate806;
+  $("opsSelectedDate").addEventListener('change',()=>{const value=$("opsSelectedDate").value;if(/^\d{4}-\d{2}-\d{2}$/.test(value)){selectedDate806=value;refreshDate806();}});
+  $("opsPrevDate").addEventListener('click',()=>shiftDate806(-1));
+  $("opsNextDate").addEventListener('click',()=>shiftDate806(1));
+  $("opsToday").addEventListener('click',()=>{selectedDate806=localIsoDate();$("opsSelectedDate").value=selectedDate806;refreshDate806();});
+  for(const id of ['opsSearch806','opsSlot806','opsStatus806'])$(id).addEventListener(id==='opsSearch806'?'input':'change',updateFilters806);
+  $("opsClear806").addEventListener('click',()=>{
+    filters806={query:'',slot:'all',status:'all',staffId:'all',onlyExceptions:false,exceptionKind:'all'};
+    $("opsSearch806").value='';$("opsSlot806").value='all';$("opsStatus806").value='all';renderDispatch806();
+  });
+  $("opsOnlyExceptions806").addEventListener('click',()=>{filters806.onlyExceptions=!filters806.onlyExceptions;renderDispatch806();});
+  $("opsAllStaff806").addEventListener('click',()=>{filters806.staffId='all';renderDispatch806();});
+  document.querySelectorAll('[data-exception-kind]').forEach(button=>button.addEventListener('click',()=>{filters806.exceptionKind=button.dataset.exceptionKind;renderDispatch806();}));
   $("opsRefresh")?.addEventListener("click", refresh);
   window.AdminShell.boot({
     pageKey: "app-operations",
     onReady: refresh
   });
 
-  window.RosieOperationsDailyCommandCentre = Object.freeze({ build: BUILD, refresh });
+  window.RosieOperationsDailyCommandCentre = Object.freeze({ build: BUILD, dispatchBuild:DISPATCH_BUILD, refresh });
 })();
