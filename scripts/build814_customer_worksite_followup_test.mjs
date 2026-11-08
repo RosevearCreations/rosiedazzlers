@@ -132,7 +132,7 @@ assert.match(migration,/raise exception 'Recorded worksite follow-up events cann
 assert.equal(read('../my-account.html'),read('../my-account/index.html'));
 assert.equal(read('../admin-today.html'),read('../admin-today/index.html'));
 for(const id of ['build814Form','build814Issue','build814Kind','build814Text','build814CustomerHistory','build814CustomerStatus'])assert.match(read('../my-account.html'),new RegExp(`id="${id}"`));
-assert.match(read('../admin-today.html'),/admin-worksite-followups-v814\.mjs\?v=build816/);
+assert.match(read('../admin-today.html'),/admin-worksite-followups-v814\.mjs\?v=build\d+/);
 assert.match(read('../assets/customer-worksite-issues-v811.mjs'),/loadCustomerWorksiteFollowups814\(issues\)/);
 assert.match(read('../assets/my-account-v355.js'),/20261108build816/);
 assert.match(read('./current_booking_wizard_regression.sh'),/build814_customer_worksite_followup_test\.mjs/);

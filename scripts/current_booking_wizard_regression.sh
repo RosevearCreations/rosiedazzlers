@@ -167,3 +167,4 @@ node scripts/build813_worksite_issue_timeline_test.mjs
 node scripts/build814_customer_worksite_followup_test.mjs
 node scripts/build815_worksite_followup_aging_escalation_test.mjs
 node scripts/build816_supervisor_followup_priority_it_truth_test.mjs
+node scripts/build817_followup_search_review_triage_test.mjs

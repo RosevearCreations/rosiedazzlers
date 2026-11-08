@@ -21,6 +21,31 @@ export function priority816(row,owner=null,escalation=null,now=Date.now()){
   if(band==='attention')return {level:5,label:'24+ hours — assigned'};
   return {level:6,label:'Recent follow-up'};
 }
+// Build 817: client-side triage over the authenticated, bounded staff queue.
+// Missing ownership data must never be interpreted as an unassigned or overdue owner.
+export function reviewTarget817(row,owner,now=Date.now()){
+  if(row?.status!=='awaiting_staff'||!owner?.review_due_at)return 'none';
+  const due=Date.parse(owner.review_due_at);
+  if(!Number.isFinite(due))return 'unknown';
+  return due<=now?'past':due<=now+86400000?'soon':'later';
+}
+export function selectFollowups817(rows,{status='priority',query='',target='all',ownershipReady=false,owners=[],escalations=[],staffId=null,now=Date.now()}={}){
+  const ownerFor=id=>owners.find(e=>e.followup_id===id);
+  const escalationFor=id=>escalations.find(e=>e.followup_id===id);
+  const search=String(query).trim().toLocaleLowerCase().slice(0,100);
+  return rows.filter(r=>{
+    const owner=ownershipReady?ownerFor(r.id):null,escalation=escalationFor(r.id);
+    const matchesStatus=status==='all'||r.status===status||(status==='priority'&&r.status==='awaiting_staff')||
+      (status==='unowned'&&ownershipReady&&r.status==='awaiting_staff'&&!owner)||
+      (status==='mine'&&ownershipReady&&owner?.owner_staff_user_id===staffId)||
+      (status==='aging'&&['attention','overdue'].includes(advisoryAging815(r,now)?.band))||
+      (status==='escalated'&&!!escalation&&escalation.status!=='cleared');
+    if(!matchesStatus||target!=='all'&&(!ownershipReady||reviewTarget817(r,owner,now)!==target))return false;
+    return !search||[r.booking_id,r.issue_category,r.request_kind,FOLLOWUP_KINDS_814[r.request_kind],r.request_text]
+      .some(value=>String(value??'').toLocaleLowerCase().includes(search));
+  }).sort((a,b)=>priority816(a,ownerFor(a.id),escalationFor(a.id),now).level-priority816(b,ownerFor(b.id),escalationFor(b.id),now).level||
+    (Date.parse(a.requested_at)||0)-(Date.parse(b.requested_at)||0));
+}
 function ownerControls(row){if(row.status!=='awaiting_staff'&&!ownershipFor(row.id))return '';
   if(!ownershipReady)return '<p class="notice bad">Owner assignment source unavailable. Assignments are read-only until refresh.</p>';
   const current=ownershipFor(row.id),person=ownershipCandidates.find(s=>s.id===current?.owner_staff_user_id);
@@ -50,12 +75,13 @@ function audit(id){const history=events.filter(e=>e.followup_id===id).slice(0,12
     ${history.length?`<ol class="build813-event-list">${history.map(e=>`<li><time>${esc(eventTimeToronto813(e.recorded_at))}</time> · Rev ${esc(e.followup_revision)} · ${esc(e.event_kind.replaceAll('_',' '))}${e.actor_staff_user_id?` · Staff ${esc(e.actor_staff_user_id.slice(0,8))}`:''}</li>`).join('')}</ol>`:'<p class="muted">No recorded actions yet. History is not reconstructed.</p>'}
     <p class="muted">Actions are written by the database. Customers cannot see staff identity or the internal audit log.</p></details>`;}
 function render(){const el=$('build814StaffList');if(!el)return;
-  $('build814StaffCounts').textContent=loaded?`${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'} · ${records.length} recent follow-ups.`:'Awaiting authenticated operations access.';
+  const filter=$('build814StaffFilter')?.value||'priority',query=$('build817StaffSearch')?.value||'',target=ownershipReady?($('build817ReviewTarget')?.value||'all'):'all';
+  const selection=loaded?selectFollowups817(records,{status:filter,query,target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
+  const targetSelect=$('build817ReviewTarget');if(targetSelect)targetSelect.disabled=!ownershipReady;
+  $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
-  const filter=$('build814StaffFilter')?.value||'awaiting_staff';const selection=records.filter(r=>filter==='all'||r.status===filter||(filter==='priority'&&r.status==='awaiting_staff')||(filter==='unowned'&&ownershipReady&&r.status==='awaiting_staff'&&!ownershipFor(r.id))||(filter==='mine'&&ownershipReady&&ownershipFor(r.id)?.owner_staff_user_id===staffId)||(filter==='aging'&&['attention','overdue'].includes(advisoryAging815(r)?.band))||(filter==='escalated'&&escalationByFollowup(r.id)?.status!=='cleared'&&!!escalationByFollowup(r.id)))
-    .sort((a,b)=>priority816(a,ownershipFor(a.id),escalationByFollowup(a.id)).level-priority816(b,ownershipFor(b.id),escalationByFollowup(b.id)).level||Date.parse(a.requested_at)-Date.parse(b.requested_at));
   el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue">
-    <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span>${row.status==='awaiting_staff'?`<span class="badge build816-priority-label">${esc(priority816(row,ownershipReady?ownershipFor(row.id):null,escalationReady?escalationByFollowup(row.id):null).label)}</span>`:''}<h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
+    <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span>${row.status==='awaiting_staff'?`<span class="badge build816-priority-label">${ownershipReady?esc(priority816(row,ownershipFor(row.id),escalationReady?escalationByFollowup(row.id):null).label):'Ownership priority unavailable'}</span>`:''}<h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
     <p class="muted">${esc(row.issue_category||'Worksite report')} · Booking ${esc(row.booking_id||'Reference on file')} · ${esc(eventTimeToronto813(row.requested_at))}</p>
     <p><strong>Customer’s follow-up:</strong> ${esc(row.request_text)}</p>
     ${row.staff_response?`<p class="build814-response"><strong>Recorded response:</strong> ${esc(row.staff_response)} · ${esc(eventTimeToronto813(row.staff_responded_at))}</p>`:''}
@@ -121,4 +147,5 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
 }
 export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;
   $('build814StaffRefresh').addEventListener('click',load);$('build814StaffFilter').addEventListener('change',render);
+  $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',render);
   $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
