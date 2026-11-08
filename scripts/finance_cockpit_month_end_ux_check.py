@@ -68,8 +68,12 @@ if current < 384 or next_release != current + 1:
     raise SystemExit(f"Build 384 living release sequence is invalid: {[current, next_release]}")
 if (int(handoff_current.group(1)), int(handoff_next.group(1))) != (current, next_release):
     raise SystemExit("Build 384 release queue and project handoff are not synchronized.")
-if f"Current source direction: **Build {current} —" not in readme:
-    raise SystemExit(f"README must identify current source release {current}.")
+candidate_match = re.search(r"\*\*Current release candidate: Build (\d{3}) —", readme)
+if candidate_match:
+    if int(candidate_match.group(1)) < current:
+        raise SystemExit(f"README candidate predates retained release {current}.")
+elif f"Current source direction: **Build {current} —" not in readme:
+    raise SystemExit(f"README must identify current source release {current} or a newer candidate.")
 
 for token in ["Build 384 — Finance Cockpit & Month-End UX", "production-exact-sha", "scripts/cloudflare_pages_production_acceptance.sh"]:
     if token not in workflow:
