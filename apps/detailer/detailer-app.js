@@ -14,7 +14,7 @@
   const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const requestedJobId=String(new URLSearchParams(location.search).get('job')||'').trim();
   const requestedMessages=location.hash==='#liveJobHost';
-  let actor=null,jobs=[],selected=null,liveModule=null,currentPolicy=null,deepLinkHandled=false;
+  let actor=null,jobs=[],selected=null,liveModule=null,liveModuleMount805=null,currentPolicy=null,deepLinkHandled=false;
   let mobile745=null,boardFilter='all',reconciliationRequired=true,wasDisconnected=false,continuityEpoch=0;
   let readiness={jobId:null,state:'idle',intake:null,error:''};
   let readinessRequest=0;
@@ -353,10 +353,12 @@
     if(!currentPolicy?.may_load_live_module||!selected)return;
     $('liveJobHost').dataset.loaded='loading';
     try{
-      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20261102build746');
+      const mod=await loader.load('detailer-live-job','/apps/detailer/live-job-module.js?v=20261108build805');
       if(!continuityVerified()||!currentPolicy?.may_load_live_module)return;
       if(!liveModule){
-        liveModule=await mod.mount({host:$('liveJobHost'),job:selected,policy:currentPolicy,api,onJobPatch:(patch)=>{selected={...selected,...patch};const idx=jobs.findIndex((j)=>String(j.id)===String(selected.id));if(idx>=0)jobs[idx]=selected;renderJobs();renderSelected();},onFieldState:(next)=>{fieldGate=next||fieldGate;updateActionButtons();}});
+        if(!liveModuleMount805)liveModuleMount805=mod.mount({host:$('liveJobHost'),job:selected,policy:currentPolicy,api,onJobPatch:(patch)=>{selected={...selected,...patch};const idx=jobs.findIndex((j)=>String(j.id)===String(selected.id));if(idx>=0)jobs[idx]=selected;renderJobs();renderSelected();},onFieldState:(next)=>{fieldGate=next||fieldGate;updateActionButtons();}});
+        try{liveModule=await liveModuleMount805;}finally{liveModuleMount805=null;}
+        liveModule?.setJob?.(selected,currentPolicy); // Resolve any job/revision switch during the first mount.
       }else liveModule.setJob?.(selected,currentPolicy);
       $('liveJobHost').dataset.loaded='true';
       $('runtimeMessage').innerHTML='<strong>Build 383 field workflow awake.</strong><p class="mini">The module loaded because this job is open. Field evidence, media and messages are user-driven; there is still no recurring network timer.</p>';
