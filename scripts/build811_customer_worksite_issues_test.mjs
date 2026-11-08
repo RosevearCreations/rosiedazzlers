@@ -110,7 +110,7 @@ const html=read('../my-account.html');assert.equal(html,read('../my-account/inde
 for(const id of ['build811Form','build811Booking','build811Category','build811Description','build811CustomerHistory','build811CustomerStatus'])assert.match(html,new RegExp(`id="${id}"`));
 assert.match(read('../admin-today.html'),/admin-worksite-issues-v811\.mjs/);
 assert.match(read('../assets/my-account-history-v742.js'),/clearCustomerWorksiteIssues811\(\)/);
-assert.match(read('../assets/my-account-v355.js'),/my-account-history-v742\.js\?v=20261108build814/);
+assert.match(read('../assets/my-account-v355.js'),/my-account-history-v742\.js\?v=20261108build815/);
 assert.match(read('./current_booking_wizard_regression.sh'),/build811_customer_worksite_issues_test\.mjs/);
 assert.match(read('./build413_workflow_efficiency_accessibility_check.py'),/build413\(\?:\[_-\]\|\$\)/,
   'Retained Build 413 schema gate continues to match actual build labels, not unrelated migration timestamp digits');

@@ -97,6 +97,6 @@ assert.equal(read('../my-account.html'),read('../my-account/index.html'));
 assert.equal(read('../admin-today.html'),read('../admin-today/index.html'));
 assert.match(read('../assets/customer-worksite-issues-v811.mjs'),/worksite_timeline_v813/);
 assert.match(read('../assets/admin-worksite-issues-v811.mjs'),/staffAuditMarkup813/);
-assert.match(read('../assets/my-account-v355.js'),/20261108build814/);
+assert.match(read('../assets/my-account-v355.js'),/20261108build815/);
 assert.match(read('./current_booking_wizard_regression.sh'),/build813_worksite_issue_timeline_test\.mjs/);
 console.log('Build 813 PASS: database-recorded staff handoffs, real issue history, customer-only timeline redaction, safe follow-up guidance, no invented backfill, and protected staff audit.');

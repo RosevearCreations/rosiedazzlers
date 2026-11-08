@@ -24,3 +24,9 @@
 .build814-confirm,.build814-staff-reply{display:grid;gap:10px;margin-block:14px;padding:14px;border:1px solid rgba(148,163,184,.3);border-radius:12px}
 .build814-confirm button,.build814-staff-reply button{justify-self:start}
 @media(max-width:600px){.build814-confirm button,.build814-staff-reply button{width:100%}}
+.build815-age{padding:8px 12px;border-inline-start:4px solid #789bb3;background:rgba(120,155,179,.12);border-radius:4px}
+.build815-age-attention{border-inline-start-color:#d9ad4a;background:rgba(217,173,74,.13)}
+.build815-age-overdue{border-inline-start-color:#cf705f;background:rgba(207,112,95,.13)}
+.build815-escalation,.build815-customer-progress{border:1px solid rgba(212,175,55,.45);border-radius:12px;padding:12px;margin-block:10px}
+.build815-customer-next{padding:10px;background:rgba(148,163,184,.12);border-radius:8px}
+.build815-escalation form button{max-width:100%}
