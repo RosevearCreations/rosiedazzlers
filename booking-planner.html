@@ -11,6 +11,7 @@
   <meta name="robots" content="index,follow" />
   <link rel="stylesheet" href="/assets/site.css?v=20261101build734" />
   <link rel="stylesheet" href="/assets/ux-800-804.css?v=build804" />
+  <link rel="stylesheet" href="/assets/checkout-mobile-v808.css?v=build808" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -658,6 +659,15 @@
         <div id="finalSummary" class="summary-box" role="region" aria-label="Current non-binding booking estimate"></div>
         <p id="finalReviewDisclosure631" class="booking-final-review-631__notice" role="status" aria-live="polite">Estimated amount only. A slot is not held by this review.</p>
       </div>
+      <div class="checkout-steps-808" role="group" aria-label="What happens after pressing the payment button">
+        <strong>What happens next</strong>
+        <ol><li>We verify the date, package and current deposit.</li><li>If payment is needed, we open the secure payment provider.</li><li>Your booking is confirmed only after payment and booking verification. A gift covering the deposit needs no extra charge.</li></ol>
+        <p id="checkoutProgress808" role="status" aria-live="polite">Ready for final review. You will see a clear status before leaving this page.</p>
+      </div>
+      <div id="giftCompletion808" class="notice ok checkout-gift-808" role="status" aria-live="polite" hidden>
+        <strong>Gift-covered booking accepted.</strong> No additional deposit payment was required. Keep your confirmation email for the final service details.
+        <a class="btn ghost" href="/my-account">View my account</a>
+      </div>
       <div id="step5Error" class="field-error" role="alert" aria-live="assertive" tabindex="-1"></div>
 
       <div class="wizard-actions">
@@ -682,6 +692,7 @@
   <script type="module">
     import { validateFinalReviewContact631, finalReviewDisclosure631 } from "/assets/booking-final-review-v631.js?v=1";
     import { createCheckoutAttemptGuard737, validateBookingAddress737, validateBookingChoices737, CHECKOUT_UNCERTAIN_KEY_737 } from "/assets/booking-journey-v737.js?v=20261101build737";
+    import { classifyCheckoutResult808 } from "/assets/checkout-mobile-v808.mjs?v=build808";
     import {
       loadPricingCatalogClient,
       fetchJsonStrict,
@@ -2330,9 +2341,11 @@
     let uncertainCheckout737 = false;
     try { uncertainCheckout737 = sessionStorage.getItem(CHECKOUT_UNCERTAIN_KEY_737) === "1"; } catch {}
     const checkoutGuard737 = createCheckoutAttemptGuard737(uncertainCheckout737);
+    const checkoutProgress808 = qs("#checkoutProgress808");
     if (uncertainCheckout737) {
       qs("#checkoutBtn").disabled = true;
       qs("#checkoutBtn").textContent = "Contact us before another payment attempt";
+      checkoutProgress808.textContent = "Previous payment setup could not be verified. Contact Rosie before trying again.";
     }
 
     qs("#checkoutBtn").addEventListener("click", async () => {
@@ -2340,12 +2353,14 @@
       const btn = qs("#checkoutBtn");
       btn.disabled = true;
       btn.textContent = "Checking booking details…";
+      checkoutProgress808.textContent = "Step 1 of 3: checking current choices and availability…";
       for (let i = 1; i <= 5; i++) {
         const ok = await validateStep(i);
         if (!ok) {
           checkoutGuard737.releaseForCorrection();
           btn.disabled = false;
           btn.textContent = "Book and pay deposit";
+          checkoutProgress808.textContent = "Please correct the highlighted step before continuing.";
           gotoStep(i);
           return;
         }
@@ -2407,6 +2422,7 @@
       };
 
       btn.textContent = "Preparing payment…";
+      checkoutProgress808.textContent = "Step 2 of 3: securely preparing the deposit payment. Please wait; do not press Back or pay twice.";
       checkoutGuard737.markSubmitted();
       analyticsTrack("checkout_started", {
         package_code: state.selectedPackageCode,
@@ -2422,17 +2438,25 @@
           body: JSON.stringify(payload)
         });
         const out = await res.json().catch(() => null);
-        if (!res.ok || !out?.ok || !out?.checkout_url) {
-          const failure = new Error(out?.error || "Checkout could not be verified.");
-          // A definite input rejection can be corrected. A missing redirect,
-          // server error, or uncertain payment-session state must not replay.
-          failure.safeToCorrect = [400, 422].includes(res.status) ||
-            (res.status === 409 && out?.recovery_state === "stale_availability");
+        const decision = classifyCheckoutResult808(res.status, out);
+        if (decision.kind === "correctable" || decision.kind === "review_required") {
+          const failure = new Error(decision.message);
+          failure.safeToCorrect = decision.kind === "correctable";
           throw failure;
         }
+        if (decision.kind === "gift_confirmed") {
+          checkoutGuard737.markCompleted();
+          checkoutProgress808.textContent = "Step 3 of 3: gift-covered booking accepted by the checkout service.";
+          qs("#giftCompletion808").hidden = false;
+          btn.textContent = "Booking accepted — no payment needed";
+          try { sessionStorage.removeItem(CHECKOUT_UNCERTAIN_KEY_737); } catch {}
+          analyticsTrack("checkout_completed", { provider:"gift", verification_state:"server_confirmed" });
+          return;
+        }
         checkoutGuard737.markRedirect();
-        analyticsTrack("checkout_redirect", { booking_id: out.booking_id || null, provider:"stripe" });
-        location.href = out.checkout_url;
+        checkoutProgress808.textContent = "Step 3 of 3: opening the secure payment provider. We confirm the booking only after the return is verified.";
+        analyticsTrack("checkout_redirect", { provider:decision.mode });
+        location.href = decision.url;
       } catch (err) {
         analyticsTrack("checkout_error", { message: err?.message || "Checkout failed." });
         const needsManualReview = err?.safeToCorrect !== true;
@@ -2443,11 +2467,13 @@
         try{qs("#bookingStatus")?.focus({preventScroll:true});}catch{qs("#bookingStatus")?.focus();}
         if (needsManualReview) {
           checkoutGuard737.markUncertain();
+          checkoutProgress808.textContent = "Payment status uncertain — checkout locked to prevent a duplicate booking or charge.";
           try { sessionStorage.setItem(CHECKOUT_UNCERTAIN_KEY_737, "1"); } catch {}
           btn.disabled = true;
           btn.textContent = "Contact us before another payment attempt";
         } else {
           checkoutGuard737.releaseForCorrection();
+          checkoutProgress808.textContent = "Payment not confirmed. Review your choices and availability before retrying.";
           btn.disabled = false;
           btn.textContent = "Book and pay deposit";
         }

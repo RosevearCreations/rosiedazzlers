@@ -211,7 +211,10 @@
       async function start() {
         track("booking_confirmation_view", { verification_state: "started" });
         if (provider === "gift") {
-          showConfirmed({ package: params.get("package"), size: params.get("size") }, "gift");
+          // A user-editable URL is never proof of gift redemption or booking
+          // confirmation. Gift-covered bookings get their result only from the
+          // successful canonical POST /api/checkout response in the planner.
+          showError("Gift-covered bookings are confirmed only after the secure checkout request succeeds. A link alone cannot verify a booking. Check your email or contact Rosie before another payment attempt.");
           return;
         }
         if (provider === "stripe") {
