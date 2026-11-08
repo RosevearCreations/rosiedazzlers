@@ -180,6 +180,41 @@ function renameCurrentPreset823(){
   presetNotice822('Comparison preset renamed. Its settings and current queue were not changed.');
   $('build822PresetStatus').focus({preventScroll:false});
 }
+function syncReviewDraftEditor823(){
+  const key=$('build822ExceptionSelect')?.value||'all';
+  $('build823NoteText').value=reviewDrafts823.get(key)?.text||'';
+}
+function renderSourceFreshness823(){
+  const result=sourceFreshness823({loaded,loadedAt:sourceLoadedAt822});
+  const alert=$('build823FreshnessAlert');
+  if(alert){alert.dataset.status=result.status;alert.textContent=result.message;}
+  const refresh=$('build823RefreshNow');if(refresh)refresh.disabled=busy;
+  return result;
+}
+function renderReviewDraft823(ready,category){
+  const note=reviewDrafts823.get(category);
+  $('build823SaveNote').disabled=!ready;
+  $('build823ClearNote').disabled=!ready||!note;
+  $('build823NoteStatus').textContent=reviewDraftSummary823(note,{actor:staffId,category,sourceReady:ready});
+  $('build823NotePreview').textContent=ready&&note?.ok?note.text:'';
+}
+function saveCurrentReviewDraft823(){
+  const key=$('build822ExceptionSelect')?.value||'all';
+  const fresh=sourceFreshness823({loaded,loadedAt:sourceLoadedAt822});
+  const result=validateReviewDraft823({actor:staffId,sourceReady:loaded&&fresh.allowReport,category:key,
+    shown:Math.min(150,records.length),text:$('build823NoteText').value});
+  if(!result.ok){$('build823NoteStatus').textContent=result.reason;return;}
+  reviewDrafts823.set(key,result);
+  renderReviewDraft823(true,key);
+  $('build823NoteStatus').focus({preventScroll:false});
+}
+function clearCurrentReviewDraft823(){
+  const key=$('build822ExceptionSelect')?.value||'all';
+  reviewDrafts823.delete(key);
+  syncReviewDraftEditor823();
+  renderReviewDraft823(!!staffId&&loaded&&sourceFreshness823({loaded,loadedAt:sourceLoadedAt822}).allowReport,key);
+  $('build823NoteStatus').focus({preventScroll:false});
+}
 function exceptionContext822(){return {now:Date.now(),ownershipReady,owners:ownership,escalationReady,escalations};}
 function renderExceptionControls822(selection,result,context){
   const select=$('build822ExceptionSelect');if(!select)return;
