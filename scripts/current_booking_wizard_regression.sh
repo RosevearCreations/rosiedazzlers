@@ -159,3 +159,4 @@ node scripts/build805_mobile_job_guide_test.mjs
 node scripts/build806_admin_dispatch_test.mjs
 node scripts/build807_customer_service_experience_test.mjs
 node --experimental-vm-modules scripts/build808_mobile_checkout_confirmation_test.mjs
+node scripts/build809_customer_booking_self_service_test.mjs
