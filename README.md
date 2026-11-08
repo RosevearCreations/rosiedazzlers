@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 817 — Staff Follow-Up Search & Review-Target Triage.** Contract: `docs/build817_staff_followup_search_review_target_triage.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 818 — Supervisor Follow-Up Saved Triage Views, Accessible Review Notes & Queue Continuity.** Contract: `docs/build818_supervisor_saved_triage_views_review_notes.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 
