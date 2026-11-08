@@ -171,3 +171,4 @@ node scripts/build817_followup_search_review_triage_test.mjs
 node scripts/build818_saved_triage_views_review_notes_test.mjs
 node scripts/build819_followup_outcome_handoff_test.mjs
 node scripts/build820_followup_trend_snapshot_test.mjs
+node scripts/build821_followup_comparison_accessibility_test.mjs
