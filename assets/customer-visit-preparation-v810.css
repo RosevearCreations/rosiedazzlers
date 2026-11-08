@@ -1,0 +1,16 @@
+.build810-preparation{margin-top:18px;padding-top:10px;border-top:1px solid rgba(128,128,128,.25)}
+.build810-preparation .form-grid{margin:12px 0}
+.build810-prep-guidance{padding:14px;border:1px solid rgba(77,119,255,.33);background:rgba(77,119,255,.07);border-radius:14px;margin:10px 0 16px}
+.build810-prep-guidance p{margin:8px 0;line-height:1.5}
+.build810-prep-fieldset{border:0;padding:0;margin:0}
+.build810-prep-fieldset legend{font-size:1.04rem;font-weight:700;margin-bottom:12px}
+.build810-prep-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.build810-check-item{display:flex;align-items:flex-start;gap:10px;border-radius:14px;border:1px solid rgba(128,128,128,.32);padding:13px;min-width:0;cursor:pointer}
+.build810-check-item:focus-within{outline:2px solid currentColor;outline-offset:2px}
+.build810-check-item input{margin-top:4px;accent-color:#d6a84b;min-width:18px;min-height:18px}
+.build810-check-item span{display:grid;gap:5px;min-width:0;overflow-wrap:anywhere}
+.build810-check-item small{font-size:.9rem;line-height:1.45;opacity:.85}
+.build810-preparation .actions{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.build810-preparation textarea[readonly]{width:100%;margin-top:10px;min-height:130px}
+#build810CopyFallback[hidden]{display:none!important}
+@media(max-width:680px){.build810-prep-items{grid-template-columns:minmax(0,1fr)}.build810-preparation .actions .btn{width:100%}}
