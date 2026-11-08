@@ -82,7 +82,7 @@ assert.doesNotMatch(migration,/security definer/i);
 assert.doesNotMatch(read('../functions/api/admin/worksite_ownership_v816.js'),/twilio|sendgrid|stripe.com|method:\s*'PATCH'[^\n]*bookings/i);
 const html=read('../admin-today.html'),account=read('../my-account.html');
 for(const filter of ['priority','unowned','mine'])assert.ok(html.includes('option value="'+filter+'"'));
-assert.match(html,/admin-worksite-followups-v814.mjs\?v=build81[6789]/);
+assert.match(html,/admin-worksite-followups-v814.mjs\?v=build(?:81[6789]|820)/);
 assert.match(account,/my-account-v355.js\?v=20261108build816/);
 assert.equal(html,read('../admin-today/index.html'));assert.equal(account,read('../my-account/index.html'));
 assert.match(read('../assets/admin-worksite-followups-v814.mjs'),/data-build816-owner/);

@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 819 — Supervisor Follow-Up Outcome Summaries, Review Closure Guidance & Accessible Handoff Feedback.** Contract: `docs/build819_supervisor_outcome_summaries_closure_handoff.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 820 — Supervisor Follow-Up Outcome Trend Snapshots, Review Workload Signals & Safe Queue Export Preview.** Contract: `docs/build820_followup_trends_workload_safe_export.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 

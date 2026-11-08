@@ -3,6 +3,7 @@ import { eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 import { FOLLOWUP_LABELS_814,FOLLOWUP_KINDS_814 } from './customer-worksite-followups-v814.mjs';
 import { readViews818,saveView818,selectView818,removeView818,viewStorage818 } from './build818-followup-view-state.mjs';
 import { outcome819,latestReturnedHandoff819,outcomeSummary819 } from './build819-followup-outcomes.mjs';
+import { COHORTS_820,trendSnapshot820,workloadSignals820,safeQueuePreview820 } from './build820-followup-trends.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
@@ -17,6 +18,32 @@ function ensureOutcomeSurface819(){
   const summary=document.createElement('p');summary.id='build819OutcomeSummary';summary.setAttribute('role','status');summary.setAttribute('aria-live','polite');summary.textContent='Waiting for the authenticated outcome summary.';
   const handoff=document.createElement('p');handoff.id='build819HandoffStatus';handoff.className='muted';handoff.tabIndex=-1;handoff.setAttribute('role','status');handoff.setAttribute('aria-live','polite');handoff.textContent='Manual changes show readback and focus guidance here.';
   section.append(heading,summary,handoff);counts.before(section);
+}
+function ensureTrendSurface820(){
+  const counts=$('build814StaffCounts');if(!counts||$('build820TrendRows'))return;
+  const section=document.createElement('section');section.className='build820-insights';section.setAttribute('aria-labelledby','build820InsightsHeading');
+  section.innerHTML=`<h3 id="build820InsightsHeading">Filtered follow-up trend snapshots and workload</h3>
+    <p class="muted">Read-only request-date cohorts from the currently filtered, newest 150 authorized records at most. These are not complete historical trends, response-time promises or issue-closure totals. Switching filters changes the observed cohort.</p>
+    <div class="build820-table-scroll" role="region" aria-label="Observed follow-up request cohorts" tabindex="0"><table class="build820-trend-table">
+      <caption>Observed outcome status by request age</caption><thead><tr><th scope="col">Request cohort</th><th scope="col">Awaiting staff</th><th scope="col">Staff replied</th><th scope="col">Needs help</th><th scope="col">Answer confirmed</th><th scope="col">Source review</th><th scope="col">Shown</th></tr></thead>
+      <tbody id="build820TrendRows"></tbody></table></div>
+    <p id="build820Workload" class="build820-workload">Workload signals available after the authorized queue loads.</p>
+    <details class="build820-preview"><summary>Preview aggregate-only queue CSV (no download)</summary><p class="muted">Only counts from the loaded filtered view are shown. No bookings, names, addresses, search text, messages, private notes or identifiers are included. Select text manually if needed; nothing is uploaded, sent, saved or downloaded.</p><pre id="build820SafeExportPreview" tabindex="0" aria-label="Aggregate-only comma separated values preview">Waiting for the authorized queue.</pre></details>
+    <p id="build820SnapshotStatus" class="muted" role="status" aria-live="polite">Waiting for verified follow-up records.</p>`;
+  counts.before(section);
+}
+function renderTrendSurface820(selection){
+  const table=$('build820TrendRows'),workload=$('build820Workload'),preview=$('build820SafeExportPreview'),status=$('build820SnapshotStatus');
+  if(!table||!workload||!preview||!status)return;
+  if(!loaded){table.textContent='';workload.textContent='Workload signals unavailable until the authorized queue loads.';preview.textContent='No authenticated queue snapshot available.';status.textContent='No verified source snapshot yet.';return;}
+  const now=Date.now(),snapshot=trendSnapshot820(selection,now);
+  const signals=workloadSignals820(selection,{now,ownershipReady,owners:ownership,escalationReady,escalations});
+  table.innerHTML=COHORTS_820.map(({key,label})=>{
+    const c=snapshot.cohorts[key];return `<tr><th scope="row">${esc(label)}</th><td>${c.waiting}</td><td>${c.responded}</td><td>${c.needs_help}</td><td>${c.confirmed}</td><td>${c.review}</td><td>${c.total}</td></tr>`;
+  }).join('');
+  workload.textContent=`In this filtered view: ${signals.waiting} awaiting staff · ${signals.older48h} over 48 hours without response · ${signals.unknownAge} with missing/future request dates · ${signals.unowned===null?'unowned count unavailable (owner source missing)':signals.unowned+' without a verified assigned owner'} · ${signals.reviewPast===null?'internal review targets unavailable':signals.reviewPast+' passed internal review targets'} · ${signals.openEscalations===null?'open supervisor reviews unavailable':signals.openEscalations+' open supervisor reviews among waiting follow-ups'}. These are review indicators, not customer deadlines.`;
+  preview.textContent=safeQueuePreview820(snapshot,signals);
+  status.textContent=`Observed ${snapshot.totals.total} of ${records.length} loaded authorized follow-ups after current filters (latest 150 maximum). Snapshot recalculated locally; no historic baseline or customer export was created.`;
 }
 function viewControls818(){
   const select=$('build818SavedViews');if(!select)return;
@@ -148,6 +175,7 @@ function render(){const el=$('build814StaffList');if(!el)return;
     if(!loaded)summary.textContent='Outcome summary unavailable until the authenticated follow-up queue loads.';
     else{const counts=outcomeSummary819(selection);summary.textContent=`Shown follow-ups (${counts.total}; latest 150 loaded maximum): ${counts.waiting} awaiting staff · ${counts.responded} waiting for customer decision · ${counts.needs_help} requesting more help · ${counts.confirmed} customer-confirmed answers · ${counts.review} needing source review. ${ownershipReady?'Owner source available.':'Owner source unavailable.'} ${escalationReady?'Supervisor source available.':'Supervisor source unavailable.'} No booking or issue closures are inferred.`;}
   }
+  renderTrendSurface820(selection);
   $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
   el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue" tabindex="-1" data-build819-followup="${esc(row.id)}">
@@ -216,7 +244,7 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
     const readback=await load();handoffFeedback819(row.id,'Staff response accepted by source',readback);notice(readback?'Staff response recorded and available to the customer in My Account after refresh. No outbound message was sent.':'Staff response accepted, but queue readback is unavailable. Refresh to verify before further changes.',!readback);
   }catch(error){notice(`${error.message||'Response not confirmed.'} Refresh the queue before trying again.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
-export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();
+export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();ensureTrendSurface820();
   $('build814StaffRefresh').addEventListener('click',async()=>{const success=await load();const feedback=$('build819HandoffStatus');if(feedback)feedback.textContent=success?'Follow-up queue refreshed; active search and triage filters are retained. No message was sent.':'Follow-up refresh unavailable; filters are retained. No action was recorded.';});$('build814StaffFilter').addEventListener('change',render);
   $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',render);
   $('build818SaveView').addEventListener('click',saveCurrentView818);
