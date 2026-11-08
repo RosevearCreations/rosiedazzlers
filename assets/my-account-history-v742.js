@@ -2,6 +2,7 @@
 // Reads authenticated snapshots. Submissions request review; they never change a booking.
 import { appointmentTimeline809, changeRequestChoices809, changeRequestPreview809, torontoToday809 } from './customer-booking-self-service-v809.mjs';
 import { clearCustomerVisitPreparation810, loadCustomerVisitPreparation810, preparationCandidates810 } from './customer-visit-preparation-v810.mjs';
+import { clearCustomerWorksiteIssues811, loadCustomerWorksiteIssues811 } from './customer-worksite-issues-v811.mjs';
 const $ = (selector) => document.querySelector(selector);
 const esc = (value) => String(value ?? '').replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#39;');
 const money = (cents) => new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD' }).format(Number(cents || 0) / 100);
@@ -170,6 +171,7 @@ async function refreshHistory(dashboard) {
   renderBookingOptions();
   renderAppointments809();
   loadCustomerVisitPreparation810(dashboard, accountRequests);
+  await loadCustomerWorksiteIssues811(dashboard, accountRequests);
   $('#build742HistoryStatus').textContent = 'History loaded from your signed-in account.';
 }
 
@@ -180,6 +182,7 @@ export async function loadCustomerAccountHistory(dashboard) {
   accountRequests = [];
   historyReady = false;
   clearCustomerVisitPreparation810();
+  clearCustomerWorksiteIssues811();
   renderBookingOptions();
   renderAppointments809();
   $('#build742HistoryStatus').textContent = 'Loading account history…';
@@ -190,6 +193,7 @@ export async function loadCustomerAccountHistory(dashboard) {
     accountBookings = [];
     accountRequests = [];
     clearCustomerVisitPreparation810();
+    clearCustomerWorksiteIssues811();
     for (const id of ['build742Overview','build742Quotes','build742Receipts','build742Maintenance','build742RequestHistory']) {
       document.getElementById(id)?.replaceChildren();
     }
