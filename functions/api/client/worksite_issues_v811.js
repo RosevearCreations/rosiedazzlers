@@ -4,7 +4,7 @@ import { getCurrentCustomerSession, serviceHeaders } from '../_lib/customer-sess
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const CATEGORIES = new Set(['parking_access','site_rules','utilities_restriction','weather','vehicle_condition','arrival_contact','other']);
 const CLOSED = new Set(['completed','cancelled','canceled','refunded','no_show']);
-const SELECT = 'id,booking_id,category,customer_description,status,submitted_at,updated_at,reviewed_at,customer_visible_resolution';
+const SELECT = 'id,booking_id,category,customer_description,status,submitted_at,updated_at,reviewed_at,customer_visible_resolution,staff_acknowledged_at,arrival_escalation_status';
 
 export function sameOrigin811(request) {
   const origin = request.headers.get('origin');
@@ -28,7 +28,8 @@ export function safeCustomerIssue811(row) {
   return { id:row.id, booking_id:row.booking_id, category:row.category,
     description:row.customer_description, status:row.status, submitted_at:row.submitted_at,
     updated_at:row.updated_at, reviewed_at:row.reviewed_at,
-    resolution:row.customer_visible_resolution };
+    resolution:row.customer_visible_resolution,staff_acknowledged_at:row.staff_acknowledged_at||null,
+    arrival_escalation_status:row.arrival_escalation_status||'none' };
 }
 
 export function bookingAllowsIssue811(row, today) {

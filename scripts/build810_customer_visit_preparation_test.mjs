@@ -79,7 +79,7 @@ for (const id of ['build810Preparation','build810Booking','build810VisitStatus',
   assert.match(html, new RegExp(`id="${id}"`));
 }
 assert.match(html, /customer-visit-preparation-v810\.css/);
-assert.match(html, /my-account-v355\.js\?v=20261108build811/);
+assert.match(html, /my-account-v355\.js\?v=20261108build812/);
 assert.match(html, /Rosie brings standard detailing water and power/);
 assert.match(html, /they are not saved or sent/);
 assert.match(read('../assets/site-policies.js'), /Rosie brings standard detailing water and power/);
@@ -89,7 +89,7 @@ const history = read('../assets/my-account-history-v742.js');
 assert.match(history, /loadCustomerVisitPreparation810\(dashboard, accountRequests\)/);
 assert.match(history, /clearCustomerVisitPreparation810\(\)/);
 assert.match(history, /data-build810-select/);
-assert.match(read('../assets/my-account-v355.js'), /my-account-history-v742\.js\?v=20261108build811/);
+assert.match(read('../assets/my-account-v355.js'), /my-account-history-v742\.js\?v=20261108build812/);
 const client = read('../assets/customer-visit-preparation-v810.mjs');
 assert.doesNotMatch(client, /\bfetch\s*\(|localStorage|sessionStorage|indexedDB|sendBeacon|setInterval\s*\(/,
   'Preparation is client-only and does not create hidden storage, network writes or polling');
