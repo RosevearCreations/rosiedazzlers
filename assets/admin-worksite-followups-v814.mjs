@@ -6,12 +6,14 @@ import { outcome819,latestReturnedHandoff819,outcomeSummary819 } from './build81
 import { COHORTS_820,trendSnapshot820,workloadSignals820,safeQueuePreview820 } from './build820-followup-trends.mjs';
 import { COMPARISON_MODES_821,compareSnapshots821,workloadExplanations821,readableReport821 } from './build821-followup-comparisons.mjs';
 import { readPresets822,savePreset822,selectPreset822,removePreset822,presetStorage822,EXCEPTIONS_822,drilldown822,exceptionCounts822,reportContinuity822 } from './build822-followup-review-continuity.mjs';
+import { sourceFreshness823,renamePreset823,validateReviewDraft823,reviewDraftSummary823 } from './build823-supervisor-exception-review.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
 let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=false,canEscalate=false,ownership=[],ownershipEvents=[],ownershipCandidates=[],ownershipReady=false,canAssign=false,staffId=null,busy=false,loaded=false;
 let viewsActor=null,savedViews={views:[],activeId:''};
 let presetsActor=null,savedPresets822={presets:[],activeId:''},sourceLoadedAt822=null;
+let reviewDrafts823=new Map(); // volatile local-only drafts
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
 function viewNotice(message){const el=$('build818ViewStatus');if(el)el.textContent=message;}
 function presetNotice822(message){const el=$('build822PresetStatus');if(el)el.textContent=message;}
