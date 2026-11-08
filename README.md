@@ -1,8 +1,8 @@
 # Rosie Dazzlers
 
-**Current active build: 553 — Staff Mobile Field Regression Evidence.** Contract: `BUILD553_STAFF_MOBILE_FIELD_DAIP_SOCIAL_DRAFTS.md`. Next 554; exact-main Cloudflare acceptance required.
+**Current release candidate: Build 817 — Staff Follow-Up Search & Review-Target Triage.** Contract: `docs/build817_staff_followup_search_review_target_triage.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
-Current source direction: **Build 553 — Staff Mobile Field Regression Evidence**.
+Historical Build 553 source direction: **Staff Mobile Field Regression Evidence**. Older build notes below are retained for compatibility, not active launch prerequisites.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
 <!-- Build 547 previous: Current source direction: **Build 547 — Winter Booking Rule Observed Safety & Transparency**. -->
@@ -13,7 +13,7 @@ Current source direction: **Build 553 — Staff Mobile Field Regression Evidence
 
 <!-- Retained Build 541 compatibility: Current source direction: **Build 541 — Maintenance & Fleet Continuation Evidence Integrity Review**. -->
 
-Current contract: `BUILD542_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/booking_quote_follow_up_evidence_integrity_review_check.py`.
+Historical Build 542 contract: `BUILD542_BOOKING_QUOTE_FOLLOW_UP_EVIDENCE_INTEGRITY_REVIEW.md`. Historical source authority: `scripts/booking_quote_follow_up_evidence_integrity_review_check.py`.
 
 <!-- Retained Build 541 source authority: Current contract: `BUILD541_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_INTEGRITY_REVIEW.md`. Current source authority: `scripts/maintenance_fleet_continuation_evidence_integrity_review_check.py`. --> Retained freshness authority: `BUILD531_MAINTENANCE_FLEET_CONTINUATION_EVIDENCE_FRESHNESS_REVIEW.md`. Retained outcome authority: `BUILD521_MAINTENANCE_FLEET_CONTINUATION_OUTCOME_CONTINUITY.md`. Renewed roadmap: `FORWARD_BUILD_ROADMAP_536_545.md`. Production is not considered GREEN from source promotion alone.
 

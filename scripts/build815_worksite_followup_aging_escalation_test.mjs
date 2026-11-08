@@ -106,7 +106,7 @@ const api=read('../functions/api/client/worksite_escalation_v815.js')+read('../f
 assert.doesNotMatch(api,/api.stripe.com|twilio|sendgrid|method:\s*'PATCH'[^\n]*bookings/i);
 const html=read('../admin-today.html'),account=read('../my-account.html');
 assert.match(html,/option value="aging"/);assert.match(html,/option value="escalated"/);
-assert.match(html,/admin-worksite-followups-v814.mjs\?v=build816/);
+assert.match(html,/admin-worksite-followups-v814.mjs\?v=build\d+/);
 assert.match(account,/my-account-v355.js\?v=20261108build816/);
 assert.equal(html,read('../admin-today/index.html'));assert.equal(account,read('../my-account/index.html'));
 assert.match(read('./current_booking_wizard_regression.sh'),/build815_worksite_followup_aging_escalation_test.mjs/);
