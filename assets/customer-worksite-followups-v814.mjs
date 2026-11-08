@@ -19,7 +19,19 @@ export function confirmationDecision814(status,decision,feedback){
   if(status!=='staff_replied'||!['confirmed','needs_more_help'].includes(decision))return false;
   const text=String(feedback||'').trim();return text.length<=500&&(decision==='confirmed'||text.length>=12);
 }
-let issues=[],followups=[],available=false,wired=false,epoch=0,pendingKey=null,lastFingerprint=null;
+let issues=[],followups=[],escalations=[],escalationReady=false,available=false,wired=false,epoch=0,pendingKey=null,lastFingerprint=null;
+export function customerGuidance815(row,escalation){
+  if(row.status==='staff_replied')return 'Please review Rosie’s response and confirm whether it resolved your concern.';
+  if(row.status==='confirmed')return 'You confirmed the answer resolved your concern.';
+  if(row.status==='needs_more_help')return 'You requested more help. You may send another follow-up or contact Rosie directly.';
+  if(escalation?.status==='flagged')return 'Your request has been flagged for supervisor review. A response has not yet been recorded.';
+  if(escalation?.status==='acknowledged')return 'A supervisor has acknowledged your concern. A response is still pending.';
+  return 'Your follow-up is awaiting staff response. Please refresh My Account for updates.';
+}
+function customerProgress815(row){if(!escalationReady)return '<p class="muted">Supervisor review progress is temporarily unavailable; your follow-up history is still available.</p>';
+  const e=escalations.find(v=>v.followup_id===row.id);if(!e)return '';
+  return `<p class="build815-customer-progress"><strong>Supervisor review:</strong> ${e.status==='flagged'?'Flagged for supervisor review':e.status==='acknowledged'?'Supervisor acknowledged':e.status==='cleared'?'Supervisor review completed':'Review pending'}
+    · ${esc(eventTimeToronto813(e.status==='cleared'?e.cleared_at:e.status==='acknowledged'?e.acknowledged_at:e.flagged_at))}</p>`;}
 function notice(s,err=false){const el=$('build814CustomerStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=s;}}
 function draft(){return {issue_id:$('build814Issue')?.value||'',request_kind:$('build814Kind')?.value||'',request_text:$('build814Text')?.value||''};}
 function renderControls(){const select=$('build814Issue'),submit=$('build814Submit'),preview=$('build814Preview'),form=$('build814Form');if(!select||!submit||!preview||!form)return;
@@ -36,6 +48,8 @@ function renderHistory(){const target=$('build814CustomerHistory');if(!target)re
     <p><strong>Our question:</strong> ${esc(row.request_text)}</p>
     ${row.staff_response?`<p class="build814-response"><strong>Rosie’s response:</strong> ${esc(row.staff_response)}<br><span class="muted">Recorded ${esc(eventTimeToronto813(row.staff_responded_at))}. Viewable here; no outbound notification was sent.</span></p>`:''}
     ${row.customer_decided_at?`<p><strong>Our confirmation:</strong> ${row.status==='confirmed'?'Marked resolved':'More help needed'} · ${esc(eventTimeToronto813(row.customer_decided_at))}${row.customer_feedback?` · ${esc(row.customer_feedback)}`:''}</p>`:''}
+    ${customerProgress815(row)}
+    <p class="build815-customer-next"><strong>Next step:</strong> ${esc(customerGuidance815(row,escalationReady?escalations.find(e=>e.followup_id===row.id):null))}</p>
     ${row.status==='staff_replied'?`<form class="build814-confirm" data-build814-confirm="${esc(row.id)}" aria-busy="false"><p><strong>Did Rosie’s response resolve your question?</strong></p>
       <label>Decision<select name="decision"><option value="confirmed">Yes, this answered my question</option><option value="needs_more_help">No, I still need help</option></select></label>
       <label>Optional note (required when more help is needed)<textarea name="feedback" maxlength="500" rows="2" placeholder="What is still unclear or unresolved?"></textarea></label>
@@ -46,8 +60,13 @@ function renderHistory(){const target=$('build814CustomerHistory');if(!target)re
 }
 async function refresh(expected){const response=await fetch('/api/client/worksite_followups_v814',{credentials:'include',cache:'no-store'});
   const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok||!Array.isArray(data.followups))throw Error(data?.error||'Could not load follow-ups.');
-  if(expected!==epoch)return;followups=data.followups;available=true;renderHistory();renderControls();
-  notice(`${followups.filter(r=>r.status==='awaiting_staff').length} awaiting staff response · ${followups.filter(r=>r.status==='staff_replied').length} waiting for your confirmation. Refresh to check for new answers.`);
+  if(expected!==epoch)return;followups=data.followups;available=true;
+  try{const response=await fetch('/api/client/worksite_escalation_v815',{credentials:'include',cache:'no-store'});const data=await response.json().catch(()=>null);
+    if(!response.ok||!data?.ok||!Array.isArray(data.escalations))throw Error('Supervisor progress unavailable');
+    escalations=data.escalations;escalationReady=true;
+  }catch{escalations=[];escalationReady=false;}
+  if(expected!==epoch)return;renderHistory();renderControls();
+  notice(`${followups.filter(r=>r.status==='awaiting_staff').length} awaiting staff response · ${followups.filter(r=>r.status==='staff_replied').length} waiting for your confirmation. ${escalationReady?'Supervisor progress is current as of refresh.':'Supervisor progress is temporarily unavailable.'} No response deadline is promised.`);
 }
 async function submitRequest(event){event.preventDefault();const form=$('build814Form');if(form.getAttribute('aria-busy')==='true')return;
   const values=draft(),result=followupDraft814(values,issues,followups);
@@ -78,7 +97,7 @@ function wire(){if(wired||!$('build814Form'))return;wired=true;
   $('build814CustomerHistory').addEventListener('submit',submitConfirmation);
   $('build814Refresh').addEventListener('click',async()=>{const e=epoch;available=false;renderControls();notice('Refreshing follow-up history…');try{await refresh(e);}catch(error){if(e===epoch){renderHistory();notice(error.message||'Refresh unavailable.',true);}}});
 }
-export function clearCustomerWorksiteFollowups814(){epoch++;issues=[];followups=[];available=false;pendingKey=null;lastFingerprint=null;
+export function clearCustomerWorksiteFollowups814(){epoch++;issues=[];followups=[];escalations=[];escalationReady=false;available=false;pendingKey=null;lastFingerprint=null;
   $('build814Form')?.reset();if($('build814Form'))$('build814Form').setAttribute('aria-busy','false');renderControls();renderHistory();notice('Sign in to view and submit follow-ups.');}
 export async function loadCustomerWorksiteFollowups814(ownedIssues){if(typeof document==='undefined'||!$('build814Form'))return;
   const current=Array.isArray(ownedIssues)?ownedIssues:[];issues=current;available=false;wire();renderControls();renderHistory();
