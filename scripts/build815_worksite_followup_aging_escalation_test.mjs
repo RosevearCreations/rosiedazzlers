@@ -106,8 +106,8 @@ const api=read('../functions/api/client/worksite_escalation_v815.js')+read('../f
 assert.doesNotMatch(api,/api.stripe.com|twilio|sendgrid|method:\s*'PATCH'[^\n]*bookings/i);
 const html=read('../admin-today.html'),account=read('../my-account.html');
 assert.match(html,/option value="aging"/);assert.match(html,/option value="escalated"/);
-assert.match(html,/admin-worksite-followups-v814.mjs\?v=build815/);
-assert.match(account,/my-account-v355.js\?v=20261108build815/);
+assert.match(html,/admin-worksite-followups-v814.mjs\?v=build816/);
+assert.match(account,/my-account-v355.js\?v=20261108build816/);
 assert.equal(html,read('../admin-today/index.html'));assert.equal(account,read('../my-account/index.html'));
 assert.match(read('./current_booking_wizard_regression.sh'),/build815_worksite_followup_aging_escalation_test.mjs/);
 console.log('Build 815 PASS: triage bands, supervisor RBAC, conflict-safe transitions, tenant-scoped customer progress, no private fields or automatic outreach, append-only migration and mirrors.');

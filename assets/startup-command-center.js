@@ -3,7 +3,7 @@
 // Build 241 hotfix: prevents Startup summary temporal-dead-zone crashes and keeps Build 240 catalog fallback. Historical Build 239 markers remain for compatibility.
 (function(globalScope){
 'use strict';
-const BUILD=262,CACHE_PREFIX='rosie_startup_build262_',LOCAL_EVIDENCE_KEY='rosie_startup_evidence_fallback_build262';
+const BUILD=816,CACHE_PREFIX='rosie_startup_build816_',LOCAL_EVIDENCE_KEY='rosie_startup_evidence_fallback_build262';
 const $=(s)=>document.querySelector(s),$$=(s)=>Array.from(document.querySelectorAll(s));
 const esc=(v)=>String(v??'').replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let actor=null,catalog=[],evidence={},production=null,tests=[],roadmap=[],sources={catalog:'loading',evidence:'loading',tests:'loading',roadmap:'loading',production:'loading'},automatic={};

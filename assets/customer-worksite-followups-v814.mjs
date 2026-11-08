@@ -32,6 +32,15 @@ function customerProgress815(row){if(!escalationReady)return '<p class="muted">S
   const e=escalations.find(v=>v.followup_id===row.id);if(!e)return '';
   return `<p class="build815-customer-progress"><strong>Supervisor review:</strong> ${e.status==='flagged'?'Flagged for supervisor review':e.status==='acknowledged'?'Supervisor acknowledged':e.status==='cleared'?'Supervisor review completed':'Review pending'}
     · ${esc(eventTimeToronto813(e.status==='cleared'?e.cleared_at:e.status==='acknowledged'?e.acknowledged_at:e.flagged_at))}</p>`;}
+export function accessibleProgress816(row,escalation){
+  const steps=[{label:'Follow-up submitted',date:row.requested_at,done:true}];
+  if(escalation)steps.push({label:escalation.status==='cleared'?'Supervisor review completed':escalation.status==='acknowledged'?'Supervisor acknowledged':'Supervisor review flagged',date:escalation.cleared_at||escalation.acknowledged_at||escalation.flagged_at,done:true});
+  steps.push({label:row.staff_response?'Staff response recorded':'Staff response pending',date:row.staff_responded_at,done:!!row.staff_response});
+  steps.push({label:row.customer_decided_at?'Your confirmation recorded':'Your confirmation is not yet recorded',date:row.customer_decided_at,done:!!row.customer_decided_at});
+  return steps;
+}
+function timeline816(row){const e=escalationReady?escalations.find(v=>v.followup_id===row.id):null;
+  return `<ol class="build816-customer-timeline" aria-label="Follow-up progress">${accessibleProgress816(row,e).map(step=>`<li class="${step.done?'complete':'waiting'}"><span>${esc(step.label)}</span>${step.done&&step.date?`<time datetime="${esc(step.date)}">${esc(eventTimeToronto813(step.date))}</time>`:''}</li>`).join('')}</ol>`;}
 function notice(s,err=false){const el=$('build814CustomerStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=s;}}
 function draft(){return {issue_id:$('build814Issue')?.value||'',request_kind:$('build814Kind')?.value||'',request_text:$('build814Text')?.value||''};}
 function renderControls(){const select=$('build814Issue'),submit=$('build814Submit'),preview=$('build814Preview'),form=$('build814Form');if(!select||!submit||!preview||!form)return;
@@ -41,7 +50,7 @@ function renderControls(){const select=$('build814Issue'),submit=$('build814Subm
   preview.textContent=result.message;submit.disabled=!result.ok||form.getAttribute('aria-busy')==='true';
 }
 function renderHistory(){const target=$('build814CustomerHistory');if(!target)return;
-  target.innerHTML=available?(followups.length?followups.map(row=>`<article class="build811-issue" data-build814-followup="${esc(row.id)}">
+  target.innerHTML=available?(followups.length?followups.map(row=>`<article class="build811-issue" data-build814-followup="${esc(row.id)}" aria-label="Worksite follow-up ${esc(FOLLOWUP_KINDS_814[row.request_kind]||'question')}">
     <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Staff review')}</span>
     <h4>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite follow-up')}</h4>
     <p class="muted">${esc(ISSUE_CATEGORIES_811[issues.find(i=>i.id===row.issue_id)?.category]||'Related worksite report')} · ${esc(eventTimeToronto813(row.requested_at))}</p>
@@ -49,7 +58,9 @@ function renderHistory(){const target=$('build814CustomerHistory');if(!target)re
     ${row.staff_response?`<p class="build814-response"><strong>Rosie’s response:</strong> ${esc(row.staff_response)}<br><span class="muted">Recorded ${esc(eventTimeToronto813(row.staff_responded_at))}. Viewable here; no outbound notification was sent.</span></p>`:''}
     ${row.customer_decided_at?`<p><strong>Our confirmation:</strong> ${row.status==='confirmed'?'Marked resolved':'More help needed'} · ${esc(eventTimeToronto813(row.customer_decided_at))}${row.customer_feedback?` · ${esc(row.customer_feedback)}`:''}</p>`:''}
     ${customerProgress815(row)}
+    ${timeline816(row)}
     <p class="build815-customer-next"><strong>Next step:</strong> ${esc(customerGuidance815(row,escalationReady?escalations.find(e=>e.followup_id===row.id):null))}</p>
+    ${row.status==='awaiting_staff'?'<p class="muted">For urgent access or safety concerns, <a href="/contact">contact Rosie directly</a>. Review dates are internal targets, not guaranteed reply times.</p>':''}
     ${row.status==='staff_replied'?`<form class="build814-confirm" data-build814-confirm="${esc(row.id)}" aria-busy="false"><p><strong>Did Rosie’s response resolve your question?</strong></p>
       <label>Decision<select name="decision"><option value="confirmed">Yes, this answered my question</option><option value="needs_more_help">No, I still need help</option></select></label>
       <label>Optional note (required when more help is needed)<textarea name="feedback" maxlength="500" rows="2" placeholder="What is still unclear or unresolved?"></textarea></label>

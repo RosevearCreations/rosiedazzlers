@@ -30,3 +30,12 @@
 .build815-escalation,.build815-customer-progress{border:1px solid rgba(212,175,55,.45);border-radius:12px;padding:12px;margin-block:10px}
 .build815-customer-next{padding:10px;background:rgba(148,163,184,.12);border-radius:8px}
 .build815-escalation form button{max-width:100%}
+.build816-owner{border:1px solid rgba(148,163,184,.5);border-radius:12px;padding:12px;margin-block:12px}
+.build816-owner-form{display:grid;gap:12px;padding:10px;border-top:1px solid rgba(148,163,184,.35)}
+.build816-priority-label{margin-inline-start:8px;background:rgba(212,175,55,.16)}
+.build816-customer-timeline{margin:12px 0;padding-inline-start:24px;display:grid;gap:9px}
+.build816-customer-timeline li{padding:6px 9px;border-radius:8px;border-inline-start:3px solid #64748b;background:rgba(148,163,184,.1)}
+.build816-customer-timeline li.complete{border-inline-start-color:#6ba889}
+.build816-customer-timeline time{display:block;font-size:.86rem;color:inherit;opacity:.8}
+@media(max-width:600px){.build816-owner-form button{width:100%}.build816-customer-timeline{padding-inline-start:18px}}
+@media(prefers-reduced-motion:reduce){.build816-owner *, .build816-customer-timeline *{animation:none!important;transition:none!important}}
