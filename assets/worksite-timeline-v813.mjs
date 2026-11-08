@@ -32,7 +32,7 @@ export function staffTimelineMessage813(event,staffName=()=>null){
   }
 }
 export function customerFollowUpAdvice813(status){
-  if(status==='resolved')return 'Please read Rosie’s resolution. If the concern is still unresolved, contact Rosie directly with the booking reference; this page does not send a new request.';
-  if(status==='closed_no_action')return 'Please review the explanation before making new plans. If you disagree or need help, contact Rosie directly; closing the report does not cancel your booking.';
-  return 'Staff review is still in progress. For an urgent arrival, driveway or safety issue, contact Rosie directly; a timeline update is not a sent message.';
+  if(status==='resolved')return 'Please read Rosie’s resolution. If a question remains, use the follow-up form below; it saves a new request for staff review without emailing Rosie.';
+  if(status==='closed_no_action')return 'Please review the explanation before making new plans. You may request further clarification below; this does not cancel your booking.';
+  return 'Staff review is still in progress. You may send a separate follow-up for staff review below. For urgent arrival, driveway or safety issues, contact Rosie directly.';
 }
