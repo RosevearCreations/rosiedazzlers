@@ -74,6 +74,12 @@
 .build821-readable{margin-block:13px;padding:12px;background:rgba(139,167,188,.12);border-radius:9px}
 .build821-readable p{line-height:1.6;overflow-wrap:anywhere}.build821-readable #build821ReadableReport{white-space:normal}
 @media(max-width:600px){.build821-comparison{padding:12px}.build821-compare-controls{padding:10px}.build821-comparison-table th,.build821-comparison-table td{padding:7px}}
+.build822-review{margin-block:18px 10px;padding:14px;border:1px solid rgba(139,167,188,.5);border-radius:12px;min-width:0;background:rgba(15,35,57,.25)}
+.build822-review h4{margin:0 0 12px}.build822-review fieldset{display:grid;grid-template-columns:minmax(170px,1fr) minmax(180px,2fr);align-items:center;gap:10px;min-width:0;padding:12px;margin-block:12px;border:1px solid rgba(148,163,184,.35);border-radius:10px}
+.build822-review legend{padding-inline:8px;font-weight:700}.build822-review input,.build822-review select{width:100%;max-width:100%;min-width:0}.build822-review button{min-height:44px}
+.build822-review fieldset p{grid-column:1/-1;margin:0;line-height:1.5}.build822-review .build822-continuity{padding:11px;border-inline-start:4px solid #d4af37;background:rgba(212,175,55,.09);line-height:1.55;overflow-wrap:anywhere}
+#build822PresetStatus:focus-visible,#build822ExceptionStatus:focus-visible,#build822ReportContinuity:focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:600px){.build822-review{padding:10px}.build822-review fieldset{grid-template-columns:minmax(0,1fr)}.build822-review fieldset p{grid-column:1}.build822-review button{width:100%}}
 @media(max-width:600px){.build818-view-controls{display:grid}.build818-view-controls button{width:100%}}
 @media(max-width:600px){.build816-owner-form button{width:100%}.build816-customer-timeline{padding-inline-start:18px}}
 @media(prefers-reduced-motion:reduce){.build816-owner *, .build816-customer-timeline *{animation:none!important;transition:none!important}}

@@ -56,14 +56,14 @@ for(const privateValue of ['PRIVATE-BOOKING','Private customer request','Private
 assert.doesNotMatch(read('../assets/build821-followup-comparisons.mjs'),/fetch\(|localStorage|sessionStorage|download\(|clipboard|private_note|booking_id|request_text|customer_feedback/i);
 
 const html=read('../admin-today.html');assert.equal(html,read('../admin-today/index.html'));
-assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build821/);
-assert.match(html,/worksite-issues-v811\.css\?v=build821/);
-assert.match(html,/Build 821 · Accessible comparison and review guidance/);
+assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build82[12]/);
+assert.match(html,/worksite-issues-v811\.css\?v=build82[12]/);
+assert.match(html,/Build 82[12] · (?:Accessible comparison and review guidance|Saved comparisons and source-verified exception review)/);
 const app=read('../assets/admin-worksite-followups-v814.mjs');
 for(const token of ['ensureComparisonSurface821','renderComparisonSurface821','build821ComparisonMode','build821ComparisonRows','build821ComparisonStatus','build821ThresholdList','build821ReadableReport','compareSnapshots821','workloadExplanations821','readableReport821'])assert.ok(app.includes(token),`Missing UI integration: ${token}`);
 assert.match(app,/role="region" aria-label="Accessible follow-up cohort comparison" tabindex="0"/);
 assert.match(app,/role="status" aria-live="polite" tabindex="-1"/);
-assert.match(app,/\$\('build821ComparisonMode'\)\.addEventListener\('change',\(\)=>\{render\(\);/);
+assert.match(app,/\$\('build821ComparisonMode'\)\.addEventListener\('change',\(\)=>\{(?:clearPresetSelection822\(\);)?render\(\);/);
 assert.match(app,/report\.textContent=readableReport821\(comparison,signals\)/,'plain report must be inert text');
 assert.doesNotMatch(app,/createObjectURL|\.download\s*=|\.writeText\s*\(/);
 const css=read('../assets/worksite-issues-v811.css');
