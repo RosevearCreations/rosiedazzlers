@@ -1,0 +1,10 @@
+.build809-appointment-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:10px;margin:14px 0}
+.build809-appointment-card{padding:14px;border:1px solid rgba(128,128,128,.3);border-radius:16px;min-width:0;overflow-wrap:anywhere}
+.build809-appointment-card h4{margin:6px 0}.build809-appointment-card p{margin:7px 0;line-height:1.45}
+.build809-appointment-card a{display:inline-flex;margin-top:6px}
+.build809-request-preview{border-radius:14px;padding:12px;border:1px solid rgba(77,119,255,.4);background:rgba(77,119,255,.08);margin:12px 0;line-height:1.5}
+.build809-request-preview[data-state="blocked"]{border-color:rgba(255,150,80,.55);background:rgba(255,150,80,.1)}
+.build809-policy-box{border-left:3px solid rgba(77,119,255,.65);padding:6px 12px;margin:12px 0}
+.build809-policy-box p{margin:6px 0}.build809-policy-box a{overflow-wrap:anywhere}
+#build809AppointmentStatus[hidden],#build809AppointmentList[hidden]{display:none!important}
+@media(max-width:640px){.build809-appointment-list{grid-template-columns:minmax(0,1fr)}.build742-request-panel .actions .btn{width:100%;justify-content:center}}
