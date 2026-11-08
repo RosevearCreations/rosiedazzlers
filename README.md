@@ -2,6 +2,8 @@
 
 **Current release candidate: Build 817 — Staff Follow-Up Search & Review-Target Triage.** Contract: `docs/build817_staff_followup_search_review_target_triage.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
+## Retained cumulative authority pointers (historical)
+
 Historical Build 553 source direction: **Staff Mobile Field Regression Evidence**. Older build notes below are retained for compatibility, not active launch prerequisites.
 <!-- Prior Build 548: Current source direction: **Build 548 — Controlled Site Routing & Capacity Owner Verification**. -->
 
@@ -166,7 +168,7 @@ Retained staff/mobile proof: `scripts/staff_mobile_remediation_execution_evidenc
 10. `DOC_INDEX.md`
 
 Git history and exact-SHA workflows are the release archive.
-## Retained cumulative authority pointers
+## Further historical authorities
 - `BUILD524_SERVICE_ECONOMICS_SEASONAL_CAPACITY_RELIABILITY_DECISION_OUTCOME_CONTINUITY.md`
 - `BUILD523_STAFF_MOBILE_REMEDIATION_CLOSURE_OUTCOME_CONTINUITY.md`
 - `BUILD515_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`
