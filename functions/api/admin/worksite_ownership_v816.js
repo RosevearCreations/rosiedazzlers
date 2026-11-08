@@ -46,7 +46,11 @@ export async function onRequestGet({request,env}){
     const [ownership,staff]=await Promise.all([rows(env,`${TABLE}?select=${FIELDS}&order=assigned_at.desc&limit=150`),rows(env,`staff_users?select=${STAFF}&is_active=eq.true&limit=100`)]);
     const ids=ownership.map(row=>row.id).filter(id=>UUID.test(String(id)));
     const events=ids.length?await rows(env,`customer_worksite_followup_ownership_events_v816?select=ownership_id,ownership_revision,event_kind,recorded_at,actor_staff_user_id,previous_owner_staff_user_id,current_owner_staff_user_id,review_due_at&ownership_id=in.(${ids.join(',')})&order=recorded_at.desc&limit=450`):[];
-    return json({ok:true,ownership,events,candidates:eligibleAssignees812(staff),can_assign:supervisor(access.actor),current_staff_user_id:access.actor.id,
+    // Build 818: private assignment reasons are manager-only on GET, not just
+    // hidden by the client. Authorized staff still see assignment/target state.
+    const canAssign=supervisor(access.actor);
+    const visibleOwnership=canAssign?ownership:ownership.map(({private_note,...record})=>record);
+    return json({ok:true,ownership:visibleOwnership,events,candidates:eligibleAssignees812(staff),can_assign:canAssign,current_staff_user_id:access.actor.id,
       authority:{signed_staff_session:true,internal_review_due_not_sla:true,automatic_outreach:false,booking_changed:false}});
   }catch{return json({ok:false,error:'Supervisor ownership queue unavailable. No assignment was changed.'},503);}
 }

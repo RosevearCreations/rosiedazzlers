@@ -1,11 +1,54 @@
 // Build 814: verified staff queue and response history, including audit actors.
 import { eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 import { FOLLOWUP_LABELS_814,FOLLOWUP_KINDS_814 } from './customer-worksite-followups-v814.mjs';
+import { readViews818,saveView818,selectView818,removeView818,viewStorage818 } from './build818-followup-view-state.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
 let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=false,canEscalate=false,ownership=[],ownershipEvents=[],ownershipCandidates=[],ownershipReady=false,canAssign=false,staffId=null,busy=false,loaded=false;
+let viewsActor=null,savedViews={views:[],activeId:''};
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
+function viewNotice(message){const el=$('build818ViewStatus');if(el)el.textContent=message;}
+function viewControls818(){
+  const select=$('build818SavedViews');if(!select)return;
+  select.innerHTML='<option value="">Choose a saved view</option>'+savedViews.views.map(v=>`<option value="${esc(v.id)}">${esc(v.name)}</option>`).join('');
+  select.value=savedViews.activeId;
+  const ready=!!staffId;
+  $('build818SaveView').disabled=!ready;
+  $('build818RemoveView').disabled=!ready||!savedViews.activeId;
+  select.disabled=!ready||savedViews.views.length===0;
+}
+function hydrateViews818(){
+  if(viewsActor===staffId)return;
+  viewsActor=staffId;savedViews=readViews818(viewStorage818(),staffId);
+  const selected=savedViews.views.find(v=>v.id===savedViews.activeId);
+  if(selected){$('build814StaffFilter').value=selected.status;$('build817ReviewTarget').value=selected.target;
+    $('build817StaffSearch').value='';viewNotice(`Restored “${selected.name}” filters in this browser tab. Search text was not saved.`);
+  }else viewNotice(staffId?'Views are saved only in this browser tab, for this staff account. Search and customer details are never saved.':'Sign in to manage saved views.');
+  viewControls818();
+}
+function saveCurrentView818(){
+  if(!staffId)return;
+  const outcome=saveView818(viewStorage818(),staffId,$('build818ViewName').value,{
+    status:$('build814StaffFilter').value,target:$('build817ReviewTarget').value});
+  if(!outcome.ok){viewNotice(outcome.reason);return;}
+  savedViews=outcome;viewControls818();viewNotice(`Saved “${outcome.view.name}” for this browser tab. Search and private notes were not stored.`);
+}
+function applySavedView818(){
+  const id=$('build818SavedViews').value,view=savedViews.views.find(v=>v.id===id);
+  if(!view){savedViews.activeId='';viewControls818();return;}
+  const outcome=selectView818(viewStorage818(),staffId,id);
+  if(!outcome){viewNotice('Could not remember this view in the current browser tab.');return;}
+  savedViews=outcome;$('build814StaffFilter').value=view.status;$('build817ReviewTarget').value=view.target;
+  $('build817StaffSearch').value='';viewControls818();render();
+  viewNotice(`Applied “${view.name}”. Search was cleared. ${!ownershipReady&&view.target!=='all'?'Verified ownership is unavailable; this target view is paused.':''}`);
+}
+function removeSavedView818(){
+  if(!savedViews.activeId)return;
+  const outcome=removeView818(viewStorage818(),staffId,savedViews.activeId);
+  if(!outcome){viewNotice('Saved view could not be removed.');return;}
+  savedViews=outcome;viewControls818();viewNotice('Saved view removed. Current filters and queue records were not changed.');
+}
 export function advisoryAging815(row,now=Date.now()){if(row.status!=='awaiting_staff')return null;const ms=Date.parse(row.requested_at);if(!Number.isFinite(ms)||ms>now)return {band:'unknown',label:'Age unavailable'};
   const hours=Math.floor((now-ms)/3600000);return {band:hours>=48?'overdue':hours>=24?'attention':'new',label:hours>=48?'Over 48 hours — supervisor review suggested':hours>=24?'Over 24 hours — review soon':'Newer than 24 hours'};}
 const escalationByFollowup=id=>escalations.find(e=>e.followup_id===id);
@@ -51,6 +94,7 @@ function ownerControls(row){if(row.status!=='awaiting_staff'&&!ownershipFor(row.
   const current=ownershipFor(row.id),person=ownershipCandidates.find(s=>s.id===current?.owner_staff_user_id);
   const history=current?ownershipEvents.filter(e=>e.ownership_id===current.id).slice(0,12).reverse():[];
   return `<section class="build816-owner" aria-label="Internal supervisor ownership"><p><strong>Review owner:</strong> ${esc(person?.name|| (current?'Assigned staff member':'Not assigned'))}${current?.review_due_at?` · Internal review target ${esc(eventTimeToronto813(current.review_due_at))}`:''}</p>
+    ${current&&canAssign?`<details class="build818-review-note"><summary>Private reviewer note (supervisors only)</summary><p>${current.private_note?esc(current.private_note):'No verified reviewer note is available.'}</p><p class="muted">Existing audited assignment note. Read-only here; editing requires an authorized assignment update.</p></details>`:''}
     ${current?`<details class="build813-timeline"><summary>Recorded ownership history (${history.length}${history.length===12?'+':''})</summary>${history.length?`<ol class="build813-event-list">${history.map(e=>`<li>${esc(eventTimeToronto813(e.recorded_at))} · ${esc(e.event_kind.replaceAll('_',' '))} · Rev ${esc(e.ownership_revision)} · Staff ${esc(String(e.actor_staff_user_id||'').slice(0,8))}</li>`).join('')}</ol>`:'<p class="muted">No audit events returned.</p>'}</details>`:''}
     ${canAssign&&row.status==='awaiting_staff'?`<form class="build816-owner-form" data-build816-owner="${esc(row.id)}"><label>Authorized owner<select name="owner" required><option value="">Choose a reviewer</option>${ownershipCandidates.map(s=>`<option value="${esc(s.id)}" ${current?.owner_staff_user_id===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select></label>
     <label>Internal review target (optional, within 30 days)<input type="datetime-local" name="reviewDue" value="${esc(localDateTimeValue(current?.review_due_at))}" /></label>
@@ -75,10 +119,10 @@ function audit(id){const history=events.filter(e=>e.followup_id===id).slice(0,12
     ${history.length?`<ol class="build813-event-list">${history.map(e=>`<li><time>${esc(eventTimeToronto813(e.recorded_at))}</time> · Rev ${esc(e.followup_revision)} · ${esc(e.event_kind.replaceAll('_',' '))}${e.actor_staff_user_id?` · Staff ${esc(e.actor_staff_user_id.slice(0,8))}`:''}</li>`).join('')}</ol>`:'<p class="muted">No recorded actions yet. History is not reconstructed.</p>'}
     <p class="muted">Actions are written by the database. Customers cannot see staff identity or the internal audit log.</p></details>`;}
 function render(){const el=$('build814StaffList');if(!el)return;
-  const filter=$('build814StaffFilter')?.value||'priority',query=$('build817StaffSearch')?.value||'',target=ownershipReady?($('build817ReviewTarget')?.value||'all'):'all';
+  const filter=$('build814StaffFilter')?.value||'priority',query=$('build817StaffSearch')?.value||'',target=$('build817ReviewTarget')?.value||'all';
   const selection=loaded?selectFollowups817(records,{status:filter,query,target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
   const targetSelect=$('build817ReviewTarget');if(targetSelect)targetSelect.disabled=!ownershipReady;
-  $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
+  $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
   el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue">
     <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span>${row.status==='awaiting_staff'?`<span class="badge build816-priority-label">${ownershipReady?esc(priority816(row,ownershipFor(row.id),escalationReady?escalationByFollowup(row.id):null).label):'Ownership priority unavailable'}</span>`:''}<h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
@@ -105,8 +149,8 @@ async function load(){if(busy)return;busy=true;loaded=false;escalationReady=fals
       if(!o.ok||!d?.ok||!Array.isArray(d.ownership)||!Array.isArray(d.events)||!Array.isArray(d.candidates))throw Error('Unavailable');
       ownership=d.ownership;ownershipEvents=d.events;ownershipCandidates=d.candidates;canAssign=d.can_assign===true;staffId=d.current_staff_user_id;ownershipReady=true;
     }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
-    render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);
-  }catch(error){records=[];events=[];render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);}
+    hydrateViews818();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);
+  }catch(error){records=[];events=[];staffId=null;hydrateViews818();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);}
   finally{busy=false;$('build814StaffRefresh').disabled=false;}
 }
 async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
@@ -148,4 +192,7 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
 export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;
   $('build814StaffRefresh').addEventListener('click',load);$('build814StaffFilter').addEventListener('change',render);
   $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',render);
+  $('build818SaveView').addEventListener('click',saveCurrentView818);
+  $('build818SavedViews').addEventListener('change',applySavedView818);
+  $('build818RemoveView').addEventListener('click',removeSavedView818);
   $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
