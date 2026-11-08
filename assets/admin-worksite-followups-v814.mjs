@@ -191,6 +191,15 @@ function renderSourceFreshness823(){
   const refresh=$('build823RefreshNow');if(refresh)refresh.disabled=busy;
   return result;
 }
+function tickSourceFreshness823(){
+  const state=renderSourceFreshness823();
+  if(!state.allowReport){
+    renderComparisonSurface821(renderTrendSurface820([],false));
+    const context=$('build822ReportContinuity');
+    if(context)context.textContent='Report source expired or unavailable. Refresh before relying on any aggregate totals.';
+    renderReviewDraft823(false,$('build822ExceptionSelect')?.value||'all');
+  }
+}
 function renderReviewDraft823(ready,category){
   const note=reviewDrafts823.get(category);
   $('build823SaveNote').disabled=!ready;
@@ -458,6 +467,6 @@ export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))retur
   $('build818SaveView').addEventListener('click',saveCurrentView818);
   $('build818SavedViews').addEventListener('change',applySavedView818);
   $('build818RemoveView').addEventListener('click',removeSavedView818);
-  window.setInterval(()=>{if(loaded)render();},60000);
-   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&loaded)render();});
+  window.setInterval(()=>{if(loaded)tickSourceFreshness823();},60000);
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&loaded)tickSourceFreshness823();});
    $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
