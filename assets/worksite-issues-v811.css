@@ -10,3 +10,8 @@
 .build811-staff-form{border-top:1px solid rgba(148,163,184,.2);padding-top:12px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px}
 .build811-issues button,.build811-issues select{min-height:46px}.build811-issues button:disabled{opacity:.56;cursor:not-allowed}
 @media(max-width:600px){.build811-issues .section-head,.build811-issues .attention-toolbar{align-items:stretch;flex-direction:column}.build811-issues .btn{width:100%}.build811-issue{padding:13px}.build811-staff-form{grid-template-columns:1fr}}
+.build812-actions{display:grid;gap:10px;margin-block:12px;padding:14px;border:1px solid rgba(212,175,55,.3);border-radius:12px;background:rgba(212,175,55,.06)}
+.build812-actions label{width:100%;max-width:530px}.build812-actions button{justify-self:start}
+.build812-ack{padding:10px;border-inline-start:3px solid #caa457;background:rgba(212,175,55,.08)}
+.build812-flag{padding:10px;border:1px solid #d4af37;border-radius:10px}
+@media(max-width:600px){.build812-actions button{width:100%}}
