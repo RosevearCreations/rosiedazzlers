@@ -23,11 +23,11 @@ const rows=[{id:'a',status:'awaiting_staff',requested_at:'2026-11-01T10:00:00Z'}
 assert.deepEqual(selectFollowups817(rows,{status:'priority',target:'past',ownershipReady:false}),[],'unavailable owner target is never silently broadened');
 const html=read('../admin-today.html');assert.equal(html,read('../admin-today/index.html'));
 for(const id of ['build818SavedViews','build818ViewName','build818SaveView','build818RemoveView','build818ViewStatus'])assert.match(html,new RegExp(`id="${id}"`));
-assert.match(html,/admin-worksite-followups-v814.mjs\?v=build(?:81[89]|820|821)/);
+assert.match(html,/admin-worksite-followups-v814.mjs\?v=build(?:81[89]|820|821|822)/);
 const client=read('../assets/admin-worksite-followups-v814.mjs');
 assert.match(client,/current&&canAssign.*build818-review-note/);
 assert.match(client,/review-target view paused until ownership can be verified/);
-assert.match(client,/hydrateViews818\(\);render\(\)/);
+assert.match(client,/hydrateViews818\(\);(?:hydratePresets822\(\);)?render\(\)/);
 const server=read('../functions/api/admin/worksite_ownership_v816.js');
 assert.match(server,/canAssign\?ownership:ownership\.map\(\(\{private_note,\.\.\.record\}\)=>record\)/);
 assert.match(server,/sameOrigin811\(request\)/);
