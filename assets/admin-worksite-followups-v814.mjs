@@ -2,6 +2,7 @@
 import { eventTimeToronto813 } from './worksite-timeline-v813.mjs';
 import { FOLLOWUP_LABELS_814,FOLLOWUP_KINDS_814 } from './customer-worksite-followups-v814.mjs';
 import { readViews818,saveView818,selectView818,removeView818,viewStorage818 } from './build818-followup-view-state.mjs';
+import { outcome819,latestReturnedHandoff819,outcomeSummary819 } from './build819-followup-outcomes.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
@@ -9,6 +10,14 @@ let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=fals
 let viewsActor=null,savedViews={views:[],activeId:''};
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
 function viewNotice(message){const el=$('build818ViewStatus');if(el)el.textContent=message;}
+function ensureOutcomeSurface819(){
+  const counts=$('build814StaffCounts');if(!counts||$('build819OutcomeSummary'))return;
+  const section=document.createElement('section');section.className='build819-summary';section.setAttribute('aria-label','Follow-up outcomes for the filtered queue');
+  const heading=document.createElement('h3');heading.textContent='Follow-up outcomes and closure guidance';
+  const summary=document.createElement('p');summary.id='build819OutcomeSummary';summary.setAttribute('role','status');summary.setAttribute('aria-live','polite');summary.textContent='Waiting for the authenticated outcome summary.';
+  const handoff=document.createElement('p');handoff.id='build819HandoffStatus';handoff.className='muted';handoff.tabIndex=-1;handoff.setAttribute('role','status');handoff.setAttribute('aria-live','polite');handoff.textContent='Manual changes show readback and focus guidance here.';
+  section.append(heading,summary,handoff);counts.before(section);
+}
 function viewControls818(){
   const select=$('build818SavedViews');if(!select)return;
   select.innerHTML='<option value="">Choose a saved view</option>'+savedViews.views.map(v=>`<option value="${esc(v.id)}">${esc(v.name)}</option>`).join('');
@@ -118,18 +127,36 @@ function audit(id){const history=events.filter(e=>e.followup_id===id).slice(0,12
   return `<details class="build813-timeline"><summary>Verified follow-up actions (${history.length}${history.length===12?'+':''})</summary>
     ${history.length?`<ol class="build813-event-list">${history.map(e=>`<li><time>${esc(eventTimeToronto813(e.recorded_at))}</time> · Rev ${esc(e.followup_revision)} · ${esc(e.event_kind.replaceAll('_',' '))}${e.actor_staff_user_id?` · Staff ${esc(e.actor_staff_user_id.slice(0,8))}`:''}</li>`).join('')}</ol>`:'<p class="muted">No recorded actions yet. History is not reconstructed.</p>'}
     <p class="muted">Actions are written by the database. Customers cannot see staff identity or the internal audit log.</p></details>`;}
+function outcomeCard819(row){const result=outcome819(row),handoff=latestReturnedHandoff819(row,events);
+  return `<section class="build819-outcome build819-${esc(result.kind)}" aria-label="Recorded follow-up outcome and manual next step">
+    <h4>Follow-up outcome: ${esc(result.label)}</h4>
+    <p><strong>Suggested manual next step:</strong> ${esc(result.guidance)}</p>
+    <p class="muted"><strong>Latest returned follow-up audit event:</strong> ${handoff?`${esc(handoff.label)} · ${esc(eventTimeToronto813(handoff.recordedAt))} · revision ${esc(handoff.revision)}`:'No matching event was returned in the bounded audit history. Do not reconstruct missing actions.'}</p>
+    <p class="muted">Follow-up outcome only. No automatic closure, outreach, booking, payment or dispatch action.</p>
+  </section>`;}
+function handoffFeedback819(id,action,readback){const status=$('build819HandoffStatus');if(!status)return;
+  const card=Array.from($('build814StaffList')?.querySelectorAll('[data-build819-followup]')||[]).find(node=>node.getAttribute('data-build819-followup')===id);
+  const record=records.find(row=>row.id===id);
+  status.textContent=`${action}. ${!readback?'Relevant source readback unavailable; verify before further action.':card?`Current follow-up outcome: ${outcome819(record).label}.`:'Record is outside the current filtered or bounded view. Your filters were retained.'} No outbound message was sent.`;
+  (card||status).focus({preventScroll:false});
+}
 function render(){const el=$('build814StaffList');if(!el)return;
   const filter=$('build814StaffFilter')?.value||'priority',query=$('build817StaffSearch')?.value||'',target=$('build817ReviewTarget')?.value||'all';
   const selection=loaded?selectFollowups817(records,{status:filter,query,target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
   const targetSelect=$('build817ReviewTarget');if(targetSelect)targetSelect.disabled=!ownershipReady;
+  const summary=$('build819OutcomeSummary');if(summary){
+    if(!loaded)summary.textContent='Outcome summary unavailable until the authenticated follow-up queue loads.';
+    else{const counts=outcomeSummary819(selection);summary.textContent=`Shown follow-ups (${counts.total}; latest 150 loaded maximum): ${counts.waiting} awaiting staff · ${counts.responded} waiting for customer decision · ${counts.needs_help} requesting more help · ${counts.confirmed} customer-confirmed answers · ${counts.review} needing source review. ${ownershipReady?'Owner source available.':'Owner source unavailable.'} ${escalationReady?'Supervisor source available.':'Supervisor source unavailable.'} No booking or issue closures are inferred.`;}
+  }
   $('build814StaffCounts').textContent=loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
-  el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue">
+  el.innerHTML=selection.length?selection.map(row=>`<article class="build811-issue" tabindex="-1" data-build819-followup="${esc(row.id)}">
     <span class="badge">${esc(FOLLOWUP_LABELS_814[row.status]||'Follow-up')}</span>${row.status==='awaiting_staff'?`<span class="badge build816-priority-label">${ownershipReady?esc(priority816(row,ownershipFor(row.id),escalationReady?escalationByFollowup(row.id):null).label):'Ownership priority unavailable'}</span>`:''}<h3>${esc(FOLLOWUP_KINDS_814[row.request_kind]||'Worksite question')}</h3>
     <p class="muted">${esc(row.issue_category||'Worksite report')} · Booking ${esc(row.booking_id||'Reference on file')} · ${esc(eventTimeToronto813(row.requested_at))}</p>
     <p><strong>Customer’s follow-up:</strong> ${esc(row.request_text)}</p>
     ${row.staff_response?`<p class="build814-response"><strong>Recorded response:</strong> ${esc(row.staff_response)} · ${esc(eventTimeToronto813(row.staff_responded_at))}</p>`:''}
     ${row.customer_decided_at?`<p><strong>Customer’s decision:</strong> ${esc(FOLLOWUP_LABELS_814[row.status])} · ${esc(eventTimeToronto813(row.customer_decided_at))}${row.customer_feedback?`<br>${esc(row.customer_feedback)}`:''}</p>`:''}
+    ${outcomeCard819(row)}
     ${supervisorControls(row)}
     ${ownerControls(row)}
     ${audit(row.id)}
@@ -149,8 +176,8 @@ async function load(){if(busy)return;busy=true;loaded=false;escalationReady=fals
       if(!o.ok||!d?.ok||!Array.isArray(d.ownership)||!Array.isArray(d.events)||!Array.isArray(d.candidates))throw Error('Unavailable');
       ownership=d.ownership;ownershipEvents=d.events;ownershipCandidates=d.candidates;canAssign=d.can_assign===true;staffId=d.current_staff_user_id;ownershipReady=true;
     }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
-    hydrateViews818();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);
-  }catch(error){records=[];events=[];staffId=null;hydrateViews818();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);}
+    hydrateViews818();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);return true;
+  }catch(error){records=[];events=[];staffId=null;hydrateViews818();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
   finally{busy=false;$('build814StaffRefresh').disabled=false;}
 }
 async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
@@ -164,7 +191,7 @@ async function assignOwner(event){const form=event.target.closest?.('[data-build
   if(!window.confirm('Save this internal ownership decision? No customer notification or appointment change occurs.'))return;
   form.setAttribute('aria-busy','true');form.querySelector('button').disabled=true;notice('Saving assigned reviewer…');
   try{const response=await fetch('/api/admin/worksite_ownership_v816',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({followup_id:row.id,owner_staff_user_id:owner,private_note:note,review_due_at:reviewDue,expected_revision:current?.workflow_revision??null})});
-    const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Error(data?.error||'Assignment not confirmed.');await load();notice('Supervisor owner recorded with an auditable decision. No message was sent.');
+    const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Error(data?.error||'Assignment not confirmed.');const readback=await load()&&ownershipReady;handoffFeedback819(row.id,'Supervisor owner update accepted by source',readback);notice(readback?'Supervisor owner recorded with an auditable decision. No message was sent.':'Owner update accepted, but ownership readback is unavailable. Refresh to verify before further changes.',!readback);
   }catch(error){notice(`${error.message||'Owner not confirmed.'} Refresh before retrying.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
 async function escalate(event){const flag=event.target.closest?.('[data-build815-flag]'),form=flag||event.target.closest?.('[data-build815-decision]');if(!form)return;
@@ -176,7 +203,7 @@ async function escalate(event){const flag=event.target.closest?.('[data-build815
   if(!window.confirm(`${action==='flag'?'Flag for':action==='acknowledge'?'Acknowledge':'Clear'} supervisor review? This is an internal record only; no message is sent.`))return;
   form.setAttribute('aria-busy','true');form.querySelector('button').disabled=true;notice('Saving supervisor decision…');
   try{const response=await fetch('/api/admin/worksite_escalations_v815',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,followup_id:row.id,...(flag?{reason}:{expected_revision:existing.workflow_revision})})});
-    const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Error(data?.error||'Not confirmed.');await load();notice('Supervisor decision saved in the audited internal queue. No external notification was sent.');
+    const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Error(data?.error||'Not confirmed.');const readback=await load()&&escalationReady;handoffFeedback819(row.id,'Supervisor review decision accepted by source',readback);notice(readback?'Supervisor decision saved in the audited internal queue. No external notification was sent.':'Supervisor decision accepted, but escalation readback is unavailable. Refresh to verify before further changes.',!readback);
   }catch(error){notice(`${error.message||'Decision not confirmed.'} Refresh the queue before retrying.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
 async function submit(event){const form=event.target.closest?.('[data-build814-staff-reply]');if(!form)return;event.preventDefault();if(form.getAttribute('aria-busy')==='true'||busy)return;
@@ -186,11 +213,11 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
   form.setAttribute('aria-busy','true');form.querySelector('button').disabled=true;notice('Saving staff response…');
   try{const response=await fetch('/api/admin/worksite_followups_v814',{method:'POST',credentials:'include',headers:{'Content-Type':'application/json'},body:JSON.stringify({followup_id:row.id,expected_revision:row.workflow_revision,response:responseText})});
     const data=await response.json().catch(()=>null);if(!response.ok||!data?.ok)throw Error(data?.error||'Response not saved.');
-    await load();notice('Staff response recorded and available to the customer in My Account after refresh. No outbound message was sent.');
+    const readback=await load();handoffFeedback819(row.id,'Staff response accepted by source',readback);notice(readback?'Staff response recorded and available to the customer in My Account after refresh. No outbound message was sent.':'Staff response accepted, but queue readback is unavailable. Refresh to verify before further changes.',!readback);
   }catch(error){notice(`${error.message||'Response not confirmed.'} Refresh the queue before trying again.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
-export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;
-  $('build814StaffRefresh').addEventListener('click',load);$('build814StaffFilter').addEventListener('change',render);
+export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();
+  $('build814StaffRefresh').addEventListener('click',async()=>{const success=await load();const feedback=$('build819HandoffStatus');if(feedback)feedback.textContent=success?'Follow-up queue refreshed; active search and triage filters are retained. No message was sent.':'Follow-up refresh unavailable; filters are retained. No action was recorded.';});$('build814StaffFilter').addEventListener('change',render);
   $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',render);
   $('build818SaveView').addEventListener('click',saveCurrentView818);
   $('build818SavedViews').addEventListener('change',applySavedView818);
