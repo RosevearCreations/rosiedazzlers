@@ -24,6 +24,21 @@ def require(text: str, needles: list[str], label: str) -> None:
             errors.append(f"{label} missing {needle!r}")
 
 
+def require_versioned_module(text: str, route: str, minimum: int, label: str) -> None:
+    """Accept newer cache-busting builds without accepting old or absent entrypoints."""
+    active = [int(value) for value in re.findall(re.escape(route) + r"\?v=\d{8}build(\d+)", text)]
+    if not active or max(active) < minimum:
+        errors.append(f"{label} must load {route} at Build {minimum} or newer")
+
+
+def require_verified_conjunction(text: str, name: str, fields: set[str]) -> None:
+    """Exact AND-only evidence gates; a stale feed can never satisfy them."""
+    match = re.search(r"\b" + re.escape(name) + r":([^,}\n]+)", text)
+    expression = match.group(1).strip() if match else ""
+    if not re.fullmatch(r"[A-Za-z_]\w*(?:&&[A-Za-z_]\w*)*", expression) or set(expression.split("&&")) != fields:
+        errors.append(f"{name} must require every evidence field AND verified fresh feed")
+
+
 shell = read("app/detailer/index.html")
 app = read("apps/detailer/detailer-app.js")
 live = read("apps/detailer/live-job-module.js")
@@ -43,8 +58,8 @@ require(shell, [
     "Build 383 field workflow",
     "Start requires current audited onsite setup",
     "Complete retains the field-evidence sequence",
-    "/apps/detailer/detailer-app.js?v=20261102build749",
 ], "Detailer shell")
+require_versioned_module(shell, "/apps/detailer/detailer-app.js", 749, "Detailer shell")
 
 require(app, [
     "Build 383",
@@ -53,9 +68,9 @@ require(app, [
     "fieldGate.canComplete",
     "Before-service evidence is incomplete.",
     "Completion is blocked until",
-    "/apps/detailer/live-job-module.js?v=20261102build746",
     "onFieldState",
 ], "Detailer app")
+require_versioned_module(app, "/apps/detailer/live-job-module.js", 746, "Detailer app")
 
 require(live, [
     "data-live-module=\"build383\"",
@@ -70,8 +85,6 @@ require(live, [
     "[PRODUCT USAGE]",
     "[APPROVED ADD-ONS]",
     "[COMPLETION EVIDENCE]",
-    "canStart:beforePhoto&&checklist",
-    "canComplete:beforePhoto&&checklist&&addons&&products&&completion&&afterPhoto",
     "/api/detailer/job_note_post",
     "/api/detailer/media_upload_url",
     "/api/detailer/media_post",
@@ -79,6 +92,8 @@ require(live, [
     "Payment state was not changed.",
     "No setInterval",
 ], "live field module")
+require_verified_conjunction(live, "canStart", {"verified", "beforePhoto", "checklist", "onsiteReady"})
+require_verified_conjunction(live, "canComplete", {"verified", "beforePhoto", "checklist", "addons", "products", "completion", "afterPhoto"})
 
 require(notes, [
     "requireStaffAccess",
