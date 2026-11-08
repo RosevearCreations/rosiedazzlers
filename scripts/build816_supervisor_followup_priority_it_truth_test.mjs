@@ -87,6 +87,7 @@ assert.match(account,/my-account-v355.js\?v=20261108build816/);
 assert.equal(html,read('../admin-today/index.html'));assert.equal(account,read('../my-account/index.html'));
 assert.match(read('../assets/admin-worksite-followups-v814.mjs'),/data-build816-owner/);
 assert.match(read('../assets/customer-worksite-followups-v814.mjs'),/aria-label="Follow-up progress"/);
+assert.match(read('../assets/customer-worksite-issues-v811.mjs'),/customer-worksite-followups-v814.mjs\?v=build816/);
 assert.doesNotMatch(read('../assets/customer-worksite-followups-v814.mjs'),/owner_staff_user_id|private_note|assigned_by_staff_user_id/);
 assert.equal(STARTUP_PROCESS_BUILD,816);assert.equal(RETIRED_STARTUP_PROCESS_IDS_BUILD260.has('deploy-260'),true);
 assert.equal(STARTUP_PROCESS_CATALOG_BUILD260.some(x=>x.id==='deploy-260'),false);

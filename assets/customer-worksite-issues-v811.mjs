@@ -1,7 +1,7 @@
 // Build 811 — customer-owned worksite concern intake and status. No outbound send.
 import { preparationCandidates810 } from './customer-visit-preparation-v810.mjs';
 import { customerTimelineMessage813, customerFollowUpAdvice813, eventTimeToronto813 } from './worksite-timeline-v813.mjs';
-import { clearCustomerWorksiteFollowups814, loadCustomerWorksiteFollowups814 } from './customer-worksite-followups-v814.mjs';
+import { clearCustomerWorksiteFollowups814, loadCustomerWorksiteFollowups814 } from './customer-worksite-followups-v814.mjs?v=build816';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
