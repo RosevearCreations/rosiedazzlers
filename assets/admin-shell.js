@@ -100,6 +100,7 @@
   }
 
   ensureStylesheet("/assets/admin-design-system.css?v=build612-admin-layout", "rosie-admin-design-system-css");
+  ensureStylesheet("/assets/ux-800-804.css?v=build804", "rosie-workspace-ux-800-css");
   ensureAdminCssFallback();
   void ensureContextualHelp(document.body?.dataset?.page || "");
 
@@ -254,6 +255,10 @@
       wireLogout(root, options);
       ensureReturnMenu(root, pageKey);
       ensureModuleHierarchy(root, pageKey);
+      // Build 800: search only the actor's existing authorized menu entries.
+      void import("/assets/admin-workspace-v800.mjs?v=build800")
+        .then(module=>module.initAdminWorkspace800(document))
+        .catch(error=>console.warn("Admin tool finder unavailable",error));
       if (typeof options.onReady === "function") await options.onReady({ actor, auth:globalScope.AdminAuth });
       globalScope.RosieContextHelp?.refresh?.({ pageKey });
       setLoading(root, false);
