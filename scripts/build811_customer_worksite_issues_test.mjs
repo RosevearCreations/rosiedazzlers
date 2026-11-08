@@ -111,4 +111,6 @@ assert.match(read('../admin-today.html'),/admin-worksite-issues-v811\.mjs/);
 assert.match(read('../assets/my-account-history-v742.js'),/clearCustomerWorksiteIssues811\(\)/);
 assert.match(read('../assets/my-account-v355.js'),/my-account-history-v742\.js\?v=20261108build811/);
 assert.match(read('./current_booking_wizard_regression.sh'),/build811_customer_worksite_issues_test\.mjs/);
+assert.match(read('./build413_workflow_efficiency_accessibility_check.py'),/build413\(\?:\[_-\]\|\$\)/,
+  'Retained Build 413 schema gate continues to match actual build labels, not unrelated migration timestamp digits');
 console.log('Build 811 PASS: private customer intake, owner-scoped booking, safe replay, staff session and permissions, optimistic review, public/private note split, and unchanged booking/payment/outreach.');

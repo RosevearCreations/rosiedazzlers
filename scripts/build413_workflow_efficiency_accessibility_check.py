@@ -172,7 +172,10 @@ else:
     if proc.returncode != 0:
         errors.append(f"admin-today inline script syntax failed: {proc.stderr.strip() or proc.stdout.strip()}")
 
-if any("413" in path.name.lower() for path in ROOT.rglob("*.sql")):
+# Only a migration explicitly labeled Build 413 changes that build's schema
+# contract. A later migration timestamp (e.g. 14:13) must not cause a false
+# positive merely because its digits happen to contain "413".
+if any(re.search(r"(?:^|[_-])build413(?:[_-]|$)", path.stem.lower()) for path in ROOT.rglob("*.sql")):
     errors.append("Build 413 must remain schema-neutral")
 
 if errors:
