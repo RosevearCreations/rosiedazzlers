@@ -112,8 +112,16 @@ if None not in (current, next_release):
     if handoff_builds != expected:
         errors.append(f"handoff current/next sequence {handoff_builds} does not match queue {expected}")
 
-    if f"Current source direction: **Build {current} —" not in readme:
-        errors.append(f"README does not identify current release {current}")
+    # The legacy roadmap/queue contains older checkpoint numbers. Once a
+    # sequential newer candidate is identified, never require its README to
+    # describe that historical checkpoint as the active current release.
+    candidate_match = re.search(r"\*\*Current release candidate: Build (\d{3}) —", readme)
+    candidate = int(candidate_match.group(1)) if candidate_match else None
+    if candidate is not None:
+        if candidate < current:
+            errors.append(f"README candidate {candidate} predates accepted legacy release {current}")
+    elif f"Current source direction: **Build {current} —" not in readme:
+        errors.append(f"README does not identify a current or newer release candidate (legacy {current})")
     if f"### Build {current} —" not in roadmap_sequence:
         errors.append(f"forward roadmap does not contain current release {current}")
     if f"### Build {next_release} —" not in roadmap_sequence:

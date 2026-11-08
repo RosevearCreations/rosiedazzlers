@@ -1,19 +1,25 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-## Current bounded release — Build 558
+## Current candidate — Build 817
+
+Staff Follow-Up Search & Review-Target Triage. Contract: `docs/build817_staff_followup_search_review_target_triage.md`. Next proposed Build 818 only after exact-main Production acceptance. `dev`/`main` promotion and branch cleanup must preserve required checks and unique unmerged work.
+
+## Older source queue (historical; not active prerequisites)
+
+### Historical release — Build 558
 Authenticated private R2 raw object HEAD and separate consent/privacy acceptance review; signed consent and rendered derivative remain HOLD. Contract: BUILD558_REAL_MEDIA_ARTIFACT_CONSENT_ACCEPTANCE.md. Build 559 follows Production GREEN.
 
 
-## Current bounded release — Build 557
+### Historical release — Build 557
 Project-scoped private worker-delivery receipt matching and on-demand quota measurement baseline; independent provider-verification HOLD remains. Contract: BUILD557_DAIP_MEASURED_WORKER_DELIVERY_QUOTA_BASELINE.md. Build 558 follows only after exact-main Production GREEN. No worker dispatch, renders or posting.
 
-## Current bounded release — Build 555
+### Historical release — Build 555
 Release/source evidence and DAIP job-quality/worker-cost review. Contract: `BUILD555_PRODUCTION_LEARNING_DAIP_RELIABILITY.md`; next Build 556 only after exact-main Production acceptance. Truthful source-owned HOLD remains.
 
-## Current bounded release — Build 554
+### Historical release — Build 554
 Owner review across separate economics/seasonal/capacity/first-party technical domains and private DAIP per-channel delivery approval evidence. `BUILD554_SERVICE_ECONOMICS_CAPACITY_TECHNICAL_RELIABILITY_OWNER_REVIEW.md`. Next Build 555 only after independent exact-main Cloudflare Production acceptance. No new booking, price, public posting or HOLD mutation.
 
-## Current bounded release — Build 553
+### Historical release — Build 553
 Build 553 — Staff Mobile Field Regression Evidence plus DAIP private social-video copy drafts is current source candidate. Contract: `BUILD553_STAFF_MOBILE_FIELD_DAIP_SOCIAL_DRAFTS.md`; guard: `scripts/staff_mobile_daip_social_drafts_check.py`. Prior builds require exact-main Cloudflare Production verification. No staff fault inference, rendered media or automatic posting.
 
 <!-- Previous Build 548 handoff: Build 548 — Controlled Site Routing & Capacity Owner Verification + DAIP private media intake metadata verification is active; see `BUILD548_CONTROLLED_SITE_OWNER_AND_DAIP_INTAKE_VERIFICATION.md`. Build 547 is the preceding Cloudflare-live release. See `BUILD547_WINTER_BOOKING_SAFETY_DAIP_MULTICAMERA_STORYBOARD.md` and `DAIP_CONTINUOUS_BUILD_TRACK_547_555.md`. Build 546 is the previous Production GREEN checkpoint. -->

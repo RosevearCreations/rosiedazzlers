@@ -69,8 +69,12 @@ if queue_pair:
         errors.append(f"release queue regressed behind retained Build 382 authority: Build {current}")
     if next_release != current + 1:
         errors.append(f"release queue is not sequential: {queue_pair}")
-    if f"Current source direction: **Build {current} —" not in readme:
-        errors.append(f"README does not identify current release {current}")
+    candidate_match = re.search(r"\*\*Current release candidate: Build (\d{3}) —", readme)
+    if candidate_match:
+        if int(candidate_match.group(1)) < current:
+            errors.append(f"README candidate predates retained release {current}")
+    elif f"Current source direction: **Build {current} —" not in readme:
+        errors.append(f"README does not identify current release {current} or newer candidate")
 if queue_pair and handoff_pair and queue_pair != handoff_pair:
     errors.append(f"project handoff sequence {handoff_pair} does not match release queue {queue_pair}")
 require(handoff, ["protected `main`", "Production deployment/runtime/business acceptance"], "project handoff")
