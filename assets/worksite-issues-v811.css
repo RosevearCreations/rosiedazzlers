@@ -83,3 +83,14 @@
 @media(max-width:600px){.build818-view-controls{display:grid}.build818-view-controls button{width:100%}}
 @media(max-width:600px){.build816-owner-form button{width:100%}.build816-customer-timeline{padding-inline-start:18px}}
 @media(prefers-reduced-motion:reduce){.build816-owner *, .build816-customer-timeline *{animation:none!important;transition:none!important}}
+
+/* Build 823: responsive supervisor worksheet and explicit source freshness states */
+.build823-preset-rename,.build823-note-fieldset{border-color:rgba(139,167,188,.6)!important}
+.build823-note-fieldset textarea{width:100%;min-height:90px;min-width:0;max-width:100%;resize:vertical}
+.build823-note-preview{white-space:pre-wrap;overflow-wrap:anywhere;padding:10px;border-inline-start:3px solid #8ba7bc;background:rgba(139,167,188,.12);min-height:44px}
+.build823-freshness{margin-block:12px;padding:12px;border:1px solid rgba(139,167,188,.5);border-radius:10px}
+.build823-freshness p{line-height:1.55;margin:8px 0 12px}
+#build823FreshnessAlert[data-status="warning"]{border-inline-start:4px solid #eab308;padding-inline-start:10px}
+#build823FreshnessAlert[data-status="expired"],#build823FreshnessAlert[data-status="unavailable"]{border-inline-start:4px solid #ef4444;padding-inline-start:10px}
+#build823NoteStatus:focus-visible,#build823FreshnessAlert:focus-visible,#build823PresetDetails:focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:600px){.build823-freshness{padding:10px}.build823-note-fieldset textarea{width:100%}}
