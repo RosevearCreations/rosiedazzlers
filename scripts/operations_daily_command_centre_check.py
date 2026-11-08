@@ -49,13 +49,16 @@ for needle in [
     'content="noindex,nofollow"',
     '/assets/admin-auth.js',
     '/assets/admin-shell.js',
-    '/assets/admin-operations.js?v=20260911build381',
     '/admin-booking.html',
     '/admin-today.html',
     '/admin-inventory.html',
 ]:
     if needle not in page:
         fail(f"Operations page missing contract: {needle}")
+
+asset_versions = [int(version) for version in re.findall(r'/assets/admin-operations\.js\?v=\d{8}build(\d+)', page)]
+if not asset_versions or max(asset_versions) < 381:
+    fail('Operations page must load a current versioned admin-operations.js authority')
 
 if len(re.findall(r"<h1\b", page, flags=re.I)) != 1:
     fail("Operations page must contain exactly one H1")
@@ -68,7 +71,6 @@ for needle in [
     'method: "GET"',
     'pageKey: "app-operations"',
     'service_date',
-    'assigned_staff_name',
     'trusted_service_coordinate_status',
     'arrival_geofence_status',
     'price_total_cents',
@@ -83,6 +85,13 @@ for needle in [
 ]:
     if needle not in client:
         fail(f"Operations client missing authority/evidence contract: {needle}")
+
+# The Build 806 staff presentation moved to a pure, UUID-verified projection.
+# Preserve the identity requirement in that authority instead of requiring a
+# legacy name-only marker in the rendered client.
+dispatch_helper = read("assets/admin-dispatch-v806.mjs")
+if "assigned_staff_name" not in client and not all(token in dispatch_helper for token in ["assigned_staff_name", "assigned_staff_user_id", "UUID.test"]):
+    fail("Operations assignment display must retain original identity evidence")
 
 if "setInterval(" in client:
     fail("Operations command centre must not introduce recurring polling")

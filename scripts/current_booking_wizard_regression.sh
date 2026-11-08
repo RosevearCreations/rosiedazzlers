@@ -156,3 +156,4 @@ node --test scripts/ql364-source-health.test.mjs
 node scripts/build799_ql365d_rosie_attachment_test.mjs
 node scripts/build800_804_ux_test.mjs
 node scripts/build805_mobile_job_guide_test.mjs
+node scripts/build806_admin_dispatch_test.mjs
