@@ -64,6 +64,7 @@
   <link rel="stylesheet" href="/assets/service-addon-guidance-v736.css?v=20261101build736" />
   <link rel="stylesheet" href="/assets/build649-booking-discovery.css?v=build649" />
   <link rel="stylesheet" href="/assets/build650-booking-guidance.css?v=build650" />
+  <link rel="stylesheet" href="/assets/ux-800-804.css?v=build804" />
 </head>
 <body>
   <div class="nav">
@@ -148,6 +149,7 @@
         <div class="selection-line"><span>Service</span><strong id="summaryPackage">Choose service</strong></div>
         <div class="selection-line"><span>Add-ons</span><strong id="summaryAddons">None</strong></div>
         <div class="selection-line"><span>Current estimate</span><strong id="summarySubtotal">Package required</strong></div>
+        <details class="rd-quote-breakdown-803" id="quoteBreakdown803"><summary>See itemized starting estimate</summary><div id="summaryBreakdown803" role="region" aria-label="Itemized starting estimate" aria-live="polite">Choose a vehicle size and package first.</div><p class="rd-breakdown-note">CAD before HST. Quote-only work, vehicle condition, and any approved changes are excluded until reviewed. Checkout verifies the actual amount.</p></details>
         <div class="selection-line"><span>Deposit</span><strong id="summaryDeposit">—</strong></div>
         <div class="mini muted" data-build427-estimate-note>Fixed catalogue items are revalidated in the booking planner. Quote-required items are excluded from this fixed subtotal until reviewed.</div>
         <div class="hr" style="margin:3px 0"></div>
@@ -189,6 +191,7 @@
     import { buildServiceComparison629, PACKAGE_COMPARE_LIMIT_629 } from "/assets/booking-service-comparison-v629.js?v=1";
     import { VEHICLE_TIERS_736, packageScope736, addonGuidance736 } from "/assets/service-addon-guidance-v736.js?v=20261101build736";
     import { buildQuoteHandoffHref703 } from "/assets/booking-quote-handoff-v703.mjs?v=1";
+    import { quoteBreakdown803, cad803 } from "/assets/booking-quote-breakdown-v803.mjs?v=build803";
 
     const FALLBACK_URL = "/data/rosie_services_pricing_and_packages.json?v=20260412pass12";
     const params = new URLSearchParams(location.search);
@@ -442,6 +445,33 @@
       qs("#summaryAddons").textContent = addons.length ? addons.map((row)=>row.name).join(", ") : "None";
       qs("#summarySubtotal").textContent = t.subtotal ? `${money(t.subtotal)}${t.quoteOnly?" + quoted extras":""}` : (pkg ? "Choose size for total" : "Package required");
       qs("#summaryDeposit").textContent = pkg ? money(t.deposit) : "—";
+      // Build 803: explanation from the same source catalogue; checkout remains authoritative.
+      const details=qs("#summaryBreakdown803");
+      const breakdown=quoteBreakdown803({packageName:pkg?.name||"",
+        packageAmount:state.size&&pkg?packagePrice(pkg,state.size):null,
+        vehicleSize:state.size,deposit:t.deposit,
+        addons:addons.map(addon=>({name:addon.name,quoteRequired:addon.quote_required===true,
+          amount:state.size?(addon?.prices_cad?.[state.size]??addon.price_cad):null}))});
+      details.replaceChildren();
+      if(!breakdown.ready||Math.abs(breakdown.subtotal-t.subtotal)>0.01){
+        details.textContent="Choose a size and service, or continue to the booking planner for a fresh price.";
+      }else{
+        for(const line of breakdown.lines){
+          const row=document.createElement("div");row.className="rd-breakdown-line";
+          const label=document.createElement("span");label.textContent=line.label;
+          const amount=document.createElement("strong");amount.textContent=cad803(line.amount);
+          row.append(label,amount);details.appendChild(row);
+        }
+        const total=document.createElement("div");total.className="rd-breakdown-line";
+        const name=document.createElement("span");name.textContent="Fixed-item starting subtotal";
+        const amount=document.createElement("strong");amount.textContent=cad803(breakdown.subtotal);
+        total.append(name,amount);details.appendChild(total);
+        if(breakdown.quoteOnly.length){
+          const quote=document.createElement("p");quote.className="rd-breakdown-note";
+          quote.textContent=`Separate quote required: ${breakdown.quoteOnly.join(", ")}. No amount included.`;
+          details.appendChild(quote);
+        }
+      }
       qs("#requestQuoteBtn703").href = buildQuoteHandoffHref703({
         size: state.size,
         service: pkg?.name || "",
