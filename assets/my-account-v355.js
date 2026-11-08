@@ -233,7 +233,7 @@ async function captureDashboardResponse(response, input) {
   const payload = await response.clone().json().catch(() => null);
   if (payload?.ok) {
     renderDashboardHistory(payload);
-    import('/assets/my-account-history-v742.js?v=20261108build809')
+    import('/assets/my-account-history-v742.js?v=20261108build809&build810=1')
       .then((module) => module.loadCustomerAccountHistory?.(payload))
       .catch(() => {
         const status = document.querySelector('#build742HistoryStatus');
