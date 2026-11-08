@@ -4,7 +4,7 @@ import { requireActionAccess } from '../_lib/action-permissions.js';
 import { sameOrigin811 } from '../client/worksite_issues_v811.js';
 
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-const SELECT='id,customer_profile_id,booking_id,category,customer_description,status,submitted_at,updated_at,reviewed_at,reviewed_by_staff_user_id,staff_private_note,customer_visible_resolution';
+const SELECT='id,customer_profile_id,booking_id,category,customer_description,status,submitted_at,updated_at,reviewed_at,reviewed_by_staff_user_id,staff_private_note,customer_visible_resolution,workflow_revision';
 const NEXT={pending_review:new Set(['reviewing','resolved','closed_no_action']),reviewing:new Set(['resolved','closed_no_action'])};
 const respond=(data,status=200)=>{const response=baseJson(data,status);const h=new Headers(response.headers);h.set('Cache-Control','no-store');h.set('X-Content-Type-Options','nosniff');return new Response(response.body,{status:response.status,headers:h});};
 
@@ -13,11 +13,12 @@ export function validStaffDecision811(body) {
   const id=String(body.issue_id||'').trim();
   const expected=String(body.expected_status||'').trim();
   const next=String(body.status||'').trim();
+  const revision=body.expected_revision;
   const resolution=typeof body.resolution==='string'?body.resolution.trim():'';
   const privateNote=typeof body.private_note==='string'?body.private_note.trim():'';
-  if(!UUID.test(id)||!NEXT[expected]?.has(next)||resolution.length>1000||privateNote.length>800||
+  if(!UUID.test(id)||!NEXT[expected]?.has(next)||!Number.isSafeInteger(revision)||revision<0||revision>2147483645||resolution.length>1000||privateNote.length>800||
     (next!=='reviewing'&&resolution.length<8))return null;
-  return {id,expected,next,resolution,privateNote};
+  return {id,expected,next,resolution,privateNote,revision};
 }
 
 export async function staffAccess811(request,env) {
@@ -53,11 +54,11 @@ export async function onRequestPost({request,env}) {
     const decision=validStaffDecision811(JSON.parse(raw));
     if(!decision)return respond({ok:false,error:'Select a permitted next status. A completed review needs a customer-visible explanation of at least eight characters.'},400);
     const now=new Date().toISOString();
-    const patch={status:decision.next,updated_at:now,reviewed_at:now,reviewed_by_staff_user_id:access.actor.id,
+    const patch={status:decision.next,updated_at:now,reviewed_at:now,reviewed_by_staff_user_id:access.actor.id,workflow_revision:decision.revision+1,
       staff_private_note:decision.privateNote||null,customer_visible_resolution:decision.resolution||null};
     // Both id and expected status must still match: simultaneous reviewers cannot
     // accidentally overwrite a newer decision.
-    const response=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_worksite_issues_v811?select=${SELECT}&id=eq.${encodeURIComponent(decision.id)}&status=eq.${encodeURIComponent(decision.expected)}`,{
+    const response=await fetch(`${env.SUPABASE_URL}/rest/v1/customer_worksite_issues_v811?select=${SELECT}&id=eq.${encodeURIComponent(decision.id)}&status=eq.${encodeURIComponent(decision.expected)}&workflow_revision=eq.${decision.revision}`,{
       method:'PATCH',headers:{...serviceHeaders(env),Prefer:'return=representation'},body:JSON.stringify(patch)
     });
     if(!response.ok)return respond({ok:false,error:'Review could not be recorded. Refresh the queue.'},503);
@@ -73,5 +74,5 @@ export async function onRequestPost({request,env}) {
 function staffIssue811(row){return {id:row.id,customer_profile_id:row.customer_profile_id,booking_id:row.booking_id,category:row.category,
   description:row.customer_description,status:row.status,submitted_at:row.submitted_at,updated_at:row.updated_at,
   reviewed_at:row.reviewed_at,reviewed_by_staff_user_id:row.reviewed_by_staff_user_id,
-  private_note:row.staff_private_note,resolution:row.customer_visible_resolution};}
+  private_note:row.staff_private_note,resolution:row.customer_visible_resolution,workflow_revision:row.workflow_revision};}
 async function loadRows(env,path){const r=await fetch(`${env.SUPABASE_URL}/rest/v1/${path}`,{headers:serviceHeaders(env)});if(!r.ok)throw Error('Source unavailable');const rows=await r.json();if(!Array.isArray(rows))throw Error('Unexpected source');return rows;}
