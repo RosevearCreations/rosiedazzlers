@@ -409,7 +409,8 @@ function render(){const el=$('build814StaffList');if(!el)return;
       <button class="btn primary" type="submit">Save response for customer account</button><p class="muted">Saves a response in My Account; does not email or text the customer.</p></form>`:''}
   </article>`).join(''):'<p class="muted">No follow-ups match this filter.</p>';
 }
-async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=null;reviewDrafts823.clear();$('build823NoteText').value='';escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
+async function load(){if(busy)return false;const previousActor824=staffId,editingNote824=$('build823NoteText').value;
+  busy=true;loaded=false;sourceLoadedAt822=null;escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
   try{const response=await fetch('/api/admin/worksite_followups_v814',{credentials:'include',cache:'no-store'});const data=await response.json().catch(()=>null);
     if(!response.ok||!data?.ok||!Array.isArray(data.followups)||!Array.isArray(data.events))throw Error(data?.error||'Queue unavailable.');
     records=data.followups;events=data.events;loaded=true;sourceLoadedAt822=Date.now();
@@ -421,8 +422,9 @@ async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=nu
       if(!o.ok||!d?.ok||!Array.isArray(d.ownership)||!Array.isArray(d.events)||!Array.isArray(d.candidates))throw Error('Unavailable');
       ownership=d.ownership;ownershipEvents=d.events;ownershipCandidates=d.candidates;canAssign=d.can_assign===true;staffId=d.current_staff_user_id;ownershipReady=true;
     }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
+    if(previousActor824!==staffId||!canAssign){reviewDrafts823.clear();$('build823NoteText').value='';}else{$('build823NoteText').value=editingNote824;}
     hydrateViews818();hydratePresets822();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);return true;
-  }catch(error){records=[];events=[];sourceLoadedAt822=null;staffId=null;hydrateViews818();hydratePresets822();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
+  }catch(error){records=[];events=[];sourceLoadedAt822=null;staffId=null;canAssign=false;reviewDrafts823.clear();$('build823NoteText').value='';hydrateViews818();hydratePresets822();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
   finally{busy=false;$('build814StaffRefresh').disabled=false;$('build823RefreshNow').disabled=false;}
 }
 async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
@@ -462,6 +464,7 @@ async function submit(event){const form=event.target.closest?.('[data-build814-s
   }catch(error){notice(`${error.message||'Response not confirmed.'} Refresh the queue before trying again.`,true);form.setAttribute('aria-busy','false');form.querySelector('button').disabled=false;}
 }
 export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))return;ensureOutcomeSurface819();ensureTrendSurface820();ensureComparisonSurface821();
+  reviewHandoff824=createSupervisorHandoff824({refresh:load});reviewHandoff824.mount();
   $('build814StaffRefresh').addEventListener('click',async()=>{const success=await load();const feedback=$('build819HandoffStatus');if(feedback)feedback.textContent=success?'Follow-up queue refreshed; active search and triage filters are retained. No message was sent.':'Follow-up refresh unavailable; filters are retained. No action was recorded.';});$('build814StaffFilter').addEventListener('change',()=>{clearPresetSelection822();render();});
   $('build817StaffSearch').addEventListener('input',render);$('build817ReviewTarget').addEventListener('change',()=>{clearPresetSelection822();render();});
   $('build821ComparisonMode').addEventListener('change',()=>{clearPresetSelection822();render();$('build821ComparisonStatus').focus({preventScroll:false});});
@@ -471,7 +474,7 @@ export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))retur
    $('build823RenamePreset').addEventListener('click',renameCurrentPreset823);
    $('build823SaveNote').addEventListener('click',saveCurrentReviewDraft823);
    $('build823ClearNote').addEventListener('click',clearCurrentReviewDraft823);
-   $('build823RefreshNow').addEventListener('click',load);
+   $('build823RefreshNow').addEventListener('click',async()=>{const ok=await load();const a=$('build823FreshnessAlert');a.textContent=ok?'Verified source refreshed; any local draft remains unsent and subject to current authorization.':'Refresh failed. Source is unavailable; no review was saved.';a.focus({preventScroll:false});});
   $('build822ExceptionSelect').addEventListener('change',()=>{syncReviewDraftEditor823();render();$('build822ExceptionStatus').focus({preventScroll:false});});
   $('build822ClearException').addEventListener('click',()=>{$('build822ExceptionSelect').value='all';syncReviewDraftEditor823();render();$('build822ExceptionStatus').focus({preventScroll:false});});
   $('build818SaveView').addEventListener('click',saveCurrentView818);
