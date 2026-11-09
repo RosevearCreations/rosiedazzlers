@@ -2,11 +2,11 @@
 
 > **ACTIVE MASTER SHELL–ALIGNED QUEUE — November 8, 2026**
 >
-> **Last independently verified feature release:** Build **827**, protected `main` Production GREEN at the recorded [exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42625859691); resolve later changes from live Git and workflow evidence.
+> **Last independently verified feature release:** Build **828**, protected `main` Production GREEN at the recorded [exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42636761326); resolve later changes from live Git and workflow evidence.
 >
 > **Completed software slice:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Product-owner and AI Data requirement approvals remain UNKNOWN/HOLD, distinct from software GREEN.
 >
-> **Current protected-promotion candidate:** **828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness** ([source-only limits](docs/build828_evidence_provenance_decision_trace_freshness.md)); it is not an owner-verified module completion or Comms connection.
+> **Completed software slice:** **828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness** ([source-only limits](docs/build828_evidence_provenance_decision_trace_freshness.md)). Real owner/module acceptance and Comms trust remain HOLD, separate from software GREEN.
 >
 > **Next proposed build:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter** (**CONTRACT REVIEW HOLD** pending approved source/consumer scope).
 >
