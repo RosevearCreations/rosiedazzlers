@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="/assets/site.css?v=20261101build734"/>
 <link rel="stylesheet" href="/assets/build825-field-acceptance.css?v=build825"/>
 <link rel="stylesheet" href="/assets/build826-guided-field-evidence.css?v=build826"/>
+<link rel="stylesheet" href="/assets/build827-module-registry.css?v=build827"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -147,6 +148,33 @@
     <p class="muted">Source ID <strong>rosiedazzlers</strong>; owned-business shell, not a child tenant. This is a private, read-only proposed reporting contract for AI Data Platform. It does not publish events to AI Data or Comms, authenticate an independent signer, or create a persistent Comms connection.</p>
   </div>
 </section>
+<section class="section build827-register" id="build827Registry" aria-labelledby="build827Heading">
+  <div class="panel">
+    <span class="badge">Build 827 · Master Shell requirement denominator drafts</span>
+    <h2 id="build827Heading">6. Review stable module requirements and evidence gaps</h2>
+    <p>All 45 audited Rosie module scopes have stable IDs; three role/device families share one requirement definition per family, so duplicate wording is not counted as separate requirements. These are <strong>39 unapproved criterion drafts</strong>, not 39 verified deliverables. No owner has approved their full scope or weights, and AI Data Platform remains the master scoring authority.</p>
+    <div class="build827-controls">
+      <label for="build827Search">Find module, requirement, scope or proposed criterion
+        <input id="build827Search" type="search" autocomplete="off" placeholder="Search 45 module scopes"/></label>
+      <label for="build827Filter">Local source reference
+        <select id="build827Filter"><option value="all">All draft scopes</option>
+          <option value="review">Linked in recent local review history</option>
+          <option value="unknown">No recent local review link / UNKNOWN</option></select></label>
+      <button id="build827Refresh" class="btn ghost" type="button">Refresh local references</button>
+    </div>
+    <p id="build827Status" role="status" aria-live="polite">No authorized local source checked yet.</p>
+    <p id="build827Count" role="status" aria-live="polite">Requirement registry not yet rendered.</p>
+    <div class="build825-scroll" role="region" aria-label="Draft module requirements and source-linked review references" tabindex="0">
+      <table><caption>Stable ID drafts · UNKNOWN weight/denominator until owner approval</caption>
+        <thead><tr><th scope="col">Module scope</th><th scope="col">Requirement / scope IDs</th>
+          <th scope="col">Proposed acceptance criterion</th><th scope="col">Proposed owner and variant</th>
+          <th scope="col">Approval and denominator</th><th scope="col">Recent local review reference (not proof)</th></tr></thead>
+        <tbody id="build827Rows"></tbody></table>
+    </div>
+    <p class="muted">A local reference is only a pointer to a recent operator-reported review. Freshness and independent verification remain UNKNOWN. The 2026-11-08 estimates remain unchanged. Product-owner scope, explicit in/out decisions, criterion weights, real evidence, signed approval and AI Data contract review are required before scoring. Comms is DISCONNECTED / HOLD; nothing is published or sent.</p>
+    <a href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md" target="_blank" rel="noopener">Read the audited 45-module baseline and limits</a>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -156,7 +184,8 @@
 <script type="module">
   import { startFieldAcceptance825 } from '/assets/build825-field-acceptance-dashboard.mjs?v=build825';
   import { startGuidedEvidence826 } from '/assets/build826-guided-field-evidence.mjs?v=build826';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();}});
+  import { startModuleRegistry827 } from '/assets/build827-module-registry-ui.mjs?v=build827';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();}});
 </script>
 </body>
 </html>
