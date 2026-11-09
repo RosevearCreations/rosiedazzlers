@@ -66,9 +66,9 @@ assert.match(reportContinuity822({loaded:true,loadedAt:now,mode:'foreign',status
 assert.match(reportContinuity822({loaded:true,loadedAt:now,mode:'adjacent',status:'priority',target:'all',shown:6,sourceCount:5}),/No verified report context/);
 
 const html=read('../admin-today.html');assert.equal(html,read('../admin-today/index.html'),'both entry routes must match');
-assert.match(html,/Build (?:822 · Saved comparisons and source-verified exception review|823 · Internal review drafts, preset renaming and source freshness)/);
-assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build82[23]/);
-assert.match(html,/worksite-issues-v811\.css\?v=build82[23]/);
+assert.match(html,/Build (?:822 · Saved comparisons and source-verified exception review|823 · Internal review drafts, preset renaming and source freshness|824 · Private supervisor handoff and source recovery)/);
+assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build82[234]/);
+assert.match(html,/worksite-issues-v811\.css\?v=build82[234]/);
 const client=read('../assets/admin-worksite-followups-v814.mjs');
 for(const name of ['build822PresetName','build822PresetSelect','build822SavePreset','build822RemovePreset','build822PresetStatus','build822ExceptionSelect','build822ExceptionStatus','build822ClearException','build822ReportContinuity','hydratePresets822','drilldown822','reportContinuity822'])assert.ok(client.includes(name),`Missing integration: ${name}`);
 assert.match(client,/role="status" aria-live="polite" tabindex="-1"/);

@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 823 — Supervisor Exception Review Notes, Preset Usability Improvements & Report Source Freshness Alerts.** Contract: `docs/build823_supervisor_exception_review_notes_presets_freshness.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 824 — Supervisor Review Handoff Continuity, Private Note Authorization & Accessible Freshness Recovery.** Contract: `docs/build824_supervisor_private_review_handoff_continuity.md`. Module completion snapshot: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 
