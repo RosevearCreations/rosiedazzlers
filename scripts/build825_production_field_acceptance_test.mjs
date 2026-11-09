@@ -46,7 +46,7 @@ for(const m of MODULE_BASELINE_825){assert.ok(Number.isInteger(m.built)&&m.built
   assert.ok(m.name&&m.note&&typeof m.note==='string');
 }
 const baseline=read('../docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md');
-for(const m of MODULE_BASELINE_825)assert.ok(baseline.includes('| '+m.name+' | '+m.built+'% | '+m.proven+'% |'),'Never alter audited rates behind the owner's back: '+m.name);
+for(const m of MODULE_BASELINE_825)assert.ok(baseline.includes('| '+m.name+' | '+m.built+'% | '+m.proven+'% |'),"Never alter audited rates behind the owner\'s back: "+m.name);
 
 let signed=true,role='operations_manager',permission=true,offlineTable='',sessionRequests=0;
 const env={SUPABASE_URL:'https://supabase-mock.invalid',SUPABASE_SERVICE_ROLE_KEY:'test-only'};
