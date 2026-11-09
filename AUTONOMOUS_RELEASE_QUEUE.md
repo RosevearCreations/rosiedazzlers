@@ -2,7 +2,7 @@
 
 > **ACTIVE MASTER SHELL–ALIGNED QUEUE — November 8, 2026**
 >
-> **Last independently verified release:** Build **826**, protected `main` Production GREEN at `addce823f7d32445dc76c93db3246ac117eeed04` (exact-SHA Cloudflare and HTTP smoke passed).
+> **Last independently verified release:** Build **826**, protected `main` Production GREEN, verified by exact-SHA Cloudflare and HTTP smoke; resolve the current commit from live Git and workflow evidence.
 >
 > **Next proposed executable build:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**.
 >
@@ -203,7 +203,7 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/reliability-security-cost-reassessment-authority.yml`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
-## Historical source release checkpoint (superseded)
+## Current release
 **Build 553 — Staff Mobile Field Regression Evidence** is the active bounded release.
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is the active bounded release. -->
 <!-- Prior: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is the active bounded release. -->
@@ -368,7 +368,7 @@ Production promotion proceeds through protected main and a pull request to prote
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
-## Historical next-release pointer (superseded)
+## Next release
 **Build 554 — Service Economics, Capacity & Technical Reliability Owner Review** is next only after the current release is independently GREEN on protected main.
 <!-- Prior: **Build 551 — Maintenance & Fleet Pilot Commercial Decision** is next only after the current release is independently GREEN on protected main. -->
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is next only after the current release is independently GREEN on protected main. -->
