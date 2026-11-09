@@ -44,7 +44,7 @@ assert.equal(read('../admin-today.html'),read('../admin-today/index.html'));
 const html=read('../admin-today.html');
 assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build(?:820|821|822|823|824)/);
 assert.match(html,/worksite-issues-v811\.css\?v=build(?:820|821|822|823|824)/);
-assert.match(html,/Build (?:820 · Read-only supervisor workload insights|821 · Accessible comparison and review guidance|822 · Saved comparisons and source-verified exception review|823 · Internal review drafts, preset renaming and source freshness)/);
+assert.match(html,/Build (?:820 · Read-only supervisor workload insights|821 · Accessible comparison and review guidance|822 · Saved comparisons and source-verified exception review|823 · Internal review drafts, preset renaming and source freshness|824 · Private supervisor handoff and source recovery)/);
 const app=read('../assets/admin-worksite-followups-v814.mjs');
 for(const token of ['ensureTrendSurface820','renderTrendSurface820','build820TrendRows','build820Workload','build820SafeExportPreview','build820SnapshotStatus','trendSnapshot820','workloadSignals820','safeQueuePreview820'])assert.ok(app.includes(token),`Missing UI contract: ${token}`);
 assert.match(app,/preview\.textContent=safeQueuePreview820\(snapshot,signals\)/,'CSV must be inserted as inert text');
