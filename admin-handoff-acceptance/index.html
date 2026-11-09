@@ -7,6 +7,7 @@
 <meta name="description" content="Authenticated supervisor-only review of real handoff, role/device and module evidence."/>
 <link rel="stylesheet" href="/assets/site.css?v=20261101build734"/>
 <link rel="stylesheet" href="/assets/build825-field-acceptance.css?v=build825"/>
+<link rel="stylesheet" href="/assets/build826-guided-field-evidence.css?v=build826"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -76,6 +77,76 @@
     <p class="muted">Only manual refresh is supported. No screenshots, telemetry, automatic browsing, account modifications or outbound messages are generated.</p>
   </div>
 </section>
+
+<section class="section build826-evidence" id="build826GuidedEvidence" aria-labelledby="build826Heading">
+  <div class="panel">
+    <span class="badge">Build 826 · Guided evidence and append-only review</span>
+    <h2 id="build826Heading">5. Record a real observation, seek a second-supervisor review and track module decisions</h2>
+    <p>This is a manually completed <strong>operator report</strong>. Record only something we actually observed under the intended authenticated role on an actual device. A second signed supervisor can review it. Neither report nor signoff substitutes for independent device proof, a source-owned Comms signature or owner approval of a completion percentage.</p>
+    <div class="build825-actions">
+      <button id="build826Refresh" class="btn ghost" type="button">Refresh private evidence history</button>
+      <a class="btn ghost" href="/admin-today.html#build814StaffFollowups">Review private worksite handoffs</a>
+    </div>
+    <p id="build826Status" class="build825-status" role="status" aria-live="polite" tabindex="-1">Sign in as an authorized supervisor to load the evidence ledger.</p>
+    <div class="build826-form-grid">
+      <fieldset class="build826-form">
+        <legend>Step 1 — Authenticated device observation</legend>
+        <label for="build826Role">Role actually tested</label>
+        <select id="build826Role"><option value="customer">Customer</option><option value="detailer">Detailer</option><option value="operations">Operations</option><option value="admin">Admin</option></select>
+        <label for="build826Device">Actual device class</label>
+        <select id="build826Device"><option value="phone">Phone</option><option value="tablet">Tablet</option><option value="desktop">Desktop</option></select>
+        <label for="build826Browser">Browser used</label>
+        <select id="build826Browser"><option value="chrome">Chrome</option><option value="safari">Safari</option><option value="firefox">Firefox</option><option value="edge">Edge</option></select>
+        <label for="build826Route">Safe internal route (no query strings, customer names or IDs)</label>
+        <input id="build826Route" type="text" value="/admin-handoff-acceptance.html" maxlength="90" autocomplete="off" spellcheck="false"/>
+        <label for="build826Viewport">Observed viewport width in pixels</label>
+        <input id="build826Viewport" type="number" min="320" max="3840" step="1" value="1366"/>
+        <label for="build826ObservedAt">When we directly observed the result</label>
+        <input id="build826ObservedAt" type="datetime-local" required/>
+        <label for="build826Outcome">Observed outcome</label>
+        <select id="build826Outcome"><option value="pass">Pass — personally observed</option><option value="fail">Fail — requires triage</option><option value="blocked">Blocked — no pass claim</option></select>
+        <button id="build826CaptureSubmit" class="btn primary" type="button" disabled>Record operator-observed evidence</button>
+        <p class="muted">Only route, role, device, browser, width, outcome and time are recorded. Never enter customer content, screenshots, credentials or copied provider receipts.</p>
+      </fieldset>
+      <fieldset class="build826-form">
+        <legend>Step 2 — Separate signed-supervisor signoff</legend>
+        <p class="muted">Use a different signed supervisor from the original reporter. The server rejects self-review. This records a human decision, not an Ed25519 original owner signature.</p>
+        <label for="build826SignoffTarget">Previously recorded observation</label>
+        <select id="build826SignoffTarget"><option value="">Refresh and select a source event</option></select>
+        <label for="build826SignoffDecision">Review decision</label>
+        <select id="build826SignoffDecision"><option value="accepted_for_review">Accepted for further owner review</option><option value="returned">Returned for missing evidence</option><option value="rejected">Rejected</option></select>
+        <button id="build826SignoffSubmit" class="btn ghost" type="button" disabled>Record separate supervisor decision</button>
+        <p class="muted">Accepted for review is not approved for production, customer outreach, Master Shell connection or device acceptance.</p>
+      </fieldset>
+      <fieldset class="build826-form">
+        <legend>Step 3 — Append a module readiness review</legend>
+        <label for="build826ModuleId">Audited Rosie Dazzlers module</label>
+        <select id="build826ModuleId"></select>
+        <label for="build826ModuleState">Readiness review state</label>
+        <select id="build826ModuleState"><option value="hold">HOLD — not accepted</option><option value="needs_evidence">Needs original evidence</option><option value="owner_review_candidate">Candidate for formal owner review</option></select>
+        <label for="build826ModuleTarget">Separate accepted signoff (required for owner review candidate)</label>
+        <select id="build826ModuleTarget"><option value="">No accepted signoff currently available</option></select>
+        <button id="build826ModuleSubmit" class="btn ghost" type="button" disabled>Append module readiness review</button>
+        <p class="muted">All 45 built/proven percentages remain their original provisional estimates. The Master Shell must approve requirement denominators, weights and evidence before calculating an authoritative score.</p>
+      </fieldset>
+    </div>
+    <div class="build826-evidence-ref">
+      <label for="build826EvidenceRef">Short, nonpersonal source reference code used for the selected step (6–80 characters)</label>
+      <input id="build826EvidenceRef" maxlength="80" autocomplete="off" spellcheck="false" placeholder="FIELD-TEST-PHONE-20261108"/>
+      <p class="muted">Do not enter customer, booking, address, staff names, keys, passwords or external file contents. A reference code is a pointer for an auditor, not independent verification.</p>
+    </div>
+    <h3>4. Read-back history and latest review states</h3>
+    <p id="build826HistoryStatus" role="status" aria-live="polite">No authorized ledger loaded.</p>
+    <div class="build825-scroll" role="region" aria-label="Recent append-only field evidence and module review history" tabindex="0">
+      <table><caption>Latest 75 visible records from a maximum of 100 private source records</caption>
+        <thead><tr><th scope="col">Source time</th><th scope="col">Record type</th><th scope="col">Role or module</th><th scope="col">Device or decision</th><th scope="col">Reference</th></tr></thead>
+        <tbody id="build826HistoryRows"></tbody></table>
+    </div>
+    <h3>5. Master Shell integration compatibility and blockers</h3>
+    <div id="build826MasterState" role="status" aria-live="polite">No authenticated source report yet. Rosie Comms remains DISCONNECTED / HOLD.</div>
+    <p class="muted">Source ID <strong>rosiedazzlers</strong>; owned-business shell, not a child tenant. This is a private, read-only proposed reporting contract for AI Data Platform. It does not publish events to AI Data or Comms, authenticate an independent signer, or create a persistent Comms connection.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -84,7 +155,8 @@
 <script src="/assets/chrome.js?v=20261025build656"></script>
 <script type="module">
   import { startFieldAcceptance825 } from '/assets/build825-field-acceptance-dashboard.mjs?v=build825';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>startFieldAcceptance825()});
+  import { startGuidedEvidence826 } from '/assets/build826-guided-field-evidence.mjs?v=build826';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();}});
 </script>
 </body>
 </html>
