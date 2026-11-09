@@ -175,3 +175,4 @@ node scripts/build821_followup_comparison_accessibility_test.mjs
 node scripts/build822_followup_presets_exception_continuity_test.mjs
 node scripts/build823_supervisor_exception_review_test.mjs
 node scripts/build824_supervisor_private_handoff_test.mjs
+node scripts/build825_production_field_acceptance_test.mjs

@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 824 — Supervisor Review Handoff Continuity, Private Note Authorization & Accessible Freshness Recovery.** Contract: `docs/build824_supervisor_private_review_handoff_continuity.md`. Module completion snapshot: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 825 — Production Supervisor Handoff Field Acceptance, Role/Device Verification & Evidence-Based Module Readiness Tracking.** Contract: `docs/build825_supervisor_field_acceptance_module_readiness.md`. Module estimate baseline: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 
