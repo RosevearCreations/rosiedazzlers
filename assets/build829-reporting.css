@@ -1,0 +1,11 @@
+/* Build 829: private, nonpublishing compatibility inventory. */
+.build829-reporting{scroll-margin-top:90px}
+.build829-reporting .build829-controls{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:16px 0}
+.build829-reporting .build829-controls label{display:grid;gap:5px;flex:1 1 200px;font-weight:600}
+.build829-reporting :is(input,select){min-height:44px;width:100%;max-width:100%;padding:8px}
+.build829-reporting button{min-height:44px}
+.build829-reporting th,.build829-reporting td{vertical-align:top;overflow-wrap:anywhere;min-width:145px}
+.build829-reporting th small{display:block;margin-top:6px;font-weight:400;color:var(--muted,#747b86)}
+.build829-reporting :is(input,select,button):focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:650px){.build829-reporting .build829-controls{display:grid}.build829-reporting td{min-width:190px}}
+@media(prefers-reduced-motion:reduce){.build829-reporting *{animation:none!important;transition:none!important}}

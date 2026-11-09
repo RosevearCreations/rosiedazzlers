@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="/assets/build826-guided-field-evidence.css?v=build826"/>
 <link rel="stylesheet" href="/assets/build827-module-registry.css?v=build827"/>
 <link rel="stylesheet" href="/assets/build828-provenance.css?v=build828"/>
+<link rel="stylesheet" href="/assets/build829-reporting.css?v=build829"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -205,6 +206,32 @@
     <p class="muted">The 30-day check is a proposed follow-up reminder, not an authorized expiration rule. Conflict warnings, later HOLD decisions and missing older events require human investigation. Original event release SHA is not recorded in the Build 826 ledger; the current deployment SHA cannot be substituted. Source IDs are internal Rosie records only. No private customer details, actor IDs, shared message/event publish, Master Shell scoring or canonical HOLD change is performed.</p>
   </div>
 </section>
+<section class="section build829-reporting" id="build829Reporting" aria-labelledby="build829Heading">
+  <div class="panel">
+    <span class="badge">Build 829 · AI Data source compatibility preview</span>
+    <h2 id="build829Heading">8. Inspect the read-only Master Shell field mapping</h2>
+    <p>The exact <strong>rosiedazzlers</strong> owned-business shell is mapped to AI Data V1 fields, while the external reader grant and signed transport remain <strong>HOLD</strong>. This is private to signed-in Rosie supervisors. A local review is not an approved readiness score, provider proof or consumer acknowledgement. No customer or staff identities are exported.</p>
+    <div class="build829-controls">
+      <label for="build829Search">Find module, stable scope or draft requirement
+        <input id="build829Search" type="search" autocomplete="off" placeholder="Search the local 45-scope mapping"/></label>
+      <label for="build829Filter">Show scopes
+        <select id="build829Filter"><option value="all">All draft scopes</option>
+          <option value="local">With local review state</option>
+          <option value="due">Draft review follow-up due</option>
+          <option value="conflict">Partial or conflicting chain</option></select></label>
+      <button id="build829Refresh" class="btn ghost" type="button">Refresh private compatibility preview</button>
+    </div>
+    <p id="build829Status" role="status" aria-live="polite">Private source has not been checked.</p>
+    <p id="build829Count" role="status" aria-live="polite">Compatibility preview not loaded.</p>
+    <div class="build825-scroll" role="region" aria-label="Read-only AI Data compatibility scope mapping" tabindex="0">
+      <table><caption>Source reported vs approved Master readiness · no signed events or denominator approval</caption>
+        <thead><tr><th scope="col">Module / stable ID</th><th scope="col">Rosie local review</th>
+          <th scope="col">Local freshness</th><th scope="col">AI Data readiness</th><th scope="col">Consumer permission</th></tr></thead>
+        <tbody id="build829Rows"></tbody></table>
+    </div>
+    <p class="muted">The AI Data Build 337 event requires a signed envelope, exact audience, source sequence, evidence URI and valid expiry. None are created here. The module adapter exposes null approved numerators, denominators, evidence and expiry until an independent source/consumer authorization and product-owner approval exist. The original QL-364/365D Comms trust gate is unchanged.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -216,7 +243,8 @@
   import { startGuidedEvidence826 } from '/assets/build826-guided-field-evidence.mjs?v=build826';
   import { startModuleRegistry827 } from '/assets/build827-module-registry-ui.mjs?v=build827';
   import { startProvenance828 } from '/assets/build828-provenance-ui.mjs?v=build828';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();}});
+  import { startReporting829 } from '/assets/build829-reporting-ui.mjs?v=build829';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();}});
 </script>
 </body>
 </html>
