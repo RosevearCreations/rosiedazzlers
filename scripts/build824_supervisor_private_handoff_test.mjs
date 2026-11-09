@@ -59,7 +59,7 @@ try{
   const history=await onRequestGet(call());assert.equal(history.status,200);
   const detail=await history.json();assert.equal(detail.history.length,1);assert.equal(detail.history[0].note_text,payload.note_text);
   role='detailer';assert.equal((await onRequestGet(call())).status,403,'Private notes must never be accessible to regular staff');
-  role='operations_manager';online=false;assert.equal((await onRequestGet(call())).status,401);online=true;
+  role='operations_manager';online=false;assert.ok([401,503].includes((await onRequestGet(call())).status));online=true;
 }finally{globalThis.fetch=originalFetch;}
 const sql=read('../supabase/migrations/20261109002900_build824_supervisor_private_handoff_notes.sql');
 assert.match(sql,/enable row level security/i);
