@@ -173,3 +173,4 @@ node scripts/build819_followup_outcome_handoff_test.mjs
 node scripts/build820_followup_trend_snapshot_test.mjs
 node scripts/build821_followup_comparison_accessibility_test.mjs
 node scripts/build822_followup_presets_exception_continuity_test.mjs
+node scripts/build823_supervisor_exception_review_test.mjs

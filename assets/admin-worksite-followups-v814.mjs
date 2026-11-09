@@ -6,12 +6,14 @@ import { outcome819,latestReturnedHandoff819,outcomeSummary819 } from './build81
 import { COHORTS_820,trendSnapshot820,workloadSignals820,safeQueuePreview820 } from './build820-followup-trends.mjs';
 import { COMPARISON_MODES_821,compareSnapshots821,workloadExplanations821,readableReport821 } from './build821-followup-comparisons.mjs';
 import { readPresets822,savePreset822,selectPreset822,removePreset822,presetStorage822,EXCEPTIONS_822,drilldown822,exceptionCounts822,reportContinuity822 } from './build822-followup-review-continuity.mjs';
+import { sourceFreshness823,renamePreset823,validateReviewDraft823,reviewDraftSummary823 } from './build823-supervisor-exception-review.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
 let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=false,canEscalate=false,ownership=[],ownershipEvents=[],ownershipCandidates=[],ownershipReady=false,canAssign=false,staffId=null,busy=false,loaded=false;
 let viewsActor=null,savedViews={views:[],activeId:''};
 let presetsActor=null,savedPresets822={presets:[],activeId:''},sourceLoadedAt822=null;
+let reviewDrafts823=new Map(); // volatile local-only drafts
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
 function viewNotice(message){const el=$('build818ViewStatus');if(el)el.textContent=message;}
 function presetNotice822(message){const el=$('build822PresetStatus');if(el)el.textContent=message;}
@@ -76,7 +78,22 @@ function ensureComparisonSurface821(){
       <p id="build822ExceptionStatus" role="status" aria-live="polite" tabindex="-1">Choose an exception after loading verified source records.</p>
     </fieldset>
     <p class="build822-continuity" id="build822ReportContinuity" role="status" aria-live="polite">Report context appears after authorized records load.</p>
-    <p class="muted">Presets remember only comparison mode, status and internal target for this browser tab. Search, customer records, review notes, exception results and report text are not saved. A returning preset re-queries the authorized queue; no historical report is inferred.</p>
+    <fieldset class="build823-preset-rename"><legend>Rename selected comparison preset</legend>
+<label for="build823PresetRename">New name (settings stay unchanged)</label><input id="build823PresetRename" type="text" minlength="2" maxlength="40" autocomplete="off" />
+<button id="build823RenamePreset" class="btn ghost" type="button" disabled>Rename selected preset</button>
+<p id="build823PresetDetails" role="status" aria-live="polite">Select a preset to see its settings.</p></fieldset>
+<fieldset class="build823-note-fieldset"><legend>Supervisor exception review draft — current page only</legend>
+<label for="build823NoteText">Internal review note for the selected exception category</label>
+<textarea id="build823NoteText" rows="3" maxlength="500" autocomplete="off" aria-describedby="build823NoteStatus" placeholder="Internal next step; avoid customer details."></textarea>
+<button id="build823SaveNote" class="btn ghost" type="button" disabled>Hold draft in this page</button>
+<button id="build823ClearNote" class="btn ghost" type="button" disabled>Clear draft</button>
+<p id="build823NoteStatus" role="status" aria-live="polite" tabindex="-1">No draft. Refresh or leaving this page clears the note.</p>
+<p id="build823NotePreview" class="build823-note-preview" aria-label="Internal unsaved draft preview"></p></fieldset>
+<section class="build823-freshness" aria-labelledby="build823FreshnessHeading">
+<h4 id="build823FreshnessHeading">Report source freshness</h4>
+<p id="build823FreshnessAlert" role="status" aria-live="polite" data-status="unavailable">Refresh to check source age.</p>
+<button id="build823RefreshNow" class="btn ghost" type="button">Refresh verified report source</button></section>
+<p class="muted">Presets remember only comparison mode, status and internal target for this browser tab. Search, customer records, review notes, exception results and report text are not saved. A returning preset re-queries the authorized queue; no historical report is inferred.</p>
   </section>`);
   counts.before(section);
 }
@@ -101,6 +118,11 @@ function presetControls822(){
   select.disabled=!ready||savedPresets822.presets.length===0;
   $('build822SavePreset').disabled=!ready;
   $('build822RemovePreset').disabled=!ready||!savedPresets822.activeId;
+  const selected=savedPresets822.presets.find(p=>p.id===savedPresets822.activeId);
+  $('build823RenamePreset').disabled=!ready||!selected;
+  $('build823PresetRename').disabled=!ready||!selected;
+  $('build823PresetRename').value=selected?.name||'';
+  $('build823PresetDetails').textContent=selected?'Selected: '+selected.name+'. Comparison: '+selected.mode+'; status: '+selected.status+'; review target: '+selected.target+'.':'Select a saved preset to review its settings.';
 }
 function hydratePresets822(){
   if(presetsActor===staffId)return;
@@ -148,6 +170,64 @@ function removeCurrentPreset822(){
   const data=removePreset822(presetStorage822(),staffId,id);
   if(!data){presetNotice822('The saved comparison could not be removed.');return;}
   savedPresets822=data;presetControls822();presetNotice822('Comparison preset removed. Queue records, filters and report content were not changed.');
+}
+function renameCurrentPreset823(){
+  if(!staffId||!savedPresets822.activeId)return;
+  const result=renamePreset823(presetStorage822(),staffId,savedPresets822.activeId,$('build823PresetRename').value);
+  if(!result.ok){presetNotice822(result.reason);return;}
+  savedPresets822={presets:result.presets,activeId:result.activeId};
+  presetControls822();
+  presetNotice822('Comparison preset renamed. Its settings and current queue were not changed.');
+  $('build822PresetStatus').focus({preventScroll:false});
+}
+function syncReviewDraftEditor823(){
+  const key=$('build822ExceptionSelect')?.value||'all';
+  $('build823NoteText').value=reviewDrafts823.get(key)?.text||'';
+}
+function renderSourceFreshness823(){
+  const result=sourceFreshness823({loaded,loadedAt:sourceLoadedAt822});
+  const alert=$('build823FreshnessAlert');
+  if(alert){alert.dataset.status=result.status;alert.textContent=result.message;}
+  const refresh=$('build823RefreshNow');if(refresh)refresh.disabled=busy;
+  return result;
+}
+function tickSourceFreshness823(){
+  const state=renderSourceFreshness823();
+  if(!state.allowReport){
+    renderComparisonSurface821(renderTrendSurface820([],false));
+    const context=$('build822ReportContinuity');
+    if(context)context.textContent='Report source expired or unavailable. Refresh before relying on any aggregate totals.';
+    renderReviewDraft823(false,$('build822ExceptionSelect')?.value||'all');
+  }
+}
+function renderReviewDraft823(ready,category){
+  const note=reviewDrafts823.get(category);
+  $('build823SaveNote').disabled=!ready;
+  $('build823ClearNote').disabled=!ready||!note;
+  $('build823NoteStatus').textContent=reviewDraftSummary823(note,{actor:staffId,category,sourceReady:ready});
+  $('build823NotePreview').textContent=ready&&note?.ok?note.text:'';
+}
+function saveCurrentReviewDraft823(){
+  const key=$('build822ExceptionSelect')?.value||'all';
+  const fresh=sourceFreshness823({loaded,loadedAt:sourceLoadedAt822});
+  const filter=$('build814StaffFilter')?.value||'priority',target=$('build817ReviewTarget')?.value||'all';
+  const ownerBlocked=!ownershipReady&&(filter==='unowned'||filter==='mine'||target!=='all');
+  const escalationBlocked=!escalationReady&&filter==='escalated';
+  const selected=loaded?selectFollowups817(records,{status:filter,query:$('build817StaffSearch')?.value||'',target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
+  const checked=drilldown822(selected,key,exceptionContext822());
+  const result=validateReviewDraft823({actor:staffId,sourceReady:loaded&&fresh.allowReport&&!ownerBlocked&&!escalationBlocked&&checked.ok,category:key,
+    shown:checked.ok?checked.count:0,text:$('build823NoteText').value});
+  if(!result.ok){$('build823NoteStatus').textContent=result.reason;return;}
+  reviewDrafts823.set(key,result);
+  renderReviewDraft823(true,key);
+  $('build823NoteStatus').focus({preventScroll:false});
+}
+function clearCurrentReviewDraft823(){
+  const key=$('build822ExceptionSelect')?.value||'all';
+  reviewDrafts823.delete(key);
+  syncReviewDraftEditor823();
+  renderReviewDraft823(!!staffId&&loaded&&sourceFreshness823({loaded,loadedAt:sourceLoadedAt822}).allowReport,key);
+  $('build823NoteStatus').focus({preventScroll:false});
 }
 function exceptionContext822(){return {now:Date.now(),ownershipReady,owners:ownership,escalationReady,escalations};}
 function renderExceptionControls822(selection,result,context){
@@ -303,8 +383,10 @@ function render(){const el=$('build814StaffList');if(!el)return;
     if(!loaded)summary.textContent='Outcome summary unavailable until the authenticated follow-up queue loads.';
     else{const counts=outcomeSummary819(selection);summary.textContent=`Shown follow-ups (${counts.total}; latest 150 loaded maximum): ${counts.waiting} awaiting staff · ${counts.responded} waiting for customer decision · ${counts.needs_help} requesting more help · ${counts.confirmed} customer-confirmed answers · ${counts.review} needing source review. ${ownershipReady?'Owner source available.':'Owner source unavailable.'} ${escalationReady?'Supervisor source available.':'Supervisor source unavailable.'} No booking or issue closures are inferred.`;}
   }
-  renderComparisonSurface821(renderTrendSurface820(selection,exception.ok));
-  const context=$('build822ReportContinuity');if(context)context.textContent=reportContinuity822({loaded:loaded&&exception.ok,loadedAt:sourceLoadedAt822,mode:$('build821ComparisonMode')?.value,status:filter,target,exception:exceptionKey,shown:selection.length,sourceCount:records.length});
+  const freshness823=renderSourceFreshness823();
+  renderComparisonSurface821(renderTrendSurface820(selection,exception.ok&&freshness823.allowReport));
+  renderReviewDraft823(!!staffId&&loaded&&exception.ok&&freshness823.allowReport,exceptionKey);
+  const context=$('build822ReportContinuity');if(context)context.textContent=reportContinuity822({loaded:loaded&&exception.ok&&freshness823.allowReport,loadedAt:sourceLoadedAt822,mode:$('build821ComparisonMode')?.value,status:filter,target,exception:exceptionKey,shown:selection.length,sourceCount:records.length});
   $('build814StaffCounts').textContent=loaded&&!exception.ok?`Selected exception review unavailable: ${exception.reason}`:loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
   if(!exception.ok){el.innerHTML='<p class="notice bad">This exception view is paused because its verified source is unavailable. Choose another category or refresh the authenticated queue.</p>';return;}
@@ -322,7 +404,7 @@ function render(){const el=$('build814StaffList');if(!el)return;
       <button class="btn primary" type="submit">Save response for customer account</button><p class="muted">Saves a response in My Account; does not email or text the customer.</p></form>`:''}
   </article>`).join(''):'<p class="muted">No follow-ups match this filter.</p>';
 }
-async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=null;escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
+async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=null;reviewDrafts823.clear();$('build823NoteText').value='';escalationReady=false;ownershipReady=false;$('build814StaffRefresh').disabled=true;render();notice('Loading verified staff follow-ups…');
   try{const response=await fetch('/api/admin/worksite_followups_v814',{credentials:'include',cache:'no-store'});const data=await response.json().catch(()=>null);
     if(!response.ok||!data?.ok||!Array.isArray(data.followups)||!Array.isArray(data.events))throw Error(data?.error||'Queue unavailable.');
     records=data.followups;events=data.events;loaded=true;sourceLoadedAt822=Date.now();
@@ -336,7 +418,7 @@ async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=nu
     }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
     hydrateViews818();hydratePresets822();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);return true;
   }catch(error){records=[];events=[];sourceLoadedAt822=null;staffId=null;hydrateViews818();hydratePresets822();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
-  finally{busy=false;$('build814StaffRefresh').disabled=false;}
+  finally{busy=false;$('build814StaffRefresh').disabled=false;$('build823RefreshNow').disabled=false;}
 }
 async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
   if(busy||!ownershipReady||!canAssign||form.getAttribute('aria-busy')==='true')return;
@@ -381,9 +463,15 @@ export function loadStaffWorksiteFollowups814(){if(!$('build814StaffList'))retur
   $('build822SavePreset').addEventListener('click',saveCurrentPreset822);
   $('build822PresetSelect').addEventListener('change',applyPreset822);
   $('build822RemovePreset').addEventListener('click',removeCurrentPreset822);
-  $('build822ExceptionSelect').addEventListener('change',()=>{render();$('build822ExceptionStatus').focus({preventScroll:false});});
-  $('build822ClearException').addEventListener('click',()=>{$('build822ExceptionSelect').value='all';render();$('build822ExceptionStatus').focus({preventScroll:false});});
+   $('build823RenamePreset').addEventListener('click',renameCurrentPreset823);
+   $('build823SaveNote').addEventListener('click',saveCurrentReviewDraft823);
+   $('build823ClearNote').addEventListener('click',clearCurrentReviewDraft823);
+   $('build823RefreshNow').addEventListener('click',load);
+  $('build822ExceptionSelect').addEventListener('change',()=>{syncReviewDraftEditor823();render();$('build822ExceptionStatus').focus({preventScroll:false});});
+  $('build822ClearException').addEventListener('click',()=>{$('build822ExceptionSelect').value='all';syncReviewDraftEditor823();render();$('build822ExceptionStatus').focus({preventScroll:false});});
   $('build818SaveView').addEventListener('click',saveCurrentView818);
   $('build818SavedViews').addEventListener('change',applySavedView818);
   $('build818RemoveView').addEventListener('click',removeSavedView818);
-  $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
+  window.setInterval(()=>{if(loaded)tickSourceFreshness823();},60000);
+   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&loaded)tickSourceFreshness823();});
+   $('build814StaffList').addEventListener('submit',submit);$('build814StaffList').addEventListener('submit',escalate);$('build814StaffList').addEventListener('submit',assignOwner);load();}
