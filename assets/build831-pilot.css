@@ -1,0 +1,9 @@
+.build831-pilot .build831-controls{display:flex;flex-wrap:wrap;gap:1rem;align-items:end;margin:1rem 0}
+.build831-pilot .build831-controls label{display:grid;gap:.35rem;max-width:26rem}
+.build831-pilot .build831-controls select{min-width:16rem;max-width:100%}
+.build831-pilot details{max-width:26rem}
+.build831-pilot details p{margin:.6rem 0;line-height:1.45}
+.build831-pilot .btn.ghost{display:inline-block;margin:.35rem 0;padding:.5rem .65rem}
+.build831-pilot :is(a,button,select,summary):focus-visible{outline:3px solid #b58e42;outline-offset:3px}
+@media(max-width:650px){.build831-pilot .build831-controls{display:grid;grid-template-columns:1fr}
+.build831-pilot .build831-controls label,.build831-pilot .build831-controls select{width:100%}}
