@@ -176,3 +176,4 @@ node scripts/build822_followup_presets_exception_continuity_test.mjs
 node scripts/build823_supervisor_exception_review_test.mjs
 node scripts/build824_supervisor_private_handoff_test.mjs
 node scripts/build825_production_field_acceptance_test.mjs
+node scripts/build826_guided_field_evidence_test.mjs
