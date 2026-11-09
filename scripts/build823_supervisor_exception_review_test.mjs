@@ -65,13 +65,13 @@ assert.match(reviewDraftSummary823(draft,{actor,sourceReady:true,category:'revie
 
 const html=read('../admin-today.html');
 assert.equal(html,read('../admin-today/index.html'),'both admin today entry routes must match');
-assert.match(html,/Build 823 · Internal review drafts, preset renaming and source freshness/);
-assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build823/);
-assert.match(html,/worksite-issues-v811\.css\?v=build823/);
+assert.match(html,/Build (?:823 · Internal review drafts, preset renaming and source freshness|824 · Private supervisor handoff and source recovery)/);
+assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build82[34]/);
+assert.match(html,/worksite-issues-v811\.css\?v=build82[34]/);
 const app=read('../assets/admin-worksite-followups-v814.mjs');
 for(const token of ['build823PresetRename','build823RenamePreset','build823PresetDetails','build823NoteText','build823SaveNote','build823ClearNote','build823NoteStatus','build823NotePreview','build823FreshnessAlert','build823RefreshNow','renamePreset823','validateReviewDraft823','sourceFreshness823','reviewDrafts823.clear()','tickSourceFreshness823','sourceLoadedAt822'])assert.ok(app.includes(token),'Missing Build 823 contract: '+token);
 assert.match(app,/renderComparisonSurface821\(renderTrendSurface820\(selection,exception\.ok&&freshness823\.allowReport\)\)/);
-assert.match(app,/renderReviewDraft823\(\!\!staffId&&loaded&&exception\.ok&&freshness823\.allowReport,exceptionKey\)/);
+assert.match(app,/renderReviewDraft823\(\!\!canAssign&&\!\!staffId&&loaded&&exception\.ok&&freshness823\.allowReport,exceptionKey\)/);
 assert.match(app,/window\.setInterval\(\(\)=>\{if\(loaded\)tickSourceFreshness823\(\);\},60000\)/);
 assert.doesNotMatch(app,/createObjectURL|\.download\s*=|\.writeText\s*\(/);
 const css=read('../assets/worksite-issues-v811.css');
