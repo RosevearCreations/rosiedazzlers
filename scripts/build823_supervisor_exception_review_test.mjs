@@ -54,7 +54,7 @@ assert.equal(validateReviewDraft823({actor:'unverified',sourceReady:true,categor
 assert.equal(validateReviewDraft823({actor,sourceReady:false,category:'older48h',shown:4,text:draft.text}).ok,false);
 assert.equal(validateReviewDraft823({actor,sourceReady:true,category:'foreign',shown:4,text:draft.text}).ok,false);
 assert.equal(validateReviewDraft823({actor,sourceReady:true,category:'older48h',shown:151,text:draft.text}).ok,false);
-assert.equal(validateReviewDraft823({actor,sourceReady:true,category:'older48h',shown:4,text:'Too short'}).ok,false);
+assert.equal(validateReviewDraft823({actor,sourceReady:true,category:'older48h',shown:4,text:'Short'}).ok,false);
 assert.equal(validateReviewDraft823({actor,sourceReady:true,category:'older48h',shown:4,text:'x'.repeat(501)}).ok,false);
 assert.equal(validateReviewDraft823({actor,sourceReady:true,category:'older48h',shown:4,text:'Unsafe\u0000content'}).ok,false);
 const summary=reviewDraftSummary823(draft,{actor,sourceReady:true,category:'older48h'});
