@@ -1,0 +1,16 @@
+/* Build 828: source lineage is diagnostic only. */
+.build828-provenance{scroll-margin-top:90px}
+.build828-provenance .build828-controls{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:16px 0}
+.build828-provenance .build828-controls label{display:grid;gap:5px;flex:1 1 200px;font-weight:600}
+.build828-provenance :is(input,select){min-height:44px;width:100%;max-width:100%;padding:8px}
+.build828-provenance button{min-height:44px}
+.build828-provenance th,.build828-provenance td{vertical-align:top;overflow-wrap:anywhere;min-width:145px}
+.build828-provenance th small{display:block;margin-top:6px;font-weight:400;color:var(--muted,#747b86)}
+.build828-provenance td:last-child{min-width:250px;max-width:500px}
+.build828-provenance details{padding:6px}
+.build828-provenance summary{cursor:pointer;font-weight:600;min-height:32px}
+.build828-provenance li{margin:10px 0;padding-bottom:8px;border-bottom:1px solid var(--border,#64748b)}
+.build828-provenance li p{margin:5px 0;font-size:.88em}
+.build828-provenance :is(input,select,button,summary):focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:650px){.build828-provenance .build828-controls{display:grid}.build828-provenance td:last-child{min-width:190px}}
+@media(prefers-reduced-motion:reduce){.build828-provenance *{animation:none!important;transition:none!important}}

@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="/assets/build825-field-acceptance.css?v=build825"/>
 <link rel="stylesheet" href="/assets/build826-guided-field-evidence.css?v=build826"/>
 <link rel="stylesheet" href="/assets/build827-module-registry.css?v=build827"/>
+<link rel="stylesheet" href="/assets/build828-provenance.css?v=build828"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -175,6 +176,35 @@
     <a href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md" target="_blank" rel="noopener">Read the audited 45-module baseline and limits</a>
   </div>
 </section>
+<section class="section build828-provenance" id="build828Provenance" aria-labelledby="build828Heading">
+  <div class="panel">
+    <span class="badge">Build 828 · Evidence provenance and freshness</span>
+    <h2 id="build828Heading">7. Follow local requirement evidence, reviews and possible stale decisions</h2>
+    <p>This read-only supervisor screen traces a module review to its separate signoff and operator-observed device event when all records are still in the latest 100 source events. A complete local chain is <strong>not</strong> independent field/owner/provider proof. A missing historical target is UNKNOWN, not a failed review. Nothing is automatically reopened, approved or sent to Master Shell.</p>
+    <div class="build828-controls">
+      <label for="build828Search">Search module or stable requirement/scope ID
+        <input id="build828Search" type="search" autocomplete="off" placeholder="Find an evidence chain"/></label>
+      <label for="build828Filter">Review signals
+        <select id="build828Filter"><option value="all">All 45 scopes</option>
+          <option value="linked">Complete local chain (unverified)</option>
+          <option value="partial">Target outside recent window</option>
+          <option value="conflict">Conflicting local chain</option>
+          <option value="due">30-day review advisory</option>
+          <option value="reopen">Inferred reopen / return advisory</option></select></label>
+      <button id="build828Refresh" class="btn ghost" type="button">Refresh local decision lineage</button>
+    </div>
+    <p id="build828Status" role="status" aria-live="polite">No private source read yet.</p>
+    <p id="build828Count" role="status" aria-live="polite">Provenance report not loaded.</p>
+    <div class="build825-scroll" role="region" aria-label="Requirement scope source provenance and review timelines" tabindex="0">
+      <table><caption>Source-linked local review trace · no approved score, expiry or owner signature</caption>
+        <thead><tr><th scope="col">Module / stable scope</th><th scope="col">Local chain</th>
+          <th scope="col">Latest decision</th><th scope="col">Draft freshness</th>
+          <th scope="col">Source record IDs and decision trace</th></tr></thead>
+        <tbody id="build828Rows"></tbody></table>
+    </div>
+    <p class="muted">The 30-day check is a proposed follow-up reminder, not an authorized expiration rule. Conflict warnings, later HOLD decisions and missing older events require human investigation. Original event release SHA is not recorded in the Build 826 ledger; the current deployment SHA cannot be substituted. Source IDs are internal Rosie records only. No private customer details, actor IDs, shared message/event publish, Master Shell scoring or canonical HOLD change is performed.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -185,7 +215,8 @@
   import { startFieldAcceptance825 } from '/assets/build825-field-acceptance-dashboard.mjs?v=build825';
   import { startGuidedEvidence826 } from '/assets/build826-guided-field-evidence.mjs?v=build826';
   import { startModuleRegistry827 } from '/assets/build827-module-registry-ui.mjs?v=build827';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();}});
+  import { startProvenance828 } from '/assets/build828-provenance-ui.mjs?v=build828';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();}});
 </script>
 </body>
 </html>
