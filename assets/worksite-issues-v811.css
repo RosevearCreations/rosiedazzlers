@@ -94,3 +94,19 @@
 #build823FreshnessAlert[data-status="expired"],#build823FreshnessAlert[data-status="unavailable"]{border-inline-start:4px solid #ef4444;padding-inline-start:10px}
 #build823NoteStatus:focus-visible,#build823FreshnessAlert:focus-visible,#build823PresetDetails:focus-visible{outline:3px solid #d4af37;outline-offset:3px}
 @media(max-width:600px){.build823-freshness{padding:10px}.build823-note-fieldset textarea{width:100%}}
+
+/* Build 824: private authorized supervisor handoff, readable and accessible across devices. */
+.build824-handoff{margin-block:16px;padding:14px;border:1px solid rgba(139,167,188,.6);border-radius:12px}
+.build824-handoff[hidden]{display:none!important}
+.build824-handoff label{display:block;font-weight:650;margin:12px 0 7px}
+.build824-handoff select,.build824-handoff textarea{width:100%;max-width:100%;min-width:0}
+.build824-handoff textarea{min-height:96px;resize:vertical}
+.build824-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:12px}
+.build824-actions button{min-height:44px}
+.build824-handoff #build824HandoffStatus{padding:10px 12px;border-inline-start:3px solid #8ba7bc;line-height:1.55}
+.build824-handoff #build824HandoffStatus[data-status="error"]{border-inline-start-color:#ef4444}
+.build824-history{padding-inline-start:26px;max-height:320px;overflow-y:auto}
+.build824-history li{padding:10px 0;border-bottom:1px solid rgba(148,163,184,.35);overflow-wrap:anywhere}
+.build824-history li p{white-space:pre-wrap;margin:6px 0}
+#build824HandoffStatus:focus-visible,#build824ReviewSelect:focus-visible,#build824NoteText:focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:600px){.build824-handoff{padding:10px}.build824-actions{display:grid}.build824-actions button{width:100%}}
