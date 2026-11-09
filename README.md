@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 822 — Supervisor Follow-Up Comparison Saved Presets, Exception Review Drilldowns & Report Continuity.** Contract: `docs/build822_followup_saved_comparison_exception_review_continuity.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 823 — Supervisor Exception Review Notes, Preset Usability Improvements & Report Source Freshness Alerts.** Contract: `docs/build823_supervisor_exception_review_notes_presets_freshness.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 

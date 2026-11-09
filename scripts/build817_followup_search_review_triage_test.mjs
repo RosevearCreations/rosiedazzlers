@@ -38,7 +38,7 @@ const html=read('../admin-today.html');
 assert.equal(html,read('../admin-today/index.html'));
 assert.match(html,/id="build817StaffSearch"[^>]*type="search"/);
 assert.match(html,/id="build817ReviewTarget" disabled/);
-assert.match(html,/admin-worksite-followups-v814.mjs\?v=build(?:81[789]|820|821|822)/);
+assert.match(html,/admin-worksite-followups-v814.mjs\?v=build(?:81[789]|820|821|822|823)/);
 assert.match(html,/latest 150 (?:loaded|authorized) follow-ups/);
 const ui=read('../assets/admin-worksite-followups-v814.mjs');
 assert.match(ui,/targetSelect\.disabled=!ownershipReady/);
