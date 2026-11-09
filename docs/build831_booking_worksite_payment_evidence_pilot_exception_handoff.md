@@ -30,4 +30,6 @@ The tenth private section on `/admin-handoff-acceptance.html` presents filterabl
 
 **Regression:** `scripts/build831_booking_worksite_payment_pilot_test.mjs` tests all exception categories, deposit/final linking, negative events, currency/amount/refund mismatches, unsigned signoff, bounded/conflicting source, signed supervisor 401/403 and 503, PII exclusion, GET-only reads, route parity and accessible UI. The cumulative regression, protected PR checks and exact-SHA Cloudflare proof cover software release integrity, not business acceptance.
 
+**Software deployment verification (November 9, 2026):** [Feature/dev PR #894](https://github.com/RosevearCreations/rosiedazzlers/pull/894), [protected main PR #895](https://github.com/RosevearCreations/rosiedazzlers/pull/895), [exact-SHA Cloudflare Production workflow](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42723146713), feature `main` SHA `f53d25737b810456ffde37df7725b9d263102ec0`. All protected checks and immutable/live production static/contextual HTTP smoke passed. There are **no** original provider receipts or independently observed field/owner signatures supplied with this code release.
+
 **Next proposed Build 832:** Job Economics, Inventory, Payroll, Invoice & Tax Source Reconciliation — keep accountant and owner acceptance separate from code GREEN.
