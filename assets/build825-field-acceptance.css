@@ -1,0 +1,25 @@
+/* Build 825: accessible responsive field-acceptance worksheet. */
+.build825-main .panel{max-width:100%;overflow:visible}
+.build825-main h1{max-width:36ch;line-height:1.2}
+.build825-main h2{margin:0 0 12px}
+.build825-main p{line-height:1.6}
+.build825-actions{display:flex;gap:12px;flex-wrap:wrap;align-items:end;margin:12px 0 16px}
+.build825-actions .btn{min-height:44px}
+.build825-actions label{display:grid;gap:6px;min-width:min(100%,230px);flex:1}
+.build825-actions select,.build825-actions input{min-height:44px;width:100%;min-width:0}
+.build825-scroll{max-width:100%;overflow-x:auto;margin:12px 0 18px;border:1px solid var(--border,#64748b);border-radius:10px}
+.build825-scroll:focus-visible{outline:3px solid #d4af37;outline-offset:2px}
+.build825-scroll table{width:100%;border-collapse:collapse;text-align:left}
+.build825-scroll table th,.build825-scroll table td{padding:11px;border-bottom:1px solid var(--border,#64748b);white-space:normal;overflow-wrap:anywhere;vertical-align:top}
+.build825-scroll table thead th{position:sticky;top:0;background:var(--card,#182235);z-index:1}
+.build825-scroll table tbody tr:last-child th,.build825-scroll table tbody tr:last-child td{border-bottom:0}
+.build825-scroll table th[scope=row]{font-weight:650;min-width:130px}
+.build825-scroll table caption{padding:9px 12px;text-align:left;font-weight:650}
+.build825-status{border-inline-start:4px solid #94a3b8;padding:10px 12px;min-height:44px;background:rgba(148,163,184,.10)}
+.build825-status[data-status=error],#build825HandoffStatus[data-status=unavailable]{border-inline-start:4px solid #ef4444;padding-inline-start:12px}
+#build825HandoffStatus[data-status=owner_action]{border-inline-start:4px solid #eab308;padding-inline-start:12px}
+.build825-source-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:9px;padding:0;list-style:none}
+.build825-source-grid li{border:1px solid var(--border,#64748b);border-radius:9px;padding:10px;overflow-wrap:anywhere}
+.build825-status:focus-visible,.build825-actions button:focus-visible,.build825-actions a:focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:680px){.build825-main .panel{padding:12px}.build825-actions{display:grid;grid-template-columns:1fr}.build825-actions .btn,.build825-actions label{width:100%}.build825-scroll table{min-width:650px}.build825-source-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){.build825-main *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
