@@ -7,6 +7,7 @@ import {sameOrigin811} from '../client/worksite_issues_v811.js';
 import {validateEvidence826,proposedMasterReadiness826} from '../../../assets/build826-field-evidence-contract.mjs';
 import {draftRegistry827} from '../../../assets/build827-module-requirements.mjs';
 import {provenanceReport828} from '../../../assets/build828-evidence-provenance.mjs';
+import {roleDeviceRecovery830} from '../../../assets/build830-role-device-recovery.mjs';
 
 const TABLE='rosie_field_acceptance_events_v826';
 const SELECT='id,event_kind,actor_staff_user_id,target_event_id,module_id,role_id,device_class,browser_class,route_path,viewport_width,observed_outcome,observed_at,evidence_ref,review_state,recorded_at';
@@ -41,6 +42,9 @@ export async function onRequestGet({request,env}){
       }),
       requirement_registry_draft:draftRegistry827({events}),
       requirement_provenance_preview:provenanceReport828({
+        events,sourceRevision:env.CF_PAGES_COMMIT_SHA,generatedAt
+      }),
+      role_device_recovery_preview:roleDeviceRecovery830({
         events,sourceRevision:env.CF_PAGES_COMMIT_SHA,generatedAt
       }),
       source_authority:{append_only:true,operator_reported_not_independently_verified:true,
