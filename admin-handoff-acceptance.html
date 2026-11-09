@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="/assets/build828-provenance.css?v=build828"/>
 <link rel="stylesheet" href="/assets/build829-reporting.css?v=build829"/>
 <link rel="stylesheet" href="/assets/build830-role-device.css?v=build830"/>
+<link rel="stylesheet" href="/assets/build831-pilot.css?v=build831"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -263,6 +264,31 @@
     <p class="muted">Selecting <strong>Prepare observation form</strong> fills only the intended role and device in Step 1 above. We must personally use the correct authenticated account on a real device, verify its browser, screen width, permitted route, recovery from interruption/weak network and accessibility, then record actual results. The 30-day local follow-up is not an approved expiry rule. Missing older source records remain UNKNOWN. No customer details, independent device signatures, outbound notifications, AI Data scores or Comms connection changes are produced.</p>
   </div>
 </section>
+<section class="section build831-pilot" id="build831Pilot" aria-labelledby="build831Heading">
+  <div class="panel">
+    <span class="badge">Build 831 · Private booking-to-worksite-to-payment evidence pilot</span>
+    <h2 id="build831Heading">10. Review booking, worksite and payment exceptions together</h2>
+    <p>Read a bounded sample of actual stored booking, worksite update, dated signoff, deposit and final-balance records. This is a <strong>signed-supervisor read-only review</strong>, not a live customer transaction, provider-authenticated receipt or independent field/owner approval. A local paid state never proves a Stripe/PayPal payment.</p>
+    <div class="build831-controls">
+      <label for="build831Filter">Exception focus
+        <select id="build831Filter"><option value="all">All recent bookings</option>
+          <option value="payment">Payment, provider and finance review</option>
+          <option value="worksite">Worksite, signoff and field review</option>
+          <option value="source">Missing booking handoff or source conflict</option></select></label>
+      <button id="build831Refresh" class="btn ghost" type="button">Refresh private pilot source</button>
+    </div>
+    <p id="build831Status" role="status" aria-live="polite">Private source not checked.</p>
+    <p id="build831Count" role="status" aria-live="polite">Local pilot not loaded.</p>
+    <div class="build825-scroll" role="region" aria-label="Private booking, worksite and payment evidence exception handoffs" tabindex="0">
+      <table><caption>Local source evidence only · original consent, provider, accountant and owner verification remain HOLD</caption>
+        <thead><tr><th scope="col">Booking suffix</th><th scope="col">Booking / worksite</th>
+          <th scope="col">Worksite records</th><th scope="col">Local payment requests</th>
+          <th scope="col">Handoff state</th><th scope="col">Manual review</th></tr></thead>
+        <tbody id="build831Rows"></tbody></table>
+    </div>
+    <p class="muted">Review only original customer-consented bookings and independently witnessed real jobs. Follow the private admin route for each exception and obtain the actual signed provider and finance receipts before owner signoff. No payment, refund, reminder, booking, customer message, AI Data event, Comms incident, module percentage or HOLD state is automatically changed.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -276,7 +302,8 @@
   import { startProvenance828 } from '/assets/build828-provenance-ui.mjs?v=build828';
   import { startReporting829 } from '/assets/build829-reporting-ui.mjs?v=build829';
   import { startRoleDeviceRecovery830 } from '/assets/build830-role-device-ui.mjs?v=build830';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();}});
+  import { startBookingWorksitePilot831 } from '/assets/build831-pilot-ui.mjs?v=build831';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();}});
 </script>
 </body>
 </html>
