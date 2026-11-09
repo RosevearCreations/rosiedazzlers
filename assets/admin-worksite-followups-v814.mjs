@@ -210,8 +210,13 @@ function renderReviewDraft823(ready,category){
 function saveCurrentReviewDraft823(){
   const key=$('build822ExceptionSelect')?.value||'all';
   const fresh=sourceFreshness823({loaded,loadedAt:sourceLoadedAt822});
-  const result=validateReviewDraft823({actor:staffId,sourceReady:loaded&&fresh.allowReport,category:key,
-    shown:Math.min(150,records.length),text:$('build823NoteText').value});
+  const filter=$('build814StaffFilter')?.value||'priority',target=$('build817ReviewTarget')?.value||'all';
+  const ownerBlocked=!ownershipReady&&(filter==='unowned'||filter==='mine'||target!=='all');
+  const escalationBlocked=!escalationReady&&filter==='escalated';
+  const selected=loaded?selectFollowups817(records,{status:filter,query:$('build817StaffSearch')?.value||'',target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
+  const checked=drilldown822(selected,key,exceptionContext822());
+  const result=validateReviewDraft823({actor:staffId,sourceReady:loaded&&fresh.allowReport&&!ownerBlocked&&!escalationBlocked&&checked.ok,category:key,
+    shown:checked.ok?checked.count:0,text:$('build823NoteText').value});
   if(!result.ok){$('build823NoteStatus').textContent=result.reason;return;}
   reviewDrafts823.set(key,result);
   renderReviewDraft823(true,key);
