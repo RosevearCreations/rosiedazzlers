@@ -2,11 +2,11 @@
 
 > **ACTIVE MASTER SHELL–ALIGNED QUEUE — November 8, 2026**
 >
-> **Last independently verified feature release:** Build **828**, protected `main` Production GREEN at the recorded [exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42636761326); resolve later changes from live Git and workflow evidence.
+> **Last independently verified feature release:** Build **830**, protected `main` Production GREEN for code/deployment at the recorded [exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42676277050); resolve later changes from live Git and workflow evidence.
 >
 > **Completed software slice:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Product-owner and AI Data requirement approvals remain UNKNOWN/HOLD, distinct from software GREEN.
 >
-> **Completed software slice:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter**, independently [GREEN for protected software and Cloudflare deployment](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455). **830** adds [local role/device manual recovery and acceptance evidence](docs/build830_real_role_device_acceptance_matrix_recovery.md) as the next release candidate. Real original devices, owner/module acceptance, shared AI Data consumer scope and Comms trust remain HOLD, separate from software GREEN.
+> **Completed software slices:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter** ([previous exact-SHA proof](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455)); **830 — Customer, Detailer & Admin Role × Device Acceptance Matrix and Recovery**, independently [GREEN for code and exact Cloudflare Production](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42676277050), with [local recovery workbench](docs/build830_real_role_device_acceptance_matrix_recovery.md). Real original devices, owner/module acceptance, shared AI Data consumer scope and Comms trust remain HOLD, separate from software GREEN.
 >
 > **Next proposed build:** **831 — Booking-to-Worksite-to-Payment Evidence Pilot & Exception Handoff** (**GENUINE BOOKING, WORKSITE, PROVIDER AND OWNER RECEIPTS HOLD**; AI Data signed source-to-consumer activation remains separate CONTRACT HOLD).
 >
