@@ -6,7 +6,9 @@
 >
 > **Completed software slice:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Product-owner and AI Data requirement approvals remain UNKNOWN/HOLD, distinct from software GREEN.
 >
-> **Next proposed executable build:** **828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness**.
+> **Current protected-promotion candidate:** **828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness** ([source-only limits](docs/build828_evidence_provenance_decision_trace_freshness.md)); it is not an owner-verified module completion or Comms connection.
+>
+> **Next proposed build:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter** (**CONTRACT REVIEW HOLD** pending approved source/consumer scope).
 >
 > **Canonical forward queue:** [Rosie Master Shell Forward Queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md).
 >
