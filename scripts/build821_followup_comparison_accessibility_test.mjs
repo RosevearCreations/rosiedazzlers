@@ -56,9 +56,9 @@ for(const privateValue of ['PRIVATE-BOOKING','Private customer request','Private
 assert.doesNotMatch(read('../assets/build821-followup-comparisons.mjs'),/fetch\(|localStorage|sessionStorage|download\(|clipboard|private_note|booking_id|request_text|customer_feedback/i);
 
 const html=read('../admin-today.html');assert.equal(html,read('../admin-today/index.html'));
-assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build82[12]/);
-assert.match(html,/worksite-issues-v811\.css\?v=build82[12]/);
-assert.match(html,/Build 82[12] · (?:Accessible comparison and review guidance|Saved comparisons and source-verified exception review)/);
+assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build82[123]/);
+assert.match(html,/worksite-issues-v811\.css\?v=build82[123]/);
+assert.match(html,/Build 82[12] · (?:Accessible comparison and review guidance|Saved comparisons and source-verified exception review|Internal review drafts, preset renaming and source freshness)/);
 const app=read('../assets/admin-worksite-followups-v814.mjs');
 for(const token of ['ensureComparisonSurface821','renderComparisonSurface821','build821ComparisonMode','build821ComparisonRows','build821ComparisonStatus','build821ThresholdList','build821ReadableReport','compareSnapshots821','workloadExplanations821','readableReport821'])assert.ok(app.includes(token),`Missing UI integration: ${token}`);
 assert.match(app,/role="region" aria-label="Accessible follow-up cohort comparison" tabindex="0"/);
