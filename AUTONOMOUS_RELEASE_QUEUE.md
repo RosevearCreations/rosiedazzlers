@@ -1,6 +1,18 @@
 # Rosie Dazzlers — Autonomous Development Queue
 
-## Current candidate — Build 817
+> **ACTIVE MASTER SHELL–ALIGNED QUEUE — November 8, 2026**
+>
+> **Last independently verified release:** Build **826**, protected `main` Production GREEN at `addce823f7d32445dc76c93db3246ac117eeed04` (exact-SHA Cloudflare and HTTP smoke passed).
+>
+> **Next proposed executable build:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**.
+>
+> **Canonical forward queue:** [Rosie Master Shell Forward Queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md).
+>
+> **Code/deployment status and business acceptance are separate.** Real authenticated device coverage, provider outcomes, AI Data scoring contract, and original QL-364/QL-365D Comms signer/owner receipts remain HOLD or UNKNOWN until independently verified. Existing QL-364 source and public manifest remain `DISCONNECTED / HOLD`.
+>
+> **Archive below:** Historic build labels, "current" claims, and release pointers are preserved as prior-run evidence/compatibility, **not** today's queue or open prerequisite list.
+
+## Historical candidate — Build 817 (superseded after 826)
 
 Staff Follow-Up Search & Review-Target Triage. Contract: `docs/build817_staff_followup_search_review_target_triage.md`. Next proposed Build 818 only after exact-main Production acceptance. `dev`/`main` promotion and branch cleanup must preserve required checks and unique unmerged work.
 
@@ -26,7 +38,7 @@ Build 553 — Staff Mobile Field Regression Evidence plus DAIP private social-vi
 
 <!-- Retained Build 546 note: Build 546 — Seasonal Owner Evidence Closure & Public Claim Decision Readiness is active. --> Contract: `BUILD546_SEASONAL_OWNER_EVIDENCE_CLOSURE_PUBLIC_CLAIM_DECISION_READINESS.md`; current read-only source authority: `scripts/seasonal_owner_evidence_closure_public_claim_readiness_check.py`. Next: Build 547 — Winter Booking Rule Observed Safety & Transparency only after independent exact-main Cloudflare Production GREEN. Canonical seasonal owner HOLD is retained; no source test or publication-readiness output closes it. The previously recorded Build 545 queue status below is historic.
 
-This living queue records only the current bounded release path. Historical implementation belongs in Git/workflow evidence.
+The historical queue below records earlier bounded release paths. The active forward queue is now docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md.
 
 Current bounded release: Build 545 — Production Learning & Roadmap Renewal. Its contract is `BUILD545_PRODUCTION_LEARNING_ROADMAP_RENEWAL.md`, reconciliation is `PRODUCTION_LEARNING_536_544.md`, and forward queue is `FORWARD_BUILD_ROADMAP_546_555.md`. Build 546 follows only after independent Build 545 Production GREEN. No actual business/provider evidence is inferred from source GREEN.
 
@@ -191,7 +203,7 @@ Retained compatibility pointer: Build 482 — Staff & Mobile Remediation Executi
 - `.github/workflows/reliability-security-cost-reassessment-authority.yml`
 - `.github/workflows/support-automation-exception-handling-authority.yml`
 
-## Current release
+## Historical source release checkpoint (superseded)
 **Build 553 — Staff Mobile Field Regression Evidence** is the active bounded release.
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is the active bounded release. -->
 <!-- Prior: **Build 549 — Provider Delivery & Local Search Manual Evidence Closure** is the active bounded release. -->
@@ -356,7 +368,7 @@ Production promotion proceeds through protected main and a pull request to prote
 
 Historical compatibility marker for retained source-authority checks: rd main protection is the legacy wording; the active rule is protected main.
 Missing required checks or exact Production runtime/deployment identity are blockers.
-## Next release
+## Historical next-release pointer (superseded)
 **Build 554 — Service Economics, Capacity & Technical Reliability Owner Review** is next only after the current release is independently GREEN on protected main.
 <!-- Prior: **Build 551 — Maintenance & Fleet Pilot Commercial Decision** is next only after the current release is independently GREEN on protected main. -->
 <!-- Prior: **Build 550 — Backup Recovery & Authenticated Device Field Closure** is next only after the current release is independently GREEN on protected main. -->
@@ -378,7 +390,7 @@ Build 542 begins only after Build 541 is independently GREEN on protected main. 
 Current contract: BUILD530_RECOVERY_AUTHENTICATED_DEVICE_CLOSURE_EVIDENCE_FRESHNESS_REVIEW.md. Current source authority: scripts/recovery_authenticated_device_closure_evidence_freshness_review_check.py.
 -->
 
-## Future queue
+## Historical future-queue pointer (superseded)
 The future queue continues through `FORWARD_BUILD_ROADMAP_536_545.md`; it has not run out.
 
 ## Continuing rule
