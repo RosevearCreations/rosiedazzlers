@@ -413,7 +413,7 @@ async function load(){if(busy)return;busy=true;loaded=false;sourceLoadedAt822=nu
     }catch{ownership=[];ownershipEvents=[];ownershipCandidates=[];canAssign=false;staffId=null;ownershipReady=false;}
     hydrateViews818();hydratePresets822();render();notice(escalationReady&&ownershipReady?'Priority queue, supervisor reviews and owner records loaded. No outbound message is sent.':'Follow-ups loaded, but some supervisor/owner records are unavailable. Their controls are disabled.',!escalationReady||!ownershipReady);return true;
   }catch(error){records=[];events=[];sourceLoadedAt822=null;staffId=null;hydrateViews818();hydratePresets822();render();notice(`${error.message||'Queue unavailable.'} Authenticated operations permission is required.`,true);return false;}
-  finally{busy=false;$('build814StaffRefresh').disabled=false;}
+  finally{busy=false;$('build814StaffRefresh').disabled=false;$('build823RefreshNow').disabled=false;}
 }
 async function assignOwner(event){const form=event.target.closest?.('[data-build816-owner]');if(!form)return;event.preventDefault();
   if(busy||!ownershipReady||!canAssign||form.getAttribute('aria-busy')==='true')return;
