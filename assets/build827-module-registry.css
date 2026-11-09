@@ -1,0 +1,12 @@
+/* Build 827 — requirements are drafts, never score approvals. */
+.build827-register{scroll-margin-top:90px}
+.build827-register .build827-controls{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:16px 0}
+.build827-register .build827-controls label{display:grid;gap:5px;flex:1 1 200px;font-weight:600}
+.build827-register :is(input,select){min-height:44px;padding:8px;width:100%;max-width:100%}
+.build827-register button{min-height:44px}
+.build827-register th,.build827-register td{vertical-align:top;overflow-wrap:anywhere;min-width:130px}
+.build827-register td:nth-child(2){font-size:.82em;max-width:190px}
+.build827-register td:nth-child(2) small{display:block;color:var(--muted,#747b86);margin-top:5px}
+.build827-register td:nth-child(3){min-width:240px}
+.build827-register :is(input,select,button):focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:650px){.build827-register .build827-controls{display:grid}.build827-register td:nth-child(3){min-width:180px}}

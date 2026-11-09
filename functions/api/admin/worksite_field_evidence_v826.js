@@ -5,6 +5,7 @@ import {hasActionAccess} from '../_lib/action-permissions.js';
 import {staffAccess811} from './worksite_issue_review_v811.js';
 import {sameOrigin811} from '../client/worksite_issues_v811.js';
 import {validateEvidence826,proposedMasterReadiness826} from '../../../assets/build826-field-evidence-contract.mjs';
+import {draftRegistry827} from '../../../assets/build827-module-requirements.mjs';
 
 const TABLE='rosie_field_acceptance_events_v826';
 const SELECT='id,event_kind,actor_staff_user_id,target_event_id,module_id,role_id,device_class,browser_class,route_path,viewport_width,observed_outcome,observed_at,evidence_ref,review_state,recorded_at';
@@ -36,6 +37,7 @@ export async function onRequestGet({request,env}){
       master_preview:proposedMasterReadiness826({
         events,sourceRevision:env.CF_PAGES_COMMIT_SHA,generatedAt:new Date().toISOString()
       }),
+      requirement_registry_draft:draftRegistry827({events}),
       source_authority:{append_only:true,operator_reported_not_independently_verified:true,
         human_review_is_not_owner_cryptographic_signature:true,
         original_comms_test_receipt_verified:false,master_submission_performed:false,
