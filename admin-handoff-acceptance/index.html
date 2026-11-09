@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Field Acceptance & Module Readiness | Rosie Dazzlers</title>
+<meta name="description" content="Authenticated supervisor-only review of real handoff, role/device and module evidence."/>
+<link rel="stylesheet" href="/assets/site.css?v=20261101build734"/>
+<link rel="stylesheet" href="/assets/build825-field-acceptance.css?v=build825"/>
+</head>
+<body data-page="admin-today">
+<header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
+<main class="container build825-main" id="build825Acceptance">
+<section class="section">
+  <div class="panel">
+    <span class="badge">Build 825 · Evidence-backed field acceptance</span>
+    <h1>Supervisor handoff, device verification & module readiness</h1>
+    <p>We compare real source records with authenticated Customer, Detailer, Operations and Admin observations on phone, tablet and desktop. Missing evidence remains <strong>HOLD</strong>, not an inferred pass. No customer record, appointment, payment, payroll or canonical HOLD is changed here.</p>
+    <div class="build825-actions"><button id="build825Refresh" class="btn primary" type="button">Refresh verified sources</button>
+      <a class="btn ghost" href="/admin-today.html#build814StaffFollowups">Open private supervisor handoffs</a>
+      <a class="btn ghost" href="/admin-launch-readiness.html">Record and review actual field evidence</a></div>
+    <p class="build825-status" id="build825Status" role="status" aria-live="polite" tabindex="-1">Waiting for authenticated supervisor access…</p>
+    <p id="build825SnapshotTime" class="muted">No verified source snapshot yet.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="panel" aria-labelledby="build825HandoffHeading">
+    <h2 id="build825HandoffHeading">1. Private supervisor handoff field acceptance</h2>
+    <p id="build825HandoffStatus" role="status" aria-live="polite">Awaiting source records.</p>
+    <p id="build825OperationalStatus" class="muted">Operational acceptance HOLD until independently observed.</p>
+    <p>Handoff counts prove only that records exist. Real session, reviewer identity, device, note authorization, readback, outcome and owner signoff must still be observed. An empty queue is not a successful field trial.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="panel" aria-labelledby="build825DeviceHeading">
+    <h2 id="build825DeviceHeading">2. Authenticated role and device verification</h2>
+    <p id="build825DeviceStatus" role="status" aria-live="polite">Waiting for separately authorized device evidence.</p>
+    <div class="build825-scroll" role="region" aria-label="Authenticated role acceptance table" tabindex="0"><table><caption>Required role observations — Customer, Detailer, Operations and Admin</caption>
+      <thead><tr><th scope="col">Role</th><th scope="col">Evidence status</th><th scope="col">Current result</th><th scope="col">Dated observation</th></tr></thead><tbody id="build825RoleRows"></tbody></table></div>
+    <div class="build825-scroll" role="region" aria-label="Device-class acceptance table" tabindex="0"><table><caption>Representative physical device observations</caption>
+      <thead><tr><th scope="col">Device class</th><th scope="col">Evidence status</th><th scope="col">Dated observation</th></tr></thead><tbody id="build825DeviceRows"></tbody></table></div>
+    <p class="muted">Source-responsive checks and simulated tests do not prove physical device acceptance. The existing I.T. diagnostics permission is required for device evidence; an Operations supervisor without that permission sees an unavailable status, not elevated access.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="panel" aria-labelledby="build825ModulesHeading">
+    <h2 id="build825ModulesHeading">3. Evidence-based module readiness register</h2>
+    <p><strong>Built %</strong> and <strong>Proven %</strong> are unchanged provisional November 8 audit estimates. Counts show available source observations but never recalculate or approve a completion rate.</p>
+    <div class="build825-actions">
+      <label>Module search <input id="build825ModuleSearch" type="search" autocomplete="off" placeholder="Find payroll, booking, inventory…" /></label>
+      <label>Evidence state <select id="build825StatusFilter"><option value="all">All 45 modules</option>
+        <option value="missing_observation">No source events</option><option value="device_hold">Role/device verification HOLD</option>
+        <option value="owner_review">Evidence available for owner review</option><option value="source_unavailable">Source unavailable</option></select></label>
+    </div>
+    <p id="build825ModuleCount" role="status" aria-live="polite">Awaiting verified source data.</p>
+    <div class="build825-scroll" role="region" aria-label="Module completion and evidence register" tabindex="0"><table>
+      <caption>45-module snapshot — no automatic score promotion</caption><thead><tr>
+        <th scope="col">Module</th><th scope="col">Built estimate</th><th scope="col">Proven estimate</th><th scope="col">Observed evidence gate</th><th scope="col">Source</th>
+      </tr></thead><tbody id="build825ModuleRows"></tbody></table></div>
+    <p class="muted">Percentages are approximate, not mathematically calculated code coverage or contractual readiness. Review the <a href="https://github.com/RosevearCreations/rosiedazzlers/blob/main/docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md" rel="noopener" target="_blank">complete 45-module audit and assumptions</a>.</p>
+  </div>
+</section>
+<section class="section">
+  <div class="panel" aria-labelledby="build825SourcesHeading">
+    <h2 id="build825SourcesHeading">4. Source registry and acceptance procedure</h2>
+    <p>Counts are read from the currently authorized database only; unavailable sources are not interpreted as zero. They are not complete historical samples or externally verified outcomes.</p>
+    <ul id="build825Sources" class="build825-source-grid"></ul>
+    <h3>Field review procedure</h3>
+    <ol>
+      <li>Sign in with the intended role, using a real phone, tablet or desktop and the actual deployed URL.</li>
+      <li>Test the booking, assignment, worksite follow-up and supervisor private note workflow. Record dated browser, route, viewport and outcome evidence in the existing Launch Readiness evidence authority.</li>
+      <li>Refresh this dashboard and confirm that the independently permissioned role/device authority reports the actual observation. Investigate any stale, missing or negative evidence.</li>
+      <li>Inspect original provider, payroll, inventory, finance and integration receipts before changing any module percentage or owner HOLD.</li>
+      <li>Explicitly approve or retain HOLD in the owning process. This dashboard makes no automatic decision.</li>
+    </ol>
+    <p class="muted">Only manual refresh is supported. No screenshots, telemetry, automatic browsing, account modifications or outbound messages are generated.</p>
+  </div>
+</section>
+</main>
+<footer class="footer container" data-footer></footer>
+<script src="/assets/admin-auth.js"></script>
+<script src="/assets/admin-shell.js"></script>
+<script src="/assets/admin-runtime.js"></script>
+<script src="/assets/chrome.js?v=20261101build734"></script>
+<script type="module">
+  import { startFieldAcceptance825 } from '/assets/build825-field-acceptance-dashboard.mjs?v=build825';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>startFieldAcceptance825()});
+</script>
+</body>
+</html>
