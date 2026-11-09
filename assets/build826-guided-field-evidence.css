@@ -1,0 +1,19 @@
+/* Build 826 — accessible private evidence entry, distinct signoff, review history. */
+.build826-evidence{scroll-margin-top:90px}
+.build826-form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;align-items:start}
+.build826-form{padding:14px;border:1px solid var(--border,#64748b);border-radius:12px;min-width:0}
+.build826-form legend{font-weight:700;white-space:normal;padding:0 8px}
+.build826-form label,.build826-evidence-ref label{display:block;margin:11px 0 5px;font-weight:600;line-height:1.4}
+.build826-form input,.build826-form select,.build826-evidence-ref input{min-width:0;width:100%;max-width:100%;min-height:44px;padding:8px}
+.build826-form button{width:100%;min-height:44px;white-space:normal;margin-top:13px}
+.build826-form p{font-size:.92em}
+.build826-evidence-ref{border:1px dashed var(--border,#64748b);border-radius:10px;padding:12px;margin:14px 0}
+.build826-evidence-ref input{width:100%;max-width:720px}
+#build826Status[data-status=error]{border-inline-start:4px solid #e44;padding:10px}
+#build826MasterState{border-inline-start:4px solid #eab308;padding:8px 12px;max-width:100%;overflow-wrap:anywhere}
+#build826MasterState p{margin:.4em 0}
+#build826HistoryStatus{max-width:90ch;line-height:1.5}
+.build826-evidence :is(input,select,button,a):focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:1000px){.build826-form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:650px){.build826-form-grid{grid-template-columns:1fr}.build826-form{padding:10px}.build826-evidence-ref{padding:10px}}
+@media(prefers-reduced-motion:reduce){.build826-evidence *{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
