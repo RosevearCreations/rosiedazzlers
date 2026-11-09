@@ -2,11 +2,11 @@
 
 > **ACTIVE MASTER SHELL–ALIGNED QUEUE — November 8, 2026**
 >
-> **Last independently verified feature release:** Build **830**, protected `main` Production GREEN for code/deployment at the recorded [final exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42677617351); resolve later changes from live Git and workflow evidence.
+> **Last independently verified feature release:** Build **831**, protected `main` Production GREEN for code/deployment at the recorded [exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42723146713); resolve later changes from live Git and workflow evidence.
 >
 > **Completed software slice:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Product-owner and AI Data requirement approvals remain UNKNOWN/HOLD, distinct from software GREEN.
 >
-> **Completed software slices:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter** ([earlier proof](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455)); **830 — Customer, Detailer & Admin Role × Device Acceptance Matrix and Recovery**, independently [GREEN for exact Cloudflare Production](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42677617351). **831** is the current bounded [private booking/worksite/deposit/final-balance source exception pilot](docs/build831_booking_worksite_payment_evidence_pilot_exception_handoff.md) pending protected release. Real devices, consented bookings, independent worksite/provider/accountant/owner acceptance, AI Data consumer permissions and Comms trust remain HOLD.
+> **Completed software slices:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter** ([earlier proof](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455)); **830 — Role × Device Matrix and Recovery** ([earlier proof](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42677617351)); **831 — Private Booking-to-Worksite-to-Payment Evidence Pilot & Exception Handoff** independently [GREEN for protected code and exact-SHA Cloudflare Production](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42723146713). Real devices, consented bookings, independent worksite/provider/accountant/owner acceptance, AI Data consumer permissions and Comms trust remain HOLD.
 >
 > **Next proposed build:** **832 — Job Economics, Inventory, Payroll, Invoice & Tax Source Reconciliation** (**REAL ACCOUNTANT, OWNER AND FINANCIAL RECEIPTS HOLD**; AI Data signed source-to-consumer activation remains separate CONTRACT HOLD).
 >
