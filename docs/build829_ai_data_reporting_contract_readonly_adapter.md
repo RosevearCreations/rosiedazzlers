@@ -39,3 +39,11 @@ The external integration remains `DISCONNECTED / HOLD`. Do not publish until AI 
 Run `node scripts/build829_ai_data_reporting_adapter_test.mjs`, the cumulative `bash scripts/current_booking_wizard_regression.sh`, and `python3 scripts/release_check.py`. Protected source/main PR checks and independent Cloudflare exact-SHA live HTTP acceptance establish **software release only**.
 
 **Next proposed Build 830:** Customer, Detailer & Admin Role × Device Acceptance Matrix and Recovery — awaits original real-device observation and owner witnesses; can proceed on private source screens without unapproved cross-app grants.
+
+## Verified feature release — November 9, 2026
+
+- Protected source [PR #886](https://github.com/RosevearCreations/rosiedazzlers/pull/886) merged to `dev` after 95 successful workflow checks; protected production [PR #887](https://github.com/RosevearCreations/rosiedazzlers/pull/887) merged to `main` after 98 successful checks.
+- Immutable feature production SHA: `9e935a41c554129c7a7cc27e61010abb7b8c95c2`.
+- [Production Business Acceptance & Exact-SHA Authority run 42652262455](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455) succeeded. The exact-SHA job confirms Cloudflare `rosiedazzlers` Production branch `main`, deployment `5582c245-caa0-4c53-a81a-fe8d57b7cb60`, static/contextual HTTP on the immutable Pages URL and canonical `https://rosiedazzlers.ca`, ending in `PRODUCTION EXACT-SHA ACCEPTANCE: PASS`.
+- Live static adapter source includes `rosie.ai-data.source-compatibility.preview.v1` and `approvedAudience: []`; anonymous GET `/api/admin/master_shell_reporting_v829` returned HTTP **401** (private source boundary).
+- **Software release GREEN only.** No external AI Data reader approval, signed event, verified owner denominator, private Comms TEST receipt or functional field-device acceptance was derived from these checks.
