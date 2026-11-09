@@ -7,6 +7,7 @@ import { COHORTS_820,trendSnapshot820,workloadSignals820,safeQueuePreview820 } f
 import { COMPARISON_MODES_821,compareSnapshots821,workloadExplanations821,readableReport821 } from './build821-followup-comparisons.mjs';
 import { readPresets822,savePreset822,selectPreset822,removePreset822,presetStorage822,EXCEPTIONS_822,drilldown822,exceptionCounts822,reportContinuity822 } from './build822-followup-review-continuity.mjs';
 import { sourceFreshness823,renamePreset823,validateReviewDraft823,reviewDraftSummary823 } from './build823-supervisor-exception-review.mjs';
+import { createSupervisorHandoff824 } from './build824-supervisor-handoff.mjs';
 const $=id=>typeof document==='undefined'?null:document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&'+'#39;'}[c]));
 const localDateTimeValue=v=>{if(!v)return '';const date=new Date(v);if(!Number.isFinite(date.getTime()))return '';const pad=n=>String(n).padStart(2,'0');return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;};
@@ -14,6 +15,7 @@ let records=[],events=[],escalations=[],escalationEvents=[],escalationReady=fals
 let viewsActor=null,savedViews={views:[],activeId:''};
 let presetsActor=null,savedPresets822={presets:[],activeId:''},sourceLoadedAt822=null;
 let reviewDrafts823=new Map(); // volatile local-only drafts
+let reviewHandoff824=null,lastSelection824=[];
 function notice(message,err=false){const el=$('build814StaffStatus');if(el){el.className=err?'notice bad':'notice';el.textContent=message;}}
 function viewNotice(message){const el=$('build818ViewStatus');if(el)el.textContent=message;}
 function presetNotice822(message){const el=$('build822PresetStatus');if(el)el.textContent=message;}
@@ -193,6 +195,7 @@ function renderSourceFreshness823(){
 }
 function tickSourceFreshness823(){
   const state=renderSourceFreshness823();
+  reviewHandoff824?.update({staffId,canAssign,verified:loaded,sourceLoadedAt:sourceLoadedAt822,selection:lastSelection824});
   if(!state.allowReport){
     renderComparisonSurface821(renderTrendSurface820([],false));
     const context=$('build822ReportContinuity');
@@ -215,7 +218,7 @@ function saveCurrentReviewDraft823(){
   const escalationBlocked=!escalationReady&&filter==='escalated';
   const selected=loaded?selectFollowups817(records,{status:filter,query:$('build817StaffSearch')?.value||'',target,ownershipReady,owners:ownership,escalations:escalationReady?escalations:[],staffId}):[];
   const checked=drilldown822(selected,key,exceptionContext822());
-  const result=validateReviewDraft823({actor:staffId,sourceReady:loaded&&fresh.allowReport&&!ownerBlocked&&!escalationBlocked&&checked.ok,category:key,
+  const result=validateReviewDraft823({actor:staffId,sourceReady:canAssign&&loaded&&fresh.allowReport&&!ownerBlocked&&!escalationBlocked&&checked.ok,category:key,
     shown:checked.ok?checked.count:0,text:$('build823NoteText').value});
   if(!result.ok){$('build823NoteStatus').textContent=result.reason;return;}
   reviewDrafts823.set(key,result);
@@ -226,7 +229,7 @@ function clearCurrentReviewDraft823(){
   const key=$('build822ExceptionSelect')?.value||'all';
   reviewDrafts823.delete(key);
   syncReviewDraftEditor823();
-  renderReviewDraft823(!!staffId&&loaded&&sourceFreshness823({loaded,loadedAt:sourceLoadedAt822}).allowReport,key);
+  renderReviewDraft823(!!canAssign&&!!staffId&&loaded&&sourceFreshness823({loaded,loadedAt:sourceLoadedAt822}).allowReport,key);
   $('build823NoteStatus').focus({preventScroll:false});
 }
 function exceptionContext822(){return {now:Date.now(),ownershipReady,owners:ownership,escalationReady,escalations};}
@@ -385,7 +388,9 @@ function render(){const el=$('build814StaffList');if(!el)return;
   }
   const freshness823=renderSourceFreshness823();
   renderComparisonSurface821(renderTrendSurface820(selection,exception.ok&&freshness823.allowReport));
-  renderReviewDraft823(!!staffId&&loaded&&exception.ok&&freshness823.allowReport,exceptionKey);
+  renderReviewDraft823(!!canAssign&&!!staffId&&loaded&&exception.ok&&freshness823.allowReport,exceptionKey);
+  lastSelection824=selection;
+  reviewHandoff824?.update({staffId,canAssign,verified:loaded&&exception.ok,sourceLoadedAt:sourceLoadedAt822,selection});
   const context=$('build822ReportContinuity');if(context)context.textContent=reportContinuity822({loaded:loaded&&exception.ok&&freshness823.allowReport,loadedAt:sourceLoadedAt822,mode:$('build821ComparisonMode')?.value,status:filter,target,exception:exceptionKey,shown:selection.length,sourceCount:records.length});
   $('build814StaffCounts').textContent=loaded&&!exception.ok?`Selected exception review unavailable: ${exception.reason}`:loaded?`${selection.length} of ${records.length} loaded follow-ups shown (latest 150 maximum) · ${records.filter(r=>r.status==='awaiting_staff').length} waiting for staff · ${records.filter(r=>advisoryAging815(r)?.band==='overdue').length} over 48 hours · ${ownershipReady?records.filter(r=>r.status==='awaiting_staff'&&!ownershipFor(r.id)).length+' unowned waiting · '+records.filter(r=>reviewTarget817(r,ownershipFor(r.id))==='past').length+' passed internal review targets · ':target!=='all'?'review-target view paused until ownership can be verified · ':'ownership source unavailable · '}${escalationReady?escalations.filter(e=>e.status!=='cleared').length+' open supervisor reviews':'supervisor state unavailable'}.`:'Awaiting authenticated operations access.';
   if(!loaded){el.innerHTML='<p class="muted">Waiting for the authorized follow-up queue.</p>';return;}
