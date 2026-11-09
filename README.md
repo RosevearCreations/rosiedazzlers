@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 826 — Guided Authenticated Device Evidence Capture, Supervisor Field Signoff & Module Readiness Change History.** Contract: `docs/build826_guided_field_evidence_and_master_shell_gap_review.md`. Module estimates: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`; proposed Master Shell readiness preview is NOT an authenticated connection or score approval. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release baseline: Build 826 — Guided Authenticated Device Evidence Capture, Supervisor Field Signoff & Module Readiness Change History**, independently verified GREEN on protected `main` (`addce823f7d32445dc76c93db3246ac117eeed04`). **Next proposed build: 827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts.** [Active forward queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md). Build 826 source and Master Shell gap report: `docs/build826_guided_field_evidence_and_master_shell_gap_review.md`. The 45 completion percentages are provisional: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`. Master scoring denominators and signed Comms integration remain UNKNOWN/HOLD; source release GREEN is not functional signoff.
 
 ## Retained cumulative authority pointers (historical)
 
