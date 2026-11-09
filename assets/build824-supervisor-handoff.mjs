@@ -11,7 +11,7 @@ const cleanTime=value=>{
 };
 const validText=text=>typeof text==='string'&&text.trim().length>=12&&text.trim().length<=500;
 export function createSupervisorHandoff824({refresh}={}){
-  let actor='',rows=[],canManage=false,loaded=false,loadedAt=null,selected='',pending=null,historyId='';
+  let actor='',rows=[],canManage=false,loaded=false,loadedAt=null,selected='',pending=null,historyId='',verifiedHistoryIds=new Set();
   const status=(message,error=false)=>{
     const el=$('build824HandoffStatus');
     if(el){el.textContent=message;el.dataset.status=error?'error':'info';}
@@ -21,7 +21,7 @@ export function createSupervisorHandoff824({refresh}={}){
     return canManage&&!!actor&&loaded&&freshness.allowReport&&rows.length<=150;
   };
   function resetPrivate(){
-    selected='';pending=null;historyId='';
+    selected='';pending=null;historyId='';verifiedHistoryIds.clear();
     if($('build824NoteText'))$('build824NoteText').value='';
     if($('build824History'))$('build824History').textContent='';
   }
@@ -46,7 +46,7 @@ export function createSupervisorHandoff824({refresh}={}){
     anchor.append(section);
     $('build824ReviewSelect').addEventListener('change',()=>{
       selected=$('build824ReviewSelect').value;
-      pending=null;historyId='';$('build824History').textContent='';
+      pending=null;historyId='';verifiedHistoryIds.clear();$('build824History').textContent='';
       $('build824NoteText').value='';
       renderButtons();
       status(selected?'Select Read source-backed history or enter a new private handoff.':'Choose a verified follow-up.');
@@ -106,8 +106,9 @@ export function createSupervisorHandoff824({refresh}={}){
       if(!response.ok||!data?.ok||!Array.isArray(data.history)||data.followup_id!==id||!data.private_supervisor_only)
         throw Error(data?.error||'Private history could not be verified.');
       if(selected!==id||!okSource())throw Error('The selected follow-up or source changed. Refresh and retry.');
-      const list=$('build824History');list.textContent='';
+      const list=$('build824History');list.textContent='';verifiedHistoryIds.clear();
       for(const note of data.history.slice(0,20)){
+        if(UUID.test(String(note.id||'')))verifiedHistoryIds.add(note.id);
         const li=document.createElement('li');
         const time=document.createElement('time');time.textContent=cleanTime(note.recorded_at);
         const body=document.createElement('p');body.textContent=String(note.note_text||'');
@@ -140,8 +141,7 @@ export function createSupervisorHandoff824({refresh}={}){
         throw Error(data?.error||'Supervisor handoff could not be confirmed.');
       const noteId=data.note_id;
       if(!await readHistory())throw Error('Private note accepted, but source readback is unavailable. Preserve draft and retry the same request ID.');
-      const verified=Array.from($('build824History').querySelectorAll('li')).length>0;
-      if(!verified)throw Error('Private note accepted but history returned empty. Source verification required.');
+      if(selected!==payload.followup_id||!verifiedHistoryIds.has(noteId))throw Error('Private note accepted but its exact source readback was not verified. Preserve the draft and request ID.');
       pending=null;$('build824NoteText').value='';
       status('Private supervisor handoff saved and source history refreshed. No customer, booking or payment action occurred.');
       $('build824HandoffStatus').focus({preventScroll:false});
