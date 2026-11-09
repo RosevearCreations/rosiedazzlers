@@ -1,0 +1,15 @@
+/* Build 830: accessible local role/device matrix, manual retest guidance. */
+.build830-recovery{scroll-margin-top:90px}
+.build830-recovery .build830-controls{display:flex;flex-wrap:wrap;align-items:end;gap:12px;margin:16px 0}
+.build830-recovery .build830-controls label{display:grid;gap:5px;flex:1 1 170px;font-weight:600}
+.build830-recovery select{min-height:44px;padding:8px;width:100%}
+.build830-recovery button{min-height:44px}
+.build830-recovery td,.build830-recovery th{vertical-align:top;overflow-wrap:anywhere;min-width:160px}
+.build830-recovery th small{display:block;font-weight:400;color:var(--muted,#747b86)}
+.build830-recovery summary{cursor:pointer;min-height:35px;font-weight:600}
+.build830-recovery td:last-child{min-width:260px;max-width:500px}
+.build830-recovery details p{font-size:.92em}
+.build830-recovery td button{margin-top:8px}
+.build830-recovery :is(select,button,summary):focus-visible{outline:3px solid #d4af37;outline-offset:3px}
+@media(max-width:650px){.build830-recovery .build830-controls{display:grid}.build830-recovery td:last-child{min-width:210px}}
+@media(prefers-reduced-motion:reduce){.build830-recovery *{animation:none!important;transition:none!important}}

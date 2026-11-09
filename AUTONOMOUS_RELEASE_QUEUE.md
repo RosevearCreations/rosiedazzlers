@@ -6,9 +6,9 @@
 >
 > **Completed software slice:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Product-owner and AI Data requirement approvals remain UNKNOWN/HOLD, distinct from software GREEN.
 >
-> **Completed software slice:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter**, independently [GREEN for protected software and Cloudflare deployment](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455); [source-only limits](docs/build829_ai_data_reporting_contract_readonly_adapter.md). Real owner/module acceptance, shared AI Data consumer scope and Comms trust remain HOLD, separate from software GREEN.
+> **Completed software slice:** **829 — AI Data Reporting Contract Compatibility & Read-Only Source Adapter**, independently [GREEN for protected software and Cloudflare deployment](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42652262455). **830** adds [local role/device manual recovery and acceptance evidence](docs/build830_real_role_device_acceptance_matrix_recovery.md) as the next release candidate. Real original devices, owner/module acceptance, shared AI Data consumer scope and Comms trust remain HOLD, separate from software GREEN.
 >
-> **Next proposed build:** **830 — Customer, Detailer & Admin Role × Device Acceptance Matrix and Recovery** (**REAL-DEVICE/OWNER EVIDENCE HOLD**; AI Data 829 signed source-to-consumer activation remains separate CONTRACT HOLD).
+> **Next proposed build:** **831 — Booking-to-Worksite-to-Payment Evidence Pilot & Exception Handoff** (**GENUINE BOOKING, WORKSITE, PROVIDER AND OWNER RECEIPTS HOLD**; AI Data signed source-to-consumer activation remains separate CONTRACT HOLD).
 >
 > **Canonical forward queue:** [Rosie Master Shell Forward Queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md).
 >

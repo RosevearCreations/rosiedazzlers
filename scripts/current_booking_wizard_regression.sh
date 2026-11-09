@@ -180,3 +180,4 @@ node scripts/build826_guided_field_evidence_test.mjs
 node scripts/build827_module_requirements_registry_test.mjs
 node scripts/build828_evidence_provenance_test.mjs
 node scripts/build829_ai_data_reporting_adapter_test.mjs
+node scripts/build830_role_device_recovery_test.mjs
