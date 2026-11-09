@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="/assets/build827-module-registry.css?v=build827"/>
 <link rel="stylesheet" href="/assets/build828-provenance.css?v=build828"/>
 <link rel="stylesheet" href="/assets/build829-reporting.css?v=build829"/>
+<link rel="stylesheet" href="/assets/build830-role-device.css?v=build830"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -232,6 +233,36 @@
     <p class="muted">The AI Data Build 337 event requires a signed envelope, exact audience, source sequence, evidence URI and valid expiry. None are created here. The module adapter exposes null approved numerators, denominators, evidence and expiry until an independent source/consumer authorization and product-owner approval exist. The original QL-364/365D Comms trust gate is unchanged.</p>
   </div>
 </section>
+<section class="section build830-recovery" id="build830Recovery" aria-labelledby="build830Heading">
+  <div class="panel">
+    <span class="badge">Build 830 · Real role and device field walkthroughs</span>
+    <h2 id="build830Heading">9. Check Customer, Detailer, Operations and Admin on every device</h2>
+    <p>Review the twelve role × phone/tablet/desktop cells from the latest private source observations. A positive local entry needs a <strong>different signed supervisor</strong> to review it, and neither action replaces original real-device I.T. verification or owner acceptance. Negative observations stay visible even after a newer retest candidate. No browser automation or field session is fabricated.</p>
+    <div class="build830-controls">
+      <label for="build830RoleFilter">Role
+        <select id="build830RoleFilter"><option value="all">All four roles</option>
+          <option value="customer">Customer</option><option value="detailer">Detailer</option>
+          <option value="operations">Operations</option><option value="admin">Admin</option></select></label>
+      <label for="build830StateFilter">Recovery focus
+        <select id="build830StateFilter"><option value="all">All 12 role/device cells</option>
+          <option value="negative">Latest failure or blocked</option>
+          <option value="retest">Newer retest needs owner review</option>
+          <option value="review">Recorded local pass/signoff</option>
+          <option value="missing">Missing, conflicting or aged</option></select></label>
+      <button id="build830Refresh" class="btn ghost" type="button">Refresh private device matrix</button>
+    </div>
+    <p id="build830Status" role="status" aria-live="polite">No real-device source has been read.</p>
+    <p id="build830Count" role="status" aria-live="polite">Device matrix not loaded.</p>
+    <div class="build825-scroll" role="region" aria-label="Twelve role-by-device recovery and review cells" tabindex="0">
+      <table><caption>12 local observation/review cells · owner/independent I.T. acceptance remains UNKNOWN</caption>
+        <thead><tr><th scope="col">Role / device</th><th scope="col">Latest local state</th>
+          <th scope="col">Outcome</th><th scope="col">When / browser / width</th>
+          <th scope="col">Separate reviewer</th><th scope="col">Guided recovery</th></tr></thead>
+        <tbody id="build830Rows"></tbody></table>
+    </div>
+    <p class="muted">Selecting <strong>Prepare observation form</strong> fills only the intended role and device in Step 1 above. We must personally use the correct authenticated account on a real device, verify its browser, screen width, permitted route, recovery from interruption/weak network and accessibility, then record actual results. The 30-day local follow-up is not an approved expiry rule. Missing older source records remain UNKNOWN. No customer details, independent device signatures, outbound notifications, AI Data scores or Comms connection changes are produced.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -244,7 +275,8 @@
   import { startModuleRegistry827 } from '/assets/build827-module-registry-ui.mjs?v=build827';
   import { startProvenance828 } from '/assets/build828-provenance-ui.mjs?v=build828';
   import { startReporting829 } from '/assets/build829-reporting-ui.mjs?v=build829';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();}});
+  import { startRoleDeviceRecovery830 } from '/assets/build830-role-device-ui.mjs?v=build830';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();}});
 </script>
 </body>
 </html>
