@@ -1,6 +1,6 @@
 # Rosie Dazzlers — Master Value Roadmap
 
-> **NOVEMBER 8, 2026 CURRENT DIRECTION:** Build 826 is independently promoted GREEN on protected `main`; the next source build is **827**. See the [current Master Shell–aligned queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md). The Build 309-era release/SHA statements retained below are **historical**, not active promotion or launch requirements. Do not infer connected Master Shell status, verified module percentages, provider signoffs or real-world device acceptance from the code release.
+> **NOVEMBER 9, 2026 CURRENT DIRECTION:** Build 827 code/deployment is independently promoted GREEN on protected `main`; next proposed source build **828**. See the [Master Shell–aligned queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md) and the recorded exact-SHA proof. The Build 309-era release/SHA statements retained below are **historical**, not active promotion or launch requirements. Do not infer connected Master Shell status, approved module percentages, provider signoffs or real-world device acceptance from the code release.
 
 **Living authority 2 of 2**  
 **Build:** 309  
