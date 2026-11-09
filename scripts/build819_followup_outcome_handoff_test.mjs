@@ -31,8 +31,8 @@ assert.deepEqual(latestReturnedHandoff819(replied,events),{label:'Staff response
 assert.equal(latestReturnedHandoff819(waiting,events),null);
 assert.equal(latestReturnedHandoff819(null,events),null);
 const html=read('../admin-today.html');assert.equal(html,read('../admin-today/index.html'));
-assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build(?:819|820|821|822|823)/);
-assert.match(html,/worksite-issues-v811\.css\?v=build(?:819|820|821|822|823)/);
+assert.match(html,/admin-worksite-followups-v814\.mjs\?v=build(?:819|820|821|822|823|824)/);
+assert.match(html,/worksite-issues-v811\.css\?v=build(?:819|820|821|822|823|824)/);
 const app=read('../assets/admin-worksite-followups-v814.mjs');
 for(const token of ['ensureOutcomeSurface819','build819OutcomeSummary','build819HandoffStatus','outcomeCard819','latestReturnedHandoff819','data-build819-followup','handoffFeedback819','focus({preventScroll:false})'])assert.ok(app.includes(token),`Missing UI contract: ${token}`);
 assert.match(app,/const readback=await load\(\);handoffFeedback819\(row\.id/);
