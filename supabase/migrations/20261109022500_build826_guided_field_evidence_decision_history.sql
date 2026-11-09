@@ -24,7 +24,7 @@ create table public.rosie_field_acceptance_events_v826 (
       and device_class in ('phone','tablet','desktop')
       and browser_class in ('chrome','safari','firefox','edge')
       and route_path is not null and route_path ~ '^/(app|admin|book|account|detailer)([./-][A-Za-z0-9_./-]*)?$'
-      and char_length(route_path) between 5 and 90
+      and char_length(route_path) between 4 and 90
       and viewport_width between 320 and 3840
       and observed_outcome in ('pass','fail','blocked')
       and observed_at is not null
