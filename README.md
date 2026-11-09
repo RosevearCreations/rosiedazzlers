@@ -1,6 +1,6 @@
 # Rosie Dazzlers
 
-**Current release candidate: Build 825 — Production Supervisor Handoff Field Acceptance, Role/Device Verification & Evidence-Based Module Readiness Tracking.** Contract: `docs/build825_supervisor_field_acceptance_module_readiness.md`. Module estimate baseline: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
+**Current release candidate: Build 826 — Guided Authenticated Device Evidence Capture, Supervisor Field Signoff & Module Readiness Change History.** Contract: `docs/build826_guided_field_evidence_and_master_shell_gap_review.md`. Module estimates: `docs/ROSIE_MODULE_COMPLETION_AUDIT_20261108.md`; proposed Master Shell readiness preview is NOT an authenticated connection or score approval. Production status must be verified against the exact promoted `main` SHA and required Cloudflare acceptance; source alone is not proof.
 
 ## Retained cumulative authority pointers (historical)
 
