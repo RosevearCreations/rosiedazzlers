@@ -1,8 +1,8 @@
 # Rosie Dazzlers — Master Shell–aligned build queue (827 onward)
 
-**Current planning authority:** November 8, 2026 | **Status:** Owner-directed queue rebaseline; the future builds below are **proposed**, not already implemented.  
-**Latest independently accepted code/deployment release:** Build **826**, protected `main` `addce823f7d32445dc76c93db3246ac117eeed04`; [exact-SHA production acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42551591105).  
-**Current feature promotion candidate:** **827**. **Next proposed build: 828**, conditional on protected Build 827 release acceptance. This document supersedes historical "current" and "next" build wording in `AUTONOMOUS_RELEASE_QUEUE.md`, `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. Those older sections remain for audit/compatibility only.
+**Current planning authority:** November 9, 2026 | **Status:** Owner-directed queue rebaseline; only explicitly accepted builds below are implemented.
+**Latest independently accepted code/deployment release:** Build **827**, protected `main` `fd84749a87776d33ae3c6df8a2e1d62a0f29a110`; [exact-SHA Cloudflare Production/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42625859691). This immutable reference records the feature release; recheck current `main` before any later claim.
+**Next proposed feature build: 828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness.** This document supersedes historical "current" and "next" build wording in `AUTONOMOUS_RELEASE_QUEUE.md`, `AI_PROJECT_HANDOFF.md` and `MASTER_VALUE_ROADMAP.md`. Those older sections remain for audit/compatibility only.
 
 **Architecture authority:** Owner-supplied *Rosevear Suite Master Shell Architecture and Integration Handoff* (v1.0, 2026-11-08); [Rosie Build 826 gap assessment](build826_guided_field_evidence_and_master_shell_gap_review.md); [QL-365D six-app trust gate](https://github.com/RosevearCreations/rosevear-comms-hub/blob/main/docs/handoffs/QL365D_SIX_APP_COMMS_ATTACHMENT_VALIDATION_HANDOFF.md).
 
@@ -10,10 +10,10 @@
 
 | Capability | Verified current code/release position | Independent real-world acceptance |
 | --- | --- | --- |
-| Rosie protected source/deployment | Build 826 promoted to `main` with protected checks and exact-SHA Cloudflare live HTTP acceptance | **GREEN for code/deployment only** |
+| Rosie protected source/deployment | Build 827 promoted through protected dev/main PRs #878/#879 and exact-SHA Cloudflare live HTTP acceptance | **GREEN for code/deployment only** |
 | Customer, worker, admin role/device readiness | Build 825 source-driven dashboard plus Build 826 guided observation and second-supervisor ledger | **PARTIAL / HOLD** where authentic device sessions and role coverage have not been witnessed |
 | Supervisor private handoffs | Build 824 private RLS table; Build 826 append-only decision history | **SOURCE IMPLEMENTED; FIELD ACCEPTANCE HOLD** while no actual cases or decisions have been confirmed |
-| Module inventory and completion | 45 provisional audited modules; Build 826 proposed source preview | **NO APPROVED REQUIREMENT DENOMINATORS; completion % not authoritative** |
+| Module inventory and completion | Build 827 stages 45 stable module scopes, 39 deduplicated criterion drafts and bounded local review pointers; old estimates untouched | **NO APPROVED REQUIREMENT DENOMINATORS; completion % not authoritative** |
 | Rosie source identity and health | Exact `rosiedazzlers` owned-business shell, QL-364 source adapter and discovery manifest | **DISCONNECTED / HOLD** for the Comms private trust connection, pending original owner/signer/receipt proof |
 | AI Data master completion feed | Read-only *proposed* format in Build 826, no event publication | **CONTRACT AND CONSUMER ACCEPTANCE HOLD** |
 | Payment, delivery, jobs, payroll, accounting, inventory, provider and backup | Substantial source implementation; historical protected business contracts | **EVIDENCE-DEPENDENT HOLD** for original provider/employee/field/accountant/restore acceptance |
@@ -26,7 +26,7 @@
 
 | Build | New priority and proposed title | Current state / dependency | Bounded acceptance objective |
 | --- | --- | --- | --- |
-| **827** | **Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts** | **SOURCE CANDIDATE — protected promotion and owner denominators pending.** [Build 827 registry](build827_master_shell_module_requirement_registry.md) stages 45 module scopes and 39 shared criterion drafts; no owner-approved weight or score | Stable requirement/scope IDs, proposed roles and criteria, bounded private local evidence references, UNKNOWN freshness/denominator and no inferred scoring; actual owner and AI Data approval still required |
+| **827** | **Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts** | **CODE/DEPLOYMENT GREEN; PRODUCT-OWNER REQUIREMENT ACCEPTANCE HOLD.** [Build 827 registry](build827_master_shell_module_requirement_registry.md) stages 45 module scopes and 39 shared criterion drafts; no approved weight or score | Stable requirement/scope IDs, proposed roles and criteria, bounded private local evidence references, UNKNOWN freshness/denominator and no inferred scoring; actual owner and AI Data approval still required |
 | **828** | **Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness** | **QUEUED**, builds on 824–827 | Connect actual observation/signoff/production/source IDs to each requirement; bounded immutable audit, expiry/conflict/reopen; no forged proof or private data export |
 | **829** | **AI Data Reporting Contract Compatibility & Read-Only Source Adapter** | **CONTRACT REVIEW HOLD** until AI Data/Comms agree source ID, schema/version, reader audience and use | Versioned local discovery/read model, negative auth and freshness tests, approved numerator/denominator or `UNKNOWN`; **no outbound publish before consumer authorization** |
 | **830** | **Customer, Detailer & Admin Role × Device Acceptance Matrix and Recovery** | **QUEUED — REAL DEVICES REQUIRED** | Real customer/detailer/operations/admin flows on phone/tablet/desktop with tested browser, dated witness and accessibility/weak-network recovery; negative roles stay denied |
@@ -72,4 +72,4 @@
 - Canonical unresolved business requirements: `STARTUP_GO_LIVE_BLOCKERS.md`.
 - Required external handoff: AI Data and Comms approve shared registry/event version, owner/witness/signing/receiver and privacy boundaries. No producer can mark that approved solely from its own repository.
 
-**Updated queue state:** Build 826 was the last independently accepted source/deployment GREEN at Build 827 kickoff; Build 827 source implementation is a protected-promotion candidate (not owner-approved denominators); Build 828 is next proposed; Builds 829–840 queued/conditional as labeled. Recheck actual release green from the current protected production run; Master Shell/Comms trust and real-world acceptance remain truthfully HELD or UNKNOWN.
+**Updated queue state:** Build 827 source/deployment GREEN at the exact feature-release commit and production acceptance linked above; Build 828 is next proposed; Builds 829–840 queued/conditional as labeled. No owner denominators, real-field/provider acceptance or Comms trust were created by the release. Recheck current protected production HEAD for later claims; Master Shell/Comms trust and real-world acceptance remain HELD or UNKNOWN.

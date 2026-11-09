@@ -2,11 +2,11 @@
 
 > **ACTIVE MASTER SHELL–ALIGNED QUEUE — November 8, 2026**
 >
-> **Last independently verified release:** Build **826**, protected `main` Production GREEN, verified by exact-SHA Cloudflare and HTTP smoke; resolve the current commit from live Git and workflow evidence.
+> **Last independently verified feature release:** Build **827**, protected `main` Production GREEN at the recorded [exact-SHA Cloudflare/static/contextual HTTP acceptance](https://github.com/RosevearCreations/rosiedazzlers/actions/runs/42625859691); resolve later changes from live Git and workflow evidence.
 >
-> **Current protected-promotion candidate:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Source implementation and local tests do not by themselves establish a GREEN main release or approved denominators.
+> **Completed software slice:** **827 — Master Shell Module Requirements Registry, Stable IDs & Evidence-Linked Denominator Drafts**. Product-owner and AI Data requirement approvals remain UNKNOWN/HOLD, distinct from software GREEN.
 >
-> **Next proposed executable build after 827:** **828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness**.
+> **Next proposed executable build:** **828 — Evidence Provenance, Reviewer Decision Trace & Readiness Source Freshness**.
 >
 > **Canonical forward queue:** [Rosie Master Shell Forward Queue, Builds 827–840](docs/ROSIE_MASTER_SHELL_FORWARD_QUEUE_827_840.md).
 >
