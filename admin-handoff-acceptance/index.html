@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="/assets/build832-economics.css?v=build832"/>
 <link rel="stylesheet" href="/assets/build833-comms.css?v=build833"/>
 <link rel="stylesheet" href="/assets/build834-master-status.css?v=build834"/>
+<link rel="stylesheet" href="/assets/build835-pilot.css?v=build835"/>
 </head>
 <body data-page="admin-today">
 <header class="nav"><div class="nav-inner"><a class="brand" href="/admin.html"><img data-logo alt="Rosie Dazzlers logo"/><strong>Rosie Dazzlers Admin</strong></a><div id="navLinks" class="nav-links"></div></div></header>
@@ -361,6 +362,22 @@
     <p class="muted">AI Data Builds 335/337 define <code>source.health.reported</code> and <code>release.promoted</code> with expiring evidence, approved audience, signer, sequence and verified receipt. Rosie 834 only stages intentionally incomplete, non-ingestible payload shapes. The external original QL-364/365D Comms one-use signed health TEST and all messaging, incident, provider and owner grants remain separate and HELD.</p>
   </div>
 </section>
+<section class="section build835-pilot" id="build835OwnerPilot" aria-labelledby="build835Heading">
+  <div class="panel">
+    <span class="badge">Build 835 · Owner-authorized one-source Master Shell pilot</span>
+    <h2 id="build835Heading">14. Inspect original TEST readiness and receipt reconciliation</h2>
+    <p>This Rosie-only panel explains which approvals and independent signed receipts are still required for <strong>one</strong> source-owned health TEST. It never executes a GET to Comms Hub or sends an AI Data event. Protected original Ree/Jack owner authorization and the existing QL-795 one-attempt verifier remain the only path to a real source receipt. <strong>Even a valid TEST receipt leaves all six source connections HOLD.</strong></p>
+    <div class="build835-controls"><button class="btn ghost" id="build835Refresh" type="button">Refresh pilot readiness (no TEST)</button></div>
+    <p id="build835State" role="status" aria-live="polite">No original signed TEST or owner approval verified. HOLD.</p>
+    <p id="build835Summary">No original receipt has been independently verified in this operator session.</p>
+    <div class="build825-scroll" role="region" tabindex="0" aria-label="Owner authorization and original one-source receipt acceptance stages">
+      <table><caption>One Rosie source only · private original evidence and connection authorization remain separate</caption>
+        <thead><tr><th scope="col">Gate</th><th scope="col">Evidence required</th><th scope="col">Observed readiness</th><th scope="col">Responsible authority</th></tr></thead><tbody id="build835Steps"></tbody></table>
+    </div>
+    <p id="build835Next" class="muted">Original protected operator and independent witness required.</p>
+    <p class="muted">No credentials, original signed artifacts, customer/payment data, database writes, connection activation, automatic retry or new peer permission are collected here. A read-only status check is not a signed TEST receipt.</p>
+  </div>
+</section>
 </main>
 <footer class="footer container" data-footer></footer>
 <script src="/assets/admin-auth.js"></script>
@@ -378,7 +395,8 @@
   import { startEconomics832 } from '/assets/build832-economics-ui.mjs?v=build832';
   import { startCommsReview833 } from '/assets/build833-comms-ui.mjs?v=build833';
   import { startMasterStatus834 } from '/assets/build834-master-status-ui.mjs?v=build834';
-  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();}});
+  import { startOwnerPilot835 } from '/assets/build835-pilot-ui.mjs?v=build835';
+  window.AdminShell.boot({pageKey:'admin-today',onReady:()=>{startFieldAcceptance825();startGuidedEvidence826();startModuleRegistry827();startProvenance828();startReporting829();startRoleDeviceRecovery830();startBookingWorksitePilot831();startEconomics832();startCommsReview833();startMasterStatus834();startOwnerPilot835();}});
 </script>
 </body>
 </html>
